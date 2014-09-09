@@ -18,6 +18,27 @@ Please execute ``python -V`` or ``python3 -V`` to make sure you have Python 3.4 
 
 You should now see a ``(env)`` prepended to your shell prompt.
 
+Working with the code
+---------------------
+The first thing you need are all the main application's dependencies::
+
+    cd src/
+    pip install -r requirements.txt
+
+Then, create the local database::
+
+    python manage.py syncdb
+
+Static code checks
+^^^^^^^^^^^^^^^^^^
+
+Before you check in your code into git, always run::
+
+    pyflakes .
+    pep8 --ignore=E501,E128 .
+
+to check for syntax, style and other errors.
+
 Working with the documentation
 ------------------------------
 First, you should install the requiremente necessary for building the documentation. Make sure you have your virtual python enviroment activated (see above). Then, install the packages by executing::
