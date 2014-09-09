@@ -1,0 +1,12 @@
+language: python
+python:
+    - "3.2"
+    - "3.4"
+install:
+    - pip install -q src/requirements.txt
+before_script:
+    - cd src
+    - "pep8 --ignore=E501,E128 --exclude=migrations ."
+    - pyflakes .
+script:
+    - python manage.py test
