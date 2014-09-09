@@ -7,4 +7,6 @@ Contents:
    :maxdepth: 2
 
    goals
+   concepts
    setup
+   structure
