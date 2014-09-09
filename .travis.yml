@@ -3,7 +3,7 @@ python:
     - "3.2"
     - "3.4"
 install:
-    - pip install -q src/requirements.txt
+    - pip install -q -r src/requirements.txt
 before_script:
     - cd src
     - "pep8 --ignore=E501,E128 --exclude=migrations ."
