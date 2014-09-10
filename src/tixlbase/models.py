@@ -11,7 +11,7 @@ class UserManager(BaseUserManager):
 
     def create_user(self, identifier, username, password=None):
         user = self.model(identifier=identifier)
-        user.set_password(user)
+        user.set_password(password)
         user.save()
         return user
 
@@ -21,7 +21,7 @@ class UserManager(BaseUserManager):
         user = self.model(identifier=identifier, username=username)
         user.is_staff = True
         user.is_superuser = True
-        user.set_password(user)
+        user.set_password(password)
         user.save()
         return user
 
