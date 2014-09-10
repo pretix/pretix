@@ -6,7 +6,7 @@ install:
     - pip install -q -r src/requirements.txt
 before_script:
     - cd src
-    - "pep8 --ignore=E501,E128 --exclude=migrations ."
-    - pyflakes .
+    - flake8 --ignore=E128,F403,F401 .
+    - python manage.py validate
 script:
     - python manage.py test
