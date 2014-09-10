@@ -36,6 +36,15 @@ Then, create the local database::
 
     python manage.py syncdb
 
+Run the development server
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Execute::
+
+    python manage.py runserver
+
+to start a local development webserver on port 8000.
+
 Static code checks
 ^^^^^^^^^^^^^^^^^^
 
