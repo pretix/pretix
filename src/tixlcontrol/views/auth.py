@@ -44,6 +44,8 @@ class AuthenticationForm(BaseAuthenticationForm):
 
 def login(request):
     ctx = {}
+    if request.user.is_authenticated():
+        return redirect('control:index')
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid() and form.user_cache:
