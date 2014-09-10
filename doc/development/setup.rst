@@ -3,10 +3,17 @@ The development setup
 
 Obtain a copy of the source code
 --------------------------------
-Just clone our git repository::
+Just clone our git repository including its submodules::
 
-    git clone https://github.com/tixl/tixl.git
+    git clone --recursive https://github.com/tixl/tixl.git 
     cd tixl/
+
+Dependencies
+------------
+* Python 3.4 or newer
+* ``pip`` for Python 3
+* ``git``
+* ``lessc`` (Debian package: ``node-less``)
 
 Your local python environment
 -----------------------------

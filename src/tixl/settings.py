@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'tixlbase',
     'tixlcontrol',
     'tixlpresale',
+    'compressor',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -91,6 +92,24 @@ LOGIN_URL_CONTROL = '/control/login'
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = '_static'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
+)
+
+COMPRESS_CSS_FILTERS = (
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter',
+)
+
 
 try:
     from local_settings import *

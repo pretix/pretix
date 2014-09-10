@@ -1,4 +1,9 @@
 Django>=1.7
+django-compressor
+BeautifulSoup4
+html5lib
+slimit
+lxml
 pyflakes
 pep8
 pep8-naming
