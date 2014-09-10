@@ -1,10 +1,10 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'tixl.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
+import tixlcontrol.urls
 
+
+urlpatterns = patterns('',
+    url(r'^control/', include(tixlcontrol.urls, namespace='control')),
     url(r'^admin/', include(admin.site.urls)),
 )

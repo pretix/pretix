@@ -49,6 +49,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'tixlcontrol.middleware.LoginRequiredMiddleware',
 )
 
 ROOT_URLCONF = 'tixl.urls'
@@ -83,7 +84,8 @@ USE_TZ = True
 # Authentication
 
 AUTH_USER_MODEL = 'tixlbase.User'
-
+LOGIN_URL = '/login'
+LOGIN_URL_CONTROL = '/control/login'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
