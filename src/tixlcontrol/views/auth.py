@@ -45,11 +45,15 @@ class AuthenticationForm(BaseAuthenticationForm):
 def login(request):
     ctx = {}
     if request.user.is_authenticated():
+        if "next" in request.GET:
+            return redirect(request.GET.get("next", 'control:index'))
         return redirect('control:index')
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid() and form.user_cache:
             auth_login(request, form.user_cache)
+            if "next" in request.GET:
+                return redirect(request.GET.get("next", 'control:index'))
             return redirect('control:index')
     else:
         form = AuthenticationForm()
