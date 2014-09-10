@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'tixlcontrol',
     'tixlpresale',
     'compressor',
+    'bootstrap3',
 )
 
 MIDDLEWARE_CLASSES = (

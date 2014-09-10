@@ -14,7 +14,7 @@ class LoginRequiredMiddleware:
     """
 
     EXCEPTIONS = (
-        "login"
+        "auth.login"
     )
 
     def process_request(self, request):

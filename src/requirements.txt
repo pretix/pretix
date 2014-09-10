@@ -1,4 +1,5 @@
 Django>=1.7
+django-bootstrap3
 django-compressor
 BeautifulSoup4
 html5lib

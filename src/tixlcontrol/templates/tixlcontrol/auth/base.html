@@ -1,0 +1,16 @@
+{% load compress %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		{% compress css %}
+		<link rel="stylesheet" type="text/less" href="{% static "tixlcontrol/less/auth.less" %}" />
+		{% endcompress %}
+	</head>
+	<body>
+		<div class="container">
+		{% block content %}
+		{% endblock %}
+	</body>
+</html>
