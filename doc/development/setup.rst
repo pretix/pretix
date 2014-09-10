@@ -34,8 +34,7 @@ Static code checks
 
 Before you check in your code into git, always run::
 
-    pyflakes .
-    pep8 --ignore=E501,E128 .
+    flake8 .
 
 to check for syntax, style and other errors.
 
