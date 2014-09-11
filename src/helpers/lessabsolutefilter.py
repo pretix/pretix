@@ -1,6 +1,7 @@
 from compressor.filters.base import CompilerFilter
 from compressor.filters.css_default import CssAbsoluteFilter
 
+
 class LessFilter(CompilerFilter):
     def __init__(self, content, attrs, **kwargs):
         super(LessFilter, self).__init__(content, command='lessc {infile} {outfile}', **kwargs)
