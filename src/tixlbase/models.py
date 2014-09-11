@@ -124,22 +124,33 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Organizer(models.Model):
     """
-    This model represents an entity organizing events, like a company,
-    an organization or a person. It has one user as owner (who has
-    registered it) and can have any number of users with admin
-    authorization. Any organizer has a unique slug, which is a short
-    name (alphanumeric, all lowercase) being used in URLs.
+    This model represents an entity organizing events, like a company.
+    Any organizer has a unique slug, which is a short name (alphanumeric,
+    all lowercase) being used in URLs.
     """
 
     name = models.CharField(max_length=200)
     slug = models.CharField(max_length=50,
-                            unique=True,
-                            db_index=True)
-    owner = models.ForeignKey(User, null=True, blank=True,
-                              on_delete=models.PROTECT)
+                            unique=True, db_index=True)
+    permitted = models.ManyToManyField(User, through='OrganizerPermission',
+                                       related_name="organizers")
 
     class Meta:
         ordering = ("name",)
+
+
+class OrganizerPermission(models.Model):
+    """
+    The relation between an Organizer and an User who has permissions to
+    access an organizer profile.
+    """
+
+    organizer = models.ForeignKey(Organizer)
+    user = models.ForeignKey(User, related_name="organizer_perms")
+    can_create_events = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = (("organizer", "user"),)
 
 
 class Event(models.Model):
@@ -171,8 +182,9 @@ class Event(models.Model):
     organizer = models.ForeignKey(Organizer, related_name="events",
                                   on_delete=models.PROTECT)
     name = models.CharField(max_length=200)
-    slug = models.CharField(max_length=50,
-                            db_index=True)
+    slug = models.CharField(max_length=50, db_index=True)
+    permitted = models.ManyToManyField(User, through='EventPermission',
+                                       related_name="events")
     locale = models.CharField(max_length=10)
     currency = models.CharField(max_length=10)
     date_from = models.DateTimeField()
@@ -187,3 +199,17 @@ class Event(models.Model):
     class Meta:
         unique_together = (("organizer", "slug"),)
         ordering = ("date_from", "name")
+
+
+class EventPermission(models.Model):
+    """
+    The relation between an Event and an User who has permissions to
+    access an event.
+    """
+
+    organizer = models.ForeignKey(Event)
+    user = models.ForeignKey(User, related_name="event_perms")
+    can_change_settings = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = (("organizer", "user"),)
