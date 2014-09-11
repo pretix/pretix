@@ -1,0 +1,16 @@
+{% extends "tixlcontrol/auth/base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+{% block content %}
+	<form class="form-signin" action="" method="post">
+		{% bootstrap_form_errors form type='all' layout='inline' %}
+		{% csrf_token %}
+		{% bootstrap_field form.email %}
+		{% bootstrap_field form.password %}
+		<div class="form-group buttons">
+			<button type="submit" class="btn btn-primary">
+				{% trans "Log in" %}
+			</button>
+		</div>
+	</form>
+{% endblock %}

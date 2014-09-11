@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils.translation import ugettext as _
 
 
 class UserManager(BaseUserManager):
@@ -8,19 +9,19 @@ class UserManager(BaseUserManager):
     model documentation to see what's so special about our user model.
     """
 
-    def create_user(self, email, password=None):
-        user = self.model(email=email)
-        user.set_password(user)
+    def create_user(self, identifier, username, password=None):
+        user = self.model(identifier=identifier)
+        user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self, email, password=None):
+    def create_superuser(self, identifier, username, password=None):
         if password is None:
             raise Exception("You must provide a password")
-        user = self.model(email=email)
+        user = self.model(identifier=identifier, username=username)
         user.is_staff = True
         user.is_superuser = True
-        user.set_password(user)
+        user.set_password(password)
         user.save()
         return user
 
@@ -59,11 +60,21 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
 
     identifier = models.CharField(max_length=255, unique=True)
-    username = models.CharField(max_length=120)
+    username = models.CharField(max_length=120, blank=True,
+                                null=True,
+                                help_text=_('Letters, digits and @/./+/-/_ only.'))
     event = models.ForeignKey('Event', related_name="users",
-                              null=True, blank=True)
+                              null=True, blank=True,
+                              on_delete=models.PROTECT)
     email = models.EmailField(unique=False, db_index=True,
-                              null=True, blank=True)
+                              null=True, blank=True,
+                              verbose_name=_('E-mail'))
+    givenname = models.CharField(max_length=255, blank=True,
+                                 null=True,
+                                 verbose_name=_('Given name'))
+    familyname = models.CharField(max_length=255, blank=True,
+                                  null=True,
+                                  verbose_name=_('Family name'))
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -73,12 +84,35 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.identifier
 
+    def get_short_name(self):
+        if self.givenname:
+            return self.givenname
+        elif self.familyname:
+            return self.familyname
+        else:
+            return self.username
+
+    def get_full_name(self):
+        if self.givenname and not self.familyname:
+            return self.givenname
+        elif not self.givenname and self.familyname:
+            return self.familyname
+        elif self.familyname and self.givenname:
+            return '%(family)s, %(given)s' % {
+                'family': self.familyname,
+                'given': self.givenname
+            }
+        else:
+            return self.username
+
     def save(self, *args, **kwargs):
         if self.identifier is None:
             if self.event is None:
-                self.identifier = self.email
+                self.identifier = self.email.lower()
             else:
-                self.identifier = "%s@%d.event.tixl" % (self.username, self.event.id)
+                self.identifier = "%s@%d.event.tixl" % (self.username.lower(), self.event.id)
+        if not self.pk:
+            self.identifier = self.identifier.lower()
         super().save(*args, **kwargs)
 
     USERNAME_FIELD = 'identifier'
@@ -101,7 +135,8 @@ class Organizer(models.Model):
     slug = models.CharField(max_length=50,
                             unique=True,
                             db_index=True)
-    owner = models.ForeignKey(User, null=True, blank=True)
+    owner = models.ForeignKey(User, null=True, blank=True,
+                              on_delete=models.PROTECT)
 
     class Meta:
         ordering = ("name",)
@@ -133,7 +168,8 @@ class Event(models.Model):
     matter when they were ordered (and thus, ignoring payment_term_days).
     """
 
-    organizer = models.ForeignKey(Organizer, related_name="events")
+    organizer = models.ForeignKey(Organizer, related_name="events",
+                                  on_delete=models.PROTECT)
     name = models.CharField(max_length=200)
     slug = models.CharField(max_length=50,
                             db_index=True)

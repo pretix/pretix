@@ -3,10 +3,17 @@ The development setup
 
 Obtain a copy of the source code
 --------------------------------
-Just clone our git repository::
+Just clone our git repository including its submodules::
 
-    git clone https://github.com/tixl/tixl.git
+    git clone --recursive https://github.com/tixl/tixl.git 
     cd tixl/
+
+Dependencies
+------------
+* Python 3.4 or newer
+* ``pip`` for Python 3
+* ``git``
+* ``lessc`` (Debian package: ``node-less``)
 
 Your local python environment
 -----------------------------
@@ -29,13 +36,29 @@ Then, create the local database::
 
     python manage.py syncdb
 
+Create the translation files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To generate updated translation files, run a::
+
+    make localegen
+
+To compile the language files for use, run::
+
+    make localecompile
+
+Run the development server
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+Execute::
+
+    python manage.py runserver
+
+to start a local development webserver on port 8000.
+
 Static code checks
 ^^^^^^^^^^^^^^^^^^
-
 Before you check in your code into git, always run::
 
-    pyflakes .
-    pep8 --ignore=E501,E128 .
+    flake8 .
 
 to check for syntax, style and other errors.
 

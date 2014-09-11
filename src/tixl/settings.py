@@ -39,16 +39,20 @@ INSTALLED_APPS = (
     'tixlbase',
     'tixlcontrol',
     'tixlpresale',
+    'compressor',
+    'bootstrap3',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'tixlcontrol.middleware.LoginRequiredMiddleware',
 )
 
 ROOT_URLCONF = 'tixl.urls'
@@ -79,16 +83,45 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOCALE_PATHS = (
+    'locale',
+)
+
+from django.utils.translation import ugettext_lazy as _
+LANGUAGES = (
+    ('de', _('German')),
+    ('en', _('English')),
+)
+
 
 # Authentication
 
 AUTH_USER_MODEL = 'tixlbase.User'
-
+LOGIN_URL = '/login'
+LOGIN_URL_CONTROL = '/control/login'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = '_static'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
+)
+
+COMPRESS_CSS_FILTERS = (
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter',
+)
+
 
 try:
     from local_settings import *

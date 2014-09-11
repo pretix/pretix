@@ -1,0 +1,3 @@
+[submodule "src/tixlbase/static/bootstrap"]
+	path = src/tixlbase/static/bootstrap
+	url = https://github.com/twbs/bootstrap.git
