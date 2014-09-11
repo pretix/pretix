@@ -1,5 +1,6 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 
 
 def index(request):
-    return HttpResponse('Coming soon.')
+    return render(request, 'tixlcontrol/base.html', {})
