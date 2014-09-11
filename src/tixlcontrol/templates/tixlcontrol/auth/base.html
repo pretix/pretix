@@ -1,4 +1,5 @@
 {% load compress %}
+{% load i18n %}
 {% load staticfiles %}
 <!DOCTYPE html>
 <html>
@@ -10,7 +11,15 @@
 	</head>
 	<body>
 		<div class="container">
-		{% block content %}
-		{% endblock %}
+			{% block content %}
+			{% endblock %}
+			<footer>
+				{% with "href='http://tixl.de'" as a_attr %}
+					{% blocktrans trimmed %}
+						powered by <a {{ a_attr }}>tixl</a>
+					{% endblocktrans %}
+				{% endwith %}
+			</footer>
+		</div>
 	</body>
 </html>
