@@ -36,9 +36,18 @@ Then, create the local database::
 
     python manage.py syncdb
 
+Create the translation files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To generate updated translation files, run a::
+
+    make localegen
+
+To compile the language files for use, run::
+
+    make localecompile
+
 Run the development server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 Execute::
 
     python manage.py runserver
@@ -47,7 +56,6 @@ to start a local development webserver on port 8000.
 
 Static code checks
 ^^^^^^^^^^^^^^^^^^
-
 Before you check in your code into git, always run::
 
     flake8 .

@@ -5,6 +5,7 @@
 *.aux
 *.log
 *.toc
+*.mo
 *~
 .ropeproject
 __pycache__/
