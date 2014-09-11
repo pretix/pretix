@@ -55,6 +55,18 @@ MIDDLEWARE_CLASSES = (
     'tixlcontrol.middleware.LoginRequiredMiddleware',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.request",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    'tixlcontrol.context.contextprocessor',
+)
+
 ROOT_URLCONF = 'tixl.urls'
 
 WSGI_APPLICATION = 'tixl.wsgi.application'
@@ -114,13 +126,17 @@ STATICFILES_FINDERS = (
 )
 
 COMPRESS_PRECOMPILERS = (
-    ('text/less', 'lessc {infile} {outfile}'),
+    ('text/less', 'helpers.lessabsolutefilter.LessFilter'),
 )
 
 COMPRESS_CSS_FILTERS = (
     'compressor.filters.css_default.CssAbsoluteFilter',
     'compressor.filters.cssmin.CSSMinFilter',
 )
+
+# Tixl specific settings
+
+TIXL_INSTANCE_NAME = 'tixl.de'
 
 
 try:
