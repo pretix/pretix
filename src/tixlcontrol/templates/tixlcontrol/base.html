@@ -8,6 +8,10 @@
 		{% compress css %}
 		<link rel="stylesheet" type="text/less" href="{% static "tixlcontrol/less/main.less" %}" />
 		{% endcompress %}
+		{% compress js %}
+		<script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+		<script type="text/javascript" src="{% static "bootstrap/dist/js/bootstrap.js" %}"></script>
+		{% endcompress %}
 	</head>
 	<body>
 		<div class="navbar navbar-default navbar-static-top" role="navigation">
