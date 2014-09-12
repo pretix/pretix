@@ -2,4 +2,4 @@ from django.shortcuts import render
 
 
 def index(request, event):
-    pass
+    return render(request, 'tixlcontrol/event/index.html', {})

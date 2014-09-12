@@ -5,6 +5,7 @@ from django.utils.six.moves.urllib.parse import urlparse
 from django.shortcuts import resolve_url
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.http import HttpResponseNotFound
+from django.utils.translation import ugettext as _
 
 from tixlbase.models import Event
 
@@ -45,6 +46,8 @@ class PermissionMiddleware:
             return redirect_to_login(
                 path, resolved_login_url, REDIRECT_FIELD_NAME)
 
+        request.user.events_cache = request.user.events.order_by(
+            "organizer", "date_from").prefetch_related("organizer")
         if 'event.' in url_name and 'event' in url.kwargs:
             try:
                 request.event = Event.objects.get(
