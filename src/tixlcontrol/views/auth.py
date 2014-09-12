@@ -8,7 +8,8 @@ from django.contrib.auth import login as auth_login
 
 class AuthenticationForm(BaseAuthenticationForm):
     """
-    The login form.
+    The login form, providing an email and password field. The
+    form does already implement validation for correct user data.
     """
     email = forms.EmailField(label=_("E-mail address"), max_length=254)
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
@@ -43,6 +44,10 @@ class AuthenticationForm(BaseAuthenticationForm):
 
 
 def login(request):
+    """
+    Render and process a most basic login form. Takes an URL as GET
+    parameter "next" for redirection after successful login
+    """
     ctx = {}
     if request.user.is_authenticated():
         if "next" in request.GET:
