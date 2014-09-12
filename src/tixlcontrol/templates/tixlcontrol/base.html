@@ -34,7 +34,7 @@
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="#"><i class="fa fa-user"></i> {{ request.user.get_full_name }}</a></li>
-						<li><a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}"><i class="fa fa-sign-out"></i></a></li>
+						<li><a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}"><i class="fa fa-sign-out"></i><span class="visible-xs-inline">{% trans "Log out" %}</span></a></li>
 					</ul>
 				</div><!--/.nav-collapse -->
 			</div>
