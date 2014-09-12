@@ -56,4 +56,3 @@ class PermissionMiddleware:
                 )
             except:
                 return HttpResponseNotFound(_("The selected event was not found or you have no permission to administrate it."))
-
