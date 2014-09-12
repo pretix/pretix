@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
+from django.template.defaultfilters import date as _date
 
 
 class UserManager(BaseUserManager):
@@ -243,6 +244,20 @@ class Event(models.Model):
         null=True, blank=True,
         verbose_name=_("Last date of payments")
     )
+
+    def get_date_from_display(self):
+        return _date(
+            self.date_from,
+            "DATETIME_FORMAT" if self.show_times else "DATE_FORMAT"
+        )
+
+    def get_date_to_display(self):
+        if not self.show_date_to:
+            return ""
+        return _date(
+            self.date_to,
+            "DATETIME_FORMAT" if self.show_times else "DATE_FORMAT"
+        )
 
     def __str__(self):
         return self.name

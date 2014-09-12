@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>{{ settings.TIXL_INSTANCE_NAME }}</title>
+		<title>{% block title %}{% endblock %}{% if url_name != "index" %} :: {% endif %}{{ settings.TIXL_INSTANCE_NAME }}</title>
 		{% compress css %}
 		<link rel="stylesheet" type="text/less" href="{% static "tixlcontrol/less/main.less" %}" />
 		{% endcompress %}
@@ -23,7 +23,10 @@
 				</div>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="{% url 'control:index' %}">{% trans "Dashboard" %}</a></li>
+						{% block nav %}
+						<li {% if url_name == "index" %}class="active"{% endif %}><a href="{% url 'control:index' %}">{% trans "Dashboard" %}</a></li>
+						<li {% if "events" in url_name %}class="active"{% endif %}><a href="{% url 'control:events' %}">{% trans "Events" %}</a></li>
+						{% endblock %}
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="#"><i class="fa fa-user"></i> {{ request.user.get_full_name }}</a></li>
