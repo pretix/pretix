@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-11 11:16+0200\n"
+"POT-Creation-Date: 2014-09-11 21:09+0200\n"
 "PO-Revision-Date: 2014-09-11 11:05+200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: tixl/settings.py:92
+#: tixl/settings.py:104
 msgid "German"
 msgstr "Deutsch"
 
-#: tixl/settings.py:93
+#: tixl/settings.py:105
 msgid "English"
 msgstr "Englisch"
 
@@ -30,7 +30,7 @@ msgstr "Englisch"
 msgid "The two password fields didn't match."
 msgstr "Die beiden eingegebenen Passwörter stimmen nicht überein."
 
-#: tixlbase/admin.py:18 tixlcontrol/views/auth.py:14
+#: tixlbase/admin.py:18 tixlcontrol/views/auth.py:15
 msgid "Password"
 msgstr "Passwort"
 
@@ -70,15 +70,27 @@ msgstr "Nachname"
 msgid "Log in"
 msgstr "Anmelden"
 
-#: tixlcontrol/views/auth.py:13
+#: tixlcontrol/templates/tixlcontrol/base.html:17
+msgid "Toggle navigation"
+msgstr ""
+
+#: tixlcontrol/templates/tixlcontrol/base.html:26
+msgid "Dashboard"
+msgstr "Übersicht"
+
+#: tixlcontrol/templates/tixlcontrol/base.html:30
+msgid "Log out"
+msgstr "Abmelden"
+
+#: tixlcontrol/views/auth.py:14
 msgid "E-mail address"
 msgstr "E-Mail-Adresse"
 
-#: tixlcontrol/views/auth.py:18
+#: tixlcontrol/views/auth.py:19
 msgid "Please enter a correct e-mail address and password."
 msgstr ""
 "Bitte geben Sie eine gültige Kombination aus E-Mail-Adresse und Passwort ein."
 
-#: tixlcontrol/views/auth.py:19
+#: tixlcontrol/views/auth.py:20
 msgid "This account is inactive."
 msgstr "Dieses Konto ist deaktiviert."

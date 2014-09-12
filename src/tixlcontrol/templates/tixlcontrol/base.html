@@ -1,0 +1,40 @@
+{% load compress %}
+{% load staticfiles %}
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{ settings.TIXL_INSTANCE_NAME }}</title>
+		{% compress css %}
+		<link rel="stylesheet" type="text/less" href="{% static "tixlcontrol/less/main.less" %}" />
+		{% endcompress %}
+	</head>
+	<body>
+		<div class="navbar navbar-default navbar-static-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">{% trans "Toggle navigation" %}</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">{{ settings.TIXL_INSTANCE_NAME }}</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="{% url 'control:index' %}">{% trans "Dashboard" %}</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#"><i class="fa fa-user"></i> {{ request.user.get_full_name }}</a></li>
+						<li><a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}"><i class="fa fa-sign-out"></i></a></li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+		</div>
+		<div class="container">
+		{% block content %}
+		{% endblock %}
+		</div>
+	</body>
+</html>

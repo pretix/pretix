@@ -4,6 +4,7 @@ from django import forms
 from django.utils.translation import ugettext as _
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
 
 
 class AuthenticationForm(BaseAuthenticationForm):
@@ -64,3 +65,8 @@ def login(request):
         form = AuthenticationForm()
     ctx['form'] = form
     return render(request, 'tixlcontrol/auth/login.html', ctx)
+
+
+def logout(request):
+    auth_logout(request)
+    return redirect('control:auth.login')

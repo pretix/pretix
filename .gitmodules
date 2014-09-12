@@ -1,3 +1,6 @@
 [submodule "src/tixlbase/static/bootstrap"]
 	path = src/tixlbase/static/bootstrap
 	url = https://github.com/twbs/bootstrap.git
+[submodule "src/tixlbase/static/fontawesome"]
+	path = src/tixlbase/static/fontawesome
+	url = https://github.com/FortAwesome/Font-Awesome.git
