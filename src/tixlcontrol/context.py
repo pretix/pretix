@@ -3,7 +3,9 @@ from django.core.urlresolvers import resolve
 
 
 def contextprocessor(request):
-    return {
+    ctx = {
         'url_name': resolve(request.path_info).url_name,
         'settings': settings,
     }
+
+    return ctx

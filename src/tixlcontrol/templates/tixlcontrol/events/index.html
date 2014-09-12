@@ -16,7 +16,7 @@
 		<tbody>
 			{% for e in events %}
 			<tr>
-				<td><strong><a href="">{{ e.name }}</a></strong></td>
+				<td><strong><a href="{% url "control:event.index" event=e.slug %}">{{ e.name }}</a></strong></td>
 				<td>{{ e.organizer }}</td>
 				<td>{{ e.get_date_from_display }}</td>
 				<td>{{ e.get_date_to_display }}</td>
