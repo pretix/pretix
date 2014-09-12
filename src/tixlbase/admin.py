@@ -3,7 +3,9 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext as _
 from django import forms
 
-from tixlbase.models import User
+from tixlbase.models import (
+    User, Organizer, OrganizerPermission, Event, EventPermission
+)
 
 
 class TixlUserCreationForm(forms.ModelForm):
@@ -57,4 +59,36 @@ class TixlUserAdmin(UserAdmin):
     list_filter = ('is_staff', 'is_active', 'groups')
     add_form = TixlUserCreationForm
 
+
+class OrganizerPermissionInline(admin.TabularInline):
+
+    model = OrganizerPermission
+    extra = 2
+
+
+class OrganizerAdmin(admin.ModelAdmin):
+
+    model = Organizer
+    inlines = [OrganizerPermissionInline]
+    list_display = ('name', 'slug')
+    search_fields = ('name', 'slug')
+
+
+class EventPermissionInline(admin.TabularInline):
+
+    model = EventPermission
+    extra = 2
+
+
+class EventAdmin(admin.ModelAdmin):
+
+    model = Event
+    inlines = [EventPermissionInline]
+    list_display = ('name', 'slug', 'organizer', 'date_from')
+    search_fields = ('name', 'slug')
+    list_filter = ('date_from', 'locale', 'currency')
+
+
 admin.site.register(User, TixlUserAdmin)
+admin.site.register(Organizer, OrganizerAdmin)
+admin.site.register(Event, EventAdmin)

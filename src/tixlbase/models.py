@@ -1,6 +1,7 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 
 class UserManager(BaseUserManager):
@@ -75,9 +76,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     familyname = models.CharField(max_length=255, blank=True,
                                   null=True,
                                   verbose_name=_('Family name'))
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True,
+                                    verbose_name=_('Is active'))
+    is_staff = models.BooleanField(default=False,
+                                   verbose_name=('Is site admin'))
+    date_joined = models.DateTimeField(auto_now_add=True,
+                                       verbose_name=_('Date joined'))
 
     objects = UserManager()
 
@@ -119,6 +123,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['username']
 
     class Meta:
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
         unique_together = (("event", "username"),)
 
 
@@ -129,13 +135,20 @@ class Organizer(models.Model):
     all lowercase) being used in URLs.
     """
 
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200,
+                            verbose_name=_("Name"))
     slug = models.CharField(max_length=50,
-                            unique=True, db_index=True)
+                            unique=True, db_index=True,
+                            verbose_name=_("Slug"))
     permitted = models.ManyToManyField(User, through='OrganizerPermission',
                                        related_name="organizers")
 
+    def __str__(self):
+        return self.name
+
     class Meta:
+        verbose_name = _("Organizer")
+        verbose_name_plural = _("Organizers")
         ordering = ("name",)
 
 
@@ -147,9 +160,20 @@ class OrganizerPermission(models.Model):
 
     organizer = models.ForeignKey(Organizer)
     user = models.ForeignKey(User, related_name="organizer_perms")
-    can_create_events = models.BooleanField(default=True)
+    can_create_events = models.BooleanField(
+        default=True,
+        verbose_name=_("Can create events"),
+    )
+
+    def __str__(self):
+        return _("%(name)s on %(object)s") % {
+            'name': str(self.user),
+            'object': str(self.organizer),
+        }
 
     class Meta:
+        verbose_name = _("Organizer permission")
+        verbose_name_plural = _("Organizer permissions")
         unique_together = (("organizer", "user"),)
 
 
@@ -181,22 +205,51 @@ class Event(models.Model):
 
     organizer = models.ForeignKey(Organizer, related_name="events",
                                   on_delete=models.PROTECT)
-    name = models.CharField(max_length=200)
-    slug = models.CharField(max_length=50, db_index=True)
+    name = models.CharField(max_length=200,
+                            verbose_name=_("Name"))
+    slug = models.CharField(max_length=50, db_index=True,
+                            verbose_name=_("Slug"))
     permitted = models.ManyToManyField(User, through='EventPermission',
-                                       related_name="events")
-    locale = models.CharField(max_length=10)
-    currency = models.CharField(max_length=10)
-    date_from = models.DateTimeField()
-    date_to = models.DateTimeField(null=True, blank=True)
-    show_date_to = models.BooleanField(default=True)
-    show_times = models.BooleanField(default=True)
-    presale_end = models.DateTimeField(null=True, blank=True)
-    presale_start = models.DateTimeField(null=True, blank=True)
-    payment_term_days = models.IntegerField(default=14)
-    payment_term_last = models.DateTimeField(null=True, blank=True)
+                                       related_name="events",)
+    locale = models.CharField(max_length=10,
+                              choices=settings.LANGUAGES,
+                              verbose_name=_("Default locale"))
+    currency = models.CharField(max_length=10,
+                                verbose_name=_("Default currency"))
+    date_from = models.DateTimeField(verbose_name=_("Event start time"))
+    date_to = models.DateTimeField(null=True, blank=True,
+                                   verbose_name=_("Event end time"))
+    show_date_to = models.BooleanField(
+        default=True,
+        verbose_name=_("Show event end date")
+    )
+    show_times = models.BooleanField(
+        default=True,
+        verbose_name=_("Show dates with time")
+    )
+    presale_end = models.DateTimeField(
+        null=True, blank=True,
+        verbose_name=_("End of presale")
+    )
+    presale_start = models.DateTimeField(
+        null=True, blank=True,
+        verbose_name=_("Start of presale")
+    )
+    payment_term_days = models.IntegerField(
+        default=14,
+        verbose_name=_("Payment term in days")
+    )
+    payment_term_last = models.DateTimeField(
+        null=True, blank=True,
+        verbose_name=_("Last date of payments")
+    )
+
+    def __str__(self):
+        return self.name
 
     class Meta:
+        verbose_name = _("Event")
+        verbose_name_plural = _("Events")
         unique_together = (("organizer", "slug"),)
         ordering = ("date_from", "name")
 
@@ -207,9 +260,20 @@ class EventPermission(models.Model):
     access an event.
     """
 
-    organizer = models.ForeignKey(Event)
+    event = models.ForeignKey(Event)
     user = models.ForeignKey(User, related_name="event_perms")
-    can_change_settings = models.BooleanField(default=True)
+    can_change_settings = models.BooleanField(
+        default=True,
+        verbose_name=_("Can change event settings")
+    )
+
+    def __str__(self):
+        return _("%(name)s on %(object)s") % {
+            'name': str(self.user),
+            'object': str(self.event),
+        }
 
     class Meta:
-        unique_together = (("organizer", "user"),)
+        verbose_name = _("Event permission")
+        verbose_name_plural = _("Event permissions")
+        unique_together = (("event", "user"),)

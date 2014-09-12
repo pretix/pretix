@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-11 21:09+0200\n"
+"POT-Creation-Date: 2014-09-12 20:56+0200\n"
 "PO-Revision-Date: 2014-09-11 11:05+200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
@@ -26,45 +26,162 @@ msgstr "Deutsch"
 msgid "English"
 msgstr "Englisch"
 
-#: tixlbase/admin.py:16
+#: tixlbase/admin.py:18
 msgid "The two password fields didn't match."
 msgstr "Die beiden eingegebenen Passwörter stimmen nicht überein."
 
-#: tixlbase/admin.py:18 tixlcontrol/views/auth.py:15
+#: tixlbase/admin.py:20 tixlcontrol/views/auth.py:16
 msgid "Password"
 msgstr "Passwort"
 
-#: tixlbase/admin.py:20
+#: tixlbase/admin.py:22
 msgid "Password confirmation"
 msgstr "Passwort bestätigen"
 
-#: tixlbase/admin.py:22
+#: tixlbase/admin.py:24
 msgid "Enter the same password as above, for verification."
 msgstr "Geben Sie zur Bestätigung das selbe Passwort wie oben ein"
 
-#: tixlbase/admin.py:50
+#: tixlbase/admin.py:52
 msgid "Personal info"
 msgstr "Persönliche Daten"
 
-#: tixlbase/admin.py:51
+#: tixlbase/admin.py:53
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: tixlbase/models.py:65
+#: tixlbase/models.py:66
 msgid "Letters, digits and @/./+/-/_ only."
 msgstr "Nur Buchstaben, Zahlen und @/./+/-/_"
 
-#: tixlbase/models.py:71
+#: tixlbase/models.py:72
 msgid "E-mail"
 msgstr "E-Mail"
 
-#: tixlbase/models.py:74
+#: tixlbase/models.py:75
 msgid "Given name"
 msgstr "Vorname"
 
-#: tixlbase/models.py:77
+#: tixlbase/models.py:78
 msgid "Family name"
 msgstr "Nachname"
+
+#: tixlbase/models.py:80
+msgid "Is active"
+msgstr "Ist aktiviert"
+
+#: tixlbase/models.py:84
+msgid "Date joined"
+msgstr "Registrierungsdatum"
+
+#: tixlbase/models.py:126
+msgid "User"
+msgstr "Benutzer"
+
+#: tixlbase/models.py:127
+msgid "Users"
+msgstr "Benutzer"
+
+#: tixlbase/models.py:139 tixlbase/models.py:209
+msgid "Name"
+msgstr "Name"
+
+#: tixlbase/models.py:142 tixlbase/models.py:211
+msgid "Slug"
+msgstr "Kurzform"
+
+#: tixlbase/models.py:150
+msgid "Organizer"
+msgstr "Veranstalter"
+
+#: tixlbase/models.py:151
+msgid "Organizers"
+msgstr "Veranstalter"
+
+#: tixlbase/models.py:165
+msgid "Can create events"
+msgstr "Kann Veranstaltungen erstellen"
+
+#: tixlbase/models.py:169 tixlbase/models.py:271
+#, python-format
+msgid "%(name)s on %(object)s"
+msgstr "%(name)s für %(object)s"
+
+#: tixlbase/models.py:175
+msgid "Organizer permission"
+msgstr "Veranstalter-Berechtigung"
+
+#: tixlbase/models.py:176
+msgid "Organizer permissions"
+msgstr "Veranstalter-Berechtigungen"
+
+#: tixlbase/models.py:216
+msgid "Default locale"
+msgstr "Standardsprache"
+
+#: tixlbase/models.py:218
+msgid "Default currency"
+msgstr "Standardwährung"
+
+#: tixlbase/models.py:219
+msgid "Event start time"
+msgstr "Veranstaltungsbeginn"
+
+#: tixlbase/models.py:221
+msgid "Event end time"
+msgstr "Veranstaltungsende"
+
+#: tixlbase/models.py:224
+msgid "Show event end date"
+msgstr "Zeige Veranstaltungsende"
+
+#: tixlbase/models.py:228
+msgid "Show dates with time"
+msgstr "Zeige Uhrzeiten"
+
+#: tixlbase/models.py:232
+msgid "End of presale"
+msgstr "Ende des Vorverkaufs"
+
+#: tixlbase/models.py:236
+msgid "Start of presale"
+msgstr "Beginn des Vorverkaufs"
+
+#: tixlbase/models.py:240
+msgid "Payment term in days"
+msgstr "Zahlungsziel in Tagen"
+
+#: tixlbase/models.py:244
+msgid "Last date of payments"
+msgstr "Datum des letzten möglichen Zahlungseingangs"
+
+#: tixlbase/models.py:251
+msgid "Event"
+msgstr "Veranstaltung"
+
+#: tixlbase/models.py:252 tixlcontrol/templates/tixlcontrol/base.html:28
+#: tixlcontrol/templates/tixlcontrol/events/index.html:3
+msgid "Events"
+msgstr "Veranstaltungen"
+
+#: tixlbase/models.py:267
+msgid "Can change event settings"
+msgstr "Kann Veranstaltungseinstellungen ändern"
+
+#: tixlbase/models.py:277
+msgid "Event permission"
+msgstr "Veranstaltungs-Berechtigungen"
+
+#: tixlbase/models.py:278
+#, fuzzy
+#| msgid "Permissions"
+msgid "Event permissions"
+msgstr "Berechtigungen"
+
+#: tixlcontrol/templates/tixlcontrol/auth/base.html:18
+#, python-format
+msgid "powered by <a %(a_attr)s>tixl</a>"
+msgstr "powered by <a %(a_attr)s>tixl</a>"
 
 #: tixlcontrol/templates/tixlcontrol/auth/login.html:12
 msgid "Log in"
@@ -72,25 +189,25 @@ msgstr "Anmelden"
 
 #: tixlcontrol/templates/tixlcontrol/base.html:17
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Navigation umschalten"
 
-#: tixlcontrol/templates/tixlcontrol/base.html:26
+#: tixlcontrol/templates/tixlcontrol/base.html:27
 msgid "Dashboard"
 msgstr "Übersicht"
 
-#: tixlcontrol/templates/tixlcontrol/base.html:30
+#: tixlcontrol/templates/tixlcontrol/base.html:33
 msgid "Log out"
 msgstr "Abmelden"
 
-#: tixlcontrol/views/auth.py:14
+#: tixlcontrol/views/auth.py:15
 msgid "E-mail address"
 msgstr "E-Mail-Adresse"
 
-#: tixlcontrol/views/auth.py:19
+#: tixlcontrol/views/auth.py:20
 msgid "Please enter a correct e-mail address and password."
 msgstr ""
 "Bitte geben Sie eine gültige Kombination aus E-Mail-Adresse und Passwort ein."
 
-#: tixlcontrol/views/auth.py:20
+#: tixlcontrol/views/auth.py:21
 msgid "This account is inactive."
 msgstr "Dieses Konto ist deaktiviert."
