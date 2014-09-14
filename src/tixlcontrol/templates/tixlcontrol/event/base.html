@@ -10,7 +10,7 @@
 		{% for g in event_list %}
 			<li class="dropdown-header">{{ g.grouper }}</li>
 			{% for e in g.list %}
-			<li><a href="{% url "control:event.index" event=e.slug %}">{{ e.name }}</a></li>
+			<li><a href="{% url "control:event.index" organizer=g.grouper.slug event=e.slug %}">{{ e.name }}</a></li>
 			{% endfor %}
 		{% endfor %}
 	</ul>

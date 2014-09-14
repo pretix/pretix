@@ -52,7 +52,8 @@ class PermissionMiddleware:
             try:
                 request.event = Event.objects.get(
                     slug=url.kwargs['event'],
-                    permitted__id__exact=request.user.id
+                    permitted__id__exact=request.user.id,
+                    organizer__slug=url.kwargs['organizer'],
                 )
-            except:
+            except Event.DoesNotExist:
                 return HttpResponseNotFound(_("The selected event was not found or you have no permission to administrate it."))
