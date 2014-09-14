@@ -91,7 +91,7 @@ def get_language_from_request(request):
         pass
 
     # Priority 3: Event default
-    if hassattr(request, 'event'):
+    if hasattr(request, 'event'):
         lang_code = request.event.locale
         try:
             return get_supported_language_variant(lang_code)
