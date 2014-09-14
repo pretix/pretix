@@ -50,6 +50,7 @@ class TixlUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('identifier', 'event', 'username', 'password')}),
         (_('Personal info'), {'fields': ('familyname', 'givenname', 'email')}),
+        (_('Locale'), {'fields': ('locale', 'timezone')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff',
                                        'groups', 'user_permissions')}),
     )

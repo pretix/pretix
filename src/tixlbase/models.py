@@ -83,6 +83,13 @@ class User(AbstractBaseUser, PermissionsMixin):
                                    verbose_name=('Is site admin'))
     date_joined = models.DateTimeField(auto_now_add=True,
                                        verbose_name=_('Date joined'))
+    locale = models.CharField(max_length=50,
+                              choices=settings.LANGUAGES,
+                              default=settings.LANGUAGE_CODE,
+                              verbose_name=_('Language'))
+    timezone = models.CharField(max_length=100,
+                                default=settings.TIME_ZONE,
+                                verbose_name=('Timezone'))
 
     objects = UserManager()
 
@@ -215,6 +222,9 @@ class Event(models.Model):
     locale = models.CharField(max_length=10,
                               choices=settings.LANGUAGES,
                               verbose_name=_("Default locale"))
+    timezone = models.CharField(max_length=100,
+                                default=settings.TIME_ZONE,
+                                verbose_name=_('Default timezone'))
     currency = models.CharField(max_length=10,
                                 verbose_name=_("Default currency"))
     date_from = models.DateTimeField(verbose_name=_("Event start time"))
