@@ -57,7 +57,7 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
         return reverse('control:event.settings', kwargs={
             'organizer': self.get_object().organizer.slug,
             'event': self.get_object().slug,
-        })
+        }) + '?success=true'
 
 
 def index(request, organizer, event):

@@ -4,6 +4,11 @@
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
 	<h1>{% trans "Settings" %}</h1>
+	{% if "success" in request.GET %}
+		<div class="alert alert-success">
+			{% trans "Your changes have been saved." %}
+		</div>
+	{% endif %}
 	<form action="" method="post" class="form-horizontal">
 		{% csrf_token %}
 		<fieldset>
