@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import date as _date
+from django.core.validators import RegexValidator
 
 
 class UserManager(BaseUserManager):
@@ -215,8 +216,19 @@ class Event(models.Model):
                                   on_delete=models.PROTECT)
     name = models.CharField(max_length=200,
                             verbose_name=_("Name"))
-    slug = models.CharField(max_length=50, db_index=True,
-                            verbose_name=_("Slug"))
+    slug = models.CharField(
+        max_length=50, db_index=True,
+        help_text=_(
+            "Should be short, only contain lowercase letters and numbers, and must be unique among your events. "
+            + "This is being used in addresses and bank transfer references."),
+        validators=[
+            RegexValidator(
+                regex="^[a-zA-Z0-9.-]+$",
+                message=_("The slug may only contain letters, numbers, dots and dashes."),
+            )
+        ],
+        verbose_name=_("Slug"),
+    )
     permitted = models.ManyToManyField(User, through='EventPermission',
                                        related_name="events",)
     locale = models.CharField(max_length=10,
@@ -232,27 +244,33 @@ class Event(models.Model):
                                    verbose_name=_("Event end time"))
     show_date_to = models.BooleanField(
         default=True,
-        verbose_name=_("Show event end date")
+        verbose_name=_("Show event end date"),
+        help_text=("If disabled, only event's start date will be displayed to the public."),
     )
     show_times = models.BooleanField(
         default=True,
-        verbose_name=_("Show dates with time")
+        verbose_name=_("Show dates with time"),
+        help_text=("If disabled, the event's start and end date will be displayed without the time of day."),
     )
     presale_end = models.DateTimeField(
         null=True, blank=True,
-        verbose_name=_("End of presale")
+        verbose_name=_("End of presale"),
+        help_text=_("No items will be sold after this date."),
     )
     presale_start = models.DateTimeField(
         null=True, blank=True,
-        verbose_name=_("Start of presale")
+        verbose_name=_("Start of presale"),
+        help_text=_("No items will be sold before this date."),
     )
     payment_term_days = models.IntegerField(
         default=14,
-        verbose_name=_("Payment term in days")
+        verbose_name=_("Payment term in days"),
+        help_text=_("The number of days after placing an order the user has to pay to preserve his reservation."),
     )
     payment_term_last = models.DateTimeField(
         null=True, blank=True,
-        verbose_name=_("Last date of payments")
+        verbose_name=_("Last date of payments"),
+        help_text=_("The last date any payments are accepted. This has precedence over the number of days configured above.")
     )
 
     def get_date_from_display(self):

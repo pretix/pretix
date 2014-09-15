@@ -15,6 +15,6 @@
 		{% endfor %}
 	</ul>
 </li>
-<li {% if url_name == "event.index" %}class="active"{% endif %}><a href="{% url 'control:index' %}">{% trans "Dashboard" %}</a></li>
-<li {% if "event.settings" in url_name %}class="active"{% endif %}><a href="">{% trans "Settings" %}</a></li>
+<li {% if url_name == "event.index" %}class="active"{% endif %}><a href="{% url 'control:event.index' organizer=request.event.organizer.slug event=request.event.slug %}">{% trans "Dashboard" %}</a></li>
+<li {% if url_name == "event.settings" %}class="active"{% endif %}><a href="{% url 'control:event.settings' organizer=request.event.organizer.slug event=request.event.slug %}">{% trans "Settings" %}</a></li>
 {% endblock %}
