@@ -358,6 +358,9 @@ class Property(models.Model):
         verbose_name=_("Property name"),
     )
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = _("Item property")
         verbose_name_plural = _("Item properties")
@@ -378,6 +381,9 @@ class PropertyValue(models.Model):
         max_length=250,
         verbose_name=_("Value"),
     )
+
+    def __str__(self):
+        return "%s: %s" % (self.prop.name, self.value)
 
 
 class Item(models.Model):
@@ -467,12 +473,12 @@ class ItemFlavor(models.Model):
         Item,
         related_name='flavors'
     )
-    prop = models.ManyToManyField(
+    values = models.ManyToManyField(
         PropertyValue,
-        related_name='values'
+        related_name='flavors',
     )
     active = models.BooleanField(
-        default=True
+        default=True,
     )
     default_price = models.DecimalField(
         decimal_places=2, max_digits=7,

@@ -4,7 +4,8 @@ from django.utils.translation import ugettext as _
 from django import forms
 
 from tixlbase.models import (
-    User, Organizer, OrganizerPermission, Event, EventPermission
+    User, Organizer, OrganizerPermission, Event, EventPermission,
+    Property, PropertyValue, Item, ItemFlavor
 )
 
 
@@ -90,6 +91,36 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ('date_from', 'locale', 'currency')
 
 
+class PropertyValueInline(admin.StackedInline):
+
+    model = PropertyValue
+    extra = 4
+
+
+class PropertyAdmin(admin.ModelAdmin):
+
+    model = Property
+    inlines = [PropertyValueInline]
+    list_display = ('name', 'event')
+    search_fields = ('name', 'event')
+
+
+class ItemFlavorInline(admin.TabularInline):
+
+    model = ItemFlavor
+    extra = 4
+
+
+class ItemAdmin(admin.ModelAdmin):
+
+    model = Item
+    inlines = [ItemFlavorInline]
+    list_display = ('name', 'event', 'category')
+    search_fields = ('name', 'event', 'category', 'short_description')
+
+
 admin.site.register(User, TixlUserAdmin)
 admin.site.register(Organizer, OrganizerAdmin)
 admin.site.register(Event, EventAdmin)
+admin.site.register(Property, PropertyAdmin)
+admin.site.register(Item, ItemAdmin)
