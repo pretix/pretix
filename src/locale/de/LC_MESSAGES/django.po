@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 20:56+0200\n"
+"POT-Creation-Date: 2014-09-16 22:52+0200\n"
 "PO-Revision-Date: 2014-09-11 11:05+200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
@@ -47,136 +47,255 @@ msgid "Personal info"
 msgstr "Persönliche Daten"
 
 #: tixlbase/admin.py:53
+msgid "Locale"
+msgstr "Sprache"
+
+#: tixlbase/admin.py:54
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: tixlbase/models.py:66
+#: tixlbase/models.py:68
 msgid "Letters, digits and @/./+/-/_ only."
 msgstr "Nur Buchstaben, Zahlen und @/./+/-/_"
 
-#: tixlbase/models.py:72
+#: tixlbase/models.py:74
 msgid "E-mail"
 msgstr "E-Mail"
 
-#: tixlbase/models.py:75
+#: tixlbase/models.py:77
 msgid "Given name"
 msgstr "Vorname"
 
-#: tixlbase/models.py:78
+#: tixlbase/models.py:80
 msgid "Family name"
 msgstr "Nachname"
 
-#: tixlbase/models.py:80
+#: tixlbase/models.py:82
 msgid "Is active"
 msgstr "Ist aktiviert"
 
-#: tixlbase/models.py:84
+#: tixlbase/models.py:86
 msgid "Date joined"
 msgstr "Registrierungsdatum"
 
-#: tixlbase/models.py:126
+#: tixlbase/models.py:90
+msgid "Language"
+msgstr "Sprache"
+
+#: tixlbase/models.py:135
 msgid "User"
 msgstr "Benutzer"
 
-#: tixlbase/models.py:127
+#: tixlbase/models.py:136
 msgid "Users"
 msgstr "Benutzer"
 
-#: tixlbase/models.py:139 tixlbase/models.py:209
+#: tixlbase/models.py:148 tixlbase/models.py:218
 msgid "Name"
 msgstr "Name"
 
-#: tixlbase/models.py:142 tixlbase/models.py:211
+#: tixlbase/models.py:151 tixlbase/models.py:230
 msgid "Slug"
 msgstr "Kurzform"
 
-#: tixlbase/models.py:150
+#: tixlbase/models.py:159
+#: tixlcontrol/templates/tixlcontrol/events/index.html:11
 msgid "Organizer"
 msgstr "Veranstalter"
 
-#: tixlbase/models.py:151
+#: tixlbase/models.py:160
 msgid "Organizers"
 msgstr "Veranstalter"
 
-#: tixlbase/models.py:165
+#: tixlbase/models.py:174
 msgid "Can create events"
 msgstr "Kann Veranstaltungen erstellen"
 
-#: tixlbase/models.py:169 tixlbase/models.py:271
+#: tixlbase/models.py:178 tixlbase/models.py:314
 #, python-format
 msgid "%(name)s on %(object)s"
 msgstr "%(name)s für %(object)s"
 
-#: tixlbase/models.py:175
+#: tixlbase/models.py:184
 msgid "Organizer permission"
 msgstr "Veranstalter-Berechtigung"
 
-#: tixlbase/models.py:176
+#: tixlbase/models.py:185
 msgid "Organizer permissions"
 msgstr "Veranstalter-Berechtigungen"
 
-#: tixlbase/models.py:216
+#: tixlbase/models.py:222
+msgid ""
+"Should be short, only contain lowercase letters and numbers, and must be "
+"unique among your events. This is being used in addresses and bank transfer "
+"references."
+msgstr ""
+"Sollte kurz sein und darf nur Kleinbuchstaben und Zahlen enthalten. Muss "
+"unter Ihren Veranstaltungen einmalig sein. Wird in URLs und "
+"Verwendungszwecken für Banküberweisungen benutzt."
+
+#: tixlbase/models.py:227
+msgid "The slug may only contain letters, numbers, dots and dashes."
+msgstr ""
+"Der Kurzname darf nur Buchstaben, Zahlen, Punkte und Bindestriche enthalten"
+
+#: tixlbase/models.py:236
 msgid "Default locale"
 msgstr "Standardsprache"
 
-#: tixlbase/models.py:218
+#: tixlbase/models.py:239 tixlcontrol/views/event.py:17
+msgid "Default timezone"
+msgstr "Standardzeitzone"
+
+#: tixlbase/models.py:241
 msgid "Default currency"
 msgstr "Standardwährung"
 
-#: tixlbase/models.py:219
+#: tixlbase/models.py:242
 msgid "Event start time"
 msgstr "Veranstaltungsbeginn"
 
-#: tixlbase/models.py:221
+#: tixlbase/models.py:244
 msgid "Event end time"
 msgstr "Veranstaltungsende"
 
-#: tixlbase/models.py:224
+#: tixlbase/models.py:247
 msgid "Show event end date"
 msgstr "Zeige Veranstaltungsende"
 
-#: tixlbase/models.py:228
+#: tixlbase/models.py:248
+msgid "If disabled, only event's start date will be displayed to the public."
+msgstr ""
+"Wenn diese Einstellung deaktiviert ist, wird nur der Beginn der "
+"Veranstaltung öffentlich angezeigt."
+
+#: tixlbase/models.py:252
 msgid "Show dates with time"
 msgstr "Zeige Uhrzeiten"
 
-#: tixlbase/models.py:232
+#: tixlbase/models.py:253
+msgid ""
+"If disabled, the event's start and end date will be displayed without the "
+"time of day."
+msgstr ""
+"Wenn diese Einstellung deaktiviert ist, werden Veranstaltungsbeginn und -"
+"ende ohne Uhrzeit angezeigt"
+
+#: tixlbase/models.py:257
 msgid "End of presale"
 msgstr "Ende des Vorverkaufs"
 
-#: tixlbase/models.py:236
+#: tixlbase/models.py:258
+msgid "No items will be sold after this date."
+msgstr "Es werden nach diesem Termin keine Produkte mehr verkauft."
+
+#: tixlbase/models.py:262
 msgid "Start of presale"
 msgstr "Beginn des Vorverkaufs"
 
-#: tixlbase/models.py:240
+#: tixlbase/models.py:263
+msgid "No items will be sold before this date."
+msgstr "Es werden vor diesem Termin keine Produkte verkauft."
+
+#: tixlbase/models.py:267
 msgid "Payment term in days"
 msgstr "Zahlungsziel in Tagen"
 
-#: tixlbase/models.py:244
+#: tixlbase/models.py:268
+msgid ""
+"The number of days after placing an order the user has to pay to preserve "
+"his reservation."
+msgstr "Die Anzahl an Tagen die ein Käufer zum Bezahlen seiner Bestellung hat."
+
+#: tixlbase/models.py:272
 msgid "Last date of payments"
 msgstr "Datum des letzten möglichen Zahlungseingangs"
 
-#: tixlbase/models.py:251
+#: tixlbase/models.py:273
+msgid ""
+"The last date any payments are accepted. This has precedence over the number "
+"of days configured above."
+msgstr ""
+"Das Datum, bis zu dem Zahlungseingänge akzeptiert werden. Diese Einstellung "
+"hat Vorrang über der oben eingestellten Anzahl an Tagen"
+
+#: tixlbase/models.py:294
 msgid "Event"
 msgstr "Veranstaltung"
 
-#: tixlbase/models.py:252 tixlcontrol/templates/tixlcontrol/base.html:28
+#: tixlbase/models.py:295 tixlcontrol/templates/tixlcontrol/base.html:32
 #: tixlcontrol/templates/tixlcontrol/events/index.html:3
+#: tixlcontrol/templates/tixlcontrol/events/index.html:5
 msgid "Events"
 msgstr "Veranstaltungen"
 
-#: tixlbase/models.py:267
+#: tixlbase/models.py:310
 msgid "Can change event settings"
 msgstr "Kann Veranstaltungseinstellungen ändern"
 
-#: tixlbase/models.py:277
+#: tixlbase/models.py:320
 msgid "Event permission"
+msgstr "Veranstaltungs-Berechtigung"
+
+#: tixlbase/models.py:321
+msgid "Event permissions"
 msgstr "Veranstaltungs-Berechtigungen"
 
-#: tixlbase/models.py:278
-#, fuzzy
-#| msgid "Permissions"
-msgid "Event permissions"
-msgstr "Berechtigungen"
+#: tixlbase/models.py:333
+msgid "Category name"
+msgstr "Bezeichnung"
+
+#: tixlbase/models.py:343
+msgid "Item category"
+msgstr "Produktkategorie"
+
+#: tixlbase/models.py:344
+msgid "Item categories"
+msgstr "Produktkategorien"
+
+#: tixlbase/models.py:361
+msgid "Item name"
+msgstr "Produktbezeichnung"
+
+#: tixlbase/models.py:366
+msgid "Short description"
+msgstr "Kurze Beschreibung"
+
+#: tixlbase/models.py:367
+msgid "This is shown below the item name in lists."
+msgstr "Wird in Listen unter dem Name angezeigt."
+
+#: tixlbase/models.py:371
+msgid "Long description"
+msgstr "Lange Beschreibung"
+
+#: tixlbase/models.py:376
+msgid "Default price"
+msgstr "Basispreis"
+
+#: tixlbase/models.py:381
+msgid "Included taxes in percent"
+msgstr "Steuern inklusive in Prozent"
+
+#: tixlbase/models.py:394
+msgid "Item"
+msgstr "Produkt"
+
+#: tixlbase/models.py:395
+msgid "Items"
+msgstr "Produkte"
+
+#: tixlcontrol/middleware.py:59
+msgid ""
+"The selected event was not found or you have no permission to administrate "
+"it."
+msgstr ""
+"Sie haben keine Berechtigung, die ausgewählte Veranstaltung zu "
+"administrieren."
+
+#: tixlcontrol/permissions.py:22
+msgid "You do not have permission to view this content."
+msgstr "Sie haben keine Berechtigung, diese Inhalte aufzurufen."
 
 #: tixlcontrol/templates/tixlcontrol/auth/base.html:18
 #, python-format
@@ -187,17 +306,72 @@ msgstr "powered by <a %(a_attr)s>tixl</a>"
 msgid "Log in"
 msgstr "Anmelden"
 
-#: tixlcontrol/templates/tixlcontrol/base.html:17
+#: tixlcontrol/templates/tixlcontrol/base.html:21
 msgid "Toggle navigation"
 msgstr "Navigation umschalten"
 
-#: tixlcontrol/templates/tixlcontrol/base.html:27
+#: tixlcontrol/templates/tixlcontrol/base.html:31
+#: tixlcontrol/templates/tixlcontrol/event/base.html:18
 msgid "Dashboard"
 msgstr "Übersicht"
 
-#: tixlcontrol/templates/tixlcontrol/base.html:33
+#: tixlcontrol/templates/tixlcontrol/base.html:37
 msgid "Log out"
 msgstr "Abmelden"
+
+#: tixlcontrol/templates/tixlcontrol/event/base.html:8
+msgid "Event overview"
+msgstr "Überblick"
+
+#: tixlcontrol/templates/tixlcontrol/event/base.html:19
+#: tixlcontrol/templates/tixlcontrol/event/settings.html:6
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: tixlcontrol/templates/tixlcontrol/event/settings.html:9
+msgid "Your changes have been saved."
+msgstr "Die Änderungen wurden gespeichert."
+
+#: tixlcontrol/templates/tixlcontrol/event/settings.html:15
+msgid "General information"
+msgstr "Allgemeine Informationen"
+
+#: tixlcontrol/templates/tixlcontrol/event/settings.html:23
+msgid "Display settings"
+msgstr "Anzeigeeinstellungen"
+
+#: tixlcontrol/templates/tixlcontrol/event/settings.html:30
+msgid "Presale settings"
+msgstr "Vorverkaufseinstellungen"
+
+#: tixlcontrol/templates/tixlcontrol/event/settings.html:35
+msgid "Payment settings"
+msgstr "Zahlungseinstellungen"
+
+#: tixlcontrol/templates/tixlcontrol/event/settings.html:42
+msgid "Save"
+msgstr "Speichern"
+
+#: tixlcontrol/templates/tixlcontrol/events/index.html:6
+msgid ""
+"The list below shows all events you have administrative access to. Click on "
+"the event name to access event details."
+msgstr ""
+"Die untenstehende Liste zeigt alle Veranstaltungen, auf die Sie "
+"administrativen Zugriff haben. Klicken Sie auf einen Veranstaltungstitel um "
+"Details aufzurufen"
+
+#: tixlcontrol/templates/tixlcontrol/events/index.html:10
+msgid "Event name"
+msgstr "Veranstaltungstitel"
+
+#: tixlcontrol/templates/tixlcontrol/events/index.html:12
+msgid "Start date"
+msgstr "Beginn"
+
+#: tixlcontrol/templates/tixlcontrol/events/index.html:13
+msgid "End date"
+msgstr "Ende"
 
 #: tixlcontrol/views/auth.py:15
 msgid "E-mail address"

@@ -245,12 +245,12 @@ class Event(models.Model):
     show_date_to = models.BooleanField(
         default=True,
         verbose_name=_("Show event end date"),
-        help_text=("If disabled, only event's start date will be displayed to the public."),
+        help_text=_("If disabled, only event's start date will be displayed to the public."),
     )
     show_times = models.BooleanField(
         default=True,
         verbose_name=_("Show dates with time"),
-        help_text=("If disabled, the event's start and end date will be displayed without the time of day."),
+        help_text=_("If disabled, the event's start and end date will be displayed without the time of day."),
     )
     presale_end = models.DateTimeField(
         null=True, blank=True,
