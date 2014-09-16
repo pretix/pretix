@@ -320,3 +320,76 @@ class EventPermission(models.Model):
         verbose_name = _("Event permission")
         verbose_name_plural = _("Event permissions")
         unique_together = (("event", "user"),)
+
+
+class ItemCategory(models.Model):
+    """
+    Items can be sorted into categories
+    """
+    event = models.ForeignKey(Event,
+                              on_delete=models.CASCADE)
+    name = models.CharField(
+        max_length=255,
+        verbose_name=_("Category name"),
+    )
+    position = models.IntegerField(
+        null=True, blank=True
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _("Item category")
+        verbose_name_plural = _("Item categories")
+        ordering = ('position',)
+
+
+class Item(models.Model):
+    """
+    An item is a thing which can be sold.
+    """
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.PROTECT
+    )
+    category = models.ForeignKey(ItemCategory,
+                                 on_delete=models.PROTECT,
+                                 blank=True, null=True)
+    name = models.CharField(
+        max_length=255,
+        verbose_name=_("Item name")
+    )
+    active = models.BooleanField(default=True)
+    deleted = models.BooleanField(default=False)
+    short_description = models.TextField(
+        verbose_name=_("Short description"),
+        help_text=_("This is shown below the item name in lists."),
+        null=True, blank=True,
+    )
+    long_description = models.TextField(
+        verbose_name=_("Long description"),
+        null=True, blank=True,
+    )
+    default_price = models.DecimalField(
+        null=True, blank=True,
+        verbose_name=_("Default price"),
+        max_digits=7, decimal_places=2
+    )
+    tax_rate = models.DecimalField(
+        null=True, blank=True,
+        verbose_name=_("Included taxes in percent"),
+        max_digits=7, decimal_places=2
+    )
+
+    def __str__(self):
+        return self.name
+
+    def delete(self):
+        self.deleted = True
+        self.active = False
+        return super().save()
+
+    class Meta:
+        verbose_name = _("Item")
+        verbose_name_plural = _("Items")
