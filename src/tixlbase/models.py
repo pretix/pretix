@@ -345,17 +345,62 @@ class ItemCategory(models.Model):
         ordering = ('position',)
 
 
+class Property(models.Model):
+    """
+    A property is a modifier which can be applied to an
+    Item. For example 'Size' would be a property associated
+    with the item 'T-Shirt'.
+    """
+
+    event = models.ForeignKey(Event)
+    name = models.CharField(
+        max_length=250,
+        verbose_name=_("Property name"),
+    )
+
+    class Meta:
+        verbose_name = _("Item property")
+        verbose_name_plural = _("Item properties")
+
+
+class PropertyValue(models.Model):
+    """
+    A value of a property. If the property would be 'T-Shirt size',
+    this could be 'M' or 'L'
+    """
+
+    prop = models.ForeignKey(
+        Property,
+        on_delete=models.CASCADE,
+        related_name="values"
+    )
+    value = models.CharField(
+        max_length=250,
+        verbose_name=_("Value"),
+    )
+
+
 class Item(models.Model):
     """
-    An item is a thing which can be sold.
+    An item is a thing which can be sold. It belongs to an
+    event and may or may not belong to a category.
+
+    It has a default price which might by overriden by
+    restrictions.
+
+    Items can not be deleted, as this would cause database
+    inconsistencies. Instead, they have an attribute "deleted".
+    Deleted items will not be shown anywhere.
     """
     event = models.ForeignKey(
         Event,
         on_delete=models.PROTECT
     )
-    category = models.ForeignKey(ItemCategory,
-                                 on_delete=models.PROTECT,
-                                 blank=True, null=True)
+    category = models.ForeignKey(
+        ItemCategory,
+        on_delete=models.PROTECT,
+        blank=True, null=True
+    )
     name = models.CharField(
         max_length=255,
         verbose_name=_("Item name")
@@ -381,6 +426,10 @@ class Item(models.Model):
         verbose_name=_("Included taxes in percent"),
         max_digits=7, decimal_places=2
     )
+    properties = models.ManyToManyField(
+        Property,
+        related_name='items',
+    )
 
     def __str__(self):
         return self.name
@@ -393,3 +442,40 @@ class Item(models.Model):
     class Meta:
         verbose_name = _("Item")
         verbose_name_plural = _("Items")
+
+
+class ItemFlavor(models.Model):
+    """
+    A flavor is an item combined with values for all properties
+    associated with the item. For example, if your item is 'T-Shirt'
+    and your properties are 'Size' and 'Color', then an example for a
+    flavor would be 'T-Shirt XL read'.
+
+    Attention: _ALL_ combinations of PropertyValues _ALWAYS_ exist,
+    even if there is no ItemFlavor object for them! ItemFlavor objects
+    do NOT prove existance, they are only available to make it possible
+    to override default values (like the price) for certain combinations
+    of property values.
+
+    They also allow to explicitly EXCLUDE certain combinations of property
+    values by creating an ItemFlavor object for them with active set to
+    False.
+
+    Restrictions can be not only set to items but also directly to flavors.
+    """
+    item = models.ForeignKey(
+        Item,
+        related_name='flavors'
+    )
+    prop = models.ManyToManyField(
+        PropertyValue,
+        related_name='values'
+    )
+    active = models.BooleanField(
+        default=True
+    )
+    default_price = models.DecimalField(
+        decimal_places=2, max_digits=7,
+        null=True, blank=True,
+        verbose_name=_("Default price")
+    )
