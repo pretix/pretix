@@ -1,3 +1,5 @@
+from itertools import product
+
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -461,6 +463,39 @@ class Item(models.Model):
         self.deleted = True
         self.active = False
         return super().save()
+
+    def get_all_variations(self):
+        """
+        This method returns a list containing all variations of this
+        item, where n is the number of properties connected to this
+        item. The list contains either tupels of PropertyValue objects
+        or ItemVariation objects. The returned list is assumed not to
+        be in any order.
+        """
+        all_variations = self.variations.all().prefetch_related("values")
+        all_properties = self.properties.all().prefetch_related("values")
+        variations_cache = {}
+        for var in all_variations:
+            key = []
+            for v in var.values.all():
+                key.append((v.prop.pk, v.pk))
+            key = hash(tuple(sorted(key)))
+            variations_cache[key] = var
+
+        result = []
+        for comb in product(*[prop.values.all() for prop in all_properties]):
+            if len(comb) == 0:
+                continue
+            key = []
+            for v in comb:
+                key.append((v.prop.pk, v.pk))
+            key = hash(tuple(sorted(key)))
+            if key in variations_cache:
+                result.append(variations_cache[key])
+            else:
+                result.append(comb)
+
+        return result
 
     class Meta:
         verbose_name = _("Item")
