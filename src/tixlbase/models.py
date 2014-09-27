@@ -309,6 +309,10 @@ class EventPermission(models.Model):
         default=True,
         verbose_name=_("Can change event settings")
     )
+    can_change_items = models.BooleanField(
+        default=True,
+        verbose_name=_("Can change item settings")
+    )
 
     def __str__(self):
         return _("%(name)s on %(object)s") % {
@@ -400,11 +404,13 @@ class Item(models.Model):
     """
     event = models.ForeignKey(
         Event,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        related_name="items",
     )
     category = models.ForeignKey(
         ItemCategory,
         on_delete=models.PROTECT,
+        related_name="items",
         blank=True, null=True
     )
     name = models.CharField(
@@ -450,32 +456,32 @@ class Item(models.Model):
         verbose_name_plural = _("Items")
 
 
-class ItemFlavor(models.Model):
+class ItemVariation(models.Model):
     """
-    A flavor is an item combined with values for all properties
+    A variation is an item combined with values for all properties
     associated with the item. For example, if your item is 'T-Shirt'
     and your properties are 'Size' and 'Color', then an example for a
-    flavor would be 'T-Shirt XL read'.
+    variation would be 'T-Shirt XL read'.
 
     Attention: _ALL_ combinations of PropertyValues _ALWAYS_ exist,
-    even if there is no ItemFlavor object for them! ItemFlavor objects
+    even if there is no ItemVariation object for them! ItemVariation objects
     do NOT prove existance, they are only available to make it possible
     to override default values (like the price) for certain combinations
     of property values.
 
     They also allow to explicitly EXCLUDE certain combinations of property
-    values by creating an ItemFlavor object for them with active set to
+    values by creating an ItemVariation object for them with active set to
     False.
 
-    Restrictions can be not only set to items but also directly to flavors.
+    Restrictions can be not only set to items but also directly to variation.
     """
     item = models.ForeignKey(
         Item,
-        related_name='flavors'
+        related_name='variations'
     )
     values = models.ManyToManyField(
         PropertyValue,
-        related_name='flavors',
+        related_name='variations',
     )
     active = models.BooleanField(
         default=True,

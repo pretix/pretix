@@ -5,7 +5,7 @@ from django import forms
 
 from tixlbase.models import (
     User, Organizer, OrganizerPermission, Event, EventPermission,
-    Property, PropertyValue, Item, ItemFlavor
+    Property, PropertyValue, Item, ItemVariation
 )
 
 
@@ -105,16 +105,16 @@ class PropertyAdmin(admin.ModelAdmin):
     search_fields = ('name', 'event')
 
 
-class ItemFlavorInline(admin.TabularInline):
+class ItemVariationInline(admin.TabularInline):
 
-    model = ItemFlavor
+    model = ItemVariation
     extra = 4
 
 
 class ItemAdmin(admin.ModelAdmin):
 
     model = Item
-    inlines = [ItemFlavorInline]
+    inlines = [ItemVariationInline]
     list_display = ('name', 'event', 'category')
     search_fields = ('name', 'event', 'category', 'short_description')
 
