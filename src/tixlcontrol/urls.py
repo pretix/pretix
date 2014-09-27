@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url, include
-from tixlcontrol.views import main, event
+from tixlcontrol.views import main, event, item
 
 urlpatterns = patterns('',)
 urlpatterns += patterns(
@@ -16,9 +16,13 @@ urlpatterns += patterns(
     'tixlcontrol.views.event',
     url(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include(
         patterns(
-            'tixlcontrol.views.event',
-            url(r'^$', 'index', name='event.index'),
+            'tixlcontrol.views',
+            url(r'^$', 'event.index', name='event.index'),
             url(r'^settings$', event.EventUpdate.as_view(), name='event.settings'),
+            url(r'^items$', item.ItemList.as_view(), name='event.items'),
+            url(r'^items/(?P<item>\d+)/$', item.ItemUpdateGeneral.as_view(), name='event.item'),
+            url(r'^categories$', item.CategoryList.as_view(), name='event.items.categories'),
+            url(r'^properties$', item.PropertyList.as_view(), name='event.items.properties'),
         )
         ))
 )

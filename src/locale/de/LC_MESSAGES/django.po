@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-16 22:52+0200\n"
+"POT-Creation-Date: 2014-09-27 12:36+0200\n"
 "PO-Revision-Date: 2014-09-11 11:05+200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
@@ -26,31 +26,31 @@ msgstr "Deutsch"
 msgid "English"
 msgstr "Englisch"
 
-#: tixlbase/admin.py:18
+#: tixlbase/admin.py:19
 msgid "The two password fields didn't match."
 msgstr "Die beiden eingegebenen Passwörter stimmen nicht überein."
 
-#: tixlbase/admin.py:20 tixlcontrol/views/auth.py:16
+#: tixlbase/admin.py:21 tixlcontrol/views/auth.py:16
 msgid "Password"
 msgstr "Passwort"
 
-#: tixlbase/admin.py:22
+#: tixlbase/admin.py:23
 msgid "Password confirmation"
 msgstr "Passwort bestätigen"
 
-#: tixlbase/admin.py:24
+#: tixlbase/admin.py:25
 msgid "Enter the same password as above, for verification."
 msgstr "Geben Sie zur Bestätigung das selbe Passwort wie oben ein"
 
-#: tixlbase/admin.py:52
+#: tixlbase/admin.py:53
 msgid "Personal info"
 msgstr "Persönliche Daten"
 
-#: tixlbase/admin.py:53
+#: tixlbase/admin.py:54
 msgid "Locale"
 msgstr "Sprache"
 
-#: tixlbase/admin.py:54
+#: tixlbase/admin.py:55
 msgid "Permissions"
 msgstr "Berechtigungen"
 
@@ -111,7 +111,7 @@ msgstr "Veranstalter"
 msgid "Can create events"
 msgstr "Kann Veranstaltungen erstellen"
 
-#: tixlbase/models.py:178 tixlbase/models.py:314
+#: tixlbase/models.py:178 tixlbase/models.py:318
 #, python-format
 msgid "%(name)s on %(object)s"
 msgstr "%(name)s für %(object)s"
@@ -219,7 +219,7 @@ msgstr ""
 "Das Datum, bis zu dem Zahlungseingänge akzeptiert werden. Diese Einstellung "
 "hat Vorrang über der oben eingestellten Anzahl an Tagen"
 
-#: tixlbase/models.py:294
+#: tixlbase/models.py:294 tixlbase/models.py:409
 msgid "Event"
 msgstr "Veranstaltung"
 
@@ -233,55 +233,99 @@ msgstr "Veranstaltungen"
 msgid "Can change event settings"
 msgstr "Kann Veranstaltungseinstellungen ändern"
 
-#: tixlbase/models.py:320
+#: tixlbase/models.py:314
+msgid "Can change item settings"
+msgstr "Kann Produkte ändern"
+
+#: tixlbase/models.py:324
 msgid "Event permission"
 msgstr "Veranstaltungs-Berechtigung"
 
-#: tixlbase/models.py:321
+#: tixlbase/models.py:325
 msgid "Event permissions"
 msgstr "Veranstaltungs-Berechtigungen"
 
-#: tixlbase/models.py:333
+#: tixlbase/models.py:337
 msgid "Category name"
 msgstr "Bezeichnung"
 
-#: tixlbase/models.py:343
+#: tixlbase/models.py:347
 msgid "Item category"
 msgstr "Produktkategorie"
 
-#: tixlbase/models.py:344
+#: tixlbase/models.py:348
 msgid "Item categories"
 msgstr "Produktkategorien"
 
-#: tixlbase/models.py:361
+#: tixlbase/models.py:362
+msgid "Property name"
+msgstr "Bezeichnung"
+
+#: tixlbase/models.py:369
+msgid "Item property"
+msgstr "Eigenschaft"
+
+#: tixlbase/models.py:370
+msgid "Item properties"
+msgstr "Eigenschaften"
+
+#: tixlbase/models.py:386
+msgid "Value"
+msgstr ""
+
+#: tixlbase/models.py:416
+msgid "Category"
+msgstr "Kategorie"
+
+#: tixlbase/models.py:420 tixlcontrol/templates/tixlcontrol/items/index.html:9
 msgid "Item name"
 msgstr "Produktbezeichnung"
 
-#: tixlbase/models.py:366
+#: tixlbase/models.py:424
+msgid "Active"
+msgstr "aktiviert"
+
+#: tixlbase/models.py:428
 msgid "Short description"
 msgstr "Kurze Beschreibung"
 
-#: tixlbase/models.py:367
+#: tixlbase/models.py:429
 msgid "This is shown below the item name in lists."
 msgstr "Wird in Listen unter dem Name angezeigt."
 
-#: tixlbase/models.py:371
+#: tixlbase/models.py:433
 msgid "Long description"
 msgstr "Lange Beschreibung"
 
-#: tixlbase/models.py:376
+#: tixlbase/models.py:438 tixlbase/models.py:503
 msgid "Default price"
 msgstr "Basispreis"
 
-#: tixlbase/models.py:381
-msgid "Included taxes in percent"
+#: tixlbase/models.py:443
+msgid "Taxes included in percent"
 msgstr "Steuern inklusive in Prozent"
 
-#: tixlbase/models.py:394
+#: tixlbase/models.py:449 tixlcontrol/templates/tixlcontrol/items/base.html:8
+msgid "Properties"
+msgstr "Eigenschaften"
+
+#: tixlbase/models.py:451
+msgid ""
+"The selected properties will be available for the user to select. After "
+"saving this field, move to the 'Variations' tab to configure the details."
+msgstr ""
+"Die hier ausgewählten Eigenschaften stehen für dieses Produkt zur Verfügung. "
+"Nach der Auswahl können Sie im Tab 'Varianten' die Details konfigurieren:"
+
+#: tixlbase/models.py:466 tixlcontrol/templates/tixlcontrol/item/base.html:3
 msgid "Item"
 msgstr "Produkt"
 
-#: tixlbase/models.py:395
+#: tixlbase/models.py:467 tixlcontrol/templates/tixlcontrol/event/base.html:20
+#: tixlcontrol/templates/tixlcontrol/items/base.html:3
+#: tixlcontrol/templates/tixlcontrol/items/base.html:6
+#: tixlcontrol/templates/tixlcontrol/items/index.html:3
+#: tixlcontrol/templates/tixlcontrol/items/index.html:5
 msgid "Items"
 msgstr "Produkte"
 
@@ -329,10 +373,14 @@ msgid "Settings"
 msgstr "Einstellungen"
 
 #: tixlcontrol/templates/tixlcontrol/event/settings.html:9
+#: tixlcontrol/templates/tixlcontrol/item/index.html:9
 msgid "Your changes have been saved."
 msgstr "Die Änderungen wurden gespeichert."
 
 #: tixlcontrol/templates/tixlcontrol/event/settings.html:15
+#: tixlcontrol/templates/tixlcontrol/item/base.html:7
+#: tixlcontrol/templates/tixlcontrol/item/index.html:5
+#: tixlcontrol/templates/tixlcontrol/item/index.html:15
 msgid "General information"
 msgstr "Allgemeine Informationen"
 
@@ -349,6 +397,7 @@ msgid "Payment settings"
 msgstr "Zahlungseinstellungen"
 
 #: tixlcontrol/templates/tixlcontrol/event/settings.html:42
+#: tixlcontrol/templates/tixlcontrol/item/index.html:34
 msgid "Save"
 msgstr "Speichern"
 
@@ -372,6 +421,22 @@ msgstr "Beginn"
 #: tixlcontrol/templates/tixlcontrol/events/index.html:13
 msgid "End date"
 msgstr "Ende"
+
+#: tixlcontrol/templates/tixlcontrol/item/base.html:5
+msgid "Modify item:"
+msgstr ""
+
+#: tixlcontrol/templates/tixlcontrol/item/index.html:23
+msgid "Price settings"
+msgstr "Preis"
+
+#: tixlcontrol/templates/tixlcontrol/item/index.html:28
+msgid "Variations"
+msgstr "Varianten"
+
+#: tixlcontrol/templates/tixlcontrol/items/base.html:7
+msgid "Categories"
+msgstr "Kategorien"
 
 #: tixlcontrol/views/auth.py:15
 msgid "E-mail address"

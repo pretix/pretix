@@ -1,0 +1,39 @@
+{% extends "tixlcontrol/item/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+	<h2>{% trans "General information" %}</h2>
+	
+	{% if "success" in request.GET %}
+		<div class="alert alert-success">
+			{% trans "Your changes have been saved." %}
+		</div>
+	{% endif %}
+	<form action="" method="post" class="form-horizontal">
+		{% csrf_token %}
+		<fieldset>
+			<legend>{% trans "General information" %}</legend>
+			{% bootstrap_field form.name layout="horizontal" %}
+			{% bootstrap_field form.active layout="horizontal" %}
+			{% bootstrap_field form.category layout="horizontal" %}
+			{% bootstrap_field form.short_description layout="horizontal" %}
+			{% bootstrap_field form.long_description layout="horizontal" %}
+		</fieldset>
+		<fieldset>
+			<legend>{% trans "Price settings" %}</legend>
+			{% bootstrap_field form.default_price layout="horizontal" %}
+			{% bootstrap_field form.tax_rate layout="horizontal" %}
+		</fieldset>
+		<fieldset>
+			<legend>{% trans "Variations" %}</legend>
+			{% bootstrap_field form.properties layout="horizontal" %}
+		</fieldset>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-primary">
+					{% trans "Save" %}
+				</button>
+			</div>
+		</div>
+	</form>
+{% endblock %}

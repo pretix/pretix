@@ -406,18 +406,23 @@ class Item(models.Model):
         Event,
         on_delete=models.PROTECT,
         related_name="items",
+        verbose_name=_("Event"),
     )
     category = models.ForeignKey(
         ItemCategory,
         on_delete=models.PROTECT,
         related_name="items",
-        blank=True, null=True
+        blank=True, null=True,
+        verbose_name=_("Category"),
     )
     name = models.CharField(
         max_length=255,
         verbose_name=_("Item name")
     )
-    active = models.BooleanField(default=True)
+    active = models.BooleanField(
+        default=True,
+        verbose_name=_("Active"),
+    )
     deleted = models.BooleanField(default=False)
     short_description = models.TextField(
         verbose_name=_("Short description"),
@@ -435,12 +440,18 @@ class Item(models.Model):
     )
     tax_rate = models.DecimalField(
         null=True, blank=True,
-        verbose_name=_("Included taxes in percent"),
+        verbose_name=_("Taxes included in percent"),
         max_digits=7, decimal_places=2
     )
     properties = models.ManyToManyField(
         Property,
         related_name='items',
+        verbose_name=_("Properties"),
+        help_text=_(
+            'The selected properties will be available for the user '
+            + 'to select. After saving this field, move to the '
+            + '\'Variations\' tab to configure the details.'
+        )
     )
 
     def __str__(self):

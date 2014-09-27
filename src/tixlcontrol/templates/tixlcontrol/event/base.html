@@ -17,4 +17,5 @@
 </li>
 <li {% if url_name == "event.index" %}class="active"{% endif %}><a href="{% url 'control:event.index' organizer=request.event.organizer.slug event=request.event.slug %}">{% trans "Dashboard" %}</a></li>
 <li {% if url_name == "event.settings" %}class="active"{% endif %}><a href="{% url 'control:event.settings' organizer=request.event.organizer.slug event=request.event.slug %}">{% trans "Settings" %}</a></li>
+<li {% if "event.item" in url_name %}class="active"{% endif %}><a href="{% url 'control:event.items' organizer=request.event.organizer.slug event=request.event.slug %}">{% trans "Items" %}</a></li>
 {% endblock %}

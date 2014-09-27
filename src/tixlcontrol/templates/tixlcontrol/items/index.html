@@ -1,0 +1,20 @@
+{% extends "tixlcontrol/items/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Items" %}{% endblock %}
+{% block inside %}
+	<h1>{% trans "Items" %}</h1>
+	<table class="table table-condensed table-hover">
+		<thead>
+			<tr>
+				<th>{% trans "Item name" %}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for i in items %}
+			<tr>
+				<td><strong><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.pk %}">{{ i.name }}</a></strong></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
