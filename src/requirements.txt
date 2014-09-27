@@ -1,5 +1,6 @@
 Django>=1.7
 pytz
+django-appconf
 django-bootstrap3
 django-compressor
 BeautifulSoup4
