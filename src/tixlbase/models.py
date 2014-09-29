@@ -342,7 +342,7 @@ class ItemCategory(models.Model):
         verbose_name=_("Category name"),
     )
     position = models.IntegerField(
-        null=True, blank=True
+        default=0
     )
 
     def __str__(self):

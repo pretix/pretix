@@ -22,7 +22,12 @@ urlpatterns += patterns(
             url(r'^items$', item.ItemList.as_view(), name='event.items'),
             url(r'^items/(?P<item>\d+)/$', item.ItemUpdateGeneral.as_view(), name='event.item'),
             url(r'^items/(?P<item>\d+)/variations$', item.ItemVariations.as_view(), name='event.item.variations'),
-            url(r'^categories$', item.CategoryList.as_view(), name='event.items.categories'),
+            url(r'^categories/$', item.CategoryList.as_view(), name='event.items.categories'),
+            url(r'^category/(?P<category>\d+)/delete$', item.CategoryDelete.as_view(), name='event.items.categories.delete'),
+            url(r'^category/(?P<category>\d+)/up$', item.category_move_up, name='event.items.categories.up'),
+            url(r'^category/(?P<category>\d+)/down$', item.category_move_down, name='event.items.categories.down'),
+            url(r'^category/(?P<category>\d+)/$', item.CategoryUpdate.as_view(), name='event.items.categories.edit'),
+            url(r'^category/add$', item.CategoryCreate.as_view(), name='event.items.categories.add'),
             url(r'^properties$', item.PropertyList.as_view(), name='event.items.properties'),
         )
         ))

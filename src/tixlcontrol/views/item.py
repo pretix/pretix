@@ -1,14 +1,17 @@
 from itertools import product
 
 from django.views.generic import ListView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.core.urlresolvers import resolve, reverse
+from django.http import HttpResponseRedirect
 from django import forms
+from django.db.models import Q
+from django.shortcuts import redirect
 
 from tixlbase.models import Item, ItemCategory, Property, ItemVariation
-from tixlcontrol.permissions import EventPermissionRequiredMixin
+from tixlcontrol.permissions import EventPermissionRequiredMixin, event_permission_required
 
 
 class ItemList(ListView):
@@ -22,15 +25,124 @@ class ItemList(ListView):
         )
 
 
+class CategoryForm(forms.ModelForm):
+
+    class Meta:
+        model = ItemCategory
+        localized_fields = '__all__'
+        fields = [
+            'name'
+        ]
+
+
+class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
+    model = ItemCategory
+    form_class = CategoryForm
+    template_name = 'tixlcontrol/items/category_delete.html'
+    permission = 'can_change_items'
+    context_object_name = 'category'
+
+    def get_object(self, queryset=None):
+        url = resolve(self.request.path_info)
+        return self.request.event.categories.get(
+            id=url.kwargs['category']
+        )
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.items.update(category=None)
+        success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)
+
+    def get_success_url(self):
+        return reverse('control:event.items.categories', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        }) + '?deleted=true'
+
+
+class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
+    model = ItemCategory
+    form_class = CategoryForm
+    template_name = 'tixlcontrol/items/category.html'
+    permission = 'can_change_items'
+    context_object_name = 'category'
+
+    def get_object(self, queryset=None):
+        url = resolve(self.request.path_info)
+        return self.request.event.categories.get(
+            id=url.kwargs['category']
+        )
+
+    def get_success_url(self):
+        return reverse('control:event.items.categories', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        }) + '?updated=true'
+
+
+class CategoryCreate(EventPermissionRequiredMixin, CreateView):
+    model = ItemCategory
+    form_class = CategoryForm
+    template_name = 'tixlcontrol/items/category.html'
+    permission = 'can_change_items'
+    context_object_name = 'category'
+
+    def get_success_url(self):
+        return reverse('control:event.items.categories', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        }) + '?created=true'
+
+    def form_valid(self, form):
+        form.instance.event = self.request.event
+        return super().form_valid(form)
+
+
 class CategoryList(ListView):
     model = ItemCategory
-    context_object_name = 'items'
-    template_name = 'tixlcontrol/items/index.html'
+    context_object_name = 'categories'
+    template_name = 'tixlcontrol/items/categories.html'
 
     def get_queryset(self):
-        return ItemCategory.objects.filter(
-            event=self.request.event
-        )
+        return self.request.event.categories.all()
+
+
+def category_move(request, organizer, event, category, up=True):
+    category = request.event.categories.get(
+        id=category
+    )
+    categories = list(request.event.categories.order_by("position"))
+
+    index = categories.index(category)
+    if index != 0 and up:
+        categories[index - 1], categories[index] = categories[index], categories[index - 1]
+    elif index != len(categories) - 1 and not up:
+        categories[index + 1], categories[index] = categories[index], categories[index + 1]
+
+    for i, cat in enumerate(categories):
+        if cat.position != i:
+            cat.position = i
+            cat.save()
+
+
+@event_permission_required("can_change_items")
+def category_move_up(request, organizer, event, category):
+    category_move(request, organizer, event, category, up=True)
+    return redirect(reverse('control:event.items.categories', kwargs={
+        'organizer': request.event.organizer.slug,
+        'event': request.event.slug,
+    }) + '?ordered=true')
+
+
+@event_permission_required("can_change_items")
+def category_move_down(request, organizer, event, category):
+    category_move(request, organizer, event, category, up=False)
+    return redirect(reverse('control:event.items.categories', kwargs={
+        'organizer': request.event.organizer.slug,
+        'event': request.event.slug,
+    }) + '?ordered=true')
 
 
 class PropertyList(ListView):
@@ -165,7 +277,7 @@ class ItemVariations(TemplateView, SingleObjectMixin):
             # on the x-axis
             sort = lambda v: v[prop2.pk].pk
 
-            for val1 in prop1.values.all().order_by("id"):
+            for val1 in prop1.values.all():
                 formrow = []
                 # We are now inside a grid row. We iterate over all variations
                 # which belong in this row and create forms for them. In order
