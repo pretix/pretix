@@ -43,9 +43,10 @@ class ItemVariationsTest(TestCase):
         self.assertEqual(len(v), 3)
         values = []
         for var in v:
-            self.assertIs(type(var), tuple)
-            self.assertIs(type(var[0]), PropertyValue)
-            values.append(var[0].value)
+            self.assertIs(type(var), dict)
+            self.assertIn(p.pk, var)
+            self.assertIs(type(var[p.pk]), PropertyValue)
+            values.append(var[p.pk].value)
         self.assertEqual(sorted(values), sorted(['S', 'M', 'L']))
 
         # One property, one variation
@@ -55,14 +56,18 @@ class ItemVariationsTest(TestCase):
         self.assertIs(type(v), list)
         self.assertEqual(len(v), 3)
         values = []
+        num_variations = 0
         for var in v:
-            if type(var) == ItemVariation:
-                self.assertEqual(iv.pk, var.pk)
-                values.append(iv.values.all()[0].value)
-            elif type(var) == tuple:
-                self.assertIs(type(var[0]), PropertyValue)
-                values.append(var[0].value)
+            self.assertIs(type(var), dict)
+            if 'variation' in var and type(var['variation']) is ItemVariation:
+                self.assertEqual(iv.pk, var['variation'].pk)
+                values.append(var['variation'].values.all()[0].value)
+                num_variations += 1
+            elif p.pk in var:
+                self.assertIs(type(var[p.pk]), PropertyValue)
+                values.append(var[p.pk].value)
         self.assertEqual(sorted(values), sorted(['S', 'M', 'L']))
+        self.assertEqual(num_variations, 1)
 
         # Two properties, one variation
         p2 = Property.objects.get(event=e, name='Color')
@@ -74,13 +79,14 @@ class ItemVariationsTest(TestCase):
         values = []
         num_variations = 0
         for var in v:
-            if type(var) == ItemVariation:
-                self.assertEqual(iv.pk, var.pk)
+            self.assertIs(type(var), dict)
+            if 'variation' in var:
+                self.assertEqual(iv.pk, var['variation'].pk)
                 values.append(sorted([ivv.value for ivv in iv.values.all()]))
                 self.assertEqual(sorted([ivv.value for ivv in iv.values.all()]), sorted(['S', 'black']))
                 num_variations += 1
-            elif type(var) == tuple:
-                values.append(sorted([pv.value for pv in var]))
+            else:
+                values.append(sorted([pv.value for pv in var.values()]))
         self.assertEqual(sorted(values), sorted([
             ['S', 'black'],
             ['S', 'blue'],

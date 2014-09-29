@@ -467,10 +467,10 @@ class Item(models.Model):
     def get_all_variations(self):
         """
         This method returns a list containing all variations of this
-        item, where n is the number of properties connected to this
-        item. The list contains either tupels of PropertyValue objects
-        or ItemVariation objects. The returned list is assumed not to
-        be in any order.
+        item. The list contains one dictionary per variation, where
+        the Proprty IDs are keys and the PropertyValue objects are
+        values. If an ItemVariation object exists, it is available in
+        the dictionary via the special key 'variation'.
         """
         all_variations = self.variations.all().prefetch_related("values")
         all_properties = self.properties.all().prefetch_related("values")
@@ -487,13 +487,14 @@ class Item(models.Model):
             if len(comb) == 0:
                 continue
             key = []
+            var = {}
             for v in comb:
                 key.append((v.prop.pk, v.pk))
+                var[v.prop.pk] = v
             key = hash(tuple(sorted(key)))
             if key in variations_cache:
-                result.append(variations_cache[key])
-            else:
-                result.append(comb)
+                var['variation'] = variations_cache[key]
+            result.append(var)
 
         return result
 
