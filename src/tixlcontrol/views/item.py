@@ -1,3 +1,5 @@
+from itertools import product
+
 from django.views.generic import ListView
 from django.views.generic.edit import UpdateView
 from django.views.generic.base import TemplateView
@@ -105,6 +107,28 @@ class ItemVariations(TemplateView, SingleObjectMixin):
         super().__init__(*args, **kwargs)
         self.item = None
 
+    def get_form(self, variation, data=None):
+        """
+        Return the dict for one given variation. Variations are expected to be
+        dictionaries in the format of Item.get_all_variations()
+        """
+        # Values are all dictionary ite
+        values = [i[1] for i in sorted([it for it in variation.items() if it[0] != 'variation'])]
+        if 'variation' in variation:
+            form = ItemVariationForm(
+                data,
+                instance=variation['variation'],
+                prefix=",".join([str(i.pk) for i in values]),
+            )
+        else:
+            form = ItemVariationForm(
+                data,
+                instance=ItemVariation(item=self.object),
+                prefix=",".join([str(i.pk) for i in values]),
+            )
+        form.values = values
+        return form
+
     def get_forms(self):
         """
         Returns one form per possible item variation. The forms are returned
@@ -112,52 +136,103 @@ class ItemVariations(TemplateView, SingleObjectMixin):
         3-dimensional list, depending on the number of properties associated
         with this item (this is being used for form display), the second
         contains all forms in one single list (this is used for processing).
+
+        The first, hierarchical list, is a list of dicts on all levels but the
+        last one, where the dict contains the two entries 'row' containing a
+        string describing this layer and 'forms' which contains the forms or
+        the next list of dicts.
         """
         forms = []
         forms_flat = []
         variations = self.object.get_all_variations()
         data = self.request.POST if self.request.method == 'POST' else None
+
         if self.dimension == 1:
-            for var in variations:
-                val = [var[self.properties[0].pk]]
-                if 'variation' in var:
-                    form = ItemVariationForm(
-                        data,
-                        instance=var['variation'],
-                        prefix=val[0].pk,
-                    )
-                else:
-                    form = ItemVariationForm(
-                        data,
-                        instance=ItemVariation(item=self.object),
-                        prefix=val[0].pk,
-                    )
-                form.values = val
+            # For one-dimensional structures we just have a list of forms
+            for variation in variations:
+                form = self.get_form(variation, data)
                 forms.append(form)
             forms_flat = forms
+
         elif self.dimension == 2:
+            # For two-dimensional structures we have a grid of forms
+            # prop1 is the property on the grid's y-axis
             prop1 = self.properties[0]
-            for val1 in prop1.values.all():
-                thisforms = []
-                for var in [v for v in variations if v[prop1.pk].pk == val1.pk]:
-                    val = [i[1] for i in sorted([it for it in var.items() if it[0] != 'variation'])]
-                    if 'variation' in var:
-                        form = ItemVariationForm(
-                            data,
-                            instance=var['variation'],
-                            prefix=",".join([str(i.pk) for i in val])
-                        )
-                    else:
-                        form = ItemVariationForm(
-                            data,
-                            instance=ItemVariation(item=self.object),
-                            prefix=",".join([str(i.pk) for i in val])
-                        )
-                    form.values = val
-                    form.subval = var[prop1.pk]
-                    thisforms.append(form)
+            # prop2 is the property on the grid's x-axis
+            prop2 = self.properties[1]
+
+            for val1 in prop1.values.all().order_by("id"):
+                formrow = []
+                # We are now inside a grid row. We iterate over all variations
+                # which belong in this row and create forms for them. In order
+                # to achieve this, we select all variation dictionaries which
+                # have the same value for prop1 as our row does and sort them
+                # by their value for prop2.
+                sort = lambda v: v[prop2.pk].pk
+                filtered = [v for v in variations if v[prop1.pk].pk == val1.pk]
+                for variation in sorted(filtered, key=sort):
+                    form = self.get_form(variation, data)
+                    formrow.append(form)
                     forms_flat.append(form)
-                forms.append(thisforms)
+
+                forms.append({'row': val1.value, 'forms': formrow})
+
+        elif self.dimension > 2:
+            # For 3 or more dimensional structures we display a list of grids
+            # of forms
+
+            # prop1 is the property on all the grid's y-axes
+            prop1 = self.properties[0]
+            # prop2 is the property on all the grid's x-axes
+            prop2 = self.properties[1]
+
+            # Given an iterable of PropertyValue objects, this will return a
+            # list of their primary keys, ordered by the primary keys of the
+            # properties they belong to EXCEPT the value for the property prop2.
+            # We'll see later why we need this.
+            selector = lambda values: [
+                v.pk for v in sorted(values, key=lambda v: v.prop.pk)
+                if v.prop.pk != prop2.pk
+            ]
+
+            # Given an dictionary like the ones returned by
+            # Item.get_all_variation() this will return a list of PropertyValue
+            # objects sorted by the primary keys of the properties they belong
+            # to.
+            values = lambda variation: [
+                i[1] for i in sorted(
+                    [it for it in variation.items() if it[0] != 'variation']
+                )
+            ]
+
+            # We now iterate over the cartesian product of all the other
+            # properties which are NOT on the axes of the grid because we
+            # create one grid for any combination of them.
+            for gridrow in product(*[prop.values.all() for prop in self.properties[2:]]):
+                grids = []
+                for val1 in prop1.values.all():
+                    formrow = []
+                    # We are now inside one of the rows of the grid and have to
+                    # select the variations to display in this row. In order to
+                    # achieve this, we use the 'selector' lambda defined above.
+                    # It gives us a normalized, comparable version of a set of
+                    # PropertyValue objects. In this case, we compute the
+                    # selector of our row as the selector of the sum of the
+                    # values defining our grind and the value defining our row.
+                    selection = selector(gridrow + (val1,))
+                    # We now iterate over all variations who generate the same
+                    # selector as 'selection'.
+                    filtered = [v for v in variations if selector(values(v)) == selection]
+                    sort = lambda v: v[prop2.pk].pk
+                    for variation in sorted(filtered, key=sort):
+                        form = self.get_form(variation, data)
+                        formrow.append(form)
+                        forms_flat.append(form)
+
+                    grids.append({'row': val1, 'forms': formrow})
+
+                forms.append({'row': ", ".join([value.value for value in gridrow]), 'forms': grids})
+
         return forms, forms_flat
 
     def main(self, request, *args, **kwargs):
@@ -196,6 +271,8 @@ class ItemVariations(TemplateView, SingleObjectMixin):
             return ['tixlcontrol/item/variations_1d.html']
         elif self.dimension == 2:
             return ['tixlcontrol/item/variations_2d.html']
+        elif self.dimension > 2:
+            return ['tixlcontrol/item/variations_nd.html']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

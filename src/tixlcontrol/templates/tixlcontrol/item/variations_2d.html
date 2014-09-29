@@ -17,8 +17,8 @@
 			<tbody>
 				{% for sub in forms %}
 					<tr>
-						<td>{{ sub.0.subval.value }}</td>
-						{% for form in sub %}
+						<td>{{ sub.row }}</td>
+						{% for form in sub.forms %}
 							<td>
 								{% bootstrap_field form.active layout='inline' %}
 								{% bootstrap_field form.default_price layout='inline' %}
