@@ -455,6 +455,7 @@ class Item(models.Model):
         Property,
         related_name='items',
         verbose_name=_("Properties"),
+        blank=True,
         help_text=_(
             'The selected properties will be available for the user '
             + 'to select. After saving this field, move to the '
