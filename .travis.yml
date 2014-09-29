@@ -7,6 +7,7 @@ install:
 before_script:
     - cd src
     - flake8 --ignore=E123,E128,F403,F401,N802 .
+    - python manage.py check
     - python manage.py validate
 script:
     - python manage.py test
