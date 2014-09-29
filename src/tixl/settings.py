@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'tixlpresale',
     'compressor',
     'bootstrap3',
+    'debug_toolbar.apps.DebugToolbarConfig',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -49,6 +50,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'tixlbase.middleware.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -134,10 +136,14 @@ COMPRESS_CSS_FILTERS = (
     'compressor.filters.cssmin.CSSMinFilter',
 )
 
+# Debug toolbar
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
+
+
 # Tixl specific settings
 
 TIXL_INSTANCE_NAME = 'tixl.de'
-
+INTERNAL_IPS = ('127.0.0.1', '::1')
 
 try:
     from local_settings import *
