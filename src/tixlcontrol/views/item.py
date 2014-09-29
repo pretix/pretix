@@ -161,6 +161,10 @@ class ItemVariations(TemplateView, SingleObjectMixin):
             # prop2 is the property on the grid's x-axis
             prop2 = self.properties[1]
 
+            # Given a list of variations, this will sort them by their position
+            # on the x-axis
+            sort = lambda v: v[prop2.pk].pk
+
             for val1 in prop1.values.all().order_by("id"):
                 formrow = []
                 # We are now inside a grid row. We iterate over all variations
@@ -168,7 +172,6 @@ class ItemVariations(TemplateView, SingleObjectMixin):
                 # to achieve this, we select all variation dictionaries which
                 # have the same value for prop1 as our row does and sort them
                 # by their value for prop2.
-                sort = lambda v: v[prop2.pk].pk
                 filtered = [v for v in variations if v[prop1.pk].pk == val1.pk]
                 for variation in sorted(filtered, key=sort):
                     form = self.get_form(variation, data)
@@ -205,6 +208,10 @@ class ItemVariations(TemplateView, SingleObjectMixin):
                 )
             ]
 
+            # Given a list of variations, this will sort them by their position
+            # on the x-axis
+            sort = lambda v: v[prop2.pk].pk
+
             # We now iterate over the cartesian product of all the other
             # properties which are NOT on the axes of the grid because we
             # create one grid for any combination of them.
@@ -223,7 +230,6 @@ class ItemVariations(TemplateView, SingleObjectMixin):
                     # We now iterate over all variations who generate the same
                     # selector as 'selection'.
                     filtered = [v for v in variations if selector(values(v)) == selection]
-                    sort = lambda v: v[prop2.pk].pk
                     for variation in sorted(filtered, key=sort):
                         form = self.get_form(variation, data)
                         formrow.append(form)
@@ -237,8 +243,8 @@ class ItemVariations(TemplateView, SingleObjectMixin):
 
     def main(self, request, *args, **kwargs):
         self.object = self.get_object()
-        self.properties = self.object.properties.all()
-        self.dimension = self.properties.count()
+        self.properties = list(self.object.properties.all().prefetch_related("values"))
+        self.dimension = len(self.properties)
         self.forms, self.forms_flat = self.get_forms()
 
     def get(self, request, *args, **kwargs):

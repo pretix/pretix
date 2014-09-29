@@ -484,7 +484,7 @@ class Item(models.Model):
         for var in all_variations:
             key = []
             for v in var.values.all():
-                key.append((v.prop.pk, v.pk))
+                key.append((v.prop_id, v.pk))
             key = hash(tuple(sorted(key)))
             variations_cache[key] = var
 
