@@ -119,22 +119,46 @@ class ItemVariations(TemplateView, SingleObjectMixin):
         data = self.request.POST if self.request.method == 'POST' else None
         if self.dimension == 1:
             for var in variations:
-                val = [i[1] for i in sorted([it for it in var.items() if it[0] != 'variation'])]
+                val = [var[self.properties[0].pk]]
                 if 'variation' in var:
                     form = ItemVariationForm(
                         data,
                         instance=var['variation'],
-                        prefix=",".join([str(i) for i in val])
+                        prefix=val[0].pk,
                     )
                 else:
                     form = ItemVariationForm(
                         data,
                         instance=ItemVariation(item=self.object),
-                        prefix=",".join([str(i) for i in val])
+                        prefix=val[0].pk,
                     )
                 form.values = val
                 forms.append(form)
             forms_flat = forms
+        elif self.dimension == 2:
+            prop1 = self.properties[0]
+            prop2 = self.properties[1]
+            for val1 in prop1.values.all():
+                thisforms = []
+                for var in [v for v in variations if v[prop1.pk].pk == val1.pk]:
+                    val = [i[1] for i in sorted([it for it in var.items() if it[0] != 'variation'])]
+                    if 'variation' in var:
+                        form = ItemVariationForm(
+                            data,
+                            instance=var['variation'],
+                            prefix=",".join([str(i.pk) for i in val])
+                        )
+                    else:
+                        form = ItemVariationForm(
+                            data,
+                            instance=ItemVariation(item=self.object),
+                            prefix=",".join([str(i.pk) for i in val])
+                        )
+                    form.values = val
+                    form.subval = var[prop1.pk]
+                    thisforms.append(form)
+                    forms_flat.append(form)
+                forms.append(thisforms)
         return forms, forms_flat
 
     def main(self, request, *args, **kwargs):
@@ -171,6 +195,8 @@ class ItemVariations(TemplateView, SingleObjectMixin):
     def get_template_names(self):
         if self.dimension == 1:
             return ['tixlcontrol/item/variations_1d.html']
+        elif self.dimension == 2:
+            return ['tixlcontrol/item/variations_2d.html']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
