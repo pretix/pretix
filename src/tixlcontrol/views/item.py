@@ -137,7 +137,6 @@ class ItemVariations(TemplateView, SingleObjectMixin):
             forms_flat = forms
         elif self.dimension == 2:
             prop1 = self.properties[0]
-            prop2 = self.properties[1]
             for val1 in prop1.values.all():
                 thisforms = []
                 for var in [v for v in variations if v[prop1.pk].pk == val1.pk]:
