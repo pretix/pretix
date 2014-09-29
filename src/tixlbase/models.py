@@ -332,8 +332,11 @@ class ItemCategory(models.Model):
     """
     Items can be sorted into categories
     """
-    event = models.ForeignKey(Event,
-                              on_delete=models.CASCADE)
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name='categories',
+    )
     name = models.CharField(
         max_length=255,
         verbose_name=_("Category name"),
@@ -358,7 +361,10 @@ class Property(models.Model):
     with the item 'T-Shirt'.
     """
 
-    event = models.ForeignKey(Event)
+    event = models.ForeignKey(
+        Event,
+        related_name="properties",
+    )
     name = models.CharField(
         max_length=250,
         verbose_name=_("Property name"),

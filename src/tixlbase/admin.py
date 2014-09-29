@@ -5,7 +5,7 @@ from django import forms
 
 from tixlbase.models import (
     User, Organizer, OrganizerPermission, Event, EventPermission,
-    Property, PropertyValue, Item, ItemVariation
+    Property, PropertyValue, Item, ItemVariation, ItemCategory
 )
 
 
@@ -105,6 +105,13 @@ class PropertyAdmin(admin.ModelAdmin):
     search_fields = ('name', 'event')
 
 
+class ItemCategoryAdmin(admin.ModelAdmin):
+
+    model = ItemCategory
+    list_display = ('name', 'event')
+    search_fields = ('name', 'event')
+
+
 class ItemVariationInline(admin.TabularInline):
 
     model = ItemVariation
@@ -124,3 +131,4 @@ admin.site.register(Organizer, OrganizerAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Property, PropertyAdmin)
 admin.site.register(Item, ItemAdmin)
+admin.site.register(ItemCategory, ItemCategoryAdmin)

@@ -42,6 +42,11 @@ class PropertyList(ListView):
 
 class ItemUpdateFormGeneral(forms.ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category'].queryset = self.instance.event.categories.all()
+        self.fields['properties'].queryset = self.instance.event.properties.all()
+
     class Meta:
         model = Item
         localized_fields = '__all__'
