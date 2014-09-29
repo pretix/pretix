@@ -520,7 +520,7 @@ class ItemVariation(models.Model):
     values by creating an ItemVariation object for them with active set to
     False.
 
-    Restrictions can be not only set to items but also directly to variation.
+    Restrictions can be not only set to items but also directly to variations.
     """
     item = models.ForeignKey(
         Item,
