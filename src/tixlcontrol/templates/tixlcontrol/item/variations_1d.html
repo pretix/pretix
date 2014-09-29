@@ -1,0 +1,36 @@
+{% extends "tixlcontrol/item/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+	<h2>{% trans "Variations" %}</h2>
+	<form action="" method="post">
+		{% csrf_token %}
+		<table class="table">
+			<thead>
+				<tr>
+					<th>{{ properties.0 }}</th>
+					<th>{% trans "Active" %}</th>
+					<th>{% trans "Price" %}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for form in forms %}
+					{% bootstrap_form_errors form type='all' layout='inline' %}
+					<tr>
+						<td>{{ form.values.0 }}</td>
+						<td>{% bootstrap_field form.active layout='inline' %}</td>
+						<td>{% bootstrap_field form.default_price layout='inline' %} {{ form.default_price.errors }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<div class="form-group">
+			<div class="col-sm-12">
+				<button type="submit" class="btn btn-primary">
+					{% trans "Save" %}
+				</button>
+			</div>
+		</div>
+	</form>
+	
+{% endblock %}

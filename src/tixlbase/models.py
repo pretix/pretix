@@ -538,9 +538,10 @@ class ItemVariation(models.Model):
     )
     active = models.BooleanField(
         default=True,
+        verbose_name=_("Active"),
     )
     default_price = models.DecimalField(
         decimal_places=2, max_digits=7,
         null=True, blank=True,
-        verbose_name=_("Default price")
+        verbose_name=_("Default price"),
     )
