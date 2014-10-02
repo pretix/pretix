@@ -1,6 +1,11 @@
 tixl
 ====
 
+[![Docs](https://readthedocs.org/projects/tixl/badge/)](https://readthedocs.org/projects/tixl/)
+[![Build Status](https://travis-ci.org/tixl/tixl.svg?branch=master)](https://travis-ci.org/tixl/tixl)
+[![Coverage Status](https://img.shields.io/coveralls/tixl/tixl.svg)](https://coveralls.io/r/tixl/tixl)
+
+
 Reinventing ticket presales, one bit at a time.
 
 Project status
