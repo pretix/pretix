@@ -1,0 +1,9 @@
+[run]
+source = tixlbase,tixlcontrol,tixlpresale
+omit = */migrations/*,*/urls.py
+
+[report]
+exclude_lines =
+	pragma: no cover
+	def __str__
+	if settings.DEBUG
