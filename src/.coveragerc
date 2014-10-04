@@ -1,6 +1,6 @@
 [run]
 source = tixlbase,tixlcontrol,tixlpresale
-omit = */migrations/*,*/urls.py
+omit = */migrations/*,*/urls.py,*/tests/*
 
 [report]
 exclude_lines =
