@@ -5,13 +5,14 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.core.urlresolvers import resolve, reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django import forms
-from django.db.models import Q
 from django.shortcuts import redirect
+from django.forms.models import inlineformset_factory
 
-from tixlbase.models import Item, ItemCategory, Property, ItemVariation
+from tixlbase.models import Item, ItemCategory, Property, ItemVariation, PropertyValue
 from tixlcontrol.permissions import EventPermissionRequiredMixin, event_permission_required
+from tixlcontrol.views.forms import TolerantFormsetModelForm
 
 
 class ItemList(ListView):
@@ -22,7 +23,7 @@ class ItemList(ListView):
     def get_queryset(self):
         return Item.objects.filter(
             event=self.request.event
-        )
+        ).prefetch_related("category")
 
 
 class CategoryForm(forms.ModelForm):
@@ -147,13 +148,171 @@ def category_move_down(request, organizer, event, category):
 
 class PropertyList(ListView):
     model = Property
-    context_object_name = 'items'
-    template_name = 'tixlcontrol/items/index.html'
+    context_object_name = 'properties'
+    template_name = 'tixlcontrol/items/properties.html'
 
     def get_queryset(self):
         return Property.objects.filter(
             event=self.request.event
         )
+
+
+class PropertyForm(forms.ModelForm):
+    class Meta:
+        model = Property
+        localized_fields = '__all__'
+        fields = [
+            'name',
+        ]
+
+
+class PropertyValueForm(TolerantFormsetModelForm):
+    class Meta:
+        model = PropertyValue
+        localized_fields = '__all__'
+        fields = [
+            'value',
+        ]
+
+
+class PropertyUpdate(EventPermissionRequiredMixin, UpdateView):
+    model = Property
+    form_class = PropertyForm
+    template_name = 'tixlcontrol/items/property.html'
+    permission = 'can_change_items'
+    context_object_name = 'property'
+
+    def get_object(self, queryset=None):
+        url = resolve(self.request.path_info)
+        return self.request.event.properties.get(
+            id=url.kwargs['property']
+        )
+
+    def get_success_url(self):
+        url = resolve(self.request.path_info)
+        return reverse('control:event.items.properties.edit', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'property': url.kwargs['property']
+        }) + '?success=true'
+
+    def get_formset(self):
+        formsetclass = inlineformset_factory(
+            Property, PropertyValue,
+            form=PropertyValueForm,
+            can_order=True,
+            extra=0,
+        )
+        formset = formsetclass(**self.get_form_kwargs())
+        return formset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['formset'] = self.get_formset()
+        return context
+
+    def form_valid(self, form, formset):
+        for i, f in enumerate(formset.ordered_forms):
+            f.instance.position = i
+        formset.save()
+        return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        formset = self.get_formset()
+        if form.is_valid() and formset.is_valid():
+            return self.form_valid(form, formset)
+        else:
+            return self.form_invalid(form)
+
+
+class PropertyCreate(EventPermissionRequiredMixin, CreateView):
+    model = Property
+    form_class = PropertyForm
+    template_name = 'tixlcontrol/items/property.html'
+    permission = 'can_change_items'
+    context_object_name = 'property'
+
+    def get_success_url(self):
+        return reverse('control:event.items.properties', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        }) + '?created=true'
+
+    def get_formset(self):
+        formsetclass = inlineformset_factory(
+            Property, PropertyValue,
+            form=PropertyValueForm,
+            can_order=True,
+            extra=3,
+        )
+        formset = formsetclass(**self.get_form_kwargs())
+        return formset
+
+    def get_context_data(self, *args, **kwargs):
+        self.object = None
+        context = super().get_context_data(*args, **kwargs)
+        context['formset'] = self.get_formset()
+        return context
+
+    def form_valid(self, form, formset):
+        form.instance.event = self.request.event
+        resp = super().form_valid(form)
+        for i, f in enumerate(formset.ordered_forms):
+            f.instance.position = i
+            f.instance.prop = form.instance
+            f.instance.save()
+        return resp
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        formset = self.get_formset()
+        if form.is_valid() and formset.is_valid():
+            return self.form_valid(form, formset)
+        else:
+            return self.form_invalid(form)
+
+
+class PropertyDelete(EventPermissionRequiredMixin, DeleteView):
+    model = Property
+    form_class = PropertyForm
+    template_name = 'tixlcontrol/items/property_delete.html'
+    permission = 'can_change_items'
+    context_object_name = 'property'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['dependent'] = self.get_object().items.all()
+        context['possible'] = self.is_allowed()
+        return context
+
+    def is_allowed(self):
+        return self.get_object().items.count() == 0
+
+    def get_object(self, queryset=None):
+        if not hasattr(self, 'object') or not self.object:
+            url = resolve(self.request.path_info)
+            self.object = self.request.event.properties.get(
+                id=url.kwargs['property']
+            )
+        return self.object
+
+    def delete(self, request, *args, **kwargs):
+        if self.is_allowed():
+            success_url = self.get_success_url()
+            self.get_object().delete()
+            return HttpResponseRedirect(success_url)
+        else:
+            return HttpResponseForbidden()
+
+    def get_success_url(self):
+        return reverse('control:event.items.properties', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        }) + '?deleted=true'
 
 
 class ItemUpdateFormGeneral(forms.ModelForm):

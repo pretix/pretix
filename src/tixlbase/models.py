@@ -393,9 +393,17 @@ class PropertyValue(models.Model):
         max_length=250,
         verbose_name=_("Value"),
     )
+    position = models.IntegerField(
+        default=0
+    )
 
     def __str__(self):
         return "%s: %s" % (self.prop.name, self.value)
+
+    class Meta:
+        verbose_name = _("Property value")
+        verbose_name_plural = _("Property values")
+        ordering = ("position",)
 
 
 class Item(models.Model):

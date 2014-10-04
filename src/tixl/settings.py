@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'compressor',
     'bootstrap3',
     'debug_toolbar.apps.DebugToolbarConfig',
+    'djangoformsetjs',
 )
 
 MIDDLEWARE_CLASSES = (

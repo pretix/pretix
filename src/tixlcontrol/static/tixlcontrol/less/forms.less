@@ -14,3 +14,13 @@ td > .form-group > .checkbox {
 .has-success .form-control {
 	border-color: #cccccc;
 }
+.form-horizontal [data-formset] .form-group {
+	width: 100%;
+}
+[data-formset] .form-group:not([data-formset-form-deleted]):last-of-type [data-formset-move-down-button],
+[data-formset] .form-group:not([data-formset-form-deleted]):first-of-type [data-formset-move-up-button] {
+	cursor: not-allowed;
+    pointer-events: none; // Future-proof disabling of clicks
+    .opacity(.65);
+    .box-shadow(none);
+}

@@ -29,6 +29,9 @@ urlpatterns += patterns(
             url(r'^category/(?P<category>\d+)/$', item.CategoryUpdate.as_view(), name='event.items.categories.edit'),
             url(r'^category/add$', item.CategoryCreate.as_view(), name='event.items.categories.add'),
             url(r'^properties$', item.PropertyList.as_view(), name='event.items.properties'),
+            url(r'^properties/(?P<property>\d+)/$', item.PropertyUpdate.as_view(), name='event.items.properties.edit'),
+            url(r'^properties/(?P<property>\d+)/delete$', item.PropertyDelete.as_view(), name='event.items.properties.delete'),
+            url(r'^properties/add$', item.PropertyCreate.as_view(), name='event.items.properties.add'),
         )
         ))
 )

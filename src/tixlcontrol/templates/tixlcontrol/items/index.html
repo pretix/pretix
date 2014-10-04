@@ -7,12 +7,14 @@
 		<thead>
 			<tr>
 				<th>{% trans "Item name" %}</th>
+				<th>{% trans "Category" %}</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for i in items %}
 			<tr>
 				<td><strong><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.pk %}">{{ i.name }}</a></strong></td>
+				<td>{{ i.category }}</td>
 			</tr>
 			{% endfor %}
 		</tbody>
