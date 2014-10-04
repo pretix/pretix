@@ -9,4 +9,5 @@ Contents:
    goals
    concepts
    setup
+   style
    structure
