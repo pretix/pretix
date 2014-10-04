@@ -8,8 +8,8 @@ Just clone our git repository including its submodules::
     git clone --recursive https://github.com/tixl/tixl.git 
     cd tixl/
 
-Dependencies
-------------
+External Dependencies
+---------------------
 * Python 3.4 or newer
 * ``pip`` for Python 3
 * ``git``
@@ -18,12 +18,17 @@ Dependencies
 Your local python environment
 -----------------------------
 
-Please execute ``python -V`` or ``python3 -V`` to make sure you have Python 3.4 installed. Also make sure you have pip for Python 3 installed, you can execute ``pip3 -V`` to check. Then use Python 3.4's internal tools to create a virtual environment and activate it for your current session::
+Please execute ``python -V`` or ``python3 -V`` to make sure you have Python 3.4 
+installed. Also make sure you have pip for Python 3 installed, you can execute 
+``pip3 -V`` to check. Then use Python 3.4's internal tools to create a virtual 
+environment and activate it for your current session::
 
     pyvenv env
     source env/bin/activate
 
-You should now see a ``(env)`` prepended to your shell prompt.
+You should now see a ``(env)`` prepended to your shell prompt. You have to do this
+in every shell you use to work with tixl (or configure your shell to do so 
+automatically).
 
 Working with the code
 ---------------------
@@ -38,33 +43,53 @@ Then, create the local database::
 
 Create the translation files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-To generate updated translation files, run a::
+If you're working with the translation, you can use the following command to scan the
+source code for strings to be translated and update the ``*.po`` files accordingly::
 
     make localegen
 
-To compile the language files for use, run::
+To actually see tixl in your language, you have to compile the ``*.po`` files to their
+optimized binary ``*.mo`` counterparts::
 
     make localecompile
 
 Run the development server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-Execute::
+To run the local development webserver, execute::
 
     python manage.py runserver
 
-to start a local development webserver on port 8000.
+and head to http://localhost:8000/
 
-Static code checks
-^^^^^^^^^^^^^^^^^^
+Code checks and unit tests
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 Before you check in your code into git, always run::
 
     flake8 .
+    python manage.py validate
+    python manage.py test
 
-to check for syntax, style and other errors.
+to check for syntax, style and other errors. The ``flake8`` command by default is a bit
+stricter than what we really enforce, but we do enforce that all commits produce no output
+from::
+
+    flake8 --ignore=E123,E128,F403,F401,N802 .
+
+It is therefore a good idea to put this command into your git hook ``.git/hooks/pre-commit``,
+for example::
+
+    #!/bin/sh
+    cd $GIT_DIR/../src
+    source ../env/bin/activate
+    flake8 --ignore=E123,E128,F403,F401,N802 .
+
+
 
 Working with the documentation
 ------------------------------
-First, you should install the requiremente necessary for building the documentation. Make sure you have your virtual python enviroment activated (see above). Then, install the packages by executing::
+First, you should install the requirements necessary for building the documentation. 
+Make sure you have your virtual python enviroment activated (see above). Then, install the 
+packages by executing::
 
     cd doc/
     pip install -r requirements.txt
