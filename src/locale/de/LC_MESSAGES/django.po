@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-29 22:28+0200\n"
-"PO-Revision-Date: 2014-09-29 22:29+0100\n"
+"POT-Creation-Date: 2014-10-05 12:06+0200\n"
+"PO-Revision-Date: 2014-10-05 12:08+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.9\n"
 
-#: tixl/settings.py:106
+#: tixl/settings.py:107
 msgid "German"
 msgstr "Deutsch"
 
-#: tixl/settings.py:107
+#: tixl/settings.py:108
 msgid "English"
 msgstr "Englisch"
 
@@ -219,11 +219,11 @@ msgstr ""
 "Das Datum, bis zu dem Zahlungseingänge akzeptiert werden. Diese Einstellung "
 "hat Vorrang über der oben eingestellten Anzahl an Tagen"
 
-#: tixlbase/models.py:296 tixlbase/models.py:417
+#: tixlbase/models.py:296 tixlbase/models.py:425
 msgid "Event"
 msgstr "Veranstaltung"
 
-#: tixlbase/models.py:297 tixlcontrol/templates/tixlcontrol/base.html:32
+#: tixlbase/models.py:297 tixlcontrol/templates/tixlcontrol/base.html:34
 #: tixlcontrol/templates/tixlcontrol/events/index.html:3
 #: tixlcontrol/templates/tixlcontrol/events/index.html:5
 msgid "Events"
@@ -267,10 +267,15 @@ msgid "Property name"
 msgstr "Bezeichnung"
 
 #: tixlbase/models.py:377
+#: tixlcontrol/templates/tixlcontrol/items/property.html:5
+#: tixlcontrol/templates/tixlcontrol/items/property.html:7
 msgid "Item property"
 msgstr "Eigenschaft"
 
 #: tixlbase/models.py:378
+#: tixlcontrol/templates/tixlcontrol/items/properties.html:3
+#: tixlcontrol/templates/tixlcontrol/items/properties.html:5
+#: tixlcontrol/templates/tixlcontrol/items/properties.html:25
 msgid "Item properties"
 msgstr "Eigenschaften"
 
@@ -278,44 +283,53 @@ msgstr "Eigenschaften"
 msgid "Value"
 msgstr "Wert"
 
-#: tixlbase/models.py:424
+#: tixlbase/models.py:404
+msgid "Property value"
+msgstr "Wert"
+
+#: tixlbase/models.py:405
+msgid "Property values"
+msgstr "Werte"
+
+#: tixlbase/models.py:432
+#: tixlcontrol/templates/tixlcontrol/items/index.html:10
 msgid "Category"
 msgstr "Kategorie"
 
-#: tixlbase/models.py:428 tixlcontrol/templates/tixlcontrol/items/index.html:9
+#: tixlbase/models.py:436 tixlcontrol/templates/tixlcontrol/items/index.html:9
 msgid "Item name"
 msgstr "Produktbezeichnung"
 
-#: tixlbase/models.py:432 tixlbase/models.py:542
+#: tixlbase/models.py:440 tixlbase/models.py:550
 #: tixlcontrol/templates/tixlcontrol/item/variations_1d.html:12
 msgid "Active"
 msgstr "aktiviert"
 
-#: tixlbase/models.py:436
+#: tixlbase/models.py:444
 msgid "Short description"
 msgstr "Kurze Beschreibung"
 
-#: tixlbase/models.py:437
+#: tixlbase/models.py:445
 msgid "This is shown below the item name in lists."
 msgstr "Wird in Listen unter dem Name angezeigt."
 
-#: tixlbase/models.py:441
+#: tixlbase/models.py:449
 msgid "Long description"
 msgstr "Lange Beschreibung"
 
-#: tixlbase/models.py:446 tixlbase/models.py:547
+#: tixlbase/models.py:454 tixlbase/models.py:555
 msgid "Default price"
 msgstr "Basispreis"
 
-#: tixlbase/models.py:451
+#: tixlbase/models.py:459
 msgid "Taxes included in percent"
 msgstr "Steuern inklusive in Prozent"
 
-#: tixlbase/models.py:457 tixlcontrol/templates/tixlcontrol/items/base.html:8
+#: tixlbase/models.py:465 tixlcontrol/templates/tixlcontrol/items/base.html:8
 msgid "Properties"
 msgstr "Eigenschaften"
 
-#: tixlbase/models.py:460
+#: tixlbase/models.py:468
 msgid ""
 "The selected properties will be available for the user to select. After "
 "saving this field, move to the 'Variations' tab to configure the details."
@@ -323,11 +337,11 @@ msgstr ""
 "Die hier ausgewählten Eigenschaften stehen für dieses Produkt zur Verfügung. "
 "Nach der Auswahl können Sie im Tab 'Varianten' die Details konfigurieren:"
 
-#: tixlbase/models.py:509 tixlcontrol/templates/tixlcontrol/item/base.html:3
+#: tixlbase/models.py:517 tixlcontrol/templates/tixlcontrol/item/base.html:3
 msgid "Item"
 msgstr "Produkt"
 
-#: tixlbase/models.py:510 tixlcontrol/templates/tixlcontrol/event/base.html:20
+#: tixlbase/models.py:518 tixlcontrol/templates/tixlcontrol/event/base.html:20
 #: tixlcontrol/templates/tixlcontrol/items/base.html:3
 #: tixlcontrol/templates/tixlcontrol/items/base.html:6
 #: tixlcontrol/templates/tixlcontrol/items/index.html:3
@@ -356,16 +370,16 @@ msgstr "powered by <a %(a_attr)s>tixl</a>"
 msgid "Log in"
 msgstr "Anmelden"
 
-#: tixlcontrol/templates/tixlcontrol/base.html:21
+#: tixlcontrol/templates/tixlcontrol/base.html:23
 msgid "Toggle navigation"
 msgstr "Navigation umschalten"
 
-#: tixlcontrol/templates/tixlcontrol/base.html:31
+#: tixlcontrol/templates/tixlcontrol/base.html:33
 #: tixlcontrol/templates/tixlcontrol/event/base.html:18
 msgid "Dashboard"
 msgstr "Übersicht"
 
-#: tixlcontrol/templates/tixlcontrol/base.html:37
+#: tixlcontrol/templates/tixlcontrol/base.html:39
 msgid "Log out"
 msgstr "Abmelden"
 
@@ -382,6 +396,8 @@ msgstr "Einstellungen"
 #: tixlcontrol/templates/tixlcontrol/item/index.html:9
 #: tixlcontrol/templates/tixlcontrol/items/categories.html:8
 #: tixlcontrol/templates/tixlcontrol/items/category.html:11
+#: tixlcontrol/templates/tixlcontrol/items/properties.html:8
+#: tixlcontrol/templates/tixlcontrol/items/property.html:12
 msgid "Your changes have been saved."
 msgstr "Die Änderungen wurden gespeichert."
 
@@ -390,6 +406,7 @@ msgstr "Die Änderungen wurden gespeichert."
 #: tixlcontrol/templates/tixlcontrol/item/index.html:5
 #: tixlcontrol/templates/tixlcontrol/item/index.html:15
 #: tixlcontrol/templates/tixlcontrol/items/category.html:15
+#: tixlcontrol/templates/tixlcontrol/items/property.html:16
 msgid "General information"
 msgstr "Allgemeine Informationen"
 
@@ -411,6 +428,7 @@ msgstr "Zahlungseinstellungen"
 #: tixlcontrol/templates/tixlcontrol/item/variations_2d.html:35
 #: tixlcontrol/templates/tixlcontrol/item/variations_nd.html:38
 #: tixlcontrol/templates/tixlcontrol/items/category.html:21
+#: tixlcontrol/templates/tixlcontrol/items/property.html:67
 msgid "Save"
 msgstr "Speichern"
 
@@ -485,12 +503,54 @@ msgstr ""
 "löschen?"
 
 #: tixlcontrol/templates/tixlcontrol/items/category_delete.html:13
+#: tixlcontrol/templates/tixlcontrol/items/property_delete.html:21
 msgid "Confirm"
 msgstr "Bestätigen"
 
 #: tixlcontrol/templates/tixlcontrol/items/category_delete.html:16
+#: tixlcontrol/templates/tixlcontrol/items/property_delete.html:24
 msgid "Cancel"
 msgstr "Abbrechen"
+
+#: tixlcontrol/templates/tixlcontrol/items/properties.html:12
+msgid "A new property has been created."
+msgstr "Eine neue Eigenschaft wurde erstellt."
+
+#: tixlcontrol/templates/tixlcontrol/items/properties.html:16
+msgid "The property has been deleted."
+msgstr "Die Eigenschaft wurde gelöscht."
+
+#: tixlcontrol/templates/tixlcontrol/items/properties.html:20
+msgid "Create new property"
+msgstr "Eigenschaft hinzufügen"
+
+#: tixlcontrol/templates/tixlcontrol/items/property.html:20
+msgid "Values"
+msgstr "Werte"
+
+#: tixlcontrol/templates/tixlcontrol/items/property.html:61
+msgid "Add a new value"
+msgstr "Neuen Wert hinzufügen."
+
+#: tixlcontrol/templates/tixlcontrol/items/property_delete.html:4
+#: tixlcontrol/templates/tixlcontrol/items/property_delete.html:6
+msgid "Delete item property"
+msgstr "Eigenschaft löschen"
+
+#: tixlcontrol/templates/tixlcontrol/items/property_delete.html:8
+#, python-format
+msgid ""
+"You can not delete the property <strong>%(property)s</strong> as long as the "
+"following items use it:"
+msgstr ""
+"Die Eigenschaft <strong>%(property)s</strong> kann nicht gelöscht werden, "
+"solange sie von den folgenden Produkten benutzt wird:"
+
+#: tixlcontrol/templates/tixlcontrol/items/property_delete.html:17
+#, python-format
+msgid "Are you sure you want to the property <strong>%(property)s</strong>?"
+msgstr ""
+"Möchten Sie die Eigenschaft <strong>%(property)s</strong> wirklich löschen?"
 
 #: tixlcontrol/views/auth.py:15
 msgid "E-mail address"
