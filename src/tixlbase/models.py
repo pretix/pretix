@@ -444,7 +444,7 @@ class Question(models.Model):
         verbose_name_plural = _("Questions")
 
     def __str__(self):
-        return self.name
+        return self.question
 
 
 class Item(models.Model):
@@ -513,7 +513,7 @@ class Item(models.Model):
     )
     questions = models.ManyToManyField(
         Question,
-        related_name='questions',
+        related_name='items',
         verbose_name=_("Questions"),
         blank=True,
         help_text=_(

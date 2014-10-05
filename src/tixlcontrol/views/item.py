@@ -10,7 +10,7 @@ from django import forms
 from django.shortcuts import redirect
 from django.forms.models import inlineformset_factory
 
-from tixlbase.models import Item, ItemCategory, Property, ItemVariation, PropertyValue
+from tixlbase.models import Item, ItemCategory, Property, ItemVariation, PropertyValue, Question
 from tixlcontrol.permissions import EventPermissionRequiredMixin, event_permission_required
 from tixlcontrol.views.forms import TolerantFormsetModelForm
 
@@ -315,12 +315,103 @@ class PropertyDelete(EventPermissionRequiredMixin, DeleteView):
         }) + '?deleted=true'
 
 
+class QuestionList(ListView):
+    model = Question
+    context_object_name = 'questions'
+    template_name = 'tixlcontrol/items/questions.html'
+
+    def get_queryset(self):
+        return self.request.event.questions.all()
+
+
+class QuestionForm(forms.ModelForm):
+
+    class Meta:
+        model = Question
+        localized_fields = '__all__'
+        fields = [
+            'question',
+            'type',
+            'required',
+        ]
+
+
+class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
+    model = Question
+    template_name = 'tixlcontrol/items/question_delete.html'
+    permission = 'can_change_items'
+    context_object_name = 'question'
+
+    def get_object(self, queryset=None):
+        url = resolve(self.request.path_info)
+        return self.request.event.questions.get(
+            id=url.kwargs['question']
+        )
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['dependent'] = list(self.get_object().items.all())
+        return context
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.items.update(category=None)
+        success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)
+
+    def get_success_url(self):
+        return reverse('control:event.items.questions', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        }) + '?deleted=true'
+
+
+class QuestionUpdate(EventPermissionRequiredMixin, UpdateView):
+    model = Question
+    form_class = QuestionForm
+    template_name = 'tixlcontrol/items/question.html'
+    permission = 'can_change_items'
+    context_object_name = 'question'
+
+    def get_object(self, queryset=None):
+        url = resolve(self.request.path_info)
+        return self.request.event.questions.get(
+            id=url.kwargs['question']
+        )
+
+    def get_success_url(self):
+        return reverse('control:event.items.questions', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        }) + '?updated=true'
+
+
+class QuestionCreate(EventPermissionRequiredMixin, CreateView):
+    model = Question
+    form_class = QuestionForm
+    template_name = 'tixlcontrol/items/question.html'
+    permission = 'can_change_items'
+    context_object_name = 'question'
+
+    def get_success_url(self):
+        return reverse('control:event.items.questions', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        }) + '?created=true'
+
+    def form_valid(self, form):
+        form.instance.event = self.request.event
+        return super().form_valid(form)
+
+
 class ItemUpdateFormGeneral(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = self.instance.event.categories.all()
         self.fields['properties'].queryset = self.instance.event.properties.all()
+        self.fields['questions'].queryset = self.instance.event.questions.all()
 
     class Meta:
         model = Item
@@ -334,6 +425,7 @@ class ItemUpdateFormGeneral(forms.ModelForm):
             'default_price',
             'tax_rate',
             'properties',
+            'questions',
         ]
 
 

@@ -1,0 +1,40 @@
+{% extends "tixlcontrol/items/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Questions" %}{% endblock %}
+{% block inside %}
+	<h1>{% trans "Questions" %}</h1>
+	{% if "updated" in request.GET %}
+		<div class="alert alert-success">
+			{% trans "Your changes have been saved." %}
+		</div>
+	{% elif "created" in request.GET %}
+		<div class="alert alert-success">
+			{% trans "A new question has been created." %}
+		</div>
+	{% elif "deleted" in request.GET %}
+		<div class="alert alert-success">
+			{% trans "The question has been deleted." %}
+		</div>
+	{% endif %}
+	<p>
+		<a href="{% url "control:event.items.questions.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create new question" %}</a>
+	</p>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>{% trans "Question" %}</th>
+				<th>{% trans "Type" %}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for q in questions %}
+			<tr>
+				<td><strong><a href="{% url "control:event.items.questions.edit" organizer=request.event.organizer.slug event=request.event.slug question=q.pk %}">{{ q.question }}</a></strong></td>
+				<td>{{ q.get_type_display }}</td>
+				<td class="text-right"><a href="{% url "control:event.items.questions.delete" organizer=request.event.organizer.slug event=request.event.slug question=q.pk %}"" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
