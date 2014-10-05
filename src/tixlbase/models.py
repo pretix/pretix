@@ -406,6 +406,47 @@ class PropertyValue(models.Model):
         return "%s: %s" % (self.prop.name, self.value)
 
 
+class Question(models.Model):
+    """
+    A question is an input field that can be used to extend a ticket
+    by custom information, e.g. "Attendee name" or "Attendee age".
+    """
+    TYPE_NUMBER = "N"
+    TYPE_STRING = "S"
+    TYPE_TEXT = "T"
+    TYPE_BOOLEAN = "B"
+    TYPE_CHOICES = (
+        (TYPE_NUMBER, _("Number")),
+        (TYPE_STRING, _("Text (one line)")),
+        (TYPE_TEXT, _("Multiline text")),
+        (TYPE_BOOLEAN, _("Yes/No")),
+    )
+
+    event = models.ForeignKey(
+        Event,
+        related_name="questions",
+    )
+    question = models.TextField(
+        verbose_name=_("Question"),
+    )
+    type = models.CharField(
+        max_length=5,
+        choices=TYPE_CHOICES,
+        verbose_name=_("Question type"),
+    )
+    required = models.BooleanField(
+        default=False,
+        verbose_name=_("Required question"),
+    )
+
+    class Meta:
+        verbose_name = _("Question")
+        verbose_name_plural = _("Questions")
+
+    def __str__(self):
+        return self.name
+
+
 class Item(models.Model):
     """
     An item is a thing which can be sold. It belongs to an
@@ -468,6 +509,16 @@ class Item(models.Model):
             'The selected properties will be available for the user '
             + 'to select. After saving this field, move to the '
             + '\'Variations\' tab to configure the details.'
+        )
+    )
+    questions = models.ManyToManyField(
+        Question,
+        related_name='questions',
+        verbose_name=_("Questions"),
+        blank=True,
+        help_text=_(
+            'The user will be asked to fill in answers for the '
+            + 'selected questions'
         )
     )
 

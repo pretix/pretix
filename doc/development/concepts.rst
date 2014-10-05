@@ -67,6 +67,13 @@ and 'blue'.
 Any combination of those **values** is called a **variation**. Using the examples from 
 above, a possible **variation** would be 'T-Shirt, S, blue'.
 
+Questions
+^^^^^^^^^
+
+An item can be extended using **questions**. Questions enable items to be extended by
+additional information which can be entered by the user. Examples of possible questions
+include 'Name' or 'age'.
+
 Restrictions
 ^^^^^^^^^^^^
 
