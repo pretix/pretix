@@ -64,6 +64,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     The is_staff field is only True for system operators.
     """
 
+    USERNAME_FIELD = 'identifier'
+    REQUIRED_FIELDS = ['username']
+
     identifier = models.CharField(max_length=255, unique=True)
     username = models.CharField(max_length=120, blank=True,
                                 null=True,
@@ -96,8 +99,23 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
+    class Meta:
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
+        unique_together = (("event", "username"),)
+
     def __str__(self):
         return self.identifier
+
+    def save(self, *args, **kwargs):
+        if self.identifier is None:
+            if self.event is None:
+                self.identifier = self.email.lower()
+            else:
+                self.identifier = "%s@%d.event.tixl" % (self.username.lower(), self.event.id)
+        if not self.pk:
+            self.identifier = self.identifier.lower()
+        super().save(*args, **kwargs)
 
     def get_short_name(self):
         if self.givenname:
@@ -120,24 +138,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         else:
             return self.username
 
-    def save(self, *args, **kwargs):
-        if self.identifier is None:
-            if self.event is None:
-                self.identifier = self.email.lower()
-            else:
-                self.identifier = "%s@%d.event.tixl" % (self.username.lower(), self.event.id)
-        if not self.pk:
-            self.identifier = self.identifier.lower()
-        super().save(*args, **kwargs)
-
-    USERNAME_FIELD = 'identifier'
-    REQUIRED_FIELDS = ['username']
-
-    class Meta:
-        verbose_name = _("User")
-        verbose_name_plural = _("Users")
-        unique_together = (("event", "username"),)
-
 
 class Organizer(models.Model):
     """
@@ -154,13 +154,13 @@ class Organizer(models.Model):
     permitted = models.ManyToManyField(User, through='OrganizerPermission',
                                        related_name="organizers")
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = _("Organizer")
         verbose_name_plural = _("Organizers")
         ordering = ("name",)
+
+    def __str__(self):
+        return self.name
 
 
 class OrganizerPermission(models.Model):
@@ -176,16 +176,16 @@ class OrganizerPermission(models.Model):
         verbose_name=_("Can create events"),
     )
 
+    class Meta:
+        verbose_name = _("Organizer permission")
+        verbose_name_plural = _("Organizer permissions")
+        unique_together = (("organizer", "user"),)
+
     def __str__(self):
         return _("%(name)s on %(object)s") % {
             'name': str(self.user),
             'object': str(self.organizer),
         }
-
-    class Meta:
-        verbose_name = _("Organizer permission")
-        verbose_name_plural = _("Organizer permissions")
-        unique_together = (("organizer", "user"),)
 
 
 class Event(models.Model):
@@ -275,6 +275,15 @@ class Event(models.Model):
         help_text=_("The last date any payments are accepted. This has precedence over the number of days configured above.")
     )
 
+    class Meta:
+        verbose_name = _("Event")
+        verbose_name_plural = _("Events")
+        unique_together = (("organizer", "slug"),)
+        ordering = ("date_from", "name")
+
+    def __str__(self):
+        return self.name
+
     def get_date_from_display(self):
         return _date(
             self.date_from,
@@ -288,15 +297,6 @@ class Event(models.Model):
             self.date_to,
             "DATETIME_FORMAT" if self.show_times else "DATE_FORMAT"
         )
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("Event")
-        verbose_name_plural = _("Events")
-        unique_together = (("organizer", "slug"),)
-        ordering = ("date_from", "name")
 
 
 class EventPermission(models.Model):
@@ -316,16 +316,16 @@ class EventPermission(models.Model):
         verbose_name=_("Can change item settings")
     )
 
+    class Meta:
+        verbose_name = _("Event permission")
+        verbose_name_plural = _("Event permissions")
+        unique_together = (("event", "user"),)
+
     def __str__(self):
         return _("%(name)s on %(object)s") % {
             'name': str(self.user),
             'object': str(self.event),
         }
-
-    class Meta:
-        verbose_name = _("Event permission")
-        verbose_name_plural = _("Event permissions")
-        unique_together = (("event", "user"),)
 
 
 class ItemCategory(models.Model):
@@ -345,13 +345,13 @@ class ItemCategory(models.Model):
         default=0
     )
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = _("Item category")
         verbose_name_plural = _("Item categories")
         ordering = ('position',)
+
+    def __str__(self):
+        return self.name
 
 
 class Property(models.Model):
@@ -370,12 +370,12 @@ class Property(models.Model):
         verbose_name=_("Property name"),
     )
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = _("Item property")
         verbose_name_plural = _("Item properties")
+
+    def __str__(self):
+        return self.name
 
 
 class PropertyValue(models.Model):
@@ -397,13 +397,13 @@ class PropertyValue(models.Model):
         default=0
     )
 
-    def __str__(self):
-        return "%s: %s" % (self.prop.name, self.value)
-
     class Meta:
         verbose_name = _("Property value")
         verbose_name_plural = _("Property values")
         ordering = ("position",)
+
+    def __str__(self):
+        return "%s: %s" % (self.prop.name, self.value)
 
 
 class Item(models.Model):
@@ -471,6 +471,10 @@ class Item(models.Model):
         )
     )
 
+    class Meta:
+        verbose_name = _("Item")
+        verbose_name_plural = _("Items")
+
     def __str__(self):
         return self.name
 
@@ -513,10 +517,6 @@ class Item(models.Model):
 
         return result
 
-    class Meta:
-        verbose_name = _("Item")
-        verbose_name_plural = _("Items")
-
 
 class ItemVariation(models.Model):
     """
@@ -554,3 +554,7 @@ class ItemVariation(models.Model):
         null=True, blank=True,
         verbose_name=_("Default price"),
     )
+
+    class Meta:
+        verbose_name = _("Item variation")
+        verbose_name_plural = _("Item variations")
