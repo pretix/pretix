@@ -555,6 +555,7 @@ class Item(models.Model):
         result = []
         for comb in product(*[prop.values.all() for prop in all_properties]):
             if len(comb) == 0:
+                result.append({})
                 continue
             key = []
             var = {}

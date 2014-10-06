@@ -33,7 +33,8 @@ class ItemVariationsTest(TestCase):
 
         # No properties available
         v = i.get_all_variations()
-        self.assertEqual(len(v), 0)
+        self.assertEqual(len(v), 1)
+        self.assertEqual(v[0], {})
 
         # One property, no variations
         p = Property.objects.get(event=e, name='Size')
