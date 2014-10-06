@@ -1,4 +1,4 @@
-Implementation Concepts
+Implementation concepts
 =======================
 
 Basic terminology
@@ -73,6 +73,8 @@ Questions
 An item can be extended using **questions**. Questions enable items to be extended by
 additional information which can be entered by the user. Examples of possible questions
 include 'Name' or 'age'.
+
+.. _restrictionconcept:
 
 Restrictions
 ^^^^^^^^^^^^

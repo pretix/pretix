@@ -11,3 +11,4 @@ Contents:
    setup
    style
    structure
+   api/index

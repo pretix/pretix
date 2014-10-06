@@ -569,6 +569,9 @@ class Item(models.Model):
 
         return result
 
+    def get_cache(self):
+        return None
+
 
 class ItemVariation(models.Model):
     """
@@ -610,3 +613,24 @@ class ItemVariation(models.Model):
     class Meta:
         verbose_name = _("Item variation")
         verbose_name_plural = _("Item variations")
+
+
+class BaseRestriction(models.Model):
+    """
+    A restriction is the abstract concept of a rule that limits the availability
+    of Items or ItemVariations. This model is just an abstract base class to be
+    extended by restriction plugins.
+    """
+    items = models.ManyToManyField(
+        Item,
+        related_name="restrictions_%(app_label)s_%(class)s",
+    )
+    variations = models.ManyToManyField(
+        ItemVariation,
+        related_name="restrictions_%(app_label)s_%(class)s",
+    )
+
+    class Meta:
+        abstract = True
+        verbose_name = _("Restriction")
+        verbose_name_plural = _("Restrictions")
