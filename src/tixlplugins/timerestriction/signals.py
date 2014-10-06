@@ -11,7 +11,7 @@ def availability_handler(sender, **kwargs):
     # Handle the signal's input arguments
     item = kwargs['item']
     variations = kwargs['variations']
-    cache = kwargs['cache']  # NOQA
+    cache = kwargs['cache']
     context = kwargs['context']  # NOQA
 
     # Fetch all restriction objects applied to this item
@@ -29,6 +29,25 @@ def availability_handler(sender, **kwargs):
     # interfere with other plugins.
     variations = [d.copy() for d in variations]
 
+    # The maximum validity of our cached values is the next date, one of our
+    # timeframe_from or tiemframe_to actions happens
+    def timediff(restrictions):
+        for r in restrictions:
+            if r.timeframe_from >= now():
+                yield (r.timeframe_from - now()).total_seconds()
+            if r.timeframe_to >= now():
+                yield (r.timeframe_to - now()).total_seconds()
+
+    try:
+        cache_validity = min(timediff(restrictions))
+    except ValueError:
+        # empty sequence
+        # If we get here, there are restrictions available but nothing will
+        # change about them any more. If it were not for the case of no
+        # restriction for the base item but restrictions for special
+        # variations, we could quit here with 'item not available'.
+        cache_validity = 3600
+
     # Walk through all variations we are asked for
     for v in variations:
         # If this point is reached, there ARE time restrictions for this item
@@ -36,6 +55,23 @@ def availability_handler(sender, **kwargs):
         # without any timeframe
         available = False
         price = None
+
+        # Make up some unique key for this variation
+        cachekey = 'timerestriction:%d:%s' % (
+            item.pk,
+            ",".join(sorted([str(v[1].pk) for v in v.items() if v[0] != 'variation']))
+        )
+
+        # Fetch from cache, if available
+        cached = cache.get(cachekey)
+        if cached is not None:
+            v['available'] = (cached.split(":")[0] == 'True')
+            try:
+                v['price'] = float(cached.split(":")[1])
+            except ValueError:
+                v['price'] = None
+            continue
+
         # Walk through all restriction objects applied to this item
         for restriction in restrictions:
             applied_to = list(restriction.variations.all())
@@ -57,5 +93,10 @@ def availability_handler(sender, **kwargs):
 
         v['available'] = available
         v['price'] = price
+        cache.set(
+            cachekey,
+            '%s:%s' % ('True' if available else 'False', str(price) if price else ''),
+            cache_validity
+        )
 
     return variations

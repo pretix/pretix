@@ -285,8 +285,9 @@ class Event(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
+        obj = super().save(*args, **kwargs)
         self.get_cache().clear()
-        return super().save(self, *args, **kwargs)
+        return obj
 
     def get_date_from_display(self):
         return _date(
@@ -364,7 +365,7 @@ class ItemCategory(models.Model):
     def save(self, *args, **kwargs):
         if self.event:
             self.event.get_cache().clear()
-        return super().save(self, *args, **kwargs)
+        return super().save(*args, **kwargs)
 
 
 class Property(models.Model):
@@ -393,7 +394,7 @@ class Property(models.Model):
     def save(self, *args, **kwargs):
         if self.event:
             self.event.get_cache().clear()
-        return super().save(self, *args, **kwargs)
+        return super().save(*args, **kwargs)
 
 
 class PropertyValue(models.Model):
@@ -426,7 +427,7 @@ class PropertyValue(models.Model):
     def save(self, *args, **kwargs):
         if self.prop:
             self.prop.event.get_cache().clear()
-        return super().save(self, *args, **kwargs)
+        return super().save(*args, **kwargs)
 
 
 class Question(models.Model):
@@ -472,7 +473,7 @@ class Question(models.Model):
     def save(self, *args, **kwargs):
         if self.event:
             self.event.get_cache().clear()
-        return super().save(self, *args, **kwargs)
+        return super().save(*args, **kwargs)
 
 
 class Item(models.Model):
@@ -560,7 +561,7 @@ class Item(models.Model):
     def save(self, *args, **kwargs):
         if self.event:
             self.event.get_cache().clear()
-        return super().save(self, *args, **kwargs)
+        return super().save(*args, **kwargs)
 
     def delete(self):
         self.deleted = True
@@ -647,7 +648,7 @@ class ItemVariation(models.Model):
     def save(self, *args, **kwargs):
         if self.item:
             self.item.event.get_cache().clear()
-        return super().save(self, *args, **kwargs)
+        return super().save(*args, **kwargs)
 
 
 class BaseRestriction(models.Model):
@@ -679,4 +680,4 @@ class BaseRestriction(models.Model):
     def save(self, *args, **kwargs):
         if self.event:
             self.event.get_cache().clear()
-        return super().save(self, *args, **kwargs)
+        return super().save(*args, **kwargs)

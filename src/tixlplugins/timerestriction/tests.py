@@ -33,7 +33,7 @@ class TimeRestrictionTest(TestCase):
     def test_nothing(self):
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.event.get_all_variations(),
+            variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
@@ -43,12 +43,13 @@ class TimeRestrictionTest(TestCase):
         r = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=3),
             timeframe_to=now() + timedelta(days=3),
+            event=self.event,
             price=12
         )
         r.items.add(self.item)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.event.get_all_variations(),
+            variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
@@ -60,12 +61,13 @@ class TimeRestrictionTest(TestCase):
         r = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() - timedelta(days=3),
+            event=self.event,
             price=12
         )
         r.items.add(self.item)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.event.get_all_variations(),
+            variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
@@ -76,18 +78,20 @@ class TimeRestrictionTest(TestCase):
         r1 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() + timedelta(days=3),
+            event=self.event,
             price=12
         )
         r1.items.add(self.item)
         r2 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=3),
             timeframe_to=now() + timedelta(days=5),
+            event=self.event,
             price=8
         )
         r2.items.add(self.item)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.event.get_all_variations(),
+            variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
@@ -99,18 +103,20 @@ class TimeRestrictionTest(TestCase):
         r1 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() + timedelta(days=5),
+            event=self.event,
             price=12
         )
         r1.items.add(self.item)
         r2 = TimeRestriction.objects.create(
             timeframe_from=now() + timedelta(days=1),
             timeframe_to=now() + timedelta(days=7),
+            event=self.event,
             price=8
         )
         r2.items.add(self.item)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.event.get_all_variations(),
+            variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
@@ -122,18 +128,20 @@ class TimeRestrictionTest(TestCase):
         r1 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() + timedelta(days=2),
+            event=self.event,
             price=12
         )
         r1.items.add(self.item)
         r2 = TimeRestriction.objects.create(
             timeframe_from=now() + timedelta(days=4),
             timeframe_to=now() + timedelta(days=7),
+            event=self.event,
             price=8
         )
         r2.items.add(self.item)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.event.get_all_variations(),
+            variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
@@ -145,18 +153,20 @@ class TimeRestrictionTest(TestCase):
         r1 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() - timedelta(days=1),
+            event=self.event,
             price=12
         )
         r1.items.add(self.item)
         r2 = TimeRestriction.objects.create(
             timeframe_from=now() + timedelta(days=4),
             timeframe_to=now() + timedelta(days=7),
+            event=self.event,
             price=8
         )
         r2.items.add(self.item)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.event.get_all_variations(),
+            variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
@@ -173,13 +183,14 @@ class TimeRestrictionTest(TestCase):
         r1 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() + timedelta(days=1),
+            event=self.event,
             price=12
         )
         r1.items.add(self.item)
         r1.variations.add(v1)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.event.get_all_variations(),
+            variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 3)
@@ -200,12 +211,14 @@ class TimeRestrictionTest(TestCase):
         r1 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() + timedelta(days=1),
+            event=self.event,
             price=12
         )
         r1.items.add(self.item)
         r2 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() + timedelta(days=1),
+            event=self.event,
             price=8
         )
         r2.items.add(self.item)
@@ -213,13 +226,14 @@ class TimeRestrictionTest(TestCase):
         r3 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() - timedelta(days=1),
+            event=self.event,
             price=10
         )
         r3.items.add(self.item)
         r3.variations.add(v2)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.event.get_all_variations(),
+            variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 3)
@@ -241,6 +255,7 @@ class TimeRestrictionTest(TestCase):
         r1 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() + timedelta(days=1),
+            event=self.event,
             price=12
         )
         r1.items.add(self.item)
@@ -248,6 +263,7 @@ class TimeRestrictionTest(TestCase):
         r2 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() + timedelta(days=1),
+            event=self.event,
             price=8
         )
         r2.items.add(self.item)
@@ -255,13 +271,14 @@ class TimeRestrictionTest(TestCase):
         r3 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() - timedelta(days=1),
+            event=self.event,
             price=8
         )
         r3.items.add(self.item)
         r3.variations.add(v2)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.event.get_all_variations(),
+            variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 3)

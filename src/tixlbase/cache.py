@@ -12,11 +12,14 @@ class EventRelatedCache:
     you store data in this cache, it is only stored for this event. The
     main purpose of this is to be able to flush all cached data related
     to this event at once.
+
+    The object is stateless, all state is in the cache, so you can
+    instantiate it as many times as you want.
     """
 
     def __init__(self, event, cache='default'):
         self.cache = caches[cache]
-        self.prefix = self._build_prefix()
+        self.event = event
         self.prefixkey = 'event:%d' % self.event.pk
 
     def _prefix_key(self, original_key):
@@ -42,7 +45,7 @@ class EventRelatedCache:
             prefix = int(time.time())
             self.cache.set(self.prefixkey, prefix)
 
-    def set(self, key, value, timeout=300):
+    def set(self, key, value, timeout=3600):
         return self.cache.set(self._prefix_key(key), value, timeout)
 
     def get(self, key):
@@ -51,7 +54,7 @@ class EventRelatedCache:
     def get_many(self, keys):
         return self.cache.get_many([self._prefix_key(key) for key in keys])
 
-    def set_many(self, values, timeout=300):
+    def set_many(self, values, timeout=3600):
         newvalues = {}
         for i in values.items():
             newvalues[self._prefix_key(i[0])] = i[1]
