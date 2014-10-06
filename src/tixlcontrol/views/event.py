@@ -22,7 +22,7 @@ class EventUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['slug'].widget.attrs['readonly'] = True
+        self.fields['slug'].widget.attrs['readonly'] = 'readonly'
 
     class Meta:
         model = Event
