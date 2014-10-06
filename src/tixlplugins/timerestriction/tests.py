@@ -33,8 +33,8 @@ class TimeRestrictionTest(TestCase):
     def test_nothing(self):
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.item.get_all_variations(),
-            context=None, cache=self.item.get_cache()
+            variations=self.event.get_all_variations(),
+            context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
         self.assertTrue('available' not in result[0] or result[0]['available'] is True)
@@ -48,8 +48,8 @@ class TimeRestrictionTest(TestCase):
         r.items.add(self.item)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.item.get_all_variations(),
-            context=None, cache=self.item.get_cache()
+            variations=self.event.get_all_variations(),
+            context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
         self.assertIn('available', result[0])
@@ -65,8 +65,8 @@ class TimeRestrictionTest(TestCase):
         r.items.add(self.item)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.item.get_all_variations(),
-            context=None, cache=self.item.get_cache()
+            variations=self.event.get_all_variations(),
+            context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
         self.assertIn('available', result[0])
@@ -87,8 +87,8 @@ class TimeRestrictionTest(TestCase):
         r2.items.add(self.item)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.item.get_all_variations(),
-            context=None, cache=self.item.get_cache()
+            variations=self.event.get_all_variations(),
+            context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
         self.assertIn('available', result[0])
@@ -110,8 +110,8 @@ class TimeRestrictionTest(TestCase):
         r2.items.add(self.item)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.item.get_all_variations(),
-            context=None, cache=self.item.get_cache()
+            variations=self.event.get_all_variations(),
+            context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
         self.assertIn('available', result[0])
@@ -133,8 +133,8 @@ class TimeRestrictionTest(TestCase):
         r2.items.add(self.item)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.item.get_all_variations(),
-            context=None, cache=self.item.get_cache()
+            variations=self.event.get_all_variations(),
+            context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
         self.assertIn('available', result[0])
@@ -156,8 +156,8 @@ class TimeRestrictionTest(TestCase):
         r2.items.add(self.item)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.item.get_all_variations(),
-            context=None, cache=self.item.get_cache()
+            variations=self.event.get_all_variations(),
+            context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 1)
         self.assertIn('available', result[0])
@@ -179,8 +179,8 @@ class TimeRestrictionTest(TestCase):
         r1.variations.add(v1)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.item.get_all_variations(),
-            context=None, cache=self.item.get_cache()
+            variations=self.event.get_all_variations(),
+            context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 3)
         for v in result:
@@ -219,8 +219,8 @@ class TimeRestrictionTest(TestCase):
         r3.variations.add(v2)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.item.get_all_variations(),
-            context=None, cache=self.item.get_cache()
+            variations=self.event.get_all_variations(),
+            context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 3)
         for v in result:
@@ -261,8 +261,8 @@ class TimeRestrictionTest(TestCase):
         r3.variations.add(v2)
         result = signals.availability_handler(
             None, item=self.item,
-            variations=self.item.get_all_variations(),
-            context=None, cache=self.item.get_cache()
+            variations=self.event.get_all_variations(),
+            context=None, cache=self.event.get_cache()
         )
         self.assertEqual(len(result), 3)
         for v in result:

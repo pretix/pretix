@@ -284,6 +284,10 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        self.get_cache().clear()
+        return super().save(self, *args, **kwargs)
+
     def get_date_from_display(self):
         return _date(
             self.date_from,
@@ -297,6 +301,10 @@ class Event(models.Model):
             self.date_to,
             "DATETIME_FORMAT" if self.show_times else "DATE_FORMAT"
         )
+
+    def get_cache(self):
+        from tixlbase.cache import EventRelatedCache
+        return EventRelatedCache(self)
 
 
 class EventPermission(models.Model):
@@ -353,6 +361,11 @@ class ItemCategory(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if self.event:
+            self.event.get_cache().clear()
+        return super().save(self, *args, **kwargs)
+
 
 class Property(models.Model):
     """
@@ -376,6 +389,11 @@ class Property(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.event:
+            self.event.get_cache().clear()
+        return super().save(self, *args, **kwargs)
 
 
 class PropertyValue(models.Model):
@@ -404,6 +422,11 @@ class PropertyValue(models.Model):
 
     def __str__(self):
         return "%s: %s" % (self.prop.name, self.value)
+
+    def save(self, *args, **kwargs):
+        if self.prop:
+            self.prop.event.get_cache().clear()
+        return super().save(self, *args, **kwargs)
 
 
 class Question(models.Model):
@@ -445,6 +468,11 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question
+
+    def save(self, *args, **kwargs):
+        if self.event:
+            self.event.get_cache().clear()
+        return super().save(self, *args, **kwargs)
 
 
 class Item(models.Model):
@@ -529,6 +557,11 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if self.event:
+            self.event.get_cache().clear()
+        return super().save(self, *args, **kwargs)
+
     def delete(self):
         self.deleted = True
         self.active = False
@@ -568,9 +601,6 @@ class Item(models.Model):
             result.append(var)
 
         return result
-
-    def get_cache(self):
-        return None
 
 
 class ItemVariation(models.Model):
@@ -614,6 +644,11 @@ class ItemVariation(models.Model):
         verbose_name = _("Item variation")
         verbose_name_plural = _("Item variations")
 
+    def save(self, *args, **kwargs):
+        if self.item:
+            self.item.event.get_cache().clear()
+        return super().save(self, *args, **kwargs)
+
 
 class BaseRestriction(models.Model):
     """
@@ -621,6 +656,12 @@ class BaseRestriction(models.Model):
     of Items or ItemVariations. This model is just an abstract base class to be
     extended by restriction plugins.
     """
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name="restrictions_%(app_label)s_%(class)s",
+        verbose_name=_("Event"),
+    )
     items = models.ManyToManyField(
         Item,
         related_name="restrictions_%(app_label)s_%(class)s",
@@ -634,3 +675,8 @@ class BaseRestriction(models.Model):
         abstract = True
         verbose_name = _("Restriction")
         verbose_name_plural = _("Restrictions")
+
+    def save(self, *args, **kwargs):
+        if self.event:
+            self.event.get_cache().clear()
+        return super().save(self, *args, **kwargs)
