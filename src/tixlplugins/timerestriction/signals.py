@@ -59,7 +59,9 @@ def availability_handler(sender, **kwargs):
         # Make up some unique key for this variation
         cachekey = 'timerestriction:%d:%s' % (
             item.pk,
-            ",".join(sorted([str(v[1].pk) for v in v.items() if v[0] != 'variation']))
+            ",".join(sorted(
+                [str(v[1].pk) for v in v.items() if v[0] != 'variation']
+            ))
         )
 
         # Fetch from cache, if available
@@ -83,19 +85,24 @@ def availability_handler(sender, **kwargs):
                 if 'variation' not in v or v['variation'] not in applied_to:
                     continue
 
-            if restriction.timeframe_from <= now() and restriction.timeframe_to >= now():
+            if (restriction.timeframe_from <= now()
+                    and restriction.timeframe_to >= now()):
                 # Selling this item is currently possible
                 available = True
                 # If multiple time frames are currently active, make sure to
                 # get the cheapest price:
-                if restriction.price is not None and (price is None or restriction.price < price):
+                if (restriction.price is not None
+                        and (price is None or restriction.price < price)):
                     price = restriction.price
 
         v['available'] = available
         v['price'] = price
         cache.set(
             cachekey,
-            '%s:%s' % ('True' if available else 'False', str(price) if price else ''),
+            '%s:%s' % (
+                'True' if available else 'False',
+                str(price) if price else ''
+            ),
             cache_validity
         )
 
