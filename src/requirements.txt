@@ -13,7 +13,6 @@ lxml
 
 # Debugging requirements
 django-debug-toolbar
-ipython
 
 # Testing requirements
 pyflakes
