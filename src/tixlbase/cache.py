@@ -39,7 +39,7 @@ class EventRelatedCache:
         return key
 
     def _strip_prefix(self, key):
-        return key.split(":", maxsplit=3)[-1] if 'event:' in key else key
+        return key.split(":", 3)[-1] if 'event:' in key else key
 
     def clear(self):
         try:
