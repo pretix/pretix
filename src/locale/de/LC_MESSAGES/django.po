@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-05 12:06+0200\n"
-"PO-Revision-Date: 2014-10-05 12:08+0100\n"
+"POT-Creation-Date: 2014-10-07 18:12+0200\n"
+"PO-Revision-Date: 2014-10-07 18:18+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.9\n"
 
-#: tixl/settings.py:107
+#: tixl/settings.py:110
 msgid "German"
 msgstr "Deutsch"
 
-#: tixl/settings.py:108
+#: tixl/settings.py:111
 msgid "English"
 msgstr "Englisch"
 
@@ -54,77 +54,77 @@ msgstr "Sprache"
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: tixlbase/models.py:70
+#: tixlbase/models.py:75
 msgid "Letters, digits and @/./+/-/_ only."
 msgstr "Nur Buchstaben, Zahlen und @/./+/-/_"
 
-#: tixlbase/models.py:76
+#: tixlbase/models.py:81
 msgid "E-mail"
 msgstr "E-Mail"
 
-#: tixlbase/models.py:79
+#: tixlbase/models.py:84
 msgid "Given name"
 msgstr "Vorname"
 
-#: tixlbase/models.py:82
+#: tixlbase/models.py:87
 msgid "Family name"
 msgstr "Nachname"
 
-#: tixlbase/models.py:84
+#: tixlbase/models.py:89
 msgid "Is active"
 msgstr "Ist aktiviert"
 
-#: tixlbase/models.py:88
+#: tixlbase/models.py:93
 msgid "Date joined"
 msgstr "Registrierungsdatum"
 
-#: tixlbase/models.py:92
+#: tixlbase/models.py:97
 msgid "Language"
 msgstr "Sprache"
 
-#: tixlbase/models.py:137
+#: tixlbase/models.py:105
 msgid "User"
 msgstr "Benutzer"
 
-#: tixlbase/models.py:138
+#: tixlbase/models.py:106
 msgid "Users"
 msgstr "Benutzer"
 
-#: tixlbase/models.py:150 tixlbase/models.py:220
+#: tixlbase/models.py:152 tixlbase/models.py:222
 msgid "Name"
 msgstr "Name"
 
-#: tixlbase/models.py:153 tixlbase/models.py:232
+#: tixlbase/models.py:155 tixlbase/models.py:234
 msgid "Slug"
 msgstr "Kurzform"
 
-#: tixlbase/models.py:161
+#: tixlbase/models.py:160
 #: tixlcontrol/templates/tixlcontrol/events/index.html:11
 msgid "Organizer"
 msgstr "Veranstalter"
 
-#: tixlbase/models.py:162
+#: tixlbase/models.py:161
 msgid "Organizers"
 msgstr "Veranstalter"
 
-#: tixlbase/models.py:176
+#: tixlbase/models.py:178
 msgid "Can create events"
 msgstr "Kann Veranstaltungen erstellen"
 
-#: tixlbase/models.py:180 tixlbase/models.py:320
+#: tixlbase/models.py:182
+msgid "Organizer permission"
+msgstr "Veranstalter-Berechtigung"
+
+#: tixlbase/models.py:183
+msgid "Organizer permissions"
+msgstr "Veranstalter-Berechtigungen"
+
+#: tixlbase/models.py:187 tixlbase/models.py:345
 #, python-format
 msgid "%(name)s on %(object)s"
 msgstr "%(name)s für %(object)s"
 
-#: tixlbase/models.py:186
-msgid "Organizer permission"
-msgstr "Veranstalter-Berechtigung"
-
-#: tixlbase/models.py:187
-msgid "Organizer permissions"
-msgstr "Veranstalter-Berechtigungen"
-
-#: tixlbase/models.py:224
+#: tixlbase/models.py:226
 msgid ""
 "Should be short, only contain lowercase letters and numbers, and must be "
 "unique among your events. This is being used in addresses and bank transfer "
@@ -134,46 +134,46 @@ msgstr ""
 "unter Ihren Veranstaltungen einmalig sein. Wird in URLs und "
 "Verwendungszwecken für Banküberweisungen benutzt."
 
-#: tixlbase/models.py:229
+#: tixlbase/models.py:231
 msgid "The slug may only contain letters, numbers, dots and dashes."
 msgstr ""
 "Der Kurzname darf nur Buchstaben, Zahlen, Punkte und Bindestriche enthalten"
 
-#: tixlbase/models.py:238
+#: tixlbase/models.py:240
 msgid "Default locale"
 msgstr "Standardsprache"
 
-#: tixlbase/models.py:241 tixlcontrol/views/event.py:17
+#: tixlbase/models.py:243 tixlcontrol/views/event.py:19
 msgid "Default timezone"
 msgstr "Standardzeitzone"
 
-#: tixlbase/models.py:243
+#: tixlbase/models.py:245
 msgid "Default currency"
 msgstr "Standardwährung"
 
-#: tixlbase/models.py:244
+#: tixlbase/models.py:246
 msgid "Event start time"
 msgstr "Veranstaltungsbeginn"
 
-#: tixlbase/models.py:246
+#: tixlbase/models.py:248
 msgid "Event end time"
 msgstr "Veranstaltungsende"
 
-#: tixlbase/models.py:249
+#: tixlbase/models.py:251
 msgid "Show event end date"
 msgstr "Zeige Veranstaltungsende"
 
-#: tixlbase/models.py:250
+#: tixlbase/models.py:252
 msgid "If disabled, only event's start date will be displayed to the public."
 msgstr ""
 "Wenn diese Einstellung deaktiviert ist, wird nur der Beginn der "
 "Veranstaltung öffentlich angezeigt."
 
-#: tixlbase/models.py:254
+#: tixlbase/models.py:256
 msgid "Show dates with time"
 msgstr "Zeige Uhrzeiten"
 
-#: tixlbase/models.py:255
+#: tixlbase/models.py:257
 msgid ""
 "If disabled, the event's start and end date will be displayed without the "
 "time of day."
@@ -181,37 +181,37 @@ msgstr ""
 "Wenn diese Einstellung deaktiviert ist, werden Veranstaltungsbeginn und -"
 "ende ohne Uhrzeit angezeigt"
 
-#: tixlbase/models.py:259
+#: tixlbase/models.py:261
 msgid "End of presale"
 msgstr "Ende des Vorverkaufs"
 
-#: tixlbase/models.py:260
+#: tixlbase/models.py:262
 msgid "No items will be sold after this date."
 msgstr "Es werden nach diesem Termin keine Produkte mehr verkauft."
 
-#: tixlbase/models.py:264
+#: tixlbase/models.py:266
 msgid "Start of presale"
 msgstr "Beginn des Vorverkaufs"
 
-#: tixlbase/models.py:265
+#: tixlbase/models.py:267
 msgid "No items will be sold before this date."
 msgstr "Es werden vor diesem Termin keine Produkte verkauft."
 
-#: tixlbase/models.py:269
+#: tixlbase/models.py:271
 msgid "Payment term in days"
 msgstr "Zahlungsziel in Tagen"
 
-#: tixlbase/models.py:270
+#: tixlbase/models.py:272
 msgid ""
 "The number of days after placing an order the user has to pay to preserve "
 "his reservation."
 msgstr "Die Anzahl an Tagen die ein Käufer zum Bezahlen seiner Bestellung hat."
 
-#: tixlbase/models.py:274
+#: tixlbase/models.py:276
 msgid "Last date of payments"
 msgstr "Datum des letzten möglichen Zahlungseingangs"
 
-#: tixlbase/models.py:275
+#: tixlbase/models.py:277
 msgid ""
 "The last date any payments are accepted. This has precedence over the number "
 "of days configured above."
@@ -219,117 +219,160 @@ msgstr ""
 "Das Datum, bis zu dem Zahlungseingänge akzeptiert werden. Diese Einstellung "
 "hat Vorrang über der oben eingestellten Anzahl an Tagen"
 
-#: tixlbase/models.py:296 tixlbase/models.py:425
+#: tixlbase/models.py:281
+#: tixlcontrol/templates/tixlcontrol/event/settings_base.html:9
+msgid "Plugins"
+msgstr "Plugins"
+
+#: tixlbase/models.py:285 tixlbase/models.py:506 tixlbase/models.py:678
 msgid "Event"
 msgstr "Veranstaltung"
 
-#: tixlbase/models.py:297 tixlcontrol/templates/tixlcontrol/base.html:34
+#: tixlbase/models.py:286 tixlcontrol/templates/tixlcontrol/base.html:34
 #: tixlcontrol/templates/tixlcontrol/events/index.html:3
 #: tixlcontrol/templates/tixlcontrol/events/index.html:5
 msgid "Events"
 msgstr "Veranstaltungen"
 
-#: tixlbase/models.py:312
+#: tixlbase/models.py:332
 msgid "Can change event settings"
 msgstr "Kann Veranstaltungseinstellungen ändern"
 
-#: tixlbase/models.py:316
+#: tixlbase/models.py:336
 msgid "Can change item settings"
 msgstr "Kann Produkte ändern"
 
-#: tixlbase/models.py:326
+#: tixlbase/models.py:340
 msgid "Event permission"
 msgstr "Veranstaltungs-Berechtigung"
 
-#: tixlbase/models.py:327
+#: tixlbase/models.py:341
 msgid "Event permissions"
 msgstr "Veranstaltungs-Berechtigungen"
 
-#: tixlbase/models.py:342
+#: tixlbase/models.py:362
 msgid "Category name"
 msgstr "Bezeichnung"
 
-#: tixlbase/models.py:352
+#: tixlbase/models.py:369
 #: tixlcontrol/templates/tixlcontrol/items/category.html:4
 #: tixlcontrol/templates/tixlcontrol/items/category.html:6
 msgid "Item category"
 msgstr "Produktkategorie"
 
-#: tixlbase/models.py:353
+#: tixlbase/models.py:370
 #: tixlcontrol/templates/tixlcontrol/items/categories.html:3
 #: tixlcontrol/templates/tixlcontrol/items/categories.html:5
 #: tixlcontrol/templates/tixlcontrol/items/categories.html:25
 msgid "Item categories"
 msgstr "Produktkategorien"
 
-#: tixlbase/models.py:370
+#: tixlbase/models.py:395
 msgid "Property name"
 msgstr "Bezeichnung"
 
-#: tixlbase/models.py:377
+#: tixlbase/models.py:399
 #: tixlcontrol/templates/tixlcontrol/items/property.html:5
 #: tixlcontrol/templates/tixlcontrol/items/property.html:7
 msgid "Item property"
 msgstr "Eigenschaft"
 
-#: tixlbase/models.py:378
+#: tixlbase/models.py:400
 #: tixlcontrol/templates/tixlcontrol/items/properties.html:3
 #: tixlcontrol/templates/tixlcontrol/items/properties.html:5
 #: tixlcontrol/templates/tixlcontrol/items/properties.html:25
 msgid "Item properties"
 msgstr "Eigenschaften"
 
-#: tixlbase/models.py:394
+#: tixlbase/models.py:424
 msgid "Value"
 msgstr "Wert"
 
-#: tixlbase/models.py:404
+#: tixlbase/models.py:431
 msgid "Property value"
 msgstr "Wert"
 
-#: tixlbase/models.py:405
+#: tixlbase/models.py:432
 msgid "Property values"
 msgstr "Werte"
 
-#: tixlbase/models.py:432
+#: tixlbase/models.py:454
+msgid "Number"
+msgstr "Zahl"
+
+#: tixlbase/models.py:455
+msgid "Text (one line)"
+msgstr "Text (einzeilig)"
+
+#: tixlbase/models.py:456
+msgid "Multiline text"
+msgstr "Text (mehrzeilig)"
+
+#: tixlbase/models.py:457
+msgid "Yes/No"
+msgstr "Ja/Nein"
+
+#: tixlbase/models.py:465 tixlbase/models.py:478
+#: tixlcontrol/templates/tixlcontrol/items/question.html:4
+#: tixlcontrol/templates/tixlcontrol/items/question.html:6
+#: tixlcontrol/templates/tixlcontrol/items/questions.html:25
+msgid "Question"
+msgstr "Frage"
+
+#: tixlbase/models.py:470
+msgid "Question type"
+msgstr "Fragentyp"
+
+#: tixlbase/models.py:474
+msgid "Required question"
+msgstr "Antwort erforderlich"
+
+#: tixlbase/models.py:479 tixlbase/models.py:557
+#: tixlcontrol/templates/tixlcontrol/items/base.html:9
+#: tixlcontrol/templates/tixlcontrol/items/questions.html:3
+#: tixlcontrol/templates/tixlcontrol/items/questions.html:5
+msgid "Questions"
+msgstr "Fragen"
+
+#: tixlbase/models.py:513
 #: tixlcontrol/templates/tixlcontrol/items/index.html:10
 msgid "Category"
 msgstr "Kategorie"
 
-#: tixlbase/models.py:436 tixlcontrol/templates/tixlcontrol/items/index.html:9
+#: tixlbase/models.py:517 tixlcontrol/templates/tixlcontrol/items/index.html:9
 msgid "Item name"
 msgstr "Produktbezeichnung"
 
-#: tixlbase/models.py:440 tixlbase/models.py:550
+#: tixlbase/models.py:521 tixlbase/models.py:650
 #: tixlcontrol/templates/tixlcontrol/item/variations_1d.html:12
 msgid "Active"
 msgstr "aktiviert"
 
-#: tixlbase/models.py:444
+#: tixlbase/models.py:525
 msgid "Short description"
 msgstr "Kurze Beschreibung"
 
-#: tixlbase/models.py:445
+#: tixlbase/models.py:526
 msgid "This is shown below the item name in lists."
 msgstr "Wird in Listen unter dem Name angezeigt."
 
-#: tixlbase/models.py:449
+#: tixlbase/models.py:530
 msgid "Long description"
 msgstr "Lange Beschreibung"
 
-#: tixlbase/models.py:454 tixlbase/models.py:555
+#: tixlbase/models.py:535 tixlbase/models.py:655
 msgid "Default price"
 msgstr "Basispreis"
 
-#: tixlbase/models.py:459
+#: tixlbase/models.py:540
 msgid "Taxes included in percent"
 msgstr "Steuern inklusive in Prozent"
 
-#: tixlbase/models.py:465 tixlcontrol/templates/tixlcontrol/items/base.html:8
+#: tixlbase/models.py:546 tixlcontrol/templates/tixlcontrol/items/base.html:8
 msgid "Properties"
 msgstr "Eigenschaften"
 
-#: tixlbase/models.py:468
+#: tixlbase/models.py:549
 msgid ""
 "The selected properties will be available for the user to select. After "
 "saving this field, move to the 'Variations' tab to configure the details."
@@ -337,17 +380,39 @@ msgstr ""
 "Die hier ausgewählten Eigenschaften stehen für dieses Produkt zur Verfügung. "
 "Nach der Auswahl können Sie im Tab 'Varianten' die Details konfigurieren:"
 
-#: tixlbase/models.py:517 tixlcontrol/templates/tixlcontrol/item/base.html:3
+#: tixlbase/models.py:560
+msgid "The user will be asked to fill in answers for the selected questions"
+msgstr ""
+"Der Käufer wird beim Kauf aufgefordert, Antworten für die ausgewählten "
+"Fragen anzugeben."
+
+#: tixlbase/models.py:566 tixlcontrol/templates/tixlcontrol/item/base.html:3
 msgid "Item"
 msgstr "Produkt"
 
-#: tixlbase/models.py:518 tixlcontrol/templates/tixlcontrol/event/base.html:20
+#: tixlbase/models.py:567 tixlcontrol/templates/tixlcontrol/event/base.html:20
 #: tixlcontrol/templates/tixlcontrol/items/base.html:3
 #: tixlcontrol/templates/tixlcontrol/items/base.html:6
 #: tixlcontrol/templates/tixlcontrol/items/index.html:3
 #: tixlcontrol/templates/tixlcontrol/items/index.html:5
 msgid "Items"
 msgstr "Produkte"
+
+#: tixlbase/models.py:659
+msgid "Item variation"
+msgstr "Variante"
+
+#: tixlbase/models.py:660
+msgid "Item variations"
+msgstr "Varianten"
+
+#: tixlbase/models.py:691
+msgid "Restriction"
+msgstr "Beschränkung"
+
+#: tixlbase/models.py:692
+msgid "Restrictions"
+msgstr "Beschränkungen"
 
 #: tixlcontrol/middleware.py:59
 msgid ""
@@ -388,49 +453,70 @@ msgid "Event overview"
 msgstr "Überblick"
 
 #: tixlcontrol/templates/tixlcontrol/event/base.html:19
-#: tixlcontrol/templates/tixlcontrol/event/settings.html:6
+#: tixlcontrol/templates/tixlcontrol/event/settings_base.html:6
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: tixlcontrol/templates/tixlcontrol/event/settings.html:9
+#: tixlcontrol/templates/tixlcontrol/event/plugins.html:8
+msgid "Installed plugins"
+msgstr "Installierte Plugins"
+
+#: tixlcontrol/templates/tixlcontrol/event/plugins.html:11
+#: tixlcontrol/templates/tixlcontrol/event/settings.html:8
 #: tixlcontrol/templates/tixlcontrol/item/index.html:9
 #: tixlcontrol/templates/tixlcontrol/items/categories.html:8
 #: tixlcontrol/templates/tixlcontrol/items/category.html:11
 #: tixlcontrol/templates/tixlcontrol/items/properties.html:8
 #: tixlcontrol/templates/tixlcontrol/items/property.html:12
+#: tixlcontrol/templates/tixlcontrol/items/question.html:11
+#: tixlcontrol/templates/tixlcontrol/items/questions.html:8
 msgid "Your changes have been saved."
 msgstr "Die Änderungen wurden gespeichert."
 
-#: tixlcontrol/templates/tixlcontrol/event/settings.html:15
+#: tixlcontrol/templates/tixlcontrol/event/plugins.html:23
+msgid "Disable"
+msgstr "Deaktivieren"
+
+#: tixlcontrol/templates/tixlcontrol/event/plugins.html:25
+msgid "Enable"
+msgstr "Aktivieren"
+
+#: tixlcontrol/templates/tixlcontrol/event/settings.html:13
 #: tixlcontrol/templates/tixlcontrol/item/base.html:7
 #: tixlcontrol/templates/tixlcontrol/item/index.html:5
 #: tixlcontrol/templates/tixlcontrol/item/index.html:15
 #: tixlcontrol/templates/tixlcontrol/items/category.html:15
 #: tixlcontrol/templates/tixlcontrol/items/property.html:16
+#: tixlcontrol/templates/tixlcontrol/items/question.html:15
 msgid "General information"
 msgstr "Allgemeine Informationen"
 
-#: tixlcontrol/templates/tixlcontrol/event/settings.html:23
+#: tixlcontrol/templates/tixlcontrol/event/settings.html:21
 msgid "Display settings"
 msgstr "Anzeigeeinstellungen"
 
-#: tixlcontrol/templates/tixlcontrol/event/settings.html:30
+#: tixlcontrol/templates/tixlcontrol/event/settings.html:28
 msgid "Presale settings"
 msgstr "Vorverkaufseinstellungen"
 
-#: tixlcontrol/templates/tixlcontrol/event/settings.html:35
+#: tixlcontrol/templates/tixlcontrol/event/settings.html:33
 msgid "Payment settings"
 msgstr "Zahlungseinstellungen"
 
-#: tixlcontrol/templates/tixlcontrol/event/settings.html:42
-#: tixlcontrol/templates/tixlcontrol/item/index.html:34
+#: tixlcontrol/templates/tixlcontrol/event/settings.html:40
+#: tixlcontrol/templates/tixlcontrol/item/index.html:35
 #: tixlcontrol/templates/tixlcontrol/item/variations_1d.html:30
 #: tixlcontrol/templates/tixlcontrol/item/variations_2d.html:35
 #: tixlcontrol/templates/tixlcontrol/item/variations_nd.html:38
 #: tixlcontrol/templates/tixlcontrol/items/category.html:21
 #: tixlcontrol/templates/tixlcontrol/items/property.html:67
+#: tixlcontrol/templates/tixlcontrol/items/question.html:23
 msgid "Save"
 msgstr "Speichern"
+
+#: tixlcontrol/templates/tixlcontrol/event/settings_base.html:8
+msgid "General settings"
+msgstr "Allgemeine Einstellungen"
 
 #: tixlcontrol/templates/tixlcontrol/events/index.html:6
 msgid ""
@@ -458,7 +544,6 @@ msgid "Modify item:"
 msgstr "Produkt bearbeiten:"
 
 #: tixlcontrol/templates/tixlcontrol/item/base.html:8
-#: tixlcontrol/templates/tixlcontrol/item/index.html:28
 #: tixlcontrol/templates/tixlcontrol/item/variations_1d.html:5
 #: tixlcontrol/templates/tixlcontrol/item/variations_2d.html:5
 #: tixlcontrol/templates/tixlcontrol/item/variations_nd.html:5
@@ -468,6 +553,10 @@ msgstr "Varianten"
 #: tixlcontrol/templates/tixlcontrol/item/index.html:23
 msgid "Price settings"
 msgstr "Preis"
+
+#: tixlcontrol/templates/tixlcontrol/item/index.html:28
+msgid "Advanced settings"
+msgstr "Erweiterte Einstellungen"
 
 #: tixlcontrol/templates/tixlcontrol/item/variations_1d.html:13
 msgid "Price"
@@ -504,11 +593,13 @@ msgstr ""
 
 #: tixlcontrol/templates/tixlcontrol/items/category_delete.html:13
 #: tixlcontrol/templates/tixlcontrol/items/property_delete.html:21
+#: tixlcontrol/templates/tixlcontrol/items/question_delete.html:19
 msgid "Confirm"
 msgstr "Bestätigen"
 
 #: tixlcontrol/templates/tixlcontrol/items/category_delete.html:16
 #: tixlcontrol/templates/tixlcontrol/items/property_delete.html:24
+#: tixlcontrol/templates/tixlcontrol/items/question_delete.html:22
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -552,6 +643,40 @@ msgid "Are you sure you want to the property <strong>%(property)s</strong>?"
 msgstr ""
 "Möchten Sie die Eigenschaft <strong>%(property)s</strong> wirklich löschen?"
 
+#: tixlcontrol/templates/tixlcontrol/items/question_delete.html:4
+#: tixlcontrol/templates/tixlcontrol/items/question_delete.html:6
+msgid "Delete question"
+msgstr "Frage löschen"
+
+#: tixlcontrol/templates/tixlcontrol/items/question_delete.html:9
+#, python-format
+msgid "Are you sure you want to the question <strong>%(question)s</strong>?"
+msgstr "Möchten Sie die Frage <strong>%(question)s</strong> wirklich löschen?"
+
+#: tixlcontrol/templates/tixlcontrol/items/question_delete.html:11
+msgid ""
+"All answers to the question given by the buyers of the following tickets "
+"will be <strong>permanently lost</strong>."
+msgstr ""
+"Alle Antworten, die von Käufern der folgenden Tickets auf diese Frage "
+"gegeben wurden, sind <strong>unwiderruflich gelöscht</strong>."
+
+#: tixlcontrol/templates/tixlcontrol/items/questions.html:12
+msgid "A new question has been created."
+msgstr "Eine neue Frage wurde erstellt."
+
+#: tixlcontrol/templates/tixlcontrol/items/questions.html:16
+msgid "The question has been deleted."
+msgstr "Die Frage wurde gelöscht."
+
+#: tixlcontrol/templates/tixlcontrol/items/questions.html:20
+msgid "Create new question"
+msgstr "Frage erstellen"
+
+#: tixlcontrol/templates/tixlcontrol/items/questions.html:26
+msgid "Type"
+msgstr "Typ"
+
 #: tixlcontrol/views/auth.py:15
 msgid "E-mail address"
 msgstr "E-Mail-Adresse"
@@ -564,3 +689,36 @@ msgstr ""
 #: tixlcontrol/views/auth.py:21
 msgid "This account is inactive."
 msgstr "Dieses Konto ist deaktiviert."
+
+#: tixlplugins/timerestriction/__init__.py:8
+msgid "Time restriction"
+msgstr "Zeitliche Beschränkung"
+
+#: tixlplugins/timerestriction/__init__.py:12
+msgid "Restriciton by time"
+msgstr "Zeitliche Beschränkung"
+
+#: tixlplugins/timerestriction/__init__.py:13
+msgid "the tixl team"
+msgstr "Das tixl-Team"
+
+#: tixlplugins/timerestriction/__init__.py:15
+msgid ""
+"This plugin adds the possibility to restrict the sale of a given item or "
+"variation to a certain timeframe or change its price during a certain period."
+msgstr ""
+"Dieses Plugin ermöglicht es, den Verkauf eines Produktes auf bestimmte "
+"Zeiträume einzuschränken oder seinen Preis für einen bestimmten Zeitraum zu "
+"ändern."
+
+#: tixlplugins/timerestriction/models.py:15
+msgid "Start of time frame"
+msgstr "Beginn des Zeitraums"
+
+#: tixlplugins/timerestriction/models.py:18
+msgid "End of time frame"
+msgstr "Ende des Zeitraums"
+
+#: tixlplugins/timerestriction/models.py:23
+msgid "Price in time frame"
+msgstr "Preis im Zeitraum"
