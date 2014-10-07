@@ -33,7 +33,7 @@ class PermissionMiddlewareTest(TestCase):
         })
         self.assertEqual(response.status_code, 302)
 
-        response = c.get('/control/event/dummy/dummy/settings')
+        response = c.get('/control/event/dummy/dummy/settings/')
         self.assertIn(response.status_code, (403, 404))
 
     def test_wrong_event_permission(self):
@@ -49,7 +49,7 @@ class PermissionMiddlewareTest(TestCase):
         })
         self.assertEqual(response.status_code, 302)
 
-        response = c.get('/control/event/dummy/dummy/settings')
+        response = c.get('/control/event/dummy/dummy/settings/')
         self.assertIn(response.status_code, (403, 404))
 
     def test_correct(self):
@@ -65,5 +65,5 @@ class PermissionMiddlewareTest(TestCase):
         })
         self.assertEqual(response.status_code, 302)
 
-        response = c.get('/control/event/dummy/dummy/settings')
+        response = c.get('/control/event/dummy/dummy/settings/')
         self.assertEqual(response.status_code, 200)
