@@ -18,7 +18,8 @@ urlpatterns += patterns(
         patterns(
             'tixlcontrol.views',
             url(r'^$', 'event.index', name='event.index'),
-            url(r'^settings$', event.EventUpdate.as_view(), name='event.settings'),
+            url(r'^settings/$', event.EventUpdate.as_view(), name='event.settings'),
+            url(r'^settings/plugins$', event.EventPlugins.as_view(), name='event.settings.plugins'),
             url(r'^items/$', item.ItemList.as_view(), name='event.items'),
             url(r'^items/(?P<item>\d+)/$', item.ItemUpdateGeneral.as_view(), name='event.item'),
             url(r'^items/(?P<item>\d+)/variations$', item.ItemVariations.as_view(), name='event.item.variations'),

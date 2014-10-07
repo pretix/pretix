@@ -48,7 +48,7 @@ class TimeRestrictionTest(TestCase):
         )
         r.items.add(self.item)
         result = signals.availability_handler(
-            None, item=self.item,
+            self.event, item=self.item,
             variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
@@ -66,7 +66,7 @@ class TimeRestrictionTest(TestCase):
         )
         r.items.add(self.item)
         result = signals.availability_handler(
-            None, item=self.item,
+            self.event, item=self.item,
             variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
@@ -90,7 +90,7 @@ class TimeRestrictionTest(TestCase):
         )
         r2.items.add(self.item)
         result = signals.availability_handler(
-            None, item=self.item,
+            self.event, item=self.item,
             variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
@@ -115,7 +115,7 @@ class TimeRestrictionTest(TestCase):
         )
         r2.items.add(self.item)
         result = signals.availability_handler(
-            None, item=self.item,
+            self.event, item=self.item,
             variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
@@ -140,7 +140,7 @@ class TimeRestrictionTest(TestCase):
         )
         r2.items.add(self.item)
         result = signals.availability_handler(
-            None, item=self.item,
+            self.event, item=self.item,
             variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
@@ -165,7 +165,7 @@ class TimeRestrictionTest(TestCase):
         )
         r2.items.add(self.item)
         result = signals.availability_handler(
-            None, item=self.item,
+            self.event, item=self.item,
             variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
@@ -189,7 +189,7 @@ class TimeRestrictionTest(TestCase):
         r1.items.add(self.item)
         r1.variations.add(v1)
         result = signals.availability_handler(
-            None, item=self.item,
+            self.event, item=self.item,
             variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
@@ -232,7 +232,7 @@ class TimeRestrictionTest(TestCase):
         r3.items.add(self.item)
         r3.variations.add(v2)
         result = signals.availability_handler(
-            None, item=self.item,
+            self.event, item=self.item,
             variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )
@@ -277,7 +277,7 @@ class TimeRestrictionTest(TestCase):
         r3.items.add(self.item)
         r3.variations.add(v2)
         result = signals.availability_handler(
-            None, item=self.item,
+            self.event, item=self.item,
             variations=self.item.get_all_variations(),
             context=None, cache=self.event.get_cache()
         )

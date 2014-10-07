@@ -1,15 +1,13 @@
-{% extends "tixlcontrol/event/base.html" %}
+{% extends "tixlcontrol/event/settings_base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block title %}{{ request.event.name }}{% endblock %}
-{% block content %}
-	<h1>{% trans "Settings" %}</h1>
-	{% if "success" in request.GET %}
-		<div class="alert alert-success">
-			{% trans "Your changes have been saved." %}
-		</div>
-	{% endif %}
+{% block inside %}
 	<form action="" method="post" class="form-horizontal">
+		{% if "success" in request.GET %}
+			<div class="alert alert-success">
+				{% trans "Your changes have been saved." %}
+			</div>
+		{% endif %}
 		{% csrf_token %}
 		<fieldset>
 			<legend>{% trans "General information" %}</legend>

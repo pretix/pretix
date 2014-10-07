@@ -276,6 +276,10 @@ class Event(models.Model):
         verbose_name=_("Last date of payments"),
         help_text=_("The last date any payments are accepted. This has precedence over the number of days configured above.")
     )
+    plugins = models.TextField(
+        null=True, blank=True,
+        verbose_name=_("Plugins"),
+    )
 
     class Meta:
         verbose_name = _("Event")
@@ -290,6 +294,11 @@ class Event(models.Model):
         obj = super().save(*args, **kwargs)
         self.get_cache().clear()
         return obj
+
+    def get_plugins(self):
+        if self.plugins is None:
+            return []
+        return self.plugins.split(",")
 
     def get_date_from_display(self):
         return _date(

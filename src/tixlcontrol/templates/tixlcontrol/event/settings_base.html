@@ -1,0 +1,13 @@
+{% extends "tixlcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{{ request.event.name }}{% endblock %}
+{% block content %}
+	<h1>{% trans "Settings" %}</h1>
+	<ul class="nav nav-pills">
+		<li {% if "event.settings" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.settings' organizer=request.event.organizer.slug event=request.event.slug %}">{% trans "General settings" %}</a></li>
+		<li {% if "event.settings.plugins" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.settings.plugins' organizer=request.event.organizer.slug event=request.event.slug  %}">{% trans "Plugins" %}</a></li>
+	</ul>
+	{% block inside %}
+	{% endblock %}
+{% endblock %}

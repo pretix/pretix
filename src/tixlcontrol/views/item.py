@@ -461,10 +461,11 @@ class ItemVariationForm(forms.ModelForm):
         ]
 
 
-class ItemVariations(TemplateView, SingleObjectMixin):
+class ItemVariations(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
 
     model = Item
     context_object_name = 'item'
+    permission = 'can_change_items'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

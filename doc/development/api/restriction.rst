@@ -56,11 +56,11 @@ restrict anything without doing so. It is available as ``tixlbase.signals.determ
 and is sent out every time some component of tixl wants to know whether a specific item or
 variation is available for sell.
 
-It is sent out with several arguments:
+It is sent out with several keyword arguments:
 
-    item
+    ``item``
         The instance of ``tixlbase.models.Item`` in question.
-    variations
+    ``variations``
         A list of dictionaries in the same format as ``Item.get_all_variations``: 
         The list contains one dictionary per variation, where the ``Property`` IDs are 
         keys and the ``PropertyValue`` objects are values. If an ``ItemVariation`` object 
@@ -70,19 +70,20 @@ It is sent out with several arguments:
         only the list of all variations the frontend likes to determine the status for.
         Technically, you won't get ``dict`` objects but ``tixlbase.types.VariationDict`` 
         objects, which behave exactly the same but add some extra methods.
-    context
+    ``context``
         A yet-to-defined context object containing information about the user and the order
         process. This is required to implement coupon-systems or similar restrictions.
-    cache
+    ``cache``
         An object very similar to Django's own caching API (see tip below)
 
+The positional argument ``sender`` contains the event.
 All receivers **have to** return a copy of the given list of variation dictionaries where each
 dictionary can be extended by the following two keys:
 
-    available
+    ``available``
         A boolean value whether or not this plugin allows this variation to be on sale. Defaults
         to ``True``.
-    price
+    ``price``
         A price to be set for this variation. Set to ``None`` or omit to keep the default price 
         of the variation or the item's base price.
 

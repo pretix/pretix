@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.edit import UpdateView
+from django.views.generic.base import TemplateView
+from django.views.generic.detail import SingleObjectMixin
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
@@ -55,6 +57,49 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('control:event.settings', kwargs={
+            'organizer': self.get_object().organizer.slug,
+            'event': self.get_object().slug,
+        }) + '?success=true'
+
+
+class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
+
+    model = Event
+    context_object_name = 'event'
+    permission = 'can_change_settings'
+    template_name = 'tixlcontrol/event/plugins.html'
+
+    def get_object(self, queryset=None):
+        return self.request.event
+
+    def get_context_data(self, *args, **kwargs):
+        from tixlbase.plugins import get_all_plugins
+        context = super().get_context_data(*args, **kwargs)
+        context['plugins'] = get_all_plugins()
+        context['plugins_active'] = self.object.get_plugins()
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        plugins_active = self.object.get_plugins()
+        for key, value in request.POST.items():
+            if key.startswith("plugin:"):
+                module = key.split(":")[1]
+                if value == "enable":
+                    plugins_active.append(module)
+                else:
+                    plugins_active.remove(module)
+        self.object.plugins = ",".join(plugins_active)
+        self.object.save()
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('control:event.settings.plugins', kwargs={
             'organizer': self.get_object().organizer.slug,
             'event': self.get_object().slug,
         }) + '?success=true'

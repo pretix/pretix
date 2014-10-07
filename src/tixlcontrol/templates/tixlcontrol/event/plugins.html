@@ -1,0 +1,39 @@
+{% extends "tixlcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+	<form action="" method="post" class="form-horizontal form-plugins">
+		{% csrf_token %}
+		<fieldset>
+			<legend>{% trans "Installed plugins" %}</legend>
+			{% if "success" in request.GET %}
+				<div class="alert alert-success">
+					{% trans "Your changes have been saved." %}
+				</div>
+			{% endif %}
+			{% for plugin in plugins %}
+				<div class="panel panel-{% if plugin.module in plugins_active %}success{% else %}default{% endif %}">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-sm-10">
+								<h3 class="panel-title">{{ plugin.name }}</h3>
+							</div>
+							<div class="col-sm-2">
+								{% if plugin.module in plugins_active %}
+									<button class="btn btn-default btn-block" name="plugin:{{ plugin.module }}" value="disable">{% trans "Disable" %}</button>
+								{% else %}
+									<button class="btn btn-primary btn-block" name="plugin:{{ plugin.module }}" value="enable">{% trans "Enable" %}</button>
+
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<p class="meta">Version {{ plugin.version }} by <em>{{ plugin.author }}</em></p>
+						<p>{{ plugin.description }}</p>
+					</div>
+				</div>
+			{% endfor %}
+		</fieldset>
+	</form>
+{% endblock %}

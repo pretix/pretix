@@ -1,5 +1,39 @@
 import django.dispatch
+from django.apps import apps
+from django.dispatch.dispatcher import NO_RECEIVERS
 
-determine_availability = django.dispatch.Signal(
+
+class EventPluginSignal(django.dispatch.Signal):
+
+    def send(self, sender, **named):
+        """
+        Send signal from sender to all connected receivers that belong to
+        plugins enabled for the given Event.
+
+        sender is required to be an instance of ``tixlbase.models.Event``.
+        """
+        responses = []
+        if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
+            return responses
+
+        for receiver in self._live_receivers(sender):
+            # Find the Django application this belongs to
+            searchpath = receiver.__module__
+            app = None
+            while "." in searchpath:
+                try:
+                    if apps.is_installed(searchpath):
+                        app = apps.get_app_config(searchpath.split(".")[-1])
+                except LookupError:
+                    pass
+                searchpath, mod = searchpath.rsplit(".", 1)
+
+            # Only fire receivers from active plugins
+            if app.name in sender.get_plugins():
+                response = receiver(signal=self, sender=sender, **named)
+                responses.append((receiver, response))
+        return responses
+
+determine_availability = EventPluginSignal(
     providing_args=["item", "variations", "context", "cache"]
 )
