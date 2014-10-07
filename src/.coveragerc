@@ -7,3 +7,4 @@ exclude_lines =
 	pragma: no cover
 	def __str__
 	if settings.DEBUG
+	NOQA

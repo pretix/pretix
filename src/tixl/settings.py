@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'debug_toolbar.apps.DebugToolbarConfig',
     'djangoformsetjs',
+    'tixlplugins.testdummy',
     'tixlplugins.timerestriction',
 )
 

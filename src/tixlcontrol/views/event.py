@@ -75,7 +75,7 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
     def get_context_data(self, *args, **kwargs):
         from tixlbase.plugins import get_all_plugins
         context = super().get_context_data(*args, **kwargs)
-        context['plugins'] = get_all_plugins()
+        context['plugins'] = [p for p in get_all_plugins() if not p.name.startswith('.')]
         context['plugins_active'] = self.object.get_plugins()
         return context
 

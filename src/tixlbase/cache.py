@@ -38,6 +38,9 @@ class EventRelatedCache:
             key = hashlib.sha256(key.encode("UTF-8")).hexdigest()
         return key
 
+    def _strip_prefix(self, key):
+        return key.split(":", maxsplit=3)[-1] if 'event:' in key else key
+
     def clear(self):
         try:
             prefix = self.cache.incr(self.prefixkey, 1)
@@ -52,25 +55,29 @@ class EventRelatedCache:
         return self.cache.get(self._prefix_key(key))
 
     def get_many(self, keys):
-        return self.cache.get_many([self._prefix_key(key) for key in keys])
+        values = self.cache.get_many([self._prefix_key(key) for key in keys])
+        newvalues = {}
+        for k, v in values.items():
+            newvalues[self._strip_prefix(k)] = v
+        return newvalues
 
     def set_many(self, values, timeout=3600):
         newvalues = {}
-        for i in values.items():
-            newvalues[self._prefix_key(i[0])] = i[1]
-        return self.cache.set_many([newvalues], timeout)
+        for k, v in values.items():
+            newvalues[self._prefix_key(k)] = v
+        return self.cache.set_many(newvalues, timeout)
 
-    def delete(self, key):
+    def delete(self, key):  # NOQA
         return self.cache.delete(self._prefix_key(key))
 
-    def delete_many(self, keys):
+    def delete_many(self, keys):  # NOQA
         return self.cache.delete_many([self._prefix_key(key) for key in keys])
 
-    def incr(self, key, by=1):
+    def incr(self, key, by=1):  # NOQA
         return self.cache.incr(self._prefix_key(key), by)
 
-    def decr(self, key, by=1):
+    def decr(self, key, by=1):  # NOQA
         return self.cache.decr(self._prefix_key(key), by)
 
-    def close(self):
+    def close(self):  # NOQA
         pass

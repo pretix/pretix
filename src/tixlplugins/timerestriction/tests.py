@@ -57,6 +57,33 @@ class TimeRestrictionTest(TestCase):
         self.assertTrue(result[0]['available'])
         self.assertEqual(result[0]['price'], 12)
 
+    def test_cached_result(self):
+        r = TimeRestriction.objects.create(
+            timeframe_from=now() - timedelta(days=3),
+            timeframe_to=now() + timedelta(days=3),
+            event=self.event,
+            price=12
+        )
+        r.items.add(self.item)
+        result = signals.availability_handler(
+            self.event, item=self.item,
+            variations=self.item.get_all_variations(),
+            context=None, cache=self.event.get_cache()
+        )
+        self.assertEqual(len(result), 1)
+        self.assertIn('available', result[0])
+        self.assertTrue(result[0]['available'])
+        self.assertEqual(result[0]['price'], 12)
+        result = signals.availability_handler(
+            self.event, item=self.item,
+            variations=self.item.get_all_variations(),
+            context=None, cache=self.event.get_cache()
+        )
+        self.assertEqual(len(result), 1)
+        self.assertIn('available', result[0])
+        self.assertTrue(result[0]['available'])
+        self.assertEqual(result[0]['price'], 12)
+
     def test_simple_case_unavailable(self):
         r = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),

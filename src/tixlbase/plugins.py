@@ -1,6 +1,6 @@
-try:
+try:  # NOQA
     from enum import Enum
-except ImportError:
+except ImportError:  # NOQA
     from flufl.enum import Enum
 
 from django.apps import apps
