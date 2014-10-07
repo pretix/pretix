@@ -5,6 +5,7 @@ from tixlbase.models import (
     Event, Organizer, Item, ItemVariation,
     Property, PropertyValue
 )
+from tixlbase.types import VariationDict
 
 
 class ItemVariationsTest(TestCase):
@@ -44,7 +45,7 @@ class ItemVariationsTest(TestCase):
         self.assertEqual(len(v), 3)
         values = []
         for var in v:
-            self.assertIs(type(var), dict)
+            self.assertIs(type(var), VariationDict)
             self.assertIn(p.pk, var)
             self.assertIs(type(var[p.pk]), PropertyValue)
             values.append(var[p.pk].value)
@@ -59,7 +60,7 @@ class ItemVariationsTest(TestCase):
         values = []
         num_variations = 0
         for var in v:
-            self.assertIs(type(var), dict)
+            self.assertIs(type(var), VariationDict)
             if 'variation' in var and type(var['variation']) is ItemVariation:
                 self.assertEqual(iv.pk, var['variation'].pk)
                 values.append(var['variation'].values.all()[0].value)
@@ -80,7 +81,7 @@ class ItemVariationsTest(TestCase):
         values = []
         num_variations = 0
         for var in v:
-            self.assertIs(type(var), dict)
+            self.assertIs(type(var), VariationDict)
             if 'variation' in var:
                 self.assertEqual(iv.pk, var['variation'].pk)
                 values.append(sorted([ivv.value for ivv in iv.values.all()]))

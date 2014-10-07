@@ -59,9 +59,7 @@ def availability_handler(sender, **kwargs):
         # Make up some unique key for this variation
         cachekey = 'timerestriction:%d:%s' % (
             item.pk,
-            ",".join(sorted(
-                [str(v[1].pk) for v in v.items() if v[0] != 'variation']
-            ))
+            v.identify(),
         )
 
         # Fetch from cache, if available

@@ -561,16 +561,6 @@ class ItemVariations(TemplateView, SingleObjectMixin):
                 if v.prop.pk != prop2.pk
             ]
 
-            # Given an dictionary like the ones returned by
-            # Item.get_all_variation() this will return a list of PropertyValue
-            # objects sorted by the primary keys of the properties they belong
-            # to.
-            values = lambda variation: [
-                i[1] for i in sorted(
-                    [it for it in variation.items() if it[0] != 'variation']
-                )
-            ]
-
             # Given a list of variations, this will sort them by their position
             # on the x-axis
             sort = lambda v: v[prop2.pk].pk
@@ -592,7 +582,7 @@ class ItemVariations(TemplateView, SingleObjectMixin):
                     selection = selector(gridrow + (val1,))
                     # We now iterate over all variations who generate the same
                     # selector as 'selection'.
-                    filtered = [v for v in variations if selector(values(v)) == selection]
+                    filtered = [v for v in variations if selector(v.relevant_values()) == selection]
                     for variation in sorted(filtered, key=sort):
                         form = self.get_form(variation, data)
                         formrow.append(form)

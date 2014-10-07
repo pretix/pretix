@@ -68,6 +68,8 @@ It is sent out with several arguments:
         the item does not have any properties, the list will contain exactly one empty
         dictionary. Please not: this is *not* the list of all possible variations, this is
         only the list of all variations the frontend likes to determine the status for.
+        Technically, you won't get ``dict`` objects but ``tixlbase.types.VariationDict`` 
+        objects, which behave exactly the same but add some extra methods.
     context
         A yet-to-defined context object containing information about the user and the order
         process. This is required to implement coupon-systems or similar restrictions.
@@ -158,9 +160,7 @@ In our example, the implementation could look like this::
             # Make up some unique key for this variation
             cachekey = 'timerestriction:%d:%s' % (
                 item.pk,
-                ",".join(sorted(
-                    [str(v[1].pk) for v in v.items() if v[0] != 'variation']
-                ))
+                v.identify(),
             )
 
             # Fetch from cache, if available

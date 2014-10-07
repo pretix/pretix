@@ -7,6 +7,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import date as _date
 from django.core.validators import RegexValidator
 
+from tixlbase.types import VariationDict
+
 
 class UserManager(BaseUserManager):
     """
@@ -571,10 +573,13 @@ class Item(models.Model):
     def get_all_variations(self):
         """
         This method returns a list containing all variations of this
-        item. The list contains one dictionary per variation, where
+        item. The list contains one VariationDict per variation, where
         the Proprty IDs are keys and the PropertyValue objects are
         values. If an ItemVariation object exists, it is available in
         the dictionary via the special key 'variation'.
+
+        VariationDicts differ from dicts only by specifying some extra
+        methods.
         """
         all_variations = self.variations.all().prefetch_related("values")
         all_properties = self.properties.all().prefetch_related("values")
@@ -583,20 +588,20 @@ class Item(models.Model):
             key = []
             for v in var.values.all():
                 key.append((v.prop_id, v.pk))
-            key = hash(tuple(sorted(key)))
+            key = tuple(sorted(key))
             variations_cache[key] = var
 
         result = []
         for comb in product(*[prop.values.all() for prop in all_properties]):
             if len(comb) == 0:
-                result.append({})
+                result.append(VariationDict())
                 continue
             key = []
-            var = {}
+            var = VariationDict()
             for v in comb:
                 key.append((v.prop.pk, v.pk))
                 var[v.prop.pk] = v
-            key = hash(tuple(sorted(key)))
+            key = tuple(sorted(key))
             if key in variations_cache:
                 var['variation'] = variations_cache[key]
             result.append(var)
