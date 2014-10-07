@@ -1,4 +1,7 @@
-from enum import Enum
+try:
+    from enum import Enum
+except ImportError:
+    from flufl.enum import Enum
 
 from django.apps import apps
 

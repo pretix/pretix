@@ -11,6 +11,10 @@ html5lib
 slimit
 lxml
 
+# Polyfill for Python <3.4
+# Remove this, when Python 3.3 support is dropped
+flufl.enum
+
 # Debugging requirements
 django-debug-toolbar
 
