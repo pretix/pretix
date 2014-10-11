@@ -35,7 +35,7 @@ LESS stylesheets
 
 * Indent your code with four spaces.
 * Make use of the nesting feature of LESS to put your code in logical groups, but avoid using 
-  more then three levels of nesting.
+  more than three levels of nesting.
 * Put spaces after ``:`` in declarations.
 * Put spaces before ``{`` in rulesets.
 * When grouping selectors, use one line per selector.
