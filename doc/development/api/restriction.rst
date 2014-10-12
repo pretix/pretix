@@ -66,12 +66,12 @@ It is sent out with several keyword arguments:
         keys and the ``PropertyValue`` objects are values. If an ``ItemVariation`` object 
         exists, it is available in the dictionary via the special key ``'variation'``. If
         the item does not have any properties, the list will contain exactly one empty
-        dictionary. Please not: this is *not* the list of all possible variations, this is
+        dictionary. Please note: this is *not* the list of all possible variations, this is
         only the list of all variations the frontend likes to determine the status for.
         Technically, you won't get ``dict`` objects but ``tixlbase.types.VariationDict`` 
         objects, which behave exactly the same but add some extra methods.
     ``context``
-        A yet-to-defined context object containing information about the user and the order
+        A yet-to-be-defined context object containing information about the user and the order
         process. This is required to implement coupon-systems or similar restrictions.
     ``cache``
         An object very similar to Django's own caching API (see tip below)

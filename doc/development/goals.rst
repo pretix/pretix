@@ -9,7 +9,7 @@ Technical goals
 * Python 3.4 features may be used, Python 3.2 is an absolute requirement
 * Use Django 1.7+
 * Be PEP-8 compliant
-* Be fully internationalization, unicode and timezone aware
+* Be fully internationalized, unicode and timezone aware
 * Use a fully documented and reproducible setup
 * Be fully tested by both unit and behaviour tests
 * Use LessCSS
