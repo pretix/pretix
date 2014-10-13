@@ -649,7 +649,7 @@ class ItemRestrictions(ItemDetailMixin, EventPermissionRequiredMixin, TemplateVi
         for receiver, response in responses:
             response['formset'] = response['formsetclass'](
                 self.request.POST if self.request.method == 'POST' else None,
-                queryset=response['queryset'],
+                instance=self.object,
                 prefix=response['prefix'],
             )
             formsets.append(response)

@@ -30,3 +30,48 @@ class TolerantFormsetModelForm(forms.ModelForm):
             if field._has_changed(initial_value, data_value):
                 return True
         return False
+
+
+class RestrictionForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        if 'item' in kwargs:
+            self.item = kwargs['item']
+            del kwargs['item']
+            super().__init__(*args, **kwargs)
+            if 'variations' in self.fields:
+                self.fields['variations'] = VariationsField(item=self.item)
+
+
+class RestrictionInlineFormset(forms.BaseInlineFormSet):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def initialized_empty_form(self):
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            item=self.instance
+        )
+        return form
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['item'] = self.instance
+        return super()._construct_form(i, **kwargs)
+
+
+class VariationsField(forms.ModelMultipleChoiceField):
+
+    def __init__(self, item=None, **kwargs):
+        self.item = item
+        super().__init__(self, **kwargs)
+
+    def _get_choices(self):
+        if not hasattr(self, 'item'):
+            return ()
+        print(self.item.pk)
+        return ()
+
+    choices = property(_get_choices, forms.ChoiceField._set_choices)

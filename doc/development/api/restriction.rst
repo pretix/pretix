@@ -213,4 +213,83 @@ In our example, the implementation could look like this::
     If you do not copy down to the ``dict`` objects, you will run into 
     interference problems with other plugins.
 
+Control interface formsets
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To make it possible for the event organizer to configure your restriction, there is a 
+'Restrictions' page in the item configuration. This page is able to show a formset for
+each restriction plugin, but *you* are required to create this formset. This is why you
+should listen to the the ``tixlcontrol.signals.restriction_formset`` signal.
+
+Currently, the signal comes with only one keyword argument:
+
+    ``item``
+        The instance of ``tixlbase.models.Item`` we want a formset for.
+
+You are expected to return a dict containing the following items:
+
+    ``formsetclass``
+        An inline formset class (not a formset object).
+
+    ``prefix``
+        A unique prefix for your queryset.
+
+    ``title``
+        A title for your formset (normally your plugin name)
+
+
+Our time restriction example looks like this::
+
+    from django.utils.translation import ugettext_lazy as _
+    from django.dispatch import receiver
+    from django.forms.models import inlineformset_factory
+
+    from tixlcontrol.signals import restriction_formset
+    from tixlbase.models import Item
+    from tixlcontrol.views.forms import (
+        VariationsField, RestrictionInlineFormset, RestrictionForm
+    )
+
+    from .models import TimeRestriction
+
+    class TimeRestrictionForm(RestrictionForm):
+
+        class Meta:
+            model = TimeRestriction
+            localized_fields = '__all__'
+            fields = [
+                'variations',
+                'timeframe_from',
+                'timeframe_to',
+                'price',
+            ]
+
+
+    @receiver(restriction_formset)
+    def formset_handler(sender, **kwargs):
+        formset = inlineformset_factory(
+            Item,
+            TimeRestriction,
+            formset=RestrictionInlineFormset,
+            form=TimeRestrictionForm,
+            can_order=False,
+            can_delete=True,
+            extra=0,
+        )
+
+        return {
+            'title': _('Restriction by time'),
+            'formsetclass': formset,
+            'prefix': 'timerestriction',
+        }
+
+
+.. NOTE::
+   If you do use the ``RestrictionInlineFormset``, ``RestrictionForm`` and
+   ``VariationsField`` classes in your implementation, we will do a lot of magic for you
+   to display the ``variations`` field in the form in a nice and consistent way. So please,
+   use these base classes and test carefully, if you make any changes to the behaviour
+   of this field.
+   
+
 .. _caching feature: https://docs.djangoproject.com/en/1.7/topics/cache/

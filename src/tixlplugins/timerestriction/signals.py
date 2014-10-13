@@ -1,10 +1,11 @@
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from django import forms
-from django.forms.models import modelformset_factory
+from django.forms.models import inlineformset_factory
 
 from tixlbase.signals import determine_availability
+from tixlbase.models import Item
+from tixlcontrol.views.forms import VariationsField, RestrictionInlineFormset, RestrictionForm
 from tixlcontrol.signals import restriction_formset
 
 from .models import TimeRestriction
@@ -111,11 +112,13 @@ def availability_handler(sender, **kwargs):
     return variations
 
 
-class TimeRestrictionForm(forms.ModelForm):
+class TimeRestrictionForm(RestrictionForm):
+
     class Meta:
         model = TimeRestriction
         localized_fields = '__all__'
         fields = [
+            'variations',
             'timeframe_from',
             'timeframe_to',
             'price',
@@ -124,21 +127,18 @@ class TimeRestrictionForm(forms.ModelForm):
 
 @receiver(restriction_formset)
 def formset_handler(sender, **kwargs):
-    # Handle the signal's input arguments
-    item = kwargs['item']
-
-    formset = modelformset_factory(
+    formset = inlineformset_factory(
+        Item,
         TimeRestriction,
+        formset=RestrictionInlineFormset,
         form=TimeRestrictionForm,
         can_order=False,
         can_delete=True,
         extra=0,
     )
-    queryset = TimeRestriction.objects.filter(item=item)
 
     return {
         'title': _('Restriction by time'),
         'formsetclass': formset,
-        'queryset': queryset,
         'prefix': 'timerestriction',
     }
