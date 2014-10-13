@@ -13,6 +13,7 @@ from django.forms.models import inlineformset_factory
 from tixlbase.models import Item, ItemCategory, Property, ItemVariation, PropertyValue, Question
 from tixlcontrol.permissions import EventPermissionRequiredMixin, event_permission_required
 from tixlcontrol.views.forms import TolerantFormsetModelForm
+from tixlcontrol.signals import restriction_formset
 
 
 class ItemList(ListView):
@@ -405,6 +406,20 @@ class QuestionCreate(EventPermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+class ItemDetailMixin(SingleObjectMixin):
+    model = Item
+    context_object_name = 'item'
+
+    def get_object(self, queryset=None):
+        if not hasattr(self, 'object') or not self.object:
+            url = resolve(self.request.path_info)
+            self.item = self.request.event.items.get(
+                id=url.kwargs['item']
+            )
+            self.object = self.item
+        return self.object
+
+
 class ItemUpdateFormGeneral(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -429,18 +444,10 @@ class ItemUpdateFormGeneral(forms.ModelForm):
         ]
 
 
-class ItemUpdateGeneral(EventPermissionRequiredMixin, UpdateView):
-    model = Item
+class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateView):
     form_class = ItemUpdateFormGeneral
     template_name = 'tixlcontrol/item/index.html'
     permission = 'can_change_items'
-    context_object_name = 'item'
-
-    def get_object(self, queryset=None):
-        url = resolve(self.request.path_info)
-        return self.request.event.items.get(
-            id=url.kwargs['item']
-        )
 
     def get_success_url(self):
         return reverse('control:event.item', kwargs={
@@ -461,10 +468,8 @@ class ItemVariationForm(forms.ModelForm):
         ]
 
 
-class ItemVariations(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
+class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
 
-    model = Item
-    context_object_name = 'item'
     permission = 'can_change_items'
 
     def __init__(self, *args, **kwargs):
@@ -618,14 +623,6 @@ class ItemVariations(EventPermissionRequiredMixin, TemplateView, SingleObjectMix
                     form.save()
         return self.render_to_response(context)
 
-    def get_object(self, queryset=None):
-        if not self.item:
-            url = resolve(self.request.path_info)
-            self.item = self.request.event.items.get(
-                id=url.kwargs['item']
-            )
-        return self.item
-
     def get_template_names(self):
         if self.dimension == 1:
             return ['tixlcontrol/item/variations_1d.html']
@@ -639,3 +636,64 @@ class ItemVariations(EventPermissionRequiredMixin, TemplateView, SingleObjectMix
         context['forms'] = self.forms
         context['properties'] = self.properties
         return context
+
+
+class ItemRestrictions(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
+
+    permission = 'can_change_items'
+    template_name = 'tixlcontrol/item/restrictions.html'
+
+    def get_formsets(self):
+        responses = restriction_formset.send(self.object.event, item=self.object)
+        formsets = []
+        for receiver, response in responses:
+            response['formset'] = response['formsetclass'](
+                self.request.POST if self.request.method == 'POST' else None,
+                queryset=response['queryset'],
+                prefix=response['prefix'],
+            )
+            formsets.append(response)
+        return formsets
+
+    def main(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.request = request
+        self.formsets = self.get_formsets()
+
+    def get(self, request, *args, **kwargs):
+        self.main(request, *args, **kwargs)
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        self.main(request, *args, **kwargs)
+        valid = True
+        for f in self.formsets:
+            valid &= f['formset'].is_valid()
+        if valid:
+            for f in self.formsets:
+                for form in f['formset']:
+                    if 'DELETE' in form.cleaned_data and form.cleaned_data['DELETE'] is True:
+                        if form.instance.pk is None:
+                            continue
+                        form.instance.delete()
+                    else:
+                        form.instance.event = request.event
+                        form.instance.item = self.object
+                        form.instance.save()
+            return redirect(self.get_success_url())
+        else:
+            context = self.get_context_data(object=self.object)
+            return self.render_to_response(context)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['formsets'] = self.formsets
+        return context
+
+    def get_success_url(self):
+        return reverse('control:event.item.restrictions', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'item': self.object.pk
+        }) + '?success=true'

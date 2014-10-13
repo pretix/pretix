@@ -23,6 +23,7 @@ urlpatterns += patterns(
             url(r'^items/$', item.ItemList.as_view(), name='event.items'),
             url(r'^items/(?P<item>\d+)/$', item.ItemUpdateGeneral.as_view(), name='event.item'),
             url(r'^items/(?P<item>\d+)/variations$', item.ItemVariations.as_view(), name='event.item.variations'),
+            url(r'^items/(?P<item>\d+)/restrictions$', item.ItemRestrictions.as_view(), name='event.item.restrictions'),
             url(r'^categories/$', item.CategoryList.as_view(), name='event.items.categories'),
             url(r'^categories/(?P<category>\d+)/delete$', item.CategoryDelete.as_view(), name='event.items.categories.delete'),
             url(r'^categories/(?P<category>\d+)/up$', item.category_move_up, name='event.items.categories.up'),

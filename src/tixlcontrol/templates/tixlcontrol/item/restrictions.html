@@ -1,0 +1,41 @@
+{% extends "tixlcontrol/item/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load formset_tags %}
+{% block inside %}
+	<h2>{% trans "Restrictions" %}</h2>
+	<form action="" method="post">
+		{% csrf_token %}
+		{% for set in formsets %}
+			<fieldset>
+				<legend>{{ set.title }}</legend>
+				<div data-formset class="restriction-formset" data-formset-prefix="{{ set.formset.prefix }}">
+					<div data-formset-body>
+						{{ set.formset.management_form }}
+						{% for f in set.formset %}
+							<div class="form-horizontal" data-formset-form>
+								{% bootstrap_form f layout="horizontal" %}
+							</div>
+						{% endfor %}
+					</div>
+					<script type="form-template" data-formset-empty-form>
+						{% escapescript %}
+							<div class="form-horizontal" data-formset-form>
+								{% bootstrap_form set.formset.empty_form layout="horizontal" %}
+							</div>
+						{% endescapescript %}
+					</script>
+					<button type="button" class="btn btn-default" data-formset-add><i class="fa fa-plus"></i> {% trans "Add a new restriction" %}</button>
+				</div>
+			</fieldset>
+		{% endfor %}
+		<div class="form-group">
+			<div class="col-sm-12">
+				<button type="submit" class="btn btn-primary">
+					{% trans "Save" %}
+				</button>
+			</div>
+		</div>
+	</form>
+	
+{% endblock %}
