@@ -118,7 +118,7 @@ In our example, the implementation could look like this::
 
         # Fetch all restriction objects applied to this item
         restrictions = list(TimeRestriction.objects.filter(
-            items__in=(item,),
+            item=item,
         ).prefetch_related('variations'))
 
         # If we do not know anything about this item, we are done here.

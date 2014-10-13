@@ -16,7 +16,7 @@ def availability_handler(sender, **kwargs):
 
     # Fetch all restriction objects applied to this item
     restrictions = list(TimeRestriction.objects.filter(
-        items__in=(item,),
+        item=item,
     ).prefetch_related('variations'))
 
     # If we do not know anything about this item, we are done here.

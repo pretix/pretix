@@ -677,12 +677,15 @@ class BaseRestriction(models.Model):
         related_name="restrictions_%(app_label)s_%(class)s",
         verbose_name=_("Event"),
     )
-    items = models.ManyToManyField(
+    item = models.ForeignKey(
         Item,
+        blank=True,
+        null=True,
         related_name="restrictions_%(app_label)s_%(class)s",
     )
     variations = models.ManyToManyField(
         ItemVariation,
+        blank=True,
         related_name="restrictions_%(app_label)s_%(class)s",
     )
 
