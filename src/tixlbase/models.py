@@ -266,7 +266,7 @@ class Event(models.Model):
         verbose_name=_("Start of presale"),
         help_text=_("No items will be sold before this date."),
     )
-    payment_term_days = models.IntegerField(
+    payment_term_days = models.PositiveIntegerField(
         default=14,
         verbose_name=_("Payment term in days"),
         help_text=_("The number of days after placing an order the user has to pay to preserve his reservation."),
@@ -709,13 +709,14 @@ class BaseRestriction(models.Model):
     )
     item = models.ForeignKey(
         Item,
-        blank=True,
-        null=True,
+        blank=True, null=True,
+        verbose_name=_("Item"),
         related_name="restrictions_%(app_label)s_%(class)s",
     )
     variations = VariationsField(
         ItemVariation,
         blank=True,
+        verbose_name=_("Variations"),
         related_name="restrictions_%(app_label)s_%(class)s",
     )
 
@@ -728,3 +729,203 @@ class BaseRestriction(models.Model):
         if self.event:
             self.event.get_cache().clear()
         return super().save(*args, **kwargs)
+
+
+class Quota(models.Model):
+    """
+    A quota is a "pool of tickets". It is there to limit the number of items
+    of a certain type to be sold. For example, you could have a quota of 500
+    applied to all your items (because you only have that much space in your
+    building), and also a quota of 100 applied to the VIP tickets for
+    exclusivity. In this case, no more than 500 tickets will be sold in total
+    and no more than 100 of them will be VIP tickets (but 450 normal and 50
+    VIP tickets will be fine).
+
+    As always, a quota can not only be tied to an item, but also to a specific
+    variation. We follow the general rule here: If there are no variations
+    speficied, the quota applies to all of them, and if there are variations
+    specified, the quota applies to those.
+
+    This object holds two fields, "order_cache" and "lock_cache", which are
+    implementation specific and are considered private. It is planned that they
+    are being used as a fallback solution if redis is not available.
+    """
+    name = models.CharField(
+        max_length=200,
+        verbose_name=_("Name")
+    )
+    size = models.PositiveIntegerField(
+        verbose_name=_("Total capacity")
+    )
+    items = models.ManyToManyField(
+        Item,
+        verbose_name=_("Item"),
+        blank=True
+    )
+    variations = VariationsField(
+        ItemVariation,
+        blank=True,
+        verbose_name=_("Variations")
+    )
+    order_cache = models.ManyToManyField(
+        'OrderPosition',
+        blank=True
+    )
+    lock_cache = models.ManyToManyField(
+        'CartPosition',
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = _("Quota")
+        verbose_name_plural = _("Quotas")
+
+
+class Order(models.Model):
+    """
+    An order is created when a user clicks 'buy' on his cart. It holds
+    several OrderPositions and is connected to an user. It has an
+    expiration date: If items run out of capacity, orders which are over
+    their expiration date might be cancelled.
+
+    Important: An order holds its total monetary value, as an order is a
+    piece of 'history' and must not change due to a change in item prices.
+    """
+
+    STATUS_PENDING = "n"
+    STATUS_PAID = "p"
+    STATUS_EXPIRED = "e"
+    STATUS_CANCELLED = "c"
+    STATUS_CHOICE = (
+        (STATUS_PAID, _("pending")),
+        (STATUS_PENDING, _("paid")),
+        (STATUS_EXPIRED, _("expired")),
+        (STATUS_CANCELLED, _("cancelled")),
+    )
+
+    status = models.CharField(
+        max_length=3,
+        choices=STATUS_CHOICE,
+        verbose_name=_("Status")
+    )
+    event = models.ForeignKey(
+        Event,
+        verbose_name=_("Event")
+    )
+    user = models.ForeignKey(
+        User, null=True, blank=True,
+        verbose_name=_("User")
+    )
+    datetime = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=_("Date")
+    )
+    expires = models.DateTimeField(
+        verbose_name=_("Expiration date")
+    )
+    payment_date = models.DateTimeField(
+        verbose_name=_("Payment date")
+    )
+    payment_info = models.TextField(
+        verbose_name=_("Payment information")
+    )
+    total = models.DecimalField(
+        decimal_places=2, max_digits=10,
+        verbose_name=_("Total amount")
+    )
+
+    class Meta:
+        verbose_name = _("Order")
+        verbose_name_plural = _("Orders")
+
+
+class QuestionAnswer(models.Model):
+    """
+    The answer to a Question, connected to an OrderPosition or CartPosition
+    """
+    orderposition = models.ForeignKey('OrderPosition', null=True, blank=True)
+    cartposition = models.ForeignKey('CartPosition', null=True, blank=True)
+    question = models.ForeignKey(Question)
+    answer = models.TextField()
+
+
+class OrderPosition(models.Model):
+    """
+    An OrderPosition is one line of an order, representing one ordered items
+    of a specified type (or variation).
+
+    Important: An OrderPosition holds its total monetary value, as an order is a
+    piece of 'history' and must not change due to a change in item prices.
+    """
+    order = models.ForeignKey(
+        Order,
+        verbose_name=_("Order")
+    )
+    item = models.ForeignKey(
+        Item,
+        verbose_name=_("Item")
+    )
+    variation = models.ForeignKey(
+        ItemVariation,
+        null=True, blank=True,
+        verbose_name=_("Variation")
+    )
+    price = models.DecimalField(
+        decimal_places=2, max_digits=10,
+        verbose_name=_("Price")
+    )
+    answers = models.ManyToManyField(
+        Question,
+        through=QuestionAnswer,
+        verbose_name=_("Answers")
+    )
+
+    class Meta:
+        verbose_name = _("Order position")
+        verbose_name_plural = _("Order positions")
+
+
+class CartPosition(models.Model):
+    """
+    A cart position is similar to a order line, except that it is not
+    yet part of a binding order but just placed by some user in his or
+    her cart. It therefore normally has a much shorter expiration time
+    than an ordered position, but still blocks an item in the quota pool
+    as we do not want to throw out users while they're clicking through
+    the checkout process.
+    """
+    event = models.ForeignKey(
+        Event,
+        verbose_name=_("Event")
+    )
+    user = models.ForeignKey(
+        User, null=True, blank=True,
+        verbose_name=_("User")
+    )
+    session = models.CharField(
+        max_length=255, null=True, blank=True,
+        verbose_name=_("Session key")
+    )
+    item = models.ForeignKey(
+        Item,
+        verbose_name=_("Item")
+    )
+    variation = models.ForeignKey(
+        ItemVariation,
+        null=True, blank=True,
+        verbose_name=_("Variation")
+    )
+    total = models.DecimalField(
+        decimal_places=2, max_digits=10,
+        verbose_name=_("Price")
+    )
+    datetime = models.DateTimeField(
+        verbose_name=_("Datetime")
+    )
+    expires = models.DateTimeField(
+        verbose_name=_("Expiration date")
+    )
+
+    class Meta:
+        verbose_name = _("Cart position")
+        verbose_name_plural = _("Cart positions")
