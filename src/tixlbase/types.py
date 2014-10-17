@@ -30,17 +30,31 @@ class VariationDict(dict):
 
     def identify(self):
         """
-        Build an identifier for this dict. This can be any string used to
-        compare one VariationDict to others.
+        Build a simple and unique identifier for this dict. This can be any string
+        used to compare one VariationDict to others.
 
         In the current implementation, it is a string containing a list of
         the PropertyValue id's, sorted by the Property id's and is therefore
         unique among one item.
         """
         order_key = lambda i: i[0]
-        return ",".join([
+        return ",".join((
             str(v[1].pk) for v in sorted(self.relevant_items(), key=order_key)
-        ])
+        ))
+
+    def key(self):
+        """
+        Build an identifier for this dict which exactly specifies the combination
+        for this variation without any doubt. This can be used to "talk" about a
+        variation in network communication.
+
+        In the current implementation, it is a string containing a list of
+        the propertyid:valueid tuples without any specific order and is therefore
+        not useful to compare two VariationDicts for equality.
+        """
+        return ",".join((
+            str(v[0]) + ":" + str(v[1].pk) for v in self.relevant_items()
+        ))
 
     def __eq__(self, other):
         if type(other) is type(self):

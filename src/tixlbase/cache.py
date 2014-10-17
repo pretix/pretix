@@ -38,7 +38,8 @@ class EventRelatedCache:
             key = hashlib.sha256(key.encode("UTF-8")).hexdigest()
         return key
 
-    def _strip_prefix(self, key):
+    @staticmethod
+    def _strip_prefix(key):
         return key.split(":", 3)[-1] if 'event:' in key else key
 
     def clear(self):

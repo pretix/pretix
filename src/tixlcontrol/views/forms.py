@@ -27,6 +27,8 @@ class TolerantFormsetModelForm(forms.ModelForm):
                     # Always assume data has changed if validation fails.
                     self._changed_data.append(name)
                     continue
+            # We're using a private API of Django here. This is not nice, but no problem as it seems
+            # like this will become a public API in Django 1.7.
             if field._has_changed(initial_value, data_value):
                 return True
         return False

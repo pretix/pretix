@@ -88,7 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True,
                                     verbose_name=_('Is active'))
     is_staff = models.BooleanField(default=False,
-                                   verbose_name=('Is site admin'))
+                                   verbose_name=_('Is site admin'))
     date_joined = models.DateTimeField(auto_now_add=True,
                                        verbose_name=_('Date joined'))
     locale = models.CharField(max_length=50,
@@ -97,7 +97,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                               verbose_name=_('Language'))
     timezone = models.CharField(max_length=100,
                                 default=settings.TIME_ZONE,
-                                verbose_name=('Timezone'))
+                                verbose_name=_('Timezone'))
 
     objects = UserManager()
 

@@ -7,8 +7,7 @@ from django.utils.translation.trans_real import (
     get_supported_language_variant,
     parse_accept_lang_header,
     language_code_re,
-    check_for_language,
-    _supported
+    check_for_language
 )
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.utils import translation, timezone
@@ -16,6 +15,8 @@ from collections import OrderedDict
 from django.utils.cache import patch_vary_headers
 
 from tixlbase.models import Event
+
+_supported = None
 
 
 class LocaleMiddleware(BaseLocaleMiddleware):
