@@ -624,7 +624,9 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
         return self.render_to_response(context)
 
     def get_template_names(self):
-        if self.dimension == 1:
+        if self.dimension == 0:
+            return ['tixlcontrol/item/variations_0d.html']
+        elif self.dimension == 1:
             return ['tixlcontrol/item/variations_1d.html']
         elif self.dimension == 2:
             return ['tixlcontrol/item/variations_2d.html']
