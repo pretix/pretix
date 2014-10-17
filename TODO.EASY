@@ -1,0 +1,11 @@
+This is a list of tasks to be done in the tixl project which might be an
+easy starting point for diving into the project.
+
+tixlcontrol/
+* Implement user settings (password change, etc)
+* Implement password resetting
+* Implement a basic form for the creation of events
+* Implement a basic from for the creation of items
+* Make a lot of interface design improvements
+* Write tests. A lot of tests.
+
