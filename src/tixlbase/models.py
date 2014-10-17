@@ -579,7 +579,7 @@ class Item(models.Model):
         self.active = False
         return super().save()
 
-    def get_all_variations(self):
+    def get_all_variations(self, use_cache=False):
         """
         This method returns a list containing all variations of this
         item. The list contains one VariationDict per variation, where
@@ -590,6 +590,9 @@ class Item(models.Model):
         VariationDicts differ from dicts only by specifying some extra
         methods.
         """
+        if use_cache and hasattr(self, '_get_all_variations_cache'):
+            return self._get_all_variations_cache
+
         all_variations = self.variations.all().prefetch_related("values")
         all_properties = self.properties.all().prefetch_related("values")
         variations_cache = {}
@@ -615,6 +618,7 @@ class Item(models.Model):
                 var['variation'] = variations_cache[key]
             result.append(var)
 
+        self._get_all_variations_cache = result
         return result
 
 

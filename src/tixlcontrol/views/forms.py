@@ -8,7 +8,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 
-from tixlbase.models import ItemVariation, PropertyValue
+from tixlbase.models import ItemVariation, PropertyValue, Item
 
 
 class TolerantFormsetModelForm(forms.ModelForm):
@@ -71,8 +71,13 @@ class RestrictionInlineFormset(forms.BaseInlineFormSet):
     render a working empty form for a JavaScript-enabled restriction formset.
     """
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, data=None, files=None, instance=None,
+                 save_as_new=False, prefix=None, queryset=None, **kwargs):
+        super().__init__(
+            data, files, instance, save_as_new, prefix, queryset, **kwargs
+        )
+        if isinstance(self.instance, Item):
+            self.queryset = self.queryset.prefetch_related("variations")
 
     def initialized_empty_form(self):
         form = self.form(
@@ -242,7 +247,7 @@ class VariationsField(forms.ModelMultipleChoiceField):
         """
         if self.item is None:
             return ()
-        variations = self.item.get_all_variations()
+        variations = self.item.get_all_variations(use_cache=True)
         return (
             (
                 v['variation'].pk if 'variation' in v else v.key(),
