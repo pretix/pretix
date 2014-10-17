@@ -14,14 +14,14 @@
 						{{ set.formset.management_form }}
 						{% for f in set.formset %}
 							<div class="form-horizontal" data-formset-form>
-								{% bootstrap_form f layout="horizontal" %}
+								{% bootstrap_form f layout="horizontal" field_class="col-md-10" %}
 							</div>
 						{% endfor %}
 					</div>
 					<script type="form-template" data-formset-empty-form>
 						{% escapescript %}
 							<div class="form-horizontal" data-formset-form>
-								{% bootstrap_form set.formset.initialized_empty_form layout="horizontal" %}
+								{% bootstrap_form set.formset.initialized_empty_form layout="horizontal" field_class="col-md-10" %}
 							</div>
 						{% endescapescript %}
 					</script>

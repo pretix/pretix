@@ -1,7 +1,12 @@
+from itertools import product
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import transaction, IntegrityError
+from django.forms.widgets import flatatt
 from django.utils.encoding import force_text
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext as _
 
 from tixlbase.models import ItemVariation, PropertyValue
 
@@ -87,6 +92,123 @@ class RestrictionInlineFormset(forms.BaseInlineFormSet):
         exclude = ['item']
 
 
+class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
+
+    def __init__(self, name, value, attrs, choices):
+        self.name = name
+        self.value = value
+        self.attrs = attrs
+        self.choices = choices
+
+    def render(self):
+        """
+        Outputs a grid for this set of choice fields.
+        """
+        if len(self.choices) == 0:
+            raise ValueError("Can't handle empty lists")
+
+        variations = []
+        for key, value in self.choices:
+            value['key'] = key
+            variations.append(value)
+
+        properties = [v.prop for v in variations[0].relevant_values()]
+        dimension = len(properties)
+
+        id_ = self.attrs.get('id', None)
+        start_tag = format_html('<div class="variations" id="{0}">', id_) if id_ else '<div class="variations">'
+        output = [start_tag]
+
+        # TODO: This is very duplicate to tixlcontrol.views.item.ItemVariations.get_forms()
+        # Find a common abstraction to avoid the repetition.
+        if dimension == 0:
+            output.append(format_html('<em>{0}</em>', _("not applicable")))
+        elif dimension == 1:
+            output.append('<ul>')
+            for i, variation in enumerate(variations):
+                final_attrs = dict(
+                    self.attrs.copy(), type=self.choice_input_class.input_type,
+                    name=self.name, value=variation['key']
+                )
+                if variation['key'] in self.value:
+                    final_attrs['checked'] = 'checked'
+                w = self.choice_input_class(
+                    self.name, self.value, self.attrs.copy(),
+                    (variation['key'], variation[properties[0].pk].value),
+                    i
+                )
+                output.append(format_html('<li>{0}</li>', force_text(w)))
+            output.append('</ul>')
+
+        elif dimension >= 2:
+            # prop1 is the property on all the grid's y-axes
+            prop1 = properties[0]
+            prop1v = list(prop1.values.all())
+            # prop2 is the property on all the grid's x-axes
+            prop2 = properties[1]
+            prop2v = list(prop2.values.all())
+
+            # Given an iterable of PropertyValue objects, this will return a
+            # list of their primary keys, ordered by the primary keys of the
+            # properties they belong to EXCEPT the value for the property prop2.
+            # We'll see later why we need this.
+            selector = lambda values: [
+                v.pk for v in sorted(values, key=lambda v: v.prop.pk)
+                if v.prop.pk != prop2.pk
+            ]
+
+            # Given a list of variations, this will sort them by their position
+            # on the x-axis
+            sort = lambda v: v[prop2.pk].pk
+
+            # We now iterate over the cartesian product of all the other
+            # properties which are NOT on the axes of the grid because we
+            # create one grid for any combination of them.
+            for gridrow in product(*[prop.values.all() for prop in properties[2:]]):
+                if len(gridrow) > 0:
+                    output.append('<strong>')
+                    output.append(", ".join([value.value for value in gridrow]))
+                    output.append('</strong>')
+                output.append('<table class="table"><thead><tr><th></th>')
+                for val2 in prop2v:
+                    output.append(format_html('<th>{0}</th>', val2.value))
+                output.append('</thead><tbody>')
+                for val1 in prop1v:
+                    output.append(format_html('<tr><th>{0}</th>', val1.value))
+                    # We are now inside one of the rows of the grid and have to
+                    # select the variations to display in this row. In order to
+                    # achieve this, we use the 'selector' lambda defined above.
+                    # It gives us a normalized, comparable version of a set of
+                    # PropertyValue objects. In this case, we compute the
+                    # selector of our row as the selector of the sum of the
+                    # values defining our grind and the value defining our row.
+                    selection = selector(gridrow + (val1,))
+                    # We now iterate over all variations who generate the same
+                    # selector as 'selection'.
+                    filtered = [v for v in variations if selector(v.relevant_values()) == selection]
+                    for variation in sorted(filtered, key=sort):
+                        final_attrs = dict(
+                            self.attrs.copy(), type=self.choice_input_class.input_type,
+                            name=self.name, value=variation['key']
+                        )
+                        if variation['key'] in self.value:
+                            final_attrs['checked'] = 'checked'
+                        output.append(format_html('<td><label><input{0} /></label></td>', flatatt(final_attrs)))
+                    output.append('</td>')
+                output.append('</tbody></table>')
+        output.append('</div>')
+        return mark_safe('\n'.join(output))
+
+
+class VariationsCheckboxRenderer(VariationsFieldRenderer):
+    choice_input_class = forms.widgets.CheckboxChoiceInput
+
+
+class VariationsSelectMultiple(forms.CheckboxSelectMultiple):
+    renderer = VariationsCheckboxRenderer
+    _empty_value = []
+
+
 class VariationsField(forms.ModelMultipleChoiceField):
     """
     This form field is intended to be used to let the user select a
@@ -100,6 +222,8 @@ class VariationsField(forms.ModelMultipleChoiceField):
 
     def __init__(self, *args, item=None, **kwargs):
         self.item = item
+        if 'widget' not in args or kwargs['widget'] is None:
+            kwargs['widget'] = VariationsSelectMultiple
         super().__init__(*args, **kwargs)
 
     def set_item(self, item):
