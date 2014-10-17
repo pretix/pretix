@@ -320,7 +320,7 @@ class VariationsField(forms.ModelMultipleChoiceField):
                             var.values.add(
                                 PropertyValue.objects.get(
                                     pk=value,
-                                    prop_pk=prop
+                                    prop_id=prop
                                 )
                             )
                         except PropertyValue.DoesNotExist:
