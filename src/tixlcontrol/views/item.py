@@ -680,7 +680,7 @@ class ItemRestrictions(ItemDetailMixin, EventPermissionRequiredMixin, TemplateVi
                     else:
                         form.instance.event = request.event
                         form.instance.item = self.object
-                        form.instance.save()
+                        form.save()
             return redirect(self.get_success_url())
         else:
             context = self.get_context_data(object=self.object)

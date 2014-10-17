@@ -665,6 +665,32 @@ class ItemVariation(models.Model):
         return super().save(*args, **kwargs)
 
 
+class VariationsField(models.ManyToManyField):
+    """
+    This is a ManyToManyField using the tixlcontrol.views.forms.VariationsField
+    form field by default.
+    """
+
+    def formfield(self, **kwargs):
+        from tixlcontrol.views.forms import VariationsField as FVariationsField
+        from django.db.models.fields.related import RelatedField
+        defaults = {
+            'form_class': FVariationsField,
+            # We don't need a queryset
+            'queryset': ItemVariation.objects.none(),
+        }
+        defaults.update(kwargs)
+        # If initial is passed in, it's a list of related objects, but the
+        # MultipleChoiceField takes a list of IDs.
+        if defaults.get('initial') is not None:
+            initial = defaults['initial']
+            if callable(initial):
+                initial = initial()
+            defaults['initial'] = [i.pk for i in initial]
+        # Skip ManyToManyField in dependency chain
+        return super(RelatedField, self).formfield(**defaults)
+
+
 class BaseRestriction(models.Model):
     """
     A restriction is the abstract concept of a rule that limits the availability
@@ -683,7 +709,7 @@ class BaseRestriction(models.Model):
         null=True,
         related_name="restrictions_%(app_label)s_%(class)s",
     )
-    variations = models.ManyToManyField(
+    variations = VariationsField(
         ItemVariation,
         blank=True,
         related_name="restrictions_%(app_label)s_%(class)s",

@@ -185,8 +185,7 @@ In our example, the implementation could look like this::
                     if 'variation' not in v or v['variation'] not in applied_to:
                         continue
 
-                if (restriction.timeframe_from <= now()
-                        and restriction.timeframe_to >= now()):
+                if restriction.timeframe_from <= now() <= restriction.timeframe_to:
                     # Selling this item is currently possible
                     available = True
                     # If multiple time frames are currently active, make sure to
