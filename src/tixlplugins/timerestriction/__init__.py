@@ -9,7 +9,7 @@ class TimeRestrictionApp(AppConfig):
 
     class TixlPluginMeta:
         type = PluginType.RESTRICTION
-        name = _("Restriciton by time")
+        name = _("Restricition by time")
         author = _("the tixl team")
         version = '1.0.0'
         description = _("This plugin adds the possibility to restrict the sale " +

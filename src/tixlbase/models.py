@@ -920,7 +920,7 @@ class CartPosition(models.Model):
         verbose_name=_("Price")
     )
     datetime = models.DateTimeField(
-        verbose_name=_("Datetime")
+        verbose_name=_("Date")
     )
     expires = models.DateTimeField(
         verbose_name=_("Expiration date")
