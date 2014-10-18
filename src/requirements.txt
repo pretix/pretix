@@ -25,4 +25,7 @@ pep8-naming
 flake8
 coveralls
 coverage
-
+selenium
+PyVirtualDisplay
+-e git+https://github.com/tixl/sauceclient.git@master#egg=sauceclient
+travis
