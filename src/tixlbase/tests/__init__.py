@@ -64,7 +64,7 @@ class BrowserTest(LiveServerTestCase):
             self.tearDownSauce()
 
     def setUpSauce(self):
-        if 'tunnel-identifier' in os.environ:
+        if 'TRAVIS_JOB_NUMBER' in os.environ:
             self.desired_capabilities['tunnel-identifier'] = \
                 os.environ['TRAVIS_JOB_NUMBER']
             self.desired_capabilities['build'] = os.environ['TRAVIS_BUILD_NUMBER']
