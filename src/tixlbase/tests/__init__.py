@@ -4,7 +4,7 @@ import sys
 from django.test import LiveServerTestCase
 from selenium import webdriver
 
-RUN_LOCAL = ('SAUCE_USERNAME' in os.environ)
+RUN_LOCAL = ('SAUCE_USERNAME' not in os.environ)
 
 if RUN_LOCAL:
     # could add Chrome, PhantomJS etc... here
