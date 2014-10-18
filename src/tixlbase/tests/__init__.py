@@ -64,11 +64,12 @@ class BrowserTest(LiveServerTestCase):
             self.tearDownSauce()
 
     def setUpSauce(self):
-        self.desired_capabilities['tunnel-identifier'] = \
-            os.environ['TRAVIS_JOB_NUMBER']
-        self.desired_capabilities['build'] = os.environ['TRAVIS_BUILD_NUMBER']
-        self.desired_capabilities['tags'] = \
-            [os.environ['TRAVIS_PYTHON_VERSION'], 'CI']
+        if 'tunnel-identifier' in os.environ:
+            self.desired_capabilities['tunnel-identifier'] = \
+                os.environ['TRAVIS_JOB_NUMBER']
+            self.desired_capabilities['build'] = os.environ['TRAVIS_BUILD_NUMBER']
+            self.desired_capabilities['tags'] = \
+                [os.environ['TRAVIS_PYTHON_VERSION'], 'CI']
         self.desired_capabilities['name'] = self.id()
 
         sauce_url = "http://%s:%s@ondemand.saucelabs.com:80/wd/hub"
