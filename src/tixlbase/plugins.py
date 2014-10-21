@@ -10,7 +10,7 @@ class PluginType(Enum):
     RESTRICTION = 1
 
 
-def get_all_plugins():
+def get_all_plugins() -> "class":
     plugins = []
     for app in apps.get_app_configs():
         if hasattr(app, 'TixlPluginMeta'):

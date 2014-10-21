@@ -6,7 +6,7 @@ class VariationDict(dict):
     code calling this method.
     """
 
-    def relevant_items(self):
+    def relevant_items(self) -> "list[(int, PropertyValue)]":
         """
         Iterate over all items with numeric keys.
 
@@ -17,7 +17,7 @@ class VariationDict(dict):
             if type(i[0]) is int:
                 yield i
 
-    def relevant_values(self):
+    def relevant_values(self) -> "list[PropertyValue]":
         """
         Iterate over all values with numeric keys.
 
@@ -28,7 +28,7 @@ class VariationDict(dict):
             if type(i[0]) is int:
                 yield i[1]
 
-    def identify(self):
+    def identify(self) -> str:
         """
         Build a simple and unique identifier for this dict. This can be any string
         used to compare one VariationDict to others.
@@ -42,7 +42,7 @@ class VariationDict(dict):
             str(v[1].pk) for v in sorted(self.relevant_items(), key=order_key)
         ))
 
-    def key(self):
+    def key(self) -> str:
         """
         Build an identifier for this dict which exactly specifies the combination
         for this variation without any doubt. This can be used to "talk" about a
@@ -62,7 +62,7 @@ class VariationDict(dict):
         else:
             return super().__eq__(other)
 
-    def ordered_values(self):
+    def ordered_values(self) -> "list[ItemVariation]":
         """
         Returns a list of values ordered by their keys
         """
@@ -74,7 +74,7 @@ class VariationDict(dict):
             )
         ]
 
-    def copy(self):
+    def copy(self) -> "VariationDict":
         """
         Return a one-level deep copy of this object (create a new
         VariationDict but make a shallow copy of the dict inside it).

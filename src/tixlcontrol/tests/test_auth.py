@@ -22,6 +22,16 @@ class LoginFormBrowserTest(BrowserTest):
         self.driver.find_element_by_css_selector('button[type="submit"]').click()
         self.driver.find_element_by_class_name("navbar-right")
 
+    def test_login_fail(self):
+        self.driver.implicitly_wait(10)
+        self.driver.get('%s%s' % (self.live_server_url, '/control/login'))
+        username_input = self.driver.find_element_by_name("email")
+        username_input.send_keys('dummy@dummy.dummy')
+        password_input = self.driver.find_element_by_name("password")
+        password_input.send_keys('wrong')
+        self.driver.find_element_by_css_selector('button[type="submit"]').click()
+        self.driver.find_element_by_class_name("alert-danger")
+
 
 class LoginFormTest(TestCase):
     """

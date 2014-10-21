@@ -62,7 +62,7 @@ class LocaleMiddleware(BaseLocaleMiddleware):
         return response
 
 
-def get_language_from_request(request):
+def get_language_from_request(request) -> str:
     """
     Analyzes the request to find what language the user wants the system to
     show. Only languages listed in settings.LANGUAGES are taken into account.

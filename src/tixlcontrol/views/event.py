@@ -52,10 +52,10 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
     template_name = 'tixlcontrol/event/settings.html'
     permission = 'can_change_settings'
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None) -> Event:
         return self.request.event
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.settings', kwargs={
             'organizer': self.get_object().organizer.slug,
             'event': self.get_object().slug,
@@ -72,7 +72,7 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
     def get_object(self, queryset=None):
         return self.request.event
 
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs) -> dict:
         from tixlbase.plugins import get_all_plugins
         context = super().get_context_data(*args, **kwargs)
         context['plugins'] = [p for p in get_all_plugins() if not p.name.startswith('.')]
@@ -98,7 +98,7 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
         self.object.save()
         return redirect(self.get_success_url())
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.settings.plugins', kwargs={
             'organizer': self.get_object().organizer.slug,
             'event': self.get_object().slug,

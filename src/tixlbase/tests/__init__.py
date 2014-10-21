@@ -8,7 +8,7 @@ RUN_LOCAL = ('SAUCE_USERNAME' not in os.environ)
 
 if RUN_LOCAL:
     # could add Chrome, PhantomJS etc... here
-    BROWSERS = ['Chrome']
+    BROWSERS = ['Chrome', 'Firefox']
 else:
     from sauceclient import SauceClient
     USERNAME = os.environ.get('SAUCE_USERNAME')

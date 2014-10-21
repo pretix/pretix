@@ -3,6 +3,8 @@ import hashlib
 
 from django.core.cache import caches
 
+from tixlbase.models import Event
+
 
 class EventRelatedCache:
     """
@@ -17,12 +19,12 @@ class EventRelatedCache:
     instantiate it as many times as you want.
     """
 
-    def __init__(self, event, cache='default'):
+    def __init__(self, event: Event, cache: str='default'):
         self.cache = caches[cache]
         self.event = event
         self.prefixkey = 'event:%d' % self.event.pk
 
-    def _prefix_key(self, original_key):
+    def _prefix_key(self, original_key: str) -> str:
         # Race conditions can happen here, but should be very very rare.
         # We could only handle this by going _really_ lowlevel using
         # memcached's `add` keyword instead of `set`.
@@ -39,7 +41,7 @@ class EventRelatedCache:
         return key
 
     @staticmethod
-    def _strip_prefix(key):
+    def _strip_prefix(key: str) -> str:
         return key.split(":", 3)[-1] if 'event:' in key else key
 
     def clear(self):
@@ -49,35 +51,35 @@ class EventRelatedCache:
             prefix = int(time.time())
             self.cache.set(self.prefixkey, prefix)
 
-    def set(self, key, value, timeout=3600):
+    def set(self, key: str, value: str, timeout: int=3600):
         return self.cache.set(self._prefix_key(key), value, timeout)
 
-    def get(self, key):
+    def get(self, key: str) -> str:
         return self.cache.get(self._prefix_key(key))
 
-    def get_many(self, keys):
+    def get_many(self, keys: "list[str]") -> "dict[str, str]":
         values = self.cache.get_many([self._prefix_key(key) for key in keys])
         newvalues = {}
         for k, v in values.items():
             newvalues[self._strip_prefix(k)] = v
         return newvalues
 
-    def set_many(self, values, timeout=3600):
+    def set_many(self, values: "dict[str, str]", timeout=3600):
         newvalues = {}
         for k, v in values.items():
             newvalues[self._prefix_key(k)] = v
         return self.cache.set_many(newvalues, timeout)
 
-    def delete(self, key):  # NOQA
+    def delete(self, key: str):  # NOQA
         return self.cache.delete(self._prefix_key(key))
 
-    def delete_many(self, keys):  # NOQA
+    def delete_many(self, keys: "list[str]"):  # NOQA
         return self.cache.delete_many([self._prefix_key(key) for key in keys])
 
-    def incr(self, key, by=1):  # NOQA
+    def incr(self, key: str, by: int=1):  # NOQA
         return self.cache.incr(self._prefix_key(key), by)
 
-    def decr(self, key, by=1):  # NOQA
+    def decr(self, key: str, by: int=1):  # NOQA
         return self.cache.decr(self._prefix_key(key), by)
 
     def close(self):  # NOQA

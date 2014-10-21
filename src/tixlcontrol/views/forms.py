@@ -12,7 +12,7 @@ from tixlbase.models import ItemVariation, PropertyValue, Item
 
 
 class TolerantFormsetModelForm(forms.ModelForm):
-    def has_changed(self):
+    def has_changed(self) -> bool:
         """
         Returns True if data differs from initial. Contrary to the default
         implementation, the ORDER field is being ignored.
@@ -231,11 +231,11 @@ class VariationsField(forms.ModelMultipleChoiceField):
             kwargs['widget'] = VariationsSelectMultiple
         super().__init__(*args, **kwargs)
 
-    def set_item(self, item):
+    def set_item(self, item: Item):
         self.item = item
         self._set_choices(self._get_choices())
 
-    def _get_choices(self):
+    def _get_choices(self) -> "list[(str, VariationDict)]":
         """
         We can't use a normal QuerySet as there theoretically might be
         two types of variations: Some who already have a ItemVariation
@@ -255,7 +255,7 @@ class VariationsField(forms.ModelMultipleChoiceField):
             ) for v in variations
         )
 
-    def clean(self, value):
+    def clean(self, value: "list[int]"):
         """
         At cleaning time, we have to clean up the mess we produced with our
         _get_choices implementation. In the case of ItemVariation object ids

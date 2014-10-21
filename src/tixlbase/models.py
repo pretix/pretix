@@ -119,7 +119,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             self.identifier = self.identifier.lower()
         super().save(*args, **kwargs)
 
-    def get_short_name(self):
+    def get_short_name(self) -> str:
         if self.givenname:
             return self.givenname
         elif self.familyname:
@@ -127,7 +127,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         else:
             return self.username
 
-    def get_full_name(self):
+    def get_full_name(self) -> str:
         if self.givenname and not self.familyname:
             return self.givenname
         elif not self.givenname and self.familyname:
@@ -295,18 +295,18 @@ class Event(models.Model):
         self.get_cache().clear()
         return obj
 
-    def get_plugins(self):
+    def get_plugins(self) -> "list[str]":
         if self.plugins is None:
             return []
         return self.plugins.split(",")
 
-    def get_date_from_display(self):
+    def get_date_from_display(self) -> str:
         return _date(
             self.date_from,
             "DATETIME_FORMAT" if self.show_times else "DATE_FORMAT"
         )
 
-    def get_date_to_display(self):
+    def get_date_to_display(self) -> str:
         if not self.show_date_to:
             return ""
         return _date(
@@ -314,7 +314,7 @@ class Event(models.Model):
             "DATETIME_FORMAT" if self.show_times else "DATE_FORMAT"
         )
 
-    def get_cache(self):
+    def get_cache(self) -> "tixlbase.cache.EventRelatedCache":
         from tixlbase.cache import EventRelatedCache
         return EventRelatedCache(self)
 
@@ -579,7 +579,7 @@ class Item(models.Model):
         self.active = False
         return super().save()
 
-    def get_all_variations(self, use_cache=False):
+    def get_all_variations(self, use_cache: bool=False) -> "list[VariationDict]":
         """
         This method returns a list containing all variations of this
         item. The list contains one VariationDict per variation, where
