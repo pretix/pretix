@@ -38,6 +38,11 @@ urlpatterns += patterns(
             url(r'^properties/(?P<property>\d+)/$', item.PropertyUpdate.as_view(), name='event.items.properties.edit'),
             url(r'^properties/(?P<property>\d+)/delete$', item.PropertyDelete.as_view(), name='event.items.properties.delete'),
             url(r'^properties/add$', item.PropertyCreate.as_view(), name='event.items.properties.add'),
+            url(r'^quotas/$', item.QuotaList.as_view(), name='event.items.quotas'),
+            url(r'^quotas/(?P<quota>\d+)/$', item.QuotaUpdate.as_view(), name='event.items.quotas.edit'),
+            url(r'^quotas/(?P<quota>\d+)/delete$', item.QuotaDelete.as_view(),
+                name='event.items.quotas.delete'),
+            url(r'^quotas/add$', item.QuotaCreate.as_view(), name='event.items.quotas.add'),
         )
         ))
 )

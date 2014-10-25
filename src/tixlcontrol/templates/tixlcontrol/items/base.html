@@ -7,6 +7,7 @@
 		<li {% if "event.items.categories" in url_name %}class="active"{% endif %}><a href="{% url 'control:event.items.categories' organizer=request.event.organizer.slug event=request.event.slug %}">{% trans "Categories" %}</a></li>
 		<li {% if "event.items.properties" in url_name %}class="active"{% endif %}><a href="{% url 'control:event.items.properties' organizer=request.event.organizer.slug event=request.event.slug %}">{% trans "Properties" %}</a></li>
 		<li {% if "event.items.questions" in url_name %}class="active"{% endif %}><a href="{% url 'control:event.items.questions' organizer=request.event.organizer.slug event=request.event.slug %}">{% trans "Questions" %}</a></li>
+		<li {% if "event.items.quotas" in url_name %}class="active"{% endif %}><a href="{% url 'control:event.items.quotas' organizer=request.event.organizer.slug event=request.event.slug %}">{% trans "Quotas" %}</a></li>
 	</ul>
 	{% block inside %}
 	{% endblock %}

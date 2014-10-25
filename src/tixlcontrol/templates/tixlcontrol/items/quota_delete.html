@@ -1,14 +1,14 @@
 {% extends "tixlcontrol/items/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block title %}{% trans "Delete question" %}{% endblock %}
+{% block title %}{% trans "Delete quota" %}{% endblock %}
 {% block inside %}
-	<h1>{% trans "Delete question" %}</h1>
+	<h1>{% trans "Delete quota" %}</h1>
 	<form action="" method="post" class="form-horizontal">
 		{% csrf_token %}
-		<p>{% blocktrans %}Are you sure you want to the question <strong>{{ question }}</strong>?{% endblocktrans %}</p>
+		<p>{% blocktrans %}Are you sure you want to delete the quota <strong>{{ quota }}</strong>?{% endblocktrans %}</p>
 		{% if dependent|length > 0 %}
-			<p>{% blocktrans %}All answers to the question given by the buyers of the following tickets will be <strong>permanently lost</strong>.{% endblocktrans %}</p>
+			<p>{% blocktrans %}The following items might be no longer available for sale:{% endblocktrans %}</p>
 			{% for item in dependent %}
 				<li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.pk %}">{{ item.name }}</a></li>
 			{% endfor %}
@@ -18,7 +18,7 @@
 				<button type="submit" class="btn btn-primary">
 					{% trans "Confirm" %}
 				</button>
-				<a href="{% url "control:event.items.questions" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default">
+				<a href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default">
 					{% trans "Cancel" %}
 				</a>
 			</div>

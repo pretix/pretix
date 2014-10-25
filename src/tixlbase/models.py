@@ -750,6 +750,12 @@ class Quota(models.Model):
     implementation specific and are considered private. It is planned that they
     are being used as a fallback solution if redis is not available.
     """
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name="quotas",
+        verbose_name=_("Event"),
+    )
     name = models.CharField(
         max_length=200,
         verbose_name=_("Name")
@@ -779,6 +785,9 @@ class Quota(models.Model):
     class Meta:
         verbose_name = _("Quota")
         verbose_name_plural = _("Quotas")
+
+    def __str__(self):
+        return self.name
 
 
 class Order(models.Model):

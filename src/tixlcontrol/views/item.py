@@ -10,7 +10,9 @@ from django import forms
 from django.shortcuts import redirect
 from django.forms.models import inlineformset_factory
 
-from tixlbase.models import Item, ItemCategory, Property, ItemVariation, PropertyValue, Question
+from tixlbase.models import (
+    Item, ItemCategory, Property, ItemVariation, PropertyValue, Question, Quota
+)
 from tixlcontrol.permissions import EventPermissionRequiredMixin, event_permission_required
 from tixlcontrol.views.forms import TolerantFormsetModelForm
 from tixlcontrol.signals import restriction_formset
@@ -404,6 +406,97 @@ class QuestionCreate(EventPermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.event = self.request.event
         return super().form_valid(form)
+
+
+class QuotaList(ListView):
+    model = Quota
+    context_object_name = 'quotas'
+    template_name = 'tixlcontrol/items/quotas.html'
+
+    def get_queryset(self):
+        return Quota.objects.filter(
+            event=self.request.event
+        )
+
+
+class QuotaForm(forms.ModelForm):
+
+    class Meta:
+        model = Quota
+        localized_fields = '__all__'
+        fields = [
+            'name',
+            'size',
+        ]
+
+
+class QuotaCreate(EventPermissionRequiredMixin, CreateView):
+    model = Quota
+    form_class = QuotaForm
+    template_name = 'tixlcontrol/items/quota.html'
+    permission = 'can_change_items'
+    context_object_name = 'quota'
+
+    def get_success_url(self):
+        return reverse('control:event.items.quotas', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        }) + '?created=true'
+
+    def form_valid(self, form):
+        form.instance.event = self.request.event
+        return super().form_valid(form)
+
+
+class QuotaUpdate(EventPermissionRequiredMixin, UpdateView):
+    model = Quota
+    form_class = QuotaForm
+    template_name = 'tixlcontrol/items/quota.html'
+    permission = 'can_change_items'
+    context_object_name = 'quota'
+
+    def get_object(self, queryset=None):
+        url = resolve(self.request.path_info)
+        return self.request.event.quotas.get(
+            id=url.kwargs['quota']
+        )
+
+    def get_success_url(self):
+        return reverse('control:event.items.quotas', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        }) + '?updated=true'
+
+
+class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
+    model = Quota
+    template_name = 'tixlcontrol/items/quota_delete.html'
+    permission = 'can_change_items'
+    context_object_name = 'quota'
+
+    def get_object(self, queryset=None):
+        url = resolve(self.request.path_info)
+        return self.request.event.quotas.get(
+            id=url.kwargs['quota']
+        )
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['dependent'] = list(self.get_object().items.all())
+        return context
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.items.update(category=None)
+        success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)
+
+    def get_success_url(self):
+        return reverse('control:event.items.quotas', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        }) + '?deleted=true'
 
 
 class ItemDetailMixin(SingleObjectMixin):
