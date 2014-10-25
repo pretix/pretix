@@ -3,7 +3,6 @@
 {% load bootstrap3 %}
 {% load formset_tags %}
 {% block inside %}
-	<h2>{% trans "Restrictions" %}</h2>
 	<form action="" method="post">
 		{% csrf_token %}
 		{% for set in formsets %}

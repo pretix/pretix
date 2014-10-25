@@ -2,8 +2,6 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inside %}
-	<h2>{% trans "General information" %}</h2>
-	
 	{% if "success" in request.GET %}
 		<div class="alert alert-success">
 			{% trans "Your changes have been saved." %}
