@@ -50,3 +50,18 @@ td > .form-group > .checkbox {
 .container ul.nav-pills {
     margin: 20px 0;
 }
+
+.variation-matrix {
+    td .form-group, .checkbox {
+        margin: 0;
+    }
+}
+@media (min-width: @screen-sm-min) {
+    .variation-matrix > tbody > tr > td {
+        line-height: 34px;
+
+        input[type=checkbox] {
+            margin-top: 10px;
+        }
+    }
+}
