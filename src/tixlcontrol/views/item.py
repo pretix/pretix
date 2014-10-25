@@ -616,34 +616,8 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
                 forms.append(form)
             forms_flat = forms
 
-        elif self.dimension == 2:
-            # For two-dimensional structures we have a grid of forms
-            # prop1 is the property on the grid's y-axis
-            prop1 = self.properties[0]
-            # prop2 is the property on the grid's x-axis
-            prop2 = self.properties[1]
-
-            # Given a list of variations, this will sort them by their position
-            # on the x-axis
-            sort = lambda v: v[prop2.pk].pk
-
-            for val1 in prop1.values.all():
-                formrow = []
-                # We are now inside a grid row. We iterate over all variations
-                # which belong in this row and create forms for them. In order
-                # to achieve this, we select all variation dictionaries which
-                # have the same value for prop1 as our row does and sort them
-                # by their value for prop2.
-                filtered = [v for v in variations if v[prop1.pk].pk == val1.pk]
-                for variation in sorted(filtered, key=sort):
-                    form = self.get_form(variation, data)
-                    formrow.append(form)
-                    forms_flat.append(form)
-
-                forms.append({'row': val1.value, 'forms': formrow})
-
-        elif self.dimension > 2:
-            # For 3 or more dimensional structures we display a list of grids
+        elif self.dimension >= 2:
+            # For 2 or more dimensional structures we display a list of grids
             # of forms
 
             # prop1 is the property on all the grid's y-axes
@@ -721,9 +695,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
             return ['tixlcontrol/item/variations_0d.html']
         elif self.dimension == 1:
             return ['tixlcontrol/item/variations_1d.html']
-        elif self.dimension == 2:
-            return ['tixlcontrol/item/variations_2d.html']
-        elif self.dimension > 2:
+        elif self.dimension >= 2:
             return ['tixlcontrol/item/variations_nd.html']
 
     def get_context_data(self, **kwargs):

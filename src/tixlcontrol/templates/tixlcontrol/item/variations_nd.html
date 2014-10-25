@@ -5,7 +5,9 @@
 	<form action="" method="post">
 		{% csrf_token %}
 		{% for major in forms %}
-			<h3>{{ major.row }}</h3>
+            {% if major.row %}
+			    <h3>{{ major.row }}</h3>
+            {% endif %}
 			<table class="table">
 				<thead>
 					<tr>
@@ -18,7 +20,7 @@
 				<tbody>
 					{% for sub in major.forms %}
 						<tr>
-							<td>{{ sub.row }}</td>
+							<td>{{ sub.row.value }}</td>
 							{% for form in sub.forms %}
 								<td>
 									{% bootstrap_field form.active layout='inline' %}
