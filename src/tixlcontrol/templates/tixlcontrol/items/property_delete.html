@@ -15,16 +15,14 @@
 		<form action="" method="post" class="form-horizontal">
 			{% csrf_token %}
 			<p>{% blocktrans %}Are you sure you want to the property <strong>{{ property }}</strong>?{% endblocktrans %}</p>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-primary">
-						{% trans "Confirm" %}
-					</button>
-					<a href="{% url "control:event.items.properties" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default">
-						{% trans "Cancel" %}
-					</a>
-				</div>
-			</div>
+            <div class="form-group submit-group">
+                <a href="{% url "control:event.items.properties" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+                    {% trans "Cancel" %}
+                </a>
+                <button type="submit" class="btn btn-primary btn-save">
+                    {% trans "Delete" %}
+                </button>
+            </div>
 		</form>
 	{% endif %}
 {% endblock %}

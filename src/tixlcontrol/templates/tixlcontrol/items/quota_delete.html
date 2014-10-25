@@ -13,15 +13,13 @@
 				<li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.pk %}">{{ item.name }}</a></li>
 			{% endfor %}
 		{% endif %}
-		<div class="form-group">
-			<div class="col-sm-offset-2 col-sm-10">
-				<button type="submit" class="btn btn-primary">
-					{% trans "Confirm" %}
-				</button>
-				<a href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default">
-					{% trans "Cancel" %}
-				</a>
-			</div>
+		<div class="form-group submit-group">
+            <a href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Delete" %}
+            </button>
 		</div>
 	</form>
 {% endblock %}
