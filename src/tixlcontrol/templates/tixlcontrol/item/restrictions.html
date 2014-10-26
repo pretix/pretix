@@ -3,36 +3,64 @@
 {% load bootstrap3 %}
 {% load formset_tags %}
 {% block inside %}
-	<form action="" method="post">
-		{% csrf_token %}
-		{% for set in formsets %}
-			<fieldset>
-				<legend>{{ set.title }}</legend>
-				<div data-formset class="restriction-formset" data-formset-prefix="{{ set.formset.prefix }}">
-					<div data-formset-body>
-						{{ set.formset.management_form }}
-						{% for f in set.formset %}
-							<div class="form-horizontal" data-formset-form>
-								{% bootstrap_form f layout="horizontal" field_class="col-md-10" %}
-							</div>
-						{% endfor %}
-					</div>
-					<script type="form-template" data-formset-empty-form>
-						{% escapescript %}
-							<div class="form-horizontal" data-formset-form>
-								{% bootstrap_form set.formset.initialized_empty_form layout="horizontal" field_class="col-md-10" %}
-							</div>
-						{% endescapescript %}
-					</script>
-					<button type="button" class="btn btn-default" data-formset-add><i class="fa fa-plus"></i> {% trans "Add a new restriction" %}</button>
-				</div>
-			</fieldset>
-		{% endfor %}
-		<div class="form-group submit-group">
+    <form action="" method="post">
+        {% csrf_token %}
+        {% for set in formsets %}
+            <fieldset>
+                <legend>{{ set.title }}</legend>
+                <div data-formset class="restriction-formset" data-formset-prefix="{{ set.formset.prefix }}">
+                    <div data-formset-body class="panel-group collapse" id="accordion_{{ set.formset.prefix }}">
+                        {{ set.formset.management_form }}
+                        {% for f in set.formset %}
+                            <div class="panel panel-default" data-formset-form>
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion"
+                                           href="#collapse{{ f.prefix }}">
+                                            Test
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapse{{ f.prefix }}" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        <div class="form-horizontal">
+                                            {% bootstrap_form f layout="horizontal" field_class="col-md-10" %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <script type="form-template" data-formset-empty-form>
+                        {% escapescript %}
+                            <div class="panel panel-default" data-formset-form>
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse__prefix__">
+                                            {% trans "New restriction" %}
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapse__prefix__" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        <div class="form-horizontal">
+                                            {% bootstrap_form set.formset.initialized_empty_form layout="horizontal" field_class="col-md-10" %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endescapescript %}
+                    </script>
+                    <button type="button" class="btn btn-default" data-formset-add><i
+                            class="fa fa-plus"></i> {% trans "Add a new restriction" %}</button>
+                </div>
+            </fieldset>
+        {% endfor %}
+        <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
             </button>
-		</div>
-	</form>
-	
+        </div>
+    </form>
+
 {% endblock %}
