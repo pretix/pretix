@@ -62,8 +62,8 @@ def availability_handler(sender, **kwargs):
         price = None
 
         # Make up some unique key for this variation
-        cachekey = 'timerestriction:%d:%s' % (
-            item.pk,
+        cachekey = 'timerestriction:%s:%s' % (
+            item.identity,
             v.identify(),
         )
 

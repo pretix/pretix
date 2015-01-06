@@ -40,7 +40,6 @@ class ItemVariationsTest(TestCase):
 
         for vd in variations:
             for i, v in vd.relevant_items():
-                self.assertIs(type(i), int)
                 self.assertIs(type(v), PropertyValue)
 
             for v in vd.relevant_values():
