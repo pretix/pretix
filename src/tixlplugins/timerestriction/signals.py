@@ -20,7 +20,7 @@ def availability_handler(sender, **kwargs):
     context = kwargs['context']  # NOQA
 
     # Fetch all restriction objects applied to this item
-    restrictions = list(TimeRestriction.objects.filter(
+    restrictions = list(TimeRestriction.objects.current.filter(
         item=item,
     ).prefetch_related('variations'))
 
@@ -79,7 +79,7 @@ def availability_handler(sender, **kwargs):
 
         # Walk through all restriction objects applied to this item
         for restriction in restrictions:
-            applied_to = list(restriction.variations.all())
+            applied_to = list(restriction.variations.current.all())
 
             # Only take this restriction into consideration if it either
             # is directly applied to this variation OR is applied to all

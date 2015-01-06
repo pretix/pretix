@@ -46,11 +46,11 @@ class PermissionMiddleware:
             return redirect_to_login(
                 path, resolved_login_url, REDIRECT_FIELD_NAME)
 
-        request.user.events_cache = request.user.events.order_by(
+        request.user.events_cache = request.user.events.current.order_by(
             "organizer", "date_from").prefetch_related("organizer")
         if 'event.' in url_name and 'event' in url.kwargs:
             try:
-                request.event = Event.objects.get(
+                request.event = Event.objects.current.get(
                     slug=url.kwargs['event'],
                     permitted__id__exact=request.user.id,
                     organizer__slug=url.kwargs['organizer'],

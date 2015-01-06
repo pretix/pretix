@@ -7,18 +7,19 @@ from django.utils.encoding import force_text
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
+from tixlbase.forms import VersionedModelForm
 
 from tixlbase.models import ItemVariation, PropertyValue, Item
 
 
-class TolerantFormsetModelForm(forms.ModelForm):
+class TolerantFormsetModelForm(VersionedModelForm):
     def has_changed(self) -> bool:
         """
         Returns True if data differs from initial. Contrary to the default
         implementation, the ORDER field is being ignored.
         """
         for name, field in self.fields.items():
-            if name == 'ORDER':
+            if name == 'ORDER' or name == 'id':
                 continue
             prefixed_name = self.add_prefix(name)
             data_value = field.widget.value_from_datadict(self.data, self.files, prefixed_name)
@@ -37,7 +38,7 @@ class TolerantFormsetModelForm(forms.ModelForm):
                     self._changed_data.append(name)
                     continue
             # We're using a private API of Django here. This is not nice, but no problem as it seems
-            # like this will become a public API in Django 1.7.
+            # like this will become a public API in future Django.
             if field._has_changed(initial_value, data_value):
                 return True
         return False
@@ -77,7 +78,7 @@ class RestrictionInlineFormset(forms.BaseInlineFormSet):
             data, files, instance, save_as_new, prefix, queryset, **kwargs
         )
         if isinstance(self.instance, Item):
-            self.queryset = self.queryset.prefetch_related("variations")
+            self.queryset = self.queryset.as_of().prefetch_related("variations")
 
     def initialized_empty_form(self):
         form = self.form(
@@ -139,7 +140,7 @@ class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
                     final_attrs['checked'] = 'checked'
                 w = self.choice_input_class(
                     self.name, self.value, self.attrs.copy(),
-                    (variation['key'], variation[properties[0].pk].value),
+                    (variation['key'], variation[properties[0].identity].value),
                     i
                 )
                 output.append(format_html('<li>{0}</li>', force_text(w)))
@@ -148,28 +149,28 @@ class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
         elif dimension >= 2:
             # prop1 is the property on all the grid's y-axes
             prop1 = properties[0]
-            prop1v = list(prop1.values.all())
+            prop1v = list(prop1.values.current.all())
             # prop2 is the property on all the grid's x-axes
             prop2 = properties[1]
-            prop2v = list(prop2.values.all())
+            prop2v = list(prop2.values.current.all())
 
             # Given an iterable of PropertyValue objects, this will return a
             # list of their primary keys, ordered by the primary keys of the
             # properties they belong to EXCEPT the value for the property prop2.
             # We'll see later why we need this.
             selector = lambda values: [
-                v.pk for v in sorted(values, key=lambda v: v.prop.pk)
-                if v.prop.pk != prop2.pk
+                v.identity for v in sorted(values, key=lambda v: v.prop.identity)
+                if v.prop.identity != prop2.identity
             ]
 
             # Given a list of variations, this will sort them by their position
             # on the x-axis
-            sort = lambda v: v[prop2.pk].pk
+            sort = lambda v: v[prop2.identity].identity
 
             # We now iterate over the cartesian product of all the other
             # properties which are NOT on the axes of the grid because we
             # create one grid for any combination of them.
-            for gridrow in product(*[prop.values.all() for prop in properties[2:]]):
+            for gridrow in product(*[prop.values.current.all() for prop in properties[2:]]):
                 if len(gridrow) > 0:
                     output.append('<strong>')
                     output.append(", ".join([value.value for value in gridrow]))
@@ -250,7 +251,7 @@ class VariationsField(forms.ModelMultipleChoiceField):
         variations = self.item.get_all_variations(use_cache=True)
         return (
             (
-                v['variation'].pk if 'variation' in v else v.key(),
+                v['variation'].identity if 'variation' in v else v.key(),
                 v
             ) for v in variations
         )
@@ -287,9 +288,9 @@ class VariationsField(forms.ModelMultipleChoiceField):
         for var in all_variations:
             key = []
             for v in var.values.all():
-                key.append((v.prop_id, v.pk))
+                key.append((v.prop_id, v.identity))
             key = tuple(sorted(key))
-            variations_cache[key] = var.pk
+            variations_cache[key] = var.identity
 
         cleaned_value = []
 
@@ -303,7 +304,7 @@ class VariationsField(forms.ModelMultipleChoiceField):
                     # Hash the combination in the same way as in our cache above
                     key = []
                     for pair in pk.split(","):
-                        key.append(tuple([int(i) for i in pair.split(":")]))
+                        key.append(tuple([i for i in pair.split(":")]))
                     key = tuple(sorted(key))
 
                     if key in variations_cache:
@@ -316,15 +317,15 @@ class VariationsField(forms.ModelMultipleChoiceField):
 
                     # No ItemVariation present, create one!
                     var = ItemVariation()
-                    var.item = self.item
+                    var.item_id = self.item.identity
                     var.save()
                     # Add the values to the ItemVariation object
                     for pair in pk.split(","):
                         prop, value = pair.split(":")
                         try:
                             var.values.add(
-                                PropertyValue.objects.get(
-                                    pk=value,
+                                PropertyValue.objects.current.get(
+                                    identity=value,
                                     prop_id=prop
                                 )
                             )
@@ -334,16 +335,16 @@ class VariationsField(forms.ModelMultipleChoiceField):
                                 code='invalid_pk_value',
                                 params={'pk': value},
                             )
-                    variations_cache[key] = var.pk
-                    cleaned_value.append(str(var.pk))
+                    variations_cache[key] = var.identity
+                    cleaned_value.append(str(var.identity))
                 else:
                     # An ItemVariation id was given
                     cleaned_value.append(pk)
 
-        qs = ItemVariation.objects.filter(item=self.item, pk__in=cleaned_value)
+        qs = self.item.variations.current.filter(identity__in=cleaned_value)
 
         # Re-check for consistency
-        pks = set(force_text(getattr(o, "pk")) for o in qs)
+        pks = set(force_text(getattr(o, "identity")) for o in qs)
         for val in cleaned_value:
             if force_text(val) not in pks:
                 raise ValidationError(

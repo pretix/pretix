@@ -10,7 +10,7 @@ class EventList(ListView):
     template_name = 'tixlcontrol/events/index.html'
 
     def get_queryset(self):
-        return Event.objects.filter(
+        return Event.objects.current.filter(
             permitted__id__exact=self.request.user.pk
         ).prefetch_related(
             "organizer",

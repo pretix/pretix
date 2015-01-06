@@ -5,17 +5,16 @@ class VariationDict(dict):
     returned by ``Item.get_all_variations()`` to avoid duplicate code in the
     code calling this method.
     """
+    IGNORE_KEYS = ('variation', 'key')
 
-    def relevant_items(self) -> "list[(int, PropertyValue)]":
+    def relevant_items(self) -> "list[(str, PropertyValue)]":
         """
         Iterate over all items with numeric keys.
 
         This is in use because the variation dictionaries use property ids
         as key and have some special keys like 'variation'.
         """
-        for i in self.items():
-            if type(i[0]) is int:
-                yield i
+        return (i for i in self.items() if i[0] not in self.IGNORE_KEYS)
 
     def relevant_values(self) -> "list[PropertyValue]":
         """
@@ -24,9 +23,7 @@ class VariationDict(dict):
         This is in use because the variation dictionaries use property ids
         as key and have some special keys like 'variation'.
         """
-        for i in self.items():
-            if type(i[0]) is int:
-                yield i[1]
+        return (i[1] for i in self.items() if i[0] not in self.IGNORE_KEYS)
 
     def identify(self) -> str:
         """

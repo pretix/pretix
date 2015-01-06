@@ -32,11 +32,11 @@
 		<tbody>
 			{% for q in quotas %}
 			<tr>
-				<td><strong><a href="{% url "control:event.items.quotas.edit" organizer=request.event.organizer.slug event=request.event.slug quota=q.pk %}">{{ q.name }}</a></strong></td>
+				<td><strong><a href="{% url "control:event.items.quotas.edit" organizer=request.event.organizer.slug event=request.event.slug quota=q.identity %}">{{ q.name }}</a></strong></td>
 				<td></td>
 				<td>{{ q.size }}</td>
                 <td></td>
-				<td class="text-right"><a href="{% url "control:event.items.quotas.delete" organizer=request.event.organizer.slug event=request.event.slug quota=q.pk %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></td>
+				<td class="text-right"><a href="{% url "control:event.items.quotas.delete" organizer=request.event.organizer.slug event=request.event.slug quota=q.identity %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></td>
 			</tr>
 			{% endfor %}
 		</tbody>

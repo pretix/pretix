@@ -30,7 +30,7 @@ class LocaleMiddleware(BaseLocaleMiddleware):
         url = resolve(request.path_info)
         if 'event' in url.kwargs and 'organizer' in url.kwargs:
             try:
-                request.event = Event.objects.get(
+                request.event = Event.objects.current.get(
                     slug=url.kwargs['event'],
                     organizer__slug=url.kwargs['organizer'],
                 )

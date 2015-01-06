@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import date as _date
 from django.core.validators import RegexValidator
+from versions.models import Versionable, VersionedForeignKey, VersionedManyToManyField
 
 from tixlbase.types import VariationDict
 
@@ -141,7 +142,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             return self.username
 
 
-class Organizer(models.Model):
+class Organizer(Versionable):
     """
     This model represents an entity organizing events, like a company.
     Any organizer has a unique slug, which is a short name (alphanumeric,
@@ -165,13 +166,13 @@ class Organizer(models.Model):
         return self.name
 
 
-class OrganizerPermission(models.Model):
+class OrganizerPermission(Versionable):
     """
     The relation between an Organizer and an User who has permissions to
     access an organizer profile.
     """
 
-    organizer = models.ForeignKey(Organizer)
+    organizer = VersionedForeignKey(Organizer)
     user = models.ForeignKey(User, related_name="organizer_perms")
     can_create_events = models.BooleanField(
         default=True,
@@ -181,7 +182,6 @@ class OrganizerPermission(models.Model):
     class Meta:
         verbose_name = _("Organizer permission")
         verbose_name_plural = _("Organizer permissions")
-        unique_together = (("organizer", "user"),)
 
     def __str__(self):
         return _("%(name)s on %(object)s") % {
@@ -190,7 +190,7 @@ class OrganizerPermission(models.Model):
         }
 
 
-class Event(models.Model):
+class Event(Versionable):
     """
     This model represents an event. An event is anything you can buy
     tickets for. It belongs to one orgnaizer and has a name and a slug,
@@ -216,8 +216,8 @@ class Event(models.Model):
     matter when they were ordered (and thus, ignoring payment_term_days).
     """
 
-    organizer = models.ForeignKey(Organizer, related_name="events",
-                                  on_delete=models.PROTECT)
+    organizer = VersionedForeignKey(Organizer, related_name="events",
+                                    on_delete=models.PROTECT)
     name = models.CharField(max_length=200,
                             verbose_name=_("Name"))
     slug = models.CharField(
@@ -284,7 +284,7 @@ class Event(models.Model):
     class Meta:
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
-        unique_together = (("organizer", "slug"),)
+        # unique_together = (("organizer", "slug"),)  # TODO: Enforce manually
         ordering = ("date_from", "name")
 
     def __str__(self):
@@ -319,13 +319,13 @@ class Event(models.Model):
         return EventRelatedCache(self)
 
 
-class EventPermission(models.Model):
+class EventPermission(Versionable):
     """
     The relation between an Event and an User who has permissions to
     access an event.
     """
 
-    event = models.ForeignKey(Event)
+    event = VersionedForeignKey(Event)
     user = models.ForeignKey(User, related_name="event_perms")
     can_change_settings = models.BooleanField(
         default=True,
@@ -339,7 +339,6 @@ class EventPermission(models.Model):
     class Meta:
         verbose_name = _("Event permission")
         verbose_name_plural = _("Event permissions")
-        unique_together = (("event", "user"),)
 
     def __str__(self):
         return _("%(name)s on %(object)s") % {
@@ -348,11 +347,11 @@ class EventPermission(models.Model):
         }
 
 
-class ItemCategory(models.Model):
+class ItemCategory(Versionable):
     """
     Items can be sorted into categories
     """
-    event = models.ForeignKey(
+    event = VersionedForeignKey(
         Event,
         on_delete=models.CASCADE,
         related_name='categories',
@@ -373,20 +372,25 @@ class ItemCategory(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
         if self.event:
             self.event.get_cache().clear()
-        return super().save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.event:
+            self.event.get_cache().clear()
 
 
-class Property(models.Model):
+class Property(Versionable):
     """
     A property is a modifier which can be applied to an
     Item. For example 'Size' would be a property associated
     with the item 'T-Shirt'.
     """
 
-    event = models.ForeignKey(
+    event = VersionedForeignKey(
         Event,
         related_name="properties",
     )
@@ -402,19 +406,24 @@ class Property(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
         if self.event:
             self.event.get_cache().clear()
-        return super().save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.event:
+            self.event.get_cache().clear()
 
 
-class PropertyValue(models.Model):
+class PropertyValue(Versionable):
     """
     A value of a property. If the property would be 'T-Shirt size',
     this could be 'M' or 'L'
     """
 
-    prop = models.ForeignKey(
+    prop = VersionedForeignKey(
         Property,
         on_delete=models.CASCADE,
         related_name="values"
@@ -435,13 +444,18 @@ class PropertyValue(models.Model):
     def __str__(self):
         return "%s: %s" % (self.prop.name, self.value)
 
-    def save(self, *args, **kwargs):
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
         if self.prop:
             self.prop.event.get_cache().clear()
-        return super().save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.prop:
+            self.prop.event.get_cache().clear()
 
 
-class Question(models.Model):
+class Question(Versionable):
     """
     A question is an input field that can be used to extend a ticket
     by custom information, e.g. "Attendee name" or "Attendee age".
@@ -457,7 +471,7 @@ class Question(models.Model):
         (TYPE_BOOLEAN, _("Yes/No")),
     )
 
-    event = models.ForeignKey(
+    event = VersionedForeignKey(
         Event,
         related_name="questions",
     )
@@ -481,13 +495,18 @@ class Question(models.Model):
     def __str__(self):
         return self.question
 
-    def save(self, *args, **kwargs):
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
         if self.event:
             self.event.get_cache().clear()
-        return super().save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.event:
+            self.event.get_cache().clear()
 
 
-class Item(models.Model):
+class Item(Versionable):
     """
     An item is a thing which can be sold. It belongs to an
     event and may or may not belong to a category.
@@ -499,13 +518,13 @@ class Item(models.Model):
     inconsistencies. Instead, they have an attribute "deleted".
     Deleted items will not be shown anywhere.
     """
-    event = models.ForeignKey(
+    event = VersionedForeignKey(
         Event,
         on_delete=models.PROTECT,
         related_name="items",
         verbose_name=_("Event"),
     )
-    category = models.ForeignKey(
+    category = VersionedForeignKey(
         ItemCategory,
         on_delete=models.PROTECT,
         related_name="items",
@@ -540,7 +559,7 @@ class Item(models.Model):
         verbose_name=_("Taxes included in percent"),
         max_digits=7, decimal_places=2
     )
-    properties = models.ManyToManyField(
+    properties = VersionedManyToManyField(
         Property,
         related_name='items',
         verbose_name=_("Properties"),
@@ -551,7 +570,7 @@ class Item(models.Model):
             + '\'Variations\' tab to configure the details.'
         )
     )
-    questions = models.ManyToManyField(
+    questions = VersionedManyToManyField(
         Question,
         related_name='items',
         verbose_name=_("Questions"),
@@ -570,14 +589,16 @@ class Item(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         if self.event:
             self.event.get_cache().clear()
-        return super().save(*args, **kwargs)
 
     def delete(self):
         self.deleted = True
         self.active = False
-        return super().save()
+        super().save()
+        if self.event:
+            self.event.get_cache().clear()
 
     def get_all_variations(self, use_cache: bool=False) -> "list[VariationDict]":
         """
@@ -593,26 +614,26 @@ class Item(models.Model):
         if use_cache and hasattr(self, '_get_all_variations_cache'):
             return self._get_all_variations_cache
 
-        all_variations = self.variations.all().prefetch_related("values")
-        all_properties = self.properties.all().prefetch_related("values")
+        all_variations = self.variations.current.all().prefetch_related("values")
+        all_properties = self.properties.current.all().prefetch_related("values")
         variations_cache = {}
         for var in all_variations:
             key = []
-            for v in var.values.all():
-                key.append((v.prop_id, v.pk))
+            for v in var.values.current.all():
+                key.append((v.prop_id, v.identity))
             key = tuple(sorted(key))
             variations_cache[key] = var
 
         result = []
-        for comb in product(*[prop.values.all() for prop in all_properties]):
+        for comb in product(*[prop.values.current.all() for prop in all_properties]):
             if len(comb) == 0:
                 result.append(VariationDict())
                 continue
             key = []
             var = VariationDict()
             for v in comb:
-                key.append((v.prop.pk, v.pk))
-                var[v.prop.pk] = v
+                key.append((v.prop.identity, v.identity))
+                var[v.prop.identity] = v
             key = tuple(sorted(key))
             if key in variations_cache:
                 var['variation'] = variations_cache[key]
@@ -622,7 +643,7 @@ class Item(models.Model):
         return result
 
 
-class ItemVariation(models.Model):
+class ItemVariation(Versionable):
     """
     A variation is an item combined with values for all properties
     associated with the item. For example, if your item is 'T-Shirt'
@@ -641,11 +662,11 @@ class ItemVariation(models.Model):
 
     Restrictions can be not only set to items but also directly to variations.
     """
-    item = models.ForeignKey(
+    item = VersionedForeignKey(
         Item,
         related_name='variations'
     )
-    values = models.ManyToManyField(
+    values = VersionedManyToManyField(
         PropertyValue,
         related_name='variations',
     )
@@ -663,13 +684,18 @@ class ItemVariation(models.Model):
         verbose_name = _("Item variation")
         verbose_name_plural = _("Item variations")
 
-    def save(self, *args, **kwargs):
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
         if self.item:
             self.item.event.get_cache().clear()
-        return super().save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.item:
+            self.item.event.get_cache().clear()
 
 
-class VariationsField(models.ManyToManyField):
+class VariationsField(VersionedManyToManyField):
     """
     This is a ManyToManyField using the tixlcontrol.views.forms.VariationsField
     form field by default.
@@ -690,31 +716,31 @@ class VariationsField(models.ManyToManyField):
             initial = defaults['initial']
             if callable(initial):
                 initial = initial()
-            defaults['initial'] = [i.pk for i in initial]
+            defaults['initial'] = [i.identity for i in initial]
         # Skip ManyToManyField in dependency chain
         return super(RelatedField, self).formfield(**defaults)
 
 
-class BaseRestriction(models.Model):
+class BaseRestriction(Versionable):
     """
     A restriction is the abstract concept of a rule that limits the availability
     of Items or ItemVariations. This model is just an abstract base class to be
     extended by restriction plugins.
     """
-    event = models.ForeignKey(
+    event = VersionedForeignKey(
         Event,
         on_delete=models.CASCADE,
         related_name="restrictions_%(app_label)s_%(class)s",
         verbose_name=_("Event"),
     )
-    item = models.ForeignKey(
+    item = VersionedForeignKey(
         Item,
         blank=True, null=True,
         verbose_name=_("Item"),
         related_name="restrictions_%(app_label)s_%(class)s",
     )
     variations = VariationsField(
-        ItemVariation,
+        'tixlbase.ItemVariation',
         blank=True,
         verbose_name=_("Variations"),
         related_name="restrictions_%(app_label)s_%(class)s",
@@ -725,13 +751,18 @@ class BaseRestriction(models.Model):
         verbose_name = _("Restriction")
         verbose_name_plural = _("Restrictions")
 
-    def save(self, *args, **kwargs):
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
         if self.event:
             self.event.get_cache().clear()
-        return super().save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.event:
+            self.event.get_cache().clear()
 
 
-class Quota(models.Model):
+class Quota(Versionable):
     """
     A quota is a "pool of tickets". It is there to limit the number of items
     of a certain type to be sold. For example, you could have a quota of 500
@@ -750,7 +781,7 @@ class Quota(models.Model):
     implementation specific and are considered private. It is planned that they
     are being used as a fallback solution if redis is not available.
     """
-    event = models.ForeignKey(
+    event = VersionedForeignKey(
         Event,
         on_delete=models.CASCADE,
         related_name="quotas",
@@ -763,7 +794,7 @@ class Quota(models.Model):
     size = models.PositiveIntegerField(
         verbose_name=_("Total capacity")
     )
-    items = models.ManyToManyField(
+    items = VersionedManyToManyField(
         Item,
         verbose_name=_("Item"),
         blank=True
@@ -790,7 +821,7 @@ class Quota(models.Model):
         return self.name
 
 
-class Order(models.Model):
+class Order(Versionable):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
     several OrderPositions and is connected to an user. It has an
@@ -817,7 +848,7 @@ class Order(models.Model):
         choices=STATUS_CHOICE,
         verbose_name=_("Status")
     )
-    event = models.ForeignKey(
+    event = VersionedForeignKey(
         Event,
         verbose_name=_("Event")
     )
@@ -848,13 +879,13 @@ class Order(models.Model):
         verbose_name_plural = _("Orders")
 
 
-class QuestionAnswer(models.Model):
+class QuestionAnswer(Versionable):
     """
     The answer to a Question, connected to an OrderPosition or CartPosition
     """
     orderposition = models.ForeignKey('OrderPosition', null=True, blank=True)
     cartposition = models.ForeignKey('CartPosition', null=True, blank=True)
-    question = models.ForeignKey(Question)
+    question = VersionedForeignKey(Question)
     answer = models.TextField()
 
 
@@ -866,15 +897,15 @@ class OrderPosition(models.Model):
     Important: An OrderPosition holds its total monetary value, as an order is a
     piece of 'history' and must not change due to a change in item prices.
     """
-    order = models.ForeignKey(
+    order = VersionedForeignKey(
         Order,
         verbose_name=_("Order")
     )
-    item = models.ForeignKey(
+    item = VersionedForeignKey(
         Item,
         verbose_name=_("Item")
     )
-    variation = models.ForeignKey(
+    variation = VersionedForeignKey(
         ItemVariation,
         null=True, blank=True,
         verbose_name=_("Variation")
@@ -883,7 +914,7 @@ class OrderPosition(models.Model):
         decimal_places=2, max_digits=10,
         verbose_name=_("Price")
     )
-    answers = models.ManyToManyField(
+    answers = VersionedManyToManyField(
         Question,
         through=QuestionAnswer,
         verbose_name=_("Answers")
@@ -903,7 +934,7 @@ class CartPosition(models.Model):
     as we do not want to throw out users while they're clicking through
     the checkout process.
     """
-    event = models.ForeignKey(
+    event = VersionedForeignKey(
         Event,
         verbose_name=_("Event")
     )
@@ -915,11 +946,11 @@ class CartPosition(models.Model):
         max_length=255, null=True, blank=True,
         verbose_name=_("Session key")
     )
-    item = models.ForeignKey(
+    item = VersionedForeignKey(
         Item,
         verbose_name=_("Item")
     )
-    variation = models.ForeignKey(
+    variation = VersionedForeignKey(
         ItemVariation,
         null=True, blank=True,
         verbose_name=_("Variation")

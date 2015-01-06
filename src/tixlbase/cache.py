@@ -22,7 +22,7 @@ class EventRelatedCache:
     def __init__(self, event: Event, cache: str='default'):
         self.cache = caches[cache]
         self.event = event
-        self.prefixkey = 'event:%d' % self.event.pk
+        self.prefixkey = 'event:%s' % self.event.pk
 
     def _prefix_key(self, original_key: str) -> str:
         # Race conditions can happen here, but should be very very rare.
@@ -34,7 +34,7 @@ class EventRelatedCache:
         if prefix is None:
             prefix = int(time.time())
             self.cache.set(self.prefixkey, prefix)
-        key = 'event:%d:%d:%s' % (self.event.pk, prefix, original_key)
+        key = 'event:%s:%d:%s' % (self.event.pk, prefix, original_key)
         if len(key) > 200:  # Hash long keys, as memcached has a length limit
             # TODO: Use a more efficient, non-cryptographic hash algorithm
             key = hashlib.sha256(key.encode("UTF-8")).hexdigest()

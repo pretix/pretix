@@ -4,9 +4,9 @@
 {% block content %}
 	<h1>{% trans "Modify item:" %} {{ item.name }}</h1>
 	<ul class="nav nav-pills">
-		<li {% if "event.item" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=item.pk %}">{% trans "General information" %}</a></li>
-		<li {% if "event.item.variations" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=item.pk %}">{% trans "Variations" %}</a></li>
-		<li {% if "event.item.restrictions" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.restrictions' organizer=request.event.organizer.slug event=request.event.slug item=item.pk %}">{% trans "Restrictions" %}</a></li>
+		<li {% if "event.item" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "General information" %}</a></li>
+		<li {% if "event.item.variations" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "Variations" %}</a></li>
+		<li {% if "event.item.restrictions" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.restrictions' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "Restrictions" %}</a></li>
 	</ul>
 	{% block inside %}
 	{% endblock %}

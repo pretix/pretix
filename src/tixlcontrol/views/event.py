@@ -7,12 +7,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 
 from pytz import common_timezones
+from tixlbase.forms import VersionedModelForm
 
 from tixlbase.models import Event
 from tixlcontrol.permissions import EventPermissionRequiredMixin
 
 
-class EventUpdateForm(forms.ModelForm):
+class EventUpdateForm(VersionedModelForm):
 
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
