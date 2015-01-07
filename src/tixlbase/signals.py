@@ -4,6 +4,11 @@ from django.dispatch.dispatcher import NO_RECEIVERS
 
 
 class EventPluginSignal(django.dispatch.Signal):
+    """
+    This is an extension to Django's built-in signals which differs in a way that it sends
+    out it's events only to receivers which belong to plugins that are enabled for the given
+    Event.
+    """
 
     def send(self, sender, **named):
         """
@@ -34,6 +39,11 @@ class EventPluginSignal(django.dispatch.Signal):
                 responses.append((receiver, response))
         return responses
 
+"""
+This signal is sent out every time some component of tixl wants to know whether a specific
+item or variation is available for sell. The item will only be sold, if all (active) receivers
+return a positive result (see plugin API documentation for details).
+"""
 determine_availability = EventPluginSignal(
     providing_args=["item", "variations", "context", "cache"]
 )

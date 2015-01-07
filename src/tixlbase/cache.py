@@ -15,8 +15,9 @@ class EventRelatedCache:
     main purpose of this is to be able to flush all cached data related
     to this event at once.
 
-    The object is stateless, all state is in the cache, so you can
-    instantiate it as many times as you want.
+    The EventRelatedCache instance itself is stateless, all state is
+    stored in the cache backend, so you can instantiate this class as many
+    times as you want.
     """
 
     def __init__(self, event: Event, cache: str='default'):

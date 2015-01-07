@@ -13,6 +13,14 @@ from tixlbase.models import ItemVariation, PropertyValue, Item
 
 
 class TolerantFormsetModelForm(VersionedModelForm):
+    """
+    This is equivalent to a normal VersionedModelForm, but works around a problem that
+    arises when the form is used inside a FormSet with can_order=True and django-formset-js
+    enabled. In this configuration, even empty "extra" forms might have an ORDER value
+    sent and Django marks the form as empty and raises validation errors because the other
+    fields have not been filled.
+    """
+
     def has_changed(self) -> bool:
         """
         Returns True if data differs from initial. Contrary to the default
@@ -99,6 +107,10 @@ class RestrictionInlineFormset(forms.BaseInlineFormSet):
 
 
 class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
+    """
+    This is the default renderer for a VariationsField. Based on the choice input class
+    this renders a list or a matrix of checkboxes/radio buttons/...
+    """
 
     def __init__(self, name, value, attrs, choices):
         self.name = name
@@ -207,10 +219,17 @@ class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
 
 
 class VariationsCheckboxRenderer(VariationsFieldRenderer):
+    """
+    This is the same as VariationsFieldRenderer but with the choice input class
+    forced to checkboxes
+    """
     choice_input_class = forms.widgets.CheckboxChoiceInput
 
 
 class VariationsSelectMultiple(forms.CheckboxSelectMultiple):
+    """
+    This is the default widget for a VariationsField
+    """
     renderer = VariationsCheckboxRenderer
     _empty_value = []
 
@@ -240,7 +259,7 @@ class VariationsField(forms.ModelMultipleChoiceField):
         """
         We can't use a normal QuerySet as there theoretically might be
         two types of variations: Some who already have a ItemVariation
-        object associated with tham and some who don't. We therefore use
+        object associated with them and some who don't. We therefore use
         the item's ``get_all_variations`` method. In the first case, we
         use the ItemVariation objects primary key as our choice, key,
         in the latter case we use a string constructed from the values

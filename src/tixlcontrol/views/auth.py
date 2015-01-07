@@ -9,8 +9,8 @@ from django.contrib.auth import logout as auth_logout
 
 class AuthenticationForm(BaseAuthenticationForm):
     """
-    The login form, providing an email and password field. The
-    form does already implement validation for correct user data.
+    The login form, providing an email and password field. The form already implements
+    validation for correct user data.
     """
     email = forms.EmailField(label=_("E-mail address"), max_length=254)
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
@@ -68,5 +68,8 @@ def login(request):
 
 
 def logout(request):
+    """
+    Log the user out of the current session, then redirect to login page.
+    """
     auth_logout(request)
     return redirect('control:auth.login')

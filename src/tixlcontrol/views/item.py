@@ -47,7 +47,7 @@ class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
     permission = 'can_change_items'
     context_object_name = 'category'
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None) -> ItemCategory:
         url = resolve(self.request.path_info)
         return self.request.event.categories.current.get(
             identity=url.kwargs['category']
@@ -62,7 +62,7 @@ class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
         self.object.delete()
         return HttpResponseRedirect(success_url)
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.items.categories', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -76,13 +76,13 @@ class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
     permission = 'can_change_items'
     context_object_name = 'category'
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None) -> ItemCategory:
         url = resolve(self.request.path_info)
         return self.request.event.categories.current.get(
             identity=url.kwargs['category']
         )
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.items.categories', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -96,7 +96,7 @@ class CategoryCreate(EventPermissionRequiredMixin, CreateView):
     permission = 'can_change_items'
     context_object_name = 'category'
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.items.categories', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -116,7 +116,12 @@ class CategoryList(ListView):
         return self.request.event.categories.current.all()
 
 
-def category_move(request, organizer, event, category, up=True):
+def category_move(request, category, up=True):
+    """
+    This is a helper function to avoid duplicating code in category_move_up and
+    category_move_down. It takes a category and a direction and then tries to bring
+    all categories for this event in a new order.
+    """
     category = request.event.categories.current.get(
         identity=category
     )
@@ -136,7 +141,7 @@ def category_move(request, organizer, event, category, up=True):
 
 @event_permission_required("can_change_items")
 def category_move_up(request, organizer, event, category):
-    category_move(request, organizer, event, category, up=True)
+    category_move(request, category, up=True)
     return redirect(reverse('control:event.items.categories', kwargs={
         'organizer': request.event.organizer.slug,
         'event': request.event.slug,
@@ -145,7 +150,7 @@ def category_move_up(request, organizer, event, category):
 
 @event_permission_required("can_change_items")
 def category_move_down(request, organizer, event, category):
-    category_move(request, organizer, event, category, up=False)
+    category_move(request, category, up=False)
     return redirect(reverse('control:event.items.categories', kwargs={
         'organizer': request.event.organizer.slug,
         'event': request.event.slug,
@@ -188,13 +193,13 @@ class PropertyUpdate(EventPermissionRequiredMixin, UpdateView):
     permission = 'can_change_items'
     context_object_name = 'property'
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None) -> Property:
         url = resolve(self.request.path_info)
         return self.request.event.properties.current.get(
             identity=url.kwargs['property']
         )
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         url = resolve(self.request.path_info)
         return reverse('control:event.items.properties.edit', kwargs={
             'organizer': self.request.event.organizer.slug,
@@ -214,7 +219,7 @@ class PropertyUpdate(EventPermissionRequiredMixin, UpdateView):
         formset = formsetclass(**kwargs)
         return formset
 
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
         context['formset'] = self.get_formset()
         return context
@@ -249,7 +254,7 @@ class PropertyCreate(EventPermissionRequiredMixin, CreateView):
     permission = 'can_change_items'
     context_object_name = 'property'
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.items.properties', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -265,7 +270,7 @@ class PropertyCreate(EventPermissionRequiredMixin, CreateView):
         formset = formsetclass(**self.get_form_kwargs())
         return formset
 
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs) -> dict:
         self.object = None
         context = super().get_context_data(*args, **kwargs)
         context['formset'] = self.get_formset()
@@ -297,16 +302,16 @@ class PropertyDelete(EventPermissionRequiredMixin, DeleteView):
     permission = 'can_change_items'
     context_object_name = 'property'
 
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
         context['dependent'] = self.get_object().items.current.all()
         context['possible'] = self.is_allowed()
         return context
 
-    def is_allowed(self):
+    def is_allowed(self) -> bool:
         return self.get_object().items.current.count() == 0
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None) -> Property:
         if not hasattr(self, 'object') or not self.object:
             url = resolve(self.request.path_info)
             self.object = self.request.event.properties.current.get(
@@ -322,7 +327,7 @@ class PropertyDelete(EventPermissionRequiredMixin, DeleteView):
         else:
             return HttpResponseForbidden()
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.items.properties', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -356,13 +361,13 @@ class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
     permission = 'can_change_items'
     context_object_name = 'question'
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None) -> Question:
         url = resolve(self.request.path_info)
         return self.request.event.questions.current.get(
             identity=url.kwargs['question']
         )
 
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
         context['dependent'] = list(self.get_object().items.current.all())
         return context
@@ -373,7 +378,7 @@ class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
         self.object.delete()
         return HttpResponseRedirect(success_url)
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.items.questions', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -387,13 +392,13 @@ class QuestionUpdate(EventPermissionRequiredMixin, UpdateView):
     permission = 'can_change_items'
     context_object_name = 'question'
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None) -> Question:
         url = resolve(self.request.path_info)
         return self.request.event.questions.current.get(
             identity=url.kwargs['question']
         )
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.items.questions', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -407,7 +412,7 @@ class QuestionCreate(EventPermissionRequiredMixin, CreateView):
     permission = 'can_change_items'
     context_object_name = 'question'
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.items.questions', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -447,7 +452,7 @@ class QuotaCreate(EventPermissionRequiredMixin, CreateView):
     permission = 'can_change_items'
     context_object_name = 'quota'
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.items.quotas', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -465,13 +470,13 @@ class QuotaUpdate(EventPermissionRequiredMixin, UpdateView):
     permission = 'can_change_items'
     context_object_name = 'quota'
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None) -> Quota:
         url = resolve(self.request.path_info)
         return self.request.event.quotas.current.get(
             identity=url.kwargs['quota']
         )
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.items.quotas', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -484,13 +489,13 @@ class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
     permission = 'can_change_items'
     context_object_name = 'quota'
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None) -> Quota:
         url = resolve(self.request.path_info)
         return self.request.event.quotas.current.get(
             identity=url.kwargs['quota']
         )
 
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
         context['dependent'] = list(self.get_object().items.current.all())
         return context
@@ -501,7 +506,7 @@ class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
         self.object.delete()
         return HttpResponseRedirect(success_url)
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.items.quotas', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -512,7 +517,7 @@ class ItemDetailMixin(SingleObjectMixin):
     model = Item
     context_object_name = 'item'
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None) -> Item:
         if not hasattr(self, 'object') or not self.object:
             url = resolve(self.request.path_info)
             self.item = self.request.event.items.current.get(
@@ -551,7 +556,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
     template_name = 'tixlcontrol/item/index.html'
     permission = 'can_change_items'
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.item', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -578,7 +583,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
         super().__init__(*args, **kwargs)
         self.item = None
 
-    def get_form(self, variation, data=None):
+    def get_form(self, variation, data=None) -> ItemVariationForm:
         """
         Return the dict for one given variation. Variations are expected to be
         dictionaries in the format of Item.get_all_variations()
@@ -603,7 +608,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
         form.values = values
         return form
 
-    def get_forms(self):
+    def get_forms(self) -> tuple:
         """
         Returns one form per possible item variation. The forms are returned
         twice: The first entry in the returned tuple contains a 1-, 2- or
@@ -705,7 +710,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
         # TODO: Redirect to success message
         return self.render_to_response(context)
 
-    def get_template_names(self):
+    def get_template_names(self) -> "List[str]":
         if self.dimension == 0:
             return ['tixlcontrol/item/variations_0d.html']
         elif self.dimension == 1:
@@ -713,7 +718,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
         elif self.dimension >= 2:
             return ['tixlcontrol/item/variations_nd.html']
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         context['forms'] = self.forms
         context['properties'] = self.properties
@@ -768,12 +773,12 @@ class ItemRestrictions(ItemDetailMixin, EventPermissionRequiredMixin, TemplateVi
             context = self.get_context_data(object=self.object)
             return self.render_to_response(context)
 
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
         context['formsets'] = self.formsets
         return context
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse('control:event.item.restrictions', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,

@@ -70,7 +70,7 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
     permission = 'can_change_settings'
     template_name = 'tixlcontrol/event/plugins.html'
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None) -> Event:
         return self.request.event
 
     def get_context_data(self, *args, **kwargs) -> dict:

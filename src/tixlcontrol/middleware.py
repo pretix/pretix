@@ -13,8 +13,7 @@ from tixlbase.models import Event
 class PermissionMiddleware:
 
     """
-    This middleware enforces all requests to the control app
-    to require login.
+    This middleware enforces all requests to the control app to require login.
     Additionally, it enforces all requests to "control:event." URLs
     to be for an event the user has basic access to.
     """
@@ -56,4 +55,5 @@ class PermissionMiddleware:
                     organizer__slug=url.kwargs['organizer'],
                 )
             except Event.DoesNotExist:
-                return HttpResponseNotFound(_("The selected event was not found or you have no permission to administrate it."))
+                return HttpResponseNotFound(_("The selected event was not found or you "
+                                              "have no permission to administrate it."))

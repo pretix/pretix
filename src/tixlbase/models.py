@@ -349,7 +349,8 @@ class EventPermission(Versionable):
 
 class ItemCategory(Versionable):
     """
-    Items can be sorted into categories
+    Items can be sorted into categories, which only have a name and a
+    configurable order
     """
     event = VersionedForeignKey(
         Event,
@@ -385,9 +386,8 @@ class ItemCategory(Versionable):
 
 class Property(Versionable):
     """
-    A property is a modifier which can be applied to an
-    Item. For example 'Size' would be a property associated
-    with the item 'T-Shirt'.
+    A property is a modifier which can be applied to an Item. For example
+    'Size' would be a property associated with the item 'T-Shirt'.
     """
 
     event = VersionedForeignKey(

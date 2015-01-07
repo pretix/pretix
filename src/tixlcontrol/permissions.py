@@ -5,6 +5,10 @@ from tixlbase.models import EventPermission
 
 
 def event_permission_required(permission):
+    """
+    This view decorator rejects all requests with a 403 response which are not from
+    users having the given permission for the event the request is associated with.
+    """
     def decorator(function):
         def wrapper(request, *args, **kw):
             if not request.user.is_authenticated():
@@ -26,6 +30,10 @@ def event_permission_required(permission):
 
 
 class EventPermissionRequiredMixin:
+    """
+    This mixin is equivalent to the event_permission_required view decorator but
+    is in a form suitable for class-based views.
+    """
     permission = ''
 
     @classmethod
