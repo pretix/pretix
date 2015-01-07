@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-07 18:12+0200\n"
-"PO-Revision-Date: 2014-10-07 18:18+0100\n"
+"POT-Creation-Date: 2014-10-07 18:27+0200\n"
+"PO-Revision-Date: 2014-10-07 18:28+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -480,6 +480,11 @@ msgstr "Deaktivieren"
 #: tixlcontrol/templates/tixlcontrol/event/plugins.html:25
 msgid "Enable"
 msgstr "Aktivieren"
+
+#: tixlcontrol/templates/tixlcontrol/event/plugins.html:32
+#, python-format
+msgid "Version %(plugin.version)s by <em>%(plugin.author)s</em>"
+msgstr "Version %(plugin.version)s von <em>%(plugin.author)s</em>"
 
 #: tixlcontrol/templates/tixlcontrol/event/settings.html:13
 #: tixlcontrol/templates/tixlcontrol/item/base.html:7
