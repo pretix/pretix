@@ -7,8 +7,7 @@ from django.utils.translation.trans_real import (
     get_supported_language_variant,
     parse_accept_lang_header,
     language_code_re,
-    check_for_language,
-    _supported
+    check_for_language
 )
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.utils import translation, timezone
@@ -16,6 +15,8 @@ from collections import OrderedDict
 from django.utils.cache import patch_vary_headers
 
 from tixlbase.models import Event
+
+_supported = None
 
 
 class LocaleMiddleware(BaseLocaleMiddleware):
@@ -29,7 +30,7 @@ class LocaleMiddleware(BaseLocaleMiddleware):
         url = resolve(request.path_info)
         if 'event' in url.kwargs and 'organizer' in url.kwargs:
             try:
-                request.event = Event.objects.get(
+                request.event = Event.objects.current.get(
                     slug=url.kwargs['event'],
                     organizer__slug=url.kwargs['organizer'],
                 )
@@ -61,7 +62,7 @@ class LocaleMiddleware(BaseLocaleMiddleware):
         return response
 
 
-def get_language_from_request(request):
+def get_language_from_request(request) -> str:
     """
     Analyzes the request to find what language the user wants the system to
     show. Only languages listed in settings.LANGUAGES are taken into account.

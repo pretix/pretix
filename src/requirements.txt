@@ -3,6 +3,7 @@ Django>=1.7
 pytz
 django-bootstrap3
 -e git+https://github.com/tixl/django-formset-js.git@master#egg=django-formset-js
+-e git+https://github.com/tixl/cleanerversion.git@tixl#egg=cleanerversion
 
 # Deployment / static file compilation requirements
 django-compressor
@@ -25,4 +26,7 @@ pep8-naming
 flake8
 coveralls
 coverage
-
+selenium
+PyVirtualDisplay
+-e git+https://github.com/tixl/sauceclient.git@master#egg=sauceclient
+travis

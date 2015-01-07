@@ -2,7 +2,6 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inside %}
-	<h2>{% trans "Variations" %}</h2>
 	<form action="" method="post">
 		{% csrf_token %}
 		<table class="table">
@@ -24,12 +23,10 @@
 				{% endfor %}
 			</tbody>
 		</table>
-		<div class="form-group">
-			<div class="col-sm-12">
-				<button type="submit" class="btn btn-primary">
-					{% trans "Save" %}
-				</button>
-			</div>
+		<div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
 		</div>
 	</form>
 	

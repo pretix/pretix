@@ -1,7 +1,12 @@
 from django.dispatch import receiver
 from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
+from django.forms.models import inlineformset_factory
 
 from tixlbase.signals import determine_availability
+from tixlbase.models import Item
+from tixlcontrol.views.forms import VariationsField, RestrictionInlineFormset, RestrictionForm
+from tixlcontrol.signals import restriction_formset
 
 from .models import TimeRestriction
 
@@ -15,8 +20,8 @@ def availability_handler(sender, **kwargs):
     context = kwargs['context']  # NOQA
 
     # Fetch all restriction objects applied to this item
-    restrictions = list(TimeRestriction.objects.filter(
-        items__in=(item,),
+    restrictions = list(TimeRestriction.objects.current.filter(
+        item=item,
     ).prefetch_related('variations'))
 
     # If we do not know anything about this item, we are done here.
@@ -57,8 +62,8 @@ def availability_handler(sender, **kwargs):
         price = None
 
         # Make up some unique key for this variation
-        cachekey = 'timerestriction:%d:%s' % (
-            item.pk,
+        cachekey = 'timerestriction:%s:%s' % (
+            item.identity,
             v.identify(),
         )
 
@@ -74,7 +79,7 @@ def availability_handler(sender, **kwargs):
 
         # Walk through all restriction objects applied to this item
         for restriction in restrictions:
-            applied_to = list(restriction.variations.all())
+            applied_to = list(restriction.variations.current.all())
 
             # Only take this restriction into consideration if it either
             # is directly applied to this variation OR is applied to all
@@ -83,8 +88,7 @@ def availability_handler(sender, **kwargs):
                 if 'variation' not in v or v['variation'] not in applied_to:
                     continue
 
-            if (restriction.timeframe_from <= now()
-                    and restriction.timeframe_to >= now()):
+            if restriction.timeframe_from <= now() <= restriction.timeframe_to:
                 # Selling this item is currently possible
                 available = True
                 # If multiple time frames are currently active, make sure to
@@ -105,3 +109,35 @@ def availability_handler(sender, **kwargs):
         )
 
     return variations
+
+
+class TimeRestrictionForm(RestrictionForm):
+
+    class Meta:
+        model = TimeRestriction
+        localized_fields = '__all__'
+        fields = [
+            'variations',
+            'timeframe_from',
+            'timeframe_to',
+            'price',
+        ]
+
+
+@receiver(restriction_formset)
+def formset_handler(sender, **kwargs):
+    formset = inlineformset_factory(
+        Item,
+        TimeRestriction,
+        formset=RestrictionInlineFormset,
+        form=TimeRestrictionForm,
+        can_order=False,
+        can_delete=True,
+        extra=0,
+    )
+
+    return {
+        'title': _('Restriction by time'),
+        'formsetclass': formset,
+        'prefix': 'timerestriction',
+    }

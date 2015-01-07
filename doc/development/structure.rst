@@ -7,7 +7,7 @@ Python source code
 All the source code lives in ``src/``, which has several subdirectories.
 
 tixl/
-    This directory contains the basic Django settings and URL routing. It is
+    This directory contains the basic Django settings and URL routing.
 
 tixlbase/
     This is the django app containing all the models and methods which are

@@ -2,8 +2,6 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inside %}
-	<h2>{% trans "General information" %}</h2>
-	
 	{% if "success" in request.GET %}
 		<div class="alert alert-success">
 			{% trans "Your changes have been saved." %}
@@ -29,12 +27,10 @@
 			{% bootstrap_field form.properties layout="horizontal" %}
 			{% bootstrap_field form.questions layout="horizontal" %}
 		</fieldset>
-		<div class="form-group">
-			<div class="col-sm-offset-2 col-sm-10">
-				<button type="submit" class="btn btn-primary">
-					{% trans "Save" %}
-				</button>
-			</div>
+		<div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
 		</div>
 	</form>
 {% endblock %}

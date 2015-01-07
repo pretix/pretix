@@ -95,8 +95,8 @@ to do nearly anything, there are a few obvious examples:
   a maximum number. You can use this either to stop selling tickets completely when your house
   is full or for creating limited 'VIP tickets'. We'll come to this again later.
 * A more advanced example is a restriction by user, for example reduced ticket prices for 
-  members who are members of a special group.
-* Arbitrary sophisticated features like coupon codes are also possible to be implemented using 
+  users who are members of a special group.
+* Arbitrary sophisticated features like coupon codes can also be implemented using 
   this feature.
 
 Any number of **restrictions** can be applied to the whole of a **item** or even to a specific 
@@ -139,7 +139,7 @@ special care in the implementation to never sell more tickets than allowed, even
 * The same quota can apply to multiple items and one item can be affected by multiple quotas, to
   enable both of the following features at the same time:
 
-  * You'll want to make sure you never have more then X people at your event, so you'll create a quota
+  * You'll want to make sure you never have more than X people at your event, so you'll create a quota
     applying to all ticket items.
   * You want to reduce the first Y tickets in price, so you'll create a restriction which is bound by
     a quota of Y and reduces the price.

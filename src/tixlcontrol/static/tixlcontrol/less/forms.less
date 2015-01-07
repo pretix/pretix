@@ -28,3 +28,40 @@ td > .form-group > .checkbox {
 .form-plugins .panel-title {
 	line-height: 34px;
 }
+
+.restriction-formset .variations label {
+    margin: 0;
+}
+
+.submit-group {
+    margin: 15px 0 0 0 !important;
+    padding: 15px;
+    background: #eeeeee;
+    text-align: right;
+    .btn-save {
+        .btn-lg;
+    }
+    .btn-cancel {
+        .pull-left;
+        .btn-lg;
+    }
+}
+
+.container ul.nav-pills {
+    margin: 20px 0;
+}
+
+.variation-matrix {
+    td .form-group, .checkbox {
+        margin: 0;
+    }
+}
+@media (min-width: @screen-sm-min) {
+    .variation-matrix > tbody > tr > td {
+        line-height: 34px;
+
+        input[type=checkbox] {
+            margin-top: 10px;
+        }
+    }
+}

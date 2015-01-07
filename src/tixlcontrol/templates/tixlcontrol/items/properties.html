@@ -29,8 +29,10 @@
 		<tbody>
 			{% for p in properties %}
 			<tr>
-				<td><strong><a href="{% url "control:event.items.properties.edit" organizer=request.event.organizer.slug event=request.event.slug property=p.pk %}">{{ p.name }}</a></strong></td>
-				<td class="text-right"><a href="{% url "control:event.items.properties.delete" organizer=request.event.organizer.slug event=request.event.slug property=p.pk %}"" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></td>
+				<td><strong><a href="
+				{% url "control:event.items.properties.edit" organizer=request.event.organizer.slug event=request.event.slug property=p.identity %}">{{ p.name }}</a></strong></td>
+				<td class="text-right"><a href="
+				{% url "control:event.items.properties.delete" organizer=request.event.organizer.slug event=request.event.slug property=p.identity %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></td>
 			</tr>
 			{% endfor %}
 		</tbody>

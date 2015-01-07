@@ -1,5 +1,5 @@
-API details
-===========
+Plugin API
+==========
 
 Contents:
 

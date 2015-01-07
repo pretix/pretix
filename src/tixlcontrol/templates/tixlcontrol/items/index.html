@@ -13,7 +13,8 @@
 		<tbody>
 			{% for i in items %}
 			<tr>
-				<td><strong><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.pk %}">{{ i.name }}</a></strong></td>
+				<td><strong><a href="
+				{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.identity %}">{{ i.name }}</a></strong></td>
 				<td>{{ i.category }}</td>
 			</tr>
 			{% endfor %}

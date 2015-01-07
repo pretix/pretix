@@ -46,7 +46,8 @@ class TimeRestrictionTest(TestCase):
             event=self.event,
             price=12
         )
-        r.items.add(self.item)
+        r.item = self.item
+        r.save()
         result = signals.availability_handler(
             self.event, item=self.item,
             variations=self.item.get_all_variations(),
@@ -64,7 +65,8 @@ class TimeRestrictionTest(TestCase):
             event=self.event,
             price=12
         )
-        r.items.add(self.item)
+        r.item = self.item
+        r.save()
         result = signals.availability_handler(
             self.event, item=self.item,
             variations=self.item.get_all_variations(),
@@ -91,7 +93,8 @@ class TimeRestrictionTest(TestCase):
             event=self.event,
             price=12
         )
-        r.items.add(self.item)
+        r.item = self.item
+        r.save()
         result = signals.availability_handler(
             self.event, item=self.item,
             variations=self.item.get_all_variations(),
@@ -108,14 +111,16 @@ class TimeRestrictionTest(TestCase):
             event=self.event,
             price=12
         )
-        r1.items.add(self.item)
+        r1.item = self.item
+        r1.save()
         r2 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=3),
             timeframe_to=now() + timedelta(days=5),
             event=self.event,
             price=8
         )
-        r2.items.add(self.item)
+        r2.item = self.item
+        r2.save()
         result = signals.availability_handler(
             self.event, item=self.item,
             variations=self.item.get_all_variations(),
@@ -133,14 +138,16 @@ class TimeRestrictionTest(TestCase):
             event=self.event,
             price=12
         )
-        r1.items.add(self.item)
+        r1.item = self.item
+        r1.save()
         r2 = TimeRestriction.objects.create(
             timeframe_from=now() + timedelta(days=1),
             timeframe_to=now() + timedelta(days=7),
             event=self.event,
             price=8
         )
-        r2.items.add(self.item)
+        r2.item = self.item
+        r2.save()
         result = signals.availability_handler(
             self.event, item=self.item,
             variations=self.item.get_all_variations(),
@@ -158,14 +165,16 @@ class TimeRestrictionTest(TestCase):
             event=self.event,
             price=12
         )
-        r1.items.add(self.item)
+        r1.item = self.item
+        r1.save()
         r2 = TimeRestriction.objects.create(
             timeframe_from=now() + timedelta(days=4),
             timeframe_to=now() + timedelta(days=7),
             event=self.event,
             price=8
         )
-        r2.items.add(self.item)
+        r2.item = self.item
+        r2.save()
         result = signals.availability_handler(
             self.event, item=self.item,
             variations=self.item.get_all_variations(),
@@ -183,14 +192,16 @@ class TimeRestrictionTest(TestCase):
             event=self.event,
             price=12
         )
-        r1.items.add(self.item)
+        r1.item = self.item
+        r1.save()
         r2 = TimeRestriction.objects.create(
             timeframe_from=now() + timedelta(days=4),
             timeframe_to=now() + timedelta(days=7),
             event=self.event,
             price=8
         )
-        r2.items.add(self.item)
+        r2.item = self.item
+        r2.save()
         result = signals.availability_handler(
             self.event, item=self.item,
             variations=self.item.get_all_variations(),
@@ -213,7 +224,8 @@ class TimeRestrictionTest(TestCase):
             event=self.event,
             price=12
         )
-        r1.items.add(self.item)
+        r1.item = self.item
+        r1.save()
         r1.variations.add(v1)
         result = signals.availability_handler(
             self.event, item=self.item,
@@ -241,14 +253,16 @@ class TimeRestrictionTest(TestCase):
             event=self.event,
             price=12
         )
-        r1.items.add(self.item)
+        r1.item = self.item
+        r1.save()
         r2 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() + timedelta(days=1),
             event=self.event,
             price=8
         )
-        r2.items.add(self.item)
+        r2.item = self.item
+        r2.save()
         r2.variations.add(v1)
         r3 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
@@ -256,7 +270,8 @@ class TimeRestrictionTest(TestCase):
             event=self.event,
             price=10
         )
-        r3.items.add(self.item)
+        r3.item = self.item
+        r3.save()
         r3.variations.add(v2)
         result = signals.availability_handler(
             self.event, item=self.item,
@@ -285,7 +300,8 @@ class TimeRestrictionTest(TestCase):
             event=self.event,
             price=12
         )
-        r1.items.add(self.item)
+        r1.item = self.item
+        r1.save()
         r1.variations.add(v1)
         r2 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
@@ -293,7 +309,8 @@ class TimeRestrictionTest(TestCase):
             event=self.event,
             price=8
         )
-        r2.items.add(self.item)
+        r2.item = self.item
+        r2.save()
         r2.variations.add(v1)
         r3 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
@@ -301,7 +318,8 @@ class TimeRestrictionTest(TestCase):
             event=self.event,
             price=8
         )
-        r3.items.add(self.item)
+        r3.item = self.item
+        r3.save()
         r3.variations.add(v2)
         result = signals.availability_handler(
             self.event, item=self.item,

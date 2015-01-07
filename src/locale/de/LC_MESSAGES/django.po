@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-07 18:27+0200\n"
-"PO-Revision-Date: 2014-10-07 18:28+0100\n"
+"POT-Creation-Date: 2014-10-18 17:35+0200\n"
+"PO-Revision-Date: 2014-10-18 17:35+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -74,6 +74,10 @@ msgstr "Nachname"
 msgid "Is active"
 msgstr "Ist aktiviert"
 
+#: tixlbase/models.py:91
+msgid "Is site admin"
+msgstr "Ist Systemadministrator"
+
 #: tixlbase/models.py:93
 msgid "Date joined"
 msgstr "Registrierungsdatum"
@@ -82,7 +86,11 @@ msgstr "Registrierungsdatum"
 msgid "Language"
 msgstr "Sprache"
 
-#: tixlbase/models.py:105
+#: tixlbase/models.py:100
+msgid "Timezone"
+msgstr "Zeitzone"
+
+#: tixlbase/models.py:105 tixlbase/models.py:817 tixlbase/models.py:903
 msgid "User"
 msgstr "Benutzer"
 
@@ -90,7 +98,7 @@ msgstr "Benutzer"
 msgid "Users"
 msgstr "Benutzer"
 
-#: tixlbase/models.py:152 tixlbase/models.py:222
+#: tixlbase/models.py:152 tixlbase/models.py:222 tixlbase/models.py:755
 msgid "Name"
 msgstr "Name"
 
@@ -222,9 +230,10 @@ msgstr ""
 #: tixlbase/models.py:281
 #: tixlcontrol/templates/tixlcontrol/event/settings_base.html:9
 msgid "Plugins"
-msgstr "Plugins"
-
 #: tixlbase/models.py:285 tixlbase/models.py:506 tixlbase/models.py:678
+msgstr "Erweiterungen"
+
+#: tixlbase/models.py:285 tixlbase/models.py:506 tixlbase/models.py:708
 msgid "Event"
 msgstr "Veranstaltung"
 
@@ -321,7 +330,7 @@ msgstr "Frage"
 
 #: tixlbase/models.py:470
 msgid "Question type"
-msgstr "Fragentyp"
+msgstr "Art der Antwort"
 
 #: tixlbase/models.py:474
 msgid "Required question"
@@ -383,10 +392,9 @@ msgstr ""
 #: tixlbase/models.py:560
 msgid "The user will be asked to fill in answers for the selected questions"
 msgstr ""
-"Der Käufer wird beim Kauf aufgefordert, Antworten für die ausgewählten "
-"Fragen anzugeben."
+"Der Käuft wird beim Kauf gebeten, die ausgewählten Fragen zu beantworten"
 
-#: tixlbase/models.py:566 tixlcontrol/templates/tixlcontrol/item/base.html:3
+#: tixlbase/models.py:566 tixlbase/models.py:713 tixlbase/models.py:762
 msgid "Item"
 msgstr "Produkt"
 
@@ -413,6 +421,100 @@ msgstr "Beschränkung"
 #: tixlbase/models.py:692
 msgid "Restrictions"
 msgstr "Beschränkungen"
+
+
+#: tixlbase/models.py:758
+msgid "Total capacity"
+msgstr "Gesamtanzahl"
+
+#: tixlbase/models.py:780
+msgid "Quota"
+msgstr "Kontingent"
+
+#: tixlbase/models.py:781
+msgid "Quotas"
+msgstr "Kontingente"
+
+#: tixlbase/models.py:800
+msgid "pending"
+msgstr "ausstehend"
+
+#: tixlbase/models.py:801
+msgid "paid"
+msgstr "bezahlt"
+
+#: tixlbase/models.py:802
+msgid "expired"
+msgstr "abgelaufen"
+
+#: tixlbase/models.py:803
+msgid "cancelled"
+msgstr "storniert"
+
+#: tixlbase/models.py:809
+msgid "Status"
+msgstr "Status"
+
+#: tixlbase/models.py:821 tixlbase/models.py:923
+msgid "Date"
+msgstr "Datum"
+
+#: tixlbase/models.py:824 tixlbase/models.py:926
+msgid "Expiration date"
+msgstr "Ablaufdatum"
+
+#: tixlbase/models.py:827
+msgid "Payment date"
+msgstr "Zahlungsdatum"
+
+#: tixlbase/models.py:830
+msgid "Payment information"
+msgstr "Zahlungsinformationen"
+
+#: tixlbase/models.py:834
+msgid "Total amount"
+msgstr "Gesamtbetrag"
+
+#: tixlbase/models.py:838 tixlbase/models.py:862
+msgid "Order"
+msgstr "Bestellung"
+
+#: tixlbase/models.py:839
+msgid "Orders"
+msgstr "Bestellungen"
+
+#: tixlbase/models.py:871 tixlbase/models.py:916
+msgid "Variation"
+msgstr "Variante"
+
+#: tixlbase/models.py:875 tixlbase/models.py:920
+#: tixlcontrol/templates/tixlcontrol/item/variations_1d.html:13
+msgid "Price"
+msgstr "Preis"
+
+#: tixlbase/models.py:880
+msgid "Answers"
+msgstr "Antworten"
+
+#: tixlbase/models.py:884
+msgid "Order position"
+msgstr "Bestelltes Produkt"
+
+#: tixlbase/models.py:885
+msgid "Order positions"
+msgstr "Bestellzeile"
+
+#: tixlbase/models.py:907
+msgid "Session key"
+msgstr "Sitzung"
+
+#: tixlbase/models.py:930
+msgid "Cart position"
+msgstr "Produkt im Warenkorb"
+
+#: tixlbase/models.py:931
+msgid "Cart positions"
+msgstr "Produkte im Warenkorb"
 
 #: tixlcontrol/middleware.py:59
 msgid ""
@@ -459,7 +561,7 @@ msgstr "Einstellungen"
 
 #: tixlcontrol/templates/tixlcontrol/event/plugins.html:8
 msgid "Installed plugins"
-msgstr "Installierte Plugins"
+msgstr "Installierte Erweiterungen"
 
 #: tixlcontrol/templates/tixlcontrol/event/plugins.html:11
 #: tixlcontrol/templates/tixlcontrol/event/settings.html:8
@@ -548,10 +650,6 @@ msgstr "Ende"
 msgid "Modify item:"
 msgstr "Produkt bearbeiten:"
 
-#: tixlcontrol/templates/tixlcontrol/item/base.html:8
-#: tixlcontrol/templates/tixlcontrol/item/variations_1d.html:5
-#: tixlcontrol/templates/tixlcontrol/item/variations_2d.html:5
-#: tixlcontrol/templates/tixlcontrol/item/variations_nd.html:5
 msgid "Variations"
 msgstr "Varianten"
 
@@ -566,6 +664,16 @@ msgstr "Erweiterte Einstellungen"
 #: tixlcontrol/templates/tixlcontrol/item/variations_1d.html:13
 msgid "Price"
 msgstr "Preis"
+
+#: tixlcontrol/templates/tixlcontrol/item/restrictions.html:28
+msgid "Add a new restriction"
+msgstr "Neue Beschränkung hinzufügen"
+
+#: tixlcontrol/templates/tixlcontrol/item/variations_0d.html:6
+msgid ""
+"You have to define and select propreties to be able to configure variations."
+msgstr ""
+"Sie müssen Eigenschaften auswählen, um Varianten konfigurieren zu können."
 
 #: tixlcontrol/templates/tixlcontrol/items/base.html:7
 msgid "Categories"
@@ -663,8 +771,8 @@ msgid ""
 "All answers to the question given by the buyers of the following tickets "
 "will be <strong>permanently lost</strong>."
 msgstr ""
-"Alle Antworten, die von Käufern der folgenden Tickets auf diese Frage "
-"gegeben wurden, sind <strong>unwiderruflich gelöscht</strong>."
+"Alle Antworten auf diese Frage werden <strong>unwiderruflich gelöscht</"
+"strong>."
 
 #: tixlcontrol/templates/tixlcontrol/items/questions.html:12
 msgid "A new question has been created."
@@ -695,12 +803,16 @@ msgstr ""
 msgid "This account is inactive."
 msgstr "Dieses Konto ist deaktiviert."
 
+#: tixlcontrol/views/forms.py:130
+msgid "not applicable"
+msgstr "nicht anwendbar"
+
 #: tixlplugins/timerestriction/__init__.py:8
 msgid "Time restriction"
 msgstr "Zeitliche Beschränkung"
 
 #: tixlplugins/timerestriction/__init__.py:12
-msgid "Restriciton by time"
+msgid "Restricition by time"
 msgstr "Zeitliche Beschränkung"
 
 #: tixlplugins/timerestriction/__init__.py:13
@@ -712,8 +824,8 @@ msgid ""
 "This plugin adds the possibility to restrict the sale of a given item or "
 "variation to a certain timeframe or change its price during a certain period."
 msgstr ""
-"Dieses Plugin ermöglicht es, den Verkauf eines Produktes auf bestimmte "
-"Zeiträume einzuschränken oder seinen Preis für einen bestimmten Zeitraum zu "
+"Dieses Plugin ermöglicht es, den Verkauf von Produkten auf einen gewissen "
+"Zeitraum einzuschränken oder den Preis während eines gewissen Zeitraums zu "
 "ändern."
 
 #: tixlplugins/timerestriction/models.py:15
@@ -727,3 +839,10 @@ msgstr "Ende des Zeitraums"
 #: tixlplugins/timerestriction/models.py:23
 msgid "Price in time frame"
 msgstr "Preis im Zeitraum"
+
+#: tixlplugins/timerestriction/signals.py:140
+msgid "Restriction by time"
+msgstr "Zeitliche Beschränkung"
+
+#~ msgid "Datetime"
+#~ msgstr "Datum"
