@@ -1,5 +1,7 @@
 from itertools import product
 from django.db import transaction
+from django.forms import BooleanField, ModelForm
+from django.utils.functional import cached_property
 
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -9,13 +11,14 @@ from django.core.urlresolvers import resolve, reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import redirect
 from django.forms.models import inlineformset_factory
+from django.utils.translation import ugettext_lazy as _
 from tixlbase.forms import VersionedModelForm
 
 from tixlbase.models import (
-    Item, ItemCategory, Property, ItemVariation, PropertyValue, Question, Quota
-)
+    Item, ItemCategory, Property, ItemVariation, PropertyValue, Question, Quota,
+    Versionable)
 from tixlcontrol.permissions import EventPermissionRequiredMixin, event_permission_required
-from tixlcontrol.views.forms import TolerantFormsetModelForm
+from tixlcontrol.views.forms import TolerantFormsetModelForm, VariationsField
 from tixlcontrol.signals import restriction_formset
 
 
@@ -431,10 +434,45 @@ class QuotaList(ListView):
     def get_queryset(self):
         return Quota.objects.current.filter(
             event=self.request.event
-        )
+        ).prefetch_related("items")
 
 
-class QuotaForm(VersionedModelForm):
+class QuotaForm(ModelForm):
+
+    def __init__(self, **kwargs):
+        items = kwargs['items']
+        del kwargs['items']
+        super().__init__(**kwargs)
+
+        if hasattr(self, 'instance'):
+            active_items = set(self.instance.items.all())
+            active_variations = set(self.instance.variations.all())
+        else:
+            active_items = set()
+            active_variations = set()
+
+        for item in items:
+            if len(item.properties.all()) > 0:
+                self.fields['item_%s' % item.identity] = VariationsField(
+                    item, label=_("Activate for"),
+                    required=False,
+                    initial=active_variations
+                )
+                self.fields['item_%s' % item.identity].set_item(item)
+            else:
+                self.fields['item_%s' % item.identity] = BooleanField(
+                    label=_("Activate"),
+                    required=False,
+                    initial=(item in active_items)
+                )
+
+    def save(self, commit=True):
+        if self.instance.pk is not None and isinstance(self.instance, Versionable):
+            if self.has_changed():
+                self.instance = self.instance.clone_shallow()
+                # TODO: order_cache, lock_cache are emptied by that but you'll have
+                #       to rebuild them anyway
+        return super().save(commit)
 
     class Meta:
         model = Quota
@@ -445,7 +483,53 @@ class QuotaForm(VersionedModelForm):
         ]
 
 
-class QuotaCreate(EventPermissionRequiredMixin, CreateView):
+class QuotaEditorMixin:
+
+    @cached_property
+    def items(self) -> "List[Item]":
+        return list(self.request.event.items.all().prefetch_related("properties", "variations"))
+
+    def get_form(self, form_class):
+        if not hasattr(self, '_form'):
+            kwargs = self.get_form_kwargs()
+            kwargs['items'] = self.items
+            self._form = form_class(**kwargs)
+        return self._form
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        context['items'] = self.items
+        for item in context['items']:
+            item.field = self.get_form(QuotaForm)['item_%s' % item.identity]
+        return context
+
+    @transaction.atomic()
+    def form_valid(self, form):
+        res = super().form_valid(form)
+        # The following commented-out checks are not necessary as both self.object.items
+        # and self.object.variations can be expected empty due to the performance
+        # optimization of tixlbase.models.Versionable.clone_shallow()
+        # items = self.object.items.all()
+        # variations = self.object.variations.all()
+        for item in self.items:
+            field = form.fields['item_%s' % item.identity]
+            data = form.cleaned_data['item_%s' % item.identity]
+            if isinstance(field, VariationsField):
+                self.object.variations.add(data)
+                #  for v in data:
+                #     if v not in variations:
+                #         self.object.variations.add(v)
+                #  for v in variations:
+                #     if v not in data:
+                #         self.object.variations.remove(v)
+            if data:  # and item not in items:
+                self.object.items.add(item)
+            # elif not data and item in items:
+            #     self.object.items.remove(item)
+        return res
+
+
+class QuotaCreate(EventPermissionRequiredMixin, QuotaEditorMixin, CreateView):
     model = Quota
     form_class = QuotaForm
     template_name = 'tixlcontrol/items/quota.html'
@@ -463,7 +547,7 @@ class QuotaCreate(EventPermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class QuotaUpdate(EventPermissionRequiredMixin, UpdateView):
+class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
     model = Quota
     form_class = QuotaForm
     template_name = 'tixlcontrol/items/quota.html'

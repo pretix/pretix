@@ -6,7 +6,7 @@ from django.forms.widgets import flatatt
 from django.utils.encoding import force_text
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from tixlbase.forms import VersionedModelForm
 
 from tixlbase.models import ItemVariation, PropertyValue, Item
@@ -301,7 +301,7 @@ class VariationsField(forms.ModelMultipleChoiceField):
         if self.required and not value:
             raise ValidationError(self.error_messages['required'], code='required')
         elif not self.required and not value:
-            return self.queryset.none()
+            return []
         if not isinstance(value, (list, tuple)):
             raise ValidationError(self.error_messages['list'], code='list')
 

@@ -11,7 +11,7 @@ class VersionedBaseModelForm(BaseModelForm):
         if self.instance.pk is not None and isinstance(self.instance, Versionable):
             if self.has_changed():
                 self.instance = self.instance.clone()
-        super().save(commit)
+        return super().save(commit)
 
 
 class VersionedModelForm(six.with_metaclass(ModelFormMetaclass, VersionedBaseModelForm)):

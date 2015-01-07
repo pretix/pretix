@@ -1,4 +1,6 @@
 from itertools import product
+import copy
+import uuid
 
 from django.db import models
 from django.conf import settings
@@ -6,9 +8,52 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import date as _date
 from django.core.validators import RegexValidator
-from versions.models import Versionable, VersionedForeignKey, VersionedManyToManyField
+import six
+from versions.models import Versionable as BaseVersionable
+from versions.models import VersionedForeignKey, VersionedManyToManyField, get_utc_now
 
 from tixlbase.types import VariationDict
+
+
+class Versionable(BaseVersionable):
+
+    class Meta:
+        abstract = True
+
+    def clone_shallow(self, forced_version_date=None):
+        """
+        This behaves like clone(), but misses all the Many2Many-relation-handling. This is
+        a performance optimization for cases in which we have to handle the Many2Many relations
+        by handy anyways.
+        """
+        if not self.pk:
+            raise ValueError('Instance must be saved before it can be cloned')
+
+        if self.version_end_date:
+            raise ValueError('This is a historical item and can not be cloned.')
+
+        if forced_version_date:
+            if not self.version_start_date <= forced_version_date <= get_utc_now():
+                raise ValueError('The clone date must be between the version start date and now.')
+        else:
+            forced_version_date = get_utc_now()
+
+        earlier_version = self
+
+        later_version = copy.copy(earlier_version)
+        later_version.version_end_date = None
+        later_version.version_start_date = forced_version_date
+
+        # set earlier_version's ID to a new UUID so the clone (later_version) can
+        # get the old one -- this allows 'head' to always have the original
+        # id allowing us to get at all historic foreign key relationships
+        earlier_version.id = six.u(str(uuid.uuid4()))
+        earlier_version.version_end_date = forced_version_date
+        earlier_version.save()
+
+        later_version.save()
+
+        return later_version
 
 
 class UserManager(BaseUserManager):
@@ -614,18 +659,18 @@ class Item(Versionable):
         if use_cache and hasattr(self, '_get_all_variations_cache'):
             return self._get_all_variations_cache
 
-        all_variations = self.variations.current.all().prefetch_related("values")
-        all_properties = self.properties.current.all().prefetch_related("values")
+        all_variations = self.variations.all().prefetch_related("values")
+        all_properties = self.properties.all().prefetch_related("values")
         variations_cache = {}
         for var in all_variations:
             key = []
-            for v in var.values.current.all():
+            for v in var.values.all():
                 key.append((v.prop_id, v.identity))
             key = tuple(sorted(key))
             variations_cache[key] = var
 
         result = []
-        for comb in product(*[prop.values.current.all() for prop in all_properties]):
+        for comb in product(*[prop.values.all() for prop in all_properties]):
             if len(comb) == 0:
                 result.append(VariationDict())
                 continue
@@ -772,8 +817,8 @@ class Quota(Versionable):
     and no more than 100 of them will be VIP tickets (but 450 normal and 50
     VIP tickets will be fine).
 
-    As always, a quota can not only be tied to an item, but also to a specific
-    variation. We follow the general rule here: If there are no variations
+    As always, a quota can not only be tied to an item, but also to specific
+    variations. We follow the general rule here: If there are no variations
     speficied, the quota applies to all of them, and if there are variations
     specified, the quota applies to those.
 
@@ -797,10 +842,12 @@ class Quota(Versionable):
     items = VersionedManyToManyField(
         Item,
         verbose_name=_("Item"),
+        related_name="quotas",
         blank=True
     )
     variations = VariationsField(
         ItemVariation,
+        related_name="quotas",
         blank=True,
         verbose_name=_("Variations")
     )

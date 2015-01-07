@@ -8,6 +8,14 @@
 		<li {% if "event.item.variations" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "Variations" %}</a></li>
 		<li {% if "event.item.restrictions" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.restrictions' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "Restrictions" %}</a></li>
 	</ul>
+    {% if item.identity and not item.quotas.exists %}
+        <div class="alert alert-warning">
+        	{% blocktrans trimmed %}
+                Please note, that your item will <strong>not</strong> be available for sale until you added your item
+                to an existing or newly created quota.
+	        {% endblocktrans %}
+        </div>
+    {% endif %}
 	{% block inside %}
 	{% endblock %}
 {% endblock %}
