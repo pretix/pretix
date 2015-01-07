@@ -214,7 +214,13 @@ class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
                         output.append(format_html('<td><label><input{0} /></label></td>', flatatt(final_attrs)))
                     output.append('</td>')
                 output.append('</tbody></table>')
-        output.append('</div>')
+        output.append(
+            ('<div class="help-block"><a href="#" class="variations-select-all">{0}</a> · '
+             '<a href="#" class="variations-select-none">{1}</a></div></div>').format(
+                _("Select all"),
+                _("Deselect all")
+            )
+        )
         return mark_safe('\n'.join(output))
 
 

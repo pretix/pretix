@@ -179,11 +179,9 @@ In our example, the implementation could look like this::
                 applied_to = list(restriction.variations.all())
 
                 # Only take this restriction into consideration if it either
-                # is directly applied to this variation OR is applied to all
-                # variations (e.g. the applied_to list is empty)
-                if len(applied_to) > 0:
-                    if 'variation' not in v or v['variation'] not in applied_to:
-                        continue
+                # is directly applied to this variation
+                if 'variation' not in v or v['variation'] not in applied_to:
+                    continue
 
                 if restriction.timeframe_from <= now() <= restriction.timeframe_to:
                     # Selling this item is currently possible
@@ -236,6 +234,9 @@ You are expected to return a dict containing the following items:
     ``title``
         A title for your formset (normally your plugin name)
 
+    ``description``
+        An short, explanatory text about your restriction.
+
 
 Our time restriction example looks like this::
 
@@ -280,6 +281,9 @@ Our time restriction example looks like this::
             'title': _('Restriction by time'),
             'formsetclass': formset,
             'prefix': 'timerestriction',
+            'description': 'If you use this restriction type, the system will only '
+                           'sell variations, which are covered by at least one of the '
+                           'timeframes you define below.'
         }
 
 

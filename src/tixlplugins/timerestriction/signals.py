@@ -81,12 +81,10 @@ def availability_handler(sender, **kwargs):
         for restriction in restrictions:
             applied_to = list(restriction.variations.current.all())
 
-            # Only take this restriction into consideration if it either
-            # is directly applied to this variation OR is applied to all
-            # variations (e.g. the applied_to list is empty)
-            if len(applied_to) > 0:
-                if 'variation' not in v or v['variation'] not in applied_to:
-                    continue
+            # Only take this restriction into consideration if it
+            # is directly applied to this variation
+            if 'variation' not in v or v['variation'] not in applied_to:
+                continue
 
             if restriction.timeframe_from <= now() <= restriction.timeframe_to:
                 # Selling this item is currently possible
@@ -140,4 +138,8 @@ def formset_handler(sender, **kwargs):
         'title': _('Restriction by time'),
         'formsetclass': formset,
         'prefix': 'timerestriction',
+        'description': 'If you use this restriction type, the system will only sell variations, which are covered '
+                       'by at least one of the timeframes you define below. You can also change the price of '
+                       'variations for within the given timeframe. Please note, that if you change the price of '
+                       'variations here, this will overrule the price set in the "Variations" section.'
     }
