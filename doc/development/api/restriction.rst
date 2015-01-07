@@ -215,7 +215,7 @@ In our example, the implementation could look like this::
 Control interface formsets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To make it possible for the event organizer to configure your restriction, there is a 
+To make it possible for the event organizer to configure your restriction, there is a
 'Restrictions' page in the item configuration. This page is able to show a formset for
 each restriction plugin, but *you* are required to create this formset. This is why you
 should listen to the the ``tixlcontrol.signals.restriction_formset`` signal.
