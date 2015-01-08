@@ -227,6 +227,7 @@ class PropertyUpdate(EventPermissionRequiredMixin, UpdateView):
         context['formset'] = self.get_formset()
         return context
 
+    @transaction.atomic()
     def form_valid(self, form, formset):
         for f in formset.deleted_forms:
             f.instance.delete()
@@ -279,6 +280,7 @@ class PropertyCreate(EventPermissionRequiredMixin, CreateView):
         context['formset'] = self.get_formset()
         return context
 
+    @transaction.atomic()
     def form_valid(self, form, formset):
         form.instance.event = self.request.event
         resp = super().form_valid(form)
@@ -836,6 +838,7 @@ class ItemRestrictions(ItemDetailMixin, EventPermissionRequiredMixin, TemplateVi
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
+    @transaction.atomic()
     def post(self, request, *args, **kwargs):
         self.main(request, *args, **kwargs)
         valid = True
