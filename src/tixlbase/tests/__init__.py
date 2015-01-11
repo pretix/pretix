@@ -2,6 +2,7 @@ import os
 import sys
 
 from django.test import LiveServerTestCase
+from django.conf import settings
 from selenium import webdriver
 
 RUN_LOCAL = ('SAUCE_USERNAME' not in os.environ)
@@ -50,6 +51,10 @@ def on_platforms():
 
 
 class BrowserTest(LiveServerTestCase):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        settings.DEBUG = True
 
     def setUp(self):
         if RUN_LOCAL:

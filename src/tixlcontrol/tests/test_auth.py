@@ -1,5 +1,4 @@
-from django.test import TestCase, Client, LiveServerTestCase
-from selenium import webdriver
+from django.test import TestCase, Client
 
 from tixlbase.models import User
 from tixlbase.tests import BrowserTest, on_platforms

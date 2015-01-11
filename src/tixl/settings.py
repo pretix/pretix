@@ -147,6 +147,7 @@ DEBUG_TOOLBAR_PATCH_SETTINGS = False
 # Tixl specific settings
 
 TIXL_INSTANCE_NAME = 'tixl.de'
+DEFAULT_CURRENCY = 'EUR'
 INTERNAL_IPS = ('127.0.0.1', '::1')
 
 try:

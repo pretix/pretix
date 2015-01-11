@@ -296,12 +296,14 @@ class Event(Versionable):
                                        related_name="events",)
     locale = models.CharField(max_length=10,
                               choices=settings.LANGUAGES,
-                              verbose_name=_("Default locale"))
+                              verbose_name=_("Default locale"),
+                              default=settings.LANGUAGE_CODE)
     timezone = models.CharField(max_length=100,
                                 default=settings.TIME_ZONE,
                                 verbose_name=_('Default timezone'))
     currency = models.CharField(max_length=10,
-                                verbose_name=_("Default currency"))
+                                verbose_name=_("Default currency"),
+                                default=settings.DEFAULT_CURRENCY)
     date_from = models.DateTimeField(verbose_name=_("Event start time"))
     date_to = models.DateTimeField(null=True, blank=True,
                                    verbose_name=_("Event end time"))
