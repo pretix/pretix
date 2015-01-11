@@ -258,6 +258,7 @@ class VariationsField(forms.ModelMultipleChoiceField):
         super().__init__(*args, **kwargs)
 
     def set_item(self, item: Item):
+        assert isinstance(item, Item)
         self.item = item
         self._set_choices(self._get_choices())
 

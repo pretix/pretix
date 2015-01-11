@@ -21,6 +21,7 @@ class EventRelatedCache:
     """
 
     def __init__(self, event: Event, cache: str='default'):
+        assert isinstance(event, Event)
         self.cache = caches[cache]
         self.event = event
         self.prefixkey = 'event:%s' % self.event.pk

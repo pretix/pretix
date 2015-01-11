@@ -2,6 +2,8 @@ import django.dispatch
 from django.apps import apps
 from django.dispatch.dispatcher import NO_RECEIVERS
 
+from tixlbase.models import Event
+
 
 class EventPluginSignal(django.dispatch.Signal):
     """
@@ -17,6 +19,8 @@ class EventPluginSignal(django.dispatch.Signal):
 
         sender is required to be an instance of ``tixlbase.models.Event``.
         """
+        assert isinstance(sender, Event)
+
         responses = []
         if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
             return responses
