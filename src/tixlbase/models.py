@@ -51,9 +51,23 @@ class Versionable(BaseVersionable):
         earlier_version.version_end_date = forced_version_date
         earlier_version.save()
 
+        for field in earlier_version._meta.many_to_many:
+            earlier_version.clone_relations_shallow(later_version, field.attname, forced_version_date)
+
+        if hasattr(earlier_version._meta, 'many_to_many_related'):
+            for rel in earlier_version._meta.many_to_many_related:
+                earlier_version.clone_relations_shallow(later_version, rel.via_field_name, forced_version_date)
+
         later_version.save()
 
         return later_version
+
+    def clone_relations_shallow(self, clone, manager_field_name, forced_version_date):
+        # Source: the original object, where relations are currently pointing to
+        source = getattr(self, manager_field_name)  # returns a VersionedRelatedManager instance
+        # Destination: the clone, where the cloned relations should point to
+        source.through.objects.filter(**{source.source_field.attname: clone.id}).update(**{
+            source.source_field.attname: self.id})
 
 
 class UserManager(BaseUserManager):
@@ -156,11 +170,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.identifier
 
     def save(self, *args, **kwargs):
-        if self.identifier is None:
+        if not self.identifier:
             if self.event is None:
                 self.identifier = self.email.lower()
             else:
-                self.identifier = "%s@%d.event.tixl" % (self.username.lower(), self.event.id)
+                self.identifier = "%s@%s.event.tixl" % (self.username.lower(), self.event.id)
         if not self.pk:
             self.identifier = self.identifier.lower()
         super().save(*args, **kwargs)
@@ -179,7 +193,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         elif not self.givenname and self.familyname:
             return self.familyname
         elif self.familyname and self.givenname:
-            return '%(family)s, %(given)s' % {
+            return _('%(family)s, %(given)s') % {
                 'family': self.familyname,
                 'given': self.givenname
             }

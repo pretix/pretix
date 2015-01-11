@@ -2,12 +2,19 @@
 {% load i18n %}
 {% block title %}{{ item.name }} :: {% trans "Item" %}{% endblock %}
 {% block content %}
-	<h1>{% trans "Modify item:" %} {{ item.name }}</h1>
-	<ul class="nav nav-pills">
-		<li {% if "event.item" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "General information" %}</a></li>
-		<li {% if "event.item.variations" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "Variations" %}</a></li>
-		<li {% if "event.item.restrictions" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.restrictions' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "Restrictions" %}</a></li>
-	</ul>
+    {% if item.identity %}
+        <h1>{% trans "Modify item:" %} {{ item.name }}</h1>
+        <ul class="nav nav-pills">
+            <li {% if "event.item" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "General information" %}</a></li>
+            <li {% if "event.item.variations" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "Variations" %}</a></li>
+            <li {% if "event.item.restrictions" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.restrictions' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "Restrictions" %}</a></li>
+        </ul>
+    {% else %}
+        <h1>{% trans "Create item" %}</h1>
+        <p>{% blocktrans trimmed %}
+            You will be able to adjust further settings in the next step.
+        {% endblocktrans %}</p>
+    {% endif %}
     {% if item.identity and not item.quotas.exists %}
         <div class="alert alert-warning">
         	{% blocktrans trimmed %}

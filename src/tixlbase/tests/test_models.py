@@ -3,7 +3,7 @@ from django.utils.timezone import now
 
 from tixlbase.models import (
     Event, Organizer, Item, ItemVariation,
-    Property, PropertyValue
+    Property, PropertyValue, User
 )
 from tixlbase.types import VariationDict
 
@@ -139,3 +139,41 @@ class ItemVariationsTest(TestCase):
             ['L', 'blue'],
         ]))
         self.assertEqual(num_variations, 1)
+
+
+class VersionableTestCase(TestCase):
+
+    def test_shallow_cone(self):
+        o = Organizer.objects.create(name='Dummy', slug='dummy')
+        event = Event.objects.create(
+            organizer=o, name='Dummy', slug='dummy',
+            date_from=now(),
+        )
+        old = Item.objects.create(event=event, name='Dummy', default_price=14)
+        prop = Property.objects.create(event=event, name='Size')
+        old.properties.add(prop)
+        new = old.clone_shallow()
+        self.assertIsNone(new.version_end_date)
+        self.assertIsNotNone(old.version_end_date)
+        self.assertEqual(new.properties.count(), 0)
+        self.assertEqual(old.properties.count(), 1)
+
+
+class UserTestCase(TestCase):
+
+    def test_identifier_local(self):
+        o = Organizer.objects.create(name='Dummy', slug='dummy')
+        event = Event.objects.create(
+            organizer=o, name='Dummy', slug='dummy',
+            date_from=now(),
+        )
+        u = User(event=event, username='tester')
+        u.set_password("test")
+        u.save()
+        self.assertEqual(u.identifier, "%s@%s.event.tixl" % (u.username.lower(), event.id))
+
+    def test_identifier_global(self):
+        u = User(email='test@example.com')
+        u.set_password("test")
+        u.save()
+        self.assertEqual(u.identifier, "test@example.com")

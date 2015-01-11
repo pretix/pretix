@@ -21,6 +21,7 @@ urlpatterns += patterns(
             url(r'^settings/$', event.EventUpdate.as_view(), name='event.settings'),
             url(r'^settings/plugins$', event.EventPlugins.as_view(), name='event.settings.plugins'),
             url(r'^items/$', item.ItemList.as_view(), name='event.items'),
+            url(r'^items/add$', item.ItemCreate.as_view(), name='event.items.add'),
             url(r'^items/(?P<item>[0-9a-f-]+)/$', item.ItemUpdateGeneral.as_view(), name='event.item'),
             url(r'^items/(?P<item>[0-9a-f-]+)/variations$', item.ItemVariations.as_view(),
                 name='event.item.variations'),

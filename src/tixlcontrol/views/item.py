@@ -513,11 +513,12 @@ class QuotaEditorMixin:
         # optimization of tixlbase.models.Versionable.clone_shallow()
         # items = self.object.items.all()
         # variations = self.object.variations.all()
+        self.object = form.instance
         for item in self.items:
             field = form.fields['item_%s' % item.identity]
             data = form.cleaned_data['item_%s' % item.identity]
             if isinstance(field, VariationsField):
-                self.object.variations.add(data)
+                self.object.variations.add(*data)
                 #  for v in data:
                 #     if v not in variations:
                 #         self.object.variations.add(v)
@@ -613,7 +614,7 @@ class ItemDetailMixin(SingleObjectMixin):
         return self.object
 
 
-class ItemUpdateFormGeneral(VersionedModelForm):
+class ItemFormGeneral(VersionedModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -637,8 +638,30 @@ class ItemUpdateFormGeneral(VersionedModelForm):
         ]
 
 
+class ItemCreate(EventPermissionRequiredMixin, CreateView):
+    form_class = ItemFormGeneral
+    template_name = 'tixlcontrol/item/index.html'
+    permission = 'can_change_items'
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.item', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'item': self.object.identity,
+            }) + '?success=true'
+
+    def get_form_kwargs(self):
+        """
+        Returns the keyword arguments for instantiating the form.
+        """
+        newinst = Item(event=self.request.event)
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'instance': newinst})
+        return kwargs
+
+
 class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateView):
-    form_class = ItemUpdateFormGeneral
+    form_class = ItemFormGeneral
     template_name = 'tixlcontrol/item/index.html'
     permission = 'can_change_items'
 

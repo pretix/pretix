@@ -38,6 +38,12 @@ class LocaleDeterminationTest(TestCase):
         language = response['Content-Language']
         self.assertEqual(language, self.TEST_LOCALE)
 
+    def test_unknown_browser_default(self):
+        c = Client(HTTP_ACCEPT_LANGUAGE='sjn')
+        response = c.get('/control/')
+        language = response['Content-Language']
+        self.assertEqual(language, settings.LANGUAGE_CODE)
+
     def test_cookie_settings(self):
         c = Client()
         cookies = c.cookies
