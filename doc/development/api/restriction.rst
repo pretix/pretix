@@ -178,9 +178,10 @@ In our example, the implementation could look like this::
             for restriction in restrictions:
                 applied_to = list(restriction.variations.all())
 
-                # Only take this restriction into consideration if it either
-                # is directly applied to this variation
-                if 'variation' not in v or v['variation'] not in applied_to:
+                # Only take this restriction into consideration if it
+                # is directly applied to this variation or if the item
+                # has no variations
+                if len(v) != 0 and ('variation' not in v or v['variation'] not in applied_to):
                     continue
 
                 if restriction.timeframe_from <= now() <= restriction.timeframe_to:

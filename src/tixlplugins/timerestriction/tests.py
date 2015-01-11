@@ -29,6 +29,12 @@ class TimeRestrictionTest(TestCase):
         self.value1 = PropertyValue.objects.create(prop=self.property, value='S')
         self.value2 = PropertyValue.objects.create(prop=self.property, value='M')
         self.value3 = PropertyValue.objects.create(prop=self.property, value='L')
+        self.variation1 = ItemVariation.objects.create(item=self.item)
+        self.variation1.values.add(self.value1)
+        self.variation2 = ItemVariation.objects.create(item=self.item)
+        self.variation2.values.add(self.value2)
+        self.variation3 = ItemVariation.objects.create(item=self.item)
+        self.variation3.values.add(self.value3)
 
     def test_nothing(self):
         result = signals.availability_handler(
@@ -213,10 +219,6 @@ class TimeRestrictionTest(TestCase):
 
     def test_variation_specific(self):
         self.item.properties.add(self.property)
-        v1 = ItemVariation.objects.create(item=self.item)
-        v1.values.add(self.value1)
-        v2 = ItemVariation.objects.create(item=self.item)
-        v2.values.add(self.value2)
 
         r1 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
@@ -226,7 +228,7 @@ class TimeRestrictionTest(TestCase):
         )
         r1.item = self.item
         r1.save()
-        r1.variations.add(v1)
+        r1.variations.add(self.variation1)
         result = signals.availability_handler(
             self.event, item=self.item,
             variations=self.item.get_all_variations(),
@@ -234,65 +236,14 @@ class TimeRestrictionTest(TestCase):
         )
         self.assertEqual(len(result), 3)
         for v in result:
-            if 'variation' in v and v['variation'].pk == v1.pk:
+            if 'variation' in v and v['variation'].pk == self.variation1.pk:
                 self.assertTrue(v['available'])
                 self.assertEqual(v['price'], 12)
             else:
                 self.assertFalse(v['available'])
 
-    def test_variation_specific_and_general(self):
-        self.item.properties.add(self.property)
-        v1 = ItemVariation.objects.create(item=self.item)
-        v1.values.add(self.value1)
-        v2 = ItemVariation.objects.create(item=self.item)
-        v2.values.add(self.value2)
-
-        r1 = TimeRestriction.objects.create(
-            timeframe_from=now() - timedelta(days=5),
-            timeframe_to=now() + timedelta(days=1),
-            event=self.event,
-            price=12
-        )
-        r1.item = self.item
-        r1.save()
-        r2 = TimeRestriction.objects.create(
-            timeframe_from=now() - timedelta(days=5),
-            timeframe_to=now() + timedelta(days=1),
-            event=self.event,
-            price=8
-        )
-        r2.item = self.item
-        r2.save()
-        r2.variations.add(v1)
-        r3 = TimeRestriction.objects.create(
-            timeframe_from=now() - timedelta(days=5),
-            timeframe_to=now() - timedelta(days=1),
-            event=self.event,
-            price=10
-        )
-        r3.item = self.item
-        r3.save()
-        r3.variations.add(v2)
-        result = signals.availability_handler(
-            self.event, item=self.item,
-            variations=self.item.get_all_variations(),
-            context=None, cache=self.event.get_cache()
-        )
-        self.assertEqual(len(result), 3)
-        for v in result:
-            if 'variation' in v and v['variation'].pk == v1.pk:
-                self.assertTrue(v['available'])
-                self.assertEqual(v['price'], 8)
-            else:
-                self.assertTrue(v['available'])
-                self.assertEqual(v['price'], 12)
-
     def test_variation_specifics(self):
         self.item.properties.add(self.property)
-        v1 = ItemVariation.objects.create(item=self.item)
-        v1.values.add(self.value1)
-        v2 = ItemVariation.objects.create(item=self.item)
-        v2.values.add(self.value2)
 
         r1 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
@@ -302,7 +253,7 @@ class TimeRestrictionTest(TestCase):
         )
         r1.item = self.item
         r1.save()
-        r1.variations.add(v1)
+        r1.variations.add(self.variation1)
         r2 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() + timedelta(days=1),
@@ -311,7 +262,7 @@ class TimeRestrictionTest(TestCase):
         )
         r2.item = self.item
         r2.save()
-        r2.variations.add(v1)
+        r2.variations.add(self.variation1)
         r3 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
             timeframe_to=now() - timedelta(days=1),
@@ -320,7 +271,7 @@ class TimeRestrictionTest(TestCase):
         )
         r3.item = self.item
         r3.save()
-        r3.variations.add(v2)
+        r3.variations.add(self.variation3)
         result = signals.availability_handler(
             self.event, item=self.item,
             variations=self.item.get_all_variations(),
@@ -328,7 +279,7 @@ class TimeRestrictionTest(TestCase):
         )
         self.assertEqual(len(result), 3)
         for v in result:
-            if 'variation' in v and v['variation'].pk == v1.pk:
+            if 'variation' in v and v['variation'].pk == self.variation1.pk:
                 self.assertTrue(v['available'])
                 self.assertEqual(v['price'], 8)
             else:
