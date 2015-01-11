@@ -54,7 +54,7 @@ class BrowserTest(LiveServerTestCase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        settings.DEBUG = True
+        settings.DEBUG = ('--debug' in sys.argv)
 
     def setUp(self):
         if RUN_LOCAL:
