@@ -142,6 +142,9 @@ COMPRESS_CSS_FILTERS = (
 
 # Debug toolbar
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
+DEBUG_TOOLBAR_CONFIG = {
+    'JQUERY_URL': ''
+}
 
 
 # Tixl specific settings

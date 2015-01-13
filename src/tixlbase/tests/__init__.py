@@ -1,5 +1,6 @@
 import os
 import sys
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from django.test import LiveServerTestCase
 from django.conf import settings
@@ -50,7 +51,7 @@ def on_platforms():
     return decorator
 
 
-class BrowserTest(LiveServerTestCase):
+class BrowserTest(StaticLiveServerTestCase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
