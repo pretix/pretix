@@ -17,7 +17,7 @@ useful some day.
 
 if RUN_LOCAL:
     # could add Chrome, Firefox, etc... here
-    BROWSERS = ['PhantomJS']
+    BROWSERS = [os.environ.get('TEST_BROWSER', 'PhantomJS')]
 else:
     from sauceclient import SauceClient
     USERNAME = os.environ.get('SAUCE_USERNAME')

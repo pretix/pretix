@@ -59,6 +59,7 @@ class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         for item in self.object.items.current.all():
+            # TODO: Clone!?
             item.category = None
             item.save()
         success_url = self.get_success_url()
@@ -139,7 +140,7 @@ def category_move(request, category, up=True):
     for i, cat in enumerate(categories):
         if cat.position != i:
             cat.position = i
-            cat.save()
+            cat.save()  # TODO: Clone or document sloppiness?
 
 
 @event_permission_required("can_change_items")
