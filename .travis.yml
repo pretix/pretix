@@ -14,8 +14,3 @@ script:
     - coverage run manage.py test
 after_success:
     - coveralls
-addons:
-    sauce_connect:
-        username: "tixl"
-        access_key:
-            secure: "a0NUwGs2jHci0hIg3jySZLkfljv6FP33fZxAyi2gKeaxcVC+a/AailSnUgDoyVWxPr0JnkLvdFcxzDBgrQ1TLsgpRDSXnc1nIGsaHjgvVGSJ1hKACYtO/9QH+dgaaHEsIsHHbvGdnjwjrX8AZtDnkcRk1T3Skj8kUCniaU39w38="

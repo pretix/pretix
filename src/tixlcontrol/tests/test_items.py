@@ -87,7 +87,7 @@ class PropertiesTest(BrowserTest):
         self.driver.get('%s/control/event/%s/%s/properties/add' % (
             self.live_server_url, self.orga1.slug, self.event1.slug
         ))
-        self.driver.find_element_by_name("name").send_keys('Size')
+        self.driver.find_element_by_css_selector("#id_name").send_keys('Size')
         self.driver.find_element_by_name("values-0-value").send_keys('S')
         self.driver.find_element_by_name("values-1-value").send_keys('M')
         self.driver.find_element_by_class_name("btn-save").click()
@@ -104,8 +104,8 @@ class PropertiesTest(BrowserTest):
         self.driver.get('%s/control/event/%s/%s/properties/%s/' % (
             self.live_server_url, self.orga1.slug, self.event1.slug, c.identity
         ))
-        self.driver.find_element_by_name("name").clear()
-        self.driver.find_element_by_name("name").send_keys('Color')
+        self.driver.find_element_by_css_selector("#id_name").clear()
+        self.driver.find_element_by_css_selector("#id_name").send_keys('Color')
         self.driver.find_elements_by_css_selector("div.form-group button.btn-danger")[0].click()
         self.driver.find_element_by_name("values-1-value").clear()
         self.driver.find_element_by_name("values-1-value").send_keys('red')

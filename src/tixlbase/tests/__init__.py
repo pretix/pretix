@@ -7,10 +7,17 @@ from django.conf import settings
 from selenium import webdriver
 
 RUN_LOCAL = ('SAUCE_USERNAME' not in os.environ)
+"""
+For a long time, we used SauceLabs for CI testing, because they provide free
+browser VMs for Open Source projects. However, more tests failed because of
+connection timeouts to SauceLabs than for real reasons, so we're using
+PhantomJS now. However, we'll keep the SauceClient code here as it might prove
+useful some day.
+"""
 
 if RUN_LOCAL:
-    # could add Chrome, PhantomJS etc... here
-    BROWSERS = ['Chrome', 'Firefox']
+    # could add Chrome, Firefox, etc... here
+    BROWSERS = ['PhantomJS']
 else:
     from sauceclient import SauceClient
     USERNAME = os.environ.get('SAUCE_USERNAME')
