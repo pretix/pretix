@@ -1,7 +1,7 @@
 pretix
 ======
 
-[![Docs](https://readthedocs.org/projects/pretix/badge/)](https://readthedocs.org/projects/pretix/)
+[![Docs](https://readthedocs.org/projects/tixl/badge/?version=latest)](http://docs.pretix.eu/en/latest/)
 [![Build Status](https://travis-ci.org/pretix/pretix.svg?branch=master)](https://travis-ci.org/pretix/pretix)
 [![Coverage Status](https://img.shields.io/coveralls/pretix/pretix.svg)](https://coveralls.io/r/pretix/pretix)
 
