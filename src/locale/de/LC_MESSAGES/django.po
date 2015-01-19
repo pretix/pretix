@@ -1,6 +1,6 @@
-# tixl translation file German
-# Copyright (C) 2014 the tixl authors
-# This file is distributed under the same license as the tixl package.
+# pretix translation file German
+# Copyright (C) 2014 the pretix authors
+# This file is distributed under the same license as the pretix package.
 # Raphael Michel <michel@rami.io>, 2014.
 #
 msgid ""
@@ -18,121 +18,121 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.9\n"
 
-#: tixl/settings.py:110
+#: pretix/settings.py:110
 msgid "German"
 msgstr "Deutsch"
 
-#: tixl/settings.py:111
+#: pretix/settings.py:111
 msgid "English"
 msgstr "Englisch"
 
-#: tixlbase/admin.py:19
+#: pretixbase/admin.py:19
 msgid "The two password fields didn't match."
 msgstr "Die beiden eingegebenen Passwörter stimmen nicht überein."
 
-#: tixlbase/admin.py:21 tixlcontrol/views/auth.py:16
+#: pretixbase/admin.py:21 pretixcontrol/views/auth.py:16
 msgid "Password"
 msgstr "Passwort"
 
-#: tixlbase/admin.py:23
+#: pretixbase/admin.py:23
 msgid "Password confirmation"
 msgstr "Passwort bestätigen"
 
-#: tixlbase/admin.py:25
+#: pretixbase/admin.py:25
 msgid "Enter the same password as above, for verification."
 msgstr "Geben Sie zur Bestätigung das selbe Passwort wie oben ein"
 
-#: tixlbase/admin.py:53
+#: pretixbase/admin.py:53
 msgid "Personal info"
 msgstr "Persönliche Daten"
 
-#: tixlbase/admin.py:54
+#: pretixbase/admin.py:54
 msgid "Locale"
 msgstr "Sprache"
 
-#: tixlbase/admin.py:55
+#: pretixbase/admin.py:55
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: tixlbase/models.py:75
+#: pretixbase/models.py:75
 msgid "Letters, digits and @/./+/-/_ only."
 msgstr "Nur Buchstaben, Zahlen und @/./+/-/_"
 
-#: tixlbase/models.py:81
+#: pretixbase/models.py:81
 msgid "E-mail"
 msgstr "E-Mail"
 
-#: tixlbase/models.py:84
+#: pretixbase/models.py:84
 msgid "Given name"
 msgstr "Vorname"
 
-#: tixlbase/models.py:87
+#: pretixbase/models.py:87
 msgid "Family name"
 msgstr "Nachname"
 
-#: tixlbase/models.py:89
+#: pretixbase/models.py:89
 msgid "Is active"
 msgstr "Ist aktiviert"
 
-#: tixlbase/models.py:91
+#: pretixbase/models.py:91
 msgid "Is site admin"
 msgstr "Ist Systemadministrator"
 
-#: tixlbase/models.py:93
+#: pretixbase/models.py:93
 msgid "Date joined"
 msgstr "Registrierungsdatum"
 
-#: tixlbase/models.py:97
+#: pretixbase/models.py:97
 msgid "Language"
 msgstr "Sprache"
 
-#: tixlbase/models.py:100
+#: pretixbase/models.py:100
 msgid "Timezone"
 msgstr "Zeitzone"
 
-#: tixlbase/models.py:105 tixlbase/models.py:817 tixlbase/models.py:903
+#: pretixbase/models.py:105 pretixbase/models.py:817 pretixbase/models.py:903
 msgid "User"
 msgstr "Benutzer"
 
-#: tixlbase/models.py:106
+#: pretixbase/models.py:106
 msgid "Users"
 msgstr "Benutzer"
 
-#: tixlbase/models.py:152 tixlbase/models.py:222 tixlbase/models.py:755
+#: pretixbase/models.py:152 pretixbase/models.py:222 pretixbase/models.py:755
 msgid "Name"
 msgstr "Name"
 
-#: tixlbase/models.py:155 tixlbase/models.py:234
+#: pretixbase/models.py:155 pretixbase/models.py:234
 msgid "Slug"
 msgstr "Kurzform"
 
-#: tixlbase/models.py:160
-#: tixlcontrol/templates/tixlcontrol/events/index.html:11
+#: pretixbase/models.py:160
+#: pretixcontrol/templates/pretixcontrol/events/index.html:11
 msgid "Organizer"
 msgstr "Veranstalter"
 
-#: tixlbase/models.py:161
+#: pretixbase/models.py:161
 msgid "Organizers"
 msgstr "Veranstalter"
 
-#: tixlbase/models.py:178
+#: pretixbase/models.py:178
 msgid "Can create events"
 msgstr "Kann Veranstaltungen erstellen"
 
-#: tixlbase/models.py:182
+#: pretixbase/models.py:182
 msgid "Organizer permission"
 msgstr "Veranstalter-Berechtigung"
 
-#: tixlbase/models.py:183
+#: pretixbase/models.py:183
 msgid "Organizer permissions"
 msgstr "Veranstalter-Berechtigungen"
 
-#: tixlbase/models.py:187 tixlbase/models.py:345
+#: pretixbase/models.py:187 pretixbase/models.py:345
 #, python-format
 msgid "%(name)s on %(object)s"
 msgstr "%(name)s für %(object)s"
 
-#: tixlbase/models.py:226
+#: pretixbase/models.py:226
 msgid ""
 "Should be short, only contain lowercase letters and numbers, and must be "
 "unique among your events. This is being used in addresses and bank transfer "
@@ -142,46 +142,46 @@ msgstr ""
 "unter Ihren Veranstaltungen einmalig sein. Wird in URLs und "
 "Verwendungszwecken für Banküberweisungen benutzt."
 
-#: tixlbase/models.py:231
+#: pretixbase/models.py:231
 msgid "The slug may only contain letters, numbers, dots and dashes."
 msgstr ""
 "Der Kurzname darf nur Buchstaben, Zahlen, Punkte und Bindestriche enthalten"
 
-#: tixlbase/models.py:240
+#: pretixbase/models.py:240
 msgid "Default locale"
 msgstr "Standardsprache"
 
-#: tixlbase/models.py:243 tixlcontrol/views/event.py:19
+#: pretixbase/models.py:243 pretixcontrol/views/event.py:19
 msgid "Default timezone"
 msgstr "Standardzeitzone"
 
-#: tixlbase/models.py:245
+#: pretixbase/models.py:245
 msgid "Default currency"
 msgstr "Standardwährung"
 
-#: tixlbase/models.py:246
+#: pretixbase/models.py:246
 msgid "Event start time"
 msgstr "Veranstaltungsbeginn"
 
-#: tixlbase/models.py:248
+#: pretixbase/models.py:248
 msgid "Event end time"
 msgstr "Veranstaltungsende"
 
-#: tixlbase/models.py:251
+#: pretixbase/models.py:251
 msgid "Show event end date"
 msgstr "Zeige Veranstaltungsende"
 
-#: tixlbase/models.py:252
+#: pretixbase/models.py:252
 msgid "If disabled, only event's start date will be displayed to the public."
 msgstr ""
 "Wenn diese Einstellung deaktiviert ist, wird nur der Beginn der "
 "Veranstaltung öffentlich angezeigt."
 
-#: tixlbase/models.py:256
+#: pretixbase/models.py:256
 msgid "Show dates with time"
 msgstr "Zeige Uhrzeiten"
 
-#: tixlbase/models.py:257
+#: pretixbase/models.py:257
 msgid ""
 "If disabled, the event's start and end date will be displayed without the "
 "time of day."
@@ -189,37 +189,37 @@ msgstr ""
 "Wenn diese Einstellung deaktiviert ist, werden Veranstaltungsbeginn und -"
 "ende ohne Uhrzeit angezeigt"
 
-#: tixlbase/models.py:261
+#: pretixbase/models.py:261
 msgid "End of presale"
 msgstr "Ende des Vorverkaufs"
 
-#: tixlbase/models.py:262
+#: pretixbase/models.py:262
 msgid "No items will be sold after this date."
 msgstr "Es werden nach diesem Termin keine Produkte mehr verkauft."
 
-#: tixlbase/models.py:266
+#: pretixbase/models.py:266
 msgid "Start of presale"
 msgstr "Beginn des Vorverkaufs"
 
-#: tixlbase/models.py:267
+#: pretixbase/models.py:267
 msgid "No items will be sold before this date."
 msgstr "Es werden vor diesem Termin keine Produkte verkauft."
 
-#: tixlbase/models.py:271
+#: pretixbase/models.py:271
 msgid "Payment term in days"
 msgstr "Zahlungsziel in Tagen"
 
-#: tixlbase/models.py:272
+#: pretixbase/models.py:272
 msgid ""
 "The number of days after placing an order the user has to pay to preserve "
 "his reservation."
 msgstr "Die Anzahl an Tagen die ein Käufer zum Bezahlen seiner Bestellung hat."
 
-#: tixlbase/models.py:276
+#: pretixbase/models.py:276
 msgid "Last date of payments"
 msgstr "Datum des letzten möglichen Zahlungseingangs"
 
-#: tixlbase/models.py:277
+#: pretixbase/models.py:277
 msgid ""
 "The last date any payments are accepted. This has precedence over the number "
 "of days configured above."
@@ -227,161 +227,160 @@ msgstr ""
 "Das Datum, bis zu dem Zahlungseingänge akzeptiert werden. Diese Einstellung "
 "hat Vorrang über der oben eingestellten Anzahl an Tagen"
 
-#: tixlbase/models.py:281
-#: tixlcontrol/templates/tixlcontrol/event/settings_base.html:9
+#: pretixbase/models.py:281
+#: pretixcontrol/templates/pretixcontrol/event/settings_base.html:9
 msgid "Plugins"
-#: tixlbase/models.py:285 tixlbase/models.py:506 tixlbase/models.py:678
 msgstr "Erweiterungen"
 
-#: tixlbase/models.py:285 tixlbase/models.py:506 tixlbase/models.py:708
+#: pretixbase/models.py:285 pretixbase/models.py:506 pretixbase/models.py:708
 msgid "Event"
 msgstr "Veranstaltung"
 
-#: tixlbase/models.py:286 tixlcontrol/templates/tixlcontrol/base.html:34
-#: tixlcontrol/templates/tixlcontrol/events/index.html:3
-#: tixlcontrol/templates/tixlcontrol/events/index.html:5
+#: pretixbase/models.py:286 pretixcontrol/templates/pretixcontrol/base.html:34
+#: pretixcontrol/templates/pretixcontrol/events/index.html:3
+#: pretixcontrol/templates/pretixcontrol/events/index.html:5
 msgid "Events"
 msgstr "Veranstaltungen"
 
-#: tixlbase/models.py:332
+#: pretixbase/models.py:332
 msgid "Can change event settings"
 msgstr "Kann Veranstaltungseinstellungen ändern"
 
-#: tixlbase/models.py:336
+#: pretixbase/models.py:336
 msgid "Can change item settings"
 msgstr "Kann Produkte ändern"
 
-#: tixlbase/models.py:340
+#: pretixbase/models.py:340
 msgid "Event permission"
 msgstr "Veranstaltungs-Berechtigung"
 
-#: tixlbase/models.py:341
+#: pretixbase/models.py:341
 msgid "Event permissions"
 msgstr "Veranstaltungs-Berechtigungen"
 
-#: tixlbase/models.py:362
+#: pretixbase/models.py:362
 msgid "Category name"
 msgstr "Bezeichnung"
 
-#: tixlbase/models.py:369
-#: tixlcontrol/templates/tixlcontrol/items/category.html:4
-#: tixlcontrol/templates/tixlcontrol/items/category.html:6
+#: pretixbase/models.py:369
+#: pretixcontrol/templates/pretixcontrol/items/category.html:4
+#: pretixcontrol/templates/pretixcontrol/items/category.html:6
 msgid "Item category"
 msgstr "Produktkategorie"
 
-#: tixlbase/models.py:370
-#: tixlcontrol/templates/tixlcontrol/items/categories.html:3
-#: tixlcontrol/templates/tixlcontrol/items/categories.html:5
-#: tixlcontrol/templates/tixlcontrol/items/categories.html:25
+#: pretixbase/models.py:370
+#: pretixcontrol/templates/pretixcontrol/items/categories.html:3
+#: pretixcontrol/templates/pretixcontrol/items/categories.html:5
+#: pretixcontrol/templates/pretixcontrol/items/categories.html:25
 msgid "Item categories"
 msgstr "Produktkategorien"
 
-#: tixlbase/models.py:395
+#: pretixbase/models.py:395
 msgid "Property name"
 msgstr "Bezeichnung"
 
-#: tixlbase/models.py:399
-#: tixlcontrol/templates/tixlcontrol/items/property.html:5
-#: tixlcontrol/templates/tixlcontrol/items/property.html:7
+#: pretixbase/models.py:399
+#: pretixcontrol/templates/pretixcontrol/items/property.html:5
+#: pretixcontrol/templates/pretixcontrol/items/property.html:7
 msgid "Item property"
 msgstr "Eigenschaft"
 
-#: tixlbase/models.py:400
-#: tixlcontrol/templates/tixlcontrol/items/properties.html:3
-#: tixlcontrol/templates/tixlcontrol/items/properties.html:5
-#: tixlcontrol/templates/tixlcontrol/items/properties.html:25
+#: pretixbase/models.py:400
+#: pretixcontrol/templates/pretixcontrol/items/properties.html:3
+#: pretixcontrol/templates/pretixcontrol/items/properties.html:5
+#: pretixcontrol/templates/pretixcontrol/items/properties.html:25
 msgid "Item properties"
 msgstr "Eigenschaften"
 
-#: tixlbase/models.py:424
+#: pretixbase/models.py:424
 msgid "Value"
 msgstr "Wert"
 
-#: tixlbase/models.py:431
+#: pretixbase/models.py:431
 msgid "Property value"
 msgstr "Wert"
 
-#: tixlbase/models.py:432
+#: pretixbase/models.py:432
 msgid "Property values"
 msgstr "Werte"
 
-#: tixlbase/models.py:454
+#: pretixbase/models.py:454
 msgid "Number"
 msgstr "Zahl"
 
-#: tixlbase/models.py:455
+#: pretixbase/models.py:455
 msgid "Text (one line)"
 msgstr "Text (einzeilig)"
 
-#: tixlbase/models.py:456
+#: pretixbase/models.py:456
 msgid "Multiline text"
 msgstr "Text (mehrzeilig)"
 
-#: tixlbase/models.py:457
+#: pretixbase/models.py:457
 msgid "Yes/No"
 msgstr "Ja/Nein"
 
-#: tixlbase/models.py:465 tixlbase/models.py:478
-#: tixlcontrol/templates/tixlcontrol/items/question.html:4
-#: tixlcontrol/templates/tixlcontrol/items/question.html:6
-#: tixlcontrol/templates/tixlcontrol/items/questions.html:25
+#: pretixbase/models.py:465 pretixbase/models.py:478
+#: pretixcontrol/templates/pretixcontrol/items/question.html:4
+#: pretixcontrol/templates/pretixcontrol/items/question.html:6
+#: pretixcontrol/templates/pretixcontrol/items/questions.html:25
 msgid "Question"
 msgstr "Frage"
 
-#: tixlbase/models.py:470
+#: pretixbase/models.py:470
 msgid "Question type"
 msgstr "Art der Antwort"
 
-#: tixlbase/models.py:474
+#: pretixbase/models.py:474
 msgid "Required question"
 msgstr "Antwort erforderlich"
 
-#: tixlbase/models.py:479 tixlbase/models.py:557
-#: tixlcontrol/templates/tixlcontrol/items/base.html:9
-#: tixlcontrol/templates/tixlcontrol/items/questions.html:3
-#: tixlcontrol/templates/tixlcontrol/items/questions.html:5
+#: pretixbase/models.py:479 pretixbase/models.py:557
+#: pretixcontrol/templates/pretixcontrol/items/base.html:9
+#: pretixcontrol/templates/pretixcontrol/items/questions.html:3
+#: pretixcontrol/templates/pretixcontrol/items/questions.html:5
 msgid "Questions"
 msgstr "Fragen"
 
-#: tixlbase/models.py:513
-#: tixlcontrol/templates/tixlcontrol/items/index.html:10
+#: pretixbase/models.py:513
+#: pretixcontrol/templates/pretixcontrol/items/index.html:10
 msgid "Category"
 msgstr "Kategorie"
 
-#: tixlbase/models.py:517 tixlcontrol/templates/tixlcontrol/items/index.html:9
+#: pretixbase/models.py:517 pretixcontrol/templates/pretixcontrol/items/index.html:9
 msgid "Item name"
 msgstr "Produktbezeichnung"
 
-#: tixlbase/models.py:521 tixlbase/models.py:650
-#: tixlcontrol/templates/tixlcontrol/item/variations_1d.html:12
+#: pretixbase/models.py:521 pretixbase/models.py:650
+#: pretixcontrol/templates/pretixcontrol/item/variations_1d.html:12
 msgid "Active"
 msgstr "aktiviert"
 
-#: tixlbase/models.py:525
+#: pretixbase/models.py:525
 msgid "Short description"
 msgstr "Kurze Beschreibung"
 
-#: tixlbase/models.py:526
+#: pretixbase/models.py:526
 msgid "This is shown below the item name in lists."
 msgstr "Wird in Listen unter dem Name angezeigt."
 
-#: tixlbase/models.py:530
+#: pretixbase/models.py:530
 msgid "Long description"
 msgstr "Lange Beschreibung"
 
-#: tixlbase/models.py:535 tixlbase/models.py:655
+#: pretixbase/models.py:535 pretixbase/models.py:655
 msgid "Default price"
 msgstr "Basispreis"
 
-#: tixlbase/models.py:540
+#: pretixbase/models.py:540
 msgid "Taxes included in percent"
 msgstr "Steuern inklusive in Prozent"
 
-#: tixlbase/models.py:546 tixlcontrol/templates/tixlcontrol/items/base.html:8
+#: pretixbase/models.py:546 pretixcontrol/templates/pretixcontrol/items/base.html:8
 msgid "Properties"
 msgstr "Eigenschaften"
 
-#: tixlbase/models.py:549
+#: pretixbase/models.py:549
 msgid ""
 "The selected properties will be available for the user to select. After "
 "saving this field, move to the 'Variations' tab to configure the details."
@@ -389,134 +388,134 @@ msgstr ""
 "Die hier ausgewählten Eigenschaften stehen für dieses Produkt zur Verfügung. "
 "Nach der Auswahl können Sie im Tab 'Varianten' die Details konfigurieren:"
 
-#: tixlbase/models.py:560
+#: pretixbase/models.py:560
 msgid "The user will be asked to fill in answers for the selected questions"
 msgstr ""
 "Der Käuft wird beim Kauf gebeten, die ausgewählten Fragen zu beantworten"
 
-#: tixlbase/models.py:566 tixlbase/models.py:713 tixlbase/models.py:762
+#: pretixbase/models.py:566 pretixbase/models.py:713 pretixbase/models.py:762
 msgid "Item"
 msgstr "Produkt"
 
-#: tixlbase/models.py:567 tixlcontrol/templates/tixlcontrol/event/base.html:20
-#: tixlcontrol/templates/tixlcontrol/items/base.html:3
-#: tixlcontrol/templates/tixlcontrol/items/base.html:6
-#: tixlcontrol/templates/tixlcontrol/items/index.html:3
-#: tixlcontrol/templates/tixlcontrol/items/index.html:5
+#: pretixbase/models.py:567 pretixcontrol/templates/pretixcontrol/event/base.html:20
+#: pretixcontrol/templates/pretixcontrol/items/base.html:3
+#: pretixcontrol/templates/pretixcontrol/items/base.html:6
+#: pretixcontrol/templates/pretixcontrol/items/index.html:3
+#: pretixcontrol/templates/pretixcontrol/items/index.html:5
 msgid "Items"
 msgstr "Produkte"
 
-#: tixlbase/models.py:659
+#: pretixbase/models.py:659
 msgid "Item variation"
 msgstr "Variante"
 
-#: tixlbase/models.py:660
+#: pretixbase/models.py:660
 msgid "Item variations"
 msgstr "Varianten"
 
-#: tixlbase/models.py:691
+#: pretixbase/models.py:691
 msgid "Restriction"
 msgstr "Beschränkung"
 
-#: tixlbase/models.py:692
+#: pretixbase/models.py:692
 msgid "Restrictions"
 msgstr "Beschränkungen"
 
 
-#: tixlbase/models.py:758
+#: pretixbase/models.py:758
 msgid "Total capacity"
 msgstr "Gesamtanzahl"
 
-#: tixlbase/models.py:780
+#: pretixbase/models.py:780
 msgid "Quota"
 msgstr "Kontingent"
 
-#: tixlbase/models.py:781
+#: pretixbase/models.py:781
 msgid "Quotas"
 msgstr "Kontingente"
 
-#: tixlbase/models.py:800
+#: pretixbase/models.py:800
 msgid "pending"
 msgstr "ausstehend"
 
-#: tixlbase/models.py:801
+#: pretixbase/models.py:801
 msgid "paid"
 msgstr "bezahlt"
 
-#: tixlbase/models.py:802
+#: pretixbase/models.py:802
 msgid "expired"
 msgstr "abgelaufen"
 
-#: tixlbase/models.py:803
+#: pretixbase/models.py:803
 msgid "cancelled"
 msgstr "storniert"
 
-#: tixlbase/models.py:809
+#: pretixbase/models.py:809
 msgid "Status"
 msgstr "Status"
 
-#: tixlbase/models.py:821 tixlbase/models.py:923
+#: pretixbase/models.py:821 pretixbase/models.py:923
 msgid "Date"
 msgstr "Datum"
 
-#: tixlbase/models.py:824 tixlbase/models.py:926
+#: pretixbase/models.py:824 pretixbase/models.py:926
 msgid "Expiration date"
 msgstr "Ablaufdatum"
 
-#: tixlbase/models.py:827
+#: pretixbase/models.py:827
 msgid "Payment date"
 msgstr "Zahlungsdatum"
 
-#: tixlbase/models.py:830
+#: pretixbase/models.py:830
 msgid "Payment information"
 msgstr "Zahlungsinformationen"
 
-#: tixlbase/models.py:834
+#: pretixbase/models.py:834
 msgid "Total amount"
 msgstr "Gesamtbetrag"
 
-#: tixlbase/models.py:838 tixlbase/models.py:862
+#: pretixbase/models.py:838 pretixbase/models.py:862
 msgid "Order"
 msgstr "Bestellung"
 
-#: tixlbase/models.py:839
+#: pretixbase/models.py:839
 msgid "Orders"
 msgstr "Bestellungen"
 
-#: tixlbase/models.py:871 tixlbase/models.py:916
+#: pretixbase/models.py:871 pretixbase/models.py:916
 msgid "Variation"
 msgstr "Variante"
 
-#: tixlbase/models.py:875 tixlbase/models.py:920
-#: tixlcontrol/templates/tixlcontrol/item/variations_1d.html:13
+#: pretixbase/models.py:875 pretixbase/models.py:920
+#: pretixcontrol/templates/pretixcontrol/item/variations_1d.html:13
 msgid "Price"
 msgstr "Preis"
 
-#: tixlbase/models.py:880
+#: pretixbase/models.py:880
 msgid "Answers"
 msgstr "Antworten"
 
-#: tixlbase/models.py:884
+#: pretixbase/models.py:884
 msgid "Order position"
 msgstr "Bestelltes Produkt"
 
-#: tixlbase/models.py:885
+#: pretixbase/models.py:885
 msgid "Order positions"
 msgstr "Bestellzeile"
 
-#: tixlbase/models.py:907
+#: pretixbase/models.py:907
 msgid "Session key"
 msgstr "Sitzung"
 
-#: tixlbase/models.py:930
+#: pretixbase/models.py:930
 msgid "Cart position"
 msgstr "Produkt im Warenkorb"
 
-#: tixlbase/models.py:931
+#: pretixbase/models.py:931
 msgid "Cart positions"
 msgstr "Produkte im Warenkorb"
 
-#: tixlcontrol/middleware.py:59
+#: pretixcontrol/middleware.py:59
 msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
@@ -524,108 +523,108 @@ msgstr ""
 "Sie haben keine Berechtigung, die ausgewählte Veranstaltung zu "
 "administrieren."
 
-#: tixlcontrol/permissions.py:23
+#: pretixcontrol/permissions.py:23
 msgid "You do not have permission to view this content."
 msgstr "Sie haben keine Berechtigung, diese Inhalte aufzurufen."
 
-#: tixlcontrol/templates/tixlcontrol/auth/base.html:18
+#: pretixcontrol/templates/pretixcontrol/auth/base.html:18
 #, python-format
-msgid "powered by <a %(a_attr)s>tixl</a>"
-msgstr "powered by <a %(a_attr)s>tixl</a>"
+msgid "powered by <a %(a_attr)s>pretix</a>"
+msgstr "powered by <a %(a_attr)s>pretix</a>"
 
-#: tixlcontrol/templates/tixlcontrol/auth/login.html:12
+#: pretixcontrol/templates/pretixcontrol/auth/login.html:12
 msgid "Log in"
 msgstr "Anmelden"
 
-#: tixlcontrol/templates/tixlcontrol/base.html:23
+#: pretixcontrol/templates/pretixcontrol/base.html:23
 msgid "Toggle navigation"
 msgstr "Navigation umschalten"
 
-#: tixlcontrol/templates/tixlcontrol/base.html:33
-#: tixlcontrol/templates/tixlcontrol/event/base.html:18
+#: pretixcontrol/templates/pretixcontrol/base.html:33
+#: pretixcontrol/templates/pretixcontrol/event/base.html:18
 msgid "Dashboard"
 msgstr "Übersicht"
 
-#: tixlcontrol/templates/tixlcontrol/base.html:39
+#: pretixcontrol/templates/pretixcontrol/base.html:39
 msgid "Log out"
 msgstr "Abmelden"
 
-#: tixlcontrol/templates/tixlcontrol/event/base.html:8
+#: pretixcontrol/templates/pretixcontrol/event/base.html:8
 msgid "Event overview"
 msgstr "Überblick"
 
-#: tixlcontrol/templates/tixlcontrol/event/base.html:19
-#: tixlcontrol/templates/tixlcontrol/event/settings_base.html:6
+#: pretixcontrol/templates/pretixcontrol/event/base.html:19
+#: pretixcontrol/templates/pretixcontrol/event/settings_base.html:6
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: tixlcontrol/templates/tixlcontrol/event/plugins.html:8
+#: pretixcontrol/templates/pretixcontrol/event/plugins.html:8
 msgid "Installed plugins"
 msgstr "Installierte Erweiterungen"
 
-#: tixlcontrol/templates/tixlcontrol/event/plugins.html:11
-#: tixlcontrol/templates/tixlcontrol/event/settings.html:8
-#: tixlcontrol/templates/tixlcontrol/item/index.html:9
-#: tixlcontrol/templates/tixlcontrol/items/categories.html:8
-#: tixlcontrol/templates/tixlcontrol/items/category.html:11
-#: tixlcontrol/templates/tixlcontrol/items/properties.html:8
-#: tixlcontrol/templates/tixlcontrol/items/property.html:12
-#: tixlcontrol/templates/tixlcontrol/items/question.html:11
-#: tixlcontrol/templates/tixlcontrol/items/questions.html:8
+#: pretixcontrol/templates/pretixcontrol/event/plugins.html:11
+#: pretixcontrol/templates/pretixcontrol/event/settings.html:8
+#: pretixcontrol/templates/pretixcontrol/item/index.html:9
+#: pretixcontrol/templates/pretixcontrol/items/categories.html:8
+#: pretixcontrol/templates/pretixcontrol/items/category.html:11
+#: pretixcontrol/templates/pretixcontrol/items/properties.html:8
+#: pretixcontrol/templates/pretixcontrol/items/property.html:12
+#: pretixcontrol/templates/pretixcontrol/items/question.html:11
+#: pretixcontrol/templates/pretixcontrol/items/questions.html:8
 msgid "Your changes have been saved."
 msgstr "Die Änderungen wurden gespeichert."
 
-#: tixlcontrol/templates/tixlcontrol/event/plugins.html:23
+#: pretixcontrol/templates/pretixcontrol/event/plugins.html:23
 msgid "Disable"
 msgstr "Deaktivieren"
 
-#: tixlcontrol/templates/tixlcontrol/event/plugins.html:25
+#: pretixcontrol/templates/pretixcontrol/event/plugins.html:25
 msgid "Enable"
 msgstr "Aktivieren"
 
-#: tixlcontrol/templates/tixlcontrol/event/plugins.html:32
+#: pretixcontrol/templates/pretixcontrol/event/plugins.html:32
 #, python-format
 msgid "Version %(plugin.version)s by <em>%(plugin.author)s</em>"
 msgstr "Version %(plugin.version)s von <em>%(plugin.author)s</em>"
 
-#: tixlcontrol/templates/tixlcontrol/event/settings.html:13
-#: tixlcontrol/templates/tixlcontrol/item/base.html:7
-#: tixlcontrol/templates/tixlcontrol/item/index.html:5
-#: tixlcontrol/templates/tixlcontrol/item/index.html:15
-#: tixlcontrol/templates/tixlcontrol/items/category.html:15
-#: tixlcontrol/templates/tixlcontrol/items/property.html:16
-#: tixlcontrol/templates/tixlcontrol/items/question.html:15
+#: pretixcontrol/templates/pretixcontrol/event/settings.html:13
+#: pretixcontrol/templates/pretixcontrol/item/base.html:7
+#: pretixcontrol/templates/pretixcontrol/item/index.html:5
+#: pretixcontrol/templates/pretixcontrol/item/index.html:15
+#: pretixcontrol/templates/pretixcontrol/items/category.html:15
+#: pretixcontrol/templates/pretixcontrol/items/property.html:16
+#: pretixcontrol/templates/pretixcontrol/items/question.html:15
 msgid "General information"
 msgstr "Allgemeine Informationen"
 
-#: tixlcontrol/templates/tixlcontrol/event/settings.html:21
+#: pretixcontrol/templates/pretixcontrol/event/settings.html:21
 msgid "Display settings"
 msgstr "Anzeigeeinstellungen"
 
-#: tixlcontrol/templates/tixlcontrol/event/settings.html:28
+#: pretixcontrol/templates/pretixcontrol/event/settings.html:28
 msgid "Presale settings"
 msgstr "Vorverkaufseinstellungen"
 
-#: tixlcontrol/templates/tixlcontrol/event/settings.html:33
+#: pretixcontrol/templates/pretixcontrol/event/settings.html:33
 msgid "Payment settings"
 msgstr "Zahlungseinstellungen"
 
-#: tixlcontrol/templates/tixlcontrol/event/settings.html:40
-#: tixlcontrol/templates/tixlcontrol/item/index.html:35
-#: tixlcontrol/templates/tixlcontrol/item/variations_1d.html:30
-#: tixlcontrol/templates/tixlcontrol/item/variations_2d.html:35
-#: tixlcontrol/templates/tixlcontrol/item/variations_nd.html:38
-#: tixlcontrol/templates/tixlcontrol/items/category.html:21
-#: tixlcontrol/templates/tixlcontrol/items/property.html:67
-#: tixlcontrol/templates/tixlcontrol/items/question.html:23
+#: pretixcontrol/templates/pretixcontrol/event/settings.html:40
+#: pretixcontrol/templates/pretixcontrol/item/index.html:35
+#: pretixcontrol/templates/pretixcontrol/item/variations_1d.html:30
+#: pretixcontrol/templates/pretixcontrol/item/variations_2d.html:35
+#: pretixcontrol/templates/pretixcontrol/item/variations_nd.html:38
+#: pretixcontrol/templates/pretixcontrol/items/category.html:21
+#: pretixcontrol/templates/pretixcontrol/items/property.html:67
+#: pretixcontrol/templates/pretixcontrol/items/question.html:23
 msgid "Save"
 msgstr "Speichern"
 
-#: tixlcontrol/templates/tixlcontrol/event/settings_base.html:8
+#: pretixcontrol/templates/pretixcontrol/event/settings_base.html:8
 msgid "General settings"
 msgstr "Allgemeine Einstellungen"
 
-#: tixlcontrol/templates/tixlcontrol/events/index.html:6
+#: pretixcontrol/templates/pretixcontrol/events/index.html:6
 msgid ""
 "The list below shows all events you have administrative access to. Click on "
 "the event name to access event details."
@@ -634,69 +633,65 @@ msgstr ""
 "administrativen Zugriff haben. Klicken Sie auf einen Veranstaltungstitel um "
 "Details aufzurufen"
 
-#: tixlcontrol/templates/tixlcontrol/events/index.html:10
+#: pretixcontrol/templates/pretixcontrol/events/index.html:10
 msgid "Event name"
 msgstr "Veranstaltungstitel"
 
-#: tixlcontrol/templates/tixlcontrol/events/index.html:12
+#: pretixcontrol/templates/pretixcontrol/events/index.html:12
 msgid "Start date"
 msgstr "Beginn"
 
-#: tixlcontrol/templates/tixlcontrol/events/index.html:13
+#: pretixcontrol/templates/pretixcontrol/events/index.html:13
 msgid "End date"
 msgstr "Ende"
 
-#: tixlcontrol/templates/tixlcontrol/item/base.html:5
+#: pretixcontrol/templates/pretixcontrol/item/base.html:5
 msgid "Modify item:"
 msgstr "Produkt bearbeiten:"
 
 msgid "Variations"
 msgstr "Varianten"
 
-#: tixlcontrol/templates/tixlcontrol/item/index.html:23
+#: pretixcontrol/templates/pretixcontrol/item/index.html:23
 msgid "Price settings"
 msgstr "Preis"
 
-#: tixlcontrol/templates/tixlcontrol/item/index.html:28
+#: pretixcontrol/templates/pretixcontrol/item/index.html:28
 msgid "Advanced settings"
 msgstr "Erweiterte Einstellungen"
 
-#: tixlcontrol/templates/tixlcontrol/item/variations_1d.html:13
-msgid "Price"
-msgstr "Preis"
-
-#: tixlcontrol/templates/tixlcontrol/item/restrictions.html:28
+#: pretixcontrol/templates/pretixcontrol/item/restrictions.html:28
 msgid "Add a new restriction"
 msgstr "Neue Beschränkung hinzufügen"
 
-#: tixlcontrol/templates/tixlcontrol/item/variations_0d.html:6
+#: pretixcontrol/templates/pretixcontrol/item/variations_0d.html:6
 msgid ""
 "You have to define and select propreties to be able to configure variations."
 msgstr ""
 "Sie müssen Eigenschaften auswählen, um Varianten konfigurieren zu können."
 
-#: tixlcontrol/templates/tixlcontrol/items/base.html:7
+#: pretixcontrol/templates/pretixcontrol/items/base.html:7
 msgid "Categories"
 msgstr "Kategorien"
 
-#: tixlcontrol/templates/tixlcontrol/items/categories.html:12
+#: pretixcontrol/templates/pretixcontrol/items/categories.html:12
 msgid "A new category has been created."
 msgstr "Eine neue Kategorie wurde erstellt."
 
-#: tixlcontrol/templates/tixlcontrol/items/categories.html:16
+#: pretixcontrol/templates/pretixcontrol/items/categories.html:16
 msgid "The category has been deleted."
 msgstr "Die Kategorie wurde gelöscht."
 
-#: tixlcontrol/templates/tixlcontrol/items/categories.html:20
+#: pretixcontrol/templates/pretixcontrol/items/categories.html:20
 msgid "Create new category"
 msgstr "Kategorie erstellen"
 
-#: tixlcontrol/templates/tixlcontrol/items/category_delete.html:4
-#: tixlcontrol/templates/tixlcontrol/items/category_delete.html:6
+#: pretixcontrol/templates/pretixcontrol/items/category_delete.html:4
+#: pretixcontrol/templates/pretixcontrol/items/category_delete.html:6
 msgid "Delete item category"
 msgstr "Kategorie löschen"
 
-#: tixlcontrol/templates/tixlcontrol/items/category_delete.html:9
+#: pretixcontrol/templates/pretixcontrol/items/category_delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to the category <strong>%(category.name)s</strong>?"
@@ -704,44 +699,44 @@ msgstr ""
 "Möchten Sie die Kategorie <strong>%(category.name)s</strong> wirklich "
 "löschen?"
 
-#: tixlcontrol/templates/tixlcontrol/items/category_delete.html:13
-#: tixlcontrol/templates/tixlcontrol/items/property_delete.html:21
-#: tixlcontrol/templates/tixlcontrol/items/question_delete.html:19
+#: pretixcontrol/templates/pretixcontrol/items/category_delete.html:13
+#: pretixcontrol/templates/pretixcontrol/items/property_delete.html:21
+#: pretixcontrol/templates/pretixcontrol/items/question_delete.html:19
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: tixlcontrol/templates/tixlcontrol/items/category_delete.html:16
-#: tixlcontrol/templates/tixlcontrol/items/property_delete.html:24
-#: tixlcontrol/templates/tixlcontrol/items/question_delete.html:22
+#: pretixcontrol/templates/pretixcontrol/items/category_delete.html:16
+#: pretixcontrol/templates/pretixcontrol/items/property_delete.html:24
+#: pretixcontrol/templates/pretixcontrol/items/question_delete.html:22
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: tixlcontrol/templates/tixlcontrol/items/properties.html:12
+#: pretixcontrol/templates/pretixcontrol/items/properties.html:12
 msgid "A new property has been created."
 msgstr "Eine neue Eigenschaft wurde erstellt."
 
-#: tixlcontrol/templates/tixlcontrol/items/properties.html:16
+#: pretixcontrol/templates/pretixcontrol/items/properties.html:16
 msgid "The property has been deleted."
 msgstr "Die Eigenschaft wurde gelöscht."
 
-#: tixlcontrol/templates/tixlcontrol/items/properties.html:20
+#: pretixcontrol/templates/pretixcontrol/items/properties.html:20
 msgid "Create new property"
 msgstr "Eigenschaft hinzufügen"
 
-#: tixlcontrol/templates/tixlcontrol/items/property.html:20
+#: pretixcontrol/templates/pretixcontrol/items/property.html:20
 msgid "Values"
 msgstr "Werte"
 
-#: tixlcontrol/templates/tixlcontrol/items/property.html:61
+#: pretixcontrol/templates/pretixcontrol/items/property.html:61
 msgid "Add a new value"
 msgstr "Neuen Wert hinzufügen."
 
-#: tixlcontrol/templates/tixlcontrol/items/property_delete.html:4
-#: tixlcontrol/templates/tixlcontrol/items/property_delete.html:6
+#: pretixcontrol/templates/pretixcontrol/items/property_delete.html:4
+#: pretixcontrol/templates/pretixcontrol/items/property_delete.html:6
 msgid "Delete item property"
 msgstr "Eigenschaft löschen"
 
-#: tixlcontrol/templates/tixlcontrol/items/property_delete.html:8
+#: pretixcontrol/templates/pretixcontrol/items/property_delete.html:8
 #, python-format
 msgid ""
 "You can not delete the property <strong>%(property)s</strong> as long as the "
@@ -750,23 +745,23 @@ msgstr ""
 "Die Eigenschaft <strong>%(property)s</strong> kann nicht gelöscht werden, "
 "solange sie von den folgenden Produkten benutzt wird:"
 
-#: tixlcontrol/templates/tixlcontrol/items/property_delete.html:17
+#: pretixcontrol/templates/pretixcontrol/items/property_delete.html:17
 #, python-format
 msgid "Are you sure you want to the property <strong>%(property)s</strong>?"
 msgstr ""
 "Möchten Sie die Eigenschaft <strong>%(property)s</strong> wirklich löschen?"
 
-#: tixlcontrol/templates/tixlcontrol/items/question_delete.html:4
-#: tixlcontrol/templates/tixlcontrol/items/question_delete.html:6
+#: pretixcontrol/templates/pretixcontrol/items/question_delete.html:4
+#: pretixcontrol/templates/pretixcontrol/items/question_delete.html:6
 msgid "Delete question"
 msgstr "Frage löschen"
 
-#: tixlcontrol/templates/tixlcontrol/items/question_delete.html:9
+#: pretixcontrol/templates/pretixcontrol/items/question_delete.html:9
 #, python-format
 msgid "Are you sure you want to the question <strong>%(question)s</strong>?"
 msgstr "Möchten Sie die Frage <strong>%(question)s</strong> wirklich löschen?"
 
-#: tixlcontrol/templates/tixlcontrol/items/question_delete.html:11
+#: pretixcontrol/templates/pretixcontrol/items/question_delete.html:11
 msgid ""
 "All answers to the question given by the buyers of the following tickets "
 "will be <strong>permanently lost</strong>."
@@ -774,52 +769,52 @@ msgstr ""
 "Alle Antworten auf diese Frage werden <strong>unwiderruflich gelöscht</"
 "strong>."
 
-#: tixlcontrol/templates/tixlcontrol/items/questions.html:12
+#: pretixcontrol/templates/pretixcontrol/items/questions.html:12
 msgid "A new question has been created."
 msgstr "Eine neue Frage wurde erstellt."
 
-#: tixlcontrol/templates/tixlcontrol/items/questions.html:16
+#: pretixcontrol/templates/pretixcontrol/items/questions.html:16
 msgid "The question has been deleted."
 msgstr "Die Frage wurde gelöscht."
 
-#: tixlcontrol/templates/tixlcontrol/items/questions.html:20
+#: pretixcontrol/templates/pretixcontrol/items/questions.html:20
 msgid "Create new question"
 msgstr "Frage erstellen"
 
-#: tixlcontrol/templates/tixlcontrol/items/questions.html:26
+#: pretixcontrol/templates/pretixcontrol/items/questions.html:26
 msgid "Type"
 msgstr "Typ"
 
-#: tixlcontrol/views/auth.py:15
+#: pretixcontrol/views/auth.py:15
 msgid "E-mail address"
 msgstr "E-Mail-Adresse"
 
-#: tixlcontrol/views/auth.py:20
+#: pretixcontrol/views/auth.py:20
 msgid "Please enter a correct e-mail address and password."
 msgstr ""
 "Bitte geben Sie eine gültige Kombination aus E-Mail-Adresse und Passwort ein."
 
-#: tixlcontrol/views/auth.py:21
+#: pretixcontrol/views/auth.py:21
 msgid "This account is inactive."
 msgstr "Dieses Konto ist deaktiviert."
 
-#: tixlcontrol/views/forms.py:130
+#: pretixcontrol/views/forms.py:130
 msgid "not applicable"
 msgstr "nicht anwendbar"
 
-#: tixlplugins/timerestriction/__init__.py:8
+#: pretixplugins/timerestriction/__init__.py:8
 msgid "Time restriction"
 msgstr "Zeitliche Beschränkung"
 
-#: tixlplugins/timerestriction/__init__.py:12
+#: pretixplugins/timerestriction/__init__.py:12
 msgid "Restricition by time"
 msgstr "Zeitliche Beschränkung"
 
-#: tixlplugins/timerestriction/__init__.py:13
-msgid "the tixl team"
-msgstr "Das tixl-Team"
+#: pretixplugins/timerestriction/__init__.py:13
+msgid "the pretix team"
+msgstr "Das pretix-Team"
 
-#: tixlplugins/timerestriction/__init__.py:15
+#: pretixplugins/timerestriction/__init__.py:15
 msgid ""
 "This plugin adds the possibility to restrict the sale of a given item or "
 "variation to a certain timeframe or change its price during a certain period."
@@ -828,19 +823,19 @@ msgstr ""
 "Zeitraum einzuschränken oder den Preis während eines gewissen Zeitraums zu "
 "ändern."
 
-#: tixlplugins/timerestriction/models.py:15
+#: pretixplugins/timerestriction/models.py:15
 msgid "Start of time frame"
 msgstr "Beginn des Zeitraums"
 
-#: tixlplugins/timerestriction/models.py:18
+#: pretixplugins/timerestriction/models.py:18
 msgid "End of time frame"
 msgstr "Ende des Zeitraums"
 
-#: tixlplugins/timerestriction/models.py:23
+#: pretixplugins/timerestriction/models.py:23
 msgid "Price in time frame"
 msgstr "Preis im Zeitraum"
 
-#: tixlplugins/timerestriction/signals.py:140
+#: pretixplugins/timerestriction/signals.py:140
 msgid "Restriction by time"
 msgstr "Zeitliche Beschränkung"
 

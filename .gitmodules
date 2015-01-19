@@ -1,6 +1,6 @@
-[submodule "src/tixlbase/static/bootstrap"]
-	path = src/tixlbase/static/bootstrap
+[submodule "src/pretixbase/static/bootstrap"]
+	path = src/pretixbase/static/bootstrap
 	url = https://github.com/twbs/bootstrap.git
-[submodule "src/tixlbase/static/fontawesome"]
-	path = src/tixlbase/static/fontawesome
+[submodule "src/pretixbase/static/fontawesome"]
+	path = src/pretixbase/static/fontawesome
 	url = https://github.com/FortAwesome/Font-Awesome.git

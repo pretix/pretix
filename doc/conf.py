@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# tixl documentation build configuration file, created by
+# pretix documentation build configuration file, created by
 # sphinx-quickstart on Mon Sep  8 15:13:08 2014.
 #
 # This file is execfile()d with the current directory set to its
@@ -49,7 +49,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'tixl'
+project = 'pretix'
 copyright = '2014, Raphael Michel'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -182,7 +182,7 @@ html_use_index = False
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'tixldoc'
+htmlhelp_basename = 'pretixdoc'
 
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 if not on_rtd:  # only import and set the theme if we're building docs locally
@@ -208,7 +208,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'tixl.tex', 'tixl Documentation',
+  ('index', 'pretix.tex', 'pretix Documentation',
    'Raphael Michel', 'manual'),
 ]
 
@@ -238,7 +238,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'tixl', 'tixl Documentation',
+    ('index', 'pretix', 'pretix Documentation',
      ['Raphael Michel'], 1)
 ]
 
@@ -252,8 +252,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'tixl', 'tixl Documentation',
-   'Raphael Michel', 'tixl', 'One line description of project.',
+  ('index', 'pretix', 'pretix Documentation',
+   'Raphael Michel', 'pretix', 'One line description of project.',
    'Miscellaneous'),
 ]
 

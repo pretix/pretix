@@ -1,5 +1,5 @@
 [run]
-source = tixlbase,tixlcontrol,tixlpresale,tixlplugins
+source = pretixbase,pretixcontrol,pretixpresale,pretixplugins
 omit = */migrations/*,*/urls.py,*/tests/*
 
 [report]

@@ -4,7 +4,7 @@
 Writing a restriction plugin
 ============================
 
-Please make sure you have read and understood the :ref:`basic idea being tixl's restrictions 
+Please make sure you have read and understood the :ref:`basic idea being pretix's restrictions 
 <restrictionconcept>`. In this document, we will walk through the creation of a restriction
 plugin using the example of a restriction by date and time.
 
@@ -15,14 +15,14 @@ The restriction model
 
 It is very likely that your new restriction plugin needs to store data. In order to do
 so, it should define its own model with a name related to what your restriction does,
-e.g. ``TimeRestriction``. This model should be a child class of ``tixlbase.models.BaseRestriction``.
+e.g. ``TimeRestriction``. This model should be a child class of ``pretixbase.models.BaseRestriction``.
 You do not need to define custom fields, but you should create at least an empty model.
-In our example, we put the following into :file:`tixlplugins/timerestriction/models.py`::
+In our example, we put the following into :file:`pretixplugins/timerestriction/models.py`::
 
     from django.db import models
     from django.utils.translation import ugettext_lazy as _
 
-    from tixlbase.models import BaseRestriction
+    from pretixbase.models import BaseRestriction
 
 
     class TimeRestriction(BaseRestriction):
@@ -52,14 +52,14 @@ Availability determination
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This is the one signal *every* restriction plugin has to listen for, as your plugin does not
-restrict anything without doing so. It is available as ``tixlbase.signals.determine_availability``
-and is sent out every time some component of tixl wants to know whether a specific item or
+restrict anything without doing so. It is available as ``pretixbase.signals.determine_availability``
+and is sent out every time some component of pretix wants to know whether a specific item or
 variation is available for sell.
 
 It is sent out with several keyword arguments:
 
     ``item``
-        The instance of ``tixlbase.models.Item`` in question.
+        The instance of ``pretixbase.models.Item`` in question.
     ``variations``
         A list of dictionaries in the same format as ``Item.get_all_variations``: 
         The list contains one dictionary per variation, where the ``Property`` IDs are 
@@ -68,7 +68,7 @@ It is sent out with several keyword arguments:
         the item does not have any properties, the list will contain exactly one empty
         dictionary. Please note: this is *not* the list of all possible variations, this is
         only the list of all variations the frontend likes to determine the status for.
-        Technically, you won't get ``dict`` objects but ``tixlbase.types.VariationDict`` 
+        Technically, you won't get ``dict`` objects but ``pretixbase.types.VariationDict`` 
         objects, which behave exactly the same but add some extra methods.
     ``context``
         A yet-to-be-defined context object containing information about the user and the order
@@ -103,7 +103,7 @@ In our example, the implementation could look like this::
     from django.dispatch import receiver
     from django.utils.timezone import now
 
-    from tixlbase.signals import determine_availability
+    from pretixbase.signals import determine_availability
 
     from .models import TimeRestriction
 
@@ -217,12 +217,12 @@ Control interface formsets
 To make it possible for the event organizer to configure your restriction, there is a
 'Restrictions' page in the item configuration. This page is able to show a formset for
 each restriction plugin, but *you* are required to create this formset. This is why you
-should listen to the the ``tixlcontrol.signals.restriction_formset`` signal.
+should listen to the the ``pretixcontrol.signals.restriction_formset`` signal.
 
 Currently, the signal comes with only one keyword argument:
 
     ``item``
-        The instance of ``tixlbase.models.Item`` we want a formset for.
+        The instance of ``pretixbase.models.Item`` we want a formset for.
 
 You are expected to return a dict containing the following items:
 
@@ -245,9 +245,9 @@ Our time restriction example looks like this::
     from django.dispatch import receiver
     from django.forms.models import inlineformset_factory
 
-    from tixlcontrol.signals import restriction_formset
-    from tixlbase.models import Item
-    from tixlcontrol.views.forms import (
+    from pretixcontrol.signals import restriction_formset
+    from pretixbase.models import Item
+    from pretixcontrol.views.forms import (
         VariationsField, RestrictionInlineFormset, RestrictionForm
     )
 

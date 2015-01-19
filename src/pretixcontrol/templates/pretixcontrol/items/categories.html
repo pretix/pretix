@@ -1,0 +1,43 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Item categories" %}{% endblock %}
+{% block inside %}
+	<h1>{% trans "Item categories" %}</h1>
+	{% if "updated" in request.GET %}
+		<div class="alert alert-success">
+			{% trans "Your changes have been saved." %}
+		</div>
+	{% elif "created" in request.GET %}
+		<div class="alert alert-success">
+			{% trans "A new category has been created." %}
+		</div>
+	{% elif "deleted" in request.GET %}
+		<div class="alert alert-success">
+			{% trans "The category has been deleted." %}
+		</div>
+	{% endif %}
+	<p>
+		<a href="{% url "control:event.items.categories.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create new category" %}</a>
+	</p>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>{% trans "Item categories" %}</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for c in categories %}
+			<tr>
+				<td><strong><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.identity %}">{{ c.name }}</a></strong></td>
+				<td>
+					<a href="{% url "control:event.items.categories.up" organizer=request.event.organizer.slug event=request.event.slug category=c.identity %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
+					<a href="{% url "control:event.items.categories.down" organizer=request.event.organizer.slug event=request.event.slug category=c.identity %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
+				</td>
+				<td class="text-right"><a href="{% url "control:event.items.categories.delete" organizer=request.event.organizer.slug event=request.event.slug category=c.identity %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

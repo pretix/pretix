@@ -4,18 +4,18 @@
 Plugin basics
 =============
 
-It is possible to extend tixl with custom Python code using the official plugin
+It is possible to extend pretix with custom Python code using the official plugin
 API. Every plugin has to be implemented as an independent Django 'app' living
 either in an own python package either installed like any python module or in 
-the ``tixlplugins/`` directory of your tixl installation. A plugin may only
+the ``pretixplugins/`` directory of your pretix installation. A plugin may only
 require two steps to install:
 
-* Add it to the ``INSTALLED_APPS`` setting of Django in ``tixl/settings.py``
+* Add it to the ``INSTALLED_APPS`` setting of Django in ``pretix/settings.py``
 * Perform database migrations by using ``python manage.py migrate``
 
-The communication between tixl and the plugins happens via Django's
-`signal dispatcher`_ pattern. The core modules of tixl, ``tixlbase``, 
-``tixlcontrol`` and ``tixlpresale`` expose a number of signals which are documented 
+The communication between pretix and the plugins happens via Django's
+`signal dispatcher`_ pattern. The core modules of pretix, ``pretixbase``, 
+``pretixcontrol`` and ``pretixpresale`` expose a number of signals which are documented 
 on the next pages.
 
 .. _`pluginsetup`:
@@ -23,15 +23,15 @@ on the next pages.
 Creating a plugin
 -----------------
 
-To create a new plugin, create a new python package as a subpackage to ``tixlplugins``.
-In order to do so, you can place your module into tixl's :file:`tixlplugins` folder *or
-anywhere else in your python import path* inside a folder called ``tixlplugins``. 
+To create a new plugin, create a new python package as a subpackage to ``pretixplugins``.
+In order to do so, you can place your module into pretix's :file:`pretixplugins` folder *or
+anywhere else in your python import path* inside a folder called ``pretixplugins``. 
 
 .. IMPORTANT::
     This makes use of a design pattern called `namespace packages`_ which is only 
     implicitly available as of Python 3.4. As we aim to support Python 3.2 for a bit 
-    longer, you **MUST** put **EXACLTY** the following content into ``tixlplugins/__init__.py``
-    if you create a new ``tixlplugins`` folder somewhere in your path::
+    longer, you **MUST** put **EXACLTY** the following content into ``pretixplugins/__init__.py``
+    if you create a new ``pretixplugins`` folder somewhere in your path::
         
         from pkgutil import extend_path
         __path__ = extend_path(__path__, __name__)
@@ -48,17 +48,17 @@ example, taken from the time restriction module (see next chapter) as a template
 
     from django.apps import AppConfig
     from django.utils.translation import ugettext_lazy as _
-    from tixlbase.plugins import PluginType
+    from pretixbase.plugins import PluginType
 
 
     class TimeRestrictionApp(AppConfig):
-        name = 'tixlplugins.timerestriction'
+        name = 'pretixplugins.timerestriction'
         verbose_name = _("Time restriction")
 
         class TixlPluginMeta:
             type = PluginType.RESTRICTION
             name = _("Restriciton by time")
-            author = _("the tixl team")
+            author = _("the pretix team")
             version = '1.0.0'
             description = _("This plugin adds the possibility to restrict the sale " +
                             "of a given item or variation to a certain timeframe " +
@@ -67,7 +67,7 @@ example, taken from the time restriction module (see next chapter) as a template
         def ready(self):
             from . import signals  # NOQA
 
-    default_app_config = 'tixlplugins.timerestriction.TimeRestrictionApp'
+    default_app_config = 'pretixplugins.timerestriction.TimeRestrictionApp'
 
 .. IMPORTANT::
    You have to implement a ``TixlPluginMeta`` class like in the example to make your

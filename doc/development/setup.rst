@@ -5,8 +5,8 @@ Obtain a copy of the source code
 --------------------------------
 Just clone our git repository including its submodules::
 
-    git clone --recursive https://github.com/tixl/tixl.git 
-    cd tixl/
+    git clone --recursive https://github.com/pretix/pretix.git 
+    cd pretix/
 
 External Dependencies
 ---------------------
@@ -27,7 +27,7 @@ environment and activate it for your current session::
     source env/bin/activate
 
 You should now see a ``(env)`` prepended to your shell prompt. You have to do this
-in every shell you use to work with tixl (or configure your shell to do so 
+in every shell you use to work with pretix (or configure your shell to do so 
 automatically).
 
 Working with the code
@@ -48,7 +48,7 @@ source code for strings to be translated and update the ``*.po`` files according
 
     make localegen
 
-To actually see tixl in your language, you have to compile the ``*.po`` files to their
+To actually see pretix in your language, you have to compile the ``*.po`` files to their
 optimized binary ``*.mo`` counterparts::
 
     make localecompile

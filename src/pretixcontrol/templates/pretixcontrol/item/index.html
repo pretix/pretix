@@ -1,0 +1,36 @@
+{% extends "pretixcontrol/item/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+	{% if "success" in request.GET %}
+		<div class="alert alert-success">
+			{% trans "Your changes have been saved." %}
+		</div>
+	{% endif %}
+	<form action="" method="post" class="form-horizontal">
+		{% csrf_token %}
+		<fieldset>
+			<legend>{% trans "General information" %}</legend>
+			{% bootstrap_field form.name layout="horizontal" %}
+			{% bootstrap_field form.active layout="horizontal" %}
+			{% bootstrap_field form.category layout="horizontal" %}
+			{% bootstrap_field form.short_description layout="horizontal" %}
+			{% bootstrap_field form.long_description layout="horizontal" %}
+		</fieldset>
+		<fieldset>
+			<legend>{% trans "Price settings" %}</legend>
+			{% bootstrap_field form.default_price layout="horizontal" %}
+			{% bootstrap_field form.tax_rate layout="horizontal" %}
+		</fieldset>
+		<fieldset>
+			<legend>{% trans "Advanced settings" %}</legend>
+			{% bootstrap_field form.properties layout="horizontal" %}
+			{% bootstrap_field form.questions layout="horizontal" %}
+		</fieldset>
+		<div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+		</div>
+	</form>
+{% endblock %}

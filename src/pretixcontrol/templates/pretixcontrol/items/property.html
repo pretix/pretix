@@ -1,0 +1,70 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load formset_tags %}
+{% block title %}{% trans "Item property" %}{% endblock %}
+{% block inside %}
+	<h1>{% trans "Item property" %}</h1>
+	<form action="" method="post" class="form-horizontal">
+		{% csrf_token %}
+		{% if "success" in request.GET %}
+			<div class="alert alert-success">
+				{% trans "Your changes have been saved." %}
+			</div>
+		{% endif %}
+		<fieldset>
+			<legend>{% trans "General information" %}</legend>
+			{% bootstrap_field form.name layout="horizontal" %}
+		</fieldset>
+		<fieldset>
+			<legend>{% trans "Values" %}</legend>
+			<div data-formset data-formset-prefix="{{ formset.prefix }}">
+				<div data-formset-body>
+					{{ formset.management_form }}
+					{% for f in formset %}
+						<div class="form-group" data-formset-form>
+							{{ f.id }}
+							<div class="col-sm-9">
+								{% bootstrap_field f.value form_group_class="" layout="inline" %}
+							</div>
+							<div class="sr-only">
+								{% bootstrap_field f.ORDER form_group_class="" layout="inline" %}
+								{% bootstrap_field f.DELETE form_group_class="" layout="inline" %}
+							</div>
+							<div class="col-sm-3 text-right">
+								<button type="button" class="btn btn-default" data-formset-move-up-button><i class="fa fa-arrow-up"></i></button>
+								<button type="button" class="btn btn-default" data-formset-move-down-button><i class="fa fa-arrow-down"></i></button>
+								<button type="button" class="btn btn-danger" data-formset-delete-button><i class="fa fa-trash"></i></button>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+				<script type="form-template" data-formset-empty-form>
+					{% escapescript %}
+						<div class="form-group" data-formset-form>
+							{{ formset.empty_form.id }}
+							<div class="col-sm-9">
+								{% bootstrap_field formset.empty_form.value form_group_class="" layout="inline" %}
+							</div>
+							<div class="sr-only">
+								{% bootstrap_field formset.empty_form.ORDER form_group_class="" layout="inline" %}
+								{% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+							</div>
+							<div class="col-sm-3 text-right">
+								<button type="button" class="btn btn-default" data-formset-move-up-button><i class="fa fa-arrow-up"></i></button>
+								<button type="button" class="btn btn-default" data-formset-move-down-button><i class="fa fa-arrow-down"></i></button>
+								<button type="button" class="btn btn-danger" data-formset-delete-button><i class="fa fa-trash"></i></button>
+							</div>
+						</div>
+					{% endescapescript %}
+				</script>
+				<button type="button" class="btn btn-default" data-formset-add><i class="fa fa-plus"></i> {% trans "Add a new value" %}</button>
+			</div>
+		</fieldset>
+		<div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+		</div>
+	</form>
+{% endblock %}

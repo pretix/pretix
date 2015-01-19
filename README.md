@@ -1,9 +1,9 @@
-tixl
-====
+pretix
+======
 
-[![Docs](https://readthedocs.org/projects/tixl/badge/)](https://readthedocs.org/projects/tixl/)
-[![Build Status](https://travis-ci.org/tixl/tixl.svg?branch=master)](https://travis-ci.org/tixl/tixl)
-[![Coverage Status](https://img.shields.io/coveralls/tixl/tixl.svg)](https://coveralls.io/r/tixl/tixl)
+[![Docs](https://readthedocs.org/projects/pretix/badge/)](https://readthedocs.org/projects/pretix/)
+[![Build Status](https://travis-ci.org/pretix/pretix.svg?branch=master)](https://travis-ci.org/pretix/pretix)
+[![Coverage Status](https://img.shields.io/coveralls/pretix/pretix.svg)](https://coveralls.io/r/pretix/pretix)
 
 
 Reinventing ticket presales, one bit at a time.

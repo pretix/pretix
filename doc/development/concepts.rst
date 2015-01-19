@@ -7,18 +7,18 @@ Basic terminology
 The components
 ^^^^^^^^^^^^^^
 
-The project tixl is split into several components. The main three of them are:
+The project pretix is split into several components. The main three of them are:
 
-**tixlbase**
+**pretixbase**
     Tixlbase is the foundation below all other components. It is primarily
     responsible for the data structures and database communication. It also hosts
     several utilities which are used by multiple other components.
 
-**tixlcontrol**
+**pretixcontrol**
     Tixlcontrol is the web-based backend software which allows organizers to
     create and manage their events, items, orders and tickets.
 
-**tixlpresale**
+**pretixpresale**
     Tixlpresale is the ticket-shop itself, containing all the parts visible to the
     end user.
 
@@ -29,7 +29,7 @@ Tixl is all about **events**, which are defined as something happening somewhere
 Every Event is managed by the **organizer**, an abstract entity running the event.
 
 Tixl is used by **users**. We want to enable global users who can just login into 
-tixl and buy tickets for as many events as they like but at the same time it
+pretix and buy tickets for as many events as they like but at the same time it
 should be possible to create some kind of local user to have a temporary account
 just to buy tickets for one single event.
 
@@ -46,7 +46,7 @@ as our primary key:
 **Local users**
     Local users do only exist inside the scope of one event. They are identified by 
     usernames, which are only valid for exactly one event. Internally, their identifier 
-    is "{username}@{event.id}.event.tixl"
+    is "{username}@{event.id}.event.pretix"
 
 **Global users**
     Global users exist everywhere in the installation of Tixl. They can buy tickets 
@@ -57,7 +57,7 @@ as our primary key:
 Items and variations
 ^^^^^^^^^^^^^^^^^^^^
 
-The purpose of tixl is to sell **items** (which belong to **events**) to **users**. 
+The purpose of pretix is to sell **items** (which belong to **events**) to **users**. 
 An **item** is a abstract thing, popular examples being event tickets or a piece of 
 merchandise, like 'T-Shirt'. An **item** can have multiple **properties** with multiple 
 **values** each. For example, the **item** 'T-Shirt' could have the **property** 'Size' 
@@ -79,7 +79,7 @@ include 'Name' or 'age'.
 Restrictions
 ^^^^^^^^^^^^
 
-The probably most powerful concepts of tixl is the very abstract concept of **restricitons**. 
+The probably most powerful concepts of pretix is the very abstract concept of **restricitons**. 
 We already know that **items** can come in very different **variations**, but a 
 **restriction** decides whether an variation is available for sale and assign **prices** 
 to **variations**. There are **restriction types** (pieces of code implementing the 
@@ -115,7 +115,7 @@ Any number of **restrictions** can be applied to the whole of a **item** or even
   sense otherwise on an one-dimensional time axis).
 * If multiple restrictions apply which set the price, the *cheapest* price determines the final price.
 
-Restrictions can be implemented using a plugin system and do not require changes to the tixl codebase.
+Restrictions can be implemented using a plugin system and do not require changes to the pretix codebase.
 
 Restriction by number
 """""""""""""""""""""

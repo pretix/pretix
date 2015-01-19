@@ -17,7 +17,7 @@ Technical goals
 Feature goals
 -------------
 
-* One tixl software installation has to cope with multiple events by multiple organizers
+* One pretix software installation has to cope with multiple events by multiple organizers
 * There is no code access necessary to create a new event
 * Tixl is abstract in many ways to adopt to as much events as possible.
 

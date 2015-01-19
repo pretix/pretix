@@ -1,0 +1,26 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Items" %}{% endblock %}
+{% block inside %}
+	<h1>{% trans "Items" %}</h1>
+    <p>
+        <a href="{% url "control:event.items.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create new item" %}</a>
+    </p>
+	<table class="table table-condensed table-hover">
+		<thead>
+			<tr>
+				<th>{% trans "Item name" %}</th>
+				<th>{% trans "Category" %}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for i in items %}
+			<tr>
+				<td><strong><a href="
+				{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.identity %}">{{ i.name }}</a></strong></td>
+				<td>{% if i.category %}{{ i.category }}{% endif %}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "pretixcontrol/item/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load formset_tags %}
+{% block inside %}
+    <p>{% blocktrans trimmed %}
+        In this area, you can choose of a set of "restriction types" to restrict the availability of your item with
+        certain conditions.
+    {% endblocktrans %}</p>
+    <form action="" method="post">
+        {% csrf_token %}
+        {% for set in formsets %}
+            <fieldset>
+                <legend>{{ set.title }}</legend>
+                <p>{{ set.description }}</p>
+                <div data-formset class="restriction-formset" data-formset-prefix="{{ set.formset.prefix }}">
+                    <div data-formset-body class="panel-group collapse" id="accordion_{{ set.formset.prefix }}">
+                        {{ set.formset.management_form }}
+                        {% for f in set.formset %}
+                            <div class="panel panel-default" data-formset-form>
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion"
+                                           href="#collapse{{ f.prefix }}">
+                                            {{ set.title }}
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapse{{ f.prefix }}" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        <div class="form-horizontal">
+                                            {% bootstrap_form f layout="horizontal" field_class="col-md-10" %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <script type="form-template" data-formset-empty-form>
+                        {% escapescript %}
+                            <div class="panel panel-default" data-formset-form>
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse__prefix__">
+                                            {% trans "New restriction" %}
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapse__prefix__" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        <div class="form-horizontal">
+                                            {% bootstrap_form set.formset.initialized_empty_form layout="horizontal" field_class="col-md-10" %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endescapescript %}
+                    </script>
+                    <button type="button" class="btn btn-default" data-formset-add><i
+                            class="fa fa-plus"></i> {% trans "Add a new restriction" %}</button>
+                </div>
+            </fieldset>
+        {% endfor %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+
+{% endblock %}
