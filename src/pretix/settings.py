@@ -105,7 +105,7 @@ LOCALE_PATHS = (
     'locale',
 )
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _  # NOQA
 LANGUAGES = (
     ('de', _('German')),
     ('en', _('English')),
@@ -154,6 +154,6 @@ DEFAULT_CURRENCY = 'EUR'
 INTERNAL_IPS = ('127.0.0.1', '::1')
 
 try:
-    from local_settings import *
+    from local_settings import *  # NOQA
 except ImportError:
     pass

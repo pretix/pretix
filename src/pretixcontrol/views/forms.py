@@ -166,18 +166,20 @@ class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
             prop2 = properties[1]
             prop2v = list(prop2.values.current.all())
 
-            # Given an iterable of PropertyValue objects, this will return a
-            # list of their primary keys, ordered by the primary keys of the
-            # properties they belong to EXCEPT the value for the property prop2.
-            # We'll see later why we need this.
-            selector = lambda values: [
-                v.identity for v in sorted(values, key=lambda v: v.prop.identity)
-                if v.prop.identity != prop2.identity
-            ]
+            def selector(values):
+                # Given an iterable of PropertyValue objects, this will return a
+                # list of their primary keys, ordered by the primary keys of the
+                # properties they belong to EXCEPT the value for the property prop2.
+                # We'll see later why we need this.
+                return [
+                    v.identity for v in sorted(values, key=lambda v: v.prop.identity)
+                    if v.prop.identity != prop2.identity
+                ]
 
-            # Given a list of variations, this will sort them by their position
-            # on the x-axis
-            sort = lambda v: v[prop2.identity].identity
+            def sort(v):
+                # Given a list of variations, this will sort them by their position
+                # on the x-axis
+                return v[prop2.identity].identity
 
             # We now iterate over the cartesian product of all the other
             # properties which are NOT on the axes of the grid because we

@@ -34,7 +34,8 @@ class VariationDict(dict):
         the PropertyValue id's, sorted by the Property id's and is therefore
         unique among one item.
         """
-        order_key = lambda i: i[0]
+        def order_key(i):
+            i[0]
         return ",".join((
             str(v[1].pk) for v in sorted(self.relevant_items(), key=order_key)
         ))
