@@ -18,4 +18,4 @@ Raphael Michel <mail@raphaelmichel.de>
 
 License
 -------
-It's the AGPL. See the LICENSE file for more information.
+It's the Apache License. See the LICENSE file for more information.
