@@ -1,0 +1,24 @@
+{% load compress %}
+{% load staticfiles %}
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}{% if url_name != "event.index" %} :: {% endif %}{{ event.name }}</title>
+    {% compress css %}
+        <link rel="stylesheet" type="text/less" href="{% static "pretixpresale/less/main.less" %}" />
+    {% endcompress %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
+        <script type="text/javascript" src="{% static "bootstrap/dist/js/bootstrap.js" %}"></script>
+    {% endcompress %}
+</head>
+<body>
+<div class="container event">
+    <h1>{{ event.name }}</h1>
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>
