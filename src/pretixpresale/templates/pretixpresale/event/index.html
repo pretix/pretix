@@ -1,5 +1,19 @@
 {% extends "pretixpresale/event/base.html" %}
 
 {% block content %}
-Hallo
+    {% for tup in items_by_category %}
+        <h3>{{ tup.0.name }}</h3>
+        {% for item in tup.1 %}
+            <div class="row-fluid">
+                <div class="col-md-8">
+                    <strong>{{ item.name }}</strong>
+                    <p>{{ item.short_description }}</p>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="col-md-4 form-inline availability-box abailable">
+                    <input type="number" class="form-control input-sm input-item-count" placeholder="0" min="0">
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
 {% endblock %}

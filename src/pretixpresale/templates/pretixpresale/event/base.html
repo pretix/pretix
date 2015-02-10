@@ -16,7 +16,7 @@
 </head>
 <body>
 <div class="container event">
-    <h1>{{ event.name }}</h1>
+    <h1>{{ event.name }} <small>{{ event.date_from|date }}{% if event.show_date_to %} – {{ event.date_to|date }}{% endif %}</small></h1>
     {% block content %}
     {% endblock %}
 </div>

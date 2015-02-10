@@ -55,11 +55,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'pretixbase.middleware.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pretixcontrol.middleware.PermissionMiddleware',
     'pretixpresale.middleware.EventMiddleware',
+    'pretixbase.middleware.LocaleMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
