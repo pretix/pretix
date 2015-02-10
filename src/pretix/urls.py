@@ -3,11 +3,13 @@ from django.contrib import admin
 from django.conf import settings
 
 import pretixcontrol.urls
+import pretixpresale.urls
 
 
 urlpatterns = patterns('',
     url(r'^control/', include(pretixcontrol.urls, namespace='control')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'', include(pretixpresale.urls, namespace='presale')),
 )
 
 if settings.DEBUG:

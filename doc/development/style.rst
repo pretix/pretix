@@ -28,6 +28,8 @@ Python code
 
 * For templates and models, follow the `Django Coding Style`_.
 
+* Use Django's class-based views
+
 * Always mark all strings ever displayed to any user for translation.
 
 LESS stylesheets

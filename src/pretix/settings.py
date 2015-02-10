@@ -59,6 +59,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pretixcontrol.middleware.PermissionMiddleware',
+    'pretixpresale.middleware.EventMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
