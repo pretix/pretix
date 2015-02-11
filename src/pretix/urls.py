@@ -9,7 +9,8 @@ import pretixpresale.urls
 urlpatterns = patterns('',
     url(r'^control/', include(pretixcontrol.urls, namespace='control')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'', include(pretixpresale.urls, namespace='presale')),
+    # The pretixpresale namespace is configured at the bottom of this file, because it
+    # contains a wildcard-style URL which has to be configured _after_ debug settings.
 )
 
 if settings.DEBUG:
@@ -17,3 +18,7 @@ if settings.DEBUG:
     urlpatterns += patterns('',
         url(r'^__debug__/', include(debug_toolbar.urls)),
     )
+
+urlpatterns += patterns('',
+    url(r'', include(pretixpresale.urls, namespace='presale'))
+)
