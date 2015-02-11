@@ -5,6 +5,8 @@ import uuid
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db.models import Q
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import date as _date
 from django.core.validators import RegexValidator
@@ -704,6 +706,13 @@ class Item(Versionable):
         return result
 
     def get_all_available_variations(self):
+        """
+        This method returns a list of all variations which are theoretically
+        possible for sale. It DOES call all activated restriction plugins, but it
+        DOES NOT take into account quotas. Use is_available on the ItemVariation
+        objects (or the Item it self, if it does not have variations) to determine
+        availability by the terms of quotas.
+        """
         from .signals import determine_availability
 
         variations = self.get_all_variations()
@@ -731,6 +740,16 @@ class Item(Versionable):
                     var['price'] = response[i]['price']
 
         return variations
+
+    def availability(self):
+        """
+        This method is used to determine whether this Item is currently available
+        for sale. It may return any of the return codes of Quota.availability()
+        """
+        if self.properties.exist():
+            raise ValueError('Do not call this directly on items which have properties '
+                             'but call this on their ItemVariation objects')
+        return max([q.availability() for q in self.quotas.all()])
 
 
 class ItemVariation(Versionable):
@@ -783,6 +802,13 @@ class ItemVariation(Versionable):
         super().save(*args, **kwargs)
         if self.item:
             self.item.event.get_cache().clear()
+
+    def availability(self):
+        """
+        This method is used to determine whether this Item is currently available
+        for sale. It may return any of the return codes of Quota.availability()
+        """
+        return max([q.availability() for q in self.quotas.all()])
 
 
 class VariationsField(VersionedManyToManyField):
@@ -867,10 +893,35 @@ class Quota(Versionable):
     speficied, the quota applies to all of them, and if there are variations
     specified, the quota applies to those.
 
-    This object holds two fields, "order_cache" and "lock_cache", which are
-    implementation specific and are considered private. It is planned that they
-    are being used as a fallback solution if redis is not available.
+    Please read the documentation section on quotas carefully before doing
+    anything with quotas. This might confuse you otherwise.
+    http://docs.pretix.eu/en/latest/development/concepts.html#restriction-by-number
+
+    The AVAILABILITY_* constants represent varios states of an quota allowing
+    its items/variations being for sale.
+
+    AVAILABILITY_OK
+        This item is available for sale.
+
+    AVAILABILITY_RESERVED
+        This item is currently not available for sale, because all available
+        items are in people's shopping carts. It might become available
+        again if those people do not proceed with checkout.
+
+    AVAILABILITY_ORDERED
+        This item is currently not availalbe for sale, because all available
+        items are ordered. It might become available again if those people
+        do not pay.
+
+    AVAILABILITY_GONE
+        This item is completely sold out.
     """
+
+    AVAILABILITY_GONE = 30
+    AVAILABILITY_ORDERED = 20
+    AVAILABILITY_RESERVED = 10
+    AVAILABILITY_OK = 0
+
     event = VersionedForeignKey(
         Event,
         on_delete=models.CASCADE,
@@ -896,14 +947,6 @@ class Quota(Versionable):
         blank=True,
         verbose_name=_("Variations")
     )
-    order_cache = models.ManyToManyField(
-        'OrderPosition',
-        blank=True
-    )
-    lock_cache = models.ManyToManyField(
-        'CartPosition',
-        blank=True
-    )
 
     class Meta:
         verbose_name = _("Quota")
@@ -911,6 +954,62 @@ class Quota(Versionable):
 
     def __str__(self):
         return self.name
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        if self.event:
+            self.event.get_cache().clear()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.event:
+            self.event.get_cache().clear()
+
+    def availability(self):
+        """
+        This method is used to determine whether Items or ItemVariations belonging
+        to this quota should currently be available for sale. It returns one of the
+        Quota.AVAILABILITY_ constants. 0 is returned if the item is available, a
+        positive number depending on the reason, if not.
+        """
+        # TODO: These lookups are highly inefficient. However, we'll wait with optimizing
+        #       until Django 1.8 is released, as the following feature might make it a
+        #       lot easier:
+        #       https://docs.djangoproject.com/en/1.8/ref/models/conditional-expressions/
+        # TODO: Test for interference with old versions of Item-Quota-relations, etc.
+        # TODO: Prevent corner-cases like people having ordered an item before it got
+        #       its first variationsadded
+        quotalookup = (
+            (  # Orders for items which do not have any variations
+                Q(variation__isnull=True)
+                & Q(item__quotas__in=[self])
+            ) | (  # Orders for items which do have any variations
+                Q(variation__quotas__in=[self])
+            )
+        )
+        paid_orders = OrderPosition.objects.current.filter(
+            Q(order__status=Order.STATUS_PAID)
+            & quotalookup
+        )
+        if paid_orders >= self.size:
+            return Quota.AVAILABILITY_GONE
+
+        pending_valid_orders = OrderPosition.objects.current.filter(
+            Q(order__status=Order.STATUS_PENDING)
+            & Q(order__expires__gte=now())
+            & quotalookup
+        )
+        if (paid_orders + pending_valid_orders) >= self.size:
+            return Quota.AVAILABILITY_ORDERED
+
+        valid_cart_positions = CartPosition.objects.current.filter(
+            Q(order__expires__lt=now())
+            & quotalookup
+        )
+        if (paid_orders + pending_valid_orders + valid_cart_positions) >= self.size:
+            return Quota.AVAILABILITY_RESERVED
+
+        return Quota.AVAILABILITY_OK
 
 
 class Order(Versionable):

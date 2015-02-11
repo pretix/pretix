@@ -125,21 +125,21 @@ special care in the implementation to never sell more tickets than allowed, even
 
 * There is a concept of **quotas**. A quota is basically a number of items combined with information
   about how many of them are still available.
-* Every time a user places a item in the cart, a **lock** object is created, reducing the number of
+* Every time a user places a item in the cart, a **cart lock** is created, reducing the number of
   available items in the pool by one. The lock is valid for a fixed time (e.g. 30 minutes), but not
   instantly deleted afther those 30 minutes (we'll get to that).
 * Every time a user places a binding order, the lock object is replaced by an **order** which behaves
   much the same as the lock. It reduces the number of available item and is valid for a fixed time, this
   time for the configured payment term (e.g. 14 days).
 * If the order is being paid, the **order** becomes permanent.
-* Once there are no available tickets left and a user wants to buy a ticket, a lock which is in place
-  for more than the allowed time frame is being removed in favor of the new buyer. If there are no
-  abandoned locks available, an unpaid order being older than the configured payment term is being
-  removed. If there are none of them as well, this quota is sold out.
-* The same quota can apply to multiple items and one item can be affected by multiple quotas, to
-  enable both of the following features at the same time:
-
-  * You'll want to make sure you never have more than X people at your event, so you'll create a quota
-    applying to all ticket items.
-  * You want to reduce the first Y tickets in price, so you'll create a restriction which is bound by
-    a quota of Y and reduces the price.
+* Once there are no available tickets left and user A wants to buy a ticket, he can do so, as long as 
+  there are *expired* cart locks in the system. In this case, user A gets a new cart lock, so that there 
+  are  more cart locks than available tickets and therefore have to remove one of the expired cart locks.
+  However, we do not choose one by random, but keep the surplus in a way that leads to the deletion
+  of the cart lock of the user who tries *last* to use his lock.
+* The same goes for orders which are not paid within the specified timeframe. This policy allows to
+  sell as much items as possible, guarantees you to get your item if you checkout within the validity 
+  period of your lock or pay within the validity period of your order. It does not guarantee you anything
+  any longer, but it tries to be *as tolerant as possible* to users who are paying after their payment
+  period or click checkout after the expiry of their lock.
+* The same quota can apply to multiple items and one item can be affected by multiple quotas
