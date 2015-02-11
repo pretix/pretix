@@ -2,7 +2,7 @@ import django.dispatch
 from django.apps import apps
 from django.dispatch.dispatcher import NO_RECEIVERS
 
-from pretixbase.models import Event
+from .models import Event
 
 
 class EventPluginSignal(django.dispatch.Signal):

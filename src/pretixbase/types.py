@@ -5,7 +5,7 @@ class VariationDict(dict):
     returned by ``Item.get_all_variations()`` to avoid duplicate code in the
     code calling this method.
     """
-    IGNORE_KEYS = ('variation', 'key')
+    IGNORE_KEYS = ('variation', 'key', 'available', 'price')
 
     def relevant_items(self) -> "list[(str, PropertyValue)]":
         """
@@ -60,6 +60,13 @@ class VariationDict(dict):
         else:
             return super().__eq__(other)
 
+    def empty(self):
+        """
+        Returns true, if this VariationDict does not contain any "real" data like
+        references to PropertyValues, but only "metadata".
+        """
+        return not next(self.relevant_items(), False)
+
     def ordered_values(self) -> "list[ItemVariation]":
         """
         Returns a list of values ordered by their keys
@@ -71,6 +78,9 @@ class VariationDict(dict):
                 key=lambda i: i[0]
             )
         ]
+
+    def __str__(self):
+        return " – ".join([v.value for v in self.ordered_values()])
 
     def copy(self) -> "VariationDict":
         """

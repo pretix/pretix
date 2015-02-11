@@ -4,16 +4,37 @@
     {% for tup in items_by_category %}
         <h3>{{ tup.0.name }}</h3>
         {% for item in tup.1 %}
-            <div class="row-fluid">
-                <div class="col-md-8">
-                    <strong>{{ item.name }}</strong>
-                    <p>{{ item.short_description }}</p>
+            {% if item.has_variations %}
+                <div class="row-fluid">
+                    <div class="col-md-8">
+                        <strong>{{ item.name }}</strong>
+                        <p>{{ item.short_description }}</p>
+                    </div>
                     <div class="clearfix"></div>
                 </div>
-                <div class="col-md-4 form-inline availability-box abailable">
-                    <input type="number" class="form-control input-sm input-item-count" placeholder="0" min="0">
+                {% for var in item.available_variations %}
+                    <div class="row-fluid">
+                        <div class="col-md-8">
+                            {{ var }}
+                        </div>
+                        <div class="col-md-1 availability-box abailable">
+                            <input type="number" class="form-control input-item-count" placeholder="0" min="0">
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="row-fluid">
+                    <div class="col-md-8">
+                        <strong>{{ item.name }}</strong>
+                        <p>{{ item.short_description }}</p>
+                    </div>
+                    <div class="col-md-1 availability-box abailable">
+                        <input type="number" class="form-control input-item-count" placeholder="0" min="0">
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
-            </div>
+            {% endif %}
         {% endfor %}
     {% endfor %}
 {% endblock %}

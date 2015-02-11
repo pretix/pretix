@@ -12,7 +12,7 @@ import six
 from versions.models import Versionable as BaseVersionable
 from versions.models import VersionedForeignKey, VersionedManyToManyField, get_utc_now
 
-from pretixbase.types import VariationDict
+from .types import VariationDict
 
 
 class Versionable(BaseVersionable):
@@ -702,6 +702,35 @@ class Item(Versionable):
 
         self._get_all_variations_cache = result
         return result
+
+    def get_all_available_variations(self):
+        from .signals import determine_availability
+
+        variations = self.get_all_variations()
+        responses = determine_availability.send(
+            self.event, item=self,
+            variations=variations, context=None,
+            cache=self.event.get_cache()
+        )
+
+        for i, var in enumerate(variations):
+            var['available'] = var['variation'].active if 'variation' in var else True
+            if 'variation' in var:
+                if var['variation'].default_price:
+                    var['price'] = var['variation'].default_price
+                else:
+                    var['price'] = self.default_price
+            else:
+                var['price'] = self.default_price
+
+            for receiver, response in responses:
+                if 'available' in response[i]:
+                    var['available'] &= response[i]['available']
+                if 'price' in response[i] and response[i]['price'] \
+                        and response[i]['price'] < var['price']:
+                    var['price'] = response[i]['price']
+
+        return variations
 
 
 class ItemVariation(Versionable):
