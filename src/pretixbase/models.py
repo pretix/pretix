@@ -429,7 +429,7 @@ class ItemCategory(Versionable):
     class Meta:
         verbose_name = _("Item category")
         verbose_name_plural = _("Item categories")
-        ordering = ('position',)
+        ordering = ('position', 'id')
 
     def __str__(self):
         return self.name

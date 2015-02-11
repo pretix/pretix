@@ -28,7 +28,8 @@ class EventIndex(EventViewMixin, TemplateView):
 
         # Regroup those by category
         context['items_by_category'] = sorted([
+            # a group is a tuple of a category and a list of items
             (cat, [i for i in items if i.category_id == cat.identity])
-            for cat in set([i.category for i in items])
-        ], key=lambda group: group[0].position)
+            for cat in set([i.category for i in items])  # insert categories into a set for uniqueness
+        ], key=lambda group: (group[0].position, group[0].pk))  # a set is unsorted, so sort again by category
         return context
