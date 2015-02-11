@@ -1047,7 +1047,7 @@ class CartPosition(models.Model):
         null=True, blank=True,
         verbose_name=_("Variation")
     )
-    total = models.DecimalField(
+    price = models.DecimalField(
         decimal_places=2, max_digits=10,
         verbose_name=_("Price")
     )
