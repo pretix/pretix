@@ -27,16 +27,6 @@ class LocaleMiddleware(BaseLocaleMiddleware):
     """
 
     def process_request(self, request):
-        url = resolve(request.path_info)
-        if 'event' in url.kwargs and 'organizer' in url.kwargs and not hasattr(request, 'event'):
-            try:
-                request.event = Event.objects.current.get(
-                    slug=url.kwargs['event'],
-                    organizer__slug=url.kwargs['organizer'],
-                )
-            except Event.DoesNotExist:
-                pass
-
         language = get_language_from_request(request)
         translation.activate(language)
         request.LANGUAGE_CODE = translation.get_language()
