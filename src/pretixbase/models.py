@@ -446,6 +446,13 @@ class ItemCategory(Versionable):
         if self.event:
             self.event.get_cache().clear()
 
+    def __lt__(self, other):
+        if self.position < other.position:
+            return True
+        if self.position == other.position:
+            return self.pk < other.pk
+        return False
+
 
 class Property(Versionable):
     """
@@ -516,6 +523,13 @@ class PropertyValue(Versionable):
         super().save(*args, **kwargs)
         if self.prop:
             self.prop.event.get_cache().clear()
+
+    def __lt__(self, other):
+        if self.position < other.position:
+            return True
+        if self.position == other.position:
+            return self.pk < other.pk
+        return False
 
 
 class Question(Versionable):
@@ -708,14 +722,32 @@ class Item(Versionable):
     def get_all_available_variations(self):
         """
         This method returns a list of all variations which are theoretically
-        possible for sale. It DOES call all activated restriction plugins, but it
-        DOES NOT take into account quotas. Use is_available on the ItemVariation
-        objects (or the Item it self, if it does not have variations) to determine
-        availability by the terms of quotas.
+        possible for sale. It DOES call all activated restriction plugins, and it
+        DOES only return variations which DO have an ItemVariation object, as all
+        variations without one CAN NOT be part of a Quota and therefore CAN NOT
+        ever be available for sale. The only exception is the empty variation
+        for items without properties, which never has an ItemVariation object.
+
+        This DOES NOT take into account quotas itself. Use is_available on the
+        ItemVariation objects (or the Item it self, if it does not have variations) to
+        determine availability by the terms of quotas.
+
+        It is recommended to call
+            prefetch_related('properties', 'variations__values__prop')
+        when retrieving Item objects you are going to use this method on.
         """
         from .signals import determine_availability
-
-        variations = self.get_all_variations()
+        if self.properties.count() == 0:
+            variations = [VariationDict()]
+        else:
+            all_variations = list(self.variations.all())
+            variations = []
+            for var in all_variations:
+                vardict = VariationDict()
+                for v in var.values.all():
+                    vardict[v.prop.identity] = v
+                vardict['variation'] = var
+                variations.append(vardict)
         responses = determine_availability.send(
             self.event, item=self,
             variations=variations, context=None,
@@ -746,7 +778,7 @@ class Item(Versionable):
         This method is used to determine whether this Item is currently available
         for sale. It may return any of the return codes of Quota.availability()
         """
-        if self.properties.exist():
+        if self.properties.count() > 0:
             raise ValueError('Do not call this directly on items which have properties '
                              'but call this on their ItemVariation objects')
         return max([q.availability() for q in self.quotas.all()])
@@ -987,25 +1019,25 @@ class Quota(Versionable):
                 Q(variation__quotas__in=[self])
             )
         )
-        paid_orders = OrderPosition.objects.current.filter(
+        paid_orders = OrderPosition.objects.filter(
             Q(order__status=Order.STATUS_PAID)
             & quotalookup
-        )
+        ).count()
         if paid_orders >= self.size:
             return Quota.AVAILABILITY_GONE
 
-        pending_valid_orders = OrderPosition.objects.current.filter(
+        pending_valid_orders = OrderPosition.objects.filter(
             Q(order__status=Order.STATUS_PENDING)
             & Q(order__expires__gte=now())
             & quotalookup
-        )
+        ).count()
         if (paid_orders + pending_valid_orders) >= self.size:
             return Quota.AVAILABILITY_ORDERED
 
-        valid_cart_positions = CartPosition.objects.current.filter(
-            Q(order__expires__lt=now())
+        valid_cart_positions = CartPosition.objects.filter(
+            Q(expires__gte=now())
             & quotalookup
-        )
+        ).count()
         if (paid_orders + pending_valid_orders + valid_cart_positions) >= self.size:
             return Quota.AVAILABILITY_RESERVED
 
@@ -1080,7 +1112,7 @@ class QuestionAnswer(Versionable):
     answer = models.TextField()
 
 
-class OrderPosition(models.Model):
+class OrderPosition(Versionable):
     """
     An OrderPosition is one line of an order, representing one ordered items
     of a specified type (or variation).
@@ -1116,7 +1148,7 @@ class OrderPosition(models.Model):
         verbose_name_plural = _("Order positions")
 
 
-class CartPosition(models.Model):
+class CartPosition(Versionable):
     """
     A cart position is similar to a order line, except that it is not
     yet part of a binding order but just placed by some user in his or

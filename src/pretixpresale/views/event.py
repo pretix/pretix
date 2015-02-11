@@ -16,15 +16,25 @@ class EventIndex(EventViewMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         # Fetch all items
         items = self.request.event.items.all().select_related(
-            'category',
+            'category',  # for re-grouping
+        ).prefetch_related(
+            'properties', 'variations__values__prop',  # for .get_all_available_variations()
+            'quotas', 'variations__quotas'  # for .availability()
         ).annotate(quotac=Count('quotas')).filter(
             quotac__gt=0
         ).order_by('category__position', 'category_id', 'name')
 
         for item in items:
-            item.available_variations = item.get_all_available_variations()
+            item.available_variations = sorted(item.get_all_available_variations(),
+                                               key=lambda vd: vd.ordered_values())
             item.has_variations = (len(item.available_variations) != 1
                                    or not item.available_variations[0].empty())
+            if not item.has_variations:
+                item.cached_availability = item.availability()
+                item.price = item.available_variations[0]['price']
+            else:
+                for var in item.available_variations:
+                    var.cached_availability = var['variation'].availability()
 
         # Regroup those by category
         context['items_by_category'] = sorted([

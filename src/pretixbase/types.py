@@ -35,7 +35,7 @@ class VariationDict(dict):
         unique among one item.
         """
         def order_key(i):
-            i[0]
+            return i[0]
         return ",".join((
             str(v[1].pk) for v in sorted(self.relevant_items(), key=order_key)
         ))
