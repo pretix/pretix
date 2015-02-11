@@ -23,24 +23,24 @@ class LocaleDeterminationTest(TestCase):
 
     def test_global_default(self):
         c = Client()
-        response = c.get('/control/')
+        response = c.get('/control/login')
         language = response['Content-Language']
         self.assertEqual(language, settings.LANGUAGE_CODE)
 
     def test_browser_default(self):
         c = Client(HTTP_ACCEPT_LANGUAGE=self.TEST_LOCALE)
-        response = c.get('/control/')
+        response = c.get('/control/login')
         language = response['Content-Language']
         self.assertEqual(language, self.TEST_LOCALE)
 
         c = Client(HTTP_ACCEPT_LANGUAGE=self.TEST_LOCALE_LONG)
-        response = c.get('/control/')
+        response = c.get('/control/login')
         language = response['Content-Language']
         self.assertEqual(language, self.TEST_LOCALE)
 
     def test_unknown_browser_default(self):
         c = Client(HTTP_ACCEPT_LANGUAGE='sjn')
-        response = c.get('/control/')
+        response = c.get('/control/login')
         language = response['Content-Language']
         self.assertEqual(language, settings.LANGUAGE_CODE)
 
@@ -48,12 +48,12 @@ class LocaleDeterminationTest(TestCase):
         c = Client()
         cookies = c.cookies
         cookies[settings.LANGUAGE_COOKIE_NAME] = self.TEST_LOCALE
-        response = c.get('/control/')
+        response = c.get('/control/login')
         language = response['Content-Language']
         self.assertEqual(language, self.TEST_LOCALE)
 
         cookies[settings.LANGUAGE_COOKIE_NAME] = self.TEST_LOCALE_LONG
-        response = c.get('/control/')
+        response = c.get('/control/login')
         language = response['Content-Language']
         self.assertEqual(language, self.TEST_LOCALE)
 
@@ -67,6 +67,6 @@ class LocaleDeterminationTest(TestCase):
         })
         self.assertEqual(response.status_code, 302)
 
-        response = c.get('/control/')
+        response = c.get('/control/login')
         language = response['Content-Language']
         self.assertEqual(language, self.TEST_LOCALE)

@@ -11,7 +11,8 @@ def event_permission_required(permission):
     """
     def decorator(function):
         def wrapper(request, *args, **kw):
-            if not request.user.is_authenticated():
+            if not request.user.is_authenticated():  # NOQA
+                # just a double check, should not ever happen
                 return HttpResponseForbidden()
             perm = EventPermission.objects.get(
                 event=request.event,
