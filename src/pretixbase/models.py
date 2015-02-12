@@ -1087,10 +1087,12 @@ class Order(Versionable):
         verbose_name=_("Expiration date")
     )
     payment_date = models.DateTimeField(
-        verbose_name=_("Payment date")
+        verbose_name=_("Payment date"),
+        null=True, blank=True
     )
     payment_info = models.TextField(
-        verbose_name=_("Payment information")
+        verbose_name=_("Payment information"),
+        null=True, blank=True
     )
     total = models.DecimalField(
         decimal_places=2, max_digits=10,
@@ -1183,7 +1185,8 @@ class CartPosition(Versionable):
         verbose_name=_("Price")
     )
     datetime = models.DateTimeField(
-        verbose_name=_("Date")
+        verbose_name=_("Date"),
+        auto_now_add=True
     )
     expires = models.DateTimeField(
         verbose_name=_("Expiration date")
