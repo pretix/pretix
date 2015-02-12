@@ -19,7 +19,10 @@ class EventMiddleware:
         if url_namespace != 'presale':
             return
         if 'event.' in url_name and 'event' in url.kwargs:
-            request.event = Event.objects.current.get(
-                slug=url.kwargs['event'],
-                organizer__slug=url.kwargs['organizer'],
-            )
+            try:
+                request.event = Event.objects.current.filter(
+                    slug=url.kwargs['event'],
+                    organizer__slug=url.kwargs['organizer'],
+                ).select_related('organizer')[0]
+            except IndexError:
+                return HttpResponseNotFound()  # TODO: Provide error message

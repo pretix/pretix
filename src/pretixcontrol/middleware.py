@@ -49,11 +49,11 @@ class PermissionMiddleware:
             "organizer", "date_from").prefetch_related("organizer")
         if 'event.' in url_name and 'event' in url.kwargs:
             try:
-                request.event = Event.objects.current.get(
+                request.event = Event.objects.current.filter(
                     slug=url.kwargs['event'],
                     permitted__id__exact=request.user.id,
                     organizer__slug=url.kwargs['organizer'],
-                )
-            except Event.DoesNotExist:
+                ).select_related('organizer')[0]
+            except IndexError:
                 return HttpResponseNotFound(_("The selected event was not found or you "
                                               "have no permission to administrate it."))
