@@ -4,7 +4,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>{% block title %}{% endblock %}{% if url_name != "index" %} :: {% endif %}{{ settings.TIXL_INSTANCE_NAME }}</title>
+		<title>{% block title %}{% endblock %}{% if url_name != "index" %} :: {% endif %}
+            {{ settings.PRETIX_INSTANCE_NAME }}</title>
 		{% compress css %}
 		<link rel="stylesheet" type="text/less" href="{% static "pretixcontrol/less/main.less" %}" />
 		{% endcompress %}
