@@ -202,7 +202,7 @@ class QuotaTestCase(TestCase):
 
     def test_available(self):
         self.quota.items.add(self.item1)
-        self.assertEqual(self.item1.availability(), Quota.AVAILABILITY_OK)
+        self.assertEqual(self.item1.availability(), (Quota.AVAILABILITY_OK, 2))
         self.quota.items.add(self.item2)
         self.quota.variations.add(self.var1)
         try:
@@ -210,7 +210,7 @@ class QuotaTestCase(TestCase):
             self.assertTrue(False)
         except:
             pass
-        self.assertEqual(self.var1.availability(), Quota.AVAILABILITY_OK)
+        self.assertEqual(self.var1.availability(), (Quota.AVAILABILITY_OK, 2))
 
     def test_sold_out(self):
         self.quota.items.add(self.item1)
@@ -219,19 +219,19 @@ class QuotaTestCase(TestCase):
                                      total=4)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
-        self.assertEqual(self.item1.availability(), Quota.AVAILABILITY_GONE)
+        self.assertEqual(self.item1.availability(), (Quota.AVAILABILITY_GONE, 0))
 
         self.quota.items.add(self.item2)
         self.quota.variations.add(self.var1)
         self.quota.size = 3
         self.quota.save()
-        self.assertEqual(self.var1.availability(), Quota.AVAILABILITY_OK)
+        self.assertEqual(self.var1.availability(), (Quota.AVAILABILITY_OK, 1))
 
         order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
                                      expires=now() + timedelta(days=3),
                                      total=4)
         OrderPosition.objects.create(order=order, item=self.item2, variation=self.var1, price=2)
-        self.assertEqual(self.var1.availability(), Quota.AVAILABILITY_GONE)
+        self.assertEqual(self.var1.availability(), (Quota.AVAILABILITY_GONE, 0))
 
     def test_ordered(self):
         self.quota.items.add(self.item1)
@@ -239,17 +239,17 @@ class QuotaTestCase(TestCase):
                                      expires=now() + timedelta(days=3),
                                      total=4)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
-        self.assertEqual(self.item1.availability(), Quota.AVAILABILITY_OK)
+        self.assertEqual(self.item1.availability(), (Quota.AVAILABILITY_OK, 1))
 
         order = Order.objects.create(event=self.event, status=Order.STATUS_PENDING,
                                      expires=now() + timedelta(days=3),
                                      total=4)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
-        self.assertEqual(self.item1.availability(), Quota.AVAILABILITY_ORDERED)
+        self.assertEqual(self.item1.availability(), (Quota.AVAILABILITY_ORDERED, 0))
 
         order.expires = now() - timedelta(days=3)
         order.save()
-        self.assertEqual(self.item1.availability(), Quota.AVAILABILITY_OK)
+        self.assertEqual(self.item1.availability(), (Quota.AVAILABILITY_OK, 1))
 
     def test_reserved(self):
         self.quota.items.add(self.item1)
@@ -259,32 +259,36 @@ class QuotaTestCase(TestCase):
                                      expires=now() + timedelta(days=3),
                                      total=4)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
-        self.assertEqual(self.item1.availability(), Quota.AVAILABILITY_OK)
+        self.assertEqual(self.item1.availability(), (Quota.AVAILABILITY_OK, 2))
 
         order = Order.objects.create(event=self.event, status=Order.STATUS_PENDING,
                                      expires=now() + timedelta(days=3),
                                      total=4)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
-        self.assertEqual(self.item1.availability(), Quota.AVAILABILITY_OK)
+        self.assertEqual(self.item1.availability(), (Quota.AVAILABILITY_OK, 1))
 
         cp = CartPosition.objects.create(event=self.event, item=self.item1, price=2,
                                          expires=now() + timedelta(days=3))
-        self.assertEqual(self.item1.availability(), Quota.AVAILABILITY_RESERVED)
+        self.assertEqual(self.item1.availability(), (Quota.AVAILABILITY_RESERVED, 0))
 
         cp.expires = now() - timedelta(days=3)
         cp.save()
-        self.assertEqual(self.item1.availability(), Quota.AVAILABILITY_OK)
+        self.assertEqual(self.item1.availability(), (Quota.AVAILABILITY_OK, 1))
 
         self.quota.items.add(self.item2)
         self.quota.variations.add(self.var1)
         cp = CartPosition.objects.create(event=self.event, item=self.item2, variation=self.var1,
                                          price=2, expires=now() + timedelta(days=3))
-        self.assertEqual(self.item1.availability(), Quota.AVAILABILITY_RESERVED)
+        self.assertEqual(self.item1.availability(), (Quota.AVAILABILITY_RESERVED, 0))
 
     def test_multiple(self):
         self.quota.items.add(self.item1)
-        self.assertEqual(self.item1.availability(), Quota.AVAILABILITY_OK)
+        self.assertEqual(self.item1.availability(), (Quota.AVAILABILITY_OK, 2))
 
-        quota2 = Quota.objects.create(event=self.event, name="Test 2", size=0)
+        quota2 = Quota.objects.create(event=self.event, name="Test 2", size=1)
         quota2.items.add(self.item1)
-        self.assertEqual(self.item1.availability(), Quota.AVAILABILITY_GONE)
+        self.assertEqual(self.item1.availability(), (Quota.AVAILABILITY_OK, 1))
+
+        quota2.size = 0
+        quota2.save()
+        self.assertEqual(self.item1.availability(), (Quota.AVAILABILITY_GONE, 0))

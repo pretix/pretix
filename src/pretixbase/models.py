@@ -781,7 +781,7 @@ class Item(Versionable):
         if self.properties.count() > 0:
             raise ValueError('Do not call this directly on items which have properties '
                              'but call this on their ItemVariation objects')
-        return max([q.availability() for q in self.quotas.all()])
+        return min([q.availability() for q in self.quotas.all()])
 
 
 class ItemVariation(Versionable):
@@ -840,7 +840,7 @@ class ItemVariation(Versionable):
         This method is used to determine whether this Item is currently available
         for sale. It may return any of the return codes of Quota.availability()
         """
-        return max([q.availability() for q in self.quotas.all()])
+        return min([q.availability() for q in self.quotas.all()])
 
 
 class VariationsField(VersionedManyToManyField):
@@ -929,7 +929,7 @@ class Quota(Versionable):
     anything with quotas. This might confuse you otherwise.
     http://docs.pretix.eu/en/latest/development/concepts.html#restriction-by-number
 
-    The AVAILABILITY_* constants represent varios states of an quota allowing
+    The AVAILABILITY_* constants represent various states of an quota allowing
     its items/variations being for sale.
 
     AVAILABILITY_OK
@@ -949,10 +949,10 @@ class Quota(Versionable):
         This item is completely sold out.
     """
 
-    AVAILABILITY_GONE = 30
-    AVAILABILITY_ORDERED = 20
-    AVAILABILITY_RESERVED = 10
-    AVAILABILITY_OK = 0
+    AVAILABILITY_GONE = 0
+    AVAILABILITY_ORDERED = 10
+    AVAILABILITY_RESERVED = 20
+    AVAILABILITY_OK = 100
 
     event = VersionedForeignKey(
         Event,
@@ -1000,9 +1000,9 @@ class Quota(Versionable):
     def availability(self):
         """
         This method is used to determine whether Items or ItemVariations belonging
-        to this quota should currently be available for sale. It returns one of the
-        Quota.AVAILABILITY_ constants. 0 is returned if the item is available, a
-        positive number depending on the reason, if not.
+        to this quota should currently be available for sale. It returns a tuple where
+        the first entry is one of the Quota.AVAILABILITY_ constants and the second
+        is the number of available tickets.
         """
         # TODO: These lookups are highly inefficient. However, we'll wait with optimizing
         #       until Django 1.8 is released, as the following feature might make it a
@@ -1024,7 +1024,7 @@ class Quota(Versionable):
             & quotalookup
         ).count()
         if paid_orders >= self.size:
-            return Quota.AVAILABILITY_GONE
+            return (Quota.AVAILABILITY_GONE, 0)
 
         pending_valid_orders = OrderPosition.objects.filter(
             Q(order__status=Order.STATUS_PENDING)
@@ -1032,16 +1032,16 @@ class Quota(Versionable):
             & quotalookup
         ).count()
         if (paid_orders + pending_valid_orders) >= self.size:
-            return Quota.AVAILABILITY_ORDERED
+            return (Quota.AVAILABILITY_ORDERED, 0)
 
         valid_cart_positions = CartPosition.objects.filter(
             Q(expires__gte=now())
             & quotalookup
         ).count()
         if (paid_orders + pending_valid_orders + valid_cart_positions) >= self.size:
-            return Quota.AVAILABILITY_RESERVED
+            return (Quota.AVAILABILITY_RESERVED, 0)
 
-        return Quota.AVAILABILITY_OK
+        return (Quota.AVAILABILITY_OK, self.size - paid_orders - pending_valid_orders - valid_cart_positions)
 
 
 class Order(Versionable):

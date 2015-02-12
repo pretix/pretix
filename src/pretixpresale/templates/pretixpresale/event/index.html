@@ -27,12 +27,12 @@
                                     {% endblocktrans %}</small>
                                 {% endif %}
                             </div>
-                            {% if var.cached_availability == 0 %}
+                            {% if var.cached_availability.0 == 100 %}
                                 <div class="col-md-2 col-xs-6 availability-box available">
                                     <input type="number" class="form-control input-item-count" placeholder="0" min="0">
                                 </div>
                             {% else %}
-                                {% include "pretixpresale/event/fragment_availability.html" with avail=var.cached_availability %}
+                                {% include "pretixpresale/event/fragment_availability.html" with avail=var.cached_availability.0 %}
                             {% endif %}
                             <div class="clearfix"></div>
                         </div>
@@ -51,12 +51,12 @@
                             {% endblocktrans %}</small>
                             {% endif %}
                         </div>
-                        {% if item.cached_availability == 0 %}
+                        {% if item.cached_availability.0 == 100 %}
                             <div class="col-md-2 col-xs-6 availability-box available">
                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0">
                             </div>
                         {% else %}
-                            {% include "pretixpresale/event/fragment_availability.html" with avail=item.cached_availability %}
+                            {% include "pretixpresale/event/fragment_availability.html" with avail=item.cached_availability.0 %}
                         {% endif %}
                         <div class="clearfix"></div>
                     </div>
