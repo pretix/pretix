@@ -44,6 +44,7 @@ class EventUpdateForm(VersionedModelForm):
             'presale_end',
             'payment_term_days',
             'payment_term_last',
+            'max_items_per_order'
         ]
 
 
