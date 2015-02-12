@@ -1,0 +1,8 @@
+requirements: 
+    - src/requirements.txt
+uses: 
+    - django
+ignore-paths:
+    - doc
+ignore-patterns:
+    - (^|/)migrations(/|$)
