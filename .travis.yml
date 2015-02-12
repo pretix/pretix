@@ -11,6 +11,6 @@ before_script:
     - python manage.py check
     - python manage.py validate
 script:
-    - travis_wait coverage run manage.py test
+    - travis_wait coverage run manage.py test -v 2
 after_success:
     - coveralls
