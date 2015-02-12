@@ -155,6 +155,14 @@ DEFAULT_CURRENCY = 'EUR'
 
 INTERNAL_IPS = ('127.0.0.1', '::1')
 
+from django.contrib.messages import constants as messages  # NOQA
+MESSAGE_TAGS = {
+    messages.INFO: 'alert-info',
+    messages.ERROR: 'alert-danger',
+    messages.WARNING: 'alert-warning',
+    messages.SUCCESS: 'alert-success',
+}
+
 try:
     from local_settings import *  # NOQA
 except ImportError:

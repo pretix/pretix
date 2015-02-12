@@ -17,6 +17,13 @@
 <body>
 <div class="container event">
     <h1>{{ event.name }} <small>{{ event.date_from|date }}{% if event.show_date_to %} – {{ event.date_to|date }}{% endif %}</small></h1>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
     {% block content %}
     {% endblock %}
 </div>
