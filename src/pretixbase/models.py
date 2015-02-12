@@ -5,7 +5,7 @@ import uuid
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import date as _date
@@ -747,7 +747,7 @@ class Item(Versionable):
         if self.properties.count() == 0:
             variations = [VariationDict()]
         else:
-            all_variations = list(self.variations.all())
+            all_variations = list(self.variations.annotate(qc=Count('quotas')).filter(qc__gt=0))
             variations = []
             for var in all_variations:
                 vardict = VariationDict()
