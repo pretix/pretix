@@ -34,7 +34,7 @@
                                     <div class="col-md-2 col-xs-6 availability-box available">
                                         <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                 max="{{ var.cached_availability.1 }}"
-                                                name="variation_{{ var.variation.identity }}">
+                                                name="variation_{{ item.identity }}_{{ var.variation.identity }}">
                                     </div>
                                 {% else %}
                                     {% include "pretixpresale/event/fragment_availability.html" with avail=var.cached_availability.0 %}

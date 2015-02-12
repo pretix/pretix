@@ -723,7 +723,7 @@ class Item(Versionable):
         self._get_all_variations_cache = result
         return result
 
-    def get_all_available_variations(self):
+    def get_all_available_variations(self, use_cache: bool=False):
         """
         This method returns a list of all variations which are theoretically
         possible for sale. It DOES call all activated restriction plugins, and it
@@ -740,6 +740,9 @@ class Item(Versionable):
             prefetch_related('properties', 'variations__values__prop')
         when retrieving Item objects you are going to use this method on.
         """
+        if use_cache and hasattr(self, '_get_all_available_variations_cache'):
+            return self._get_all_available_variations_cache
+
         from .signals import determine_availability
         if self.properties.count() == 0:
             variations = [VariationDict()]
@@ -775,6 +778,7 @@ class Item(Versionable):
                         and response[i]['price'] < var['price']:
                     var['price'] = response[i]['price']
 
+        self._get_all_available_variations_cache = variations
         return variations
 
     def availability(self):
@@ -786,6 +790,31 @@ class Item(Versionable):
             raise ValueError('Do not call this directly on items which have properties '
                              'but call this on their ItemVariation objects')
         return min([q.availability() for q in self.quotas.all()])
+
+    def execute_restrictions(self):
+        """
+        This method is used to determine whether this ItemVariation is restricted
+        in sale by any restriction plugins.
+        It returns False, if the item is unavailable or the item's price, if it is
+        available.
+        """
+        if self.properties.count() > 0:
+            raise ValueError('Do not call this directly on items which have properties '
+                             'but call this on their ItemVariation objects')
+        from .signals import determine_availability
+        vd = VariationDict()
+        responses = determine_availability.send(
+            self.event, item=self,
+            variations=[vd], context=None,
+            cache=self.event.get_cache()
+        )
+        price = self.default_price
+        for receiver, response in responses:
+            if 'available' in response[0] and not response[0]['available']:
+                return False
+            elif 'price' in response[0] and response[0]['price'] < price:
+                price = response[0]['price']
+        return price
 
 
 class ItemVariation(Versionable):
@@ -841,10 +870,39 @@ class ItemVariation(Versionable):
 
     def availability(self):
         """
-        This method is used to determine whether this Item is currently available
-        for sale. It may return any of the return codes of Quota.availability()
+        This method is used to determine whether this ItemVariation is currently
+        available for sale in terms of quotas. It may return any of the return codes
+        of Quota.availability()
         """
         return min([q.availability() for q in self.quotas.all()])
+
+    def to_variation_dict(self):
+        vd = VariationDict()
+        for v in self.values.all():
+            vd[v.prop.identity] = v
+        vd['variation'] = self
+        return vd
+
+    def execute_restrictions(self):
+        """
+        This method is used to determine whether this ItemVariation is restricted
+        in sale by any restriction plugins.
+        It returns False, if the item is unavailable or the item's price, if it is
+        available.
+        """
+        from .signals import determine_availability
+        responses = determine_availability.send(
+            self.item.event, item=self.item,
+            variations=[self.to_variation_dict()], context=None,
+            cache=self.item.event.get_cache()
+        )
+        price = self.default_price if self.default_price is not None else self.item.default_price
+        for receiver, response in responses:
+            if 'available' in response[0] and not response[0]['available']:
+                return False
+            elif 'price' in response[0] and response[0]['price'] < price:
+                price = response[0]['price']
+        return price
 
 
 class VariationsField(VersionedManyToManyField):
@@ -1028,7 +1086,7 @@ class Quota(Versionable):
             & quotalookup
         ).count()
         if paid_orders >= self.size:
-            return (Quota.AVAILABILITY_GONE, 0)
+            return Quota.AVAILABILITY_GONE, 0
 
         pending_valid_orders = OrderPosition.objects.filter(
             Q(order__status=Order.STATUS_PENDING)
@@ -1036,16 +1094,31 @@ class Quota(Versionable):
             & quotalookup
         ).count()
         if (paid_orders + pending_valid_orders) >= self.size:
-            return (Quota.AVAILABILITY_ORDERED, 0)
+            return Quota.AVAILABILITY_ORDERED, 0
 
         valid_cart_positions = CartPosition.objects.filter(
             Q(expires__gte=now())
             & quotalookup
         ).count()
         if (paid_orders + pending_valid_orders + valid_cart_positions) >= self.size:
-            return (Quota.AVAILABILITY_RESERVED, 0)
+            return Quota.AVAILABILITY_RESERVED, 0
 
-        return (Quota.AVAILABILITY_OK, self.size - paid_orders - pending_valid_orders - valid_cart_positions)
+        return Quota.AVAILABILITY_OK, self.size - paid_orders - pending_valid_orders - valid_cart_positions
+
+    def lock(self):
+        """
+        Issue a lock on this quota so nobody can take tickets from this quota until
+        you release the lock
+        """
+        pass
+
+    def release(self, force=False):
+        """
+        Release a lock placed by lock(). If the parameter force is not set,
+        the lock will only be released if it was issued in _this_ python
+        representation of the database object.
+        """
+        pass
 
 
 class Order(Versionable):
