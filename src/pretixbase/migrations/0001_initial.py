@@ -319,10 +319,10 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=200, verbose_name='Name')),
                 ('size', models.PositiveIntegerField(verbose_name='Total capacity')),
                 ('event', versions.models.VersionedForeignKey(related_name='quotas', to='pretixbase.Event', verbose_name='Event')),
-                ('items', versions.models.VersionedManyToManyField(blank=True, to='pretixbase.Item', verbose_name='Item')),
+                ('items', versions.models.VersionedManyToManyField(blank=True, related_name='quotas', to='pretixbase.Item', verbose_name='Item')),
                 ('lock_cache', models.ManyToManyField(blank=True, to='pretixbase.CartPosition')),
                 ('order_cache', models.ManyToManyField(blank=True, to='pretixbase.OrderPosition')),
-                ('variations', pretixbase.models.VariationsField(blank=True, to='pretixbase.ItemVariation', verbose_name='Variations')),
+                ('variations', pretixbase.models.VariationsField(blank=True, related_name='quotas', to='pretixbase.ItemVariation', verbose_name='Variations')),
             ],
             options={
                 'verbose_name_plural': 'Quotas',
