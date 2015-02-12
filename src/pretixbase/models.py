@@ -1,6 +1,7 @@
 from itertools import product
 import copy
 import uuid
+import time
 
 from django.db import models
 from django.conf import settings
@@ -1041,6 +1042,10 @@ class Quota(Versionable):
         blank=True,
         verbose_name=_("Variations")
     )
+    locked = models.DateTimeField(
+        null=True, blank=True
+    )
+    locked_here = False
 
     class Meta:
         verbose_name = _("Quota")
@@ -1105,12 +1110,31 @@ class Quota(Versionable):
 
         return Quota.AVAILABILITY_OK, self.size - paid_orders - pending_valid_orders - valid_cart_positions
 
+    class LockTimeoutException(Exception):
+        pass
+
     def lock(self):
         """
         Issue a lock on this quota so nobody can take tickets from this quota until
-        you release the lock
+        you release the lock.
+
+        Raises an Quota.LockTimeoutException if the quota is locked every time we
+        try to obtain a lock.
         """
-        pass
+        retries = 5
+        for i in range(retries):
+            dt = now()
+            updated = Quota.objects.current.filter(
+                identity=self.identity, locked__isnull=True,
+                version_end_date__isnull=True
+            ).update(
+                locked=dt
+            )
+            if updated:
+                self.locked_here = dt
+                return True
+            time.sleep(2 ** i / 100)
+        raise Quota.LockTimeoutException()
 
     def release(self, force=False):
         """
@@ -1118,7 +1142,15 @@ class Quota(Versionable):
         the lock will only be released if it was issued in _this_ python
         representation of the database object.
         """
-        pass
+        if not self.locked_here and not force:
+            return False
+        updated = Quota.objects.current.filter(
+            identity=self.identity,
+            version_end_date__isnull=True
+        ).update(
+            locked=None
+        )
+        return updated
 
 
 class Order(Versionable):

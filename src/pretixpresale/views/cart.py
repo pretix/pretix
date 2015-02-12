@@ -94,13 +94,22 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             price = item.execute_restrictions() if variation is None else variation.execute_restrictions()
 
             if price is False:
-                msg_some_unavailable = True
-                messages.error(self.request,
-                               _('Some of the items you selected were no longer available. '
-                                 'Please see below for details.'))
+                if not msg_some_unavailable:
+                    msg_some_unavailable = True
+                    messages.error(self.request,
+                                   _('Some of the items you selected were no longer available. '
+                                     'Please see below for details.'))
                 continue
 
             quotas = list(item.quotas.all()) if variation is None else list(variation.quotas.all())
+            if len(quotas) == 0:
+                if not msg_some_unavailable:
+                    msg_some_unavailable = True
+                    messages.error(self.request,
+                                   _('Some of the items you selected were no longer available. '
+                                     'Please see below for details.'))
+                continue
+
             quota_ok = i[2]
             try:
                 for quota in quotas:
@@ -132,6 +141,12 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                         price=price,
                         expires=now() + timedelta(minutes=30)
                     )
+            except Quota.LockTimeoutException:
+                if not msg_some_unavailable:
+                    msg_some_unavailable = True
+                    messages.error(self.request,
+                                   _('We were not able to process your request completely as the '
+                                     'server was too busy. Please try again.'))
             finally:
                 for quota in quotas:
                     quota.release()
