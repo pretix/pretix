@@ -1132,6 +1132,7 @@ class Quota(Versionable):
             )
             if updated:
                 self.locked_here = dt
+                self.locked = dt
                 return True
             time.sleep(2 ** i / 100)
         raise Quota.LockTimeoutException()
@@ -1150,6 +1151,8 @@ class Quota(Versionable):
         ).update(
             locked=None
         )
+        self.locked_here = None
+        self.locked = None
         return updated
 
 
