@@ -1,7 +1,7 @@
 from itertools import product
 from django import forms
 from django.core.exceptions import ValidationError
-from django.db import transaction, IntegrityError
+from django.db import transaction
 from django.forms.widgets import flatatt
 from django.utils.encoding import force_text
 from django.utils.html import format_html

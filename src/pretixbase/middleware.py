@@ -1,7 +1,6 @@
 import pytz
 
 from django.conf import settings
-from django.core.urlresolvers import resolve
 from django.middleware.locale import LocaleMiddleware as BaseLocaleMiddleware
 from django.utils.translation.trans_real import (
     get_supported_language_variant,
@@ -14,7 +13,6 @@ from django.utils import translation, timezone
 from collections import OrderedDict
 from django.utils.cache import patch_vary_headers
 
-from pretixbase.models import Event
 
 _supported = None
 

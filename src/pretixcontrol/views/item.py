@@ -649,7 +649,7 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
             'item': self.object.identity,
-            }) + '?success=true'
+        }) + '?success=true'
 
     def get_form_kwargs(self):
         """

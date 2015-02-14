@@ -1,11 +1,5 @@
-from django.conf import settings
 from django.core.urlresolvers import resolve
-from django.utils.encoding import force_str
-from django.utils.six.moves.urllib.parse import urlparse
-from django.shortcuts import resolve_url
-from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.http import HttpResponseNotFound
-from django.utils.translation import ugettext as _
 
 from pretixbase.models import Event
 

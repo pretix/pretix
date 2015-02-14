@@ -21,7 +21,7 @@ class CartActionMixin(CartMixin):
             return reverse('presale:event.index', kwargs={
                 'event': self.request.event.slug,
                 'organizer': self.request.event.organizer.slug,
-                })
+            })
 
     def get_success_url(self):
         return self.get_next_url()

@@ -18,7 +18,7 @@ class ItemFormTest(BrowserTest):
         self.event1 = Event.objects.create(
             organizer=self.orga1, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
-            )
+        )
         OrganizerPermission.objects.create(organizer=self.orga1, user=self.user)
         EventPermission.objects.create(event=self.event1, user=self.user, can_change_items=True,
                                        can_change_settings=True)

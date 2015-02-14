@@ -2,7 +2,6 @@ import os
 import sys
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
-from django.test import LiveServerTestCase
 from django.conf import settings
 from selenium import webdriver
 

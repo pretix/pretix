@@ -54,5 +54,5 @@ urlpatterns += patterns(
                 name='event.items.quotas.delete'),
             url(r'^quotas/add$', item.QuotaCreate.as_view(), name='event.items.quotas.add'),
         )
-        ))
+    ))
 )

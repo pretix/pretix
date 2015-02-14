@@ -5,7 +5,7 @@ from django.forms.models import inlineformset_factory
 
 from pretixbase.signals import determine_availability
 from pretixbase.models import Item
-from pretixcontrol.views.forms import VariationsField, RestrictionInlineFormset, RestrictionForm
+from pretixcontrol.views.forms import RestrictionInlineFormset, RestrictionForm
 from pretixcontrol.signals import restriction_formset
 
 from .models import TimeRestriction
