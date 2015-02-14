@@ -7,6 +7,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db.models import Q, Count
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import date as _date
@@ -227,6 +228,58 @@ class Organizer(Versionable):
     def __str__(self):
         return self.name
 
+    class OrganizerSettingsProxy:
+        """
+        This objects allows convenient access to settings stored in the
+        OrganizerSettings database model. It exposes all settings as properties
+        and it will do all the nasty defaults stuff for
+        you. It will return None for non-existing properties.
+        """
+
+        def __init__(self, organizer):
+            self._organizer = organizer
+            self._cached_obj = None
+
+        def _cache(self):
+            if self._cached_obj is None:
+                self._cached_obj = {}
+                for setting in self._organizer.setting_objects.current.all():
+                    self._cached_obj[setting.key] = setting
+            return self._cached_obj
+
+        def __getattr__(self, key):
+            if key in self._cache():
+                return self._cache()[key].value
+            if key in OrganizerSetting.DEFAULTS:
+                return OrganizerSetting.DEFAULTS[key]
+            return None
+
+        def __delattr__(self, key):
+            if key.startswith('_'):
+                return super().__delattr__(key)
+            if key in self._cache():
+                self._cache()[key].delete()
+                del self._cache()[key]
+
+        def __setattr__(self, key, value):
+            if key.startswith('_'):
+                return super().__setattr__(key, value)
+            if key in self._cache():
+                s = self._cache()[key]
+                s = s.clone()
+            else:
+                s = OrganizerSetting(organizer=self._organizer, key=key)
+            s.value = value
+            s.save()
+            self._cache()[key] = s
+
+    @cached_property
+    def settings(self):
+        """
+        Returns an object representing this organizer's settings
+        """
+        return Organizer.OrganizerSettingsProxy(self)
+
 
 class OrganizerPermission(Versionable):
     """
@@ -385,6 +438,56 @@ class Event(Versionable):
     def get_cache(self) -> "pretix.base.cache.EventRelatedCache":
         from pretix.base.cache import EventRelatedCache
         return EventRelatedCache(self)
+
+    class EventSettingsProxy:
+        """
+        This objects allows convenient access to settings stored in the
+        EventSettings database model. It exposes all settings as properties
+        and it will do all the nasty inheritance and defaults stuff for
+        you. It will return None for non-existing properties.
+        """
+
+        def __init__(self, event):
+            self._event = event
+            self._cached_obj = None
+
+        def _cache(self):
+            if self._cached_obj is None:
+                self._cached_obj = {}
+                for setting in self._event.setting_objects.current.all():
+                    self._cached_obj[setting.key] = setting
+            return self._cached_obj
+
+        def __getattr__(self, key):
+            if key in self._cache():
+                return self._cache()[key].value
+            return getattr(self._event.organizer.settings, key)
+
+        def __setattr__(self, key, value):
+            if key.startswith('_'):
+                return super().__setattr__(key, value)
+            if key in self._cache():
+                s = self._cache()[key]
+                s = s.clone()
+            else:
+                s = EventSetting(event=self._event, key=key)
+            s.value = value
+            s.save()
+            self._cache()[key] = s
+
+        def __delattr__(self, key):
+            if key.startswith('_'):
+                return super().__delattr__(key)
+            if key in self._cache():
+                self._cache()[key].delete()
+                del self._cache()[key]
+
+    @cached_property
+    def settings(self):
+        """
+        Returns an object representing this event's settings
+        """
+        return Event.EventSettingsProxy(self)
 
 
 class EventPermission(Versionable):
@@ -1320,3 +1423,26 @@ class CartPosition(Versionable):
     class Meta:
         verbose_name = _("Cart position")
         verbose_name_plural = _("Cart positions")
+
+
+class EventSetting(Versionable):
+    """
+    An event settings is a key-value setting which can be set for a
+    specific event
+    """
+    event = VersionedForeignKey(Event, related_name='setting_objects')
+    key = models.CharField(max_length=255)
+    value = models.TextField()
+
+
+class OrganizerSetting(Versionable):
+    """
+    An event option is a key-value setting which can be set for an
+    organizer. It will be inherited by the events of this organizer
+    """
+    DEFAULTS = {
+
+    }
+    organizer = VersionedForeignKey(Organizer, related_name='setting_objects')
+    key = models.CharField(max_length=255)
+    value = models.TextField()
