@@ -745,14 +745,27 @@ class Item(Versionable):
             return self._get_all_available_variations_cache
 
         from .signals import determine_availability
-        if self.properties.count() == 0:
+
+        propids = set([p.identity for p in self.properties.all()])
+        if len(propids) == 0:
             variations = [VariationDict()]
         else:
-            all_variations = list(self.variations.annotate(qc=Count('quotas')).filter(qc__gt=0))
+            all_variations = list(
+                self.variations.annotate(
+                    qc=Count('quotas')
+                ).filter(qc__gt=0).prefetch_related(
+                    "values", "values__prop"
+                )
+            )
             variations = []
             for var in all_variations:
+                values = list(var.values.all())
+                # Make sure we don't expose stale ItemVariation objects which are
+                # still around altough they have an old set of properties
+                if set([v.prop.identity for v in values]) != propids:
+                    continue
                 vardict = VariationDict()
-                for v in var.values.all():
+                for v in values:
                     vardict[v.prop.identity] = v
                 vardict['variation'] = var
                 variations.append(vardict)

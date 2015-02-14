@@ -18,7 +18,7 @@ class EventIndex(EventViewMixin, TemplateView):
         items = self.request.event.items.all().select_related(
             'category',  # for re-grouping
         ).prefetch_related(
-            'properties', 'variations__values__prop',  # for .get_all_available_variations()
+            'properties',  # for .get_all_available_variations()
             'quotas', 'variations__quotas'  # for .availability()
         ).annotate(quotac=Count('quotas')).filter(
             quotac__gt=0
