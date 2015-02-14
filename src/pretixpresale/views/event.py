@@ -30,13 +30,13 @@ class EventIndex(EventViewMixin, TemplateView):
             item.has_variations = (len(item.available_variations) != 1
                                    or not item.available_variations[0].empty())
             if not item.has_variations:
-                item.cached_availability = list(item.availability())
+                item.cached_availability = list(item.check_quotas())
                 item.cached_availability[1] = min(item.cached_availability[1],
                                                   self.request.event.max_items_per_order)
                 item.price = item.available_variations[0]['price']
             else:
                 for var in item.available_variations:
-                    var.cached_availability = list(var['variation'].availability())
+                    var.cached_availability = list(var['variation'].check_quotas())
                     var.cached_availability[1] = min(var.cached_availability[1],
                                                      self.request.event.max_items_per_order)
 

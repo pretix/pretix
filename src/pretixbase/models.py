@@ -782,7 +782,7 @@ class Item(Versionable):
         self._get_all_available_variations_cache = variations
         return variations
 
-    def availability(self):
+    def check_quotas(self):
         """
         This method is used to determine whether this Item is currently available
         for sale. It may return any of the return codes of Quota.availability()
@@ -792,7 +792,7 @@ class Item(Versionable):
                              'but call this on their ItemVariation objects')
         return min([q.availability() for q in self.quotas.all()])
 
-    def execute_restrictions(self):
+    def check_restrictions(self):
         """
         This method is used to determine whether this ItemVariation is restricted
         in sale by any restriction plugins.
@@ -869,7 +869,7 @@ class ItemVariation(Versionable):
         if self.item:
             self.item.event.get_cache().clear()
 
-    def availability(self):
+    def check_quotas(self):
         """
         This method is used to determine whether this ItemVariation is currently
         available for sale in terms of quotas. It may return any of the return codes
@@ -884,7 +884,7 @@ class ItemVariation(Versionable):
         vd['variation'] = self
         return vd
 
-    def execute_restrictions(self):
+    def check_restrictions(self):
         """
         This method is used to determine whether this ItemVariation is restricted
         in sale by any restriction plugins.

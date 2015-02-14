@@ -39,8 +39,11 @@ class CartActionMixin:
 
 class CartAdd(EventViewMixin, CartActionMixin, View):
 
-    def post(self, *args, **kwargs):
-        # Parse input
+    def _items_from_post_data(self):
+        """
+        Parses the POST data and returns a list of tuples in the
+        form (item id, variation id or None, number)
+        """
         items = []
         for key, value in self.request.POST.items():
             if value.strip() == '':
@@ -49,23 +52,29 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                 try:
                     items.append((key.split("_")[1], None, int(value)))
                 except ValueError:
-                    messages.error(self.request, _('Please only enter numbers.'))
-                    return redirect(self.get_failure_url())
+                    messages.error(self.request, _('Please enter numbers only.'))
+                    return False
             elif key.startswith('variation_'):
                 try:
                     items.append((key.split("_")[1], key.split("_")[2], int(value)))
                 except ValueError:
-                    messages.error(self.request, _('Please only enter numbers.'))
-                    return redirect(self.get_failure_url())
+                    messages.error(self.request, _('Please enter numbers only.'))
+                    return False
+        if len(items) == 0:
+            messages.error(self.request, _('You did not select any items.'))
+            return False
+        return items
+
+    def post(self, *args, **kwargs):
+        items = self._items_from_post_data()
+        if not items:
+            return redirect(self.get_failure_url())
 
         if sum(i[2] for i in items) > self.request.event.max_items_per_order:
             # TODO: Plurals
             messages.error(self.request,
                            _("You cannot select more than %d items per order") % self.event.max_items_per_order)
             return redirect(self.get_failure_url())
-
-        # items is now a list of tuples of the form
-        # (item id, variation id or None, number)
 
         # Fetch items from the database
         items_cache = {
@@ -91,7 +100,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                 return redirect(self.get_failure_url())
             item = items_cache[i[0]]
             variation = variations_cache[i[1]] if i[1] is not None else None
-            price = item.execute_restrictions() if variation is None else variation.execute_restrictions()
+            price = item.check_restrictions() if variation is None else variation.check_restrictions()
 
             if price is False:
                 if not msg_some_unavailable:
