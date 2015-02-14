@@ -55,7 +55,7 @@ example, taken from the time restriction module (see next chapter) as a template
         name = 'pretixplugins.timerestriction'
         verbose_name = _("Time restriction")
 
-        class TixlPluginMeta:
+        class PretixPluginMeta:
             type = PluginType.RESTRICTION
             name = _("Restriciton by time")
             author = _("the pretix team")
@@ -70,7 +70,7 @@ example, taken from the time restriction module (see next chapter) as a template
     default_app_config = 'pretixplugins.timerestriction.TimeRestrictionApp'
 
 .. IMPORTANT::
-   You have to implement a ``TixlPluginMeta`` class like in the example to make your
+   You have to implement a ``PretixPluginMeta`` class like in the example to make your
    plugin available to the users.
 
 .. _signal dispatcher: https://docs.djangoproject.com/en/1.7/topics/signals/

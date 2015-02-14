@@ -1,5 +1,5 @@
 [run]
-source = pretixbase,pretixcontrol,pretixpresale,pretixplugins
+source = pretix
 omit = */migrations/*,*/urls.py,*/tests/*,*/testdummy/*,*/admin.py
 
 [report]

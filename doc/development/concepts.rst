@@ -9,26 +9,26 @@ The components
 
 The project pretix is split into several components. The main three of them are:
 
-**pretixbase**
-    Tixlbase is the foundation below all other components. It is primarily
+**pretix.base**
+    Pretixbase is the foundation below all other components. It is primarily
     responsible for the data structures and database communication. It also hosts
     several utilities which are used by multiple other components.
 
-**pretixcontrol**
-    Tixlcontrol is the web-based backend software which allows organizers to
+**pretix.control**
+    Pretixcontrol is the web-based backend software which allows organizers to
     create and manage their events, items, orders and tickets.
 
-**pretixpresale**
-    Tixlpresale is the ticket-shop itself, containing all the parts visible to the
+**pretix.presale**
+    Pretixpresale is the ticket-shop itself, containing all the parts visible to the
     end user.
 
 Users and events
 ^^^^^^^^^^^^^^^^
 
-Tixl is all about **events**, which are defined as something happening somewhere. 
+Pretix is all about **events**, which are defined as something happening somewhere.
 Every Event is managed by the **organizer**, an abstract entity running the event.
 
-Tixl is used by **users**. We want to enable global users who can just login into 
+Pretix is used by **users**. We want to enable global users who can just login into
 pretix and buy tickets for as many events as they like but at the same time it
 should be possible to create some kind of local user to have a temporary account
 just to buy tickets for one single event.

@@ -37,15 +37,15 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'pretixbase',
-    'pretixcontrol',
-    'pretixpresale',
+    'pretix.base',
+    'pretix.control',
+    'pretix.presale',
     'compressor',
     'bootstrap3',
     'debug_toolbar.apps.DebugToolbarConfig',
     'djangoformsetjs',
-    'pretixplugins.testdummy',
-    'pretixplugins.timerestriction',
+    'pretix.plugins.testdummy',
+    'pretix.plugins.timerestriction',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -57,9 +57,9 @@ MIDDLEWARE_CLASSES = (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'pretixcontrol.middleware.PermissionMiddleware',
-    'pretixpresale.middleware.EventMiddleware',
-    'pretixbase.middleware.LocaleMiddleware',
+    'pretix.control.middleware.PermissionMiddleware',
+    'pretix.presale.middleware.EventMiddleware',
+    'pretix.base.middleware.LocaleMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -71,7 +71,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    'pretixcontrol.context.contextprocessor',
+    'pretix.control.context.contextprocessor',
 )
 
 ROOT_URLCONF = 'pretix.urls'
@@ -133,7 +133,7 @@ STATICFILES_FINDERS = (
 )
 
 COMPRESS_PRECOMPILERS = (
-    ('text/less', 'helpers.lessabsolutefilter.LessFilter'),
+    ('text/less', 'pretix.helpers.lessabsolutefilter.LessFilter'),
 )
 
 COMPRESS_CSS_FILTERS = (
@@ -148,7 +148,7 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 
-# Tixl specific settings
+# Pretix specific settings
 
 PRETIX_INSTANCE_NAME = 'pretix.de'
 DEFAULT_CURRENCY = 'EUR'
