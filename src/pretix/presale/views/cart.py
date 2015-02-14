@@ -57,6 +57,14 @@ class CartActionMixin(CartMixin):
             return False
         return items
 
+    def _re_add_position(self, items, position):
+        for i, tup in enumerate(items):
+            if tup[0] == position.item_id and tup[1] == position.variation_id:
+                items[i] = (tup[0], tup[1], tup[2] + 1)
+                return items
+        items.append((position.item_id, position.variation_id, 1))
+        return items
+
 
 class CartRemove(EventViewMixin, CartActionMixin, View):
 
@@ -94,6 +102,25 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                            _("You cannot select more than %d items per order") % self.event.max_items_per_order)
             return redirect(self.get_failure_url())
 
+        # Extend this user's cart session to 30 minutes from now to ensure all items in the
+        # cart expire at the same time
+        qw = Q(session=self.get_session_key())
+        if self.request.user.is_authenticated():
+            qw |= Q(user=self.request.user)
+
+        # We can extend the reservation of items which are not yet expired without
+        # risk
+        CartPosition.objects.current.filter(
+            qw & Q(event=self.request.event) & Q(expires__gt=now())
+        ).update(expires=now() + timedelta(minutes=30))
+
+        # For items that are already expired, we have to delete and re-add them, as they might
+        # be no longer available. Sorry!
+        for cp in CartPosition.objects.current.filter(
+                qw & Q(event=self.request.event) & Q(expires__lte=now())):
+            items = self._re_add_position(items, cp)
+            cp.delete()
+
         # Fetch items from the database
         items_cache = {
             i.identity: i for i
@@ -109,14 +136,6 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                 identity__in=[i[1] for i in items if i[1] is not None]
             ).select_related("item", "item__event").prefetch_related("quotas", "values", "values__prop")
         }
-
-        # Extend this user's cart session to 30 minutes from now to ensure all items in the
-        # cart expire at the same time
-        qw = Q(session=self.get_session_key())
-        if self.request.user.is_authenticated():
-            qw |= Q(user=self.request.user)
-        CartPosition.objects.current.filter(
-            qw & Q(event=self.request.event)).update(expires=now() + timedelta(minutes=30))
 
         # Process the request itself
         msg_some_unavailable = False

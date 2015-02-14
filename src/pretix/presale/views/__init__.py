@@ -1,7 +1,9 @@
 import uuid
 from itertools import groupby
+from datetime import timedelta
 
 from django.db.models import Q
+from django.utils.timezone import now
 
 from pretix.base.models import CartPosition
 
@@ -49,6 +51,10 @@ class CartDisplayMixin(CartMixin):
         return {
             'positions': positions,
             'total': sum(p.total for p in positions),
+            'minutes_left': (
+                max(min(p.expires for p in positions) - now(), timedelta()).seconds // 60
+                if positions else 0
+            ),
         }
 
 
