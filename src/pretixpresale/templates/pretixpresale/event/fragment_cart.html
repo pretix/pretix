@@ -1,0 +1,59 @@
+{% load i18n %}
+{% if cart %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "Your cart" %}</h3>
+        </div>
+        <div class="panel-body">
+            {% for line in cart %}
+                <div class="row-fluid cart-row">
+                    <div class="col-md-4 col-xs-6">
+                        <strong>{{ line.item }}</strong>
+                        {% if line.variation %}
+                            – {{ line.variation }}
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3 col-xs-6 price">
+                        {{ event.currency }} {{ line.price|floatformat:2 }}
+                    </div>
+                    <div class="col-md-2 col-xs-6 count">
+                        <form action="{% url "presale:event.cart.remove" event=event.slug organizer=event.organizer.slug %}"
+                                method="post">
+                            {% csrf_token %}
+                            {% if line.variation %}
+                                <input type="hidden" name="variation_{{ line.item.identity }}_{{ line.variation.identity }}"
+                                        value="1" />
+                            {% else %}
+                                <input type="hidden" name="item_{{ line.item.identity }}"
+                                        value="1" />
+                            {% endif %}
+                            <button class="btn btn-mini btn-link"><i class="fa fa-minus"></i></button>
+                        </form>
+                        {{ line.count }}
+                        <form action="{% url "presale:event.cart.add" event=event.slug organizer=event.organizer.slug %}"
+                            method="post">
+                            {% csrf_token %}
+                            {% if line.variation %}
+                                <input type="hidden" name="variation_{{ line.item.identity }}_{{ line.variation.identity }}"
+                                    value="1" />
+                            {% else %}
+                                <input type="hidden" name="item_{{ line.item.identity }}"
+                                        value="1" />
+                            {% endif %}
+                            <button class="btn btn-mini btn-link"><i class="fa fa-plus"></i></button>
+                        </form>
+                    </div>
+                    <div class="col-md-3 col-xs-6 price">
+                        <strong>{{ event.currency }} {{ line.total|floatformat:2 }}</strong>
+                        {% if line.item.tax_rate %}
+                            <br /><small>{% blocktrans trimmed with rate=line.item.tax_rate %}
+                            incl. {{ rate }}% taxes
+                        {% endblocktrans %}</small>
+                        {% endif %}
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

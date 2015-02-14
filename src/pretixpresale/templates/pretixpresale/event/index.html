@@ -2,6 +2,7 @@
 {% load i18n %}
 
 {% block content %}
+    {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event %}
     <form method="post"
             action="{% url "presale:event.cart.add" organizer=request.event.organizer.slug event=request.event.slug %}?next={{ request.path_info|urlencode }}">
         {% csrf_token %}

@@ -872,6 +872,9 @@ class ItemVariation(Versionable):
         verbose_name = _("Item variation")
         verbose_name_plural = _("Item variations")
 
+    def __str__(self):
+        return str(self.to_variation_dict())
+
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.item:
@@ -1099,14 +1102,14 @@ class Quota(Versionable):
                 Q(variation__quotas__in=[self])
             )
         )
-        paid_orders = OrderPosition.objects.filter(
+        paid_orders = OrderPosition.objects.current.filter(
             Q(order__status=Order.STATUS_PAID)
             & quotalookup
         ).count()
         if paid_orders >= self.size:
             return Quota.AVAILABILITY_GONE, 0
 
-        pending_valid_orders = OrderPosition.objects.filter(
+        pending_valid_orders = OrderPosition.objects.current.filter(
             Q(order__status=Order.STATUS_PENDING)
             & Q(order__expires__gte=now())
             & quotalookup
@@ -1114,7 +1117,7 @@ class Quota(Versionable):
         if (paid_orders + pending_valid_orders) >= self.size:
             return Quota.AVAILABILITY_ORDERED, 0
 
-        valid_cart_positions = CartPosition.objects.filter(
+        valid_cart_positions = CartPosition.objects.current.filter(
             Q(expires__gte=now())
             & quotalookup
         ).count()

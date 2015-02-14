@@ -1,15 +1,9 @@
 from django.db.models import Count
 from django.views.generic import TemplateView
+from pretixpresale.views import EventViewMixin, CartDisplayMixin
 
 
-class EventViewMixin:
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['event'] = self.request.event
-        return context
-
-
-class EventIndex(EventViewMixin, TemplateView):
+class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
     template_name = "pretixpresale/event/index.html"
 
     def get_context_data(self, **kwargs):
@@ -46,4 +40,6 @@ class EventIndex(EventViewMixin, TemplateView):
             (cat, [i for i in items if i.category_id == cat.identity])
             for cat in set([i.category for i in items])  # insert categories into a set for uniqueness
         ], key=lambda group: (group[0].position, group[0].pk))  # a set is unsorted, so sort again by category
+
+        context['cart'] = self.get_cart()
         return context

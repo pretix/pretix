@@ -1,18 +1,18 @@
 from datetime import timedelta
-import uuid
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.shortcuts import redirect
 from django.utils.timezone import now
 from django.views.generic import View
 from django.utils.translation import ugettext_lazy as _
 
-from .event import EventViewMixin
 from pretixbase.models import Item, ItemVariation, Quota, CartPosition
+from pretixpresale.views import CartMixin, EventViewMixin
 
 
-class CartActionMixin:
+class CartActionMixin(CartMixin):
 
     def get_next_url(self):
         if "next" in self.request.GET and '://' not in self.request.GET:
@@ -28,16 +28,6 @@ class CartActionMixin:
 
     def get_failure_url(self):
         return self.get_next_url()
-
-    def get_session_key(self):
-        if 'cart_key' in self.request.session:
-            return self.request.session.get('cart_key')
-        key = str(uuid.uuid4())
-        self.request.session['cart_key'] = key
-        return key
-
-
-class CartAdd(EventViewMixin, CartActionMixin, View):
 
     def _items_from_post_data(self):
         """
@@ -65,6 +55,32 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             return False
         return items
 
+
+class CartRemove(EventViewMixin, CartActionMixin, View):
+
+    def post(self, *args, **kwargs):
+        items = self._items_from_post_data()
+        if not items:
+            return redirect(self.get_failure_url())
+        qw = Q(session=self.get_session_key())
+        if self.request.user.is_authenticated():
+            qw |= Q(user=self.request.user)
+
+        for item, variation, cnt in items:
+            cw = qw & Q(item_id=item)
+            if variation:
+                cw &= Q(variation_id=variation)
+            else:
+                cw &= Q(variation__isnull=True)
+            for cp in CartPosition.objects.current.filter(cw).order_by("-price")[:cnt]:
+                cp.delete()
+
+        messages.success(self.request, _('Your cart has been updated.'))
+        return redirect(self.get_success_url())
+
+
+class CartAdd(EventViewMixin, CartActionMixin, View):
+
     def post(self, *args, **kwargs):
         items = self._items_from_post_data()
         if not items:
@@ -79,18 +95,26 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
         # Fetch items from the database
         items_cache = {
             i.identity: i for i
-            in Item.objects.filter(
+            in Item.objects.current.filter(
                 event=self.request.event,
                 identity__in=[i[0] for i in items]
             ).prefetch_related("quotas")
         }
         variations_cache = {
             v.identity: v for v
-            in ItemVariation.objects.filter(
+            in ItemVariation.objects.current.filter(
                 item__event=self.request.event,
                 identity__in=[i[1] for i in items if i[1] is not None]
             ).select_related("item", "item__event").prefetch_related("quotas", "values", "values__prop")
         }
+
+        # Extend this user's cart session to 30 minutes from now to ensure all items in the
+        # cart expire at the same time
+        qw = Q(session=self.get_session_key())
+        if self.request.user.is_authenticated():
+            qw |= Q(user=self.request.user)
+        CartPosition.objects.current.filter(
+            qw & Q(event=self.request.event)).update(expires=now() + timedelta(minutes=30))
 
         # Process the request itself
         msg_some_unavailable = False

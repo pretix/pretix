@@ -1,5 +1,4 @@
 .product-row {
-    padding: 10px 0;
     border-top: 1px solid @table-border-color;
 
     &.headline, &.simple {
@@ -25,7 +24,14 @@
             color: @alert-warning-text;
         }
     }
-    .price {
+}
+.cart-row, .product-row {
+    padding: 10px 0;
+
+    .count form {
+        display: inline;
+    }
+    .price, .count {
         text-align: center;
     }
     .price small,

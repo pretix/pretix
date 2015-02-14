@@ -10,6 +10,7 @@ urlpatterns = patterns(
             'pretixpresale.views.event',
             url(r'^$', pretixpresale.views.event.EventIndex.as_view(), name='event.index'),
             url(r'^cart/add$', pretixpresale.views.cart.CartAdd.as_view(), name='event.cart.add'),
+            url(r'^cart/remove$', pretixpresale.views.cart.CartRemove.as_view(), name='event.cart.remove'),
         )
     )),
 )
