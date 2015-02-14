@@ -38,15 +38,18 @@ class CartDisplayMixin(CartMixin):
         def keyfunc(pos):
             return pos.item_id, pos.variation_id, pos.price
 
-        cart = []
+        positions = []
         for k, g in groupby(sorted(cartpos, key=keyfunc), key=keyfunc):
             g = list(g)
             group = g[0]
             group.count = len(g)
             group.total = group.count * group.price
-            cart.append(group)
+            positions.append(group)
 
-        return cart
+        return {
+            'positions': positions,
+            'total': sum(p.total for p in positions),
+        }
 
 
 class EventViewMixin:

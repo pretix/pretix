@@ -17,6 +17,8 @@ class CartActionMixin(CartMixin):
     def get_next_url(self):
         if "next" in self.request.GET and '://' not in self.request.GET:
             return self.request.GET.get('next')
+        elif "HTTP_REFERER" in self.request.META:
+            return self.request.META.get('HTTP_REFERER')
         else:
             return reverse('presale:event.index', kwargs={
                 'event': self.request.event.slug,
