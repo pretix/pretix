@@ -61,7 +61,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                     messages.error(self.request, _('Please enter numbers only.'))
                     return False
         if len(items) == 0:
-            messages.error(self.request, _('You did not select any items.'))
+            messages.warning(self.request, _('You did not select any items.'))
             return False
         return items
 
@@ -71,7 +71,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             return redirect(self.get_failure_url())
 
         if sum(i[2] for i in items) > self.request.event.max_items_per_order:
-            # TODO: Plurals
+            # TODO: i18n plurals
             messages.error(self.request,
                            _("You cannot select more than %d items per order") % self.event.max_items_per_order)
             return redirect(self.get_failure_url())
@@ -81,27 +81,34 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             i.identity: i for i
             in Item.objects.filter(
                 event=self.request.event,
-                id__in=[i[0] for i in items]
+                identity__in=[i[0] for i in items]
             ).prefetch_related("quotas")
         }
         variations_cache = {
             v.identity: v for v
             in ItemVariation.objects.filter(
                 item__event=self.request.event,
-                id__in=[i[1] for i in items if i[1] is not None]
+                identity__in=[i[1] for i in items if i[1] is not None]
             ).select_related("item", "item__event").prefetch_related("quotas", "values", "values__prop")
         }
 
         # Process the request itself
         msg_some_unavailable = False
         for i in items:
+            # Check whether the specified items are part of what we just fetched from the database
+            # If they are not, the user supplied item IDs which either do not exist or belong to
+            # a different event
             if i[0] not in items_cache or (i[1] is not None and i[1] not in variations_cache):
                 messages.error(self.request, _('You selected an item which is not available for sale.'))
                 return redirect(self.get_failure_url())
+
             item = items_cache[i[0]]
             variation = variations_cache[i[1]] if i[1] is not None else None
-            price = item.check_restrictions() if variation is None else variation.check_restrictions()
 
+            # Execute restriction plugins to check whether they (a) change the price or
+            # (b) make the item/variation unavailable. If neither is the case, check_restriction
+            # will correctly return the default price
+            price = item.check_restrictions() if variation is None else variation.check_restrictions()
             if price is False:
                 if not msg_some_unavailable:
                     msg_some_unavailable = True
@@ -110,6 +117,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                                      'Please see below for details.'))
                 continue
 
+            # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
             quotas = list(item.quotas.all()) if variation is None else list(variation.quotas.all())
             if len(quotas) == 0:
                 if not msg_some_unavailable:
@@ -119,12 +127,16 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                                      'Please see below for details.'))
                 continue
 
+            # Assume that all quotas allow us to buy i[2] instances of the object
             quota_ok = i[2]
             try:
                 for quota in quotas:
+                    # Lock the quota, so no other thread is allowed to perform sales covered by this
+                    # quota while we're doing so.
                     quota.lock()
                     avail = quota.availability()
                     if avail[0] != Quota.AVAILABILITY_OK:
+                        # This quota is sold out/currently unavailable, so do not sell this at all
                         if not msg_some_unavailable:
                             msg_some_unavailable = True
                             messages.error(self.request,
@@ -133,6 +145,8 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                         quota_ok = 0
                         break
                     elif avail[1] < i[2]:
+                        # This quota is available, but with less than i[2] items left, so we have to
+                        # reduce the number of bought items
                         if not msg_some_unavailable:
                             msg_some_unavailable = True
                             messages.error(self.request,
@@ -140,6 +154,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                                              'the quantity you selected. Please see below for details.'))
                         quota_ok = min(quota_ok, avail[1])
 
+                # Create a CartPosition for as much items as we can
                 for k in range(quota_ok):
                     CartPosition.objects.create(
                         event=self.request.event,
@@ -151,12 +166,15 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                         expires=now() + timedelta(minutes=30)
                     )
             except Quota.LockTimeoutException:
+                # Is raised when there are too many threads asking for quota locks and we were
+                # unaible to get one
                 if not msg_some_unavailable:
                     msg_some_unavailable = True
                     messages.error(self.request,
                                    _('We were not able to process your request completely as the '
                                      'server was too busy. Please try again.'))
             finally:
+                # Release the locks. This is important ;)
                 for quota in quotas:
                     quota.release()
 
