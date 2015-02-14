@@ -23,23 +23,7 @@ on the next pages.
 Creating a plugin
 -----------------
 
-To create a new plugin, create a new python package as a subpackage to ``pretixplugins``.
-In order to do so, you can place your module into pretix's :file:`pretixplugins` folder *or
-anywhere else in your python import path* inside a folder called ``pretixplugins``. 
-
-.. IMPORTANT::
-    This makes use of a design pattern called `namespace packages`_ which is only 
-    implicitly available as of Python 3.4. As we aim to support Python 3.2 for a bit 
-    longer, you **MUST** put **EXACLTY** the following content into ``pretixplugins/__init__.py``
-    if you create a new ``pretixplugins`` folder somewhere in your path::
-        
-        from pkgutil import extend_path
-        __path__ = extend_path(__path__, __name__)
-
-    Otherwise it **will break** on Python 3.2 systems *depending on the python path's order*,
-    which is not tolerable behaviour. Also, even on Python 3.4 the test runner seems to have
-    problems without this workaround.
-
+To create a new plugin, create a new python package.
 
 Inside your newly created folder, you'll probably need the three python modules ``__init__.py``,
 ``models.py`` and ``signals.py``, although this is up to you. You can take the following
@@ -48,11 +32,11 @@ example, taken from the time restriction module (see next chapter) as a template
 
     from django.apps import AppConfig
     from django.utils.translation import ugettext_lazy as _
-    from pretixbase.plugins import PluginType
+    from pretix.base.plugins import PluginType
 
 
     class TimeRestrictionApp(AppConfig):
-        name = 'pretixplugins.timerestriction'
+        name = 'pretix.plugins.timerestriction'
         verbose_name = _("Time restriction")
 
         class PretixPluginMeta:
@@ -67,7 +51,7 @@ example, taken from the time restriction module (see next chapter) as a template
         def ready(self):
             from . import signals  # NOQA
 
-    default_app_config = 'pretixplugins.timerestriction.TimeRestrictionApp'
+    default_app_config = 'pretix.plugins.timerestriction.TimeRestrictionApp'
 
 .. IMPORTANT::
    You have to implement a ``PretixPluginMeta`` class like in the example to make your
