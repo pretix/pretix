@@ -1,6 +1,8 @@
 from datetime import timedelta
+import json
 
 from django.contrib import messages
+from django.contrib.auth.views import redirect_to_login
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.shortcuts import redirect
@@ -9,10 +11,10 @@ from django.views.generic import View
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Item, ItemVariation, Quota, CartPosition
-from pretix.presale.views import CartMixin, EventViewMixin
+from pretix.presale.views import EventLoginRequiredMixin, EventViewMixin
 
 
-class CartActionMixin(CartMixin):
+class CartActionMixin:
 
     def get_next_url(self):
         if "next" in self.request.GET and '://' not in self.request.GET:
@@ -66,15 +68,13 @@ class CartActionMixin(CartMixin):
         return items
 
 
-class CartRemove(EventViewMixin, CartActionMixin, View):
+class CartRemove(EventViewMixin, CartActionMixin, EventLoginRequiredMixin, View):
 
     def post(self, *args, **kwargs):
         items = self._items_from_post_data()
         if not items:
             return redirect(self.get_failure_url())
-        qw = Q(session=self.get_session_key())
-        if self.request.user.is_authenticated():
-            qw |= Q(user=self.request.user)
+        qw = Q(user=self.request.user)
 
         for item, variation, cnt in items:
             cw = qw & Q(item_id=item)
@@ -91,33 +91,44 @@ class CartRemove(EventViewMixin, CartActionMixin, View):
 
 class CartAdd(EventViewMixin, CartActionMixin, View):
 
-    def post(self, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
+
+        # We do not use EventLoginRequiredMixin here, as we want to store stuff into the
+        # session beforehand
+        if not request.user.is_authenticated() or \
+                (request.user.event is None or request.user.event == request.event):
+            request.session['cart_tmp'] = json.dumps(items)
+            return redirect_to_login(
+                request.path, reverse('presale:event.checkout.login', kwargs={
+                    'organizer': request.event.organizer.slug,
+                    'event': request.event.slug,
+                }), 'next'
+            )
+        return self.process(items)
+
+    def process(self, items):
         if not items:
             return redirect(self.get_failure_url())
-
-        if sum(i[2] for i in items) > self.request.event.max_items_per_order:
+        existing = CartPosition.objects.current.filter(user=self.request.user, event=self.request.event).count()
+        if sum(i[2] for i in items) + existing > self.request.event.max_items_per_order:
             # TODO: i18n plurals
             messages.error(self.request,
                            _("You cannot select more than %d items per order") % self.event.max_items_per_order)
             return redirect(self.get_failure_url())
 
         # Extend this user's cart session to 30 minutes from now to ensure all items in the
-        # cart expire at the same time
-        qw = Q(session=self.get_session_key())
-        if self.request.user.is_authenticated():
-            qw |= Q(user=self.request.user)
-
+        # cart expire at the same
         # We can extend the reservation of items which are not yet expired without
         # risk
         CartPosition.objects.current.filter(
-            qw & Q(event=self.request.event) & Q(expires__gt=now())
+            Q(user=self.request.user) & Q(event=self.request.event) & Q(expires__gt=now())
         ).update(expires=now() + timedelta(minutes=30))
 
         # For items that are already expired, we have to delete and re-add them, as they might
         # be no longer available. Sorry!
         for cp in CartPosition.objects.current.filter(
-                qw & Q(event=self.request.event) & Q(expires__lte=now())):
+                Q(user=self.request.user) & Q(event=self.request.event) & Q(expires__lte=now())):
             items = self._re_add_position(items, cp)
             cp.delete()
 
@@ -203,8 +214,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                 for k in range(quota_ok):
                     CartPosition.objects.create(
                         event=self.request.event,
-                        session=self.get_session_key(),
-                        user=(self.request.user if self.request.user.is_authenticated() else None),
+                        user=self.request.user,
                         item=item,
                         variation=variation,
                         price=price,
@@ -227,3 +237,10 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             messages.success(self.request, _('The items have been successfully added to your cart.'))
 
         return redirect(self.get_success_url())
+
+    def get(self, request, *args, **kwargs):
+        if 'cart_tmp' in request.session and request.user.is_authenticated():
+            items = json.loads(request.session['cart_tmp'])
+            del request.session['cart_tmp']
+            return self.process(items)
+        return redirect(self.get_failure_url())

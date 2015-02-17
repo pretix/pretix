@@ -4,10 +4,10 @@ from django.shortcuts import redirect
 from django.views.generic import View
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.presale.views import EventViewMixin, CartDisplayMixin
+from pretix.presale.views import EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin
 
 
-class CheckoutStart(EventViewMixin, CartDisplayMixin, View):
+class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, View):
 
     def get_failure_url(self):
         return reverse('presale:event.index', kwargs={

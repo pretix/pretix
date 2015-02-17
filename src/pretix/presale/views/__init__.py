@@ -1,6 +1,8 @@
 import uuid
 from itertools import groupby
 from datetime import timedelta
+from django.contrib.auth.views import redirect_to_login
+from django.core.urlresolvers import reverse
 
 from django.db.models import Q
 from django.utils.timezone import now
@@ -8,21 +10,32 @@ from django.utils.timezone import now
 from pretix.base.models import CartPosition
 
 
-class CartMixin:
-    def get_session_key(self):
-        if 'cart_key' in self.request.session:
-            return self.request.session.get('cart_key')
-        key = str(uuid.uuid4())
-        self.request.session['cart_key'] = key
-        return key
+class EventLoginRequiredMixin:
+
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(EventLoginRequiredMixin, cls).as_view(**initkwargs)
+
+        def decorator(view_func):
+            def _wrapped_view(request, *args, **kwargs):
+                if request.user.is_authenticated() and \
+                        (request.user.event is None or request.user.event == request.event):
+                    return view_func(request, *args, **kwargs)
+                path = request.path
+                return redirect_to_login(
+                    path, reverse('presale:event.checkout.login', kwargs={
+                        'organizer': request.event.organizer.slug,
+                        'event': request.event.slug,
+                    }), 'next'
+                )
+            return _wrapped_view
+        return decorator(view)
 
 
-class CartDisplayMixin(CartMixin):
+class CartDisplayMixin:
 
     def get_cart(self):
-        qw = Q(session=self.get_session_key())
-        if self.request.user.is_authenticated():
-            qw |= Q(user=self.request.user)
+        qw = Q(user=self.request.user)
 
         cartpos = list(CartPosition.objects.current.filter(
             qw & Q(event=self.request.event)
