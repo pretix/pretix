@@ -1,7 +1,7 @@
 Development goals
 =================
 
-Tixl is a web software handling presale of event tickets.
+Pretix is a web software handling presale of event tickets.
 
 Technical goals
 ---------------
@@ -19,7 +19,7 @@ Feature goals
 
 * One pretix software installation has to cope with multiple events by multiple organizers
 * There is no code access necessary to create a new event
-* Tixl is abstract in many ways to adopt to as much events as possible.
+*Tixe is abstract in many ways to adopt to as much events as possible.
 
     * Tickets are only an instance of an abstract model called items, such that the system can also sell e.g. merchandise
     * An abstract concept of restriction is used to restrict the selling of tickets, for example by date, by number or by user permissions.
