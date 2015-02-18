@@ -73,7 +73,7 @@ to check for syntax, style and other errors. The ``flake8`` command by default i
 stricter than what we really enforce, but we do enforce that all commits produce no output
 from::
 
-    flake8 --ignore=E123,E128,F403,F401,N802 .
+    flake8 --ignore=E123,E128,F403,F401,N802,W503 .
 
 It is therefore a good idea to put this command into your git hook ``.git/hooks/pre-commit``,
 for example::
@@ -81,7 +81,7 @@ for example::
     #!/bin/sh
     cd $GIT_DIR/../src
     source ../env/bin/activate
-    flake8 --ignore=E123,E128,F403,F401,N802 .
+    flake8 --ignore=E123,E128,F403,F401,N802,W503 .
 
 
 
