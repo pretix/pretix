@@ -765,7 +765,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
             def sort(v):
                 # Given a list of variations, this will sort them by their position
                 # on the x-axis
-                return v[prop2.identity].identity
+                return v[prop2.identity].sortkey
 
             # We now iterate over the cartesian product of all the other
             # properties which are NOT on the axes of the grid because we

@@ -649,12 +649,12 @@ class PropertyValue(Versionable):
         if self.prop:
             self.prop.event.get_cache().clear()
 
+    @property
+    def sortkey(self):
+        return self.position, self.pk
+
     def __lt__(self, other):
-        if self.position < other.position:
-            return True
-        if self.position == other.position:
-            return self.pk < other.pk
-        return False
+        return self.sortkey < other.sortkey
 
 
 class Question(Versionable):
