@@ -1,5 +1,5 @@
 # Functional requirements
-Django==1.7.3
+Django==1.8a1
 pytz
 django-bootstrap3
 -e git+https://github.com/pretix/django-formset-js.git@master#egg=django-formset-js
