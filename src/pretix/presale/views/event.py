@@ -25,7 +25,7 @@ class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
             'category',  # for re-grouping
         ).prefetch_related(
             'properties',  # for .get_all_available_variations()
-            'quotas', 'variations__quotas'  # for .availability()
+            'quotas', 'variations__quotas', 'quotas__event'  # for .availability()
         ).annotate(quotac=Count('quotas')).filter(
             quotac__gt=0
         ).order_by('category__position', 'category_id', 'name')

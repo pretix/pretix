@@ -875,7 +875,7 @@ class Item(Versionable):
                 self.variations.annotate(
                     qc=Count('quotas')
                 ).filter(qc__gt=0).prefetch_related(
-                    "values", "values__prop"
+                    "values", "values__prop", "quotas__event"
                 )
             )
             variations = []
@@ -1215,6 +1215,7 @@ class Quota(Versionable):
         # TODO: Test for interference with old versions of Item-Quota-relations, etc.
         # TODO: Prevent corner-cases like people having ordered an item before it got
         #       its first variationsadded
+        cache = self.event.get_cache()
         quotalookup = (
             (  # Orders for items which do not have any variations
                 Q(variation__isnull=True)
@@ -1223,10 +1224,15 @@ class Quota(Versionable):
                 Q(variation__quotas__in=[self])
             )
         )
-        paid_orders = OrderPosition.objects.current.filter(
-            Q(order__status=Order.STATUS_PAID)
-            & quotalookup
-        ).count()
+
+        paid_orders = cache.get('quota_paid_%s' % self.identity)
+        if paid_orders is None:
+            paid_orders = OrderPosition.objects.current.filter(
+                Q(order__status=Order.STATUS_PAID)
+                & quotalookup
+            ).count()
+            cache.set('quota_paid_%s' % self.identity, paid_orders)
+
         if paid_orders >= self.size:
             return Quota.AVAILABILITY_GONE, 0
 
@@ -1290,6 +1296,7 @@ class Quota(Versionable):
         )
         self.locked_here = None
         self.locked = None
+        self.event.get_cache().delete('quota_paid_%s' % self.identity)
         return updated
 
 
