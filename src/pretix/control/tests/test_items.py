@@ -1,7 +1,7 @@
 import os
 import time
 import datetime
-from django.utils import unittest
+import unittest
 from selenium.webdriver.support.select import Select
 from pretix.base.models import User, Organizer, Event, OrganizerPermission, EventPermission, ItemCategory, Property, \
     PropertyValue, Question, Quota, Item
