@@ -492,7 +492,7 @@ class QuotaEditorMixin:
     def items(self) -> "List[Item]":
         return list(self.request.event.items.all().prefetch_related("properties", "variations"))
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=QuotaForm):
         if not hasattr(self, '_form'):
             kwargs = self.get_form_kwargs()
             kwargs['items'] = self.items
