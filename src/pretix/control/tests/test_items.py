@@ -11,7 +11,6 @@ from pretix.base.tests import BrowserTest, on_platforms
 class ItemFormTest(BrowserTest):
     def setUp(self):
         super().setUp()
-        self.driver.set_window_size(1920, 1080)
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy@dummy.dummy', 'dummy')
         self.orga1 = Organizer.objects.create(name='CCC', slug='ccc')
         self.orga2 = Organizer.objects.create(name='MRM', slug='mrm')
