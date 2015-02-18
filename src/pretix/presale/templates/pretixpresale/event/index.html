@@ -35,7 +35,7 @@
         {% csrf_token %}
         {% for tup in items_by_category %}
             <section>
-                <h3>{{ tup.0.name }}</h3>
+                {% if tup.0 %}<h3>{{ tup.0.name }}</h3>{% endif %}
                 {% for item in tup.1 %}
                     {% if item.has_variations %}
                         <div class="row-fluid product-row headline">

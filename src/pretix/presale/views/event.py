@@ -49,9 +49,10 @@ class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
         # Regroup those by category
         context['items_by_category'] = sorted([
             # a group is a tuple of a category and a list of items
-            (cat, [i for i in items if i.category_id == cat.identity])
+            (cat, [i for i in items if i.category == cat])
             for cat in set([i.category for i in items])  # insert categories into a set for uniqueness
-        ], key=lambda group: (group[0].position, group[0].pk))  # a set is unsorted, so sort again by category
+            # a set is unsorted, so sort again by category
+        ], key=lambda group: (group[0].position, group[0].identity) if group[0] is not None else (0, ""))
 
         context['cart'] = self.get_cart() if self.request.user.is_authenticated() else None
         return context
