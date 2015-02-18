@@ -71,7 +71,8 @@ class Versionable(BaseVersionable):
         source = getattr(self, manager_field_name)  # returns a VersionedRelatedManager instance
         # Destination: the clone, where the cloned relations should point to
         source.through.objects.filter(**{source.source_field.attname: clone.id}).update(**{
-            source.source_field.attname: self.id})
+            source.source_field.attname: self.id, 'version_end_date': forced_version_date
+        })
 
 
 class UserManager(BaseUserManager):

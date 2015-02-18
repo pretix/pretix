@@ -514,22 +514,21 @@ class QuotaEditorMixin:
         # optimization of pretixbase.models.Versionable.clone_shallow()
         # items = self.object.items.all()
         # variations = self.object.variations.all()
+        selected_variations = []
         self.object = form.instance
         for item in self.items:
             field = form.fields['item_%s' % item.identity]
             data = form.cleaned_data['item_%s' % item.identity]
             if isinstance(field, VariationsField):
-                self.object.variations.add(*data)
-                #  for v in data:
-                #     if v not in variations:
-                #         self.object.variations.add(v)
-                #  for v in variations:
-                #     if v not in data:
-                #         self.object.variations.remove(v)
+                for v in data:
+                    selected_variations.append(v)
             if data:  # and item not in items:
                 self.object.items.add(item)
             # elif not data and item in items:
             #     self.object.items.remove(item)
+
+        self.object.variations.add(*[v for v in selected_variations])  # if v not in variations])
+        # self.object.variations.remove(*[v for v in variations if v not in selected_variations])
         return res
 
 
