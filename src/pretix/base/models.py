@@ -921,7 +921,7 @@ class Item(Versionable):
         This method is used to determine whether this Item is currently available
         for sale. It may return any of the return codes of Quota.availability()
         """
-        if self.properties.count() > 0:
+        if self.properties.count() > 0:  # NOQA
             raise ValueError('Do not call this directly on items which have properties '
                              'but call this on their ItemVariation objects')
         return min([q.availability() for q in self.quotas.all()])
@@ -933,7 +933,7 @@ class Item(Versionable):
         It returns False, if the item is unavailable or the item's price, if it is
         available.
         """
-        if self.properties.count() > 0:
+        if self.properties.count() > 0:  # NOQA
             raise ValueError('Do not call this directly on items which have properties '
                              'but call this on their ItemVariation objects')
         from .signals import determine_availability

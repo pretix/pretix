@@ -46,6 +46,8 @@ class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
                     var.cached_availability[1] = min(var.cached_availability[1],
                                                      self.request.event.max_items_per_order)
 
+        items = [item for item in items if len(item.available_variations) > 0]
+
         # Regroup those by category
         context['items_by_category'] = sorted([
             # a group is a tuple of a category and a list of items
