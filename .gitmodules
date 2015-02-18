@@ -1,6 +1,6 @@
-[submodule "src/pretix/base/static/bootstrap"]
-	path = src/pretix/base/static/bootstrap
-	url = https://github.com/twbs/bootstrap.git
 [submodule "src/pretix/base/static/fontawesome"]
 	path = src/pretix/base/static/fontawesome
 	url = https://github.com/FortAwesome/Font-Awesome.git
+[submodule "src/pretix/base/static/bootstrap"]
+	path = src/pretix/base/static/bootstrap
+	url = https://github.com/twbs/bootstrap.git

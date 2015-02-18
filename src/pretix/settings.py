@@ -149,8 +149,9 @@ DEBUG_TOOLBAR_CONFIG = {
 
 
 # Pretix specific settings
-
 PRETIX_INSTANCE_NAME = 'pretix.de'
+PRETIX_GLOBAL_REGISTRATION = True
+
 DEFAULT_CURRENCY = 'EUR'
 
 INTERNAL_IPS = ('127.0.0.1', '::1')

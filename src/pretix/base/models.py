@@ -86,6 +86,23 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
+    def create_global_user(self, email, password=None, **kwargs):
+        user = self.model(**kwargs)
+        user.identifier = email
+        user.email = email
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_local_user(self, event, username, password=None, **kwargs):
+        user = self.model(**kwargs)
+        user.identifier = '%s@%s.event.pretix' % (username, event.identity)
+        user.username = username
+        user.event = event
+        user.set_password(password)
+        user.save()
+        return user
+
     def create_superuser(self, identifier, username, password=None):
         if password is None:
             raise Exception("You must provide a password")
@@ -121,7 +138,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         (1) the e-mail address for global users. An e-mail address
             is and should be required for them and global users use
             their e-mail address for login.
-        (2) "{username}@{event.id}.event.pretix" for local users, who
+        (2) "{username}@{event.identity}.event.pretix" for local users, who
             use their username to login on the event page.
     The model's save() method automatically fills the identifier field
     according to this scheme when it is empty. The __str__() method
@@ -136,7 +153,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     identifier = models.CharField(max_length=255, unique=True)
     username = models.CharField(max_length=120, blank=True,
                                 null=True,
-                                help_text=_('Letters, digits and @/./+/-/_ only.'))
+                                help_text=_('Letters, digits and ./+/-/_ only.'))
     event = models.ForeignKey('Event', related_name="users",
                               null=True, blank=True,
                               on_delete=models.PROTECT)
@@ -1251,6 +1268,7 @@ class Quota(Versionable):
             )
             if updated:
                 self.locked_here = dt
+                self.locked = dt
                 return True
             time.sleep(2 ** i / 100)
         raise Quota.LockTimeoutException()
@@ -1269,6 +1287,8 @@ class Quota(Versionable):
         ).update(
             locked=None
         )
+        self.locked_here = None
+        self.locked = None
         return updated
 
 
@@ -1395,10 +1415,6 @@ class CartPosition(Versionable):
         User, null=True, blank=True,
         verbose_name=_("User")
     )
-    session = models.CharField(
-        max_length=255, null=True, blank=True,
-        verbose_name=_("Session key")
-    )
     item = VersionedForeignKey(
         Item,
         verbose_name=_("Item")
@@ -1441,7 +1457,7 @@ class OrganizerSetting(Versionable):
     organizer. It will be inherited by the events of this organizer
     """
     DEFAULTS = {
-
+        'user_mail_required': 'False'
     }
     organizer = VersionedForeignKey(Organizer, related_name='setting_objects')
     key = models.CharField(max_length=255)
