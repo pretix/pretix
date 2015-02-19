@@ -473,8 +473,6 @@ class QuotaForm(ModelForm):
         if self.instance.pk is not None and isinstance(self.instance, Versionable):
             if self.has_changed():
                 self.instance = self.instance.clone_shallow()
-                # TODO: order_cache, lock_cache are emptied by that but you'll have
-                #       to rebuild them anyway
         return super().save(commit)
 
     class Meta:
