@@ -97,7 +97,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
         # We do not use EventLoginRequiredMixin here, as we want to store stuff into the
         # session beforehand
         if not request.user.is_authenticated() or \
-                (request.user.event is None or request.user.event == request.event):
+                (request.user.event is not None and request.user.event != request.event):
             request.session['cart_tmp'] = json.dumps(items)
             return redirect_to_login(
                 self.get_success_url(), reverse('presale:event.checkout.login', kwargs={

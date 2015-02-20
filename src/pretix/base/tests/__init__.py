@@ -20,7 +20,7 @@ class BrowserTest(StaticLiveServerTestCase):
     def setUp(self):
         self.driver = getattr(webdriver, BROWSER)()
         self.driver.set_window_size(1920, 1080)
-        self.driver.implicitly_wait(3)
+        self.driver.implicitly_wait(10)
 
     def tearDown(self):
         self.driver.quit()
