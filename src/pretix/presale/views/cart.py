@@ -100,7 +100,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                 (request.user.event is None or request.user.event == request.event):
             request.session['cart_tmp'] = json.dumps(items)
             return redirect_to_login(
-                request.path, reverse('presale:event.checkout.login', kwargs={
+                self.get_success_url(), reverse('presale:event.checkout.login', kwargs={
                     'organizer': request.event.organizer.slug,
                     'event': request.event.slug,
                 }), 'next'
@@ -239,8 +239,4 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
         return redirect(self.get_success_url())
 
     def get(self, request, *args, **kwargs):
-        if 'cart_tmp' in request.session and request.user.is_authenticated():
-            items = json.loads(request.session['cart_tmp'])
-            del request.session['cart_tmp']
-            return self.process(items)
         return redirect(self.get_failure_url())

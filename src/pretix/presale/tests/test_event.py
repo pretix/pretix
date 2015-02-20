@@ -1,11 +1,10 @@
 import datetime
-from django.test import TestCase, Client
+import time
 
-from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation
-from pretix.base.tests import BrowserTest, on_platforms
+from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation, User
+from pretix.base.tests import BrowserTest
 
 
-@on_platforms()
 class EventMiddlewareTest(BrowserTest):
 
     def setUp(self):
@@ -26,7 +25,6 @@ class EventMiddlewareTest(BrowserTest):
         self.assertEqual(resp.status_code, 404)
 
 
-@on_platforms()
 class ItemDisplayTest(BrowserTest):
 
     def setUp(self):
@@ -120,3 +118,58 @@ class ItemDisplayTest(BrowserTest):
                       self.driver.find_elements_by_css_selector("section:nth-of-type(1) div.variation")[1].text)
         self.assertIn("12.00",
                       self.driver.find_elements_by_css_selector("section:nth-of-type(1) div.variation")[1].text)
+
+
+class CartTest(BrowserTest):
+
+    def setUp(self):
+        super().setUp()
+        self.orga = Organizer.objects.create(name='CCC', slug='ccc')
+        self.event = Event.objects.create(
+            organizer=self.orga, name='30C3', slug='30c3',
+            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+        )
+        self.user = User.objects.create_local_user(self.event, 'demo', 'demo')
+        self.driver.implicitly_wait(10)
+        self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
+        self.quota_shirts = Quota.objects.create(event=self.event, name='Shirts', size=2)
+        self.shirt = Item.objects.create(event=self.event, name='T-Shirt', category=self.category, default_price=12)
+        prop1 = Property.objects.create(event=self.event, name="Color")
+        self.shirt.properties.add(prop1)
+        val1 = PropertyValue.objects.create(prop=prop1, value="Red", position=0)
+        val2 = PropertyValue.objects.create(prop=prop1, value="Black", position=1)
+        self.quota_shirts.items.add(self.shirt)
+        self.shirt_red = ItemVariation.objects.create(item=self.shirt, default_price=14)
+        self.shirt_red.values.add(val1)
+        var2 = ItemVariation.objects.create(item=self.shirt)
+        var2.values.add(val2)
+        self.quota_shirts.variations.add(self.shirt_red)
+        self.quota_shirts.variations.add(var2)
+        self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=1)
+        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
+                                          category=self.category, default_price=23)
+        self.quota_tickets.items.add(self.ticket)
+
+    def test_not_logged_in(self):
+        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
+        # add the entry ticket to cart
+        self.driver.find_element_by_css_selector('input[type=number][name=item_%s]' % self.ticket.identity).send_keys('1')
+        self.scroll_and_click(self.driver.find_element_by_css_selector('.checkout-button-row button'))
+        # should redirect to login page
+        self.driver.find_element_by_name('username')
+
+    def test_simple_login(self):
+        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
+        # add the entry ticket to cart
+        self.driver.find_element_by_css_selector('input[type=number][name=item_%s]' % self.ticket.identity).send_keys('1')
+        self.scroll_and_click(self.driver.find_element_by_css_selector('.checkout-button-row button'))
+        # should redirect to login page
+        # open the login accordion
+        self.scroll_and_click(self.driver.find_element_by_css_selector('a[href*=loginForm]'))
+        time.sleep(1)
+        # enter login details
+        self.driver.find_element_by_css_selector('#loginForm input[name=username]').send_keys('demo')
+        self.driver.find_element_by_css_selector('#loginForm input[name=password]').send_keys('demo')
+        self.scroll_and_click(self.driver.find_element_by_css_selector('#loginForm button.btn-primary'))
+        # should display our ticket
+        self.assertIn('Early-bird', self.driver.find_element_by_css_selector('.cart-row:first-child').text)

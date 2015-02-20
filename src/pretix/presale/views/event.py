@@ -1,3 +1,4 @@
+import json
 from django.contrib.auth import authenticate
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
@@ -13,6 +14,7 @@ from django.conf import settings
 from pretix.base.models import User
 
 from pretix.presale.views import EventViewMixin, CartDisplayMixin
+from pretix.presale.views.cart import CartAdd
 
 
 class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
@@ -205,6 +207,12 @@ class EventLogin(EventViewMixin, TemplateView):
     template_name = 'pretixpresale/event/login.html'
 
     def redirect_to_next(self):
+        if 'cart_tmp' in self.request.session and self.request.user.is_authenticated():
+            items = json.loads(self.request.session['cart_tmp'])
+            del self.request.session['cart_tmp']
+            ca = CartAdd()
+            ca.request = self.request
+            return ca.process(items)
         if 'next' in self.request.GET:
             return redirect(self.request.GET.get('next'))
         else:
