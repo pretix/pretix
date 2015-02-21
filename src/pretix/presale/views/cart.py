@@ -111,10 +111,10 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
         if not items:
             return redirect(self.get_failure_url())
         existing = CartPosition.objects.current.filter(user=self.request.user, event=self.request.event).count()
-        if sum(i[2] for i in items) + existing > self.request.event.max_items_per_order:
+        if sum(i[2] for i in items) + existing > int(self.request.event.settings.max_items_per_order):
             # TODO: i18n plurals
             messages.error(self.request,
-                           _("You cannot select more than %d items per order") % self.event.max_items_per_order)
+                           _("You cannot select more than %s items per order") % self.request.event.settings.max_items_per_order)
             return redirect(self.get_failure_url())
 
         # Extend this user's cart session to 30 minutes from now to ensure all items in the

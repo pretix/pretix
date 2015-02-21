@@ -36,7 +36,7 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="headingOne">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" href="#localRegisterForm" data-parent="#login_accordion">
+                    <a data-toggle="collapse" href="#localRegistrationForm" data-parent="#login_accordion">
                         {% if global_registration_form %}
                             {% trans "I want to create a new account just for this event" %}
                         {% else %}
@@ -45,7 +45,7 @@
                     </a>
                 </h4>
             </div>
-            <div id="localRegisterForm" class="panel-collapse collapse {% if request.POST.form == 'local_registration' %}in{% endif %}">
+            <div id="localRegistrationForm" class="panel-collapse collapse {% if request.POST.form == 'local_registration' %}in{% endif %}">
                 <div class="panel-body">
                     <div class="panel-body">
                         <form class="form-horizontal" method="post">

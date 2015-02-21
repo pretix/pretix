@@ -40,13 +40,13 @@ class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
             if not item.has_variations:
                 item.cached_availability = list(item.check_quotas())
                 item.cached_availability[1] = min(item.cached_availability[1],
-                                                  self.request.event.max_items_per_order)
+                                                  int(self.request.event.settings.max_items_per_order))
                 item.price = item.available_variations[0]['price']
             else:
                 for var in item.available_variations:
                     var.cached_availability = list(var['variation'].check_quotas())
                     var.cached_availability[1] = min(var.cached_availability[1],
-                                                     self.request.event.max_items_per_order)
+                                                     int(self.request.event.settings.max_items_per_order))
 
         items = [item for item in items if len(item.available_variations) > 0]
 
@@ -65,7 +65,11 @@ class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
 class LoginForm(BaseAuthenticationForm):
     username = forms.CharField(
         label=_('Username'),
-        help_text=_('If you registered for multiple events, your username is your email address.')
+        help_text=(
+            _('If you registered for multiple events, your username is your email address.')
+            if settings.PRETIX_GLOBAL_REGISTRATION
+            else None
+        )
     )
     password = forms.CharField(
         label=_('Password'),
@@ -245,7 +249,7 @@ class EventLogin(EventViewMixin, TemplateView):
                 user = authenticate(identifier=user.identifier, password=form.cleaned_data['password'])
                 login(request, user)
                 return self.redirect_to_next()
-        elif request.POST.get('form') == 'global_registration':
+        elif request.POST.get('form') == 'global_registration' and settings.PRETIX_GLOBAL_REGISTRATION:
             form = self.global_registration_form
             if form.is_valid():
                 user = User.objects.create_global_user(

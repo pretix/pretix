@@ -415,10 +415,6 @@ class Event(Versionable):
         null=True, blank=True,
         verbose_name=_("Plugins"),
     )
-    max_items_per_order = models.IntegerField(
-        verbose_name=_("Maximum number of items per order"),
-        default=10
-    )
 
     class Meta:
         verbose_name = _("Event")
@@ -1460,7 +1456,8 @@ class OrganizerSetting(Versionable):
     organizer. It will be inherited by the events of this organizer
     """
     DEFAULTS = {
-        'user_mail_required': 'False'
+        'user_mail_required': 'False',
+        'max_items_per_order': '10'
     }
     organizer = VersionedForeignKey(Organizer, related_name='setting_objects')
     key = models.CharField(max_length=255)
