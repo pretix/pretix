@@ -8,3 +8,4 @@ Contents:
 
    plugins
    restriction
+   payment

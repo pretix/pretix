@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'djangoformsetjs',
     'pretix.plugins.testdummy',
     'pretix.plugins.timerestriction',
+    'pretix.plugins.banktransfer',
 )
 
 MIDDLEWARE_CLASSES = (

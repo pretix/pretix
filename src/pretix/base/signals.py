@@ -51,3 +51,11 @@ return a positive result (see plugin API documentation for details).
 determine_availability = EventPluginSignal(
     providing_args=["item", "variations", "context", "cache"]
 )
+
+"""
+This signal is sent out to get all known payment providers. Receivers should return a
+subclass of pretix.base.payment.BasePaymentProvider
+"""
+register_payment_providers = EventPluginSignal(
+    providing_args=[]
+)

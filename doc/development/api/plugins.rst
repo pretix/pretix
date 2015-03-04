@@ -57,5 +57,12 @@ example, taken from the time restriction module (see next chapter) as a template
    You have to implement a ``PretixPluginMeta`` class like in the example to make your
    plugin available to the users.
 
+Currently, the ``PluginType`` enum has the following values defined:
+
+* ``RESTRICTION``
+* ``PAYMENT``
+
+The next pages provide details on their usage.
+
 .. _signal dispatcher: https://docs.djangoproject.com/en/1.7/topics/signals/
 .. _namespace packages: http://legacy.python.org/dev/peps/pep-0420/
