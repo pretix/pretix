@@ -629,6 +629,7 @@ class ItemFormGeneral(VersionedModelForm):
             'category',
             'name',
             'active',
+            'admission',
             'short_description',
             'long_description',
             'default_price',

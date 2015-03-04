@@ -769,8 +769,8 @@ class Item(Versionable):
         blank=True,
         help_text=_(
             'The selected properties will be available for the user '
-            + 'to select. After saving this field, move to the '
-            + '\'Variations\' tab to configure the details.'
+            'to select. After saving this field, move to the '
+            '\'Variations\' tab to configure the details.'
         )
     )
     questions = VersionedManyToManyField(
@@ -780,8 +780,16 @@ class Item(Versionable):
         blank=True,
         help_text=_(
             'The user will be asked to fill in answers for the '
-            + 'selected questions'
+            'selected questions'
         )
+    )
+    admission = models.BooleanField(
+        verbose_name=_("Is an admission ticket"),
+        help_text=_(
+            'Whether or not this item allows a person to enter '
+            'your event'
+        ),
+        default=False
     )
 
     class Meta:
@@ -1364,9 +1372,17 @@ class QuestionAnswer(Versionable):
     """
     The answer to a Question, connected to an OrderPosition or CartPosition
     """
-    orderposition = models.ForeignKey('OrderPosition', null=True, blank=True)
-    cartposition = models.ForeignKey('CartPosition', null=True, blank=True)
-    question = VersionedForeignKey(Question)
+    orderposition = models.ForeignKey(
+        'OrderPosition', null=True, blank=True,
+        related_name='answers'
+    )
+    cartposition = models.ForeignKey(
+        'CartPosition', null=True, blank=True,
+        related_name='answers'
+    )
+    question = VersionedForeignKey(
+        Question, related_name='answers'
+    )
     answer = models.TextField()
 
 
@@ -1395,10 +1411,11 @@ class OrderPosition(Versionable):
         decimal_places=2, max_digits=10,
         verbose_name=_("Price")
     )
-    answers = VersionedManyToManyField(
-        Question,
-        through=QuestionAnswer,
-        verbose_name=_("Answers")
+    attendee_name = models.CharField(
+        max_length=255,
+        verbose_name=_("Attendee name"),
+        blank=True, null=True,
+        help_text=_("Empty, if this item is not an admission ticket")
     )
 
     class Meta:
@@ -1442,6 +1459,12 @@ class CartPosition(Versionable):
     )
     expires = models.DateTimeField(
         verbose_name=_("Expiration date")
+    )
+    attendee_name = models.CharField(
+        max_length=255,
+        verbose_name=_("Attendee name"),
+        blank=True, null=True,
+        help_text=_("Empty, if this item is not an admission ticket")
     )
 
     class Meta:
