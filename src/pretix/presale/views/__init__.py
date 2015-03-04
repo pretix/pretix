@@ -35,17 +35,15 @@ class EventLoginRequiredMixin:
 class CartDisplayMixin:
 
     def get_cart(self):
-        qw = Q(user=self.request.user)
-
-        cartpos = list(CartPosition.objects.current.filter(
-            qw & Q(event=self.request.event)
+        cartpos = CartPosition.objects.current.filter(
+            Q(user=self.request.user) & Q(event=self.request.event)
         ).order_by(
             'item', 'variation'
         ).select_related(
             'item', 'variation'
         ).prefetch_related(
             'variation__values', 'variation__values__prop'
-        ))
+        )
 
         # Group items of the same variation
         # We do this by list manipulations instead of a GROUP BY query, as
@@ -54,7 +52,7 @@ class CartDisplayMixin:
             return pos.item_id, pos.variation_id, pos.price
 
         positions = []
-        for k, g in groupby(sorted(cartpos, key=keyfunc), key=keyfunc):
+        for k, g in groupby(sorted(list(cartpos), key=keyfunc), key=keyfunc):
             g = list(g)
             group = g[0]
             group.count = len(g)
@@ -63,6 +61,7 @@ class CartDisplayMixin:
 
         return {
             'positions': positions,
+            'raw': cartpos,
             'total': sum(p.total for p in positions),
             'minutes_left': (
                 max(min(p.expires for p in positions) - now(), timedelta()).seconds // 60

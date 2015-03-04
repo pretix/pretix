@@ -1480,7 +1480,9 @@ class OrganizerSetting(Versionable):
     """
     DEFAULTS = {
         'user_mail_required': 'False',
-        'max_items_per_order': '10'
+        'max_items_per_order': '10',
+        'attendee_names_asked': 'True',
+        'attendee_names_required': 'False',
     }
     organizer = VersionedForeignKey(Organizer, related_name='setting_objects')
     key = models.CharField(max_length=255)
