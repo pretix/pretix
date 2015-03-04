@@ -415,10 +415,6 @@ class Event(Versionable):
         null=True, blank=True,
         verbose_name=_("Plugins"),
     )
-    max_items_per_order = models.IntegerField(
-        verbose_name=_("Maximum number of items per order"),
-        default=10
-    )
 
     class Meta:
         verbose_name = _("Event")
@@ -1223,7 +1219,6 @@ class Quota(Versionable):
         # TODO: Test for interference with old versions of Item-Quota-relations, etc.
         # TODO: Prevent corner-cases like people having ordered an item before it got
         #       its first variationsadded
-        cache = self.event.get_cache()
         quotalookup = (
             (  # Orders for items which do not have any variations
                 Q(variation__isnull=True)
@@ -1233,13 +1228,10 @@ class Quota(Versionable):
             )
         )
 
-        paid_orders = cache.get('quota_paid_%s' % self.identity)
-        if paid_orders is None:
-            paid_orders = OrderPosition.objects.current.filter(
-                Q(order__status=Order.STATUS_PAID)
-                & quotalookup
-            ).count()
-            cache.set('quota_paid_%s' % self.identity, paid_orders)
+        paid_orders = OrderPosition.objects.current.filter(
+            Q(order__status=Order.STATUS_PAID)
+            & quotalookup
+        ).count()
 
         if paid_orders >= self.size:
             return Quota.AVAILABILITY_GONE, 0
@@ -1304,7 +1296,6 @@ class Quota(Versionable):
         )
         self.locked_here = None
         self.locked = None
-        self.event.get_cache().delete('quota_paid_%s' % self.identity)
         return updated
 
 
@@ -1488,7 +1479,8 @@ class OrganizerSetting(Versionable):
     organizer. It will be inherited by the events of this organizer
     """
     DEFAULTS = {
-        'user_mail_required': 'False'
+        'user_mail_required': 'False',
+        'max_items_per_order': '10'
     }
     organizer = VersionedForeignKey(Organizer, related_name='setting_objects')
     key = models.CharField(max_length=255)

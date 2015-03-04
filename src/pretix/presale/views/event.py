@@ -1,3 +1,4 @@
+import json
 from django.contrib.auth import authenticate
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
@@ -13,6 +14,7 @@ from django.conf import settings
 from pretix.base.models import User
 
 from pretix.presale.views import EventViewMixin, CartDisplayMixin
+from pretix.presale.views.cart import CartAdd
 
 
 class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
@@ -38,13 +40,13 @@ class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
             if not item.has_variations:
                 item.cached_availability = list(item.check_quotas())
                 item.cached_availability[1] = min(item.cached_availability[1],
-                                                  self.request.event.max_items_per_order)
+                                                  int(self.request.event.settings.max_items_per_order))
                 item.price = item.available_variations[0]['price']
             else:
                 for var in item.available_variations:
                     var.cached_availability = list(var['variation'].check_quotas())
                     var.cached_availability[1] = min(var.cached_availability[1],
-                                                     self.request.event.max_items_per_order)
+                                                     int(self.request.event.settings.max_items_per_order))
 
         items = [item for item in items if len(item.available_variations) > 0]
 
@@ -63,7 +65,11 @@ class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
 class LoginForm(BaseAuthenticationForm):
     username = forms.CharField(
         label=_('Username'),
-        help_text=_('If you registered for multiple events, your username is your email address.')
+        help_text=(
+            _('If you registered for multiple events, your username is your email address.')
+            if settings.PRETIX_GLOBAL_REGISTRATION
+            else None
+        )
     )
     password = forms.CharField(
         label=_('Password'),
@@ -205,6 +211,12 @@ class EventLogin(EventViewMixin, TemplateView):
     template_name = 'pretixpresale/event/login.html'
 
     def redirect_to_next(self):
+        if 'cart_tmp' in self.request.session and self.request.user.is_authenticated():
+            items = json.loads(self.request.session['cart_tmp'])
+            del self.request.session['cart_tmp']
+            ca = CartAdd()
+            ca.request = self.request
+            return ca.process(items)
         if 'next' in self.request.GET:
             return redirect(self.request.GET.get('next'))
         else:
@@ -237,7 +249,7 @@ class EventLogin(EventViewMixin, TemplateView):
                 user = authenticate(identifier=user.identifier, password=form.cleaned_data['password'])
                 login(request, user)
                 return self.redirect_to_next()
-        elif request.POST.get('form') == 'global_registration':
+        elif request.POST.get('form') == 'global_registration' and settings.PRETIX_GLOBAL_REGISTRATION:
             form = self.global_registration_form
             if form.is_valid():
                 user = User.objects.create_global_user(

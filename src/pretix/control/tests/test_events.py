@@ -1,9 +1,8 @@
 import datetime
 from pretix.base.models import User, Organizer, Event, OrganizerPermission, EventPermission
-from pretix.base.tests import BrowserTest, on_platforms
+from pretix.base.tests import BrowserTest
 
 
-@on_platforms()
 class EventsTest(BrowserTest):
 
     def setUp(self):

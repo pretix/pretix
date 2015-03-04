@@ -1,11 +1,10 @@
 import datetime
-from django.test import TestCase, Client
+import time
 
-from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation
-from pretix.base.tests import BrowserTest, on_platforms
+from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation, User
+from pretix.base.tests import BrowserTest
 
 
-@on_platforms()
 class EventMiddlewareTest(BrowserTest):
 
     def setUp(self):
@@ -26,7 +25,6 @@ class EventMiddlewareTest(BrowserTest):
         self.assertEqual(resp.status_code, 404)
 
 
-@on_platforms()
 class ItemDisplayTest(BrowserTest):
 
     def setUp(self):

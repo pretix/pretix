@@ -5,7 +5,7 @@ import unittest
 from selenium.webdriver.support.select import Select
 from pretix.base.models import User, Organizer, Event, OrganizerPermission, EventPermission, ItemCategory, Property, \
     PropertyValue, Question, Quota, Item
-from pretix.base.tests import BrowserTest, on_platforms
+from pretix.base.tests import BrowserTest
 
 
 class ItemFormTest(BrowserTest):
@@ -30,18 +30,7 @@ class ItemFormTest(BrowserTest):
         self.driver.find_element_by_css_selector('button[type="submit"]').click()
         self.driver.find_element_by_class_name("navbar-right")
 
-    def scroll_into_view(self, element):
-        """Scroll element into view"""
-        y = element.location['y']
-        self.driver.execute_script('window.scrollTo(0, {0})'.format(y))
 
-    def scroll_and_click(self, element):
-        self.scroll_into_view(element)
-        time.sleep(0.5)
-        element.click()
-
-
-@on_platforms()
 class CategoriesTest(ItemFormTest):
 
     def test_create(self):
@@ -109,7 +98,6 @@ class CategoriesTest(ItemFormTest):
         self.assertNotIn("Entry tickets", self.driver.find_element_by_css_selector(".container table").text)
 
 
-@on_platforms()
 class PropertiesTest(ItemFormTest):
 
     def test_create(self):
@@ -156,7 +144,6 @@ class PropertiesTest(ItemFormTest):
         self.assertNotIn("Size", self.driver.find_element_by_css_selector(".container table").text)
 
 
-@on_platforms()
 class QuestionsTest(ItemFormTest):
 
     def test_create(self):
@@ -193,7 +180,6 @@ class QuestionsTest(ItemFormTest):
         self.assertNotIn("shoe size", self.driver.find_element_by_css_selector(".container table").text)
 
 
-@on_platforms()
 class QuotaTest(ItemFormTest):
 
     def test_create(self):

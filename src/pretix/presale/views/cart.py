@@ -47,16 +47,16 @@ class CartActionMixin:
                     items.append((key.split("_")[1], None, int(value)))
                 except ValueError:
                     messages.error(self.request, _('Please enter numbers only.'))
-                    return False
+                    return []
             elif key.startswith('variation_'):
                 try:
                     items.append((key.split("_")[1], key.split("_")[2], int(value)))
                 except ValueError:
                     messages.error(self.request, _('Please enter numbers only.'))
-                    return False
+                    return []
         if len(items) == 0:
             messages.warning(self.request, _('You did not select any items.'))
-            return False
+            return []
         return items
 
     def _re_add_position(self, items, position):
@@ -91,36 +91,46 @@ class CartRemove(EventViewMixin, CartActionMixin, EventLoginRequiredMixin, View)
 
 class CartAdd(EventViewMixin, CartActionMixin, View):
 
+    error_messages = {
+        'unavailable': _('Some of the items you selected were no longer available. '
+                         'Please see below for details.'),
+        'in_part': _('Some of the items you selected were no longer available in '
+                     'the quantity you selected. Please see below for details.'),
+        'busy': _('We were not able to process your request completely as the '
+                  'server was too busy. Please try again.'),
+        'not_for_sale': _('You selected an item which is not available for sale.'),
+        'max_items': _("You cannot select more than %s items per order"),
+    }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.msg_some_unavailable = False
+
     def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
 
         # We do not use EventLoginRequiredMixin here, as we want to store stuff into the
         # session beforehand
         if not request.user.is_authenticated() or \
-                (request.user.event is None or request.user.event == request.event):
+                (request.user.event is not None and request.user.event != request.event):
             request.session['cart_tmp'] = json.dumps(items)
             return redirect_to_login(
-                request.path, reverse('presale:event.checkout.login', kwargs={
+                self.get_success_url(), reverse('presale:event.checkout.login', kwargs={
                     'organizer': request.event.organizer.slug,
                     'event': request.event.slug,
                 }), 'next'
             )
         return self.process(items)
 
-    def process(self, items):
-        if not items:
-            return redirect(self.get_failure_url())
-        existing = CartPosition.objects.current.filter(user=self.request.user, event=self.request.event).count()
-        if sum(i[2] for i in items) + existing > self.request.event.max_items_per_order:
-            # TODO: i18n plurals
-            messages.error(self.request,
-                           _("You cannot select more than %d items per order") % self.event.max_items_per_order)
-            return redirect(self.get_failure_url())
+    def error_message(self, msg, important=False):
+        if not self.msg_some_unavailable or important:
+            self.msg_some_unavailable = True
+            messages.error(self.request, msg)
 
+    def process(self, items):
         # Extend this user's cart session to 30 minutes from now to ensure all items in the
-        # cart expire at the same
-        # We can extend the reservation of items which are not yet expired without
-        # risk
+        # cart expire at the same time
+        # We can extend the reservation of items which are not yet expired without risk
         CartPosition.objects.current.filter(
             Q(user=self.request.user) & Q(event=self.request.event) & Q(expires__gt=now())
         ).update(expires=now() + timedelta(minutes=30))
@@ -131,6 +141,15 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                 Q(user=self.request.user) & Q(event=self.request.event) & Q(expires__lte=now())):
             items = self._re_add_position(items, cp)
             cp.delete()
+
+        if not items:
+            return redirect(self.get_failure_url())
+
+        existing = CartPosition.objects.current.filter(user=self.request.user, event=self.request.event).count()
+        if sum(i[2] for i in items) + existing > int(self.request.event.settings.max_items_per_order):
+            # TODO: i18n plurals
+            self.error_message(self.error_messages['max_items'] % self.request.event.settings.max_items_per_order)
+            return redirect(self.get_failure_url())
 
         # Fetch items from the database
         items_cache = {
@@ -149,13 +168,12 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
         }
 
         # Process the request itself
-        msg_some_unavailable = False
         for i in items:
             # Check whether the specified items are part of what we just fetched from the database
             # If they are not, the user supplied item IDs which either do not exist or belong to
             # a different event
             if i[0] not in items_cache or (i[1] is not None and i[1] not in variations_cache):
-                messages.error(self.request, _('You selected an item which is not available for sale.'))
+                self.error_message(self.error_messages['not_for_sale'])
                 return redirect(self.get_failure_url())
 
             item = items_cache[i[0]]
@@ -166,21 +184,13 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             # will correctly return the default price
             price = item.check_restrictions() if variation is None else variation.check_restrictions()
             if price is False:
-                if not msg_some_unavailable:
-                    msg_some_unavailable = True
-                    messages.error(self.request,
-                                   _('Some of the items you selected were no longer available. '
-                                     'Please see below for details.'))
+                self.error_message(self.error_messages['unavailable'])
                 continue
 
             # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
             quotas = list(item.quotas.all()) if variation is None else list(variation.quotas.all())
             if len(quotas) == 0:
-                if not msg_some_unavailable:
-                    msg_some_unavailable = True
-                    messages.error(self.request,
-                                   _('Some of the items you selected were no longer available. '
-                                     'Please see below for details.'))
+                self.error_message(self.error_messages['unavailable'])
                 continue
 
             # Assume that all quotas allow us to buy i[2] instances of the object
@@ -193,21 +203,13 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                     avail = quota.availability()
                     if avail[0] != Quota.AVAILABILITY_OK:
                         # This quota is sold out/currently unavailable, so do not sell this at all
-                        if not msg_some_unavailable:
-                            msg_some_unavailable = True
-                            messages.error(self.request,
-                                           _('Some of the items you selected were no longer available. '
-                                             'Please see below for details.'))
+                        self.error_message(self.error_messages['unavailable'])
                         quota_ok = 0
                         break
                     elif avail[1] < i[2]:
                         # This quota is available, but with less than i[2] items left, so we have to
                         # reduce the number of bought items
-                        if not msg_some_unavailable:
-                            msg_some_unavailable = True
-                            messages.error(self.request,
-                                           _('Some of the items you selected were no longer available in '
-                                             'the quantity you selected. Please see below for details.'))
+                        self.error_message(self.error_messages['in_part'])
                         quota_ok = min(quota_ok, avail[1])
 
                 # Create a CartPosition for as much items as we can
@@ -223,24 +225,13 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             except Quota.LockTimeoutException:
                 # Is raised when there are too many threads asking for quota locks and we were
                 # unaible to get one
-                if not msg_some_unavailable:
-                    msg_some_unavailable = True
-                    messages.error(self.request,
-                                   _('We were not able to process your request completely as the '
-                                     'server was too busy. Please try again.'))
+                self.error_message(self.error_messages['busy'], important=True)
             finally:
                 # Release the locks. This is important ;)
                 for quota in quotas:
                     quota.release()
 
-        if not msg_some_unavailable:
+        if not self.msg_some_unavailable:
             messages.success(self.request, _('The items have been successfully added to your cart.'))
 
         return redirect(self.get_success_url())
-
-    def get(self, request, *args, **kwargs):
-        if 'cart_tmp' in request.session and request.user.is_authenticated():
-            items = json.loads(request.session['cart_tmp'])
-            del request.session['cart_tmp']
-            return self.process(items)
-        return redirect(self.get_failure_url())

@@ -1,10 +1,9 @@
 from django.test import TestCase, Client
 
 from pretix.base.models import User
-from pretix.base.tests import BrowserTest, on_platforms
+from pretix.base.tests import BrowserTest
 
 
-@on_platforms()
 class LoginFormBrowserTest(BrowserTest):
 
     def setUp(self):
