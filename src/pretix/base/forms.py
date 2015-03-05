@@ -1,4 +1,5 @@
 from django.forms.models import ModelFormMetaclass, BaseModelForm
+from django import forms
 from django.utils import six
 from versions.models import Versionable
 
@@ -23,3 +24,21 @@ class VersionedModelForm(six.with_metaclass(ModelFormMetaclass, VersionedBaseMod
     with both versioned and non-versioned models.
     """
     pass
+
+
+class SettingsForm(forms.Form):
+    """
+    This form is meant to be used for modifying Event- or OrganizerSettings
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.obj = kwargs.pop('obj')
+        if 'initial' not in kwargs:
+            kwargs['initial'] = self.obj.settings
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        for name, field in self.fields.items():
+            value = self.cleaned_data[name]
+            if self.obj.settings.get(value, as_type=type(value)) != value:
+                self.obj.settings.set(name, value)

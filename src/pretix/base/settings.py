@@ -1,3 +1,6 @@
+import json
+
+
 DEFAULTS = {
     'user_mail_required': 'False',
     'max_items_per_order': '10',
@@ -27,17 +30,44 @@ class SettingsProxy:
                 self._cached_obj[setting.key] = setting
         return self._cached_obj
 
-    def get(self, key, default=None):
+    def _unserialize(self, value, as_type):
+        if isinstance(value, as_type):
+            return value
+        elif as_type == int:
+            return int(value)
+        elif as_type == float:
+            return float(value)
+        elif as_type == dict or as_type == list:
+            return json.loads(value)
+        elif as_type == bool:
+            return value == 'True'
+        return value
+
+    def _serialize(self, value):
+        if isinstance(value, str):
+            return value
+        elif isinstance(value, int) or isinstance(value, float) or isinstance(value, bool):
+            return str(value)
+        elif isinstance(value, list) or isinstance(value, bool):
+            return json.dumps(value)
+        raise TypeError('Unable to serialize %s into a setting.' % str(type(value)))
+
+    def get(self, key, default=None, as_type=str):
+        """
+        Get a setting specified by key 'key'. Normally, settings are strings, but
+        if you put non-strings into the settings object, you can request unserialization
+        by specifying 'as_type'
+        """
         if key in self._cache():
-            return self._cache()[key].value
+            return self._unserialize(self._cache()[key].value, as_type)
         value = None
         if self._parent:
             value = self._parent.settings.get(key)
         if value is None and key in DEFAULTS:
-            return DEFAULTS[key]
+            return self._unserialize(DEFAULTS[key], as_type)
         if value is None and default is not None:
-            return default
-        return value
+            return self._unserialize(default, as_type)
+        return self._unserialize(value, as_type)
 
     def __getitem__(self, key):
         return self.get(key)
@@ -59,7 +89,7 @@ class SettingsProxy:
             s = s.clone()
         else:
             s = self._type(object=self._obj, key=key)
-        s.value = value
+        s.value = self._serialize(value)
         s.save()
         self._cache()[key] = s
 
@@ -108,8 +138,8 @@ class SettingsSandbox:
     def __delattr__(self, key):
         del self._event.settings[self._convert_key(key)]
 
-    def get(self, key, default=None):
-        return self._event.settings.get(self._convert_key(key), default)
+    def get(self, key, default=None, as_type=str):
+        return self._event.settings.get(self._convert_key(key), default=default, as_type=type)
 
     def set(self, key, value):
         self._event.settings.set(self._convert_key(key), value)
