@@ -20,6 +20,7 @@ urlpatterns += patterns(
             url(r'^$', 'event.index', name='event.index'),
             url(r'^settings/$', event.EventUpdate.as_view(), name='event.settings'),
             url(r'^settings/plugins$', event.EventPlugins.as_view(), name='event.settings.plugins'),
+            url(r'^settings/payment$', event.PaymentSettings.as_view(), name='event.settings.payment'),
             url(r'^items/$', item.ItemList.as_view(), name='event.items'),
             url(r'^items/add$', item.ItemCreate.as_view(), name='event.items.add'),
             url(r'^items/(?P<item>[0-9a-f-]+)/$', item.ItemUpdateGeneral.as_view(), name='event.item'),

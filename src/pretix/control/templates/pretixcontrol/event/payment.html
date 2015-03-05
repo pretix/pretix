@@ -1,0 +1,35 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+	<form action="" method="post" class="form-horizontal form-plugins">
+		{% csrf_token %}
+		<fieldset>
+			<legend>{% trans "Payment settings" %}</legend>
+			{% if "success" in request.GET %}
+				<div class="alert alert-success">
+					{% trans "Your changes have been saved." %}
+				</div>
+			{% endif %}
+			{% for provider in providers %}
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-sm-10">
+								<h3 class="panel-title">{{ provider.verbose_name }}</h3>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						{%  bootstrap_form provider.form layout='horizontal' %}
+					</div>
+				</div>
+			{% endfor %}
+		</fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+	</form>
+{% endblock %}

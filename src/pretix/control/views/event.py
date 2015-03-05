@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.utils.functional import cached_property
 from django.views.generic.edit import UpdateView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
@@ -7,9 +8,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 
 from pytz import common_timezones
-from pretix.base.forms import VersionedModelForm
 
+from pretix.base.forms import VersionedModelForm, SettingsForm
 from pretix.base.models import Event
+from pretix.base.signals import register_payment_providers
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 
@@ -101,6 +103,66 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings.plugins', kwargs={
+            'organizer': self.get_object().organizer.slug,
+            'event': self.get_object().slug,
+        }) + '?success=true'
+
+
+class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
+
+    model = Event
+    context_object_name = 'event'
+    permission = 'can_change_settings'
+    template_name = 'pretixcontrol/event/payment.html'
+
+    def get_object(self, queryset=None) -> Event:
+        return self.request.event
+
+    @cached_property
+    def provider_forms(self) -> list:
+        providers = []
+        responses = register_payment_providers.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            provider.form = SettingsForm(
+                obj=self.request.event,
+                data=(self.request.POST if self.request.method == 'POST' else None)
+            )
+            provider.form.fields = {
+                'payment_%s_%s' % (provider.identifier, k): v
+                for k, v in provider.settings_form_fields.items()
+            }
+            provider.form.fields['payment_%s' % provider.identifier] = forms.BooleanField(
+                label=_('Enable payment method')
+            )
+            providers.append(provider)
+        return providers
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        context['providers'] = self.provider_forms
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success = True
+        for provider in self.provider_forms:
+            if provider.form.is_valid():
+                provider.form.save()
+            else:
+                success = False
+        if success:
+            return redirect(self.get_success_url())
+        else:
+            return self.get(request)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.payment', kwargs={
             'organizer': self.get_object().organizer.slug,
             'event': self.get_object().slug,
         }) + '?success=true'
