@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from django.shortcuts import render, redirect
 from django.utils.functional import cached_property
 from django.views.generic.edit import UpdateView
@@ -16,7 +17,6 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 
 
 class EventUpdateForm(VersionedModelForm):
-
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
         label=_("Default timezone"),
@@ -66,7 +66,6 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
 
 
 class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
-
     model = Event
     context_object_name = 'event'
     permission = 'can_change_settings'
@@ -77,6 +76,7 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
 
     def get_context_data(self, *args, **kwargs) -> dict:
         from pretix.base.plugins import get_all_plugins
+
         context = super().get_context_data(*args, **kwargs)
         context['plugins'] = [p for p in get_all_plugins() if not p.name.startswith('.')]
         context['plugins_active'] = self.object.get_plugins()
@@ -109,7 +109,6 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
 
 
 class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
-
     model = Event
     context_object_name = 'event'
     permission = 'can_change_settings'
@@ -128,12 +127,26 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
                 obj=self.request.event,
                 data=(self.request.POST if self.request.method == 'POST' else None)
             )
-            provider.form.fields = {
-                'payment_%s_%s' % (provider.identifier, k): v
-                for k, v in provider.settings_form_fields.items()
-            }
-            provider.form.fields['payment_%s' % provider.identifier] = forms.BooleanField(
-                label=_('Enable payment method')
+            provider.form.fields = OrderedDict(
+                [
+                    ('payment_%s__enabled' % provider.identifier,
+                     forms.BooleanField(
+                         label=_('Enable payment method')
+                     )),
+                    ('payment_%s__fee_abs' % provider.identifier,
+                     forms.DecimalField(
+                         label=_('Additional fee'),
+                         help_text=_('Absolute value')
+                     )),
+                    ('payment_%s__fee_percent' % provider.identifier,
+                     forms.DecimalField(
+                         label=_('Additional fee'),
+                         help_text=_('Percentage')
+                     )),
+                ] + [
+                    ('payment_%s_%s' % (provider.identifier, k), v)
+                    for k, v in provider.settings_form_fields.items()
+                ]
             )
             providers.append(provider)
         return providers
