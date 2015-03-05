@@ -8,6 +8,7 @@ from pretix.base.models import (
     Order, OrderPosition, CartPosition,
     OrganizerSetting)
 from pretix.base.types import VariationDict
+from pretix.base import settings
 
 
 class ItemVariationsTest(TestCase):
@@ -297,7 +298,7 @@ class QuotaTestCase(TestCase):
 class SettingsTestCase(TestCase):
 
     def setUp(self):
-        OrganizerSetting.DEFAULTS['test_default'] = 'def'
+        settings.DEFAULTS['test_default'] = 'def'
         self.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
         self.event = Event.objects.create(
             organizer=self.organizer, name='Dummy', slug='dummy',
