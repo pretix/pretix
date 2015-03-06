@@ -218,6 +218,7 @@ class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, 
             providers.append({
                 'provider': provider,
                 'fee': fee,
+                'form': provider.checkout_form_render(self.request),
             })
         return providers
 

@@ -1,5 +1,9 @@
 from decimal import Decimal
 
+from django.forms import Form
+from django.template import Context
+from django.template.loader import get_template
+
 from pretix.base.settings import SettingsSandbox
 
 
@@ -50,6 +54,41 @@ class BasePaymentProvider:
     def settings_form_fields(self) -> dict:
         """
         A dictionary. The keys should be (unprefixed) EventSetting keys,
-        the values should be corresponding django form fields
+        the values should be corresponding django form fields.
+
+        We suggest returning a collections.OrderedDict object instead of a dict.
         """
         raise NotImplementedError()
+
+    @property
+    def checkout_form_fields(self) -> dict:
+        """
+        A dictionary. The keys should be unprefixed field names,
+        the values should be corresponding django form fields.
+
+        We suggest returning a collections.OrderedDict object instead of a dict.
+        """
+        # TODO: Proper handling of required=True fields in HTML
+        return {}
+
+    def checkout_form(self, request) -> Form:
+        """
+        Returns the Form object of the form that should be displayed when the
+        user selects this provider as his payment method.
+        """
+        form = Form(
+            data=(request.POST if request.method == 'POST' else None),
+            prefix='payment_%s' % self.identifier
+        )
+        form.fields = self.checkout_form_fields
+        return form
+
+    def checkout_form_render(self, request) -> str:
+        """
+        Returns the HTML of the form that should be displayed when the user
+        selects this provider as his payment method.
+        """
+        form = self.checkout_form(request)
+        template = get_template('pretixpresale/event/checkout_payment_form_default.html')
+        ctx = Context({'request': request, 'form': form})
+        return template.render(ctx)

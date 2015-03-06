@@ -10,3 +10,10 @@ class Stripe(BasePaymentProvider):
     verbose_name = _('Credit Card via Stripe')
     settings_form_fields = OrderedDict([
     ])
+    checkout_form_fields = OrderedDict([
+        ('cc_number',
+         forms.CharField(
+             label=_('Credit card number'),
+             required=False
+         ))
+    ])
