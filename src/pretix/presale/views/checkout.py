@@ -76,7 +76,7 @@ class QuestionsForm(forms.Form):
             self.fields['question_%s' % q.identity] = field
 
 
-class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, TemplateView):
+class CheckoutStart(EventViewMixin, EventLoginRequiredMixin, TemplateView):
     template_name = "pretixpresale/event/checkout_questions.html"
 
     def get_success_url(self):
@@ -183,11 +183,11 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, T
         return ctx
 
 
-class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, TemplateView):
+class PaymentDetails(EventViewMixin, EventLoginRequiredMixin, TemplateView):
     template_name = "pretixpresale/event/checkout_payment.html"
 
     def get_success_url(self):
-        return reverse('presale:event.index', kwargs={
+        return reverse('presale:event.checkout.confirm', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
         })
@@ -229,6 +229,7 @@ class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, 
     def post(self, request, *args, **kwargs):
         for p in self.provider_forms:
             if p['provider'].identifier == request.POST.get('payment', ''):
+                request.session['payment'] = p['provider'].identifier
                 total = self._total_order_value + p['provider'].calculate_fee(self._total_order_value)
                 resp = p['provider'].checkout_prepare(request, total)
                 if isinstance(resp, HttpResponse):
@@ -241,4 +242,13 @@ class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['providers'] = self.provider_forms
+        return ctx
+
+
+class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, TemplateView):
+    template_name = "pretixpresale/event/checkout_confirm.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['cart'] = self.get_cart()
         return ctx

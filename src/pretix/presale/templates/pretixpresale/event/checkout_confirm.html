@@ -1,0 +1,46 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Confirm order" %}{% endblock %}
+{% block content %}
+    <h2>{% trans "Confirm order" %}</h2>
+    <p>{% trans "Please review the details below and confirm your order." %}</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="panel panel-primary cart">
+            <div class="panel-heading">
+                <div class="pull-right">
+                    <a href="{% url "presale:event.index" organizer=request.event.organizer.slug  event=request.event.slug %}">{% trans "Modify" %}</a>
+                </div>
+                <h3 class="panel-title">
+                    {% trans "Your cart" %}
+                </h3>
+            </div>
+            <div class="panel-body">
+                {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=False %}
+                <div class="row-fluid">
+                    <div class="col-md-6 col-xs-12">
+                        {% if cart.minutes_left > 0 %}
+                            <em>{% blocktrans trimmed with minutes=cart.minutes_left %}
+                                The items in your cart are reserved for you for {{ minutes }} minutes.
+                            {% endblocktrans %}</em>
+                        {% else %}
+                            <em>{% trans "The items in your cart are no longer reserved for you." %}</em>
+                        {% endif %}
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        {# TODO: Question answers #}
+        {# TODO: Payment method #}
+        <div class="row checkout-button-row">
+            <div class="col-md-4 col-md-offset-8">
+                <button class="btn btn-block btn-primary btn-lg" type="submit">
+                    {% trans "Place binding order" %}
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}

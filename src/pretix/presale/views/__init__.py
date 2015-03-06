@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.utils.timezone import now
 
 from pretix.base.models import CartPosition
+from pretix.base.signals import register_payment_providers
 
 
 class EventLoginRequiredMixin:
@@ -59,10 +60,21 @@ class CartDisplayMixin:
             group.total = group.count * group.price
             positions.append(group)
 
+        total = sum(p.total for p in positions)
+
+        payment_fee = 0
+        if 'payment' in self.request.session:
+            responses = register_payment_providers.send(self.request.event)
+            for receiver, response in responses:
+                provider = response(self.request.event)
+                if provider.identifier == self.request.session['payment']:
+                    payment_fee = provider.calculate_fee(total)
+
         return {
             'positions': positions,
             'raw': cartpos,
-            'total': sum(p.total for p in positions),
+            'total': total + payment_fee,
+            'payment_fee': payment_fee,
             'minutes_left': (
                 max(min(p.expires for p in positions) - now(), timedelta()).seconds // 60
                 if positions else 0
