@@ -131,17 +131,20 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
                 [
                     ('payment_%s__enabled' % provider.identifier,
                      forms.BooleanField(
-                         label=_('Enable payment method')
+                         label=_('Enable payment method'),
+                         required=False
                      )),
                     ('payment_%s__fee_abs' % provider.identifier,
                      forms.DecimalField(
                          label=_('Additional fee'),
-                         help_text=_('Absolute value')
+                         help_text=_('Absolute value'),
+                         required=False
                      )),
                     ('payment_%s__fee_percent' % provider.identifier,
                      forms.DecimalField(
                          label=_('Additional fee'),
-                         help_text=_('Percentage')
+                         help_text=_('Percentage'),
+                         required=False
                      )),
                 ] + [
                     ('payment_%s_%s' % (provider.identifier, k), v)

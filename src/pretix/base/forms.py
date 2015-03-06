@@ -40,5 +40,7 @@ class SettingsForm(forms.Form):
     def save(self):
         for name, field in self.fields.items():
             value = self.cleaned_data[name]
-            if self.obj.settings.get(value, as_type=type(value)) != value:
+            if value is None:
+                del self.obj.settings[name]
+            elif self.obj.settings.get(value, as_type=type(value)) != value:
                 self.obj.settings.set(name, value)

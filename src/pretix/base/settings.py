@@ -1,4 +1,8 @@
 import json
+import decimal
+
+from django.db.models import Model
+from versions.models import Versionable
 
 
 DEFAULTS = {
@@ -33,6 +37,8 @@ class SettingsProxy:
     def _unserialize(self, value, as_type):
         if isinstance(value, as_type):
             return value
+        elif value is None:
+            return None
         elif as_type == int:
             return int(value)
         elif as_type == float:
@@ -41,15 +47,27 @@ class SettingsProxy:
             return json.loads(value)
         elif as_type == bool:
             return value == 'True'
+        elif as_type == decimal.Decimal:
+            return decimal.Decimal(value)
+        elif issubclass(as_type, Versionable):
+            return as_type.objects.current.get(identity=value)
+        elif issubclass(as_type, Model):
+            return as_type.objects.get(pk=value)
         return value
 
     def _serialize(self, value):
         if isinstance(value, str):
             return value
-        elif isinstance(value, int) or isinstance(value, float) or isinstance(value, bool):
+        elif isinstance(value, int) or isinstance(value, float) \
+                or isinstance(value, bool) or isinstance(value, decimal.Decimal):
             return str(value)
         elif isinstance(value, list) or isinstance(value, bool):
             return json.dumps(value)
+        elif isinstance(value, Versionable):
+            return value.identity
+        elif isinstance(value, Model):
+            return value.pk
+
         raise TypeError('Unable to serialize %s into a setting.' % str(type(value)))
 
     def get(self, key, default=None, as_type=str):
