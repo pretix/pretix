@@ -23,3 +23,6 @@ class BankTransfer(BasePaymentProvider):
         template = get_template('pretixplugins/banktransfer/checkout_payment_form.html')
         ctx = Context({'request': request, 'event': self.event, 'settings': self.settings})
         return template.render(ctx)
+
+    def checkout_prepare(self, request, total):
+        return True

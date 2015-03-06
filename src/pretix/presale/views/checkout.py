@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.views.generic import View, TemplateView
 from django.utils.translation import ugettext_lazy as _
+from django.http import HttpResponse
 from pretix.base.models import CartPosition, Question, QuestionAnswer
 from pretix.base.signals import register_payment_providers
 
@@ -204,23 +205,38 @@ class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, 
         })
 
     @cached_property
-    def provider_forms(self):
-        total = CartPosition.objects.current.filter(
+    def _total_order_value(self):
+        return CartPosition.objects.current.filter(
             Q(user=self.request.user) & Q(event=self.request.event)
         ).aggregate(sum=Sum('price'))['sum']
+
+    @cached_property
+    def provider_forms(self):
         providers = []
         responses = register_payment_providers.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
             if not provider.is_enabled:
                 continue
-            fee = provider.calculate_fee(total)
+            fee = provider.calculate_fee(self._total_order_value)
             providers.append({
                 'provider': provider,
                 'fee': fee,
                 'form': provider.checkout_form_render(self.request),
             })
         return providers
+
+    def post(self, request, *args, **kwargs):
+        for p in self.provider_forms:
+            if p['provider'].identifier == request.POST.get('payment', ''):
+                total = self._total_order_value + p['provider'].calculate_fee(self._total_order_value)
+                resp = p['provider'].checkout_prepare(request, total)
+                if isinstance(resp, HttpResponse):
+                    return resp
+                elif resp is True:
+                    return redirect(self.get_success_url())
+                else:
+                    return self.get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

@@ -92,3 +92,26 @@ class BasePaymentProvider:
         template = get_template('pretixpresale/event/checkout_payment_form_default.html')
         ctx = Context({'request': request, 'form': form})
         return template.render(ctx)
+
+    def checkout_prepare(self, request, total):
+        """
+        Will be called if the user selects this provider as his payment method.
+        If the payment provider provides a form to the user to enter payment data,
+        this method should at least store the user's input into his session.
+
+        It should return True or False, depending of the validity of the user's input,
+        if the frontend should continue with default behaviour, or a custom HTTP response
+        (for example, a redirect), if you need special behaviour.
+
+        On errors, it should use Django's message framework to display an error message
+        to the user (or the normal form validation error messages).
+
+        :param total: The total price of the order, including the payment method fee.
+        """
+        form = self.checkout_form(request)
+        if form.is_valid():
+            for k, v in form.cleaned_data.items():
+                request.session['payment_%s_%s' % (self.identifier, k)] = v
+            return True
+        else:
+            return False
