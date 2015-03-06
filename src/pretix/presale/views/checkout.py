@@ -1,12 +1,13 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django import forms
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.views.generic import View, TemplateView
 from django.utils.translation import ugettext_lazy as _
 from pretix.base.models import CartPosition, Question, QuestionAnswer
+from pretix.base.signals import register_payment_providers
 
 from pretix.presale.views import EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin
 
@@ -78,7 +79,7 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, T
     template_name = "pretixpresale/event/checkout_questions.html"
 
     def get_success_url(self):
-        return reverse('presale:event.index', kwargs={
+        return reverse('presale:event.checkout.payment', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
         })
@@ -178,4 +179,49 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, T
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['forms'] = self.forms
+        return ctx
+
+
+class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, TemplateView):
+    template_name = "pretixpresale/event/checkout_payment.html"
+
+    def get_success_url(self):
+        return reverse('presale:event.index', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+        })
+
+    def get_url(self):
+        return reverse('presale:event.checkout.payment', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+        })
+
+    def get_previous_url(self):
+        return reverse('presale:event.checkout.start', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+        })
+
+    @cached_property
+    def provider_forms(self):
+        total = CartPosition.objects.current.filter(
+            Q(user=self.request.user) & Q(event=self.request.event)
+        ).aggregate(sum=Sum('price'))['sum']
+        providers = []
+        responses = register_payment_providers.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if not provider.is_enabled:
+                continue
+            fee = provider.calculate_fee(total)
+            providers.append({
+                'provider': provider,
+                'fee': fee,
+            })
+        return providers
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['providers'] = self.provider_forms
         return ctx
