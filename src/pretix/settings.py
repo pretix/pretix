@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'pretix.plugins.testdummy',
     'pretix.plugins.timerestriction',
     'pretix.plugins.banktransfer',
+    'pretix.plugins.stripe',
 )
 
 MIDDLEWARE_CLASSES = (
