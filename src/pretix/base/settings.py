@@ -157,7 +157,7 @@ class SettingsSandbox:
         del self._event.settings[self._convert_key(key)]
 
     def get(self, key, default=None, as_type=str):
-        return self._event.settings.get(self._convert_key(key), default=default, as_type=type)
+        return self._event.settings.get(self._convert_key(key), default=default, as_type=as_type)
 
     def set(self, key, value):
         self._event.settings.set(self._convert_key(key), value)
