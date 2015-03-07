@@ -76,26 +76,35 @@ class QuestionsForm(forms.Form):
             self.fields['question_%s' % q.identity] = field
 
 
-class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, TemplateView):
-    template_name = "pretixpresale/event/checkout_questions.html"
+class CheckoutView(TemplateView):
 
-    def get_success_url(self):
+    def get_payment_url(self):
         return reverse('presale:event.checkout.payment', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
         })
 
-    def get_url(self):
+    def get_confirm_url(self):
+        return reverse('presale:event.checkout.confirm', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+        })
+
+    def get_questions_url(self):
         return reverse('presale:event.checkout.start', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
         })
 
-    def get_previous_url(self):
+    def get_index_url(self):
         return reverse('presale:event.index', kwargs={
             'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
+            'organizer': self.request.event.organizer.slug
         })
+
+
+class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, CheckoutView):
+    template_name = "pretixpresale/event/checkout_questions.html"
 
     @cached_property
     def forms(self):
@@ -147,17 +156,17 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, T
             messages.error(self.request,
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.get(*args, **kwargs)
-        return redirect(self.get_success_url())
+        return redirect(self.get_payment_url())
 
     def get(self, *args, **kwargs):
         if not self.cartpos:
             messages.error(self.request,
                            _("Your cart is empty"))
-            return redirect(self.get_previous_url())
+            return redirect(self.get_index_url())
 
         if not self.forms:
             # Nothing to do here
-            return redirect(self.get_success_url())
+            return redirect(self.get_payment_url())
 
         return super().get(*args, **kwargs)
 
@@ -167,26 +176,8 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, T
         return ctx
 
 
-class PaymentDetails(EventViewMixin, EventLoginRequiredMixin, TemplateView):
+class PaymentDetails(EventViewMixin, EventLoginRequiredMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_payment.html"
-
-    def get_success_url(self):
-        return reverse('presale:event.checkout.confirm', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
-        })
-
-    def get_url(self):
-        return reverse('presale:event.checkout.payment', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
-        })
-
-    def get_previous_url(self):
-        return reverse('presale:event.checkout.start', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
-        })
 
     @cached_property
     def _total_order_value(self):
@@ -219,7 +210,7 @@ class PaymentDetails(EventViewMixin, EventLoginRequiredMixin, TemplateView):
                 if isinstance(resp, HttpResponse):
                     return resp
                 elif resp is True:
-                    return redirect(self.get_success_url())
+                    return redirect(self.get_confirm_url())
                 else:
                     return self.get(request, *args, **kwargs)
 
@@ -230,26 +221,8 @@ class PaymentDetails(EventViewMixin, EventLoginRequiredMixin, TemplateView):
         return ctx
 
 
-class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, TemplateView):
+class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_confirm.html"
-
-    def get_success_url(self):
-        return reverse('presale:event.checkout.success', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
-        })
-
-    def get_url(self):
-        return reverse('presale:event.checkout.confirm', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
-        })
-
-    def get_previous_url(self):
-        return reverse('presale:event.checkout.payment', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
-        })
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -267,27 +240,21 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Te
     def check_process(self, request):
         if not self.payment_provider:
             messages.error(request, _('The payment information you entered was incomplete.'))
-            return redirect(self.get_previous_url())
+            return redirect(self.get_payment_url())
         if not self.payment_provider.checkout_is_valid_session(request):
             messages.error(request, _('The payment information you entered was incomplete.'))
-            return redirect(self.get_previous_url())
-        if len(self.cart_items) == 0:
+            return redirect(self.get_payment_url())
+        if len(self.cartpos) == 0:
             messages.warning(request, _('Your cart is empty.'))
-            return redirect(reverse('presale:event.index', kwargs={
-                'event': self.request.event.slug,
-                'organizer': self.request.event.organizer.slug,
-            }))
-        for cp in self.cart_items:
+            return redirect(self.get_index_url())
+        for cp in self.cartpos:
             answ = {
                 aw.question_id: aw.answer for aw in cp.answers.all()
             }
             for q in cp.item.questions.all():
                 if q.required and q.identity not in answ:
                     messages.warning(request, _('Please fill in answers to all required questions.'))
-                    return redirect(reverse('presale:event.checkout.start', kwargs={
-                        'event': self.request.event.slug,
-                        'organizer': self.request.event.organizer.slug,
-                    }))
+                    return redirect(self.get_questions_url())
 
     def get(self, request, *args, **kwargs):
         self.request = request
