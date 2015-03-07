@@ -26,3 +26,6 @@ class BankTransfer(BasePaymentProvider):
 
     def checkout_prepare(self, request, total):
         return True
+
+    def checkout_is_valid_session(self, request):
+        return True

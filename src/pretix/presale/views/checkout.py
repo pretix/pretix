@@ -76,7 +76,7 @@ class QuestionsForm(forms.Form):
             self.fields['question_%s' % q.identity] = field
 
 
-class CheckoutStart(EventViewMixin, EventLoginRequiredMixin, TemplateView):
+class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, TemplateView):
     template_name = "pretixpresale/event/checkout_questions.html"
 
     def get_success_url(self):
@@ -114,22 +114,6 @@ class CheckoutStart(EventViewMixin, EventLoginRequiredMixin, TemplateView):
             if len(form.fields) > 0:
                 formlist.append(form)
         return formlist
-
-    @cached_property
-    def cartpos(self):
-        """
-        A list of this users cart position
-        """
-        return list(CartPosition.objects.current.filter(
-            Q(user=self.request.user) & Q(event=self.request.event)
-        ).order_by(
-            'item', 'variation'
-        ).select_related(
-            'item', 'variation'
-        ).prefetch_related(
-            'variation__values', 'variation__values__prop',
-            'item__questions', 'answers'
-        ))
 
     def post(self, *args, **kwargs):
         failed = False
@@ -242,13 +226,79 @@ class PaymentDetails(EventViewMixin, EventLoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['providers'] = self.provider_forms
+        ctx['selected'] = self.request.POST.get('payment', self.request.session.get('payment', ''))
         return ctx
 
 
 class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, TemplateView):
     template_name = "pretixpresale/event/checkout_confirm.html"
 
+    def get_success_url(self):
+        return reverse('presale:event.checkout.success', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+        })
+
+    def get_url(self):
+        return reverse('presale:event.checkout.confirm', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+        })
+
+    def get_previous_url(self):
+        return reverse('presale:event.checkout.payment', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+        })
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['cart'] = self.get_cart()
         return ctx
+
+    @cached_property
+    def payment_provider(self):
+        responses = register_payment_providers.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if provider.identifier == self.request.session['payment']:
+                return provider
+
+    def check_process(self, request):
+        if not self.payment_provider:
+            messages.error(request, _('The payment information you entered was incomplete.'))
+            return redirect(self.get_previous_url())
+        if not self.payment_provider.checkout_is_valid_session(request):
+            messages.error(request, _('The payment information you entered was incomplete.'))
+            return redirect(self.get_previous_url())
+        if len(self.cart_items) == 0:
+            messages.warning(request, _('Your cart is empty.'))
+            return redirect(reverse('presale:event.index', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug,
+            }))
+        for cp in self.cart_items:
+            answ = {
+                aw.question_id: aw.answer for aw in cp.answers.all()
+            }
+            for q in cp.item.questions.all():
+                if q.required and q.identity not in answ:
+                    messages.warning(request, _('Please fill in answers to all required questions.'))
+                    return redirect(reverse('presale:event.checkout.start', kwargs={
+                        'event': self.request.event.slug,
+                        'organizer': self.request.event.organizer.slug,
+                    }))
+
+    def get(self, request, *args, **kwargs):
+        self.request = request
+        check = self.check_process(request)
+        if check:
+            return check
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.request = request
+        check = self.check_process(request)
+        if check:
+            return check
+        return super().post(request, *args, **kwargs)

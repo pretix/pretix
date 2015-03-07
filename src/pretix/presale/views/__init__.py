@@ -5,6 +5,7 @@ from django.contrib.auth.views import redirect_to_login
 from django.core.urlresolvers import reverse
 
 from django.db.models import Q
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 
 from pretix.base.models import CartPosition
@@ -34,6 +35,22 @@ class EventLoginRequiredMixin:
 
 
 class CartDisplayMixin:
+
+    @cached_property
+    def cartpos(self):
+        """
+        A list of this users cart position
+        """
+        return list(CartPosition.objects.current.filter(
+            Q(user=self.request.user) & Q(event=self.request.event)
+        ).order_by(
+            'item', 'variation'
+        ).select_related(
+            'item', 'variation'
+        ).prefetch_related(
+            'variation__values', 'variation__values__prop',
+            'item__questions', 'answers'
+        ))
 
     def get_cart(self):
         cartpos = CartPosition.objects.current.filter(

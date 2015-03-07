@@ -17,3 +17,6 @@ class Stripe(BasePaymentProvider):
              required=False
          ))
     ])
+
+    def checkout_is_valid_session(self, request):
+        return False

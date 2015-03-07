@@ -78,7 +78,12 @@ class BasePaymentProvider:
         """
         form = Form(
             data=(request.POST if request.method == 'POST' else None),
-            prefix='payment_%s' % self.identifier
+            prefix='payment_%s' % self.identifier,
+            initial={
+                k.replace('payment_%s_' % self.identifier, ''): v
+                for k, v in request.session.items()
+                if k.startswith('payment_%s_' % self.identifier)
+            }
         )
         form.fields = self.checkout_form_fields
         return form
@@ -115,3 +120,11 @@ class BasePaymentProvider:
             return True
         else:
             return False
+
+    def checkout_is_valid_session(self, request):
+        """
+        This is called at the time the user tries to place the order. It should return
+        True, if the user's session is valid and all data your payment provider requires
+        in future steps is present.
+        """
+        raise NotImplementedError()
