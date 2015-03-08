@@ -98,15 +98,15 @@ class BasePaymentProvider:
         ctx = Context({'request': request, 'form': form})
         return template.render(ctx)
 
-    def checkout_prepare(self, request, total):
+    def checkout_prepare(self, request, total) -> "bool|HttpResponse":
         """
         Will be called if the user selects this provider as his payment method.
         If the payment provider provides a form to the user to enter payment data,
         this method should at least store the user's input into his session.
 
         It should return True or False, depending of the validity of the user's input,
-        if the frontend should continue with default behaviour, or a custom HTTP response
-        (for example, a redirect), if you need special behaviour.
+        if the frontend should continue with default behaviour, or a redirect URL,
+        if you need special behaviour.
 
         On errors, it should use Django's message framework to display an error message
         to the user (or the normal form validation error messages).
@@ -121,10 +121,25 @@ class BasePaymentProvider:
         else:
             return False
 
-    def checkout_is_valid_session(self, request):
+    def checkout_is_valid_session(self, request) -> bool:
         """
         This is called at the time the user tries to place the order. It should return
         True, if the user's session is valid and all data your payment provider requires
         in future steps is present.
         """
         raise NotImplementedError()
+
+    def checkout_perform(self, request, order) -> str:
+        """
+        Will be called if the user submitted his order successfully to initiate the
+        payment process.
+
+        It should return a custom redirct URL, if you need special behaviour, or None to
+        continue with default behaviour.
+
+        On errors, it should use Django's message framework to display an error message
+        to the user (or the normal form validation error messages).
+
+        :param order: The order object
+        """
+        return None

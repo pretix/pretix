@@ -10,6 +10,7 @@ DEFAULTS = {
     'max_items_per_order': '10',
     'attendee_names_asked': 'True',
     'attendee_names_required': 'False',
+    'reservation_time': '30',
 }
 
 

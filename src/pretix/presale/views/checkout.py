@@ -1,13 +1,15 @@
+from datetime import timedelta
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.db import transaction
 from django.db.models import Q, Sum
 from django import forms
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.views.generic import View, TemplateView
 from django.utils.translation import ugettext_lazy as _
-from django.http import HttpResponse
-from pretix.base.models import CartPosition, Question, QuestionAnswer
+from pretix.base.models import CartPosition, Question, QuestionAnswer, Quota, Order, OrderPosition
 from pretix.base.signals import register_payment_providers
 
 from pretix.presale.views import EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin
@@ -100,6 +102,13 @@ class CheckoutView(TemplateView):
         return reverse('presale:event.index', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug
+        })
+
+    def get_order_url(self, order):
+        return reverse('presale:event.order', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'order': order.code,
         })
 
 
@@ -207,8 +216,8 @@ class PaymentDetails(EventViewMixin, EventLoginRequiredMixin, CheckoutView):
                 request.session['payment'] = p['provider'].identifier
                 total = self._total_order_value + p['provider'].calculate_fee(self._total_order_value)
                 resp = p['provider'].checkout_prepare(request, total)
-                if isinstance(resp, HttpResponse):
-                    return resp
+                if isinstance(resp, str):
+                    return redirect(str)
                 elif resp is True:
                     return redirect(self.get_confirm_url())
                 else:
@@ -223,6 +232,22 @@ class PaymentDetails(EventViewMixin, EventLoginRequiredMixin, CheckoutView):
 
 class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_confirm.html"
+
+    error_messages = {
+        'unavailable': _('Some of the items you selected were no longer available. '
+                         'Please see below for details.'),
+        'in_part': _('Some of the items you selected were no longer available in '
+                     'the quantity you selected. Please see below for details.'),
+        'price_changed': _('The price of some of the items in your cart has changed in the '
+                           'meantime. Please see below for details.'),
+        'busy': _('We were not able to process your request completely as the '
+                  'server was too busy. Please try again.'),
+        'max_items': _("You cannot select more than %s items per order"),
+    }
+
+    def __init__(self, *args, **kwargs):
+        self.msg_some_unavailable = False
+        super().__init__(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -263,9 +288,100 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
             return check
         return super().get(request, *args, **kwargs)
 
+    def error_message(self, msg, important=False):
+        if not self.msg_some_unavailable or important:
+            self.msg_some_unavailable = True
+            messages.error(self.request, msg)
+
     def post(self, request, *args, **kwargs):
         self.request = request
         check = self.check_process(request)
         if check:
-            return check
-        return super().post(request, *args, **kwargs)
+            return
+
+        dt = now()
+        quotas_locked = set()
+
+        try:
+            cartpos = self.cartpos
+            for i, cp in enumerate(cartpos):
+                quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
+                if cp.expires < dt:
+                    price = cp.item.check_restrictions() if cp.variation is None else cp.variation.check_restrictions()
+                    if price is False:
+                        self.error_message(self.error_messages['unavailable'])
+                        continue
+                    if len(quotas) == 0:
+                        self.error_message(self.error_messages['unavailable'])
+                        continue
+                    if price != cp.price:
+                        cp = cp.clone()
+                        cartpos[i] = cp
+                        cp.price = price
+                        cp.save()
+                        self.error_message(self.error_messages['price_changed'])
+                        continue
+                    quota_ok = True
+                    for quota in quotas:
+                        # Lock the quota, so no other thread is allowed to perform sales covered by this
+                        # quota while we're doing so.
+                        if quota not in quotas_locked:
+                            quota.lock()
+                            quotas_locked.add(quota)
+                        avail = quota.availability()
+                        if avail[0] != Quota.AVAILABILITY_OK:
+                            # This quota is sold out/currently unavailable, so do not sell this at all
+                            self.error_message(self.error_messages['unavailable'])
+                            quota_ok = False
+                            break
+                    if quota_ok:
+                        cp = cp.clone()
+                        cartpos[i] = cp
+                        cp.expires = now() + timedelta(minutes=self.request.event.settings.get('reservation_time', as_type=int))
+                        cp.save()
+            if not self.msg_some_unavailable:  # Everything went well
+                with transaction.atomic():
+                    total = sum([c.price for c in cartpos])
+                    payment_fee = self.payment_provider.calculate_fee(total)
+                    total += payment_fee
+                    expires = [dt + timedelta(days=request.event.payment_term_days)]
+                    if request.event.payment_term_last:
+                        expires.append(request.event.payment_term_last)
+                    order = Order.objects.create(
+                        status=Order.STATUS_PENDING,
+                        event=request.event,
+                        user=request.user,
+                        datetime=dt,
+                        expires=min(expires),
+                        total=total,
+                        payment_fee=payment_fee,
+                        payment_provider=self.payment_provider.identifier,
+                    )
+                    for cp in cartpos:
+                        op = OrderPosition.objects.create(
+                            order=order, item=cp.item, variation=cp.variation,
+                            price=cp.price, attendee_name=cp.attendee_name
+                        )
+                        for answ in cp.answers.all():
+                            answ = answ.clone()
+                            answ.orderposition = op
+                            answ.cartposition = None
+                            answ.save()
+                        cp.delete()
+                    messages.success(request, _('Your order has been placed.'))
+                resp = self.payment_provider.checkout_perform(request, order)
+                if isinstance(resp, str):
+                    return redirect(str)
+                else:
+                    return redirect(self.get_order_url(order))
+
+        except Quota.LockTimeoutException:
+            # Is raised when there are too many threads asking for quota locks and we were
+            # unaible to get one
+            self.error_message(self.error_messages['busy'], important=True)
+        finally:
+            # Release the locks. This is important ;)
+            for quota in quotas_locked:
+                quota.release()
+
+        return redirect(self.get_confirm_url())

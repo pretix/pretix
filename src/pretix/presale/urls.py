@@ -18,6 +18,8 @@ urlpatterns = patterns(
                 name='event.checkout.payment'),
             url(r'^checkout/confirm$', pretix.presale.views.checkout.OrderConfirm.as_view(),
                 name='event.checkout.confirm'),
+            url(r'^order/(?P<order>[^/]+)/$', pretix.presale.views.checkout.OrderConfirm.as_view(),
+                name='event.order'),
             url(r'^login$', pretix.presale.views.event.EventLogin.as_view(), name='event.checkout.login'),
         )
     )),

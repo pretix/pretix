@@ -1,6 +1,7 @@
 from itertools import product
 import copy
 import uuid
+import random
 import time
 
 from django.db import models
@@ -1219,8 +1220,9 @@ class Order(Versionable):
     expiration date: If items run out of capacity, orders which are over
     their expiration date might be cancelled.
 
-    Important: An order holds its total monetary value, as an order is a
-    piece of 'history' and must not change due to a change in item prices.
+    An order -- like all objects -- has an ID, which is globally unique,
+    but also a code, which is shorter and easier to memorize, but only
+    unique among a single conference.
     """
 
     STATUS_PENDING = "n"
@@ -1234,6 +1236,10 @@ class Order(Versionable):
         (STATUS_CANCELLED, _("cancelled")),
     )
 
+    code = models.CharField(
+        max_length=16,
+        verbose_name=_("Order code")
+    )
     status = models.CharField(
         max_length=3,
         choices=STATUS_CHOICE,
@@ -1248,7 +1254,6 @@ class Order(Versionable):
         verbose_name=_("User")
     )
     datetime = models.DateTimeField(
-        auto_now_add=True,
         verbose_name=_("Date")
     )
     expires = models.DateTimeField(
@@ -1257,6 +1262,15 @@ class Order(Versionable):
     payment_date = models.DateTimeField(
         verbose_name=_("Payment date"),
         null=True, blank=True
+    )
+    payment_provider = models.CharField(
+        null=True, blank=True,
+        max_length=255,
+        verbose_name=_("Payment provider")
+    )
+    payment_fee = models.DecimalField(
+        decimal_places=2, max_digits=10,
+        verbose_name=_("Payment method fee")
     )
     payment_info = models.TextField(
         verbose_name=_("Payment information"),
@@ -1270,6 +1284,30 @@ class Order(Versionable):
     class Meta:
         verbose_name = _("Order")
         verbose_name_plural = _("Orders")
+
+    def str(self):
+        return self.full_code
+
+    @property
+    def full_code(self):
+        """
+        A order code which is unique among all events of a single organizer,
+        built by contatenating the event slug and the order code.
+        """
+        return self.event.slug.upper() + self.code
+
+    def save(self, *args, **kwargs):
+        if not self.code:
+            self.assign_code()
+        super().save(*args, **kwargs)
+
+    def assign_code(self):
+        charset = list('ABCDEFGHKLMNPQRSTUVWXYZ23456789')
+        while True:
+            code = "".join([random.choice(charset) for i in range(5)])
+            if not Order.objects.filter(event=self.event, code=code).exists():
+                self.code = code
+                return
 
 
 class QuestionAnswer(Versionable):
