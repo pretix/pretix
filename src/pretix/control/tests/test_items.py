@@ -114,6 +114,7 @@ class PropertiesTest(ItemFormTest):
         self.assertEqual("S", self.driver.find_element_by_name("values-0-value").get_attribute("value"))
         self.assertEqual("M", self.driver.find_element_by_name("values-1-value").get_attribute("value"))
 
+    @unittest.skipIf('TRAVIS' in os.environ, 'See CategoriesTest.test_sort for details.')
     def test_update(self):
         c = Property.objects.create(event=self.event1, name="Size")
         PropertyValue.objects.create(prop=c, position=0, value="S")
