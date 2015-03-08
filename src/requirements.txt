@@ -1,5 +1,5 @@
 # Functional requirements
-Django==1.8a1
+Django==1.8b1
 pytz
 django-bootstrap3
 -e git+https://github.com/pretix/django-formset-js.git@master#egg=django-formset-js
@@ -21,7 +21,7 @@ django-debug-toolbar
 
 # Testing requirements
 pyflakes
-pep8
+pep8==1.5.7  # exact requirement by flake8 2.4.0
 pep8-naming
 flake8
 coveralls
