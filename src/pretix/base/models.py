@@ -1299,6 +1299,8 @@ class Order(Versionable):
     def save(self, *args, **kwargs):
         if not self.code:
             self.assign_code()
+        if not self.datetime:
+            self.datetime = now()
         super().save(*args, **kwargs)
 
     def assign_code(self):
