@@ -1270,7 +1270,7 @@ class Order(Versionable):
     )
     payment_fee = models.DecimalField(
         decimal_places=2, max_digits=10,
-        verbose_name=_("Payment method fee")
+        default=0, verbose_name=_("Payment method fee")
     )
     payment_info = models.TextField(
         verbose_name=_("Payment information"),
