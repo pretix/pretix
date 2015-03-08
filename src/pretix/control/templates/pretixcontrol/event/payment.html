@@ -24,6 +24,8 @@
 						{%  bootstrap_form provider.form layout='horizontal' %}
 					</div>
 				</div>
+            {% empty %}
+                <em>{% trans "There are no payment providers available. Please go to the plugin settings and activate one or more payment plugins." %}</em>
 			{% endfor %}
 		</fieldset>
         <div class="form-group submit-group">

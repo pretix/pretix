@@ -136,7 +136,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
         ).update(expires=now() + timedelta(minutes=30))
 
         # For items that are already expired, we have to delete and re-add them, as they might
-        # be no longer available. Sorry!
+        # be no longer available or prices might have changed. Sorry!
         for cp in CartPosition.objects.current.filter(
                 Q(user=self.request.user) & Q(event=self.request.event) & Q(expires__lte=now())):
             items = self._re_add_position(items, cp)
@@ -220,7 +220,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                         item=item,
                         variation=variation,
                         price=price,
-                        expires=now() + timedelta(minutes=30)
+                        expires=now() + timedelta(minutes=self.request.event.settings.get('reservation_time', as_type=int))
                     )
             except Quota.LockTimeoutException:
                 # Is raised when there are too many threads asking for quota locks and we were

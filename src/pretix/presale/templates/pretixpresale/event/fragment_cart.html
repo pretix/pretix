@@ -52,6 +52,18 @@
         <div class="clearfix"></div>
     </div>
 {% endfor %}
+{% if cart.payment_fee %}
+    {# TODO: Tax rate? #}
+    <div class="row-fluid cart-row">
+        <div class="col-md-4 col-xs-6">
+            <strong>{% trans "Payment method fee" %}</strong>
+        </div>
+        <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+            <strong>{{ event.currency }} {{ cart.payment_fee|floatformat:2 }}</strong>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+{% endif %}
 <div class="row-fluid cart-row total">
     <div class="col-md-4 col-xs-6">
         <strong>{% trans "Total" %}</strong>

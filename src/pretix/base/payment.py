@@ -1,5 +1,9 @@
 from decimal import Decimal
 
+from django.forms import Form
+from django.template import Context
+from django.template.loader import get_template
+
 from pretix.base.settings import SettingsSandbox
 
 
@@ -50,6 +54,92 @@ class BasePaymentProvider:
     def settings_form_fields(self) -> dict:
         """
         A dictionary. The keys should be (unprefixed) EventSetting keys,
-        the values should be corresponding django form fields
+        the values should be corresponding django form fields.
+
+        We suggest returning a collections.OrderedDict object instead of a dict.
         """
         raise NotImplementedError()
+
+    @property
+    def checkout_form_fields(self) -> dict:
+        """
+        A dictionary. The keys should be unprefixed field names,
+        the values should be corresponding django form fields.
+
+        We suggest returning a collections.OrderedDict object instead of a dict.
+        """
+        # TODO: Proper handling of required=True fields in HTML
+        return {}
+
+    def checkout_form(self, request) -> Form:
+        """
+        Returns the Form object of the form that should be displayed when the
+        user selects this provider as his payment method.
+        """
+        form = Form(
+            data=(request.POST if request.method == 'POST' else None),
+            prefix='payment_%s' % self.identifier,
+            initial={
+                k.replace('payment_%s_' % self.identifier, ''): v
+                for k, v in request.session.items()
+                if k.startswith('payment_%s_' % self.identifier)
+            }
+        )
+        form.fields = self.checkout_form_fields
+        return form
+
+    def checkout_form_render(self, request) -> str:
+        """
+        Returns the HTML of the form that should be displayed when the user
+        selects this provider as his payment method.
+        """
+        form = self.checkout_form(request)
+        template = get_template('pretixpresale/event/checkout_payment_form_default.html')
+        ctx = Context({'request': request, 'form': form})
+        return template.render(ctx)
+
+    def checkout_prepare(self, request, total) -> "bool|HttpResponse":
+        """
+        Will be called if the user selects this provider as his payment method.
+        If the payment provider provides a form to the user to enter payment data,
+        this method should at least store the user's input into his session.
+
+        It should return True or False, depending of the validity of the user's input,
+        if the frontend should continue with default behaviour, or a redirect URL,
+        if you need special behaviour.
+
+        On errors, it should use Django's message framework to display an error message
+        to the user (or the normal form validation error messages).
+
+        :param total: The total price of the order, including the payment method fee.
+        """
+        form = self.checkout_form(request)
+        if form.is_valid():
+            for k, v in form.cleaned_data.items():
+                request.session['payment_%s_%s' % (self.identifier, k)] = v
+            return True
+        else:
+            return False
+
+    def checkout_is_valid_session(self, request) -> bool:
+        """
+        This is called at the time the user tries to place the order. It should return
+        True, if the user's session is valid and all data your payment provider requires
+        in future steps is present.
+        """
+        raise NotImplementedError()
+
+    def checkout_perform(self, request, order) -> str:
+        """
+        Will be called if the user submitted his order successfully to initiate the
+        payment process.
+
+        It should return a custom redirct URL, if you need special behaviour, or None to
+        continue with default behaviour.
+
+        On errors, it should use Django's message framework to display an error message
+        to the user (or the normal form validation error messages).
+
+        :param order: The order object
+        """
+        return None

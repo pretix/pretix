@@ -16,14 +16,16 @@
                                 <strong class="pull-right">+ {{ p.fee|floatformat:2 }} {{ event.currency }}</strong>
                                 <input type="radio" name="payment" value="{{ p.provider.identifier }}"
                                         data-parent="#payment_accordion"
-                                        required="True"
+                                        {% if selected == p.provider.identifier %}checked="checked"{% endif %}
                                         data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}" />
                                 <strong>{{ p.provider.verbose_name }}</strong>
                             </label>
                         </h4>
                     </div>
-                    <div id="payment_{{ p.provider.identifier }}" class="panel-collapse collapse">
+                    <div id="payment_{{ p.provider.identifier }}"
+                         class="panel-collapse collapse {% if selected == p.provider.identifier %}in{% endif %}">
                         <div class="panel-body form-horizontal">
+                            {{ p.form }}
                         </div>
                     </div>
                 </div>
@@ -32,7 +34,7 @@
         <div class="row checkout-button-row">
             <div class="col-md-4">
                 <a class="btn btn-block btn-default btn-lg"
-                        href="{{ view.get_previous_url }}">
+                        href="{{ view.get_questions_url }}">
                     {% trans "Go back" %}
                 </a>
             </div>

@@ -5,9 +5,11 @@ from django.contrib.auth.views import redirect_to_login
 from django.core.urlresolvers import reverse
 
 from django.db.models import Q
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 
 from pretix.base.models import CartPosition
+from pretix.base.signals import register_payment_providers
 
 
 class EventLoginRequiredMixin:
@@ -34,6 +36,22 @@ class EventLoginRequiredMixin:
 
 class CartDisplayMixin:
 
+    @cached_property
+    def cartpos(self):
+        """
+        A list of this users cart position
+        """
+        return list(CartPosition.objects.current.filter(
+            Q(user=self.request.user) & Q(event=self.request.event)
+        ).order_by(
+            'item', 'variation'
+        ).select_related(
+            'item', 'variation'
+        ).prefetch_related(
+            'variation__values', 'variation__values__prop',
+            'item__questions', 'answers'
+        ))
+
     def get_cart(self):
         cartpos = CartPosition.objects.current.filter(
             Q(user=self.request.user) & Q(event=self.request.event)
@@ -59,10 +77,21 @@ class CartDisplayMixin:
             group.total = group.count * group.price
             positions.append(group)
 
+        total = sum(p.total for p in positions)
+
+        payment_fee = 0
+        if 'payment' in self.request.session:
+            responses = register_payment_providers.send(self.request.event)
+            for receiver, response in responses:
+                provider = response(self.request.event)
+                if provider.identifier == self.request.session['payment']:
+                    payment_fee = provider.calculate_fee(total)
+
         return {
             'positions': positions,
             'raw': cartpos,
-            'total': sum(p.total for p in positions),
+            'total': total + payment_fee,
+            'payment_fee': payment_fee,
             'minutes_left': (
                 max(min(p.expires for p in positions) - now(), timedelta()).seconds // 60
                 if positions else 0
