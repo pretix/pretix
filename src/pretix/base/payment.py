@@ -98,6 +98,13 @@ class BasePaymentProvider:
         ctx = Context({'request': request, 'form': form})
         return template.render(ctx)
 
+    def checkout_confirm_render(self, request) -> str:
+        """
+        Returns the HTML that should be displayed when the user selected this provider
+        on the 'confirm order' page.
+        """
+        raise NotImplementedError()
+
     def checkout_prepare(self, request, total) -> "bool|HttpResponse":
         """
         Will be called if the user selects this provider as his payment method.

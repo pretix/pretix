@@ -29,3 +29,9 @@ class BankTransfer(BasePaymentProvider):
 
     def checkout_is_valid_session(self, request):
         return True
+
+    def checkout_confirm_render(self, request):
+        form = self.checkout_form(request)
+        template = get_template('pretixplugins/banktransfer/checkout_payment_confirm.html')
+        ctx = Context({'request': request, 'form': form, 'settings': self.settings})
+        return template.render(ctx)
