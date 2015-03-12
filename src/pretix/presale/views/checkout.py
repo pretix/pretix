@@ -147,7 +147,7 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, C
                         form.cartpos = form.cartpos.clone()
                         form.cartpos.attendee_name = v
                         form.cartpos.save()
-                    elif k.startswith('question_'):
+                    elif k.startswith('question_') and v is not None:
                         field = form.fields[k]
                         if hasattr(field, 'answer'):
                             # We already have a cached answer object, so we don't

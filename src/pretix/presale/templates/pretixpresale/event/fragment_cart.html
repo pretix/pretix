@@ -1,7 +1,7 @@
 {% load i18n %}
 {% for line in cart.positions %}
     <div class="row-fluid cart-row">
-        <div class="{% if line.has_questions %}col-md-9 col-xs-12{% else %}col-md-4 col-xs-6{% endif %}">
+        <div class="{% if line.has_questions %}col-md-9 col-xs-6{% else %}col-md-4 col-xs-6{% endif %}">
             <strong>{{ line.item }}</strong>
             {% if line.variation %}
                 – {{ line.variation }}
