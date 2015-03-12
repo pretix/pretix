@@ -368,7 +368,7 @@ class CartTest(CartTestMixin, TestCase):
         )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
             'item_' + self.ticket.identity: '1',
-            }, follow=True)
+        }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('updated', doc.select('.alert-success')[0].text)
         self.assertEqual(CartPosition.objects.current.filter(user=self.user, event=self.event).count(), 1)
@@ -384,7 +384,7 @@ class CartTest(CartTestMixin, TestCase):
         )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
             'item_' + self.ticket.identity: '2',
-            }, follow=True)
+        }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('updated', doc.select('.alert-success')[0].text)
         self.assertFalse(CartPosition.objects.current.filter(user=self.user, event=self.event).exists())

@@ -5,8 +5,7 @@ from django.utils.timezone import now
 from pretix.base.models import (
     Event, Organizer, Item, ItemVariation,
     Property, PropertyValue, User, Quota,
-    Order, OrderPosition, CartPosition,
-    OrganizerSetting)
+    Order, OrderPosition, CartPosition)
 from pretix.base.types import VariationDict
 from pretix.base import settings
 

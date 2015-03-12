@@ -1,4 +1,3 @@
-import uuid
 from itertools import groupby
 from datetime import timedelta
 from django.contrib.auth.views import redirect_to_login

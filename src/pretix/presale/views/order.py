@@ -19,7 +19,7 @@ class OrderDetailMixin:
                 user=self.request.user,
                 event=self.request.event,
                 code=self.kwargs['order'],
-                )
+            )
         except Order.DoesNotExist:
             return None
 

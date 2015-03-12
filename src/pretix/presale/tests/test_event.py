@@ -1,7 +1,6 @@
 import datetime
-import time
 
-from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation, User
+from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation
 from pretix.base.tests import BrowserTest
 
 

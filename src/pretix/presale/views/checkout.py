@@ -7,7 +7,7 @@ from django import forms
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.views.generic import View, TemplateView
+from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
 from pretix.base.models import CartPosition, Question, QuestionAnswer, Quota, Order, OrderPosition
 from pretix.base.signals import register_payment_providers
