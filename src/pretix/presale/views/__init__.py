@@ -76,7 +76,7 @@ class CartDisplayMixin:
         # Django is unable to join related models in a .values() query
         def keyfunc(pos):
             if answers and ((pos.item.admission and self.request.event.settings.attendee_names_asked == 'True')
-                    or pos.item.questions.all()):
+                            or pos.item.questions.all()):
                 return pos.id, "", "", ""
             return "", pos.item_id, pos.variation_id, pos.price
 

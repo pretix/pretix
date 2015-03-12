@@ -8,15 +8,13 @@ Python code
 
   Use `flake8`_ to check for conformance problems. The project includes a setup.cfg
   with a default configuration for flake8 that excludes migrations and other non-relevant
-  code parts. It also silences a few checks, ``N802`` (function names should be lowercase) and
-  ``E128`` (continuation line under-indented for visual indent) as well as increasing the
-  maximum line length to more than 79 characters. **However** you should still name all your
-  functions lowercase [#f1]_ and keep your lines short when possible. [#f2]_
+  code parts. It also silences a few checks, e.g. ``N802`` (function names should be lowercase) 
+  and increases the maximum line length to more than 79 characters. **However** you should 
+  still name all your functions lowercase [#f1]_ and keep your lines short when possible.
 
 * Our build server will reject all code violating other flake8 checks than the following:
   
   * E123: closing bracket does not match indentation of opening bracket’s line
-  * E128: continuation line under-indented for visual indent
   * F403: ``from module import *`` used; unable to detect undefined names
   * F401: module imported but unused
   * N802: function names should be lowercase
@@ -55,5 +53,3 @@ LESS stylesheets
 .. _Django Coding Style: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
 .. _mixins: http://lesscss.org/features/#mixins-feature
 .. [#f1] But Python's very own ``unittest`` module forces us to use ``setUp`` as a method name...
-.. [#f2] The underindentation-thing is silenced because PEP8-conforming indentation looks very bad
- in the ``urls.py`` modules.
