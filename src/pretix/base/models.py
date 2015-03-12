@@ -714,7 +714,7 @@ class Item(Versionable):
         if self.event:
             self.event.get_cache().clear()
 
-    def delete(self):
+    def delete(self, *args, **kwargs):
         self.deleted = True
         self.active = False
         super().save()
@@ -1229,11 +1229,13 @@ class Order(Versionable):
     STATUS_PAID = "p"
     STATUS_EXPIRED = "e"
     STATUS_CANCELLED = "c"
+    STATUS_REFUNDED = "r"
     STATUS_CHOICE = (
         (STATUS_PAID, _("pending")),
         (STATUS_PENDING, _("paid")),
         (STATUS_EXPIRED, _("expired")),
         (STATUS_CANCELLED, _("cancelled")),
+        (STATUS_REFUNDED, _("refunded"))
     )
 
     code = models.CharField(

@@ -25,6 +25,11 @@
         }
     }
 }
+
+.panel-body address:last-child {
+    margin-bottom: 0;
+}
+
 .cart-row, .product-row {
     padding: 10px 0;
 
@@ -42,6 +47,15 @@
 
     &.total {
         border-top: 1px solid @table-border-color;
+    }
+
+    dl {
+        padding-left: 20px;
+        margin-bottom: 0;
+
+        dd {
+            padding-left: 20px;
+        }
     }
 }
 .panel-primary .panel-heading a {

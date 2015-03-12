@@ -3,6 +3,7 @@ from django.conf.urls import patterns, url, include
 import pretix.presale.views.event
 import pretix.presale.views.cart
 import pretix.presale.views.checkout
+import pretix.presale.views.order
 
 
 urlpatterns = patterns(
@@ -18,7 +19,7 @@ urlpatterns = patterns(
                 name='event.checkout.payment'),
             url(r'^checkout/confirm$', pretix.presale.views.checkout.OrderConfirm.as_view(),
                 name='event.checkout.confirm'),
-            url(r'^order/(?P<order>[^/]+)/$', pretix.presale.views.checkout.OrderConfirm.as_view(),
+            url(r'^order/(?P<order>[^/]+)/$', pretix.presale.views.order.OrderDetails.as_view(),
                 name='event.order'),
             url(r'^login$', pretix.presale.views.event.EventLogin.as_view(), name='event.checkout.login'),
         )

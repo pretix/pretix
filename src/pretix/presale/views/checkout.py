@@ -251,7 +251,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['cart'] = self.get_cart()
+        ctx['cart'] = self.get_cart(answers=True)
         ctx['payment'] = self.payment_provider.checkout_confirm_render(self.request)
         return ctx
 

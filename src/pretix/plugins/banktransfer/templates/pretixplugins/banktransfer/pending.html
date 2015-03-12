@@ -1,0 +1,10 @@
+{% load i18n %}
+
+<p>{% blocktrans trimmed %}
+    Please transfer the full amount to the following bank account:
+{% endblocktrans %}</p>
+
+<address>
+    {{ settings.bank_details|linebreaksbr }}<br />
+    <strong>{% trans "Reference code (important):" %} {{ order.full_code }}</strong>
+</address>

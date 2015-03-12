@@ -150,3 +150,28 @@ class BasePaymentProvider:
         :param order: The order object
         """
         return None
+
+    def order_pending_render(self, request, order) -> str:
+        """
+        Will be called if the user views the detail page of an unpaid order which is
+        associated with this payment provider.
+
+        It should return HTML code which should be displayed to the user. It should contian
+        instructions on how to continue with the payment process, either in form of text
+        or buttons/links/etc.
+
+        :param order: The order object
+        """
+        raise NotImplementedError()
+
+    def order_paid_render(self, request, order) -> str:
+        """
+        Will be called if the user views the detail page of an paid order which is
+        associated with this payment provider.
+
+        It should return HTML code which should be displayed to the user or None,
+        if there is nothing to say.
+
+        :param order: The order object
+        """
+        return None
