@@ -1,15 +1,16 @@
 from itertools import groupby
-from django.db.models import Q
+from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
+from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, HttpResponseForbidden
 from pretix.base.models import Order, OrderPosition
 from pretix.base.signals import register_payment_providers
 from pretix.presale.views import EventViewMixin, EventLoginRequiredMixin, CartDisplayMixin
 
 
-class OrderDetails(EventViewMixin, EventLoginRequiredMixin, CartDisplayMixin, TemplateView):
-    template_name = "pretixpresale/event/order.html"
+class OrderDetailMixin:
 
     @cached_property
     def order(self):
@@ -18,14 +19,19 @@ class OrderDetails(EventViewMixin, EventLoginRequiredMixin, CartDisplayMixin, Te
                 user=self.request.user,
                 event=self.request.event,
                 code=self.kwargs['order'],
-            )
+                )
         except Order.DoesNotExist:
             return None
+
+
+class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
+                   CartDisplayMixin, TemplateView):
+    template_name = "pretixpresale/event/order.html"
 
     def get(self, request, *args, **kwargs):
         self.kwargs = kwargs
         if not self.order:
-            return HttpResponseNotFound
+            return HttpResponseNotFound(_('Unknown order code or order does belong to another user.'))
         return super().get(request, *args, **kwargs)
 
     def itemlist_cartlike(self):
@@ -87,4 +93,37 @@ class OrderDetails(EventViewMixin, EventLoginRequiredMixin, CartDisplayMixin, Te
             ctx['payment'] = self.payment_provider.order_pending_render(self.request, self.order)
         elif self.order.status == Order.STATUS_PAID:
             ctx['payment'] = self.payment_provider.order_paid_render(self.request, self.order)
+        return ctx
+
+
+class OrderCancel(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
+                  TemplateView):
+    template_name = "pretixpresale/event/order_cancel.html"
+
+    def post(self, request, *args, **kwargs):
+        self.kwargs = kwargs
+        if not self.order:
+            return HttpResponseNotFound(_('Unknown order code or order does belong to another user.'))
+        if self.order.status != Order.STATUS_PENDING:
+            return HttpResponseForbidden(_('You cannot cancel this order'))
+        order = self.order.clone()
+        order.status = Order.STATUS_CANCELLED
+        order.save()
+        return redirect(reverse('presale:event.order', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'order': order.code,
+        }))
+
+    def get(self, request, *args, **kwargs):
+        self.kwargs = kwargs
+        if not self.order:
+            return HttpResponseNotFound(_('Unknown order code or order does belong to another user.'))
+        if self.order.status != Order.STATUS_PENDING:
+            return HttpResponseForbidden(_('You cannot cancel this order'))
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['order'] = self.order
         return ctx

@@ -47,10 +47,10 @@
     {% if order.status == "n" %}
         <div class="row">
             <div class="col-md-12 text-right">
-                <form action="" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">{% trans "Cancel order" %}</button>
-                </form>
+                <p>
+                    <a href="{% url 'presale:event.order.cancel' event=request.event.slug organizer=request.event.organizer.slug order=order.code %}"
+                       class="btn btn-danger">{% trans "Cancel order" %}</a>
+                </p>
             </div>
         </div>
     {% endif %}
