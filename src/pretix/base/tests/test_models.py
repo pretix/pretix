@@ -16,18 +16,18 @@ class ItemVariationsTest(TestCase):
     This test case tests various methods around the properties /
     variations concept.
     """
-
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
-        self.event = Event.objects.create(
+        cls.event = Event.objects.create(
             organizer=o, name='Dummy', slug='dummy',
             date_from=now(),
         )
-        p = Property.objects.create(event=self.event, name='Size')
+        p = Property.objects.create(event=cls.event, name='Size')
         PropertyValue.objects.create(prop=p, value='S')
         PropertyValue.objects.create(prop=p, value='M')
         PropertyValue.objects.create(prop=p, value='L')
-        p = Property.objects.create(event=self.event, name='Color')
+        p = Property.objects.create(event=cls.event, name='Color')
         PropertyValue.objects.create(prop=p, value='black')
         PropertyValue.objects.create(prop=p, value='blue')
 
@@ -183,13 +183,15 @@ class UserTestCase(TestCase):
 
 
 class QuotaTestCase(TestCase):
-
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
-        self.event = Event.objects.create(
+        cls.event = Event.objects.create(
             organizer=o, name='Dummy', slug='dummy',
             date_from=now(),
         )
+
+    def setUp(self):
         self.quota = Quota.objects.create(name="Test", size=2, event=self.event)
         self.item1 = Item.objects.create(event=self.event, name="Ticket")
         self.item2 = Item.objects.create(event=self.event, name="T-Shirt")

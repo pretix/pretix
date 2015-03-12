@@ -17,24 +17,24 @@ class TimeRestrictionTest(TestCase):
     This test case tests the various aspects of the time restriction
     plugin
     """
-
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
-        self.event = Event.objects.create(
+        cls.event = Event.objects.create(
             organizer=o, name='Dummy', slug='dummy',
             date_from=now(),
         )
-        self.item = Item.objects.create(event=self.event, name='Dummy', default_price=14)
-        self.property = Property.objects.create(event=self.event, name='Size')
-        self.value1 = PropertyValue.objects.create(prop=self.property, value='S')
-        self.value2 = PropertyValue.objects.create(prop=self.property, value='M')
-        self.value3 = PropertyValue.objects.create(prop=self.property, value='L')
-        self.variation1 = ItemVariation.objects.create(item=self.item)
-        self.variation1.values.add(self.value1)
-        self.variation2 = ItemVariation.objects.create(item=self.item)
-        self.variation2.values.add(self.value2)
-        self.variation3 = ItemVariation.objects.create(item=self.item)
-        self.variation3.values.add(self.value3)
+        cls.item = Item.objects.create(event=cls.event, name='Dummy', default_price=14)
+        cls.property = Property.objects.create(event=cls.event, name='Size')
+        cls.value1 = PropertyValue.objects.create(prop=cls.property, value='S')
+        cls.value2 = PropertyValue.objects.create(prop=cls.property, value='M')
+        cls.value3 = PropertyValue.objects.create(prop=cls.property, value='L')
+        cls.variation1 = ItemVariation.objects.create(item=cls.item)
+        cls.variation1.values.add(cls.value1)
+        cls.variation2 = ItemVariation.objects.create(item=cls.item)
+        cls.variation2.values.add(cls.value2)
+        cls.variation3 = ItemVariation.objects.create(item=cls.item)
+        cls.variation3.values.add(cls.value3)
 
     def test_nothing(self):
         result = signals.availability_handler(

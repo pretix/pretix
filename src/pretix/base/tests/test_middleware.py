@@ -10,16 +10,16 @@ class LocaleDeterminationTest(TestCase):
     This test case tests various methods around the properties /
     variations concept.
     """
-
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
-        self.event = Event.objects.create(
+        cls.event = Event.objects.create(
             organizer=o, name='Dummy', slug='dummy',
             date_from=now(),
         )
-        self.TEST_LOCALE = 'de' if settings.LANGUAGE_CODE == 'en' else 'en'
-        self.TEST_LOCALE_LONG = 'de-AT' if settings.LANGUAGE_CODE == 'en' else 'en-NZ'
-        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy@dummy.dummy', 'dummy')
+        cls.TEST_LOCALE = 'de' if settings.LANGUAGE_CODE == 'en' else 'en'
+        cls.TEST_LOCALE_LONG = 'de-AT' if settings.LANGUAGE_CODE == 'en' else 'en-NZ'
+        cls.user = User.objects.create_user('dummy@dummy.dummy', 'dummy@dummy.dummy', 'dummy')
 
     def test_global_default(self):
         c = Client()

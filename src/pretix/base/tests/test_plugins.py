@@ -34,10 +34,10 @@ class PluginSignalTest(TestCase):
     """
     This test case tests the EventPluginSignal handler
     """
-
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
-        self.event = Event.objects.create(
+        cls.event = Event.objects.create(
             organizer=o, name='Dummy', slug='dummy',
             date_from=now(),
         )
