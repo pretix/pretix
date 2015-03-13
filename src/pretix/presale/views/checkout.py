@@ -145,17 +145,20 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, C
                 for k, v in form.cleaned_data.items():
                     if k == 'attendee_name':
                         form.cartpos = form.cartpos.clone()
-                        form.cartpos.attendee_name = v
+                        form.cartpos.attendee_name = v if v != '' else None
                         form.cartpos.save()
                     elif k.startswith('question_') and v is not None:
                         field = form.fields[k]
                         if hasattr(field, 'answer'):
                             # We already have a cached answer object, so we don't
                             # have to create a new one
-                            field.answer = field.answer.clone()
-                            field.answer.answer = v
-                            field.answer.save()
-                        else:
+                            if v == '':
+                                field.answer.delete()
+                            else:
+                                field.answer = field.answer.clone()
+                                field.answer.answer = v
+                                field.answer.save()
+                        elif v != '':
                             QuestionAnswer.objects.create(
                                 cartposition=form.cartpos,
                                 question=field.question,
