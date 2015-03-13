@@ -35,6 +35,9 @@ class SettingsProxy:
                 self._cached_obj[setting.key] = setting
         return self._cached_obj
 
+    def _flush(self):
+        self._cached_obj = None
+
     def _unserialize(self, value, as_type):
         if isinstance(value, as_type):
             return value
@@ -62,7 +65,7 @@ class SettingsProxy:
         elif isinstance(value, int) or isinstance(value, float) \
                 or isinstance(value, bool) or isinstance(value, decimal.Decimal):
             return str(value)
-        elif isinstance(value, list) or isinstance(value, bool):
+        elif isinstance(value, list) or isinstance(value, dict):
             return json.dumps(value)
         elif isinstance(value, Versionable):
             return value.identity

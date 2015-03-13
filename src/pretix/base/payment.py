@@ -41,14 +41,14 @@ class BasePaymentProvider:
         """
         A human-readable name for this payment provider
         """
-        raise NotImplementedError
+        raise NotImplementedError()  # NOQA
 
     @property
     def identifier(self) -> str:
         """
         A unique identifier for this payment provider
         """
-        raise NotImplementedError()
+        raise NotImplementedError()  # NOQA
 
     @property
     def settings_form_fields(self) -> dict:
@@ -58,7 +58,7 @@ class BasePaymentProvider:
 
         We suggest returning a collections.OrderedDict object instead of a dict.
         """
-        raise NotImplementedError()
+        raise NotImplementedError()  # NOQA
 
     @property
     def checkout_form_fields(self) -> dict:
@@ -103,7 +103,7 @@ class BasePaymentProvider:
         Returns the HTML that should be displayed when the user selected this provider
         on the 'confirm order' page.
         """
-        raise NotImplementedError()
+        raise NotImplementedError()  # NOQA
 
     def checkout_prepare(self, request, total) -> "bool|HttpResponse":
         """
@@ -134,7 +134,7 @@ class BasePaymentProvider:
         True, if the user's session is valid and all data your payment provider requires
         in future steps is present.
         """
-        raise NotImplementedError()
+        raise NotImplementedError()  # NOQA
 
     def checkout_perform(self, request, order) -> str:
         """
@@ -162,7 +162,7 @@ class BasePaymentProvider:
 
         :param order: The order object
         """
-        raise NotImplementedError()
+        raise NotImplementedError()  # NOQA
 
     def order_paid_render(self, request, order) -> str:
         """

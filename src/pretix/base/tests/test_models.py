@@ -7,7 +7,6 @@ from pretix.base.models import (
     Property, PropertyValue, User, Quota,
     Order, OrderPosition, CartPosition)
 from pretix.base.types import VariationDict
-from pretix.base import settings
 
 
 class ItemVariationsTest(TestCase):
@@ -294,67 +293,3 @@ class QuotaTestCase(TestCase):
         quota2.size = 0
         quota2.save()
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_GONE, 0))
-
-
-class SettingsTestCase(TestCase):
-
-    def setUp(self):
-        settings.DEFAULTS['test_default'] = 'def'
-        self.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
-        self.event = Event.objects.create(
-            organizer=self.organizer, name='Dummy', slug='dummy',
-            date_from=now(),
-        )
-
-    def test_event_set_explicit(self):
-        self.event.settings.test = 'foo'
-        self.assertEqual(self.event.settings.test, 'foo')
-
-        # Reload object
-        self.event = Event.objects.get(identity=self.event.identity)
-        self.assertEqual(self.event.settings.test, 'foo')
-
-    def test_event_set_on_organizer(self):
-        self.organizer.settings.test = 'foo'
-        self.assertEqual(self.organizer.settings.test, 'foo')
-        self.assertEqual(self.event.settings.test, 'foo')
-
-        # Reload object
-        self.organizer = Organizer.objects.get(identity=self.organizer.identity)
-        self.event = Event.objects.get(identity=self.event.identity)
-        self.assertEqual(self.organizer.settings.test, 'foo')
-        self.assertEqual(self.event.settings.test, 'foo')
-
-    def test_override_organizer(self):
-        self.organizer.settings.test = 'foo'
-        self.event.settings.test = 'bar'
-        self.assertEqual(self.organizer.settings.test, 'foo')
-        self.assertEqual(self.event.settings.test, 'bar')
-
-        # Reload object
-        self.organizer = Organizer.objects.get(identity=self.organizer.identity)
-        self.event = Event.objects.get(identity=self.event.identity)
-        self.assertEqual(self.organizer.settings.test, 'foo')
-        self.assertEqual(self.event.settings.test, 'bar')
-
-    def test_default(self):
-        self.assertEqual(self.organizer.settings.test_default, 'def')
-        self.assertEqual(self.event.settings.test_default, 'def')
-
-    def test_delete(self):
-        self.organizer.settings.test = 'foo'
-        self.event.settings.test = 'bar'
-        self.assertEqual(self.organizer.settings.test, 'foo')
-        self.assertEqual(self.event.settings.test, 'bar')
-
-        del self.event.settings.test
-        self.assertEqual(self.event.settings.test, 'foo')
-
-        self.event = Event.objects.get(identity=self.event.identity)
-        self.assertEqual(self.event.settings.test, 'foo')
-
-        del self.organizer.settings.test
-        self.assertIsNone(self.organizer.settings.test)
-
-        self.organizer = Organizer.objects.get(identity=self.organizer.identity)
-        self.assertIsNone(self.organizer.settings.test)
