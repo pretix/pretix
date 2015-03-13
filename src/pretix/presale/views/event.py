@@ -216,7 +216,8 @@ class EventLogin(EventViewMixin, TemplateView):
             del self.request.session['cart_tmp']
             ca = CartAdd()
             ca.request = self.request
-            return ca.process(items)
+            ca.items = items
+            return ca.process()
         if 'next' in self.request.GET:
             return redirect(self.request.GET.get('next'))
         else:
