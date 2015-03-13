@@ -1232,7 +1232,7 @@ msgstr "Erstattet"
 #: pretix/presale/templates/pretixpresale/event/order.html:31
 #, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr "Bitte schließen Sie Ihre Zahlung biszum %(date)s ab."
+msgstr "Bitte schließen Sie Ihre Zahlung bis zum %(date)s ab."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:40
 msgid "Ordered items"
