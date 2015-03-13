@@ -284,10 +284,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
 
     def get(self, request, *args, **kwargs):
         self.request = request
-        check = self.check_process(request)
-        if check:
-            return check
-        return super().get(request, *args, **kwargs)
+        return self.check_process(request) or super().get(request, *args, **kwargs)
 
     def error_message(self, msg, important=False):
         if not self.msg_some_unavailable or important:
@@ -296,10 +293,9 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
 
     def post(self, request, *args, **kwargs):
         self.request = request
-        check = self.check_process(request)
-        if check:
-            return
+        return self.check_process(request) or self.perform_order(request)
 
+    def perform_order(self, request):
         dt = now()
         quotas_locked = set()
 
@@ -309,10 +305,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
                 quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
                 if cp.expires < dt:
                     price = cp.item.check_restrictions() if cp.variation is None else cp.variation.check_restrictions()
-                    if price is False:
-                        self.error_message(self.error_messages['unavailable'])
-                        continue
-                    if len(quotas) == 0:
+                    if price is False or len(quotas) == 0:
                         self.error_message(self.error_messages['unavailable'])
                         continue
                     if price != cp.price:
@@ -341,40 +334,10 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
                         cp.expires = now() + timedelta(minutes=self.request.event.settings.get('reservation_time', as_type=int))
                         cp.save()
             if not self.msg_some_unavailable:  # Everything went well
-                with transaction.atomic():
-                    total = sum([c.price for c in cartpos])
-                    payment_fee = self.payment_provider.calculate_fee(total)
-                    total += payment_fee
-                    expires = [dt + timedelta(days=request.event.payment_term_days)]
-                    if request.event.payment_term_last:
-                        expires.append(request.event.payment_term_last)
-                    order = Order.objects.create(
-                        status=Order.STATUS_PENDING,
-                        event=request.event,
-                        user=request.user,
-                        datetime=dt,
-                        expires=min(expires),
-                        total=total,
-                        payment_fee=payment_fee,
-                        payment_provider=self.payment_provider.identifier,
-                    )
-                    for cp in cartpos:
-                        op = OrderPosition.objects.create(
-                            order=order, item=cp.item, variation=cp.variation,
-                            price=cp.price, attendee_name=cp.attendee_name
-                        )
-                        for answ in cp.answers.all():
-                            answ = answ.clone()
-                            answ.orderposition = op
-                            answ.cartposition = None
-                            answ.save()
-                        cp.delete()
-                    messages.success(request, _('Your order has been placed.'))
+                order = self._place_order(cartpos, dt)
+                messages.success(request, _('Your order has been placed.'))
                 resp = self.payment_provider.checkout_perform(request, order)
-                if isinstance(resp, str):
-                    return redirect(str)
-                else:
-                    return redirect(self.get_order_url(order))
+                return redirect(resp or self.get_order_url(order))
 
         except Quota.LockTimeoutException:
             # Is raised when there are too many threads asking for quota locks and we were
@@ -386,3 +349,24 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
                 quota.release()
 
         return redirect(self.get_confirm_url())
+
+    @transaction.atomic()
+    def _place_order(self, cartpos, dt):
+        total = sum([c.price for c in cartpos])
+        payment_fee = self.payment_provider.calculate_fee(total)
+        total += payment_fee
+        expires = [dt + timedelta(days=self.request.event.payment_term_days)]
+        if self.request.event.payment_term_last:
+            expires.append(self.request.event.payment_term_last)
+        order = Order.objects.create(
+            status=Order.STATUS_PENDING,
+            event=self.request.event,
+            user=self.request.user,
+            datetime=dt,
+            expires=min(expires),
+            total=total,
+            payment_fee=payment_fee,
+            payment_provider=self.payment_provider.identifier,
+        )
+        OrderPosition.transform_cart_positions(cartpos, order)
+        return order

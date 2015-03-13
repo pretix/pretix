@@ -11,6 +11,16 @@ from pretix.control.signals import restriction_formset
 from .models import TimeRestriction
 
 
+# The maximum validity of our cached values is the next date, one of our
+# timeframe_from or tiemframe_to actions happens
+def timediff(restrictions):
+    for r in restrictions:
+        if r.timeframe_from >= now():
+            yield (r.timeframe_from - now()).total_seconds()
+        if r.timeframe_to >= now():
+            yield (r.timeframe_to - now()).total_seconds()
+
+
 @receiver(determine_availability)
 def availability_handler(sender, **kwargs):
     # Handle the signal's input arguments
@@ -33,15 +43,6 @@ def availability_handler(sender, **kwargs):
     # modify it, becuase we need to to copy the dictionaries. Otherwise, we'll
     # interfere with other plugins.
     variations = [d.copy() for d in variations]
-
-    # The maximum validity of our cached values is the next date, one of our
-    # timeframe_from or tiemframe_to actions happens
-    def timediff(restrictions):
-        for r in restrictions:
-            if r.timeframe_from >= now():
-                yield (r.timeframe_from - now()).total_seconds()
-            if r.timeframe_to >= now():
-                yield (r.timeframe_to - now()).total_seconds()
 
     try:
         cache_validity = min(timediff(restrictions))

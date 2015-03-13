@@ -960,6 +960,20 @@ class ItemVariation(Versionable):
                 price = response[0]['price']
         return price
 
+    def add_values_from_string(self, pk):
+        """
+        Add values to this ItemVariation using a serialized string of the form
+        ``property-id:value-id,ṗroperty-id:value-id``
+        """
+        for pair in pk.split(","):
+            prop, value = pair.split(":")
+            self.values.add(
+                PropertyValue.objects.current.get(
+                    identity=value,
+                    prop_id=prop
+                )
+            )
+
 
 class VariationsField(VersionedManyToManyField):
     """
@@ -1332,7 +1346,27 @@ class QuestionAnswer(Versionable):
     answer = models.TextField()
 
 
-class OrderPosition(Versionable):
+class ObjectWithAnswers:
+
+    def cache_answers(self):
+        """
+        Creates two properties on the object.
+        (1) answ: a dictionary of question.id → answer string
+        (2) questions: a list of Question objects, extended by an 'answer' property
+        """
+        self.answ = {}
+        for a in self.answers.all():
+            self.answ[a.question_id] = a.answer
+        self.questions = []
+        for q in self.item.questions.all():
+            if q.identity in self.answ:
+                q.answer = self.answ[q.identity]
+            else:
+                q.answer = ""
+            self.questions.append(q)
+
+
+class OrderPosition(ObjectWithAnswers, Versionable):
     """
     An OrderPosition is one line of an order, representing one ordered items
     of a specified type (or variation).
@@ -1368,8 +1402,25 @@ class OrderPosition(Versionable):
         verbose_name = _("Order position")
         verbose_name_plural = _("Order positions")
 
+    @classmethod
+    def transform_cart_positions(cls, cp: list, order) -> list:
+        ops = []
+        for cartpos in cp:
+            op = OrderPosition(
+                order=order, item=cartpos.item, variation=cartpos.variation,
+                price=cartpos.price, attendee_name=cartpos.attendee_name
+            )
+            for answ in cartpos.answers.all():
+                answ = answ.clone()
+                answ.orderposition = op
+                answ.cartposition = None
+                answ.save()
+            op.save()
+            cartpos.delete()
+            ops.append(op)
 
-class CartPosition(Versionable):
+
+class CartPosition(ObjectWithAnswers, Versionable):
     """
     A cart position is similar to a order line, except that it is not
     yet part of a binding order but just placed by some user in his or

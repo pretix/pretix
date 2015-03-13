@@ -1,3 +1,4 @@
+from functools import partial
 from itertools import product
 from django import forms
 from django.core.exceptions import ValidationError
@@ -9,7 +10,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from pretix.base.forms import VersionedModelForm
 
-from pretix.base.models import ItemVariation, PropertyValue, Item
+from pretix.base.models import ItemVariation, Item
 
 
 class TolerantFormsetModelForm(VersionedModelForm):
@@ -106,6 +107,23 @@ class RestrictionInlineFormset(forms.BaseInlineFormSet):
         exclude = ['item']
 
 
+def selector(values, prop):
+    # Given an iterable of PropertyValue objects, this will return a
+    # list of their primary keys, ordered by the primary keys of the
+    # properties they belong to EXCEPT the value for the property prop2.
+    # We'll see later why we need this.
+    return [
+        v.identity for v in sorted(values, key=lambda v: v.prop.identity)
+        if v.prop.identity != prop.identity
+    ]
+
+
+def sort(v, prop):
+    # Given a list of variations, this will sort them by their position
+    # on the x-axis
+    return v[prop.identity].sortkey
+
+
 class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
     """
     This is the default renderer for a VariationsField. Based on the choice input class
@@ -142,80 +160,9 @@ class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
         if dimension == 0:
             output.append(format_html('<em>{0}</em>', _("not applicable")))
         elif dimension == 1:
-            output.append('<ul>')
-            for i, variation in enumerate(variations):
-                final_attrs = dict(
-                    self.attrs.copy(), type=self.choice_input_class.input_type,
-                    name=self.name, value=variation['key']
-                )
-                if variation['key'] in self.value:
-                    final_attrs['checked'] = 'checked'
-                w = self.choice_input_class(
-                    self.name, self.value, self.attrs.copy(),
-                    (variation['key'], variation[properties[0].identity].value),
-                    i
-                )
-                output.append(format_html('<li>{0}</li>', force_text(w)))
-            output.append('</ul>')
-
-        elif dimension >= 2:
-            # prop1 is the property on all the grid's y-axes
-            prop1 = properties[0]
-            prop1v = list(prop1.values.current.all())
-            # prop2 is the property on all the grid's x-axes
-            prop2 = properties[1]
-            prop2v = list(prop2.values.current.all())
-
-            def selector(values):
-                # Given an iterable of PropertyValue objects, this will return a
-                # list of their primary keys, ordered by the primary keys of the
-                # properties they belong to EXCEPT the value for the property prop2.
-                # We'll see later why we need this.
-                return [
-                    v.identity for v in sorted(values, key=lambda v: v.prop.identity)
-                    if v.prop.identity != prop2.identity
-                ]
-
-            def sort(v):
-                # Given a list of variations, this will sort them by their position
-                # on the x-axis
-                return v[prop2.identity].sortkey
-
-            # We now iterate over the cartesian product of all the other
-            # properties which are NOT on the axes of the grid because we
-            # create one grid for any combination of them.
-            for gridrow in product(*[prop.values.current.all() for prop in properties[2:]]):
-                if len(gridrow) > 0:
-                    output.append('<strong>')
-                    output.append(", ".join([value.value for value in gridrow]))
-                    output.append('</strong>')
-                output.append('<table class="table"><thead><tr><th></th>')
-                for val2 in prop2v:
-                    output.append(format_html('<th>{0}</th>', val2.value))
-                output.append('</thead><tbody>')
-                for val1 in prop1v:
-                    output.append(format_html('<tr><th>{0}</th>', val1.value))
-                    # We are now inside one of the rows of the grid and have to
-                    # select the variations to display in this row. In order to
-                    # achieve this, we use the 'selector' lambda defined above.
-                    # It gives us a normalized, comparable version of a set of
-                    # PropertyValue objects. In this case, we compute the
-                    # selector of our row as the selector of the sum of the
-                    # values defining our grind and the value defining our row.
-                    selection = selector(gridrow + (val1,))
-                    # We now iterate over all variations who generate the same
-                    # selector as 'selection'.
-                    filtered = [v for v in variations if selector(v.relevant_values()) == selection]
-                    for variation in sorted(filtered, key=sort):
-                        final_attrs = dict(
-                            self.attrs.copy(), type=self.choice_input_class.input_type,
-                            name=self.name, value=variation['key']
-                        )
-                        if variation['key'] in self.value:
-                            final_attrs['checked'] = 'checked'
-                        output.append(format_html('<td><label><input{0} /></label></td>', flatatt(final_attrs)))
-                    output.append('</td>')
-                output.append('</tbody></table>')
+            output = self.render_1d(output, variations, properties)
+        else:
+            output = self.render_nd(output, variations, properties)
         output.append(
             ('<div class="help-block"><a href="#" class="variations-select-all">{0}</a> · '
              '<a href="#" class="variations-select-none">{1}</a></div></div>').format(
@@ -224,6 +171,67 @@ class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
             )
         )
         return mark_safe('\n'.join(output))
+
+    def render_1d(self, output, variations, properties):
+        output.append('<ul>')
+        for i, variation in enumerate(variations):
+            final_attrs = dict(
+                self.attrs.copy(), type=self.choice_input_class.input_type,
+                name=self.name, value=variation['key']
+            )
+            if variation['key'] in self.value:
+                final_attrs['checked'] = 'checked'
+            w = self.choice_input_class(
+                self.name, self.value, self.attrs.copy(),
+                (variation['key'], variation[properties[0].identity].value),
+                i
+            )
+            output.append(format_html('<li>{0}</li>', force_text(w)))
+        output.append('</ul>')
+        return output
+
+    def render_bd(self, output, variations, properties):
+        # prop1 is the property on all the grid's y-axes
+        prop1 = properties[0]
+        prop1v = list(prop1.values.current.all())
+        # prop2 is the property on all the grid's x-axes
+        prop2 = properties[1]
+        prop2v = list(prop2.values.current.all())
+
+        # We now iterate over the cartesian product of all the other
+        # properties which are NOT on the axes of the grid because we
+        # create one grid for any combination of them.
+        for gridrow in product(*[prop.values.current.all() for prop in properties[2:]]):
+            if len(gridrow) > 0:
+                output.append('<strong>')
+                output.append(", ".join([value.value for value in gridrow]))
+                output.append('</strong>')
+            output.append('<table class="table"><thead><tr><th></th>')
+            output.append(*[format_html('<th>{0}</th>', val2.value) for val2 in prop2v])
+            output.append('</thead><tbody>')
+            for val1 in prop1v:
+                output.append(format_html('<tr><th>{0}</th>', val1.value))
+                # We are now inside one of the rows of the grid and have to
+                # select the variations to display in this row. In order to
+                # achieve this, we use the 'selector' lambda defined above.
+                # It gives us a normalized, comparable version of a set of
+                # PropertyValue objects. In this case, we compute the
+                # selector of our row as the selector of the sum of the
+                # values defining our grind and the value defining our row.
+                selection = selector(gridrow + (val1,), prop2)
+                # We now iterate over all variations who generate the same
+                # selector as 'selection'.
+                filtered = [v for v in variations if selector(v.relevant_values(), prop2) == selection]
+                for variation in sorted(filtered, key=partial(sort, prop=prop2)):
+                    final_attrs = dict(
+                        self.attrs.copy(), type=self.choice_input_class.input_type,
+                        name=self.name, value=variation['key']
+                    )
+                    if variation['key'] in self.value:
+                        final_attrs['checked'] = 'checked'
+                    output.append(format_html('<td><label><input{0} /></label></td>', flatatt(final_attrs)))
+                output.append('</td>')
+            output.append('</tbody></table>')
 
 
 class VariationsCheckboxRenderer(VariationsFieldRenderer):
@@ -312,13 +320,9 @@ class VariationsField(forms.ModelMultipleChoiceField):
         # For implementation details, see ItemVariation.get_all_variations()
         # which uses a very similar method
         all_variations = self.item.variations.all().prefetch_related("values")
-        variations_cache = {}
-        for var in all_variations:
-            key = []
-            for v in var.values.all():
-                key.append((v.prop_id, v.identity))
-            key = tuple(sorted(key))
-            variations_cache[key] = var.identity
+        variations_cache = {
+            var.to_variation_dict().identify(): var.identity for var in all_variations
+        }
 
         cleaned_value = []
 
@@ -330,10 +334,7 @@ class VariationsField(forms.ModelMultipleChoiceField):
                     # A combination of PropertyValues was given
 
                     # Hash the combination in the same way as in our cache above
-                    key = []
-                    for pair in pk.split(","):
-                        key.append(tuple([i for i in pair.split(":")]))
-                    key = tuple(sorted(key))
+                    key = ",".join([pair.split(":")[1] for pair in sorted(pk.split(","))])
 
                     if key in variations_cache:
                         # An ItemVariation object already exists for this variation,
@@ -348,21 +349,14 @@ class VariationsField(forms.ModelMultipleChoiceField):
                     var.item_id = self.item.identity
                     var.save()
                     # Add the values to the ItemVariation object
-                    for pair in pk.split(","):
-                        prop, value = pair.split(":")
-                        try:
-                            var.values.add(
-                                PropertyValue.objects.current.get(
-                                    identity=value,
-                                    prop_id=prop
-                                )
-                            )
-                        except PropertyValue.DoesNotExist:
-                            raise ValidationError(
-                                self.error_messages['invalid_pk_value'],
-                                code='invalid_pk_value',
-                                params={'pk': value},
-                            )
+                    try:
+                        var.add_values_from_string(pk)
+                    except:
+                        raise ValidationError(
+                            self.error_messages['invalid_pk_value'],
+                            code='invalid_pk_value',
+                            params={'pk': value},
+                        )
                     variations_cache[key] = var.identity
                     cleaned_value.append(str(var.identity))
                 else:

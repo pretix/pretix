@@ -50,24 +50,14 @@ class LocaleMiddleware(BaseLocaleMiddleware):
         return response
 
 
-def get_language_from_request(request) -> str:
-    """
-    Analyzes the request to find what language the user wants the system to
-    show. Only languages listed in settings.LANGUAGES are taken into account.
-    If the user requests a sublanguage where we have a main language, we send
-    out the main language.
-    """
-    global _supported
-    if _supported is None:
-        _supported = OrderedDict(settings.LANGUAGES)
-
-    # Priority 1: User settings
+def get_language_from_user_settings(request) -> str:
     if request.user.is_authenticated():
         lang_code = request.user.locale
         if lang_code in _supported and lang_code is not None and check_for_language(lang_code):
             return lang_code
 
-    # Priority 2: Anonymous user settings (session, cookie)
+
+def get_language_from_session_or_cookie(request) -> str:
     if hasattr(request, 'session'):
         lang_code = request.session.get(LANGUAGE_SESSION_KEY)
         if lang_code in _supported and lang_code is not None and check_for_language(lang_code):
@@ -79,7 +69,8 @@ def get_language_from_request(request) -> str:
     except LookupError:
         pass
 
-    # Priority 3: Event default
+
+def get_language_from_event(request) -> str:
     if hasattr(request, 'event'):
         lang_code = request.event.locale
         try:
@@ -87,7 +78,8 @@ def get_language_from_request(request) -> str:
         except LookupError:
             pass
 
-    # Priority 4: Browser default
+
+def get_language_from_browser(request) -> str:
     accept = request.META.get('HTTP_ACCEPT_LANGUAGE', '')
     for accept_lang, unused in parse_accept_lang_header(accept):
         if accept_lang == '*':
@@ -101,7 +93,29 @@ def get_language_from_request(request) -> str:
         except LookupError:
             continue
 
+
+def get_default_language():
     try:
         return get_supported_language_variant(settings.LANGUAGE_CODE)
     except LookupError:
         return settings.LANGUAGE_CODE
+
+
+def get_language_from_request(request) -> str:
+    """
+    Analyzes the request to find what language the user wants the system to
+    show. Only languages listed in settings.LANGUAGES are taken into account.
+    If the user requests a sublanguage where we have a main language, we send
+    out the main language.
+    """
+    global _supported
+    if _supported is None:
+        _supported = OrderedDict(settings.LANGUAGES)
+
+    return (
+        get_language_from_user_settings(request)
+        or get_language_from_session_or_cookie(request)
+        or get_language_from_event(request)
+        or get_language_from_browser(request)
+        or get_default_language()
+    )

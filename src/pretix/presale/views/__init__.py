@@ -52,10 +52,9 @@ class CartDisplayMixin:
         ))
 
     def get_cart(self, answers=False, queryset=None, payment_fee=None):
-        if queryset is None:
-            queryset = CartPosition.objects.current.filter(
-                Q(user=self.request.user) & Q(event=self.request.event)
-            )
+        queryset = queryset or CartPosition.objects.current.filter(
+            Q(user=self.request.user) & Q(event=self.request.event)
+        )
 
         prefetch = ['variation__values', 'variation__values__prop']
         if answers:
@@ -87,33 +86,18 @@ class CartDisplayMixin:
             group.total = group.count * group.price
             group.has_questions = answers and k[0] != ""
             if answers:
-                group.answ = {}
-                for a in group.answers.all():
-                    group.answ[a.question_id] = a.answer
-                group.questions = []
-                for q in group.item.questions.all():
-                    if q.identity in group.answ:
-                        q.answer = group.answ[q.identity]
-                    else:
-                        q.answer = ""
-                    group.questions.append(q)
+                group.cache_answers()
             positions.append(group)
 
         total = sum(p.total for p in positions)
 
-        if payment_fee is None:
-            payment_fee = 0
-            if 'payment' in self.request.session:
-                responses = register_payment_providers.send(self.request.event)
-                for receiver, response in responses:
-                    provider = response(self.request.event)
-                    if provider.identifier == self.request.session['payment']:
-                        payment_fee = provider.calculate_fee(total)
+        payment_fee = payment_fee or self.get_payment_fee(total)
 
         try:
             minutes_left = max(min(p.expires for p in positions) - now(), timedelta()).seconds // 60 if positions else 0
         except AttributeError:
             minutes_left = None
+
         return {
             'positions': positions,
             'raw': cartpos,
@@ -122,6 +106,16 @@ class CartDisplayMixin:
             'answers': answers,
             'minutes_left': minutes_left,
         }
+
+    def get_payment_fee(self, total):
+        payment_fee = 0
+        if 'payment' in self.request.session:
+            responses = register_payment_providers.send(self.request.event)
+            for receiver, response in responses:
+                provider = response(self.request.event)
+                if provider.identifier == self.request.session['payment']:
+                    payment_fee = provider.calculate_fee(total)
+        return payment_fee
 
 
 class EventViewMixin:
