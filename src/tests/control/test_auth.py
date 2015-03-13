@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 
 from pretix.base.models import User
-from pretix.base.tests import BrowserTest
+from tests.base import BrowserTest
 
 
 class LoginFormBrowserTest(BrowserTest):

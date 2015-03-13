@@ -1,5 +1,4 @@
 import datetime
-import time
 from unittest import expectedFailure
 from bs4 import BeautifulSoup
 from django.test import TestCase

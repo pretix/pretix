@@ -5,7 +5,7 @@ import unittest
 from selenium.webdriver.support.select import Select
 from pretix.base.models import User, Organizer, Event, OrganizerPermission, EventPermission, ItemCategory, Property, \
     PropertyValue, Question, Quota, Item
-from pretix.base.tests import BrowserTest
+from tests.base import BrowserTest
 
 
 class ItemFormTest(BrowserTest):

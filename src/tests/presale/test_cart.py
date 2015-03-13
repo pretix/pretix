@@ -7,7 +7,7 @@ from datetime import timedelta
 
 from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation, User, \
     CartPosition
-from pretix.base.tests import BrowserTest
+from tests.base import BrowserTest
 
 
 class CartTestMixin:
