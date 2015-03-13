@@ -190,7 +190,7 @@ class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
         output.append('</ul>')
         return output
 
-    def render_bd(self, output, variations, properties):
+    def render_nd(self, output, variations, properties):
         # prop1 is the property on all the grid's y-axes
         prop1 = properties[0]
         prop1v = list(prop1.values.current.all())
@@ -207,7 +207,8 @@ class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
                 output.append(", ".join([value.value for value in gridrow]))
                 output.append('</strong>')
             output.append('<table class="table"><thead><tr><th></th>')
-            output.append(*[format_html('<th>{0}</th>', val2.value) for val2 in prop2v])
+            for val2 in prop2v:
+                output.append(format_html('<th>{0}</th>', val2.value))
             output.append('</thead><tbody>')
             for val1 in prop1v:
                 output.append(format_html('<tr><th>{0}</th>', val1.value))
@@ -232,6 +233,7 @@ class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
                     output.append(format_html('<td><label><input{0} /></label></td>', flatatt(final_attrs)))
                 output.append('</td>')
             output.append('</tbody></table>')
+        return output
 
 
 class VariationsCheckboxRenderer(VariationsFieldRenderer):
