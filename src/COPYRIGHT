@@ -17,9 +17,11 @@ This project includes the work of others, namely:
 * Django, (c) Django Software Foundation and contributors, BSD License
 * Font Awesome, (c) Dave Gandy, SIL Open Font License and MIT License
 * Bootstrap, (c) Twitter, Inc., MIT License
+* jQuery, (c) jQuery Foundation and contributors, MIT License
 * django-formset-js, (c) Ionata Web Solutions, BSD License
 * CleanerVersion, (c) Jean-Christophe Zulian, Brian King, Andrea Marcacci, Manuel Jeckelmann, Apache License
 * django-bootstrap3, (c) Dylan Verheul, Apache License
 * pytz, (c) Stuart Bishop, MIT License
 * python-dateutil, (c) Yaron de Leeuw, BSD License
 * startbootstrap-sb-admin-2, (c) Iron Summit Media Strategies, LLC, Apache License
+* metismenu, (c) Osman Nuri Okumus, MIT License

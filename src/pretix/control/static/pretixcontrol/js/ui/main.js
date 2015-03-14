@@ -23,5 +23,5 @@ $(function () {
             });
         });
     }
-    $('.collapse').collapse();
+    $('.collapsible').collapse();
 });

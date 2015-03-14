@@ -14,7 +14,7 @@
                 <legend>{{ set.title }}</legend>
                 <p>{{ set.description }}</p>
                 <div data-formset class="restriction-formset" data-formset-prefix="{{ set.formset.prefix }}">
-                    <div data-formset-body class="panel-group collapse" id="accordion_{{ set.formset.prefix }}">
+                    <div data-formset-body class="panel-group collapsible" id="accordion_{{ set.formset.prefix }}">
                         {{ set.formset.management_form }}
                         {% for f in set.formset %}
                             <div class="panel panel-default" data-formset-form>

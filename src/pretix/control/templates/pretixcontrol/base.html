@@ -7,51 +7,84 @@
 		<title>{% block title %}{% endblock %}{% if url_name != "index" %} :: {% endif %}
             {{ settings.PRETIX_INSTANCE_NAME }}</title>
 		{% compress css %}
-		<link rel="stylesheet" type="text/less" href="{% static "pretixcontrol/less/main.less" %}" />
+    		<link rel="stylesheet" type="text/less" href="{% static "pretixcontrol/less/main.less" %}" />
 		{% endcompress %}
 		{% compress js %}
-		<script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
-		<script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
-		<script type="text/javascript" src="{% static "bootstrap/dist/js/bootstrap.js" %}"></script>
-		<script type="text/javascript" src="{% static "pretixcontrol/js/ui/main.js" %}"></script>
+            <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+            <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
+            <script type="text/javascript" src="{% static "bootstrap/dist/js/bootstrap.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/metisMenu.min.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/sb-admin-2.js" %}"></script>
+		    <script type="text/javascript" src="{% static "pretixcontrol/js/ui/main.js" %}"></script>
 		{% endcompress %}
 	</head>
 	<body>
-		<div class="navbar navbar-default navbar-static-top" role="navigation">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="sr-only">{% trans "Toggle navigation" %}</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#">{{ settings.PRETIX_INSTANCE_NAME }}</a>
-				</div>
-				<div class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-						{% block nav %}
-						<li {% if url_name == "index" %}class="active"{% endif %}><a href="{% url 'control:index' %}">{% trans "Dashboard" %}</a></li>
-						<li {% if "events" in url_name %}class="active"{% endif %}><a href="{% url 'control:events' %}">{% trans "Events" %}</a></li>
-						{% endblock %}
-					</ul>
-					<ul class="nav navbar-nav navbar-right">
-						<li><a href="#"><i class="fa fa-user"></i> {{ request.user.get_full_name }}</a></li>
-						<li><a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}"><i class="fa fa-sign-out"></i><span class="visible-xs-inline">{% trans "Log out" %}</span></a></li>
-					</ul>
-				</div><!--/.nav-collapse -->
-			</div>
-		</div>
-		<div class="container">
-		{% block content %}
-		{% endblock %}
-		</div>
-        <footer>
-            {% with "href='http://pretix.eu'" as a_attr %}
-                {% blocktrans trimmed %}
-                    powered by <a {{ a_attr }}>pretix</a>
-                {% endblocktrans %}
-            {% endwith %}
-        </footer>
+        <div id="#wrapper">
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">{% trans "Toggle navigation" %}</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">{{ settings.PRETIX_INSTANCE_NAME }}</a>
+                </div>
+                <ul class="nav navbar-top-links navbar-left">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i>
+                            {{ request.event }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="{% url "control:events" %}">{% trans "Event overview" %}</a></li>
+                            {% regroup request.user.events_cache by organizer as event_list %}
+                            {% for g in event_list %}
+                                <li class="dropdown-header">{{ g.grouper }}</li>
+                                {% for e in g.list %}
+                                    <li><a href="{% url "control:event.index" organizer=g.grouper.slug event=e.slug %}">{{ e.name }}</a></li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li><a href="#"><i class="fa fa-user"></i> {{ request.user.get_full_name }}</a></li>
+                    <li><a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}"><i class="fa fa-sign-out"></i><span class="visible-xs-inline">{% trans "Log out" %}</span></a></li>
+                </ul>
+                <div class="navbar-default sidebar" role="navigation">
+                    <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            {% block nav %}
+                                <li>
+                                    <a href="{% url 'control:index' %}" {% if url_name == "index" %}class="active"{% endif %}>
+                                        <i class="fa fa-dashboard fa-fw"></i>
+                                        {% trans "Dashboard" %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'control:events' %}" {% if "events" in url_name %}class="active"{% endif %}>
+                                        <i class="fa fa-calendar fa-fw"></i>
+                                        {% trans "Events" %}
+                                    </a>
+                                </li>
+                            {% endblock %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div id="page-wrapper">
+                <div class="container-fluid">
+
+                    {% block content %}
+                    {% endblock %}
+                    <footer>
+                        {% with "href='http://pretix.eu'" as a_attr %}
+                            {% blocktrans trimmed %}
+                                powered by <a {{ a_attr }}>pretix</a>
+                            {% endblocktrans %}
+                        {% endwith %}
+                    </footer>
+                </div>
+            </div>
+        </div>
 	</body>
 </html>
