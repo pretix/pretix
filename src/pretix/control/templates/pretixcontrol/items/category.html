@@ -1,9 +1,9 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block title %}{% trans "Item category" %}{% endblock %}
+{% block title %}{% trans "Product category" %}{% endblock %}
 {% block inside %}
-	<h1>{% trans "Item category" %}</h1>
+	<h1>{% trans "Product category" %}</h1>
 	<form action="" method="post" class="form-horizontal">
 		{% csrf_token %}
 		{% if "success" in request.GET %}

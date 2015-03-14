@@ -13,7 +13,7 @@ class TimeRestrictionApp(AppConfig):
         author = _("the pretix team")
         version = '1.0.0'
         description = _("This plugin adds the possibility to restrict the sale " +
-                        "of a given item or variation to a certain timeframe " +
+                        "of a given product or variation to a certain timeframe " +
                         "or change its price during a certain period.")
 
     def ready(self):

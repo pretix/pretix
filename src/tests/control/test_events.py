@@ -36,7 +36,7 @@ class EventsTest(BrowserTest):
 
     def test_event_list(self):
         self.driver.get('%s%s' % (self.live_server_url, '/control/events/'))
-        tabletext = self.driver.find_element_by_css_selector(".container .table").text
+        tabletext = self.driver.find_element_by_css_selector("#page-wrapper .table").text
         self.assertIn("30C3", tabletext)
         self.assertNotIn("31C3", tabletext)
         self.assertNotIn("MRMCD14", tabletext)

@@ -254,9 +254,9 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
     template_name = "pretixpresale/event/checkout_confirm.html"
 
     error_messages = {
-        'unavailable': _('Some of the items you selected were no longer available. '
+        'unavailable': _('Some of the products you selected were no longer available. '
                          'Please see below for details.'),
-        'in_part': _('Some of the items you selected were no longer available in '
+        'in_part': _('Some of the products you selected were no longer available in '
                      'the quantity you selected. Please see below for details.'),
         'price_changed': _('The price of some of the items in your cart has changed in the '
                            'meantime. Please see below for details.'),

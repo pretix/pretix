@@ -1,8 +1,8 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
-{% block title %}{% trans "Item categories" %}{% endblock %}
+{% block title %}{% trans "Product categories" %}{% endblock %}
 {% block inside %}
-	<h1>{% trans "Item categories" %}</h1>
+	<h1>{% trans "Product categories" %}</h1>
 	{% if "updated" in request.GET %}
 		<div class="alert alert-success">
 			{% trans "Your changes have been saved." %}
@@ -22,7 +22,7 @@
 	<table class="table table-hover">
 		<thead>
 			<tr>
-				<th>{% trans "Item categories" %}</th>
+				<th>{% trans "Product categories" %}</th>
 				<th></th>
 				<th></th>
 			</tr>

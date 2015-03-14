@@ -193,7 +193,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content)
-        self.assertIn('did not select any items', doc.select('.alert-warning')[0].text)
+        self.assertIn('did not select any products', doc.select('.alert-warning')[0].text)
         self.assertFalse(CartPosition.objects.filter(user=self.user, event=self.event).exists())
 
     def test_wrong_event(self):

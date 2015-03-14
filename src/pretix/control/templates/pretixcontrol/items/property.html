@@ -2,9 +2,9 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load formset_tags %}
-{% block title %}{% trans "Item property" %}{% endblock %}
+{% block title %}{% trans "Product property" %}{% endblock %}
 {% block inside %}
-	<h1>{% trans "Item property" %}</h1>
+	<h1>{% trans "Product property" %}</h1>
 	<form action="" method="post" class="form-horizontal">
 		{% csrf_token %}
 		{% if "success" in request.GET %}

@@ -1,8 +1,8 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
-{% block title %}{% trans "Item properties" %}{% endblock %}
+{% block title %}{% trans "Product properties" %}{% endblock %}
 {% block inside %}
-	<h1>{% trans "Item properties" %}</h1>
+	<h1>{% trans "Product properties" %}</h1>
 	{% if "updated" in request.GET %}
 		<div class="alert alert-success">
 			{% trans "Your changes have been saved." %}
@@ -22,7 +22,7 @@
 	<table class="table table-hover">
 		<thead>
 			<tr>
-				<th>{% trans "Item properties" %}</th>
+				<th>{% trans "Product properties" %}</th>
 				<th></th>
 			</tr>
 		</thead>

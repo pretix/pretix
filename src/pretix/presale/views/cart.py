@@ -55,7 +55,7 @@ class CartActionMixin:
                     messages.error(self.request, _('Please enter numbers only.'))
                     return []
         if len(items) == 0:
-            messages.warning(self.request, _('You did not select any items.'))
+            messages.warning(self.request, _('You did not select any products.'))
             return []
         return items
 
@@ -84,13 +84,13 @@ class CartRemove(EventViewMixin, CartActionMixin, EventLoginRequiredMixin, View)
 class CartAdd(EventViewMixin, CartActionMixin, View):
 
     error_messages = {
-        'unavailable': _('Some of the items you selected were no longer available. '
+        'unavailable': _('Some of the products you selected were no longer available. '
                          'Please see below for details.'),
-        'in_part': _('Some of the items you selected were no longer available in '
+        'in_part': _('Some of the products you selected were no longer available in '
                      'the quantity you selected. Please see below for details.'),
         'busy': _('We were not able to process your request completely as the '
                   'server was too busy. Please try again.'),
-        'not_for_sale': _('You selected an item which is not available for sale.'),
+        'not_for_sale': _('You selected a product which is not available for sale.'),
         'max_items': _("You cannot select more than %s items per order"),
     }
 
@@ -232,6 +232,6 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                     quota.release()
 
         if not self.msg_some_unavailable:
-            messages.success(self.request, _('The items have been successfully added to your cart.'))
+            messages.success(self.request, _('The products have been successfully added to your cart.'))
 
         return redirect(self.get_success_url())

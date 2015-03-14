@@ -352,12 +352,12 @@ class Event(Versionable):
     presale_end = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("End of presale"),
-        help_text=_("No items will be sold after this date."),
+        help_text=_("No products will be sold after this date."),
     )
     presale_start = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("Start of presale"),
-        help_text=_("No items will be sold before this date."),
+        help_text=_("No products will be sold before this date."),
     )
     payment_term_days = models.PositiveIntegerField(
         default=14,
@@ -433,7 +433,7 @@ class EventPermission(Versionable):
     )
     can_change_items = models.BooleanField(
         default=True,
-        verbose_name=_("Can change item settings")
+        verbose_name=_("Can change product settings")
     )
 
     class Meta:
@@ -466,8 +466,8 @@ class ItemCategory(Versionable):
     )
 
     class Meta:
-        verbose_name = _("Item category")
-        verbose_name_plural = _("Item categories")
+        verbose_name = _("Product category")
+        verbose_name_plural = _("Product categories")
         ordering = ('position', 'id')
 
     def __str__(self):
@@ -507,8 +507,8 @@ class Property(Versionable):
     )
 
     class Meta:
-        verbose_name = _("Item property")
-        verbose_name_plural = _("Item properties")
+        verbose_name = _("Product property")
+        verbose_name_plural = _("Product properties")
 
     def __str__(self):
         return self.name
@@ -623,7 +623,9 @@ class Question(Versionable):
 class Item(Versionable):
     """
     An item is a thing which can be sold. It belongs to an
-    event and may or may not belong to a category.
+    event and may or may not belong to a category. Items are often
+    also called 'products' but are named 'items' internally due to
+    historic reasons.
 
     It has a default price which might by overriden by
     restrictions.
@@ -656,7 +658,7 @@ class Item(Versionable):
     deleted = models.BooleanField(default=False)
     short_description = models.TextField(
         verbose_name=_("Short description"),
-        help_text=_("This is shown below the item name in lists."),
+        help_text=_("This is shown below the product name in lists."),
         null=True, blank=True,
     )
     long_description = models.TextField(
@@ -697,15 +699,15 @@ class Item(Versionable):
     admission = models.BooleanField(
         verbose_name=_("Is an admission ticket"),
         help_text=_(
-            'Whether or not this item allows a person to enter '
+            'Whether or not buying this product allows a person to enter '
             'your event'
         ),
         default=False
     )
 
     class Meta:
-        verbose_name = _("Item")
-        verbose_name_plural = _("Items")
+        verbose_name = _("Product")
+        verbose_name_plural = _("Products")
 
     def __str__(self):
         return self.name
@@ -909,8 +911,8 @@ class ItemVariation(Versionable):
     )
 
     class Meta:
-        verbose_name = _("Item variation")
-        verbose_name_plural = _("Item variations")
+        verbose_name = _("Product variation")
+        verbose_name_plural = _("Product variations")
 
     def __str__(self):
         return str(self.to_variation_dict())
@@ -1412,7 +1414,7 @@ class OrderPosition(ObjectWithAnswers, Versionable):
         max_length=255,
         verbose_name=_("Attendee name"),
         blank=True, null=True,
-        help_text=_("Empty, if this item is not an admission ticket")
+        help_text=_("Empty, if this product is not an admission ticket")
     )
 
     class Meta:
@@ -1478,7 +1480,7 @@ class CartPosition(ObjectWithAnswers, Versionable):
         max_length=255,
         verbose_name=_("Attendee name"),
         blank=True, null=True,
-        help_text=_("Empty, if this item is not an admission ticket")
+        help_text=_("Empty, if this product is not an admission ticket")
     )
 
     class Meta:

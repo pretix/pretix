@@ -40,7 +40,7 @@ class CategoriesTest(ItemFormTest):
         self.driver.find_element_by_name("name").send_keys('Entry tickets')
         self.driver.find_element_by_class_name("btn-save").click()
         self.driver.find_element_by_class_name("alert-success")
-        self.assertIn("Entry tickets", self.driver.find_element_by_css_selector(".container table").text)
+        self.assertIn("Entry tickets", self.driver.find_element_by_css_selector("#page-wrapper table").text)
 
     def test_update(self):
         c = ItemCategory.objects.create(event=self.event1, name="Entry tickets")
@@ -51,8 +51,8 @@ class CategoriesTest(ItemFormTest):
         self.driver.find_element_by_name("name").send_keys('T-Shirts')
         self.scroll_and_click(self.driver.find_element_by_class_name("btn-save"))
         self.driver.find_element_by_class_name("alert-success")
-        self.assertIn("T-Shirts", self.driver.find_element_by_css_selector(".container table").text)
-        self.assertNotIn("Entry tickets", self.driver.find_element_by_css_selector(".container table").text)
+        self.assertIn("T-Shirts", self.driver.find_element_by_css_selector("#page-wrapper table").text)
+        self.assertNotIn("Entry tickets", self.driver.find_element_by_css_selector("#page-wrapper table").text)
 
     @unittest.skipIf('TRAVIS' in os.environ, 'See docstring for details.')
     def test_sort(self):
@@ -95,7 +95,7 @@ class CategoriesTest(ItemFormTest):
         ))
         self.driver.find_element_by_class_name("btn-danger").click()
         self.driver.find_element_by_class_name("alert-success")
-        self.assertNotIn("Entry tickets", self.driver.find_element_by_css_selector(".container table").text)
+        self.assertNotIn("Entry tickets", self.driver.find_element_by_css_selector("#page-wrapper table").text)
 
 
 class PropertiesTest(ItemFormTest):
@@ -109,7 +109,7 @@ class PropertiesTest(ItemFormTest):
         self.driver.find_element_by_name("values-1-value").send_keys('M')
         self.scroll_and_click(self.driver.find_element_by_class_name("btn-save"))
         self.driver.find_element_by_class_name("alert-success")
-        self.assertIn("Size", self.driver.find_element_by_css_selector(".container table").text)
+        self.assertIn("Size", self.driver.find_element_by_css_selector("#page-wrapper table").text)
         self.driver.find_element_by_partial_link_text("Size").click()
         self.assertEqual("S", self.driver.find_element_by_name("values-0-value").get_attribute("value"))
         self.assertEqual("M", self.driver.find_element_by_name("values-1-value").get_attribute("value"))
@@ -142,7 +142,7 @@ class PropertiesTest(ItemFormTest):
         ))
         self.driver.find_element_by_class_name("btn-danger").click()
         self.driver.find_element_by_class_name("alert-success")
-        self.assertNotIn("Size", self.driver.find_element_by_css_selector(".container table").text)
+        self.assertNotIn("Size", self.driver.find_element_by_css_selector("#page-wrapper table").text)
 
 
 class QuestionsTest(ItemFormTest):
@@ -155,7 +155,7 @@ class QuestionsTest(ItemFormTest):
         Select(self.driver.find_element_by_name("type")).select_by_value('N')
         self.driver.find_element_by_class_name("btn-save").click()
         self.driver.find_element_by_class_name("alert-success")
-        self.assertIn("shoe size", self.driver.find_element_by_css_selector(".container table").text)
+        self.assertIn("shoe size", self.driver.find_element_by_css_selector("#page-wrapper table").text)
 
     def test_update(self):
         c = Question.objects.create(event=self.event1, question="What is your shoe size?", type="N", required=True)
@@ -166,8 +166,8 @@ class QuestionsTest(ItemFormTest):
         self.driver.find_element_by_name("question").send_keys('How old are you?')
         self.scroll_and_click(self.driver.find_element_by_class_name("btn-save"))
         self.driver.find_element_by_class_name("alert-success")
-        self.assertIn("How old", self.driver.find_element_by_css_selector(".container table").text)
-        self.assertNotIn("shoe size", self.driver.find_element_by_css_selector(".container table").text)
+        self.assertIn("How old", self.driver.find_element_by_css_selector("#page-wrapper table").text)
+        self.assertNotIn("shoe size", self.driver.find_element_by_css_selector("#page-wrapper table").text)
         c = Question.objects.current.get(identity=c.identity)
         self.assertTrue(c.required)
 
@@ -178,7 +178,7 @@ class QuestionsTest(ItemFormTest):
         ))
         self.driver.find_element_by_class_name("btn-danger").click()
         self.driver.find_element_by_class_name("alert-success")
-        self.assertNotIn("shoe size", self.driver.find_element_by_css_selector(".container table").text)
+        self.assertNotIn("shoe size", self.driver.find_element_by_css_selector("#page-wrapper table").text)
 
 
 class QuotaTest(ItemFormTest):
@@ -191,7 +191,7 @@ class QuotaTest(ItemFormTest):
         self.driver.find_element_by_name("size").send_keys('500')
         self.driver.find_element_by_class_name("btn-save").click()
         self.driver.find_element_by_class_name("alert-success")
-        self.assertIn("Full house", self.driver.find_element_by_css_selector(".container table").text)
+        self.assertIn("Full house", self.driver.find_element_by_css_selector("#page-wrapper table").text)
 
     def test_update(self):
         c = Quota.objects.create(event=self.event1, name="Full house", size=500)
@@ -206,16 +206,17 @@ class QuotaTest(ItemFormTest):
         ))
         self.driver.find_element_by_name("size").clear()
         self.driver.find_element_by_name("size").send_keys('350')
-        self.scroll_and_click(self.driver.find_element_by_css_selector('.panel-group .panel:nth-child(1) .panel-title a'))
-        time.sleep(1)
+        # self.scroll_and_click(self.driver.find_element_by_css_selector('.panel-group .panel:nth-child(1)
+        # .panel-title a'))
+        # time.sleep(1)
         self.scroll_and_click(self.driver.find_element_by_name("item_%s" % item1.identity))
-        self.driver.find_element_by_css_selector('.panel-group .panel:nth-child(2) .panel-title a').click()
-        time.sleep(1)
+        # self.driver.find_element_by_css_selector('.panel-group .panel:nth-child(2) .panel-title a').click()
+        # time.sleep(1)
         self.scroll_and_click(self.driver.find_elements_by_css_selector("input[name=item_%s]" % item2.identity)[1])
         self.scroll_and_click(self.driver.find_element_by_class_name("btn-save"))
         self.driver.find_element_by_class_name("alert-success")
-        self.assertIn("350", self.driver.find_element_by_css_selector(".container table").text)
-        self.assertNotIn("500", self.driver.find_element_by_css_selector(".container table").text)
+        self.assertIn("350", self.driver.find_element_by_css_selector("#page-wrapper table").text)
+        self.assertNotIn("500", self.driver.find_element_by_css_selector("#page-wrapper table").text)
 
     def test_delete(self):
         c = Quota.objects.create(event=self.event1, name="Full house", size=500)
@@ -224,4 +225,4 @@ class QuotaTest(ItemFormTest):
         ))
         self.driver.find_element_by_class_name("btn-danger").click()
         self.driver.find_element_by_class_name("alert-success")
-        self.assertNotIn("Full house", self.driver.find_element_by_css_selector(".container table").text)
+        self.assertNotIn("Full house", self.driver.find_element_by_css_selector("#page-wrapper table").text)

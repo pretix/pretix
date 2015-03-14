@@ -1,11 +1,11 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block title %}{% trans "Delete item property" %}{% endblock %}
+{% block title %}{% trans "Delete product property" %}{% endblock %}
 {% block inside %}
-	<h1>{% trans "Delete item property" %}</h1>
+	<h1>{% trans "Delete product property" %}</h1>
 	{% if not possible %}
-		<p>{% blocktrans %}You can not delete the property <strong>{{ property }}</strong> as long as the following items use it:{% endblocktrans %}</p>
+		<p>{% blocktrans %}You can not delete the property <strong>{{ property }}</strong> as long as the following products use it:{% endblocktrans %}</p>
 		<ul>
 			{% for item in dependent %}
 				<li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.pk %}">{{ item.name }}</a></li>

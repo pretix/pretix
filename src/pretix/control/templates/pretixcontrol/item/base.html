@@ -1,16 +1,16 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
-{% block title %}{{ item.name }} :: {% trans "Item" %}{% endblock %}
+{% block title %}{{ item.name }} :: {% trans "Product" %}{% endblock %}
 {% block content %}
     {% if item.identity %}
-        <h1>{% trans "Modify item:" %} {{ item.name }}</h1>
+        <h1>{% trans "Modify product:" %} {{ item.name }}</h1>
         <ul class="nav nav-pills">
             <li {% if "event.item" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "General information" %}</a></li>
             <li {% if "event.item.variations" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "Variations" %}</a></li>
             <li {% if "event.item.restrictions" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.restrictions' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "Restrictions" %}</a></li>
         </ul>
     {% else %}
-        <h1>{% trans "Create item" %}</h1>
+        <h1>{% trans "Create product" %}</h1>
         <p>{% blocktrans trimmed %}
             You will be able to adjust further settings in the next step.
         {% endblocktrans %}</p>
@@ -18,8 +18,8 @@
     {% if item.identity and not item.quotas.exists %}
         <div class="alert alert-warning">
         	{% blocktrans trimmed %}
-                Please note, that your item will <strong>not</strong> be available for sale until you added your item
-                to an existing or newly created quota.
+                Please note, that your product  will <strong>not</strong> be available for sale until you added your
+                item to an existing or newly created quota.
 	        {% endblocktrans %}
         </div>
     {% endif %}

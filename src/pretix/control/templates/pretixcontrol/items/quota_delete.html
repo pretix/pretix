@@ -8,7 +8,7 @@
 		{% csrf_token %}
 		<p>{% blocktrans %}Are you sure you want to delete the quota <strong>{{ quota }}</strong>?{% endblocktrans %}</p>
 		{% if dependent|length > 0 %}
-			<p>{% blocktrans %}The following items might be no longer available for sale:{% endblocktrans %}</p>
+			<p>{% blocktrans %}The following products might be no longer available for sale:{% endblocktrans %}</p>
 			{% for item in dependent %}
 				<li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.pk %}">{{ item.name }}</a></li>
 			{% endfor %}
