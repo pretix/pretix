@@ -1,12 +1,13 @@
 import datetime
 import time
+from unittest import expectedFailure
 from bs4 import BeautifulSoup
 from django.test import TestCase
 from django.utils.timezone import now
 from datetime import timedelta
 
 from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation, User, \
-    CartPosition
+    CartPosition, Question, QuestionAnswer
 from tests.base import BrowserTest
 
 
@@ -291,6 +292,29 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 23)
         self.assertGreater(objs[0].expires, now())
+
+    @expectedFailure
+    def test_renew_questions(self):
+        """
+        Currently fails. See: https://github.com/pretix/pretix/issues/20
+        """
+        cr1 = CartPosition.objects.create(
+            event=self.event, user=self.user, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+        q1 = Question.objects.create(
+            event=self.event, question='Age', type=Question.TYPE_NUMBER,
+            required=True
+        )
+        self.ticket.questions.add(q1)
+        cr1.answers.add(QuestionAnswer.objects.create(
+            cartposition=cr1, question=q1, answer='23'
+        ))
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+        }, follow=True)
+        objs = list(CartPosition.objects.current.filter(user=self.user, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].answers.get(question=q1).answer, '23')
 
     def test_renew_expired_failed(self):
         self.quota_tickets.size = 0
