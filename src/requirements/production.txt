@@ -1,0 +1,13 @@
+# Functional requirements
+Django==1.8b2
+pytz
+django-bootstrap3
+-e git+https://github.com/pretix/django-formset-js.git@master#egg=django-formset-js
+-e git+https://github.com/pretix/cleanerversion.git@pretix#egg=cleanerversion
+django-compressor
+
+# Deployment / static file compilation requirements
+BeautifulSoup4
+html5lib
+slimit
+lxml

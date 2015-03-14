@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.utils.timezone import now
 from datetime import timedelta
 
-from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation, User, \
+from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, User, \
     CartPosition, Question, Order, OrderPosition
 
 
