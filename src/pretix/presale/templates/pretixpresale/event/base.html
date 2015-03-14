@@ -17,7 +17,23 @@
 </head>
 <body>
 <div class="container event">
-    <h1>{{ event.name }} <small>{{ event.date_from|date }}{% if event.show_date_to %} – {{ event.date_to|date }}{% endif %}</small></h1>
+    <div class="page-header">
+        <div class="pull-right loginbox">
+            {% if request.user.is_authenticated %}
+                {% blocktrans trimmed with name=request.user.identifier %}
+                    Hello, {{ name }}!
+                {% endblocktrans %} &middot;
+                <a href="{% url "presale:event.orders" event=request.event.slug organizer=request.event.organizer.slug %}">
+                    {% trans "My orders" %}</a> &middot;
+                <a href="{% url "presale:event.logout" event=request.event.slug organizer=request.event.organizer.slug %}">
+                    {% trans "Logout" %}</a>
+            {% else %}
+                <a href="{% url "presale:event.checkout.login" event=request.event.slug organizer=request.event.organizer.slug %}">
+                    {% trans "Login" %}</a>
+            {% endif %}
+        </div>
+        <h1>{{ event.name }} <small>{{ event.date_from|date }}{% if event.show_date_to %} – {{ event.date_to|date }}{% endif %}</small></h1>
+    </div>
     {% if messages %}
         {% for message in messages %}
             <div class="alert {{ message.tags }}">

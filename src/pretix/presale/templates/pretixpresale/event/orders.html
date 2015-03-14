@@ -1,0 +1,47 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Your orders" %}{% endblock %}
+
+{% block content %}
+    <h2>{% trans "Welcome back!" %}</h2>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "Your orders" %}</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                <thead>
+                    <th>{% trans "Order code" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Total" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>{{ order.code }}</td>
+                            <td>{{ order.datetime|date }}</td>
+                            <td>{{ event.currency }} {{ order.total|floatformat:2 }}</td>
+                            <td>{% include "pretixpresale/event/fragment_order_status.html" with order=order %}</td>
+                            <td><a href="{% url "presale:event.order" event=request.event.slug organizer=request.event.organizer.slug order=order.code %}">
+                                {% trans "View details" %}
+                            </a></td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5">
+                                <em>{% trans "You did not yet place any orders." %}</em>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href="{% url "presale:event.index" event=request.event.slug organizer=request.event.organizer.slug %}"
+                class="btn btn-primary btn-lg">
+                <span class="fa fa-plus"></span>
+                {% trans "Place new order" %}
+            </a>
+        </div>
+    </div>
+{% endblock %}

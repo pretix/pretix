@@ -1,5 +1,5 @@
 import json
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db.models import Count
@@ -8,12 +8,12 @@ from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.contrib.auth.forms import AuthenticationForm as BaseAuthenticationForm
 from django.contrib.auth import login
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from pretix.base.models import User
 
-from pretix.presale.views import EventViewMixin, CartDisplayMixin
+from pretix.presale.views import EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin
 from pretix.presale.views.cart import CartAdd
 
 
@@ -222,7 +222,7 @@ class EventLogin(EventViewMixin, TemplateView):
             return redirect(self.request.GET.get('next'))
         else:
             return redirect(reverse(
-                'presale:event.index', kwargs={
+                'presale:event.orders', kwargs={
                     'organizer': self.request.event.organizer.slug,
                     'event': self.request.event.slug,
                 }
@@ -289,4 +289,24 @@ class EventLogin(EventViewMixin, TemplateView):
         context['login_form'] = self.login_form
         context['global_registration_form'] = self.global_registration_form
         context['local_registration_form'] = self.local_registration_form
+        return context
+
+
+class EventLogout(EventViewMixin, View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect(reverse(
+            'presale:event.index', kwargs={
+                'organizer': self.request.event.organizer.slug,
+                'event': self.request.event.slug,
+            }
+        ))
+
+
+class EventOrders(EventLoginRequiredMixin, EventViewMixin, TemplateView):
+    template_name = 'pretixpresale/event/orders.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['orders'] = self.request.user.orders.all()
         return context

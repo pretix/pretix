@@ -1264,11 +1264,13 @@ class Order(Versionable):
     )
     event = VersionedForeignKey(
         Event,
-        verbose_name=_("Event")
+        verbose_name=_("Event"),
+        related_name="orders"
     )
     user = models.ForeignKey(
         User, null=True, blank=True,
-        verbose_name=_("User")
+        verbose_name=_("User"),
+        related_name="orders"
     )
     datetime = models.DateTimeField(
         verbose_name=_("Date")
