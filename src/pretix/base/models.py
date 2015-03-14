@@ -1,3 +1,4 @@
+from datetime import datetime
 from itertools import product
 import copy
 import uuid
@@ -1327,6 +1328,19 @@ class Order(Versionable):
                 self.code = code
                 return
 
+    @property
+    def can_modify_answers(self):
+        if self.status not in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED):
+            return False
+        modify_deadline = self.event.settings.get('last_order_modification_date', as_type=datetime)
+        if modify_deadline is not None and now() > modify_deadline:
+            return False
+        ask_names = self.event.settings.get('attendee_names_asked', as_type=bool)
+        for cp in self.positions.all().prefetch_related('item__questions'):
+            if (cp.item.admission and ask_names) or cp.item.questions.all():
+                return True
+        return False  # nothing there to modify
+
 
 class QuestionAnswer(Versionable):
     """
@@ -1376,7 +1390,8 @@ class OrderPosition(ObjectWithAnswers, Versionable):
     """
     order = VersionedForeignKey(
         Order,
-        verbose_name=_("Order")
+        verbose_name=_("Order"),
+        related_name='positions'
     )
     item = VersionedForeignKey(
         Item,

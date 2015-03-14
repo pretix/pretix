@@ -1,3 +1,4 @@
+from datetime import datetime, time, date
 from decimal import Decimal
 from django.test import TestCase
 from django.utils.timezone import now
@@ -94,6 +95,15 @@ class SettingsTestCase(TestCase):
 
     def test_serialize_int(self):
         self._test_serialization(2, int)
+
+    def test_serialize_datetime(self):
+        self._test_serialization(now(), datetime)
+
+    def test_serialize_time(self):
+        self._test_serialization(now().time(), time)
+
+    def test_serialize_date(self):
+        self._test_serialization(now().date(), date)
 
     def test_serialize_decimal(self):
         self._test_serialization(Decimal('2.3'), Decimal)

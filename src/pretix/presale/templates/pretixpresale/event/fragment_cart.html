@@ -1,7 +1,7 @@
 {% load i18n %}
 {% for line in cart.positions %}
     <div class="row-fluid cart-row">
-        <div class="{% if line.has_questions %}col-md-9 col-xs-6{% else %}col-md-4 col-xs-6{% endif %}">
+        <div class="col-md-4 col-xs-6">
             <strong>{{ line.item }}</strong>
             {% if line.variation %}
                 – {{ line.variation }}
@@ -17,41 +17,40 @@
                     <dd>{% if q.answer %}{{ q.answer }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
                 {% endfor %}
             </dl>
-        {% else %}
-            </div>
-            <div class="col-md-3 col-xs-6 price">
-                {{ event.currency }} {{ line.price|floatformat:2 }}
-            </div>
-            <div class="col-md-2 col-xs-6 count">
-                {% if editable %}
-                <form action="{% url "presale:event.cart.remove" event=event.slug organizer=event.organizer.slug %}"
-                        method="post">
-                    {% csrf_token %}
-                    {% if line.variation %}
-                        <input type="hidden" name="variation_{{ line.item.identity }}_{{ line.variation.identity }}"
-                                value="1" />
-                    {% else %}
-                        <input type="hidden" name="item_{{ line.item.identity }}"
-                                value="1" />
-                    {% endif %}
-                    <button class="btn btn-mini btn-link"><i class="fa fa-minus"></i></button>
-                </form>
-                {% endif %}
-                {{ line.count }}
-                {% if editable %}
-                <form action="{% url "presale:event.cart.add" event=event.slug organizer=event.organizer.slug %}"
+        {% endif %}
+        </div>
+        <div class="col-md-3 col-xs-6 price">
+            {{ event.currency }} {{ line.price|floatformat:2 }}
+        </div>
+        <div class="col-md-2 col-xs-6 count">
+            {% if editable %}
+            <form action="{% url "presale:event.cart.remove" event=event.slug organizer=event.organizer.slug %}"
                     method="post">
-                    {% csrf_token %}
-                    {% if line.variation %}
-                        <input type="hidden" name="variation_{{ line.item.identity }}_{{ line.variation.identity }}"
+                {% csrf_token %}
+                {% if line.variation %}
+                    <input type="hidden" name="variation_{{ line.item.identity }}_{{ line.variation.identity }}"
                             value="1" />
-                    {% else %}
-                        <input type="hidden" name="item_{{ line.item.identity }}"
-                                value="1" />
-                    {% endif %}
-                    <button class="btn btn-mini btn-link"><i class="fa fa-plus"></i></button>
-                </form>
+                {% else %}
+                    <input type="hidden" name="item_{{ line.item.identity }}"
+                            value="1" />
                 {% endif %}
+                <button class="btn btn-mini btn-link"><i class="fa fa-minus"></i></button>
+            </form>
+            {% endif %}
+            {{ line.count }}
+            {% if editable %}
+            <form action="{% url "presale:event.cart.add" event=event.slug organizer=event.organizer.slug %}"
+                method="post">
+                {% csrf_token %}
+                {% if line.variation %}
+                    <input type="hidden" name="variation_{{ line.item.identity }}_{{ line.variation.identity }}"
+                        value="1" />
+                {% else %}
+                    <input type="hidden" name="item_{{ line.item.identity }}"
+                            value="1" />
+                {% endif %}
+                <button class="btn btn-mini btn-link"><i class="fa fa-plus"></i></button>
+            </form>
             {% endif %}
         </div>
         <div class="col-md-3 col-xs-6 price">

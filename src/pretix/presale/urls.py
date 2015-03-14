@@ -20,6 +20,8 @@ urlpatterns = [
             name='event.order'),
         url(r'^order/(?P<order>[^/]+)/cancel$', pretix.presale.views.order.OrderCancel.as_view(),
             name='event.order.cancel'),
+        url(r'^order/(?P<order>[^/]+)/modify$', pretix.presale.views.order.OrderModify.as_view(),
+            name='event.order.modify'),
         url(r'^login$', pretix.presale.views.event.EventLogin.as_view(), name='event.checkout.login'),
     ])),
 ]

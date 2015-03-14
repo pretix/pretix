@@ -29,8 +29,9 @@ class QuestionsForm(forms.Form):
         :param cartpos: The cart position the form should be for
         :param event: The event this belongs to
         """
-        cartpos = kwargs.pop('cartpos')
-        item = cartpos.item
+        cartpos = kwargs.pop('cartpos', None)
+        orderpos = kwargs.pop('orderpos', None)
+        item = cartpos.item if cartpos else orderpos.item
         questions = list(item.questions.all())
         event = kwargs.pop('event')
 
@@ -40,12 +41,16 @@ class QuestionsForm(forms.Form):
             self.fields['attendee_name'] = forms.CharField(
                 max_length=255, required=(event.settings.attendee_names_required == 'True'),
                 label=_('Attendee name'),
-                initial=cartpos.attendee_name
+                initial=(cartpos.attendee_name if cartpos else orderpos.attendee_name)
             )
 
         for q in questions:
             # Do we already have an answer? Provide it as the initial value
-            answers = [a for a in cartpos.answers.all() if a.question_id == q.identity]
+            answers = [
+                a for a
+                in (cartpos.answers.all() if cartpos else orderpos.answers.all())
+                if a.question_id == q.identity
+            ]
             if answers:
                 initial = answers[0].answer
             else:
@@ -112,8 +117,7 @@ class CheckoutView(TemplateView):
         })
 
 
-class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, CheckoutView):
-    template_name = "pretixpresale/event/checkout_questions.html"
+class QuestionsViewMixin:
 
     @cached_property
     def forms(self):
@@ -123,20 +127,23 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, C
         submitted at once.
         """
         formlist = []
-        for cr in self.cartpos:
+        for cr in self.positions:
+            cartpos = cr if isinstance(cr, CartPosition) else None
+            orderpos = cr if isinstance(cr, OrderPosition) else None
             form = QuestionsForm(event=self.request.event,
                                  prefix=cr.identity,
-                                 cartpos=cr,
+                                 cartpos=cartpos,
+                                 orderpos=orderpos,
                                  data=(self.request.POST if self.request.method == 'POST' else None))
-            form.cartpos = cr
+            form.pos = cartpos or orderpos
             if len(form.fields) > 0:
                 formlist.append(form)
         return formlist
 
-    def post(self, *args, **kwargs):
+    def save(self):
         failed = False
         for form in self.forms:
-            # Every form represents a CartPosition with questions attached
+            # Every form represents a CartPosition or OrderPosition with questions attached
             if not form.is_valid():
                 failed = True
             else:
@@ -144,9 +151,9 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, C
                 # answers to the questions / in the CartPosition object
                 for k, v in form.cleaned_data.items():
                     if k == 'attendee_name':
-                        form.cartpos = form.cartpos.clone()
-                        form.cartpos.attendee_name = v if v != '' else None
-                        form.cartpos.save()
+                        form.pos = form.pos.clone()
+                        form.pos.attendee_name = v if v != '' else None
+                        form.pos.save()
                     elif k.startswith('question_') and v is not None:
                         field = form.fields[k]
                         if hasattr(field, 'answer'):
@@ -160,10 +167,20 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, C
                                 field.answer.save()
                         elif v != '':
                             QuestionAnswer.objects.create(
-                                cartposition=form.cartpos,
+                                cartposition=(form.pos if isinstance(form.pos, CartPosition) else None),
+                                orderposition=(form.pos if isinstance(form.pos, OrderPosition) else None),
                                 question=field.question,
                                 answer=v
                             )
+        return not failed
+
+
+class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin,
+                    QuestionsViewMixin, CheckoutView):
+    template_name = "pretixpresale/event/checkout_questions.html"
+
+    def post(self, *args, **kwargs):
+        failed = not self.save()
         if failed:
             messages.error(self.request,
                            _("We had difficulties processing your input. Please review the errors below."))
@@ -171,7 +188,7 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, C
         return redirect(self.get_payment_url())
 
     def get(self, *args, **kwargs):
-        if not self.cartpos:
+        if not self.positions:
             messages.error(self.request,
                            _("Your cart is empty"))
             return redirect(self.get_index_url())
@@ -267,7 +284,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
                 return provider
 
     def check_process(self, request):
-        if len(self.cartpos) == 0:
+        if len(self.positions) == 0:
             messages.warning(request, _('Your cart is empty.'))
             return redirect(self.get_index_url())
         if 'payment' not in request.session or not self.payment_provider:
@@ -276,7 +293,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
         if not self.payment_provider.checkout_is_valid_session(request):
             messages.error(request, _('The payment information you entered was incomplete.'))
             return redirect(self.get_payment_url())
-        for cp in self.cartpos:
+        for cp in self.positions:
             answ = {
                 aw.question_id: aw.answer for aw in cp.answers.all()
             }
@@ -307,7 +324,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
         quotas_locked = set()
 
         try:
-            cartpos = self.cartpos
+            cartpos = self.positions
             for i, cp in enumerate(cartpos):
                 quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
                 if cp.expires < dt:

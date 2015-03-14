@@ -1,6 +1,8 @@
+from datetime import datetime, date, time
 import json
 import decimal
 
+import dateutil.parser
 from django.db.models import Model
 from versions.models import Versionable
 
@@ -11,6 +13,7 @@ DEFAULTS = {
     'attendee_names_asked': 'True',
     'attendee_names_required': 'False',
     'reservation_time': '30',
+    'last_order_modification_date': None,
 }
 
 
@@ -51,6 +54,12 @@ class SettingsProxy:
             return json.loads(value)
         elif as_type == bool:
             return value == 'True'
+        elif as_type == datetime:
+            return dateutil.parser.parse(value)
+        elif as_type == date:
+            return dateutil.parser.parse(value).date()
+        elif as_type == time:
+            return dateutil.parser.parse(value).time()
         elif as_type == decimal.Decimal:
             return decimal.Decimal(value)
         elif issubclass(as_type, Versionable):
@@ -67,6 +76,8 @@ class SettingsProxy:
             return str(value)
         elif isinstance(value, list) or isinstance(value, dict):
             return json.dumps(value)
+        elif isinstance(value, datetime) or isinstance(value, date) or isinstance(value, time):
+            return value.isoformat()
         elif isinstance(value, Versionable):
             return value.identity
         elif isinstance(value, Model):

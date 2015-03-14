@@ -36,6 +36,13 @@
     {% endif %}
     <div class="panel panel-primary cart">
         <div class="panel-heading">
+            {% if order.can_modify_answers %}
+                <div class="pull-right">
+                    <a href="{% url "presale:event.order.modify" organizer=request.event.organizer.slug event=request.event.slug order=order.code %}">
+                        {% trans "Change answers" %}
+                    </a>
+                </div>
+            {% endif %}
             <h3 class="panel-title">
                 {% trans "Ordered items" %}
             </h3>

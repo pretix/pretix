@@ -36,7 +36,7 @@ class EventLoginRequiredMixin:
 class CartDisplayMixin:
 
     @cached_property
-    def cartpos(self):
+    def positions(self):
         """
         A list of this users cart position
         """
