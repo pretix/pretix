@@ -267,15 +267,15 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
                 return provider
 
     def check_process(self, request):
-        if not self.payment_provider:
+        if len(self.cartpos) == 0:
+            messages.warning(request, _('Your cart is empty.'))
+            return redirect(self.get_index_url())
+        if 'payment' not in request.session or not self.payment_provider:
             messages.error(request, _('The payment information you entered was incomplete.'))
             return redirect(self.get_payment_url())
         if not self.payment_provider.checkout_is_valid_session(request):
             messages.error(request, _('The payment information you entered was incomplete.'))
             return redirect(self.get_payment_url())
-        if len(self.cartpos) == 0:
-            messages.warning(request, _('Your cart is empty.'))
-            return redirect(self.get_index_url())
         for cp in self.cartpos:
             answ = {
                 aw.question_id: aw.answer for aw in cp.answers.all()
@@ -284,6 +284,10 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
                 if q.required and q.identity not in answ:
                     messages.warning(request, _('Please fill in answers to all required questions.'))
                     return redirect(self.get_questions_url())
+            if cp.item.admission and self.request.event.settings.get('attendee_names_required', as_type=bool) \
+                    and cp.attendee_name is None:
+                messages.warning(request, _('Please fill in answers to all required questions.'))
+                return redirect(self.get_questions_url())
 
     def get(self, request, *args, **kwargs):
         self.request = request
@@ -336,6 +340,8 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
                         cartpos[i] = cp
                         cp.expires = now() + timedelta(minutes=self.request.event.settings.get('reservation_time', as_type=int))
                         cp.save()
+                    else:
+                        cp.delete()  # Sorry!
             if not self.msg_some_unavailable:  # Everything went well
                 order = self._place_order(cartpos, dt)
                 messages.success(request, _('Your order has been placed.'))
