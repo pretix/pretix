@@ -23,15 +23,19 @@ class Paypal(BasePaymentProvider):
     identifier = 'paypal'
     verbose_name = _('PayPal')
     settings_form_fields = OrderedDict([
+        ('endpoint',
+         forms.ChoiceField(
+             label=_('Endpoint'),
+             initial='live',
+             choices=(
+                 ('live', 'Live'),
+                 ('sandbox', 'Sandbox'),
+             ),
+             required=False
+         )),
         ('client_id',
          forms.CharField(
              label=_('Client ID'),
-             required=False
-         )),
-        ('endpoint',
-         forms.CharField(
-             label=_('Endpoint'),
-             initial='api.paypal.com',
              required=False
          )),
         ('secret',
