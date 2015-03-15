@@ -1,0 +1,5 @@
+Sphinx
+markupsafe
+sphinx_rtd_theme
+-r production.txt
+-r paypal.txt

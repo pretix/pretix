@@ -1,3 +1,1 @@
-Sphinx
-markupsafe
-sphinx_rtd_theme
+-r ../src/requirements/docs.txt
