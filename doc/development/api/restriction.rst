@@ -4,9 +4,9 @@
 Writing a restriction plugin
 ============================
 
-Please make sure you have read and understood the :ref:`basic idea being pretix's restrictions 
-<restrictionconcept>`. In this document, we will walk through the creation of a restriction
-plugin using the example of a restriction by date and time.
+Please make sure you have read and understood the :ref:`basic idea <restrictionconcept>` behind
+what pretix calls *restrictions*. In this document, we will walk through the creation of a
+restriction plugin using the example of a restriction by date and time.
 
 Also, read :ref:`Creating a plugin <pluginsetup>` first.
 

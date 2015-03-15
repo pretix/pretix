@@ -13,23 +13,45 @@ require two steps to install:
 * Add it to the ``INSTALLED_APPS`` setting of Django in ``pretix/settings.py``
 * Perform database migrations by using ``python manage.py migrate``
 
-The communication between pretix and the plugins happens via Django's
-`signal dispatcher`_ pattern. The core modules of pretix, ``pretixbase``, 
+The communication between pretix and the plugins happens mostly using Django's
+`signal dispatcher`_ feature. The core modules of pretix, ``pretixbase``,
 ``pretixcontrol`` and ``pretixpresale`` expose a number of signals which are documented 
 on the next pages.
 
 .. _`pluginsetup`:
 
-Creating a plugin
------------------
+To create a new plugin, create a new python package which must be a vaild `Django app`_
+and must contain plugin metadata, as described below.
 
-To create a new plugin, create a new python package.
+The following pages go into detail about the several types of plugins currently
+supported. While these instructions don't assume that you know a lot about pretix,
+they do assume that you have prior knowledge about Django (e.g. it's view layer,
+how it's ORM works, etc.).
 
-Inside your newly created folder, you'll probably need the three python modules ``__init__.py``,
-``models.py`` and ``signals.py``, although this is up to you. You can take the following
-example, taken from the time restriction module (see next chapter) as a template for your 
-``__init__.py`` module::
+Plugin metadata
+---------------
 
+The plugin metadata lives inside a ``PretixPluginMeta`` class inside your app's
+configuration class. The metadata class must define the following attributes:
+
+``type`` (``pretix.base.plugins.PluginType``):
+    The type of plugin. Currently available: ``RESTRICTION``, ``PAYMENT``
+
+``name`` (``str``):
+    The human-readable name of your plugin
+
+``author`` (``str``):
+    Your name
+
+``version`` (``str``):
+    A human-readable version code of your plugin
+
+``description`` (``str``):
+    A more verbose description of what your plugin does.
+
+A working example would be::
+
+    # file: pretix/plugins/timerestriction/__init__.py
     from django.apps import AppConfig
     from django.utils.translation import ugettext_lazy as _
     from pretix.base.plugins import PluginType
@@ -48,21 +70,36 @@ example, taken from the time restriction module (see next chapter) as a template
                             "of a given item or variation to a certain timeframe " +
                             "or change its price during a certain period.")
 
-        def ready(self):
-            from . import signals  # NOQA
 
     default_app_config = 'pretix.plugins.timerestriction.TimeRestrictionApp'
 
-.. IMPORTANT::
-   You have to implement a ``PretixPluginMeta`` class like in the example to make your
-   plugin available to the users.
 
-Currently, the ``PluginType`` enum has the following values defined:
+Signals
+-------
 
-* ``RESTRICTION``
-* ``PAYMENT``
+The various components of pretix define a number of signals which your plugin can
+listen for. We will go into the details of the different signals in the following
+pages. We suggest that you put your signal receivers into a ``signals`` submodule
+of your plugin. You should extend your ``AppConfig`` (see above) by the following
+method to make your receivers available::
 
-The next pages provide details on their usage.
+    class TimeRestrictionApp(AppConfig):
+        …
 
+        def ready(self):
+            from . import signals  # NOQA
+
+Views
+-----
+
+Your plugin may define custom views. If you put an ``urls`` submodule into your
+plugin module, pretix will automatically import it and include it into the root
+URL configuration.
+
+.. WARNING:: If you define custom URLs and views, you are currently on your own
+   with checking that the calling user is logged in, has appropriate permissions,
+   etc. We plan on providing native support for this in a later version.
+
+.. _Django app: https://docs.djangoproject.com/en/1.7/ref/applications/
 .. _signal dispatcher: https://docs.djangoproject.com/en/1.7/topics/signals/
 .. _namespace packages: http://legacy.python.org/dev/peps/pep-0420/

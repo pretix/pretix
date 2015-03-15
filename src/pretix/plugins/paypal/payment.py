@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.template import Context
 from django.template.loader import get_template
-from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
 from django import forms
