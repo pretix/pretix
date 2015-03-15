@@ -205,7 +205,7 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin,
         return ctx
 
 
-class PaymentDetails(EventViewMixin, EventLoginRequiredMixin, CheckoutView):
+class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_payment.html"
 
     @cached_property
@@ -234,10 +234,10 @@ class PaymentDetails(EventViewMixin, EventLoginRequiredMixin, CheckoutView):
         for p in self.provider_forms:
             if p['provider'].identifier == request.POST.get('payment', ''):
                 request.session['payment'] = p['provider'].identifier
-                total = self._total_order_value + p['provider'].calculate_fee(self._total_order_value)
-                resp = p['provider'].checkout_prepare(request, total)
+                resp = p['provider'].checkout_prepare(
+                    request, self.get_cart(payment_fee=p['provider'].calculate_fee(self._total_order_value)))
                 if isinstance(resp, str):
-                    return redirect(str)
+                    return redirect(resp)
                 elif resp is True:
                     return redirect(self.get_confirm_url())
                 else:

@@ -105,7 +105,7 @@ class BasePaymentProvider:
         """
         raise NotImplementedError()  # NOQA
 
-    def checkout_prepare(self, request, total) -> "bool|HttpResponse":
+    def checkout_prepare(self, request, cart) -> "bool|HttpResponse":
         """
         Will be called if the user selects this provider as his payment method.
         If the payment provider provides a form to the user to enter payment data,
@@ -117,8 +117,6 @@ class BasePaymentProvider:
 
         On errors, it should use Django's message framework to display an error message
         to the user (or the normal form validation error messages).
-
-        :param total: The total price of the order, including the payment method fee.
         """
         form = self.checkout_form(request)
         if form.is_valid():
