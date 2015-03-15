@@ -8,8 +8,6 @@ from pretix.base.payment import BasePaymentProvider
 class Stripe(BasePaymentProvider):
     identifier = 'stripe'
     verbose_name = _('Credit Card via Stripe')
-    settings_form_fields = OrderedDict([
-    ])
     checkout_form_fields = OrderedDict([
         ('cc_number',
          forms.CharField(

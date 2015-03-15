@@ -22,30 +22,35 @@ class Paypal(BasePaymentProvider):
 
     identifier = 'paypal'
     verbose_name = _('PayPal')
-    settings_form_fields = OrderedDict([
-        ('endpoint',
-         forms.ChoiceField(
-             label=_('Endpoint'),
-             initial='live',
-             choices=(
-                 ('live', 'Live'),
-                 ('sandbox', 'Sandbox'),
-             ),
-             required=False
-         )),
-        ('client_id',
-         forms.CharField(
-             label=_('Client ID'),
-             required=False
-         )),
-        ('secret',
-         forms.CharField(
-             label=_('Secret'),
-             required=False
-         ))
-    ])
     checkout_form_fields = OrderedDict([
     ])
+
+    @property
+    def settings_form_fields(self):
+        return OrderedDict(
+            list(super().settings_form_fields.items()) + [
+                ('endpoint',
+                 forms.ChoiceField(
+                     label=_('Endpoint'),
+                     initial='live',
+                     choices=(
+                         ('live', 'Live'),
+                         ('sandbox', 'Sandbox'),
+                     ),
+                     required=False
+                 )),
+                ('client_id',
+                 forms.CharField(
+                     label=_('Client ID'),
+                     required=False
+                 )),
+                ('secret',
+                 forms.CharField(
+                     label=_('Secret'),
+                     required=False
+                 ))
+            ]
+        )
 
     def init_api(self):
         paypalrestsdk.set_config(

@@ -10,14 +10,19 @@ from pretix.base.payment import BasePaymentProvider
 class BankTransfer(BasePaymentProvider):
     identifier = 'banktransfer'
     verbose_name = _('Bank transfer')
-    settings_form_fields = OrderedDict([
-        ('bank_details',
-         forms.CharField(
-             widget=forms.Textarea,
-             label=_('Bank account details'),
-             required=False
-         ))
-    ])
+
+    @property
+    def settings_form_fields(self):
+        return OrderedDict(
+            list(super().settings_form_fields.items()) + [
+                ('bank_details',
+                 forms.CharField(
+                     widget=forms.Textarea,
+                     label=_('Bank account details'),
+                     required=False
+                 ))
+            ]
+        )
 
     def checkout_form_render(self, request) -> str:
         template = get_template('pretixplugins/banktransfer/checkout_payment_form.html')

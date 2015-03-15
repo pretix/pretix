@@ -129,25 +129,6 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
             )
             provider.form.fields = OrderedDict(
                 [
-                    ('payment_%s__enabled' % provider.identifier,
-                     forms.ChoiceField(
-                         label=_('Enable payment method'),
-                         required=False,
-                         choices=SettingsForm.BOOL_CHOICES,
-                     )),
-                    ('payment_%s__fee_abs' % provider.identifier,
-                     forms.DecimalField(
-                         label=_('Additional fee'),
-                         help_text=_('Absolute value'),
-                         required=False
-                     )),
-                    ('payment_%s__fee_percent' % provider.identifier,
-                     forms.DecimalField(
-                         label=_('Additional fee'),
-                         help_text=_('Percentage'),
-                         required=False
-                     )),
-                ] + [
                     ('payment_%s_%s' % (provider.identifier, k), v)
                     for k, v in provider.settings_form_fields.items()
                 ]
