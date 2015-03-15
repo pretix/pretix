@@ -9,3 +9,4 @@ Contents:
    plugins
    restriction
    payment
+   general

@@ -8,3 +8,10 @@ This signal is sent out to build configuration forms for all restriction formset
 restriction_formset = EventPluginSignal(
     providing_args=["item"]
 )
+
+"""
+This signal is sent out to include code into the HTML <head> tag
+"""
+html_head = EventPluginSignal(
+    providing_args=[]
+)

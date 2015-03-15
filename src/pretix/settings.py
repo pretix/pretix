@@ -75,6 +75,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     'pretix.control.context.contextprocessor',
+    'pretix.presale.context.contextprocessor',
 )
 
 ROOT_URLCONF = 'pretix.urls'
