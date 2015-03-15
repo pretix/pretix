@@ -308,5 +308,5 @@ class EventOrders(EventLoginRequiredMixin, EventViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['orders'] = self.request.user.orders.all()
+        context['orders'] = self.request.user.orders.current.all()
         return context
