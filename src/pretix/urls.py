@@ -1,3 +1,5 @@
+import importlib
+from django.apps import apps
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
@@ -18,6 +20,16 @@ if settings.DEBUG:
     urlpatterns.append(
         url(r'^__debug__/', include(debug_toolbar.urls)),
     )
+
+for app in apps.get_app_configs():
+    if hasattr(app, 'PretixPluginMeta'):
+        try:
+            urlmod = importlib.import_module(app.name + '.urls')
+            urlpatterns.append(
+                url(r'', include(urlmod, namespace='plugins'))
+            )
+        except ImportError:
+            pass
 
 urlpatterns.append(
     url(r'', include(pretix.presale.urls, namespace='presale'))
