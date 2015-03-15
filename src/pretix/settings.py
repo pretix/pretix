@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'pretix.plugins.timerestriction',
     'pretix.plugins.banktransfer',
     'pretix.plugins.stripe',
+    'pretix.plugins.paypal',
 )
 
 MIDDLEWARE_CLASSES = (
