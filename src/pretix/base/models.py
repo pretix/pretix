@@ -1345,6 +1345,14 @@ class Order(Versionable):
                 return True
         return False  # nothing there to modify
 
+    def mark_paid(self, provider, info, date=None):
+        order = self.clone()
+        order.payment_provider = provider
+        order.payment_info = info
+        order.payment_date = date or now()
+        order.status = Order.STATUS_PAID
+        order.save()
+
 
 class QuestionAnswer(Versionable):
     """
