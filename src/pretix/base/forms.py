@@ -2,6 +2,7 @@ from django.forms.models import ModelFormMetaclass, BaseModelForm
 from django import forms
 from django.utils import six
 from versions.models import Versionable
+from django.utils.translation import ugettext_lazy as _
 
 
 class VersionedBaseModelForm(BaseModelForm):
@@ -30,6 +31,10 @@ class SettingsForm(forms.Form):
     """
     This form is meant to be used for modifying Event- or OrganizerSettings
     """
+    BOOL_CHOICES = (
+        ('True', _('enabled')),
+        ('False', _('disabled')),
+    )
 
     def __init__(self, *args, **kwargs):
         self.obj = kwargs.pop('obj')

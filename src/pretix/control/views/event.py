@@ -130,9 +130,10 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
             provider.form.fields = OrderedDict(
                 [
                     ('payment_%s__enabled' % provider.identifier,
-                     forms.BooleanField(
+                     forms.ChoiceField(
                          label=_('Enable payment method'),
-                         required=False
+                         required=False,
+                         choices=SettingsForm.BOOL_CHOICES,
                      )),
                     ('payment_%s__fee_abs' % provider.identifier,
                      forms.DecimalField(
