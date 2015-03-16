@@ -3,3 +3,4 @@
 -r requirements/dev.txt
 -r requirements/testing.txt
 -r requirements/paypal.txt
+-r requirements/stripe.txt
