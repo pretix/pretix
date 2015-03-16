@@ -12,7 +12,8 @@ HTML head injection
 
 These two signals allow you to put code inside the HTML ``<head>`` tag
 of every page. One signal is for the frontend, one for the backend. You
-won't get any arguments and can return plain HTML.
+will get the request as a keyword argument ``request`` and can return plain
+HTML.
 
 * ``pretix.presale.signals.html_head``
 * ``pretix.control.signals.html_head``

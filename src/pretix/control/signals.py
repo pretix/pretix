@@ -13,5 +13,5 @@ restriction_formset = EventPluginSignal(
 This signal is sent out to include code into the HTML <head> tag
 """
 html_head = EventPluginSignal(
-    providing_args=[]
+    providing_args=["request"]
 )
