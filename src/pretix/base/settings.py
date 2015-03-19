@@ -46,10 +46,8 @@ class SettingsProxy:
             return value
         elif value is None:
             return None
-        elif as_type == int:
-            return int(value)
-        elif as_type == float:
-            return float(value)
+        elif as_type == int or as_type == float or as_type == decimal.Decimal:
+            return as_type(value)
         elif as_type == dict or as_type == list:
             return json.loads(value)
         elif as_type == bool:
@@ -60,8 +58,6 @@ class SettingsProxy:
             return dateutil.parser.parse(value).date()
         elif as_type == time:
             return dateutil.parser.parse(value).time()
-        elif as_type == decimal.Decimal:
-            return decimal.Decimal(value)
         elif issubclass(as_type, Versionable):
             return as_type.objects.current.get(identity=value)
         elif issubclass(as_type, Model):
