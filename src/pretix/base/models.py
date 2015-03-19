@@ -228,14 +228,17 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Organizer(Versionable):
     """
-    This model represents an entity organizing events, like a company.
-    Any organizer has a unique slug, which is a short name (alphanumeric,
-    all lowercase) being used in URLs.
+    This model represents an entity organizing events, e.g. a company, institution,
+    charity, person, …
+
+    :param name: The organizer's name
+    :param slug: A globally unique, short name for this organizer, to be used
+                 in URLs and similar places.
     """
 
     name = models.CharField(max_length=200,
                             verbose_name=_("Name"))
-    slug = models.CharField(max_length=50,
+    slug = models.SlugField(max_length=50,
                             unique=True, db_index=True,
                             verbose_name=_("Slug"))
     permitted = models.ManyToManyField(User, through='OrganizerPermission',
@@ -284,34 +287,36 @@ class OrganizerPermission(Versionable):
 class Event(Versionable):
     """
     This model represents an event. An event is anything you can buy
-    tickets for. It belongs to one orgnaizer and has a name and a slug,
-    the latter being a short, alphanumeric, all-lowercase name being
-    used in URLs. The slug has to be unique among the events of the same
-    organizer.
+    tickets for.
 
-    An event can hold several properties, such as a default locale and
-    currency.
-
-    The event has date_from and date_to field which mark the actual
-    datetime of the event itself. The show_date_to and show_times
-    fields are used to control the display of these dates. (Without
-    show_times only days are shown, now times.)
-
-    The presale_start and presale_end fields mark the time frame in
-    which tickets are sold for this event. These two dates override
-    every other restrictions to ticket sale if set.
-
-    The payment_term_days field holds the number of days after
-    submitting a ticket order, in which the ticket has to be paid.
-    The payment_term_last is the day all orders must be paid by, no
-    matter when they were ordered (and thus, ignoring payment_term_days).
+    :param organizer: The organizer this event belongs to
+    :param name: This events full title
+    :param slug: A short, alphanumeric, all-lowercase name for use in URLs. The slug has to
+                 be unique among the events of the same organizer.
+    :param locale: This events default locale
+    :param timezone: The timezone this event takes place in (or is being described in)
+    :param currency: The currency of all prices and payments of this event
+    :param date_from: The datetime this event starts
+    :param date_to: The datetime this event ends
+    :param show_date_to: If ``False``, the ``date_to`` value will not be shown to the
+                         user and the event will be listed only with it's start date.
+    :param show_times: If ``False``, ``date_from`` and ``date_to`` will only be displayed
+                       as dates, without a time of day.
+    :param presale_start: No tickets will be sold before this date.
+    :param presale_end: No tickets will be sold before this date.
+    :param payment_term_days: The number of days in which an order has to be
+                              paid after it has been submitted.
+    :param payment_term_last: The day all orders must be paid by, no matter when
+                              the order was placed.
+    :param plugins: A comma-separated list of plugin names that are active for this
+                    event.
     """
 
     organizer = VersionedForeignKey(Organizer, related_name="events",
                                     on_delete=models.PROTECT)
     name = models.CharField(max_length=200,
                             verbose_name=_("Name"))
-    slug = models.CharField(
+    slug = models.SlugField(
         max_length=50, db_index=True,
         help_text=_(
             "Should be short, only contain lowercase letters and numbers, and must be unique among your events. "
@@ -655,7 +660,6 @@ class Item(Versionable):
         default=True,
         verbose_name=_("Active"),
     )
-    deleted = models.BooleanField(default=False)
     short_description = models.TextField(
         verbose_name=_("Short description"),
         help_text=_("This is shown below the product name in lists."),
@@ -718,9 +722,7 @@ class Item(Versionable):
             self.event.get_cache().clear()
 
     def delete(self, *args, **kwargs):
-        self.deleted = True
-        self.active = False
-        super().save()
+        super().delete(*args, **kwargs)
         if self.event:
             self.event.get_cache().clear()
 
