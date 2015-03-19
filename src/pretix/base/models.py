@@ -1425,6 +1425,36 @@ class Order(Versionable):
     An order -- like all objects -- has an ID, which is globally unique,
     but also a code, which is shorter and easier to memorize, but only
     unique among a single conference.
+
+    :param code: In addition to the ID, which is globally unique, every
+                 order has an order code, which is shorter and easier to
+                 memorize, but is only unique among a single conference.
+    :param status: The status of this order. One of:
+
+        * ``STATUS_PENDING``
+        * ``STATUS_PAID``
+        * ``STATUS_EXPIRED``
+        * ``STATUS_CANCELLED``
+        * ``STATUS_REFUNDED``
+
+    :param event: The event this belongs to
+    :type event: Event
+    :param user: The user who ordered this
+    :type user: User
+    :param datetime: The datetime of the order placement
+    :type datetime: datetime
+    :param expires: The date until this order has to be paid to guarantee the
+    :type expires: datetime
+    :param payment_date: The date of the payment completion (null, if not yet paid).
+    :type payment_date: datetime
+    :param payment_provider: The payment provider selected by the user
+    :type payment_provider: str
+    :param payment_fee: The payment fee calculated at checkout time
+    :type payment_fee: decimal.Decimal
+    :param payment_info: Arbitrary information stored by the payment provider
+    :type payment_info: str
+    :param total: The total amount of the order, including the payment fee
+    :type total: decimal.Decimal
     """
 
     STATUS_PENDING = "n"
@@ -1519,6 +1549,11 @@ class Order(Versionable):
 
     @property
     def can_modify_answers(self):
+        """
+        Is ``True`` if the user can change the question answers / attendee names that are
+        related to the order. This checks order status and modification deadlines. It also
+        returns ``False``, if there are no questions that can be answered.
+        """
         if self.status not in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED):
             return False
         modify_deadline = self.event.settings.get('last_order_modification_date', as_type=datetime)
@@ -1531,17 +1566,41 @@ class Order(Versionable):
         return False  # nothing there to modify
 
     def mark_paid(self, provider, info, date=None):
+        """
+        Mark this order as paid. This clones the order object, sets the payment provider,
+        info and date and returns the cloned order object.
+
+        :param provider: The payment provider that marked this as paid
+        :type provider: str
+        :param info: The information to store in order.payment_info
+        :type info: str
+        :param date: The date the payment was received (if you pass ``None``, the current
+                     time will be used).
+        :type date: datetime
+        """
         order = self.clone()
         order.payment_provider = provider
         order.payment_info = info
         order.payment_date = date or now()
         order.status = Order.STATUS_PAID
         order.save()
+        return order
 
 
 class QuestionAnswer(Versionable):
     """
-    The answer to a Question, connected to an OrderPosition or CartPosition
+    The answer to a Question, connected to an OrderPosition or CartPosition.
+
+    :param orderposition: The order position this is related to, or null if this is
+                          related to a cart position.
+    :type orderposition: OrderPosition
+    :param cartposition: The cart position this is related to, or null if this is related
+                         to an order position.
+    :type cartposition: CartPosition
+    :param question: The question this is an answer for
+    :type question: Question
+    :param answer: The actual answer data
+    :type answer: str
     """
     orderposition = models.ForeignKey(
         'OrderPosition', null=True, blank=True,
@@ -1582,8 +1641,16 @@ class OrderPosition(ObjectWithAnswers, Versionable):
     An OrderPosition is one line of an order, representing one ordered items
     of a specified type (or variation).
 
-    Important: An OrderPosition holds its total monetary value, as an order is a
-    piece of 'history' and must not change due to a change in item prices.
+    :param order: The order this is a part of
+    :type order: Order
+    :param item: The ordered item
+    :type item: Item
+    :param variation: The ordered ItemVariation or null, if the item has no properties
+    :type variation: ItemVariation
+    :param price: The price of this item
+    :type price: decimal.Decimal
+    :param attendee_name: The attendee's name, if entered.
+    :type attendee_name: str
     """
     order = VersionedForeignKey(
         Order,
@@ -1640,6 +1707,23 @@ class CartPosition(ObjectWithAnswers, Versionable):
     than an ordered position, but still blocks an item in the quota pool
     as we do not want to throw out users while they're clicking through
     the checkout process.
+
+    :param event: The event this belongs to
+    :type event: Evnt
+    :param item: The selected item
+    :type item: Item
+    :param user: The user who has this in his cart
+    :type user: User
+    :param variation: The selected ItemVariation or null, if the item has no properties
+    :type variation: ItemVariation
+    :param datetime: The datetime this item was put into the cart
+    :type datetime: datetime
+    :param expires: The date until this item is guarenteed to be reserved
+    :type expires: datetime
+    :param price: The price of this item
+    :type price: decimal.Decimal
+    :param attendee_name: The attendee's name, if entered.
+    :type attendee_name: str
     """
     event = VersionedForeignKey(
         Event,

@@ -15,4 +15,4 @@ Contents:
    api/index
 
 .. TODO::
-   Document models, cache objects, settings objects, ItemVariation objects, form fields.
+   Document settings objects, ItemVariation objects, form fields.
