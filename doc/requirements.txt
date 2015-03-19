@@ -1,1 +1,3 @@
 -r ../src/requirements.txt
+sphinx
+sphinx-rtd-theme
