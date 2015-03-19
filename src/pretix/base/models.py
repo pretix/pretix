@@ -123,11 +123,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     This is the user model used by pretix for authentication.
     Handling users is somehow complicated, as we try to have two
     classes of users in one system:
-        (1) We want global users who can just login into pretix and
+        (1) We want *global* users who can just login into pretix and
             buy tickets for multiple events -- we also need those
             global users for event organizers who should not need
             multiple users for managing multiple events.
-        (2) We want local users who exist only in the scope of a
+        (2) We want *local* users who exist only in the scope of a
             certain event
     The hard part is to find a primary key to identify all of these
     users. Letting the users choose usernames is a bad idea, as
@@ -148,7 +148,30 @@ class User(AbstractBaseUser, PermissionsMixin):
     according to this scheme when it is empty. The __str__() method
     returns the identifier.
 
-    The is_staff field is only True for system operators.
+    :param identifier: The identifier of the user, as described above
+    :type identifier: str
+    :param username: The username, null for global users.
+    :type username: str
+    :param event: The event the user belongs to, null for global users
+    :type event: Event
+    :param email: The user's e-mail address. May be empty or null for local users
+    :type email: str
+    :param givenname: The user's given name. May be empty or null.
+    :type givenname: str
+    :param familyname: The user's given name. May be empty or null.
+    :type familyname: str
+    :param givenname: The user's given name. May be empty or null.
+    :type givenname: str
+    :param is_active: Whether this user account is activated.
+    :type is_active: bool
+    :param is_staff: ``True`` for system operators.
+    :type is_staff: bool
+    :param date_joined: The datetime of the user's registration.
+    :type date_joined: datetime
+    :param locale: The user's preferred locale code.
+    :type locale: str
+    :param timezone: The user's preferred timezone.
+    :type timezone: str
     """
 
     USERNAME_FIELD = 'identifier'
@@ -195,6 +218,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.identifier
 
     def save(self, *args, **kwargs):
+        """
+        Before passing the call to the default ``save()`` method, this will fill the ``identifier``
+        field if it is empty, according to the scheme descriped in the model docstring.
+        """
         if not self.identifier:
             if self.event is None:
                 self.identifier = self.email.lower()
@@ -205,6 +232,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         super().save(*args, **kwargs)
 
     def get_short_name(self) -> str:
+        """
+        Returns the first of the following user properties that is found to exist:
+
+        * Given name
+        * Family name
+        * User name
+        """
         if self.givenname:
             return self.givenname
         elif self.familyname:
@@ -213,6 +247,14 @@ class User(AbstractBaseUser, PermissionsMixin):
             return self.username
 
     def get_full_name(self) -> str:
+        """
+        Returns the first of the following user properties that is found to exist:
+
+        * A combination of given name and family name, depending on the locale
+        * Given name
+        * Family name
+        * User name
+        """
         if self.givenname and not self.familyname:
             return self.givenname
         elif not self.givenname and self.familyname:
@@ -232,8 +274,10 @@ class Organizer(Versionable):
     charity, person, …
 
     :param name: The organizer's name
+    :type name: str
     :param slug: A globally unique, short name for this organizer, to be used
                  in URLs and similar places.
+    :type slug: str
     """
 
     name = models.CharField(max_length=200,
@@ -253,7 +297,7 @@ class Organizer(Versionable):
         return self.name
 
     @cached_property
-    def settings(self):
+    def settings(self) -> SettingsProxy:
         """
         Returns an object representing this organizer's settings
         """
@@ -264,6 +308,14 @@ class OrganizerPermission(Versionable):
     """
     The relation between an Organizer and an User who has permissions to
     access an organizer profile.
+
+    :param organizer: The organizer this relation refers to
+    :type organizer: Organizer
+    :param user: The user this set of permissions is valid for
+    :type user: User
+    :param can_create_events: Whether or not this user can create new events with this
+                              organizer account.
+    :type can_create_events: bool
     """
 
     organizer = VersionedForeignKey(Organizer)
@@ -290,26 +342,41 @@ class Event(Versionable):
     tickets for.
 
     :param organizer: The organizer this event belongs to
+    :type organizer: Organizer
     :param name: This events full title
+    :type name: str
     :param slug: A short, alphanumeric, all-lowercase name for use in URLs. The slug has to
                  be unique among the events of the same organizer.
+    :type slug: str
     :param locale: This events default locale
+    :type locale: str
     :param timezone: The timezone this event takes place in (or is being described in)
+    :type timezone: str
     :param currency: The currency of all prices and payments of this event
+    :type currency: str
     :param date_from: The datetime this event starts
+    :type date_from: datetime
     :param date_to: The datetime this event ends
+    :type date_to: datetime
     :param show_date_to: If ``False``, the ``date_to`` value will not be shown to the
                          user and the event will be listed only with it's start date.
+    :type show_date_to: bool
     :param show_times: If ``False``, ``date_from`` and ``date_to`` will only be displayed
                        as dates, without a time of day.
+    :type show_times: bool
     :param presale_start: No tickets will be sold before this date.
+    :type presale_start: datetime
     :param presale_end: No tickets will be sold before this date.
+    :type presale_end: datetime
     :param payment_term_days: The number of days in which an order has to be
                               paid after it has been submitted.
+    :type payment_term_days: int
     :param payment_term_last: The day all orders must be paid by, no matter when
                               the order was placed.
+    :type payment_term_last: datetime
     :param plugins: A comma-separated list of plugin names that are active for this
                     event.
+    :type plugins: str
     """
 
     organizer = VersionedForeignKey(Organizer, related_name="events",
@@ -394,17 +461,29 @@ class Event(Versionable):
         return obj
 
     def get_plugins(self) -> "list[str]":
+        """
+        Get the names of the plugins activated for this event as a list.
+        """
         if self.plugins is None:
             return []
         return self.plugins.split(",")
 
     def get_date_from_display(self) -> str:
+        """
+        Returns a formatted string containing the start date of the event with respect
+        to the current locale and to the ``show_times`` setting.
+        """
         return _date(
             self.date_from,
             "DATETIME_FORMAT" if self.show_times else "DATE_FORMAT"
         )
 
     def get_date_to_display(self) -> str:
+        """
+        Returns a formatted string containing the start date of the event with respect
+        to the current locale and to the ``show_times`` setting. Returns an empty string
+        if ``show_date_to`` is ``False``.
+        """
         if not self.show_date_to:
             return ""
         return _date(
@@ -413,6 +492,12 @@ class Event(Versionable):
         )
 
     def get_cache(self) -> "pretix.base.cache.EventRelatedCache":
+        """
+        Returns an :py:class:`EventRelatedCache` object. This behaves equivalent to
+        Django's built-in cache backends, but puts you into an isolated environment for
+        this event, so you don't have to prefix your cache keys. In addition, the cache
+        is being cleared every time the event or one of its related objects change.
+        """
         from pretix.base.cache import EventRelatedCache
         return EventRelatedCache(self)
 
@@ -428,6 +513,15 @@ class EventPermission(Versionable):
     """
     The relation between an Event and an User who has permissions to
     access an event.
+
+    :param event: The event this refers to
+    :type event: Event
+    :param user: The user these permission set applies to
+    :type user: User
+    :param can_change_settings: If ``True``, the user can change all basic settings for this event.
+    :type can_change_settings: bool
+    :param can_change_items: If ``True``, the user can change and add items and related objects for this event.
+    :type can_change_items: bool
     """
 
     event = VersionedForeignKey(Event)
@@ -454,8 +548,14 @@ class EventPermission(Versionable):
 
 class ItemCategory(Versionable):
     """
-    Items can be sorted into categories, which only have a name and a
-    configurable order
+    Items can be sorted into these categories.
+
+    :param event: The event this belongs to
+    :type event: Event
+    :param name: The name of this category
+    :type name: str
+    :param position: An integer, used for sorting
+    :type position: int
     """
     event = VersionedForeignKey(
         Event,
@@ -500,6 +600,11 @@ class Property(Versionable):
     """
     A property is a modifier which can be applied to an Item. For example
     'Size' would be a property associated with the item 'T-Shirt'.
+
+    :param event: The event this belongs to
+    :type event: Event
+    :param name: The name of this property.
+    :type name: str
     """
 
     event = VersionedForeignKey(
@@ -532,7 +637,14 @@ class Property(Versionable):
 class PropertyValue(Versionable):
     """
     A value of a property. If the property would be 'T-Shirt size',
-    this could be 'M' or 'L'
+    this could be 'M' or 'L'.
+
+    :param prop: The property this value is a valid option for.
+    :type prop: Property
+    :param value: The value, as a human-readable string
+    :type value: str
+    :param position: An integer, used for sorting
+    :type position: int
     """
 
     prop = VersionedForeignKey(
@@ -577,7 +689,22 @@ class PropertyValue(Versionable):
 class Question(Versionable):
     """
     A question is an input field that can be used to extend a ticket
-    by custom information, e.g. "Attendee name" or "Attendee age".
+    by custom information, e.g. "Attendee age". A question can allow one o several
+    input types, currently:
+
+    * a number (``TYPE_NUMBER``)
+    * a one-line string (``TYPE_STRING``)
+    * a multi-line string (``TYPE_TEXT``)
+    * a boolean (``TYPE_BOOLEAN``)
+
+    :param event: The event this question belongs to
+    :type event: Event
+    :param question: The question text. This will be displayed next to the input field.
+    :type question: str
+    :param type: One of the above types
+    :param required: Whether answering this question is required for submiting an order including
+                     items associated with this question.
+    :type required: bool
     """
     TYPE_NUMBER = "N"
     TYPE_STRING = "S"
@@ -627,17 +754,32 @@ class Question(Versionable):
 
 class Item(Versionable):
     """
-    An item is a thing which can be sold. It belongs to an
-    event and may or may not belong to a category. Items are often
-    also called 'products' but are named 'items' internally due to
-    historic reasons.
+    An item is a thing which can be sold. It belongs to an event and may or may not belong to a category.
+    Items are often also called 'products' but are named 'items' internally due to historic reasons.
 
-    It has a default price which might by overriden by
-    restrictions.
+    It has a default price which might by overriden by restrictions.
 
-    Items can not be deleted, as this would cause database
-    inconsistencies. Instead, they have an attribute "deleted".
-    Deleted items will not be shown anywhere.
+    :param event: The event this belongs to.
+    :type event: Event
+    :param category: The category this belongs to. May be null.
+    :type category: ItemCategory
+    :param name: The name of this item:
+    :type name: str
+    :param active: Whether this item is being sold
+    :type active: bool
+    :param short_description: A short description
+    :type short_description: str
+    :param long_description: A long description
+    :type long_description: str
+    :param default_price: The item's default price
+    :type default_price: decimal.Decimal
+    :param tax_rate: The VAT tax that is included in this item's price (in %)
+    :type tax_rate: decimal.Decimal
+    :param properties: A set of ``Property`` objects that should be applied to this item
+    :param questions: A set of ``Question`` objects that should be applied to this item
+    :param admission: ``True``, if this item allows persons to enter the event (as opposed to e.g. merchandise)
+    :type admission: bool
+
     """
     event = VersionedForeignKey(
         Event,
@@ -736,6 +878,11 @@ class Item(Versionable):
 
         VariationDicts differ from dicts only by specifying some extra
         methods.
+
+        :param use_cache: If this parameter is set to ``True``, a second call to this method
+                          on the same model instance won't query the database again but return
+                          the previous result again.
+        :type use_cache: bool
         """
         if use_cache and hasattr(self, '_get_all_variations_cache'):
             return self._get_all_variations_cache
@@ -773,16 +920,18 @@ class Item(Versionable):
         This method returns a list of all variations which are theoretically
         possible for sale. It DOES call all activated restriction plugins, and it
         DOES only return variations which DO have an ItemVariation object, as all
-        variations without one CAN NOT be part of a Quota and therefore CAN NOT
-        ever be available for sale. The only exception is the empty variation
+        variations without one CAN NOT be part of a Quota and therefore can never
+        be available for sale. The only exception is the empty variation
         for items without properties, which never has an ItemVariation object.
 
-        This DOES NOT take into account quotas itself. Use is_available on the
+        This DOES NOT take into account quotas itself. Use ``is_available`` on the
         ItemVariation objects (or the Item it self, if it does not have variations) to
         determine availability by the terms of quotas.
 
-        It is recommended to call
-            prefetch_related('properties', 'variations__values__prop')
+        It is recommended to call::
+
+            .prefetch_related('properties', 'variations__values__prop')
+
         when retrieving Item objects you are going to use this method on.
         """
         if use_cache and hasattr(self, '_get_all_available_variations_cache'):
@@ -842,7 +991,12 @@ class Item(Versionable):
     def check_quotas(self):
         """
         This method is used to determine whether this Item is currently available
-        for sale. It may return any of the return codes of Quota.availability()
+        for sale.
+
+        :returns: any of the return codes of :py:meth:`Quota.availability()`.
+
+        :raises ValueError: if you call this on an item which has properties associated with it.
+                            Please use the method on the ItemVariation object you are interested in.
         """
         if self.properties.count() > 0:  # NOQA
             raise ValueError('Do not call this directly on items which have properties '
@@ -853,8 +1007,14 @@ class Item(Versionable):
         """
         This method is used to determine whether this ItemVariation is restricted
         in sale by any restriction plugins.
-        It returns False, if the item is unavailable or the item's price, if it is
-        available.
+
+        :returns:
+
+            * ``False``, if the item is unavailable
+            * the item's price, otherwise
+
+        :raises ValueError: if you call this on an item which has properties associated with it.
+                            Please use the method on the ItemVariation object you are interested in.
         """
         if self.properties.count() > 0:  # NOQA
             raise ValueError('Do not call this directly on items which have properties '
@@ -879,20 +1039,29 @@ class ItemVariation(Versionable):
     """
     A variation is an item combined with values for all properties
     associated with the item. For example, if your item is 'T-Shirt'
-    and your properties are 'Size' and 'Color', then an example for a
+    and your properties are 'Size' and 'Color', then an example for an
     variation would be 'T-Shirt XL read'.
 
     Attention: _ALL_ combinations of PropertyValues _ALWAYS_ exist,
     even if there is no ItemVariation object for them! ItemVariation objects
     do NOT prove existance, they are only available to make it possible
     to override default values (like the price) for certain combinations
-    of property values.
+    of property values. However, appropriate ItemVariation objects will be
+    created as soon as you add your variations to a quota.
 
     They also allow to explicitly EXCLUDE certain combinations of property
     values by creating an ItemVariation object for them with active set to
     False.
 
     Restrictions can be not only set to items but also directly to variations.
+
+    :param item: The item this variation belongs to
+    :type item: Item
+    :param values: A set of ``PropertyValue`` objects defining this variation
+    :param active: Whether this value is to be sold.
+    :type active: bool
+    :param default_price: This variation's default price
+    :type default_price: decimal.Decimal
     """
     item = VersionedForeignKey(
         Item,
@@ -932,12 +1101,16 @@ class ItemVariation(Versionable):
     def check_quotas(self):
         """
         This method is used to determine whether this ItemVariation is currently
-        available for sale in terms of quotas. It may return any of the return codes
-        of Quota.availability()
+        available for sale in terms of quotas.
+
+        :returns: any of the return codes of :py:meth:`Quota.availability()`.
         """
         return min([q.availability() for q in self.quotas.all()])
 
     def to_variation_dict(self):
+        """
+        :return: a :py:class:`VariationDict` representing this variation.
+        """
         vd = VariationDict()
         for v in self.values.all():
             vd[v.prop.identity] = v
@@ -948,8 +1121,11 @@ class ItemVariation(Versionable):
         """
         This method is used to determine whether this ItemVariation is restricted
         in sale by any restriction plugins.
-        It returns False, if the item is unavailable or the item's price, if it is
-        available.
+
+        :returns:
+
+            * ``False``, if the item is unavailable
+            * the item's price, otherwise
         """
         from .signals import determine_availability
         responses = determine_availability.send(
@@ -1058,9 +1234,7 @@ class Quota(Versionable):
     VIP tickets will be fine).
 
     As always, a quota can not only be tied to an item, but also to specific
-    variations. We follow the general rule here: If there are no variations
-    speficied, the quota applies to all of them, and if there are variations
-    specified, the quota applies to those.
+    variations.
 
     Please read the documentation section on quotas carefully before doing
     anything with quotas. This might confuse you otherwise.
@@ -1084,6 +1258,15 @@ class Quota(Versionable):
 
     AVAILABILITY_GONE
         This item is completely sold out.
+
+    :param event: The event this belongs to
+    :type event: Event
+    :param name: This quota's name
+    :type str:
+    :param size: The number of items in this quota
+    :type size: int
+    :param items: The set of :py:class:`Item` objects this quota applies to
+    :param variations: The set of :py:class:`ItemVariation` objects this quota applies to
     """
 
     AVAILABILITY_GONE = 0
@@ -1141,9 +1324,10 @@ class Quota(Versionable):
     def availability(self):
         """
         This method is used to determine whether Items or ItemVariations belonging
-        to this quota should currently be available for sale. It returns a tuple where
-        the first entry is one of the Quota.AVAILABILITY_ constants and the second
-        is the number of available tickets.
+        to this quota should currently be available for sale.
+
+        :returns: a tuple where the first entry is one of the Quota.AVAILABILITY_ constants and the second
+                  is the number of available tickets.
         """
         # TODO: These lookups are highly inefficient. However, we'll wait with optimizing
         #       until Django 1.8 is released, as the following feature might make it a
@@ -1192,10 +1376,9 @@ class Quota(Versionable):
     def lock(self):
         """
         Issue a lock on this quota so nobody can take tickets from this quota until
-        you release the lock.
+        you release the lock. Will retry 5 times on failure.
 
-        Raises an Quota.LockTimeoutException if the quota is locked every time we
-        try to obtain a lock.
+        :raises Quota.LockTimeoutException: if the quota is locked every time we try to obtain the lock
         """
         retries = 5
         for i in range(retries):
@@ -1215,7 +1398,7 @@ class Quota(Versionable):
 
     def release(self, force=False):
         """
-        Release a lock placed by lock(). If the parameter force is not set,
+        Release a lock placed by :py:meth:`lock()`. If the parameter force is not set to ``True``,
         the lock will only be released if it was issued in _this_ python
         representation of the database object.
         """

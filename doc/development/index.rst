@@ -11,4 +11,8 @@ Contents:
    setup
    style
    structure
+   models
    api/index
+
+.. TODO::
+   Document models, cache objects, settings objects, ItemVariation objects, form fields.
