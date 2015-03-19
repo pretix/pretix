@@ -59,7 +59,7 @@ var pretixstripe = {
         var $form = $("#stripe_number").parents("form");
         waitingDialog.hide();
         if (response.error) {
-            $(".stripe-errors").stop().hide();
+            $(".stripe-errors").stop().hide().removeClass("sr-only");
             $(".stripe-errors").html("<div class='alert alert-danger'>" + response.error.message + "</div>");
             $(".stripe-errors").slideDown();
         } else {
@@ -85,7 +85,7 @@ $(function() {
         .keyup(pretixstripe.validate_cvc)
     $("#stripe_number").parents("form").submit(
         function () {
-            if ($("#stripe_token").val() == "") {
+            if ($("input[name=payment][value=stripe]").prop('checked') && $("#stripe_token").val() == "") {
                 pretixstripe.request();
                 return false;
             }
