@@ -38,11 +38,11 @@
                             </dl>
                         {% endif %}
                     </div>
-                    <div class="col-md-3 col-xs-6 price">
-                        {{ event.currency }} {{ line.price|floatformat:2 }}
-                    </div>
                     <div class="col-md-2 col-xs-6 count">
                         {{ line.count }}
+                    </div>
+                    <div class="col-md-3 col-xs-6 price">
+                        {{ event.currency }} {{ line.price|floatformat:2 }}
                     </div>
                     <div class="col-md-3 col-xs-6 price">
                         <strong>{{ event.currency }} {{ line.total|floatformat:2 }}</strong>

@@ -19,9 +19,6 @@
             </dl>
         {% endif %}
         </div>
-        <div class="col-md-3 col-xs-6 price">
-            {{ event.currency }} {{ line.price|floatformat:2 }}
-        </div>
         <div class="col-md-2 col-xs-6 count">
             {% if editable %}
             <form action="{% url "presale:event.cart.remove" event=event.slug organizer=event.organizer.slug %}"
@@ -52,6 +49,9 @@
                 <button class="btn btn-mini btn-link"><i class="fa fa-plus"></i></button>
             </form>
             {% endif %}
+        </div>
+        <div class="col-md-3 col-xs-6 price">
+            {{ event.currency }} {{ line.price|floatformat:2 }}
         </div>
         <div class="col-md-3 col-xs-6 price">
             <strong>{{ event.currency }} {{ line.total|floatformat:2 }}</strong>
