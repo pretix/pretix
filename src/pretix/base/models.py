@@ -238,13 +238,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         * Given name
         * Family name
         * User name
+        * E-mail address
         """
         if self.givenname:
             return self.givenname
         elif self.familyname:
             return self.familyname
         else:
-            return self.username
+            return self.get_local_name()
 
     def get_full_name(self) -> str:
         """
@@ -254,6 +255,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         * Given name
         * Family name
         * User name
+        * E-mail address
         """
         if self.givenname and not self.familyname:
             return self.givenname
@@ -265,7 +267,18 @@ class User(AbstractBaseUser, PermissionsMixin):
                 'given': self.givenname
             }
         else:
+            return self.get_local_name()
+
+    def get_local_name(self) -> str:
+        """
+        Returns the username for local users and the e-mail address for global
+        users.
+        """
+        if self.username:
             return self.username
+        if self.email:
+            return self.email
+        return self.identifier
 
 
 class Organizer(Versionable):

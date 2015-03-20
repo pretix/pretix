@@ -75,7 +75,8 @@
     </ul>
 </li>
 <li>
-    <a href="#">
+    <a href="{% url 'control:event.orders' organizer=request.event.organizer.slug event=request.event.slug %}"
+            {% if "event.orders" in url_name %}class="active"{% endif %}>
         <i class="fa fa-shopping-cart fa-fw"></i>
         {% trans "Orders" %}
     </a>

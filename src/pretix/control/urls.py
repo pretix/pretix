@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 
 
-from pretix.control.views import main, event, item, auth
+from pretix.control.views import main, event, item, auth, orders
 
 urlpatterns = [
     url(r'^logout$', auth.logout, name='auth.logout'),
@@ -46,5 +46,6 @@ urlpatterns = [
         url(r'^quotas/(?P<quota>[0-9a-f-]+)/delete$', item.QuotaDelete.as_view(),
             name='event.items.quotas.delete'),
         url(r'^quotas/add$', item.QuotaCreate.as_view(), name='event.items.quotas.add'),
+        url(r'^orders/$', orders.OrderList.as_view(), name='event.orders'),
     ])),
 ]

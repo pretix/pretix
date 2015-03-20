@@ -1,0 +1,53 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Orders" %}{% endblock %}
+{% block content %}
+	<h1>{% trans "Orders" %}</h1>
+	<table class="table table-condensed table-hover">
+		<thead>
+			<tr>
+				<th>{% trans "Order code" %}</th>
+				<th>{% trans "User" %}</th>
+                <th>{% trans "Order total" %}</th>
+                <th>{% trans "Order date" %}</th>
+                <th>{% trans "Status" %}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for o in orders %}
+			<tr>
+				<td><strong><a href="">{{ o.code }}</a></strong></td>
+                <td>{{ o.user.get_short_name }}</td>
+                <td>{{ o.total|floatformat:2 }} {{ request.event.currency }}</td>
+                <td>{{ o.datetime|date }}</td>
+                <td>{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+    {% if is_paginated %}
+        <nav class="text-center">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li>
+                        <a href="?page={{ page_obj.previous_page_number }}">
+                            <span>&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="page-current"><a>
+                    {% blocktrans trimmed with page=page_obj.number of=page_obj.paginator.num_pages %}
+                        Page {{ page }} of {{ of }}
+                    {% endblocktrans %}
+                </a></li>
+                {% if page_obj.has_next %}
+                    <li>
+                        <a href="?page={{ page_obj.next_page_number }}">
+                            <span>&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}
