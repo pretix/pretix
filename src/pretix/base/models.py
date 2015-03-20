@@ -1537,6 +1537,10 @@ class Order(Versionable):
         verbose_name=_("Payment information"),
         null=True, blank=True
     )
+    payment_manual = models.BooleanField(
+        verbose_name=_("Payment state was manually modified"),
+        default=False
+    )
     total = models.DecimalField(
         decimal_places=2, max_digits=10,
         verbose_name=_("Total amount")
@@ -1590,7 +1594,7 @@ class Order(Versionable):
                 return True
         return False  # nothing there to modify
 
-    def mark_paid(self, provider, info, date=None):
+    def mark_paid(self, provider=None, info=None, date=None, manual=None):
         """
         Mark this order as paid. This clones the order object, sets the payment provider,
         info and date and returns the cloned order object.
@@ -1604,9 +1608,11 @@ class Order(Versionable):
         :type date: datetime
         """
         order = self.clone()
-        order.payment_provider = provider
-        order.payment_info = info
+        order.payment_provider = provider or order.payment_provider
+        order.payment_info = info or order.payment_info
         order.payment_date = date or now()
+        if manual is not None:
+            order.payment_manual = manual
         order.status = Order.STATUS_PAID
         order.save()
         return order

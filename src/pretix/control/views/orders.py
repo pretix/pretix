@@ -1,5 +1,10 @@
 from itertools import groupby
+from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.db.models import Q
+from django.utils.translation import ugettext_lazy as _
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.views.generic import ListView, DetailView
 
@@ -21,17 +26,24 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         ).select_related("user")
 
 
-class OrderDetail(EventPermissionRequiredMixin, DetailView):
-    model = Order
+class OrderView(DetailView):
     context_object_name = 'order'
-    template_name = 'pretixcontrol/order/index.html'
-    permission = 'can_view_orders'
+    model = Order
 
     def get_object(self, queryset=None):
         return Order.objects.current.get(
             event=self.request.event,
             code=self.kwargs['code'].upper()
         )
+
+    @cached_property
+    def order(self):
+        return self.get_object()
+
+
+class OrderDetail(EventPermissionRequiredMixin, OrderView):
+    template_name = 'pretixcontrol/order/index.html'
+    permission = 'can_view_orders'
 
     @cached_property
     def payment_provider(self):
@@ -85,3 +97,51 @@ class OrderDetail(EventPermissionRequiredMixin, DetailView):
             'total': self.object.total,
             'payment_fee': self.object.payment_fee,
         }
+
+
+class OrderTransition(EventPermissionRequiredMixin, OrderView):
+    permission = 'can_view_orders'
+
+    def post(self, *args, **kwargs):
+        to = self.request.POST.get('status', '')
+        if self.order.status == 'n' and to == 'p':
+            self.order.mark_paid(manual=True)
+            messages.success(self.request, _('The order has been marked as paid.'))
+        elif self.order.status == 'n' and to == 'c':
+            order = self.order.clone()
+            order.status = Order.STATUS_CANCELLED
+            order.save()
+            messages.success(self.request, _('The order has been cancelled.'))
+        elif self.order.status == 'p' and to == 'n':
+            order = self.order.clone()
+            order.status = Order.STATUS_PENDING
+            order.payment_manual = True
+            order.save()
+            messages.success(self.request, _('The order has been marked as not paid.'))
+        return redirect(reverse(
+            'control:event.order',
+            kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug,
+                'code': self.order.code,
+            }
+        ))
+
+    def get(self, *args, **kwargs):
+        to = self.request.GET.get('status', '')
+        if self.order.status == 'n' and to == 'c':
+            return render(self.request, 'pretixcontrol/order/cancel.html', {
+                'order': self.order,
+            })
+        elif self.order.status == 'p' and to == 'r':
+            messages.error(self.request, _('Refunding orders is not yet implemented.'))
+            return redirect(reverse(
+                'control:event.order',
+                kwargs={
+                    'event': self.request.event.slug,
+                    'organizer': self.request.event.organizer.slug,
+                    'code': self.order.code,
+                    }
+            ))
+        else:
+            return HttpResponse(status=405)
