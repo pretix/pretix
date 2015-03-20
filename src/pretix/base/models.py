@@ -1488,8 +1488,8 @@ class Order(Versionable):
     STATUS_CANCELLED = "c"
     STATUS_REFUNDED = "r"
     STATUS_CHOICE = (
-        (STATUS_PAID, _("pending")),
-        (STATUS_PENDING, _("paid")),
+        (STATUS_PENDING, _("pending")),
+        (STATUS_PAID, _("paid")),
         (STATUS_EXPIRED, _("expired")),
         (STATUS_CANCELLED, _("cancelled")),
         (STATUS_REFUNDED, _("refunded"))

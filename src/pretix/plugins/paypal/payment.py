@@ -153,7 +153,7 @@ class Paypal(BasePaymentProvider):
 
         self.init_api()
         payment = paypalrestsdk.Payment.find(request.session.get('payment_paypal_id'))
-        if str(payment.transactions[0].amount.total) != str(order.total) or payment.transactions[1].amount.currency != \
+        if str(payment.transactions[0].amount.total) != str(order.total) or payment.transactions[0].amount.currency != \
                 self.event.currency:
             messages.error(request, _('We were unable to process your payment. See below for details on how to '
                                       'proceed.'))
@@ -169,7 +169,7 @@ class Paypal(BasePaymentProvider):
             messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as soon as the '
                                         'payment completed.'))
             order = order.clone()
-            order.payment_info = str(payment)
+            order.payment_info = json.dumps(payment.to_dict())
             order.save()
             return
 
@@ -179,7 +179,7 @@ class Paypal(BasePaymentProvider):
             logger.error('Invalid state: %s' % str(payment))
             return
 
-        order.mark_paid('paypal', str(payment))
+        order.mark_paid('paypal', json.dumps(payment.to_dict()))
         messages.success(request, _('We successfully received your payment. Thank you!'))
         return None
 
@@ -193,4 +193,14 @@ class Paypal(BasePaymentProvider):
         template = get_template('pretixplugins/paypal/pending.html')
         ctx = Context({'request': request, 'event': self.event, 'settings': self.settings,
                        'retry': retry, 'order': order})
+        return template.render(ctx)
+
+    def order_control_render(self, request, order) -> str:
+        if order.payment_info:
+            payment_info = json.loads(order.payment_info)
+        else:
+            payment_info = None
+        template = get_template('pretixplugins/paypal/control.html')
+        ctx = Context({'request': request, 'event': self.event, 'settings': self.settings,
+                       'payment_info': payment_info, 'order': order})
         return template.render(ctx)

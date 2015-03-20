@@ -83,6 +83,8 @@ The provider class
 
    .. automethod:: order_paid_render
 
+   .. automethod:: order_control_render
+
 
 Additional views
 ----------------

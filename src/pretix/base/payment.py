@@ -273,3 +273,17 @@ class BasePaymentProvider:
         :param order: The order object
         """
         return None
+
+    def order_control_render(self, request: HttpRequest, order: Order) -> str:
+        """
+        Will be called if the *event administrator* views the detail page of an order
+        which is associated with this payment provider.
+
+        It should return HTML code containing information regarding the current payment
+        status and, if applicable, next steps.
+
+        The default implementation returns the verbose name of the payment provider.
+
+        :param order: The order object
+        """
+        return _('Payment provider: %s' % self.verbose_name)

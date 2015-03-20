@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import json
 import logging
 from django.contrib import messages
 from django.template import Context
@@ -81,4 +82,15 @@ class Stripe(BasePaymentProvider):
         template = get_template('pretixplugins/stripe/pending.html')
         ctx = Context({'request': request, 'event': self.event, 'settings': self.settings,
                        'order': order})
+        return template.render(ctx)
+
+    def order_control_render(self, request, order) -> str:
+        if order.payment_info:
+            payment_info = json.loads(order.payment_info)
+            payment_info['amount'] /= 100
+        else:
+            payment_info = None
+        template = get_template('pretixplugins/stripe/control.html')
+        ctx = Context({'request': request, 'event': self.event, 'settings': self.settings,
+                       'payment_info': payment_info, 'order': order})
         return template.render(ctx)

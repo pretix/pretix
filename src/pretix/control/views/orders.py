@@ -1,8 +1,10 @@
 from itertools import groupby
 from django.db.models import Q
+from django.utils.functional import cached_property
 from django.views.generic import ListView, DetailView
 
 from pretix.base.models import Order
+from pretix.base.signals import register_payment_providers
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 
@@ -31,10 +33,19 @@ class OrderDetail(EventPermissionRequiredMixin, DetailView):
             code=self.kwargs['code'].upper()
         )
 
+    @cached_property
+    def payment_provider(self):
+        responses = register_payment_providers.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if provider.identifier == self.object.payment_provider:
+                return provider
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['items'] = self.get_items()
         ctx['event'] = self.request.event
+        ctx['payment'] = self.payment_provider.order_control_render(self.request, self.object)
         return ctx
 
     def get_items(self):

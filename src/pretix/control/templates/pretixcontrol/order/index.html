@@ -10,6 +10,7 @@
         {% blocktrans trimmed with code=order.code %}
             Order details: {{ code }}
         {% endblocktrans %}
+        {% include "pretixcontrol/orders/fragment_order_status.html" with order=order class="pull-right" %}
     </h1>
     <div class="panel panel-primary items">
         <div class="panel-heading">
@@ -76,6 +77,21 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
+        </div>
+    </div>
+    <div class="panel panel-primary items">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Payment information" %}
+            </h3>
+        </div>
+        <div class="panel-body">
+            {{ payment }}
+            {% if order.status == 'n' %}
+                <p>{% blocktrans trimmed with date=order.expires %}
+                    The payment has to be completed before {{ date }}.
+                {% endblocktrans %}</p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
