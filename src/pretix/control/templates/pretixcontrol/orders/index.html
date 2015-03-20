@@ -16,7 +16,9 @@
 		<tbody>
 			{% for o in orders %}
 			<tr>
-				<td><strong><a href="">{{ o.code }}</a></strong></td>
+				<td><strong><a
+                        href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code%}"
+                        >{{ o.code }}</a></strong></td>
                 <td>{{ o.user.get_short_name }}</td>
                 <td>{{ o.total|floatformat:2 }} {{ request.event.currency }}</td>
                 <td>{{ o.datetime|date }}</td>

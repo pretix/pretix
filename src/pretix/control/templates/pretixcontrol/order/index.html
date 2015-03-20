@@ -1,0 +1,81 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% block title %}
+    {% blocktrans trimmed with code=order.code %}
+        Order details: {{ code }}
+    {% endblocktrans %}
+{% endblock %}
+{% block content %}
+    <h1>
+        {% blocktrans trimmed with code=order.code %}
+            Order details: {{ code }}
+        {% endblocktrans %}
+    </h1>
+    <div class="panel panel-primary items">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Ordered items" %}
+            </h3>
+        </div>
+        <div class="panel-body">
+            {% for line in items.positions %}
+                <div class="row-fluid product-row">
+                    <div class="col-md-4 col-xs-6">
+                        <strong>{{ line.item }}</strong>
+                        {% if line.variation %}
+                            – {{ line.variation }}
+                        {% endif %}
+                        {% if line.has_questions %}
+                            <dl>
+                                {% if line.item.admission and event.settings.attendee_names_asked == 'True' %}
+                                    <dt>{% trans "Attendee name" %}</dt>
+                                    <dd>{% if line.attendee_name %}{{ line.attendee_name }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
+                                {% endif %}
+                                {% for q in line.questions %}
+                                    <dt>{{ q.question }}</dt>
+                                    <dd>{% if q.answer %}{{ q.answer }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
+                                {% endfor %}
+                            </dl>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3 col-xs-6 price">
+                        {{ event.currency }} {{ line.price|floatformat:2 }}
+                    </div>
+                    <div class="col-md-2 col-xs-6 count">
+                        {{ line.count }}
+                    </div>
+                    <div class="col-md-3 col-xs-6 price">
+                        <strong>{{ event.currency }} {{ line.total|floatformat:2 }}</strong>
+                        {% if line.item.tax_rate %}
+                            <br /><small>{% blocktrans trimmed with rate=line.item.tax_rate %}
+                            incl. {{ rate }}% taxes
+                        {% endblocktrans %}</small>
+                        {% endif %}
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            {% endfor %}
+            {% if items.payment_fee %}
+                {# TODO: Tax rate? #}
+                <div class="row-fluid product-row">
+                    <div class="col-md-4 col-xs-6">
+                        <strong>{% trans "Payment method fee" %}</strong>
+                    </div>
+                    <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+                        <strong>{{ event.currency }} {{ items.payment_fee|floatformat:2 }}</strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            {% endif %}
+            <div class="row-fluid product-row total">
+                <div class="col-md-4 col-xs-6">
+                    <strong>{% trans "Total" %}</strong>
+                </div>
+                <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+                    <strong>{{ event.currency }} {{ items.total|floatformat:2 }}</strong>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

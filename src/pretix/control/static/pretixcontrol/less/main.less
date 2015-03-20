@@ -19,3 +19,31 @@ nav.navbar {
 .nav-pills {
     margin-bottom: 10px;
 }
+.product-row {
+    padding: 10px 0;
+
+    .count form {
+        display: inline;
+    }
+    .price, .count {
+        text-align: right;
+    }
+    .price small,
+    .availability-box small {
+        display: block;
+        line-height: 1;
+    }
+
+    &.total {
+        border-top: 1px solid @table-border-color;
+    }
+
+    dl {
+        padding-left: 20px;
+        margin-bottom: 0;
+
+        dd {
+            padding-left: 20px;
+        }
+    }
+}

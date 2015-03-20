@@ -535,6 +535,10 @@ class EventPermission(Versionable):
     :type can_change_settings: bool
     :param can_change_items: If ``True``, the user can change and add items and related objects for this event.
     :type can_change_items: bool
+    :param can_view_orders: If ``True``, the user can inspect details of all orders.
+    :type can_view_orders: bool
+    :param can_change_orders: If ``True``, the user can change details of orders
+    :type can_change_orders: bool
     """
 
     event = VersionedForeignKey(Event)
@@ -546,6 +550,14 @@ class EventPermission(Versionable):
     can_change_items = models.BooleanField(
         default=True,
         verbose_name=_("Can change product settings")
+    )
+    can_view_orders = models.BooleanField(
+        default=True,
+        verbose_name=_("Can view orders")
+    )
+    can_change_orders = models.BooleanField(
+        default=True,
+        verbose_name=_("Can change orders")
     )
 
     class Meta:
