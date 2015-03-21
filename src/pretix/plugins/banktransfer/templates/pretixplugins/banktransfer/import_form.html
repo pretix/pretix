@@ -1,0 +1,25 @@
+{% extends "pretixplugins/banktransfer/import_base.html" %}
+{% load i18n %}
+{% block inner %}
+    <p>{% blocktrans trimmed %}
+        This page allows you to upload bank statement files to process incoming payments.
+    {% endblocktrans %}</p>
+    <p>{% blocktrans trimmed %}
+        Currently, only <code>.csv</code> files are supported.
+    {% endblocktrans %}</p>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "Upload a new file" %}</h3>
+        </div>
+        <div class="panel-body">
+            <form action="" method="post" enctype="multipart/form-data" class="form-inline">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="file" name="file" />
+                </div>
+                <button class="btn btn-primary pull-right" type="submit">
+                    <span class="icon icon-upload"></span> {% trans "Start upload" %}
+                </button>
+            </form></div>
+    </div>
+{% endblock %}

@@ -1,0 +1,85 @@
+import csv
+import io
+
+
+class HintMismatchError(Exception):
+    pass
+
+
+def parse(data, hint):
+    result = []
+    if 'cols' not in hint:
+        raise HintMismatchError('Invalid hint')
+    if len(data[0]) != hint['cols']:
+        raise HintMismatchError('Wrong column count')
+    for row in data:
+        resrow = {}
+        if None in row or len(row) == 0:
+            # Wrong column count
+            continue
+        if hint.get('payer') is not None:
+            resrow['payer'] = "\n".join([row[int(i)].strip() for i in hint.get('payer')])
+        if hint.get('reference') is not None:
+            resrow['reference'] = "\n".join([row[int(i)].strip() for i in hint.get('reference')])
+        if hint.get('amount') is not None:
+            resrow['amount'] = row[int(hint.get('amount'))].strip()
+        if hint.get('date') is not None:
+            resrow['date'] = row[int(hint.get('date'))].strip()
+        if len(resrow['amount']) == 0 or 'amount' not in resrow \
+                or resrow['amount'][0] not in list("1234567890," "+- ") \
+                or len(resrow['reference']) == 0:
+            # This is probably a headline or something other special.
+            continue
+        result.append(resrow)
+    return result
+
+
+def get_rows_from_file(file):
+    data = file.read()
+    try:
+        import chardet
+        charset = chardet.detect(data)['encoding']
+    except ImportError:
+        charset = file.charset
+    data = data.decode(charset or 'utf-8')
+    # Sniffing line by line is necessary as some banks like to include
+    # one-column garbage at the beginning of the file which breaks the sniffer.
+    # See also: http://bugs.python.org/issue2078
+    last_e = None
+    dialect = None
+    for line in data.split("\n"):
+        line = line.strip()
+        if len(line) == 0:
+            continue
+        try:
+            dialect = csv.Sniffer().sniff(line, delimiters=";,.#:")
+        except Exception as e:
+            last_e = e
+        else:
+            last_e = None
+            break
+    if dialect is None:
+        raise last_e
+    reader = csv.reader(io.StringIO(data), dialect)
+    rows = []
+    for row in reader:
+        if rows and len(row) > len(rows[0]):
+            # Some banks put metadata above the real data, things like
+            # a headline, the bank's name, the user's name, etc.
+            # In many cases, we can identify this because these rows
+            # have less columns than the rows containing the real data.
+            # Therefore, if the number of columns suddenly grows, we start
+            # over with parsing.
+            rows = []
+        rows.append(row)
+    return rows
+
+
+def new_hint(data):
+    return {
+        'payer': data.getlist('payer') if 'payer' in data else None,
+        'reference': data.getlist('reference') if 'date' in data else None,
+        'date': int(data.get('date')) if 'date' in data else None,
+        'amount': int(data.get('amount')) if 'amount' in data else None,
+        'cols': int(data.get('cols')) if 'cols' in data else None
+    }

@@ -4,3 +4,4 @@
 -r requirements/testing.txt
 -r requirements/paypal.txt
 -r requirements/stripe.txt
+-r requirements/banktransfer.txt

@@ -54,3 +54,14 @@ nav.navbar {
 .container-fluid > .alert:first-child {
     margin-top: 20px;
 }
+
+.flipped-scroll-wrapper {
+    overflow-y: auto;
+}
+.flipped-scroll-wrapper, .flipped-scroll-inner {
+    /* This nasty hack puts the scroll bar at the top, so the user really
+       notices that there is one */
+    transform: rotateX(180deg);
+    -ms-transform: rotateX(180deg); /* IE 9 */
+    -webkit-transform: rotateX(180deg); /* Safari and Chrome */
+}

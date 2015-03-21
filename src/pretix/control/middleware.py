@@ -24,9 +24,8 @@ class PermissionMiddleware:
 
     def process_request(self, request):
         url = resolve(request.path_info)
-        url_namespace = url.namespace
         url_name = url.url_name
-        if url_namespace != 'control' or url_name in self.EXCEPTIONS:
+        if not request.path.startswith('/control') or url_name in self.EXCEPTIONS:
             return
         if not request.user.is_authenticated():
             # Taken from django/contrib/auth/decorators.py
@@ -47,7 +46,7 @@ class PermissionMiddleware:
 
         request.user.events_cache = request.user.events.current.order_by(
             "organizer", "date_from").prefetch_related("organizer")
-        if 'event.' in url_name and 'event' in url.kwargs:
+        if 'event' in url.kwargs and 'organizer' in url.kwargs:
             try:
                 request.event = Event.objects.current.filter(
                     slug=url.kwargs['event'],
