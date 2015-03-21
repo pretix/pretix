@@ -15,3 +15,10 @@ This signal is sent out to include code into the HTML <head> tag
 html_head = EventPluginSignal(
     providing_args=["request"]
 )
+
+"""
+This signal is sent out to include navigation items in the event admin
+"""
+nav_event = EventPluginSignal(
+    providing_args=["request"]
+)

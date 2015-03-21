@@ -81,4 +81,14 @@
         {% trans "Orders" %}
     </a>
 </li>
+    {% for nav in nav_event %}
+    <li>
+        <a href="{{ nav.url }}" {% if nav.active %}class="active"{% endif %}>
+            {% if nav.icon %}
+                <i class="fa fa-{{ nav.icon }} fa-fw"></i>
+            {% endif %}
+            {{ nav.label }}
+        </a>
+    </li>
+    {% endfor %}
 {% endblock %}

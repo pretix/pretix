@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.urlresolvers import resolve
-from .signals import html_head
+from .signals import html_head, nav_event
 
 
 def contextprocessor(request):
@@ -20,4 +20,9 @@ def contextprocessor(request):
             _html_head.append(response)
     ctx['html_head'] = "".join(_html_head)
 
+    _nav_event = []
+    if hasattr(request, 'event'):
+        for receiver, response in nav_event.send(request.event, request=request):
+            _nav_event += response
+    ctx['nav_event'] = _nav_event
     return ctx
