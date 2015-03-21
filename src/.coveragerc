@@ -1,6 +1,6 @@
 [run]
 source = pretix
-omit = */migrations/*,*/urls.py,*/tests/*,*/testdummy/*,*/admin.py
+omit = */migrations/*,*/urls.py,*/tests/*,*/testdummy/*,*/admin.py,*/mt940.py
 
 [report]
 exclude_lines =
