@@ -6,6 +6,8 @@ django-bootstrap3
 -e git+https://github.com/pretix/django-formset-js.git@master#egg=django-formset-js
 -e git+https://github.com/pretix/cleanerversion.git@pretix#egg=cleanerversion
 django-compressor
+reportlab
+-e git+https://github.com/pretix/PyPDF2.git@pretix#egg=PyPDF2
 
 # Deployment / static file compilation requirements
 BeautifulSoup4
