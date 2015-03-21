@@ -10,7 +10,7 @@ from django.utils.timezone import now
 from django.views.generic import TemplateView
 from pretix.base.models import Order
 from pretix.control.permissions import EventPermissionRequiredMixin
-from pretix.plugins.banktransfer import csvimport
+from pretix.plugins.banktransfer import csvimport, mt940import
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -22,7 +22,15 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        if 'mark_paid' in self.request.POST:
+        if ('file' in self.request.FILES and 'csv' in self.request.FILES.get('file').name.lower()) \
+                or 'amount' in self.request.POST:
+            # Process CSV
+            return self.process_csv()
+
+        if 'file' in self.request.FILES and 'txt' in self.request.FILES.get('file').name.lower():
+            return self.process_mt940()
+
+        if 'confirm' in self.request.POST:
             orders = Order.objects.filter(event=self.request.event,
                                           code__in=self.request.POST.getlist('mark_paid'))
             for order in orders:
@@ -35,7 +43,13 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
 
             messages.success(self.request, _('The selected orders have been marked as paid.'))
             return self.redirect_back()
-        return self.process_csv()
+
+        messages.error(self.request, _('We were unable to detect the file type of this import. Please '
+                                       'contact support for help.'))
+        return self.redirect_back()
+
+    def process_mt940(self):
+        return self.confirm_view(mt940import.parse(self.request.FILES.get('file')))
 
     def process_csv(self):
         if 'file' in self.request.FILES:
