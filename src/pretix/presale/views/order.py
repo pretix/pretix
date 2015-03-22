@@ -10,12 +10,6 @@ from pretix.base.models import Order, OrderPosition
 from pretix.base.signals import register_payment_providers
 from pretix.presale.views import EventViewMixin, EventLoginRequiredMixin, CartDisplayMixin
 from pretix.presale.views.checkout import QuestionsViewMixin
-from reportlab.graphics.shapes import Drawing
-from reportlab.pdfgen import canvas
-from reportlab.lib import pagesizes, units
-from reportlab.graphics.barcode.qr import QrCodeWidget
-from reportlab.graphics import renderPDF
-from PyPDF2 import PdfFileWriter, PdfFileReader
 from django.contrib.staticfiles import finders
 
 
@@ -151,6 +145,12 @@ class OrderDownload(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
                     View):
 
     def get(self, request, *args, **kwargs):
+        from reportlab.graphics.shapes import Drawing
+        from reportlab.pdfgen import canvas
+        from reportlab.lib import pagesizes, units
+        from reportlab.graphics.barcode.qr import QrCodeWidget
+        from reportlab.graphics import renderPDF
+        from PyPDF2 import PdfFileWriter, PdfFileReader
         if self.order.status != Order.STATUS_PAID:
             return HttpResponseForbidden(_('Order is not paid'))
         response = HttpResponse(content_type='application/pdf')
