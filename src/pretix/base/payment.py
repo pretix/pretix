@@ -4,7 +4,6 @@ from django import forms
 
 from django.forms import Form
 from django.http import HttpRequest
-from django.template import Context
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from pretix.base.forms import SettingsForm
@@ -156,7 +155,7 @@ class BasePaymentProvider:
         """
         form = self.checkout_form(request)
         template = get_template('pretixpresale/event/checkout_payment_form_default.html')
-        ctx = Context({'request': request, 'form': form})
+        ctx = {'request': request, 'form': form}
         return template.render(ctx)
 
     def checkout_confirm_render(self, request) -> str:

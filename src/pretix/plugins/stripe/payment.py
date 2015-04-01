@@ -2,7 +2,6 @@ from collections import OrderedDict
 import json
 import logging
 from django.contrib import messages
-from django.template import Context
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from django import forms
@@ -49,7 +48,7 @@ class Stripe(BasePaymentProvider):
 
     def checkout_form_render(self, request) -> str:
         template = get_template('pretixplugins/stripe/checkout_payment_form.html')
-        ctx = Context({'request': request, 'event': self.event, 'settings': self.settings})
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings}
         return template.render(ctx)
 
     def _init_api(self):
@@ -57,7 +56,7 @@ class Stripe(BasePaymentProvider):
 
     def checkout_confirm_render(self, request) -> str:
         template = get_template('pretixplugins/stripe/checkout_payment_confirm.html')
-        ctx = Context({'request': request, 'event': self.event, 'settings': self.settings})
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings}
         return template.render(ctx)
 
     def checkout_perform(self, request, order) -> str:
@@ -80,8 +79,8 @@ class Stripe(BasePaymentProvider):
 
     def order_pending_render(self, request, order) -> str:
         template = get_template('pretixplugins/stripe/pending.html')
-        ctx = Context({'request': request, 'event': self.event, 'settings': self.settings,
-                       'order': order})
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings,
+               'order': order}
         return template.render(ctx)
 
     def order_control_render(self, request, order) -> str:
@@ -91,6 +90,6 @@ class Stripe(BasePaymentProvider):
         else:
             payment_info = None
         template = get_template('pretixplugins/stripe/control.html')
-        ctx = Context({'request': request, 'event': self.event, 'settings': self.settings,
-                       'payment_info': payment_info, 'order': order})
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings,
+               'payment_info': payment_info, 'order': order}
         return template.render(ctx)

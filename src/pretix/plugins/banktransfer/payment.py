@@ -1,6 +1,5 @@
 from collections import OrderedDict
 import json
-from django.template import Context
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from django import forms
@@ -27,7 +26,7 @@ class BankTransfer(BasePaymentProvider):
 
     def checkout_form_render(self, request) -> str:
         template = get_template('pretixplugins/banktransfer/checkout_payment_form.html')
-        ctx = Context({'request': request, 'event': self.event, 'settings': self.settings})
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings}
         return template.render(ctx)
 
     def checkout_prepare(self, request, total):
@@ -39,12 +38,12 @@ class BankTransfer(BasePaymentProvider):
     def checkout_confirm_render(self, request):
         form = self.checkout_form(request)
         template = get_template('pretixplugins/banktransfer/checkout_payment_confirm.html')
-        ctx = Context({'request': request, 'form': form, 'settings': self.settings})
+        ctx = {'request': request, 'form': form, 'settings': self.settings}
         return template.render(ctx)
 
     def order_pending_render(self, request, order) -> str:
         template = get_template('pretixplugins/banktransfer/pending.html')
-        ctx = Context({'request': request, 'order': order, 'settings': self.settings})
+        ctx = {'request': request, 'order': order, 'settings': self.settings}
         return template.render(ctx)
 
     def order_control_render(self, request, order) -> str:
@@ -54,6 +53,6 @@ class BankTransfer(BasePaymentProvider):
         else:
             payment_info = None
         template = get_template('pretixplugins/banktransfer/control.html')
-        ctx = Context({'request': request, 'event': self.event, 'settings': self.settings,
-                       'payment_info': payment_info, 'order': order})
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings,
+               'payment_info': payment_info, 'order': order}
         return template.render(ctx)

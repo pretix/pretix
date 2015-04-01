@@ -3,7 +3,6 @@ import json
 import logging
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.template import Context
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
@@ -63,7 +62,7 @@ class Paypal(BasePaymentProvider):
 
     def checkout_form_render(self, request) -> str:
         template = get_template('pretixplugins/paypal/checkout_payment_form.html')
-        ctx = Context({'request': request, 'event': self.event, 'settings': self.settings})
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings}
         return template.render(ctx)
 
     def checkout_prepare(self, request, cart):
@@ -130,7 +129,7 @@ class Paypal(BasePaymentProvider):
         on the 'confirm order' page.
         """
         template = get_template('pretixplugins/paypal/checkout_payment_confirm.html')
-        ctx = Context({'request': request, 'event': self.event, 'settings': self.settings})
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings}
         return template.render(ctx)
 
     def checkout_perform(self, request, order) -> str:
@@ -191,8 +190,8 @@ class Paypal(BasePaymentProvider):
         except KeyError:
             pass
         template = get_template('pretixplugins/paypal/pending.html')
-        ctx = Context({'request': request, 'event': self.event, 'settings': self.settings,
-                       'retry': retry, 'order': order})
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings,
+               'retry': retry, 'order': order}
         return template.render(ctx)
 
     def order_control_render(self, request, order) -> str:
@@ -201,6 +200,6 @@ class Paypal(BasePaymentProvider):
         else:
             payment_info = None
         template = get_template('pretixplugins/paypal/control.html')
-        ctx = Context({'request': request, 'event': self.event, 'settings': self.settings,
-                       'payment_info': payment_info, 'order': order})
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings,
+               'payment_info': payment_info, 'order': order}
         return template.render(ctx)
