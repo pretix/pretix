@@ -4,6 +4,7 @@ import copy
 import uuid
 import random
 import time
+from django.core.urlresolvers import reverse
 
 from django.db import models
 from django.conf import settings
@@ -1615,6 +1616,24 @@ class Order(Versionable):
             order.payment_manual = manual
         order.status = Order.STATUS_PAID
         order.save()
+
+        from pretix.base.mail import mail
+        mail(
+            order.user, _('Payment received for your order: %(code)s') % {'code': order.code},
+            'pretixpresale/email/order_paid.txt',
+            {
+                'user': order.user,
+                'order': order,
+                'event': order.event,
+                'url': settings.SITE_URL + reverse('presale:event.order', kwargs={
+                    'event': order.event.slug,
+                    'organizer': order.event.organizer.slug,
+                    'order': order.code
+                }),
+                'downloads': order.event.settings.get('ticket_download', as_type=bool)
+            },
+            order.event
+        )
         return order
 
 

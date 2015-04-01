@@ -14,6 +14,7 @@ DEFAULTS = {
     'attendee_names_asked': 'True',
     'attendee_names_required': 'False',
     'reservation_time': '30',
+    'ticket_download': 'True',
     'last_order_modification_date': None,
     'mail_from': settings.MAIL_FROM,
 }

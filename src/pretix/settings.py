@@ -194,6 +194,7 @@ LOGGING = {
 }
 
 MAIL_FROM = 'pretix@localhost'
+SITE_URL = 'http://localhost'
 
 try:
     from .local_settings import *  # NOQA

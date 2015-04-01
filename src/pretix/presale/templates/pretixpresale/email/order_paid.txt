@@ -1,0 +1,19 @@
+{% load i18n %}{% if download %}{% blocktrans with event=event.name url=url %}Hello,
+
+we successfully received your payment for {{ event }}. Thank you!
+
+You will be able to download your ticket at:
+{{ url }}
+
+Best regards,
+Your {{ event }} team
+{% endblocktrans %}{% else %}{% blocktrans with event=event.name url=url %}Hello,
+
+we successfully received your payment for {{ event }}. Thank you!
+
+You can view the status of your order at
+{{ url }}
+
+Best regards,
+Your {{ event }} team
+{% endblocktrans %}{% endif %}
