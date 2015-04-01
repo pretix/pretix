@@ -11,7 +11,10 @@ from pretix.base.settings import SettingsSandbox
 class SettingsTestCase(TestCase):
 
     def setUp(self):
-        settings.DEFAULTS['test_default'] = 'def'
+        settings.DEFAULTS['test_default'] = {
+            'default': 'def',
+            'type': str
+        }
         self.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
         self.event = Event.objects.create(
             organizer=self.organizer, name='Dummy', slug='dummy',

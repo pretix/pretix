@@ -9,14 +9,54 @@ from versions.models import Versionable
 
 
 DEFAULTS = {
-    'user_mail_required': 'False',
-    'max_items_per_order': '10',
-    'attendee_names_asked': 'True',
-    'attendee_names_required': 'False',
-    'reservation_time': '30',
-    'ticket_download': 'True',
-    'last_order_modification_date': None,
-    'mail_from': settings.MAIL_FROM,
+    'user_mail_required': {
+        'default': 'False',
+        'type': bool
+    },
+    'max_items_per_order': {
+        'default': '10',
+        'type': int
+    },
+    'attendee_names_asked': {
+        'default': 'True',
+        'type': bool
+    },
+    'attendee_names_required': {
+        'default': 'False',
+        'type': bool
+    },
+    'reservation_time': {
+        'default': '30',
+        'type': int
+    },
+    'payment_term_days': {
+        'default': '14',
+        'type': int
+    },
+    'payment_term_last': {
+        'default': None,
+        'type': datetime,
+    },
+    'show_date_to': {
+        'default': 'True',
+        'type': bool
+    },
+    'show_times': {
+        'default': 'True',
+        'type': bool
+    },
+    'ticket_download': {
+        'default': 'True',
+        'type': bool
+    },
+    'last_order_modification_date': {
+        'default': 'None',
+        'type': datetime
+    },
+    'mail_from': {
+        'default': settings.MAIL_FROM,
+        'type': str
+    }
 }
 
 
@@ -84,19 +124,24 @@ class SettingsProxy:
 
         raise TypeError('Unable to serialize %s into a setting.' % str(type(value)))
 
-    def get(self, key, default=None, as_type=str):
+    def get(self, key, default=None, as_type=None):
         """
         Get a setting specified by key 'key'. Normally, settings are strings, but
         if you put non-strings into the settings object, you can request unserialization
         by specifying 'as_type'
         """
+        if as_type is None and key in DEFAULTS:
+            as_type = DEFAULTS[key]['type']
+        elif as_type is None:
+            as_type = str
+
         if key in self._cache():
             return self._unserialize(self._cache()[key].value, as_type)
         value = None
         if self._parent:
             value = self._parent.settings.get(key)
         if value is None and key in DEFAULTS:
-            return self._unserialize(DEFAULTS[key], as_type)
+            return self._unserialize(DEFAULTS[key]['default'], as_type)
         if value is None and default is not None:
             return self._unserialize(default, as_type)
         return self._unserialize(value, as_type)
