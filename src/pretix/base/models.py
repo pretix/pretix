@@ -446,7 +446,7 @@ class Event(Versionable):
         """
         return _date(
             self.date_from,
-            "DATETIME_FORMAT" if self.show_times else "DATE_FORMAT"
+            "DATETIME_FORMAT" if self.settings.show_times else "DATE_FORMAT"
         )
 
     def get_date_to_display(self) -> str:
@@ -455,11 +455,11 @@ class Event(Versionable):
         to the current locale and to the ``show_times`` setting. Returns an empty string
         if ``show_date_to`` is ``False``.
         """
-        if not self.settings.get('show_date_to', as_type=bool):
+        if not self.settings.show_date_to:
             return ""
         return _date(
             self.date_to,
-            "DATETIME_FORMAT" if self.show_times else "DATE_FORMAT"
+            "DATETIME_FORMAT" if self.settings.show_times else "DATE_FORMAT"
         )
 
     def get_cache(self) -> "pretix.base.cache.EventRelatedCache":
