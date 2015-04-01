@@ -4,11 +4,13 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Q, Sum
 from django import forms
+from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
+from pretix.base.mail import mail
 from pretix.base.models import CartPosition, Question, QuestionAnswer, Quota, Order, OrderPosition
 from pretix.base.signals import register_payment_providers
 
@@ -319,7 +321,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
         self.request = request
         return self.check_process(request) or self.perform_order(request)
 
-    def perform_order(self, request):
+    def perform_order(self, request: HttpRequest):
         dt = now()
         quotas_locked = set()
 
@@ -362,6 +364,17 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
             if not self.msg_some_unavailable:  # Everything went well
                 order = self._place_order(cartpos, dt)
                 messages.success(request, _('Your order has been placed.'))
+                mail(
+                    request.user, _('Your order: %(code)s') % {'code': order.code},
+                    'pretixpresale/email/order_placed.txt',
+                    {
+                        'user': request.user, 'order': order,
+                        'event': request.event,
+                        'url': request.build_absolute_uri(self.get_order_url(order)),
+                        'payment': self.payment_provider.order_pending_mail_render(order)
+                    },
+                    request.event
+                )
                 resp = self.payment_provider.checkout_perform(request, order)
                 return redirect(resp or self.get_order_url(order))
 

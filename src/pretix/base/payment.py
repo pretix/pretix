@@ -248,6 +248,16 @@ class BasePaymentProvider:
         """
         return None
 
+    def order_pending_mail_render(self, order: Order) -> str:
+        """
+        After the user submitted his order, he or she will receive a confirmation
+        e-mail. You can return a string from this method if you want to add additional
+        information to this e-mail.
+
+        :param order: The order object
+        """
+        return ""
+
     def order_pending_render(self, request: HttpRequest, order: Order) -> str:
         """
         If the user visits a detail page of an order which has not yet been paid but

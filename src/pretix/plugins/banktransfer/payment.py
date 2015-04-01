@@ -41,6 +41,11 @@ class BankTransfer(BasePaymentProvider):
         ctx = {'request': request, 'form': form, 'settings': self.settings}
         return template.render(ctx)
 
+    def order_pending_mail_render(self, order) -> str:
+        template = get_template('pretixplugins/banktransfer/email/order_pending.txt')
+        ctx = {'event': self.event, 'order': order, 'settings': self.settings}
+        return template.render(ctx)
+
     def order_pending_render(self, request, order) -> str:
         template = get_template('pretixplugins/banktransfer/pending.html')
         ctx = {'request': request, 'order': order, 'settings': self.settings}

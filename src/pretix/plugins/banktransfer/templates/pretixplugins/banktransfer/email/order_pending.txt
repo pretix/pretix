@@ -1,0 +1,5 @@
+{% load i18n %}{% blocktrans with bank=settings.bank_details code=order.full_code %}
+Please transfer the full amount to the following bank account.
+
+Reference: {{ code }}
+{{ bank }}{% endblocktrans %}

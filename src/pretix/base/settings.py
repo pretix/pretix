@@ -4,6 +4,7 @@ import decimal
 
 import dateutil.parser
 from django.db.models import Model
+from django.conf import settings
 from versions.models import Versionable
 
 
@@ -14,6 +15,7 @@ DEFAULTS = {
     'attendee_names_required': 'False',
     'reservation_time': '30',
     'last_order_modification_date': None,
+    'mail_from': settings.MAIL_FROM,
 }
 
 

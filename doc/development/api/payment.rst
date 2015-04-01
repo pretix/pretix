@@ -77,6 +77,8 @@ The provider class
 
    .. automethod:: checkout_perform
 
+   .. automethod:: order_pending_mail_render
+
    .. automethod:: order_pending_render
 
       This is an abstract method, you **must** override this!

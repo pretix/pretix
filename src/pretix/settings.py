@@ -193,7 +193,9 @@ LOGGING = {
     },
 }
 
+MAIL_FROM = 'pretix@localhost'
+
 try:
-    from local_settings import *  # NOQA
+    from .local_settings import *  # NOQA
 except ImportError:
     pass
