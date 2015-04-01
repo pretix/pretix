@@ -39,9 +39,9 @@ class QuestionsForm(forms.Form):
 
         super().__init__(*args, **kwargs)
 
-        if item.admission and event.settings.attendee_names_asked == 'True':
+        if item.admission and event.settings.attendee_names_asked:
             self.fields['attendee_name'] = forms.CharField(
-                max_length=255, required=(event.settings.attendee_names_required == 'True'),
+                max_length=255, required=event.settings.attendee_names_required,
                 label=_('Attendee name'),
                 initial=(cartpos.attendee_name if cartpos else orderpos.attendee_name)
             )

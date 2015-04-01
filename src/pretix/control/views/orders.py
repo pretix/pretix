@@ -76,7 +76,7 @@ class OrderDetail(EventPermissionRequiredMixin, OrderView):
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
         def keyfunc(pos):
-            if ((pos.item.admission and self.request.event.settings.attendee_names_asked == 'True')
+            if ((pos.item.admission and self.request.event.settings.attendee_names_asked)
                     or pos.item.questions.all()):
                 return pos.id, "", "", ""
             return "", pos.item_id, pos.variation_id, pos.price

@@ -183,7 +183,7 @@ class LocalRegistrationForm(forms.Form):
     def __init__(self, request, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.request = request
-        self.fields['email'].required = (request.event.settings.user_mail_required == 'True')
+        self.fields['email'].required = request.event.settings.user_mail_required
 
     def clean(self):
         password1 = self.cleaned_data.get('password')
