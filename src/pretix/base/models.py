@@ -362,32 +362,16 @@ class Event(Versionable):
     :param slug: A short, alphanumeric, all-lowercase name for use in URLs. The slug has to
                  be unique among the events of the same organizer.
     :type slug: str
-    :param locale: This events default locale
-    :type locale: str
-    :param timezone: The timezone this event takes place in (or is being described in)
-    :type timezone: str
     :param currency: The currency of all prices and payments of this event
     :type currency: str
     :param date_from: The datetime this event starts
     :type date_from: datetime
     :param date_to: The datetime this event ends
     :type date_to: datetime
-    :param show_date_to: If ``False``, the ``date_to`` value will not be shown to the
-                         user and the event will be listed only with it's start date.
-    :type show_date_to: bool
-    :param show_times: If ``False``, ``date_from`` and ``date_to`` will only be displayed
-                       as dates, without a time of day.
-    :type show_times: bool
     :param presale_start: No tickets will be sold before this date.
     :type presale_start: datetime
     :param presale_end: No tickets will be sold before this date.
     :type presale_end: datetime
-    :param payment_term_days: The number of days in which an order has to be
-                              paid after it has been submitted.
-    :type payment_term_days: int
-    :param payment_term_last: The day all orders must be paid by, no matter when
-                              the order was placed.
-    :type payment_term_last: datetime
     :param plugins: A comma-separated list of plugin names that are active for this
                     event.
     :type plugins: str
@@ -412,29 +396,12 @@ class Event(Versionable):
     )
     permitted = models.ManyToManyField(User, through='EventPermission',
                                        related_name="events",)
-    locale = models.CharField(max_length=10,
-                              choices=settings.LANGUAGES,
-                              verbose_name=_("Default locale"),
-                              default=settings.LANGUAGE_CODE)
-    timezone = models.CharField(max_length=100,
-                                default=settings.TIME_ZONE,
-                                verbose_name=_('Default timezone'))
     currency = models.CharField(max_length=10,
                                 verbose_name=_("Default currency"),
                                 default=settings.DEFAULT_CURRENCY)
     date_from = models.DateTimeField(verbose_name=_("Event start time"))
     date_to = models.DateTimeField(null=True, blank=True,
                                    verbose_name=_("Event end time"))
-    show_date_to = models.BooleanField(
-        default=True,
-        verbose_name=_("Show event end date"),
-        help_text=_("If disabled, only event's start date will be displayed to the public."),
-    )
-    show_times = models.BooleanField(
-        default=True,
-        verbose_name=_("Show dates with time"),
-        help_text=_("If disabled, the event's start and end date will be displayed without the time of day."),
-    )
     presale_end = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("End of presale"),
@@ -444,16 +411,6 @@ class Event(Versionable):
         null=True, blank=True,
         verbose_name=_("Start of presale"),
         help_text=_("No products will be sold before this date."),
-    )
-    payment_term_days = models.PositiveIntegerField(
-        default=14,
-        verbose_name=_("Payment term in days"),
-        help_text=_("The number of days after placing an order the user has to pay to preserve his reservation."),
-    )
-    payment_term_last = models.DateTimeField(
-        null=True, blank=True,
-        verbose_name=_("Last date of payments"),
-        help_text=_("The last date any payments are accepted. This has precedence over the number of days configured above.")
     )
     plugins = models.TextField(
         null=True, blank=True,
@@ -498,7 +455,7 @@ class Event(Versionable):
         to the current locale and to the ``show_times`` setting. Returns an empty string
         if ``show_date_to`` is ``False``.
         """
-        if not self.show_date_to:
+        if not self.settings.get('show_date_to', as_type=bool):
             return ""
         return _date(
             self.date_to,

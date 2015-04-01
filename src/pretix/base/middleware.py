@@ -33,7 +33,7 @@ class LocaleMiddleware(BaseLocaleMiddleware):
         if request.user.is_authenticated():
             tzname = request.user.timezone
         if hasattr(request, 'event'):
-            tzname = request.event.timezone
+            tzname = request.event.settings.timezone
         if tzname:
             try:
                 timezone.activate(pytz.timezone(tzname))
@@ -72,7 +72,7 @@ def get_language_from_session_or_cookie(request) -> str:
 
 def get_language_from_event(request) -> str:
     if hasattr(request, 'event'):
-        lang_code = request.event.locale
+        lang_code = request.event.settings.locale
         try:
             return get_supported_language_variant(lang_code)
         except LookupError:

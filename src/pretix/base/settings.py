@@ -37,6 +37,14 @@ DEFAULTS = {
         'default': None,
         'type': datetime,
     },
+    'timezone': {
+        'default': settings.TIME_ZONE,
+        'type': str
+    },
+    'locale': {
+        'default': settings.LANGUAGE_CODE,
+        'type': str
+    },
     'show_date_to': {
         'default': 'True',
         'type': bool
@@ -50,7 +58,7 @@ DEFAULTS = {
         'type': bool
     },
     'last_order_modification_date': {
-        'default': 'None',
+        'default': None,
         'type': datetime
     },
     'mail_from': {

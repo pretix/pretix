@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import transaction
@@ -394,9 +394,9 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
         total = sum([c.price for c in cartpos])
         payment_fee = self.payment_provider.calculate_fee(total)
         total += payment_fee
-        expires = [dt + timedelta(days=self.request.event.payment_term_days)]
-        if self.request.event.payment_term_last:
-            expires.append(self.request.event.payment_term_last)
+        expires = [dt + timedelta(days=self.request.event.settings.get('payment_term_days', as_type=int))]
+        if self.request.event.settings.get('payment_term_last'):
+            expires.append(self.request.event.settings.get('payment_term_last', as_type=datetime))
         order = Order.objects.create(
             status=Order.STATUS_PENDING,
             event=self.request.event,

@@ -88,7 +88,7 @@ class EventAdmin(admin.ModelAdmin):
     inlines = [EventPermissionInline]
     list_display = ('name', 'slug', 'organizer', 'date_from')
     search_fields = ('name', 'slug')
-    list_filter = ('date_from', 'locale', 'currency')
+    list_filter = ('date_from', 'currency')
 
 
 class PropertyValueInline(admin.StackedInline):
