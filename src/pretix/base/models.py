@@ -15,6 +15,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import date as _date
 from django.core.validators import RegexValidator
+from pretix.base.i18n import I18nCharField, I18nTextField
 from pretix.base.settings import SettingsProxy
 import six
 from versions.models import Versionable as BaseVersionable
@@ -379,8 +380,10 @@ class Event(Versionable):
 
     organizer = VersionedForeignKey(Organizer, related_name="events",
                                     on_delete=models.PROTECT)
-    name = models.CharField(max_length=200,
-                            verbose_name=_("Name"))
+    name = I18nCharField(
+        max_length=200,
+        verbose_name=_("Name"),
+    )
     slug = models.SlugField(
         max_length=50, db_index=True,
         help_text=_(
@@ -424,7 +427,7 @@ class Event(Versionable):
         ordering = ("date_from", "name")
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def save(self, *args, **kwargs):
         obj = super().save(*args, **kwargs)
@@ -594,7 +597,7 @@ class Property(Versionable):
         Event,
         related_name="properties",
     )
-    name = models.CharField(
+    name = I18nCharField(
         max_length=250,
         verbose_name=_("Property name"),
     )
@@ -604,7 +607,7 @@ class Property(Versionable):
         verbose_name_plural = _("Product properties")
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -635,7 +638,7 @@ class PropertyValue(Versionable):
         on_delete=models.CASCADE,
         related_name="values"
     )
-    value = models.CharField(
+    value = I18nCharField(
         max_length=250,
         verbose_name=_("Value"),
     )
@@ -704,7 +707,7 @@ class Question(Versionable):
         Event,
         related_name="questions",
     )
-    question = models.TextField(
+    question = I18nTextField(
         verbose_name=_("Question"),
     )
     type = models.CharField(
@@ -722,7 +725,7 @@ class Question(Versionable):
         verbose_name_plural = _("Questions")
 
     def __str__(self):
-        return self.question
+        return str(self.question)
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -777,20 +780,20 @@ class Item(Versionable):
         blank=True, null=True,
         verbose_name=_("Category"),
     )
-    name = models.CharField(
+    name = I18nCharField(
         max_length=255,
-        verbose_name=_("Item name")
+        verbose_name=_("Item name"),
     )
     active = models.BooleanField(
         default=True,
         verbose_name=_("Active"),
     )
-    short_description = models.TextField(
+    short_description = I18nTextField(
         verbose_name=_("Short description"),
         help_text=_("This is shown below the product name in lists."),
         null=True, blank=True,
     )
-    long_description = models.TextField(
+    long_description = I18nTextField(
         verbose_name=_("Long description"),
         null=True, blank=True,
     )
@@ -839,7 +842,7 @@ class Item(Versionable):
         verbose_name_plural = _("Products")
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

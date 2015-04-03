@@ -2,7 +2,7 @@
 {% for line in cart.positions %}
     <div class="row-fluid cart-row">
         <div class="col-md-4 col-xs-6">
-            <strong>{{ line.item }}</strong>
+            <strong>{{ line.item.name }}</strong>
             {% if line.variation %}
                 – {{ line.variation }}
             {% endif %}

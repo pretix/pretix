@@ -17,7 +17,7 @@ class EventMiddlewareTest(BrowserTest):
 
     def test_event_header(self):
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        self.assertIn(self.event.name, self.driver.find_element_by_css_selector("h1").text)
+        self.assertIn(str(self.event.name), self.driver.find_element_by_css_selector("h1").text)
 
     def test_not_found(self):
         resp = self.client.get('%s/%s/%s/' % (self.live_server_url, 'foo', 'bar'))

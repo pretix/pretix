@@ -80,7 +80,7 @@ class VariationDict(dict):
         ]
 
     def __str__(self):
-        return " – ".join([v.value for v in self.ordered_values()])
+        return " – ".join([str(v.value) for v in self.ordered_values()])
 
     def copy(self) -> "VariationDict":
         """

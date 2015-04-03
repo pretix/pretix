@@ -104,15 +104,15 @@ class PropertiesTest(ItemFormTest):
         self.driver.get('%s/control/event/%s/%s/properties/add' % (
             self.live_server_url, self.orga1.slug, self.event1.slug
         ))
-        self.driver.find_element_by_css_selector("#id_name").send_keys('Size')
-        self.driver.find_element_by_name("values-0-value").send_keys('S')
-        self.driver.find_element_by_name("values-1-value").send_keys('M')
+        self.driver.find_element_by_css_selector("#id_name_0").send_keys('Size')
+        self.driver.find_element_by_name("values-0-value_0").send_keys('S')
+        self.driver.find_element_by_name("values-1-value_0").send_keys('M')
         self.scroll_and_click(self.driver.find_element_by_class_name("btn-save"))
         self.driver.find_element_by_class_name("alert-success")
         self.assertIn("Size", self.driver.find_element_by_css_selector("#page-wrapper table").text)
         self.driver.find_element_by_partial_link_text("Size").click()
-        self.assertEqual("S", self.driver.find_element_by_name("values-0-value").get_attribute("value"))
-        self.assertEqual("M", self.driver.find_element_by_name("values-1-value").get_attribute("value"))
+        self.assertEqual("S", self.driver.find_element_by_name("values-0-value_0").get_attribute("value"))
+        self.assertEqual("M", self.driver.find_element_by_name("values-1-value_0").get_attribute("value"))
 
     @unittest.skipIf('TRAVIS' in os.environ, 'See CategoriesTest.test_sort for details.')
     def test_update(self):
@@ -122,18 +122,18 @@ class PropertiesTest(ItemFormTest):
         self.driver.get('%s/control/event/%s/%s/properties/%s/' % (
             self.live_server_url, self.orga1.slug, self.event1.slug, c.identity
         ))
-        self.driver.find_element_by_css_selector("#id_name").clear()
-        self.driver.find_element_by_css_selector("#id_name").send_keys('Color')
+        self.driver.find_element_by_css_selector("#id_name_0").clear()
+        self.driver.find_element_by_css_selector("#id_name_0").send_keys('Color')
         self.driver.find_elements_by_css_selector("div.form-group button.btn-danger")[0].click()
-        self.scroll_into_view(self.driver.find_element_by_name("values-1-value"))
-        self.driver.find_element_by_name("values-1-value").clear()
-        self.driver.find_element_by_name("values-1-value").send_keys('red')
+        self.scroll_into_view(self.driver.find_element_by_name("values-1-value_0"))
+        self.driver.find_element_by_name("values-1-value_0").clear()
+        self.driver.find_element_by_name("values-1-value_0").send_keys('red')
         self.driver.find_element_by_css_selector("button[data-formset-add]").click()
-        self.driver.find_element_by_name("values-2-value").send_keys('blue')
+        self.driver.find_element_by_name("values-2-value_0").send_keys('blue')
         self.driver.find_element_by_class_name("btn-save").click()
         self.driver.find_element_by_class_name("alert-success")
-        self.assertEqual("red", self.driver.find_element_by_name("values-0-value").get_attribute("value"))
-        self.assertEqual("blue", self.driver.find_element_by_name("values-1-value").get_attribute("value"))
+        self.assertEqual("red", self.driver.find_element_by_name("values-0-value_0").get_attribute("value"))
+        self.assertEqual("blue", self.driver.find_element_by_name("values-1-value_0").get_attribute("value"))
 
     def test_delete(self):
         c = Property.objects.create(event=self.event1, name="Size")
@@ -151,7 +151,7 @@ class QuestionsTest(ItemFormTest):
         self.driver.get('%s/control/event/%s/%s/questions/add' % (
             self.live_server_url, self.orga1.slug, self.event1.slug
         ))
-        self.driver.find_element_by_name("question").send_keys('What is your shoe size?')
+        self.driver.find_element_by_name("question_0").send_keys('What is your shoe size?')
         Select(self.driver.find_element_by_name("type")).select_by_value('N')
         self.driver.find_element_by_class_name("btn-save").click()
         self.driver.find_element_by_class_name("alert-success")
@@ -162,8 +162,8 @@ class QuestionsTest(ItemFormTest):
         self.driver.get('%s/control/event/%s/%s/questions/%s/' % (
             self.live_server_url, self.orga1.slug, self.event1.slug, c.identity
         ))
-        self.driver.find_element_by_name("question").clear()
-        self.driver.find_element_by_name("question").send_keys('How old are you?')
+        self.driver.find_element_by_name("question_0").clear()
+        self.driver.find_element_by_name("question_0").send_keys('How old are you?')
         self.scroll_and_click(self.driver.find_element_by_class_name("btn-save"))
         self.driver.find_element_by_class_name("alert-success")
         self.assertIn("How old", self.driver.find_element_by_css_selector("#page-wrapper table").text)

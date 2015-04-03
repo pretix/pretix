@@ -21,21 +21,19 @@ class ItemVariationsTest(TestCase):
             organizer=o, name='Dummy', slug='dummy',
             date_from=now(),
         )
-        p = Property.objects.create(event=cls.event, name='Size')
-        PropertyValue.objects.create(prop=p, value='S')
-        PropertyValue.objects.create(prop=p, value='M')
-        PropertyValue.objects.create(prop=p, value='L')
-        p = Property.objects.create(event=cls.event, name='Color')
-        PropertyValue.objects.create(prop=p, value='black')
-        PropertyValue.objects.create(prop=p, value='blue')
+        cls.p_size = Property.objects.create(event=cls.event, name='Size')
+        cls.pv_size_s = PropertyValue.objects.create(prop=cls.p_size, value='S')
+        cls.pv_size_m = PropertyValue.objects.create(prop=cls.p_size, value='M')
+        PropertyValue.objects.create(prop=cls.p_size, value='L')
+        cls.p_color = Property.objects.create(event=cls.event, name='Color')
+        cls.pv_color_black = PropertyValue.objects.create(prop=cls.p_color, value='black')
+        PropertyValue.objects.create(prop=cls.p_color, value='blue')
 
     def test_variationdict(self):
         i = Item.objects.create(event=self.event, name='Dummy')
-        p = Property.objects.get(event=self.event, name='Size')
-        i.properties.add(p)
+        i.properties.add(self.p_size)
         iv = ItemVariation.objects.create(item=i)
-        pv = PropertyValue.objects.get(prop=p, value='S')
-        iv.values.add(pv)
+        iv.values.add(self.pv_size_s)
 
         variations = i.get_all_variations()
 
@@ -46,16 +44,16 @@ class ItemVariationsTest(TestCase):
             for v in vd.relevant_values():
                 self.assertIs(type(v), PropertyValue)
 
-            if vd[p.pk] == pv:
+            if vd[self.p_size.pk] == self.pv_size_s:
                 vd1 = vd
 
         vd2 = VariationDict()
-        vd2[p.pk] = pv
+        vd2[self.p_size.pk] = self.pv_size_s
 
         self.assertEqual(vd2.identify(), vd1.identify())
         self.assertEqual(vd2, vd1)
 
-        vd2[p.pk] = PropertyValue.objects.get(prop=p, value='M')
+        vd2[self.p_size.pk] = self.pv_size_m
 
         self.assertNotEqual(vd2.identify(), vd.identify())
         self.assertNotEqual(vd2, vd1)
@@ -63,7 +61,7 @@ class ItemVariationsTest(TestCase):
         vd3 = vd2.copy()
         self.assertEqual(vd3, vd2)
 
-        vd2[p.pk] = pv
+        vd2[self.p_size.pk] = self.pv_size_s
         self.assertNotEqual(vd3, vd2)
 
         vd4 = VariationDict()
@@ -80,22 +78,21 @@ class ItemVariationsTest(TestCase):
         self.assertEqual(v[0], {})
 
         # One property, no variations
-        p = Property.objects.get(event=self.event, name='Size')
-        i.properties.add(p)
+        i.properties.add(self.p_size)
         v = i.get_all_variations()
         self.assertIs(type(v), list)
         self.assertEqual(len(v), 3)
         values = []
         for var in v:
             self.assertIs(type(var), VariationDict)
-            self.assertIn(p.pk, var)
-            self.assertIs(type(var[p.pk]), PropertyValue)
-            values.append(var[p.pk].value)
-        self.assertEqual(sorted(values), sorted(['S', 'M', 'L']))
+            self.assertIn(self.p_size.pk, var)
+            self.assertIs(type(var[self.p_size.pk]), PropertyValue)
+            values.append(var[self.p_size.pk].value)
+        self.assertEqual(sorted([str(V) for V in values]), sorted(['S', 'M', 'L']))
 
         # One property, one variation
         iv = ItemVariation.objects.create(item=i)
-        iv.values.add(PropertyValue.objects.get(prop=p, value='S'))
+        iv.values.add(self.pv_size_s)
         v = i.get_all_variations()
         self.assertIs(type(v), list)
         self.assertEqual(len(v), 3)
@@ -107,16 +104,15 @@ class ItemVariationsTest(TestCase):
                 self.assertEqual(iv.pk, var['variation'].pk)
                 values.append(var['variation'].values.all()[0].value)
                 num_variations += 1
-            elif p.pk in var:
-                self.assertIs(type(var[p.pk]), PropertyValue)
-                values.append(var[p.pk].value)
-        self.assertEqual(sorted(values), sorted(['S', 'M', 'L']))
+            elif self.p_size.pk in var:
+                self.assertIs(type(var[self.p_size.pk]), PropertyValue)
+                values.append(var[self.p_size.pk].value)
+        self.assertEqual(sorted([str(V) for V in values]), sorted(['S', 'M', 'L']))
         self.assertEqual(num_variations, 1)
 
         # Two properties, one variation
-        p2 = Property.objects.get(event=self.event, name='Color')
-        i.properties.add(p2)
-        iv.values.add(PropertyValue.objects.get(prop=p2, value='black'))
+        i.properties.add(self.p_color)
+        iv.values.add(self.pv_color_black)
         v = i.get_all_variations()
         self.assertIs(type(v), list)
         self.assertEqual(len(v), 6)
@@ -126,11 +122,11 @@ class ItemVariationsTest(TestCase):
             self.assertIs(type(var), VariationDict)
             if 'variation' in var:
                 self.assertEqual(iv.pk, var['variation'].pk)
-                values.append(sorted([ivv.value for ivv in iv.values.all()]))
-                self.assertEqual(sorted([ivv.value for ivv in iv.values.all()]), sorted(['S', 'black']))
+                values.append(sorted([str(ivv.value) for ivv in iv.values.all()]))
+                self.assertEqual(sorted([str(ivv.value) for ivv in iv.values.all()]), sorted(['S', 'black']))
                 num_variations += 1
             else:
-                values.append(sorted([pv.value for pv in var.values()]))
+                values.append(sorted([str(pv.value) for pv in var.values()]))
         self.assertEqual(sorted(values), sorted([
             ['S', 'black'],
             ['S', 'blue'],

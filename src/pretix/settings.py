@@ -112,8 +112,8 @@ LOCALE_PATHS = (
 
 from django.utils.translation import ugettext_lazy as _  # NOQA
 LANGUAGES = (
-    ('de', _('German')),
     ('en', _('English')),
+    ('de', _('German')),
 )
 
 
