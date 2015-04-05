@@ -85,12 +85,41 @@ class I18nFormField(forms.MultiValueField):
     def langcodes(self):
         return [l[0] for l in settings.LANGUAGES]
 
+    def clean(self, value):
+        found = False
+        clean_data = []
+        errors = []
+        for i, field in enumerate(self.fields):
+            try:
+                field_value = value[i]
+            except IndexError:
+                field_value = None
+            if field_value not in self.empty_values:
+                found = True
+            try:
+                clean_data.append(field.clean(field_value))
+            except forms.ValidationError as e:
+                # Collect all validation errors in a single list, which we'll
+                # raise at the end of clean(), rather than raising a single
+                # exception for the first error we encounter. Skip duplicates.
+                errors.extend(m for m in e.error_list if m not in errors)
+        if errors:
+            raise forms.ValidationError(errors)
+        if self.one_required and not found:
+            raise forms.ValidationError(self.error_messages['required'], code='required')
+
+        out = self.compress(clean_data)
+        self.validate(out)
+        self.run_validators(out)
+        return out
+
     def __init__(self, *args, **kwargs):
         fields = []
         defaults = {
             'widget': self.widget,
             'max_length': kwargs.pop('max_length', None),
         }
+        self.one_required = kwargs['required']
         kwargs['required'] = False
         defaults.update(**kwargs)
         for lngcode in self.langcodes():
@@ -102,8 +131,6 @@ class I18nFormField(forms.MultiValueField):
 
 
 class I18nFieldMixin:
-    # TODO: Formfield
-    # TODO: Correct null/blank validating
     form_class = I18nFormField
     widget = I18nTextInput
 
@@ -133,7 +160,6 @@ class I18nFieldMixin:
 
 
 class I18nCharField(I18nFieldMixin, TextField, metaclass=SubfieldBase):
-    # TODO: Check max length
     widget = I18nTextInput
 
 
