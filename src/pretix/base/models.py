@@ -548,7 +548,7 @@ class ItemCategory(Versionable):
         on_delete=models.CASCADE,
         related_name='categories',
     )
-    name = models.CharField(
+    name = I18nCharField(
         max_length=255,
         verbose_name=_("Category name"),
     )
