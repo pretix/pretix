@@ -62,7 +62,7 @@ class I18nWidget(forms.MultiWidget):
                 if value is not None and isinstance(value.data, dict) and lng in value.data
                 else None
             )
-        if not isinstance(value.data, dict):
+        if value and not isinstance(value.data, dict):
             data[0] = value.data
         return data
 

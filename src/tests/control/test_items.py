@@ -37,7 +37,7 @@ class CategoriesTest(ItemFormTest):
         self.driver.get('%s/control/event/%s/%s/categories/add' % (
             self.live_server_url, self.orga1.slug, self.event1.slug
         ))
-        self.driver.find_element_by_name("name").send_keys('Entry tickets')
+        self.driver.find_element_by_name("name_0").send_keys('Entry tickets')
         self.driver.find_element_by_class_name("btn-save").click()
         self.driver.find_element_by_class_name("alert-success")
         self.assertIn("Entry tickets", self.driver.find_element_by_css_selector("#page-wrapper table").text)
@@ -47,8 +47,8 @@ class CategoriesTest(ItemFormTest):
         self.driver.get('%s/control/event/%s/%s/categories/%s/' % (
             self.live_server_url, self.orga1.slug, self.event1.slug, c.identity
         ))
-        self.driver.find_element_by_name("name").clear()
-        self.driver.find_element_by_name("name").send_keys('T-Shirts')
+        self.driver.find_element_by_name("name_0").clear()
+        self.driver.find_element_by_name("name_0").send_keys('T-Shirts')
         self.scroll_and_click(self.driver.find_element_by_class_name("btn-save"))
         self.driver.find_element_by_class_name("alert-success")
         self.assertIn("T-Shirts", self.driver.find_element_by_css_selector("#page-wrapper table").text)
