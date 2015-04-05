@@ -19,7 +19,7 @@
 			<tr>
 				<td><strong><a href="
 				{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.identity %}">{{ i.name }}</a></strong></td>
-				<td>{% if i.category %}{{ i.category }}{% endif %}</td>
+				<td>{% if i.category %}{{ i.category.name }}{% endif %}</td>
 			</tr>
 			{% endfor %}
 		</tbody>

@@ -562,7 +562,7 @@ class ItemCategory(Versionable):
         ordering = ('position', 'id')
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
