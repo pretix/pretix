@@ -2,7 +2,6 @@ from collections import OrderedDict
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.utils.functional import cached_property
-from django.views.generic.edit import UpdateView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django import forms
@@ -15,6 +14,7 @@ from pretix.base.forms import VersionedModelForm, SettingsForm
 from pretix.base.models import Event
 from pretix.base.signals import register_payment_providers
 from pretix.control.permissions import EventPermissionRequiredMixin
+from . import UpdateView
 
 
 class EventUpdateForm(VersionedModelForm):
@@ -71,9 +71,13 @@ class EventSettingsForm(SettingsForm):
         choices=((a, a) for a in common_timezones),
         label=_("Default timezone"),
     )
+    locales = forms.MultipleChoiceField(
+        choices=settings.LANGUAGES,
+        label=_("Available langauges"),
+    )
     locale = forms.ChoiceField(
         choices=settings.LANGUAGES,
-        label=_("Default locale"),
+        label=_("Default language"),
     )
     user_mail_required = forms.BooleanField(
         label=_("Require e-mail adresses"),

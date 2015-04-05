@@ -4,7 +4,7 @@ from django.forms import BooleanField, ModelForm
 from django.utils.functional import cached_property
 
 from django.views.generic import ListView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import DeleteView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.core.urlresolvers import resolve, reverse
@@ -12,14 +12,15 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import redirect
 from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.forms import VersionedModelForm
+from pretix.base.forms import VersionedModelForm, I18nModelForm
 
 from pretix.base.models import (
     Item, ItemCategory, Property, ItemVariation, PropertyValue, Question, Quota,
     Versionable)
 from pretix.control.permissions import EventPermissionRequiredMixin, event_permission_required
-from pretix.control.views.forms import TolerantFormsetModelForm, VariationsField
+from pretix.control.views.forms import TolerantFormsetModelForm, VariationsField, I18nInlineFormSet
 from pretix.control.signals import restriction_formset
+from . import UpdateView, CreateView
 
 
 class ItemList(ListView):
@@ -215,6 +216,7 @@ class PropertyUpdate(EventPermissionRequiredMixin, UpdateView):
         formsetclass = inlineformset_factory(
             Property, PropertyValue,
             form=PropertyValueForm,
+            formset=I18nInlineFormSet,
             can_order=True,
             extra=0,
         )
@@ -269,6 +271,7 @@ class PropertyCreate(EventPermissionRequiredMixin, CreateView):
         formsetclass = inlineformset_factory(
             Property, PropertyValue,
             form=PropertyValueForm,
+            formset=I18nInlineFormSet,
             can_order=True,
             extra=3,
         )
@@ -440,7 +443,7 @@ class QuotaList(ListView):
         ).prefetch_related("items")
 
 
-class QuotaForm(ModelForm):
+class QuotaForm(I18nModelForm):
 
     def __init__(self, **kwargs):
         items = kwargs['items']

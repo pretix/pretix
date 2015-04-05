@@ -3,6 +3,7 @@ from itertools import product
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.forms import BaseInlineFormSet
 from django.forms.widgets import flatatt
 from django.utils.encoding import force_text
 from django.utils.html import format_html
@@ -11,6 +12,20 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.base.forms import VersionedModelForm
 
 from pretix.base.models import ItemVariation, Item
+
+
+class I18nInlineFormSet(BaseInlineFormSet):
+    """
+    This is equivalent to a normal BaseInlineFormset, but cares for the special needs
+    of I18nForms (see there for more information).
+    """
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event', None)
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['event'] = self.event
+        return super()._construct_form(i, **kwargs)
 
 
 class TolerantFormsetModelForm(VersionedModelForm):

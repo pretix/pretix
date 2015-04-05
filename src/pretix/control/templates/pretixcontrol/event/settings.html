@@ -19,6 +19,7 @@
         </fieldset>
         <fieldset>
             <legend>{% trans "Display settings" %}</legend>
+            {% bootstrap_field sform.locales layout="horizontal" %}
             {% bootstrap_field sform.locale layout="horizontal" %}
             {% bootstrap_field sform.timezone layout="horizontal" %}
             {% bootstrap_field sform.show_date_to layout="horizontal" %}

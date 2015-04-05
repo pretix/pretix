@@ -1,11 +1,25 @@
 from django.forms.models import ModelFormMetaclass, BaseModelForm
 from django import forms
 from django.utils import six
+from pretix.base.i18n import I18nFormField
 from versions.models import Versionable
 from django.utils.translation import ugettext_lazy as _
 
 
-class VersionedBaseModelForm(BaseModelForm):
+class BaseI18nModelForm(BaseModelForm):
+    """
+    This is a helperclass to construct I18nModelForm
+    """
+    def __init__(self, *args, **kwargs):
+        event = kwargs.pop('event', None)
+        super().__init__(*args, **kwargs)
+        if event:
+            for k, field in self.fields.items():
+                if isinstance(field, I18nFormField):
+                    field.widget.enabled_langcodes = event.settings.get('locales')
+
+
+class VersionedBaseModelForm(BaseI18nModelForm):
     """
     This is a helperclass to construct VersionedModelForm
     """
@@ -18,11 +32,22 @@ class VersionedBaseModelForm(BaseModelForm):
 
 class VersionedModelForm(six.with_metaclass(ModelFormMetaclass, VersionedBaseModelForm)):
     """
-    This is a modified version of Django's ModelForm which differs from ModelForm in
+    This is a modified version of I18nModelForm which differs from I18nModelForm in
     only one way: It executes the .clone() method of an object before saving it back to
     the database, if the model is a sub-class of versions.models.Versionable. You can
     safely use this as a base class for all your model forms, it will work out correctly
     with both versioned and non-versioned models.
+    """
+    pass
+
+
+class I18nModelForm(six.with_metaclass(ModelFormMetaclass, BaseI18nModelForm)):
+    """
+    This is a modified version of Django's ModelForm which differs from ModelForm in
+    only one way: The constructor takes one additional optional argument ``event``
+    which may be given an :pyclass:`pretix.base.models.Event` instance. If given, this
+    instance is used to select the visible languages in all I18nFormFields of the form. If
+    not given, all languages will be displayed.
     """
     pass
 

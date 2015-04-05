@@ -41,6 +41,10 @@ DEFAULTS = {
         'default': settings.TIME_ZONE,
         'type': str
     },
+    'locales': {
+        'default': json.dumps([settings.LANGUAGE_CODE]),
+        'type': list
+    },
     'locale': {
         'default': settings.LANGUAGE_CODE,
         'type': str

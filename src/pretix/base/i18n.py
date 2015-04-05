@@ -4,10 +4,18 @@ from django.conf import settings
 from django.db.models import TextField, SubfieldBase
 from django import forms
 from django.utils import translation
+from django.utils.safestring import mark_safe
 
 
-class LazyI18String:
+class LazyI18nString:
+    """
+    This represents an internationalized string that is/was/will be stored in the database.
+    """
+
     def __init__(self, data):
+        """
+        Input data should be a dictionary which maps language codes to content.
+        """
         self.data = data
         if isinstance(self.data, str) and self.data is not None:
             try:
@@ -18,6 +26,11 @@ class LazyI18String:
                 self.data = j
 
     def __str__(self):
+        """
+        Evaluate the given string with respect to the currently active locale.
+        This will rather return you a string in a wrong language than give you an
+        empty value.
+        """
         if self.data is None:
             return ""
         if isinstance(self.data, dict):
@@ -41,14 +54,19 @@ class LazyI18String:
 
 
 class I18nWidget(forms.MultiWidget):
+    """
+    The default form widget for I18nCharField and I18nTextField. It makes
+    use of Django's MultiWidget mechanism and does some magic to save you
+    time.
+    """
     widget = forms.TextInput
 
-    def langcodes(self):
-        return [l[0] for l in settings.LANGUAGES]
-
-    def __init__(self, attrs=None):
+    def __init__(self, langcodes, field, attrs=None):
         widgets = []
-        for lng in self.langcodes():
+        self.langcodes = langcodes
+        self.enabled_langcodes = langcodes
+        self.field = field
+        for lng in self.langcodes:
             a = copy.copy(attrs) or {}
             a['data-lang'] = lng
             widgets.append(self.widget(attrs=a))
@@ -56,7 +74,7 @@ class I18nWidget(forms.MultiWidget):
 
     def decompress(self, value):
         data = []
-        for lng in self.langcodes():
+        for lng in self.langcodes:
             data.append(
                 value.data[lng]
                 if value is not None and isinstance(value.data, dict) and lng in value.data
@@ -65,6 +83,29 @@ class I18nWidget(forms.MultiWidget):
         if value and not isinstance(value.data, dict):
             data[0] = value.data
         return data
+
+    def render(self, name, value, attrs=None):
+        if self.is_localized:
+            for widget in self.widgets:
+                widget.is_localized = self.is_localized
+        # value is a list of values, each corresponding to a widget
+        # in self.widgets.
+        if not isinstance(value, list):
+            value = self.decompress(value)
+        output = []
+        final_attrs = self.build_attrs(attrs)
+        id_ = final_attrs.get('id', None)
+        for i, widget in enumerate(self.widgets):
+            if self.langcodes[i] not in self.enabled_langcodes:
+                continue
+            try:
+                widget_value = value[i]
+            except IndexError:
+                widget_value = None
+            if id_:
+                final_attrs = dict(final_attrs, id='%s_%s' % (id_, i))
+            output.append(widget.render(name + '_%s' % i, widget_value, final_attrs))
+        return mark_safe(self.format_output(output))
 
     def format_output(self, rendered_widgets):
         return '<div class="i18n-form-group">%s</div>' % super().format_output(rendered_widgets)
@@ -79,16 +120,18 @@ class I18nTextarea(I18nWidget):
 
 
 class I18nFormField(forms.MultiValueField):
+    """
+    The form field that is used by I18nCharField and I18nTextField. It makes use
+    of Django's MultiValueField mechanism to create one sub-field per available
+    language.
+    """
 
     def compress(self, data_list):
-        langcodes = self.langcodes()
+        langcodes = self.langcodes
         data = {}
         for i, value in enumerate(data_list):
             data[langcodes[i]] = value
-        return LazyI18String(data)
-
-    def langcodes(self):
-        return [l[0] for l in settings.LANGUAGES]
+        return LazyI18nString(data)
 
     def clean(self, value):
         found = False
@@ -124,10 +167,14 @@ class I18nFormField(forms.MultiValueField):
             'widget': self.widget,
             'max_length': kwargs.pop('max_length', None),
         }
+        self.langcodes = kwargs.pop('langcodes', [l[0] for l in settings.LANGUAGES])
         self.one_required = kwargs['required']
         kwargs['required'] = False
+        kwargs['widget'] = kwargs['widget'](
+            langcodes=self.langcodes, field=self
+        )
         defaults.update(**kwargs)
-        for lngcode in self.langcodes():
+        for lngcode in self.langcodes:
             defaults['label'] = '%s (%s)' % (defaults.get('label'), lngcode)
             fields.append(forms.CharField(**defaults))
         super().__init__(
@@ -144,15 +191,15 @@ class I18nFieldMixin:
         super().__init__(*args, **kwargs)
 
     def to_python(self, value):
-        if isinstance(value, LazyI18String):
+        if isinstance(value, LazyI18nString):
             return value
-        return LazyI18String(value)
+        return LazyI18nString(value)
 
     def get_prep_value(self, value):
-        if isinstance(value, LazyI18String):
+        if isinstance(value, LazyI18nString):
             value = value.data
         if isinstance(value, dict):
-            return json.dumps(value, sort_keys=True)
+            return json.dumps({k: v for k, v in value.items() if v}, sort_keys=True)
         return value
 
     def get_prep_lookup(self, lookup_type, value):
@@ -165,8 +212,16 @@ class I18nFieldMixin:
 
 
 class I18nCharField(I18nFieldMixin, TextField, metaclass=SubfieldBase):
+    """
+    A CharField which takes internationalized data. Internally, a TextField dabase
+    field is used to store JSON. If you interact with this field, you will work
+    with LazyI18nString instances.
+    """
     widget = I18nTextInput
 
 
 class I18nTextField(I18nFieldMixin, TextField, metaclass=SubfieldBase):
+    """
+    Like I18nCharField, but for TextFields.
+    """
     widget = I18nTextarea
