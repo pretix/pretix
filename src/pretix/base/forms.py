@@ -47,5 +47,5 @@ class SettingsForm(forms.Form):
             value = self.cleaned_data[name]
             if value is None:
                 del self.obj.settings[name]
-            elif self.obj.settings.get(value, as_type=type(value)) != value:
+            elif self.obj.settings.get(name, as_type=type(value)) != value:
                 self.obj.settings.set(name, value)
