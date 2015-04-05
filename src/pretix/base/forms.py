@@ -1,3 +1,5 @@
+import copy
+from django.db import models
 from django.forms.models import ModelFormMetaclass, BaseModelForm
 from django import forms
 from django.utils import six
@@ -23,10 +25,26 @@ class VersionedBaseModelForm(BaseI18nModelForm):
     """
     This is a helperclass to construct VersionedModelForm
     """
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance', None)
+        self.original_instance = copy.copy(instance) if instance else None
+        super().__init__(*args, **kwargs)
+
     def save(self, commit=True):
         if self.instance.pk is not None and isinstance(self.instance, Versionable):
-            if self.has_changed():
-                self.instance = self.instance.clone()
+            if self.has_changed() and self.original_instance:
+                new = self.instance
+                old = self.original_instance
+                clone = old.clone()
+                for f in type(self.instance)._meta.get_fields():
+                    if f.name not in (
+                        'id', 'identity', 'version_start_date', 'version_end_date',
+                        'version_birth_date'
+                    ) and not isinstance(f, (
+                        models.ManyToOneRel, models.ManyToManyRel, models.ManyToManyField
+                    )):
+                        setattr(clone, f.name, getattr(new, f.name))
+                self.instance = clone
         return super().save(commit)
 
 
