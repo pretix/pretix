@@ -64,6 +64,9 @@ class I18nWidget(forms.MultiWidget):
             )
         return data
 
+    def format_output(self, rendered_widgets):
+        return '<div class="i18n-form-group">%s</div>' % super().format_output(rendered_widgets)
+
 
 class I18nTextInput(I18nWidget):
     widget = forms.TextInput

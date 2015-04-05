@@ -67,6 +67,21 @@ td > .form-group > .checkbox {
     padding-left: 0;
 }
 
+.i18n-form-group input,
+.i18n-form-group textarea {
+    .border-top-radius(0px);
+    .border-bottom-radius(0px);
+    border-top-width: 0;
+
+    &:first-child {
+        .border-top-radius(@input-border-radius);
+        border-top-width: 1px;
+    }
+    &:last-child {
+        .border-bottom-radius(@input-border-radius);
+    }
+}
+
 @media (min-width: @screen-sm-min) {
     .variation-matrix > tbody > tr > td {
         line-height: 34px;
