@@ -59,9 +59,11 @@ class I18nWidget(forms.MultiWidget):
         for lng in self.langcodes():
             data.append(
                 value.data[lng]
-                if value is not None and value.data is not None and lng in value.data
+                if value is not None and isinstance(value.data, dict) and lng in value.data
                 else None
             )
+        if not isinstance(value.data, dict):
+            data[0] = value.data
         return data
 
     def format_output(self, rendered_widgets):
