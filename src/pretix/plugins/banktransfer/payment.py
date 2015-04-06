@@ -19,7 +19,6 @@ class BankTransfer(BasePaymentProvider):
                  forms.CharField(
                      widget=forms.Textarea,
                      label=_('Bank account details'),
-                     required=False
                  ))
             ]
         )

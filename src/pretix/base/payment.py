@@ -91,6 +91,9 @@ class BasePaymentProvider:
                          ))
                     ]
                 )
+
+        .. WARNING:: It is highly discouraged to alter the ``_enabled`` field of the default
+                     implementation.
         """
         return OrderedDict([
             ('_enabled',

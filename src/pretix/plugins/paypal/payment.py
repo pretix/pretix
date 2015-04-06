@@ -35,17 +35,14 @@ class Paypal(BasePaymentProvider):
                          ('live', 'Live'),
                          ('sandbox', 'Sandbox'),
                      ),
-                     required=False
                  )),
                 ('client_id',
                  forms.CharField(
                      label=_('Client ID'),
-                     required=False
                  )),
                 ('secret',
                  forms.CharField(
                      label=_('Secret'),
-                     required=False
                  ))
             ]
         )

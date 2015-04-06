@@ -23,12 +23,10 @@ class Stripe(BasePaymentProvider):
                 ('secret_key',
                  forms.CharField(
                      label=_('Secret key'),
-                     required=False
                  )),
                 ('publishable_key',
                  forms.CharField(
                      label=_('Publishable key'),
-                     required=False
                  ))
             ]
         )

@@ -196,6 +196,34 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
         }) + '?success=true'
 
 
+class PaymentMethodForm(SettingsForm):
+    """
+    This is a SettingsForm, but if fields are set to required=True, validation
+    errors are only raised if the payment method is enabled.
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.settingspref = kwargs.pop('settingspref')
+        super().__init__(*args, **kwargs)
+
+    def prepare_fields(self):
+        for k, v in self.fields.items():
+            v._required = v.required
+            v.required = False
+            v.widget.is_required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        enabled = cleaned_data.get(self.settingspref + '_enabled') == 'True'
+        if not enabled:
+            return
+        for k, v in self.fields.items():
+            val = cleaned_data.get(k)
+            if v._required and (val is None or val == ""):
+                print(enabled, k, v)
+                self.add_error(k, _('This field is required.'))
+
+
 class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
     model = Event
     context_object_name = 'event'
@@ -211,8 +239,9 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
         responses = register_payment_providers.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
-            provider.form = SettingsForm(
+            provider.form = PaymentMethodForm(
                 obj=self.request.event,
+                settingspref='payment_%s_' % provider.identifier,
                 data=(self.request.POST if self.request.method == 'POST' else None)
             )
             provider.form.fields = OrderedDict(
@@ -221,6 +250,7 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
                     for k, v in provider.settings_form_fields.items()
                 ]
             )
+            provider.form.prepare_fields()
             providers.append(provider)
         return providers
 
