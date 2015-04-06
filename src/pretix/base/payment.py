@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from decimal import Decimal
 from django import forms
+from django.contrib import messages
 
 from django.forms import Form
 from django.http import HttpRequest
@@ -299,3 +300,38 @@ class BasePaymentProvider:
         :param order: The order object
         """
         return _('Payment provider: %s' % self.verbose_name)
+
+    def order_control_refund_render(self, order: Order) -> str:
+        """
+        Will be called if the event administrator clicks an order's 'refund' button.
+        This can be used to display information *before* the order is being refunded.
+
+        It should return HTML code which should be displayed to the user. It should
+        contain information about to which extend the money will be refunded
+        automatically.
+
+        :param order: The order object
+        """
+        return '<div class="alert alert-warning">%s</div>' % _('The money can not be automatically refunded, '
+                                                               'please transfer the money back manually.')
+
+    def order_control_refund_perform(self, request: HttpRequest, order: Order) -> "bool|str":
+        """
+        Will be called if the event administrator confirms the refund.
+
+        This should transfer the money back (if possible). You can return an URL the
+        user should be redirected to if you need special behaviour or None to continue
+        with default behaviour.
+
+        On failure, you should use Django's message framework to display an error message
+        to the user.
+
+        The default implementation sets the Orders state to refunded and shows a success
+        message.
+
+        :param request: The HTTP request
+        :param order: The order object
+        """
+        order.mark_refunded()
+        messages.success(request, _('The order has been marked as refunded. Please transfer the money '
+                                    'back to the buyer manually.'))

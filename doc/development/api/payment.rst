@@ -87,6 +87,10 @@ The provider class
 
    .. automethod:: order_control_render
 
+   .. automethod:: order_control_refund_render
+
+   .. automethod:: order_control_refund_perform
+
 
 Additional views
 ----------------

@@ -91,3 +91,33 @@ class Stripe(BasePaymentProvider):
         ctx = {'request': request, 'event': self.event, 'settings': self.settings,
                'payment_info': payment_info, 'order': order}
         return template.render(ctx)
+
+    def order_control_refund_render(self, order) -> str:
+        return '<div class="alert alert-info">%s</div>' % _('The money will be automatically refunded.')
+
+    def order_control_refund_perform(self, request, order) -> "bool|str":
+        self._init_api()
+
+        if order.payment_info:
+            payment_info = json.loads(order.payment_info)
+        else:
+            payment_info = None
+
+        if not payment_info:
+            order.mark_refunded()
+            messages.warning(request, _('We were unable to transfer the money back automatically. '
+                                        'Please get in touch with the customer and transfer it back manually.'))
+            return
+
+        try:
+            ch = stripe.Charge.retrieve(payment_info['id'])
+            ch.refunds.create()
+            ch.refresh()
+        except stripe.error.StripeError:
+            order.mark_refunded()
+            messages.warning(request, _('We were unable to transfer the money back automatically. '
+                                        'Please get in touch with the customer and transfer it back manually.'))
+        else:
+            order = order.mark_refunded()
+            order.payment_info = str(ch)
+            order.save()

@@ -1555,6 +1555,16 @@ class Order(Versionable):
                 return True
         return False  # nothing there to modify
 
+    def mark_refunded(self):
+        """
+        Mark this order as refunded. This clones the order object, sets the payment status and
+        returns the cloned order object.
+        """
+        order = self.clone()
+        order.status = Order.STATUS_REFUNDED
+        order.save()
+        return order
+
     def mark_paid(self, provider=None, info=None, date=None, manual=None):
         """
         Mark this order as paid. This clones the order object, sets the payment provider,

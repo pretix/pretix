@@ -5,6 +5,10 @@
         <p>{% blocktrans trimmed %}
             This order has been paid via PayPal.
         {% endblocktrans %}</p>
+    {% elif order.status == "r" %}
+        <p>{% blocktrans trimmed %}
+            This order has been planned to be paid via PayPal and has been marked as refunded.
+        {% endblocktrans %}</p>
     {% else %}
         <p>{% blocktrans trimmed %}
             This order has been planned to be paid via PayPal, but the payment has not yet been completed.

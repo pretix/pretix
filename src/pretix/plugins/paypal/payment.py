@@ -200,3 +200,37 @@ class Paypal(BasePaymentProvider):
         ctx = {'request': request, 'event': self.event, 'settings': self.settings,
                'payment_info': payment_info, 'order': order}
         return template.render(ctx)
+
+    def order_control_refund_render(self, order) -> str:
+        return '<div class="alert alert-info">%s</div>' % _('The money will be automatically refunded.')
+
+    def order_control_refund_perform(self, request, order) -> "bool|str":
+        self.init_api()
+
+        if order.payment_info:
+            payment_info = json.loads(order.payment_info)
+        else:
+            payment_info = None
+
+        if not payment_info:
+            order.mark_refunded()
+            messages.warning(request, _('We were unable to transfer the money back automatically. '
+                                        'Please get in touch with the customer and transfer it back manually.'))
+            return
+
+        for res in payment_info['transactions'][0]['related_resources']:
+            for k, v in res.items():
+                if k == 'sale':
+                    sale = paypalrestsdk.Sale.find(v['id'])
+                    break
+
+        refund = sale.refund({})
+        if not refund.success():
+            order.mark_refunded()
+            messages.warning(request, _('We were unable to transfer the money back automatically. '
+                                        'Please get in touch with the customer and transfer it back manually.'))
+        else:
+            sale = paypalrestsdk.Payment.find(payment_info['id'])
+            order = order.mark_refunded()
+            order.payment_info = json.dumps(sale.to_dict())
+            order.save()

@@ -40,18 +40,18 @@ class OrderView(DetailView):
     def order(self):
         return self.get_object()
 
-
-class OrderDetail(EventPermissionRequiredMixin, OrderView):
-    template_name = 'pretixcontrol/order/index.html'
-    permission = 'can_view_orders'
-
     @cached_property
     def payment_provider(self):
         responses = register_payment_providers.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
-            if provider.identifier == self.object.payment_provider:
+            if provider.identifier == self.order.payment_provider:
                 return provider
+
+
+class OrderDetail(EventPermissionRequiredMixin, OrderView):
+    template_name = 'pretixcontrol/order/index.html'
+    permission = 'can_view_orders'
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -118,6 +118,10 @@ class OrderTransition(EventPermissionRequiredMixin, OrderView):
             order.payment_manual = True
             order.save()
             messages.success(self.request, _('The order has been marked as not paid.'))
+        elif self.order.status == 'p' and to == 'r':
+            ret = self.payment_provider.order_control_refund_perform(self.request, self.order)
+            if ret:
+                return redirect(ret)
         return redirect(reverse(
             'control:event.order',
             kwargs={
@@ -134,14 +138,9 @@ class OrderTransition(EventPermissionRequiredMixin, OrderView):
                 'order': self.order,
             })
         elif self.order.status == 'p' and to == 'r':
-            messages.error(self.request, _('Refunding orders is not yet implemented.'))
-            return redirect(reverse(
-                'control:event.order',
-                kwargs={
-                    'event': self.request.event.slug,
-                    'organizer': self.request.event.organizer.slug,
-                    'code': self.order.code,
-                    }
-            ))
+            return render(self.request, 'pretixcontrol/order/refund.html', {
+                'order': self.order,
+                'payment': self.payment_provider.order_control_refund_render(self.order),
+            })
         else:
             return HttpResponse(status=405)
