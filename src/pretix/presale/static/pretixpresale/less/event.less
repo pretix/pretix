@@ -1,11 +1,7 @@
 .product-row {
     border-top: 1px solid @table-border-color;
 
-    &.headline, &.simple {
-        border-top: 2px solid @table-border-color;
-    }
     &:last-child {
-        border-bottom: 2px solid @table-border-color;
     }
     p:last-child {
         margin-bottom: 0;
@@ -24,6 +20,12 @@
             color: @alert-warning-text;
         }
     }
+}
+.item-with-variations .product-row.headline, .product-row.simple {
+    border-top: 2px solid @table-border-color;
+}
+.item-with-variations:last-child {
+    border-bottom: 2px solid @table-border-color;
 }
 
 .panel-body address:last-child {

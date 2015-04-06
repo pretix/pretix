@@ -38,38 +38,54 @@
                 {% if tup.0 %}<h3>{{ tup.0.name }}</h3>{% endif %}
                 {% for item in tup.1 %}
                     {% if item.has_variations %}
-                        <div class="row-fluid product-row headline">
-                            <div class="col-md-8 col-xs-12">
-                                <strong>{{ item.name }}</strong>
-                                {% if item.short_description %}<p>{{ item.short_description }}</p>{% endif %}
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        {% for var in item.available_variations %}
-                            <div class="row-fluid product-row variation">
+                        <div class="item-with-variations">
+                            <div class="row-fluid product-row headline">
                                 <div class="col-md-8 col-xs-12">
-                                    {{ var }}
+                                    <a href="javascript:void();" data-toggle="variations">
+                                        <strong>{{ item.name }}</strong>
+                                    </a>
+                                    {% if item.short_description %}<p>{{ item.short_description }}</p>{% endif %}
                                 </div>
                                 <div class="col-md-2 col-xs-6 price">
-                                    {{ event.currency }} {{ var.price|floatformat:2 }}
-                                    {% if item.tax_rate %}
-                                        <br /><small>{% blocktrans trimmed with rate=item.tax_rate %}
-                                            incl. {{ rate }}% taxes
-                                        {% endblocktrans %}</small>
-                                    {% endif %}
+                                    {% blocktrans trimmed with minprice=item.min_price|floatformat:2 currency=event.currency %}
+                                        from {{ currency }} {{ minprice }}
+                                    {% endblocktrans %}
                                 </div>
-                                {% if var.cached_availability.0 == 100 %}
-                                    <div class="col-md-2 col-xs-6 availability-box available">
-                                        <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                max="{{ var.cached_availability.1 }}"
-                                                name="variation_{{ item.identity }}_{{ var.variation.identity }}">
-                                    </div>
-                                {% else %}
-                                    {% include "pretixpresale/event/fragment_availability.html" with avail=var.cached_availability.0 %}
-                                {% endif %}
+                                <div class="col-md-2 col-xs-6 availability-box">
+                                    <a href="javascript:void();" data-toggle="variations" class="js-only">
+                                        {% trans "Show variants" %}
+                                    </a>
+                                </div>
                                 <div class="clearfix"></div>
                             </div>
-                        {% endfor %}
+                            <div class="variations">
+                                {% for var in item.available_variations %}
+                                    <div class="row-fluid product-row variation">
+                                        <div class="col-md-8 col-xs-12">
+                                            {{ var }}
+                                        </div>
+                                        <div class="col-md-2 col-xs-6 price">
+                                            {{ event.currency }} {{ var.price|floatformat:2 }}
+                                            {% if item.tax_rate %}
+                                                <br /><small>{% blocktrans trimmed with rate=item.tax_rate %}
+                                                    incl. {{ rate }}% taxes
+                                                {% endblocktrans %}</small>
+                                            {% endif %}
+                                        </div>
+                                        {% if var.cached_availability.0 == 100 %}
+                                            <div class="col-md-2 col-xs-6 availability-box available">
+                                                <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                        max="{{ var.cached_availability.1 }}"
+                                                        name="variation_{{ item.identity }}_{{ var.variation.identity }}">
+                                            </div>
+                                        {% else %}
+                                            {% include "pretixpresale/event/fragment_availability.html" with avail=var.cached_availability.0 %}
+                                        {% endif %}
+                                        <div class="clearfix"></div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
                     {% else %}
                         <div class="row-fluid product-row simple">
                             <div class="col-md-8 col-xs-12">
