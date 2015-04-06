@@ -17,10 +17,27 @@
 			{% bootstrap_field form.type layout="horizontal" %}
 			{% bootstrap_field form.required layout="horizontal" %}
 		</fieldset>
+        <div class="alert alert-info alert-required-boolean">
+            {% blocktrans trimmed %}
+                If you mark a Yes/No question as required, it means that the user has to select Yes and No is not
+                accepted. If you want to allow both options, do not make this field required.
+            {% endblocktrans %}
+        </div>
 		<div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
             </button>
 		</div>
 	</form>
+    <script type="text/javascript">
+    $(function() {
+        function alert_required_boolean() {
+            var show = $("#id_type").val() == "B" && $("#id_required").prop("checked");
+            $(".alert-required-boolean").toggle(show);
+        }
+        $("#id_type").change(alert_required_boolean);
+        $("#id_required").change(alert_required_boolean);
+        alert_required_boolean();
+    });
+    </script>
 {% endblock %}

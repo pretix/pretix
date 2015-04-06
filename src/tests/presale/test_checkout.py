@@ -100,34 +100,6 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(cr1.answers.filter(question=q2).count(), 1)
         self.assertFalse(cr2.answers.filter(question=q2).exists())
 
-    @expectedFailure
-    def test_boolean_required_question(self):
-        """
-        Expected to fail. See https://github.com/pretix/pretix/issues/19
-        """
-        q1 = Question.objects.create(
-            event=self.event, question='Breakfast', type=Question.TYPE_BOOLEAN,
-            required=True
-        )
-        self.ticket.questions.add(q1)
-        cr1 = CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.ticket,
-            price=23, expires=now() + timedelta(minutes=10)
-        )
-        response = self.client.get('/%s/%s/checkout' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
-        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr1.identity, q1.identity))), 1)
-
-        response = self.client.post('/%s/%s/checkout' % (self.orga.slug, self.event.slug), {
-            '%s-question_%s' % (cr1.identity, q1.identity): '',
-        }, follow=True)
-        self.assertRedirects(response, '/%s/%s/checkout/payment' % (self.orga.slug, self.event.slug),
-                             target_status_code=200)
-
-        cr1 = CartPosition.objects.current.get(identity=cr1.identity)
-        self.assertEqual(cr1.answers.filter(question=q1).count(), 1)
-        self.assertEqual(cr1.answers.get(question=q1).value, 'False')
-
     def test_attendee_name_required(self):
         self.event.settings.set('attendee_names_asked', True)
         self.event.settings.set('attendee_names_required', True)
