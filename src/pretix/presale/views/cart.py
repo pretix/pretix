@@ -124,26 +124,29 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             if tup[0] == position.item_id and tup[1] == position.variation_id:
                 self.items[i] = (tup[0], tup[1], tup[2] + 1)
                 return self.items
-        self.items.append((position.item_id, position.variation_id, 1))
+        self.items.append((position.item_id, position.variation_id, 1, position))
 
     def _expired_positions(self):
+        positions = set()
         # For items that are already expired, we have to delete and re-add them, as they might
         # be no longer available or prices might have changed. Sorry!
         for cp in CartPosition.objects.current.filter(
             Q(user=self.request.user) & Q(event=self.request.event) & Q(expires__lte=now())
         ):
             self._re_add_position(cp)
-            cp.delete()
+            positions.add(cp)
+        return positions
 
     def process(self):
         # Extend this user's cart session to 30 minutes from now to ensure all items in the
         # cart expire at the same time
         # We can extend the reservation of items which are not yet expired without risk
+        expiry = now() + timedelta(minutes=self.request.event.settings.get('reservation_time', as_type=int))
         CartPosition.objects.current.filter(
             Q(user=self.request.user) & Q(event=self.request.event) & Q(expires__gt=now())
-        ).update(expires=now() + timedelta(minutes=30))
+        ).update(expires=expiry)
 
-        self._expired_positions()
+        _expired = self._expired_positions()
 
         if not self.items:
             return redirect(self.get_failure_url())
@@ -214,14 +217,21 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
 
                 # Create a CartPosition for as much items as we can
                 for k in range(quota_ok):
-                    CartPosition.objects.create(
-                        event=self.request.event,
-                        user=self.request.user,
-                        item=item,
-                        variation=variation,
-                        price=price,
-                        expires=now() + timedelta(minutes=self.request.event.settings.get('reservation_time', as_type=int))
-                    )
+                    if len(i) > 3 and i[2] == 1:
+                        # Recreating
+                        cp = i[3].clone()
+                        cp.expires = expiry
+                        cp.price = price
+                        cp.save()
+                    else:
+                        CartPosition.objects.create(
+                            event=self.request.event,
+                            user=self.request.user,
+                            item=item,
+                            variation=variation,
+                            price=price,
+                            expires=expiry
+                        )
             except Quota.LockTimeoutException:
                 # Is raised when there are too many threads asking for quota locks and we were
                 # unaible to get one
@@ -230,6 +240,10 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                 # Release the locks. This is important ;)
                 for quota in quotas:
                     quota.release()
+
+        for cp in _expired:
+            if cp.version_end_date is None:
+                cp.delete()
 
         if not self.msg_some_unavailable:
             messages.success(self.request, _('The products have been successfully added to your cart.'))

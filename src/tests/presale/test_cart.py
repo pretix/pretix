@@ -293,7 +293,6 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].price, 23)
         self.assertGreater(objs[0].expires, now())
 
-    @expectedFailure
     def test_renew_questions(self):
         """
         Currently fails. See: https://github.com/pretix/pretix/issues/20
