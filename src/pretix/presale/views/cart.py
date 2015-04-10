@@ -120,11 +120,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             messages.error(self.request, msg)
 
     def _re_add_position(self, position):
-        for i, tup in enumerate(self.items):
-            if tup[0] == position.item_id and tup[1] == position.variation_id:
-                self.items[i] = (tup[0], tup[1], tup[2] + 1)
-                return self.items
-        self.items.append((position.item_id, position.variation_id, 1, position))
+        self.items.insert(0, (position.item_id, position.variation_id, 1, position))
 
     def _expired_positions(self):
         positions = set()
