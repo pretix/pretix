@@ -40,7 +40,7 @@ class LazyI18nString:
             elif settings.LANGUAGE_CODE in self.data and self.data[settings.LANGUAGE_CODE]:
                 return self.data[settings.LANGUAGE_CODE]
             elif len(self.data):
-                return self.data.items()[0][1]
+                return list(self.data.items())[0][1]
             else:
                 return ""
         else:
