@@ -1,11 +1,12 @@
 import datetime
 import time
+from django.test import TestCase
 
-from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation
+from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation, User
 from tests.base import BrowserTest
 
 
-class EventMiddlewareTest(BrowserTest):
+class EventTestMixin:
 
     def setUp(self):
         super().setUp()
@@ -14,6 +15,12 @@ class EventMiddlewareTest(BrowserTest):
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
         )
+
+
+class EventMiddlewareTest(EventTestMixin, BrowserTest):
+
+    def setUp(self):
+        super().setUp()
         self.driver.implicitly_wait(10)
 
     def test_event_header(self):
@@ -25,15 +32,10 @@ class EventMiddlewareTest(BrowserTest):
         self.assertEqual(resp.status_code, 404)
 
 
-class ItemDisplayTest(BrowserTest):
+class ItemDisplayTest(EventTestMixin, BrowserTest):
 
     def setUp(self):
         super().setUp()
-        self.orga = Organizer.objects.create(name='CCC', slug='ccc')
-        self.event = Event.objects.create(
-            organizer=self.orga, name='30C3', slug='30c3',
-            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
-        )
         self.driver.implicitly_wait(10)
 
     def test_without_category(self):
@@ -124,3 +126,63 @@ class ItemDisplayTest(BrowserTest):
                       self.driver.find_elements_by_css_selector("section:nth-of-type(1) div.variation")[1].text)
         self.assertIn("12.00",
                       self.driver.find_elements_by_css_selector("section:nth-of-type(1) div.variation")[1].text)
+
+
+class LoginTest(EventTestMixin, TestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.local_user = User.objects.create_local_user(self.event, 'demo', 'foo')
+        self.global_user = User.objects.create_global_user('demo@demo.dummy', 'demo')
+
+    def test_login_invalid(self):
+        response = self.client.post(
+            '/%s/%s/login' % (self.orga.slug, self.event.slug),
+            {
+                'form': 'login',
+                'username': 'demo',
+                'password': 'bar'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('alert-danger', response.rendered_content)
+
+    def test_login_local(self):
+        response = self.client.post(
+            '/%s/%s/login' % (self.orga.slug, self.event.slug),
+            {
+                'form': 'login',
+                'username': 'demo',
+                'password': 'foo'
+            }
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_login_global(self):
+        response = self.client.post(
+            '/%s/%s/login' % (self.orga.slug, self.event.slug),
+            {
+                'form': 'login',
+                'username': 'demo@demo.dummy',
+                'password': 'demo'
+            }
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_login_already_logged_in(self):
+        self.assertTrue(self.client.login(username='demo@%s.event.pretix' % self.event.identity, password='foo'))
+        response = self.client.get(
+            '/%s/%s/login' % (self.orga.slug, self.event.slug),
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_logout(self):
+        self.assertTrue(self.client.login(username='demo@%s.event.pretix' % self.event.identity, password='foo'))
+        response = self.client.get(
+            '/%s/%s/logout' % (self.orga.slug, self.event.slug),
+        )
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get(
+            '/%s/%s/login' % (self.orga.slug, self.event.slug),
+        )
+        self.assertEqual(response.status_code, 200)
