@@ -1,4 +1,5 @@
 import datetime
+import time
 
 from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation
 from tests.base import BrowserTest
@@ -86,6 +87,9 @@ class ItemDisplayTest(BrowserTest):
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
         self.assertIn("Early-bird",
                       self.driver.find_element_by_css_selector("section:nth-of-type(1) div:nth-of-type(1)").text)
+        for el in self.driver.find_elements_by_link_text('Show variants'):
+            self.scroll_and_click(el)
+        time.sleep(2)
         self.assertIn("Red",
                       self.driver.find_element_by_css_selector("section:nth-of-type(1)").text)
         self.assertNotIn("Black",
@@ -109,6 +113,9 @@ class ItemDisplayTest(BrowserTest):
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
         self.assertIn("Early-bird",
                       self.driver.find_element_by_css_selector("section:nth-of-type(1) div:nth-of-type(1)").text)
+        for el in self.driver.find_elements_by_link_text('Show variants'):
+            self.scroll_and_click(el)
+        time.sleep(2)
         self.assertIn("Red",
                       self.driver.find_elements_by_css_selector("section:nth-of-type(1) div.variation")[0].text)
         self.assertIn("14.00",
