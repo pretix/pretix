@@ -14,7 +14,7 @@ def register_payment_provider(sender, **kwargs):
 
 
 @receiver(nav_event)
-def html_head_presale(sender, request=None, **kwargs):
+def control_nav_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
     return [
         {
