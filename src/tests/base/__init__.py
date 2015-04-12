@@ -18,7 +18,13 @@ class BrowserTest(StaticLiveServerTestCase):
         settings.DEBUG = ('--debug' in sys.argv)
 
     def setUp(self):
-        self.driver = getattr(webdriver, BROWSER)()
+        if hasattr(webdriver, BROWSER):
+            self.driver = getattr(webdriver, BROWSER)()
+        else:
+            self.driver = webdriver.Remote(
+                desired_capabilities=webdriver.DesiredCapabilities.CHROME,
+                command_executor=BROWSER
+            )
         self.driver.set_window_size(1920, 1080)
         self.driver.implicitly_wait(10)
 
