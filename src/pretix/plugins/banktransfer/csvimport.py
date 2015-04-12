@@ -18,16 +18,16 @@ def parse(data, hint):
             # Wrong column count
             continue
         if hint.get('payer') is not None:
-            resrow['payer'] = "\n".join([row[int(i)].strip() for i in hint.get('payer')])
+            resrow['payer'] = "\n".join([row[int(i)].strip() for i in hint.get('payer')]).strip()
         if hint.get('reference') is not None:
-            resrow['reference'] = "\n".join([row[int(i)].strip() for i in hint.get('reference')])
+            resrow['reference'] = "\n".join([row[int(i)].strip() for i in hint.get('reference')]).strip()
         if hint.get('amount') is not None:
             resrow['amount'] = row[int(hint.get('amount'))].strip()
         if hint.get('date') is not None:
             resrow['date'] = row[int(hint.get('date'))].strip()
         if len(resrow['amount']) == 0 or 'amount' not in resrow \
                 or resrow['amount'][0] not in list("1234567890," "+- ") \
-                or len(resrow['reference']) == 0:
+                or len(resrow['reference']) == 0 or resrow['date'] == '':
             # This is probably a headline or something other special.
             continue
         result.append(resrow)

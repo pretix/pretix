@@ -1,0 +1,3 @@
+Kontonummer;Buchungstag;Wertstellung;Auftraggeber/Empfänger;Buchungstext;VWZ1;VWZ2;VWZ3;VWZ4;VWZ5;VWZ6;VWZ7;VWZ8;VWZ9;VWZ10;VWZ11;VWZ12;VWZ13;VWZ14;Betrag;Kontostand;Währung
+123456789;09.04.2015;09.04.2015;"Lars Lieferant";"OnlBanking-Euro-Überweisung";BIC:THISINOBIC;IBAN:DE59433524647958971194;Datum: 09.04.15 Zeit: 10:47;KD 1234567 TAN 123456;Rechnung Nr. 123;456;;;;;;;;;-42,00;1.337,00;EUR
+123456789;08.04.2015;08.04.2015;Karl Kunde;"SEPA-Überweisung";Ticket-Bestellung;Bestellnummer 2015ABC;DEV;;;;;;;;;;;;12,00;1.325,00;EUR

@@ -1,0 +1,3 @@
+"Auftragskonto";"Buchungstag";"Valutadatum";"Buchungstext";"Verwendungszweck";"Begünstigter/Zahlungspflichtiger";"Kontonummer";"BLZ";"Betrag";"Währung";"Info"
+"123456";"09.03";"09.03.15";"ONLINE-UEBERWEISUNG";"SVWZ+Begleichung Rechnung 1234";"Max Mustermann";"DE13495179316396679327";"THISISNOBIC";"-23,42";"EUR";"Umsatz gebucht"
+"123456";"03.03";"03.03.15";"GUTSCHRIFT";"EREF+123456789 Ticket-Bestellung 2015XALSK";"Karl Kunde";"DE89701226010601035858";"THISISNOBIC";"42,32";"EUR";"Umsatz gebucht"

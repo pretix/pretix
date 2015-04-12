@@ -1,0 +1,22 @@
+"BBBank eG"
+
+"Umsatzanzeige"
+
+"BLZ:";"2229428475";;"Datum:";"12.04.2015"
+"Konto:";"4369871042";;"Uhrzeit:";"18:50:28"
+"Abfrage von:";"Max Mustermann";;"Kontoinhaber:";"Max Mustermann"
+
+"Zeitraum:";"1 Woche";"von:";;"bis:";
+"Betrag in EUR:";;"von:";" ";"bis:";" "
+"Sortiert nach:";"Buchungstag";"absteigend"
+
+"Buchungstag";"Valuta";"Auftraggeber/Zahlungsempfänger";"Empfänger/Zahlungspflichtiger";"Konto-Nr.";"BLZ";"Vorgang/Verwendungszweck";"Währung";"Umsatz";" "
+"10.04.2015";"10.04.2015";"Mustermann, Max";"Einzug ";;;"LASTSCHRIFT
+Einzug Nutzungsgebuehren IB
+AN: DE76574670095813552253";"EUR";"42,23";"S"
+"08.04.2015";"08.04.2015";"Mustermann, Max";"Kunde, Karl";;;"GUTSCHRIFT
+Ticket 2015XAZTY IBAN: DE83
+839857672994615084";"EUR";"42,23";"H"
+
+"07.04.2015";;;;;;"EUR";"Anfangssaldo";"1.337,00";"H"
+"10.04.2015";;;;;;"EUR";"Endsaldo";"1.337,00";"H"
