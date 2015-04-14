@@ -2,11 +2,13 @@ from itertools import groupby
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Q
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.views.generic import ListView, DetailView
+from pretix.base.forms import VersionedModelForm
 
 from pretix.base.models import Order, Quota
 from pretix.base.signals import register_payment_providers
@@ -26,7 +28,7 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         ).select_related("user")
 
 
-class OrderView(DetailView):
+class OrderView(EventPermissionRequiredMixin, DetailView):
     context_object_name = 'order'
     model = Order
 
@@ -49,7 +51,13 @@ class OrderView(DetailView):
                 return provider
 
 
-class OrderDetail(EventPermissionRequiredMixin, OrderView):
+class ExtendForm(VersionedModelForm):
+    class Meta:
+        model = Order
+        fields = ['expires']
+
+
+class OrderDetail(OrderView):
     template_name = 'pretixcontrol/order/index.html'
     permission = 'can_view_orders'
 
@@ -99,8 +107,8 @@ class OrderDetail(EventPermissionRequiredMixin, OrderView):
         }
 
 
-class OrderTransition(EventPermissionRequiredMixin, OrderView):
-    permission = 'can_view_orders'
+class OrderTransition(OrderView):
+    permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
         to = self.request.POST.get('status', '')
@@ -148,3 +156,51 @@ class OrderTransition(EventPermissionRequiredMixin, OrderView):
             })
         else:
             return HttpResponse(status=405)
+
+
+class OrderExtend(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        if self.order.status != Order.STATUS_PENDING:
+            messages.error(self.request, _('This action is only allowed for pending orders.'))
+            return self._redirect_back()
+        oldvalue = self.order.expires
+
+        if self.form.is_valid():
+            if oldvalue > now():
+                self.form.save()
+            else:
+                is_available, _quotas_locked = self.order._is_still_available(keep_locked=False)
+                if is_available is True:
+                    self.form.save()
+                    messages.success(self.request, _('The payment term has been changed.'))
+                else:
+                    messages.error(self.request, is_available)
+            return self._redirect_back()
+        else:
+            return self.get(*args, **kwargs)
+
+    def _redirect_back(self):
+        return redirect(reverse(
+            'control:event.order',
+            kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug,
+                'code': self.order.code,
+            }
+        ))
+
+    def get(self, *args, **kwargs):
+        if self.order.status != Order.STATUS_PENDING:
+            messages.error(self.request, _('This action is only allowed for pending orders.'))
+            return self._redirect_back()
+        return render(self.request, 'pretixcontrol/order/extend.html', {
+            'order': self.order,
+            'form': self.form,
+        })
+
+    @cached_property
+    def form(self):
+        return ExtendForm(instance=self.order,
+                          data=self.request.POST if self.request.method == "POST" else None)

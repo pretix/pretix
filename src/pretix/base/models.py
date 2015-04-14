@@ -1568,22 +1568,27 @@ class Order(Versionable):
         order.save()
         return order
 
-    def _can_be_paid(self):
+    def _can_be_paid(self, keep_locked=False):
         error_messages = {
-            'unavailable': _('Some of the ordered products were no longer available.'),
-            'busy': _('We were not able to process the request completely as the '
-                      'server was too busy. Please try again.'),
             'late': _("The payment is too late to be accepted."),
         }
 
         if self.event.settings.get('payment_term_last') \
                 and now() > self.event.settings.get('payment_term_last'):
-            return error_messages['late']
+            return error_messages['late'], None
         if now() < self.expires:
-            return True
+            return True, None
         if not self.event.settings.get('payment_term_accept_late'):
-            return error_messages['late']
+            return error_messages['late'], None
 
+        return self._is_still_available(keep_locked)
+
+    def _is_still_available(self, keep_locked=False):
+        error_messages = {
+            'unavailable': _('Some of the ordered products were no longer available.'),
+            'busy': _('We were not able to process the request completely as the '
+                      'server was too busy. Please try again.'),
+        }
         positions = list(self.positions.all().select_related(
             'item', 'variation'
         ).prefetch_related(
@@ -1591,6 +1596,7 @@ class Order(Versionable):
             'item__questions', 'answers'
         ))
         quotas_locked = set()
+        release = True
 
         try:
             for i, op in enumerate(positions):
@@ -1613,16 +1619,19 @@ class Order(Versionable):
                         # This quota is sold out/currently unavailable, so do not sell this at all
                         raise Quota.QuotaExceededException(error_messages['unavailable'])
         except Quota.QuotaExceededException as e:
-            return str(e)
+            return str(e), None
         except Quota.LockTimeoutException:
             # Is raised when there are too many threads asking for quota locks and we were
             # unaible to get one
-            return error_messages['busy']
+            return error_messages['busy'], None
+        else:
+            release = False
         finally:
             # Release the locks. This is important ;)
-            for quota in quotas_locked:
-                quota.release()
-        return True
+            if release or not keep_locked:
+                for quota in quotas_locked:
+                    quota.release()
+        return True, quotas_locked
 
     def mark_paid(self, provider=None, info=None, date=None, manual=None, force=False):
         """
@@ -1641,7 +1650,7 @@ class Order(Versionable):
         :type force: boolean
         :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
         """
-        can_be_paid = self._can_be_paid()
+        can_be_paid, quotas_locked = self._can_be_paid(keep_locked=True)
         if not force and can_be_paid is not True:
             raise Quota.QuotaExceededException(can_be_paid)
         order = self.clone()
@@ -1652,6 +1661,10 @@ class Order(Versionable):
             order.payment_manual = manual
         order.status = Order.STATUS_PAID
         order.save()
+
+        if quotas_locked:
+            for quota in quotas_locked:
+                quota.release()
 
         from pretix.base.mail import mail
         mail(
