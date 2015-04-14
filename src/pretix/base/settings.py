@@ -37,6 +37,10 @@ DEFAULTS = {
         'default': None,
         'type': datetime,
     },
+    'payment_term_accept_late': {
+        'default': 'True',
+        'type': bool
+    },
     'timezone': {
         'default': settings.TIME_ZONE,
         'type': str

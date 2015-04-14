@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render
 from django.utils.timezone import now
 from django.views.generic import TemplateView
-from pretix.base.models import Order
+from pretix.base.models import Order, Quota
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.plugins.banktransfer import csvimport, mt940import
 from django.utils.translation import ugettext_lazy as _
@@ -33,15 +33,25 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
         if 'confirm' in self.request.POST:
             orders = Order.objects.filter(event=self.request.event,
                                           code__in=self.request.POST.getlist('mark_paid'))
+            some_failed = False
             for order in orders:
-                order.mark_paid(provider='banktransfer', info=json.dumps({
-                    'reference': self.request.POST.get('reference_%s' % order.code),
-                    'date': self.request.POST.get('date_%s' % order.code),
-                    'payer': self.request.POST.get('payer_%s' % order.code),
-                    'import': now().isoformat(),
-                }))
+                try:
+                    order.mark_paid(provider='banktransfer', info=json.dumps({
+                        'reference': self.request.POST.get('reference_%s' % order.code),
+                        'date': self.request.POST.get('date_%s' % order.code),
+                        'payer': self.request.POST.get('payer_%s' % order.code),
+                        'import': now().isoformat(),
+                    }))
+                except Quota.QuotaExceededException:
+                    some_failed = True
 
-            messages.success(self.request, _('The selected orders have been marked as paid.'))
+            if some_failed:
+                messages.success(self.request, _('The selected orders have been marked as paid.'))
+            else:
+                messages.warning(self.request, _('Not all of the selected orders could be marked as '
+                                                 'paid as some of them have expired and the selected '
+                                                 'items are sold out.'))
+                # TODO: Display a list of them!
             return self.redirect_back()
 
         messages.error(self.request, _('We were unable to detect the file type of this import. Please '

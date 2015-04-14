@@ -239,8 +239,11 @@ class BasePaymentProvider:
         If the payment is completed, you should call ``order.mark_paid(provider, info)``
         with ``provider`` being your :py:attr:`identifier` and ``info`` being any string
         you might want to store for later usage. Please note, that if you want to store
-        something inside ``order.payment_info``, please do a ``order = order.clone()`` before
-        modifying or saving the order object.
+        something inside ``order.payment_info``, please do it after the ``mark_paid`` call,
+        as this call does a object clone for you. Please also note that ``mark_paid`` might
+        raise a ``Quota.QuotaExceededException`` if (and only if) the payment term of this
+        order is over and some of the items are sold out. You should use the exception message
+        to display a meaningful error to the user.
 
         The default implementation just returns ``None`` and therefore leaves the
         order unpaid. The user will be redirected to the order's detail page by default.

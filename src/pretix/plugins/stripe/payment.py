@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from django import forms
+from pretix.base.models import Quota
 import stripe
 
 from pretix.base.payment import BasePaymentProvider
@@ -67,7 +68,11 @@ class Stripe(BasePaymentProvider):
         )
         logging.info(charge)
         if charge.status == 'succeeded' and charge.paid:
-            order.mark_paid('stripe', str(charge))
+            try:
+                order.mark_paid('paypal', str(charge))
+                messages.success(request, _('We successfully received your payment. Thank you!'))
+            except Quota.QuotaExceededException as e:
+                messages.error(request, str(e))
             messages.success(request, _('We successfully received your payment. Thank you!'))
         else:
             messages.warning(request, _('Stripe reported an error: %s' % charge.failure_message))

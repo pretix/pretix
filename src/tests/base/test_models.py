@@ -176,7 +176,8 @@ class UserTestCase(TestCase):
         self.assertEqual(u.identifier, "test@example.com")
 
 
-class QuotaTestCase(TestCase):
+class BaseQuotaTestCase(TestCase):
+
     @classmethod
     def setUpTestData(cls):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
@@ -187,7 +188,7 @@ class QuotaTestCase(TestCase):
 
     def setUp(self):
         self.quota = Quota.objects.create(name="Test", size=2, event=self.event)
-        self.item1 = Item.objects.create(event=self.event, name="Ticket")
+        self.item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23)
         self.item2 = Item.objects.create(event=self.event, name="T-Shirt")
         p = Property.objects.create(event=self.event, name='Size')
         pv1 = PropertyValue.objects.create(prop=p, value='S')
@@ -196,6 +197,9 @@ class QuotaTestCase(TestCase):
         self.var1 = ItemVariation.objects.create(item=self.item2)
         self.var1.values.add(pv1)
         self.item2.properties.add(p)
+
+
+class QuotaTestCase(BaseQuotaTestCase):
 
     def test_available(self):
         self.quota.items.add(self.item1)
@@ -289,3 +293,69 @@ class QuotaTestCase(TestCase):
         quota2.size = 0
         quota2.save()
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_GONE, 0))
+
+
+class OrderTestCase(BaseQuotaTestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create_local_user(self.event, 'dummy', 'dummy')
+        self.order = Order.objects.create(
+            status=Order.STATUS_PENDING, event=self.event,
+            user=self.user, datetime=now() - timedelta(days=5),
+            expires=now() + timedelta(days=5), total=46
+        )
+        self.quota.items.add(self.item1)
+        OrderPosition.objects.create(order=self.order, item=self.item1,
+                                     variation=None, price=23)
+        OrderPosition.objects.create(order=self.order, item=self.item1,
+                                     variation=None, price=23)
+
+    def test_paid_in_time(self):
+        self.quota.size = 0
+        self.quota.save()
+        self.order.mark_paid()
+        self.order = Order.objects.current.get(identity=self.order.identity)
+        self.assertEqual(self.order.status, Order.STATUS_PAID)
+
+    def test_paid_expired_available(self):
+        self.order.expires = now() - timedelta(days=2)
+        self.order.save()
+        self.order.mark_paid()
+        self.order = Order.objects.current.get(identity=self.order.identity)
+        self.assertEqual(self.order.status, Order.STATUS_PAID)
+
+    def test_paid_expired_partial(self):
+        self.order.expires = now() - timedelta(days=2)
+        self.order.save()
+        self.quota.size = 1
+        self.quota.save()
+        try:
+            self.order.mark_paid()
+            self.assertFalse(True, 'This should have raised an exception.')
+        except Quota.QuotaExceededException:
+            pass
+        self.order = Order.objects.current.get(identity=self.order.identity)
+        self.assertIn(self.order.status, (Order.STATUS_PENDING, Order.STATUS_EXPIRED))
+
+    def test_paid_expired_unavailable(self):
+        self.order.expires = now() - timedelta(days=2)
+        self.order.save()
+        self.quota.size = 0
+        self.quota.save()
+        try:
+            self.order.mark_paid()
+            self.assertFalse(True, 'This should have raised an exception.')
+        except Quota.QuotaExceededException:
+            pass
+        self.order = Order.objects.current.get(identity=self.order.identity)
+        self.assertIn(self.order.status, (Order.STATUS_PENDING, Order.STATUS_EXPIRED))
+
+    def test_paid_expired_unavailable_force(self):
+        self.order.expires = now() - timedelta(days=2)
+        self.order.save()
+        self.quota.size = 0
+        self.quota.save()
+        self.order.mark_paid(force=True)
+        self.order = Order.objects.current.get(identity=self.order.identity)
+        self.assertEqual(self.order.status, Order.STATUS_PAID)

@@ -9,6 +9,7 @@ from django.utils.translation import ugettext as __
 from django import forms
 
 import paypalrestsdk
+from pretix.base.models import Quota
 
 from pretix.base.payment import BasePaymentProvider
 
@@ -175,8 +176,11 @@ class Paypal(BasePaymentProvider):
             logger.error('Invalid state: %s' % str(payment))
             return
 
-        order.mark_paid('paypal', json.dumps(payment.to_dict()))
-        messages.success(request, _('We successfully received your payment. Thank you!'))
+        try:
+            order.mark_paid('paypal', json.dumps(payment.to_dict()))
+            messages.success(request, _('We successfully received your payment. Thank you!'))
+        except Quota.QuotaExceededException as e:
+            messages.error(request, str(e))
         return None
 
     def order_pending_render(self, request, order) -> str:

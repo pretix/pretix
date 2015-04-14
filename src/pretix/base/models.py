@@ -1359,6 +1359,9 @@ class Quota(Versionable):
     class LockTimeoutException(Exception):
         pass
 
+    class QuotaExceededException(Exception):
+        pass
+
     def lock(self):
         """
         Issue a lock on this quota so nobody can take tickets from this quota until
@@ -1565,7 +1568,63 @@ class Order(Versionable):
         order.save()
         return order
 
-    def mark_paid(self, provider=None, info=None, date=None, manual=None):
+    def _can_be_paid(self):
+        error_messages = {
+            'unavailable': _('Some of the ordered products were no longer available.'),
+            'busy': _('We were not able to process the request completely as the '
+                      'server was too busy. Please try again.'),
+            'late': _("The payment is too late to be accepted."),
+        }
+
+        if self.event.settings.get('payment_term_last') \
+                and now() > self.event.settings.get('payment_term_last'):
+            return error_messages['late']
+        if now() < self.expires:
+            return True
+        if not self.event.settings.get('payment_term_accept_late'):
+            return error_messages['late']
+
+        positions = list(self.positions.all().select_related(
+            'item', 'variation'
+        ).prefetch_related(
+            'variation__values', 'variation__values__prop',
+            'item__questions', 'answers'
+        ))
+        quotas_locked = set()
+
+        try:
+            for i, op in enumerate(positions):
+                quotas = list(op.item.quotas.all()) if op.variation is None else list(op.variation.quotas.all())
+                if len(quotas) == 0:
+                    raise Quota.QuotaExceededException(error_messages['unavailable'])
+
+                for quota in quotas:
+                    # Lock the quota, so no other thread is allowed to perform sales covered by this
+                    # quota while we're doing so.
+                    if quota not in quotas_locked:
+                        quota.lock()
+                        quotas_locked.add(quota)
+                        quota.cached_availability = quota.availability()[1]
+                    else:
+                        # Use cached version
+                        quota = [q for q in quotas_locked if q.pk == quota.pk][0]
+                    quota.cached_availability -= 1
+                    if quota.cached_availability < 0:
+                        # This quota is sold out/currently unavailable, so do not sell this at all
+                        raise Quota.QuotaExceededException(error_messages['unavailable'])
+        except Quota.QuotaExceededException as e:
+            return str(e)
+        except Quota.LockTimeoutException:
+            # Is raised when there are too many threads asking for quota locks and we were
+            # unaible to get one
+            return error_messages['busy']
+        finally:
+            # Release the locks. This is important ;)
+            for quota in quotas_locked:
+                quota.release()
+        return True
+
+    def mark_paid(self, provider=None, info=None, date=None, manual=None, force=False):
         """
         Mark this order as paid. This clones the order object, sets the payment provider,
         info and date and returns the cloned order object.
@@ -1577,7 +1636,14 @@ class Order(Versionable):
         :param date: The date the payment was received (if you pass ``None``, the current
                      time will be used).
         :type date: datetime
+        :param force: Whether this payment should be marked as paid even if no remaining
+                      quota is available (default: ``False``).
+        :type force: boolean
+        :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
         """
+        can_be_paid = self._can_be_paid()
+        if not force and can_be_paid is not True:
+            raise Quota.QuotaExceededException(can_be_paid)
         order = self.clone()
         order.payment_provider = provider or order.payment_provider
         order.payment_info = info or order.payment_info

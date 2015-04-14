@@ -61,6 +61,14 @@ class EventSettingsForm(SettingsForm):
                     "days configured above."),
         required=False
     )
+    payment_term_accept_late = forms.BooleanField(
+        label='Accept late payments',
+        help_text=_("Accept payments that come after the end of the order's payment term. "
+                    "Payments will only be accepted if the regarding quotas have remaining "
+                    "capacity. No payments will be accepted after the 'Last date of payments' "
+                    "configured above."),
+        required=False
+    )
     last_order_modification_date = forms.DateTimeField(
         label='Last date of modifications',
         help_text=_("The last date users can modify details of their orders, such as attendee names or "
