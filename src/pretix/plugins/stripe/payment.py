@@ -60,25 +60,42 @@ class Stripe(BasePaymentProvider):
 
     def checkout_perform(self, request, order) -> str:
         self._init_api()
-        charge = stripe.Charge.create(
-            amount=int(order.total * 100),
-            currency=request.event.currency.lower(),
-            source=request.session['payment_stripe_token'],
-            idempotency_key=self.event.identity + order.code  # TODO: Use something better
-        )
-        logging.info(charge)
-        if charge.status == 'succeeded' and charge.paid:
-            try:
-                order.mark_paid('paypal', str(charge))
-                messages.success(request, _('We successfully received your payment. Thank you!'))
-            except Quota.QuotaExceededException as e:
-                messages.error(request, str(e))
-            messages.success(request, _('We successfully received your payment. Thank you!'))
+        try:
+            charge = stripe.Charge.create(
+                amount=int(order.total * 100),
+                currency=request.event.currency.lower(),
+                source=request.session['payment_stripe_token'],
+                idempotency_key=self.event.identity + order.code  # TODO: Use something better
+            )
+        except stripe.error.CardError as e:
+            err = e.json_body['error']
+            messages.error(request, _('Stripe reported an error with your card: %s' % err['message']))
+            logger.info('Stripe card error: %s' % str(err))
+        except stripe.error.InvalidRequestError or stripe.error.AuthenticationError or stripe.error.APIConnectionError \
+                as e:
+            err = e.json_body['error']
+            messages.error(request, _('We had trouble communicating with Stripe. Please try again and get in touch '
+                                      'with us if this problem persists.'))
+            logger.error('Stripe error: %s' % str(err))
+        except stripe.error.StripeError as e:
+            err = e.json_body['error']
+            messages.error(request, _('We had trouble processing the payment. Please try again and get '
+                                      'in touch with us if this problem persists.'))
+            logger.error('Stripe error: %s' % str(err))
         else:
-            messages.warning(request, _('Stripe reported an error: %s' % charge.failure_message))
-            order = order.clone()
-            order.payment_info = str(charge)
-            order.save()
+            logger.info(charge)
+            if charge.status == 'succeeded' and charge.paid:
+                try:
+                    order.mark_paid('paypal', str(charge))
+                    messages.success(request, _('We successfully received your payment. Thank you!'))
+                except Quota.QuotaExceededException as e:
+                    messages.error(request, str(e))
+                messages.success(request, _('We successfully received your payment. Thank you!'))
+            else:
+                messages.warning(request, _('Stripe reported an error: %s' % charge.failure_message))
+                order = order.clone()
+                order.payment_info = str(charge)
+                order.save()
 
     def order_pending_render(self, request, order) -> str:
         template = get_template('pretixplugins/stripe/pending.html')
@@ -118,6 +135,12 @@ class Stripe(BasePaymentProvider):
             ch = stripe.Charge.retrieve(payment_info['id'])
             ch.refunds.create()
             ch.refresh()
+        except stripe.error.InvalidRequestError or stripe.error.AuthenticationError or stripe.error.APIConnectionError \
+                as e:
+            err = e.json_body['error']
+            messages.error(request, _('We had trouble communicating with Stripe. Please try again and contact '
+                                      'support if the problem persists.'))
+            logger.error('Stripe error: %s' % str(err))
         except stripe.error.StripeError:
             order.mark_refunded()
             messages.warning(request, _('We were unable to transfer the money back automatically. '
