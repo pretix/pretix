@@ -30,97 +30,118 @@
         </div>
     </div>
     {% endif %}
-    <form method="post"
-            action="{% url "presale:event.cart.add" organizer=request.event.organizer.slug event=request.event.slug %}?next={{ request.path_info|urlencode }}">
-        {% csrf_token %}
-        {% for tup in items_by_category %}
-            <section>
-                {% if tup.0 %}<h3>{{ tup.0.name }}</h3>{% endif %}
-                {% for item in tup.1 %}
-                    {% if item.has_variations %}
-                        <div class="item-with-variations">
-                            <div class="row-fluid product-row headline">
+    {% if not event.presale_is_running %}
+        <div class="alert alert-info">
+            {% if event.presale_has_ended %}
+                {% blocktrans trimmed %}
+                    The presale period for this event is over.
+                {% endblocktrans %}
+            {% elif event.settings.presale_start_show_date %}
+                {% blocktrans trimmed with date=event.presale_start|date time=event.presale_start|time %}
+                    The presale for this event will start on {{ date }} at {{ time }}.
+                {% endblocktrans %}
+            {% else %}
+                {% blocktrans trimmed %}
+                    The presale for this event has not yet started.
+                {% endblocktrans %}
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if event.presale_is_running or event.settings.show_items_outside_presale_period %}
+        <form method="post"
+                action="{% url "presale:event.cart.add" organizer=request.event.organizer.slug event=request.event.slug %}?next={{ request.path_info|urlencode }}">
+            {% csrf_token %}
+            {% for tup in items_by_category %}
+                <section>
+                    {% if tup.0 %}<h3>{{ tup.0.name }}</h3>{% endif %}
+                    {% for item in tup.1 %}
+                        {% if item.has_variations %}
+                            <div class="item-with-variations">
+                                <div class="row-fluid product-row headline">
+                                    <div class="col-md-8 col-xs-12">
+                                        <a href="javascript:void();" data-toggle="variations">
+                                            <strong>{{ item.name }}</strong>
+                                        </a>
+                                        {% if item.short_description %}<p>{{ item.short_description }}</p>{% endif %}
+                                    </div>
+                                    <div class="col-md-2 col-xs-6 price">
+                                        {% blocktrans trimmed with minprice=item.min_price|floatformat:2 currency=event.currency %}
+                                            from {{ currency }} {{ minprice }}
+                                        {% endblocktrans %}
+                                    </div>
+                                    <div class="col-md-2 col-xs-6 availability-box">
+                                        <a href="javascript:void();" data-toggle="variations" class="js-only">
+                                            {% trans "Show variants" %}
+                                        </a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="variations">
+                                    {% for var in item.available_variations %}
+                                        <div class="row-fluid product-row variation">
+                                            <div class="col-md-8 col-xs-12">
+                                                {{ var }}
+                                            </div>
+                                            <div class="col-md-2 col-xs-6 price">
+                                                {{ event.currency }} {{ var.price|floatformat:2 }}
+                                                {% if item.tax_rate %}
+                                                    <br /><small>{% blocktrans trimmed with rate=item.tax_rate %}
+                                                        incl. {{ rate }}% taxes
+                                                    {% endblocktrans %}</small>
+                                                {% endif %}
+                                            </div>
+                                            {% if var.cached_availability.0 == 100 %}
+                                                <div class="col-md-2 col-xs-6 availability-box available">
+                                                    <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                            max="{{ var.cached_availability.1 }}"
+                                                            name="variation_{{ item.identity }}_{{ var.variation.identity }}">
+                                                </div>
+                                            {% else %}
+                                                {% include "pretixpresale/event/fragment_availability.html" with avail=var.cached_availability.0 %}
+                                            {% endif %}
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="row-fluid product-row simple">
                                 <div class="col-md-8 col-xs-12">
-                                    <a href="javascript:void();" data-toggle="variations">
-                                        <strong>{{ item.name }}</strong>
-                                    </a>
+                                    <strong>{{ item.name }}</strong>
                                     {% if item.short_description %}<p>{{ item.short_description }}</p>{% endif %}
                                 </div>
                                 <div class="col-md-2 col-xs-6 price">
-                                    {% blocktrans trimmed with minprice=item.min_price|floatformat:2 currency=event.currency %}
-                                        from {{ currency }} {{ minprice }}
-                                    {% endblocktrans %}
+                                    {{ event.currency }} {{ item.price }}
+                                    {% if item.tax_rate %}
+                                        <br /><small>{% blocktrans trimmed with rate=item.tax_rate %}
+                                        incl. {{ rate }}% taxes
+                                    {% endblocktrans %}</small>
+                                    {% endif %}
                                 </div>
-                                <div class="col-md-2 col-xs-6 availability-box">
-                                    <a href="javascript:void();" data-toggle="variations" class="js-only">
-                                        {% trans "Show variants" %}
-                                    </a>
-                                </div>
+                                {% if item.cached_availability.0 == 100 %}
+                                    <div class="col-md-2 col-xs-6 availability-box available">
+                                        <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                max="{{ item.cached_availability.1 }}" name="item_{{ item.identity }}">
+                                    </div>
+                                {% else %}
+                                    {% include "pretixpresale/event/fragment_availability.html" with avail=item.cached_availability.0 %}
+                                {% endif %}
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="variations">
-                                {% for var in item.available_variations %}
-                                    <div class="row-fluid product-row variation">
-                                        <div class="col-md-8 col-xs-12">
-                                            {{ var }}
-                                        </div>
-                                        <div class="col-md-2 col-xs-6 price">
-                                            {{ event.currency }} {{ var.price|floatformat:2 }}
-                                            {% if item.tax_rate %}
-                                                <br /><small>{% blocktrans trimmed with rate=item.tax_rate %}
-                                                    incl. {{ rate }}% taxes
-                                                {% endblocktrans %}</small>
-                                            {% endif %}
-                                        </div>
-                                        {% if var.cached_availability.0 == 100 %}
-                                            <div class="col-md-2 col-xs-6 availability-box available">
-                                                <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                        max="{{ var.cached_availability.1 }}"
-                                                        name="variation_{{ item.identity }}_{{ var.variation.identity }}">
-                                            </div>
-                                        {% else %}
-                                            {% include "pretixpresale/event/fragment_availability.html" with avail=var.cached_availability.0 %}
-                                        {% endif %}
-                                        <div class="clearfix"></div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="row-fluid product-row simple">
-                            <div class="col-md-8 col-xs-12">
-                                <strong>{{ item.name }}</strong>
-                                {% if item.short_description %}<p>{{ item.short_description }}</p>{% endif %}
-                            </div>
-                            <div class="col-md-2 col-xs-6 price">
-                                {{ event.currency }} {{ item.price }}
-                                {% if item.tax_rate %}
-                                    <br /><small>{% blocktrans trimmed with rate=item.tax_rate %}
-                                    incl. {{ rate }}% taxes
-                                {% endblocktrans %}</small>
-                                {% endif %}
-                            </div>
-                            {% if item.cached_availability.0 == 100 %}
-                                <div class="col-md-2 col-xs-6 availability-box available">
-                                    <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                            max="{{ item.cached_availability.1 }}" name="item_{{ item.identity }}">
-                                </div>
-                            {% else %}
-                                {% include "pretixpresale/event/fragment_availability.html" with avail=item.cached_availability.0 %}
-                            {% endif %}
-                            <div class="clearfix"></div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </section>
-        {% endfor %}
-        <div class="row-fluid checkout-button-row">
-            <div class="col-md-4 col-md-offset-8">
-                <button class="btn btn-block btn-primary btn-lg" type="submit">
-                    <i class="fa fa-shopping-cart"></i> {% trans "Add to cart" %}
-                </button>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-    </form>
+                        {% endif %}
+                    {% endfor %}
+                </section>
+            {% endfor %}
+            {% if event.presale_is_running %}
+                <div class="row-fluid checkout-button-row">
+                    <div class="col-md-4 col-md-offset-8">
+                        <button class="btn btn-block btn-primary btn-lg" type="submit">
+                            <i class="fa fa-shopping-cart"></i> {% trans "Add to cart" %}
+                        </button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            {% endif %}
+        </form>
+    {% endif %}
 {% endblock %}

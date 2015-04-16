@@ -482,6 +482,20 @@ class Event(Versionable):
         """
         return SettingsProxy(self, type=EventSetting, parent=self.organizer)
 
+    @property
+    def presale_has_ended(self):
+        if self.presale_end and now() > self.presale_end:
+            return True
+        return False
+
+    @property
+    def presale_is_running(self):
+        if self.presale_start and now() < self.presale_start:
+            return False
+        if self.presale_end and now() > self.presale_end:
+            return False
+        return True
+
 
 class EventPermission(Versionable):
     """

@@ -4,8 +4,10 @@ from django.contrib.auth.views import redirect_to_login
 from django.core.urlresolvers import reverse
 
 from django.db.models import Q
+from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.utils.functional import cached_property
 from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import CartPosition
 from pretix.base.signals import register_payment_providers

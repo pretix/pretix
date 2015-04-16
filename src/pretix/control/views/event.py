@@ -55,6 +55,16 @@ class EventSettingsForm(SettingsForm):
         label='Payment term in days',
         help_text=_("The number of days after placing an order the user has to pay to preserve his reservation."),
     )
+    show_items_outside_presale_period = forms.BooleanField(
+        label=_("Show items outside presale period"),
+        help_text=_("Show item details before presale has started and after presale has ended"),
+        required=False
+    )
+    presale_start_show_date = forms.BooleanField(
+        label=_("Show start date"),
+        help_text=_("Show the presale start date before presale has started"),
+        required=False
+    )
     payment_term_last = forms.DateTimeField(
         label='Last date of payments',
         help_text=_("The last date any payments are accepted. This has precedence over the number of "

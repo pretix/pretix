@@ -41,6 +41,14 @@ DEFAULTS = {
         'default': 'True',
         'type': bool
     },
+    'presale_start_show_date': {
+        'default': 'True',
+        'type': bool
+    },
+    'show_items_outside_presale_period': {
+        'default': 'True',
+        'type': bool
+    },
     'timezone': {
         'default': settings.TIME_ZONE,
         'type': str

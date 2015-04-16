@@ -99,6 +99,13 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
         self.msg_some_unavailable = False
 
     def post(self, request, *args, **kwargs):
+        if request.event.presale_start and now() < request.event.presale_start:
+            messages.error(request, _('The presale period not yet started.'))
+            return redirect(self.get_failure_url())
+        if request.event.presale_end and now() > request.event.presale_end:
+            messages.error(request, _('The presale period has ended.'))
+            return redirect(self.get_failure_url())
+
         self.items = self._items_from_post_data()
 
         # We do not use EventLoginRequiredMixin here, as we want to store stuff into the

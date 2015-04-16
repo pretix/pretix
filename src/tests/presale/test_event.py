@@ -1,6 +1,7 @@
 import datetime
 import time
 from django.test import TestCase
+from django.utils.timezone import now
 
 from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation, User
 from tests.base import BrowserTest
@@ -186,3 +187,56 @@ class LoginTest(EventTestMixin, TestCase):
             '/%s/%s/login' % (self.orga.slug, self.event.slug),
         )
         self.assertEqual(response.status_code, 200)
+
+
+class DeadlineTest(EventTestMixin, TestCase):
+
+    def setUp(self):
+        super().setUp()
+
+    def test_not_yet_started(self):
+        self.event.presale_start = now() + datetime.timedelta(days=1)
+        self.event.save()
+        response = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('alert-info', response.rendered_content)
+        self.assertNotIn('checkout-button-row', response.rendered_content)
+        response = self.client.post(
+            '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
+            follow=True
+        )
+        self.assertIn('alert-danger', response.rendered_content)
+        self.assertIn('not yet started', response.rendered_content)
+
+    def test_over(self):
+        self.event.presale_end = now() - datetime.timedelta(days=1)
+        self.event.save()
+        response = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('alert-info', response.rendered_content)
+        self.assertNotIn('checkout-button-row', response.rendered_content)
+        response = self.client.post(
+            '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
+            follow=True
+        )
+        self.assertIn('alert-danger', response.rendered_content)
+        self.assertIn('is over', response.rendered_content)
+
+    def test_in_time(self):
+        self.event.presale_start = now() - datetime.timedelta(days=1)
+        self.event.presale_end = now() + datetime.timedelta(days=1)
+        self.event.save()
+        response = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('alert-info', response.rendered_content)
+        self.assertIn('checkout-button-row', response.rendered_content)
+        response = self.client.post(
+            '/%s/%s/cart/add' % (self.orga.slug, self.event.slug)
+        )
+        self.assertNotEqual(response.status_code, 403)

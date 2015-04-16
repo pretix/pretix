@@ -355,10 +355,11 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
                             quota_ok = False
                             break
                     if quota_ok:
-                        cp = cp.clone()
-                        cartpos[i] = cp
-                        cp.expires = now() + timedelta(minutes=self.request.event.settings.get('reservation_time', as_type=int))
-                        cp.save()
+                        if not self.request.event.presale_end or now() < self.request.event.presale_end:
+                            cp = cp.clone()
+                            cartpos[i] = cp
+                            cp.expires = now() + timedelta(minutes=self.request.event.settings.get('reservation_time', as_type=int))
+                            cp.save()
                     else:
                         cp.delete()  # Sorry!
             if not self.msg_some_unavailable:  # Everything went well
