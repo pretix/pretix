@@ -22,6 +22,9 @@
 					</div>
 					<div class="panel-body">
 						{%  bootstrap_form provider.form layout='horizontal' %}
+                        {% with c=provider.settings_content %}
+                            {% if c %}{{ c|safe }}{% endif %}
+                        {% endwith %}
 					</div>
 				</div>
             {% empty %}

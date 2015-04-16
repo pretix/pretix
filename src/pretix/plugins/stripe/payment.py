@@ -2,6 +2,7 @@ from collections import OrderedDict
 import json
 import logging
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from django import forms
@@ -32,6 +33,13 @@ class Stripe(BasePaymentProvider):
             ]
         )
 
+    def settings_content_render(self, request):
+        return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
+            _('Please configure a <a href="https://dashboard.stripe.com/account/webhooks">Stripe Webhook</a> to '
+              'the following endpoint in order to automatically cancel orders when a charges are refunded externally.'),
+            request.build_absolute_uri(reverse('plugins:stripe:webhook'))
+        )
+
     def checkout_is_valid_session(self, request):
         return request.session.get('payment_stripe_token') != ''
 
@@ -51,6 +59,7 @@ class Stripe(BasePaymentProvider):
         return template.render(ctx)
 
     def _init_api(self):
+        stripe.api_version = '2015-04-07'
         stripe.api_key = self.settings.get('secret_key')
 
     def checkout_confirm_render(self, request) -> str:
@@ -65,6 +74,11 @@ class Stripe(BasePaymentProvider):
                 amount=int(order.total * 100),
                 currency=request.event.currency.lower(),
                 source=request.session['payment_stripe_token'],
+                metadata={
+                    'order': order.identity,
+                    'event': self.event.identity,
+                    'code': order.code
+                },
                 idempotency_key=self.event.identity + order.code  # TODO: Use something better
             )
         except stripe.error.CardError as e:
@@ -83,16 +97,15 @@ class Stripe(BasePaymentProvider):
                                       'in touch with us if this problem persists.'))
             logger.error('Stripe error: %s' % str(err))
         else:
-            logger.info(charge)
             if charge.status == 'succeeded' and charge.paid:
                 try:
                     order.mark_paid('paypal', str(charge))
                     messages.success(request, _('We successfully received your payment. Thank you!'))
                 except Quota.QuotaExceededException as e:
                     messages.error(request, str(e))
-                messages.success(request, _('We successfully received your payment. Thank you!'))
             else:
                 messages.warning(request, _('Stripe reported an error: %s' % charge.failure_message))
+                logger.info('Charge failed: %s' % str(charge))
                 order = order.clone()
                 order.payment_info = str(charge)
                 order.save()

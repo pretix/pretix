@@ -258,6 +258,7 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
                     for k, v in provider.settings_form_fields.items()
                 ]
             )
+            provider.settings_content = provider.settings_content_render(self.request)
             provider.form.prepare_fields()
             providers.append(provider)
         return providers

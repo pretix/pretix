@@ -61,6 +61,8 @@ The provider class
 
    .. autoattribute:: settings_form_fields
 
+   .. automethod:: settings_content_render
+
    .. automethod:: checkout_form_render
 
    .. automethod:: checkout_form

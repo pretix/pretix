@@ -117,6 +117,13 @@ class BasePaymentProvider:
              )),
         ])
 
+    def settings_content_render(self, request: HttpRequest) -> str:
+        """
+        When the event's administrator administrator visits the event configuration
+        page, this method is called. It may return HTML containing additional information
+        that is displayed below the form fields configured in ``settings_form_fields``.
+        """
+
     @property
     def checkout_form_fields(self) -> dict:
         """
