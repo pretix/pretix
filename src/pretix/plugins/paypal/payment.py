@@ -88,8 +88,8 @@ class Paypal(BasePaymentProvider):
                 "payment_method": "paypal",
             },
             "redirect_urls": {
-                "return_url": request.build_absolute_uri(reverse('plugins:paypal.return')),
-                "cancel_url": request.build_absolute_uri(reverse('plugins:paypal.abort')),
+                "return_url": request.build_absolute_uri(reverse('plugins:paypal:return')),
+                "cancel_url": request.build_absolute_uri(reverse('plugins:paypal:abort')),
             },
             "transactions": [
                 {

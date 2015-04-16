@@ -21,15 +21,19 @@ if settings.DEBUG:
         url(r'^__debug__/', include(debug_toolbar.urls)),
     )
 
+pluginpatterns = []
 for app in apps.get_app_configs():
     if hasattr(app, 'PretixPluginMeta'):
         try:
             urlmod = importlib.import_module(app.name + '.urls')
-            urlpatterns.append(
-                url(r'', include(urlmod, namespace='plugins'))
+            pluginpatterns.append(
+                url(r'', include(urlmod, namespace=app.label))
             )
         except ImportError:
             pass
+urlpatterns.append(
+    url(r'', include(pluginpatterns, namespace='plugins'))
+)
 
 urlpatterns.append(
     url(r'', include(pretix.presale.urls, namespace='presale'))

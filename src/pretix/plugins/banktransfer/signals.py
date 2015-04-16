@@ -19,11 +19,11 @@ def control_nav_import(sender, request=None, **kwargs):
     return [
         {
             'label': _('Import bank data'),
-            'url': reverse('plugins:banktransfer.import', kwargs={
+            'url': reverse('plugins:banktransfer:import', kwargs={
                 'event': request.event.slug,
                 'organizer': request.event.organizer.slug,
             }),
-            'active': (url.namespace == 'plugins' and url.url_name == 'banktransfer.import'),
+            'active': (url.namespace == 'plugins:banktransfer' and url.url_name == 'import'),
             'icon': 'upload',
         }
     ]

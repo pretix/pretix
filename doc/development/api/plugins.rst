@@ -94,7 +94,8 @@ Views
 
 Your plugin may define custom views. If you put an ``urls`` submodule into your
 plugin module, pretix will automatically import it and include it into the root
-URL configuration.
+URL configuration with the namespace ``plugins:<label>:``, where ``<label>`` is
+your Django app label.
 
 .. WARNING:: If you define custom URLs and views, you are currently on your own
    with checking that the calling user is logged in, has appropriate permissions,

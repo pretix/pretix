@@ -5,7 +5,7 @@
         Our attempt to execute your Payment via PayPal has failed. Please try again or contact us.
     {% endblocktrans %}</p>
     <p>
-        <a href="{% url "plugins:paypal.retry" order=order.code %}" class="btn btn-default">{% trans "Try again" %}</a>
+        <a href="{% url "plugins:paypal:retry" order=order.code %}" class="btn btn-default">{% trans "Try again" %}</a>
     </p>
 {% else %}
     <p>{% blocktrans trimmed %}

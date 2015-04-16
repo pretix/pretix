@@ -73,10 +73,10 @@ def retry(request, order):
                 "payment_method": "paypal",
             },
             "redirect_urls": {
-                "return_url": request.build_absolute_uri(reverse('plugins:paypal.retry', kwargs={
+                "return_url": request.build_absolute_uri(reverse('plugins:paypal:retry', kwargs={
                     'order': order.code
                 })),
-                "cancel_url": request.build_absolute_uri(reverse('plugins:paypal.retry', kwargs={
+                "cancel_url": request.build_absolute_uri(reverse('plugins:paypal:retry', kwargs={
                     'order': order.code
                 })),
             },
