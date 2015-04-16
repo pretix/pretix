@@ -70,7 +70,7 @@ DEFAULTS = {
         'type': bool
     },
     'ticket_download': {
-        'default': 'True',
+        'default': 'False',
         'type': bool
     },
     'ticket_download_date': {
