@@ -7,7 +7,6 @@ import paypalrestsdk
 from pretix.base.models import Event, Order
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
-from pretix.base.settings import SettingsSandbox
 from pretix.plugins.paypal.payment import Paypal
 
 

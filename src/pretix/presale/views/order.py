@@ -1,4 +1,4 @@
-from io import StringIO, BytesIO
+from io import BytesIO
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect

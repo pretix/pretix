@@ -1,6 +1,6 @@
 from itertools import product
 from django.db import transaction
-from django.forms import BooleanField, ModelForm
+from django.forms import BooleanField
 from django.utils.functional import cached_property
 
 from django.views.generic import ListView

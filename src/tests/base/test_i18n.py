@@ -1,7 +1,4 @@
-import random
-
 from django.test import TestCase
-from django.core.cache import cache as django_cache
 from django.utils import translation
 from django.utils.timezone import now
 from pretix.base.i18n import LazyI18nString
