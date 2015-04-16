@@ -189,10 +189,10 @@ class OrderDownload(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
 
         for op in self.order.positions.all().select_related('item', 'variation'):
             p.setFont("Helvetica", 22)
-            p.drawString(15 * units.mm, 235 * units.mm, request.event.name)
+            p.drawString(15 * units.mm, 235 * units.mm, str(request.event.name))
 
             p.setFont("Helvetica", 17)
-            item = op.item.name
+            item = str(op.item.name)
             if op.variation:
                 item += " – " + str(op.variation)
             p.drawString(15 * units.mm, 220 * units.mm, item)
