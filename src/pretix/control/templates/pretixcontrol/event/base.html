@@ -34,6 +34,12 @@
                     {% trans "Plugins" %}
                 </a>
             </li>
+            <li>
+                <a href="{% url 'control:event.settings.tickets' organizer=request.event.organizer.slug event=request.event.slug %}"
+                        {% if "event.settings.tickets" == url_name %}class="active"{% endif %} >
+                    {% trans "Tickets" %}
+                </a>
+            </li>
         </ul>
     </li>
     <li>

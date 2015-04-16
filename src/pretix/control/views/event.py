@@ -2,6 +2,7 @@ from collections import OrderedDict
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.utils.functional import cached_property
+from django.views.generic import FormView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django import forms
@@ -301,6 +302,65 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
             'organizer': self.get_object().organizer.slug,
             'event': self.get_object().slug,
         }) + '?success=true'
+
+
+class TicketSettingsForm(SettingsForm):
+    ticket_download = forms.BooleanField(
+        label=_("Use feature"),
+        help_text=_("Use pretix to generate tickets for the user to download and print out."),
+        required=False
+    )
+    ticket_download_date = forms.DateTimeField(
+        label=_("Download date"),
+        help_text=_("Ticket download will be offered after this date."),
+        required=True
+    )
+
+    def prepare_fields(self):
+        # See clean()
+        for k, v in self.fields.items():
+            v._required = v.required
+            v.required = False
+            v.widget.is_required = False
+
+    def clean(self):
+        # required=True files should only be required if the feature is enabled
+        cleaned_data = super().clean()
+        enabled = cleaned_data.get('ticket_download') == 'True'
+        if not enabled:
+            return
+        for k, v in self.fields.items():
+            val = cleaned_data.get(k)
+            if v._required and (val is None or val == ""):
+                print(enabled, k, v)
+                self.add_error(k, _('This field is required.'))
+
+
+class TicketSettings(EventPermissionRequiredMixin, FormView):
+    model = Event
+    form_class = TicketSettingsForm
+    template_name = 'pretixcontrol/event/tickets.html'
+    permission = 'can_change_settings'
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.tickets', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        }) + '?success=true'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['obj'] = self.request.event
+        return kwargs
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.prepare_fields()
+        return form
 
 
 def index(request, organizer, event):

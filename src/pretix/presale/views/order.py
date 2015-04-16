@@ -2,6 +2,7 @@ from io import StringIO, BytesIO
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView, View
@@ -48,6 +49,11 @@ class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
+        ctx['can_download'] = (
+            self.request.event.settings.ticket_download
+            and now() > self.request.event.settings.ticket_download_date
+            and self.order.status == Order.STATUS_PAID
+        )
         ctx['cart'] = self.get_cart(
             answers=True,
             queryset=OrderPosition.objects.current.filter(order=self.order)
@@ -144,6 +150,13 @@ class OrderCancel(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
 class OrderDownload(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
                     View):
 
+    def get_order_url(self):
+        return reverse('presale:event.order', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'order': self.order.code,
+        })
+
     def get(self, request, *args, **kwargs):
         from reportlab.graphics.shapes import Drawing
         from reportlab.pdfgen import canvas
@@ -151,8 +164,14 @@ class OrderDownload(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         from reportlab.graphics.barcode.qr import QrCodeWidget
         from reportlab.graphics import renderPDF
         from PyPDF2 import PdfFileWriter, PdfFileReader
+
         if self.order.status != Order.STATUS_PAID:
-            return HttpResponseForbidden(_('Order is not paid'))
+            messages.error(request, _('Order is not paid.'))
+            return redirect(self.get_order_url())
+        if not self.request.event.settings.ticket_download or now() < self.request.event.settings.ticket_download_date:
+            messages.error(request, _('Ticket download is not (yet) enabled.'))
+            return redirect(self.get_order_url())
+
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'inline; filename="order%s%s.pdf"' % (request.event.slug, self.order.code)
 

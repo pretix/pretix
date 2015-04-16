@@ -81,8 +81,7 @@ class SettingsForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.obj = kwargs.pop('obj')
-        if 'initial' not in kwargs:
-            kwargs['initial'] = self.obj.settings
+        kwargs['initial'] = self.obj.settings
         super().__init__(*args, **kwargs)
 
     def save(self):

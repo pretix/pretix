@@ -73,6 +73,10 @@ DEFAULTS = {
         'default': 'True',
         'type': bool
     },
+    'ticket_download_date': {
+        'default': None,
+        'type': datetime
+    },
     'last_order_modification_date': {
         'default': None,
         'type': datetime
