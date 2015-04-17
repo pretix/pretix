@@ -52,6 +52,7 @@ urlpatterns = [
         url(r'^orders/(?P<code>[0-9A-Z]+)/extend$', orders.OrderExtend.as_view(),
             name='event.order.extend'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/$', orders.OrderDetail.as_view(), name='event.order'),
+        url(r'^orders/overview/$', orders.OverView.as_view(), name='event.orders.overview'),
         url(r'^orders/$', orders.OrderList.as_view(), name='event.orders'),
     ])),
 ]

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-15 10:03+0200\n"
-"PO-Revision-Date: 2015-04-15 10:31+0100\n"
+"PO-Revision-Date: 2015-04-17 21:32+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -1113,7 +1113,7 @@ msgstr "Zahlung ausstehend"
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:6
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:6
 msgid "Paid"
-msgstr "Bezahlt"
+msgstr "bezahlt"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:10
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:10
@@ -1123,7 +1123,7 @@ msgstr "storniert"
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:12
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:12
 msgid "Refunded"
-msgstr "Erstattet"
+msgstr "erstattet"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:11
 msgid "Order total"
