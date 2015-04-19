@@ -9,4 +9,5 @@ Contents:
    plugins
    restriction
    payment
+   ticketoutput
    general

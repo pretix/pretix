@@ -20,11 +20,10 @@ that we'll soon create::
 
     from pretix.base.signals import register_payment_providers
 
-    from .payment import Paypal
-
 
     @receiver(register_payment_providers)
     def register_payment_provider(sender, **kwargs):
+        from .payment import Paypal
         return Paypal
 
 

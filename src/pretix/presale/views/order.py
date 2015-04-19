@@ -8,7 +8,7 @@ from django.utils.functional import cached_property
 from django.views.generic import TemplateView, View
 from django.http import HttpResponseNotFound, HttpResponseForbidden, HttpResponse
 from pretix.base.models import Order, OrderPosition
-from pretix.base.signals import register_payment_providers
+from pretix.base.signals import register_payment_providers, register_ticket_outputs
 from pretix.presale.views import EventViewMixin, EventLoginRequiredMixin, CartDisplayMixin
 from pretix.presale.views.checkout import QuestionsViewMixin
 from django.contrib.staticfiles import finders
@@ -46,6 +46,21 @@ class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
             if provider.identifier == self.order.payment_provider:
                 return provider
 
+    @cached_property
+    def download_buttons(self):
+        buttons = []
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if not provider.is_enabled:
+                continue
+            buttons.append({
+                'icon': provider.download_button_icon or 'fa-download',
+                'text': provider.download_button_text or 'fa-download',
+                'identifier': provider.identifier,
+            })
+        return buttons
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
@@ -54,6 +69,7 @@ class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
             and now() > self.request.event.settings.ticket_download_date
             and self.order.status == Order.STATUS_PAID
         )
+        ctx['download_buttons'] = self.download_buttons
         ctx['cart'] = self.get_cart(
             answers=True,
             queryset=OrderPosition.objects.current.filter(order=self.order)
@@ -157,73 +173,22 @@ class OrderDownload(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
             'order': self.order.code,
         })
 
-    def get(self, request, *args, **kwargs):
-        from reportlab.graphics.shapes import Drawing
-        from reportlab.pdfgen import canvas
-        from reportlab.lib import pagesizes, units
-        from reportlab.graphics.barcode.qr import QrCodeWidget
-        from reportlab.graphics import renderPDF
-        from PyPDF2 import PdfFileWriter, PdfFileReader
+    @cached_property
+    def output(self):
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if provider.identifier == self.kwargs.get('output'):
+                return provider
 
+    def get(self, request, *args, **kwargs):
+        if not self.output or not self.output.is_enabled:
+            messages.error(request, _('You requested an invalid ticket output type.'))
+            return redirect(self.get_order_url())
         if self.order.status != Order.STATUS_PAID:
             messages.error(request, _('Order is not paid.'))
             return redirect(self.get_order_url())
         if not self.request.event.settings.ticket_download or now() < self.request.event.settings.ticket_download_date:
             messages.error(request, _('Ticket download is not (yet) enabled.'))
             return redirect(self.get_order_url())
-
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="order%s%s.pdf"' % (request.event.slug, self.order.code)
-
-        pagesize = request.event.settings.get('ticketpdf_pagesize', default='A4')
-        if hasattr(pagesizes, pagesize):
-            pagesize = getattr(pagesizes, pagesize)
-        else:
-            pagesize = pagesizes.A4
-        defaultfname = finders.find('pretixpresale/pdf/ticket_default_a4.pdf')
-        fname = request.event.settings.get('ticketpdf_background', default=defaultfname)
-        # TODO: Handle file objects
-
-        buffer = BytesIO()
-        p = canvas.Canvas(buffer, pagesize=pagesize)
-
-        for op in self.order.positions.all().select_related('item', 'variation'):
-            p.setFont("Helvetica", 22)
-            p.drawString(15 * units.mm, 235 * units.mm, str(request.event.name))
-
-            p.setFont("Helvetica", 17)
-            item = str(op.item.name)
-            if op.variation:
-                item += " – " + str(op.variation)
-            p.drawString(15 * units.mm, 220 * units.mm, item)
-
-            p.setFont("Helvetica", 17)
-            p.drawString(15 * units.mm, 210 * units.mm, "%s %s" % (str(op.price), request.event.currency))
-
-            reqs = 80 * units.mm
-            qrw = QrCodeWidget(op.identity, barLevel='H')
-            b = qrw.getBounds()
-            w = b[2] - b[0]
-            h = b[3] - b[1]
-            d = Drawing(reqs, reqs, transform=[reqs / w, 0, 0, reqs / h, 0, 0])
-            d.add(qrw)
-            renderPDF.draw(d, p, 10 * units.mm, 130 * units.mm)
-
-            p.setFont("Helvetica", 11)
-            p.drawString(15 * units.mm, 130 * units.mm, op.identity)
-
-            p.showPage()
-
-        p.save()
-
-        buffer.seek(0)
-        new_pdf = PdfFileReader(buffer)
-        output = PdfFileWriter()
-        for page in new_pdf.pages:
-            bg_pdf = PdfFileReader(open(fname, "rb"))
-            bg_page = bg_pdf.getPage(0)
-            bg_page.mergePage(page)
-            output.addPage(bg_page)
-
-        output.write(response)
-        return response
+        return self.output.generate(request, self.order)

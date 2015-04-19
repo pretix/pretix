@@ -13,7 +13,7 @@ from pytz import common_timezones
 
 from pretix.base.forms import VersionedModelForm, SettingsForm
 from pretix.base.models import Event
-from pretix.base.signals import register_payment_providers
+from pretix.base.signals import register_payment_providers, register_ticket_outputs
 from pretix.control.permissions import EventPermissionRequiredMixin
 from . import UpdateView
 
@@ -215,7 +215,7 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
         }) + '?success=true'
 
 
-class PaymentMethodForm(SettingsForm):
+class ProviderForm(SettingsForm):
     """
     This is a SettingsForm, but if fields are set to required=True, validation
     errors are only raised if the payment method is enabled.
@@ -258,7 +258,7 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
         responses = register_payment_providers.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
-            provider.form = PaymentMethodForm(
+            provider.form = ProviderForm(
                 obj=self.request.event,
                 settingspref='payment_%s_' % provider.identifier,
                 data=(self.request.POST if self.request.method == 'POST' else None)
@@ -346,6 +346,11 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
         form.save()
         return super().form_valid(form)
 
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        context['providers'] = self.provider_forms
+        return context
+
     def get_success_url(self) -> str:
         return reverse('control:event.settings.tickets', kwargs={
             'organizer': self.request.event.organizer.slug,
@@ -361,6 +366,41 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
         form = super().get_form(form_class)
         form.prepare_fields()
         return form
+
+    def post(self, request, *args, **kwargs):
+        success = True
+        for provider in self.provider_forms:
+            if provider.form.is_valid():
+                provider.form.save()
+            else:
+                success = False
+        form = self.get_form(self.get_form_class())
+        if success and form.is_valid():
+            return redirect(self.get_success_url())
+        else:
+            return self.get(request)
+
+    @cached_property
+    def provider_forms(self) -> list:
+        providers = []
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            provider.form = ProviderForm(
+                obj=self.request.event,
+                settingspref='ticketoutput_%s_' % provider.identifier,
+                data=(self.request.POST if self.request.method == 'POST' else None)
+            )
+            provider.form.fields = OrderedDict(
+                [
+                    ('ticketoutput_%s_%s' % (provider.identifier, k), v)
+                    for k, v in provider.settings_form_fields.items()
+                ]
+            )
+            provider.settings_content = provider.settings_content_render(self.request)
+            provider.form.prepare_fields()
+            providers.append(provider)
+        return providers
 
 
 def index(request, organizer, event):

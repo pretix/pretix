@@ -60,3 +60,11 @@ subclass of pretix.base.payment.BasePaymentProvider
 register_payment_providers = EventPluginSignal(
     providing_args=[]
 )
+
+"""
+This signal is sent out to get all known ticket outputs. Receivers should return a
+subclass of pretix.base.ticketoutput.BaseTicketOutput
+"""
+register_ticket_outputs = EventPluginSignal(
+    providing_args=[]
+)

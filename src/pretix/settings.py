@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'pretix.plugins.banktransfer',
     'pretix.plugins.stripe',
     'pretix.plugins.paypal',
+    'pretix.plugins.ticketoutputpdf',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -37,10 +37,12 @@
                             entering the event.
                         {% endblocktrans %}
                     </p>
-                    <a href="{% url "presale:event.order.download" organizer=request.event.organizer.slug event=request.event.slug order=order.code %}"
-                            class="btn btn-primary">
-                        <span class="fa fa-print"></span> {% trans "Download PDF" %}
-                    </a>
+                    {% for b in download_buttons %}
+                        <a href="{% url "presale:event.order.download" organizer=request.event.organizer.slug event=request.event.slug order=order.code output=b.identifier %}"
+                                class="btn btn-primary">
+                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
+                        </a>
+                    {% endfor %}
                 {% else %}
                     {% blocktrans trimmed with date=event.settings.ticket_download_date|date %}
                         You will be able to download your tickets here on {{ date }}.
