@@ -39,7 +39,14 @@ The first thing you need are all the main application's dependencies::
 
 Then, create the local database::
 
-    python manage.py syncdb
+    python manage.py migrate
+
+If you need some test data, run::
+
+    python make_testdata.py
+
+and a sample event with sample products and a user ``admin@localhost`` with password
+``admin`` will be created.
 
 Create the translation files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
