@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from pretix.base.plugins import PluginType
 
@@ -17,6 +18,15 @@ class BankTransferApp(AppConfig):
 
     def ready(self):
         from . import signals  # NOQA
+
+    @cached_property
+    def compatibility_warnings(self):
+        errs = []
+        try:
+            import chardet
+        except ImportError:
+            errs.append(_("Install the python package 'chardet' for better CSV import capabilities."))
+        return errs
 
 
 default_app_config = 'pretix.plugins.banktransfer.BankTransferApp'

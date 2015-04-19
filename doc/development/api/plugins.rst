@@ -74,6 +74,13 @@ A working example would be::
     default_app_config = 'pretix.plugins.timerestriction.TimeRestrictionApp'
 
 
+The ``AppConfig`` class may implement a property ``compatiblity_errors``, that checks
+whether the pretix installation meets all requirements of the plugin. If so,
+it should contian ``None`` or an empty list, otherwise a list of strings containing
+human-readable error messages. We recommend using the ``django.utils.functional.cached_property``
+decorator, as it might get called a lot. You can also implement ``compatibility_warnings``,
+those will be displayed but not block the plugin execution.
+
 Signals
 -------
 

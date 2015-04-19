@@ -39,8 +39,9 @@ class EventPluginSignal(django.dispatch.Signal):
 
             # Only fire receivers from active plugins
             if app.name in sender.get_plugins():
-                response = receiver(signal=self, sender=sender, **named)
-                responses.append((receiver, response))
+                if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
+                    response = receiver(signal=self, sender=sender, **named)
+                    responses.append((receiver, response))
         return responses
 
 """

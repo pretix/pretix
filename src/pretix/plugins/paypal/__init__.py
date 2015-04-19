@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from pretix.base.plugins import PluginType
 
@@ -17,5 +18,13 @@ class PaypalApp(AppConfig):
     def ready(self):
         from . import signals  # NOQA
 
+    @cached_property
+    def compatibility_errors(self):
+        errs = []
+        try:
+            import paypalrestsdk
+        except ImportError:
+            errs.append("Python package 'paypalrestsdk' is not installed.")
+        return errs
 
 default_app_config = 'pretix.plugins.paypal.PaypalApp'

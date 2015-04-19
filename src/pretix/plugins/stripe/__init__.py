@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from pretix.base.plugins import PluginType
 
@@ -17,6 +18,15 @@ class StripeApp(AppConfig):
 
     def ready(self):
         from . import signals  # NOQA
+
+    @cached_property
+    def compatibility_errors(self):
+        errs = []
+        try:
+            import stripe
+        except ImportError:
+            errs.append("Python package 'stripe' is not installed.")
+        return errs
 
 
 default_app_config = 'pretix.plugins.stripe.StripeApp'

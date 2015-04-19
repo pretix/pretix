@@ -20,5 +20,6 @@ def get_all_plugins() -> "List[class]":
         if hasattr(app, 'PretixPluginMeta'):
             meta = app.PretixPluginMeta
             meta.module = app.name
+            meta.app = app
             plugins.append(meta)
     return plugins
