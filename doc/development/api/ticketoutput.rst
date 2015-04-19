@@ -14,7 +14,7 @@ Please read :ref:`Creating a plugin <pluginsetup>` first, if you haven't already
 Output registration
 -------------------
 
-The payment provider API does not make a lot of usage from signals, however, it
+The ticket output API does not make a lot of usage from signals, however, it
 does use a signal to get a list of all available ticket outputs. Your plugin
 should listen for this signal and return the subclass of ``pretix.base.ticketoutput.BaseTicketOutput``
 that we'll soon create::
