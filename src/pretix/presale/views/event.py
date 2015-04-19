@@ -47,8 +47,9 @@ class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
                     var.cached_availability = list(var['variation'].check_quotas())
                     var.cached_availability[1] = min(var.cached_availability[1],
                                                      int(self.request.event.settings.max_items_per_order))
+                    var.price = var.get('price', item.default_price)
                 if len(item.available_variations) > 0:
-                    item.min_price = min([var['price'] for v in item.available_variations])
+                    item.min_price = min([v.price for v in item.available_variations])
 
         items = [item for item in items if len(item.available_variations) > 0]
 
