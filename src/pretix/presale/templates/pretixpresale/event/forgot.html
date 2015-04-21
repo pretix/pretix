@@ -1,0 +1,20 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Password recovery" %}{% endblock %}
+{% block content %}
+    <h2>{% trans "Password recovery" %}</h2>
+    <form class="form-horizontal" method="post">
+        {% csrf_token %}
+        {% bootstrap_form_errors form type='all' layout='inline' %}
+        {% bootstrap_field form.username layout="horizontal" %}
+        <input type="hidden" name="form" value="login" />
+        <div class="form-group">
+            <div class="submit-group col-md-offset-2 col-md-4 text-right">
+                <button type="submit" class="btn btn-primary btn-save">
+                    {% trans "Send recovery information" %}
+                </button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

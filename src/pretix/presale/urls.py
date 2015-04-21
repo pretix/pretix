@@ -25,6 +25,8 @@ urlpatterns = [
         url(r'^order/(?P<order>[^/]+)/download/(?P<output>[^/]+)$', pretix.presale.views.order.OrderDownload.as_view(),
             name='event.order.download'),
         url(r'^login$', pretix.presale.views.event.EventLogin.as_view(), name='event.checkout.login'),
+        url(r'^forgot$', pretix.presale.views.event.EventForgot.as_view(), name='event.forgot'),
+        url(r'^forgot/recover$', pretix.presale.views.event.EventRecover.as_view(), name='event.forgot.recover'),
         url(r'^logout$', pretix.presale.views.event.EventLogout.as_view(), name='event.logout'),
         url(r'^orders$', pretix.presale.views.event.EventOrders.as_view(), name='event.orders'),
     ])),

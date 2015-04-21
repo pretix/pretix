@@ -24,6 +24,9 @@
                         <input type="hidden" name="form" value="login" />
                         <div class="form-group">
                             <div class="submit-group col-md-offset-2 col-md-4 text-right">
+                                <a href="{% url "presale:event.forgot" event=request.event.slug organizer=request.event.organizer.slug %}" class="btn btn-link">
+                                    {% trans "Lost password?" %}
+                                </a>
                                 <button type="submit" class="btn btn-primary btn-save">
                                     {% trans "Login" %}
                                 </button>

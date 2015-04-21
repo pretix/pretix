@@ -1,9 +1,13 @@
 import json
+from django.contrib import messages
 from django.contrib.auth import authenticate, logout
+from django.core import signing
+from django.core.signing import SignatureExpired, BadSignature
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db.models import Count
 from django import forms
+from django.forms import Form
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.contrib.auth.forms import AuthenticationForm as BaseAuthenticationForm
@@ -11,6 +15,7 @@ from django.contrib.auth import login
 from django.views.generic import TemplateView, View
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from pretix.base.mail import mail
 from pretix.base.models import User
 
 from pretix.presale.views import EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin
@@ -258,7 +263,7 @@ class EventLogin(EventViewMixin, TemplateView):
             if form.is_valid():
                 user = User.objects.create_global_user(
                     form.cleaned_data['email'], form.cleaned_data['password'],
-                )
+                    )
                 user = authenticate(identifier=user.identifier, password=form.cleaned_data['password'])
                 login(request, user)
                 return self.redirect_to_next()
@@ -292,6 +297,216 @@ class EventLogin(EventViewMixin, TemplateView):
         context['login_form'] = self.login_form
         context['global_registration_form'] = self.global_registration_form
         context['local_registration_form'] = self.local_registration_form
+        return context
+
+
+class PasswordRecoverForm(Form):
+    error_messages = {
+        'pw_mismatch': _("Please enter the same password twice"),
+    }
+    password = forms.CharField(
+        label=_('Password'),
+        widget=forms.PasswordInput,
+        required=True
+    )
+    password_repeat = forms.CharField(
+        label=_('Repeat password'),
+        widget=forms.PasswordInput
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        password1 = self.cleaned_data.get('password')
+        password2 = self.cleaned_data.get('password_repeat')
+
+        if password1 and password1 != password2:
+            raise forms.ValidationError(
+                self.error_messages['pw_mismatch'],
+                code='pw_mismatch',
+            )
+
+        return self.cleaned_data
+
+
+class PasswordForgotForm(Form):
+    username = forms.CharField(
+        label=_('Username or E-mail'),
+    )
+
+    def __init__(self, event, *args, **kwargs):
+        self.event = event
+        super().__init__(*args, **kwargs)
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        try:
+            self.cleaned_data['user'] = User.objects.get(
+                identifier=username, event__isnull=True
+            )
+            return username
+        except User.DoesNotExist:
+            pass
+        try:
+            self.cleaned_data['user'] = User.objects.get(
+                username=username, event=self.event
+            )
+            return username
+        except User.DoesNotExist:
+            pass
+        try:
+            self.cleaned_data['user'] = User.objects.get(
+                email=username, event=self.event
+            )
+            return username
+        except:
+            raise forms.ValidationError(
+                _("We are unable to find a user matching the data you provided."),
+                code='unknown_user',
+            )
+
+
+class EventForgot(EventViewMixin, TemplateView):
+    template_name = 'pretixpresale/event/forgot.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and \
+                (request.user.event is None or request.user.event == request.event):
+            return redirect(reverse(
+                'presale:event.orders', kwargs={
+                    'organizer': self.request.event.organizer.slug,
+                    'event': self.request.event.slug,
+                    }
+            ))
+        return super().get(request, *args, **kwargs)
+
+    def generate_token(self, user):
+        return signing.dumps({
+            "type": "reset",
+            "user": user.id
+        })
+
+    def post(self, request, *args, **kwargs):
+        if self.form.is_valid():
+            user = self.form.cleaned_data['user']
+            if user.email:
+                mail(
+                    user, _('Password recovery'),
+                    'pretixpresale/email/forgot.txt',
+                    {
+                        'user': user,
+                        'event': self.request.event,
+                        'url': settings.SITE_URL + reverse('presale:event.forgot.recover', kwargs={
+                            'event': self.request.event.slug,
+                            'organizer': self.request.event.organizer.slug,
+                            }) + '?token=' + self.generate_token(user),
+                        },
+                    self.request.event
+                )
+                messages.success(request, _('We sent you an e-mail containing further instructions.'))
+            else:
+                messages.success(request, _('We are unable to send you a new password, as you did not enter an e-mail '
+                                            'address at your registration.'))
+            return redirect(reverse(
+                'presale:event.forgot', kwargs={
+                    'organizer': self.request.event.organizer.slug,
+                    'event': self.request.event.slug,
+                    }
+            ))
+        else:
+            return self.get(request, *args, **kwargs)
+
+    @cached_property
+    def form(self):
+        return PasswordForgotForm(
+            event=self.request.event,
+            data=self.request.POST if self.request.method == 'POST' else None
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form
+        return context
+
+
+class EventRecover(EventViewMixin, TemplateView):
+    template_name = 'pretixpresale/event/recover.html'
+
+    error_messages = {
+        'invalid': _('You clicked on an invalid link. Please check that you copied the full '
+                     'web address into your address bar.'),
+        'expired': _('This password recovery link has expired. Please request a new e-mail and '
+                     'use the recovery link within 24 hours.'),
+        'unknownuser': _('We were unable to find the user you requested a new password for.')
+    }
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and \
+                (request.user.event is None or request.user.event == request.event):
+            return redirect(reverse(
+                'presale:event.orders', kwargs={
+                    'organizer': self.request.event.organizer.slug,
+                    'event': self.request.event.slug,
+                }
+            ))
+        try:
+            self.get_user()
+        except User.DoesNotExist:
+            return self.invalid('unknownuser')
+        except SignatureExpired:
+            return self.invalid('expired')
+        except BadSignature:
+            return self.invalid('invalid')
+        return super().get(request, *args, **kwargs)
+
+    def get_user(self):
+        token = signing.loads(self.request.GET.get('token', ''),
+                              max_age=3600 * 24)
+        if token['type'] != 'reset':
+            raise BadSignature()
+        return User.objects.get(id=token['user'])
+
+    def invalid(self, msg):
+        messages.error(self.request, self.error_messages[msg])
+        return redirect(reverse(
+            'presale:event.forgot', kwargs={
+                'organizer': self.request.event.organizer.slug,
+                'event': self.request.event.slug
+            }
+        ))
+
+    def post(self, request, *args, **kwargs):
+        if self.form.is_valid():
+            try:
+                user = self.get_user()
+            except User.DoesNotExist:
+                return self.invalid('unknownuser')
+            except SignatureExpired:
+                return self.invalid('expired')
+            except BadSignature:
+                return self.invalid('invalid')
+            else:
+                user.set_password(self.form.cleaned_data['password'])
+                messages.success(request, _('You can now login using your new password.'))
+            return redirect(reverse(
+                'presale:event.checkout.login', kwargs={
+                    'organizer': self.request.event.organizer.slug,
+                    'event': self.request.event.slug,
+                }
+            ))
+        else:
+            return self.get(request, *args, **kwargs)
+
+    @cached_property
+    def form(self):
+        return PasswordRecoverForm(
+            data=self.request.POST if self.request.method == 'POST' else None
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form
         return context
 
 
