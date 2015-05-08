@@ -4,6 +4,7 @@ import pretix.presale.views.event
 import pretix.presale.views.cart
 import pretix.presale.views.checkout
 import pretix.presale.views.order
+import pretix.presale.views.locale
 
 
 urlpatterns = [
@@ -30,4 +31,5 @@ urlpatterns = [
         url(r'^logout$', pretix.presale.views.event.EventLogout.as_view(), name='event.logout'),
         url(r'^orders$', pretix.presale.views.event.EventOrders.as_view(), name='event.orders'),
     ])),
+    url(r'^locale/set$', pretix.presale.views.locale.LocaleSet.as_view(), name='locale.set'),
 ]

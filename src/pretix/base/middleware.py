@@ -26,6 +26,9 @@ class LocaleMiddleware(BaseLocaleMiddleware):
 
     def process_request(self, request):
         language = get_language_from_request(request)
+        if hasattr(request, 'event'):
+            if language not in request.event.settings.locales:
+                language = request.event.settings.locale
         translation.activate(language)
         request.LANGUAGE_CODE = translation.get_language()
 
@@ -37,6 +40,7 @@ class LocaleMiddleware(BaseLocaleMiddleware):
         if tzname:
             try:
                 timezone.activate(pytz.timezone(tzname))
+                request.timezone = tzname
             except pytz.UnknownTimeZoneError:
                 pass
         else:
