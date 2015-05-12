@@ -128,8 +128,9 @@ LOGIN_URL_CONTROL = '/control/login'
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
-
 STATIC_ROOT = '_static'
+MEDIA_ROOT = 'media'
+MEDIA_URL = '/media/'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -140,6 +141,8 @@ STATICFILES_FINDERS = (
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'pretix.helpers.lessabsolutefilter.LessFilter'),
 )
+
+COMPRESS_OFFLINE = not DEBUG
 
 COMPRESS_CSS_FILTERS = (
     'compressor.filters.css_default.CssAbsoluteFilter',
