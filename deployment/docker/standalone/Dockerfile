@@ -2,7 +2,7 @@ FROM debian:jessie
 
 RUN apt-get update && apt-get install -y supervisor python3 git python3-pip \
 	libxml2-dev libxslt1-dev python-dev python-virtualenv locales libffi-dev \
-	build-essential python3-dev zlib1g-dev libssl-dev npm gettext \
+	build-essential python3-dev zlib1g-dev libssl-dev npm gettext git \
 	--no-install-recommends
 
 WORKDIR /
@@ -20,15 +20,17 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD gunicorn_starter.bash /gunicorn_starter.bash
 
-ADD src /src
-WORKDIR /src
+RUN git clone --recursive --depth 1 https://github.com/pretix/pretix.git /pretix
+WORKDIR /pretix/src
 
 RUN pip3 install -r requirements.txt
 RUN pip3 install gunicorn
 
-ADD local_settings.py /src/pretix/local_settings.py
-
 RUN make production
+
+RUN mkdir /etc/pretix
+RUN mkdir /data
+VOLUME /etc/pretix
 
 EXPOSE 80
 CMD ["/usr/bin/supervisord"]
