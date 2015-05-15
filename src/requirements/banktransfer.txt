@@ -1,2 +1,2 @@
-chardet
+chardet>=2.3,<3
 

@@ -1,7 +1,14 @@
-all: localecompile
+all: localecompile staticfiles
+production: localecompile staticfiles compress
 
 localecompile:
-	django-admin compilemessages
+	./manage.py compilemessages
 
 localegen:
-	django-admin makemessages --all
+	./manage.py makemessages --all
+
+staticfiles:
+	./manage.py collectstatic --noinput
+
+compress:
+	./manage.py compress

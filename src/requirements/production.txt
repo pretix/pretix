@@ -1,12 +1,12 @@
 # Functional requirements
 Django==1.8.1
-python-dateutil
+python-dateutil>=2.4,<2.5
 pytz
-django-bootstrap3
+django-bootstrap3>=5.4,<5.5
 -e git+https://github.com/pretix/django-formset-js.git@master#egg=django-formset-js
 -e git+https://github.com/pretix/cleanerversion.git@pretix#egg=cleanerversion
-django-compressor
-reportlab
+django-compressor>=1.5,<2.0
+reportlab>=3.1.44,<3.2
 -e git+https://github.com/pretix/PyPDF2.git@pretix#egg=PyPDF2
 
 # Deployment / static file compilation requirements
@@ -14,4 +14,4 @@ BeautifulSoup4
 html5lib
 slimit
 lxml
-dj-static
+dj-static==0.0.6
