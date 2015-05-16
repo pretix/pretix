@@ -21,6 +21,8 @@ else:
         with open(SECRET_FILE, 'w') as f:
             f.write(SECRET_KEY)
 
+# Adjustable settings
+
 DEBUG = TEMPLATE_DEBUG = config.getboolean('django', 'debug', fallback=False)
 
 DATABASES = {
@@ -43,8 +45,8 @@ MEDIA_ROOT = config.get('media', 'root', fallback='media')
 PRETIX_INSTANCE_NAME = config.get('pretix', 'instance_name', fallback='pretix.de')
 PRETIX_GLOBAL_REGISTRATION = config.getboolean('pretix', 'global_registration', fallback=True)
 
-MAIL_FROM = config.get('mail', 'from', fallback='pretix@localhost')
 SITE_URL = config.get('pretix', 'url', fallback='http://localhost')
+FORCE_SCRIPT_NAME = config.get('pretix', 'scriptname', fallback=None)
 
 DEFAULT_CURRENCY = config.get('pretix', 'currency', fallback='EUR')
 
@@ -53,7 +55,23 @@ ALLOWED_HOSTS = config.get('django', 'hosts', fallback='localhost').split(',')
 LANGUAGE_CODE = config.get('locale', 'default', fallback='en')
 TIME_ZONE = config.get('locale', 'timezone', fallback='UTC')
 
-# Application definition
+MAIL_FROM = SERVER_EMAIL = DEFAULT_FROM_EMAIL = config.get(
+    'mail', 'from', fallback='pretix@localhost')
+EMAIL_HOST = config.get('mail', 'host', fallback='localhost')
+EMAIL_PORT = config.getint('mail', 'port', fallback=25)
+EMAIL_HOST_USER = config.get('mail', 'user', fallback='')
+EMAIL_HOST_PASSWORD = config.get('mail', 'password', fallback='')
+
+SESSION_COOKIE_SECURE = SESSION_COOKIE_HTTPONLY = config.getboolean(
+    'pretix', 'securecookie', fallback=False)
+LANGUAGE_COOKIE_DOMAIN = SESSION_COOKIE_DOMAIN = CSRF_COOKIE_DOMAIN = config.get(
+    'pretix', 'cookiedomain', fallback=None)
+
+# Internal settings
+
+SESSION_COOKIE_NAME = 'pretix_session'
+LANGUAGE_COOKIE_NAME = 'pretix_language'
+CSRF_COOKIE_NAME = 'pretix_csrftoken'
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -91,23 +109,9 @@ MIDDLEWARE_CLASSES = (
     'pretix.base.middleware.LocaleMiddleware',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.request",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
-    'pretix.control.context.contextprocessor',
-    'pretix.presale.context.contextprocessor',
-)
-
 ROOT_URLCONF = 'pretix.urls'
 
 WSGI_APPLICATION = 'pretix.wsgi.application'
-
 
 USE_I18N = True
 USE_L10N = True
@@ -123,16 +127,42 @@ LANGUAGES = (
     ('de', _('German')),
 )
 
-
-# Authentication
-
 AUTH_USER_MODEL = 'pretixbase.User'
 LOGIN_URL = '/login'
 LOGIN_URL_CONTROL = '/control/login'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/dev/howto/static-files/
+template_loaders = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+)
+if DEBUG:
+    template_loaders = (
+        ('django.template.loaders.cached.Loader', template_loaders),
+    )
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                "django.template.context_processors.request",
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'pretix.control.context.contextprocessor',
+                'pretix.presale.context.contextprocessor',
+            ],
+            'loaders': template_loaders
+        },
+    },
+]
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -156,9 +186,6 @@ DEBUG_TOOLBAR_PATCH_SETTINGS = False
 DEBUG_TOOLBAR_CONFIG = {
     'JQUERY_URL': ''
 }
-
-
-# Pretix specific settings
 
 INTERNAL_IPS = ('127.0.0.1', '::1')
 
@@ -194,8 +221,3 @@ LOGGING = {
         },
     },
 }
-
-try:
-    from .local_settings import *  # NOQA
-except ImportError:
-    pass

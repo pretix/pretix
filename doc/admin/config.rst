@@ -25,7 +25,10 @@ Example::
     instance_name=pretix.de
     global_registration=off
     site_url=http://localhost
+    scriptname=/presale/
     currency=EUR
+    cookiedomain=.pretix.de
+    securecookie=on
 
 ``instance_name``
     The name of this installation. Default: ``pretix.de``
@@ -34,11 +37,21 @@ Example::
     Whether or not this installation supports global user accounts (in addition to
     event-bound accounts). Defaults to ``True``.
 
+``scriptname``
+    The path pretix runs at, if it does not run under its own subdomain.
+
 ``site_url``
     The installation's full URL, without a trailing slash.
 
 ``currency``
     The default currency as a three-letter code. Defaults to ``EUR``.
+
+``cookiedomain``
+    The domain to be used for session cookies, csrf protection cookies and locale cookies.
+    Empty by default.
+
+``securecookie``
+    Set the ``secure`` and ``httponly`` flags on session cookies. Off by default.
 
 Locale settings
 ---------------
@@ -102,10 +115,25 @@ Example::
 
     [mail]
     from=hello@localhost
+    host=127.0.0.71
+    user=pretix
+    password=foobar
+    port=1025
+    tls=on
+    ssl=off
+
+``host``, ``port``
+    The SMTP Host to connect to. Defaults to ``localhost`` and ``25``.
+
+``user``, ``password``
+    The SMTP user data to use for the connection. Empty by default.
 
 ``from``
     The email address to set as ``From`` header in outgoing emails by the system.
     Default: ``pretix@localhost``
+
+``tls``, ``ssl``
+    Use STARTTLS or SSL for the SMTP connection. Off by default.
 
 Django settings
 ---------------
