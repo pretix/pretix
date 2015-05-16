@@ -12,6 +12,7 @@ before_script:
     - python manage.py check
 script:
     - make
+    - make compress
     - coverage run manage.py test -v 2
 after_success:
     - coveralls
