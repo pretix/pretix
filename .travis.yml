@@ -9,9 +9,8 @@ before_script:
     - cd src
     - flake8 --ignore=E123,F403,F401,N802,C901,W503 .
     - python manage.py check
-    - python manage.py collectstatic --noinput
-    - python manage.py compress
 script:
+    - make
     - coverage run manage.py test -v 2
 after_success:
     - coveralls
