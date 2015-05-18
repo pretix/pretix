@@ -25,9 +25,12 @@ else:
 
 DEBUG = TEMPLATE_DEBUG = config.getboolean('django', 'debug', fallback=False)
 
+dbengine = 'django.db.backends.' + config.get('database', 'backend', fallback='sqlite3')
+if dbengine == 'django.db.backends.mysql':
+    dbengine = 'mysql.connector.django'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.' + config.get('database', 'backend', fallback='sqlite3'),
+        'ENGINE': dbengine,
         'NAME': config.get('database', 'name', fallback=os.path.join(BASE_DIR, 'db.sqlite3')),
         'USER': config.get('database', 'user', fallback=''),
         'PASSWORD': config.get('database', 'user', fallback=''),
