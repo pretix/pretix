@@ -24,6 +24,8 @@ RUN git clone --recursive --depth 1 https://github.com/pretix/pretix.git /pretix
 WORKDIR /pretix/src
 
 RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements/mysql.txt
+RUN pip3 install -r requirements/postgres.txt
 RUN pip3 install gunicorn
 
 RUN make production
