@@ -3,7 +3,7 @@ FROM debian:jessie
 RUN apt-get update && apt-get install -y supervisor python3 git python3-pip \
 	libxml2-dev libxslt1-dev python-dev python-virtualenv locales libffi-dev \
 	build-essential python3-dev zlib1g-dev libssl-dev npm gettext git \
-	libpq-dev \ 
+	libpq-dev libmysqlclient-dev \ 
 	--no-install-recommends
 
 WORKDIR /
