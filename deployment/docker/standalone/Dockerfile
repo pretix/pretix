@@ -29,7 +29,7 @@ RUN pip3 install -r requirements/mysql.txt
 RUN pip3 install -r requirements/postgres.txt
 RUN pip3 install gunicorn
 
-RUN make production
+RUN make
 
 RUN mkdir /etc/pretix
 RUN mkdir /data
