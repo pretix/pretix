@@ -52,9 +52,8 @@ class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
     context_object_name = 'category'
 
     def get_object(self, queryset=None) -> ItemCategory:
-        url = resolve(self.request.path_info)
         return self.request.event.categories.current.get(
-            identity=url.kwargs['category']
+            identity=self.kwargs['category']
         )
 
     def delete(self, request, *args, **kwargs):
@@ -199,17 +198,15 @@ class PropertyUpdate(EventPermissionRequiredMixin, UpdateView):
     context_object_name = 'property'
 
     def get_object(self, queryset=None) -> Property:
-        url = resolve(self.request.path_info)
         return self.request.event.properties.current.get(
-            identity=url.kwargs['property']
+            identity=self.kwargs['property']
         )
 
     def get_success_url(self) -> str:
-        url = resolve(self.request.path_info)
         return reverse('control:event.items.properties.edit', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-            'property': url.kwargs['property']
+            'property': self.kwargs['property']
         }) + '?success=true'
 
     def get_formset(self):
@@ -322,9 +319,8 @@ class PropertyDelete(EventPermissionRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None) -> Property:
         if not hasattr(self, 'object') or not self.object:
-            url = resolve(self.request.path_info)
             self.object = self.request.event.properties.current.get(
-                identity=url.kwargs['property']
+                identity=self.kwargs['property']
             )
         return self.object
 
@@ -371,9 +367,8 @@ class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
     context_object_name = 'question'
 
     def get_object(self, queryset=None) -> Question:
-        url = resolve(self.request.path_info)
         return self.request.event.questions.current.get(
-            identity=url.kwargs['question']
+            identity=self.kwargs['question']
         )
 
     def get_context_data(self, *args, **kwargs) -> dict:
@@ -402,9 +397,8 @@ class QuestionUpdate(EventPermissionRequiredMixin, UpdateView):
     context_object_name = 'question'
 
     def get_object(self, queryset=None) -> Question:
-        url = resolve(self.request.path_info)
         return self.request.event.questions.current.get(
-            identity=url.kwargs['question']
+            identity=self.kwargs['question']
         )
 
     def get_success_url(self) -> str:
@@ -559,9 +553,8 @@ class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
     context_object_name = 'quota'
 
     def get_object(self, queryset=None) -> Quota:
-        url = resolve(self.request.path_info)
         return self.request.event.quotas.current.get(
-            identity=url.kwargs['quota']
+            identity=self.kwargs['quota']
         )
 
     def get_success_url(self) -> str:
@@ -578,9 +571,8 @@ class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
     context_object_name = 'quota'
 
     def get_object(self, queryset=None) -> Quota:
-        url = resolve(self.request.path_info)
         return self.request.event.quotas.current.get(
-            identity=url.kwargs['quota']
+            identity=self.kwargs['quota']
         )
 
     def get_context_data(self, *args, **kwargs) -> dict:
@@ -607,9 +599,8 @@ class ItemDetailMixin(SingleObjectMixin):
 
     def get_object(self, queryset=None) -> Item:
         if not hasattr(self, 'object') or not self.object:
-            url = resolve(self.request.path_info)
             self.item = self.request.event.items.current.get(
-                identity=url.kwargs['item']
+                identity=self.kwargs['item']
             )
             self.object = self.item
         return self.object

@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.urlresolvers import resolve
+from django.core.urlresolvers import resolve, get_script_prefix
 from .signals import html_head, nav_event
 
 
@@ -8,7 +8,7 @@ def contextprocessor(request):
     Adds data to all template contexts
     """
     url = resolve(request.path_info)
-    if not request.path.startswith('/control'):
+    if not request.path.startswith(get_script_prefix() + 'control'):
         return {}
     ctx = {
         'url_name': url.url_name,
