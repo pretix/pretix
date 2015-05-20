@@ -25,7 +25,6 @@ Example::
     instance_name=pretix.de
     global_registration=off
     site_url=http://localhost
-    scriptname=/presale/
     currency=EUR
     cookiedomain=.pretix.de
     securecookie=on
@@ -36,9 +35,6 @@ Example::
 ``global_registration``
     Whether or not this installation supports global user accounts (in addition to
     event-bound accounts). Defaults to ``True``.
-
-``scriptname``
-    The path pretix runs at, if it does not run under its own subdomain.
 
 ``site_url``
     The installation's full URL, without a trailing slash.

@@ -14,5 +14,5 @@ BeautifulSoup4
 html5lib
 slimit
 lxml
--e git+https://github.com/pretix/static3.git@readme#egg=static3
-dj-static==0.0.6
+static3==0.6.1
+-e git+https://github.com/pretix/dj-static.git@script-path#egg=dj-static
