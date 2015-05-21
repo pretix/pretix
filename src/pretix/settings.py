@@ -121,8 +121,8 @@ LANGUAGES = (
 # Authentication
 
 AUTH_USER_MODEL = 'pretixbase.User'
-LOGIN_URL = '/login'
-LOGIN_URL_CONTROL = '/control/login'
+LOGIN_URL = '/login'  # global login does not yet exist
+LOGIN_URL_CONTROL = 'control:auth.login'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
