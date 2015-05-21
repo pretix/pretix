@@ -109,10 +109,10 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, identifier, username, password=None):
+    def create_superuser(self, identifier, password=None):
         if password is None:
             raise Exception("You must provide a password")
-        user = self.model(identifier=identifier, username=username)
+        user = self.model(identifier=identifier, email=identifier)
         user.is_staff = True
         user.is_superuser = True
         user.set_password(password)
