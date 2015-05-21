@@ -1,7 +1,7 @@
+from urllib.parse import urlparse
 from django.conf import settings
-from django.core.urlresolvers import resolve
+from django.core.urlresolvers import resolve, get_script_prefix
 from django.utils.encoding import force_str
-from django.utils.six.moves.urllib.parse import urlparse
 from django.shortcuts import resolve_url
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.http import HttpResponseNotFound
@@ -25,7 +25,7 @@ class PermissionMiddleware:
     def process_request(self, request):
         url = resolve(request.path_info)
         url_name = url.url_name
-        if not request.path.startswith('/control') or url_name in self.EXCEPTIONS:
+        if not request.path.startswith(get_script_prefix() + 'control') or url_name in self.EXCEPTIONS:
             return
         if not request.user.is_authenticated():
             # Taken from django/contrib/auth/decorators.py

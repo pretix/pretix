@@ -1,34 +1,76 @@
-"""
-Django settings for pretix project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/dev/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/dev/ref/settings/
-"""
-
+import configparser
 import os
+from django.utils.crypto import get_random_string
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+config = configparser.ConfigParser()
+config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
+            encoding='utf-8')
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+if config.has_option('django', 'secret'):
+    SECRET_KEY = config.get('django', 'secret')
+else:
+    SECRET_FILE = os.path.join(BASE_DIR, '.secret')
+    if os.path.exists(SECRET_FILE):
+        with open(SECRET_FILE, 'r') as f:
+            SECRET_KEY = f.read().strip()
+    else:
+        chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
+        SECRET_KEY = get_random_string(50, chars)
+        with open(SECRET_FILE, 'w') as f:
+            f.write(SECRET_KEY)
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
+# Adjustable settings
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0ro^46+8k#dv3ej=oen-2ww)i30#$$^&x&eajyj&_&h)$nc6@5'
+DEBUG = TEMPLATE_DEBUG = config.getboolean('django', 'debug', fallback=False)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.' + config.get('database', 'backend', fallback='sqlite3'),
+        'NAME': config.get('database', 'name', fallback=os.path.join(BASE_DIR, 'db.sqlite3')),
+        'USER': config.get('database', 'user', fallback=''),
+        'PASSWORD': config.get('database', 'password', fallback=''),
+        'HOST': config.get('database', 'host', fallback=''),
+        'PORT': config.get('database', 'port', fallback='')
+    }
+}
 
-TEMPLATE_DEBUG = True
+STATIC_URL = config.get('static', 'url', fallback='/static/')
+STATIC_ROOT = config.get('static', 'root', fallback='_static')
 
-ALLOWED_HOSTS = []
+MEDIA_URL = config.get('media', 'url', fallback=os.environ.get('MEDIA_ROOT', '/media/'))
+MEDIA_ROOT = config.get('media', 'root', fallback='media')
 
+PRETIX_INSTANCE_NAME = config.get('pretix', 'instance_name', fallback='pretix.de')
+PRETIX_GLOBAL_REGISTRATION = config.getboolean('pretix', 'global_registration', fallback=True)
 
-# Application definition
+SITE_URL = config.get('pretix', 'url', fallback='http://localhost')
+
+DEFAULT_CURRENCY = config.get('pretix', 'currency', fallback='EUR')
+
+ALLOWED_HOSTS = config.get('django', 'hosts', fallback='localhost').split(',')
+
+LANGUAGE_CODE = config.get('locale', 'default', fallback='en')
+TIME_ZONE = config.get('locale', 'timezone', fallback='UTC')
+
+MAIL_FROM = SERVER_EMAIL = DEFAULT_FROM_EMAIL = config.get(
+    'mail', 'from', fallback='pretix@localhost')
+EMAIL_HOST = config.get('mail', 'host', fallback='localhost')
+EMAIL_PORT = config.getint('mail', 'port', fallback=25)
+EMAIL_HOST_USER = config.get('mail', 'user', fallback='')
+EMAIL_HOST_PASSWORD = config.get('mail', 'password', fallback='')
+
+SESSION_COOKIE_SECURE = SESSION_COOKIE_HTTPONLY = config.getboolean(
+    'pretix', 'securecookie', fallback=False)
+LANGUAGE_COOKIE_DOMAIN = SESSION_COOKIE_DOMAIN = CSRF_COOKIE_DOMAIN = config.get(
+    'pretix', 'cookiedomain', fallback=None)
+
+# Internal settings
+
+SESSION_COOKIE_NAME = 'pretix_session'
+LANGUAGE_COOKIE_NAME = 'pretix_language'
+CSRF_COOKIE_NAME = 'pretix_csrftoken'
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -66,45 +108,12 @@ MIDDLEWARE_CLASSES = (
     'pretix.base.middleware.LocaleMiddleware',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.request",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
-    'pretix.control.context.contextprocessor',
-    'pretix.presale.context.contextprocessor',
-)
-
 ROOT_URLCONF = 'pretix.urls'
 
 WSGI_APPLICATION = 'pretix.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/dev/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
-# Internationalization
-# https://docs.djangoproject.com/en/dev/topics/i18n/
-
-LANGUAGE_CODE = 'en'
-
-TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 LOCALE_PATHS = (
@@ -117,20 +126,42 @@ LANGUAGES = (
     ('de', _('German')),
 )
 
-
-# Authentication
-
 AUTH_USER_MODEL = 'pretixbase.User'
 LOGIN_URL = '/login'  # global login does not yet exist
 LOGIN_URL_CONTROL = 'control:auth.login'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/dev/howto/static-files/
+template_loaders = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+)
+if DEBUG:
+    template_loaders = (
+        ('django.template.loaders.cached.Loader', template_loaders),
+    )
 
-STATIC_URL = '/static/'
-STATIC_ROOT = '_static'
-MEDIA_ROOT = 'media'
-MEDIA_URL = '/media/'
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                "django.template.context_processors.request",
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'pretix.control.context.contextprocessor',
+                'pretix.presale.context.contextprocessor',
+            ],
+            'loaders': template_loaders
+        },
+    },
+]
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -142,7 +173,7 @@ COMPRESS_PRECOMPILERS = (
     ('text/less', 'pretix.helpers.lessabsolutefilter.LessFilter'),
 )
 
-COMPRESS_OFFLINE = not DEBUG
+COMPRESS_ENABLED = COMPRESS_OFFLINE = not DEBUG
 
 COMPRESS_CSS_FILTERS = (
     'compressor.filters.css_default.CssAbsoluteFilter',
@@ -154,13 +185,6 @@ DEBUG_TOOLBAR_PATCH_SETTINGS = False
 DEBUG_TOOLBAR_CONFIG = {
     'JQUERY_URL': ''
 }
-
-
-# Pretix specific settings
-PRETIX_INSTANCE_NAME = 'pretix.de'
-PRETIX_GLOBAL_REGISTRATION = True
-
-DEFAULT_CURRENCY = 'EUR'
 
 INTERNAL_IPS = ('127.0.0.1', '::1')
 
@@ -196,11 +220,3 @@ LOGGING = {
         },
     },
 }
-
-MAIL_FROM = 'pretix@localhost'
-SITE_URL = 'http://localhost'
-
-try:
-    from .local_settings import *  # NOQA
-except ImportError:
-    pass
