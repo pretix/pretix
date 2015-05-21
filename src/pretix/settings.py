@@ -134,7 +134,7 @@ template_loaders = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 )
-if DEBUG:
+if not DEBUG:
     template_loaders = (
         ('django.template.loaders.cached.Loader', template_loaders),
     )
