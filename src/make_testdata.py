@@ -13,10 +13,8 @@ from pretix.base.models import *
 if Organizer.objects.exists():
     print("There already is data in your DB!")
     sys.exit(0)
-user = User.objects.create_global_user(
+user = User.objects.get(
     identifier='admin@localhost',
-    email='admin@localhost',
-    password='admin'
 )
 organizer = Organizer.objects.create(
     name='MRMCD e.V', slug='mrmcd'

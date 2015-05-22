@@ -1,0 +1,30 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Account settings" %}{% endblock %}
+{% block content %}
+<h1>{% trans "Account settings" %}</h1>
+<form action="" method="post" class="form-horizontal">
+    {% csrf_token %}
+    {% bootstrap_form_errors form %}
+    <fieldset>
+        <legend>{% trans "General settings" %}</legend>
+        {% bootstrap_field form.givenname layout='horizontal' %}
+        {% bootstrap_field form.familyname layout='horizontal' %}
+        {% bootstrap_field form.locale layout='horizontal' %}
+        {% bootstrap_field form.timezone layout='horizontal' %}
+    </fieldset>
+    <fieldset>
+        <legend>{% trans "Login settings" %}</legend>
+        {% bootstrap_field form.old_pw layout='horizontal' %}
+        {% bootstrap_field form.email layout='horizontal' %}
+        {% bootstrap_field form.new_pw layout='horizontal' %}
+        {% bootstrap_field form.new_pw_repeat layout='horizontal' %}
+    </fieldset>
+    <div class="form-group submit-group">
+        <button type="submit" class="btn btn-primary btn-save">
+            {% trans "Save" %}
+        </button>
+    </div>
+</form>
+{% endblock %}

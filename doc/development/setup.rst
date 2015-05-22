@@ -41,12 +41,10 @@ Then, create the local database::
 
     python manage.py migrate
 
-If you need some test data, run::
+A first user with username ``admin@localhost`` and password ``admin`` will be automatically
+created. If you want to genreate more test data, run::
 
     python make_testdata.py
-
-and a sample event with sample products and a user ``admin@localhost`` with password
-``admin`` will be created.
 
 Create the translation files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
