@@ -48,8 +48,17 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-top-links navbar-right">
-                    <li><a href="{% url 'control:user.settings' %}"><i class="fa fa-user"></i> {{ request.user.get_full_name }}</a></li>
-                    <li><a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}"><i class="fa fa-sign-out"></i><span class="visible-xs-inline">{% trans "Log out" %}</span></a></li>
+                    <li>
+                        <a href="{% url 'control:user.settings' %}">
+                            <i class="fa fa-user"></i> {{ request.user.get_full_name }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}">
+                            <i class="fa fa-sign-out"></i>
+                            <span class="visible-xs-inline">{% trans "Log out" %}</span>
+                        </a>
+                    </li>
                 </ul>
                 <div class="navbar-default sidebar" role="navigation">
                     <div class="sidebar-nav navbar-collapse">
