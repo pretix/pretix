@@ -134,14 +134,10 @@ class OrderTransition(OrderView):
             ret = self.payment_provider.order_control_refund_perform(self.request, self.order)
             if ret:
                 return redirect(ret)
-        return redirect(reverse(
-            'control:event.order',
-            kwargs={
-                'event': self.request.event.slug,
-                'organizer': self.request.event.organizer.slug,
-                'code': self.order.code,
-            }
-        ))
+        return redirect('control:event.order',
+                        event=self.request.event.slug,
+                        organizer=self.request.event.organizer.slug,
+                        code=self.order.code)
 
     def get(self, *args, **kwargs):
         to = self.request.GET.get('status', '')
@@ -182,14 +178,10 @@ class OrderExtend(OrderView):
             return self.get(*args, **kwargs)
 
     def _redirect_back(self):
-        return redirect(reverse(
-            'control:event.order',
-            kwargs={
-                'event': self.request.event.slug,
-                'organizer': self.request.event.organizer.slug,
-                'code': self.order.code,
-            }
-        ))
+        return redirect('control:event.order',
+                        event=self.request.event.slug,
+                        organizer=self.request.event.organizer.slug,
+                        code=self.order.code)
 
     def get(self, *args, **kwargs):
         if self.order.status != Order.STATUS_PENDING:

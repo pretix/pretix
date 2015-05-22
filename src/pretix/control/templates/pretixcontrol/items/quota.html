@@ -6,11 +6,6 @@
 	<h1>{% trans "Quota" %}</h1>
 	<form action="" method="post" class="form-horizontal">
 		{% csrf_token %}
-		{% if "success" in request.GET %}
-			<div class="alert alert-success">
-				{% trans "Your changes have been saved." %}
-			</div>
-		{% endif %}
 		<fieldset>
 			<legend>{% trans "General information" %}</legend>
 			{% bootstrap_field form.name layout="horizontal" %}

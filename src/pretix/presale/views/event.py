@@ -229,12 +229,9 @@ class EventLogin(EventViewMixin, TemplateView):
         if 'next' in self.request.GET:
             return redirect(self.request.GET.get('next'))
         else:
-            return redirect(reverse(
-                'presale:event.orders', kwargs={
-                    'organizer': self.request.event.organizer.slug,
-                    'event': self.request.event.slug,
-                }
-            ))
+            return redirect('presale:event.orders',
+                            organizer=self.request.event.organizer.slug,
+                            event=self.request.event.slug)
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and \
@@ -377,12 +374,9 @@ class EventForgot(EventViewMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and \
                 (request.user.event is None or request.user.event == request.event):
-            return redirect(reverse(
-                'presale:event.orders', kwargs={
-                    'organizer': self.request.event.organizer.slug,
-                    'event': self.request.event.slug,
-                    }
-            ))
+            return redirect('presale:event.orders',
+                            organizer=self.request.event.organizer.slug,
+                            event=self.request.event.slug)
         return super().get(request, *args, **kwargs)
 
     def generate_token(self, user):
@@ -412,12 +406,9 @@ class EventForgot(EventViewMixin, TemplateView):
             else:
                 messages.success(request, _('We are unable to send you a new password, as you did not enter an e-mail '
                                             'address at your registration.'))
-            return redirect(reverse(
-                'presale:event.forgot', kwargs={
-                    'organizer': self.request.event.organizer.slug,
-                    'event': self.request.event.slug,
-                    }
-            ))
+            return redirect('presale:event.forgot',
+                            organizer=self.request.event.organizer.slug,
+                            event=self.request.event.slug)
         else:
             return self.get(request, *args, **kwargs)
 
@@ -448,12 +439,9 @@ class EventRecover(EventViewMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and \
                 (request.user.event is None or request.user.event == request.event):
-            return redirect(reverse(
-                'presale:event.orders', kwargs={
-                    'organizer': self.request.event.organizer.slug,
-                    'event': self.request.event.slug,
-                }
-            ))
+            return redirect('presale:event.orders',
+                            organizer=self.request.event.organizer.slug,
+                            event=self.request.event.slug)
         try:
             self.get_user()
         except User.DoesNotExist:
@@ -473,12 +461,9 @@ class EventRecover(EventViewMixin, TemplateView):
 
     def invalid(self, msg):
         messages.error(self.request, self.error_messages[msg])
-        return redirect(reverse(
-            'presale:event.forgot', kwargs={
-                'organizer': self.request.event.organizer.slug,
-                'event': self.request.event.slug
-            }
-        ))
+        return redirect('presale:event.forgot',
+                        organizer=self.request.event.organizer.slug,
+                        event=self.request.event.slug)
 
     def post(self, request, *args, **kwargs):
         if self.form.is_valid():
@@ -493,12 +478,9 @@ class EventRecover(EventViewMixin, TemplateView):
             else:
                 user.set_password(self.form.cleaned_data['password'])
                 messages.success(request, _('You can now login using your new password.'))
-            return redirect(reverse(
-                'presale:event.checkout.login', kwargs={
-                    'organizer': self.request.event.organizer.slug,
-                    'event': self.request.event.slug,
-                }
-            ))
+            return redirect('presale:event.checkout.login',
+                            organizer=self.request.event.organizer.slug,
+                            event=self.request.event.slug)
         else:
             return self.get(request, *args, **kwargs)
 
@@ -517,12 +499,9 @@ class EventRecover(EventViewMixin, TemplateView):
 class EventLogout(EventViewMixin, View):
     def get(self, request, *args, **kwargs):
         logout(request)
-        return redirect(reverse(
-            'presale:event.index', kwargs={
-                'organizer': self.request.event.organizer.slug,
-                'event': self.request.event.slug,
-            }
-        ))
+        return redirect('presale:event.index',
+                        organizer=self.request.event.organizer.slug,
+                        event=self.request.event.slug)
 
 
 class EventOrders(EventLoginRequiredMixin, EventViewMixin, TemplateView):

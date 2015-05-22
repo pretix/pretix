@@ -1,4 +1,5 @@
 from itertools import product
+from django.contrib import messages
 from django.db import transaction
 from django.forms import BooleanField
 from django.utils.functional import cached_property
@@ -64,13 +65,14 @@ class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
             item.save()
         success_url = self.get_success_url()
         self.object.delete()
+        messages.success(request, _('The selected category has been deleted.'))
         return HttpResponseRedirect(success_url)
 
     def get_success_url(self) -> str:
         return reverse('control:event.items.categories', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-        }) + '?deleted=true'
+        })
 
 
 class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
@@ -86,11 +88,15 @@ class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
             identity=url.kwargs['category']
         )
 
+    def form_valid(self, form):
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
     def get_success_url(self) -> str:
         return reverse('control:event.items.categories', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-        }) + '?updated=true'
+        })
 
 
 class CategoryCreate(EventPermissionRequiredMixin, CreateView):
@@ -104,10 +110,11 @@ class CategoryCreate(EventPermissionRequiredMixin, CreateView):
         return reverse('control:event.items.categories', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-        }) + '?created=true'
+        })
 
     def form_valid(self, form):
         form.instance.event = self.request.event
+        messages.success(self.request, _('The new category has been created.'))
         return super().form_valid(form)
 
 
@@ -146,19 +153,17 @@ def category_move(request, category, up=True):
 @event_permission_required("can_change_items")
 def category_move_up(request, organizer, event, category):
     category_move(request, category, up=True)
-    return redirect(reverse('control:event.items.categories', kwargs={
-        'organizer': request.event.organizer.slug,
-        'event': request.event.slug,
-    }) + '?ordered=true')
+    return redirect('control:event.items.categories',
+                    organizer=request.event.organizer.slug,
+                    event=request.event.slug)
 
 
 @event_permission_required("can_change_items")
 def category_move_down(request, organizer, event, category):
     category_move(request, category, up=False)
-    return redirect(reverse('control:event.items.categories', kwargs={
-        'organizer': request.event.organizer.slug,
-        'event': request.event.slug,
-    }) + '?ordered=true')
+    return redirect('control:event.items.categories',
+                    organizer=request.event.organizer.slug,
+                    event=request.event.slug)
 
 
 class PropertyList(ListView):
@@ -207,7 +212,7 @@ class PropertyUpdate(EventPermissionRequiredMixin, UpdateView):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
             'property': self.kwargs['property']
-        }) + '?success=true'
+        })
 
     def get_formset(self):
         formsetclass = inlineformset_factory(
@@ -238,6 +243,8 @@ class PropertyUpdate(EventPermissionRequiredMixin, UpdateView):
                 f.instance = f.instance.clone()
             f.instance.position = i
             f.instance.save()
+
+        messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
     def post(self, request, *args, **kwargs):
@@ -262,7 +269,7 @@ class PropertyCreate(EventPermissionRequiredMixin, CreateView):
         return reverse('control:event.items.properties', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-        }) + '?created=true'
+        })
 
     def get_formset(self):
         formsetclass = inlineformset_factory(
@@ -289,6 +296,7 @@ class PropertyCreate(EventPermissionRequiredMixin, CreateView):
             f.instance.position = i
             f.instance.prop = form.instance
             f.instance.save()
+        messages.success(self.request, _('The new property has been created.'))
         return resp
 
     def post(self, request, *args, **kwargs):
@@ -328,6 +336,7 @@ class PropertyDelete(EventPermissionRequiredMixin, DeleteView):
         if self.is_allowed():
             success_url = self.get_success_url()
             self.get_object().delete()
+            messages.success(request, _('The selected property has been deleted.'))
             return HttpResponseRedirect(success_url)
         else:
             return HttpResponseForbidden()
@@ -336,7 +345,7 @@ class PropertyDelete(EventPermissionRequiredMixin, DeleteView):
         return reverse('control:event.items.properties', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-        }) + '?deleted=true'
+        })
 
 
 class QuestionList(ListView):
@@ -380,13 +389,14 @@ class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
         self.object = self.get_object()
         success_url = self.get_success_url()
         self.object.delete()
+        messages.success(request, _('The selected question has been deleted.'))
         return HttpResponseRedirect(success_url)
 
     def get_success_url(self) -> str:
         return reverse('control:event.items.questions', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-        }) + '?deleted=true'
+        })
 
 
 class QuestionUpdate(EventPermissionRequiredMixin, UpdateView):
@@ -401,11 +411,15 @@ class QuestionUpdate(EventPermissionRequiredMixin, UpdateView):
             identity=self.kwargs['question']
         )
 
+    def form_valid(self, form):
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
     def get_success_url(self) -> str:
         return reverse('control:event.items.questions', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-        }) + '?updated=true'
+        })
 
 
 class QuestionCreate(EventPermissionRequiredMixin, CreateView):
@@ -419,10 +433,11 @@ class QuestionCreate(EventPermissionRequiredMixin, CreateView):
         return reverse('control:event.items.questions', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-        }) + '?created=true'
+        })
 
     def form_valid(self, form):
         form.instance.event = self.request.event
+        messages.success(self.request, _('The new question has been created.'))
         return super().form_valid(form)
 
 
@@ -538,10 +553,11 @@ class QuotaCreate(EventPermissionRequiredMixin, QuotaEditorMixin, CreateView):
         return reverse('control:event.items.quotas', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-        }) + '?created=true'
+        })
 
     def form_valid(self, form):
         form.instance.event = self.request.event
+        messages.success(self.request, _('The new quota has been created.'))
         return super().form_valid(form)
 
 
@@ -557,11 +573,15 @@ class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
             identity=self.kwargs['quota']
         )
 
+    def form_valid(self, form):
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
     def get_success_url(self) -> str:
         return reverse('control:event.items.quotas', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-        }) + '?updated=true'
+        })
 
 
 class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
@@ -584,13 +604,14 @@ class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
         self.object = self.get_object()
         success_url = self.get_success_url()
         self.object.delete()
+        messages.success(self.request, _('The selected quota has been deleted.'))
         return HttpResponseRedirect(success_url)
 
     def get_success_url(self) -> str:
         return reverse('control:event.items.quotas', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-        }) + '?deleted=true'
+        })
 
 
 class ItemDetailMixin(SingleObjectMixin):
@@ -641,7 +662,11 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
             'item': self.object.identity,
-        }) + '?success=true'
+        })
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
 
     def get_form_kwargs(self):
         """
@@ -663,7 +688,11 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
             'item': self.get_object().identity,
-        }) + '?success=true'
+        })
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
 
 
 class ItemVariationForm(VersionedModelForm):
@@ -802,6 +831,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
     def post(self, request, *args, **kwargs):
         self.main(request, *args, **kwargs)
         context = self.get_context_data(object=self.object)
+        valid = True
         with transaction.atomic():
             for form in self.forms_flat:
                 if form.is_valid() and form.has_changed():
@@ -811,7 +841,11 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
                         # for newly created items as cleanerversion does already set the
                         # primary key in its post_init hook
                         form.instance.values.add(*form.values)
-        # TODO: Redirect to success message
+                elif not form.is_valid and form.has_changed():
+                    valid = False
+        if valid:
+            messages.success(self.request, _('Your changes have been saved.'))
+            return redirect(self.get_success_url())
         return self.render_to_response(context)
 
     def get_template_names(self) -> "List[str]":
@@ -821,6 +855,13 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
             return ['pretixcontrol/item/variations_1d.html']
         elif self.dimension >= 2:
             return ['pretixcontrol/item/variations_nd.html']
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.item.variations', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'item': self.get_object().identity,
+        })
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
@@ -873,6 +914,7 @@ class ItemRestrictions(ItemDetailMixin, EventPermissionRequiredMixin, TemplateVi
                         form.instance.event = request.event
                         form.instance.item = self.object
                         form.save()
+            messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
             context = self.get_context_data(object=self.object)
@@ -888,4 +930,4 @@ class ItemRestrictions(ItemDetailMixin, EventPermissionRequiredMixin, TemplateVi
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
             'item': self.object.identity
-        }) + '?success=true'
+        })

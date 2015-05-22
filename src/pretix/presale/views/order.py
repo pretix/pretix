@@ -108,11 +108,10 @@ class OrderModify(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
             messages.error(self.request,
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.get(*args, **kwargs)
-        return redirect(reverse('presale:event.order', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
-            'order': self.order.code,
-        }))
+        return redirect('presale:event.order',
+                        event=self.request.event.slug,
+                        organizer=self.request.event.organizer.slug,
+                        order=self.order.code)
 
     def get(self, request, *args, **kwargs):
         self.request = request
@@ -143,11 +142,10 @@ class OrderCancel(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         order = self.order.clone()
         order.status = Order.STATUS_CANCELLED
         order.save()
-        return redirect(reverse('presale:event.order', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
-            'order': order.code,
-        }))
+        return redirect('presale:event.order',
+                        event=self.request.event.slug,
+                        organizer=self.request.event.organizer.slug,
+                        order=order.code)
 
     def get(self, request, *args, **kwargs):
         self.kwargs = kwargs

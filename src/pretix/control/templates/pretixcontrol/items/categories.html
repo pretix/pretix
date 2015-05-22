@@ -3,19 +3,6 @@
 {% block title %}{% trans "Product categories" %}{% endblock %}
 {% block inside %}
 	<h1>{% trans "Product categories" %}</h1>
-	{% if "updated" in request.GET %}
-		<div class="alert alert-success">
-			{% trans "Your changes have been saved." %}
-		</div>
-	{% elif "created" in request.GET %}
-		<div class="alert alert-success">
-			{% trans "A new category has been created." %}
-		</div>
-	{% elif "deleted" in request.GET %}
-		<div class="alert alert-success">
-			{% trans "The category has been deleted." %}
-		</div>
-	{% endif %}
 	<p>
 		<a href="{% url "control:event.items.categories.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create new category" %}</a>
 	</p>

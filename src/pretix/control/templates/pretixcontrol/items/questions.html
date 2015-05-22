@@ -3,19 +3,6 @@
 {% block title %}{% trans "Questions" %}{% endblock %}
 {% block inside %}
 	<h1>{% trans "Questions" %}</h1>
-	{% if "updated" in request.GET %}
-		<div class="alert alert-success">
-			{% trans "Your changes have been saved." %}
-		</div>
-	{% elif "created" in request.GET %}
-		<div class="alert alert-success">
-			{% trans "A new question has been created." %}
-		</div>
-	{% elif "deleted" in request.GET %}
-		<div class="alert alert-success">
-			{% trans "The question has been deleted." %}
-		</div>
-	{% endif %}
 	<p>
 		<a href="{% url "control:event.items.questions.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create new question" %}</a>
 	</p>

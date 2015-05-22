@@ -2,11 +2,6 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inside %}
-	{% if "success" in request.GET %}
-		<div class="alert alert-success">
-			{% trans "Your changes have been saved." %}
-		</div>
-	{% endif %}
 	<form action="" method="post" class="form-horizontal">
 		{% csrf_token %}
 		<fieldset>

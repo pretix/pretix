@@ -23,10 +23,9 @@ def success(request):
         request.session['payment_paypal_payer'] = payer
         try:
             event = Event.objects.current.get(identity=request.session['payment_paypal_event'])
-            return redirect(reverse('presale:event.checkout.confirm', kwargs={
-                'event': event.slug,
-                'organizer': event.organizer.slug,
-            }))
+            return redirect('presale:event.checkout.confirm',
+                            event=event.slug,
+                            organizer=event.organizer.slug)
         except Event.DoesNotExist:
             pass  # TODO: Handle this
     else:
@@ -38,10 +37,9 @@ def abort(request):
     messages.error(request, _('It looks like you cancelled the PayPal payment'))
     try:
         event = Event.objects.current.get(identity=request.session['payment_paypal_event'])
-        return redirect(reverse('presale:event.checkout.payment', kwargs={
-            'event': event.slug,
-            'organizer': event.organizer.slug,
-        }))
+        return redirect('presale:event.checkout.payment',
+                        event=event.slug,
+                        organizer=event.organizer.slug)
     except Event.DoesNotExist:
         pass  # TODO: Handle this
 
@@ -103,8 +101,7 @@ def retry(request, order):
         if resp:
             return redirect(resp)
 
-    return redirect(reverse('presale:event.order', kwargs={
-        'event': order.event.slug,
-        'organizer': order.event.organizer.slug,
-        'order': order.code,
-    }))
+    return redirect('presale:event.order',
+                    event=order.event.slug,
+                    organizer=order.event.organizer.slug,
+                    order=order.code)

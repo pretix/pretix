@@ -125,10 +125,9 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
         })
 
     def redirect_back(self):
-        return redirect(reverse('plugins:banktransfer:import', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
-        }))
+        return redirect('plugins:banktransfer:import',
+                        event=self.request.event.slug,
+                        organizer=self.request.event.organizer.slug)
 
     def annotate_data(self, data):
         pattern = re.compile(self.request.event.slug.upper() + "([A-Z0-9]{5})")
