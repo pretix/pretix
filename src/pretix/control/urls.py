@@ -1,13 +1,16 @@
 from django.conf.urls import url, include
 
 
-from pretix.control.views import main, event, item, auth, orders, user
+from pretix.control.views import main, event, item, auth, orders, user, organizer
 
 urlpatterns = [
     url(r'^logout$', auth.logout, name='auth.logout'),
     url(r'^login$', auth.login, name='auth.login'),
     url(r'^$', main.index, name='index'),
     url(r'^settings$', user.UserSettings.as_view(), name='user.settings'),
+    url(r'^organizers/$', organizer.OrganizerList.as_view(), name='organizers'),
+    url(r'^organizers/add$', organizer.OrganizerCreate.as_view(), name='organizers.add'),
+    url(r'^organizer/(?P<organizer>[^/]+)/edit$', organizer.OrganizerUpdate.as_view(), name='organizer.edit'),
     url(r'^events/$', main.EventList.as_view(), name='events'),
     url(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
         url(r'^$', event.index, name='event.index'),

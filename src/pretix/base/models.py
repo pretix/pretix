@@ -298,7 +298,7 @@ class Organizer(Versionable):
     name = models.CharField(max_length=200,
                             verbose_name=_("Name"))
     slug = models.SlugField(max_length=50,
-                            unique=True, db_index=True,
+                            db_index=True,
                             verbose_name=_("Slug"))
     permitted = models.ManyToManyField(User, through='OrganizerPermission',
                                        related_name="organizers")

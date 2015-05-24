@@ -76,6 +76,12 @@
                                         {% trans "Events" %}
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{% url 'control:organizers' %}" {% if "organizer" in url_name %}class="active"{% endif %}>
+                                        <i class="fa fa-users fa-fw"></i>
+                                        {% trans "Organizers" %}
+                                    </a>
+                                </li>
                             {% endblock %}
                         </ul>
                     </div>

@@ -7,7 +7,7 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.http import HttpResponseNotFound
 from django.utils.translation import ugettext as _
 
-from pretix.base.models import Event
+from pretix.base.models import Event, Organizer
 
 
 class PermissionMiddleware:
@@ -53,6 +53,16 @@ class PermissionMiddleware:
                     permitted__id__exact=request.user.id,
                     organizer__slug=url.kwargs['organizer'],
                 ).select_related('organizer')[0]
+                request.organizer = request.event.organizer
             except IndexError:
                 return HttpResponseNotFound(_("The selected event was not found or you "
+                                              "have no permission to administrate it."))
+        elif 'organizer' in url.kwargs:
+            try:
+                request.organizer = Organizer.objects.current.filter(
+                    slug=url.kwargs['organizer'],
+                    permitted__id__exact=request.user.id,
+                )[0]
+            except IndexError:
+                return HttpResponseNotFound(_("The selected organizer was not found or you "
                                               "have no permission to administrate it."))
