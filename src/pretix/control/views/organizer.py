@@ -13,6 +13,7 @@ class OrganizerList(ListView):
     model = Organizer
     context_object_name = 'organizers'
     template_name = 'pretixcontrol/organizers/index.html'
+    paginate_by = 30
 
     def get_queryset(self):
         if self.request.user.is_superuser:

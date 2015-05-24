@@ -5,7 +5,7 @@
 	<h1>{% trans "Organizers" %}</h1>
 	<p>{% trans "The list below shows all organizer accounts you have administrative access to." %}</p>
     {% if request.user.is_superuser %}
-        <a href="{% url "control:organizers.add" %}" class="btn btn-primary">
+        <a href="{% url "control:organizers.add" %}" class="btn btn-default">
             <span class="fa fa-plus"></span>
             {% trans "Create a new organizer" %}
         </a>
@@ -26,4 +26,5 @@
 			{% endfor %}
 		</tbody>
 	</table>
+    {% include "pretixcontrol/pagination.html" %}
 {% endblock %}

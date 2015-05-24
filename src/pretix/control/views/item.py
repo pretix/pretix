@@ -27,6 +27,7 @@ from . import UpdateView, CreateView
 class ItemList(ListView):
     model = Item
     context_object_name = 'items'
+    paginate_by = 30
     template_name = 'pretixcontrol/items/index.html'
 
     def get_queryset(self):
@@ -121,6 +122,7 @@ class CategoryCreate(EventPermissionRequiredMixin, CreateView):
 class CategoryList(ListView):
     model = ItemCategory
     context_object_name = 'categories'
+    paginate_by = 30
     template_name = 'pretixcontrol/items/categories.html'
 
     def get_queryset(self):
@@ -169,6 +171,7 @@ def category_move_down(request, organizer, event, category):
 class PropertyList(ListView):
     model = Property
     context_object_name = 'properties'
+    paginate_by = 30
     template_name = 'pretixcontrol/items/properties.html'
 
     def get_queryset(self):
@@ -351,6 +354,7 @@ class PropertyDelete(EventPermissionRequiredMixin, DeleteView):
 class QuestionList(ListView):
     model = Question
     context_object_name = 'questions'
+    paginate_by = 30
     template_name = 'pretixcontrol/items/questions.html'
 
     def get_queryset(self):
@@ -444,6 +448,7 @@ class QuestionCreate(EventPermissionRequiredMixin, CreateView):
 class QuotaList(ListView):
     model = Quota
     context_object_name = 'quotas'
+    paginate_by = 30
     template_name = 'pretixcontrol/items/quotas.html'
 
     def get_queryset(self):
