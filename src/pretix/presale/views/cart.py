@@ -100,7 +100,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
 
     def post(self, request, *args, **kwargs):
         if request.event.presale_start and now() < request.event.presale_start:
-            messages.error(request, _('The presale period not yet started.'))
+            messages.error(request, _('The presale period for this event has not yet started.'))
             return redirect(self.get_failure_url())
         if request.event.presale_end and now() > request.event.presale_end:
             messages.error(request, _('The presale period has ended.'))

@@ -54,7 +54,7 @@ class EventSettingsForm(SettingsForm):
         required=False
     )
     payment_term_days = forms.IntegerField(
-        label='Payment term in days',
+        label=_('Payment term in days'),
         help_text=_("The number of days after placing an order the user has to pay to preserve his reservation."),
     )
     show_items_outside_presale_period = forms.BooleanField(
@@ -68,13 +68,13 @@ class EventSettingsForm(SettingsForm):
         required=False
     )
     payment_term_last = forms.DateTimeField(
-        label='Last date of payments',
+        label=_('Last date of payments'),
         help_text=_("The last date any payments are accepted. This has precedence over the number of "
                     "days configured above."),
         required=False
     )
     payment_term_accept_late = forms.BooleanField(
-        label='Accept late payments',
+        label=_('Accept late payments'),
         help_text=_("Accept payments that come after the end of the order's payment term. "
                     "Payments will only be accepted if the regarding quotas have remaining "
                     "capacity. No payments will be accepted after the 'Last date of payments' "
@@ -82,7 +82,7 @@ class EventSettingsForm(SettingsForm):
         required=False
     )
     last_order_modification_date = forms.DateTimeField(
-        label='Last date of modifications',
+        label=_('Last date of modifications'),
         help_text=_("The last date users can modify details of their orders, such as attendee names or "
                     "answers to questions."),
         required=False
