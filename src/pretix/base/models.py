@@ -297,9 +297,19 @@ class Organizer(Versionable):
 
     name = models.CharField(max_length=200,
                             verbose_name=_("Name"))
-    slug = models.SlugField(max_length=50,
-                            db_index=True,
-                            verbose_name=_("Slug"))
+    slug = models.SlugField(
+        max_length=50, db_index=True,
+        help_text=_(
+            "Should be short, only contain lowercase letters and numbers, and must be unique among your events. "
+            + "This is being used in addresses and bank transfer references."),
+        validators=[
+            RegexValidator(
+                regex="^[a-zA-Z0-9.-]+$",
+                message=_("The slug may only contain letters, numbers, dots and dashes."),
+                )
+        ],
+        verbose_name=_("Slug"),
+    )
     permitted = models.ManyToManyField(User, through='OrganizerPermission',
                                        related_name="organizers")
 

@@ -4,6 +4,10 @@
 {% block content %}
 	<h1>{% trans "Events" %}</h1>
 	<p>{% trans "The list below shows all events you have administrative access to. Click on the event name to access event details." %}</p>
+    <a href="{% url "control:events.add" %}" class="btn btn-default">
+        <span class="fa fa-plus"></span>
+        {% trans "Create a new event" %}
+    </a>
 	<table class="table table-condensed table-hover">
 		<thead>
 			<tr>

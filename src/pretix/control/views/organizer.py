@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden
@@ -25,9 +26,22 @@ class OrganizerList(ListView):
 
 
 class OrganizerForm(VersionedModelForm):
+    error_messages = {
+        'duplicate_slug': _("This slug is already in use. Please choose a different one."),
+    }
+
     class Meta:
         model = Organizer
         fields = ['name', 'slug']
+
+    def clean_slug(self):
+        slug = self.cleaned_data['slug']
+        if Organizer.objects.filter(slug=slug).exists():
+            raise forms.ValidationError(
+                self.error_messages['duplicate_slug'],
+                code='duplicate_slug',
+            )
+        return slug
 
 
 class OrganizerUpdateForm(OrganizerForm):
@@ -70,9 +84,6 @@ class OrganizerCreate(CreateView):
         if not request.user.is_superuser:
             return HttpResponseForbidden()  # TODO
         return super().dispatch(request, *args, **kwargs)
-
-    def get_object(self, queryset=None) -> Organizer:
-        return self.request.organizer
 
     def form_valid(self, form):
         messages.success(self.request, _('The new organizer has been created.'))

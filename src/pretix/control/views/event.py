@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from django.conf import settings
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.utils.functional import cached_property
 from django.views.generic import FormView
@@ -156,13 +157,14 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         self.sform.save()
+        messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings', kwargs={
             'organizer': self.object.organizer.slug,
             'event': self.object.slug,
-        }) + '?success=true'
+        })
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()

@@ -12,6 +12,8 @@ urlpatterns = [
     url(r'^organizers/add$', organizer.OrganizerCreate.as_view(), name='organizers.add'),
     url(r'^organizer/(?P<organizer>[^/]+)/edit$', organizer.OrganizerUpdate.as_view(), name='organizer.edit'),
     url(r'^events/$', main.EventList.as_view(), name='events'),
+    url(r'^events/add$', main.EventCreateStart.as_view(), name='events.add'),
+    url(r'^event/(?P<organizer>[^/]+)/add', main.EventCreate.as_view(), name='events.create'),
     url(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
         url(r'^$', event.index, name='event.index'),
         url(r'^settings/$', event.EventUpdate.as_view(), name='event.settings'),
