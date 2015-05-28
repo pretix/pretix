@@ -32,7 +32,7 @@
                 </div> &middot;
             {% endif %}
             {% if request.user.is_authenticated %}
-                {% blocktrans trimmed with name=request.user.identifier %}
+                {% blocktrans trimmed with name=request.user %}
                     Hello, {{ name }}!
                 {% endblocktrans %} &middot;
                 <a href="{% url "presale:event.orders" event=request.event.slug organizer=request.event.organizer.slug %}">
