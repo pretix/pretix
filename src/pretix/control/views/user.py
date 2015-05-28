@@ -90,7 +90,7 @@ class UserSettingsForm(forms.ModelForm):
         if password1:
             self.instance.set_password(password1)
 
-        self.instance.identifier = self.instance.email
+        self.instance.identifier = email
 
         return self.cleaned_data
 
