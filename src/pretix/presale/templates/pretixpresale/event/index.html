@@ -49,7 +49,7 @@
     {% endif %}
     {% if event.presale_is_running or event.settings.show_items_outside_presale_period %}
         <form method="post"
-                action="{% url "presale:event.cart.add" organizer=request.event.organizer.slug event=request.event.slug %}?next={{ request.path_info|urlencode }}">
+                action="{% url "presale:event.cart.add" organizer=request.event.organizer.slug event=request.event.slug %}?next={{ request.path|urlencode }}">
             {% csrf_token %}
             {% for tup in items_by_category %}
                 <section>
