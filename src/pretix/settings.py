@@ -73,7 +73,6 @@ LANGUAGE_COOKIE_NAME = 'pretix_language'
 CSRF_COOKIE_NAME = 'pretix_csrftoken'
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
