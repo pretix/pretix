@@ -7,7 +7,7 @@ config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pre
             encoding='utf-8')
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-DATA_DIR = config.get('pretix', 'datadir', fallback='data')
+DATA_DIR = config.get('pretix', 'datadir', fallback=os.environ.get('DATA_DIR', 'data'))
 
 if not os.path.exists(DATA_DIR):
     os.mkdir(DATA_DIR)
@@ -40,9 +40,9 @@ DATABASES = {
     }
 }
 
-STATIC_URL = config.get('static', 'url', fallback='/static/')
+STATIC_URL = config.get('urls', 'static', fallback='/static/')
 
-MEDIA_URL = config.get('media', 'url', fallback=os.environ.get('MEDIA_ROOT', '/media/'))
+MEDIA_URL = config.get('urls', 'media', fallback='/media/')
 
 PRETIX_INSTANCE_NAME = config.get('pretix', 'instance_name', fallback='pretix.de')
 PRETIX_GLOBAL_REGISTRATION = config.getboolean('pretix', 'global_registration', fallback=True)

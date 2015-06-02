@@ -52,7 +52,7 @@ Example::
 
 ``datadir``
     The local path to a data directory that will be used for storing user uploads and similar
-    data.
+    data. Defaults to the value of the environment variable ``DATA_DIR`` or ``data``.
 
 Locale settings
 ---------------

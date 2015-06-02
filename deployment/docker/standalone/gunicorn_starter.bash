@@ -1,7 +1,7 @@
 #!/bin/bash
 cd /pretix/src
 export DJANGO_SETTINGS_MODULE=pretix.settings
-export MEDIA_ROOT=/data/
+export DATA_DIR=/data/
 python3 manage.py migrate
 python3 manage.py compress
 gunicorn \
