@@ -860,10 +860,14 @@ class Item(Versionable):
         ),
         default=False
     )
+    position = models.IntegerField(
+        default=0
+    )
 
     class Meta:
         verbose_name = _("Product")
         verbose_name_plural = _("Products")
+        ordering = ("category__position", "category", "position")
 
     def __str__(self):
         return str(self.name)

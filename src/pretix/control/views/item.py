@@ -27,13 +27,58 @@ from . import UpdateView, CreateView
 class ItemList(ListView):
     model = Item
     context_object_name = 'items'
-    paginate_by = 30
+    # paginate_by = 30
+    # Pagination is disabled as it is very unlikely to be necessary
+    # here and could cause problems with the "reorder-within-category" feature
     template_name = 'pretixcontrol/items/index.html'
 
     def get_queryset(self):
         return Item.objects.current.filter(
             event=self.request.event
         ).prefetch_related("category")
+
+
+def item_move(request, item, up=True):
+    """
+    This is a helper function to avoid duplicating code in item_move_up and
+    item_move_down. It takes an item and a direction and then tries to bring
+    all items for this category in a new order.
+    """
+    try:
+        item = request.event.items.current.get(
+            identity=item
+        )
+    except Item.DoesNotExist:
+        raise Http404(_("The requested product does not exist."))
+    items = list(request.event.items.current.filter(category=item.category).order_by("position"))
+
+    index = items.index(item)
+    if index != 0 and up:
+        items[index - 1], items[index] = items[index], items[index - 1]
+    elif index != len(items) - 1 and not up:
+        items[index + 1], items[index] = items[index], items[index + 1]
+
+    for i, item in enumerate(items):
+        if item.position != i:
+            item.position = i
+            item.save()  # TODO: Clone or document sloppiness?
+    messages.success(request, _('The order of items as been updated.'))
+
+
+@event_permission_required("can_change_items")
+def item_move_up(request, organizer, event, item):
+    item_move(request, item, up=True)
+    return redirect('control:event.items',
+                    organizer=request.event.organizer.slug,
+                    event=request.event.slug)
+
+
+@event_permission_required("can_change_items")
+def item_move_down(request, organizer, event, item):
+    item_move(request, item, up=False)
+    return redirect('control:event.items',
+                    organizer=request.event.organizer.slug,
+                    event=request.event.slug)
 
 
 class CategoryForm(VersionedModelForm):
@@ -159,6 +204,7 @@ def category_move(request, category, up=True):
         if cat.position != i:
             cat.position = i
             cat.save()  # TODO: Clone or document sloppiness?
+    messages.success(request, _('The order of categories as been updated.'))
 
 
 @event_permission_required("can_change_items")

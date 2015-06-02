@@ -35,7 +35,7 @@ class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
             'quotas', 'variations__quotas', 'quotas__event'  # for .availability()
         ).annotate(quotac=Count('quotas')).filter(
             quotac__gt=0
-        ).order_by('category__position', 'category_id', 'name')
+        ).order_by('category__position', 'category_id', 'position', 'name')
 
         for item in items:
             item.available_variations = sorted(item.get_all_available_variations(),

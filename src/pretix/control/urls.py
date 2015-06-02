@@ -27,6 +27,8 @@ urlpatterns = [
             name='event.item.variations'),
         url(r'^items/(?P<item>[0-9a-f-]+)/restrictions$', item.ItemRestrictions.as_view(),
             name='event.item.restrictions'),
+        url(r'^items/(?P<item>[0-9a-f-]+)/up$', item.item_move_up, name='event.items.up'),
+        url(r'^items/(?P<item>[0-9a-f-]+)/down$', item.item_move_down, name='event.items.down'),
         url(r'^categories/$', item.CategoryList.as_view(), name='event.items.categories'),
         url(r'^categories/(?P<category>[0-9a-f-]+)/delete$', item.CategoryDelete.as_view(),
             name='event.items.categories.delete'),
