@@ -9,7 +9,7 @@ from django.views.generic.edit import DeleteView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.core.urlresolvers import resolve, reverse
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.shortcuts import redirect
 from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
@@ -54,9 +54,12 @@ class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
     context_object_name = 'category'
 
     def get_object(self, queryset=None) -> ItemCategory:
-        return self.request.event.categories.current.get(
-            identity=self.kwargs['category']
-        )
+        try:
+            return self.request.event.categories.current.get(
+                identity=self.kwargs['category']
+            )
+        except ItemCategory.DoesNotExist:
+            raise Http404(_("The requested product category does not exist."))
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -85,9 +88,12 @@ class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None) -> ItemCategory:
         url = resolve(self.request.path_info)
-        return self.request.event.categories.current.get(
-            identity=url.kwargs['category']
-        )
+        try:
+            return self.request.event.categories.current.get(
+                identity=url.kwargs['category']
+            )
+        except ItemCategory.DoesNotExist:
+            raise Http404(_("The requested product category does not exist."))
 
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
@@ -135,9 +141,12 @@ def category_move(request, category, up=True):
     category_move_down. It takes a category and a direction and then tries to bring
     all categories for this event in a new order.
     """
-    category = request.event.categories.current.get(
-        identity=category
-    )
+    try:
+        category = request.event.categories.current.get(
+            identity=category
+        )
+    except ItemCategory.DoesNotExist:
+        raise Http404(_("The requested product category does not exist."))
     categories = list(request.event.categories.current.order_by("position"))
 
     index = categories.index(category)
@@ -206,9 +215,12 @@ class PropertyUpdate(EventPermissionRequiredMixin, UpdateView):
     context_object_name = 'property'
 
     def get_object(self, queryset=None) -> Property:
-        return self.request.event.properties.current.get(
-            identity=self.kwargs['property']
-        )
+        try:
+            return self.request.event.properties.current.get(
+                identity=self.kwargs['property']
+            )
+        except Property.DoesNotExist:
+            raise Http404(_("The requested property does not exist."))
 
     def get_success_url(self) -> str:
         return reverse('control:event.items.properties.edit', kwargs={
@@ -330,9 +342,12 @@ class PropertyDelete(EventPermissionRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None) -> Property:
         if not hasattr(self, 'object') or not self.object:
-            self.object = self.request.event.properties.current.get(
-                identity=self.kwargs['property']
-            )
+            try:
+                self.object = self.request.event.properties.current.get(
+                    identity=self.kwargs['property']
+                )
+            except Property.DoesNotExist:
+                raise Http404(_("The requested property does not exist."))
         return self.object
 
     def delete(self, request, *args, **kwargs):
@@ -380,9 +395,12 @@ class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
     context_object_name = 'question'
 
     def get_object(self, queryset=None) -> Question:
-        return self.request.event.questions.current.get(
-            identity=self.kwargs['question']
-        )
+        try:
+            return self.request.event.questions.current.get(
+                identity=self.kwargs['question']
+            )
+        except Question.DoesNotExist:
+            raise Http404(_("The requested question does not exist."))
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
@@ -411,9 +429,12 @@ class QuestionUpdate(EventPermissionRequiredMixin, UpdateView):
     context_object_name = 'question'
 
     def get_object(self, queryset=None) -> Question:
-        return self.request.event.questions.current.get(
-            identity=self.kwargs['question']
-        )
+        try:
+            return self.request.event.questions.current.get(
+                identity=self.kwargs['question']
+            )
+        except Question.DoesNotExist:
+            raise Http404(_("The requested question does not exist."))
 
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
@@ -574,9 +595,12 @@ class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
     context_object_name = 'quota'
 
     def get_object(self, queryset=None) -> Quota:
-        return self.request.event.quotas.current.get(
-            identity=self.kwargs['quota']
-        )
+        try:
+            return self.request.event.quotas.current.get(
+                identity=self.kwargs['quota']
+            )
+        except Quota.DoesNotExist:
+            raise Http404(_("The requested quota does not exist."))
 
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
@@ -596,9 +620,12 @@ class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
     context_object_name = 'quota'
 
     def get_object(self, queryset=None) -> Quota:
-        return self.request.event.quotas.current.get(
-            identity=self.kwargs['quota']
-        )
+        try:
+            return self.request.event.quotas.current.get(
+                identity=self.kwargs['quota']
+            )
+        except Quota.DoesNotExist:
+            raise Http404(_("The requested quota does not exist."))
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
@@ -624,12 +651,15 @@ class ItemDetailMixin(SingleObjectMixin):
     context_object_name = 'item'
 
     def get_object(self, queryset=None) -> Item:
-        if not hasattr(self, 'object') or not self.object:
-            self.item = self.request.event.items.current.get(
-                identity=self.kwargs['item']
-            )
-            self.object = self.item
-        return self.object
+        try:
+            if not hasattr(self, 'object') or not self.object:
+                self.item = self.request.event.items.current.get(
+                    identity=self.kwargs['item']
+                )
+                self.object = self.item
+            return self.object
+        except Item.DoesNotExist:
+            raise Http404(_("The requested item does not exist."))
 
 
 class ItemFormGeneral(VersionedModelForm):
