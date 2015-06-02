@@ -7,11 +7,15 @@ config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pre
             encoding='utf-8')
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+DATA_DIR = config.get('pretix', 'datadir', fallback='data')
+
+if not os.path.exists(DATA_DIR):
+    os.mkdir(DATA_DIR)
 
 if config.has_option('django', 'secret'):
     SECRET_KEY = config.get('django', 'secret')
 else:
-    SECRET_FILE = os.path.join(BASE_DIR, '.secret')
+    SECRET_FILE = os.path.join(DATA_DIR, '.secret')
     if os.path.exists(SECRET_FILE):
         with open(SECRET_FILE, 'r') as f:
             SECRET_KEY = f.read().strip()
@@ -37,10 +41,8 @@ DATABASES = {
 }
 
 STATIC_URL = config.get('static', 'url', fallback='/static/')
-STATIC_ROOT = config.get('static', 'root', fallback='_static')
 
 MEDIA_URL = config.get('media', 'url', fallback=os.environ.get('MEDIA_ROOT', '/media/'))
-MEDIA_ROOT = config.get('media', 'root', fallback='media')
 
 PRETIX_INSTANCE_NAME = config.get('pretix', 'instance_name', fallback='pretix.de')
 PRETIX_GLOBAL_REGISTRATION = config.getboolean('pretix', 'global_registration', fallback=True)
@@ -67,6 +69,9 @@ LANGUAGE_COOKIE_DOMAIN = SESSION_COOKIE_DOMAIN = CSRF_COOKIE_DOMAIN = config.get
     'pretix', 'cookiedomain', fallback=None)
 
 # Internal settings
+
+STATIC_ROOT = '_static'
+MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 
 SESSION_COOKIE_NAME = 'pretix_session'
 LANGUAGE_COOKIE_NAME = 'pretix_language'
@@ -212,7 +217,7 @@ LOGGING = {
 
     },
     'loggers': {
-        '': {
+        'django.request': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,

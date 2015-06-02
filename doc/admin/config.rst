@@ -28,6 +28,7 @@ Example::
     currency=EUR
     cookiedomain=.pretix.de
     securecookie=on
+    datadir=/data
 
 ``instance_name``
     The name of this installation. Default: ``pretix.de``
@@ -48,6 +49,10 @@ Example::
 
 ``securecookie``
     Set the ``secure`` and ``httponly`` flags on session cookies. Off by default.
+
+``datadir``
+    The local path to a data directory that will be used for storing user uploads and similar
+    data.
 
 Locale settings
 ---------------
@@ -87,22 +92,22 @@ Example::
 ``user``, ``password``, ``host``, ``port``
     Connection details for the database connection. Empty by default.
 
-Uploaded files
---------------
+URLs
+-----
 
 Example::
 
-    [media]
-    url=/media/
-    root=media
+    [urls]
+    media=/media/
+    static=/media/
 
-``root``
-    The filesystem location to store user-uploaded content at. By default, this takes
-    the value of the environment variable ``MEDIA_ROOT``, if present, or ``media`` if not.
-
-``url``
+``media``
     The URL to be used to serve user-uploaded content. You should not need to modify
     this. Default: ``/media/``
+
+``static``
+    The URL to be used to serve static files. You should not need to modify
+    this. Default: ``/static/``
 
 Email
 -----
@@ -154,24 +159,6 @@ Example::
     Whether or not to run in debug mode. Default is ``False``.
 
     .. WARNING:: Never set this to ``True`` in production!
-
-Static files
-------------
-
-You should *not* need to modify these settings as logn as you don't want to use a
-custom delivery method for static files such as an external CDN.
-
-Example::
-
-    [static]
-    url=/static/
-    root=_static
-
-``url``
-    The URL to be used to serve static files. Default: ``/static/``.
-
-``root``
-    The filesystem path to be used for static file storage. Default: ``_static``
 
 
 .. _Python documentation: https://docs.python.org/3/library/configparser.html?highlight=configparser#supported-ini-file-structure
