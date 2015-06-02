@@ -13,6 +13,6 @@ before_script:
 script:
     - make
     - make compress
-    - coverage run py.test
+    - coverage run -m py.test tests
 after_success:
     - coveralls
