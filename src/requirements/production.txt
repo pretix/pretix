@@ -1,5 +1,5 @@
 # Functional requirements
-Django==1.8.1
+Django>=1.8,<1.9
 python-dateutil>=2.4,<2.5
 pytz
 django-bootstrap3>=5.4,<5.5
