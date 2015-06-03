@@ -8,9 +8,15 @@ config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pre
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DATA_DIR = config.get('pretix', 'datadir', fallback=os.environ.get('DATA_DIR', 'data'))
+LOG_DIR = os.path.join(DATA_DIR, 'logs')
+MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 
 if not os.path.exists(DATA_DIR):
     os.mkdir(DATA_DIR)
+if not os.path.exists(LOG_DIR):
+    os.mkdir(LOG_DIR)
+if not os.path.exists(MEDIA_ROOT):
+    os.mkdir(MEDIA_ROOT)
 
 if config.has_option('django', 'secret'):
     SECRET_KEY = config.get('django', 'secret')
@@ -71,7 +77,6 @@ LANGUAGE_COOKIE_DOMAIN = SESSION_COOKIE_DOMAIN = CSRF_COOKIE_DOMAIN = config.get
 # Internal settings
 
 STATIC_ROOT = '_static'
-MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 
 SESSION_COOKIE_NAME = 'pretix_session'
 LANGUAGE_COOKIE_NAME = 'pretix_language'
@@ -200,26 +205,42 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'alert-success',
 }
 
+loglevel = 'DEBUG' if DEBUG else 'INFO'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'default': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
+            'format': '%(levelname)s %(asctime)s %(name)s %(module)s %(message)s'
         },
     },
     'handlers': {
         'console': {
-            'level': 'INFO',
+            'level': loglevel,
             'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': loglevel,
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'pretix.log'),
             'formatter': 'default'
         },
-
     },
     'loggers': {
+        '': {
+            'handlers': ['file', 'console'],
+            'level': loglevel,
+            'propagate': True,
+        },
         'django.request': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
+            'handlers': ['file', 'console'],
+            'level': loglevel,
+            'propagate': True,
+        },
+        'django.security': {
+            'handlers': ['file', 'console'],
+            'level': loglevel,
             'propagate': True,
         },
     },
