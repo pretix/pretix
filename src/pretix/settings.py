@@ -95,7 +95,6 @@ INSTALLED_APPS = (
     'bootstrap3',
     'debug_toolbar.apps.DebugToolbarConfig',
     'djangoformsetjs',
-    'pretix.plugins.testdummy',
     'pretix.plugins.timerestriction',
     'pretix.plugins.banktransfer',
     'pretix.plugins.stripe',

@@ -328,7 +328,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertFalse(CartPosition.objects.current.filter(user=self.user, event=self.event).exists())
 
     def test_restriction_failed(self):
-        self.event.plugins = 'pretix.plugins.testdummy'
+        self.event.plugins = 'tests.testdummy'
         self.event.save()
         self.event.settings.testdummy_available = 'yes'
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
@@ -343,7 +343,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].price, 23)
 
     def test_restriction_ok(self):
-        self.event.plugins = 'pretix.plugins.testdummy'
+        self.event.plugins = 'tests.testdummy'
         self.event.save()
         self.event.settings.testdummy_available = 'no'
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {

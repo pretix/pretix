@@ -49,9 +49,9 @@ class PluginSignalTest(TestCase):
         self.assertEqual(len(responses), 0)
 
     def test_one_plugin_active(self):
-        self.event.plugins = 'pretix.plugins.testdummy'
+        self.event.plugins = 'tests.testdummy'
         self.event.save()
         payload = {'foo': 'bar'}
         responses = determine_availability.send(self.event, **payload)
         self.assertEqual(len(responses), 1)
-        self.assertIn('pretix.plugins.testdummy.signals', [r[0].__module__ for r in responses])
+        self.assertIn('tests.testdummy.signals', [r[0].__module__ for r in responses])

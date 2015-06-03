@@ -3,7 +3,7 @@ from pretix.base.plugins import PluginType
 
 
 class TestDummyApp(AppConfig):
-    name = 'pretix.plugins.testdummy'
+    name = 'tests.testdummy'
     verbose_name = '.testdummy'
 
     class PretixPluginMeta:
@@ -12,6 +12,7 @@ class TestDummyApp(AppConfig):
         version = '1.0.0'
 
     def ready(self):
-        from . import signals  # NOQA
+        from tests.testdummy import signals
 
-default_app_config = 'pretix.plugins.testdummy.TestDummyApp'
+
+default_app_config = 'tests.testdummy.TestDummyApp'
