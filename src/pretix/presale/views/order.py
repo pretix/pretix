@@ -1,4 +1,3 @@
-from io import BytesIO
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
@@ -6,16 +5,14 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView, View
-from django.http import HttpResponseNotFound, HttpResponseForbidden, HttpResponse
+from django.http import HttpResponseNotFound, HttpResponseForbidden
 from pretix.base.models import Order, OrderPosition
 from pretix.base.signals import register_payment_providers, register_ticket_outputs
 from pretix.presale.views import EventViewMixin, EventLoginRequiredMixin, CartDisplayMixin
 from pretix.presale.views.checkout import QuestionsViewMixin
-from django.contrib.staticfiles import finders
 
 
 class OrderDetailMixin:
-
     @cached_property
     def order(self):
         try:
@@ -163,7 +160,6 @@ class OrderCancel(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
 
 class OrderDownload(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
                     View):
-
     def get_order_url(self):
         return reverse('presale:event.order', kwargs={
             'event': self.request.event.slug,

@@ -1,12 +1,11 @@
-from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView, UpdateView, CreateView
-from pretix.base.forms import VersionedModelForm
 
 from pretix.base.models import Organizer, OrganizerPermission
+from pretix.control.forms.organizer import OrganizerUpdateForm, OrganizerForm
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
 
 
@@ -23,35 +22,6 @@ class OrganizerList(ListView):
             return Organizer.objects.current.filter(
                 permitted__id__exact=self.request.user.pk
             )
-
-
-class OrganizerForm(VersionedModelForm):
-    error_messages = {
-        'duplicate_slug': _("This slug is already in use. Please choose a different one."),
-    }
-
-    class Meta:
-        model = Organizer
-        fields = ['name', 'slug']
-
-    def clean_slug(self):
-        slug = self.cleaned_data['slug']
-        if Organizer.objects.filter(slug=slug).exists():
-            raise forms.ValidationError(
-                self.error_messages['duplicate_slug'],
-                code='duplicate_slug',
-            )
-        return slug
-
-
-class OrganizerUpdateForm(OrganizerForm):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['slug'].widget.attrs['disabled'] = 'disabled'
-
-    def clean_slug(self):
-        return self.instance.slug
 
 
 class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):

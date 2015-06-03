@@ -1,9 +1,9 @@
 from datetime import timedelta, datetime
+
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Q, Sum
-from django import forms
 from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
@@ -11,82 +11,13 @@ from django.utils.timezone import now
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
 from pretix.base.mail import mail
-from pretix.base.models import CartPosition, Question, QuestionAnswer, Quota, Order, OrderPosition
+from pretix.base.models import CartPosition, QuestionAnswer, Quota, Order, OrderPosition
 from pretix.base.signals import register_payment_providers
-
+from pretix.presale.forms.checkout import QuestionsForm
 from pretix.presale.views import EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin
 
 
-class QuestionsForm(forms.Form):
-    """
-    This form class is responsible for asking order-related questions. This includes
-    the attendee name for admission tickets, if the corresponding setting is enabled,
-    as well as additional questions defined by the organizer.
-    """
-
-    def __init__(self, *args, **kwargs):
-        """
-        Takes two additional keyword arguments:
-
-        :param cartpos: The cart position the form should be for
-        :param event: The event this belongs to
-        """
-        cartpos = kwargs.pop('cartpos', None)
-        orderpos = kwargs.pop('orderpos', None)
-        item = cartpos.item if cartpos else orderpos.item
-        questions = list(item.questions.all())
-        event = kwargs.pop('event')
-
-        super().__init__(*args, **kwargs)
-
-        if item.admission and event.settings.attendee_names_asked:
-            self.fields['attendee_name'] = forms.CharField(
-                max_length=255, required=event.settings.attendee_names_required,
-                label=_('Attendee name'),
-                initial=(cartpos.attendee_name if cartpos else orderpos.attendee_name)
-            )
-
-        for q in questions:
-            # Do we already have an answer? Provide it as the initial value
-            answers = [
-                a for a
-                in (cartpos.answers.all() if cartpos else orderpos.answers.all())
-                if a.question_id == q.identity
-            ]
-            if answers:
-                initial = answers[0].answer
-            else:
-                initial = None
-            if q.type == Question.TYPE_BOOLEAN:
-                field = forms.BooleanField(
-                    label=q.question, required=q.required,
-                    initial=initial
-                )
-            elif q.type == Question.TYPE_NUMBER:
-                field = forms.DecimalField(
-                    label=q.question, required=q.required,
-                    initial=initial
-                )
-            elif q.type == Question.TYPE_STRING:
-                field = forms.CharField(
-                    label=q.question, required=q.required,
-                    initial=initial
-                )
-            elif q.type == Question.TYPE_TEXT:
-                field = forms.CharField(
-                    label=q.question, required=q.required,
-                    widget=forms.Textarea,
-                    initial=initial
-                )
-            field.question = q
-            if answers:
-                # Cache the answer object for later use
-                field.answer = answers[0]
-            self.fields['question_%s' % q.identity] = field
-
-
 class CheckoutView(TemplateView):
-
     def get_payment_url(self):
         return reverse('presale:event.checkout.payment', kwargs={
             'event': self.request.event.slug,
@@ -120,7 +51,6 @@ class CheckoutView(TemplateView):
 
 
 class QuestionsViewMixin:
-
     @cached_property
     def forms(self):
         """
@@ -358,7 +288,8 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
                         if not self.request.event.presale_end or now() < self.request.event.presale_end:
                             cp = cp.clone()
                             cartpos[i] = cp
-                            cp.expires = now() + timedelta(minutes=self.request.event.settings.get('reservation_time', as_type=int))
+                            cp.expires = now() + timedelta(
+                                minutes=self.request.event.settings.get('reservation_time', as_type=int))
                             cp.save()
                     else:
                         cp.delete()  # Sorry!

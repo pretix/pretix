@@ -247,7 +247,7 @@ Our time restriction example looks like this::
 
     from pretix.control.signals import restriction_formset
     from pretix.base.models import Item
-    from pretix.control.views.forms import (
+    from pretix.control.forms import (
         VariationsField, RestrictionInlineFormset, RestrictionForm
     )
 

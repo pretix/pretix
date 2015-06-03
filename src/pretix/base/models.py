@@ -4,8 +4,8 @@ import copy
 import uuid
 import random
 import time
-from django.core.urlresolvers import reverse
 
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -20,7 +20,6 @@ from pretix.base.settings import SettingsProxy
 import six
 from versions.models import Versionable as BaseVersionable
 from versions.models import VersionedForeignKey, VersionedManyToManyField, get_utc_now
-
 from .types import VariationDict
 
 
@@ -1177,7 +1176,7 @@ class VariationsField(VersionedManyToManyField):
     """
 
     def formfield(self, **kwargs):
-        from pretix.control.views.forms import VariationsField as FVariationsField
+        from pretix.control.forms import VariationsField as FVariationsField
         from django.db.models.fields.related import RelatedField
         defaults = {
             'form_class': FVariationsField,

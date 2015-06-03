@@ -1,23 +1,22 @@
 import json
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.core import signing
 from django.core.signing import SignatureExpired, BadSignature
 from django.core.urlresolvers import reverse
-from django.core.validators import RegexValidator
 from django.db.models import Count
-from django import forms
-from django.forms import Form
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
-from django.contrib.auth.forms import AuthenticationForm as BaseAuthenticationForm
 from django.contrib.auth import login
 from django.views.generic import TemplateView, View
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from pretix.base.mail import mail
 from pretix.base.models import User
-
+from pretix.presale.forms.auth import GlobalRegistrationForm, LocalRegistrationForm, PasswordForgotForm, \
+    PasswordRecoverForm
+from pretix.presale.forms.auth import LoginForm
 from pretix.presale.views import EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin
 from pretix.presale.views.cart import CartAdd
 
@@ -59,160 +58,19 @@ class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
         items = [item for item in items if len(item.available_variations) > 0]
 
         # Regroup those by category
-        context['items_by_category'] = sorted([
-            # a group is a tuple of a category and a list of items
-            (cat, [i for i in items if i.category == cat])
-            for cat in set([i.category for i in items])  # insert categories into a set for uniqueness
-            # a set is unsorted, so sort again by category
-        ], key=lambda group: (group[0].position, group[0].identity) if group[0] is not None else (0, ""))
+        context['items_by_category'] = sorted(
+            [
+                # a group is a tuple of a category and a list of items
+                (cat, [i for i in items if i.category == cat])
+                for cat in set([i.category for i in items])
+                # insert categories into a set for uniqueness
+                # a set is unsorted, so sort again by category
+            ],
+            key=lambda group: (group[0].position, group[0].identity) if group[0] is not None else (0, "")
+        )
 
         context['cart'] = self.get_cart() if self.request.user.is_authenticated() else None
         return context
-
-
-class LoginForm(BaseAuthenticationForm):
-    username = forms.CharField(
-        label=_('Username'),
-        help_text=(
-            _('If you registered for multiple events, your username is your email address.')
-            if settings.PRETIX_GLOBAL_REGISTRATION
-            else None
-        )
-    )
-    password = forms.CharField(
-        label=_('Password'),
-        widget=forms.PasswordInput
-    )
-
-    error_messages = {
-        'invalid_login': _("Please enter a correct username and password."),
-        'inactive': _("This account is inactive."),
-    }
-
-    def __init__(self, request=None, *args, **kwargs):
-        self.request = request
-        self.user_cache = None
-        super(forms.Form, self).__init__(*args, **kwargs)
-
-    def clean(self):
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-
-        if username and password:
-            if '@' in username:
-                identifier = username.lower()
-            else:
-                identifier = "%s@%s.event.pretix" % (username, self.request.event.identity)
-            self.user_cache = authenticate(identifier=identifier,
-                                           password=password)
-            if self.user_cache is None:
-                raise forms.ValidationError(
-                    self.error_messages['invalid_login'],
-                    code='invalid_login',
-                )
-            else:
-                self.confirm_login_allowed(self.user_cache)
-
-        return self.cleaned_data
-
-
-class GlobalRegistrationForm(forms.Form):
-    error_messages = {
-        'duplicate_email': _("You already registered with that e-mail address, please use the login form."),
-        'pw_mismatch': _("Please enter the same password twice"),
-    }
-    email = forms.EmailField(
-        label=_('Email address'),
-        required=True
-    )
-    password = forms.CharField(
-        label=_('Password'),
-        widget=forms.PasswordInput,
-        required=True
-    )
-    password_repeat = forms.CharField(
-        label=_('Repeat password'),
-        widget=forms.PasswordInput
-    )
-
-    def clean(self):
-        password1 = self.cleaned_data.get('password')
-        password2 = self.cleaned_data.get('password_repeat')
-
-        if password1 and password1 != password2:
-            raise forms.ValidationError(
-                self.error_messages['pw_mismatch'],
-                code='pw_mismatch',
-            )
-
-        return self.cleaned_data
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if User.objects.filter(identifier=email).exists():
-            raise forms.ValidationError(
-                self.error_messages['duplicate_email'],
-                code='duplicate_email',
-            )
-        return email
-
-
-class LocalRegistrationForm(forms.Form):
-    error_messages = {
-        'invalid_username': _("Please only use characters, numbers or ./+/-/_ in your username."),
-        'duplicate_username': _("This username is already taken. Please choose a different one."),
-        'pw_mismatch': _("Please enter the same password twice"),
-    }
-    username = forms.CharField(
-        label=_('Username'),
-        validators=[
-            RegexValidator(
-                regex='^[a-zA-Z0-9\.+\-_]*$',
-                code='invalid_username',
-                message=error_messages['invalid_username']
-            ),
-        ],
-        required=True
-    )
-    email = forms.EmailField(
-        label=_('E-mail address'),
-        required=False
-    )
-    password = forms.CharField(
-        label=_('Password'),
-        widget=forms.PasswordInput,
-        required=True
-    )
-    password_repeat = forms.CharField(
-        label=_('Repeat password'),
-        widget=forms.PasswordInput
-    )
-
-    def __init__(self, request, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.request = request
-        self.fields['email'].required = request.event.settings.user_mail_required
-
-    def clean(self):
-        password1 = self.cleaned_data.get('password')
-        password2 = self.cleaned_data.get('password_repeat')
-
-        if password1 and password1 != password2:
-            raise forms.ValidationError(
-                self.error_messages['pw_mismatch'],
-                code='pw_mismatch',
-            )
-
-        return self.cleaned_data
-
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if User.objects.filter(event=self.request.event, username=username).exists():
-            raise forms.ValidationError(
-                self.error_messages['duplicate_username'],
-                code='duplicate_username',
-            )
-        return username
 
 
 class EventLogin(EventViewMixin, TemplateView):
@@ -301,73 +159,6 @@ class EventLogin(EventViewMixin, TemplateView):
         return context
 
 
-class PasswordRecoverForm(Form):
-    error_messages = {
-        'pw_mismatch': _("Please enter the same password twice"),
-    }
-    password = forms.CharField(
-        label=_('Password'),
-        widget=forms.PasswordInput,
-        required=True
-    )
-    password_repeat = forms.CharField(
-        label=_('Repeat password'),
-        widget=forms.PasswordInput
-    )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def clean(self):
-        password1 = self.cleaned_data.get('password')
-        password2 = self.cleaned_data.get('password_repeat')
-
-        if password1 and password1 != password2:
-            raise forms.ValidationError(
-                self.error_messages['pw_mismatch'],
-                code='pw_mismatch',
-            )
-
-        return self.cleaned_data
-
-
-class PasswordForgotForm(Form):
-    username = forms.CharField(
-        label=_('Username or E-mail'),
-    )
-
-    def __init__(self, event, *args, **kwargs):
-        self.event = event
-        super().__init__(*args, **kwargs)
-
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        try:
-            self.cleaned_data['user'] = User.objects.get(
-                identifier=username, event__isnull=True
-            )
-            return username
-        except User.DoesNotExist:
-            pass
-        try:
-            self.cleaned_data['user'] = User.objects.get(
-                username=username, event=self.event
-            )
-            return username
-        except User.DoesNotExist:
-            pass
-        try:
-            self.cleaned_data['user'] = User.objects.get(
-                email=username, event=self.event
-            )
-            return username
-        except:
-            raise forms.ValidationError(
-                _("We are unable to find a user matching the data you provided."),
-                code='unknown_user',
-            )
-
-
 class EventForgot(EventViewMixin, TemplateView):
     template_name = 'pretixpresale/event/forgot.html'
 
@@ -398,8 +189,8 @@ class EventForgot(EventViewMixin, TemplateView):
                         'url': settings.SITE_URL + reverse('presale:event.forgot.recover', kwargs={
                             'event': self.request.event.slug,
                             'organizer': self.request.event.organizer.slug,
-                            }) + '?token=' + self.generate_token(user),
-                        },
+                        }) + '?token=' + self.generate_token(user),
+                    },
                     self.request.event
                 )
                 messages.success(request, _('We sent you an e-mail containing further instructions.'))

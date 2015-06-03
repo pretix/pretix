@@ -1,6 +1,6 @@
 from itertools import groupby
+
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -8,10 +8,9 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.views.generic import ListView, DetailView, TemplateView
-from pretix.base.forms import VersionedModelForm
-
 from pretix.base.models import Order, Quota, OrderPosition
 from pretix.base.signals import register_payment_providers
+from pretix.control.forms.orders import ExtendForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 
@@ -51,12 +50,6 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
                 return provider
 
 
-class ExtendForm(VersionedModelForm):
-    class Meta:
-        model = Order
-        fields = ['expires']
-
-
 class OrderDetail(OrderView):
     template_name = 'pretixcontrol/order/index.html'
     permission = 'can_view_orders'
@@ -84,8 +77,8 @@ class OrderDetail(OrderView):
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
         def keyfunc(pos):
-            if ((pos.item.admission and self.request.event.settings.attendee_names_asked)
-                    or pos.item.questions.all()):
+            if (pos.item.admission and self.request.event.settings.attendee_names_asked) \
+                    or pos.item.questions.all():
                 return pos.id, "", "", ""
             return "", pos.item_id, pos.variation_id, pos.price
 
@@ -212,33 +205,38 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
 
         num_total = {
             (p['item'], p['variation']): p['cnt']
-            for p in OrderPosition.objects.current.filter(
-                order__event=self.request.event
-            ).values('item', 'variation').annotate(cnt=Count('id'))
+            for p in
+            OrderPosition.objects.current.filter(order__event=self.request.event).values('item', 'variation').annotate(
+                cnt=Count('id'))
         }
         num_cancelled = {
             (p['item'], p['variation']): p['cnt']
-            for p in OrderPosition.objects.current.filter(
-                order__event=self.request.event, order__status=Order.STATUS_CANCELLED
-            ).values('item', 'variation').annotate(cnt=Count('id'))
+            for p in (OrderPosition.objects.current
+                      .filter(order__event=self.request.event, order__status=Order.STATUS_CANCELLED)
+                      .values('item', 'variation')
+                      .annotate(cnt=Count('id')))
         }
         num_refunded = {
             (p['item'], p['variation']): p['cnt']
-            for p in OrderPosition.objects.current.filter(
-                order__event=self.request.event, order__status=Order.STATUS_REFUNDED
-            ).values('item', 'variation').annotate(cnt=Count('id'))
+            for p in (OrderPosition.objects.current
+                      .filter(order__event=self.request.event, order__status=Order.STATUS_REFUNDED)
+                      .values('item', 'variation')
+                      .annotate(cnt=Count('id')))
         }
         num_pending = {
             (p['item'], p['variation']): p['cnt']
-            for p in OrderPosition.objects.current.filter(
-                order__event=self.request.event, order__status__in=(Order.STATUS_PENDING, Order.STATUS_EXPIRED)
-            ).values('item', 'variation').annotate(cnt=Count('id'))
+            for p in (OrderPosition.objects.current
+                      .filter(order__event=self.request.event,
+                              order__status__in=(Order.STATUS_PENDING, Order.STATUS_EXPIRED))
+                      .values('item', 'variation')
+                      .annotate(cnt=Count('id')))
         }
         num_paid = {
             (p['item'], p['variation']): p['cnt']
-            for p in OrderPosition.objects.current.filter(
-                order__event=self.request.event, order__status=Order.STATUS_PAID
-            ).values('item', 'variation').annotate(cnt=Count('id'))
+            for p in (OrderPosition.objects.current
+                      .filter(order__event=self.request.event, order__status=Order.STATUS_PAID)
+                      .values('item', 'variation')
+                      .annotate(cnt=Count('id')))
         }
 
         for item in items:
@@ -260,12 +258,16 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
             item.num_paid = sum(var.num_paid for var in item.all_variations)
 
         # Regroup those by category
-        ctx['items_by_category'] = sorted([
-            # a group is a tuple of a category and a list of items
-            (cat, [i for i in items if i.category == cat])
-            for cat in set([i.category for i in items])  # insert categories into a set for uniqueness
-            # a set is unsorted, so sort again by category
-        ], key=lambda group: (group[0].position, group[0].identity) if group[0] is not None else (0, ""))
+        ctx['items_by_category'] = sorted(
+            [
+                # a group is a tuple of a category and a list of items
+                (cat, [i for i in items if i.category == cat])
+                for cat in set([i.category for i in items])
+                # insert categories into a set for uniqueness
+                # a set is unsorted, so sort again by category
+            ],
+            key=lambda group: (group[0].position, group[0].identity) if group[0] is not None else (0, "")
+        )
         for c in ctx['items_by_category']:
             c[0].num_total = sum(item.num_total for item in c[1])
             c[0].num_pending = sum(item.num_pending for item in c[1])

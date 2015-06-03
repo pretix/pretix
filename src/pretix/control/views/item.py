@@ -1,9 +1,8 @@
 from itertools import product
+
 from django.contrib import messages
 from django.db import transaction
-from django.forms import BooleanField
 from django.utils.functional import cached_property
-
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
 from django.views.generic.base import TemplateView
@@ -13,13 +12,13 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.shortcuts import redirect
 from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.forms import VersionedModelForm, I18nModelForm
-
 from pretix.base.models import (
-    Item, ItemCategory, Property, ItemVariation, PropertyValue, Question, Quota,
-    Versionable)
+    Item, ItemCategory, Property, ItemVariation, PropertyValue, Question, Quota)
+from pretix.control.forms.item import ItemVariationForm, QuotaForm, QuestionForm, PropertyForm, PropertyValueForm, \
+    CategoryForm
+from pretix.control.forms.item import ItemFormGeneral
 from pretix.control.permissions import EventPermissionRequiredMixin, event_permission_required
-from pretix.control.views.forms import TolerantFormsetModelForm, VariationsField, I18nInlineFormSet
+from pretix.control.forms import VariationsField, I18nInlineFormSet
 from pretix.control.signals import restriction_formset
 from . import UpdateView, CreateView
 
@@ -79,16 +78,6 @@ def item_move_down(request, organizer, event, item):
     return redirect('control:event.items',
                     organizer=request.event.organizer.slug,
                     event=request.event.slug)
-
-
-class CategoryForm(VersionedModelForm):
-
-    class Meta:
-        model = ItemCategory
-        localized_fields = '__all__'
-        fields = [
-            'name'
-        ]
 
 
 class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
@@ -233,24 +222,6 @@ class PropertyList(ListView):
         return Property.objects.current.filter(
             event=self.request.event
         )
-
-
-class PropertyForm(VersionedModelForm):
-    class Meta:
-        model = Property
-        localized_fields = '__all__'
-        fields = [
-            'name',
-        ]
-
-
-class PropertyValueForm(TolerantFormsetModelForm):
-    class Meta:
-        model = PropertyValue
-        localized_fields = '__all__'
-        fields = [
-            'value',
-        ]
 
 
 class PropertyUpdate(EventPermissionRequiredMixin, UpdateView):
@@ -422,18 +393,6 @@ class QuestionList(ListView):
         return self.request.event.questions.current.all()
 
 
-class QuestionForm(VersionedModelForm):
-
-    class Meta:
-        model = Question
-        localized_fields = '__all__'
-        fields = [
-            'question',
-            'type',
-            'required',
-        ]
-
-
 class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
     model = Question
     template_name = 'pretixcontrol/items/question_delete.html'
@@ -524,52 +483,7 @@ class QuotaList(ListView):
         ).prefetch_related("items")
 
 
-class QuotaForm(I18nModelForm):
-
-    def __init__(self, **kwargs):
-        items = kwargs['items']
-        del kwargs['items']
-        super().__init__(**kwargs)
-
-        if hasattr(self, 'instance'):
-            active_items = set(self.instance.items.all())
-            active_variations = set(self.instance.variations.all())
-        else:
-            active_items = set()
-            active_variations = set()
-
-        for item in items:
-            if len(item.properties.all()) > 0:
-                self.fields['item_%s' % item.identity] = VariationsField(
-                    item, label=_("Activate for"),
-                    required=False,
-                    initial=active_variations
-                )
-                self.fields['item_%s' % item.identity].set_item(item)
-            else:
-                self.fields['item_%s' % item.identity] = BooleanField(
-                    label=_("Activate"),
-                    required=False,
-                    initial=(item in active_items)
-                )
-
-    def save(self, commit=True):
-        if self.instance.pk is not None and isinstance(self.instance, Versionable):
-            if self.has_changed():
-                self.instance = self.instance.clone_shallow()
-        return super().save(commit)
-
-    class Meta:
-        model = Quota
-        localized_fields = '__all__'
-        fields = [
-            'name',
-            'size',
-        ]
-
-
 class QuotaEditorMixin:
-
     @cached_property
     def items(self) -> "List[Item]":
         return list(self.request.event.items.all().prefetch_related("properties", "variations"))
@@ -606,8 +520,8 @@ class QuotaEditorMixin:
                     selected_variations.append(v)
             if data:  # and item not in items:
                 self.object.items.add(item)
-            # elif not data and item in items:
-            #     self.object.items.remove(item)
+                # elif not data and item in items:
+                # self.object.items.remove(item)
 
         self.object.variations.add(*[v for v in selected_variations])  # if v not in variations])
         # self.object.variations.remove(*[v for v in variations if v not in selected_variations])
@@ -708,31 +622,6 @@ class ItemDetailMixin(SingleObjectMixin):
             raise Http404(_("The requested item does not exist."))
 
 
-class ItemFormGeneral(VersionedModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['category'].queryset = self.instance.event.categories.current.all()
-        self.fields['properties'].queryset = self.instance.event.properties.current.all()
-        self.fields['questions'].queryset = self.instance.event.questions.current.all()
-
-    class Meta:
-        model = Item
-        localized_fields = '__all__'
-        fields = [
-            'category',
-            'name',
-            'active',
-            'admission',
-            'short_description',
-            'long_description',
-            'default_price',
-            'tax_rate',
-            'properties',
-            'questions',
-        ]
-
-
 class ItemCreate(EventPermissionRequiredMixin, CreateView):
     form_class = ItemFormGeneral
     template_name = 'pretixcontrol/item/index.html'
@@ -776,19 +665,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
         return super().form_valid(form)
 
 
-class ItemVariationForm(VersionedModelForm):
-
-    class Meta:
-        model = ItemVariation
-        localized_fields = '__all__'
-        fields = [
-            'active',
-            'default_price',
-        ]
-
-
 class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
-
     permission = 'can_change_items'
 
     def __init__(self, *args, **kwargs):
@@ -952,7 +829,6 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
 
 
 class ItemRestrictions(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
-
     permission = 'can_change_items'
     template_name = 'pretixcontrol/item/restrictions.html'
 
