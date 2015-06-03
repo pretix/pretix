@@ -244,11 +244,11 @@ class BasePaymentProvider:
         containing an URL the user will be redirected to. If you are done with your process
         you should return the user to the order's detail page.
 
-        If the payment is completed, you should call ``order.mark_paid(provider, info)``
+        If the payment is completed, you should call ``pretix.bsae.services.orders.mark_order_paid(order, provider, info)``
         with ``provider`` being your :py:attr:`identifier` and ``info`` being any string
         you might want to store for later usage. Please note, that if you want to store
-        something inside ``order.payment_info``, please do it after the ``mark_paid`` call,
-        as this call does a object clone for you. Please also note that ``mark_paid`` might
+        something inside ``order.payment_info``, please do it after the ``mark_order_paid`` call,
+        as this call does a object clone for you. Please also note that ``mark_order_paid`` might
         raise a ``Quota.QuotaExceededException`` if (and only if) the payment term of this
         order is over and some of the items are sold out. You should use the exception message
         to display a meaningful error to the user.

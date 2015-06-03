@@ -1,15 +1,17 @@
 from collections import OrderedDict
 import json
 import logging
+
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from django import forms
 from pretix.base.models import Quota
+from pretix.base.services.orders import mark_order_paid
 import stripe
-
 from pretix.base.payment import BasePaymentProvider
+
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
@@ -99,7 +101,7 @@ class Stripe(BasePaymentProvider):
         else:
             if charge.status == 'succeeded' and charge.paid:
                 try:
-                    order.mark_paid('paypal', str(charge))
+                    mark_order_paid(order, 'paypal', str(charge))
                     messages.success(request, _('We successfully received your payment. Thank you!'))
                 except Quota.QuotaExceededException as e:
                     messages.error(request, str(e))

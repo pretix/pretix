@@ -9,6 +9,7 @@ from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.views.generic import ListView, DetailView, TemplateView
 from pretix.base.models import Order, Quota, OrderPosition
+from pretix.base.services.orders import mark_order_paid
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.orders import ExtendForm
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -107,7 +108,7 @@ class OrderTransition(OrderView):
         to = self.request.POST.get('status', '')
         if self.order.status == 'n' and to == 'p':
             try:
-                self.order.mark_paid(manual=True)
+                mark_order_paid(self.order, manual=True)
             except Quota.QuotaExceededException as e:
                 messages.error(self.request, str(e))
             else:

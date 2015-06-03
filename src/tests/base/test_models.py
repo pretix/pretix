@@ -1,11 +1,12 @@
 from datetime import timedelta
+
 from django.test import TestCase
 from django.utils.timezone import now
-
 from pretix.base.models import (
     Event, Organizer, Item, ItemVariation,
     Property, PropertyValue, User, Quota,
     Order, OrderPosition, CartPosition)
+from pretix.base.services.orders import mark_order_paid
 from pretix.base.types import VariationDict
 
 
@@ -314,14 +315,14 @@ class OrderTestCase(BaseQuotaTestCase):
     def test_paid_in_time(self):
         self.quota.size = 0
         self.quota.save()
-        self.order.mark_paid()
+        mark_order_paid(self.order)
         self.order = Order.objects.current.get(identity=self.order.identity)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
     def test_paid_expired_available(self):
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
-        self.order.mark_paid()
+        mark_order_paid(self.order)
         self.order = Order.objects.current.get(identity=self.order.identity)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
@@ -331,7 +332,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.quota.size = 1
         self.quota.save()
         try:
-            self.order.mark_paid()
+            mark_order_paid(self.order)
             self.assertFalse(True, 'This should have raised an exception.')
         except Quota.QuotaExceededException:
             pass
@@ -344,7 +345,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.quota.size = 0
         self.quota.save()
         try:
-            self.order.mark_paid()
+            mark_order_paid(self.order)
             self.assertFalse(True, 'This should have raised an exception.')
         except Quota.QuotaExceededException:
             pass
@@ -356,6 +357,6 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order.save()
         self.quota.size = 0
         self.quota.save()
-        self.order.mark_paid(force=True)
+        mark_order_paid(self.order, force=True)
         self.order = Order.objects.current.get(identity=self.order.identity)
         self.assertEqual(self.order.status, Order.STATUS_PAID)

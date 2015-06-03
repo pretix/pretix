@@ -1,16 +1,16 @@
 from collections import OrderedDict
 import json
 import logging
+
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
 from django import forms
-
 import paypalrestsdk
 from pretix.base.models import Quota
-
+from pretix.base.services.orders import mark_order_paid
 from pretix.base.payment import BasePaymentProvider
 
 
@@ -177,7 +177,7 @@ class Paypal(BasePaymentProvider):
             return
 
         try:
-            order.mark_paid('paypal', json.dumps(payment.to_dict()))
+            mark_order_paid(order, 'paypal', json.dumps(payment.to_dict()))
             messages.success(request, _('We successfully received your payment. Thank you!'))
         except Quota.QuotaExceededException as e:
             messages.error(request, str(e))
