@@ -38,7 +38,7 @@ def mark_order_paid(order, provider=None, info=None, date=None, manual=None, for
         for quota in quotas_locked:
             quota.release()
 
-    from pretix.base.services import mail
+    from pretix.base.services.mail import mail
 
     mail(
         order.user, _('Payment received for your order: %(code)s') % {'code': order.code},
