@@ -219,6 +219,7 @@ LOGGING = {
         'console': {
             'level': loglevel,
             'class': 'logging.StreamHandler',
+            'formatter': 'default'
         },
         'file': {
             'level': loglevel,
@@ -243,5 +244,10 @@ LOGGING = {
             'level': loglevel,
             'propagate': True,
         },
+        'django.db.backends.schema': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',  # Do not output all the queries
+            'propagate': True,
+        }
     },
 }

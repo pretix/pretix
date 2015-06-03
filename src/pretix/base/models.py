@@ -484,7 +484,7 @@ class Event(Versionable):
         return EventRelatedCache(self)
 
     @cached_property
-    def settings(self):
+    def settings(self) -> SettingsProxy:
         """
         Returns an object representing this event's settings
         """

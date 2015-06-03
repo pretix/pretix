@@ -37,7 +37,7 @@ def mail(user: User, subject: str, template: str, context: dict, event: Event=No
     sender = event.settings.get('mail_from') if event else settings.MAIL_FROM
 
     email = EmailMessage(
-        subject, body, sender,
+        str(subject), body, sender,
         to=[user.email]
     )
 
