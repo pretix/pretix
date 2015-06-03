@@ -10,7 +10,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.mail import mail
+from pretix.base.services.mail import mail
 from pretix.base.models import CartPosition, QuestionAnswer, Quota, Order, OrderPosition
 from pretix.base.signals import register_payment_providers
 from pretix.presale.forms.checkout import QuestionsForm

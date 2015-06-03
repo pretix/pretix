@@ -12,7 +12,7 @@ from django.contrib.auth import login
 from django.views.generic import TemplateView, View
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from pretix.base.mail import mail
+from pretix.base.services.mail import mail
 from pretix.base.models import User
 from pretix.presale.forms.auth import GlobalRegistrationForm, LocalRegistrationForm, PasswordForgotForm, \
     PasswordRecoverForm
