@@ -22,7 +22,7 @@ class TicketOutputPdfApp(AppConfig):
     def compatibility_errors(self):
         errs = []
         try:
-            import reportlab
+            import reportlab  # NOQA
         except ImportError:
             errs.append("Python package 'reportlab' is not installed.")
         return errs

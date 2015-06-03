@@ -23,7 +23,7 @@ class StripeApp(AppConfig):
     def compatibility_errors(self):
         errs = []
         try:
-            import stripe
+            import stripe  # NOQA
         except ImportError:
             errs.append("Python package 'stripe' is not installed.")
         return errs

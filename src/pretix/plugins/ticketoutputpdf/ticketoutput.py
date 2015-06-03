@@ -1,13 +1,9 @@
 from io import BytesIO
 import logging
-from django.contrib import messages
+
 from django.contrib.staticfiles import finders
 from django.http import HttpResponse
-from django.shortcuts import redirect
-from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.models import Order
-
 from pretix.base.ticketoutput import BaseTicketOutput
 
 
@@ -15,7 +11,6 @@ logger = logging.getLogger('pretix.plugins.ticketoutputpdf')
 
 
 class PdfTicketOutput(BaseTicketOutput):
-
     identifier = 'pdf'
     verbose_name = _('PDF output')
     download_button_text = _('Download PDF')

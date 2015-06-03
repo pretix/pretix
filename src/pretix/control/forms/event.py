@@ -34,8 +34,8 @@ class EventCreateForm(VersionedModelForm):
         if Event.objects.filter(slug=slug, organizer=self.organizer).exists():
             raise forms.ValidationError(
                 self.error_messages['duplicate_slug'],
-                code='duplicate_slug',
-                )
+                code='duplicate_slug'
+            )
         return slug
 
 

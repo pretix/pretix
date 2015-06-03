@@ -1,8 +1,7 @@
 from datetime import timedelta
-from django.test import Client, TestCase
+
 from django.utils.timezone import now
 import pytest
-
 from pretix.base.models import Event, Organizer, User, EventPermission, Order
 
 

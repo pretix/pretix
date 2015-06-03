@@ -3,8 +3,8 @@ from decimal import Decimal
 import json
 import logging
 import re
+
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render
 from django.utils.timezone import now
 from django.views.generic import TemplateView

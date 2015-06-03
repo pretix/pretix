@@ -22,7 +22,7 @@ class PaypalApp(AppConfig):
     def compatibility_errors(self):
         errs = []
         try:
-            import paypalrestsdk
+            import paypalrestsdk  # NOQA
         except ImportError:
             errs.append("Python package 'paypalrestsdk' is not installed.")
         return errs

@@ -23,7 +23,7 @@ class BankTransferApp(AppConfig):
     def compatibility_warnings(self):
         errs = []
         try:
-            import chardet
+            import chardet  # NOQA
         except ImportError:
             errs.append(_("Install the python package 'chardet' for better CSV import capabilities."))
         return errs

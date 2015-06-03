@@ -304,8 +304,8 @@ class Organizer(Versionable):
         validators=[
             RegexValidator(
                 regex="^[a-zA-Z0-9.-]+$",
-                message=_("The slug may only contain letters, numbers, dots and dashes."),
-                )
+                message=_("The slug may only contain letters, numbers, dots and dashes.")
+            )
         ],
         verbose_name=_("Slug"),
     )

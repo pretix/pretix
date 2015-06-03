@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 import os
 import sys
-from datetime import date, timedelta, datetime
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pretix.settings")
 
 import django
+
 django.setup()
 
 from pretix.base.models import *
