@@ -19,7 +19,7 @@ def event_permission_required(permission):
                     event=request.event,
                     user=request.user
                 )
-            except:
+            except EventPermission.DoesNotExist:
                 pass
             else:
                 allowed = not permission
@@ -63,7 +63,7 @@ def organizer_permission_required(permission):
                     organizer=request.organizer,
                     user=request.user
                 )
-            except:
+            except OrganizerPermission.DoesNotExist:
                 pass
             else:
                 allowed = not permission

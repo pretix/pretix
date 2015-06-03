@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.utils.timezone import now
 import pytest
-from pretix.base.models import Event, Organizer, User, EventPermission, Order
+from pretix.base.models import Event, Organizer, User, EventPermission, Order, OrganizerPermission
 
 
 @pytest.fixture
@@ -19,7 +19,7 @@ def env():
         datetime=now(), expires=now() + timedelta(days=10),
         total=0, payment_provider='banktransfer'
     )
-    return event, user
+    return event, user, o
 
 
 event_urls = [
@@ -58,17 +58,21 @@ event_urls = [
 ]
 
 
+organizer_urls = [
+    'organizer/abc/edit',
+    'event/abc/add'
+]
+
+
 @pytest.mark.django_db
 @pytest.mark.parametrize("url", [
     "",
     "settings",
     "organizers/",
     "organizers/add",
-    "organizer/dummy/edit",
     "events/",
     "events/add",
-    "event/dummy/add",
-] + ['event/dummy/dummy/' + u for u in event_urls])
+] + ['event/dummy/dummy/' + u for u in event_urls] + organizer_urls)
 def test_logged_out(client, env, url):
     client.logout()
     response = client.get('/control/' + url)
@@ -144,4 +148,47 @@ def test_correct_event_permission(client, env, perm, url, code):
     ep.save()
     client.login(identifier='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/' + url)
+    assert response.status_code == code
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("url", organizer_urls)
+def test_wrong_organizer(client, env, url):
+    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/' + url)
+    # These permission violations do not yield a 403 error, but
+    # a 404 error to prevent information leakage
+    assert response.status_code == 404
+
+
+organizer_permission_urls = [
+    ("can_create_events", "event/dummy/add", 200),
+]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("perm,url,code", organizer_permission_urls)
+def test_wrong_organizer_permission(client, env, perm, url, code):
+    if perm:
+        op = OrganizerPermission(
+            organizer=env[2], user=env[1],
+        )
+        setattr(op, perm, False)
+    op.save()
+    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/' + url)
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("perm,url,code", organizer_permission_urls)
+def test_correct_organizer_permission(client, env, perm, url, code):
+    op = OrganizerPermission(
+        organizer=env[2], user=env[1],
+    )
+    if perm:
+        setattr(op, perm, True)
+    op.save()
+    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/' + url)
     assert response.status_code == code
