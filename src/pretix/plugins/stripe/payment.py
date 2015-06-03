@@ -101,7 +101,7 @@ class Stripe(BasePaymentProvider):
         else:
             if charge.status == 'succeeded' and charge.paid:
                 try:
-                    mark_order_paid(order, 'paypal', str(charge))
+                    mark_order_paid(order, 'stripe', str(charge))
                     messages.success(request, _('We successfully received your payment. Thank you!'))
                 except Quota.QuotaExceededException as e:
                     messages.error(request, str(e))
