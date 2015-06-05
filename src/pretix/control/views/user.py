@@ -21,6 +21,10 @@ class UserSettings(UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved. See below for details.'))
+        return super().form_invalid(form)
+
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
         sup = super().form_valid(form)

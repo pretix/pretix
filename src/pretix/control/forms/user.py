@@ -51,6 +51,7 @@ class UserSettingsForm(forms.ModelForm):
                 self.error_messages['pw_current_wrong'],
                 code='pw_current_wrong',
             )
+
         return old_pw
 
     def clean_email(self):
@@ -62,27 +63,28 @@ class UserSettingsForm(forms.ModelForm):
             )
         return email
 
-    def clean(self):
+    def clean_new_pw_repeat(self):
         password1 = self.cleaned_data.get('new_pw')
         password2 = self.cleaned_data.get('new_pw_repeat')
-        old_pw = self.cleaned_data.get('old_pw')
+        if password1 and password1 != password2:
+            raise forms.ValidationError(
+                self.error_messages['pw_mismatch'],
+                code='pw_mismatch'
+            )
+
+    def clean(self):
+        password1 = self.cleaned_data.get('new_pw')
         email = self.cleaned_data.get('email')
+        old_pw = self.cleaned_data.get('old_pw')
 
         if (password1 or email != self.user.email) and not old_pw:
             raise forms.ValidationError(
                 self.error_messages['pw_current'],
-                code='pw_current',
-            )
-
-        if password1 and password1 != password2:
-            raise forms.ValidationError(
-                self.error_messages['pw_mismatch'],
-                code='pw_mismatch',
+                code='pw_current'
             )
 
         if password1:
             self.instance.set_password(password1)
-
         self.instance.identifier = email
 
         return self.cleaned_data
