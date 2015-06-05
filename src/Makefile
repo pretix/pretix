@@ -12,3 +12,9 @@ staticfiles:
 
 compress:
 	./manage.py compress
+
+test:
+	py.test tests
+
+coverage:
+	coverage run -m py.test
