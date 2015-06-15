@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-15 19:28+0000\n"
-"PO-Revision-Date: 2015-06-15 21:29+0100\n"
+"POT-Creation-Date: 2015-06-15 20:38+0000\n"
+"PO-Revision-Date: 2015-06-15 22:39+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -64,9 +64,9 @@ msgstr "Zeitzone"
 
 #: pretix/base/models.py:213 pretix/base/models.py:1508
 #: pretix/base/models.py:1811
-#: pretix/control/templates/pretixcontrol/event/permissions.html:12
+#: pretix/control/templates/pretixcontrol/event/permissions.html:13
 #: pretix/control/templates/pretixcontrol/orders/index.html:10
-#: tests/base/test_mail.py:58
+#: pretix/control/views/event.py:271 tests/base/test_mail.py:58
 msgid "User"
 msgstr "Benutzer"
 
@@ -104,7 +104,7 @@ msgid "Slug"
 msgstr "Kurzform"
 
 #: pretix/base/models.py:315
-#: pretix/control/templates/pretixcontrol/events/index.html:15
+#: pretix/control/templates/pretixcontrol/events/index.html:20
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:4
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:6
 msgid "Organizer"
@@ -615,6 +615,44 @@ msgstr "Alle auswählen"
 msgid "Deselect all"
 msgstr "Keine auswählen"
 
+#: pretix/control/forms/auth.py:13 pretix/control/forms/auth.py:51
+#: pretix/presale/forms/auth.py:63
+msgid "Email address"
+msgstr "E-Mail-Adresse"
+
+#: pretix/control/forms/auth.py:14 pretix/control/forms/auth.py:55
+#: pretix/presale/forms/auth.py:21 pretix/presale/forms/auth.py:67
+#: pretix/presale/forms/auth.py:120 pretix/presale/forms/auth.py:161
+msgid "Password"
+msgstr "Passwort"
+
+#: pretix/control/forms/auth.py:18
+msgid "Please enter a correct e-mail address and password."
+msgstr ""
+"Bitte geben Sie eine gültige Kombination aus E-Mail-Adresse und Passwort ein."
+
+#: pretix/control/forms/auth.py:19 pretix/presale/forms/auth.py:27
+msgid "This account is inactive."
+msgstr "Dieses Konto ist deaktiviert."
+
+#: pretix/control/forms/auth.py:47 pretix/presale/forms/auth.py:59
+msgid ""
+"You already registered with that e-mail address, please use the login form."
+msgstr ""
+"Sie haben sich bereits mit dieser E-Mail-Adresse registriert, bitte "
+"verwenden Sie das Login-Formular."
+
+#: pretix/control/forms/auth.py:48 pretix/control/forms/user.py:17
+#: pretix/presale/forms/auth.py:60 pretix/presale/forms/auth.py:102
+#: pretix/presale/forms/auth.py:158
+msgid "Please enter the same password twice"
+msgstr "Bitte geben Sie zweimal das selbe Passwort ein."
+
+#: pretix/control/forms/auth.py:60 pretix/presale/forms/auth.py:72
+#: pretix/presale/forms/auth.py:125 pretix/presale/forms/auth.py:166
+msgid "Repeat password"
+msgstr "Passwort wiederholen"
+
 #: pretix/control/forms/event.py:13
 msgid ""
 "You already used this slug for a different event. Please choose a new one."
@@ -839,11 +877,6 @@ msgstr ""
 msgid "The current password you entered was not correct."
 msgstr "Das eingegebene aktuelle Passwort war nicht korrekt."
 
-#: pretix/control/forms/user.py:17 pretix/presale/forms/auth.py:60
-#: pretix/presale/forms/auth.py:102 pretix/presale/forms/auth.py:158
-msgid "Please enter the same password twice"
-msgstr "Bitte geben Sie zweimal das selbe Passwort ein."
-
 #: pretix/control/forms/user.py:22
 msgid "Your current password"
 msgstr "Aktuelles Passwort"
@@ -856,7 +889,7 @@ msgstr "Neues Passwort"
 msgid "Repeat new password"
 msgstr "Neues Passwort wiederholen"
 
-#: pretix/control/middleware.py:58
+#: pretix/control/middleware.py:59
 msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
@@ -864,7 +897,7 @@ msgstr ""
 "Sie haben keine Berechtigung, die ausgewählte Veranstaltung zu "
 "administrieren."
 
-#: pretix/control/middleware.py:67
+#: pretix/control/middleware.py:68
 msgid ""
 "The selected organizer was not found or you have no permission to "
 "administrate it."
@@ -884,8 +917,27 @@ msgid "powered by <a %(a_attr)s>pretix</a>"
 msgstr "powered by <a %(a_attr)s>pretix</a>"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:12
+#: pretix/control/templates/pretixcontrol/auth/register.html:18
+#: pretix/presale/templates/pretixpresale/event/login.html:65
+#: pretix/presale/templates/pretixpresale/event/login.html:95
+msgid "Register"
+msgstr "Registrieren"
+
+#: pretix/control/templates/pretixcontrol/auth/login.html:16
 msgid "Log in"
 msgstr "Anmelden"
+
+#: pretix/control/templates/pretixcontrol/auth/register.html:6
+msgid "Create a new account"
+msgstr "Neue Veranstaltung erstellen"
+
+#: pretix/control/templates/pretixcontrol/auth/register.html:14
+#: pretix/presale/templates/pretixpresale/event/base.html:48
+#: pretix/presale/templates/pretixpresale/event/login.html:4
+#: pretix/presale/templates/pretixpresale/event/login.html:6
+#: pretix/presale/templates/pretixpresale/event/login.html:31
+msgid "Login"
+msgstr "Login"
 
 #: pretix/control/templates/pretixcontrol/base.html:27
 msgid "Toggle navigation"
@@ -987,7 +1039,7 @@ msgstr ""
 "Einstellungen und aktivieren Sie eins oder mehrere Zahlungsplugins."
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:31
-#: pretix/control/templates/pretixcontrol/event/permissions.html:39
+#: pretix/control/templates/pretixcontrol/event/permissions.html:53
 #: pretix/control/templates/pretixcontrol/event/settings.html:50
 #: pretix/control/templates/pretixcontrol/event/tickets.html:35
 #: pretix/control/templates/pretixcontrol/events/create.html:29
@@ -1006,22 +1058,47 @@ msgstr ""
 msgid "Save"
 msgstr "Speichern"
 
-#: pretix/control/templates/pretixcontrol/event/permissions.html:13
+#: pretix/control/templates/pretixcontrol/event/permissions.html:14
 msgid "Change settings"
 msgstr "Kann Einstellungen ändern"
+
+#: pretix/control/templates/pretixcontrol/event/permissions.html:15
+msgid "Change products"
+msgstr "Produkte bearbeiten"
+
+#: pretix/control/templates/pretixcontrol/event/permissions.html:16
+msgid "View orders"
+msgstr "Bestellungen ansehen"
+
+#: pretix/control/templates/pretixcontrol/event/permissions.html:17
+msgid "Change orders"
+msgstr "Bestellungen verändern"
+
+#: pretix/control/templates/pretixcontrol/event/permissions.html:18
+msgid "Change permissions"
+msgstr "Berechtigungen verändern"
+
+#: pretix/control/templates/pretixcontrol/event/permissions.html:19
+#: pretix/control/templates/pretixcontrol/items/category_delete.html:17
+#: pretix/control/templates/pretixcontrol/items/property_delete.html:23
+#: pretix/control/templates/pretixcontrol/items/question_delete.html:21
+#: pretix/control/templates/pretixcontrol/items/quota_delete.html:21
+msgid "Delete"
+msgstr "Löschen"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:8
 msgid "Installed plugins"
 msgstr "Installierte Erweiterungen"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:11
-#: pretix/control/views/event.py:48 pretix/control/views/event.py:99
-#: pretix/control/views/event.py:159 pretix/control/views/event.py:208
-#: pretix/control/views/item.py:133 pretix/control/views/item.py:279
-#: pretix/control/views/item.py:445 pretix/control/views/item.py:566
-#: pretix/control/views/item.py:638 pretix/control/views/item.py:664
-#: pretix/control/views/item.py:805 pretix/control/views/item.py:874
-#: pretix/control/views/organizer.py:38 pretix/control/views/user.py:25
+#: pretix/control/views/event.py:50 pretix/control/views/event.py:101
+#: pretix/control/views/event.py:161 pretix/control/views/event.py:210
+#: pretix/control/views/event.py:326 pretix/control/views/item.py:133
+#: pretix/control/views/item.py:279 pretix/control/views/item.py:445
+#: pretix/control/views/item.py:566 pretix/control/views/item.py:638
+#: pretix/control/views/item.py:664 pretix/control/views/item.py:805
+#: pretix/control/views/item.py:874 pretix/control/views/organizer.py:38
+#: pretix/control/views/user.py:25
 msgid "Your changes have been saved."
 msgstr "Die Änderungen wurden gespeichert."
 
@@ -1115,15 +1192,19 @@ msgstr ""
 "administrativen Zugriff haben. Klicken Sie auf einen Veranstaltungstitel um "
 "Details aufzurufen"
 
-#: pretix/control/templates/pretixcontrol/events/index.html:14
+#: pretix/control/templates/pretixcontrol/events/index.html:13
+msgid "You currently do not have access to any events."
+msgstr "Sie haben zur Zeit auf keine Veranstaltungen Zugriff."
+
+#: pretix/control/templates/pretixcontrol/events/index.html:19
 msgid "Event name"
 msgstr "Veranstaltungstitel"
 
-#: pretix/control/templates/pretixcontrol/events/index.html:16
+#: pretix/control/templates/pretixcontrol/events/index.html:21
 msgid "Start date"
 msgstr "Beginn"
 
-#: pretix/control/templates/pretixcontrol/events/index.html:17
+#: pretix/control/templates/pretixcontrol/events/index.html:22
 msgid "End date"
 msgstr "Ende"
 
@@ -1211,13 +1292,6 @@ msgstr "Möchten Sie die Kategorie <strong>%(name)s</strong> wirklich löschen?"
 #: pretix/control/templates/pretixcontrol/order/extend.html:19
 msgid "Cancel"
 msgstr "Abbrechen"
-
-#: pretix/control/templates/pretixcontrol/items/category_delete.html:17
-#: pretix/control/templates/pretixcontrol/items/property_delete.html:23
-#: pretix/control/templates/pretixcontrol/items/question_delete.html:21
-#: pretix/control/templates/pretixcontrol/items/quota_delete.html:21
-msgid "Delete"
-msgstr "Löschen"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:7
 msgid ""
@@ -1520,24 +1594,22 @@ msgstr "Allgemeine Einstellungen"
 msgid "Login settings"
 msgstr "Login-Einstellungen"
 
-#: pretix/control/views/auth.py:15 pretix/presale/forms/auth.py:116
-msgid "E-mail address"
-msgstr "E-Mail-Adresse"
-
-#: pretix/control/views/auth.py:16 pretix/presale/forms/auth.py:21
-#: pretix/presale/forms/auth.py:67 pretix/presale/forms/auth.py:120
-#: pretix/presale/forms/auth.py:161
-msgid "Password"
-msgstr "Passwort"
-
-#: pretix/control/views/auth.py:20
-msgid "Please enter a correct e-mail address and password."
+#: pretix/control/views/event.py:311
+msgid "There is no user with the email address you entered."
 msgstr ""
-"Bitte geben Sie eine gültige Kombination aus E-Mail-Adresse und Passwort ein."
+"Es existiert kein Benutzer mit der E-Mail-Adresse, die Sie eingegeben haben."
 
-#: pretix/control/views/auth.py:21 pretix/presale/forms/auth.py:27
-msgid "This account is inactive."
-msgstr "Dieses Konto ist deaktiviert."
+#: pretix/control/views/event.py:316
+msgid "This user already has permissions for this event."
+msgstr "Dieser Benutzer hat bereits Zugriff auf diese Veranstaltung."
+
+#: pretix/control/views/event.py:322
+msgid "You cannot remove your own permission to view this page."
+msgstr "Sie können Ihre eigene Berechtigung nicht entfernen."
+
+#: pretix/control/views/event.py:329
+msgid "Your changes could not be saved."
+msgstr "Die Änderungen konnten nicht gespeichert werden."
 
 #: pretix/control/views/item.py:51
 msgid "The requested product does not exist."
@@ -2223,22 +2295,6 @@ msgid "Please enter a correct username and password."
 msgstr ""
 "Bitte geben Sie eine gültige Kombination aus Benutzername und Passwort ein."
 
-#: pretix/presale/forms/auth.py:59
-msgid ""
-"You already registered with that e-mail address, please use the login form."
-msgstr ""
-"Sie haben sich bereits mit dieser E-Mail-Adresse registriert, bitte "
-"verwenden Sie das Login-Formular."
-
-#: pretix/presale/forms/auth.py:63
-msgid "Email address"
-msgstr "E-Mail-Adresse"
-
-#: pretix/presale/forms/auth.py:72 pretix/presale/forms/auth.py:125
-#: pretix/presale/forms/auth.py:166
-msgid "Repeat password"
-msgstr "Passwort wiederholen"
-
 #: pretix/presale/forms/auth.py:100
 msgid "Please only use characters, numbers or ./+/-/_ in your username."
 msgstr ""
@@ -2250,6 +2306,10 @@ msgid "This username is already taken. Please choose a different one."
 msgstr ""
 "Dieser Benutzername ist bereits in Verwendung, bitte wählen Sie einen "
 "anderen."
+
+#: pretix/presale/forms/auth.py:116
+msgid "E-mail address"
+msgstr "E-Mail-Adresse"
 
 #: pretix/presale/forms/auth.py:188
 msgid "Username or E-mail"
@@ -2370,13 +2430,6 @@ msgstr "Meine Bestellungen"
 #: pretix/presale/templates/pretixpresale/event/base.html:45
 msgid "Logout"
 msgstr "Abmelden"
-
-#: pretix/presale/templates/pretixpresale/event/base.html:48
-#: pretix/presale/templates/pretixpresale/event/login.html:4
-#: pretix/presale/templates/pretixpresale/event/login.html:6
-#: pretix/presale/templates/pretixpresale/event/login.html:31
-msgid "Login"
-msgstr "Login"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:65
 msgid "Contact event organizer"
@@ -2528,11 +2581,6 @@ msgstr "Ich möchte mich nur für diese Veranstaltung registrieren"
 #: pretix/presale/templates/pretixpresale/event/login.html:46
 msgid "I want to create a new account"
 msgstr "Ich benötige ein neues Konto"
-
-#: pretix/presale/templates/pretixpresale/event/login.html:65
-#: pretix/presale/templates/pretixpresale/event/login.html:95
-msgid "Register"
-msgstr "Registrieren"
 
 #: pretix/presale/templates/pretixpresale/event/login.html:79
 msgid "I want to create a permanent account"
