@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from itertools import product
 import copy
 import uuid
@@ -1403,8 +1403,9 @@ class Quota(Versionable):
         for i in range(retries):
             dt = now()
             updated = Quota.objects.current.filter(
-                identity=self.identity, locked__isnull=True,
-                version_end_date__isnull=True
+                Q(identity=self.identity)
+                & Q(Q(locked__lt=dt - timedelta(seconds=120)) | Q(locked__isnull=True))
+                & Q(version_end_date__isnull=True)
             ).update(
                 locked=dt
             )
