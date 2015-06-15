@@ -110,7 +110,7 @@ class EventLogin(EventViewMixin, TemplateView):
                     request.event, form.cleaned_data['username'], form.cleaned_data['password'],
                     email=form.cleaned_data['email'] if form.cleaned_data['email'] != '' else None,
                     locale=request.LANGUAGE_CODE,
-                    timezone=request.timezone if hasattr(request, 'timezone') else None
+                    timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
                 )
                 user = authenticate(identifier=user.identifier, password=form.cleaned_data['password'])
                 login(request, user)
@@ -121,7 +121,7 @@ class EventLogin(EventViewMixin, TemplateView):
                 user = User.objects.create_global_user(
                     form.cleaned_data['email'], form.cleaned_data['password'],
                     locale=request.LANGUAGE_CODE,
-                    timezone=request.timezone if hasattr(request, 'timezone') else None
+                    timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
                 )
                 user = authenticate(identifier=user.identifier, password=form.cleaned_data['password'])
                 login(request, user)

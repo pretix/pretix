@@ -19,7 +19,8 @@ class PermissionMiddleware:
     """
 
     EXCEPTIONS = (
-        "auth.login"
+        "auth.login",
+        "auth.register"
     )
 
     def process_request(self, request):
