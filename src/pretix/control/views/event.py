@@ -290,9 +290,7 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
 
     @cached_property
     def add_form(self):
-        i = EventPermission(event=self.request.event)
         return EventPermissionCreateForm(data=self.request.POST if self.request.method == "POST" else None,
-                                         instance=i,
                                          prefix="add")
 
     def get_context_data(self, **kwargs):
@@ -307,6 +305,8 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
                 try:
                     self.add_form.instance.user = User.objects.get(identifier=self.add_form.cleaned_data['user'])
                     self.add_form.instance.user_id = self.add_form.instance.user.id
+                    self.add_form.instance.event = self.request.event
+                    self.add_form.instance.event_id = self.request.event.identity
                 except User.DoesNotExist:
                     messages.error(self.request, _('There is no user with the email address you entered.'))
                     return self.get(*args, **kwargs)
