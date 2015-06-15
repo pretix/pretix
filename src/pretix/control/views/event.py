@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from django import forms
 
 from django.contrib import messages
 from django.db.models import Sum
@@ -12,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from pretix.base.forms import VersionedModelForm
 from pretix.control.forms.event import ProviderForm, TicketSettingsForm, EventSettingsForm, EventUpdateForm
-from pretix.base.models import Event, OrderPosition, Order, Item, EventPermission
+from pretix.base.models import Event, OrderPosition, Order, Item, EventPermission, User
 from pretix.base.signals import register_payment_providers, register_ticket_outputs
 from pretix.control.permissions import EventPermissionRequiredMixin
 from . import UpdateView
@@ -257,6 +258,19 @@ def index(request, organizer, event):
     return render(request, 'pretixcontrol/event/index.html', ctx)
 
 
+class EventPermissionForm(VersionedModelForm):
+    class Meta:
+        model = EventPermission
+        fields = (
+            'can_change_settings', 'can_change_items', 'can_change_permissions', 'can_view_orders',
+            'can_change_orders'
+        )
+
+
+class EventPermissionCreateForm(EventPermissionForm):
+    user = forms.EmailField(required=False, label=_('User'))
+
+
 class EventPermissions(EventPermissionRequiredMixin, TemplateView):
     model = Event
     form_class = TicketSettingsForm
@@ -267,21 +281,41 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
     def formset(self):
         fs = modelformset_factory(
             EventPermission,
-            form=VersionedModelForm,
-            fields=('can_change_settings', 'can_change_items', 'can_change_permissions', 'can_view_orders',
-                    'can_change_orders'),
+            form=EventPermissionForm,
             can_delete=True, can_order=False, extra=0
         )
         return fs(data=self.request.POST if self.request.method == "POST" else None,
+                  prefix="formset",
                   queryset=EventPermission.objects.current.filter(event=self.request.event))
+
+    @cached_property
+    def add_form(self):
+        i = EventPermission(event=self.request.event)
+        return EventPermissionCreateForm(data=self.request.POST if self.request.method == "POST" else None,
+                                         instance=i,
+                                         prefix="add")
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['formset'] = self.formset
+        ctx['add_form'] = self.add_form
         return ctx
 
     def post(self, *args, **kwargs):
-        if self.formset.is_valid():
+        if self.formset.is_valid() and self.add_form.is_valid():
+            if self.add_form.has_changed():
+                try:
+                    self.add_form.instance.user = User.objects.get(identifier=self.add_form.cleaned_data['user'])
+                    self.add_form.instance.user_id = self.add_form.instance.user.id
+                except User.DoesNotExist:
+                    messages.error(self.request, _('There is no user with the email address you entered.'))
+                    return self.get(*args, **kwargs)
+                else:
+                    if EventPermission.objects.current.filter(user=self.add_form.instance.user,
+                                                              event=self.request.event).exists():
+                        messages.error(self.request, _('This user already has permissions for this event.'))
+                        return self.get(*args, **kwargs)
+                    self.add_form.save()
             for form in self.formset.forms:
                 if form.instance.user_id == self.request.user.pk:
                     if not form.cleaned_data['can_change_permissions'] or form in self.formset.deleted_forms:

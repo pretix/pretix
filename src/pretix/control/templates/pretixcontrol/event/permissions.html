@@ -31,6 +31,20 @@
                             <td>{{ form.DELETE }}</td>
                         </tr>
                     {% endfor %}
+                    <tr>
+                        <td>
+                            <div class="row-fluid">
+                                <div class="col-sm-12">
+                                    {% bootstrap_field add_form.user layout='inline' %}
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ add_form.can_change_settings }}</td>
+                        <td>{{ add_form.can_change_items }}</td>
+                        <td>{{ add_form.can_view_orders }}</td>
+                        <td>{{ add_form.can_change_orders }}</td>
+                        <td>{{ add_form.can_change_permissions }}</td>
+                    </tr>
                 </tbody>
             </table>
 		</fieldset>
