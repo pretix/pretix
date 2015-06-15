@@ -121,6 +121,14 @@ class SettingsTestCase(TestCase):
         self._test_serialization(True, bool)
         self._test_serialization(False, bool)
 
+    def test_serialize_bool_implicit(self):
+        self.event.settings.set('test', True)
+        self.event.settings._flush()
+        self.assertIs(self.event.settings.get('test', as_type=None), True)
+        self.event.settings.set('test', False)
+        self.event.settings._flush()
+        self.assertIs(self.event.settings.get('test', as_type=None), False)
+
     def test_serialize_versionable(self):
         self._test_serialization(self.event, Event)
 

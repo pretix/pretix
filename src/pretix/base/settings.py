@@ -121,7 +121,7 @@ class SettingsProxy:
         self._cached_obj = None
 
     def _unserialize(self, value, as_type):
-        if isinstance(value, as_type):
+        if as_type is not None and isinstance(value, as_type):
             return value
         elif value is None:
             return None
@@ -129,7 +129,7 @@ class SettingsProxy:
             return as_type(value)
         elif as_type == dict or as_type == list:
             return json.loads(value)
-        elif as_type == bool:
+        elif as_type == bool or value in ('True', 'False'):
             return value == 'True'
         elif as_type == datetime:
             return dateutil.parser.parse(value)
@@ -137,9 +137,9 @@ class SettingsProxy:
             return dateutil.parser.parse(value).date()
         elif as_type == time:
             return dateutil.parser.parse(value).time()
-        elif issubclass(as_type, Versionable):
+        elif as_type is not None and issubclass(as_type, Versionable):
             return as_type.objects.current.get(identity=value)
-        elif issubclass(as_type, Model):
+        elif as_type is not None and issubclass(as_type, Model):
             return as_type.objects.get(pk=value)
         return value
 
@@ -168,8 +168,6 @@ class SettingsProxy:
         """
         if as_type is None and key in DEFAULTS:
             as_type = DEFAULTS[key]['type']
-        elif as_type is None:
-            as_type = str
 
         if key in self._cache():
             return self._unserialize(self._cache()[key].value, as_type)
