@@ -24,7 +24,7 @@ class EventList(ListView):
 
 
 def index(request):
-    return render(request, 'pretixcontrol/base.html', {})
+    return render(request, 'pretixcontrol/dashboard.html', {})
 
 
 class EventCreateStart(TemplateView):

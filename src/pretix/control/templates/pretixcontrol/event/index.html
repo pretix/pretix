@@ -3,4 +3,94 @@
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
 	<h1>{{ request.event.name }}</h1>
+    <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-users fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{ tickets_sold }}</div>
+                                    <div>{% trans "Tickets sold" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% url "control:event.orders.overview" organizer=request.organizer.slug event=request.event.slug %}">
+                            <div class="panel-footer">
+                                <span class="pull-left">{% trans "Orders overview" %}</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-shopping-cart fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{ tickets_total }}</div>
+                                    <div>{% trans "Total items ordered" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% url "control:event.orders" organizer=request.organizer.slug event=request.event.slug %}">
+                            <div class="panel-footer">
+                                <span class="pull-left">{% trans "View all orders" %}</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-money fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{ tickets_revenue }}</div>
+                                    <div>{% trans "Total Revenue" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% url "control:event.orders.overview" organizer=request.organizer.slug event=request.event.slug %}">
+                            <div class="panel-footer">
+                                <span class="pull-left">{% trans "Orders overview" %}</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-folder fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{ products_active }}</div>
+                                    <div>{% trans "Active Products" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% url "control:event.items" organizer=request.organizer.slug event=request.event.slug %}">
+                            <div class="panel-footer">
+                                <span class="pull-left">{% trans "View details" %}</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
 {% endblock %}

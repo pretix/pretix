@@ -1,6 +1,7 @@
 from collections import OrderedDict
 
 from django.contrib import messages
+from django.db.models import Sum
 from django.shortcuts import render, redirect
 from django.utils.functional import cached_property
 from django.views.generic import FormView
@@ -9,7 +10,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from pretix.control.forms.event import ProviderForm, TicketSettingsForm, EventSettingsForm, EventUpdateForm
-from pretix.base.models import Event
+from pretix.base.models import Event, OrderPosition, Order, Item
 from pretix.base.signals import register_payment_providers, register_ticket_outputs
 from pretix.control.permissions import EventPermissionRequiredMixin
 from . import UpdateView
@@ -232,4 +233,23 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
 
 
 def index(request, organizer, event):
-    return render(request, 'pretixcontrol/event/index.html', {})
+    ctx = {
+        'products_active': Item.objects.current.filter(
+            event=request.event,
+            active=True,
+        ).count(),
+        'tickets_total': OrderPosition.objects.current.filter(
+            order__event=request.event,
+            item__admission=True
+        ).count(),
+        'tickets_revenue': Order.objects.current.filter(
+            event=request.event,
+            status=Order.STATUS_PAID,
+        ).aggregate(sum=Sum('total'))['sum'],
+        'tickets_sold': OrderPosition.objects.current.filter(
+            order__event=request.event,
+            order__status=Order.STATUS_PAID,
+            item__admission=True
+        ).count()
+    }
+    return render(request, 'pretixcontrol/event/index.html', ctx)
