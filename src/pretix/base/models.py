@@ -538,6 +538,10 @@ class EventPermission(Versionable):
         default=True,
         verbose_name=_("Can view orders")
     )
+    can_change_permissions = models.BooleanField(
+        default=True,
+        verbose_name=_("Can change permissions")
+    )
     can_change_orders = models.BooleanField(
         default=True,
         verbose_name=_("Can change orders")

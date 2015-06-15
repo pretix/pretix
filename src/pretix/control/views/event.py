@@ -2,6 +2,7 @@ from collections import OrderedDict
 
 from django.contrib import messages
 from django.db.models import Sum
+from django.forms import inlineformset_factory, formset_factory, modelformset_factory, BaseInlineFormSet
 from django.shortcuts import render, redirect
 from django.utils.functional import cached_property
 from django.views.generic import FormView
@@ -9,8 +10,9 @@ from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from pretix.base.forms import VersionedModelForm
 from pretix.control.forms.event import ProviderForm, TicketSettingsForm, EventSettingsForm, EventUpdateForm
-from pretix.base.models import Event, OrderPosition, Order, Item
+from pretix.base.models import Event, OrderPosition, Order, Item, EventPermission
 from pretix.base.signals import register_payment_providers, register_ticket_outputs
 from pretix.control.permissions import EventPermissionRequiredMixin
 from . import UpdateView
@@ -253,3 +255,48 @@ def index(request, organizer, event):
         ).count()
     }
     return render(request, 'pretixcontrol/event/index.html', ctx)
+
+
+class EventPermissions(EventPermissionRequiredMixin, TemplateView):
+    model = Event
+    form_class = TicketSettingsForm
+    template_name = 'pretixcontrol/event/permissions.html'
+    permission = 'can_change_permissions'
+
+    @cached_property
+    def formset(self):
+        fs = modelformset_factory(
+            EventPermission,
+            form=VersionedModelForm,
+            fields=('can_change_settings', 'can_change_items', 'can_change_permissions', 'can_view_orders',
+                    'can_change_orders'),
+            can_delete=True, can_order=False, extra=0
+        )
+        return fs(data=self.request.POST if self.request.method == "POST" else None,
+                  queryset=EventPermission.objects.current.filter(event=self.request.event))
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['formset'] = self.formset
+        return ctx
+
+    def post(self, *args, **kwargs):
+        if self.formset.is_valid():
+            for form in self.formset.forms:
+                if form.instance.user_id == self.request.user.pk:
+                    if not form.cleaned_data['can_change_permissions'] or form in self.formset.deleted_forms:
+                        messages.error(self.request, _('You cannot remove your own permission to view this page.'))
+                        return self.get(*args, **kwargs)
+
+            self.formset.save()
+            messages.success(self.request, _('Your changes have been saved.'))
+            return redirect(self.get_success_url())
+        else:
+            messages.error(self.request, _('Your changes could not be saved.'))
+            return self.get(*args, **kwargs)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.permissions', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })

@@ -23,6 +23,12 @@
                 </a>
             </li>
             <li>
+                <a href="{% url 'control:event.settings.permissions' organizer=request.event.organizer.slug event=request.event.slug %}"
+                        {% if "event.settings.permissions" == url_name %}class="active"{% endif %}>
+                    {% trans "Permissions" %}
+                </a>
+            </li>
+            <li>
                 <a href="{% url 'control:event.settings.payment' organizer=request.event.organizer.slug event=request.event.slug %}"
                         {% if "event.settings.payment" == url_name %}class="active"{% endif %}>
                     {% trans "Payment" %}

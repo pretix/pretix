@@ -6,11 +6,6 @@
 		{% csrf_token %}
 		<fieldset>
 			<legend>{% trans "Payment settings" %}</legend>
-			{% if "success" in request.GET %}
-				<div class="alert alert-success">
-					{% trans "Your changes have been saved." %}
-				</div>
-			{% endif %}
 			{% for provider in providers %}
 				<div class="panel panel-default">
 					<div class="panel-heading">
