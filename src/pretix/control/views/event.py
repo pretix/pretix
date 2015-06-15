@@ -94,13 +94,14 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
                     plugins_active.remove(module)
         self.object.plugins = ",".join(plugins_active)
         self.object.save()
+        messages.success(self.request, _('Your changes have been saved.'))
         return redirect(self.get_success_url())
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings.plugins', kwargs={
             'organizer': self.get_object().organizer.slug,
             'event': self.get_object().slug,
-        }) + '?success=true'
+        })
 
 
 class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
@@ -153,6 +154,7 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
             else:
                 success = False
         if success:
+            messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
             return self.get(request)
@@ -161,7 +163,7 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
         return reverse('control:event.settings.payment', kwargs={
             'organizer': self.get_object().organizer.slug,
             'event': self.get_object().slug,
-        }) + '?success=true'
+        })
 
 
 class TicketSettings(EventPermissionRequiredMixin, FormView):
@@ -169,10 +171,6 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
     form_class = TicketSettingsForm
     template_name = 'pretixcontrol/event/tickets.html'
     permission = 'can_change_settings'
-
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
@@ -183,7 +181,7 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
         return reverse('control:event.settings.tickets', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug
-        }) + '?success=true'
+        })
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -204,6 +202,8 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
                 success = False
         form = self.get_form(self.get_form_class())
         if success and form.is_valid():
+            form.save()
+            messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
             return self.get(request)

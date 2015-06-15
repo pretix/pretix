@@ -3,11 +3,6 @@
 {% load bootstrap3 %}
 {% block inside %}
     <form action="" method="post" class="form-horizontal">
-        {% if "success" in request.GET %}
-            <div class="alert alert-success">
-                {% trans "Your changes have been saved." %}
-            </div>
-        {% endif %}
         {% csrf_token %}
         <fieldset>
             <legend>{% trans "Ticket download" %}</legend>
