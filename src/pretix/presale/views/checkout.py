@@ -174,6 +174,8 @@ class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, 
                     return redirect(self.get_confirm_url())
                 else:
                     return self.get(request, *args, **kwargs)
+        messages.error(self.request, _("Please select a payment method."))
+        return self.get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

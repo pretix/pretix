@@ -98,10 +98,9 @@ class BasePaymentProvider:
         """
         return OrderedDict([
             ('_enabled',
-             forms.ChoiceField(
+             forms.BooleanField(
                  label=_('Enable payment method'),
                  required=False,
-                 choices=SettingsForm.BOOL_CHOICES,
              )),
             ('_fee_abs',
              forms.DecimalField(
