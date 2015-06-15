@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.views.generic import ListView, DetailView, TemplateView
-from pretix.base.models import Order, Quota, OrderPosition
+from pretix.base.models import Order, Quota, OrderPosition, ItemCategory
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.orders import ExtendForm
@@ -258,11 +258,12 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
             item.num_refunded = sum(var.num_refunded for var in item.all_variations)
             item.num_paid = sum(var.num_paid for var in item.all_variations)
 
+        nonecat = ItemCategory(name=_('Uncategorized'))
         # Regroup those by category
         ctx['items_by_category'] = sorted(
             [
                 # a group is a tuple of a category and a list of items
-                (cat, [i for i in items if i.category == cat])
+                (cat if cat is not None else nonecat, [i for i in items if i.category == cat])
                 for cat in set([i.category for i in items])
                 # insert categories into a set for uniqueness
                 # a set is unsorted, so sort again by category
