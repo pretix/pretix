@@ -59,7 +59,7 @@ def organizer_permission_required(permission):
                 # just a double check, should not ever happen
                 return HttpResponseForbidden()
             try:
-                perm = OrganizerPermission.current.objects.get(
+                perm = OrganizerPermission.objects.current.get(
                     organizer=request.organizer,
                     user=request.user
                 )
