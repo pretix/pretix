@@ -142,6 +142,15 @@ class EventSettingsForm(SettingsForm):
         label=_("Reservation period"),
         help_text=_("The number of minutes the items in a user's card are reserved for this user."),
     )
+    imprint_url = forms.URLField(
+        label=_("Imprint URL"),
+        required=False,
+    )
+    contact_mail = forms.EmailField(
+        label=_("Contact address"),
+        required=False,
+        help_text=_("Public email address for contacting the organizer")
+    )
     mail_from = forms.EmailField(
         label=_("Sender address"),
         help_text=_("Sender address for outgoing e-mails")

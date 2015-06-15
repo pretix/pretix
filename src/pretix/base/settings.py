@@ -81,6 +81,14 @@ DEFAULTS = {
         'default': None,
         'type': datetime
     },
+    'contact_mail': {
+        'default': None,
+        'type': str
+    },
+    'imprint_url': {
+        'default': None,
+        'type': str
+    },
     'mail_from': {
         'default': settings.MAIL_FROM,
         'type': str

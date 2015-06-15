@@ -61,6 +61,13 @@
     {% endblock %}
 </div>
 <footer>
+    {% if request.event.settings.contact_mail %}
+        <a href="mailto:{{ request.event.settings.contact_mail }}">{% trans "Contact event organizer" %}</a> &middot;
+    {% endif %}
+    {% if request.event.settings.imprint_url %}
+        <a href="{{ request.event.settings.imprint_url }}" target="_blank">{% trans "Imprint" %}</a>
+        &middot;
+    {% endif %}
     {% with "href='http://pretix.eu'" as a_attr %}
         {% blocktrans trimmed %}
             powered by <a {{ a_attr }}>pretix</a>
