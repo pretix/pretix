@@ -15,7 +15,7 @@ def event_permission_required(permission):
                 # just a double check, should not ever happen
                 return HttpResponseForbidden()
             try:
-                perm = EventPermission.objects.get(
+                perm = EventPermission.objects.current.get(
                     event=request.event,
                     user=request.user
                 )
@@ -59,7 +59,7 @@ def organizer_permission_required(permission):
                 # just a double check, should not ever happen
                 return HttpResponseForbidden()
             try:
-                perm = OrganizerPermission.objects.get(
+                perm = OrganizerPermission.current.objects.get(
                     organizer=request.organizer,
                     user=request.user
                 )
