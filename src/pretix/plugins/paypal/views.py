@@ -7,6 +7,7 @@ import paypalrestsdk
 from pretix.base.models import Event, Order
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
+from pretix.helpers.urls import build_absolute_uri
 from pretix.plugins.paypal.payment import Paypal
 
 
@@ -70,10 +71,10 @@ def retry(request, order):
                 "payment_method": "paypal",
             },
             "redirect_urls": {
-                "return_url": request.build_absolute_uri(reverse('plugins:paypal:retry', kwargs={
+                "return_url": build_absolute_uri(reverse('plugins:paypal:retry', kwargs={
                     'order': order.code
                 })),
-                "cancel_url": request.build_absolute_uri(reverse('plugins:paypal:retry', kwargs={
+                "cancel_url": build_absolute_uri(reverse('plugins:paypal:retry', kwargs={
                     'order': order.code
                 })),
             },

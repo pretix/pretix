@@ -14,6 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from pretix.base.services.mail import mail
 from pretix.base.models import User
+from pretix.helpers.urls import build_absolute_uri
 from pretix.presale.forms.auth import GlobalRegistrationForm, LocalRegistrationForm, PasswordForgotForm, \
     PasswordRecoverForm
 from pretix.presale.forms.auth import LoginForm
@@ -187,10 +188,10 @@ class EventForgot(EventViewMixin, TemplateView):
                     {
                         'user': user,
                         'event': self.request.event,
-                        'url': settings.SITE_URL + reverse('presale:event.forgot.recover', kwargs={
+                        'url': build_absolute_uri(reverse('presale:event.forgot.recover', kwargs={
                             'event': self.request.event.slug,
                             'organizer': self.request.event.organizer.slug,
-                        }) + '?token=' + self.generate_token(user),
+                        }) + '?token=' + self.generate_token(user)),
                     },
                     self.request.event
                 )

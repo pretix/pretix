@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django import forms
 from pretix.base.models import Quota
 from pretix.base.services.orders import mark_order_paid
+from pretix.helpers.urls import build_absolute_uri
 import stripe
 from pretix.base.payment import BasePaymentProvider
 
@@ -39,7 +40,7 @@ class Stripe(BasePaymentProvider):
         return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
             _('Please configure a <a href="https://dashboard.stripe.com/account/webhooks">Stripe Webhook</a> to '
               'the following endpoint in order to automatically cancel orders when a charges are refunded externally.'),
-            request.build_absolute_uri(reverse('plugins:stripe:webhook'))
+            build_absolute_uri(reverse('plugins:stripe:webhook'))
         )
 
     def checkout_is_valid_session(self, request):

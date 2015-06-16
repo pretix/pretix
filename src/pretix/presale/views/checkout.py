@@ -13,6 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.base.services.mail import mail
 from pretix.base.models import CartPosition, QuestionAnswer, Quota, Order, OrderPosition
 from pretix.base.signals import register_payment_providers
+from pretix.helpers.urls import build_absolute_uri
 from pretix.presale.forms.checkout import QuestionsForm
 from pretix.presale.views import EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin
 
@@ -304,7 +305,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
                     {
                         'user': request.user, 'order': order,
                         'event': request.event,
-                        'url': request.build_absolute_uri(self.get_order_url(order)),
+                        'url': build_absolute_uri(self.get_order_url(order)),
                         'payment': self.payment_provider.order_pending_mail_render(order)
                     },
                     request.event

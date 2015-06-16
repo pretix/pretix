@@ -12,6 +12,7 @@ import paypalrestsdk
 from pretix.base.models import Quota
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.payment import BasePaymentProvider
+from pretix.helpers.urls import build_absolute_uri
 
 
 logger = logging.getLogger('pretix.plugins.paypal')
@@ -88,8 +89,8 @@ class Paypal(BasePaymentProvider):
                 "payment_method": "paypal",
             },
             "redirect_urls": {
-                "return_url": request.build_absolute_uri(reverse('plugins:paypal:return')),
-                "cancel_url": request.build_absolute_uri(reverse('plugins:paypal:abort')),
+                "return_url": build_absolute_uri(reverse('plugins:paypal:return')),
+                "cancel_url": build_absolute_uri(reverse('plugins:paypal:abort')),
             },
             "transactions": [
                 {
