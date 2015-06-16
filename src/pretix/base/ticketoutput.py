@@ -86,10 +86,9 @@ class BaseTicketOutput:
         """
         return OrderedDict([
             ('_enabled',
-             forms.ChoiceField(
+             forms.BooleanField(
                  label=_('Enable output'),
                  required=False,
-                 choices=SettingsForm.BOOL_CHOICES,
              )),
         ])
 

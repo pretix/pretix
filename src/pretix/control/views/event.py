@@ -1,6 +1,9 @@
 from collections import OrderedDict
+from django import forms
 
 from django.contrib import messages
+from django.db.models import Sum
+from django.forms import inlineformset_factory, formset_factory, modelformset_factory, BaseInlineFormSet
 from django.shortcuts import render, redirect
 from django.utils.functional import cached_property
 from django.views.generic import FormView
@@ -8,8 +11,9 @@ from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from pretix.base.forms import VersionedModelForm
 from pretix.control.forms.event import ProviderForm, TicketSettingsForm, EventSettingsForm, EventUpdateForm
-from pretix.base.models import Event
+from pretix.base.models import Event, OrderPosition, Order, Item, EventPermission, User
 from pretix.base.signals import register_payment_providers, register_ticket_outputs
 from pretix.control.permissions import EventPermissionRequiredMixin
 from . import UpdateView
@@ -94,13 +98,14 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
                     plugins_active.remove(module)
         self.object.plugins = ",".join(plugins_active)
         self.object.save()
+        messages.success(self.request, _('Your changes have been saved.'))
         return redirect(self.get_success_url())
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings.plugins', kwargs={
             'organizer': self.get_object().organizer.slug,
             'event': self.get_object().slug,
-        }) + '?success=true'
+        })
 
 
 class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
@@ -153,6 +158,7 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
             else:
                 success = False
         if success:
+            messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
             return self.get(request)
@@ -161,7 +167,7 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
         return reverse('control:event.settings.payment', kwargs={
             'organizer': self.get_object().organizer.slug,
             'event': self.get_object().slug,
-        }) + '?success=true'
+        })
 
 
 class TicketSettings(EventPermissionRequiredMixin, FormView):
@@ -169,10 +175,6 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
     form_class = TicketSettingsForm
     template_name = 'pretixcontrol/event/tickets.html'
     permission = 'can_change_settings'
-
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
@@ -183,7 +185,7 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
         return reverse('control:event.settings.tickets', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug
-        }) + '?success=true'
+        })
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -204,6 +206,8 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
                 success = False
         form = self.get_form(self.get_form_class())
         if success and form.is_valid():
+            form.save()
+            messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
             return self.get(request)
@@ -232,4 +236,101 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
 
 
 def index(request, organizer, event):
-    return render(request, 'pretixcontrol/event/index.html', {})
+    ctx = {
+        'products_active': Item.objects.current.filter(
+            event=request.event,
+            active=True,
+        ).count(),
+        'tickets_total': OrderPosition.objects.current.filter(
+            order__event=request.event,
+            item__admission=True
+        ).count(),
+        'tickets_revenue': Order.objects.current.filter(
+            event=request.event,
+            status=Order.STATUS_PAID,
+        ).aggregate(sum=Sum('total'))['sum'],
+        'tickets_sold': OrderPosition.objects.current.filter(
+            order__event=request.event,
+            order__status=Order.STATUS_PAID,
+            item__admission=True
+        ).count()
+    }
+    return render(request, 'pretixcontrol/event/index.html', ctx)
+
+
+class EventPermissionForm(VersionedModelForm):
+    class Meta:
+        model = EventPermission
+        fields = (
+            'can_change_settings', 'can_change_items', 'can_change_permissions', 'can_view_orders',
+            'can_change_orders'
+        )
+
+
+class EventPermissionCreateForm(EventPermissionForm):
+    user = forms.EmailField(required=False, label=_('User'))
+
+
+class EventPermissions(EventPermissionRequiredMixin, TemplateView):
+    model = Event
+    form_class = TicketSettingsForm
+    template_name = 'pretixcontrol/event/permissions.html'
+    permission = 'can_change_permissions'
+
+    @cached_property
+    def formset(self):
+        fs = modelformset_factory(
+            EventPermission,
+            form=EventPermissionForm,
+            can_delete=True, can_order=False, extra=0
+        )
+        return fs(data=self.request.POST if self.request.method == "POST" else None,
+                  prefix="formset",
+                  queryset=EventPermission.objects.current.filter(event=self.request.event))
+
+    @cached_property
+    def add_form(self):
+        return EventPermissionCreateForm(data=self.request.POST if self.request.method == "POST" else None,
+                                         prefix="add")
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['formset'] = self.formset
+        ctx['add_form'] = self.add_form
+        return ctx
+
+    def post(self, *args, **kwargs):
+        if self.formset.is_valid() and self.add_form.is_valid():
+            if self.add_form.has_changed():
+                try:
+                    self.add_form.instance.user = User.objects.get(identifier=self.add_form.cleaned_data['user'])
+                    self.add_form.instance.user_id = self.add_form.instance.user.id
+                    self.add_form.instance.event = self.request.event
+                    self.add_form.instance.event_id = self.request.event.identity
+                except User.DoesNotExist:
+                    messages.error(self.request, _('There is no user with the email address you entered.'))
+                    return self.get(*args, **kwargs)
+                else:
+                    if EventPermission.objects.current.filter(user=self.add_form.instance.user,
+                                                              event=self.request.event).exists():
+                        messages.error(self.request, _('This user already has permissions for this event.'))
+                        return self.get(*args, **kwargs)
+                    self.add_form.save()
+            for form in self.formset.forms:
+                if form.instance.user_id == self.request.user.pk:
+                    if not form.cleaned_data['can_change_permissions'] or form in self.formset.deleted_forms:
+                        messages.error(self.request, _('You cannot remove your own permission to view this page.'))
+                        return self.get(*args, **kwargs)
+
+            self.formset.save()
+            messages.success(self.request, _('Your changes have been saved.'))
+            return redirect(self.get_success_url())
+        else:
+            messages.error(self.request, _('Your changes could not be saved.'))
+            return self.get(*args, **kwargs)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.permissions', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })

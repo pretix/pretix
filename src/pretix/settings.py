@@ -243,7 +243,7 @@ LOGGING = {
             'level': loglevel,
             'propagate': True,
         },
-        'django.db.backends.schema': {
+        'django.db.backends': {
             'handlers': ['file', 'console'],
             'level': 'INFO',  # Do not output all the queries
             'propagate': True,

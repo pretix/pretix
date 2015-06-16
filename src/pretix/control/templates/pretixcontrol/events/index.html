@@ -8,25 +8,31 @@
         <span class="fa fa-plus"></span>
         {% trans "Create a new event" %}
     </a>
-	<table class="table table-condensed table-hover">
-		<thead>
-			<tr>
-				<th>{% trans "Event name" %}</th>
-				<th>{% trans "Organizer" %}</th>
-				<th>{% trans "Start date" %}</th>
-				<th>{% trans "End date" %}</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for e in events %}
-			<tr>
-				<td><strong><a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong></td>
-				<td>{{ e.organizer }}</td>
-				<td>{{ e.get_date_from_display }}</td>
-				<td>{{ e.get_date_to_display }}</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+    {% if events|length == 0 %}
+        <p>
+            <em>{% trans "You currently do not have access to any events." %}</em>
+        </p>
+    {% else %}
+        <table class="table table-condensed table-hover">
+            <thead>
+            <tr>
+                <th>{% trans "Event name" %}</th>
+                <th>{% trans "Organizer" %}</th>
+                <th>{% trans "Start date" %}</th>
+                <th>{% trans "End date" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for e in events %}
+                <tr>
+                    <td><strong><a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong></td>
+                    <td>{{ e.organizer }}</td>
+                    <td>{{ e.get_date_from_display }}</td>
+                    <td>{{ e.get_date_to_display }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
     {% include "pretixcontrol/pagination.html" %}
 {% endblock %}

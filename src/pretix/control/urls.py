@@ -6,6 +6,7 @@ from pretix.control.views import main, event, item, auth, orders, user, organize
 urlpatterns = [
     url(r'^logout$', auth.logout, name='auth.logout'),
     url(r'^login$', auth.login, name='auth.login'),
+    url(r'^register$', auth.register, name='auth.register'),
     url(r'^$', main.index, name='index'),
     url(r'^settings$', user.UserSettings.as_view(), name='user.settings'),
     url(r'^organizers/$', organizer.OrganizerList.as_view(), name='organizers'),
@@ -18,6 +19,7 @@ urlpatterns = [
         url(r'^$', event.index, name='event.index'),
         url(r'^settings/$', event.EventUpdate.as_view(), name='event.settings'),
         url(r'^settings/plugins$', event.EventPlugins.as_view(), name='event.settings.plugins'),
+        url(r'^settings/permissions$', event.EventPermissions.as_view(), name='event.settings.permissions'),
         url(r'^settings/payment$', event.PaymentSettings.as_view(), name='event.settings.payment'),
         url(r'^settings/tickets$', event.TicketSettings.as_view(), name='event.settings.tickets'),
         url(r'^items/$', item.ItemList.as_view(), name='event.items'),

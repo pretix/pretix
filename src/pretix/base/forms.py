@@ -75,8 +75,8 @@ class SettingsForm(forms.Form):
     This form is meant to be used for modifying Event- or OrganizerSettings
     """
     BOOL_CHOICES = (
-        ('True', _('enabled')),
         ('False', _('disabled')),
+        ('True', _('enabled')),
     )
 
     def __init__(self, *args, **kwargs):

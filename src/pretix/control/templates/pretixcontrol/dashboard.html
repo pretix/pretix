@@ -1,0 +1,13 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Dashboard" %}{% endblock %}
+{% block content %}
+	<h1>{% trans "Dashboard" %}</h1>
+    <p>
+        There is nothing yet to see on this dashboard. If you have any ideas what to put here, just <a
+            href="https://github.com/pretix/pretix/issues">tell us</a>!
+    </p>
+    <p>
+        Probably, you are looking for your <a href="{% url "control:events" %}">events</a>.
+    </p>
+{% endblock %}

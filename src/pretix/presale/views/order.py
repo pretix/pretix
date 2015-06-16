@@ -63,8 +63,10 @@ class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         ctx['order'] = self.order
         ctx['can_download'] = (
             self.request.event.settings.ticket_download
-            and now() > self.request.event.settings.ticket_download_date
-            and self.order.status == Order.STATUS_PAID
+            and (
+                self.request.event.settings.ticket_download_date is None
+                or now() > self.request.event.settings.ticket_download_date
+            ) and self.order.status == Order.STATUS_PAID
         )
         ctx['download_buttons'] = self.download_buttons
         ctx['cart'] = self.get_cart(
@@ -182,7 +184,9 @@ class OrderDownload(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         if self.order.status != Order.STATUS_PAID:
             messages.error(request, _('Order is not paid.'))
             return redirect(self.get_order_url())
-        if not self.request.event.settings.ticket_download or now() < self.request.event.settings.ticket_download_date:
+        if (not self.request.event.settings.ticket_download
+            or (self.request.event.settings.ticket_download_date is not None
+                and now() < self.request.event.settings.ticket_download_date)):
             messages.error(request, _('Ticket download is not (yet) enabled.'))
             return redirect(self.get_order_url())
         return self.output.generate(request, self.order)
