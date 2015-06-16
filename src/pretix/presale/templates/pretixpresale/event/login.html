@@ -14,7 +14,7 @@
                     </a>
                 </h4>
             </div>
-            <div id="loginForm" class="panel-collapse collapse {% if request.POST.form == 'login' %}in{% endif %}">
+            <div id="loginForm" class="panel-collapse collapsed {% if request.POST.form == 'login' %}in{% endif %}">
                 <div class="panel-body">
                     <form class="form-horizontal" method="post">
                         {% csrf_token %}
@@ -48,7 +48,7 @@
                     </a>
                 </h4>
             </div>
-            <div id="localRegistrationForm" class="panel-collapse collapse {% if request.POST.form == 'local_registration' %}in{% endif %}">
+            <div id="localRegistrationForm" class="panel-collapse collapsed {% if request.POST.form == 'local_registration' %}in{% endif %}">
                 <div class="panel-body">
                     <div class="panel-body">
                         <form class="form-horizontal" method="post">
@@ -80,7 +80,7 @@
                         </a>
                     </h4>
                 </div>
-                <div id="globalRegistrationForm" class="panel-collapse collapse {% if request.POST.form == 'global_registration' %}in{% endif %}">
+                <div id="globalRegistrationForm" class="panel-collapse collapsed {% if request.POST.form == 'global_registration' %}in{% endif %}">
                     <div class="panel-body">
                         <form class="form-horizontal" method="post">
                             {% csrf_token %}

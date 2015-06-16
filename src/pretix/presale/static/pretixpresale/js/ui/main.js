@@ -10,6 +10,7 @@ $(function () {
     $("a[data-toggle=variations]").click(function() {
         $(this).parent().parent().parent().find(".variations").slideToggle();
     });
+    $(".collapsed").removeClass("collapsed").addClass("collapse");
 });
 
 
