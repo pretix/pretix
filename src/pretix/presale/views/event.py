@@ -54,6 +54,7 @@ class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
                     var.price = var.get('price', item.default_price)
                 if len(item.available_variations) > 0:
                     item.min_price = min([v.price for v in item.available_variations])
+                    item.max_price = max([v.price for v in item.available_variations])
 
         items = [item for item in items if len(item.available_variations) > 0]
 

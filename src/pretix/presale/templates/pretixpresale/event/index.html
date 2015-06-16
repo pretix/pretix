@@ -66,9 +66,13 @@
                                         {% if item.short_description %}<p>{{ item.short_description }}</p>{% endif %}
                                     </div>
                                     <div class="col-md-2 col-xs-6 price">
-                                        {% blocktrans trimmed with minprice=item.min_price|floatformat:2 currency=event.currency %}
-                                            from {{ currency }} {{ minprice }}
-                                        {% endblocktrans %}
+                                        {% if item.min_price != item.max_price %}
+                                            {% blocktrans trimmed with minprice=item.min_price|floatformat:2 currency=event.currency %}
+                                                from {{ currency }} {{ minprice }}
+                                            {% endblocktrans %}
+                                        {% else %}
+                                            {{ event.currency }} {{ item.min_price|floatformat:2 }}
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-2 col-xs-6 availability-box">
                                         <a href="javascript:void();" data-toggle="variations" class="js-only">
