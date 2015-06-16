@@ -36,8 +36,13 @@ def mail(user: User, subject: str, template: str, context: dict, event: Event=No
 
     sender = event.settings.get('mail_from') if event else settings.MAIL_FROM
 
+    subject = str(subject)
+    prefix = event.settings.get('mail_prefix')
+    if prefix:
+        subject = "[%s] %s" % (prefix, subject)
+
     email = EmailMessage(
-        str(subject), body, sender,
+        subject, body, sender,
         to=[user.email]
     )
 

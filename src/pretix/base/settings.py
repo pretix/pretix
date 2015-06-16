@@ -89,6 +89,10 @@ DEFAULTS = {
         'default': None,
         'type': str
     },
+    'mail_prefix': {
+        'default': None,
+        'type': str
+    },
     'mail_from': {
         'default': settings.MAIL_FROM,
         'type': str
