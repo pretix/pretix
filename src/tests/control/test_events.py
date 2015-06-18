@@ -45,9 +45,11 @@ class EventsTest(BrowserTest):
         self.driver.get('%s/control/event/%s/%s/settings/' % (self.live_server_url, self.orga1.slug,
                                                               self.event1.slug))
         self.driver.find_element_by_name("date_to").send_keys("2013-12-30 17:00:00")
+        self.driver.find_element_by_name("settings-mail_prefix").send_keys("TEST")
         self.driver.find_element_by_class_name("btn-save").click()
         self.driver.find_element_by_class_name("alert-success")
         self.assertIn("2013-12-30 17:00:00", self.driver.find_element_by_name("date_to").get_attribute("value"))
+        self.assertIn("TEST", self.driver.find_element_by_name("settings-mail_prefix").get_attribute("value"))
 
     def test_plugins(self):
         self.driver.get('%s/control/event/%s/%s/settings/plugins' % (self.live_server_url, self.orga1.slug,
