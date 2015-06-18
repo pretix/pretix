@@ -7,5 +7,5 @@ class LocaleTest(TestCase):
         response = self.client.get('/control/login')
         assert response['Content-Language'] == 'en'
         self.client.get('/locale/set?locale=de')
-        assert self.client.get('/')
+        response = self.client.get('/control/login')
         assert response['Content-Language'] == 'de'
