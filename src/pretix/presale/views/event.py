@@ -188,10 +188,10 @@ class EventForgot(EventViewMixin, TemplateView):
                     {
                         'user': user,
                         'event': self.request.event,
-                        'url': build_absolute_uri(reverse('presale:event.forgot.recover', kwargs={
+                        'url': build_absolute_uri('presale:event.forgot.recover', kwargs={
                             'event': self.request.event.slug,
                             'organizer': self.request.event.organizer.slug,
-                        }) + '?token=' + self.generate_token(user)),
+                        }) + '?token=' + self.generate_token(user),
                     },
                     self.request.event
                 )

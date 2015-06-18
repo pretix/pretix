@@ -40,7 +40,7 @@ class Stripe(BasePaymentProvider):
         return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
             _('Please configure a <a href="https://dashboard.stripe.com/account/webhooks">Stripe Webhook</a> to '
               'the following endpoint in order to automatically cancel orders when a charges are refunded externally.'),
-            build_absolute_uri(reverse('plugins:stripe:webhook'))
+            build_absolute_uri('plugins:stripe:webhook')
         )
 
     def checkout_is_valid_session(self, request):

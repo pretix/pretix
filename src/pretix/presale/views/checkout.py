@@ -305,7 +305,11 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
                     {
                         'user': request.user, 'order': order,
                         'event': request.event,
-                        'url': build_absolute_uri(self.get_order_url(order)),
+                        'url': build_absolute_uri('presale:event.order', kwargs={
+                            'event': self.request.event.slug,
+                            'organizer': self.request.event.organizer.slug,
+                            'order': order.code,
+                        }),
                         'payment': self.payment_provider.order_pending_mail_render(order)
                     },
                     request.event
