@@ -21,7 +21,7 @@
 	</head>
 	<body>
         <div id="#wrapper">
-            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="sr-only">{% trans "Toggle navigation" %}</span>
@@ -31,7 +31,7 @@
                     </button>
                     <a class="navbar-brand" href="{% url "control:index" %}">{{ settings.PRETIX_INSTANCE_NAME }}</a>
                 </div>
-                <ul class="nav navbar-top-links navbar-left">
+                <ul class="nav navbar-nav navbar-top-links navbar-left">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i>
                             {{ request.event }} <span class="caret"></span></a>
@@ -47,7 +47,7 @@
                         </ul>
                     </li>
                 </ul>
-                <ul class="nav navbar-top-links navbar-right">
+                <ul class="nav navbar-nav navbar-top-links navbar-right">
                     <li>
                         <a href="{% url 'control:user.settings' %}">
                             <i class="fa fa-user"></i> {{ request.user.get_full_name }}
