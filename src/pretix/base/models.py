@@ -31,7 +31,7 @@ class Versionable(BaseVersionable):
         """
         This behaves like clone(), but misses all the Many2Many-relation-handling. This is
         a performance optimization for cases in which we have to handle the Many2Many relations
-        by handy anyways.
+        by hand anyways.
         """
         if not self.pk:
             raise ValueError('Instance must be saved before it can be cloned')

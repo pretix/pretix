@@ -1,3 +1,5 @@
+import copy
+from django.db import models
 from django.forms import BooleanField
 from django.utils.translation import ugettext_lazy as _
 from pretix.base.forms import VersionedModelForm, I18nModelForm
@@ -46,9 +48,16 @@ class QuestionForm(VersionedModelForm):
 
 
 class QuotaForm(I18nModelForm):
+    """
+    The form for quotas does not derive from VersionedModelForm as it does not
+    perform a 'full clone' as part of a performance optimization
+    """
+
     def __init__(self, **kwargs):
         items = kwargs['items']
         del kwargs['items']
+        instance = kwargs.get('instance', None)
+        self.original_instance = copy.copy(instance) if instance else None
         super().__init__(**kwargs)
 
         if hasattr(self, 'instance'):
@@ -75,8 +84,19 @@ class QuotaForm(I18nModelForm):
 
     def save(self, commit=True):
         if self.instance.pk is not None and isinstance(self.instance, Versionable):
-            if self.has_changed():
-                self.instance = self.instance.clone_shallow()
+            if self.has_changed() and self.original_instance:
+                new = self.instance
+                old = self.original_instance
+                clone = old.clone_shallow()
+                for f in type(self.instance)._meta.get_fields():
+                    if f.name not in (
+                            'id', 'identity', 'version_start_date', 'version_end_date',
+                            'version_birth_date'
+                    ) and not isinstance(f, (
+                            models.ManyToOneRel, models.ManyToManyRel, models.ManyToManyField
+                    )):
+                        setattr(clone, f.name, getattr(new, f.name))
+                self.instance = clone
         return super().save(commit)
 
     class Meta:
