@@ -22,6 +22,19 @@ def env():
 
 
 @pytest.mark.django_db
+def test_send_mail_with_prefix(client, env):
+    djmail.outbox = []
+    event, user, organizer = env
+    event.settings.set('mail_prefix', 'test')
+    mail(user, 'Test subject',
+         'mailtest.txt', {}, event)
+
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [user.email]
+    assert djmail.outbox[0].subject == '[test] Test subject'
+
+
+@pytest.mark.django_db
 def test_send_mail_with_event_sender(client, env):
     djmail.outbox = []
     event, user, organizer = env
