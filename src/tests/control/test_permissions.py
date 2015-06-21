@@ -139,6 +139,23 @@ def test_wrong_event_permission(client, env, perm, url, code):
 
 
 @pytest.mark.django_db
+def test_current_permission(client, env):
+    ep = EventPermission(
+        event=env[0], user=env[1],
+    )
+    setattr(ep, 'can_change_settings', True)
+    ep.save()
+    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/event/dummy/dummy/settings/')
+    assert response.status_code == 200
+    ep = ep.clone()
+    setattr(ep, 'can_change_settings', False)
+    ep.save()
+    response = client.get('/control/event/dummy/dummy/settings/')
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code", event_permission_urls)
 def test_correct_event_permission(client, env, perm, url, code):
     ep = EventPermission(

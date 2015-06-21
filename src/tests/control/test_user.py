@@ -1,3 +1,4 @@
+from django.utils.timezone import now
 from pretix.base.models import User
 from tests.base import BrowserTest
 

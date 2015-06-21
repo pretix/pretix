@@ -2,6 +2,7 @@ import os
 import time
 import datetime
 import unittest
+from django.utils.timezone import now
 from selenium.webdriver.support.select import Select
 from pretix.base.models import User, Organizer, Event, OrganizerPermission, EventPermission, ItemCategory, Property, \
     PropertyValue, Question, Quota, Item
@@ -44,6 +45,7 @@ class CategoriesTest(ItemFormTest):
 
     def test_update(self):
         c = ItemCategory.objects.create(event=self.event1, name="Entry tickets")
+        t1 = now()
         self.driver.get('%s/control/event/%s/%s/categories/%s/' % (
             self.live_server_url, self.orga1.slug, self.event1.slug, c.identity
         ))
@@ -53,6 +55,8 @@ class CategoriesTest(ItemFormTest):
         self.driver.find_element_by_class_name("alert-success")
         self.assertIn("T-Shirts", self.driver.find_element_by_css_selector("#page-wrapper table").text)
         self.assertNotIn("Entry tickets", self.driver.find_element_by_css_selector("#page-wrapper table").text)
+        assert str(ItemCategory.objects.as_of(t1).get(identity=c.identity).name) == 'Entry tickets'
+        assert str(ItemCategory.objects.current.get(identity=c.identity).name) == 'T-Shirts'
 
     @unittest.skipIf('TRAVIS' in os.environ, 'See docstring for details.')
     def test_sort(self):
@@ -90,12 +94,15 @@ class CategoriesTest(ItemFormTest):
 
     def test_delete(self):
         c = ItemCategory.objects.create(event=self.event1, name="Entry tickets")
+        t1 = now()
         self.driver.get('%s/control/event/%s/%s/categories/%s/delete' % (
             self.live_server_url, self.orga1.slug, self.event1.slug, c.identity
         ))
         self.driver.find_element_by_class_name("btn-danger").click()
         self.driver.find_element_by_class_name("alert-success")
         self.assertNotIn("Entry tickets", self.driver.find_element_by_css_selector("#page-wrapper table").text)
+        assert ItemCategory.objects.as_of(t1).filter(identity=c.identity).exists()
+        assert not ItemCategory.objects.current.filter(identity=c.identity).exists()
 
 
 class PropertiesTest(ItemFormTest):
@@ -117,8 +124,9 @@ class PropertiesTest(ItemFormTest):
     @unittest.skipIf('TRAVIS' in os.environ, 'See CategoriesTest.test_sort for details.')
     def test_update(self):
         c = Property.objects.create(event=self.event1, name="Size")
-        PropertyValue.objects.create(prop=c, position=0, value="S")
-        PropertyValue.objects.create(prop=c, position=1, value="M")
+        p1 = PropertyValue.objects.create(prop=c, position=0, value="S")
+        p2 = PropertyValue.objects.create(prop=c, position=1, value="M")
+        t1 = now()
         self.driver.get('%s/control/event/%s/%s/properties/%s/' % (
             self.live_server_url, self.orga1.slug, self.event1.slug, c.identity
         ))
@@ -134,15 +142,24 @@ class PropertiesTest(ItemFormTest):
         self.driver.find_element_by_class_name("alert-success")
         self.assertEqual("red", self.driver.find_element_by_name("values-0-value_0").get_attribute("value"))
         self.assertEqual("blue", self.driver.find_element_by_name("values-1-value_0").get_attribute("value"))
+        assert str(Property.objects.current.get(identity=c.identity).name) == 'Color'
+        assert str(PropertyValue.objects.as_of(t1).get(identity=p2.identity).value) == 'M'
+        assert str(PropertyValue.objects.current.get(identity=p2.identity).value) == 'red'
+        assert str(PropertyValue.objects.as_of(t1).get(identity=p1.identity).value) == 'S'
+        assert not PropertyValue.objects.current.filter(identity=p1.identity).exists()
+        assert Property.objects.as_of(t1).get(identity=c.identity).name == 'Size'
 
     def test_delete(self):
         c = Property.objects.create(event=self.event1, name="Size")
+        t1 = now()
         self.driver.get('%s/control/event/%s/%s/properties/%s/delete' % (
             self.live_server_url, self.orga1.slug, self.event1.slug, c.identity
         ))
         self.driver.find_element_by_class_name("btn-danger").click()
         self.driver.find_element_by_class_name("alert-success")
         self.assertNotIn("Size", self.driver.find_element_by_css_selector("#page-wrapper table").text)
+        assert Property.objects.as_of(t1).filter(identity=c.identity).exists()
+        assert not Property.objects.current.filter(identity=c.identity).exists()
 
 
 class QuestionsTest(ItemFormTest):
@@ -159,6 +176,7 @@ class QuestionsTest(ItemFormTest):
 
     def test_update(self):
         c = Question.objects.create(event=self.event1, question="What is your shoe size?", type="N", required=True)
+        t1 = now()
         self.driver.get('%s/control/event/%s/%s/questions/%s/' % (
             self.live_server_url, self.orga1.slug, self.event1.slug, c.identity
         ))
@@ -170,15 +188,20 @@ class QuestionsTest(ItemFormTest):
         self.assertNotIn("shoe size", self.driver.find_element_by_css_selector("#page-wrapper table").text)
         c = Question.objects.current.get(identity=c.identity)
         self.assertTrue(c.required)
+        assert str(Question.objects.current.get(identity=c.identity).question) == 'How old are you?'
+        assert str(Question.objects.as_of(t1).get(identity=c.identity).question) == 'What is your shoe size?'
 
     def test_delete(self):
         c = Question.objects.create(event=self.event1, question="What is your shoe size?", type="N", required=True)
+        t1 = now()
         self.driver.get('%s/control/event/%s/%s/questions/%s/delete' % (
             self.live_server_url, self.orga1.slug, self.event1.slug, c.identity
         ))
         self.driver.find_element_by_class_name("btn-danger").click()
         self.driver.find_element_by_class_name("alert-success")
         self.assertNotIn("shoe size", self.driver.find_element_by_css_selector("#page-wrapper table").text)
+        assert Question.objects.as_of(t1).filter(identity=c.identity).exists()
+        assert not Question.objects.current.filter(identity=c.identity).exists()
 
 
 class QuotaTest(ItemFormTest):
@@ -201,6 +224,7 @@ class QuotaTest(ItemFormTest):
         item2.properties.add(prop1)
         PropertyValue.objects.create(prop=prop1, value="Silver")
         PropertyValue.objects.create(prop=prop1, value="Gold")
+        t1 = now()
         self.driver.get('%s/control/event/%s/%s/quotas/%s/' % (
             self.live_server_url, self.orga1.slug, self.event1.slug, c.identity
         ))
@@ -217,12 +241,19 @@ class QuotaTest(ItemFormTest):
         self.driver.find_element_by_class_name("alert-success")
         self.assertIn("350", self.driver.find_element_by_css_selector("#page-wrapper table").text)
         self.assertNotIn("500", self.driver.find_element_by_css_selector("#page-wrapper table").text)
+        assert Quota.objects.current.get(identity=c.identity).size == 350
+        assert Quota.objects.as_of(t1).get(identity=c.identity).size == 500
+        assert item1 in Quota.objects.current.get(identity=c.identity).items.all()
+        assert item1 not in Quota.objects.as_of(t1).get(identity=c.identity).items.all()
 
     def test_delete(self):
         c = Quota.objects.create(event=self.event1, name="Full house", size=500)
+        t1 = now()
         self.driver.get('%s/control/event/%s/%s/quotas/%s/delete' % (
             self.live_server_url, self.orga1.slug, self.event1.slug, c.identity
         ))
         self.driver.find_element_by_class_name("btn-danger").click()
         self.driver.find_element_by_class_name("alert-success")
         self.assertNotIn("Full house", self.driver.find_element_by_css_selector("#page-wrapper table").text)
+        assert Quota.objects.as_of(t1).filter(identity=c.identity).exists()
+        assert not Quota.objects.current.filter(identity=c.identity).exists()

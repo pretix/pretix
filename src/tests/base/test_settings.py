@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.test import TestCase
 from django.utils.timezone import now
 
-from pretix.base.models import Event, Organizer, User
+from pretix.base.models import Event, Organizer, User, OrganizerSetting
 from pretix.base import settings
 from pretix.base.settings import SettingsSandbox
 
@@ -45,9 +45,17 @@ class SettingsTestCase(TestCase):
 
         # Reload object
         self.organizer = Organizer.objects.get(identity=self.organizer.identity)
-        self.event = Event.objects.get(identity=self.event.identity)
+
+    def test_versioning(self):
+        self.organizer.settings.test = 'foo'
+        t1 = now()
         self.assertEqual(self.organizer.settings.test, 'foo')
         self.assertEqual(self.event.settings.test, 'foo')
+
+        self.organizer.settings.test = 'bar'
+
+        assert OrganizerSetting.objects.as_of(t1).get(object=self.organizer, key='test').value == 'foo'
+        assert OrganizerSetting.objects.current.get(object=self.organizer, key='test').value == 'bar'
 
     def test_override_organizer(self):
         self.organizer.settings.test = 'foo'
