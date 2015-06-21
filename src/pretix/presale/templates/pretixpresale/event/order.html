@@ -18,7 +18,7 @@
             </div>
             <div class="panel-body">
                 {{ payment }}
-                <strong>{% blocktrans trimmed with date=order.expires|date %}
+                <strong>{% blocktrans trimmed with date=order.expires|date:"SHORT_DATE_FORMAT" %}
                     Please complete your payment before {{ date }}
                 {% endblocktrans %}</strong>
             </div>
@@ -44,7 +44,7 @@
                         </a>
                     {% endfor %}
                 {% else %}
-                    {% blocktrans trimmed with date=event.settings.ticket_download_date|date %}
+                    {% blocktrans trimmed with date=event.settings.ticket_download_date|date:"SHORT_DATE_FORMAT" %}
                         You will be able to download your tickets here on {{ date }}.
                     {% endblocktrans %}
                 {% endif %}

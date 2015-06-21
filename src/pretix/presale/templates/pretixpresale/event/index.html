@@ -38,7 +38,7 @@
                     The presale period for this event is over.
                 {% endblocktrans %}
             {% elif event.settings.presale_start_show_date %}
-                {% blocktrans trimmed with date=event.presale_start|date time=event.presale_start|time %}
+                {% blocktrans trimmed with date=event.presale_start|date:"SHORT_DATE_FORMAT" time=event.presale_start|time:"TIME_FORMAT" %}
                     The presale for this event will start on {{ date }} at {{ time }}.
                 {% endblocktrans %}
             {% else %}

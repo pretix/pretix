@@ -21,7 +21,7 @@
                         >{{ o.code }}</a></strong></td>
                 <td>{{ o.user.get_short_name }}</td>
                 <td>{{ o.total|floatformat:2 }} {{ request.event.currency }}</td>
-                <td>{{ o.datetime|date }}</td>
+                <td>{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
                 <td>{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
 			</tr>
 			{% endfor %}

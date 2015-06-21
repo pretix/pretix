@@ -1,4 +1,4 @@
-{% load i18n %}{% blocktrans with event=event.name total=order.total|floatformat:2 currency=event.currency paymentinfo=payment date=order.expires|date url=url %}Hello,
+{% load i18n %}{% blocktrans with event=event.name total=order.total|floatformat:2 currency=event.currency paymentinfo=payment date=order.expires|date:"SHORT_DATE_FORMAT" url=url %}Hello,
 
 we successfully received your order for {{ event }} with a total value
 of {{ total }} {{ currency }}. Please complete your payment before {{ date }}.

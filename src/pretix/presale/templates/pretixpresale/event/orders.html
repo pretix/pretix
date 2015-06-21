@@ -21,7 +21,7 @@
                     {% for order in orders %}
                         <tr>
                             <td>{{ order.code }}</td>
-                            <td>{{ order.datetime|date }}</td>
+                            <td>{{ order.datetime|date:"SHORT_DATE_FORMAT" }}</td>
                             <td>{{ event.currency }} {{ order.total|floatformat:2 }}</td>
                             <td>{% include "pretixpresale/event/fragment_order_status.html" with order=order %}</td>
                             <td><a href="{% url "presale:event.order" event=request.event.slug organizer=request.event.organizer.slug order=order.code %}">
