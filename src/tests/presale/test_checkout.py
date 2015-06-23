@@ -26,6 +26,7 @@ class CheckoutTestCase(TestCase):
         self.quota_tickets.items.add(self.ticket)
         self.assertTrue(self.client.login(username='demo@%s.event.pretix' % self.event.identity, password='demo'))
         self.event.settings.set('attendee_names_asked', False)
+        self.event.settings.set('payment_banktransfer__enabled', True)
 
     def test_empty_cart(self):
         response = self.client.get('/%s/%s/checkout' % (self.orga.slug, self.event.slug), follow=True)
