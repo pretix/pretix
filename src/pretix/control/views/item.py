@@ -271,8 +271,7 @@ class PropertyUpdate(EventPermissionRequiredMixin, UpdateView):
             f.instance.pk = None
 
         for i, f in enumerate(formset.ordered_forms):
-            if f.instance.pk is not None:
-                f.instance = f.instance.clone()
+            f.save(commit=False)
             f.instance.position = i
             f.instance.save()
 

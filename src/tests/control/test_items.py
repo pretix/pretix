@@ -147,7 +147,7 @@ class PropertiesTest(ItemFormTest):
         assert str(PropertyValue.objects.current.get(identity=p2.identity).value) == 'red'
         assert str(PropertyValue.objects.as_of(t1).get(identity=p1.identity).value) == 'S'
         assert not PropertyValue.objects.current.filter(identity=p1.identity).exists()
-        assert Property.objects.as_of(t1).get(identity=c.identity).name == 'Size'
+        assert str(Property.objects.as_of(t1).get(identity=c.identity).name) == 'Size'
 
     def test_delete(self):
         c = Property.objects.create(event=self.event1, name="Size")
