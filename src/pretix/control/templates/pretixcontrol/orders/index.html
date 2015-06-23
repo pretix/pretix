@@ -3,6 +3,29 @@
 {% block title %}{% trans "Orders" %}{% endblock %}
 {% block content %}
 	<h1>{% trans "Orders" %}</h1>
+    <p>
+        <form class="form-inline" style="display: inline;"
+              action="{% url "control:event.orders.go" event=request.event.slug organizer=request.event.organizer.slug %}">
+            <div class="input-group">
+                <input type="text" name="code" class="form-control" maxlength="8" placeholder="{% trans "Order code" %}">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">{% trans "Go!" %}</button>
+                </span>
+            </div>
+        </form>
+        <form class="form-inline" action="" method="get" style="display: inline;">
+            <select name="status" class="form-control">
+                <option value="">{% trans "All orders" %}</option>
+                <option value="p" {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "Paid" %}</option>
+                <option value="n" {% if request.GET.status == "n" %}selected="selected"{% endif %}>{% trans "Pending" %}</option>
+                <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Pending (expired)" %}</option>
+                <option value="c" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Cancelled" %}</option>
+                <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Refunded" %}</option>
+            </select>
+            <input type="text" name="user" class="form-control" placeholder="{% trans "Search user" %}" value="{{ request.GET.user }}">
+            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+        </form>
+    </p>
 	<table class="table table-condensed table-hover">
 		<thead>
 			<tr>

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-23 08:09+0000\n"
-"PO-Revision-Date: 2015-06-23 10:10+0100\n"
+"POT-Creation-Date: 2015-06-23 17:16+0000\n"
+"PO-Revision-Date: 2015-06-23 19:17+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -65,7 +65,7 @@ msgstr "Zeitzone"
 #: pretix/base/models.py:213 pretix/base/models.py:1509
 #: pretix/base/models.py:1812
 #: pretix/control/templates/pretixcontrol/event/permissions.html:13
-#: pretix/control/templates/pretixcontrol/orders/index.html:10
+#: pretix/control/templates/pretixcontrol/orders/index.html:33
 #: pretix/control/views/event.py:273 tests/base/test_mail.py:71
 msgid "User"
 msgstr "Benutzer"
@@ -436,13 +436,14 @@ msgid "refunded"
 msgstr "erstattet"
 
 #: pretix/base/models.py:1495
-#: pretix/control/templates/pretixcontrol/orders/index.html:9
+#: pretix/control/templates/pretixcontrol/orders/index.html:10
+#: pretix/control/templates/pretixcontrol/orders/index.html:32
 #: pretix/presale/templates/pretixpresale/event/orders.html:14
 msgid "Order code"
 msgstr "Bestellnummer"
 
 #: pretix/base/models.py:1500
-#: pretix/control/templates/pretixcontrol/orders/index.html:13
+#: pretix/control/templates/pretixcontrol/orders/index.html:36
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_confirm.html:18
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:30
 #: pretix/presale/templates/pretixpresale/event/orders.html:17
@@ -1017,6 +1018,7 @@ msgid "Categories"
 msgstr "Kategorien"
 
 #: pretix/control/templates/pretixcontrol/event/base.html:99
+#: pretix/control/templates/pretixcontrol/orders/index.html:18
 msgid "All orders"
 msgstr "Alle Bestellungen"
 
@@ -1548,36 +1550,53 @@ msgid "Yes, refund order"
 msgstr "Ja, Bestellung zurückerstatten"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:4
-#: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:8
-#: pretix/control/templates/pretixcontrol/orders/overview.html:11
-#: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:4
-#: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:8
-msgid "Payment pending"
+#: pretix/control/templates/pretixcontrol/orders/index.html:20
+msgid "Pending"
 msgstr "Zahlung ausstehend"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:6
+#: pretix/control/templates/pretixcontrol/orders/index.html:19
 #: pretix/control/templates/pretixcontrol/orders/overview.html:14
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:6
 msgid "Paid"
 msgstr "bezahlt"
 
+#: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:8
+#: pretix/control/templates/pretixcontrol/orders/index.html:21
+msgid "Pending (expired)"
+msgstr "Zahlung ausstehend (abgelaufen)"
+
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:10
+#: pretix/control/templates/pretixcontrol/orders/index.html:22
 #: pretix/control/templates/pretixcontrol/orders/overview.html:12
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:10
 msgid "Cancelled"
 msgstr "storniert"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:12
+#: pretix/control/templates/pretixcontrol/orders/index.html:23
 #: pretix/control/templates/pretixcontrol/orders/overview.html:13
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:12
 msgid "Refunded"
 msgstr "erstattet"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:11
+#: pretix/control/templates/pretixcontrol/orders/index.html:12
+msgid "Go!"
+msgstr "Los!"
+
+#: pretix/control/templates/pretixcontrol/orders/index.html:25
+msgid "Search user"
+msgstr "Benutzer suchen"
+
+#: pretix/control/templates/pretixcontrol/orders/index.html:26
+msgid "Filter"
+msgstr "Filter"
+
+#: pretix/control/templates/pretixcontrol/orders/index.html:34
 msgid "Order total"
 msgstr "Gesamtbetrag"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:12
+#: pretix/control/templates/pretixcontrol/orders/index.html:35
 msgid "Order date"
 msgstr "Bestelldatum"
 
@@ -1589,6 +1608,12 @@ msgstr "Bestellübersicht"
 #: pretix/control/templates/pretixcontrol/orders/overview.html:10
 msgid "Total orders"
 msgstr "Bestellungen gesamt"
+
+#: pretix/control/templates/pretixcontrol/orders/overview.html:11
+#: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:4
+#: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:8
+msgid "Payment pending"
+msgstr "Zahlung ausstehend"
 
 #: pretix/control/templates/pretixcontrol/organizers/create.html:4
 #: pretix/control/templates/pretixcontrol/organizers/create.html:6
@@ -1708,29 +1733,33 @@ msgstr "Das ausgewählte Produkt existiert nicht."
 msgid "The new event has been created."
 msgstr "Eine neue Veranstaltung wurde erstellt."
 
-#: pretix/control/views/orders.py:115
+#: pretix/control/views/orders.py:125
 msgid "The order has been marked as paid."
 msgstr "Die Bestellung wurde als bezahlt markiert."
 
-#: pretix/control/views/orders.py:120
+#: pretix/control/views/orders.py:130
 msgid "The order has been cancelled."
 msgstr "Die Bestellung wurde storniert."
 
-#: pretix/control/views/orders.py:126
+#: pretix/control/views/orders.py:136
 msgid "The order has been marked as not paid."
 msgstr "Die Bestellung wurde als unbezahlt markiert."
 
-#: pretix/control/views/orders.py:156 pretix/control/views/orders.py:182
+#: pretix/control/views/orders.py:166 pretix/control/views/orders.py:192
 msgid "This action is only allowed for pending orders."
 msgstr "Diese Aktion ist nur für unbezahlte Bestellungen möglich."
 
-#: pretix/control/views/orders.py:167
+#: pretix/control/views/orders.py:177
 msgid "The payment term has been changed."
 msgstr "Die Zahlungsfrist wurde geändert."
 
-#: pretix/control/views/orders.py:261
+#: pretix/control/views/orders.py:271
 msgid "Uncategorized"
 msgstr "Unkategorisiert"
+
+#: pretix/control/views/orders.py:311
+msgid "There is no order with the given order code."
+msgstr "Es existiert keine Bestellung mit der eingegebenen Bestellnummer."
 
 #: pretix/control/views/organizer.py:59
 msgid "The new organizer has been created."

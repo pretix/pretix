@@ -1,13 +1,13 @@
 from itertools import groupby
 
 from django.contrib import messages
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, View
 from pretix.base.models import Order, Quota, OrderPosition, ItemCategory
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.signals import register_payment_providers
@@ -23,9 +23,19 @@ class OrderList(EventPermissionRequiredMixin, ListView):
     permission = 'can_view_orders'
 
     def get_queryset(self):
-        return Order.objects.current.filter(
+        qs = Order.objects.current.filter(
             event=self.request.event
-        ).select_related("user")
+        )
+        if self.request.GET.get("user", "") != "":
+            u = self.request.GET.get("user", "")
+            qs = qs.filter(
+                Q(user__identifier__icontains=u) | Q(user__email__icontains=u)
+                | Q(user__givenname__icontains=u) | Q(user__familyname__icontains=u)
+            )
+        if self.request.GET.get("status", "") != "":
+            s = self.request.GET.get("status", "")
+            qs = qs.filter(status=s)
+        return qs.select_related("user")
 
 
 class OrderView(EventPermissionRequiredMixin, DetailView):
@@ -286,3 +296,17 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
         }
 
         return ctx
+
+
+class OrderGo(EventPermissionRequiredMixin, View):
+    permission = 'can_view_orders'
+
+    def get(self, request, *args, **kwargs):
+        code = request.GET.get("code")
+        try:
+            order = Order.objects.current.get(code=code, event=request.event)
+            return redirect('control:event.order', event=request.event.slug, organizer=request.event.organizer.slug,
+                            code=order.code)
+        except Order.DoesNotExist:
+            messages.error(request, _('There is no order with the given order code.'))
+            return redirect('control:event.orders', event=request.event.slug, organizer=request.event.organizer.slug)
