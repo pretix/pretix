@@ -12,29 +12,31 @@
         {% endblocktrans %}
         {% include "pretixcontrol/orders/fragment_order_status.html" with order=order class="pull-right" %}
     </h1>
-    {% if order.status == 'n' or order.status == 'p' %}
-        <form action="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
-                method="post">
-            {% csrf_token %}
-            <div class="btn-toolbar" role="toolbar">
-                <div class="btn-group" role="group">
-                    {% if order.status == 'n' %}
-                        <button name="status" value="p" class="btn btn-default">{% trans "Mark as paid" %}</button>
-                        <a href="{% url "control:event.order.extend" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
-                            {% trans "Extend payment term" %}
-                        </a>
-                        <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=c" class="btn btn-default">
-                            {% trans "Cancel order" %}
-                        </a>
-                    {% elif order.status == 'p' %}
-                        <button name="status" value="n" class="btn btn-default">{% trans "Mark as not paid" %}</button>
-                        <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=r" class="btn btn-default">
-                            {% trans "Refund order" %}
-                        </a>
-                    {% endif %}
+    {% if request.eventperm.can_change_orders %}
+        {% if order.status == 'n' or order.status == 'p' %}
+            <form action="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
+                    method="post">
+                {% csrf_token %}
+                <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group" role="group">
+                        {% if order.status == 'n' %}
+                            <button name="status" value="p" class="btn btn-default">{% trans "Mark as paid" %}</button>
+                            <a href="{% url "control:event.order.extend" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                                {% trans "Extend payment term" %}
+                            </a>
+                            <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=c" class="btn btn-default">
+                                {% trans "Cancel order" %}
+                            </a>
+                        {% elif order.status == 'p' %}
+                            <button name="status" value="n" class="btn btn-default">{% trans "Mark as not paid" %}</button>
+                            <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=r" class="btn btn-default">
+                                {% trans "Refund order" %}
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        {% endif %}
     {% endif %}
     <div class="panel panel-primary items">
         <div class="panel-heading">

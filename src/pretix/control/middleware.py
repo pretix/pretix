@@ -7,7 +7,7 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.http import HttpResponseNotFound
 from django.utils.translation import ugettext as _
 
-from pretix.base.models import Event, Organizer
+from pretix.base.models import Event, Organizer, EventPermission
 
 
 class PermissionMiddleware:
@@ -54,6 +54,10 @@ class PermissionMiddleware:
                     permitted__id__exact=request.user.id,
                     organizer__slug=url.kwargs['organizer'],
                 ).select_related('organizer')[0]
+                request.eventperm = EventPermission.objects.current.get(
+                    event=request.event,
+                    user=request.user
+                )
                 request.organizer = request.event.organizer
             except IndexError:
                 return HttpResponseNotFound(_("The selected event was not found or you "

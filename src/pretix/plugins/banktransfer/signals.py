@@ -16,6 +16,8 @@ def register_payment_provider(sender, **kwargs):
 @receiver(nav_event)
 def control_nav_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
+    if not request.eventperm.can_change_orders:
+        return []
     return [
         {
             'label': _('Import bank data'),
