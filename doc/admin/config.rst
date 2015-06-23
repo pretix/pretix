@@ -93,7 +93,7 @@ Example::
     Connection details for the database connection. Empty by default.
 
 URLs
------
+----
 
 Example::
 
@@ -160,5 +160,18 @@ Example::
 
     .. WARNING:: Never set this to ``True`` in production!
 
+
+Memcached
+---------
+
+You can use an existing memcached server as pretix's caching backend::
+
+    [memcached]
+    location=127.0.0.1:11211
+
+``location``
+    The location of memcached, either a host:port combination or a socket file.
+
+If no memcached is configures, pretix will use Django's built-in local-memory caching method.
 
 .. _Python documentation: https://docs.python.org/3/library/configparser.html?highlight=configparser#supported-ini-file-structure

@@ -74,6 +74,14 @@ SESSION_COOKIE_SECURE = SESSION_COOKIE_HTTPONLY = config.getboolean(
 LANGUAGE_COOKIE_DOMAIN = SESSION_COOKIE_DOMAIN = CSRF_COOKIE_DOMAIN = config.get(
     'pretix', 'cookiedomain', fallback=None)
 
+if config.has_option('memcached', 'location'):
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+            'LOCATION': config.get('memcached', 'location'),
+        }
+    }
+
 # Internal settings
 
 STATIC_ROOT = '_static'
