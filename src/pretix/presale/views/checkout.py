@@ -153,7 +153,7 @@ class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, 
         responses = register_payment_providers.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
-            if not provider.is_enabled:
+            if not provider.is_enabled or not provider.is_allowed(self.request):
                 continue
             fee = provider.calculate_fee(self._total_order_value)
             providers.append({
@@ -177,6 +177,12 @@ class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, 
                     return self.get(request, *args, **kwargs)
         messages.error(self.request, _("Please select a payment method."))
         return self.get(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        if self._total_order_value == 0:
+            request.session['payment'] = 'free'
+            return redirect(self.get_confirm_url())
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -208,6 +214,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
         ctx = super().get_context_data(**kwargs)
         ctx['cart'] = self.get_cart(answers=True)
         ctx['payment'] = self.payment_provider.checkout_confirm_render(self.request)
+        ctx['payment_provider'] = self.payment_provider
         return ctx
 
     @cached_property
@@ -225,7 +232,9 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
         if 'payment' not in request.session or not self.payment_provider:
             messages.error(request, _('The payment information you entered was incomplete.'))
             return redirect(self.get_payment_url())
-        if not self.payment_provider.checkout_is_valid_session(request):
+        if not self.payment_provider.checkout_is_valid_session(request) or \
+                not self.payment_provider.is_enabled or \
+                not self.payment_provider.is_allowed(request):
             messages.error(request, _('The payment information you entered was incomplete.'))
             return redirect(self.get_payment_url())
         for cp in self.positions:
@@ -348,3 +357,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
         )
         OrderPosition.transform_cart_positions(cartpos, order)
         return order
+
+    def get_previous_url(self):
+        if self.payment_provider != "free":
+            return self.get_payment_url()

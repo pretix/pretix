@@ -2,15 +2,19 @@ from collections import OrderedDict
 from decimal import Decimal
 from django import forms
 from django.contrib import messages
+from django.db.models import Sum, Q
+from django.dispatch import receiver
 
 from django.forms import Form
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from pretix.base.forms import SettingsForm
-from pretix.base.models import Order
+from pretix.base.models import Order, CartPosition
+from pretix.base.services.orders import mark_order_paid
 
 from pretix.base.settings import SettingsSandbox
+from pretix.base.signals import register_payment_providers
 
 
 class BasePaymentProvider:
@@ -154,6 +158,16 @@ class BasePaymentProvider:
         form.fields = self.checkout_form_fields
         return form
 
+    def is_allowed(self, request: HttpRequest) -> bool:
+        """
+        You can use this method to disable this payment provider for certain groups
+        of users, products or other criteria. If this method returns ``False``, the
+        user will not be able to select this payment method.
+
+        The default implementation always returns ``True``.
+        """
+        return True
+
     def checkout_form_render(self, request: HttpRequest) -> str:
         """
         When the user selects this provider as his prefered payment method,
@@ -243,7 +257,7 @@ class BasePaymentProvider:
         containing an URL the user will be redirected to. If you are done with your process
         you should return the user to the order's detail page.
 
-        If the payment is completed, you should call ``pretix.bsae.services.orders.mark_order_paid(order, provider, info)``
+        If the payment is completed, you should call ``pretix.base.services.orders.mark_order_paid(order, provider, info)``
         with ``provider`` being your :py:attr:`identifier` and ``info`` being any string
         you might want to store for later usage. Please note, that if you want to store
         something inside ``order.payment_info``, please do it after the ``mark_order_paid`` call,
@@ -345,3 +359,67 @@ class BasePaymentProvider:
         order.mark_refunded()
         messages.success(request, _('The order has been marked as refunded. Please transfer the money '
                                     'back to the buyer manually.'))
+
+
+class FreeOrderProvider(BasePaymentProvider):
+
+    @property
+    def is_enabled(self) -> bool:
+        return True
+
+    @property
+    def identifier(self) -> str:
+        return "free"
+
+    def checkout_confirm_render(self, request) -> str:
+        return _("No payment is required as this order only includes products which are free of charge.")
+
+    def order_pending_render(self, request: HttpRequest, order: Order) -> str:
+        pass
+
+    def checkout_is_valid_session(self, request: HttpRequest) -> bool:
+        return True
+
+    @property
+    def verbose_name(self) -> str:
+        return _("Free of charge")
+
+    def checkout_perform(self, request: HttpRequest, order: Order):
+        mark_order_paid(order, 'free')
+
+    @property
+    def settings_form_fields(self) -> dict:
+        return {}
+
+    def order_control_refund_render(self, order: Order) -> str:
+        return ''
+
+    def order_control_refund_perform(self, request: HttpRequest, order: Order) -> "bool|str":
+        """
+        Will be called if the event administrator confirms the refund.
+
+        This should transfer the money back (if possible). You can return an URL the
+        user should be redirected to if you need special behaviour or None to continue
+        with default behaviour.
+
+        On failure, you should use Django's message framework to display an error message
+        to the user.
+
+        The default implementation sets the Orders state to refunded and shows a success
+        message.
+
+        :param request: The HTTP request
+        :param order: The order object
+        """
+        order.mark_refunded()
+        messages.success(request, _('The order has been marked as refunded.'))
+
+    def is_allowed(self, request: HttpRequest) -> bool:
+        return CartPosition.objects.current.filter(
+            Q(user=request.user) & Q(event=request.event)
+        ).aggregate(sum=Sum('price'))['sum'] == 0
+
+
+@receiver(register_payment_providers)
+def register_payment_provider(sender, **kwargs):
+    return FreeOrderProvider

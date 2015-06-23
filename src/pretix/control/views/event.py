@@ -136,7 +136,9 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
             )
             provider.settings_content = provider.settings_content_render(self.request)
             provider.form.prepare_fields()
-            providers.append(provider)
+            if provider.settings_content or provider.form.fields:
+                # Exclude providers which do not provide any settings
+                providers.append(provider)
         return providers
 
     def get_context_data(self, *args, **kwargs) -> dict:

@@ -29,6 +29,7 @@ class EventPluginSignal(django.dispatch.Signal):
             # Find the Django application this belongs to
             searchpath = receiver.__module__
             app = None
+            mod = None
             while "." in searchpath:
                 try:
                     if apps.is_installed(searchpath):
@@ -37,8 +38,8 @@ class EventPluginSignal(django.dispatch.Signal):
                     pass
                 searchpath, mod = searchpath.rsplit(".", 1)
 
-            # Only fire receivers from active plugins
-            if app.name in sender.get_plugins():
+            # Only fire receivers from active plugins and core modules
+            if (searchpath, mod) == ("pretix", "base") or (app and app.name in sender.get_plugins()):
                 if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
                     response = receiver(signal=self, sender=sender, **named)
                     responses.append((receiver, response))

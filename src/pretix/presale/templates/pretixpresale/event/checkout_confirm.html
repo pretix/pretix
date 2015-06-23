@@ -35,16 +35,17 @@
                 </div>
             </div>
         </div>
-        {# TODO: Question answers #}
         <div class="row-fluid">
             <div class="panel panel-primary">
                 <div class="panel-heading">
+                    {% if payment_provider.identifier != "free" %}
                     <div class="pull-right">
                         <a href="{% url "presale:event.checkout.payment" organizer=request.event.organizer.slug  event=request.event.slug %}">
                             <span class="fa fa-edit"></span>
                             {% trans "Modify" %}
                         </a>
                     </div>
+                    {% endif %}
                     <h3 class="panel-title">
                         {% trans "Payment" %}
                     </h3>
@@ -57,7 +58,7 @@
         <div class="row checkout-button-row">
 			<div class="col-md-4">
 				<a class="btn btn-block btn-default btn-lg"
-	   					href="{{ view.get_payment_url }}">
+	   					href="{{ view.get_previous_url }}">
 					{% trans "Go back" %}
 				</a>
 			</div>

@@ -66,6 +66,8 @@ The provider class
 
    .. automethod:: checkout_form
 
+   .. automethod:: is_allowed
+
    .. autoattribute:: checkout_form_fields
 
    .. automethod:: checkout_prepare
