@@ -128,6 +128,8 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin,
 
         if not self.forms:
             # Nothing to do here
+            if self.request.GET.get('back', 'false') == 'true':
+                return redirect(self.get_index_url())
             return redirect(self.get_payment_url())
 
         return super().get(*args, **kwargs)
@@ -189,6 +191,9 @@ class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, 
         ctx['providers'] = self.provider_forms
         ctx['selected'] = self.request.POST.get('payment', self.request.session.get('payment', ''))
         return ctx
+
+    def get_previous_url(self):
+        return self.get_questions_url() + "?back=true"
 
 
 class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, CheckoutView):
@@ -359,5 +364,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
         return order
 
     def get_previous_url(self):
-        if self.payment_provider != "free":
+        if self.payment_provider.identifier != "free":
             return self.get_payment_url()
+        else:
+            return self.get_questions_url() + "?back=true"
