@@ -108,19 +108,23 @@ class Paypal(BasePaymentProvider):
         return self._create_payment(request, payment)
 
     def _create_payment(self, request, payment):
-        if payment.create():
-            if payment.state not in ('created', 'approved', 'pending'):
+        try:
+            if payment.create():
+                if payment.state not in ('created', 'approved', 'pending'):
+                    messages.error(request, _('We had trouble communicating with PayPal'))
+                    logger.error('Invalid payment state: ' + str(payment))
+                    return
+                request.session['payment_paypal_id'] = payment.id
+                request.session['payment_paypal_event'] = self.event.id
+                for link in payment.links:
+                    if link.method == "REDIRECT" and link.rel == "approval_url":
+                        return str(link.href)
+            else:
                 messages.error(request, _('We had trouble communicating with PayPal'))
-                logger.error('Invalid payment state: ' + str(payment))
-                return
-            request.session['payment_paypal_id'] = payment.id
-            request.session['payment_paypal_event'] = self.event.id
-            for link in payment.links:
-                if link.method == "REDIRECT" and link.rel == "approval_url":
-                    return str(link.href)
-        else:
+                logger.error('Error on creating payment: ' + str(payment.error))
+        except Exception as e:
             messages.error(request, _('We had trouble communicating with PayPal'))
-            logger.error('Error on creating payment: ' + str(payment.error))
+            logger.error('Error on creating payment: ' + str(e))
 
     def checkout_confirm_render(self, request) -> str:
         """
