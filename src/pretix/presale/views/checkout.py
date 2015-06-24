@@ -1,19 +1,14 @@
-from datetime import timedelta, datetime
-
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.db import transaction
 from django.db.models import Q, Sum
 from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
-from django.utils.timezone import now
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.services.mail import mail
-from pretix.base.models import CartPosition, QuestionAnswer, Quota, Order, OrderPosition
+from pretix.base.models import CartPosition, QuestionAnswer, OrderPosition
+from pretix.base.services.orders import perform_order, OrderError
 from pretix.base.signals import register_payment_providers
-from pretix.helpers.urls import build_absolute_uri
 from pretix.presale.forms.checkout import QuestionsForm
 from pretix.presale.views import EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin
 
@@ -199,18 +194,6 @@ class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, 
 class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_confirm.html"
 
-    error_messages = {
-        'unavailable': _('Some of the products you selected were no longer available. '
-                         'Please see below for details.'),
-        'in_part': _('Some of the products you selected were no longer available in '
-                     'the quantity you selected. Please see below for details.'),
-        'price_changed': _('The price of some of the items in your cart has changed in the '
-                           'meantime. Please see below for details.'),
-        'busy': _('We were not able to process your request completely as the '
-                  'server was too busy. Please try again.'),
-        'max_items': _("You cannot select more than %s items per order"),
-    }
-
     def __init__(self, *args, **kwargs):
         self.msg_some_unavailable = False
         super().__init__(*args, **kwargs)
@@ -269,99 +252,15 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
         return self.check_process(request) or self.perform_order(request)
 
     def perform_order(self, request: HttpRequest):
-        dt = now()
-        quotas_locked = set()
-
         try:
-            cartpos = self.positions
-            for i, cp in enumerate(cartpos):
-                quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
-                if cp.expires < dt:
-                    price = cp.item.check_restrictions() if cp.variation is None else cp.variation.check_restrictions()
-                    if price is False or len(quotas) == 0:
-                        self.error_message(self.error_messages['unavailable'])
-                        continue
-                    if price != cp.price:
-                        cp = cp.clone()
-                        cartpos[i] = cp
-                        cp.price = price
-                        cp.save()
-                        self.error_message(self.error_messages['price_changed'])
-                        continue
-                    quota_ok = True
-                    for quota in quotas:
-                        # Lock the quota, so no other thread is allowed to perform sales covered by this
-                        # quota while we're doing so.
-                        if quota not in quotas_locked:
-                            quota.lock()
-                            quotas_locked.add(quota)
-                        avail = quota.availability()
-                        if avail[0] != Quota.AVAILABILITY_OK:
-                            # This quota is sold out/currently unavailable, so do not sell this at all
-                            self.error_message(self.error_messages['unavailable'])
-                            quota_ok = False
-                            break
-                    if quota_ok:
-                        if not self.request.event.presale_end or now() < self.request.event.presale_end:
-                            cp = cp.clone()
-                            cartpos[i] = cp
-                            cp.expires = now() + timedelta(
-                                minutes=self.request.event.settings.get('reservation_time', as_type=int))
-                            cp.save()
-                    else:
-                        cp.delete()  # Sorry!
-            if not self.msg_some_unavailable:  # Everything went well
-                order = self._place_order(cartpos, dt)
-                messages.success(request, _('Your order has been placed.'))
-                mail(
-                    request.user, _('Your order: %(code)s') % {'code': order.code},
-                    'pretixpresale/email/order_placed.txt',
-                    {
-                        'user': request.user, 'order': order,
-                        'event': request.event,
-                        'url': build_absolute_uri('presale:event.order', kwargs={
-                            'event': self.request.event.slug,
-                            'organizer': self.request.event.organizer.slug,
-                            'order': order.code,
-                        }),
-                        'payment': self.payment_provider.order_pending_mail_render(order)
-                    },
-                    request.event
-                )
-                resp = self.payment_provider.checkout_perform(request, order)
-                return redirect(resp or self.get_order_url(order))
-
-        except Quota.LockTimeoutException:
-            # Is raised when there are too many threads asking for quota locks and we were
-            # unaible to get one
-            self.error_message(self.error_messages['busy'], important=True)
-        finally:
-            # Release the locks. This is important ;)
-            for quota in quotas_locked:
-                quota.release()
-
-        return redirect(self.get_confirm_url())
-
-    @transaction.atomic()
-    def _place_order(self, cartpos, dt):
-        total = sum([c.price for c in cartpos])
-        payment_fee = self.payment_provider.calculate_fee(total)
-        total += payment_fee
-        expires = [dt + timedelta(days=self.request.event.settings.get('payment_term_days', as_type=int))]
-        if self.request.event.settings.get('payment_term_last'):
-            expires.append(self.request.event.settings.get('payment_term_last', as_type=datetime))
-        order = Order.objects.create(
-            status=Order.STATUS_PENDING,
-            event=self.request.event,
-            user=self.request.user,
-            datetime=dt,
-            expires=min(expires),
-            total=total,
-            payment_fee=payment_fee,
-            payment_provider=self.payment_provider.identifier,
-        )
-        OrderPosition.transform_cart_positions(cartpos, order)
-        return order
+            order = perform_order(self.request.event, self.request.user, self.payment_provider, self.positions)
+        except OrderError as e:
+            messages.error(request, str(e))
+            return redirect(self.get_confirm_url())
+        else:
+            messages.success(request, _('Your order has been placed.'))
+            resp = self.payment_provider.checkout_perform(request, order)
+            return redirect(resp or self.get_order_url(order))
 
     def get_previous_url(self):
         if self.payment_provider.identifier != "free":
