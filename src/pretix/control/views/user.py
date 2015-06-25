@@ -3,7 +3,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.core.urlresolvers import reverse
 from django.views.generic import UpdateView
 from django.utils.translation import ugettext_lazy as _
-from pretix.control.forms.user import UserSettingsForm
+from pretix.base.forms.user import UserSettingsForm
 
 from pretix.base.models import User
 

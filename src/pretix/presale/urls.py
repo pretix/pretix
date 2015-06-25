@@ -34,6 +34,8 @@ urlpatterns = [
         url(r'^forgot/recover$', pretix.presale.views.event.EventRecover.as_view(), name='event.forgot.recover'),
         url(r'^logout$', pretix.presale.views.event.EventLogout.as_view(), name='event.logout'),
         url(r'^orders$', pretix.presale.views.event.EventOrders.as_view(), name='event.orders'),
+        url(r'^account$', pretix.presale.views.event.EventAccount.as_view(), name='event.account'),
+        url(r'^account/settings$', pretix.presale.views.event.EventAccountSettings.as_view(), name='event.account.settings'),
     ])),
     url(r'^locale/set$', pretix.presale.views.locale.LocaleSet.as_view(), name='locale.set'),
 ]

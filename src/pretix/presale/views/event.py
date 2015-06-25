@@ -1,7 +1,7 @@
 import json
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import authenticate, logout, update_session_auth_hash
 from django.core import signing
 from django.core.signing import SignatureExpired, BadSignature
 from django.core.urlresolvers import reverse
@@ -9,9 +9,10 @@ from django.db.models import Count
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.contrib.auth import login
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView, View, UpdateView
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from pretix.base.forms.user import UserSettingsForm
 from pretix.base.services.mail import mail
 from pretix.base.models import User
 from pretix.helpers.urls import build_absolute_uri
@@ -89,7 +90,7 @@ class EventLogin(EventViewMixin, TemplateView):
         if 'next' in self.request.GET:
             return redirect(self.request.GET.get('next'))
         else:
-            return redirect('presale:event.orders',
+            return redirect('presale:event.account',
                             organizer=self.request.event.organizer.slug,
                             event=self.request.event.slug)
 
@@ -297,6 +298,15 @@ class EventLogout(EventViewMixin, View):
                         event=self.request.event.slug)
 
 
+class EventAccount(EventLoginRequiredMixin, EventViewMixin, TemplateView):
+    template_name = 'pretixpresale/event/account.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['orders'] = self.request.user.orders.current.count()
+        return context
+
+
 class EventOrders(EventLoginRequiredMixin, EventViewMixin, TemplateView):
     template_name = 'pretixpresale/event/orders.html'
 
@@ -304,3 +314,30 @@ class EventOrders(EventLoginRequiredMixin, EventViewMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['orders'] = self.request.user.orders.current.all()
         return context
+
+
+class EventAccountSettings(EventLoginRequiredMixin, EventViewMixin, UpdateView):
+    model = User
+    form_class = UserSettingsForm
+    template_name = 'pretixpresale/event/account_settings.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved. See below for details.'))
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Your changes have been saved.'))
+        sup = super().form_valid(form)
+        update_session_auth_hash(self.request, self.request.user)
+        return sup
+
+    def get_success_url(self):
+        return reverse('control:user.settings')

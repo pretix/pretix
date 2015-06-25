@@ -29,15 +29,19 @@ class UserSettingsForm(forms.ModelForm):
                                     required=False,
                                     label=_("Repeat new password"),
                                     widget=forms.PasswordInput())
-    timezone = forms.ChoiceField(
-        choices=((a, a) for a in common_timezones),
-        label=_("Default timezone"),
-    )
+    # timezone = forms.ChoiceField(
+    #     choices=((a, a) for a in common_timezones),
+    #     label=_("Default timezone"),
+    # )
 
     class Meta:
         model = User
         fields = [
-            'givenname', 'familyname', 'locale', 'timezone', 'email'
+            'givenname',
+            'familyname',
+            'locale',
+            # 'timezone',
+            'email'
         ]
 
     def __init__(self, *args, **kwargs):

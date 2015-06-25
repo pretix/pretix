@@ -38,10 +38,10 @@ class VersionedBaseModelForm(BaseI18nModelForm):
                 clone = old.clone()
                 for f in type(self.instance)._meta.get_fields():
                     if f.name not in (
-                        'id', 'identity', 'version_start_date', 'version_end_date',
-                        'version_birth_date'
+                            'id', 'identity', 'version_start_date', 'version_end_date',
+                            'version_birth_date'
                     ) and not isinstance(f, (
-                        models.ManyToOneRel, models.ManyToManyRel, models.ManyToManyField
+                            models.ManyToOneRel, models.ManyToManyRel, models.ManyToManyField
                     )):
                         setattr(clone, f.name, getattr(new, f.name))
                 self.instance = clone
