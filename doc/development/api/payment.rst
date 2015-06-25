@@ -62,29 +62,33 @@ The provider class
 
    .. automethod:: settings_content_render
 
-   .. automethod:: checkout_form_render
+   .. automethod:: payment_form_render
 
-   .. automethod:: checkout_form
+   .. automethod:: payment_form
 
    .. automethod:: is_allowed
 
-   .. autoattribute:: checkout_form_fields
+   .. autoattribute:: payment_form_fields
 
    .. automethod:: checkout_prepare
 
-   .. automethod:: checkout_is_valid_session
+   .. automethod:: payment_is_valid_session
 
    .. automethod:: checkout_confirm_render
 
       This is an abstract method, you **must** override this!
 
-   .. automethod:: checkout_perform
+   .. automethod:: payment_perform
 
    .. automethod:: order_pending_mail_render
 
    .. automethod:: order_pending_render
 
       This is an abstract method, you **must** override this!
+
+   .. automethod:: order_can_retry
+
+   .. automethod:: retry_prepare
 
    .. automethod:: order_paid_render
 

@@ -156,7 +156,7 @@ class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, 
             providers.append({
                 'provider': provider,
                 'fee': fee,
-                'form': provider.checkout_form_render(self.request),
+                'form': provider.payment_form_render(self.request),
             })
         return providers
 
@@ -220,7 +220,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
         if 'payment' not in request.session or not self.payment_provider:
             messages.error(request, _('The payment information you entered was incomplete.'))
             return redirect(self.get_payment_url())
-        if not self.payment_provider.checkout_is_valid_session(request) or \
+        if not self.payment_provider.payment_is_valid_session(request) or \
                 not self.payment_provider.is_enabled or \
                 not self.payment_provider.is_allowed(request):
             messages.error(request, _('The payment information you entered was incomplete.'))
@@ -259,7 +259,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
             return redirect(self.get_confirm_url())
         else:
             messages.success(request, _('Your order has been placed.'))
-            resp = self.payment_provider.checkout_perform(request, order)
+            resp = self.payment_provider.payment_perform(request, order)
             return redirect(resp or self.get_order_url(order))
 
     def get_previous_url(self):

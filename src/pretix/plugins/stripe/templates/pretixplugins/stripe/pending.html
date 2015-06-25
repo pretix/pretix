@@ -1,5 +1,12 @@
 {% load i18n %}
 
 <p>{% blocktrans trimmed %}
-    The credit card transaction could not be completed. Please contact us.
-{% endblocktrans %}</p>
+    The credit card transaction could not be completed for the following reason:
+{% endblocktrans %}
+    <br />
+    {% if payment_info and payment_info.error %}
+        {{ payment_info.message }}
+    {% else %}
+        {% trans "Unknown reason" %}
+    {% endif %}
+</p>

@@ -3,7 +3,6 @@ import json
 import logging
 
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from django import forms
@@ -43,8 +42,11 @@ class Stripe(BasePaymentProvider):
             build_absolute_uri('plugins:stripe:webhook')
         )
 
-    def checkout_is_valid_session(self, request):
+    def payment_is_valid_session(self, request):
         return request.session.get('payment_stripe_token') != ''
+
+    def retry_prepare(self, request, order):
+        return self.checkout_prepare(request, None)
 
     def checkout_prepare(self, request, cart):
         token = request.POST.get('stripe_token', '')
@@ -56,7 +58,7 @@ class Stripe(BasePaymentProvider):
             return False
         return True
 
-    def checkout_form_render(self, request) -> str:
+    def payment_form_render(self, request) -> str:
         template = get_template('pretixplugins/stripe/checkout_payment_form.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings}
         return template.render(ctx)
@@ -70,7 +72,10 @@ class Stripe(BasePaymentProvider):
         ctx = {'request': request, 'event': self.event, 'settings': self.settings}
         return template.render(ctx)
 
-    def checkout_perform(self, request, order) -> str:
+    def order_can_retry(self, order):
+        return True
+
+    def payment_perform(self, request, order) -> str:
         self._init_api()
         try:
             charge = stripe.Charge.create(
@@ -82,23 +87,31 @@ class Stripe(BasePaymentProvider):
                     'event': self.event.identity,
                     'code': order.code
                 },
-                idempotency_key=self.event.identity + order.code  # TODO: Use something better
+                # TODO: Is this sufficient?
+                idempotency_key=self.event.identity + order.code + request.session['payment_stripe_token']
             )
         except stripe.error.CardError as e:
             err = e.json_body['error']
             messages.error(request, _('Stripe reported an error with your card: %s' % err['message']))
             logger.info('Stripe card error: %s' % str(err))
+            order = order.clone()
+            order.payment_info = json.dumps({
+                'error': True,
+                'message': err['message'],
+            })
+            order.save()
         except stripe.error.InvalidRequestError or stripe.error.AuthenticationError or stripe.error.APIConnectionError \
-                as e:
+                or stripe.error.StripeError as e:
             err = e.json_body['error']
             messages.error(request, _('We had trouble communicating with Stripe. Please try again and get in touch '
                                       'with us if this problem persists.'))
             logger.error('Stripe error: %s' % str(err))
-        except stripe.error.StripeError as e:
-            err = e.json_body['error']
-            messages.error(request, _('We had trouble processing the payment. Please try again and get '
-                                      'in touch with us if this problem persists.'))
-            logger.error('Stripe error: %s' % str(err))
+            order = order.clone()
+            order.payment_info = json.dumps({
+                'error': True,
+                'message': err['message'],
+            })
+            order.save()
         else:
             if charge.status == 'succeeded' and charge.paid:
                 try:
@@ -112,11 +125,16 @@ class Stripe(BasePaymentProvider):
                 order = order.clone()
                 order.payment_info = str(charge)
                 order.save()
+        del request.session['payment_stripe_token']
 
     def order_pending_render(self, request, order) -> str:
+        if order.payment_info:
+            payment_info = json.loads(order.payment_info)
+        else:
+            payment_info = None
         template = get_template('pretixplugins/stripe/pending.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings,
-               'order': order}
+               'order': order, 'payment_info': payment_info}
         return template.render(ctx)
 
     def order_control_render(self, request, order) -> str:

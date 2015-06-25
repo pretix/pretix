@@ -85,7 +85,8 @@ $(function() {
         .keyup(pretixstripe.validate_cvc)
     $("#stripe_number").parents("form").submit(
         function () {
-            if ($("input[name=payment][value=stripe]").prop('checked') && $("#stripe_token").val() == "") {
+            if (($("input[name=payment][value=stripe]").prop('checked') || $("input[name=payment]").length === 0)
+                 && $("#stripe_token").val() == "") {
                 pretixstripe.request();
                 return false;
             }

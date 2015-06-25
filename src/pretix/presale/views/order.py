@@ -13,6 +13,7 @@ from pretix.presale.views.checkout import QuestionsViewMixin
 
 
 class OrderDetailMixin:
+
     @cached_property
     def order(self):
         try:
@@ -24,6 +25,21 @@ class OrderDetailMixin:
         except Order.DoesNotExist:
             return None
 
+    @cached_property
+    def payment_provider(self):
+        responses = register_payment_providers.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if provider.identifier == self.order.payment_provider:
+                return provider
+
+    def get_order_url(self):
+        return reverse('presale:event.order', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'order': self.order.code,
+        })
+
 
 class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
                    CartDisplayMixin, TemplateView):
@@ -34,14 +50,6 @@ class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         if not self.order:
             return HttpResponseNotFound(_('Unknown order code or order does belong to another user.'))
         return super().get(request, *args, **kwargs)
-
-    @cached_property
-    def payment_provider(self):
-        responses = register_payment_providers.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
-            if provider.identifier == self.order.payment_provider:
-                return provider
 
     @cached_property
     def download_buttons(self):
@@ -75,9 +83,92 @@ class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         )
         if self.order.status == Order.STATUS_PENDING:
             ctx['payment'] = self.payment_provider.order_pending_render(self.request, self.order)
+            ctx['can_retry'] = self.payment_provider.order_can_retry(self.order) and self.payment_provider.is_enabled
         elif self.order.status == Order.STATUS_PAID:
             ctx['payment'] = self.payment_provider.order_paid_render(self.request, self.order)
+            ctx['can_retry'] = False
         return ctx
+
+
+class OrderPay(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin, TemplateView):
+    template_name = "pretixpresale/event/order_pay.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        if not self.order:
+            return HttpResponseNotFound(_('Unknown order code or order does belong to another user.'))
+        if not self.payment_provider.order_can_retry(self.order) or not self.payment_provider.is_enabled:
+            messages.error(request, _('The payment for this order cannot be continued.'))
+            return redirect(self.get_order_url())
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        resp = self.payment_provider.retry_prepare(
+            request, self.order
+        )
+        if isinstance(resp, str):
+            return redirect(resp)
+        elif resp is True:
+            return redirect(self.get_confirm_url())
+        else:
+            return self.get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['order'] = self.order
+        ctx['form'] = self.form
+        return ctx
+
+    @cached_property
+    def form(self):
+        return self.payment_provider.payment_form_render(self.request)
+
+    def get_confirm_url(self):
+        return reverse('presale:event.order.pay.confirm', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'order': self.order.code,
+        })
+
+
+class OrderPayDo(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin, TemplateView):
+    template_name = "pretixpresale/event/order_pay_confirm.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        if not self.order:
+            return HttpResponseNotFound(_('Unknown order code or order does belong to another user.'))
+        if not self.payment_provider.order_can_retry(self.order) or not self.payment_provider.is_enabled:
+            messages.error(request, _('The payment for this order cannot be continued.'))
+            return redirect(self.get_order_url())
+        if not self.payment_provider.payment_is_valid_session(request) or \
+                not self.payment_provider.is_enabled or \
+                not self.payment_provider.is_allowed(request):
+            messages.error(request, _('The payment information you entered was incomplete.'))
+            return redirect(self.get_payment_url())
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        resp = self.payment_provider.payment_perform(request, self.order)
+        return redirect(resp or self.get_order_url())
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['order'] = self.order
+        ctx['payment'] = self.payment_provider.checkout_confirm_render(self.request)
+        ctx['payment_provider'] = self.payment_provider
+        return ctx
+
+    @cached_property
+    def form(self):
+        return self.payment_provider.payment_form_render(self.request)
+
+    def get_payment_url(self):
+        return reverse('presale:event.order.pay', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'order': self.order.code,
+        })
 
 
 class OrderModify(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
@@ -96,12 +187,6 @@ class OrderModify(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         ))
 
     def post(self, request, *args, **kwargs):
-        self.request = request
-        self.kwargs = kwargs
-        if not self.order:
-            return HttpResponseNotFound(_('Unknown order code or order does belong to another user.'))
-        if not self.order.can_modify_answers:
-            return HttpResponseForbidden(_('You cannot modify this order'))
         failed = not self.save()
         if failed:
             messages.error(self.request,
@@ -113,13 +198,16 @@ class OrderModify(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
                         order=self.order.code)
 
     def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
         self.request = request
         self.kwargs = kwargs
         if not self.order:
             return HttpResponseNotFound(_('Unknown order code or order does belong to another user.'))
         if not self.order.can_modify_answers:
             return HttpResponseForbidden(_('You cannot modify this order'))
-        return super().get(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

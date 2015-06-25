@@ -22,7 +22,7 @@ class Paypal(BasePaymentProvider):
 
     identifier = 'paypal'
     verbose_name = _('PayPal')
-    checkout_form_fields = OrderedDict([
+    payment_form_fields = OrderedDict([
     ])
 
     @property
@@ -55,11 +55,11 @@ class Paypal(BasePaymentProvider):
             client_id=self.settings.get('client_id'),
             client_secret=self.settings.get('secret'))
 
-    def checkout_is_valid_session(self, request):
+    def payment_is_valid_session(self, request):
         return (request.session.get('payment_paypal_id', '') != ''
                 and request.session.get('payment_paypal_payer', '') != '')
 
-    def checkout_form_render(self, request) -> str:
+    def payment_form_render(self, request) -> str:
         template = get_template('pretixplugins/paypal/checkout_payment_form.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings}
         return template.render(ctx)
@@ -135,7 +135,7 @@ class Paypal(BasePaymentProvider):
         ctx = {'request': request, 'event': self.event, 'settings': self.settings}
         return template.render(ctx)
 
-    def checkout_perform(self, request, order) -> str:
+    def payment_perform(self, request, order) -> str:
         """
         Will be called if the user submitted his order successfully to initiate the
         payment process.

@@ -129,7 +129,7 @@ class BasePaymentProvider:
         pass
 
     @property
-    def checkout_form_fields(self) -> dict:
+    def payment_form_fields(self) -> dict:
         """
         This is used by the default implementation of :py:meth:`checkout_form`.
         It should return an object similar to :py:attr:`settings_form_fields`.
@@ -138,7 +138,7 @@ class BasePaymentProvider:
         """
         return {}
 
-    def checkout_form(self, request: HttpRequest) -> Form:
+    def payment_form(self, request: HttpRequest) -> Form:
         """
         This is called by the default implementation of :py:meth:`checkout_form_render`
         to obtain the form that is displayed to the user during the checkout
@@ -155,7 +155,7 @@ class BasePaymentProvider:
                 if k.startswith('payment_%s_' % self.identifier)
             }
         )
-        form.fields = self.checkout_form_fields
+        form.fields = self.payment_form_fields
         return form
 
     def is_allowed(self, request: HttpRequest) -> bool:
@@ -168,7 +168,7 @@ class BasePaymentProvider:
         """
         return True
 
-    def checkout_form_render(self, request: HttpRequest) -> str:
+    def payment_form_render(self, request: HttpRequest) -> str:
         """
         When the user selects this provider as his prefered payment method,
         he will be shown the HTML you return from this method.
@@ -178,7 +178,7 @@ class BasePaymentProvider:
         the user to fill out form fields, you should just return a paragraph
         of explainatory text.
         """
-        form = self.checkout_form(request)
+        form = self.payment_form(request)
         template = get_template('pretixpresale/event/checkout_payment_form_default.html')
         ctx = {'request': request, 'form': form}
         return template.render(ctx)
@@ -209,7 +209,7 @@ class BasePaymentProvider:
         to the user (or the normal form validation error messages).
 
         The default implementation stores the input into the form returned by
-        :py:meth:`checkout_form` in the user's session.
+        :py:meth:`payment_form` in the user's session.
 
         If your payment method requires you to redirect the user to an external provider,
         this might be the place to do so.
@@ -233,7 +233,7 @@ class BasePaymentProvider:
             payment_fee:
                 The fee for the payment method.
         """
-        form = self.checkout_form(request)
+        form = self.payment_form(request)
         if form.is_valid():
             for k, v in form.cleaned_data.items():
                 request.session['payment_%s_%s' % (self.identifier, k)] = v
@@ -241,7 +241,7 @@ class BasePaymentProvider:
         else:
             return False
 
-    def checkout_is_valid_session(self, request: HttpRequest) -> bool:
+    def payment_is_valid_session(self, request: HttpRequest) -> bool:
         """
         This is called at the time the user tries to place the order. It should return
         ``True``, if the user's session is valid and all data your payment provider requires
@@ -249,7 +249,7 @@ class BasePaymentProvider:
         """
         raise NotImplementedError()  # NOQA
 
-    def checkout_perform(self, request: HttpRequest, order: Order) -> str:
+    def payment_perform(self, request: HttpRequest, order: Order) -> str:
         """
         After the user confirmed his purchase, this method will be called to complete
         the payment process. This is the place to actually move the money, if applicable.
@@ -298,6 +298,32 @@ class BasePaymentProvider:
         :param order: The order object
         """
         raise NotImplementedError()  # NOQA
+
+    def order_can_retry(self, order: Order) -> bool:
+        """
+        Will be called if the user views the detail page of an unpaid order to determine
+        whether the user should be presented with an option to retry the payment. The default
+        implementation always returns False.
+
+        :param order: The order object
+        """
+        return False
+
+    def retry_prepare(self, request: HttpRequest, order: Order) -> "bool|str":
+        """
+        Will be called if the user retries to pay an unpaid order (after the user filled in
+        e.g. the form returned by :py:meth:`payment_form`).
+
+        It should return and report errors the same way as :py:meth:`checkout_prepare`, but
+        receives an ``Order`` object instead of a cart object.
+        """
+        form = self.payment_form(request)
+        if form.is_valid():
+            for k, v in form.cleaned_data.items():
+                request.session['payment_%s_%s' % (self.identifier, k)] = v
+            return True
+        else:
+            return False
 
     def order_paid_render(self, request: HttpRequest, order: Order) -> str:
         """
@@ -377,14 +403,14 @@ class FreeOrderProvider(BasePaymentProvider):
     def order_pending_render(self, request: HttpRequest, order: Order) -> str:
         pass
 
-    def checkout_is_valid_session(self, request: HttpRequest) -> bool:
+    def payment_is_valid_session(self, request: HttpRequest) -> bool:
         return True
 
     @property
     def verbose_name(self) -> str:
         return _("Free of charge")
 
-    def checkout_perform(self, request: HttpRequest, order: Order):
+    def payment_perform(self, request: HttpRequest, order: Order):
         mark_order_paid(order, 'free')
 
     @property

@@ -23,7 +23,7 @@ class BankTransfer(BasePaymentProvider):
             ]
         )
 
-    def checkout_form_render(self, request) -> str:
+    def payment_form_render(self, request) -> str:
         template = get_template('pretixplugins/banktransfer/checkout_payment_form.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings}
         return template.render(ctx)
@@ -31,11 +31,11 @@ class BankTransfer(BasePaymentProvider):
     def checkout_prepare(self, request, total):
         return True
 
-    def checkout_is_valid_session(self, request):
+    def payment_is_valid_session(self, request):
         return True
 
     def checkout_confirm_render(self, request):
-        form = self.checkout_form(request)
+        form = self.payment_form(request)
         template = get_template('pretixplugins/banktransfer/checkout_payment_confirm.html')
         ctx = {'request': request, 'form': form, 'settings': self.settings}
         return template.render(ctx)
