@@ -83,7 +83,11 @@ class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         )
         if self.order.status == Order.STATUS_PENDING:
             ctx['payment'] = self.payment_provider.order_pending_render(self.request, self.order)
-            ctx['can_retry'] = self.payment_provider.order_can_retry(self.order) and self.payment_provider.is_enabled
+            ctx['can_retry'] = (
+                self.payment_provider.order_can_retry(self.order)
+                and self.payment_provider.is_enabled
+                and self.order._can_be_paid(keep_locked=False)
+            )
         elif self.order.status == Order.STATUS_PAID:
             ctx['payment'] = self.payment_provider.order_paid_render(self.request, self.order)
             ctx['can_retry'] = False

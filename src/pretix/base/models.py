@@ -1618,7 +1618,7 @@ class Order(Versionable):
         error_messages = {
             'unavailable': _('Some of the ordered products were no longer available.'),
             'busy': _('We were not able to process the request completely as the '
-                      'server was too busy. Please try again.'),
+                      'server was too busy.'),
         }
         positions = list(self.positions.all().select_related(
             'item', 'variation'

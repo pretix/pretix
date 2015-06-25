@@ -3,7 +3,6 @@ import json
 import logging
 
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
