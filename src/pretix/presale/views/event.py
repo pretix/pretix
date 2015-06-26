@@ -340,4 +340,8 @@ class EventAccountSettings(EventLoginRequiredMixin, EventViewMixin, UpdateView):
         return sup
 
     def get_success_url(self):
-        return reverse('control:user.settings')
+        return reverse('presale:event.account.settings',
+                       kwargs={
+                           'event': self.request.event.slug,
+                           'organizer': self.request.event.organizer.slug,
+                       })
