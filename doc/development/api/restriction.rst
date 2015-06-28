@@ -156,7 +156,6 @@ In our example, the implementation could look like this::
             # Therefore, it is only available inside one of the timeframes, but not
             # without any timeframe
             available = False
-            price = None
 
             # Make up some unique key for this variation
             cachekey = 'timerestriction:%d:%s' % (
@@ -190,7 +189,9 @@ In our example, the implementation could look like this::
                     available = True
                     prices.append(restriction.price)
 
-            price = min([p for p in prices if p is not None])
+            # Use the lowest of all prices set by restrictions
+            prices = [p for p in prices if p is not None]
+            price = min(prices) if prices else None
 
             v['available'] = available
             v['price'] = price
