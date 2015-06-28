@@ -68,15 +68,14 @@ and head to http://localhost:8000/
 
 Code checks and unit tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-Before you check in your code into git, always run::
+Before you check in your code into git, always run the static checkers and unit tests::
 
     flake8 .
     python manage.py validate
-    python manage.py test
+    py.test
 
-to check for syntax, style and other errors. The ``flake8`` command by default is a bit
-stricter than what we really enforce, but we do enforce that all commits produce no output
-from::
+The ``flake8`` command by default is a bit stricter than what we really enforce, but we do enforce that all commits
+produce no output from::
 
     flake8 --ignore=E123,E128,F403,F401,N802,W503 .
 
