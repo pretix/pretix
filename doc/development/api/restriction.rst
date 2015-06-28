@@ -175,8 +175,9 @@ In our example, the implementation could look like this::
                 continue
 
             # Walk through all restriction objects applied to this item
+            prices = []
             for restriction in restrictions:
-                applied_to = list(restriction.variations.all())
+                applied_to = list(restriction.variations.current.all())
 
                 # Only take this restriction into consideration if it
                 # is directly applied to this variation or if the item
@@ -187,11 +188,9 @@ In our example, the implementation could look like this::
                 if restriction.timeframe_from <= now() <= restriction.timeframe_to:
                     # Selling this item is currently possible
                     available = True
-                    # If multiple time frames are currently active, make sure to
-                    # get the cheapest price:
-                    if (restriction.price is not None
-                            and (price is None or restriction.price < price)):
-                        price = restriction.price
+                    prices.append(restriction.price)
+
+            price = min([p for p in prices if p is not None])
 
             v['available'] = available
             v['price'] = price

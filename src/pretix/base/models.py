@@ -935,6 +935,32 @@ class Item(Versionable):
         self._get_all_variations_cache = result
         return result
 
+    def _get_all_generated_variations(self):
+        propids = set([p.identity for p in self.properties.all()])
+        if len(propids) == 0:
+            variations = [VariationDict()]
+        else:
+            all_variations = list(
+                self.variations.annotate(
+                    qc=Count('quotas')
+                ).filter(qc__gt=0).prefetch_related(
+                    "values", "values__prop", "quotas__event"
+                )
+            )
+            variations = []
+            for var in all_variations:
+                values = list(var.values.all())
+                # Make sure we don't expose stale ItemVariation objects which are
+                # still around altough they have an old set of properties
+                if set([v.prop.identity for v in values]) != propids:
+                    continue
+                vardict = VariationDict()
+                for v in values:
+                    vardict[v.prop.identity] = v
+                vardict['variation'] = var
+                variations.append(vardict)
+        return variations
+
     def get_all_available_variations(self, use_cache: bool=False):
         """
         This method returns a list of all variations which are theoretically
@@ -959,29 +985,7 @@ class Item(Versionable):
 
         from .signals import determine_availability
 
-        propids = set([p.identity for p in self.properties.all()])
-        if len(propids) == 0:
-            variations = [VariationDict()]
-        else:
-            all_variations = list(
-                self.variations.annotate(
-                    qc=Count('quotas')
-                ).filter(qc__gt=0).prefetch_related(
-                    "values", "values__prop", "quotas__event"
-                )
-            )
-            variations = []
-            for var in all_variations:
-                values = list(var.values.all())
-                # Make sure we don't expose stale ItemVariation objects which are
-                # still around altough they have an old set of properties
-                if set([v.prop.identity for v in values]) != propids:
-                    continue
-                vardict = VariationDict()
-                for v in values:
-                    vardict[v.prop.identity] = v
-                vardict['variation'] = var
-                variations.append(vardict)
+        variations = self._get_all_generated_variations()
         responses = determine_availability.send(
             self.event, item=self,
             variations=variations, context=None,

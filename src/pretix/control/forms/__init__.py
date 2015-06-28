@@ -333,6 +333,26 @@ class VariationsField(forms.ModelMultipleChoiceField):
         if not isinstance(value, (list, tuple)):
             raise ValidationError(self.error_messages['list'], code='list')
 
+        cleaned_value = self._clean_value(value)
+
+        qs = self.item.variations.current.filter(identity__in=cleaned_value)
+
+        # Re-check for consistency
+        pks = set(force_text(getattr(o, "identity")) for o in qs)
+        for val in cleaned_value:
+            if force_text(val) not in pks:
+                raise ValidationError(
+                    self.error_messages['invalid_choice'],
+                    code='invalid_choice',
+                    params={'value': val},
+                )
+
+        # Since this overrides the inherited ModelChoiceField.clean
+        # we run custom validators here
+        self.run_validators(cleaned_value)
+        return qs
+
+    def _clean_value(self, value):
         # Build up a cache of variations having an ItemVariation object
         # For implementation details, see ItemVariation.get_all_variations()
         # which uses a very similar method
@@ -379,22 +399,6 @@ class VariationsField(forms.ModelMultipleChoiceField):
                 else:
                     # An ItemVariation id was given
                     cleaned_value.append(pk)
-
-        qs = self.item.variations.current.filter(identity__in=cleaned_value)
-
-        # Re-check for consistency
-        pks = set(force_text(getattr(o, "identity")) for o in qs)
-        for val in cleaned_value:
-            if force_text(val) not in pks:
-                raise ValidationError(
-                    self.error_messages['invalid_choice'],
-                    code='invalid_choice',
-                    params={'value': val},
-                )
-
-        # Since this overrides the inherited ModelChoiceField.clean
-        # we run custom validators here
-        self.run_validators(cleaned_value)
-        return qs
+        return cleaned_value
 
     choices = property(_get_choices, forms.ChoiceField._set_choices)
