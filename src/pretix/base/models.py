@@ -123,12 +123,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     This is the user model used by pretix for authentication.
     Handling users is somehow complicated, as we try to have two
     classes of users in one system:
+
         (1) We want *global* users who can just login into pretix and
             buy tickets for multiple events -- we also need those
             global users for event organizers who should not need
             multiple users for managing multiple events.
         (2) We want *local* users who exist only in the scope of a
             certain event
+
     The hard part is to find a primary key to identify all of these
     users. Letting the users choose usernames is a bad idea, as
     the primary key needs to be unique and there is no reason for a
@@ -139,11 +141,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     to supply an e-mail address.
     Therefore, we use an abstract "identifier" field as the primary
     key. The identifier is:
+
         (1) the e-mail address for global users. An e-mail address
             is and should be required for them and global users use
             their e-mail address for login.
         (2) "{username}@{event.identity}.event.pretix" for local users, who
             use their username to login on the event page.
+
     The model's save() method automatically fills the identifier field
     according to this scheme when it is empty. The __str__() method
     returns the identifier.
@@ -1342,8 +1346,8 @@ class Quota(Versionable):
         This method is used to determine whether Items or ItemVariations belonging
         to this quota should currently be available for sale.
 
-        :returns: a tuple where the first entry is one of the Quota.AVAILABILITY_ constants and the second
-                  is the number of available tickets.
+        :returns: a tuple where the first entry is one of the ``Quota.AVAILABILITY_`` constants
+                  and the second is the number of available tickets.
         """
         # TODO: These lookups are highly inefficient. However, we'll wait with optimizing
         #       until Django 1.8 is released, as the following feature might make it a
@@ -1397,7 +1401,8 @@ class Quota(Versionable):
         Issue a lock on this quota so nobody can take tickets from this quota until
         you release the lock. Will retry 5 times on failure.
 
-        :raises Quota.LockTimeoutException: if the quota is locked every time we try to obtain the lock
+        :raises Quota.LockTimeoutException: if the quota is locked every time we try
+                                            to obtain the lock
         """
         retries = 5
         for i in range(retries):

@@ -24,12 +24,18 @@ pretix/
         Django or installed 3rd-party packages, like a filter to combine the ``lessc``
         preprocessor with ``django-compressor``'s URL rewriting.
 
+tests/
+    This is the root directory for all test codes. It includes subdirectories ``base``,
+    ``control``, ``presale``, ``helpers`` and ``plugins`` to mirror the structure of the
+    ``pretix`` source code as well as ``testdummy``, which is a pretix plugin used during
+    testing.
+
 Language files
 --------------
 The language files live in ``locale/*/LC_MESSAGES/``.
 
 Static files
--------------
+------------
 
 LESS source code
 ^^^^^^^^^^^^^^^^
