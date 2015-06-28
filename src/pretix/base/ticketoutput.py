@@ -3,7 +3,6 @@ from django import forms
 
 from django.http import HttpRequest, HttpResponse
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.forms import SettingsForm
 from pretix.base.models import Order
 
 from pretix.base.settings import SettingsSandbox

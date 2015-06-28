@@ -1,6 +1,6 @@
 from django.dispatch import receiver
 
-from pretix.base.signals import determine_availability
+from pretix.base.signals import determine_availability, register_ticket_outputs
 
 
 @receiver(determine_availability)
@@ -13,3 +13,9 @@ def availability_handler(sender, **kwargs):
             v['available'] = (sender.settings.testdummy_available == 'yes')
         return variations
     return []
+
+
+@receiver(register_ticket_outputs)
+def register_ticket_outputs(sender, **kwargs):
+    from .ticketoutput import DummyTicketOutput
+    return DummyTicketOutput

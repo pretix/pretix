@@ -101,7 +101,9 @@ class OrderPay(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin, Templa
         self.request = request
         if not self.order:
             return HttpResponseNotFound(_('Unknown order code or order does belong to another user.'))
-        if not self.payment_provider.order_can_retry(self.order) or not self.payment_provider.is_enabled:
+        if (self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED)
+                or not self.payment_provider.order_can_retry(self.order)
+                or not self.payment_provider.is_enabled):
             messages.error(request, _('The payment for this order cannot be continued.'))
             return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
@@ -145,9 +147,9 @@ class OrderPayDo(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin, Temp
         if not self.payment_provider.order_can_retry(self.order) or not self.payment_provider.is_enabled:
             messages.error(request, _('The payment for this order cannot be continued.'))
             return redirect(self.get_order_url())
-        if not self.payment_provider.payment_is_valid_session(request) or \
-                not self.payment_provider.is_enabled or \
-                not self.payment_provider.is_allowed(request):
+        if (not self.payment_provider.payment_is_valid_session(request)
+                or not self.payment_provider.is_enabled
+                or not self.payment_provider.is_allowed(request)):
             messages.error(request, _('The payment information you entered was incomplete.'))
             return redirect(self.get_payment_url())
         return super().dispatch(request, *args, **kwargs)
@@ -195,11 +197,8 @@ class OrderModify(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         if failed:
             messages.error(self.request,
                            _("We had difficulties processing your input. Please review the errors below."))
-            return self.get(*args, **kwargs)
-        return redirect('presale:event.order',
-                        event=self.request.event.slug,
-                        organizer=self.request.event.organizer.slug,
-                        order=self.order.code)
+            return self.get(request, *args, **kwargs)
+        return redirect(self.get_order_url())
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
@@ -224,26 +223,22 @@ class OrderCancel(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
                   TemplateView):
     template_name = "pretixpresale/event/order_cancel.html"
 
-    def post(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
         self.kwargs = kwargs
         if not self.order:
             return HttpResponseNotFound(_('Unknown order code or order does belong to another user.'))
         if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
             return HttpResponseForbidden(_('You cannot cancel this order'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
         order = self.order.clone()
         order.status = Order.STATUS_CANCELLED
         order.save()
-        return redirect('presale:event.order',
-                        event=self.request.event.slug,
-                        organizer=self.request.event.organizer.slug,
-                        order=order.code)
+        return redirect(self.get_order_url())
 
     def get(self, request, *args, **kwargs):
-        self.kwargs = kwargs
-        if not self.order:
-            return HttpResponseNotFound(_('Unknown order code or order does belong to another user.'))
-        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
-            return HttpResponseForbidden(_('You cannot cancel this order'))
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -254,12 +249,6 @@ class OrderCancel(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
 
 class OrderDownload(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
                     View):
-    def get_order_url(self):
-        return reverse('presale:event.order', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
-            'order': self.order.code,
-        })
 
     @cached_property
     def output(self):
@@ -273,6 +262,8 @@ class OrderDownload(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         if not self.output or not self.output.is_enabled:
             messages.error(request, _('You requested an invalid ticket output type.'))
             return redirect(self.get_order_url())
+        if not self.order:
+            return HttpResponseNotFound(_('Unknown order code or order does belong to another user.'))
         if self.order.status != Order.STATUS_PAID:
             messages.error(request, _('Order is not paid.'))
             return redirect(self.get_order_url())

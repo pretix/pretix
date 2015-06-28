@@ -139,7 +139,7 @@ class CheckoutTestCase(TestCase):
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % cr1.identity)), 1)
 
-        # Not all required fields filled out, expect failure
+        # Not all fields filled out, expect success
         response = self.client.post('/%s/%s/checkout' % (self.orga.slug, self.event.slug), {
             '%s-attendee_name' % cr1.identity: '',
         }, follow=True)

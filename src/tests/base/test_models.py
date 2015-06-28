@@ -5,7 +5,7 @@ from django.utils.timezone import now
 from pretix.base.models import (
     Event, Organizer, Item, ItemVariation,
     Property, PropertyValue, User, Quota,
-    Order, OrderPosition, CartPosition)
+    Order, OrderPosition, CartPosition, Question)
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.types import VariationDict
 
@@ -189,7 +189,8 @@ class BaseQuotaTestCase(TestCase):
 
     def setUp(self):
         self.quota = Quota.objects.create(name="Test", size=2, event=self.event)
-        self.item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23)
+        self.item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
+                                         admission=True)
         self.item2 = Item.objects.create(event=self.event, name="T-Shirt")
         p = Property.objects.create(event=self.event, name='Size')
         pv1 = PropertyValue.objects.create(prop=p, value='S')
@@ -360,3 +361,18 @@ class OrderTestCase(BaseQuotaTestCase):
         mark_order_paid(self.order, force=True)
         self.order = Order.objects.current.get(identity=self.order.identity)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
+
+    def test_can_modify_answers(self):
+        self.event.settings.set('attendee_names_asked', True)
+        assert self.order.can_modify_answers
+        self.event.settings.set('attendee_names_asked', False)
+        assert not self.order.can_modify_answers
+        q = Question.objects.create(question='Foo', type=Question.TYPE_BOOLEAN, event=self.event)
+        self.item1.questions.add(q)
+        assert self.order.can_modify_answers
+        self.order.status = Order.STATUS_REFUNDED
+        assert not self.order.can_modify_answers
+        self.order.status = Order.STATUS_PAID
+        assert self.order.can_modify_answers
+        self.event.settings.set('last_order_modification_date', now() - timedelta(days=1))
+        assert not self.order.can_modify_answers
