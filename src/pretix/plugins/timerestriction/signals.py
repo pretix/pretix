@@ -138,7 +138,7 @@ def formset_handler(sender, **kwargs):
         'title': _('Restriction by time'),
         'formsetclass': formset,
         'prefix': 'timerestriction',
-        'description': 'If you use this restriction type, the system will only sell variations, which are covered '
+        'description': 'If you use this restriction type, the system will only sell variations which are covered '
                        'by at least one of the timeframes you define below. You can also change the price of '
                        'variations for within the given timeframe. Please note, that if you change the price of '
                        'variations here, this will overrule the price set in the "Variations" section.'

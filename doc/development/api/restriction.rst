@@ -282,7 +282,7 @@ Our time restriction example looks like this::
             'formsetclass': formset,
             'prefix': 'timerestriction',
             'description': 'If you use this restriction type, the system will only '
-                           'sell variations, which are covered by at least one of the '
+                           'sell variations which are covered by at least one of the '
                            'timeframes you define below.'
         }
 
