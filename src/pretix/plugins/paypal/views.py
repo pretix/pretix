@@ -1,7 +1,6 @@
 import logging
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 import paypalrestsdk
 from pretix.base.models import Event, Order

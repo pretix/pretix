@@ -12,7 +12,7 @@ class TestDummyApp(AppConfig):
         version = '1.0.0'
 
     def ready(self):
-        from tests.testdummy import signals
+        from tests.testdummy import signals  # noqa
 
 
 default_app_config = 'tests.testdummy.TestDummyApp'

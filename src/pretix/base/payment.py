@@ -9,7 +9,6 @@ from django.forms import Form
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.forms import SettingsForm
 from pretix.base.models import Order, CartPosition
 from pretix.base.services.orders import mark_order_paid
 

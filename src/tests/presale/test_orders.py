@@ -268,7 +268,7 @@ class OrdersTest(TestCase):
         self.order.save()
         response = self.client.get(
             '/%s/%s/order/%s/download/testdummy' % (self.orga.slug, self.event.slug, self.order.code),
-            )
+        )
         assert response.status_code == 200
         assert response.content.strip().decode() == self.order.identity
 

@@ -8,7 +8,7 @@ import django
 
 django.setup()
 
-from pretix.base.models import *
+from pretix.base.models import *  # NOQA
 
 if Organizer.objects.exists():
     print("There already is data in your DB!")

@@ -65,7 +65,7 @@ class OrderError(Exception):
     pass
 
 
-def perform_order(event, user, payment_provider, positions):
+def check_positions(event, dt, positions, quotas_locked):
     error_messages = {
         'unavailable': _('Some of the products you selected were no longer available. '
                          'Please see below for details.'),
@@ -73,71 +73,78 @@ def perform_order(event, user, payment_provider, positions):
                      'the quantity you selected. Please see below for details.'),
         'price_changed': _('The price of some of the items in your cart has changed in the '
                            'meantime. Please see below for details.'),
+        'max_items': _("You cannot select more than %s items per order"),
+    }
+    err = None
+
+    for i, cp in enumerate(positions):
+        quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
+        if cp.expires >= dt:
+            # Other checks are not necessary
+            continue
+        price = cp.item.check_restrictions() if cp.variation is None else cp.variation.check_restrictions()
+        if price is False or len(quotas) == 0:
+            err = err or error_messages['unavailable']
+            continue
+        if price != cp.price:
+            cp = cp.clone()
+            positions[i] = cp
+            cp.price = price
+            cp.save()
+            err = err or error_messages['price_changed']
+            continue
+        quota_ok = True
+        for quota in quotas:
+            # Lock the quota, so no other thread is allowed to perform sales covered by this
+            # quota while we're doing so.
+            if quota not in quotas_locked:
+                quota.lock()
+                quotas_locked.add(quota)
+            avail = quota.availability()
+            if avail[0] != Quota.AVAILABILITY_OK:
+                # This quota is sold out/currently unavailable, so do not sell this at all
+                err = err or error_messages['unavailable']
+                quota_ok = False
+                break
+        if quota_ok and not event.presale_end or now() < event.presale_end:
+            cp = cp.clone()
+            positions[i] = cp
+            cp.expires = now() + timedelta(
+                minutes=event.settings.get('reservation_time', as_type=int))
+            cp.save()
+        elif not quota_ok:
+            cp.delete()  # Sorry!
+    if err:
+        raise OrderError(err)
+
+
+def perform_order(event, user, payment_provider, positions):
+    error_messages = {
         'busy': _('We were not able to process your request completely as the '
                   'server was too busy. Please try again.'),
-        'max_items': _("You cannot select more than %s items per order"),
     }
     dt = now()
     quotas_locked = set()
-    err = None
 
     try:
-        for i, cp in enumerate(positions):
-            quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
-            if cp.expires < dt:
-                price = cp.item.check_restrictions() if cp.variation is None else cp.variation.check_restrictions()
-                if price is False or len(quotas) == 0:
-                    err = err or error_messages['unavailable']
-                    continue
-                if price != cp.price:
-                    cp = cp.clone()
-                    positions[i] = cp
-                    cp.price = price
-                    cp.save()
-                    err = err or error_messages['price_changed']
-                    continue
-                quota_ok = True
-                for quota in quotas:
-                    # Lock the quota, so no other thread is allowed to perform sales covered by this
-                    # quota while we're doing so.
-                    if quota not in quotas_locked:
-                        quota.lock()
-                        quotas_locked.add(quota)
-                    avail = quota.availability()
-                    if avail[0] != Quota.AVAILABILITY_OK:
-                        # This quota is sold out/currently unavailable, so do not sell this at all
-                        err = err or error_messages['unavailable']
-                        quota_ok = False
-                        break
-                if quota_ok:
-                    if not event.presale_end or now() < event.presale_end:
-                        cp = cp.clone()
-                        positions[i] = cp
-                        cp.expires = now() + timedelta(
-                            minutes=event.settings.get('reservation_time', as_type=int))
-                        cp.save()
-                else:
-                    cp.delete()  # Sorry!
-        if err:
-            raise OrderError(err)
-        else:  # Everything went well
-            order = place_order(event, user, positions, dt, payment_provider)
-            mail(
-                user, _('Your order: %(code)s') % {'code': order.code},
-                'pretixpresale/email/order_placed.txt',
-                {
-                    'user': user, 'order': order,
-                    'event': event,
-                    'url': build_absolute_uri('presale:event.order', kwargs={
-                        'event': event.slug,
-                        'organizer': event.organizer.slug,
-                        'order': order.code,
-                    }),
-                    'payment': payment_provider.order_pending_mail_render(order)
-                },
-                event
-            )
-            return order
+        check_positions(event, dt, positions, quotas_locked)
+        order = place_order(event, user, positions, dt, payment_provider)
+        mail(
+            user, _('Your order: %(code)s') % {'code': order.code},
+            'pretixpresale/email/order_placed.txt',
+            {
+                'user': user, 'order': order,
+                'event': event,
+                'url': build_absolute_uri('presale:event.order', kwargs={
+                    'event': event.slug,
+                    'organizer': event.organizer.slug,
+                    'order': order.code,
+                }),
+                'payment': payment_provider.order_pending_mail_render(order)
+            },
+            event
+        )
+        return order
     except Quota.LockTimeoutException:
         # Is raised when there are too many threads asking for quota locks and we were
         # unaible to get one
@@ -165,6 +172,6 @@ def place_order(event, user, positions, dt, payment_provider):
         total=total,
         payment_fee=payment_fee,
         payment_provider=payment_provider.identifier,
-        )
+    )
     OrderPosition.transform_cart_positions(positions, order)
     return order

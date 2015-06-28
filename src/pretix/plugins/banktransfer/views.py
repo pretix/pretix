@@ -62,56 +62,60 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
     def process_mt940(self):
         return self.confirm_view(mt940import.parse(self.request.FILES.get('file')))
 
+    def process_csv_file(self):
+        try:
+            data = csvimport.get_rows_from_file(self.request.FILES['file'])
+        except csv.Error as e:  # TODO: narrow down
+            logger.error('Import failed: ' + str(e))
+            messages.error(self.request, _('I\'m sorry, but we were unable to import this CSV file. Please '
+                                           'contact support for help.'))
+            return self.redirect_back()
+
+        if len(data) == 0:
+            messages.error(self.request, _('I\'m sorry, but we detected this file as empty. Please '
+                                           'contact support for help.'))
+
+        if self.request.event.settings.get('banktransfer_csvhint') is not None:
+            hint = self.request.event.settings.get('banktransfer_csvhint', as_type=dict)
+            try:
+                parsed = csvimport.parse(data, hint)
+            except csvimport.HintMismatchError as e:  # TODO: narrow down
+                logger.error('Import using stored hint failed: ' + str(e))
+            else:
+                return self.confirm_view(parsed)
+
+        return self.assign_view(data)
+
+    def process_csv_hint(self):
+        data = []
+        for i in range(int(self.request.POST.get('rows'))):
+            data.append([
+                self.request.POST.get('col[%d][%d]' % (i, j))
+                for j in range(int(self.request.POST.get('cols')))
+            ])
+        if 'reference' not in self.request.POST:
+            messages.error(self.request, _('You need to select the column containing the payment reference.'))
+            return self.assign_view(data)
+        try:
+            hint = csvimport.new_hint(self.request.POST)
+        except Exception as e:
+            logger.error('Parsing hint failed: ' + str(e))
+            messages.error(self.request, _('We were unable to process your input.'))
+            return self.assign_view(data)
+        try:
+            self.request.event.settings.set('banktransfer_csvhint', hint)
+        except Exception as e:  # TODO: narrow down
+            logger.error('Import using stored hint failed: ' + str(e))
+            pass
+        else:
+            parsed = csvimport.parse(data, hint)
+            return self.confirm_view(parsed)
+
     def process_csv(self):
         if 'file' in self.request.FILES:
-            # if file is csv file
-            try:
-                data = csvimport.get_rows_from_file(self.request.FILES['file'])
-            except csv.Error as e:  # TODO: narrow down
-                logger.error('Import failed: ' + str(e))
-                messages.error(self.request, _('I\'m sorry, but we were unable to import this CSV file. Please '
-                                               'contact support for help.'))
-                return self.redirect_back()
-
-            if len(data) == 0:
-                messages.error(self.request, _('I\'m sorry, but we detected this file as empty. Please '
-                                               'contact support for help.'))
-
-            if self.request.event.settings.get('banktransfer_csvhint') is not None:
-                hint = self.request.event.settings.get('banktransfer_csvhint', as_type=dict)
-                try:
-                    parsed = csvimport.parse(data, hint)
-                except csvimport.HintMismatchError as e:  # TODO: narrow down
-                    logger.error('Import using stored hint failed: ' + str(e))
-                else:
-                    return self.confirm_view(parsed)
-
-            return self.assign_view(data)
-
-        elif 'amount' in self.request.POST:  # CSV hint given
-            data = []
-            for i in range(int(self.request.POST.get('rows'))):
-                data.append([
-                    self.request.POST.get('col[%d][%d]' % (i, j))
-                    for j in range(int(self.request.POST.get('cols')))
-                ])
-            if 'reference' not in self.request.POST:
-                messages.error(self.request, _('You need to select the column containing the payment reference.'))
-                return self.assign_view(data)
-            try:
-                hint = csvimport.new_hint(self.request.POST)
-            except Exception as e:
-                logger.error('Parsing hint failed: ' + str(e))
-                messages.error(self.request, _('We were unable to process your input.'))
-                return self.assign_view(data)
-            try:
-                self.request.event.settings.set('banktransfer_csvhint', hint)
-            except Exception as e:  # TODO: narrow down
-                logger.error('Import using stored hint failed: ' + str(e))
-                pass
-            else:
-                parsed = csvimport.parse(data, hint)
-                return self.confirm_view(parsed)
+            return self.process_csv_file()
+        elif 'amount' in self.request.POST:
+            return self.process_csv_hint()
         return super().get(self.request)
 
     def confirm_view(self, parsed):

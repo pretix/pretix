@@ -1,4 +1,4 @@
-from pretix.settings import *
+from pretix.settings import *  # NOQA
 
 TEST_DIR = os.path.dirname(__file__)
 

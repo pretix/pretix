@@ -1,4 +1,3 @@
-import datetime
 import time
 from pretix.base.models import User
 from tests.base import BrowserTest

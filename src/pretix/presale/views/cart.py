@@ -108,8 +108,11 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
 
         self.items = self._items_from_post_data()
 
+        if not self.items:
+            return redirect(self.get_failure_url())
+
         # We do not use EventLoginRequiredMixin here, as we want to store stuff into the
-        # session beforehand
+        # session before redirecting to login
         if not request.user.is_authenticated() or \
                 (request.user.event is not None and request.user.event != request.event):
             request.session['cart_tmp'] = json.dumps(self.items)
@@ -119,6 +122,13 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                     'event': request.event.slug,
                 }), 'next'
             )
+
+        existing = CartPosition.objects.current.filter(user=self.request.user, event=self.request.event).count()
+        if sum(i[2] for i in self.items) + existing > int(self.request.event.settings.max_items_per_order):
+            # TODO: i18n plurals
+            self.error_message(self.error_messages['max_items'] % self.request.event.settings.max_items_per_order)
+            return redirect(self.get_failure_url())
+
         return self.process()
 
     def error_message(self, msg, important=False):
@@ -129,7 +139,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
     def _re_add_position(self, position):
         self.items.insert(0, (position.item_id, position.variation_id, 1, position))
 
-    def _expired_positions(self):
+    def _re_add_expired_positions(self):
         positions = set()
         # For items that are already expired, we have to delete and re-add them, as they might
         # be no longer available or prices might have changed. Sorry!
@@ -140,25 +150,24 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             positions.add(cp)
         return positions
 
-    def process(self):
+    def _extend_existing(self, expiry):
         # Extend this user's cart session to 30 minutes from now to ensure all items in the
         # cart expire at the same time
         # We can extend the reservation of items which are not yet expired without risk
-        expiry = now() + timedelta(minutes=self.request.event.settings.get('reservation_time', as_type=int))
         CartPosition.objects.current.filter(
             Q(user=self.request.user) & Q(event=self.request.event) & Q(expires__gt=now())
         ).update(expires=expiry)
 
-        _expired = self._expired_positions()
+    def _delete_expired(self, expired):
+        for cp in expired:
+            if cp.version_end_date is None:
+                cp.delete()
 
-        if not self.items:
-            return redirect(self.get_failure_url())
+    def process(self):
+        expiry = now() + timedelta(minutes=self.request.event.settings.get('reservation_time', as_type=int))
+        self._extend_existing(expiry)
 
-        existing = CartPosition.objects.current.filter(user=self.request.user, event=self.request.event).count()
-        if sum(i[2] for i in self.items) + existing > int(self.request.event.settings.max_items_per_order):
-            # TODO: i18n plurals
-            self.error_message(self.error_messages['max_items'] % self.request.event.settings.max_items_per_order)
-            return redirect(self.get_failure_url())
+        _expired = self._re_add_expired_positions()
 
         # Fetch items from the database
         items_cache = {
@@ -244,9 +253,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                 for quota in quotas:
                     quota.release()
 
-        for cp in _expired:
-            if cp.version_end_date is None:
-                cp.delete()
+        self._delete_expired(_expired)
 
         if not self.msg_some_unavailable:
             messages.success(self.request, _('The products have been successfully added to your cart.'))
