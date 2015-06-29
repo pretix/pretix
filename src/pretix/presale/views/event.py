@@ -271,6 +271,7 @@ class EventRecover(EventViewMixin, TemplateView):
                 return self.invalid('invalid')
             else:
                 user.set_password(self.form.cleaned_data['password'])
+                user.save()
                 messages.success(request, _('You can now login using your new password.'))
             return redirect('presale:event.checkout.login',
                             organizer=self.request.event.organizer.slug,

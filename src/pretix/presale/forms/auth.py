@@ -213,7 +213,12 @@ class PasswordForgotForm(Form):
                 email=username, event=self.event
             )
             return username
-        except:
+        except User.MultipleObjectsReturned:
+            raise forms.ValidationError(
+                _("We found multiple users with that e-mail address. Please specify the username instead"),
+                code='unknown_user',
+            )
+        except User.DoesNotExist:
             raise forms.ValidationError(
                 _("We are unable to find a user matching the data you provided."),
                 code='unknown_user',
