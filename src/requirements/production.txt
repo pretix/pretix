@@ -4,7 +4,8 @@ python-dateutil>=2.4,<2.5
 pytz
 django-bootstrap3>=6.1,<6.2
 -e git+https://github.com/pretix/django-formset-js.git@master#egg=django-formset-js
-cleanerversion>=1.5,<1.6
+#cleanerversion>=1.5,<1.6
+-e git+https://github.com/pretix/cleanerversion.git@pretix#egg=CleanerVersion
 django-compressor>=1.5,<2.0
 reportlab>=3.1.44,<3.2
 -e git+https://github.com/pretix/PyPDF2.git@pretix#egg=PyPDF2
