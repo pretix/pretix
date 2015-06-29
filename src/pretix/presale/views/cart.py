@@ -107,10 +107,6 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             return redirect(self.get_failure_url())
 
         self.items = self._items_from_post_data()
-        self._expired = self._re_add_expired_positions()
-
-        if not self.items:
-            return redirect(self.get_failure_url())
 
         # We do not use EventLoginRequiredMixin here, as we want to store stuff into the
         # session before redirecting to login
@@ -159,14 +155,22 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             Q(user=self.request.user) & Q(event=self.request.event) & Q(expires__gt=now())
         ).update(expires=expiry)
 
-    def _delete_expired(self, expired):
-        for cp in expired:
+    def _delete_expired(self):
+        for cp in self._expired:
             if cp.version_end_date is None:
                 cp.delete()
+
+    def _initial_checks(self):
+        self._expired = self._re_add_expired_positions()
+
+        if not self.items:
+            return redirect(self.get_failure_url())
 
     def process(self):
         expiry = now() + timedelta(minutes=self.request.event.settings.get('reservation_time', as_type=int))
         self._extend_existing(expiry)
+
+        self._initial_checks()
 
         # Fetch items from the database
         items_cache = {
@@ -252,7 +256,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                 for quota in quotas:
                     quota.release()
 
-        self._delete_expired(self._expired)
+        self._delete_expired()
 
         if not self.msg_some_unavailable:
             messages.success(self.request, _('The products have been successfully added to your cart.'))
