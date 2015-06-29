@@ -186,10 +186,13 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-STATICFILES_DIRS = (
-    os.path.join(DATA_DIR, 'static'),
-    os.path.join(BASE_DIR, 'static'),
-)
+STATICFILES_DIRS = []
+
+if os.path.exists(os.path.join(DATA_DIR, 'static')):
+    STATICFILES_DIRS.append(os.path.join(DATA_DIR, 'static'))
+
+if os.path.exists(os.path.join(BASE_DIR, 'static')):
+    STATICFILES_DIRS.append(os.path.join(BASE_DIR, 'static'))
 
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'pretix.helpers.lessabsolutefilter.LessFilter'),
