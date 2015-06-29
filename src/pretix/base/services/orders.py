@@ -106,7 +106,7 @@ def check_positions(event, dt, positions, quotas_locked):
                 err = err or error_messages['unavailable']
                 quota_ok = False
                 break
-        if quota_ok and not event.presale_end or now() < event.presale_end:
+        if quota_ok and (not event.presale_end or now() < event.presale_end):
             cp = cp.clone()
             positions[i] = cp
             cp.expires = now() + timedelta(

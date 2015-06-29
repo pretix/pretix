@@ -107,6 +107,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             return redirect(self.get_failure_url())
 
         self.items = self._items_from_post_data()
+        self._expired = self._re_add_expired_positions()
 
         if not self.items:
             return redirect(self.get_failure_url())
@@ -166,8 +167,6 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
     def process(self):
         expiry = now() + timedelta(minutes=self.request.event.settings.get('reservation_time', as_type=int))
         self._extend_existing(expiry)
-
-        _expired = self._re_add_expired_positions()
 
         # Fetch items from the database
         items_cache = {
@@ -253,7 +252,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                 for quota in quotas:
                     quota.release()
 
-        self._delete_expired(_expired)
+        self._delete_expired(self._expired)
 
         if not self.msg_some_unavailable:
             messages.success(self.request, _('The products have been successfully added to your cart.'))
