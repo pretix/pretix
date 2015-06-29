@@ -136,6 +136,9 @@ Example::
 ``tls``, ``ssl``
     Use STARTTLS or SSL for the SMTP connection. Off by default.
 
+``admins``
+    Comma-separated list of e-mail addresses that should receive a report about every error 500 thrown by pretix.
+
 Django settings
 ---------------
 

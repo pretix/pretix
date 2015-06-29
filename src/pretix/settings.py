@@ -69,6 +69,8 @@ EMAIL_PORT = config.getint('mail', 'port', fallback=25)
 EMAIL_HOST_USER = config.get('mail', 'user', fallback='')
 EMAIL_HOST_PASSWORD = config.get('mail', 'password', fallback='')
 
+ADMINS = [('Admin', n) for n in config.get('mail', 'admins', fallback='').split(",") if n]
+
 SESSION_COOKIE_SECURE = SESSION_COOKIE_HTTPONLY = config.getboolean(
     'pretix', 'securecookie', fallback=False)
 LANGUAGE_COOKIE_DOMAIN = SESSION_COOKIE_DOMAIN = CSRF_COOKIE_DOMAIN = config.get(
@@ -231,6 +233,11 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(name)s %(module)s %(message)s'
         },
     },
+    'filters': {
+        'require_admin_enabled': {
+            '()': 'pretix.helpers.logs.AdminExistsFilter',
+        }
+    },
     'handlers': {
         'console': {
             'level': loglevel,
@@ -243,6 +250,11 @@ LOGGING = {
             'filename': os.path.join(LOG_DIR, 'pretix.log'),
             'formatter': 'default'
         },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_admin_enabled']
+        }
     },
     'loggers': {
         '': {
@@ -251,12 +263,12 @@ LOGGING = {
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['file', 'console'],
+            'handlers': ['file', 'console', 'mail_admins'],
             'level': loglevel,
             'propagate': True,
         },
         'django.security': {
-            'handlers': ['file', 'console'],
+            'handlers': ['file', 'console', 'mail_admins'],
             'level': loglevel,
             'propagate': True,
         },
