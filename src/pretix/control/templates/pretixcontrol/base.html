@@ -68,7 +68,7 @@
                 </ul>
                 <div class="navbar-default sidebar" role="navigation">
                     <div class="sidebar-nav navbar-events-collapse navbar-collapse">
-                        <ul class="nav" id="side-menu">
+                        <ul class="nav">
                             <li><a href="{% url "control:events" %}">{% trans "Event overview" %}</a></li>
                             {% for e in request.user.events_cache %}
                                 <li>
