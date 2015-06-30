@@ -26,29 +26,31 @@
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
         </form>
     </p>
-	<table class="table table-condensed table-hover">
-		<thead>
-			<tr>
-				<th>{% trans "Order code" %}</th>
-				<th>{% trans "User" %}</th>
-                <th>{% trans "Order total" %}</th>
-                <th>{% trans "Order date" %}</th>
-                <th>{% trans "Status" %}</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for o in orders %}
-			<tr>
-				<td><strong><a
-                        href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code%}"
-                        >{{ o.code }}</a></strong></td>
-                <td>{{ o.user.get_short_name }}</td>
-                <td>{{ o.total|floatformat:2 }} {{ request.event.currency }}</td>
-                <td>{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
-                <td>{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+    <div class="table-responsive">
+        <table class="table table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th>{% trans "Order code" %}</th>
+                    <th>{% trans "User" %}</th>
+                    <th>{% trans "Order total" %}</th>
+                    <th>{% trans "Order date" %}</th>
+                    <th>{% trans "Status" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for o in orders %}
+                <tr>
+                    <td><strong><a
+                            href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code%}"
+                            >{{ o.code }}</a></strong></td>
+                    <td>{{ o.user.get_short_name }}</td>
+                    <td>{{ o.total|floatformat:2 }} {{ request.event.currency }}</td>
+                    <td>{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
+                    <td>{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% include "pretixcontrol/pagination.html" %}
 {% endblock %}

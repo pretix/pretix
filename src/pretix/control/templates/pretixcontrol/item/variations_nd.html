@@ -8,36 +8,38 @@
             {% if major.row %}
                 <h3>{{ major.row }}</h3>
             {% endif %}
-            <table class="table variation-matrix">
-                <thead>
-                <tr>
-                    <th></th>
-                    {% for val in properties.1.values.all %}
-                        <th>{{ val.value }}</th>
-                    {% endfor %}
-                </tr>
-                </thead>
-                <tbody>
-                {% for sub in major.forms %}
+            <div class="table-responsive">
+                <table class="table variation-matrix">
+                    <thead>
                     <tr>
-                        <td>{{ sub.row.value }}</td>
-                        {% for form in sub.forms %}
-                            <td>
-                                <div class="row">
-                                    <div class="col-sm-5">
-                                        {% bootstrap_field form.active layout='inline' %}
-                                    </div>
-                                    <div class="col-sm-7">
-                                        {% bootstrap_field form.default_price layout='inline' %}
-                                    </div>
-                                </div>
-                                {{ form.default_price.errors }}
-                            </td>
+                        <th></th>
+                        {% for val in properties.1.values.all %}
+                            <th>{{ val.value }}</th>
                         {% endfor %}
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for sub in major.forms %}
+                        <tr>
+                            <td>{{ sub.row.value }}</td>
+                            {% for form in sub.forms %}
+                                <td>
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            {% bootstrap_field form.active layout='inline' %}
+                                        </div>
+                                        <div class="col-sm-7">
+                                            {% bootstrap_field form.default_price layout='inline' %}
+                                        </div>
+                                    </div>
+                                    {{ form.default_price.errors }}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% endfor %}
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

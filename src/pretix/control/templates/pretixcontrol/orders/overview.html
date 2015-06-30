@@ -3,62 +3,64 @@
 {% block title %}{% trans "Order overview" %}{% endblock %}
 {% block content %}
 	<h1>{% trans "Order overview" %}</h1>
-	<table class="table table-condensed table-hover table-product-overview">
-		<thead>
-			<tr>
-				<th>{% trans "Product" %}</th>
-				<th>{% trans "Total orders" %}</th>
-                <th>{% trans "Payment pending" %}</th>
-                <th>{% trans "Cancelled" %}</th>
-                <th>{% trans "Refunded" %}</th>
-                <th>{% trans "Paid" %}</th>
-			</tr>
-		</thead>
-        <tbody>
-            {% for tup in items_by_category %}
-                {% if tup.0 %}
-                    <tr class="category">
-                        <th>{{ tup.0.name }}</th>
-                        <th>{{ tup.0.num_total }}</th>
-                        <th>{{ tup.0.num_pending }}</th>
-                        <th>{{ tup.0.num_cancelled }}</th>
-                        <th>{{ tup.0.num_refunded }}</th>
-                        <th>{{ tup.0.num_paid }}</th>
-                    </tr>
-                {% endif %}
-                {% for item in tup.1 %}
-                    <tr class="item {% if tup.0 %}categorized{% endif %}">
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.num_total }}</td>
-                        <td>{{ item.num_pending }}</td>
-                        <td>{{ item.num_cancelled }}</td>
-                        <td>{{ item.num_refunded }}</td>
-                        <td>{{ item.num_paid }}</td>
-                    </tr>
-                    {% if item.has_variations %}
-                        {% for var in item.all_variations %}
-                            <tr class="variation {% if tup.0 %}categorized{% endif %}">
-                                <td>{{ var }}</td>
-                                <td>{{ var.num_total }}</td>
-                                <td>{{ var.num_pending }}</td>
-                                <td>{{ var.num_cancelled }}</td>
-                                <td>{{ var.num_refunded }}</td>
-                                <td>{{ var.num_paid }}</td>
-                            </tr>
-                        {% endfor %}
+    <div class="table-responsive">
+        <table class="table table-condensed table-hover table-product-overview">
+            <thead>
+                <tr>
+                    <th>{% trans "Product" %}</th>
+                    <th>{% trans "Total orders" %}</th>
+                    <th>{% trans "Payment pending" %}</th>
+                    <th>{% trans "Cancelled" %}</th>
+                    <th>{% trans "Refunded" %}</th>
+                    <th>{% trans "Paid" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tup in items_by_category %}
+                    {% if tup.0 %}
+                        <tr class="category">
+                            <th>{{ tup.0.name }}</th>
+                            <th>{{ tup.0.num_total }}</th>
+                            <th>{{ tup.0.num_pending }}</th>
+                            <th>{{ tup.0.num_cancelled }}</th>
+                            <th>{{ tup.0.num_refunded }}</th>
+                            <th>{{ tup.0.num_paid }}</th>
+                        </tr>
                     {% endif %}
+                    {% for item in tup.1 %}
+                        <tr class="item {% if tup.0 %}categorized{% endif %}">
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.num_total }}</td>
+                            <td>{{ item.num_pending }}</td>
+                            <td>{{ item.num_cancelled }}</td>
+                            <td>{{ item.num_refunded }}</td>
+                            <td>{{ item.num_paid }}</td>
+                        </tr>
+                        {% if item.has_variations %}
+                            {% for var in item.all_variations %}
+                                <tr class="variation {% if tup.0 %}categorized{% endif %}">
+                                    <td>{{ var }}</td>
+                                    <td>{{ var.num_total }}</td>
+                                    <td>{{ var.num_pending }}</td>
+                                    <td>{{ var.num_cancelled }}</td>
+                                    <td>{{ var.num_refunded }}</td>
+                                    <td>{{ var.num_paid }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
                 {% endfor %}
-			{% endfor %}
-		</tbody>
-        <tfoot>
-            <tr class="total">
-                <th>{% trans "Total" %}</th>
-                <th>{{ total.num_total }}</th>
-                <th>{{ total.num_pending }}</th>
-                <th>{{ total.num_cancelled }}</th>
-                <th>{{ total.num_refunded }}</th>
-                <th>{{ total.num_paid }}</th>
-            </tr>
-        </tfoot>
-	</table>
+            </tbody>
+            <tfoot>
+                <tr class="total">
+                    <th>{% trans "Total" %}</th>
+                    <th>{{ total.num_total }}</th>
+                    <th>{{ total.num_pending }}</th>
+                    <th>{{ total.num_cancelled }}</th>
+                    <th>{{ total.num_refunded }}</th>
+                    <th>{{ total.num_paid }}</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 {% endblock %}
