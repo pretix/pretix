@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-RUN apt-get update && apt-get install -y supervisor python3 git python3-pip \
+RUN apt-get update && apt-get install -y python3 git python3-pip \
 	libxml2-dev libxslt1-dev python-dev python-virtualenv locales libffi-dev \
 	build-essential python3-dev zlib1g-dev libssl-dev npm gettext git \
 	libpq-dev libmysqlclient-dev libmemcached-dev \
@@ -18,7 +18,6 @@ ENV LC_ALL C.UTF-8
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD gunicorn_starter.bash /gunicorn_starter.bash
 
 RUN git clone --recursive --depth 1 https://github.com/pretix/pretix.git /pretix
@@ -36,6 +35,8 @@ RUN mkdir /etc/pretix
 RUN mkdir /data
 VOLUME /etc/pretix
 
+RUN chmod +x /gunicorn_starter.bash
+
 EXPOSE 80
-CMD ["/usr/bin/supervisord"]
+CMD ["/gunicorn_starter.bash"]
 
