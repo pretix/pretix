@@ -53,7 +53,6 @@ class BankTransfer(BasePaymentProvider):
     def order_control_render(self, request, order) -> str:
         if order.payment_info:
             payment_info = json.loads(order.payment_info)
-            payment_info['amount'] /= 100
         else:
             payment_info = None
         template = get_template('pretixplugins/banktransfer/control.html')
