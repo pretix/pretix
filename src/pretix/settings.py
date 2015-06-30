@@ -76,13 +76,34 @@ SESSION_COOKIE_SECURE = SESSION_COOKIE_HTTPONLY = config.getboolean(
 LANGUAGE_COOKIE_DOMAIN = SESSION_COOKIE_DOMAIN = CSRF_COOKIE_DOMAIN = config.get(
     'pretix', 'cookiedomain', fallback=None)
 
-if config.has_option('memcached', 'location'):
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
-            'LOCATION': config.get('memcached', 'location'),
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
+HAS_MEMCACHED = config.has_option('memcached', 'location')
+if HAS_MEMCACHED:
+    CACHES['default'] = {
+        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+        'LOCATION': config.get('memcached', 'location'),
+    }
+
+HAS_REDIS = config.has_option('redis', 'location')
+if HAS_REDIS:
+    CACHES['redis'] = {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": config.get('redis', 'location'),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
+    if not HAS_MEMCACHED:
+        CACHES['default'] = CACHES['redis']
+    if config.getboolean('redis', 'sessions', fallback=False):
+        SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+        SESSION_CACHE_ALIAS = "redis"
 
 # Internal settings
 

@@ -27,6 +27,7 @@ RUN pip3 install -r requirements.txt
 RUN pip3 install -r requirements/mysql.txt
 RUN pip3 install -r requirements/postgres.txt
 RUN pip3 install -r requirements/memcached.txt
+RUN pip3 install -r requirements/redis.txt
 RUN pip3 install gunicorn
 
 RUN make

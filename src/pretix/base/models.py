@@ -1408,22 +1408,8 @@ class Quota(Versionable):
         :raises Quota.LockTimeoutException: if the quota is locked every time we try
                                             to obtain the lock
         """
-        retries = 5
-        for i in range(retries):
-            dt = now()
-            updated = Quota.objects.current.filter(
-                Q(identity=self.identity)
-                & Q(Q(locked__lt=dt - timedelta(seconds=120)) | Q(locked__isnull=True))
-                & Q(version_end_date__isnull=True)
-            ).update(
-                locked=dt
-            )
-            if updated:
-                self.locked_here = dt
-                self.locked = dt
-                return True
-            time.sleep(2 ** i / 100)
-        raise Quota.LockTimeoutException()
+        from .services import locking
+        return locking.lock_quota(self)
 
     def release(self, force=False):
         """
@@ -1431,17 +1417,8 @@ class Quota(Versionable):
         the lock will only be released if it was issued in _this_ python
         representation of the database object.
         """
-        if not self.locked_here and not force:
-            return False
-        updated = Quota.objects.current.filter(
-            identity=self.identity,
-            version_end_date__isnull=True
-        ).update(
-            locked=None
-        )
-        self.locked_here = None
-        self.locked = None
-        return updated
+        from .services import locking
+        return locking.release_quota(self, force)
 
 
 class Order(Versionable):
