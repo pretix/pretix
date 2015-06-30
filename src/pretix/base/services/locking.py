@@ -6,7 +6,6 @@ from django.utils.timezone import now
 from pretix import settings
 
 from pretix.base.models import Quota
-from redis import RedisError
 
 logger = logging.getLogger('pretix.base.locking')
 
@@ -100,6 +99,7 @@ def lock_quota_redis(quota):
 
 
 def release_quota_redis(quota):
+    from redis import RedisError
     lock = redis_lock_from_quota(quota)
     try:
         lock.release()
