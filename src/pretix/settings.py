@@ -38,7 +38,7 @@ DEBUG = TEMPLATE_DEBUG = config.getboolean('django', 'debug', fallback=False)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.' + config.get('database', 'backend', fallback='sqlite3'),
-        'NAME': config.get('database', 'name', fallback=os.path.join(BASE_DIR, 'db.sqlite3')),
+        'NAME': config.get('database', 'name', fallback=os.path.join(DATA_DIR, 'db.sqlite3')),
         'USER': config.get('database', 'user', fallback=''),
         'PASSWORD': config.get('database', 'password', fallback=''),
         'HOST': config.get('database', 'host', fallback=''),
