@@ -47,11 +47,11 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
                     some_failed = True
 
             if some_failed:
-                messages.success(self.request, _('The selected orders have been marked as paid.'))
-            else:
                 messages.warning(self.request, _('Not all of the selected orders could be marked as '
                                                  'paid as some of them have expired and the selected '
                                                  'items are sold out.'))
+            else:
+                messages.success(self.request, _('The selected orders have been marked as paid.'))
                 # TODO: Display a list of them!
             return self.redirect_back()
 
