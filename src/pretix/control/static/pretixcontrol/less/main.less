@@ -18,6 +18,11 @@ nav.navbar {
     margin: 0;
 }
 
+.navbar-header .navbar-events {
+    color: white;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
 .nav-pills {
     margin-bottom: 10px;
 }
@@ -66,4 +71,9 @@ nav.navbar {
     transform: rotateX(180deg);
     -ms-transform: rotateX(180deg); /* IE 9 */
     -webkit-transform: rotateX(180deg); /* Safari and Chrome */
+}
+@media (max-width: @screen-sm-max) {
+    .navbar-nav {
+        margin-left: 0;
+    }
 }

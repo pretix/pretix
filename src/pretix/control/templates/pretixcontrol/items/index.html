@@ -14,30 +14,32 @@
         <a href="{% url "control:event.items.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                 class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create new product" %}</a>
     </p>
-	<table class="table table-condensed table-hover">
-		<thead>
-			<tr>
-				<th>{% trans "Product name" %}</th>
-				<th>{% trans "Category" %}</th>
-                <th></th>
-			</tr>
-		</thead>
-		<tbody>
-            {% regroup items by category as cat_list %}
-            {% for c in cat_list %}
-                {% for i in c.list %}
+    <div class="table-responsive">
+        <table class="table table-condensed table-hover">
+            <thead>
                 <tr>
-                    <td><strong><a href="
-                    {% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.identity %}">{{ i.name }}</a></strong></td>
-                    <td>{% if i.category %}{{ i.category.name }}{% endif %}</td>
-                    <td>
-                        <a href="{% url "control:event.items.up" organizer=request.event.organizer.slug event=request.event.slug item=i.identity %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
-                        <a href="{% url "control:event.items.down" organizer=request.event.organizer.slug event=request.event.slug item=i.identity %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
-                    </td>
+                    <th>{% trans "Product name" %}</th>
+                    <th>{% trans "Category" %}</th>
+                    <th></th>
                 </tr>
+            </thead>
+            <tbody>
+                {% regroup items by category as cat_list %}
+                {% for c in cat_list %}
+                    {% for i in c.list %}
+                    <tr>
+                        <td><strong><a href="
+                        {% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.identity %}">{{ i.name }}</a></strong></td>
+                        <td>{% if i.category %}{{ i.category.name }}{% endif %}</td>
+                        <td>
+                            <a href="{% url "control:event.items.up" organizer=request.event.organizer.slug event=request.event.slug item=i.identity %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
+                            <a href="{% url "control:event.items.down" organizer=request.event.organizer.slug event=request.event.slug item=i.identity %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
-		</tbody>
-	</table>
+            </tbody>
+        </table>
+    </div>
     {% include "pretixcontrol/pagination.html" %}
 {% endblock %}

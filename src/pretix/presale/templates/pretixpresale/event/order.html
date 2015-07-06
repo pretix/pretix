@@ -8,6 +8,7 @@
             Your order: {{ code }}
         {% endblocktrans %}
         {% include "pretixpresale/event/fragment_order_status.html" with order=order class="pull-right" %}
+        <div class="clearfix"></div>
     </h2>
     {% if order.status == "n"  %}
         <div class="panel panel-danger">

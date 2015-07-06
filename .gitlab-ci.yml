@@ -1,0 +1,28 @@
+before_script:
+tests:
+    script:
+        - git submodule init
+        - git submodule update
+        - pyvenv-3.4 --without-pip env
+        - source env/bin/activate
+        - curl https://bootstrap.pypa.io/get-pip.py | python
+        - cd src
+        - pip3 install -q -r requirements.txt
+        - flake8 --ignore=E123,F403,F401,N802,C901,W503 .
+        - python3 manage.py check
+        - make
+        - make compress
+        - coverage run -m py.test tests
+    tags:
+        - python3
+        - selenium
+build:
+    type: deploy
+    script:
+        - cd deployment/docker/standalone/
+        - docker login -u ciuser -p $DOCKERPW -e admin@rami.io docker.rami.io
+        - docker build -t pretix/standalone .
+        - docker tag pretix/standalone docker.rami.io/pretix/standalone
+        - docker push docker.rami.io/pretix/standalone
+    tags:
+        - docker

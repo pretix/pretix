@@ -6,23 +6,25 @@
 	<p>
 		<a href="{% url "control:event.items.properties.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create new property" %}</a>
 	</p>
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th>{% trans "Product properties" %}</th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for p in properties %}
-			<tr>
-				<td><strong><a href="
-				{% url "control:event.items.properties.edit" organizer=request.event.organizer.slug event=request.event.slug property=p.identity %}">{{ p.name }}</a></strong></td>
-				<td class="text-right"><a href="
-				{% url "control:event.items.properties.delete" organizer=request.event.organizer.slug event=request.event.slug property=p.identity %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>{% trans "Product properties" %}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in properties %}
+                <tr>
+                    <td><strong><a href="
+                    {% url "control:event.items.properties.edit" organizer=request.event.organizer.slug event=request.event.slug property=p.identity %}">{{ p.name }}</a></strong></td>
+                    <td class="text-right"><a href="
+                    {% url "control:event.items.properties.delete" organizer=request.event.organizer.slug event=request.event.slug property=p.identity %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% include "pretixcontrol/pagination.html" %}
 {% endblock %}
