@@ -22,7 +22,7 @@ build:
         - cd deployment/docker/standalone/
         - docker login -u ciuser -p $DOCKERPW -e admin@rami.io docker.rami.io
         - docker build -t pretix/standalone .
-        - docker tag pretix/standalone docker.rami.io/pretix/standalone
-        - docker push docker.rami.io/pretix/standalone
+        - docker tag -f pretix/standalone docker.rami.io/pretix/standalone:$CI_BUILD_REF_NAME
+        - docker push docker.rami.io/pretix/standalone:$CI_BUILD_REF_NAME
     tags:
         - docker
