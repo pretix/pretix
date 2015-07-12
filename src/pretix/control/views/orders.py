@@ -292,7 +292,7 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
             'num_pending': sum(c.num_pending for c, i in ctx['items_by_category']),
             'num_cancelled': sum(c.num_cancelled for c, i in ctx['items_by_category']),
             'num_refunded': sum(c.num_refunded for c, i in ctx['items_by_category']),
-            'num_paid': sum(c.num_total for c, i in ctx['items_by_category'])
+            'num_paid': sum(c.num_paid for c, i in ctx['items_by_category'])
         }
 
         return ctx
