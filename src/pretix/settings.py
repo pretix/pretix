@@ -131,6 +131,7 @@ INSTALLED_APPS = (
     'pretix.plugins.stripe',
     'pretix.plugins.paypal',
     'pretix.plugins.ticketoutputpdf',
+    'pretix.plugins.sendmail',
 )
 
 MIDDLEWARE_CLASSES = (

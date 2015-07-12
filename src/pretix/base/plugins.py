@@ -9,6 +9,7 @@ from django.apps import apps
 class PluginType(Enum):
     RESTRICTION = 1
     PAYMENT = 2
+    ADMINFEATURE = 3
 
 
 def get_all_plugins() -> "List[class]":

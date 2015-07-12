@@ -35,7 +35,8 @@ The plugin metadata lives inside a ``PretixPluginMeta`` class inside your app's
 configuration class. The metadata class must define the following attributes:
 
 ``type`` (``pretix.base.plugins.PluginType``):
-    The type of plugin. Currently available: ``RESTRICTION``, ``PAYMENT``
+    The type of plugin. Currently available: ``RESTRICTION``, ``PAYMENT``,
+    ``ADMINFEATURE``
 
 ``name`` (``str``):
     The human-readable name of your plugin
