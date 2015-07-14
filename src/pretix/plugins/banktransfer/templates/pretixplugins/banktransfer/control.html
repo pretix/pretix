@@ -6,12 +6,8 @@
     {% endblocktrans %}</p>
 
     <dl class="dl-horizontal">
-        <dt>{% trans "Bank account" %}</dt>
-        <dd>{{ payment_info.account }}</dd>
-        <dt>{% trans "Payer name" %}</dt>
-        <dd>{{ payment_info.name }}</dd>
-        <dt>{% trans "Total value" %}</dt>
-        <dd>{{ payment_info.value }}</dd>
+        <dt>{% trans "Payer" %}</dt>
+        <dd>{{ payment_info.payer }}</dd>
         <dt>{% trans "Payment date" %}</dt>
         <dd>{{ payment_info.date }}</dd>
         <dt>{% trans "Reference" %}</dt>
