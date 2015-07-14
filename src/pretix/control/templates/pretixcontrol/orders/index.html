@@ -7,7 +7,7 @@
         <form class="form-inline" style="display: inline;"
               action="{% url "control:event.orders.go" event=request.event.slug organizer=request.event.organizer.slug %}">
             <div class="input-group">
-                <input type="text" name="code" class="form-control" maxlength="8" placeholder="{% trans "Order code" %}">
+                <input type="text" name="code" class="form-control" placeholder="{% trans "Order code" %}">
                 <span class="input-group-btn">
                     <button class="btn btn-primary" type="submit">{% trans "Go!" %}</button>
                 </span>

@@ -304,6 +304,8 @@ class OrderGo(EventPermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         code = request.GET.get("code")
         try:
+            if code.startswith(request.event.slug):
+                code = code[len(request.event.slug):]
             order = Order.objects.current.get(code=code, event=request.event)
             return redirect('control:event.order', event=request.event.slug, organizer=request.event.organizer.slug,
                             code=order.code)
