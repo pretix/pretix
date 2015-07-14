@@ -32,8 +32,8 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             return self.process_mt940()
 
         if 'confirm' in self.request.POST:
-            orders = Order.objects.filter(event=self.request.event,
-                                          code__in=self.request.POST.getlist('mark_paid'))
+            orders = Order.objects.current.filter(event=self.request.event,
+                                                  code__in=self.request.POST.getlist('mark_paid'))
             some_failed = False
             for order in orders:
                 try:
