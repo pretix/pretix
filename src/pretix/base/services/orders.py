@@ -97,7 +97,7 @@ def check_positions(event, dt, positions, quotas_locked):
         for quota in quotas:
             # Lock the quota, so no other thread is allowed to perform sales covered by this
             # quota while we're doing so.
-            if quota not in quotas_locked:
+            if quota.identity not in [q.identity for q in quotas_locked]:
                 quota.lock()
                 quotas_locked.add(quota)
             avail = quota.availability()

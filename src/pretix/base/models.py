@@ -1624,13 +1624,13 @@ class Order(Versionable):
                 for quota in quotas:
                     # Lock the quota, so no other thread is allowed to perform sales covered by this
                     # quota while we're doing so.
-                    if quota not in quotas_locked:
+                    if quota.identity not in [q.identity for q in quotas_locked]:
                         quota.lock()
                         quotas_locked.add(quota)
                         quota.cached_availability = quota.availability()[1]
                     else:
                         # Use cached version
-                        quota = [q for q in quotas_locked if q.pk == quota.pk][0]
+                        quota = [q for q in quotas_locked if q.identity == quota.identity][0]
                     quota.cached_availability -= 1
                     if quota.cached_availability < 0:
                         # This quota is sold out/currently unavailable, so do not sell this at all
