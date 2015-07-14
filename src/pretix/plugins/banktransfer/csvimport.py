@@ -14,7 +14,7 @@ def parse(data, hint):
         raise HintMismatchError('Wrong column count')
     for row in data:
         resrow = {}
-        if None in row or len(row) == 0:
+        if None in row or len(row) != hint['cols']:
             # Wrong column count
             continue
         if hint.get('payer') is not None:
