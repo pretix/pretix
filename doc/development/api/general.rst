@@ -11,7 +11,7 @@ HTML head injection
 -------------------
 
 These two signals allow you to put code inside the HTML ``<head>`` tag
-of every page. One signal is for the frontend, one for the backend. You
+of every page. One signal is for the front end, one for the back end. You
 will get the request as a keyword argument ``request`` and can return plain
 HTML. The ``request`` object will have an attribute ``event``.
 

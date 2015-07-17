@@ -11,7 +11,9 @@ Just clone our git repository including its submodules::
 External Dependencies
 ---------------------
 * Python 3.4 or newer
-* ``pip`` for Python 3
+* ``pip`` for Python 3 (Debian package: ``python3-pip``)
+* ``pyvenv`` for Python 3 (Debian package: ``python3-venv``)
+* ``libffi`` (Debian package: ``libffi-dev``)
 * ``git``
 * ``lessc`` (Debian package: ``node-less``)
 
@@ -42,7 +44,7 @@ Then, create the local database::
     python manage.py migrate
 
 A first user with username ``admin@localhost`` and password ``admin`` will be automatically
-created. If you want to genreate more test data, run::
+created. If you want to generate more test data, run::
 
     python make_testdata.py
 
@@ -92,7 +94,7 @@ for example::
 Working with the documentation
 ------------------------------
 First, you should install the requirements necessary for building the documentation. 
-Make sure you have your virtual python enviroment activated (see above). Then, install the 
+Make sure you have your virtual python environment activated (see above). Then, install the 
 packages by executing::
 
     cd doc/

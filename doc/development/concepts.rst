@@ -26,7 +26,7 @@ Users and events
 ^^^^^^^^^^^^^^^^
 
 Pretix is all about **events**, which are defined as something happening somewhere.
-Every Event is managed by the **organizer**, an abstract entity running the event.
+Every event is managed by the **organizer**, an abstract entity running the event.
 
 Pretix is used by **users**. We want to enable global users who can just login into
 pretix and buy tickets for as many events as they like but at the same time it
@@ -59,7 +59,7 @@ Items and variations
 
 The purpose of pretix is to sell **items** (which belong to **events**) to **users**. 
 An **item** is a abstract thing, popular examples being event tickets or a piece of 
-merchandise, like 'T-Shirt'. An **item** can have multiple **properties** with multiple 
+merchandise, like 'T-shirt'. An **item** can have multiple **properties** with multiple 
 **values** each. For example, the **item** 'T-Shirt' could have the **property** 'Size' 
 with **values** 'S', 'M' and 'L' and the **property** 'Color' with **values** 'black' 
 and 'blue'.
@@ -79,12 +79,12 @@ include 'Name' or 'age'.
 Restrictions
 ^^^^^^^^^^^^
 
-The probably most powerful concepts of pretix is the very abstract concept of **restricitons**. 
+The probably most powerful concepts of pretix is the very abstract concept of **restrictions**. 
 We already know that **items** can come in very different **variations**, but a 
 **restriction** decides whether an variation is available for sale and assign **prices** 
 to **variations**. There are **restriction types** (pieces of code implementing the 
 restriction logic) and **restriction instances** (the specific configurations made by the 
-organzier). Although **restrictions** are a very abstract concept which can be used 
+organizer). Although **restrictions** are a very abstract concept which can be used 
 to do nearly anything, there are a few obvious examples:
 
 * One easy example is a restriction by time, which allows the sale of certain item variations 
@@ -106,7 +106,7 @@ Any number of **restrictions** can be applied to the whole of a **item** or even
 * The restrictions are being processed in random order (there may not be any assumptions about 
   the evaluation order).
 * Multiple restriction instances of **different restriction types** are linked with *and*, so 
-  if both a time frame and a restriction by number are applied to an item, the item is only avaliable 
+  if both a time frame and a restriction by number are applied to an item, the item is only available 
   for sale during the given time frame *and* only as long as items are available.
 * Multiple restriction instances of the **same restriction type** are typically linked with *or*, 
   although this is the decision of the restriction logic itself and not mandatory. So for example
@@ -127,7 +127,7 @@ special care in the implementation to never sell more tickets than allowed, even
   about how many of them are still available.
 * Every time a user places a item in the cart, a **cart lock** is created, reducing the number of
   available items in the pool by one. The lock is valid for a fixed time (e.g. 30 minutes), but not
-  instantly deleted afther those 30 minutes (we'll get to that).
+  instantly deleted after those 30 minutes (we'll get to that).
 * Every time a user places a binding order, the lock object is replaced by an **order** which behaves
   much the same as the lock. It reduces the number of available item and is valid for a fixed time, this
   time for the configured payment term (e.g. 14 days).
@@ -137,9 +137,10 @@ special care in the implementation to never sell more tickets than allowed, even
   are  more cart locks than available tickets and therefore have to remove one of the expired cart locks.
   However, we do not choose one by random, but keep the surplus in a way that leads to the deletion
   of the cart lock of the user who tries *last* to use his lock.
-* The same goes for orders which are not paid within the specified timeframe. This policy allows to
-  sell as much items as possible, guarantees you to get your item if you checkout within the validity 
-  period of your lock or pay within the validity period of your order. It does not guarantee you anything
+* The same goes for orders which are not paid within the specified timeframe. This policy allows the organizer to
+  sell as much items as possible. Moreover, it guarantees the users to get their items if they check out within the validity 
+  period of their locks and pay within the validity period of their orders. It does not guarantee them anything
   any longer, but it tries to be *as tolerant as possible* to users who are paying after their payment
   period or click checkout after the expiry of their lock.
-* The same quota can apply to multiple items and one item can be affected by multiple quotas
+* The same quota can apply to multiple items and one item can be affected by multiple quotas.
+
