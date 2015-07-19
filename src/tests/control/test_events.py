@@ -1,6 +1,10 @@
 import datetime
-from pretix.base.models import User, Organizer, Event, OrganizerPermission, EventPermission
+
 from tests.base import BrowserTest
+
+from pretix.base.models import (
+    Event, EventPermission, Organizer, OrganizerPermission, User,
+)
 
 
 class EventsTest(BrowserTest):

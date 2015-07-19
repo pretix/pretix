@@ -1,8 +1,11 @@
 from datetime import timedelta
 
-from django.utils.timezone import now
 import pytest
-from pretix.base.models import Event, Organizer, User, EventPermission, Order, OrganizerPermission
+from django.utils.timezone import now
+
+from pretix.base.models import (
+    Event, EventPermission, Order, Organizer, OrganizerPermission, User,
+)
 
 
 @pytest.fixture

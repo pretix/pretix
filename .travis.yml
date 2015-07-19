@@ -10,6 +10,7 @@ install:
 before_script:
     - cd src
     - flake8 --ignore=E123,F403,F401,N802,C901,W503 .
+    - isort -c -rc .
     - python manage.py check
 script:
     - make

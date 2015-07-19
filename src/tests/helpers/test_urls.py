@@ -1,6 +1,7 @@
 from django.conf import settings
-from pretix.helpers.urls import build_absolute_uri
 from django.core import urlresolvers
+
+from pretix.helpers.urls import build_absolute_uri
 
 
 def test_site_url_domain():

@@ -1,8 +1,10 @@
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
+
 from django.db import transaction
 from django.utils.timezone import now
-from pretix.base.models import Order, Quota, OrderPosition
 from django.utils.translation import ugettext_lazy as _
+
+from pretix.base.models import Order, OrderPosition, Quota
 from pretix.base.services.mail import mail
 from pretix.helpers.urls import build_absolute_uri
 

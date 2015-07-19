@@ -1,5 +1,4 @@
 from pretix.base.forms import VersionedModelForm
-
 from pretix.base.models import Order
 
 

@@ -1,7 +1,8 @@
-from django.conf.urls import url, include
+from django.conf.urls import include, url
 
-
-from pretix.control.views import main, event, item, auth, orders, user, organizer
+from pretix.control.views import (
+    auth, event, item, main, orders, organizer, user,
+)
 
 urlpatterns = [
     url(r'^logout$', auth.logout, name='auth.logout'),

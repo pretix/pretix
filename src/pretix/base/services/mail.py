@@ -1,4 +1,5 @@
 import logging
+
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
@@ -7,7 +8,7 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import LazyI18nString
-from pretix.base.models import User, Event
+from pretix.base.models import Event, User
 from pretix.helpers.urls import build_absolute_uri
 
 logger = logging.getLogger('pretix.base.mail')

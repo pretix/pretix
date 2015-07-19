@@ -1,7 +1,9 @@
 import time
-from pretix.base.models import User
+
 from tests.base import BrowserTest
 from tests.presale.test_event import EventTestMixin
+
+from pretix.base.models import User
 
 
 class UserSettingsTest(EventTestMixin, BrowserTest):

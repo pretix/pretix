@@ -1,12 +1,11 @@
-from datetime import datetime, date, time
-import json
 import decimal
+import json
+from datetime import date, datetime, time
 
 import dateutil.parser
-from django.db.models import Model
 from django.conf import settings
+from django.db.models import Model
 from versions.models import Versionable
-
 
 DEFAULTS = {
     'user_mail_required': {

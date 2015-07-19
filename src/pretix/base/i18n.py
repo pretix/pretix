@@ -1,8 +1,9 @@
 import copy
 import json
-from django.conf import settings
-from django.db.models import TextField, SubfieldBase
+
 from django import forms
+from django.conf import settings
+from django.db.models import SubfieldBase, TextField
 from django.utils import translation
 from django.utils.safestring import mark_safe
 

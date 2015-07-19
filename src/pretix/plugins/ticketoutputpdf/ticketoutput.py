@@ -1,11 +1,11 @@
-from io import BytesIO
 import logging
+from io import BytesIO
 
 from django.contrib.staticfiles import finders
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.ticketoutput import BaseTicketOutput
 
+from pretix.base.ticketoutput import BaseTicketOutput
 
 logger = logging.getLogger('pretix.plugins.ticketoutputpdf')
 

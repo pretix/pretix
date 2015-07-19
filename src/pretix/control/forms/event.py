@@ -1,10 +1,9 @@
-from django.conf import settings
 from django import forms
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-
 from pytz import common_timezones
 
-from pretix.base.forms import VersionedModelForm, SettingsForm
+from pretix.base.forms import SettingsForm, VersionedModelForm
 from pretix.base.models import Event
 
 

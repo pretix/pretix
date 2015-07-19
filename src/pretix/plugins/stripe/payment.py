@@ -1,17 +1,17 @@
-from collections import OrderedDict
 import json
 import logging
+from collections import OrderedDict
 
+import stripe
+from django import forms
 from django.contrib import messages
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
-from django import forms
+
 from pretix.base.models import Quota
+from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.orders import mark_order_paid
 from pretix.helpers.urls import build_absolute_uri
-import stripe
-from pretix.base.payment import BasePaymentProvider
-
 
 logger = logging.getLogger('pretix.plugins.stripe')
 

@@ -1,10 +1,11 @@
-from datetime import datetime, time, date
+from datetime import date, datetime, time
 from decimal import Decimal
+
 from django.test import TestCase
 from django.utils.timezone import now
 
-from pretix.base.models import Event, Organizer, User, OrganizerSetting
 from pretix.base import settings
+from pretix.base.models import Event, Organizer, OrganizerSetting, User
 from pretix.base.settings import SettingsSandbox
 
 

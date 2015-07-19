@@ -1,10 +1,14 @@
 import datetime
 import time
+
 from django.test import TestCase
 from django.utils.timezone import now
-
-from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation, User
 from tests.base import BrowserTest
+
+from pretix.base.models import (
+    Event, Item, ItemCategory, ItemVariation, Organizer, Property,
+    PropertyValue, Quota, User,
+)
 
 
 class EventTestMixin:

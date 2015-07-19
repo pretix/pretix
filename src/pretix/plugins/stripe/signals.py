@@ -4,7 +4,6 @@ from django.template import Context
 from django.template.loader import get_template
 
 from pretix.base.signals import register_payment_providers
-
 from pretix.presale.signals import html_head
 
 

@@ -1,5 +1,5 @@
-from datetime import timedelta
 import json
+from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth.views import redirect_to_login
@@ -7,10 +7,10 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.utils.timezone import now
-from django.views.generic import View
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import View
 
-from pretix.base.models import Item, ItemVariation, Quota, CartPosition
+from pretix.base.models import CartPosition, Item, ItemVariation, Quota
 from pretix.presale.views import EventLoginRequiredMixin, EventViewMixin
 
 

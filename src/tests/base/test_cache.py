@@ -1,7 +1,7 @@
 import random
 
-from django.test import TestCase
 from django.core.cache import cache as django_cache
+from django.test import TestCase
 from django.utils.timezone import now
 
 from pretix.base.models import Event, Organizer

@@ -1,19 +1,19 @@
 import csv
-from decimal import Decimal
 import json
 import logging
 import re
+from decimal import Decimal
 
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
+
 from pretix.base.models import Order, Quota
 from pretix.base.services.orders import mark_order_paid
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.plugins.banktransfer import csvimport, mt940import
-from django.utils.translation import ugettext_lazy as _
-
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
 

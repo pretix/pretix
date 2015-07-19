@@ -1,14 +1,19 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import redirect
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from django.utils.functional import cached_property
 from django.views.generic import TemplateView, View
-from django.http import HttpResponseNotFound, HttpResponseForbidden
+
 from pretix.base.models import Order, OrderPosition
-from pretix.base.signals import register_payment_providers, register_ticket_outputs
-from pretix.presale.views import EventViewMixin, EventLoginRequiredMixin, CartDisplayMixin
+from pretix.base.signals import (
+    register_payment_providers, register_ticket_outputs,
+)
+from pretix.presale.views import (
+    CartDisplayMixin, EventLoginRequiredMixin, EventViewMixin,
+)
 from pretix.presale.views.checkout import QuestionsViewMixin
 
 

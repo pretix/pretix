@@ -1,11 +1,14 @@
 import datetime
+from datetime import timedelta
+
 from bs4 import BeautifulSoup
 from django.test import TestCase
 from django.utils.timezone import now
-from datetime import timedelta
 
-from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, User, \
-    CartPosition, Question, Order, OrderPosition
+from pretix.base.models import (
+    CartPosition, Event, Item, ItemCategory, Order, OrderPosition, Organizer,
+    Question, Quota, User,
+)
 
 
 class CheckoutTestCase(TestCase):

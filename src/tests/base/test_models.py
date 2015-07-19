@@ -2,10 +2,11 @@ from datetime import timedelta
 
 from django.test import TestCase
 from django.utils.timezone import now
+
 from pretix.base.models import (
-    Event, Organizer, Item, ItemVariation,
-    Property, PropertyValue, User, Quota,
-    Order, OrderPosition, CartPosition, Question)
+    CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Organizer,
+    Property, PropertyValue, Question, Quota, User,
+)
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.types import VariationDict
 

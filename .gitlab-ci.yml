@@ -9,6 +9,7 @@ tests:
         - cd src
         - pip3 install -q -r requirements.txt
         - flake8 --ignore=E123,F403,F401,N802,C901,W503 .
+        - isort -c -rc .
         - python3 manage.py check
         - make
         - make compress

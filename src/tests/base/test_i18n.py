@@ -1,9 +1,9 @@
 from django.test import TestCase
 from django.utils import translation
 from django.utils.timezone import now
-from pretix.base.i18n import LazyI18nString
 
-from pretix.base.models import Event, Organizer, ItemCategory
+from pretix.base.i18n import LazyI18nString
+from pretix.base.models import Event, ItemCategory, Organizer
 
 
 class I18nStringTest(TestCase):

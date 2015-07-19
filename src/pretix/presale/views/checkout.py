@@ -4,13 +4,16 @@ from django.db.models import Q, Sum
 from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
-from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.models import CartPosition, QuestionAnswer, OrderPosition
-from pretix.base.services.orders import perform_order, OrderError
+from django.views.generic import TemplateView
+
+from pretix.base.models import CartPosition, OrderPosition, QuestionAnswer
+from pretix.base.services.orders import OrderError, perform_order
 from pretix.base.signals import register_payment_providers
 from pretix.presale.forms.checkout import QuestionsForm
-from pretix.presale.views import EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin
+from pretix.presale.views import (
+    CartDisplayMixin, EventLoginRequiredMixin, EventViewMixin,
+)
 
 
 class CheckoutView(TemplateView):

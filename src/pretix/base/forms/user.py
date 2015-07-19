@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth.hashers import check_password
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-# from pytz import common_timezones
 
 from pretix.base.models import User
 

@@ -1,5 +1,6 @@
 from functools import partial
 from itertools import product
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -9,9 +10,9 @@ from django.utils.encoding import force_text
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.forms import VersionedModelForm
 
-from pretix.base.models import ItemVariation, Item
+from pretix.base.forms import VersionedModelForm
+from pretix.base.models import Item, ItemVariation
 
 
 class I18nInlineFormSet(BaseInlineFormSet):

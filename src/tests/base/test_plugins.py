@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.test import TestCase
 from django.utils.timezone import now
-from django.conf import settings
 
 from pretix.base.models import Event, Organizer
 from pretix.base.plugins import get_all_plugins

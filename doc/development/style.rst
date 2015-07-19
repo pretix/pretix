@@ -22,6 +22,8 @@ Python code
  So please make sure that you *always* follow all other rules and break these rules *only when
  it makes sense*.
 
+* Use ``isort -rc pretix`` in the source directory to order your imports.
+
 * Indent your code with four spaces.
 
 * For templates and models, follow the `Django Coding Style`_.

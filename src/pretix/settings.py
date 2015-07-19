@@ -1,6 +1,9 @@
 import configparser
 import os
+
+from django.contrib.messages import constants as messages  # NOQA
 from django.utils.crypto import get_random_string
+from django.utils.translation import ugettext_lazy as _  # NOQA
 
 config = configparser.ConfigParser()
 config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
@@ -160,7 +163,6 @@ LOCALE_PATHS = (
     'locale',
 )
 
-from django.utils.translation import ugettext_lazy as _  # NOQA
 LANGUAGES = (
     ('en', _('English')),
     ('de', _('German')),
@@ -237,7 +239,6 @@ DEBUG_TOOLBAR_CONFIG = {
 
 INTERNAL_IPS = ('127.0.0.1', '::1')
 
-from django.contrib.messages import constants as messages  # NOQA
 MESSAGE_TAGS = {
     messages.INFO: 'alert-info',
     messages.ERROR: 'alert-danger',

@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.contrib.auth.hashers import make_password
 
-from django.db import models, migrations
-import pretix.base.models
-import django.db.models.deletion
-import pretix.base.i18n
-import versions.models
 import django.core.validators
+import django.db.models.deletion
+import versions.models
 from django.conf import settings
+from django.contrib.auth.hashers import make_password
+from django.db import migrations, models
+
+import pretix.base.i18n
+import pretix.base.models
 
 
 def initial_user(apps, schema_editor):

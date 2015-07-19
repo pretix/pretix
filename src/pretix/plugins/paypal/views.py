@@ -1,14 +1,14 @@
 import logging
+
+import paypalrestsdk
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
-import paypalrestsdk
+from django.utils.translation import ugettext as __, ugettext_lazy as _
+
 from pretix.base.models import Event, Order
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ugettext as __
 from pretix.helpers.urls import build_absolute_uri
 from pretix.plugins.paypal.payment import Paypal
-
 
 logger = logging.getLogger('pretix.plugins.paypal')
 

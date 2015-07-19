@@ -1,5 +1,6 @@
-from pretix.base.models import User
 from tests.base import BrowserTest
+
+from pretix.base.models import User
 
 
 class UserSettingsTest(BrowserTest):

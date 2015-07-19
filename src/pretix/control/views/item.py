@@ -1,26 +1,33 @@
 from itertools import product
 
 from django.contrib import messages
+from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
+from django.forms.models import inlineformset_factory
+from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
+from django.shortcuts import redirect
 from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView
-from django.views.generic.edit import DeleteView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
-from django.core.urlresolvers import resolve, reverse
-from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
-from django.shortcuts import redirect
-from django.forms.models import inlineformset_factory
-from django.utils.translation import ugettext_lazy as _
+from django.views.generic.edit import DeleteView
+
 from pretix.base.models import (
-    Item, ItemCategory, Property, ItemVariation, PropertyValue, Question, Quota)
-from pretix.control.forms.item import ItemVariationForm, QuotaForm, QuestionForm, PropertyForm, PropertyValueForm, \
-    CategoryForm
-from pretix.control.forms.item import ItemFormGeneral
-from pretix.control.permissions import EventPermissionRequiredMixin, event_permission_required
-from pretix.control.forms import VariationsField, I18nInlineFormSet
+    Item, ItemCategory, ItemVariation, Property, PropertyValue, Question,
+    Quota,
+)
+from pretix.control.forms import I18nInlineFormSet, VariationsField
+from pretix.control.forms.item import (
+    CategoryForm, ItemFormGeneral, ItemVariationForm, PropertyForm,
+    PropertyValueForm, QuestionForm, QuotaForm,
+)
+from pretix.control.permissions import (
+    EventPermissionRequiredMixin, event_permission_required,
+)
 from pretix.control.signals import restriction_formset
-from . import UpdateView, CreateView
+
+from . import CreateView, UpdateView
 
 
 class ItemList(ListView):

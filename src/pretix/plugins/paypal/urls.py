@@ -1,7 +1,6 @@
-from django.conf.urls import url, include
+from django.conf.urls import include, url
 
-from .views import success, abort, retry
-
+from .views import abort, retry, success
 
 urlpatterns = [
     url(r'^paypal/', include([

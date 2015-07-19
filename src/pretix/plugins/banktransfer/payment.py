@@ -1,8 +1,9 @@
-from collections import OrderedDict
 import json
+from collections import OrderedDict
+
+from django import forms
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
-from django import forms
 
 from pretix.base.payment import BasePaymentProvider
 

@@ -1,13 +1,16 @@
 import datetime
 import time
+from datetime import timedelta
+
 from bs4 import BeautifulSoup
 from django.test import TestCase
 from django.utils.timezone import now
-from datetime import timedelta
-
-from pretix.base.models import Item, Organizer, Event, ItemCategory, Quota, Property, PropertyValue, ItemVariation, User, \
-    CartPosition, Question, QuestionAnswer
 from tests.base import BrowserTest
+
+from pretix.base.models import (
+    CartPosition, Event, Item, ItemCategory, ItemVariation, Organizer,
+    Property, PropertyValue, Question, QuestionAnswer, Quota, User,
+)
 
 
 class CartTestMixin:

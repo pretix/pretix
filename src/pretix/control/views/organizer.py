@@ -2,10 +2,10 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import ListView, UpdateView, CreateView
+from django.views.generic import CreateView, ListView, UpdateView
 
 from pretix.base.models import Organizer, OrganizerPermission
-from pretix.control.forms.organizer import OrganizerUpdateForm, OrganizerForm
+from pretix.control.forms.organizer import OrganizerForm, OrganizerUpdateForm
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
 
 

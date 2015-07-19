@@ -1,4 +1,5 @@
 import os.path
+
 from django.test import TestCase
 
 # Do NOT use relative imports here

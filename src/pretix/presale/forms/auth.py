@@ -1,10 +1,12 @@
-from django.contrib.auth import authenticate
-from django.core.validators import RegexValidator
 from django import forms
-from django.forms import Form
-from django.contrib.auth.forms import AuthenticationForm as BaseAuthenticationForm
-from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.contrib.auth import authenticate
+from django.contrib.auth.forms import \
+    AuthenticationForm as BaseAuthenticationForm
+from django.core.validators import RegexValidator
+from django.forms import Form
+from django.utils.translation import ugettext_lazy as _
+
 from pretix.base.models import User
 
 

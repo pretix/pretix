@@ -1,12 +1,16 @@
+import datetime
 import os
 import time
-import datetime
 import unittest
+
 from django.utils.timezone import now
 from selenium.webdriver.support.select import Select
-from pretix.base.models import User, Organizer, Event, OrganizerPermission, EventPermission, ItemCategory, Property, \
-    PropertyValue, Question, Quota, Item
 from tests.base import BrowserTest
+
+from pretix.base.models import (
+    Event, EventPermission, Item, ItemCategory, Organizer, OrganizerPermission,
+    Property, PropertyValue, Question, Quota, User,
+)
 
 
 class ItemFormTest(BrowserTest):

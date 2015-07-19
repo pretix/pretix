@@ -77,6 +77,7 @@ Code checks and unit tests
 Before you check in your code into git, always run the static checkers and unit tests::
 
     flake8 .
+    isort -c -rc .
     python manage.py validate
     py.test
 

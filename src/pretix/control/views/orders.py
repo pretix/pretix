@@ -1,14 +1,15 @@
 from itertools import groupby
 
 from django.contrib import messages
-from django.db.models import Count, Q, Sum
-from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.db.models import Q, Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
-from django.views.generic import ListView, DetailView, TemplateView, View
-from pretix.base.models import Order, Quota, OrderPosition, ItemCategory, Item
+from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic import DetailView, ListView, TemplateView, View
+
+from pretix.base.models import Item, ItemCategory, Order, OrderPosition, Quota
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.orders import ExtendForm

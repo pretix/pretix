@@ -1,5 +1,6 @@
-from collections import defaultdict
 import io
+from collections import defaultdict
+
 from . import mt940
 
 

@@ -1,8 +1,8 @@
-from django.conf import settings
-from django.utils.timezone import now
-from django.core import mail as djmail
-from django.utils.translation import ugettext_lazy as _
 import pytest
+from django.conf import settings
+from django.core import mail as djmail
+from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Event, Organizer, User
 from pretix.base.services.mail import mail

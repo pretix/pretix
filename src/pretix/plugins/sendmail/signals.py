@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse, resolve
+from django.core.urlresolvers import resolve, reverse
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 

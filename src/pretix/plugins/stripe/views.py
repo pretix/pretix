@@ -1,12 +1,13 @@
 import json
 import logging
+
+import stripe
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from pretix.base.models import Order, Event
-from pretix.plugins.stripe.payment import Stripe
-import stripe
 
+from pretix.base.models import Event, Order
+from pretix.plugins.stripe.payment import Stripe
 
 logger = logging.getLogger('pretix.plugins.stripe')
 

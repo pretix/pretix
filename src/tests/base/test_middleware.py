@@ -1,6 +1,6 @@
-from django.test import TestCase, Client
-from django.utils.timezone import now
 from django.conf import settings
+from django.test import Client, TestCase
+from django.utils.timezone import now
 
 from pretix.base.models import Event, Organizer, User
 

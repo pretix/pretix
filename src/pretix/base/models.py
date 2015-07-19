@@ -1,24 +1,30 @@
-from datetime import datetime, timedelta
-from itertools import product
 import copy
-import uuid
 import random
 import time
+import uuid
+from datetime import datetime, timedelta
+from itertools import product
 
-from django.db import models
+import six
 from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import (
+    AbstractBaseUser, BaseUserManager, PermissionsMixin,
+)
+from django.core.validators import RegexValidator
+from django.db import models
 from django.db.models import Q, Count
+from django.template.defaultfilters import date as _date
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from django.template.defaultfilters import date as _date
-from django.core.validators import RegexValidator
+from versions.models import (
+    Versionable as BaseVersionable, VersionedForeignKey,
+    VersionedManyToManyField, get_utc_now,
+)
+
 from pretix.base.i18n import I18nCharField, I18nTextField
 from pretix.base.settings import SettingsProxy
-import six
-from versions.models import Versionable as BaseVersionable
-from versions.models import VersionedForeignKey, VersionedManyToManyField, get_utc_now
+
 from .types import VariationDict
 
 

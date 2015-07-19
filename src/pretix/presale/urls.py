@@ -1,11 +1,10 @@
-from django.conf.urls import url, include
+from django.conf.urls import include, url
 
-import pretix.presale.views.event
 import pretix.presale.views.cart
 import pretix.presale.views.checkout
-import pretix.presale.views.order
+import pretix.presale.views.event
 import pretix.presale.views.locale
-
+import pretix.presale.views.order
 
 urlpatterns = [
     url(r'^(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([

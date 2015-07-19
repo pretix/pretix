@@ -1,17 +1,17 @@
 from collections import OrderedDict
 from decimal import Decimal
+
 from django import forms
 from django.contrib import messages
-from django.db.models import Sum, Q
+from django.db.models import Q, Sum
 from django.dispatch import receiver
-
 from django.forms import Form
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.models import Order, CartPosition
-from pretix.base.services.orders import mark_order_paid
 
+from pretix.base.models import CartPosition, Order
+from pretix.base.services.orders import mark_order_paid
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
 

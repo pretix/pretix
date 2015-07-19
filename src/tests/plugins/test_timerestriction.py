@@ -4,9 +4,8 @@ from django.test import TestCase
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Event, Organizer, Item, Property, PropertyValue, ItemVariation
+    Event, Item, ItemVariation, Organizer, Property, PropertyValue,
 )
-
 # Do NOT use relative imports here
 from pretix.plugins.timerestriction import signals
 from pretix.plugins.timerestriction.models import TimeRestriction

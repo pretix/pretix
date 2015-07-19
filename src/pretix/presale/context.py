@@ -1,4 +1,5 @@
 from django.core.urlresolvers import resolve
+
 from .signals import html_head
 
 

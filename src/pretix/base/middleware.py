@@ -1,19 +1,16 @@
-from django.core.urlresolvers import get_script_prefix
-import pytz
-
-from django.conf import settings
-from django.middleware.locale import LocaleMiddleware as BaseLocaleMiddleware
-from django.utils.translation.trans_real import (
-    get_supported_language_variant,
-    parse_accept_lang_header,
-    language_code_re,
-    check_for_language
-)
-from django.utils.translation import LANGUAGE_SESSION_KEY
-from django.utils import translation, timezone
 from collections import OrderedDict
-from django.utils.cache import patch_vary_headers
 
+import pytz
+from django.conf import settings
+from django.core.urlresolvers import get_script_prefix
+from django.middleware.locale import LocaleMiddleware as BaseLocaleMiddleware
+from django.utils import timezone, translation
+from django.utils.cache import patch_vary_headers
+from django.utils.translation import LANGUAGE_SESSION_KEY
+from django.utils.translation.trans_real import (
+    check_for_language, get_supported_language_variant, language_code_re,
+    parse_accept_lang_header,
+)
 
 _supported = None
 

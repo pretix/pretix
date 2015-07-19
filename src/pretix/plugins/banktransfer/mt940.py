@@ -33,11 +33,10 @@ __version__ = '0.2'
 __all__ = ['MT940', 'rabo_description', 'abn_amro_description',
            'ing_description']
 
-from collections import namedtuple, defaultdict
-from decimal import Decimal
 import datetime
 import re
-
+from collections import defaultdict, namedtuple
+from decimal import Decimal
 
 SECTIONS = {
     'begin': [':940:'],

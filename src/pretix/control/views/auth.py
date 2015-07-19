@@ -1,9 +1,13 @@
 from django.conf import settings
-from django.shortcuts import render, redirect
-from django.contrib.auth import login as auth_login, authenticate
-from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import (
+    authenticate, login as auth_login, logout as auth_logout,
+)
+from django.shortcuts import redirect, render
+
 from pretix.base.models import User
-from pretix.control.forms.auth import AuthenticationForm, GlobalRegistrationForm
+from pretix.control.forms.auth import (
+    AuthenticationForm, GlobalRegistrationForm,
+)
 
 
 def login(request):

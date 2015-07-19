@@ -1,11 +1,13 @@
 import copy
-from django.db import models
-from django.forms.models import ModelFormMetaclass, BaseModelForm
+
 from django import forms
+from django.db import models
+from django.forms.models import BaseModelForm, ModelFormMetaclass
 from django.utils import six
-from pretix.base.i18n import I18nFormField
-from versions.models import Versionable
 from django.utils.translation import ugettext_lazy as _
+from versions.models import Versionable
+
+from pretix.base.i18n import I18nFormField
 
 
 class BaseI18nModelForm(BaseModelForm):

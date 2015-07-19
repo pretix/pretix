@@ -1,9 +1,10 @@
-from datetime import timedelta
 import logging
 import time
+from datetime import timedelta
+
+from django.conf import settings
 from django.db.models import Q
 from django.utils.timezone import now
-from pretix import settings
 
 from pretix.base.models import Quota
 

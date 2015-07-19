@@ -1,11 +1,14 @@
 import datetime
 from decimal import Decimal
+
 from bs4 import BeautifulSoup
 from django.test import TestCase
 from django.utils.timezone import now
 
-from pretix.base.models import Organizer, Event, Order, User, ItemCategory, Quota, Item, Property, PropertyValue, \
-    ItemVariation, OrderPosition, Question
+from pretix.base.models import (
+    Event, Item, ItemCategory, ItemVariation, Order, OrderPosition, Organizer,
+    Property, PropertyValue, Question, Quota, User,
+)
 
 
 class OrdersTest(TestCase):

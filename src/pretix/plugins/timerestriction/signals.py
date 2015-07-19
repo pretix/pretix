@@ -1,11 +1,11 @@
 from django.dispatch import receiver
+from django.forms.models import inlineformset_factory
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from django.forms.models import inlineformset_factory
 
-from pretix.base.signals import determine_availability
 from pretix.base.models import Item
-from pretix.control.forms import RestrictionInlineFormset, RestrictionForm
+from pretix.base.signals import determine_availability
+from pretix.control.forms import RestrictionForm, RestrictionInlineFormset
 from pretix.control.signals import restriction_formset
 
 from .models import TimeRestriction

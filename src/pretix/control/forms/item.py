@@ -1,11 +1,14 @@
 import copy
+
 from django.db import models
 from django.forms import BooleanField
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.forms import VersionedModelForm, I18nModelForm
+
+from pretix.base.forms import I18nModelForm, VersionedModelForm
 from pretix.base.models import (
-    Item, ItemCategory, Property, ItemVariation, PropertyValue, Question, Quota,
-    Versionable)
+    Item, ItemCategory, ItemVariation, Property, PropertyValue, Question,
+    Quota, Versionable,
+)
 from pretix.control.forms import TolerantFormsetModelForm, VariationsField
 
 

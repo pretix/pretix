@@ -1,25 +1,30 @@
 import json
 
+from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, logout, update_session_auth_hash
+from django.contrib.auth import (
+    authenticate, login, logout, update_session_auth_hash,
+)
 from django.core import signing
-from django.core.signing import SignatureExpired, BadSignature
+from django.core.signing import BadSignature, SignatureExpired
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
-from django.contrib.auth import login
-from django.views.generic import TemplateView, View, UpdateView
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
+from django.views.generic import TemplateView, UpdateView, View
+
 from pretix.base.forms.user import UserSettingsForm
-from pretix.base.services.mail import mail
 from pretix.base.models import User
+from pretix.base.services.mail import mail
 from pretix.helpers.urls import build_absolute_uri
-from pretix.presale.forms.auth import GlobalRegistrationForm, LocalRegistrationForm, PasswordForgotForm, \
-    PasswordRecoverForm
-from pretix.presale.forms.auth import LoginForm
-from pretix.presale.views import EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin
+from pretix.presale.forms.auth import (
+    GlobalRegistrationForm, LocalRegistrationForm, LoginForm,
+    PasswordForgotForm, PasswordRecoverForm,
+)
+from pretix.presale.views import (
+    CartDisplayMixin, EventLoginRequiredMixin, EventViewMixin,
+)
 from pretix.presale.views.cart import CartAdd
 
 

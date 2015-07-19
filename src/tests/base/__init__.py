@@ -1,11 +1,10 @@
 import os
 import sys
 import time
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from django.conf import settings
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
-
 
 # could use Chrome, Firefox, etc... here
 BROWSER = os.environ.get('TEST_BROWSER', 'PhantomJS')

@@ -8,6 +8,7 @@ coverage
 selenium
 pytest
 pytest-django
+isort
 # PyVirtualDisplay
 # -e git+https://github.com/pretix/sauceclient.git@master#egg=sauceclient
 # travis

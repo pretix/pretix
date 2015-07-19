@@ -1,21 +1,29 @@
 from collections import OrderedDict
-from django import forms
 
+from django import forms
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.db.models import Sum
 from django.forms import modelformset_factory
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
-from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
+
 from pretix.base.forms import VersionedModelForm
-from pretix.control.forms.event import ProviderForm, TicketSettingsForm, EventSettingsForm, EventUpdateForm
-from pretix.base.models import Event, OrderPosition, Order, Item, EventPermission, User
-from pretix.base.signals import register_payment_providers, register_ticket_outputs
+from pretix.base.models import (
+    Event, EventPermission, Item, Order, OrderPosition, User,
+)
+from pretix.base.signals import (
+    register_payment_providers, register_ticket_outputs,
+)
+from pretix.control.forms.event import (
+    EventSettingsForm, EventUpdateForm, ProviderForm, TicketSettingsForm,
+)
 from pretix.control.permissions import EventPermissionRequiredMixin
+
 from . import UpdateView
 
 

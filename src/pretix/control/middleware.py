@@ -1,13 +1,14 @@
 from urllib.parse import urlparse
+
 from django.conf import settings
-from django.core.urlresolvers import resolve, get_script_prefix
-from django.utils.encoding import force_str
-from django.shortcuts import resolve_url
 from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.core.urlresolvers import get_script_prefix, resolve
 from django.http import HttpResponseNotFound
+from django.shortcuts import resolve_url
+from django.utils.encoding import force_str
 from django.utils.translation import ugettext as _
 
-from pretix.base.models import Event, Organizer, EventPermission
+from pretix.base.models import Event, EventPermission, Organizer
 
 
 class PermissionMiddleware:

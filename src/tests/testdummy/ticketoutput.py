@@ -1,8 +1,8 @@
 import logging
 
 from django.http import HttpResponse
-from pretix.base.ticketoutput import BaseTicketOutput
 
+from pretix.base.ticketoutput import BaseTicketOutput
 
 logger = logging.getLogger('tests.testdummy.ticketoutput')
 

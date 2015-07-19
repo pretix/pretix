@@ -1,4 +1,5 @@
 import logging
+
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
@@ -9,7 +10,6 @@ from pretix.base.services.mail import mail
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 from . import forms
-
 
 logger = logging.getLogger('pretix.plugins.sendmail')
 

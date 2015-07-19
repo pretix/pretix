@@ -1,11 +1,11 @@
 import importlib
+
 from django.apps import apps
-from django.conf.urls import include, url
 from django.conf import settings
+from django.conf.urls import include, url
 
 import pretix.control.urls
 import pretix.presale.urls
-
 
 urlpatterns = [
     url(r'^control/', include(pretix.control.urls, namespace='control')),

@@ -1,7 +1,9 @@
-from django.contrib.auth.forms import AuthenticationForm as BaseAuthenticationForm
 from django import forms
-from django.utils.translation import ugettext as _
 from django.contrib.auth import authenticate
+from django.contrib.auth.forms import \
+    AuthenticationForm as BaseAuthenticationForm
+from django.utils.translation import ugettext as _
+
 from pretix.base.models import User
 
 
