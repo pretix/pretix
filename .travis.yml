@@ -9,10 +9,10 @@ install:
     - npm install -g less@2.5.0
 before_script:
     - cd src
+script:
     - flake8 --ignore=E123,F403,F401,N802,C901,W503 .
     - isort -c -rc .
     - python manage.py check
-script:
     - make
     - make compress
     - coverage run -m py.test tests
