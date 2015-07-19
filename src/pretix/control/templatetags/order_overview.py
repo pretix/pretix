@@ -9,6 +9,8 @@ register = template.Library()
 
 @register.filter(name='togglesum', needs_autoescape=True)
 def cut(value, autoescape=True):
+    if not value:
+        return ''
     if autoescape:
         esc = conditional_escape
     else:
