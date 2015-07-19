@@ -3,6 +3,7 @@
 {% load order_overview %}
 {% block title %}{% trans "Order overview" %}{% endblock %}
 {% block content %}
+    {% url "control:event.orders" organizer=request.event.organizer.slug event=request.event.slug as listurl %}
     <div class="pull-right">
         <div class="btn-group" role="group" id="sumtoggle">
             <button type="button" data-target=".count" class="btn btn-default active">Show number</button>
@@ -37,11 +38,31 @@
                     {% for item in tup.1 %}
                         <tr class="item {% if tup.0 %}categorized{% endif %}">
                             <td>{{ item.name }}</td>
-                            <td>{{ item.num_total|togglesum }}</td>
-                            <td>{{ item.num_pending|togglesum }}</td>
-                            <td>{{ item.num_cancelled|togglesum }}</td>
-                            <td>{{ item.num_refunded|togglesum }}</td>
-                            <td>{{ item.num_paid|togglesum }}</td>
+                            <td>
+                                <a href="{{ listurl }}?item={{ item.identity }}">
+                                    {{ item.num_total|togglesum }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ listurl }}?item={{ item.identity }}&status=n">
+                                    {{ item.num_pending|togglesum }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ listurl }}?item={{ item.identity }}&status=c">
+                                    {{ item.num_cancelled|togglesum }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ listurl }}?item={{ item.identity }}&status=r">
+                                    {{ item.num_refunded|togglesum }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ listurl }}?item={{ item.identity }}&status=p">
+                                    {{ item.num_paid|togglesum }}
+                                </a>
+                            </td>
                         </tr>
                         {% if item.has_variations %}
                             {% for var in item.all_variations %}

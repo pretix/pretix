@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.views.generic import ListView, DetailView, TemplateView, View
-from pretix.base.models import Order, Quota, OrderPosition, ItemCategory
+from pretix.base.models import Order, Quota, OrderPosition, ItemCategory, Item
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.orders import ExtendForm
@@ -35,7 +35,15 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         if self.request.GET.get("status", "") != "":
             s = self.request.GET.get("status", "")
             qs = qs.filter(status=s)
+        if self.request.GET.get("item", "") != "":
+            i = self.request.GET.get("item", "")
+            qs = qs.filter(positions__item_id__in=(i,)).distinct()
         return qs.select_related("user")
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['items'] = Item.objects.current.filter(event=self.request.event)
+        return ctx
 
 
 class OrderView(EventPermissionRequiredMixin, DetailView):

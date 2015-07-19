@@ -22,6 +22,15 @@
                 <option value="c" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Cancelled" %}</option>
                 <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Refunded" %}</option>
             </select>
+            <select name="item" class="form-control">
+                <option value="">{% trans "All products" %}</option>
+                {% for item in items %}
+                    <option value="{{ item.identity }}"
+                            {% if request.GET.item == item.identity %}selected="selected"{% endif %}>
+                        {{ item.name }}
+                    </option>
+                {% endfor %}
+            </select>
             <input type="text" name="user" class="form-control" placeholder="{% trans "Search user" %}" value="{{ request.GET.user }}">
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
         </form>
