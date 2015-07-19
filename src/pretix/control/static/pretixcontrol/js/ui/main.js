@@ -23,5 +23,13 @@ $(function () {
             });
         });
     }
+
+    $("#sumtoggle").find("button").click(function () {
+        $(".table-product-overview .sum").toggle($(this).attr("data-target") === ".sum");
+        $("#sumtoggle").find("button").not($(this)).removeClass("active");
+        $(this).addClass("active");
+        $(".table-product-overview .count").toggle($(this).attr("data-target") === ".count");
+    });
+
     $('.collapsible').collapse();
 });
