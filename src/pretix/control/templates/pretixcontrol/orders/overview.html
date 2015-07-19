@@ -44,22 +44,22 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.identity }}&status=n">
+                                <a href="{{ listurl }}?item={{ item.identity }}&amp;status=n">
                                     {{ item.num_pending|togglesum }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.identity }}&status=c">
+                                <a href="{{ listurl }}?item={{ item.identity }}&amp;status=c">
                                     {{ item.num_cancelled|togglesum }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.identity }}&status=r">
+                                <a href="{{ listurl }}?item={{ item.identity }}&amp;status=r">
                                     {{ item.num_refunded|togglesum }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.identity }}&status=p">
+                                <a href="{{ listurl }}?item={{ item.identity }}&amp;status=p">
                                     {{ item.num_paid|togglesum }}
                                 </a>
                             </td>
