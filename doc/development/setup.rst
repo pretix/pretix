@@ -66,6 +66,10 @@ To run the local development webserver, execute::
 
 and head to http://localhost:8000/
 
+As we did not implement an overall front page yet, you need to go directly to
+http://localhost:8000/control/ for the admin view or, if you imported the test
+data as suggested above, to the event page at http://localhost:8000/mrmcd/2015/
+
 Code checks and unit tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 Before you check in your code into git, always run the static checkers and unit tests::
