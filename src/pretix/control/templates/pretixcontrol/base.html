@@ -35,7 +35,10 @@
                             data-toggle="collapse" data-target=".navbar-events-collapse">
                         <i class="fa fa-calendar"></i><span class="caret"></span>
                     </button>
-                    <a class="navbar-brand" href="{% url "control:index" %}">{{ settings.PRETIX_INSTANCE_NAME }}</a>
+                    <a class="navbar-brand" href="{% url "control:index" %}">
+                        <img src="{% static "pretixbase/img/pretix-icon.svg" %}" />
+                        {{ settings.PRETIX_INSTANCE_NAME }}
+                    </a>
                 </div>
                 <ul class="nav navbar-nav navbar-top-links navbar-left hidden-xs">
                     <li class="dropdown">
