@@ -14,10 +14,10 @@ pretix/
         essential to all of pretix's features.
 
     control/
-        This is the django app containing the frontend for organizers.
+        This is the django app containing the front end for organizers.
 
     presale/
-        This is the django app containing the frontend for users buying tickets.
+        This is the django app containing the front end for users buying tickets.
 
     helpers/
         Helpers contain a very few modules providing workarounds for low-level flaws in

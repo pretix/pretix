@@ -67,7 +67,7 @@ It is sent out with several keyword arguments:
         exists, it is available in the dictionary via the special key ``'variation'``. If
         the item does not have any properties, the list will contain exactly one empty
         dictionary. Please note: this is *not* the list of all possible variations, this is
-        only the list of all variations the frontend likes to determine the status for.
+        only the list of all variations the front end likes to determine the status for.
         Technically, you won't get ``dict`` objects but ``pretix.base.types.VariationDict``
         objects, which behave exactly the same but add some extra methods.
     ``context``
@@ -217,7 +217,7 @@ Control interface formsets
 To make it possible for the event organizer to configure your restriction, there is a
 'Restrictions' page in the item configuration. This page is able to show a formset for
 each restriction plugin, but *you* are required to create this formset. This is why you
-should listen to the the ``pretix.control.signals.restriction_formset`` signal.
+should listen to the ``pretix.control.signals.restriction_formset`` signal.
 
 Currently, the signal comes with only one keyword argument:
 
