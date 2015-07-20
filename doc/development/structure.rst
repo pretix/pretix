@@ -24,6 +24,9 @@ pretix/
         Django or installed 3rd-party packages, like a filter to combine the ``lessc``
         preprocessor with ``django-compressor``'s URL rewriting.
 
+static/
+    Contains all static files (CSS, JavaScript, images)
+
 tests/
     This is the root directory for all test codes. It includes subdirectories ``base``,
     ``control``, ``presale``, ``helpers`` and ``plugins`` to mirror the structure of the
@@ -55,13 +58,13 @@ pretix.presale
 ^^^^^^^^^^^^^^^^
 
 Bootstrap
-    Bootstrap lives as a git submodule at ``pretix/base/static/bootstrap/``
+    Bootstrap lives as a git submodule at ``static/bootstrap/``
 
 Font Awesome
-    Font Awesome lives as a git submodule at ``pretix/base/static/fontawesome/``
+    Font Awesome lives as a git submodule at ``static/fontawesome/``
 
 jQuery
-    jQuery lives as a single JavaScript file in ``pretix/base/static/jquery/js/``
+    jQuery lives as a single JavaScript file in ``static/jquery/js/``
 
 jQuery plugin: Django formsets
     Our own modified version of `django-formset-js`_ is available as an independent
