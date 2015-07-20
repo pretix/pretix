@@ -1,5 +1,6 @@
 import configparser
 import os
+import sys
 
 from django.contrib.messages import constants as messages  # NOQA
 from django.utils.crypto import get_random_string
@@ -36,7 +37,8 @@ else:
 
 # Adjustable settings
 
-DEBUG = TEMPLATE_DEBUG = config.getboolean('django', 'debug', fallback=False)
+debug_fallback = "runserver" in sys.argv
+DEBUG = TEMPLATE_DEBUG = config.getboolean('django', 'debug', fallback=debug_fallback)
 
 DATABASES = {
     'default': {
