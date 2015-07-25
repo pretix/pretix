@@ -1,5 +1,6 @@
-{% load i18n %}{% blocktrans with bank=settings.bank_details code=order.full_code %}
+{% load i18n %}{% load l10n %}{% blocktrans with bank=settings.bank_details code=order.full_code total=order.total|localize currency=event.currency %}
 Please transfer the full amount to the following bank account.
 
 Reference: {{ code }}
+Amount: {{ total }} {{ currency }}
 {{ bank }}{% endblocktrans %}
