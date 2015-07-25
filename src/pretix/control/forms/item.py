@@ -128,6 +128,7 @@ class ItemFormGeneral(VersionedModelForm):
             'admission',
             'short_description',
             'long_description',
+            'picture',
             'default_price',
             'tax_rate',
             'properties',

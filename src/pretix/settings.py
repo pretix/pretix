@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'pretix.plugins.paypal',
     'pretix.plugins.ticketoutputpdf',
     'pretix.plugins.sendmail',
+    'easy_thumbnails',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -245,6 +246,12 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
     messages.WARNING: 'alert-warning',
     messages.SUCCESS: 'alert-success',
+}
+
+THUMBNAIL_ALIASES = {
+    '': {
+        'productlist': {'size': (60, 60), 'crop': True},
+    },
 }
 
 loglevel = 'DEBUG' if DEBUG else 'INFO'

@@ -1,5 +1,6 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
+{% load thumbnail %}
 {% block title %}{% trans "Presale" %}{% endblock %}
 
 {% block content %}
@@ -60,6 +61,11 @@
                             <div class="item-with-variations">
                                 <div class="row-fluid product-row headline">
                                     <div class="col-md-8 col-xs-12">
+                                        {% if item.picture %}
+                                            <img src="{{ item.picture|thumbnail_url:'productlist' }}"
+                                                    class="productpicture"
+                                                    alt="{{ item.name }}" />
+                                        {% endif %}
                                         <a href="javascript:void(0);" data-toggle="variations">
                                             <strong>{{ item.name }}</strong>
                                         </a>

@@ -875,6 +875,14 @@ class Item(Versionable):
     position = models.IntegerField(
         default=0
     )
+    picture = models.ImageField(
+        verbose_name=_("Product picture"),
+        null=True, blank=True,
+        upload_to=lambda instance, filename: '%s/%s/item-%s.%s' % (
+            instance.event.organizer.slug, instance.event.slug, instance.identity,
+            filename.split('.')[-1]
+        )
+    )
 
     class Meta:
         verbose_name = _("Product")
