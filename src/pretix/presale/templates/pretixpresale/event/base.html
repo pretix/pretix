@@ -75,5 +75,8 @@
         {% endblocktrans %}
     {% endwith %}
 </footer>
+{% compress js %}
+    <script type="text/javascript" src="{% static "lightbox/js/lightbox.min.js" %}"></script>
+{% endcompress %}
 </body>
 </html>
