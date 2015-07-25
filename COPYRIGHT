@@ -25,3 +25,7 @@ This project includes the work of others, namely:
 * python-dateutil, (c) Yaron de Leeuw, BSD License
 * startbootstrap-sb-admin-2, (c) Iron Summit Media Strategies, LLC, Apache License
 * metismenu, (c) Osman Nuri Okumus, MIT License
+* easy-thumbnails, (c) Chris Beaven and contributors
+* reportlab, (c) ReportLab Europe Ltd, BSD License
+* django-compressor, (c) Jannis Leidel and contributors, MIT License
+* static3, (c) Roman Mohr and contributors, LGPL License
