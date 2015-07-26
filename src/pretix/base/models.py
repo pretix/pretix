@@ -774,6 +774,13 @@ class Question(Versionable):
             self.event.get_cache().clear()
 
 
+def itempicture_upload_to(instance, filename):
+    return '%s/%s/item-%s.%s' % (
+        instance.event.organizer.slug, instance.event.slug, instance.identity,
+        filename.split('.')[-1]
+    )
+
+
 class Item(Versionable):
     """
     An item is a thing which can be sold. It belongs to an event and may or may not belong to a category.
@@ -801,8 +808,11 @@ class Item(Versionable):
     :param questions: A set of ``Question`` objects that should be applied to this item
     :param admission: ``True``, if this item allows persons to enter the event (as opposed to e.g. merchandise)
     :type admission: bool
+    :param picture: A product picture to be shown next to the product description.
+    :type picture: File
 
     """
+
     event = VersionedForeignKey(
         Event,
         on_delete=models.PROTECT,
@@ -878,10 +888,7 @@ class Item(Versionable):
     picture = models.ImageField(
         verbose_name=_("Product picture"),
         null=True, blank=True,
-        upload_to=lambda instance, filename: '%s/%s/item-%s.%s' % (
-            instance.event.organizer.slug, instance.event.slug, instance.identity,
-            filename.split('.')[-1]
-        )
+        upload_to=itempicture_upload_to
     )
 
     class Meta:
