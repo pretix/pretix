@@ -222,8 +222,8 @@ class QuotaTest(ItemFormTest):
 
     def test_update(self):
         c = Quota.objects.create(event=self.event1, name="Full house", size=500)
-        item1 = Item.objects.create(event=self.event1, name="Standard")
-        item2 = Item.objects.create(event=self.event1, name="Business")
+        item1 = Item.objects.create(event=self.event1, name="Standard", default_price=0)
+        item2 = Item.objects.create(event=self.event1, name="Business", default_price=0)
         prop1 = Property.objects.create(event=self.event1, name="Level")
         item2.properties.add(prop1)
         PropertyValue.objects.create(prop=prop1, value="Silver")

@@ -32,7 +32,7 @@ class ItemVariationsTest(TestCase):
         PropertyValue.objects.create(prop=cls.p_color, value='blue')
 
     def test_variationdict(self):
-        i = Item.objects.create(event=self.event, name='Dummy')
+        i = Item.objects.create(event=self.event, name='Dummy', default_price=0)
         i.properties.add(self.p_size)
         iv = ItemVariation.objects.create(item=i)
         iv.values.add(self.pv_size_s)
@@ -72,7 +72,7 @@ class ItemVariationsTest(TestCase):
         self.assertEqual(vd4.ordered_values(), ['a', 'b'])
 
     def test_get_all_variations(self):
-        i = Item.objects.create(event=self.event, name='Dummy')
+        i = Item.objects.create(event=self.event, name='Dummy', default_price=0)
 
         # No properties available
         v = i.get_all_variations()
@@ -93,7 +93,7 @@ class ItemVariationsTest(TestCase):
         self.assertEqual(sorted([str(V) for V in values]), sorted(['S', 'M', 'L']))
 
         # One property, one variation
-        iv = ItemVariation.objects.create(item=i)
+        iv = ItemVariation.objects.create(item=i, default_price=0)
         iv.values.add(self.pv_size_s)
         v = i.get_all_variations()
         self.assertIs(type(v), list)
@@ -192,7 +192,7 @@ class BaseQuotaTestCase(TestCase):
         self.quota = Quota.objects.create(name="Test", size=2, event=self.event)
         self.item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
                                          admission=True)
-        self.item2 = Item.objects.create(event=self.event, name="T-Shirt")
+        self.item2 = Item.objects.create(event=self.event, name="T-Shirt", default_price=23)
         p = Property.objects.create(event=self.event, name='Size')
         pv1 = PropertyValue.objects.create(prop=p, value='S')
         PropertyValue.objects.create(prop=p, value='M')

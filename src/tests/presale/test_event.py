@@ -45,7 +45,7 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
 
     def test_without_category(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket')
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0)
         q.items.add(item)
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
         self.assertIn("Early-bird", self.driver.find_element_by_css_selector("section .product-row:first-child").text)
@@ -53,7 +53,7 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
     def test_simple_with_category(self):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         q.items.add(item)
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
         self.assertIn("Entry tickets", self.driver.find_element_by_css_selector("section:nth-of-type(1) h3").text)
@@ -62,14 +62,14 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
 
     def test_simple_without_quota(self):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
-        Item.objects.create(event=self.event, name='Early-bird ticket', category=c)
+        Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         resp = self.client.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
         self.assertNotIn("Early-bird", resp.rendered_content)
 
     def test_no_variations_in_quota(self):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         prop1 = Property.objects.create(event=self.event, name="Color")
         item.properties.add(prop1)
         PropertyValue.objects.create(prop=prop1, value="Red")
@@ -82,7 +82,7 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
     def test_one_variation_in_quota(self):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         prop1 = Property.objects.create(event=self.event, name="Color")
         item.properties.add(prop1)
         val1 = PropertyValue.objects.create(prop=prop1, value="Red")
