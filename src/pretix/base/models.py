@@ -844,7 +844,6 @@ class Item(Versionable):
         null=True, blank=True,
     )
     default_price = models.DecimalField(
-        null=True, blank=True,
         verbose_name=_("Default price"),
         max_digits=7, decimal_places=2
     )
