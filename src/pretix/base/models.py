@@ -1550,6 +1550,7 @@ class Order(Versionable):
     class Meta:
         verbose_name = _("Order")
         verbose_name_plural = _("Orders")
+        ordering = ("-datetime",)
 
     def str(self):
         return self.full_code
