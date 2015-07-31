@@ -29,7 +29,6 @@ from .types import VariationDict
 
 
 class Versionable(BaseVersionable):
-
     class Meta:
         abstract = True
 
@@ -416,7 +415,7 @@ class Event(Versionable):
         verbose_name=_("Slug"),
     )
     permitted = models.ManyToManyField(User, through='EventPermission',
-                                       related_name="events",)
+                                       related_name="events", )
     currency = models.CharField(max_length=10,
                                 verbose_name=_("Default currency"),
                                 default=settings.DEFAULT_CURRENCY)
@@ -491,6 +490,7 @@ class Event(Versionable):
         is being cleared every time the event or one of its related objects change.
         """
         from pretix.base.cache import EventRelatedCache
+
         return EventRelatedCache(self)
 
     @cached_property
@@ -1025,7 +1025,7 @@ class Item(Versionable):
             for receiver, response in responses:
                 if 'available' in response[i]:
                     var['available'] &= response[i]['available']
-                if 'price' in response[i] and response[i]['price'] \
+                if 'price' in response[i] and response[i]['price'] is not None \
                         and response[i]['price'] < var['price']:
                     var['price'] = response[i]['price']
 
@@ -1064,6 +1064,7 @@ class Item(Versionable):
             raise ValueError('Do not call this directly on items which have properties '
                              'but call this on their ItemVariation objects')
         from .signals import determine_availability
+
         vd = VariationDict()
         responses = determine_availability.send(
             self.event, item=self,
@@ -1074,7 +1075,7 @@ class Item(Versionable):
         for receiver, response in responses:
             if 'available' in response[0] and not response[0]['available']:
                 return False
-            elif 'price' in response[0] and response[0]['price'] < price:
+            elif 'price' in response[0] and response[0]['price'] is not None and response[0]['price'] < price:
                 price = response[0]['price']
         return price
 
@@ -1172,6 +1173,7 @@ class ItemVariation(Versionable):
             * the item's price, otherwise
         """
         from .signals import determine_availability
+
         responses = determine_availability.send(
             self.item.event, item=self.item,
             variations=[self.to_variation_dict()], context=None,
@@ -1181,7 +1183,7 @@ class ItemVariation(Versionable):
         for receiver, response in responses:
             if 'available' in response[0] and not response[0]['available']:
                 return False
-            elif 'price' in response[0] and response[0]['price'] < price:
+            elif 'price' in response[0] and response[0]['price'] is not None and response[0]['price'] < price:
                 price = response[0]['price']
         return price
 
@@ -1209,6 +1211,7 @@ class VariationsField(VersionedManyToManyField):
     def formfield(self, **kwargs):
         from pretix.control.forms import VariationsField as FVariationsField
         from django.db.models.fields.related import RelatedField
+
         defaults = {
             'form_class': FVariationsField,
             # We don't need a queryset
@@ -1374,7 +1377,7 @@ class Quota(Versionable):
                   and the second is the number of available tickets.
         """
         # TODO: These lookups are highly inefficient. However, we'll wait with optimizing
-        #       until Django 1.8 is released, as the following feature might make it a
+        # until Django 1.8 is released, as the following feature might make it a
         #       lot easier:
         #       https://docs.djangoproject.com/en/1.8/ref/models/conditional-expressions/
         # TODO: Test for interference with old versions of Item-Quota-relations, etc.
@@ -1382,10 +1385,10 @@ class Quota(Versionable):
         #       its first variationsadded
         quotalookup = (
             (  # Orders for items which do not have any variations
-                Q(variation__isnull=True)
-                & Q(item__quotas__in=[self])
+               Q(variation__isnull=True)
+               & Q(item__quotas__in=[self])
             ) | (  # Orders for items which do have any variations
-                Q(variation__quotas__in=[self])
+                   Q(variation__quotas__in=[self])
             )
         )
 
@@ -1429,6 +1432,7 @@ class Quota(Versionable):
                                             to obtain the lock
         """
         from .services import locking
+
         return locking.lock_quota(self)
 
     def release(self, force=False):
@@ -1438,6 +1442,7 @@ class Quota(Versionable):
         representation of the database object.
         """
         from .services import locking
+
         return locking.release_quota(self, force)
 
 
@@ -1702,7 +1707,6 @@ class QuestionAnswer(Versionable):
 
 
 class ObjectWithAnswers:
-
     def cache_answers(self):
         """
         Creates two properties on the object.
