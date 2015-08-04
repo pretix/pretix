@@ -845,7 +845,7 @@ class Item(Versionable):
     )
     default_price = models.DecimalField(
         verbose_name=_("Default price"),
-        max_digits=7, decimal_places=2
+        max_digits=7, decimal_places=2, null=True
     )
     tax_rate = models.DecimalField(
         null=True, blank=True,
