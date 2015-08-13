@@ -6,7 +6,7 @@
 	<h1>{% trans "Delete question" %}</h1>
 	<form action="" method="post" class="form-horizontal">
 		{% csrf_token %}
-		<p>{% blocktrans %}Are you sure you want to the question <strong>{{ question }}</strong>?{% endblocktrans %}</p>
+		<p>{% blocktrans %}Are you sure you want to delete the question <strong>{{ question }}</strong>?{% endblocktrans %}</p>
 		{% if dependent|length > 0 %}
 			<p>{% blocktrans %}All answers to the question given by the buyers of the following products will be <strong>lost</strong>.{% endblocktrans %}</p>
 			{% for item in dependent %}

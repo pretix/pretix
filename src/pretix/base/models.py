@@ -1748,7 +1748,8 @@ class OrderPosition(ObjectWithAnswers, Versionable):
     )
     item = VersionedForeignKey(
         Item,
-        verbose_name=_("Item")
+        verbose_name=_("Item"),
+        related_name='positions'
     )
     variation = VersionedForeignKey(
         ItemVariation,

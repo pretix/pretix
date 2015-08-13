@@ -894,3 +894,47 @@ class ItemRestrictions(ItemDetailMixin, EventPermissionRequiredMixin, TemplateVi
             'event': self.request.event.slug,
             'item': self.object.identity
         })
+
+
+class ItemDelete(EventPermissionRequiredMixin, DeleteView):
+    model = Item
+    template_name = 'pretixcontrol/item/delete.html'
+    permission = 'can_change_items'
+    context_object_name = 'item'
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        context['possible'] = self.is_allowed()
+        return context
+
+    def is_allowed(self) -> bool:
+        return not self.get_object().positions.current.exists()
+
+    def get_object(self, queryset=None) -> Property:
+        if not hasattr(self, 'object') or not self.object:
+            try:
+                self.object = self.request.event.items.current.get(
+                    identity=self.kwargs['item']
+                )
+            except Property.DoesNotExist:
+                raise Http404(_("The requested product does not exist."))
+        return self.object
+
+    def delete(self, request, *args, **kwargs):
+        success_url = self.get_success_url()
+        if self.is_allowed():
+            self.get_object().delete()
+            messages.success(request, _('The selected product has been deleted.'))
+            return HttpResponseRedirect(success_url)
+        else:
+            o = self.get_object()
+            o.active = False
+            o.save()
+            messages.success(request, _('The selected product has been deactivated.'))
+            return HttpResponseRedirect(success_url)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.items', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })

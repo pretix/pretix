@@ -21,6 +21,7 @@
                     <th>{% trans "Product name" %}</th>
                     <th>{% trans "Category" %}</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -35,6 +36,7 @@
                             <a href="{% url "control:event.items.up" organizer=request.event.organizer.slug event=request.event.slug item=i.identity %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
                             <a href="{% url "control:event.items.down" organizer=request.event.organizer.slug event=request.event.slug item=i.identity %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
                         </td>
+                        <td class="text-right"><a href="{% url "control:event.items.delete" organizer=request.event.organizer.slug event=request.event.slug item=i.identity %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></td>
                     </tr>
                     {% endfor %}
                 {% endfor %}

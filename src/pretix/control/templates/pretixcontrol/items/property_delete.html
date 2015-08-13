@@ -14,7 +14,7 @@
 	{% else %}
 		<form action="" method="post" class="form-horizontal">
 			{% csrf_token %}
-			<p>{% blocktrans %}Are you sure you want to the property <strong>{{ property }}</strong>?{% endblocktrans %}</p>
+			<p>{% blocktrans %}Are you sure you want to delete the property <strong>{{ property }}</strong>?{% endblocktrans %}</p>
             <div class="form-group submit-group">
                 <a href="{% url "control:event.items.properties" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
                     {% trans "Cancel" %}
