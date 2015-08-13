@@ -1,5 +1,7 @@
 .. highlight:: ini
 
+.. _`config`:
+
 Configuration file
 ==================
 
