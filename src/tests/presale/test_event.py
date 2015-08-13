@@ -43,9 +43,16 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
         super().setUp()
         self.driver.implicitly_wait(10)
 
+    def test_not_active(self):
+        q = Quota.objects.create(event=self.event, name='Quota', size=2)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=False)
+        q.items.add(item)
+        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
+        self.assertNotIn("Early-bird", self.driver.find_element_by_css_selector("body").text)
+
     def test_without_category(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
         q.items.add(item)
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
         self.assertIn("Early-bird", self.driver.find_element_by_css_selector("section .product-row:first-child").text)

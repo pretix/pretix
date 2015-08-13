@@ -34,7 +34,9 @@ class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Fetch all items
-        items = self.request.event.items.all().select_related(
+        items = self.request.event.items.all().filter(
+            active=True
+        ).select_related(
             'category',  # for re-grouping
         ).prefetch_related(
             'properties',  # for .get_all_available_variations()

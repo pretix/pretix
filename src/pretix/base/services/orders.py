@@ -80,6 +80,9 @@ def check_positions(event, dt, positions, quotas_locked):
     err = None
 
     for i, cp in enumerate(positions):
+        if not cp.item.active:
+            err = err or error_messages['unavailable']
+            continue
         quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
         if cp.expires >= dt:
             # Other checks are not necessary

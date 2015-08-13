@@ -208,7 +208,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
             # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
             quotas = list(item.quotas.all()) if variation is None else list(variation.quotas.all())
 
-            if price is False or len(quotas) == 0:
+            if price is False or len(quotas) == 0 or not item.active:
                 self.error_message(self.error_messages['unavailable'])
                 continue
 
