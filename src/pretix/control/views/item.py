@@ -908,7 +908,7 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
         return context
 
     def is_allowed(self) -> bool:
-        return not self.get_object().positions.current.exists()
+        return not self.get_object().positions.exists()
 
     def get_object(self, queryset=None) -> Property:
         if not hasattr(self, 'object') or not self.object:
