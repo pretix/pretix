@@ -22,6 +22,38 @@ class I18nStringTest(TestCase):
         translation.activate('de')
         self.assertEqual(str(s), 'Hallo')
 
+    def test_similar_translations(self):
+        data = {
+            'en': 'You',
+            'de': 'Sie',
+            'de-informal': 'Du'
+        }
+        s = LazyI18nString(data)
+        translation.activate('de')
+        self.assertEqual(str(s), 'Sie')
+        translation.activate('de-informal')
+        self.assertEqual(str(s), 'Du')
+
+        data = {
+            'en': 'You',
+            'de-informal': 'Du'
+        }
+        s = LazyI18nString(data)
+        translation.activate('de')
+        self.assertEqual(str(s), 'Du')
+        translation.activate('de-informal')
+        self.assertEqual(str(s), 'Du')
+
+        data = {
+            'en': 'You',
+            'de': 'Sie'
+        }
+        s = LazyI18nString(data)
+        translation.activate('de')
+        self.assertEqual(str(s), 'Sie')
+        translation.activate('de-informal')
+        self.assertEqual(str(s), 'Sie')
+
     def test_missing_default_translation(self):
         data = {
             'de': 'Hallo',

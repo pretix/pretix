@@ -36,8 +36,14 @@ class LazyI18nString:
             return ""
         if isinstance(self.data, dict):
             lng = translation.get_language()
+            firstpart = lng.split('-')[0]
+            similar = [l for l in self.data.keys() if l.startswith(firstpart + "-")]
             if lng in self.data and self.data[lng]:
                 return self.data[lng]
+            elif firstpart in self.data:
+                return self.data[firstpart]
+            elif similar:
+                return self.data[similar[0]]
             elif settings.LANGUAGE_CODE in self.data and self.data[settings.LANGUAGE_CODE]:
                 return self.data[settings.LANGUAGE_CODE]
             elif len(self.data):

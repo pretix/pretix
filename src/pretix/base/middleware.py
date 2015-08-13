@@ -26,7 +26,15 @@ class LocaleMiddleware(BaseLocaleMiddleware):
         language = get_language_from_request(request)
         if hasattr(request, 'event') and not request.path.startswith(get_script_prefix() + 'control'):
             if language not in request.event.settings.locales:
-                language = request.event.settings.locale
+                firstpart = language.split('-')[0]
+                if firstpart in request.event.settings.locales:
+                    language = firstpart
+                else:
+                    language = request.event.settings.locale
+                    for lang in request.event.settings.locales:
+                        if lang == firstpart or lang.startswith(firstpart + '-'):
+                            language = lang
+                            break
         translation.activate(language)
         request.LANGUAGE_CODE = translation.get_language()
 

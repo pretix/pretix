@@ -170,7 +170,22 @@ LOCALE_PATHS = (
 LANGUAGES = (
     ('en', _('English')),
     ('de', _('German')),
+    ('de-informal', _('German (informal)')),
 )
+
+EXTRA_LANG_INFO = {
+    'de-informal': {
+        'bidi': False,
+        'code': 'de-informal',
+        'name': 'German (informal)',
+        'name_local': 'Deutsch (Du)'
+    },
+}
+
+# Add custom languages not provided by Django
+import django.conf.locale
+django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
+
 
 AUTH_USER_MODEL = 'pretixbase.User'
 LOGIN_URL = '/login'  # global login does not yet exist
