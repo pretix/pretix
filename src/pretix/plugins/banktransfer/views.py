@@ -135,7 +135,7 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
                         organizer=self.request.event.organizer.slug)
 
     def annotate_data(self, data):
-        pattern = re.compile(self.request.event.slug.upper() + "([A-Z0-9]{5})")
+        pattern = re.compile(self.request.event.slug.upper() + "[ ]*([A-Z0-9]{5})")
         amount_pattern = re.compile("[^0-9.-]")
         for row in data:
             row['ok'] = False
