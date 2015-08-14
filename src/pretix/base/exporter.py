@@ -1,4 +1,3 @@
-from django import forms
 from django.dispatch import receiver
 from django.http import HttpRequest, HttpResponse, JsonResponse
 
@@ -68,3 +67,92 @@ class BaseExporter:
         :param request: The HTTP request of the user requesting the export
         """
         raise NotImplementedError()  # NOQA
+
+
+class JSONExporter(BaseExporter):
+    identifier = 'json'
+    verbose_name = 'JSON'
+
+    def render(self, request):
+        jo = {
+            'event': {
+                'name': str(self.event.name),
+                'slug': self.event.slug,
+                'organizer': {
+                    'name': str(self.event.organizer.name),
+                    'slug': self.event.organizer.slug
+                },
+                'categories': [
+                    {
+                        'id': c.identity,
+                        'name': str(c.name)
+                    } for c in self.event.categories.current.all()
+                ],
+                'items': [
+                    {
+                        'id': i.identity,
+                        'name': str(i.name),
+                        'category': i.category_id,
+                        'price': i.default_price,
+                        'admission': i.admission,
+                        'active': i.active,
+                        'variations': [
+                            {
+                                'id': v.identity,
+                                'active': v.active,
+                                'price': v.default_price if v.default_price is not None else i.default_price,
+                                'name': str(v)
+                            } for v in i.variations.current.all()
+                        ]
+                    } for i in self.event.items.current.all().prefetch_related('variations')
+                ],
+                'questions': [
+                    {
+                        'id': q.identity,
+                        'question': str(q.question),
+                        'type': q.type
+                    } for q in self.event.questions.current.all()
+                ],
+                'orders': [
+                    {
+                        'code': o.code,
+                        'status': o.status,
+                        'user': o.user.identifier,
+                        'datetime': o.datetime,
+                        'payment_fee': o.payment_fee,
+                        'total': o.total,
+                        'positions': [
+                            {
+                                'item': p.item_id,
+                                'variation': p.variation_id,
+                                'price': p.price,
+                                'attendee_name': p.attendee_name,
+                                'answers': [
+                                    {
+                                        'question': a.question_id,
+                                        'answer': a.answer
+                                    } for a in p.answers.all()
+                                ]
+                            } for p in o.positions.current.all()
+                        ]
+                    } for o in
+                    self.event.orders.current.all().prefetch_related('positions', 'positions__answers').select_related(
+                        'user')
+                ],
+                'quotas': [
+                    {
+                        'id': q.identity,
+                        'size': q.size,
+                        'items': [i.id for i in q.items.all()],
+                        'variations': [v.id for v in q.variations.all()],
+                    } for q in self.event.quotas.current.all().prefetch_related('items', 'variations')
+                ]
+            }
+        }
+
+        return JsonResponse(jo)
+
+
+@receiver(register_data_exporters)
+def register_json_export(sender, **kwargs):
+    return JSONExporter
