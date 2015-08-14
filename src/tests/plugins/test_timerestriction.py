@@ -239,7 +239,7 @@ class TimeRestrictionTest(TestCase):
                 self.assertTrue(v['available'])
                 self.assertEqual(v['price'], 12)
             else:
-                self.assertFalse(v['available'])
+                self.assertTrue(v['available'])
 
     def test_variation_specifics(self):
         self.item.properties.add(self.property)
@@ -281,5 +281,7 @@ class TimeRestrictionTest(TestCase):
             if 'variation' in v and v['variation'].pk == self.variation1.pk:
                 self.assertTrue(v['available'])
                 self.assertEqual(v['price'], 8)
-            else:
+            elif 'variation' in v and v['variation'].pk == self.variation3.pk:
                 self.assertFalse(v['available'])
+            else:
+                self.assertTrue(v['available'])

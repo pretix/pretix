@@ -67,6 +67,8 @@ def availability_handler(sender, **kwargs):
                 var_restrictions.append(restriction)
 
         if not var_restrictions:
+            v['available'] = True
+            v['price'] = None
             continue
 
         # If this point is reached, there ARE time restrictions for this item
