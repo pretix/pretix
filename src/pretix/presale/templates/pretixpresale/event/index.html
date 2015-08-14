@@ -133,7 +133,7 @@
                                     {% if item.short_description %}<p>{{ item.short_description }}</p>{% endif %}
                                 </div>
                                 <div class="col-md-2 col-xs-6 price">
-                                    {{ event.currency }} {{ item.price }}
+                                    {{ event.currency }} {{ item.price|floatformat:2 }}
                                     {% if item.tax_rate %}
                                         <br /><small>{% blocktrans trimmed with rate=item.tax_rate %}
                                         incl. {{ rate }}% taxes
