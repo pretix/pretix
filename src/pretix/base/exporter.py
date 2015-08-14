@@ -1,0 +1,70 @@
+from django import forms
+from django.dispatch import receiver
+from django.http import HttpRequest, HttpResponse, JsonResponse
+
+from pretix.base.signals import register_data_exporters
+
+
+class BaseExporter:
+    """
+    This is the base class for all data exporters
+    """
+
+    def __init__(self, event):
+        self.event = event
+
+    def __str__(self):
+        return self.identifier
+
+    @property
+    def verbose_name(self) -> str:
+        """
+        A human-readable name for this exporter. This should be short but
+        self-explaining. Good examples include 'JSON' or 'Microsoft Excel'.
+        """
+        raise NotImplementedError()  # NOQA
+
+    @property
+    def identifier(self) -> str:
+        """
+        A short and unique identifier for this exporter.
+        This should only contain lowercase letters and in most
+        cases will be the same as your packagename.
+        """
+        raise NotImplementedError()  # NOQA
+
+    @property
+    def export_form_fields(self) -> dict:
+        """
+        When the event's administrator administrator visits the export page, this method
+        is called to return the configuration fields available.
+
+        It should therefore return a dictionary where the keys should be field names and
+        the values should be corresponding Django form fields.
+
+        We suggest that you return an ``OrderedDict`` object instead of a dictionary.
+        Your implementation could look like this::
+
+            @property
+            def export_form_fields(self):
+                return OrderedDict(
+                    [
+                        ('tab_width',
+                         forms.IntegerField(
+                             label=_('Tab width'),
+                             default=4
+                         ))
+                    ]
+                )
+        """
+        return {}
+
+    def render(self, request: HttpRequest) -> HttpResponse:
+        """
+        Render the exported file and return a request that either contains the file
+        or redirects to it.
+
+        :type request: HttpRequest
+        :param request: The HTTP request of the user requesting the export
+        """
+        raise NotImplementedError()  # NOQA

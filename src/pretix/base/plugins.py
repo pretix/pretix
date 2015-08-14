@@ -10,6 +10,7 @@ class PluginType(Enum):
     RESTRICTION = 1
     PAYMENT = 2
     ADMINFEATURE = 3
+    EXPORT = 4
 
 
 def get_all_plugins() -> "List[class]":

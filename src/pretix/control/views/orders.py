@@ -1,5 +1,6 @@
 from itertools import groupby
 
+from django import forms
 from django.contrib import messages
 from django.db.models import Q, Count, Sum
 from django.http import HttpResponse
@@ -11,7 +12,9 @@ from django.views.generic import DetailView, ListView, TemplateView, View
 
 from pretix.base.models import Item, ItemCategory, Order, OrderPosition, Quota
 from pretix.base.services.orders import mark_order_paid
-from pretix.base.signals import register_payment_providers
+from pretix.base.signals import (
+    register_data_exporters, register_payment_providers,
+)
 from pretix.control.forms.orders import ExtendForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 
@@ -325,3 +328,45 @@ class OrderGo(EventPermissionRequiredMixin, View):
         except Order.DoesNotExist:
             messages.error(request, _('There is no order with the given order code.'))
             return redirect('control:event.orders', event=request.event.slug, organizer=request.event.organizer.slug)
+
+
+class ExportView(EventPermissionRequiredMixin, TemplateView):
+    permission = 'can_view_orders'
+    template_name = 'pretixcontrol/orders/export.html'
+
+    @cached_property
+    def exporters(self):
+        exporters = []
+        responses = register_data_exporters.send(self.request.event)
+        for receiver, response in responses:
+            ex = response(self.request.event)
+            ex.form = forms.Form(
+                data=(self.request.POST if self.request.method == 'POST' else None)
+            )
+            ex.form.fields = ex.export_form_fields
+            exporters.append(ex)
+        return exporters
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['exporters'] = self.exporters
+        return ctx
+
+    @cached_property
+    def exporter(self):
+        for ex in self.exporters:
+            if ex.identifier == self.request.POST.get("exporter"):
+                return ex
+
+    def post(self, *args, **kwargs):
+        if not self.exporter:
+            messages.error(self.request, _('The selected exporter was not found.'))
+            return redirect('control:event.orders.export', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug
+            })
+        if not self.exporter.form.is_valid():
+            messages.error(self.request, _('There was a problem processing your input. See below for error details.'))
+            return self.get(*args, **kwargs)
+
+        return self.exporter.render(self.request)

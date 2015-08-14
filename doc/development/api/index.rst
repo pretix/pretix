@@ -10,4 +10,5 @@ Contents:
    restriction
    payment
    ticketoutput
+   exporter
    general

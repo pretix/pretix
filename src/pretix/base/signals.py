@@ -69,3 +69,11 @@ subclass of pretix.base.ticketoutput.BaseTicketOutput
 register_ticket_outputs = EventPluginSignal(
     providing_args=[]
 )
+
+"""
+This signal is sent out to get all known data exporters. Receivers should return a
+subclass of pretix.base.exporter.BaseExporter
+"""
+register_data_exporters = EventPluginSignal(
+    providing_args=[]
+)

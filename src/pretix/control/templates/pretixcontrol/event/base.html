@@ -114,6 +114,12 @@
                         {% trans "Overview" %}
                     </a>
                 </li>
+                <li>
+                    <a href="{% url 'control:event.orders.export' organizer=request.event.organizer.slug event=request.event.slug %}"
+                       {% if url_name == "event.orders.export" %}class="active"{% endif %}>
+                        {% trans "Export" %}
+                    </a>
+                </li>
             </ul>
         </li>
     {% endif %}
