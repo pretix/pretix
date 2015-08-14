@@ -56,9 +56,22 @@ def availability_handler(sender, **kwargs):
 
     # Walk through all variations we are asked for
     for v in variations:
+        var_restrictions = []
+        for restriction in restrictions:
+            applied_to = list(restriction.variations.current.all())
+
+            # Only take this restriction into consideration if it
+            # is directly applied to this variation or if the item
+            # has no variations
+            if v.empty() or ('variation' in v and v['variation'] in applied_to):
+                var_restrictions.append(restriction)
+
+        if not var_restrictions:
+            continue
+
         # If this point is reached, there ARE time restrictions for this item
         # Therefore, it is only available inside one of the timeframes, but not
-        # without any timeframe
+        # without any timeframe.
         available = False
 
         # Make up some unique key for this variation
@@ -79,15 +92,7 @@ def availability_handler(sender, **kwargs):
 
         # Walk through all restriction objects applied to this item
         prices = []
-        for restriction in restrictions:
-            applied_to = list(restriction.variations.current.all())
-
-            # Only take this restriction into consideration if it
-            # is directly applied to this variation or if the item
-            # has no variations
-            if not v.empty() and ('variation' not in v or v['variation'] not in applied_to):
-                continue
-
+        for restriction in var_restrictions:
             if restriction.timeframe_from <= now() <= restriction.timeframe_to:
                 # Selling this item is currently possible
                 available = True

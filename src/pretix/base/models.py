@@ -1022,14 +1022,21 @@ class Item(Versionable):
             else:
                 var['price'] = self.default_price
 
+            # It is possible, that *multiple* restriction plugins change the default price.
+            # In this case, the cheapest one wins. As soon as there is a restriction
+            # that changes the price, the default price has no effect.
+
             newprice = None
             for receiver, response in responses:
-                if 'available' in response[i]:
-                    var['available'] &= response[i]['available']
+                if 'available' in response[i] and not response[i]['available']:
+                    var['available'] = False
+                    break
                 if 'price' in response[i] and response[i]['price'] is not None \
                         and (newprice is None or response[i]['price'] < newprice):
                     newprice = response[i]['price']
             var['price'] = newprice or var['price']
+
+        variations = [var for var in variations if var['available']]
 
         self._get_all_available_variations_cache = variations
         return variations
