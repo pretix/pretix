@@ -1022,12 +1022,14 @@ class Item(Versionable):
             else:
                 var['price'] = self.default_price
 
+            newprice = None
             for receiver, response in responses:
                 if 'available' in response[i]:
                     var['available'] &= response[i]['available']
                 if 'price' in response[i] and response[i]['price'] is not None \
-                        and response[i]['price'] < var['price']:
-                    var['price'] = response[i]['price']
+                        and (newprice is None or response[i]['price'] < newprice):
+                    newprice = response[i]['price']
+            var['price'] = newprice or var['price']
 
         self._get_all_available_variations_cache = variations
         return variations
