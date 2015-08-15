@@ -13,6 +13,14 @@
             <div id="obd_chart" style="height: 250px;"></div>
         </div>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "Orders by product" %}</h3>
+        </div>
+        <div class="panel-body">
+            <div id="obp_chart" style="height: 250px;"></div>
+        </div>
+    </div>
     {% compress js %}
         <script type="text/javascript" src="{% static "pretixplugins/statistics/raphael-min.js" %}"></script>
         <script type="text/javascript" src="{% static "pretixplugins/statistics/morris.min.js" %}"></script>
@@ -22,6 +30,15 @@
             element: 'obd_chart',
             data: {{ obd_data|safe }},
             xkey: 'date',
+            ykeys: ['ordered', 'paid'],
+            labels: ['{% trans "Placed orders" %}', '{% trans "Paid orders" %}'],
+            lineColors: ['#000099', '#009900'],
+            resize: true
+        });
+        new Morris.Bar({
+            element: 'obp_chart',
+            data: {{ obp_data|safe }},
+            xkey: 'item',
             ykeys: ['ordered', 'paid'],
             labels: ['{% trans "Placed orders" %}', '{% trans "Paid orders" %}'],
             lineColors: ['#000099', '#009900'],

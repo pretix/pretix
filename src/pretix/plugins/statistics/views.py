@@ -6,7 +6,7 @@ import dateutil.rrule
 from django.db.models import Count
 from django.views.generic import TemplateView
 
-from pretix.base.models import Order
+from pretix.base.models import Item, Order, OrderPosition
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 
@@ -17,6 +17,7 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
+        # Orders by day
         ordered_by_day = {
             # we receive different types depending on whether we are running on
             # MySQL or SQLite
@@ -48,5 +49,32 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
             })
 
         ctx['obd_data'] = json.dumps(data)
+
+        # Orders by product
+        num_ordered = {
+            p['item']: p['cnt']
+            for p in (OrderPosition.objects.current
+                      .filter(order__event=self.request.event)
+                      .values('item', 'variation')
+                      .annotate(cnt=Count('id')))
+        }
+        num_paid = {
+            p['item']: p['cnt']
+            for p in (OrderPosition.objects.current
+                      .filter(order__event=self.request.event, order__status=Order.STATUS_PAID)
+                      .values('item', 'variation')
+                      .annotate(cnt=Count('id')))
+        }
+        item_names = {
+            i.identity: str(i.name)
+            for i in Item.objects.current.filter(event=self.request.event)
+        }
+        ctx['obp_data'] = [
+            {
+                'item': item_names[item],
+                'ordered': cnt,
+                'paid': num_paid.get(item, 0)
+            } for item, cnt in num_ordered.items()
+        ]
 
         return ctx
