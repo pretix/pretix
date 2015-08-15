@@ -1,6 +1,8 @@
 import logging
+from collections import OrderedDict
 from io import BytesIO
 
+from django import forms
 from django.contrib.staticfiles import finders
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
@@ -27,13 +29,17 @@ class PdfTicketOutput(BaseTicketOutput):
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'inline; filename="order%s%s.pdf"' % (request.event.slug, order.code)
 
-        pagesize = request.event.settings.get('ticketpdf_pagesize', default='A4')
+        pagesize = request.event.settings.get('ticketoutput_pdf_pagesize', default='A4')
         if hasattr(pagesizes, pagesize):
             pagesize = getattr(pagesizes, pagesize)
         else:
             pagesize = pagesizes.A4
+        orientation = request.event.settings.get('ticketoutput_pdf_orientation', default='portrait')
+        if hasattr(pagesizes, orientation):
+            pagesize = getattr(pagesizes, orientation)(pagesize)
+
         defaultfname = finders.find('pretixpresale/pdf/ticket_default_a4.pdf')
-        fname = request.event.settings.get('ticketpdf_background', default=defaultfname)
+        fname = request.event.settings.get('ticketoutput_pdf_background', default=defaultfname)
         # TODO: Handle file objects
 
         buffer = BytesIO()
@@ -79,3 +85,32 @@ class PdfTicketOutput(BaseTicketOutput):
 
         output.write(response)
         return response
+
+    @property
+    def settings_form_fields(self) -> dict:
+        return OrderedDict(
+            list(super().settings_form_fields.items()) + [
+                ('paper_size',
+                 forms.ChoiceField(
+                     label=_('Paper size'),
+                     choices=(
+                         ('A4', 'A4'),
+                         ('A5', 'A5'),
+                         ('B4', 'B4'),
+                         ('B5', 'B5'),
+                         ('letter', 'Letter'),
+                         ('legal', 'Legal'),
+                     ),
+                     required=False
+                 )),
+                ('orientation',
+                 forms.ChoiceField(
+                     label=_('Paper orientation'),
+                     choices=(
+                         ('portrait', _('Portrait')),
+                         ('landscape', _('Landscape')),
+                     ),
+                     required=False
+                 )),
+            ]
+        )
