@@ -4,6 +4,7 @@ from io import BytesIO
 
 from django import forms
 from django.contrib.staticfiles import finders
+from django.core.files import File
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 
@@ -41,7 +42,8 @@ class PdfTicketOutput(BaseTicketOutput):
 
         defaultfname = finders.find('pretixpresale/pdf/ticket_default_a4.pdf')
         fname = request.event.settings.get('ticketoutput_pdf_background', default=defaultfname)
-        # TODO: Handle file objects
+        if isinstance(fname, File):
+            fname = fname.name
 
         buffer = BytesIO()
         p = canvas.Canvas(buffer, pagesize=pagesize)
