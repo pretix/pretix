@@ -1,9 +1,10 @@
 import datetime
 import json
+from decimal import Decimal
 
 import dateutil.parser
 import dateutil.rrule
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.views.generic import TemplateView
 
 from pretix.base.models import Item, Order, OrderPosition
@@ -76,5 +77,25 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
                 'paid': num_paid.get(item, 0)
             } for item, cnt in num_ordered.items()
         ]
+
+        rev_by_day = {
+            o['payment_date'].date(): o['sum']
+            for o in
+            Order.objects.current.filter(event=self.request.event, payment_date__isnull=False).values(
+                'payment_date').annotate(sum=Sum('total'))
+            }
+        data = []
+        total = 0
+        for d in dateutil.rrule.rrule(
+                dateutil.rrule.DAILY,
+                dtstart=min(ordered_by_day.keys()),
+                until=max(max(ordered_by_day.keys()), max(paid_by_day.keys()))):
+            d = d.date()
+            total += float(rev_by_day.get(d, 0))
+            data.append({
+                'date': d.strftime('%Y-%m-%d'),
+                'revenue': round(total, 2),
+            })
+        ctx['rev_data'] = json.dumps(data)
 
         return ctx
