@@ -4,3 +4,7 @@
 {% compress css %}
     <link type="text/css" rel="stylesheet" href="{% static "pretixplugins/statistics/morris.css" %}">
 {% endcompress %}
+{% compress js %}
+    <script type="text/javascript" src="{% static "pretixplugins/statistics/raphael-min.js" %}"></script>
+    <script type="text/javascript" src="{% static "pretixplugins/statistics/morris.min.js" %}"></script>
+{% endcompress %}

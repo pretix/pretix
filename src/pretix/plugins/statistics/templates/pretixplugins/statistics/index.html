@@ -21,10 +21,6 @@
             <div id="obp_chart" style="height: 250px;"></div>
         </div>
     </div>
-    {% compress js %}
-        <script type="text/javascript" src="{% static "pretixplugins/statistics/raphael-min.js" %}"></script>
-        <script type="text/javascript" src="{% static "pretixplugins/statistics/morris.min.js" %}"></script>
-    {% endcompress %}
     <script type="text/javascript">
         new Morris.Line({
             element: 'obd_chart',
