@@ -18,7 +18,13 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
 
         ordered_by_day = {
-            (o['datetime'] if isinstance(o['datetime'], datetime.date) else dateutil.parser.parse(o['datetime'])).date(): o['count']
+            # we receive different types depending on whether we are running on
+            # MySQL or SQLite
+            (
+                o['datetime']
+                if isinstance(o['datetime'], datetime.date)
+                else dateutil.parser.parse(o['datetime']).date()
+            ): o['count']
             for o in
             Order.objects.current.filter(event=self.request.event).extra({'datetime': "date(datetime)"}).values(
                 'datetime').annotate(count=Count('id'))
