@@ -19,35 +19,24 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
 
         # Orders by day
-        ordered_by_day = {
-            # we receive different types depending on whether we are running on
-            # MySQL or SQLite
-            (
-                o['datetime']
-                if isinstance(o['datetime'], datetime.date)
-                else dateutil.parser.parse(o['datetime']).date()
-            ): o['count']
-            for o in
-            Order.objects.current.filter(event=self.request.event).extra({'datetime': "date(datetime)"}).values(
-                'datetime').annotate(count=Count('id'))
-        }
-        paid_by_day = {
-            (
-                o['payment_date']
-                if isinstance(o['payment_date'], datetime.date)
-                else dateutil.parser.parse(o['payment_date']).date()
-            ): o['count']
-            for o in
-            Order.objects.current.filter(event=self.request.event,
-                                         payment_date__isnull=False).extra(
-                {'payment_date': 'date(payment_date)'}
-            ).values('payment_date').annotate(count=Count('id'))
-        }
+        ordered_by_day = {}
+        for o in Order.objects.current.filter(event=self.request.event).values('datetime'):
+            day = o['datetime'].date()
+            ordered_by_day[day] = ordered_by_day.get(day, 0) + 1
+        paid_by_day = {}
+        for o in Order.objects.current.filter(event=self.request.event,
+                                              payment_date__isnull=False).values('payment_date'):
+            day = o['payment_date'].date()
+            paid_by_day[day] = paid_by_day.get(day, 0) + 1
+
         data = []
         for d in dateutil.rrule.rrule(
                 dateutil.rrule.DAILY,
-                dtstart=min(ordered_by_day.keys()),
-                until=max(max(ordered_by_day.keys()), max(paid_by_day.keys()))):
+                dtstart=min(ordered_by_day.keys() if ordered_by_day else datetime.date.today()),
+                until=max(
+                    max(ordered_by_day.keys() if paid_by_day else [datetime.date.today()]),
+                    max(paid_by_day.keys() if paid_by_day else [datetime.date(1970, 1, 1)])
+                )):
             d = d.date()
             data.append({
                 'date': d.strftime('%Y-%m-%d'),
@@ -84,25 +73,19 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
             } for item, cnt in num_ordered.items()
         ]
 
-        rev_by_day = {
-            (
-                o['payment_date']
-                if isinstance(o['payment_date'], datetime.date)
-                else dateutil.parser.parse(o['payment_date']).date()
-            ): o['sum']
-            for o in
-            Order.objects.current.filter(event=self.request.event,
-                                         status=Order.STATUS_PAID,
-                                         payment_date__isnull=False).extra(
-                {'payment_date': 'date(payment_date)'}
-            ).values('payment_date').annotate(sum=Sum('total'))
-        }
+        rev_by_day = {}
+        for o in Order.objects.current.filter(event=self.request.event,
+                                              status=Order.STATUS_PAID,
+                                              payment_date__isnull=False).values('payment_date', 'total'):
+            day = o['payment_date'].date()
+            rev_by_day[day] = rev_by_day.get(day, 0) + o['total']
+
         data = []
         total = 0
         for d in dateutil.rrule.rrule(
                 dateutil.rrule.DAILY,
-                dtstart=min(rev_by_day.keys()),
-                until=max(rev_by_day.keys())):
+                dtstart=min(rev_by_day.keys() if rev_by_day else [datetime.date.today()]),
+                until=max(rev_by_day.keys() if rev_by_day else [datetime.date.today()])):
             d = d.date()
             total += float(rev_by_day.get(d, 0))
             data.append({

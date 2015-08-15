@@ -30,7 +30,7 @@
         </div>
     </div>
     <script type="text/javascript">
-        new Morris.Line({
+        new Morris.Area({
             element: 'obd_chart',
             data: {{ obd_data|safe }},
             xkey: 'date',
@@ -38,7 +38,9 @@
             labels: ['{% trans "Placed orders" %}', '{% trans "Paid orders" %}'],
             lineColors: ['#000099', '#009900'],
             smooth: false,
-            resize: true
+            resize: true,
+            fillOpacity: 0.3,
+            behaveLikeLine: true
         });
         new Morris.Area({
             element: 'rev_chart',
@@ -48,7 +50,7 @@
             labels: ['{% trans "Total revenue" %}'],
             smooth: false,
             resize: true,
-            fillOpacity: 0.5,
+            fillOpacity: 0.3,
             preUnits: '{{ request.event.currency }} '
         });
         new Morris.Bar({
