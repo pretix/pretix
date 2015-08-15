@@ -140,7 +140,7 @@ class Stripe(BasePaymentProvider):
     def order_control_render(self, request, order) -> str:
         if order.payment_info:
             payment_info = json.loads(order.payment_info)
-            if 'amout' in payment_info:
+            if 'amount' in payment_info:
                 payment_info['amount'] /= 100
         else:
             payment_info = None
