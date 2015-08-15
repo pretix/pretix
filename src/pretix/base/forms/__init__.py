@@ -110,9 +110,12 @@ class SettingsForm(forms.Form):
                     for chunk in value.chunks():
                         destination.write(chunk)
                 value._name = fname
-            elif isinstance(field, forms.FileField):  # value should be None
+            elif isinstance(value, File):
+                # file is unchanged
+                continue
+            elif isinstance(field, forms.FileField):
+                # file is deleted
                 fname = self.obj.settings.get(name, as_type=File)
-                value = None
                 if fname:
                     try:
                         os.unlink(fname.name)
