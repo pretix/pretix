@@ -9,6 +9,7 @@ from django.views.generic import TemplateView
 
 from pretix.base.models import Item, Order, OrderPosition
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.plugins.statistics.signals import clear_cache
 
 
 class IndexView(EventPermissionRequiredMixin, TemplateView):
@@ -17,6 +18,9 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+
+        if 'latest' in self.request.GET:
+            clear_cache()
 
         cache = self.request.event.get_cache()
 
