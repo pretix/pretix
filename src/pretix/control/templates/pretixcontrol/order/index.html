@@ -33,6 +33,15 @@
                                 {% trans "Refund order" %}
                             </a>
                         {% endif %}
+
+                        {% if can_download %}
+                            {% for b in download_buttons %}
+                                <a href="{% url "presale:event.order.download" organizer=request.event.organizer.slug event=request.event.slug order=order.code output=b.identifier %}"
+                                   class="btn btn-default">
+                                    <span class="fa {{ b.icon }}"></span> {{ b.text }}
+                                </a>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
             </form>

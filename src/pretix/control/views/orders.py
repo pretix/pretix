@@ -2,6 +2,7 @@ from itertools import groupby
 
 from django import forms
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.db.models import Q, Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -14,6 +15,7 @@ from pretix.base.models import Item, ItemCategory, Order, OrderPosition, Quota
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.signals import (
     register_data_exporters, register_payment_providers,
+    register_ticket_outputs,
 )
 from pretix.control.forms.orders import ExtendForm
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -72,15 +74,42 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
             if provider.identifier == self.order.payment_provider:
                 return provider
 
+    def get_order_url(self):
+        return reverse('control:event.order', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'code': self.order.code
+        })
+
 
 class OrderDetail(OrderView):
     template_name = 'pretixcontrol/order/index.html'
     permission = 'can_view_orders'
 
+    @cached_property
+    def download_buttons(self):
+        buttons = []
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if not provider.is_enabled:
+                continue
+            buttons.append({
+                'icon': provider.download_button_icon or 'fa-download',
+                'text': provider.download_button_text or 'fa-download',
+                'identifier': provider.identifier,
+            })
+        return buttons
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['items'] = self.get_items()
         ctx['event'] = self.request.event
+        ctx['download_buttons'] = self.download_buttons
+        ctx['can_download'] = (
+            self.request.event.settings.ticket_download
+            and self.order.status == Order.STATUS_PAID
+        )
         ctx['payment'] = self.payment_provider.order_control_render(self.request, self.object)
         return ctx
 
@@ -150,10 +179,7 @@ class OrderTransition(OrderView):
             ret = self.payment_provider.order_control_refund_perform(self.request, self.order)
             if ret:
                 return redirect(ret)
-        return redirect('control:event.order',
-                        event=self.request.event.slug,
-                        organizer=self.request.event.organizer.slug,
-                        code=self.order.code)
+        return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):
         to = self.request.GET.get('status', '')
@@ -168,6 +194,26 @@ class OrderTransition(OrderView):
             })
         else:
             return HttpResponse(status=405)
+
+
+class OrderDownload(OrderView):
+
+    @cached_property
+    def output(self):
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if provider.identifier == self.kwargs.get('output'):
+                return provider
+
+    def get(self, request, *args, **kwargs):
+        if not self.output or not self.output.is_enabled:
+            messages.error(request, _('You requested an invalid ticket output type.'))
+            return redirect(self.get_order_url())
+        if self.order.status != Order.STATUS_PAID:
+            messages.error(request, _('Order is not paid.'))
+            return redirect(self.get_order_url())
+        return self.output.generate(request, self.order)
 
 
 class OrderExtend(OrderView):
