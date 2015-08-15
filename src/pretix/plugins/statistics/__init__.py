@@ -10,7 +10,7 @@ class StatisticsApp(AppConfig):
 
     class PretixPluginMeta:
         type = PluginType.ADMINFEATURE
-        name = _("Display various statistics")
+        name = _("Statistics")
         author = _("the pretix team")
         version = '1.0.0'
         description = _("This plugin shows you various statistics.")

@@ -17,7 +17,9 @@
             data: {{ obd_data|safe }},
             xkey: 'date',
             ykeys: ['ordered', 'paid'],
-            labels: ['{% trans "Placed orders" %}', '{% trans "Paid orders" %}']
+            labels: ['{% trans "Placed orders" %}', '{% trans "Paid orders" %}'],
+            lineColors: ['#000099', '#009900'],
+            resize: true
         });
     </script>
 {% endblock %}
