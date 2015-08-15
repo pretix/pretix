@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inside %}
-    <form action="" method="post" class="form-horizontal">
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         <fieldset>
             <legend>{% trans "Ticket download" %}</legend>

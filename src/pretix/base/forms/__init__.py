@@ -1,6 +1,11 @@
 import copy
+import logging
+import os
 
 from django import forms
+from django.conf import settings
+from django.core.files import File
+from django.core.files.uploadedfile import UploadedFile
 from django.db import models
 from django.forms.models import BaseModelForm, ModelFormMetaclass
 from django.utils import six
@@ -8,6 +13,9 @@ from django.utils.translation import ugettext_lazy as _
 from versions.models import Versionable
 
 from pretix.base.i18n import I18nFormField
+from pretix.base.models import Event
+
+logger = logging.getLogger('pretix.plugins.ticketoutputpdf')
 
 
 class BaseI18nModelForm(BaseModelForm):
@@ -89,6 +97,28 @@ class SettingsForm(forms.Form):
     def save(self):
         for name, field in self.fields.items():
             value = self.cleaned_data[name]
+
+            if isinstance(value, UploadedFile):
+                if isinstance(self.obj, Event):
+                    fname = '%s/%s/%s.%s' % (
+                        self.obj.organizer.slug, self.obj.slug, name, value.name.split('.')[-1]
+                    )
+                else:
+                    fname = '%s/%s.%s' % (self.obj.slug, name, value.name.split('.')[-1])
+                fpath = os.path.join(settings.MEDIA_ROOT, fname)
+                with open(fpath, 'wb+') as destination:
+                    for chunk in value.chunks():
+                        destination.write(chunk)
+                value._name = fname
+            elif isinstance(field, forms.FileField):  # value should be None
+                fname = self.obj.settings.get(name, as_type=File)
+                value = None
+                if fname:
+                    try:
+                        os.unlink(fname.name)
+                    except OSError:
+                        logger.error('Deleting file %s failed.' % fname.name)
+
             if value is None:
                 del self.obj.settings[name]
             elif self.obj.settings.get(name, as_type=type(value)) != value:

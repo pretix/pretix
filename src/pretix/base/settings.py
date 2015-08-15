@@ -1,9 +1,12 @@
 import decimal
 import json
+import os
 from datetime import date, datetime, time
+from urllib.parse import urljoin
 
 import dateutil.parser
 from django.conf import settings
+from django.core.files import File
 from django.db.models import Model
 from versions.models import Versionable
 
@@ -134,6 +137,14 @@ class SettingsProxy:
             return json.loads(value)
         elif as_type == bool or value in ('True', 'False'):
             return value == 'True'
+        elif as_type == File:
+            try:
+                f = open(os.path.join(settings.MEDIA_ROOT, value[7:]), 'r')
+                fi = File(f)
+                fi.url = urljoin(settings.MEDIA_URL, value[7:])
+                return fi
+            except OSError:
+                return False
         elif as_type == datetime:
             return dateutil.parser.parse(value)
         elif as_type == date:
@@ -160,6 +171,8 @@ class SettingsProxy:
             return value.identity
         elif isinstance(value, Model):
             return value.pk
+        elif isinstance(value, File):
+            return 'file://' + value.name
 
         raise TypeError('Unable to serialize %s into a setting.' % str(type(value)))
 
@@ -173,14 +186,19 @@ class SettingsProxy:
             as_type = DEFAULTS[key]['type']
 
         if key in self._cache():
-            return self._unserialize(self._cache()[key].value, as_type)
-        value = None
-        if self._parent:
-            value = self._parent.settings.get(key)
-        if value is None and key in DEFAULTS:
-            return self._unserialize(DEFAULTS[key]['default'], as_type)
-        if value is None and default is not None:
-            return self._unserialize(default, as_type)
+            value = self._cache()[key].value
+        else:
+            value = None
+            if self._parent:
+                value = self._parent.settings.get(key)
+            if value is None and key in DEFAULTS:
+                value = DEFAULTS[key]['default']
+            if value is None and default is not None:
+                value = default
+
+        if as_type is None and value is not None and value.startswith('file://'):
+            as_type = File
+
         return self._unserialize(value, as_type)
 
     def __getitem__(self, key):

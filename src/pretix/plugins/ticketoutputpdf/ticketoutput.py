@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.ticketoutput import BaseTicketOutput
+from pretix.control.forms import ExtFileField
 
 logger = logging.getLogger('pretix.plugins.ticketoutputpdf')
 
@@ -110,6 +111,12 @@ class PdfTicketOutput(BaseTicketOutput):
                          ('portrait', _('Portrait')),
                          ('landscape', _('Landscape')),
                      ),
+                     required=False
+                 )),
+                ('background',
+                 ExtFileField(
+                     label=_('Background PDF'),
+                     ext_whitelist=(".pdf", ),
                      required=False
                  )),
             ]

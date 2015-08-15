@@ -185,7 +185,6 @@ class ProviderForm(SettingsForm):
         for k, v in self.fields.items():
             val = cleaned_data.get(k)
             if v._required and (val is None or val == ""):
-                print(enabled, k, v)
                 self.add_error(k, _('This field is required.'))
 
 
@@ -217,5 +216,4 @@ class TicketSettingsForm(SettingsForm):
         for k, v in self.fields.items():
             val = cleaned_data.get(k)
             if v._required and (val is None or val == ""):
-                print(enabled, k, v)
                 self.add_error(k, _('This field is required.'))

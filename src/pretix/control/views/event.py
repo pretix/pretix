@@ -231,7 +231,8 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
             provider.form = ProviderForm(
                 obj=self.request.event,
                 settingspref='ticketoutput_%s_' % provider.identifier,
-                data=(self.request.POST if self.request.method == 'POST' else None)
+                data=(self.request.POST if self.request.method == 'POST' else None),
+                files=(self.request.FILES if self.request.method == 'POST' else None)
             )
             provider.form.fields = OrderedDict(
                 [

@@ -1,3 +1,4 @@
+import os
 from functools import partial
 from itertools import product
 
@@ -403,3 +404,21 @@ class VariationsField(forms.ModelMultipleChoiceField):
         return cleaned_value
 
     choices = property(_get_choices, forms.ChoiceField._set_choices)
+
+
+class ExtFileField(forms.FileField):
+
+    def __init__(self, *args, **kwargs):
+        ext_whitelist = kwargs.pop("ext_whitelist")
+        self.ext_whitelist = [i.lower() for i in ext_whitelist]
+        super().__init__(*args, **kwargs)
+
+    def clean(self, *args, **kwargs):
+        data = super().clean(*args, **kwargs)
+        if data:
+            filename = data.name
+            ext = os.path.splitext(filename)[1]
+            ext = ext.lower()
+            if ext not in self.ext_whitelist:
+                raise forms.ValidationError(_("Filetype not allowed!"))
+        return data
