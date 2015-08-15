@@ -49,7 +49,7 @@
             smooth: false,
             resize: true,
             fillOpacity: 0.5,
-            postUnits: ' {{ request.event.currency }}'
+            preUnits: '{{ request.event.currency }} '
         });
         new Morris.Bar({
             element: 'obp_chart',
