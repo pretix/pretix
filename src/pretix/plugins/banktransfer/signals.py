@@ -8,12 +8,12 @@ from pretix.control.signals import nav_event
 from .payment import BankTransfer
 
 
-@receiver(register_payment_providers)
+@receiver(register_payment_providers, dispatch_uid="payment_banktransfer")
 def register_payment_provider(sender, **kwargs):
     return BankTransfer
 
 
-@receiver(nav_event)
+@receiver(nav_event, dispatch_uid="payment_banktransfer_nav")
 def control_nav_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
     if not request.eventperm.can_change_orders:

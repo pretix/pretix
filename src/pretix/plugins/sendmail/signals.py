@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.control.signals import nav_event
 
 
-@receiver(nav_event)
+@receiver(nav_event, dispatch_uid="sendmail_nav")
 def control_nav_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
     if not request.eventperm.can_change_orders:

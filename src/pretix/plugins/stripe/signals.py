@@ -7,14 +7,14 @@ from pretix.base.signals import register_payment_providers
 from pretix.presale.signals import html_head
 
 
-@receiver(register_payment_providers)
+@receiver(register_payment_providers, dispatch_uid="payment_stripe")
 def register_payment_provider(sender, **kwargs):
     from .payment import Stripe
 
     return Stripe
 
 
-@receiver(html_head)
+@receiver(html_head, dispatch_uid="payment_stripe_html_head")
 def html_head_presale(sender, request=None, **kwargs):
     from .payment import Stripe
 

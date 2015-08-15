@@ -21,7 +21,7 @@ def timediff(restrictions):
             yield (r.timeframe_to - now()).total_seconds()
 
 
-@receiver(determine_availability)
+@receiver(determine_availability, dispatch_uid="restriction_time")
 def availability_handler(sender, **kwargs):
     # Handle the signal's input arguments
     item = kwargs['item']
@@ -131,7 +131,7 @@ class TimeRestrictionForm(RestrictionForm):
         ]
 
 
-@receiver(restriction_formset)
+@receiver(restriction_formset, dispatch_uid="restriction_time_formset")
 def formset_handler(sender, **kwargs):
     formset = inlineformset_factory(
         Item,

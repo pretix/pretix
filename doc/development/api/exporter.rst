@@ -25,7 +25,7 @@ that we'll soon create::
     from pretix.base.signals import register_data_exporter
 
 
-    @receiver(register_data_exporter)
+    @receiver(register_data_exporter, dispatch_uid="exporter_myexporter")
     def register_data_exporter(sender, **kwargs):
         from .exporter import MyExporter
         return MyExporter

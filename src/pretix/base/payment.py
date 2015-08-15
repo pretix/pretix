@@ -445,6 +445,6 @@ class FreeOrderProvider(BasePaymentProvider):
         ).aggregate(sum=Sum('price'))['sum'] == 0
 
 
-@receiver(register_payment_providers)
+@receiver(register_payment_providers, dispatch_uid="payment_free")
 def register_payment_provider(sender, **kwargs):
     return FreeOrderProvider

@@ -108,7 +108,7 @@ In our example, the implementation could look like this::
     from .models import TimeRestriction
 
 
-    @receiver(determine_availability)
+    @receiver(determine_availability, dispatch_uid="restriction_time")
     def availability_handler(sender, **kwargs):
         # Handle the signal's input arguments
         item = kwargs['item']
@@ -273,7 +273,7 @@ Our time restriction example looks like this::
             ]
 
 
-    @receiver(restriction_formset)
+    @receiver(restriction_formset, dispatch_uid="restriction_formset_time")
     def formset_handler(sender, **kwargs):
         formset = inlineformset_factory(
             Item,

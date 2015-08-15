@@ -153,6 +153,6 @@ class JSONExporter(BaseExporter):
         return JsonResponse(jo)
 
 
-@receiver(register_data_exporters)
+@receiver(register_data_exporters, dispatch_uid="exporter_json")
 def register_json_export(sender, **kwargs):
     return JSONExporter

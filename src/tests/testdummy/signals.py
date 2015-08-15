@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from pretix.base.signals import determine_availability, register_ticket_outputs
 
 
-@receiver(determine_availability)
+@receiver(determine_availability, dispatch_uid="restriction_dummy")
 def availability_handler(sender, **kwargs):
     kwargs['sender'] = sender
     if sender.settings.testdummy_available is not None:
@@ -15,7 +15,7 @@ def availability_handler(sender, **kwargs):
     return []
 
 
-@receiver(register_ticket_outputs)
+@receiver(register_ticket_outputs, dispatch_uid="output_dummy")
 def register_ticket_outputs(sender, **kwargs):
     from .ticketoutput import DummyTicketOutput
     return DummyTicketOutput
