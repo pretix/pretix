@@ -86,6 +86,10 @@ Example::
     One of ``mysql``, ``sqlite3``, ``oracle`` and ``postgresql_psycopg2``.
     Default: ``sqlite3``.
 
+    If you use MySQL, be sure to create your database using
+    ``CREATE DATABASE <dbname> CHARACTER SET utf8;``. Otherwise, Unicode
+    support will not properly work.
+
 ``name``
     The database's name. Default: ``db.sqlite3``.
 
