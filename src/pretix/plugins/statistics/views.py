@@ -32,10 +32,16 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
                 'datetime').annotate(count=Count('id'))
         }
         paid_by_day = {
-            o['payment_date'].date(): o['count']
+            (
+                o['payment_date']
+                if isinstance(o['payment_date'], datetime.date)
+                else dateutil.parser.parse(o['payment_date']).date()
+            ): o['count']
             for o in
-            Order.objects.current.filter(event=self.request.event, payment_date__isnull=False).values(
-                'payment_date').annotate(count=Count('id'))
+            Order.objects.current.filter(event=self.request.event,
+                                         payment_date__isnull=False).extra(
+                {'payment_date': 'date(payment_date)'}
+            ).values('payment_date').annotate(count=Count('id'))
         }
         data = []
         for d in dateutil.rrule.rrule(
@@ -79,12 +85,17 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
         ]
 
         rev_by_day = {
-            o['payment_date'].date(): o['sum']
+            (
+                o['payment_date']
+                if isinstance(o['payment_date'], datetime.date)
+                else dateutil.parser.parse(o['payment_date']).date()
+            ): o['sum']
             for o in
             Order.objects.current.filter(event=self.request.event,
                                          status=Order.STATUS_PAID,
-                                         payment_date__isnull=False).values(
-                'payment_date').annotate(sum=Sum('total'))
+                                         payment_date__isnull=False).extra(
+                {'payment_date': 'date(payment_date)'}
+            ).values('payment_date').annotate(sum=Sum('total'))
         }
         data = []
         total = 0
