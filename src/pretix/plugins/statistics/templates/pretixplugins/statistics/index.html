@@ -5,8 +5,14 @@
 {% block title %}{% trans "Statistics" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Statistics" %}</h1>
-    <h3>{% trans "Orders by day" %}</h3>
-    <div id="obd_chart" style="height: 250px;"></div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "Orders by day" %}</h3>
+        </div>
+        <div class="panel-body">
+            <div id="obd_chart" style="height: 250px;"></div>
+        </div>
+    </div>
     {% compress js %}
         <script type="text/javascript" src="{% static "pretixplugins/statistics/raphael-min.js" %}"></script>
         <script type="text/javascript" src="{% static "pretixplugins/statistics/morris.min.js" %}"></script>
