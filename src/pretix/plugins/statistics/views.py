@@ -1,10 +1,12 @@
+import datetime
 import json
-from django.db.models import Count
-from django.views.generic import TemplateView
+
 import dateutil.parser
 import dateutil.rrule
-from pretix.base.models import Order
+from django.db.models import Count
+from django.views.generic import TemplateView
 
+from pretix.base.models import Order
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 
@@ -16,7 +18,7 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
 
         ordered_by_day = {
-            dateutil.parser.parse(o['datetime']).date(): o['count']
+            (o['datetime'] if isinstance(o['datetime'], datetime.date) else dateutil.parser.parse(o['datetime'])).date(): o['count']
             for o in
             Order.objects.current.filter(event=self.request.event).extra({'datetime': "date(datetime)"}).values(
                 'datetime').annotate(count=Count('id'))

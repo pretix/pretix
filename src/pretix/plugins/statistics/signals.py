@@ -4,7 +4,7 @@ from django.template import Context
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.control.signals import nav_event, html_head
+from pretix.control.signals import html_head, nav_event
 
 
 @receiver(nav_event)
