@@ -58,14 +58,14 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
                 p['item']: p['cnt']
                 for p in (OrderPosition.objects.current
                           .filter(order__event=self.request.event)
-                          .values('item', 'variation')
+                          .values('item')
                           .annotate(cnt=Count('id')))
             }
             num_paid = {
                 p['item']: p['cnt']
                 for p in (OrderPosition.objects.current
                           .filter(order__event=self.request.event, order__status=Order.STATUS_PAID)
-                          .values('item', 'variation')
+                          .values('item')
                           .annotate(cnt=Count('id')))
             }
             item_names = {
