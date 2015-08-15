@@ -77,3 +77,19 @@ subclass of pretix.base.exporter.BaseExporter
 register_data_exporters = EventPluginSignal(
     providing_args=[]
 )
+
+"""
+This signal is sent out every time an order is placed. The order object is given
+as the first argument.
+"""
+order_placed = EventPluginSignal(
+    providing_args=["order"]
+)
+
+"""
+This signal is sent out every time an order is paid. The order object is given
+as the first argument.
+"""
+order_paid = EventPluginSignal(
+    providing_args=["order"]
+)

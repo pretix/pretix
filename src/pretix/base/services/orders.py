@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Order, OrderPosition, Quota
 from pretix.base.services.mail import mail
+from pretix.base.signals import order_paid, order_placed
 from pretix.helpers.urls import build_absolute_uri
 
 
@@ -37,6 +38,7 @@ def mark_order_paid(order, provider=None, info=None, date=None, manual=None, for
         order.payment_manual = manual
     order.status = Order.STATUS_PAID
     order.save()
+    order_paid.send(order.event, order=order)
 
     if quotas_locked:
         for quota in quotas_locked:
@@ -179,4 +181,5 @@ def place_order(event, user, positions, dt, payment_provider):
         payment_provider=payment_provider.identifier,
     )
     OrderPosition.transform_cart_positions(positions, order)
+    order_placed.send(event, order=order)
     return order
