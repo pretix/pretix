@@ -1,0 +1,24 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load compress %}
+{% load staticfiles %}
+{% block title %}{% trans "Statistics" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Statistics" %}</h1>
+    <h3>{% trans "Orders by day" %}</h3>
+    <div id="obd_chart" style="height: 250px;"></div>
+    {% compress js %}
+        <script type="text/javascript" src="{% static "pretixplugins/statistics/raphael-min.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixplugins/statistics/morris.min.js" %}"></script>
+    {% endcompress %}
+    <script type="text/javascript">
+        new Morris.Line({
+            element: 'obd_chart',
+            data: {{ obd_data|safe }},
+            xkey: 'date',
+            ykeys: ['ordered', 'paid'],
+            labels: ['{% trans "Placed orders" %}', '{% trans "Paid orders" %}']
+        });
+    </script>
+{% endblock %}
+

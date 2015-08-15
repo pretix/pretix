@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'pretix.plugins.paypal',
     'pretix.plugins.ticketoutputpdf',
     'pretix.plugins.sendmail',
+    'pretix.plugins.statistics',
     'easy_thumbnails',
 )
 
