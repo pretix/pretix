@@ -81,15 +81,17 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
         rev_by_day = {
             o['payment_date'].date(): o['sum']
             for o in
-            Order.objects.current.filter(event=self.request.event, payment_date__isnull=False).values(
+            Order.objects.current.filter(event=self.request.event,
+                                         status=Order.STATUS_PAID,
+                                         payment_date__isnull=False).values(
                 'payment_date').annotate(sum=Sum('total'))
-            }
+        }
         data = []
         total = 0
         for d in dateutil.rrule.rrule(
                 dateutil.rrule.DAILY,
-                dtstart=min(ordered_by_day.keys()),
-                until=max(max(ordered_by_day.keys()), max(paid_by_day.keys()))):
+                dtstart=min(rev_by_day.keys()),
+                until=max(rev_by_day.keys())):
             d = d.date()
             total += float(rev_by_day.get(d, 0))
             data.append({
