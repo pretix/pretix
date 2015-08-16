@@ -2,6 +2,7 @@ import configparser
 import os
 import sys
 
+import django.conf.locale
 from django.contrib.messages import constants as messages  # NOQA
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _  # NOQA
@@ -182,8 +183,6 @@ EXTRA_LANG_INFO = {
     },
 }
 
-# Add custom languages not provided by Django
-import django.conf.locale
 django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
 
 
