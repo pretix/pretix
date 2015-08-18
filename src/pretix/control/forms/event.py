@@ -153,7 +153,8 @@ class EventSettingsForm(SettingsForm):
     mail_prefix = forms.CharField(
         label=_("Subject prefix"),
         help_text=_("This will be prepended to the subject of all outgoing emails. This could be a short form of "
-                    "your event name.")
+                    "your event name."),
+        required=False
     )
     mail_from = forms.EmailField(
         label=_("Sender address"),
