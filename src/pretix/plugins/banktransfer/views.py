@@ -9,12 +9,10 @@ from decimal import Decimal
 from django import forms
 from django.contrib import messages
 from django.shortcuts import redirect, render
-from django.utils.decorators import method_decorator
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import TemplateView
-from pip.utils import cached_property
 
 from pretix.base.models import Order, Quota
 from pretix.base.services.orders import mark_order_paid
