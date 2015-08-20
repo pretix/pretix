@@ -199,7 +199,7 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             row['ok'] = False
             match = pattern.search(row['reference'].upper())
             if not match:
-                row['class'] = ''
+                row['class'] = 'warning'
                 row['message'] = _('No order code detected')
                 continue
 
@@ -208,24 +208,23 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
                 order = Order.objects.current.get(event=self.request.event,
                                                   code=code)
             except Order.DoesNotExist:
-                row['class'] = 'error'
+                row['class'] = 'danger'
                 row['message'] = _('Unknown order code detected')
             else:
                 row['order'] = order
                 if order.status == Order.STATUS_PENDING:
                     amount = Decimal(amount_pattern.sub("", row['amount'].replace(",", ".")))
                     if amount != order.total:
-                        row['class'] = 'error'
+                        row['class'] = 'danger'
                         row['message'] = _('Found wrong amount. Expected: %s' % str(order.total))
                     else:
                         row['class'] = 'success'
                         row['message'] = _('Valid payment')
                         row['ok'] = True
                 elif order.status == Order.STATUS_CANCELLED:
-                    row['class'] = 'error'
+                    row['class'] = 'danger'
                     row['message'] = _('Order has been cancelled')
                 elif order.status == Order.STATUS_PAID:
-                    # TODO: Do a plausibility check to tell duplicate payments from overlapping import files
                     row['class'] = ''
                     row['message'] = _('Order already has been paid')
                 elif order.status == Order.STATUS_REFUNDED:
