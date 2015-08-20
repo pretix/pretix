@@ -232,7 +232,3 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
                     row['class'] = 'warning'
                     row['message'] = _('Order has been refunded')
         return data
-
-    @method_decorator(sensitive_post_parameters)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)

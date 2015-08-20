@@ -10,7 +10,10 @@ Reinventing ticket presales, one bit at a time.
 
 Project status
 --------------
-We are really working on it, but it will take a while. Currently, this is as unstable as it can be. Everything can change daily. Try it, hack on it, write pull requests, write documentation, translate it but don't use it and don't put data in it.
+The basic features are present and sufficiently stable. pretix has been in use for one event and
+sold a few hundred tickets so far. However, many features are missing and the admin UI is far from
+being complete, so we **do not recommend** production use yet.
+
 
 Maintainer
 ----------
