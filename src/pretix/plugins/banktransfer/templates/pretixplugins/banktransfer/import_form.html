@@ -1,25 +1,50 @@
 {% extends "pretixplugins/banktransfer/import_base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
 {% block inner %}
-    <p>{% blocktrans trimmed %}
-        This page allows you to upload bank statement files to process incoming payments.
-    {% endblocktrans %}</p>
-    <p>{% blocktrans trimmed %}
-        Currently, this feature supports <code>.csv</code> files and files in the MT940 format.
-    {% endblocktrans %}</p>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">{% trans "Upload a new file" %}</h3>
         </div>
         <div class="panel-body">
+            <p>{% blocktrans trimmed %}
+                This page allows you to upload bank statement files to process incoming payments.
+            {% endblocktrans %}</p>
+            <p>{% blocktrans trimmed %}
+                Currently, this feature supports <code>.csv</code> files and files in the MT940 format.
+            {% endblocktrans %}</p>
             <form action="" method="post" enctype="multipart/form-data" class="form-inline">
                 {% csrf_token %}
                 <div class="form-group">
-                    <input type="file" name="file" />
+                    <label for="file">{% trans "Import file" %}: </label> <input id="file" type="file" name="file" />
                 </div>
+                <div class="clearfix"></div>
                 <button class="btn btn-primary pull-right" type="submit">
                     <span class="icon icon-upload"></span> {% trans "Start upload" %}
                 </button>
-            </form></div>
+            </form>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "HBCI import" %}</h3>
+        </div>
+        <div class="panel-body">
+            {% if hbci_available %}
+            <form action="" method="post" class="form-horizontal">
+                {% csrf_token %}
+                {% bootstrap_form hbci_form layout='horizontal' %}
+                <div class="clearfix"></div>
+                {% trans "Please note that this step might take a few minutes." %}
+                <button class="btn btn-primary pull-right" type="submit">
+                    <span class="icon icon-upload"></span> {% trans "Import" %}
+                </button>
+            </form>
+            {% else %}
+                <div class="alert alert-error">
+                    {% trans "HBCI is only available with Python 3.3 or newer and with aqbanking-cli and aqhbci-tool4 installed." %}
+                </div>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

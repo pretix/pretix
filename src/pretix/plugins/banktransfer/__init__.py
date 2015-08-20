@@ -27,6 +27,10 @@ class BankTransferApp(AppConfig):
             import chardet  # NOQA
         except ImportError:
             errs.append(_("Install the python package 'chardet' for better CSV import capabilities."))
+        try:
+            import defusedxml  # NOQA
+        except ImportError:
+            errs.append(_("Please install the python package 'defusedxml' for security reasons."))
         return errs
 
 
