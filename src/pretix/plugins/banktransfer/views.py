@@ -196,8 +196,13 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
         for row in data:
             row['ok'] = False
             match = pattern.search(row['reference'].upper())
+            try:
+                amount = Decimal(amount_pattern.sub("", row['amount'].replace(",", ".")))
+            except:
+                logger.exception('Could not parse amount of transaction')
+                amount = 0
             if not match:
-                row['class'] = 'warning'
+                row['class'] = 'warning' if amount > 0 else ''
                 row['message'] = _('No order code detected')
                 continue
 
@@ -211,7 +216,6 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             else:
                 row['order'] = order
                 if order.status == Order.STATUS_PENDING:
-                    amount = Decimal(amount_pattern.sub("", row['amount'].replace(",", ".")))
                     if amount != order.total:
                         row['class'] = 'danger'
                         row['message'] = _('Found wrong amount. Expected: %s' % str(order.total))
