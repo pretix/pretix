@@ -1,2 +1,3 @@
 chardet>=2.3,<3
+defusedxml
 

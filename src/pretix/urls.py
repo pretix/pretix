@@ -1,4 +1,4 @@
-import importlib
+import importlib.util
 
 from django.apps import apps
 from django.conf import settings
@@ -22,13 +22,11 @@ if settings.DEBUG:
 pluginpatterns = []
 for app in apps.get_app_configs():
     if hasattr(app, 'PretixPluginMeta'):
-        try:
+        if importlib.util.find_spec(app.name + '.urls'):
             urlmod = importlib.import_module(app.name + '.urls')
             pluginpatterns.append(
                 url(r'', include(urlmod, namespace=app.label))
             )
-        except ImportError:
-            pass
 urlpatterns.append(
     url(r'', include(pluginpatterns, namespace='plugins'))
 )
