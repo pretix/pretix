@@ -8,4 +8,5 @@ class LessFilter(CompilerFilter):
 
     def input(self, **kwargs):
         content = super(LessFilter, self).input(**kwargs)
+        kwargs.setdefault('filename', self.filename)
         return CssAbsoluteFilter(content).input(**kwargs)
