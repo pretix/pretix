@@ -1,0 +1,19 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "pretixdroid configuration" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "pretixdroid configuration" %}</h1>
+    <p>{% blocktrans trimmed %}
+        pretixdroid is an Android app that you can use to control tickets at the entrance of your event.
+        If you try to configure the app, it will ask you to scan the QR code below.
+    {% endblocktrans %}</p>
+    <div id="qrcodeCanvas"></div>
+    <script type="text/javascript">
+        jQuery('#qrcodeCanvas').qrcode({
+            text: '{{ qrdata|safe }}'
+        });
+    </script>
+    <a href="?flush_key=1" class="btn btn-default">{% trans "Reset authentication token" %}</a>
+{% endblock %}
+
