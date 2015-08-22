@@ -50,6 +50,30 @@
     <div class="panel panel-primary items">
         <div class="panel-heading">
             <h3 class="panel-title">
+                {% trans "Order details" %}
+            </h3>
+        </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>{% trans "Order code" %}</dt>
+                <dd>{{ order.code }}</dd>
+                <dt>{% trans "Order date" %}</dt>
+                <dd>{{ order.datetime }}</dd>
+                {% if order.status == "p" %}
+                    <dt>{% trans "Payment date" %}</dt>
+                    <dd>{{ order.payment_date }}</dd>
+                {% elif order.status == "n" %}
+                    <dt>{% trans "Expiry date" %}</dt>
+                    <dd>{{ order.expires }}</dd>
+                {% endif %}
+                <dt>{% trans "Username" %}</dt>
+                <dd>{{ order.user }}</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="panel panel-primary items">
+        <div class="panel-heading">
+            <h3 class="panel-title">
                 {% trans "Ordered items" %}
             </h3>
         </div>
