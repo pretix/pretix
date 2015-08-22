@@ -41,7 +41,6 @@ class PdfTicketOutput(BaseTicketOutput):
             pagesize = getattr(pagesizes, orientation)(pagesize)
 
         fname = self.settings.get('background', as_type=File)
-        print(fname)
         if isinstance(fname, File):
             fname = fname.name
         else:
