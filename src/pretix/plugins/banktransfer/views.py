@@ -108,12 +108,9 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        if sys.version_info[:2] >= (3, 3):
-            ctx['hbci_available'] = shutil.which('aqbanking-cli') and shutil.which('aqhbci-tool4')
-            if ctx['hbci_available']:
-                ctx['hbci_form'] = self.hbci_form
-        else:
-            ctx['hbci_available'] = False
+        ctx['hbci_available'] = shutil.which('aqbanking-cli') and shutil.which('aqhbci-tool4')
+        if ctx['hbci_available']:
+            ctx['hbci_form'] = self.hbci_form
         return ctx
 
     def process_csv_file(self):
