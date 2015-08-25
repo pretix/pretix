@@ -56,7 +56,7 @@ class LazyI18nString:
     def __repr__(self):
         return '<LazyI18nString: %s>' % repr(self.data)
 
-    def __lt__(self, other):
+    def __lt__(self, other):  # NOQA
         return str(self) < str(other)
 
 
@@ -209,7 +209,7 @@ class I18nFieldMixin:
             return json.dumps({k: v for k, v in value.items() if v}, sort_keys=True)
         return value
 
-    def get_prep_lookup(self, lookup_type, value):
+    def get_prep_lookup(self, lookup_type, value):  # NOQA
         raise TypeError('Lookups on i18n string currently not supported.')
 
     def formfield(self, **kwargs):

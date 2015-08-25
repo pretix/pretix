@@ -177,6 +177,34 @@ class UserTestCase(TestCase):
         u.save()
         self.assertEqual(u.identifier, "test@example.com")
 
+    def test_name(self):
+        o = Organizer.objects.create(name='Dummy', slug='dummy')
+        event = Event.objects.create(
+            organizer=o, name='Dummy', slug='dummy',
+            date_from=now(),
+        )
+        u = User.objects.create_local_user(event, 'test', 'test')
+        self.assertEqual(u.get_local_name(), 'test')
+        u.givenname = "Christopher"
+        u.familyname = "Nolan"
+        u.set_password("test")
+        u.save()
+        self.assertEqual(u.get_full_name(), 'Nolan, Christopher')
+        self.assertEqual(u.get_short_name(), 'Christopher')
+        u.givenname = None
+        u.save()
+        self.assertEqual(u.get_full_name(), 'Nolan')
+        self.assertEqual(u.get_short_name(), 'Nolan')
+        u.givenname = "Christopher"
+        u.familyname = None
+        u.save()
+        self.assertEqual(u.get_full_name(), 'Christopher')
+        self.assertEqual(u.get_short_name(), 'Christopher')
+        u.givenname = None
+        u.save()
+        self.assertEqual(u.get_full_name(), 'test')
+        self.assertEqual(u.get_short_name(), 'test')
+
 
 class BaseQuotaTestCase(TestCase):
 

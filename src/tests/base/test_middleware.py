@@ -70,3 +70,39 @@ class LocaleDeterminationTest(TestCase):
         response = c.get('/control/login')
         language = response['Content-Language']
         self.assertEqual(language, self.TEST_LOCALE)
+
+    def test_event_allowed(self):
+        self.event.settings.set('locales', ['de', 'en'])
+        c = Client()
+        cookies = c.cookies
+        cookies[settings.LANGUAGE_COOKIE_NAME] = 'de'
+        response = c.get('/dummy/dummy/')
+        language = response['Content-Language']
+        self.assertEqual(language, 'de')
+
+    def test_event_fallback_to_short(self):
+        self.event.settings.set('locales', ['de'])
+        c = Client()
+        cookies = c.cookies
+        cookies[settings.LANGUAGE_COOKIE_NAME] = 'de-informal'
+        response = c.get('/dummy/dummy/')
+        language = response['Content-Language']
+        self.assertEqual(language, 'de')
+
+    def test_event_fallback_to_long(self):
+        self.event.settings.set('locales', ['de-informal'])
+        c = Client()
+        cookies = c.cookies
+        cookies[settings.LANGUAGE_COOKIE_NAME] = 'de'
+        response = c.get('/dummy/dummy/')
+        language = response['Content-Language']
+        self.assertEqual(language, 'de-informal')
+
+    def test_event_not_allowed(self):
+        self.event.settings.set('locales', ['en'])
+        c = Client()
+        cookies = c.cookies
+        cookies[settings.LANGUAGE_COOKIE_NAME] = 'de'
+        response = c.get('/dummy/dummy/')
+        language = response['Content-Language']
+        self.assertEqual(language, 'en')

@@ -38,10 +38,10 @@ class Versionable(BaseVersionable):
         a performance optimization for cases in which we have to handle the Many2Many relations
         by hand anyways.
         """
-        if not self.pk:
+        if not self.pk:  # NOQA
             raise ValueError('Instance must be saved before it can be cloned')
 
-        if self.version_end_date:
+        if self.version_end_date:  # NOQA
             raise ValueError('This is a historical item and can not be cloned.')
 
         if forced_version_date:
@@ -112,7 +112,8 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, identifier, password=None):
+    def create_superuser(self, identifier, password=None):  # NOQA
+        # Not used in the software but required by Django
         if password is None:
             raise Exception("You must provide a password")
         user = self.model(identifier=identifier, email=identifier)
@@ -287,7 +288,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             return self.username
         if self.email:
             return self.email
-        return self.identifier
+        return self.identifier  # NOQA
 
 
 class Organizer(Versionable):

@@ -1,6 +1,8 @@
 from datetime import date, datetime, time
 from decimal import Decimal
 
+from django.core.files import File
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
 
@@ -21,6 +23,14 @@ class SettingsTestCase(TestCase):
             organizer=self.organizer, name='Dummy', slug='dummy',
             date_from=now(),
         )
+
+    def test_organizer_set_explicit(self):
+        self.organizer.settings.test = 'foo'
+        self.assertEqual(self.organizer.settings.test, 'foo')
+
+        # Reload object
+        self.organizer = Organizer.objects.get(identity=self.organizer.identity)
+        self.assertEqual(self.organizer.settings.test, 'foo')
 
     def test_event_set_explicit(self):
         self.event.settings.test = 'foo'
@@ -152,6 +162,20 @@ class SettingsTestCase(TestCase):
             self.assertTrue(False, 'No exception thrown!')
         except TypeError:
             pass
+
+    def test_serialize_file(self):
+        val = SimpleUploadedFile("sample_invalid_image.jpg", b"file_content", content_type="image/jpeg")
+        self.event.settings.set('test', val)
+        self.event.settings._flush()
+        self.assertIsInstance(self.event.settings.get('test', as_type=File), File)
+        self.assertTrue(self.event.settings.get('test', as_type=File).name.endswith(val.name))
+
+    def test_detect_file_value(self):
+        val = SimpleUploadedFile("sample_invalid_image.jpg", b"file_content", content_type="image/jpeg")
+        self.event.settings.set('test', val)
+        self.event.settings._flush()
+        self.assertIsInstance(self.event.settings.get('test'), File)
+        self.assertTrue(self.event.settings.get('test').name.endswith(val.name))
 
     def _test_serialization(self, val, as_type):
         self.event.settings.set('test', val)

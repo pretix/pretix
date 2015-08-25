@@ -32,7 +32,7 @@ class LocaleMiddleware(BaseLocaleMiddleware):
                 else:
                     language = request.event.settings.locale
                     for lang in request.event.settings.locales:
-                        if lang == firstpart or lang.startswith(firstpart + '-'):
+                        if lang.startswith(firstpart + '-'):
                             language = lang
                             break
         translation.activate(language)
@@ -107,7 +107,7 @@ def get_language_from_browser(request) -> str:
 def get_default_language():
     try:
         return get_supported_language_variant(settings.LANGUAGE_CODE)
-    except LookupError:
+    except LookupError:  # NOQA
         return settings.LANGUAGE_CODE
 
 
