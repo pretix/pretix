@@ -596,7 +596,7 @@ class ItemCategory(Versionable):
     class Meta:
         verbose_name = _("Product category")
         verbose_name_plural = _("Product categories")
-        ordering = ('position', 'id')
+        ordering = ('position', 'version_birth_date')
 
     def __str__(self):
         return str(self.name)
@@ -611,12 +611,12 @@ class ItemCategory(Versionable):
         if self.event:
             self.event.get_cache().clear()
 
+    @property
+    def sortkey(self):
+        return self.position, self.version_birth_date
+
     def __lt__(self, other):
-        if self.position < other.position:
-            return True
-        if self.position == other.position:
-            return self.pk < other.pk
-        return False
+        return self.sortkey < other.sortkey
 
 
 class Property(Versionable):
@@ -686,7 +686,7 @@ class PropertyValue(Versionable):
     class Meta:
         verbose_name = _("Property value")
         verbose_name_plural = _("Property values")
-        ordering = ("position",)
+        ordering = ("position", "version_birth_date")
 
     def __str__(self):
         return "%s: %s" % (self.prop.name, self.value)
@@ -703,7 +703,7 @@ class PropertyValue(Versionable):
 
     @property
     def sortkey(self):
-        return self.position, self.pk
+        return self.position, self.version_birth_date
 
     def __lt__(self, other):
         return self.sortkey < other.sortkey
