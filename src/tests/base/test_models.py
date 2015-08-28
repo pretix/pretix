@@ -4,8 +4,8 @@ from django.test import TestCase
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Organizer,
-    Property, PropertyValue, Question, Quota, User,
+    CartPosition, Event, Item, ItemCategory, ItemVariation, Order,
+    OrderPosition, Organizer, Property, PropertyValue, Question, Quota, User,
 )
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.types import VariationDict
@@ -405,3 +405,30 @@ class OrderTestCase(BaseQuotaTestCase):
         assert self.order.can_modify_answers
         self.event.settings.set('last_order_modification_date', now() - timedelta(days=1))
         assert not self.order.can_modify_answers
+
+
+class ItemCategoryTest(TestCase):
+    """
+    This test case tests various methods around the category model.
+    """
+    @classmethod
+    def setUpTestData(cls):
+        o = Organizer.objects.create(name='Dummy', slug='dummy')
+        cls.event = Event.objects.create(
+            organizer=o, name='Dummy', slug='dummy',
+            date_from=now(),
+        )
+
+    def test_sorting(self):
+        c1 = ItemCategory.objects.create(event=self.event)
+        c2 = ItemCategory.objects.create(event=self.event)
+        assert c1 < c2
+        c1.position = 2
+        c2.position = 1
+        assert c2 < c1
+        assert not c1 < c2
+        assert c1 > c2
+        c1.position = 1
+        c2.position = 2
+        assert c1 < c2
+        assert c2 > c1

@@ -44,7 +44,7 @@ class Versionable(BaseVersionable):
         if self.version_end_date:  # NOQA
             raise ValueError('This is a historical item and can not be cloned.')
 
-        if forced_version_date:
+        if forced_version_date:  # NOQA
             if not self.version_start_date <= forced_version_date <= get_utc_now():
                 raise ValueError('The clone date must be between the version start date and now.')
         else:

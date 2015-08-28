@@ -237,6 +237,21 @@ class DeadlineTest(EventTestMixin, TestCase):
         self.assertIn('alert-danger', response.rendered_content)
         self.assertIn('is over', response.rendered_content)
 
+    def test_not_set(self):
+        self.event.presale_start = None
+        self.event.presale_end = None
+        self.event.save()
+        response = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('alert-info', response.rendered_content)
+        self.assertIn('checkout-button-row', response.rendered_content)
+        response = self.client.post(
+            '/%s/%s/cart/add' % (self.orga.slug, self.event.slug)
+        )
+        self.assertNotEqual(response.status_code, 403)
+
     def test_in_time(self):
         self.event.presale_start = now() - datetime.timedelta(days=1)
         self.event.presale_end = now() + datetime.timedelta(days=1)

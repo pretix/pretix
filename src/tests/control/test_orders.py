@@ -85,3 +85,16 @@ def test_order_transition_to_paid_success(client, env):
     })
     o = Order.objects.current.get(identity=env[2].identity)
     assert o.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_order_transition_to_unpaid_success(client, env):
+    o = Order.objects.current.get(identity=env[2].identity)
+    o.status = Order.STATUS_PAID
+    o.save()
+    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'status': 'n'
+    })
+    o = Order.objects.current.get(identity=env[2].identity)
+    assert o.status == Order.STATUS_PENDING
