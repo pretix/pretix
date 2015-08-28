@@ -35,7 +35,17 @@
                 {% csrf_token %}
                 {% bootstrap_form hbci_form layout='horizontal' %}
                 <div class="clearfix"></div>
-                {% trans "Please note that this step might take a few minutes." %}
+                <p>
+                    {% trans "Please note that this step might take a few minutes." %}
+                </p>
+                <div class="alert alert-warning">
+                    {% blocktrans trimmed %}
+                        Your HBCI PIN code is only stored on the server for a very short time and
+                        immediately deleted after the communication with the bank is over. However,
+                        we <strong>strongly advise</strong> you to ask your bank for HBCI credentials
+                        that have <strong>read-only</strong> access to your bank account.
+                    {% endblocktrans %}
+                </div>
                 <button class="btn btn-primary pull-right" type="submit">
                     <span class="icon icon-upload"></span> {% trans "Import" %}
                 </button>
