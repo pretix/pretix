@@ -31,6 +31,7 @@ Example::
     cookiedomain=.pretix.de
     securecookie=on
     datadir=/data
+    plugins_default=pretix.plugins.sendmail,pretix.plugins.statistics
 
 ``instance_name``
     The name of this installation. Default: ``pretix.de``
@@ -54,7 +55,12 @@ Example::
 
 ``datadir``
     The local path to a data directory that will be used for storing user uploads and similar
-    data. Defaults to the value of the environment variable ``DATA_DIR`` or ``data``.
+    data. Defaults to thea value of the environment variable ``DATA_DIR`` or ``data``.
+
+``plugins_default``
+    A comma-separated list of plugins that are enabled by default for all new events.
+    Defaults to ``pretix.plugins.sendmail,pretix.plugins.statistics``.
+
 
 Locale settings
 ---------------

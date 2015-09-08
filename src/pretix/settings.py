@@ -61,6 +61,9 @@ PRETIX_GLOBAL_REGISTRATION = config.getboolean('pretix', 'global_registration', 
 
 SITE_URL = config.get('pretix', 'url', fallback='http://localhost')
 
+PRETIX_PLUGINS_DEFAULT = config.get('pretix', 'plugins_default',
+                                    fallback='pretix.plugins.sendmail,pretix.plugins.statistics')
+
 DEFAULT_CURRENCY = config.get('pretix', 'currency', fallback='EUR')
 
 ALLOWED_HOSTS = config.get('django', 'hosts', fallback='localhost').split(',')
