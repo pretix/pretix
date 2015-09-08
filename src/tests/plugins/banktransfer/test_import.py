@@ -1,10 +1,13 @@
 from datetime import timedelta
 
+import pytest
 from bs4 import BeautifulSoup
 from django.core.files.uploadedfile import SimpleUploadedFile
-import pytest
 from django.utils.timezone import now
-from pretix.base.models import Event, EventPermission, Order, Organizer, User, OrderPosition, Quota, Item
+
+from pretix.base.models import (
+    Event, EventPermission, Item, Order, OrderPosition, Organizer, Quota, User,
+)
 
 
 @pytest.fixture

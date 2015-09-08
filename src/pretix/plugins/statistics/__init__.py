@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 from django.utils.translation import ugettext_lazy as _
 
+from pretix import __version__ as version
 from pretix.base.plugins import PluginType
 
 
@@ -12,7 +13,7 @@ class StatisticsApp(AppConfig):
         type = PluginType.ADMINFEATURE
         name = _("Statistics")
         author = _("the pretix team")
-        version = '1.0.0'
+        version = version
         description = _("This plugin shows you various statistics.")
 
     def ready(self):

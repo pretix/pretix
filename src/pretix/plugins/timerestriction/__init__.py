@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 from django.utils.translation import ugettext_lazy as _
 
+from pretix import __version__ as version
 from pretix.base.plugins import PluginType
 
 
@@ -12,7 +13,7 @@ class TimeRestrictionApp(AppConfig):
         type = PluginType.RESTRICTION
         name = _("Restriction by time")
         author = _("the pretix team")
-        version = '1.0.0'
+        version = version
         description = _("This plugin adds the possibility to restrict the sale " +
                         "of a given product or variation to a certain timeframe " +
                         "or change its price during a certain period.")

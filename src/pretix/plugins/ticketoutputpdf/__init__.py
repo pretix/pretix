@@ -2,6 +2,7 @@ from django.apps import AppConfig
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
+from pretix import __version__ as version
 from pretix.base.plugins import PluginType
 
 
@@ -13,7 +14,7 @@ class TicketOutputPdfApp(AppConfig):
         type = PluginType.PAYMENT
         name = _("PDF ticket output")
         author = _("the pretix team")
-        version = '1.0.0'
+        version = version
         description = _("This plugin allows you to print out tickets as PDF files")
 
     def ready(self):
