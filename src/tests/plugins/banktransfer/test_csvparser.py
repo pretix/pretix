@@ -11,7 +11,6 @@ DATA_DIR = os.path.dirname(__file__)
 
 
 class CsvImportTest(TestCase):
-
     def _test_from_sample_file(self, filename, expected, hint, expected_parsed):
         with open(os.path.join(DATA_DIR, filename), 'rb') as f:
             data = csvimport.get_rows_from_file(f)

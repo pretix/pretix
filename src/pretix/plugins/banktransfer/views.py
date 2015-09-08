@@ -195,6 +195,7 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             match = pattern.search(row['reference'].upper())
             try:
                 amount = Decimal(amount_pattern.sub("", row['amount'].replace(",", ".")))
+                row['amount'] = str(amount)
             except:
                 logger.exception('Could not parse amount of transaction')
                 amount = 0
