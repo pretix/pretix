@@ -1,9 +1,9 @@
+from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, ListView, TemplateView
-from django.conf import settings
 
 from pretix.base.models import Event, EventPermission, OrganizerPermission
 from pretix.control.forms.event import EventCreateForm

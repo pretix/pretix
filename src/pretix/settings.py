@@ -142,6 +142,7 @@ INSTALLED_APPS = (
     'pretix.plugins.ticketoutputpdf',
     'pretix.plugins.sendmail',
     'pretix.plugins.statistics',
+    'pretix.plugins.reports',
     'pretix.plugins.pretixdroid',
     'easy_thumbnails',
 )

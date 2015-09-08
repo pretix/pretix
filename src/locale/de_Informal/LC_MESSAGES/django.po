@@ -1664,7 +1664,7 @@ msgstr "Exportieren"
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:4
 #: pretix/control/templates/pretixcontrol/orders/index.html:20
 msgid "Pending"
-msgstr "Zahlung ausstehend"
+msgstr "ausstehend"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:6
 #: pretix/control/templates/pretixcontrol/orders/index.html:19
@@ -1676,7 +1676,7 @@ msgstr "bezahlt"
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:8
 #: pretix/control/templates/pretixcontrol/orders/index.html:21
 msgid "Pending (expired)"
-msgstr "Zahlung ausstehend (abgelaufen)"
+msgstr "ausstehend (abgelaufen)"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:10
 #: pretix/control/templates/pretixcontrol/orders/index.html:22
@@ -1732,7 +1732,7 @@ msgstr "Zeige %(currency)s"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:20
 msgid "Total orders"
-msgstr "Bestellungen gesamt"
+msgstr "bestellt"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:21
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:4
