@@ -123,6 +123,7 @@ class JSONExporter(BaseExporter):
                         'total': o.total,
                         'positions': [
                             {
+                                'id': p.identity,
                                 'item': p.item_id,
                                 'variation': p.variation_id,
                                 'price': p.price,
