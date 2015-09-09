@@ -1,5 +1,4 @@
 -r requirements/production.txt
--r requirements/py33.txt
 -r requirements/dev.txt
 -r requirements/testing.txt
 -r requirements/paypal.txt

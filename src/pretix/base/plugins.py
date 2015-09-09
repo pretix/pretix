@@ -1,7 +1,4 @@
-try:  # NOQA
-    from enum import Enum
-except ImportError:  # NOQA
-    from flufl.enum import Enum  # remove this dependency when support for python <=3.3 is dropped
+from enum import Enum
 
 from django.apps import apps
 
