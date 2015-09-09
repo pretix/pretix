@@ -72,10 +72,7 @@ def mail(user: User, subject: str, template: str, context: dict=None, event: Eve
 
 
 def mail_send(to, subject, body, sender):
-    email = EmailMessage(
-        subject, body, sender,
-        to=to
-    )
+    email = EmailMessage(subject, body, sender, to=to)
 
     try:
         email.send(fail_silently=False)

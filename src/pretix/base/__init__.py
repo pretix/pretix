@@ -9,4 +9,9 @@ class PretixBaseConfig(AppConfig):
         from . import exporter  # NOQA
         from . import payment  # NOQA
 
+        try:
+            from .celery import app as celery_app  # NOQA
+        except ImportError:
+            pass
+
 default_app_config = 'pretix.base.PretixBaseConfig'
