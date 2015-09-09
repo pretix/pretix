@@ -114,6 +114,12 @@ if HAS_REDIS:
         SESSION_ENGINE = "django.contrib.sessions.backends.cache"
         SESSION_CACHE_ALIAS = "redis"
 
+HAS_CELERY = config.has_option('celery', 'broker')
+if HAS_CELERY:
+    BROKER_URL = config.get('celery', 'broker')
+    CELERY_RESULT_BACKEND = config.get('celery', 'backend')
+    CELERY_SEND_TASK_ERROR_EMAILS = bool(ADMINS)
+
 # Internal settings
 
 STATIC_ROOT = '_static'
@@ -330,3 +336,6 @@ LOGGING = {
         }
     },
 }
+
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'

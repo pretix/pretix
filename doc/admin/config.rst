@@ -210,4 +210,21 @@ to speed up various operations::
 If no redis is configured, pretix will store sessions and locks in the database. If memcached
 is configured, memcached will be used for caching instead of redis.
 
+Celery task queue
+-----------------
+
+For processing long-running tasks asynchronously, pretix needs help of the celery task queue.
+For communicating between the web server and the task workers in both direction, a messaging
+queue and a result backend is needed. You can use a redis database for both directions, or
+an AMQP server (e.h. RabbitMQ) as a broker and redis or your database as a result backend::
+
+    [celery]
+    broker=amqp://guest:guest@localhost:5672//
+    backend=redis://localhost/0
+
+RabbitMQ might be the better choice if you have a complex, multi-server, high-performance setup,
+but as you already should have a redis instance ready for session and lock storage, we recommend
+redis for convenience. See the `Celery documentation`_ for more details.
+
 .. _Python documentation: https://docs.python.org/3/library/configparser.html?highlight=configparser#supported-ini-file-structure
+.. _Celery documentation: http://docs.celeryproject.org/en/latest/configuration.html

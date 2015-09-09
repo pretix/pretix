@@ -2,7 +2,6 @@ import logging
 
 from django.conf import settings
 from django.core.mail import EmailMessage
-from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from django.utils import translation
 from django.utils.translation import ugettext as _
@@ -66,10 +65,16 @@ def mail(user: User, subject: str, template: str, context: dict=None, event: Eve
         }
     )
     body += "\r\n"
+    try:
+        return mail_send([user.email], subject, body, sender)
+    finally:
+        translation.activate(_lng)
 
+
+def mail_send(to, subject, body, sender):
     email = EmailMessage(
         subject, body, sender,
-        to=[user.email]
+        to=to
     )
 
     try:
@@ -78,5 +83,10 @@ def mail(user: User, subject: str, template: str, context: dict=None, event: Eve
     except Exception:
         logger.exception('Error sending e-mail')
         return False
-    finally:
-        translation.activate(_lng)
+
+
+if settings.HAS_CELERY:
+    from pretix.celery import app
+
+    mail_send_task = app.task(mail_send)
+    mail_send = lambda *args, **kwargs: mail_send_task.apply_async(args=args, kwargs=kwargs)
