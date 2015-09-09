@@ -167,7 +167,7 @@ class OverviewReport(Report):
                 ])
             for item in tup[1]:
                 tdata.append([
-                    item.name,
+                    "     " + str(item.name),
                     str(item.num_total[0]), str(item.num_total[1]),
                     str(item.num_pending[0]), str(item.num_pending[1]),
                     str(item.num_cancelled[0]), str(item.num_cancelled[1]),
@@ -177,7 +177,7 @@ class OverviewReport(Report):
                 if item.has_variations:
                     for var in item.all_variations:
                         tdata.append([
-                            "     " + str(var),
+                            "          " + str(var),
                             str(var.num_total[0]), str(var.num_total[1]),
                             str(var.num_pending[0]), str(var.num_pending[1]),
                             str(var.num_cancelled[0]), str(var.num_cancelled[1]),
