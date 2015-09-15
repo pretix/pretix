@@ -291,6 +291,22 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.identifier  # NOQA
 
 
+def cachedfile_name(instance, filename):
+    return 'cachedfiles/%s.%s' % (instance.id, filename.split('.')[-1])
+
+
+class CachedFile(models.Model):
+    """
+    A cached file (e.g. pre-generated ticket PDF)
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    expires = models.DateTimeField(null=True, blank=True)
+    date = models.DateTimeField(null=True, blank=True)
+    filename = models.CharField(max_length=255)
+    type = models.CharField(max_length=255)
+    file = models.FileField(null=True, blank=True, upload_to=cachedfile_name)
+
+
 class Organizer(Versionable):
     """
     This model represents an entity organizing events, e.g. a company, institution,
@@ -1685,6 +1701,12 @@ class Order(Versionable):
                 for quota in quotas_locked:
                     quota.release()
         return True, quotas_locked
+
+
+class CachedTicket(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    cachedfile = models.ForeignKey(CachedFile, on_delete=models.CASCADE)
+    provider = models.CharField(max_length=255)
 
 
 class QuestionAnswer(Versionable):

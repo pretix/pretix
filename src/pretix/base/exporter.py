@@ -1,3 +1,7 @@
+import decimal
+import json
+
+from django.core.serializers.json import DjangoJSONEncoder
 from django.dispatch import receiver
 from django.http import HttpRequest, HttpResponse, JsonResponse
 
@@ -58,13 +62,13 @@ class BaseExporter:
         """
         return {}
 
-    def render(self, request: HttpRequest) -> HttpResponse:
+    def render(self, form_data: dict) -> tuple:
         """
-        Render the exported file and return a request that either contains the file
-        or redirects to it.
+        Render the exported file and return a tuple consisting of a filename, a file type
+        and file content.
 
-        :type request: HttpRequest
-        :param request: The HTTP request of the user requesting the export
+        :type form_data: dict
+        :param form_data: The form data of the export details form
         """
         raise NotImplementedError()  # NOQA
 
@@ -73,7 +77,7 @@ class JSONExporter(BaseExporter):
     identifier = 'json'
     verbose_name = 'JSON'
 
-    def render(self, request):
+    def render(self, form_data):
         jo = {
             'event': {
                 'name': str(self.event.name),
@@ -151,7 +155,7 @@ class JSONExporter(BaseExporter):
             }
         }
 
-        return JsonResponse(jo)
+        return 'pretixdata.json', 'application/json', json.dumps(jo, cls=DjangoJSONEncoder)
 
 
 @receiver(register_data_exporters, dispatch_uid="exporter_json")

@@ -1,3 +1,4 @@
+from datetime import timedelta
 from itertools import groupby
 
 from django import forms
@@ -11,7 +12,8 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DetailView, ListView, TemplateView, View
 
-from pretix.base.models import Item, Order, Quota
+from pretix.base.models import CachedFile, Item, Order, Quota
+from pretix.base.services.export import export
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.services.stats import order_overview
 from pretix.base.signals import (
@@ -326,4 +328,9 @@ class ExportView(EventPermissionRequiredMixin, TemplateView):
             messages.error(self.request, _('There was a problem processing your input. See below for error details.'))
             return self.get(*args, **kwargs)
 
-        return self.exporter.render(self.request)
+        cf = CachedFile()
+        cf.date = now()
+        cf.expires = now() + timedelta(days=3)
+        cf.save()
+        export(self.request.event.id, str(cf.id), self.exporter.identifier, self.exporter.form.cleaned_data)
+        return redirect(reverse('presale:cachedfile.download', kwargs={'id': cf.id}))

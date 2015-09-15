@@ -82,7 +82,7 @@ def mail_send(to, subject, body, sender):
         return False
 
 
-if settings.HAS_CELERY:
+if settings.HAS_CELERY and settings.EMAIL_BACKEND != 'django.core.mail.outbox':
     from pretix.celery import app
 
     mail_send_task = app.task(mail_send)

@@ -204,11 +204,6 @@ class OverviewReportExporter(BaseExporter):
     identifier = 'pdfreport'
     verbose_name = _('Order overview (PDF)')
 
-    def render(self, request):
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="report-%s.pdf"' % request.event.slug
-
-        report = OverviewReport(request.event)
-
-        response.write(report.create())
-        return response
+    def render(self, form_data):
+        report = OverviewReport(self.event)
+        return 'report-%s.pdf' % self.event.slug, 'application/pdf', report.create()

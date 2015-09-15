@@ -1,5 +1,6 @@
 from django.conf.urls import include, url
 
+import pretix.presale.views.cachedfiles
 import pretix.presale.views.cart
 import pretix.presale.views.checkout
 import pretix.presale.views.event
@@ -7,6 +8,8 @@ import pretix.presale.views.locale
 import pretix.presale.views.order
 
 urlpatterns = [
+    url(r'^download/(?P<id>[^/]+)/$', pretix.presale.views.cachedfiles.DownloadView.as_view(),
+        name='cachedfile.download'),
     url(r'^(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
         url(r'^$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
         url(r'^cart/add$', pretix.presale.views.cart.CartAdd.as_view(), name='event.cart.add'),

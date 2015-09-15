@@ -9,3 +9,5 @@ INSTALLED_APPS = INSTALLED_APPS + (
 )
 
 MEDIA_ROOT = os.path.join(TEST_DIR, 'media')
+
+EMAIL_BACKEND = 'django.core.mail.outbox'

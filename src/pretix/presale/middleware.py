@@ -19,4 +19,4 @@ class EventMiddleware:
                     organizer__slug=url.kwargs['organizer'],
                 ).select_related('organizer')[0]
             except IndexError:
-                return HttpResponseNotFound()  # TODO: Provide error message
+                return HttpResponseNotFound('Unknown event')  # TODO: Provide error message

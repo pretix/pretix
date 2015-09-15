@@ -1,0 +1,34 @@
+{% load compress %}
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ settings.PRETIX_INSTANCE_NAME }}</title>
+    {% compress css %}
+        <link rel="stylesheet" type="text/less" href="{% static "pretixpresale/less/cachedfiles.less" %}" />
+    {% endcompress %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+    {% endcompress %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="container">
+    <i class="fa fa-cog big-animated-icon"></i>
+    <h1>{% trans "We are preparing your file for download…" %}</h1>
+    <p>
+        {% trans "If this takes longer than a few minutes, please contact us." %}
+    </p>
+</div>
+<script type="text/javascript">
+    window.setInterval(function() {
+        $.get(location.href + '?ajax=1', function(data, status) {
+            if (data === "1") {
+                location.reload();
+            }
+        });
+    }, 500);
+</script>
+</body>
+</html>
