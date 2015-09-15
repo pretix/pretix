@@ -24,12 +24,8 @@ ADD gunicorn_starter.bash /gunicorn_starter.bash
 RUN git clone --recursive --depth 1 https://github.com/pretix/pretix.git /pretix
 WORKDIR /pretix/src
 
-RUN pip3 install -r requirements.txt
-RUN pip3 install -r requirements/mysql.txt
-RUN pip3 install -r requirements/postgres.txt
-RUN pip3 install -r requirements/memcached.txt
-RUN pip3 install -r requirements/redis.txt
-RUN pip3 install gunicorn
+RUN pip3 install -r requirements.txt -r requirements/mysql.txt -r requirements/postgres.txt \
+	-r requirements/memcached.txt -r requirements/celery.txt -r requirements/redis.txt gunicorn
 
 RUN make
 
@@ -37,8 +33,10 @@ RUN mkdir /etc/pretix
 RUN mkdir /data
 VOLUME /etc/pretix
 
-RUN chmod +x /gunicorn_starter.bash
+ADD pretix.bash /usr/local/bin/pretix
+RUN chmod +x /usr/local/bin/pretix
 
 EXPOSE 80
-CMD ["/gunicorn_starter.bash"]
 
+ENTRYPOINT ["pretix"]
+CMD ["web"]
