@@ -39,7 +39,7 @@ else:
 # Adjustable settings
 
 debug_fallback = "runserver" in sys.argv
-DEBUG = TEMPLATE_DEBUG = config.getboolean('django', 'debug', fallback=debug_fallback)
+DEBUG = config.getboolean('django', 'debug', fallback=debug_fallback)
 
 DATABASES = {
     'default': {
