@@ -20,16 +20,13 @@ class PdfTicketOutput(BaseTicketOutput):
     download_button_text = _('Download PDF')
     download_button_icon = 'fa-print'
 
-    def generate(self, request, order):
+    def generate(self, order):
         from reportlab.graphics.shapes import Drawing
         from reportlab.pdfgen import canvas
         from reportlab.lib import pagesizes, units
         from reportlab.graphics.barcode.qr import QrCodeWidget
         from reportlab.graphics import renderPDF
         from PyPDF2 import PdfFileWriter, PdfFileReader
-
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="order%s%s.pdf"' % (request.event.slug, order.code)
 
         pagesize = self.settings.get('pagesize', default='A4')
         if hasattr(pagesizes, pagesize):
@@ -55,7 +52,7 @@ class PdfTicketOutput(BaseTicketOutput):
                 p.setFont("Helvetica", event_s)
                 event_x = self.settings.get('event_x', default=15, as_type=float)
                 event_y = self.settings.get('event_y', default=235, as_type=float)
-                p.drawString(event_x * units.mm, event_y * units.mm, str(request.event.name))
+                p.drawString(event_x * units.mm, event_y * units.mm, str(self.event.name))
 
             name_s = self.settings.get('name_s', default=17, as_type=float)
             if name_s:
@@ -72,7 +69,7 @@ class PdfTicketOutput(BaseTicketOutput):
                 p.setFont("Helvetica", price_s)
                 price_x = self.settings.get('price_x', default=15, as_type=float)
                 price_y = self.settings.get('price_y', default=210, as_type=float)
-                p.drawString(price_x * units.mm, price_y * units.mm, "%s %s" % (str(op.price), request.event.currency))
+                p.drawString(price_x * units.mm, price_y * units.mm, "%s %s" % (str(op.price), self.event.currency))
 
             qr_s = self.settings.get('qr_s', default=80, as_type=float)
             if qr_s:
@@ -107,8 +104,10 @@ class PdfTicketOutput(BaseTicketOutput):
             bg_page.mergePage(page)
             output.addPage(bg_page)
 
-        output.write(response)
-        return response
+        outbuffer = BytesIO()
+        output.write(outbuffer)
+        outbuffer.seek(0)
+        return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()
 
     @property
     def settings_form_fields(self) -> dict:

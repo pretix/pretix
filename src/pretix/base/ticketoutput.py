@@ -28,9 +28,10 @@ class BaseTicketOutput:
         """
         return self.settings.get('_enabled', as_type=bool)
 
-    def generate(self, request: HttpRequest, order: Order) -> HttpResponse:
+    def generate(self, order: Order) -> tuple:
         """
-        This method should generate the download file and return it to the user.
+        This method should generate the download file and return a tuple consisting of a
+        filename, a file type and file content.
         """
         raise NotImplementedError()
 

@@ -14,6 +14,7 @@ def export(event, fileid, provider, form_data):
         if ex.identifier == provider:
             file.filename, file.type, data = ex.render(form_data)
             file.file.save(cachedfile_name(file, file.filename), ContentFile(data))
+            file.save()
 
 
 if settings.HAS_CELERY:

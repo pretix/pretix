@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden, HttpResponseNotFound
@@ -7,7 +8,8 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, View
 
-from pretix.base.models import Order, OrderPosition
+from pretix.base.models import Order, OrderPosition, CachedTicket, CachedFile
+from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
@@ -277,4 +279,19 @@ class OrderDownload(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
                 and now() < self.request.event.settings.ticket_download_date)):
             messages.error(request, _('Ticket download is not (yet) enabled.'))
             return redirect(self.get_order_url())
-        return self.output.generate(request, self.order)
+
+        try:
+            ct = CachedTicket.objects.get(order=self.order, provider=self.output.identifier)
+        except CachedTicket.DoesNotExist:
+            ct = CachedTicket(order=self.order, provider=self.output.identifier)
+        try:
+            ct.cachedfile
+        except CachedFile.DoesNotExist:
+            cf = CachedFile()
+            cf.date = now()
+            cf.expires = self.request.event.date_from + timedelta(days=30)
+            cf.save()
+            ct.cachedfile = cf
+        ct.save()
+        generate(self.order.identity, self.output.identifier)
+        return redirect(reverse('presale:cachedfile.download', kwargs={'id': ct.cachedfile.id}))
