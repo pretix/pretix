@@ -12,10 +12,11 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DetailView, ListView, TemplateView, View
 
-from pretix.base.models import CachedFile, Item, Order, Quota
+from pretix.base.models import CachedFile, CachedTicket, Item, Order, Quota
 from pretix.base.services.export import export
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.services.stats import order_overview
+from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     register_data_exporters, register_payment_providers,
     register_ticket_outputs,
@@ -216,7 +217,22 @@ class OrderDownload(OrderView):
         if self.order.status != Order.STATUS_PAID:
             messages.error(request, _('Order is not paid.'))
             return redirect(self.get_order_url())
-        return self.output.generate(request, self.order)
+
+        try:
+            ct = CachedTicket.objects.get(order=self.order, provider=self.output.identifier)
+        except CachedTicket.DoesNotExist:
+            ct = CachedTicket(order=self.order, provider=self.output.identifier)
+        try:
+            ct.cachedfile
+        except CachedFile.DoesNotExist:
+            cf = CachedFile()
+            cf.date = now()
+            cf.expires = self.request.event.date_from + timedelta(days=30)
+            cf.save()
+            ct.cachedfile = cf
+        ct.save()
+        generate(self.order.identity, self.output.identifier)
+        return redirect(reverse('presale:cachedfile.download', kwargs={'id': ct.cachedfile.id}))
 
 
 class OrderExtend(OrderView):
