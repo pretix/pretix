@@ -1704,7 +1704,7 @@ class Order(Versionable):
 
 
 class CachedTicket(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = VersionedForeignKey(Order, on_delete=models.CASCADE)
     cachedfile = models.ForeignKey(CachedFile, on_delete=models.CASCADE)
     provider = models.CharField(max_length=255)
 
