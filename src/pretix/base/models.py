@@ -1,8 +1,7 @@
 import copy
 import random
-import time
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime
 from itertools import product
 
 import six
@@ -453,6 +452,7 @@ class Event(Versionable):
         null=True, blank=True,
         verbose_name=_("Plugins"),
     )
+    locked_here = False
 
     class Meta:
         verbose_name = _("Event")
@@ -530,6 +530,13 @@ class Event(Versionable):
         if self.presale_end and now() > self.presale_end:
             return False
         return True
+
+    def lock(self):
+        """
+        Returns a contextmanager that can be used to lock an event for bookings
+        """
+        from .services import locking
+        return locking.LockManager(self)
 
 
 class EventPermission(Versionable):
@@ -1372,10 +1379,6 @@ class Quota(Versionable):
         blank=True,
         verbose_name=_("Variations")
     )
-    locked = models.DateTimeField(
-        null=True, blank=True
-    )
-    locked_here = False
 
     class Meta:
         verbose_name = _("Quota")
@@ -1443,33 +1446,8 @@ class Quota(Versionable):
 
         return Quota.AVAILABILITY_OK, self.size - paid_orders - pending_valid_orders - valid_cart_positions
 
-    class LockTimeoutException(Exception):
-        pass
-
     class QuotaExceededException(Exception):
         pass
-
-    def lock(self):
-        """
-        Issue a lock on this quota so nobody can take tickets from this quota until
-        you release the lock. Will retry 5 times on failure.
-
-        :raises Quota.LockTimeoutException: if the quota is locked every time we try
-                                            to obtain the lock
-        """
-        from .services import locking
-
-        return locking.lock_quota(self)
-
-    def release(self, force=False):
-        """
-        Release a lock placed by :py:meth:`lock()`. If the parameter force is not set to ``True``,
-        the lock will only be released if it was issued in _this_ python
-        representation of the database object.
-        """
-        from .services import locking
-
-        return locking.release_quota(self, force)
 
 
 class Order(Versionable):
@@ -1637,22 +1615,22 @@ class Order(Versionable):
         order.save()
         return order
 
-    def _can_be_paid(self, keep_locked=False):
+    def _can_be_paid(self):
         error_messages = {
             'late': _("The payment is too late to be accepted."),
         }
 
         if self.event.settings.get('payment_term_last') \
                 and now() > self.event.settings.get('payment_term_last'):
-            return error_messages['late'], None
+            return error_messages['late']
         if now() < self.expires:
-            return True, None
+            return True
         if not self.event.settings.get('payment_term_accept_late'):
-            return error_messages['late'], None
+            return error_messages['late']
 
-        return self._is_still_available(keep_locked)
+        return self._is_still_available()
 
-    def _is_still_available(self, keep_locked=False):
+    def _is_still_available(self):
         error_messages = {
             'unavailable': _('Some of the ordered products were no longer available.'),
             'busy': _('We were not able to process the request completely as the '
@@ -1664,43 +1642,34 @@ class Order(Versionable):
             'variation__values', 'variation__values__prop',
             'item__questions', 'answers'
         ))
-        quotas_locked = set()
-        release = True
-
+        quota_cache = {}
         try:
-            for i, op in enumerate(positions):
-                quotas = list(op.item.quotas.all()) if op.variation is None else list(op.variation.quotas.all())
-                if len(quotas) == 0:
-                    raise Quota.QuotaExceededException(error_messages['unavailable'])
-
-                for quota in quotas:
-                    # Lock the quota, so no other thread is allowed to perform sales covered by this
-                    # quota while we're doing so.
-                    if quota.identity not in [q.identity for q in quotas_locked]:
-                        quota.lock()
-                        quotas_locked.add(quota)
-                        quota.cached_availability = quota.availability()[1]
-                    else:
-                        # Use cached version
-                        quota = [q for q in quotas_locked if q.identity == quota.identity][0]
-                    quota.cached_availability -= 1
-                    if quota.cached_availability < 0:
-                        # This quota is sold out/currently unavailable, so do not sell this at all
+            with self.event.lock():
+                for i, op in enumerate(positions):
+                    quotas = list(op.item.quotas.all()) if op.variation is None else list(op.variation.quotas.all())
+                    if len(quotas) == 0:
                         raise Quota.QuotaExceededException(error_messages['unavailable'])
+
+                    for quota in quotas:
+                        # Lock the quota, so no other thread is allowed to perform sales covered by this
+                        # quota while we're doing so.
+                        if quota.identity not in quota_cache:
+                            quota_cache[quota.identity] = quota
+                            quota.cached_availability = quota.availability()[1]
+                        else:
+                            # Use cached version
+                            quota = quota_cache[quota.identity]
+                        quota.cached_availability -= 1
+                        if quota.cached_availability < 0:
+                            # This quota is sold out/currently unavailable, so do not sell this at all
+                            raise Quota.QuotaExceededException(error_messages['unavailable'])
         except Quota.QuotaExceededException as e:
-            return str(e), None
-        except Quota.LockTimeoutException:
+            return str(e)
+        except EventLock.LockTimeoutException:
             # Is raised when there are too many threads asking for quota locks and we were
             # unaible to get one
-            return error_messages['busy'], None
-        else:
-            release = False
-        finally:
-            # Release the locks. This is important ;)
-            if release or not keep_locked:
-                for quota in quotas_locked:
-                    quota.release()
-        return True, quotas_locked
+            return error_messages['busy']
+        return True
 
 
 class CachedTicket(models.Model):
@@ -1905,3 +1874,11 @@ class OrganizerSetting(Versionable):
     object = VersionedForeignKey(Organizer, related_name='setting_objects')
     key = models.CharField(max_length=255)
     value = models.TextField()
+
+
+class EventLock(models.Model):
+    event = models.CharField(max_length=36, primary_key=True)
+    date = models.DateTimeField(auto_now=True)
+
+    class LockTimeoutException(Exception):
+        pass

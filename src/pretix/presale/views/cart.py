@@ -10,7 +10,9 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View
 
-from pretix.base.models import CartPosition, Item, ItemVariation, Quota
+from pretix.base.models import (
+    CartPosition, EventLock, Item, ItemVariation, Quota,
+)
 from pretix.presale.views import EventLoginRequiredMixin, EventViewMixin
 
 
@@ -187,78 +189,71 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                 identity__in=[i[1] for i in self.items if i[1] is not None]
             ).select_related("item", "item__event").prefetch_related("quotas", "values", "values__prop")
         }
+        try:
+            with self.request.event.lock():
+                # Process the request itself
+                for i in self.items:
+                    # Check whether the specified items are part of what we just fetched from the database
+                    # If they are not, the user supplied item IDs which either do not exist or belong to
+                    # a different event
+                    if i[0] not in items_cache or (i[1] is not None and i[1] not in variations_cache):
+                        self.error_message(self.error_messages['not_for_sale'])
+                        return redirect(self.get_failure_url())
 
-        # Process the request itself
-        for i in self.items:
-            # Check whether the specified items are part of what we just fetched from the database
-            # If they are not, the user supplied item IDs which either do not exist or belong to
-            # a different event
-            if i[0] not in items_cache or (i[1] is not None and i[1] not in variations_cache):
-                self.error_message(self.error_messages['not_for_sale'])
-                return redirect(self.get_failure_url())
+                    item = items_cache[i[0]]
+                    variation = variations_cache[i[1]] if i[1] is not None else None
 
-            item = items_cache[i[0]]
-            variation = variations_cache[i[1]] if i[1] is not None else None
+                    # Execute restriction plugins to check whether they (a) change the price or
+                    # (b) make the item/variation unavailable. If neither is the case, check_restriction
+                    # will correctly return the default price
+                    price = item.check_restrictions() if variation is None else variation.check_restrictions()
 
-            # Execute restriction plugins to check whether they (a) change the price or
-            # (b) make the item/variation unavailable. If neither is the case, check_restriction
-            # will correctly return the default price
-            price = item.check_restrictions() if variation is None else variation.check_restrictions()
+                    # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
+                    quotas = list(item.quotas.all()) if variation is None else list(variation.quotas.all())
 
-            # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
-            quotas = list(item.quotas.all()) if variation is None else list(variation.quotas.all())
+                    if price is False or len(quotas) == 0 or not item.active:
+                        self.error_message(self.error_messages['unavailable'])
+                        continue
 
-            if price is False or len(quotas) == 0 or not item.active:
-                self.error_message(self.error_messages['unavailable'])
-                continue
+                    # Assume that all quotas allow us to buy i[2] instances of the object
+                    quota_ok = i[2]
+                    for quota in quotas:
+                        avail = quota.availability()
+                        if avail[1] < i[2]:
+                            # This quota is not available or less than i[2] items are left, so we have to
+                            # reduce the number of bought items
+                            self.error_message(
+                                self.error_messages['unavailable']
+                                if avail[0] != Quota.AVAILABILITY_OK
+                                else self.error_messages['in_part']
+                            )
+                            quota_ok = min(quota_ok, avail[1])
 
-            # Assume that all quotas allow us to buy i[2] instances of the object
-            quota_ok = i[2]
-            try:
-                for quota in quotas:
-                    # Lock the quota, so no other thread is allowed to perform sales covered by this
-                    # quota while we're doing so.
-                    quota.lock()
-                    avail = quota.availability()
-                    if avail[1] < i[2]:
-                        # This quota is not available or less than i[2] items are left, so we have to
-                        # reduce the number of bought items
-                        self.error_message(
-                            self.error_messages['unavailable']
-                            if avail[0] != Quota.AVAILABILITY_OK
-                            else self.error_messages['in_part']
-                        )
-                        quota_ok = min(quota_ok, avail[1])
+                    # Create a CartPosition for as much items as we can
+                    for k in range(quota_ok):
+                        if len(i) > 3 and i[2] == 1:
+                            # Recreating
+                            cp = i[3].clone()
+                            cp.expires = expiry
+                            cp.price = price
+                            cp.save()
+                        else:
+                            CartPosition.objects.create(
+                                event=self.request.event,
+                                user=self.request.user,
+                                item=item,
+                                variation=variation,
+                                price=price,
+                                expires=expiry
+                            )
 
-                # Create a CartPosition for as much items as we can
-                for k in range(quota_ok):
-                    if len(i) > 3 and i[2] == 1:
-                        # Recreating
-                        cp = i[3].clone()
-                        cp.expires = expiry
-                        cp.price = price
-                        cp.save()
-                    else:
-                        CartPosition.objects.create(
-                            event=self.request.event,
-                            user=self.request.user,
-                            item=item,
-                            variation=variation,
-                            price=price,
-                            expires=expiry
-                        )
-            except Quota.LockTimeoutException:
-                # Is raised when there are too many threads asking for quota locks and we were
-                # unaible to get one
-                self.error_message(self.error_messages['busy'], important=True)
-            finally:
-                # Release the locks. This is important ;)
-                for quota in quotas:
-                    quota.release()
+                self._delete_expired()
 
-        self._delete_expired()
+            if not self.msg_some_unavailable:
+                messages.success(self.request, _('The products have been successfully added to your cart.'))
 
-        if not self.msg_some_unavailable:
-            messages.success(self.request, _('The products have been successfully added to your cart.'))
-
-        return redirect(self.get_success_url())
+            return redirect(self.get_success_url())
+        except EventLock.LockTimeoutException:
+            # Is raised when there are too many threads asking for quota locks and we were
+            # unaible to get one
+            self.error_message(self.error_messages['busy'], important=True)

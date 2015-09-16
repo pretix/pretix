@@ -94,7 +94,7 @@ class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
             ctx['can_retry'] = (
                 self.payment_provider.order_can_retry(self.order)
                 and self.payment_provider.is_enabled
-                and self.order._can_be_paid(keep_locked=False)
+                and self.order._can_be_paid()
             )
         elif self.order.status == Order.STATUS_PAID:
             ctx['payment'] = self.payment_provider.order_paid_render(self.request, self.order)

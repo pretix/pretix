@@ -4,7 +4,7 @@ from django.db import transaction
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Order, OrderPosition, Quota
+from pretix.base.models import EventLock, Order, OrderPosition, Quota
 from pretix.base.services.mail import mail
 from pretix.base.signals import order_paid, order_placed
 from pretix.helpers.urls import build_absolute_uri
@@ -27,22 +27,19 @@ def mark_order_paid(order, provider=None, info=None, date=None, manual=None, for
     :type force: boolean
     :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
     """
-    can_be_paid, quotas_locked = order._can_be_paid(keep_locked=True)
-    if not force and can_be_paid is not True:
-        raise Quota.QuotaExceededException(can_be_paid)
-    order = order.clone()
-    order.payment_provider = provider or order.payment_provider
-    order.payment_info = info or order.payment_info
-    order.payment_date = date or now()
-    if manual is not None:
-        order.payment_manual = manual
-    order.status = Order.STATUS_PAID
-    order.save()
-    order_paid.send(order.event, order=order)
-
-    if quotas_locked:
-        for quota in quotas_locked:
-            quota.release()
+    with order.event.lock():
+        can_be_paid = order._can_be_paid()
+        if not force and can_be_paid is not True:
+            raise Quota.QuotaExceededException(can_be_paid)
+        order = order.clone()
+        order.payment_provider = provider or order.payment_provider
+        order.payment_info = info or order.payment_info
+        order.payment_date = date or now()
+        if manual is not None:
+            order.payment_manual = manual
+        order.status = Order.STATUS_PAID
+        order.save()
+        order_paid.send(order.event, order=order)
 
     from pretix.base.services.mail import mail
 
@@ -69,7 +66,7 @@ class OrderError(Exception):
     pass
 
 
-def check_positions(event, dt, positions, quotas_locked):
+def check_positions(event, dt, positions):
     error_messages = {
         'unavailable': _('Some of the products you selected were no longer available. '
                          'Please see below for details.'),
@@ -102,11 +99,6 @@ def check_positions(event, dt, positions, quotas_locked):
             continue
         quota_ok = True
         for quota in quotas:
-            # Lock the quota, so no other thread is allowed to perform sales covered by this
-            # quota while we're doing so.
-            if quota.identity not in [q.identity for q in quotas_locked]:
-                quota.lock()
-                quotas_locked.add(quota)
             avail = quota.availability()
             if avail[0] != Quota.AVAILABILITY_OK:
                 # This quota is sold out/currently unavailable, so do not sell this at all
@@ -131,35 +123,31 @@ def perform_order(event, user, payment_provider, positions):
                   'server was too busy. Please try again.'),
     }
     dt = now()
-    quotas_locked = set()
 
     try:
-        check_positions(event, dt, positions, quotas_locked)
-        order = place_order(event, user, positions, dt, payment_provider)
-        mail(
-            user, _('Your order: %(code)s') % {'code': order.code},
-            'pretixpresale/email/order_placed.txt',
-            {
-                'user': user, 'order': order,
-                'event': event,
-                'url': build_absolute_uri('presale:event.order', kwargs={
-                    'event': event.slug,
-                    'organizer': event.organizer.slug,
-                    'order': order.code,
-                }),
-                'payment': payment_provider.order_pending_mail_render(order)
-            },
-            event
-        )
-        return order
-    except Quota.LockTimeoutException:
-        # Is raised when there are too many threads asking for quota locks and we were
-        # unaible to get one
+        with event.lock():
+            check_positions(event, dt, positions)
+            order = place_order(event, user, positions, dt, payment_provider)
+            mail(
+                user, _('Your order: %(code)s') % {'code': order.code},
+                'pretixpresale/email/order_placed.txt',
+                {
+                    'user': user, 'order': order,
+                    'event': event,
+                    'url': build_absolute_uri('presale:event.order', kwargs={
+                        'event': event.slug,
+                        'organizer': event.organizer.slug,
+                        'order': order.code,
+                    }),
+                    'payment': payment_provider.order_pending_mail_render(order)
+                },
+                event
+            )
+            return order
+    except EventLock.LockTimeoutException:
+        # Is raised when there are too many threads asking for event locks and we were
+        # unable to get one
         raise OrderError(error_messages['busy'])
-    finally:
-        # Release the locks. This is important ;)
-        for quota in quotas_locked:
-            quota.release()
 
 
 @transaction.atomic()

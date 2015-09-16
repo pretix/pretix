@@ -248,7 +248,7 @@ class OrderExtend(OrderView):
             if oldvalue > now():
                 self.form.save()
             else:
-                is_available, _quotas_locked = self.order._is_still_available(keep_locked=False)
+                is_available = self.order._is_still_available()
                 if is_available is True:
                     self.form.save()
                     messages.success(self.request, _('The payment term has been changed.'))

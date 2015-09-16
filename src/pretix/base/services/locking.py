@@ -3,110 +3,117 @@ import time
 from datetime import timedelta
 
 from django.conf import settings
-from django.db.models import Q
+from django.db import transaction
 from django.utils.timezone import now
 
-from pretix.base.models import Quota
+from pretix.base.models import EventLock
 
 logger = logging.getLogger('pretix.base.locking')
 
 
-def lock_quota(quota):
+class LockManager:
+    def __init__(self, event):
+        self.event = event
+
+    def __enter__(self):
+        lock_event(self.event)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        release_event(self.event)
+        if exc_type is not None:
+            return False
+
+
+def lock_event(event):
     """
-    Issue a lock on this quota so nobody can take tickets from this quota until
+    Issue a lock on this event so nobody can book tickets for this event until
     you release the lock. Will retry 5 times on failure.
 
-    :raises Quota.LockTimeoutException: if the quota is locked every time we try
-                                        to obtain the lock
+    :raises EventLock.LockTimeoutException: if the event is locked every time we try
+                                            to obtain the lock
     """
+    if event.locked_here:
+        return True
     if settings.HAS_REDIS:
-        return lock_quota_redis(quota)
+        return lock_event_redis(event)
     else:
-        return lock_quota_db(quota)
+        return lock_event_db(event)
 
 
-def lock_quota_db(quota):
-    retries = 5
-    for i in range(retries):
-        dt = now()
-
-        updated = Quota.objects.current.filter(
-            Q(identity=quota.identity)
-            & Q(Q(locked__lt=dt - timedelta(seconds=120)) | Q(locked__isnull=True))
-            & Q(version_end_date__isnull=True)
-        ).update(
-            locked=dt
-        )
-        if updated:
-            quota.locked_here = dt
-            quota.locked = dt
-            return True
-        time.sleep(2 ** i / 100)
-    raise Quota.LockTimeoutException()
-
-
-def release_quota(quota, force=False):
+def release_event(event, force=False):
     """
     Release a lock placed by :py:meth:`lock()`. If the parameter force is not set to ``True``,
     the lock will only be released if it was issued in _this_ python
     representation of the database object.
     """
-    if not quota.locked_here and not force:
+    if not event.locked_here and not force:
         return False
     if settings.HAS_REDIS:
-        return release_quota_redis(quota)
+        return release_event_redis(event)
     else:
-        return release_quota_db(quota)
+        return release_event_db(event)
 
 
-def release_quota_db(quota):
-    updated = Quota.objects.current.filter(
-        identity=quota.identity,
-        version_end_date__isnull=True
-    ).update(
-        locked=None
-    )
-    quota.locked_here = None
-    quota.locked = None
-    return updated
+def lock_event_db(event):
+    retries = 5
+    for i in range(retries):
+        with transaction.atomic():
+            dt = now()
+            l, created = EventLock.objects.get_or_create(event=event.identity)
+            if created:
+                event.locked_here = dt
+                return True
+            elif l.date < now() - timedelta(seconds=120):
+                updated = EventLock.objects.filter(event=event.identity, date=l.date).update(date=dt)
+                if updated:
+                    event.locked_here = dt
+                    return True
+        time.sleep(2 ** i / 100)
+    raise EventLock.LockTimeoutException()
 
 
-def redis_lock_from_quota(quota):
+def release_event_db(event):
+    deleted = EventLock.objects.filter(event=event.identity).delete()
+    event.locked_here = None
+    return deleted
+
+
+def redis_lock_from_event(event):
     from django_redis import get_redis_connection
     from redis.lock import Lock
 
-    if not hasattr(quota, '_redis_lock'):
+    if not hasattr(event, '_redis_lock'):
         rc = get_redis_connection("redis")
-        quota._redis_lock = Lock(redis=rc, name='pretix_quota_%s' % quota.identity, timeout=120)
-    return quota._redis_lock
+        event._redis_lock = Lock(redis=rc, name='pretix_event_%s' % event.identity, timeout=120)
+    return event._redis_lock
 
 
-def lock_quota_redis(quota):
+def lock_event_redis(event):
     from redis.exceptions import RedisError
-    lock = redis_lock_from_quota(quota)
+
+    lock = redis_lock_from_event(event)
     retries = 5
     for i in range(retries):
         dt = now()
         try:
             if lock.acquire(False):
-                quota.locked_here = dt
-                quota.locked = dt
+                event.locked_here = dt
                 return True
         except RedisError:
-            logger.exception('Error locking a quota')
-            raise Quota.LockTimeoutException()
+            logger.exception('Error locking an event')
+            raise EventLock.LockTimeoutException()
         time.sleep(2 ** i / 100)
-    raise Quota.LockTimeoutException()
+    raise EventLock.LockTimeoutException()
 
 
-def release_quota_redis(quota):
+def release_event_redis(event):
     from redis import RedisError
-    lock = redis_lock_from_quota(quota)
+
+    lock = redis_lock_from_event(event)
     try:
         lock.release()
     except RedisError:
-        logger.exception('Error releasing a quota lock')
-        raise Quota.LockTimeoutException()
-    quota.locked_here = None
-    quota.locked = None
+        logger.exception('Error releasing an event lock')
+        raise EventLock.LockTimeoutException()
+    event.locked_here = None
     return True
