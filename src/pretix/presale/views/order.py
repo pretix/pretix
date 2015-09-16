@@ -1,4 +1,5 @@
 from datetime import timedelta
+
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden, HttpResponseNotFound
@@ -8,7 +9,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, View
 
-from pretix.base.models import Order, OrderPosition, CachedTicket, CachedFile
+from pretix.base.models import CachedFile, CachedTicket, Order, OrderPosition
 from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,

@@ -1,9 +1,10 @@
 from datetime import timedelta
+
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
 
-from pretix.base.models import CachedFile, cachedfile_name, Order, CachedTicket
+from pretix.base.models import CachedFile, CachedTicket, Order, cachedfile_name
 from pretix.base.signals import register_ticket_outputs
 
 
