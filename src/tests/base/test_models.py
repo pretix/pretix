@@ -160,31 +160,8 @@ class VersionableTestCase(TestCase):
 
 class UserTestCase(TestCase):
 
-    def test_identifier_local(self):
-        o = Organizer.objects.create(name='Dummy', slug='dummy')
-        event = Event.objects.create(
-            organizer=o, name='Dummy', slug='dummy',
-            date_from=now(),
-        )
-        u = User(event=event, username='tester')
-        u.set_password("test")
-        u.save()
-        self.assertEqual(u.identifier, "%s@%s.event.pretix" % (u.username.lower(), event.id))
-
-    def test_identifier_global(self):
-        u = User(email='test@example.com')
-        u.set_password("test")
-        u.save()
-        self.assertEqual(u.identifier, "test@example.com")
-
     def test_name(self):
-        o = Organizer.objects.create(name='Dummy', slug='dummy')
-        event = Event.objects.create(
-            organizer=o, name='Dummy', slug='dummy',
-            date_from=now(),
-        )
-        u = User.objects.create_local_user(event, 'test', 'test')
-        self.assertEqual(u.get_local_name(), 'test')
+        u = User.objects.create_user('test@foo.bar', 'test')
         u.givenname = "Christopher"
         u.familyname = "Nolan"
         u.set_password("test")
@@ -202,8 +179,8 @@ class UserTestCase(TestCase):
         self.assertEqual(u.get_short_name(), 'Christopher')
         u.givenname = None
         u.save()
-        self.assertEqual(u.get_full_name(), 'test')
-        self.assertEqual(u.get_short_name(), 'test')
+        self.assertEqual(u.get_full_name(), 'test@foo.bar')
+        self.assertEqual(u.get_short_name(), 'test@foo.bar')
 
 
 class BaseQuotaTestCase(TestCase):
@@ -330,7 +307,7 @@ class OrderTestCase(BaseQuotaTestCase):
 
     def setUp(self):
         super().setUp()
-        self.user = User.objects.create_local_user(self.event, 'dummy', 'dummy')
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         self.order = Order.objects.create(
             status=Order.STATUS_PENDING, event=self.event,
             user=self.user, datetime=now() - timedelta(days=5),

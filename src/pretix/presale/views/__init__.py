@@ -1,6 +1,7 @@
 from datetime import timedelta
 from itertools import groupby
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.core.urlresolvers import reverse
 from django.db.models import Q
@@ -11,26 +12,12 @@ from pretix.base.models import CartPosition
 from pretix.base.signals import register_payment_providers
 
 
-class EventLoginRequiredMixin:
+class LoginRequiredMixin:
 
     @classmethod
     def as_view(cls, **initkwargs):
-        view = super(EventLoginRequiredMixin, cls).as_view(**initkwargs)
-
-        def decorator(view_func):
-            def _wrapped_view(request, *args, **kwargs):
-                if request.user.is_authenticated() and \
-                        (request.user.event is None or request.user.event == request.event):
-                    return view_func(request, *args, **kwargs)
-                path = request.path
-                return redirect_to_login(
-                    path, reverse('presale:event.checkout.login', kwargs={
-                        'organizer': request.event.organizer.slug,
-                        'event': request.event.slug,
-                    }), 'next'
-                )
-            return _wrapped_view
-        return decorator(view)
+        view = super().as_view(**initkwargs)
+        return login_required(view)
 
 
 class CartDisplayMixin:

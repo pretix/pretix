@@ -15,7 +15,7 @@ def env():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    user = User.objects.create_user('dummy@dummy.dummy', 'dummy@dummy.dummy', 'dummy')
+    user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     user.email = 'dummy@dummy.dummy'
     user.save()
     return event, user, o

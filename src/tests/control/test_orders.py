@@ -17,7 +17,7 @@ def env():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    user = User.objects.create_user('dummy@dummy.dummy', 'dummy@dummy.dummy', 'dummy')
+    user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     EventPermission.objects.create(
         event=event,
         user=user,
@@ -46,7 +46,7 @@ def env():
 
 @pytest.mark.django_db
 def test_order_list(client, env):
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/orders/')
     assert 'FOO' in response.rendered_content
     response = client.get('/control/event/dummy/dummy/orders/?user=peter')
@@ -61,7 +61,7 @@ def test_order_list(client, env):
 
 @pytest.mark.django_db
 def test_order_detail(client, env):
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/orders/FOO/')
     assert 'Early-bird' in response.rendered_content
     assert 'Peter' in response.rendered_content
@@ -69,7 +69,7 @@ def test_order_detail(client, env):
 
 @pytest.mark.django_db
 def test_order_transition_cancel(client, env):
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     client.post('/control/event/dummy/dummy/orders/FOO/transition', {
         'status': 'c'
     })
@@ -79,7 +79,7 @@ def test_order_transition_cancel(client, env):
 
 @pytest.mark.django_db
 def test_order_transition_to_paid_success(client, env):
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     client.post('/control/event/dummy/dummy/orders/FOO/transition', {
         'status': 'p'
     })
@@ -92,7 +92,7 @@ def test_order_transition_to_unpaid_success(client, env):
     o = Order.objects.current.get(identity=env[2].identity)
     o.status = Order.STATUS_PAID
     o.save()
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     client.post('/control/event/dummy/dummy/orders/FOO/transition', {
         'status': 'n'
     })

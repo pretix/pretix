@@ -17,7 +17,7 @@ def env():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    user = User.objects.create_user('dummy@dummy.dummy', 'dummy@dummy.dummy', 'dummy')
+    user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     EventPermission.objects.create(user=user, event=event)
     shirt = Item.objects.create(event=event, name='T-Shirt', default_price=12)
     prop1 = Property.objects.create(event=event, name="Color")
@@ -48,7 +48,7 @@ def env():
 
 @pytest.mark.django_db
 def test_pretixdroid(client, env):
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     client.get('/control/event/%s/%s/pretixdroid/' % (env[0].organizer.slug, env[0].slug))
     key1 = env[0].settings.get('pretixdroid_key')
     assert key1

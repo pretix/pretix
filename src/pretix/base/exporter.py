@@ -121,7 +121,7 @@ class JSONExporter(BaseExporter):
                     {
                         'code': o.code,
                         'status': o.status,
-                        'user': o.user.identifier,
+                        'user': o.user.email,
                         'datetime': o.datetime,
                         'payment_fee': o.payment_fee,
                         'total': o.total,

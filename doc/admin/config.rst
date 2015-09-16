@@ -25,7 +25,6 @@ Example::
 
     [pretix]
     instance_name=pretix.de
-    global_registration=off
     url=http://localhost
     currency=EUR
     cookiedomain=.pretix.de
@@ -35,10 +34,6 @@ Example::
 
 ``instance_name``
     The name of this installation. Default: ``pretix.de``
-
-``global_registration``
-    Whether or not this installation supports global user accounts (in addition to
-    event-bound accounts). Defaults to ``True``.
 
 ``url``
     The installation's full URL, without a trailing slash.

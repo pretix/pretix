@@ -15,7 +15,7 @@ def env():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    user = User.objects.create_user('dummy@dummy.dummy', 'dummy@dummy.dummy', 'dummy')
+    user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     Order.objects.create(
         code='FOO', event=event,
         user=user, status=Order.STATUS_PENDING,
@@ -86,7 +86,7 @@ def test_logged_out(client, env, url):
 @pytest.mark.django_db
 @pytest.mark.parametrize("url", event_urls)
 def test_wrong_event(client, env, url):
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/' + url)
     # These permission violations do not yield a 403 error, but
     # a 404 error to prevent information leakage
@@ -136,7 +136,7 @@ def test_wrong_event_permission(client, env, perm, url, code):
     )
     setattr(ep, perm, False)
     ep.save()
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/' + url)
     assert response.status_code == 403
 
@@ -148,7 +148,7 @@ def test_current_permission(client, env):
     )
     setattr(ep, 'can_change_settings', True)
     ep.save()
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/settings/')
     assert response.status_code == 200
     ep = ep.clone()
@@ -166,7 +166,7 @@ def test_correct_event_permission(client, env, perm, url, code):
     )
     setattr(ep, perm, True)
     ep.save()
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/' + url)
     assert response.status_code == code
 
@@ -174,7 +174,7 @@ def test_correct_event_permission(client, env, perm, url, code):
 @pytest.mark.django_db
 @pytest.mark.parametrize("url", organizer_urls)
 def test_wrong_organizer(client, env, url):
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/' + url)
     # These permission violations do not yield a 403 error, but
     # a 404 error to prevent information leakage
@@ -195,7 +195,7 @@ def test_wrong_organizer_permission(client, env, perm, url, code):
         )
         setattr(op, perm, False)
     op.save()
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/' + url)
     assert response.status_code == 403
 
@@ -209,6 +209,6 @@ def test_correct_organizer_permission(client, env, perm, url, code):
     if perm:
         setattr(op, perm, True)
     op.save()
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/' + url)
     assert response.status_code == code

@@ -14,16 +14,15 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, UpdateView, View
 
+from pretix.base.forms.auth import (
+    LoginForm, PasswordForgotForm, PasswordRecoverForm, RegistrationForm,
+)
 from pretix.base.forms.user import UserSettingsForm
 from pretix.base.models import User
 from pretix.base.services.mail import mail
 from pretix.helpers.urls import build_absolute_uri
-from pretix.presale.forms.auth import (
-    GlobalRegistrationForm, LocalRegistrationForm, LoginForm,
-    PasswordForgotForm, PasswordRecoverForm,
-)
 from pretix.presale.views import (
-    CartDisplayMixin, EventLoginRequiredMixin, EventViewMixin,
+    CartDisplayMixin, EventViewMixin, LoginRequiredMixin,
 )
 from pretix.presale.views.cart import CartAdd
 
@@ -102,8 +101,7 @@ class EventLogin(EventViewMixin, TemplateView):
                             event=self.request.event.slug)
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated() and \
-                (request.user.event is None or request.user.event == request.event):
+        if request.user.is_authenticated():
             return self.redirect_to_next()
         return super().get(request, *args, **kwargs)
 
@@ -113,27 +111,15 @@ class EventLogin(EventViewMixin, TemplateView):
             if form.is_valid() and form.user_cache:
                 login(request, form.user_cache)
                 return self.redirect_to_next()
-        elif request.POST.get('form') == 'local_registration':
-            form = self.local_registration_form
+        elif request.POST.get('form') == 'registration':
+            form = self.registration_form
             if form.is_valid():
-                user = User.objects.create_local_user(
-                    request.event, form.cleaned_data['username'], form.cleaned_data['password'],
-                    email=form.cleaned_data['email'] if form.cleaned_data['email'] != '' else None,
-                    locale=request.LANGUAGE_CODE,
-                    timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
-                )
-                user = authenticate(identifier=user.identifier, password=form.cleaned_data['password'])
-                login(request, user)
-                return self.redirect_to_next()
-        elif request.POST.get('form') == 'global_registration' and settings.PRETIX_GLOBAL_REGISTRATION:
-            form = self.global_registration_form
-            if form.is_valid():
-                user = User.objects.create_global_user(
+                user = User.objects.create_user(
                     form.cleaned_data['email'], form.cleaned_data['password'],
                     locale=request.LANGUAGE_CODE,
                     timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
                 )
-                user = authenticate(identifier=user.identifier, password=form.cleaned_data['password'])
+                user = authenticate(email=user.email, password=form.cleaned_data['password'])
                 login(request, user)
                 return self.redirect_to_next()
         return super().get(request, *args, **kwargs)
@@ -146,26 +132,15 @@ class EventLogin(EventViewMixin, TemplateView):
         )
 
     @cached_property
-    def global_registration_form(self):
-        if settings.PRETIX_GLOBAL_REGISTRATION:
-            return GlobalRegistrationForm(
-                data=self.request.POST if self.request.POST.get('form', '') == 'global_registration' else None
-            )
-        else:
-            return None
-
-    @cached_property
-    def local_registration_form(self):
-        return LocalRegistrationForm(
-            self.request,
-            data=self.request.POST if self.request.POST.get('form', '') == 'local_registration' else None
+    def registration_form(self):
+        return RegistrationForm(
+            data=self.request.POST if self.request.POST.get('form', '') == 'registration' else None
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['login_form'] = self.login_form
-        context['global_registration_form'] = self.global_registration_form
-        context['local_registration_form'] = self.local_registration_form
+        context['registration_form'] = self.registration_form
         return context
 
 
@@ -173,8 +148,7 @@ class EventForgot(EventViewMixin, TemplateView):
     template_name = 'pretixpresale/event/forgot.html'
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated() and \
-                (request.user.event is None or request.user.event == request.event):
+        if request.user.is_authenticated():
             return redirect('presale:event.orders',
                             organizer=self.request.event.organizer.slug,
                             event=self.request.event.slug)
@@ -238,8 +212,7 @@ class EventRecover(EventViewMixin, TemplateView):
     }
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated() and \
-                (request.user.event is None or request.user.event == request.event):
+        if request.user.is_authenticated():
             return redirect('presale:event.orders',
                             organizer=self.request.event.organizer.slug,
                             event=self.request.event.slug)
@@ -306,7 +279,7 @@ class EventLogout(EventViewMixin, View):
                         event=self.request.event.slug)
 
 
-class EventAccount(EventLoginRequiredMixin, EventViewMixin, TemplateView):
+class EventAccount(LoginRequiredMixin, EventViewMixin, TemplateView):
     template_name = 'pretixpresale/event/account.html'
 
     def get_context_data(self, **kwargs):
@@ -315,7 +288,7 @@ class EventAccount(EventLoginRequiredMixin, EventViewMixin, TemplateView):
         return context
 
 
-class EventOrders(EventLoginRequiredMixin, EventViewMixin, TemplateView):
+class EventOrders(LoginRequiredMixin, EventViewMixin, TemplateView):
     template_name = 'pretixpresale/event/orders.html'
 
     def get_context_data(self, **kwargs):
@@ -324,7 +297,7 @@ class EventOrders(EventLoginRequiredMixin, EventViewMixin, TemplateView):
         return context
 
 
-class EventAccountSettings(EventLoginRequiredMixin, EventViewMixin, UpdateView):
+class EventAccountSettings(LoginRequiredMixin, EventViewMixin, UpdateView):
     model = User
     form_class = UserSettingsForm
     template_name = 'pretixpresale/event/account_settings.html'

@@ -17,7 +17,7 @@ def env():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    user = User.objects.create_user('dummy@dummy.dummy', 'dummy@dummy.dummy', 'dummy')
+    user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     EventPermission.objects.create(user=user, event=event)
     o1 = Order.objects.create(
         code='1234S', event=event,
@@ -40,7 +40,7 @@ def env():
 
 @pytest.mark.django_db
 def test_import_csv_file(client, env):
-    client.login(identifier='dummy@dummy.dummy', password='dummy')
+    client.login(email='dummy@dummy.dummy', password='dummy')
     r = client.get('/control/event/dummy/dummy/banktransfer/import/')
     assert r.status_code == 200
 

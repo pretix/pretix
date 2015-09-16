@@ -23,9 +23,9 @@ class OrdersTest(TestCase):
         )
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.event.settings.set('ticketoutput_testdummy__enabled', True)
-        self.user = User.objects.create_local_user(self.event, 'demo', 'foo')
-        self.user2 = User.objects.create_local_user(self.event, 'bar', 'foo')
-        self.assertTrue(self.client.login(username='demo@%s.event.pretix' % self.event.identity, password='foo'))
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'foo')
+        self.user2 = User.objects.create_user('bar@dummy.dummy', 'foo')
+        self.assertTrue(self.client.login(email='dummy@dummy.dummy', password='foo'))
 
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
         self.quota_shirts = Quota.objects.create(event=self.event, name='Shirts', size=2)

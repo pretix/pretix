@@ -39,8 +39,7 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         if self.request.GET.get("user", "") != "":
             u = self.request.GET.get("user", "")
             qs = qs.filter(
-                Q(user__identifier__icontains=u) | Q(user__email__icontains=u)
-                | Q(user__givenname__icontains=u) | Q(user__familyname__icontains=u)
+                Q(user__email__icontains=u) | Q(user__givenname__icontains=u) | Q(user__familyname__icontains=u)
             )
         if self.request.GET.get("status", "") != "":
             s = self.request.GET.get("status", "")

@@ -8,7 +8,7 @@ class LoginFormBrowserTest(BrowserTest):
 
     def setUp(self):
         super().setUp()
-        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy@dummy.dummy', 'dummy')
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
 
     def test_login(self):
         self.driver.implicitly_wait(10)
@@ -38,7 +38,7 @@ class LoginFormTest(TestCase):
     """
 
     def setUp(self):
-        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy@dummy.dummy', 'dummy')
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
 
     def test_wrong_credentials(self):
         c = Client()

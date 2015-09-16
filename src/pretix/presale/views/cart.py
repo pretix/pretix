@@ -13,7 +13,7 @@ from django.views.generic import View
 from pretix.base.models import (
     CartPosition, EventLock, Item, ItemVariation, Quota,
 )
-from pretix.presale.views import EventLoginRequiredMixin, EventViewMixin
+from pretix.presale.views import EventViewMixin, LoginRequiredMixin
 
 
 class CartActionMixin:
@@ -62,7 +62,7 @@ class CartActionMixin:
         return items
 
 
-class CartRemove(EventViewMixin, CartActionMixin, EventLoginRequiredMixin, View):
+class CartRemove(EventViewMixin, CartActionMixin, LoginRequiredMixin, View):
 
     def post(self, *args, **kwargs):
         items = self._items_from_post_data()
@@ -110,10 +110,9 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
 
         self.items = self._items_from_post_data()
 
-        # We do not use EventLoginRequiredMixin here, as we want to store stuff into the
+        # We do not use LoginRequiredMixin here, as we want to store stuff into the
         # session before redirecting to login
-        if not request.user.is_authenticated() or \
-                (request.user.event is not None and request.user.event != request.event):
+        if not request.user.is_authenticated():
             request.session['cart_tmp'] = json.dumps(self.items)
             return redirect_to_login(
                 self.get_success_url(), reverse('presale:event.checkout.login', kwargs={

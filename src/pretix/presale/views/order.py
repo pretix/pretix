@@ -15,7 +15,7 @@ from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
 from pretix.presale.views import (
-    CartDisplayMixin, EventLoginRequiredMixin, EventViewMixin,
+    CartDisplayMixin, EventViewMixin, LoginRequiredMixin,
 )
 from pretix.presale.views.checkout import QuestionsViewMixin
 
@@ -49,7 +49,7 @@ class OrderDetailMixin:
         })
 
 
-class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
+class OrderDetails(EventViewMixin, LoginRequiredMixin, OrderDetailMixin,
                    CartDisplayMixin, TemplateView):
     template_name = "pretixpresale/event/order.html"
 
@@ -102,7 +102,7 @@ class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         return ctx
 
 
-class OrderPay(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin, TemplateView):
+class OrderPay(EventViewMixin, LoginRequiredMixin, OrderDetailMixin, TemplateView):
     template_name = "pretixpresale/event/order_pay.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -145,7 +145,7 @@ class OrderPay(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin, Templa
         })
 
 
-class OrderPayDo(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin, TemplateView):
+class OrderPayDo(EventViewMixin, LoginRequiredMixin, OrderDetailMixin, TemplateView):
     template_name = "pretixpresale/event/order_pay_confirm.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -185,7 +185,7 @@ class OrderPayDo(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin, Temp
         })
 
 
-class OrderModify(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
+class OrderModify(EventViewMixin, LoginRequiredMixin, OrderDetailMixin,
                   QuestionsViewMixin, TemplateView):
     template_name = "pretixpresale/event/order_modify.html"
 
@@ -227,7 +227,7 @@ class OrderModify(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         return ctx
 
 
-class OrderCancel(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
+class OrderCancel(EventViewMixin, LoginRequiredMixin, OrderDetailMixin,
                   TemplateView):
     template_name = "pretixpresale/event/order_cancel.html"
 
@@ -255,7 +255,7 @@ class OrderCancel(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         return ctx
 
 
-class OrderDownload(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
+class OrderDownload(EventViewMixin, LoginRequiredMixin, OrderDetailMixin,
                     View):
 
     @cached_property

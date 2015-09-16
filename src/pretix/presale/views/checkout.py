@@ -12,7 +12,7 @@ from pretix.base.services.orders import OrderError, perform_order
 from pretix.base.signals import register_payment_providers
 from pretix.presale.forms.checkout import QuestionsForm
 from pretix.presale.views import (
-    CartDisplayMixin, EventLoginRequiredMixin, EventViewMixin,
+    CartDisplayMixin, EventViewMixin, LoginRequiredMixin,
 )
 
 
@@ -106,7 +106,7 @@ class QuestionsViewMixin:
         return not failed
 
 
-class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin,
+class CheckoutStart(EventViewMixin, CartDisplayMixin, LoginRequiredMixin,
                     QuestionsViewMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_questions.html"
 
@@ -138,7 +138,7 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin,
         return ctx
 
 
-class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, CheckoutView):
+class PaymentDetails(EventViewMixin, CartDisplayMixin, LoginRequiredMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_payment.html"
 
     @cached_property
@@ -194,7 +194,7 @@ class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, 
         return self.get_questions_url() + "?back=true"
 
 
-class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, CheckoutView):
+class OrderConfirm(EventViewMixin, CartDisplayMixin, LoginRequiredMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_confirm.html"
 
     def __init__(self, *args, **kwargs):

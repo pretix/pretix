@@ -59,7 +59,7 @@ class UserSettingsForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        if User.objects.filter(Q(identifier=email) & ~Q(pk=self.instance.pk)).exists():
+        if User.objects.filter(Q(email=email) & ~Q(pk=self.instance.pk)).exists():
             raise forms.ValidationError(
                 self.error_messages['duplicate_identifier'],
                 code='duplicate_identifier',
@@ -88,6 +88,5 @@ class UserSettingsForm(forms.ModelForm):
 
         if password1:
             self.instance.set_password(password1)
-        self.instance.identifier = email
 
         return self.cleaned_data
