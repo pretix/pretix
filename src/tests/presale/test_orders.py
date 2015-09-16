@@ -272,8 +272,7 @@ class OrdersTest(TestCase):
         response = self.client.get(
             '/%s/%s/order/%s/download/testdummy' % (self.orga.slug, self.event.slug, self.order.code),
         )
-        assert response.status_code == 200
-        assert response.content.strip().decode() == self.order.identity
+        assert response.status_code == 302
 
         self.event.settings.set('ticket_download_date', now() + datetime.timedelta(days=1))
         response = self.client.get(
@@ -287,7 +286,7 @@ class OrdersTest(TestCase):
         response = self.client.get(
             '/%s/%s/order/%s/download/testdummy' % (self.orga.slug, self.event.slug, self.order.code),
         )
-        assert response.status_code == 200
+        assert response.status_code == 302
 
         self.event.settings.set('ticket_download', False)
         response = self.client.get(
