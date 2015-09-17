@@ -227,7 +227,7 @@ class CheckoutTestCase(TestCase):
 
         response = self.client.post('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
-        self.assertEqual(len(doc.select(".alert-success")), 1)
+        self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertFalse(CartPosition.objects.current.filter(identity=cr1.identity).exists())
         self.assertEqual(len(Order.objects.current.filter(user=self.user)), 1)
         self.assertEqual(len(OrderPosition.objects.current.filter(order__user=self.user)), 1)
@@ -241,7 +241,7 @@ class CheckoutTestCase(TestCase):
 
         response = self.client.post('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
-        self.assertEqual(len(doc.select(".alert-success")), 1)
+        self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertFalse(CartPosition.objects.current.filter(identity=cr1.identity).exists())
         self.assertEqual(len(Order.objects.current.filter(user=self.user)), 1)
         self.assertEqual(len(OrderPosition.objects.current.filter(order__user=self.user)), 1)
