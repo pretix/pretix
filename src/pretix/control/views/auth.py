@@ -4,10 +4,8 @@ from django.contrib.auth import (
 )
 from django.shortcuts import redirect, render
 
+from pretix.base.forms.auth import LoginForm, RegistrationForm
 from pretix.base.models import User
-from pretix.control.forms.auth import (
-    AuthenticationForm, GlobalRegistrationForm,
-)
 
 
 def login(request):
@@ -21,14 +19,14 @@ def login(request):
             return redirect(request.GET.get("next", 'control:index'))
         return redirect('control:index')
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
+        form = LoginForm(data=request.POST)
         if form.is_valid() and form.user_cache:
             auth_login(request, form.user_cache)
             if "next" in request.GET:
                 return redirect(request.GET.get("next", 'control:index'))
             return redirect('control:index')
     else:
-        form = AuthenticationForm()
+        form = LoginForm()
     ctx['form'] = form
     return render(request, 'pretixcontrol/auth/login.html', ctx)
 
@@ -51,17 +49,17 @@ def register(request):
             return redirect(request.GET.get("next", 'control:index'))
         return redirect('control:index')
     if request.method == 'POST':
-        form = GlobalRegistrationForm(data=request.POST)
+        form = RegistrationForm(data=request.POST)
         if form.is_valid():
-            user = User.objects.create_global_user(
+            user = User.objects.create_user(
                 form.cleaned_data['email'], form.cleaned_data['password'],
                 locale=request.LANGUAGE_CODE,
                 timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
             )
-            user = authenticate(identifier=user.identifier, password=form.cleaned_data['password'])
+            user = authenticate(email=user.email, password=form.cleaned_data['password'])
             auth_login(request, user)
             return redirect('control:index')
     else:
-        form = GlobalRegistrationForm()
+        form = RegistrationForm()
     ctx['form'] = form
     return render(request, 'pretixcontrol/auth/register.html', ctx)

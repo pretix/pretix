@@ -31,8 +31,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         users = set([o.user for o in orders])
 
         for u in users:
-            mail(u, form.cleaned_data['subject'], form.cleaned_data['message'],
-                 None, self.request.event)
+            mail(u.email, form.cleaned_data['subject'], form.cleaned_data['message'],
+                 None, self.request.event, locale=u.locale)
 
         messages.success(self.request, _('Your message will be sent to the selected users.'))
 

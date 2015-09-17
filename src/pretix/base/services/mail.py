@@ -13,7 +13,7 @@ from pretix.helpers.urls import build_absolute_uri
 logger = logging.getLogger('pretix.base.mail')
 
 
-def mail(user: User, subject: str, template: str, context: dict=None, event: Event=None):
+def mail(email: str, subject: str, template: str, context: dict=None, event: Event=None, locale: str=None):
     """
     Sends out an email to a user.
 
@@ -30,11 +30,8 @@ def mail(user: User, subject: str, template: str, context: dict=None, event: Eve
     the email has been sent, just that it has been queued by the e-mail
     backend.
     """
-    if not user.email:
-        return False
-
     _lng = translation.get_language()
-    translation.activate(user.locale or settings.LANGUAGE_CODE)
+    translation.activate(locale or settings.LANGUAGE_CODE)
 
     if isinstance(template, LazyI18nString):
         body = str(template)
@@ -66,7 +63,7 @@ def mail(user: User, subject: str, template: str, context: dict=None, event: Eve
     )
     body += "\r\n"
     try:
-        return mail_send([user.email], subject, body, sender)
+        return mail_send([email], subject, body, sender)
     finally:
         translation.activate(_lng)
 

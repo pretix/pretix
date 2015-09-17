@@ -21,13 +21,13 @@ class CheckoutTestCase(TestCase):
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
             plugins='pretix.plugins.stripe,pretix.plugins.banktransfer'
         )
-        self.user = User.objects.create_local_user(self.event, 'demo', 'demo')
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'demo')
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=5)
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                           category=self.category, default_price=23, admission=True)
         self.quota_tickets.items.add(self.ticket)
-        self.assertTrue(self.client.login(username='demo@%s.event.pretix' % self.event.identity, password='demo'))
+        self.assertTrue(self.client.login(email='dummy@dummy.dummy', password='demo'))
         self.event.settings.set('attendee_names_asked', False)
         self.event.settings.set('payment_banktransfer__enabled', True)
 

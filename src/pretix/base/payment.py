@@ -14,6 +14,7 @@ from pretix.base.models import CartPosition, Order
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
+from pretix.presale.views import user_cart_q
 
 
 class BasePaymentProvider:
@@ -441,7 +442,7 @@ class FreeOrderProvider(BasePaymentProvider):
 
     def is_allowed(self, request: HttpRequest) -> bool:
         return CartPosition.objects.current.filter(
-            Q(user=request.user) & Q(event=request.event)
+            user_cart_q(request) & Q(event=request.event)
         ).aggregate(sum=Sum('price'))['sum'] == 0
 
 

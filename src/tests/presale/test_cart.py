@@ -22,7 +22,7 @@ class CartTestMixin:
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc)
         )
-        self.user = User.objects.create_local_user(self.event, 'demo', 'demo')
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'demo')
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
         self.quota_shirts = Quota.objects.create(event=self.event, name='Shirts', size=2)
         self.shirt = Item.objects.create(event=self.event, name='T-Shirt', category=self.category, default_price=12)
@@ -51,7 +51,7 @@ class CartBrowserTest(CartTestMixin, BrowserTest):
         self.driver.find_element_by_css_selector('input[type=number][name=item_%s]' % self.ticket.identity).send_keys('1')
         self.scroll_and_click(self.driver.find_element_by_css_selector('.checkout-button-row button'))
         # should redirect to login page
-        self.driver.find_element_by_name('username')
+        self.driver.find_element_by_name('email')
 
     def test_simple_login(self):
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
@@ -63,44 +63,26 @@ class CartBrowserTest(CartTestMixin, BrowserTest):
         self.scroll_and_click(self.driver.find_element_by_css_selector('a[href*=loginForm]'))
         time.sleep(1)
         # enter login details
-        self.driver.find_element_by_css_selector('#loginForm input[name=username]').send_keys('demo')
+        self.driver.find_element_by_css_selector('#loginForm input[name=email]').send_keys('dummy@dummy.dummy')
         self.driver.find_element_by_css_selector('#loginForm input[name=password]').send_keys('demo')
         self.scroll_and_click(self.driver.find_element_by_css_selector('#loginForm button.btn-primary'))
         # should display our ticket
         self.assertIn('Early-bird', self.driver.find_element_by_css_selector('.cart-row:first-child').text)
 
-    def test_local_registration(self):
+    def test_registration(self):
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
         # add the entry ticket to cart
         self.driver.find_element_by_css_selector('input[type=number][name=item_%s]' % self.ticket.identity).send_keys('1')
         self.scroll_and_click(self.driver.find_element_by_css_selector('.checkout-button-row button'))
         # should redirect to login page
         # open the login accordion
-        self.scroll_and_click(self.driver.find_element_by_css_selector('a[href*=localRegistrationForm]'))
+        self.scroll_and_click(self.driver.find_element_by_css_selector('a[href*=registrationForm]'))
         time.sleep(1)
         # enter login details
-        self.driver.find_element_by_css_selector('#localRegistrationForm input[name=username]').send_keys('demo2')
-        self.driver.find_element_by_css_selector('#localRegistrationForm input[name=email]').send_keys('demo@demo.demo')
-        self.driver.find_element_by_css_selector('#localRegistrationForm input[name=password]').send_keys('demo')
-        self.driver.find_element_by_css_selector('#localRegistrationForm input[name=password_repeat]').send_keys('demo')
-        self.scroll_and_click(self.driver.find_element_by_css_selector('#localRegistrationForm button.btn-primary'))
-        # should display our ticket
-        self.assertIn('Early-bird', self.driver.find_element_by_css_selector('.cart-row:first-child').text)
-
-    def test_global_registration(self):
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        # add the entry ticket to cart
-        self.driver.find_element_by_css_selector('input[type=number][name=item_%s]' % self.ticket.identity).send_keys('1')
-        self.scroll_and_click(self.driver.find_element_by_css_selector('.checkout-button-row button'))
-        # should redirect to login page
-        # open the login accordion
-        self.scroll_and_click(self.driver.find_element_by_css_selector('a[href*=globalRegistrationForm]'))
-        time.sleep(1)
-        # enter login details
-        self.driver.find_element_by_css_selector('#globalRegistrationForm input[name=email]').send_keys('demo@example.com')
-        self.driver.find_element_by_css_selector('#globalRegistrationForm input[name=password]').send_keys('demo')
-        self.driver.find_element_by_css_selector('#globalRegistrationForm input[name=password_repeat]').send_keys('demo')
-        self.scroll_and_click(self.driver.find_element_by_css_selector('#globalRegistrationForm button.btn-primary'))
+        self.driver.find_element_by_css_selector('#registrationForm input[name=email]').send_keys('demo@example.com')
+        self.driver.find_element_by_css_selector('#registrationForm input[name=password]').send_keys('demo')
+        self.driver.find_element_by_css_selector('#registrationForm input[name=password_repeat]').send_keys('demo')
+        self.scroll_and_click(self.driver.find_element_by_css_selector('#registrationForm button.btn-primary'))
         # should display our ticket
         self.assertIn('Early-bird', self.driver.find_element_by_css_selector('.cart-row:first-child').text)
 
@@ -109,7 +91,7 @@ class CartTest(CartTestMixin, TestCase):
 
     def setUp(self):
         super().setUp()
-        self.assertTrue(self.client.login(username='demo@%s.event.pretix' % self.event.identity, password='demo'))
+        self.assertTrue(self.client.login(email='dummy@dummy.dummy', password='demo'))
 
     def test_simple(self):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {

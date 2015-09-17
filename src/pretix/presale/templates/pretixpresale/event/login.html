@@ -19,17 +19,17 @@
                     <form class="form-horizontal" method="post">
                         {% csrf_token %}
                         {% bootstrap_form_errors login_form type='all' layout='inline' %}
-                        {% bootstrap_field login_form.username layout="horizontal" %}
+                        {% bootstrap_field login_form.email layout="horizontal" %}
                         {% bootstrap_field login_form.password layout="horizontal" %}
                         <input type="hidden" name="form" value="login" />
                         <div class="form-group">
-                            <div class="submit-group col-md-offset-2 col-md-4 text-right">
-                                <a href="{% url "presale:event.forgot" event=request.event.slug organizer=request.event.organizer.slug %}" class="btn btn-link">
-                                    {% trans "Lost password?" %}
-                                </a>
+                            <div class="submit-group col-md-offset-3 col-md-4">
                                 <button type="submit" class="btn btn-primary btn-save">
                                     {% trans "Login" %}
                                 </button>
+                                <a href="{% url "presale:event.forgot" event=request.event.slug organizer=request.event.organizer.slug %}" class="btn btn-link">
+                                    {% trans "Lost password?" %}
+                                </a>
                             </div>
                         </div>
                     </form>
@@ -39,30 +39,23 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="headingOne">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" href="#localRegistrationForm" data-parent="#login_accordion">
-                        {% if global_registration_form %}
-                            {% trans "I want to create a new account just for this event" %}
-                        {% else %}
-                            {% trans "I want to create a new account" %}
-                        {% endif %}
+                    <a data-toggle="collapse" href="#guestForm" data-parent="#login_accordion">
+                        {% trans "I want to order as a guest" %}
                     </a>
                 </h4>
             </div>
-            <div id="localRegistrationForm" class="panel-collapse collapsed {% if request.POST.form == 'local_registration' %}in{% endif %}">
+            <div id="guestForm" class="panel-collapse collapsed {% if request.POST.form == 'guest' %}in{% endif %}">
                 <div class="panel-body">
                     <div class="panel-body">
                         <form class="form-horizontal" method="post">
                             {% csrf_token %}
-                            {% bootstrap_form_errors local_registration_form type='all' layout='inline' %}
-                            {% bootstrap_field local_registration_form.username layout="horizontal" %}
-                            {% bootstrap_field local_registration_form.email layout="horizontal" %}
-                            {% bootstrap_field local_registration_form.password layout="horizontal" %}
-                            {% bootstrap_field local_registration_form.password_repeat layout="horizontal" %}
-                            <input type="hidden" name="form" value="local_registration" />
+                            {% bootstrap_form_errors guest_form type='all' layout='inline' %}
+                            {% bootstrap_field guest_form.email layout="horizontal" %}
+                            <input type="hidden" name="form" value="guest" />
                             <div class="form-group">
-                                <div class="submit-group col-md-offset-2 col-md-4 text-right">
+                                <div class="submit-group col-md-offset-3 col-md-4">
                                     <button type="submit" class="btn btn-primary btn-save">
-                                        {% trans "Register" %}
+                                        {% trans "Continue" %}
                                     </button>
                                 </div>
                             </div>
@@ -71,35 +64,34 @@
                 </div>
             </div>
         </div>
-        {% if global_registration_form %}
-            <div class="panel panel-default">
-                <div class="panel-heading" role="tab" id="headingOne">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" href="#globalRegistrationForm" data-parent="#login_accordion">
-                            {% trans "I want to create a permanent account" %}
-                        </a>
-                    </h4>
-                </div>
-                <div id="globalRegistrationForm" class="panel-collapse collapsed {% if request.POST.form == 'global_registration' %}in{% endif %}">
-                    <div class="panel-body">
-                        <form class="form-horizontal" method="post">
-                            {% csrf_token %}
-                            {% bootstrap_form_errors global_registration_form type='all' layout='inline' %}
-                            {% bootstrap_field global_registration_form.email layout="horizontal" %}
-                            {% bootstrap_field global_registration_form.password layout="horizontal" %}
-                            {% bootstrap_field global_registration_form.password_repeat layout="horizontal" %}
-                            <input type="hidden" name="form" value="global_registration" />
-                            <div class="form-group">
-                                <div class="submit-group col-md-offset-2 col-md-4 text-right">
-                                    <button type="submit" class="btn btn-primary btn-save">
-                                        {% trans "Register" %}
-                                    </button>
-                                </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#registrationForm" data-parent="#login_accordion">
+                        {% trans "I want to create a permanent account" %}
+                    </a>
+                </h4>
+            </div>
+            <div id="registrationForm" class="panel-collapse collapsed
+             {% if request.POST.form == 'registration' %}in{% endif %}">
+                <div class="panel-body">
+                    <form class="form-horizontal" method="post">
+                        {% csrf_token %}
+                        {% bootstrap_form_errors registration_form type='all' layout='inline' %}
+                        {% bootstrap_field registration_form.email layout="horizontal" %}
+                        {% bootstrap_field registration_form.password layout="horizontal" %}
+                        {% bootstrap_field registration_form.password_repeat layout="horizontal" %}
+                        <input type="hidden" name="form" value="registration" />
+                        <div class="form-group">
+                            <div class="submit-group col-md-offset-3 col-md-4">
+                                <button type="submit" class="btn btn-primary btn-save">
+                                    {% trans "Register" %}
+                                </button>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-        {% endif %}
+        </div>
     </div>
 {% endblock %}

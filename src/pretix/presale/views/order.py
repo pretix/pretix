@@ -2,34 +2,28 @@ from datetime import timedelta
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.http import HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, View
-
 from pretix.base.models import CachedFile, CachedTicket, Order, OrderPosition
 from pretix.base.services.tickets import generate
-from pretix.base.signals import (
-    register_payment_providers, register_ticket_outputs,
-)
-from pretix.presale.views import (
-    CartDisplayMixin, EventLoginRequiredMixin, EventViewMixin,
-)
+from pretix.base.signals import register_payment_providers, register_ticket_outputs
+from pretix.presale.views import CartDisplayMixin, EventViewMixin
 from pretix.presale.views.checkout import QuestionsViewMixin
 
 
 class OrderDetailMixin:
-
     @cached_property
     def order(self):
         try:
-            return Order.objects.current.get(
-                user=self.request.user,
-                event=self.request.event,
-                code=self.kwargs['order'],
-            )
+            q = Q(Q(secret__isnull=False) & Q(secret__in=self.request.session['order_secrets']))
+            if self.request.user.is_authenticated():
+                q |= Q(user=self.request.user)
+            return Order.objects.current.get(q & Q(event=self.request.event) & Q(code=self.kwargs['order']))
         except Order.DoesNotExist:
             return None
 
@@ -49,8 +43,7 @@ class OrderDetailMixin:
         })
 
 
-class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
-                   CartDisplayMixin, TemplateView):
+class OrderDetails(EventViewMixin, OrderDetailMixin, CartDisplayMixin, TemplateView):
     template_name = "pretixpresale/event/order.html"
 
     def get(self, request, *args, **kwargs):
@@ -102,7 +95,7 @@ class OrderDetails(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         return ctx
 
 
-class OrderPay(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin, TemplateView):
+class OrderPay(EventViewMixin, OrderDetailMixin, TemplateView):
     template_name = "pretixpresale/event/order_pay.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -145,7 +138,7 @@ class OrderPay(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin, Templa
         })
 
 
-class OrderPayDo(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin, TemplateView):
+class OrderPayDo(EventViewMixin, OrderDetailMixin, TemplateView):
     template_name = "pretixpresale/event/order_pay_confirm.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -185,8 +178,7 @@ class OrderPayDo(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin, Temp
         })
 
 
-class OrderModify(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
-                  QuestionsViewMixin, TemplateView):
+class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, TemplateView):
     template_name = "pretixpresale/event/order_modify.html"
 
     @cached_property
@@ -227,8 +219,7 @@ class OrderModify(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         return ctx
 
 
-class OrderCancel(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
-                  TemplateView):
+class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
     template_name = "pretixpresale/event/order_cancel.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -255,9 +246,7 @@ class OrderCancel(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
         return ctx
 
 
-class OrderDownload(EventViewMixin, EventLoginRequiredMixin, OrderDetailMixin,
-                    View):
-
+class OrderDownload(EventViewMixin, OrderDetailMixin, View):
     @cached_property
     def output(self):
         responses = register_ticket_outputs.send(self.request.event)

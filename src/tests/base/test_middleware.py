@@ -19,7 +19,7 @@ class LocaleDeterminationTest(TestCase):
         )
         cls.TEST_LOCALE = 'de' if settings.LANGUAGE_CODE == 'en' else 'en'
         cls.TEST_LOCALE_LONG = 'de-AT' if settings.LANGUAGE_CODE == 'en' else 'en-NZ'
-        cls.user = User.objects.create_user('dummy@dummy.dummy', 'dummy@dummy.dummy', 'dummy')
+        cls.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
 
     def test_global_default(self):
         c = Client()

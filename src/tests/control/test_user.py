@@ -6,7 +6,7 @@ from pretix.base.models import User
 class UserSettingsTest(BrowserTest):
     def setUp(self):
         super().setUp()
-        self.user = User.objects.create_global_user('dummy@dummy.dummy', 'dummy')
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         self.driver.implicitly_wait(10)
         self.driver.get('%s%s' % (self.live_server_url, '/control/login'))
         username_input = self.driver.find_element_by_name("email")
@@ -47,7 +47,7 @@ class UserSettingsTest(BrowserTest):
         assert self.user.email == 'foo@example.com'
 
     def test_change_email_no_duplicates(self):
-        User.objects.create_global_user('foo@example.com', 'foo')
+        User.objects.create_user('foo@example.com', 'foo')
         self.driver.find_element_by_name("email").clear()
         self.driver.find_element_by_name("email").send_keys("foo@example.com")
         self.driver.find_element_by_name("old_pw").clear()

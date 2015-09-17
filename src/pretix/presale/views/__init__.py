@@ -11,26 +11,52 @@ from pretix.base.models import CartPosition
 from pretix.base.signals import register_payment_providers
 
 
-class EventLoginRequiredMixin:
+def login_required(view_func):
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return view_func(request, *args, **kwargs)
+        path = request.path
+        return redirect_to_login(
+            path, reverse('presale:event.checkout.login', kwargs={
+                'organizer': request.event.organizer.slug,
+                'event': request.event.slug,
+            }), 'next'
+        )
+    return _wrapped_view
 
+
+def login_or_guest_required(view_func):
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.is_authenticated() or 'guest_email' in request.session:
+            return view_func(request, *args, **kwargs)
+        path = request.path
+        return redirect_to_login(
+            path, reverse('presale:event.checkout.login', kwargs={
+                'organizer': request.event.organizer.slug,
+                'event': request.event.slug,
+            }), 'next'
+        )
+    return _wrapped_view
+
+
+class LoginRequiredMixin:
     @classmethod
     def as_view(cls, **initkwargs):
-        view = super(EventLoginRequiredMixin, cls).as_view(**initkwargs)
+        view = super().as_view(**initkwargs)
+        return login_required(view)
 
-        def decorator(view_func):
-            def _wrapped_view(request, *args, **kwargs):
-                if request.user.is_authenticated() and \
-                        (request.user.event is None or request.user.event == request.event):
-                    return view_func(request, *args, **kwargs)
-                path = request.path
-                return redirect_to_login(
-                    path, reverse('presale:event.checkout.login', kwargs={
-                        'organizer': request.event.organizer.slug,
-                        'event': request.event.slug,
-                    }), 'next'
-                )
-            return _wrapped_view
-        return decorator(view)
+
+class LoginOrGuestRequiredMixin:
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super().as_view(**initkwargs)
+        return login_or_guest_required(view)
+
+
+def user_cart_q(request):
+    if request.user.is_authenticated():
+        return Q(Q(user=request.user) | Q(session=request.session.session_key))
+    return Q(Q(user__isnull=True) & Q(session=request.session.session_key))
 
 
 class CartDisplayMixin:
@@ -41,7 +67,7 @@ class CartDisplayMixin:
         A list of this users cart position
         """
         return list(CartPosition.objects.current.filter(
-            Q(user=self.request.user) & Q(event=self.request.event)
+            user_cart_q(self.request) & Q(event=self.request.event)
         ).order_by(
             'item', 'variation'
         ).select_related(
@@ -53,7 +79,7 @@ class CartDisplayMixin:
 
     def get_cart(self, answers=False, queryset=None, payment_fee=None):
         queryset = queryset or CartPosition.objects.current.filter(
-            Q(user=self.request.user) & Q(event=self.request.event)
+            user_cart_q(self.request) & Q(event=self.request.event)
         )
 
         prefetch = ['variation__values', 'variation__values__prop']
@@ -119,7 +145,6 @@ class CartDisplayMixin:
 
 
 class EventViewMixin:
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['event'] = self.request.event

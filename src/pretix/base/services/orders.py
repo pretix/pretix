@@ -4,13 +4,16 @@ from django.db import transaction
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import EventLock, Order, OrderPosition, Quota
+from pretix.base.models import (
+    Event, EventLock, Order, OrderPosition, Quota, User,
+)
 from pretix.base.services.mail import mail
 from pretix.base.signals import order_paid, order_placed
 from pretix.helpers.urls import build_absolute_uri
 
 
-def mark_order_paid(order, provider=None, info=None, date=None, manual=None, force=False):
+def mark_order_paid(order: Order, provider: str=None, info: str=None, date: datetime=None, manual: bool=None,
+                    force: bool=False):
     """
     Marks an order as paid. This clones the order object, sets the payment provider,
     info and date and returns the cloned order object.
@@ -44,20 +47,19 @@ def mark_order_paid(order, provider=None, info=None, date=None, manual=None, for
     from pretix.base.services.mail import mail
 
     mail(
-        order.user, _('Payment received for your order: %(code)s') % {'code': order.code},
+        order.email, _('Payment received for your order: %(code)s') % {'code': order.code},
         'pretixpresale/email/order_paid.txt',
         {
-            'user': order.user,
             'order': order,
             'event': order.event,
             'url': build_absolute_uri('presale:event.order', kwargs={
                 'event': order.event.slug,
                 'organizer': order.event.organizer.slug,
                 'order': order.code,
-            }),
+            }) + '?order_secret=' + order.secret,
             'downloads': order.event.settings.get('ticket_download', as_type=bool)
         },
-        order.event
+        order.event, locale=order.locale
     )
     return order
 
@@ -66,7 +68,7 @@ class OrderError(Exception):
     pass
 
 
-def check_positions(event, dt, positions):
+def check_positions(event: Event, dt: datetime, positions: list):
     error_messages = {
         'unavailable': _('Some of the products you selected were no longer available. '
                          'Please see below for details.'),
@@ -117,7 +119,8 @@ def check_positions(event, dt, positions):
         raise OrderError(err)
 
 
-def perform_order(event, user, payment_provider, positions):
+def perform_order(event: Event, payment_provider: str, positions: list, user: User=None, email: str=None,
+                  locale: str=None):
     error_messages = {
         'busy': _('We were not able to process your request completely as the '
                   'server was too busy. Please try again.'),
@@ -127,21 +130,22 @@ def perform_order(event, user, payment_provider, positions):
     try:
         with event.lock():
             check_positions(event, dt, positions)
-            order = place_order(event, user, positions, dt, payment_provider)
+            order = place_order(event, user, email if user is None else None, positions, dt, payment_provider,
+                                locale=locale)
             mail(
-                user, _('Your order: %(code)s') % {'code': order.code},
+                order.email, _('Your order: %(code)s') % {'code': order.code},
                 'pretixpresale/email/order_placed.txt',
                 {
-                    'user': user, 'order': order,
+                    'order': order,
                     'event': event,
                     'url': build_absolute_uri('presale:event.order', kwargs={
                         'event': event.slug,
                         'organizer': event.organizer.slug,
                         'order': order.code,
-                    }),
+                    }) + '?order_secret=' + order.secret,
                     'payment': payment_provider.order_pending_mail_render(order)
                 },
-                event
+                event, locale=order.locale
             )
             return order
     except EventLock.LockTimeoutException:
@@ -151,7 +155,8 @@ def perform_order(event, user, payment_provider, positions):
 
 
 @transaction.atomic()
-def place_order(event, user, positions, dt, payment_provider):
+def place_order(event: Event, user: User, email: str, positions: list, dt: datetime, payment_provider: str,
+                locale: str=None):
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
     total += payment_fee
@@ -162,8 +167,10 @@ def place_order(event, user, positions, dt, payment_provider):
         status=Order.STATUS_PENDING,
         event=event,
         user=user,
+        guest_email=email,
         datetime=dt,
         expires=min(expires),
+        locale=locale,
         total=total,
         payment_fee=payment_fee,
         payment_provider=payment_provider.identifier,

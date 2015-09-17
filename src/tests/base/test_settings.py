@@ -152,7 +152,7 @@ class SettingsTestCase(TestCase):
         self._test_serialization(self.event, Event)
 
     def test_serialize_model(self):
-        self._test_serialization(User.objects.create_local_user(self.event, 'dummy', 'dummy'), User)
+        self._test_serialization(User.objects.create_user('dummy@dummy.dummy', 'dummy'), User)
 
     def test_serialize_unknown(self):
         class Type:

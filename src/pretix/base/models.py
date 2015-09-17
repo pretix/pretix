@@ -1,5 +1,6 @@
 import copy
 import random
+import string
 import uuid
 from datetime import datetime
 from itertools import product
@@ -88,34 +89,17 @@ class UserManager(BaseUserManager):
     model documentation to see what's so special about our user model.
     """
 
-    def create_user(self, identifier, username, password=None):
-        user = self.model(identifier=identifier)
+    def create_user(self, email, password=None, **kwargs):
+        user = self.model(email=email, **kwargs)
         user.set_password(password)
         user.save()
         return user
 
-    def create_global_user(self, email, password=None, **kwargs):
-        user = self.model(**kwargs)
-        user.identifier = email
-        user.email = email
-        user.set_password(password)
-        user.save()
-        return user
-
-    def create_local_user(self, event, username, password=None, **kwargs):
-        user = self.model(**kwargs)
-        user.identifier = '%s@%s.event.pretix' % (username, event.identity)
-        user.username = username
-        user.event = event
-        user.set_password(password)
-        user.save()
-        return user
-
-    def create_superuser(self, identifier, password=None):  # NOQA
+    def create_superuser(self, email, password=None):  # NOQA
         # Not used in the software but required by Django
         if password is None:
             raise Exception("You must provide a password")
-        user = self.model(identifier=identifier, email=identifier)
+        user = self.model(email=email)
         user.is_staff = True
         user.is_superuser = True
         user.set_password(password)
@@ -126,44 +110,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """
     This is the user model used by pretix for authentication.
-    Handling users is somehow complicated, as we try to have two
-    classes of users in one system:
 
-        (1) We want *global* users who can just login into pretix and
-            buy tickets for multiple events -- we also need those
-            global users for event organizers who should not need
-            multiple users for managing multiple events.
-        (2) We want *local* users who exist only in the scope of a
-            certain event
-
-    The hard part is to find a primary key to identify all of these
-    users. Letting the users choose usernames is a bad idea, as
-    the primary key needs to be unique and there is no reason for a
-    local user to block a name for all time. Using e-mail addresses
-    is not a good idea either, for two reasons: First, a user might
-    have multiple local users (so they are not unique), and second,
-    it should be possible to create anonymous users without having
-    to supply an e-mail address.
-    Therefore, we use an abstract "identifier" field as the primary
-    key. The identifier is:
-
-        (1) the e-mail address for global users. An e-mail address
-            is and should be required for them and global users use
-            their e-mail address for login.
-        (2) "{username}@{event.identity}.event.pretix" for local users, who
-            use their username to login on the event page.
-
-    The model's save() method automatically fills the identifier field
-    according to this scheme when it is empty. The __str__() method
-    returns the identifier.
-
-    :param identifier: The identifier of the user, as described above
-    :type identifier: str
-    :param username: The username, null for global users.
-    :type username: str
-    :param event: The event the user belongs to, null for global users
-    :type event: Event
-    :param email: The user's e-mail address. May be empty or null for local users
+    :param email: The user's e-mail address, used for identification.
     :type email: str
     :param givenname: The user's given name. May be empty or null.
     :type givenname: str
@@ -183,24 +131,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     :type timezone: str
     """
 
-    USERNAME_FIELD = 'identifier'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
-    identifier = models.CharField(max_length=255, unique=True)
-    username = models.CharField(max_length=120, blank=True,
-                                null=True,
-                                help_text=_('Letters, digits and ./+/-/_ only.'))
-    event = models.ForeignKey('Event', related_name="users",
-                              null=True, blank=True,
-                              on_delete=models.PROTECT)
-    email = models.EmailField(unique=False, db_index=True,
-                              null=True, blank=True,
+    email = models.EmailField(unique=True, db_index=True, null=True, blank=True,
                               verbose_name=_('E-mail'))
-    givenname = models.CharField(max_length=255, blank=True,
-                                 null=True,
+    givenname = models.CharField(max_length=255, blank=True, null=True,
                                  verbose_name=_('Given name'))
-    familyname = models.CharField(max_length=255, blank=True,
-                                  null=True,
+    familyname = models.CharField(max_length=255, blank=True, null=True,
                                   verbose_name=_('Family name'))
     is_active = models.BooleanField(default=True,
                                     verbose_name=_('Is active'))
@@ -221,24 +159,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
-        unique_together = (("event", "username"),)
-
-    def __str__(self):
-        return self.identifier
 
     def save(self, *args, **kwargs):
-        """
-        Before passing the call to the default ``save()`` method, this will fill the ``identifier``
-        field if it is empty, according to the scheme descriped in the model docstring.
-        """
-        if not self.identifier:
-            if self.event is None:
-                self.identifier = self.email.lower()
-            else:
-                self.identifier = "%s@%s.event.pretix" % (self.username.lower(), self.event.id)
-        if not self.pk:
-            self.identifier = self.identifier.lower()
+        self.email = self.email.lower()
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.email
 
     def get_short_name(self) -> str:
         """
@@ -246,7 +173,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
         * Given name
         * Family name
-        * User name
         * E-mail address
         """
         if self.givenname:
@@ -254,7 +180,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         elif self.familyname:
             return self.familyname
         else:
-            return self.get_local_name()
+            return self.email
 
     def get_full_name(self) -> str:
         """
@@ -264,7 +190,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         * Given name
         * Family name
         * User name
-        * E-mail address
         """
         if self.givenname and not self.familyname:
             return self.givenname
@@ -276,18 +201,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                 'given': self.givenname
             }
         else:
-            return self.get_local_name()
-
-    def get_local_name(self) -> str:
-        """
-        Returns the username for local users and the e-mail address for global
-        users.
-        """
-        if self.username:
-            return self.username
-        if self.email:
             return self.email
-        return self.identifier  # NOQA
 
 
 def cachedfile_name(instance, filename):
@@ -1450,6 +1364,10 @@ class Quota(Versionable):
         pass
 
 
+def generate_secret():
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(32))
+
+
 class Order(Versionable):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
@@ -1524,6 +1442,15 @@ class Order(Versionable):
         verbose_name=_("User"),
         related_name="orders"
     )
+    guest_email = models.EmailField(
+        null=True, blank=True,
+        verbose_name=_('E-mail')
+    )
+    guest_locale = models.CharField(
+        null=True, blank=True, max_length=32,
+        verbose_name=_('Locale')
+    )
+    secret = models.CharField(max_length=32, default=generate_secret)
     datetime = models.DateTimeField(
         verbose_name=_("Date")
     )
@@ -1670,6 +1597,18 @@ class Order(Versionable):
             # unaible to get one
             return error_messages['busy']
         return True
+
+    @property
+    def locale(self):
+        if self.user:
+            return self.user.locale
+        return self.guest_locale
+
+    @property
+    def email(self):
+        if self.user:
+            return self.user.email
+        return self.guest_email
 
 
 class CachedTicket(models.Model):
@@ -1823,6 +1762,10 @@ class CartPosition(ObjectWithAnswers, Versionable):
     user = models.ForeignKey(
         User, null=True, blank=True,
         verbose_name=_("User")
+    )
+    session = models.CharField(
+        max_length=255, null=True, blank=True,
+        verbose_name=_("Session")
     )
     item = VersionedForeignKey(
         Item,

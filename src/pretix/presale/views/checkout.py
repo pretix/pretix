@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q, Sum
 from django.http import HttpRequest
 from django.shortcuts import redirect
+from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
@@ -12,11 +13,13 @@ from pretix.base.services.orders import OrderError, perform_order
 from pretix.base.signals import register_payment_providers
 from pretix.presale.forms.checkout import QuestionsForm
 from pretix.presale.views import (
-    CartDisplayMixin, EventLoginRequiredMixin, EventViewMixin,
+    CartDisplayMixin, EventViewMixin, LoginOrGuestRequiredMixin,
+    LoginRequiredMixin, user_cart_q,
 )
 
 
 class CheckoutView(TemplateView):
+
     def get_payment_url(self):
         return reverse('presale:event.checkout.payment', kwargs={
             'event': self.request.event.slug,
@@ -41,12 +44,12 @@ class CheckoutView(TemplateView):
             'organizer': self.request.event.organizer.slug
         })
 
-    def get_order_url(self, order):
+    def get_order_url(self, order, add_secret):
         return reverse('presale:event.order', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
             'order': order.code,
-        })
+        }) + '?thanks=yes' + ('&order_secret=' + order.secret if add_secret else '')
 
 
 class QuestionsViewMixin:
@@ -106,7 +109,7 @@ class QuestionsViewMixin:
         return not failed
 
 
-class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin,
+class CheckoutStart(EventViewMixin, CartDisplayMixin, LoginOrGuestRequiredMixin,
                     QuestionsViewMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_questions.html"
 
@@ -138,13 +141,13 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin,
         return ctx
 
 
-class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, CheckoutView):
+class PaymentDetails(EventViewMixin, CartDisplayMixin, LoginOrGuestRequiredMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_payment.html"
 
     @cached_property
     def _total_order_value(self):
         return CartPosition.objects.current.filter(
-            Q(user=self.request.user) & Q(event=self.request.event)
+            user_cart_q(self.request) & Q(event=self.request.event)
         ).aggregate(sum=Sum('price'))['sum']
 
     @cached_property
@@ -194,7 +197,7 @@ class PaymentDetails(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, 
         return self.get_questions_url() + "?back=true"
 
 
-class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, CheckoutView):
+class OrderConfirm(EventViewMixin, CartDisplayMixin, LoginOrGuestRequiredMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_confirm.html"
 
     def __init__(self, *args, **kwargs):
@@ -256,14 +259,18 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, EventLoginRequiredMixin, Ch
 
     def perform_order(self, request: HttpRequest):
         try:
-            order = perform_order(self.request.event, self.request.user, self.payment_provider, self.positions)
+            order = perform_order(self.request.event, self.payment_provider, self.positions,
+                                  user=request.user if request.user.is_authenticated() else None,
+                                  email=request.session.get('guest_email', None),
+                                  locale=translation.get_language())
         except OrderError as e:
             messages.error(request, str(e))
             return redirect(self.get_confirm_url())
         else:
-            messages.success(request, _('Your order has been placed.'))
+            # Message is delivered via GET parameter
+            # messages.success(request, _('Your order has been placed.'))
             resp = self.payment_provider.payment_perform(request, order)
-            return redirect(resp or self.get_order_url(order))
+            return redirect(resp or self.get_order_url(order, not request.user.is_authenticated()))
 
     def get_previous_url(self):
         if self.payment_provider.identifier != "free":

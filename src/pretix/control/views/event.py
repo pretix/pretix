@@ -314,7 +314,7 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
         if self.formset.is_valid() and self.add_form.is_valid():
             if self.add_form.has_changed():
                 try:
-                    self.add_form.instance.user = User.objects.get(identifier=self.add_form.cleaned_data['user'])
+                    self.add_form.instance.user = User.objects.get(email=self.add_form.cleaned_data['user'])
                     self.add_form.instance.user_id = self.add_form.instance.user.id
                     self.add_form.instance.event = self.request.event
                     self.add_form.instance.event_id = self.request.event.identity

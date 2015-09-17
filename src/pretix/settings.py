@@ -57,7 +57,6 @@ STATIC_URL = config.get('urls', 'static', fallback='/static/')
 MEDIA_URL = config.get('urls', 'media', fallback='/media/')
 
 PRETIX_INSTANCE_NAME = config.get('pretix', 'instance_name', fallback='pretix.de')
-PRETIX_GLOBAL_REGISTRATION = config.getboolean('pretix', 'global_registration', fallback=True)
 
 SITE_URL = config.get('pretix', 'url', fallback='http://localhost')
 

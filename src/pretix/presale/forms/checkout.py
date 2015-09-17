@@ -4,6 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.base.models import Question
 
 
+class GuestForm(forms.Form):
+    email = forms.EmailField(label=_('E-mail'))
+
+
 class QuestionsForm(forms.Form):
     """
     This form class is responsible for asking order-related questions. This includes

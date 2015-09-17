@@ -144,52 +144,40 @@ class LoginTest(EventTestMixin, TestCase):
 
     def setUp(self):
         super().setUp()
-        self.local_user = User.objects.create_local_user(self.event, 'demo', 'foo')
-        self.global_user = User.objects.create_global_user('demo@demo.dummy', 'demo')
+        self.user = User.objects.create_user('demo@demo.dummy', 'demo')
 
     def test_login_invalid(self):
         response = self.client.post(
             '/%s/%s/login' % (self.orga.slug, self.event.slug),
             {
                 'form': 'login',
-                'username': 'demo',
+                'email': 'demo@demo.foo',
                 'password': 'bar'
             }
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn('alert-danger', response.rendered_content)
 
-    def test_login_local(self):
+    def test_login_valid(self):
         response = self.client.post(
             '/%s/%s/login' % (self.orga.slug, self.event.slug),
             {
                 'form': 'login',
-                'username': 'demo',
-                'password': 'foo'
-            }
-        )
-        self.assertEqual(response.status_code, 302)
-
-    def test_login_global(self):
-        response = self.client.post(
-            '/%s/%s/login' % (self.orga.slug, self.event.slug),
-            {
-                'form': 'login',
-                'username': 'demo@demo.dummy',
+                'email': 'demo@demo.dummy',
                 'password': 'demo'
             }
         )
         self.assertEqual(response.status_code, 302)
 
     def test_login_already_logged_in(self):
-        self.assertTrue(self.client.login(username='demo@%s.event.pretix' % self.event.identity, password='foo'))
+        self.assertTrue(self.client.login(email='demo@demo.dummy', password='demo'))
         response = self.client.get(
             '/%s/%s/login' % (self.orga.slug, self.event.slug),
         )
         self.assertEqual(response.status_code, 302)
 
     def test_logout(self):
-        self.assertTrue(self.client.login(username='demo@%s.event.pretix' % self.event.identity, password='foo'))
+        self.assertTrue(self.client.login(email='demo@demo.dummy', password='demo'))
         response = self.client.get(
             '/%s/%s/logout' % (self.orga.slug, self.event.slug),
         )

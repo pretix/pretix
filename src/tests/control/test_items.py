@@ -16,7 +16,7 @@ from pretix.base.models import (
 class ItemFormTest(BrowserTest):
     def setUp(self):
         super().setUp()
-        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy@dummy.dummy', 'dummy')
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         self.orga1 = Organizer.objects.create(name='CCC', slug='ccc')
         self.orga2 = Organizer.objects.create(name='MRM', slug='mrm')
         self.event1 = Event.objects.create(

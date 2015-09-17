@@ -30,28 +30,7 @@ Every event is managed by the **organizer**, an abstract entity running the even
 
 Pretix is used by **users**. We want to enable global users who can just login into
 pretix and buy tickets for as many events as they like but at the same time it
-should be possible to create some kind of local user to have a temporary account
-just to buy tickets for one single event.
-
-The problem is, we cannot use usernames as primary keys for our users, as we
-do not want one username to be blocked forever just because of one temporary
-account using it (people would have to think of a new username for every temporary
-account they create). On the other hand, we can not use e-mail addresses either,
-as those are not unique (imagine one person having multiple temporary accounts)
-and they should not be required for temporary account (to enable anonymity).
-
-Therefore, we split our users into two groups and use an internal **identifier**
-as our primary key:
-
-**Local users**
-    Local users do only exist inside the scope of one event. They are identified by 
-    usernames, which are only valid for exactly one event. Internally, their identifier 
-    is "{username}@{event.id}.event.pretix"
-
-**Global users**
-    Global users exist everywhere in the installation of Tixl. They can buy tickets 
-    for multiple events and they can be managers of one or more Organizers/Events. 
-    Global users are identified by e-mail addresses.
+should be possible to order products **without** needing an user account.
 
 
 Items and variations
