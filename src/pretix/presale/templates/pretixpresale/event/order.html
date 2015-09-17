@@ -3,6 +3,14 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Order details" %}{% endblock %}
 {% block content %}
+    {% if "thanks" in request.GET %}
+        <div class="thank-you">
+            <span class="fa fa-check-circle"></span>
+            <h2>{% trans "Thank you!" %}</h2>
+            <p>{% trans "Your order has been placed successfully. See below for details." %}</p>
+            <p>{% trans "We also sent you an email with a link to this page if you want to come back later." %}</p>
+        </div>
+    {% endif %}
     <h2>
         {% blocktrans trimmed with code=order.code %}
             Your order: {{ code }}

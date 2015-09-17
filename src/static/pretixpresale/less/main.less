@@ -43,3 +43,41 @@ a:hover .panel-primary > .panel-heading {
     background-color: darken(@btn-primary-bg, 10%);
     border-color: darken(@btn-primary-border, 12%);
 }
+
+.thank-you {
+    margin-bottom: 25px;
+    .fa {
+        font-size: 150px;
+        line-height: 170px;
+        display: block;
+        color: @brand-success;
+    }
+
+    h2 {
+        color: @brand-success;
+    }
+}
+@media (min-width: @screen-md-min) {
+    .thank-you {
+        height: 170px;
+        width: 70%;
+        margin: auto;
+
+        .fa {
+            float: left;
+            margin-right: 30px;
+        }
+
+        h2 {
+            padding-top: 35px;
+        }
+    }
+}
+@media (max-width: @screen-sm-max) {
+    .thank-you {
+        text-align: center;
+    }
+    h2 {
+        margin-top: 0;
+    }
+}
