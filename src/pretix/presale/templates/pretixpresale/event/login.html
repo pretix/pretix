@@ -23,13 +23,13 @@
                         {% bootstrap_field login_form.password layout="horizontal" %}
                         <input type="hidden" name="form" value="login" />
                         <div class="form-group">
-                            <div class="submit-group col-md-offset-2 col-md-4 text-right">
-                                <a href="{% url "presale:event.forgot" event=request.event.slug organizer=request.event.organizer.slug %}" class="btn btn-link">
-                                    {% trans "Lost password?" %}
-                                </a>
+                            <div class="submit-group col-md-offset-3 col-md-4">
                                 <button type="submit" class="btn btn-primary btn-save">
                                     {% trans "Login" %}
                                 </button>
+                                <a href="{% url "presale:event.forgot" event=request.event.slug organizer=request.event.organizer.slug %}" class="btn btn-link">
+                                    {% trans "Lost password?" %}
+                                </a>
                             </div>
                         </div>
                     </form>
@@ -47,7 +47,19 @@
             <div id="guestForm" class="panel-collapse collapsed {% if request.POST.form == 'guest' %}in{% endif %}">
                 <div class="panel-body">
                     <div class="panel-body">
-                        Coming soon.
+                        <form class="form-horizontal" method="post">
+                            {% csrf_token %}
+                            {% bootstrap_form_errors guest_form type='all' layout='inline' %}
+                            {% bootstrap_field guest_form.email layout="horizontal" %}
+                            <input type="hidden" name="form" value="guest" />
+                            <div class="form-group">
+                                <div class="submit-group col-md-offset-3 col-md-4">
+                                    <button type="submit" class="btn btn-primary btn-save">
+                                        {% trans "Continue" %}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -71,7 +83,7 @@
                         {% bootstrap_field registration_form.password_repeat layout="horizontal" %}
                         <input type="hidden" name="form" value="registration" />
                         <div class="form-group">
-                            <div class="submit-group col-md-offset-2 col-md-4 text-right">
+                            <div class="submit-group col-md-offset-3 col-md-4">
                                 <button type="submit" class="btn btn-primary btn-save">
                                     {% trans "Register" %}
                                 </button>

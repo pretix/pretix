@@ -1442,6 +1442,14 @@ class Order(Versionable):
         verbose_name=_("User"),
         related_name="orders"
     )
+    guest_email = models.EmailField(
+        null=True, blank=True,
+        verbose_name=_('E-mail')
+    )
+    guest_locale = models.CharField(
+        null=True, blank=True, max_length=32,
+        verbose_name=_('Locale')
+    )
     secret = models.CharField(max_length=32, default=generate_secret)
     datetime = models.DateTimeField(
         verbose_name=_("Date")
@@ -1589,6 +1597,18 @@ class Order(Versionable):
             # unaible to get one
             return error_messages['busy']
         return True
+
+    @property
+    def locale(self):
+        if self.user:
+            return self.user.locale
+        return self.guest_locale
+
+    @property
+    def email(self):
+        if self.user:
+            return self.user.email
+        return self.guest_email
 
 
 class CachedTicket(models.Model):

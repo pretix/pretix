@@ -21,6 +21,7 @@ from pretix.base.forms.user import UserSettingsForm
 from pretix.base.models import User
 from pretix.base.services.mail import mail
 from pretix.helpers.urls import build_absolute_uri
+from pretix.presale.forms.checkout import GuestForm
 from pretix.presale.views import (
     CartDisplayMixin, EventViewMixin, LoginRequiredMixin,
 )
@@ -78,7 +79,7 @@ class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
             key=lambda group: (group[0].position, group[0].identity) if group[0] is not None else (0, "")
         )
 
-        context['cart'] = self.get_cart() if self.request.user.is_authenticated() else None
+        context['cart'] = self.get_cart()
         return context
 
 
@@ -111,6 +112,11 @@ class EventLogin(EventViewMixin, TemplateView):
             if form.is_valid() and form.user_cache:
                 login(request, form.user_cache)
                 return self.redirect_to_next()
+        elif request.POST.get('form') == 'guest':
+            form = self.guest_form
+            if form.is_valid():
+                request.session['guest_email'] = form.cleaned_data['email']
+                return self.redirect_to_next()
         elif request.POST.get('form') == 'registration':
             form = self.registration_form
             if form.is_valid():
@@ -132,6 +138,12 @@ class EventLogin(EventViewMixin, TemplateView):
         )
 
     @cached_property
+    def guest_form(self):
+        return GuestForm(
+            data=self.request.POST if self.request.POST.get('form', '') == 'guest' else None
+        )
+
+    @cached_property
     def registration_form(self):
         return RegistrationForm(
             data=self.request.POST if self.request.POST.get('form', '') == 'registration' else None
@@ -141,6 +153,7 @@ class EventLogin(EventViewMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['login_form'] = self.login_form
         context['registration_form'] = self.registration_form
+        context['guest_form'] = self.guest_form
         return context
 
 
@@ -163,24 +176,19 @@ class EventForgot(EventViewMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         if self.form.is_valid():
             user = self.form.cleaned_data['user']
-            if user.email:
-                mail(
-                    user, _('Password recovery'),
-                    'pretixpresale/email/forgot.txt',
-                    {
-                        'user': user,
-                        'event': self.request.event,
-                        'url': build_absolute_uri('presale:event.forgot.recover', kwargs={
-                            'event': self.request.event.slug,
-                            'organizer': self.request.event.organizer.slug,
-                        }) + '?token=' + self.generate_token(user),
-                    },
-                    self.request.event
-                )
-                messages.success(request, _('We sent you an e-mail containing further instructions.'))
-            else:
-                messages.success(request, _('We are unable to send you a new password, as you did not enter an e-mail '
-                                            'address at your registration.'))
+            mail(
+                user.email, _('Password recovery'), 'pretixpresale/email/forgot.txt',
+                {
+                    'user': user,
+                    'event': self.request.event,
+                    'url': build_absolute_uri('presale:event.forgot.recover', kwargs={
+                        'event': self.request.event.slug,
+                        'organizer': self.request.event.organizer.slug,
+                    }) + '?token=' + self.generate_token(user),
+                },
+                self.request.event, locale=user.locale
+            )
+            messages.success(request, _('We sent you an e-mail containing further instructions.'))
             return redirect('presale:event.forgot',
                             organizer=self.request.event.organizer.slug,
                             event=self.request.event.slug)

@@ -26,8 +26,7 @@ def test_send_mail_with_prefix(client, env):
     djmail.outbox = []
     event, user, organizer = env
     event.settings.set('mail_prefix', 'test')
-    mail(user, 'Test subject',
-         'mailtest.txt', {}, event)
+    mail('dummy@dummy.dummy', 'Test subject', 'mailtest.txt', {}, event)
 
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].to == [user.email]
@@ -39,8 +38,7 @@ def test_send_mail_with_event_sender(client, env):
     djmail.outbox = []
     event, user, organizer = env
     event.settings.set('mail_from', 'foo@bar')
-    mail(user, 'Test subject',
-         'mailtest.txt', {}, event)
+    mail('dummy@dummy.dummy', 'Test subject', 'mailtest.txt', {}, event)
 
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].to == [user.email]
@@ -52,8 +50,7 @@ def test_send_mail_with_event_sender(client, env):
 def test_send_mail_with_default_sender(client, env):
     djmail.outbox = []
     event, user, organizer = env
-    mail(user, 'Test subject',
-         'mailtest.txt', {}, event)
+    mail('dummy@dummy.dummy', 'Test subject', 'mailtest.txt', {}, event)
     del event.settings['mail_from']
 
     assert len(djmail.outbox) == 1
@@ -68,8 +65,7 @@ def test_send_mail_with_user_locale(client, env):
     event, user, organizer = env
     user.locale = 'de'
     user.save()
-    mail(user, _('User'),
-         'mailtest.txt', {}, event)
+    mail('dummy@dummy.dummy', _('User'), 'mailtest.txt', {}, event, locale=user.locale)
     del event.settings['mail_from']
 
     assert len(djmail.outbox) == 1

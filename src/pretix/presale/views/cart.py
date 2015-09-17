@@ -13,7 +13,9 @@ from django.views.generic import View
 from pretix.base.models import (
     CartPosition, EventLock, Item, ItemVariation, Quota,
 )
-from pretix.presale.views import EventViewMixin, LoginRequiredMixin
+from pretix.presale.views import (
+    EventViewMixin, LoginOrGuestRequiredMixin, user_cart_q,
+)
 
 
 class CartActionMixin:
@@ -62,13 +64,13 @@ class CartActionMixin:
         return items
 
 
-class CartRemove(EventViewMixin, CartActionMixin, LoginRequiredMixin, View):
+class CartRemove(EventViewMixin, CartActionMixin, LoginOrGuestRequiredMixin, View):
 
     def post(self, *args, **kwargs):
         items = self._items_from_post_data()
         if not items:
             return redirect(self.get_failure_url())
-        qw = Q(user=self.request.user)
+        qw = user_cart_q(self.request)
 
         for item, variation, cnt in items:
             cw = qw & Q(item_id=item)
@@ -112,7 +114,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
 
         # We do not use LoginRequiredMixin here, as we want to store stuff into the
         # session before redirecting to login
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated() and 'guest_email' not in request.session:
             request.session['cart_tmp'] = json.dumps(self.items)
             return redirect_to_login(
                 self.get_success_url(), reverse('presale:event.checkout.login', kwargs={
@@ -121,7 +123,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                 }), 'next'
             )
 
-        existing = CartPosition.objects.current.filter(user=self.request.user, event=self.request.event).count()
+        existing = CartPosition.objects.current.filter(user_cart_q(self.request) & Q(event=self.request.event)).count()
         if sum(i[2] for i in self.items) + existing > int(self.request.event.settings.max_items_per_order):
             # TODO: i18n plurals
             self.error_message(self.error_messages['max_items'] % self.request.event.settings.max_items_per_order)
@@ -142,7 +144,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
         # For items that are already expired, we have to delete and re-add them, as they might
         # be no longer available or prices might have changed. Sorry!
         for cp in CartPosition.objects.current.filter(
-            Q(user=self.request.user) & Q(event=self.request.event) & Q(expires__lte=now())
+            user_cart_q(self.request) & Q(event=self.request.event) & Q(expires__lte=now())
         ):
             self._re_add_position(cp)
             positions.add(cp)
@@ -153,7 +155,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
         # cart expire at the same time
         # We can extend the reservation of items which are not yet expired without risk
         CartPosition.objects.current.filter(
-            Q(user=self.request.user) & Q(event=self.request.event) & Q(expires__gt=now())
+            user_cart_q(self.request) & Q(event=self.request.event) & Q(expires__gt=now())
         ).update(expires=expiry)
 
     def _delete_expired(self):
@@ -237,14 +239,18 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                             cp.price = price
                             cp.save()
                         else:
-                            CartPosition.objects.create(
+                            cp = CartPosition(
                                 event=self.request.event,
-                                user=self.request.user,
                                 item=item,
                                 variation=variation,
                                 price=price,
                                 expires=expiry
                             )
+                            if self.request.user.is_authenticated():
+                                cp.user = self.request.user
+                            else:
+                                cp.session = self.request.session.session_key
+                            cp.save()
 
                 self._delete_expired()
 
