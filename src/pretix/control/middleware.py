@@ -70,5 +70,5 @@ class PermissionMiddleware:
                     permitted__id__exact=request.user.id,
                 )[0]
             except IndexError:
-                return Http404(_("The selected organizer was not found or you "
-                                 "have no permission to administrate it."))
+                raise Http404(_("The selected organizer was not found or you "
+                                "have no permission to administrate it."))

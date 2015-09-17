@@ -231,7 +231,7 @@ class OrderDownload(OrderView):
             ct.cachedfile = cf
         ct.save()
         generate(self.order.identity, self.output.identifier)
-        return redirect(reverse('presale:cachedfile.download', kwargs={'id': ct.cachedfile.id}))
+        return redirect(reverse('cachedfile.download', kwargs={'id': ct.cachedfile.id}))
 
 
 class OrderExtend(OrderView):

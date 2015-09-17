@@ -31,4 +31,4 @@ class EventMiddleware:
                     organizer__slug=url.kwargs['organizer'],
                 ).select_related('organizer')[0]
             except IndexError:
-                return Http404(_('The selected event was not found.'))
+                raise Http404(_('The selected event was not found.'))
