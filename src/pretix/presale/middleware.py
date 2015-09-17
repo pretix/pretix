@@ -1,5 +1,6 @@
 from django.core.urlresolvers import resolve
-from django.http import HttpResponseNotFound
+from django.http import Http404
+from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Event
 
@@ -30,4 +31,4 @@ class EventMiddleware:
                     organizer__slug=url.kwargs['organizer'],
                 ).select_related('organizer')[0]
             except IndexError:
-                return HttpResponseNotFound('Unknown event')  # TODO: Provide error message
+                return Http404(_('The selected event was not found.'))

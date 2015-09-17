@@ -1,4 +1,4 @@
-from django.http import HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
 
 from pretix.base.models import EventPermission, OrganizerPermission
@@ -13,7 +13,7 @@ def event_permission_required(permission):
         def wrapper(request, *args, **kw):
             if not request.user.is_authenticated():  # NOQA
                 # just a double check, should not ever happen
-                return HttpResponseForbidden()
+                raise PermissionDenied()
             try:
                 perm = EventPermission.objects.current.get(
                     event=request.event,
@@ -30,7 +30,7 @@ def event_permission_required(permission):
                     pass
                 if allowed:
                     return function(request, *args, **kw)
-            return HttpResponseForbidden(_('You do not have permission to view this content.'))
+            raise PermissionDenied(_('You do not have permission to view this content.'))
         return wrapper
     return decorator
 
@@ -57,7 +57,7 @@ def organizer_permission_required(permission):
         def wrapper(request, *args, **kw):
             if not request.user.is_authenticated():  # NOQA
                 # just a double check, should not ever happen
-                return HttpResponseForbidden()
+                raise PermissionDenied()
             try:
                 perm = OrganizerPermission.objects.current.get(
                     organizer=request.organizer,
@@ -74,7 +74,7 @@ def organizer_permission_required(permission):
                     pass
                 if allowed or request.user.is_superuser:
                     return function(request, *args, **kw)
-            return HttpResponseForbidden(_('You do not have permission to view this content.'))
+            raise PermissionDenied(_('You do not have permission to view this content.'))
         return wrapper
     return decorator
 

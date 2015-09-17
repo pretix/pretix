@@ -1,6 +1,6 @@
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseForbidden
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, ListView, UpdateView
 
@@ -52,7 +52,7 @@ class OrganizerCreate(CreateView):
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_superuser:
-            return HttpResponseForbidden()  # TODO
+            raise PermissionDenied()  # TODO
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):

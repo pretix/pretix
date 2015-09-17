@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.urlresolvers import get_script_prefix, resolve
-from django.http import HttpResponseNotFound
+from django.http import Http404
 from django.shortcuts import resolve_url
 from django.utils.encoding import force_str
 from django.utils.translation import ugettext as _
@@ -12,7 +12,6 @@ from pretix.base.models import Event, EventPermission, Organizer
 
 
 class PermissionMiddleware:
-
     """
     This middleware enforces all requests to the control app to require login.
     Additionally, it enforces all requests to "control:event." URLs
@@ -43,6 +42,7 @@ class PermissionMiddleware:
                     (not login_netloc or login_netloc == current_netloc)):
                 path = request.get_full_path()
             from django.contrib.auth.views import redirect_to_login
+
             return redirect_to_login(
                 path, resolved_login_url, REDIRECT_FIELD_NAME)
 
@@ -61,8 +61,8 @@ class PermissionMiddleware:
                 )
                 request.organizer = request.event.organizer
             except IndexError:
-                return HttpResponseNotFound(_("The selected event was not found or you "
-                                              "have no permission to administrate it."))
+                raise Http404(_("The selected event was not found or you "
+                                "have no permission to administrate it."))
         elif 'organizer' in url.kwargs:
             try:
                 request.organizer = Organizer.objects.current.filter(
@@ -70,5 +70,5 @@ class PermissionMiddleware:
                     permitted__id__exact=request.user.id,
                 )[0]
             except IndexError:
-                return HttpResponseNotFound(_("The selected organizer was not found or you "
-                                              "have no permission to administrate it."))
+                return Http404(_("The selected organizer was not found or you "
+                                 "have no permission to administrate it."))

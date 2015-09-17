@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
 from django.forms.models import inlineformset_factory
-from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -380,7 +380,8 @@ class PropertyDelete(EventPermissionRequiredMixin, DeleteView):
             messages.success(request, _('The selected property has been deleted.'))
             return HttpResponseRedirect(success_url)
         else:
-            return HttpResponseForbidden()
+            messages.error(request, _('The selected property can not be deleted.'))
+            return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self) -> str:
         return reverse('control:event.items.properties', kwargs={

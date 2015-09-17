@@ -1,0 +1,18 @@
+{% load compress %}
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    {% compress css %}
+        <link rel="stylesheet" type="text/less" href="{% static "pretixbase/less/error.less" %}" />
+    {% endcompress %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

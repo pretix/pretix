@@ -7,7 +7,7 @@ from pretix.base.models import CachedFile
 
 
 class DownloadView(TemplateView):
-    template_name = "pretixpresale/cachedfiles/pending.html"
+    template_name = "pretixbase/cachedfiles/pending.html"
 
     @cached_property
     def object(self):

@@ -5,10 +5,13 @@ from django.apps import apps
 from django.conf import settings
 from django.conf.urls import include, url
 
+import pretix.base.views.cachedfiles
 import pretix.control.urls
 import pretix.presale.urls
 
 urlpatterns = [
+    url(r'^download/(?P<id>[^/]+)/$', pretix.base.views.cachedfiles.DownloadView.as_view(),
+        name='cachedfile.download'),
     url(r'^control/', include(pretix.control.urls, namespace='control')),
     # The pretixpresale namespace is configured at the bottom of this file, because it
     # contains a wildcard-style URL which has to be configured _after_ debug settings.
