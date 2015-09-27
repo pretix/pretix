@@ -19,8 +19,6 @@ ENV LC_ALL C.UTF-8
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-ADD gunicorn_starter.bash /gunicorn_starter.bash
-
 RUN git clone --recursive --depth 1 https://github.com/pretix/pretix.git /pretix
 WORKDIR /pretix/src
 
