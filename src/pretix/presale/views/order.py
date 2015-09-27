@@ -210,8 +210,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
         self.request = request
         self.kwargs = kwargs
         if not self.order:
-            messages.error(request, _('Unknown order code or order does belong to another user.'))
-            return redirect(self.get_order_url())
+            raise Http404(request, _('Unknown order code or order does belong to another user.'))
         if not self.order.can_modify_answers:
             messages.error(request, _('You cannot modify this order'))
             return redirect(self.get_order_url())

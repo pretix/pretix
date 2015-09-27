@@ -141,10 +141,11 @@ class OrdersTest(TestCase):
     def test_orders_modify_invalid(self):
         self.order.status = Order.STATUS_REFUNDED
         self.order.save()
-        response = self.client.get(
+        self.client.get(
             '/%s/%s/order/%s/modify' % (self.orga.slug, self.event.slug, self.order.code)
         )
-        assert response.status_code == 403
+        self.order = Order.objects.current.get(identity=self.order.identity)
+        assert self.order.status == Order.STATUS_REFUNDED
 
     def test_orders_modify_attendee_optional(self):
         self.event.settings.set('attendee_names_asked', True)
@@ -231,10 +232,11 @@ class OrdersTest(TestCase):
     def test_orders_cancel_invalid(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
-        response = self.client.get(
+        self.client.get(
             '/%s/%s/order/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code)
         )
-        assert response.status_code == 403
+        self.order = Order.objects.current.get(identity=self.order.identity)
+        assert self.order.status == Order.STATUS_PAID
 
     def test_orders_cancel(self):
         response = self.client.get(
