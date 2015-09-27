@@ -3,6 +3,7 @@ sudo: false
 python:
     - "3.4"
 install:
+    - pip install -U pip wheel
     - pip install -q -r src/requirements.txt
     - npm install -g less@2.5.0
 before_script:
@@ -16,3 +17,4 @@ script:
     - coverage run -m py.test tests
 after_success:
     - coveralls
+cache: pip

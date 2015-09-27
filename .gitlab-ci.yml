@@ -7,7 +7,7 @@ tests:
         - source env/bin/activate
         - curl https://bootstrap.pypa.io/get-pip.py | python
         - cd src
-        - pip3 install -q -r requirements.txt
+        - XDG_CACHE=/cache pip3 install -q -r requirements.txt
         - flake8 --ignore=E123,F403,F401,N802,C901,W503 .
         - isort -c -rc .
         - python3 manage.py check
