@@ -19,6 +19,7 @@ from pretix.base.forms.auth import (
 )
 from pretix.base.forms.user import UserSettingsForm
 from pretix.base.models import User
+from pretix.base.services.cart import CartError, add_items_to_cart
 from pretix.base.services.mail import mail
 from pretix.helpers.urls import build_absolute_uri
 from pretix.presale.forms.checkout import GuestForm
@@ -90,10 +91,12 @@ class EventLogin(EventViewMixin, TemplateView):
         if 'cart_tmp' in self.request.session:
             items = json.loads(self.request.session['cart_tmp'])
             del self.request.session['cart_tmp']
-            ca = CartAdd()
-            ca.request = self.request
-            ca.items = items
-            return ca.process()
+            try:
+                add_items_to_cart(self.request.event.identity, items, self.request.user.id,
+                                  self.request.session.session_key)
+                messages.success(self.request, _('The products have been successfully added to your cart.'))
+            except CartError as e:
+                messages.error(self.request, str(e))
         if 'next' in self.request.GET:
             return redirect(self.request.GET.get('next'))
         else:
