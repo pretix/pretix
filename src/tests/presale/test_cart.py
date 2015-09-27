@@ -69,6 +69,21 @@ class CartBrowserTest(CartTestMixin, BrowserTest):
         # should display our ticket
         self.assertIn('Early-bird', self.driver.find_element_by_css_selector('.cart-row:first-child').text)
 
+    def test_simple_login_as_guest(self):
+        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
+        # add the entry ticket to cart
+        self.driver.find_element_by_css_selector('input[type=number][name=item_%s]' % self.ticket.identity).send_keys('1')
+        self.scroll_and_click(self.driver.find_element_by_css_selector('.checkout-button-row button'))
+        # should redirect to login page
+        # open the login accordion
+        self.scroll_and_click(self.driver.find_element_by_css_selector('a[href*=guestForm]'))
+        time.sleep(1)
+        # enter login details
+        self.driver.find_element_by_css_selector('#guestForm input[name=email]').send_keys('dummy@dummy.dummy')
+        self.scroll_and_click(self.driver.find_element_by_css_selector('#guestForm button.btn-primary'))
+        # should display our ticket
+        self.assertIn('Early-bird', self.driver.find_element_by_css_selector('.cart-row:first-child').text)
+
     def test_registration(self):
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
         # add the entry ticket to cart

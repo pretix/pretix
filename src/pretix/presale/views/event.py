@@ -87,7 +87,7 @@ class EventLogin(EventViewMixin, TemplateView):
     template_name = 'pretixpresale/event/login.html'
 
     def redirect_to_next(self):
-        if 'cart_tmp' in self.request.session and self.request.user.is_authenticated():
+        if 'cart_tmp' in self.request.session:
             items = json.loads(self.request.session['cart_tmp'])
             del self.request.session['cart_tmp']
             ca = CartAdd()
