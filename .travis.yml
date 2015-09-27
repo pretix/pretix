@@ -17,4 +17,6 @@ script:
     - coverage run -m py.test tests
 after_success:
     - coveralls
-cache: pip
+cache:
+    directories:
+        - $HOME/.cache/pip
