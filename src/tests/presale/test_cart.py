@@ -327,7 +327,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
         self.assertFalse(CartPosition.objects.current.filter(user=self.user, event=self.event).exists())
 
-    def test_restriction_failed(self):
+    def test_restriction_ok(self):
         self.event.plugins = 'tests.testdummy'
         self.event.save()
         self.event.settings.testdummy_available = 'yes'
@@ -342,7 +342,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 23)
 
-    def test_restriction_ok(self):
+    def test_restriction_failed(self):
         self.event.plugins = 'tests.testdummy'
         self.event.save()
         self.event.settings.testdummy_available = 'no'
