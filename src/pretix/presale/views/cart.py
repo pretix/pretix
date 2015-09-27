@@ -74,7 +74,7 @@ class CartRemove(EventViewMixin, CartActionMixin, LoginOrGuestRequiredMixin, Vie
         if not items:
             return redirect(self.get_failure_url())
 
-        remove_items_from_cart(self.request.event.identity, items, self.request.user.od,
+        remove_items_from_cart(self.request.event.identity, items, self.request.user.id,
                                self.request.session.session_key)
         messages.success(self.request, _('Your cart has been updated.'))
         return redirect(self.get_success_url())
