@@ -3,11 +3,10 @@ tests:
     script:
         - git submodule init
         - git submodule update
-        - pyvenv-3.4 --without-pip env
+        - virtualenv-3.4 env
         - source env/bin/activate
-        - curl https://bootstrap.pypa.io/get-pip.py | python
         - cd src
-        - XDG_CACHE=/cache pip3 install -q -r requirements.txt
+        - XDG_CACHE_HOME=/cache pip3 install -q -r requirements.txt
         - flake8 --ignore=E123,F403,F401,N802,C901,W503 .
         - isort -c -rc .
         - python3 manage.py check
