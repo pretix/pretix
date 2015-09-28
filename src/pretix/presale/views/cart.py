@@ -96,7 +96,7 @@ class CartAdd(EventViewMixin, CartActionMixin, View):
                 self.get_success_url(), reverse('presale:event.checkout.login', kwargs={
                     'organizer': request.event.organizer.slug,
                     'event': request.event.slug,
-                }), 'next'
+                }) + '?guest=1', 'next'
             )
 
         return self.process(items)

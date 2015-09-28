@@ -13,8 +13,7 @@ from pretix.base.services.orders import OrderError, perform_order
 from pretix.base.signals import register_payment_providers
 from pretix.presale.forms.checkout import QuestionsForm
 from pretix.presale.views import (
-    CartDisplayMixin, EventViewMixin, LoginOrGuestRequiredMixin,
-    LoginRequiredMixin, user_cart_q,
+    CartDisplayMixin, EventViewMixin, LoginOrGuestRequiredMixin, user_cart_q,
 )
 
 

@@ -34,7 +34,7 @@ def login_or_guest_required(view_func):
             path, reverse('presale:event.checkout.login', kwargs={
                 'organizer': request.event.organizer.slug,
                 'event': request.event.slug,
-            }), 'next'
+            }) + '?guest=1', 'next'
         )
     return _wrapped_view
 
