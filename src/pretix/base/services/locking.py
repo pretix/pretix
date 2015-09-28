@@ -1,7 +1,7 @@
 import logging
 import time
-from datetime import timedelta
 import uuid
+from datetime import timedelta
 
 from django.conf import settings
 from django.db import transaction
