@@ -13,7 +13,7 @@ def env():
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=now(), plugins='pretix.plugins.banktransfer'
+        date_from=now()
     )
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     user.email = 'dummy@dummy.dummy'
@@ -22,7 +22,7 @@ def env():
 
 
 @pytest.mark.django_db
-def test_send_mail_with_prefix(client, env):
+def test_send_mail_with_prefix(env):
     djmail.outbox = []
     event, user, organizer = env
     event.settings.set('mail_prefix', 'test')
@@ -34,7 +34,7 @@ def test_send_mail_with_prefix(client, env):
 
 
 @pytest.mark.django_db
-def test_send_mail_with_event_sender(client, env):
+def test_send_mail_with_event_sender(env):
     djmail.outbox = []
     event, user, organizer = env
     event.settings.set('mail_from', 'foo@bar')
@@ -47,7 +47,7 @@ def test_send_mail_with_event_sender(client, env):
 
 
 @pytest.mark.django_db
-def test_send_mail_with_default_sender(client, env):
+def test_send_mail_with_default_sender(env):
     djmail.outbox = []
     event, user, organizer = env
     mail('dummy@dummy.dummy', 'Test subject', 'mailtest.txt', {}, event)
@@ -60,7 +60,7 @@ def test_send_mail_with_default_sender(client, env):
 
 
 @pytest.mark.django_db
-def test_send_mail_with_user_locale(client, env):
+def test_send_mail_with_user_locale(env):
     djmail.outbox = []
     event, user, organizer = env
     user.locale = 'de'
