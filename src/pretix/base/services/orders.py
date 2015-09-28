@@ -82,6 +82,7 @@ def check_positions(event: Event, dt: datetime, positions: list):
     for i, cp in enumerate(positions):
         if not cp.item.active:
             err = err or error_messages['unavailable']
+            cp.delete()
             continue
         quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
         if cp.expires >= dt:
@@ -90,6 +91,7 @@ def check_positions(event: Event, dt: datetime, positions: list):
         price = cp.item.check_restrictions() if cp.variation is None else cp.variation.check_restrictions()
         if price is False or len(quotas) == 0:
             err = err or error_messages['unavailable']
+            cp.delete()
             continue
         if price != cp.price:
             cp = cp.clone()
