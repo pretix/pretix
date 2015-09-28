@@ -12,6 +12,18 @@ from pretix.base.services.mail import mail
 from pretix.base.signals import order_paid, order_placed
 from pretix.helpers.urls import build_absolute_uri
 
+error_messages = {
+    'unavailable': _('Some of the products you selected were no longer available. '
+                     'Please see below for details.'),
+    'in_part': _('Some of the products you selected were no longer available in '
+                 'the quantity you selected. Please see below for details.'),
+    'price_changed': _('The price of some of the items in your cart has changed in the '
+                       'meantime. Please see below for details.'),
+    'max_items': _("You cannot select more than %s items per order"),
+    'busy': _('We were not able to process your request completely as the '
+              'server was too busy. Please try again.'),
+}
+
 
 def mark_order_paid(order: Order, provider: str=None, info: str=None, date: datetime=None, manual: bool=None,
                     force: bool=False):
@@ -67,17 +79,16 @@ class OrderError(Exception):
     pass
 
 
+def _check_date(event):
+    if event.presale_start and now() < event.presale_start:
+        raise OrderError(error_messages['not_started'])
+    if event.presale_end and now() > event.presale_end:
+        raise OrderError(error_messages['ended'])
+
+
 def check_positions(event: Event, dt: datetime, positions: list):
-    error_messages = {
-        'unavailable': _('Some of the products you selected were no longer available. '
-                         'Please see below for details.'),
-        'in_part': _('Some of the products you selected were no longer available in '
-                     'the quantity you selected. Please see below for details.'),
-        'price_changed': _('The price of some of the items in your cart has changed in the '
-                           'meantime. Please see below for details.'),
-        'max_items': _("You cannot select more than %s items per order"),
-    }
     err = None
+    _check_date(event)
 
     for i, cp in enumerate(positions):
         if not cp.item.active:
@@ -108,13 +119,13 @@ def check_positions(event: Event, dt: datetime, positions: list):
                 err = err or error_messages['unavailable']
                 quota_ok = False
                 break
-        if quota_ok and (not event.presale_end or now() < event.presale_end):
+        if quota_ok:
             cp = cp.clone()
             positions[i] = cp
             cp.expires = now() + timedelta(
                 minutes=event.settings.get('reservation_time', as_type=int))
             cp.save()
-        elif not quota_ok:
+        else:
             cp.delete()  # Sorry!
     if err:
         raise OrderError(err)
@@ -122,10 +133,6 @@ def check_positions(event: Event, dt: datetime, positions: list):
 
 def perform_order(event: Event, payment_provider: BasePaymentProvider, positions: list, user: User=None,
                   email: str=None, locale: str=None):
-    error_messages = {
-        'busy': _('We were not able to process your request completely as the '
-                  'server was too busy. Please try again.'),
-    }
     dt = now()
 
     try:
