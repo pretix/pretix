@@ -45,8 +45,6 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
         order.save()
         order_paid.send(order.event, order=order)
 
-    from pretix.base.services.mail import mail
-
     mail(
         order.email, _('Payment received for your order: %(code)s') % {'code': order.code},
         'pretixpresale/email/order_paid.txt',
