@@ -1559,8 +1559,6 @@ class Order(Versionable):
     def _is_still_available(self):
         error_messages = {
             'unavailable': _('Some of the ordered products were no longer available.'),
-            'busy': _('We were not able to process the request completely as the '
-                      'server was too busy.'),
         }
         positions = list(self.positions.all().select_related(
             'item', 'variation'
@@ -1570,31 +1568,26 @@ class Order(Versionable):
         ))
         quota_cache = {}
         try:
-            with self.event.lock():
-                for i, op in enumerate(positions):
-                    quotas = list(op.item.quotas.all()) if op.variation is None else list(op.variation.quotas.all())
-                    if len(quotas) == 0:
-                        raise Quota.QuotaExceededException(error_messages['unavailable'])
+            for i, op in enumerate(positions):
+                quotas = list(op.item.quotas.all()) if op.variation is None else list(op.variation.quotas.all())
+                if len(quotas) == 0:
+                    raise Quota.QuotaExceededException(error_messages['unavailable'])
 
-                    for quota in quotas:
-                        # Lock the quota, so no other thread is allowed to perform sales covered by this
-                        # quota while we're doing so.
-                        if quota.identity not in quota_cache:
-                            quota_cache[quota.identity] = quota
-                            quota.cached_availability = quota.availability()[1]
-                        else:
-                            # Use cached version
-                            quota = quota_cache[quota.identity]
-                        quota.cached_availability -= 1
-                        if quota.cached_availability < 0:
-                            # This quota is sold out/currently unavailable, so do not sell this at all
-                            raise Quota.QuotaExceededException(error_messages['unavailable'])
+                for quota in quotas:
+                    # Lock the quota, so no other thread is allowed to perform sales covered by this
+                    # quota while we're doing so.
+                    if quota.identity not in quota_cache:
+                        quota_cache[quota.identity] = quota
+                        quota.cached_availability = quota.availability()[1]
+                    else:
+                        # Use cached version
+                        quota = quota_cache[quota.identity]
+                    quota.cached_availability -= 1
+                    if quota.cached_availability < 0:
+                        # This quota is sold out/currently unavailable, so do not sell this at all
+                        raise Quota.QuotaExceededException(error_messages['unavailable'])
         except Quota.QuotaExceededException as e:
             return str(e)
-        except EventLock.LockTimeoutException:
-            # Is raised when there are too many threads asking for quota locks and we were
-            # unaible to get one
-            return error_messages['busy']
         return True
 
     @property

@@ -52,7 +52,7 @@ def release_event(event):
     :raises EventLock.LockReleaseException: if we do not own the lock
     """
     if not hasattr(event, '_lock') or not event._lock:
-        raise EventLock.LockReleaseException('')
+        raise EventLock.LockReleaseException('Lock is not owned by this thread')
     if settings.HAS_REDIS:
         return release_event_redis(event)
     else:

@@ -12,7 +12,9 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DetailView, ListView, TemplateView, View
 
-from pretix.base.models import CachedFile, CachedTicket, Item, Order, Quota
+from pretix.base.models import (
+    CachedFile, CachedTicket, EventLock, Item, Order, Quota,
+)
 from pretix.base.services.export import export
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.services.stats import order_overview
@@ -247,12 +249,17 @@ class OrderExtend(OrderView):
             if oldvalue > now():
                 self.form.save()
             else:
-                is_available = self.order._is_still_available()
-                if is_available is True:
-                    self.form.save()
-                    messages.success(self.request, _('The payment term has been changed.'))
-                else:
-                    messages.error(self.request, is_available)
+                try:
+                    with self.order.event.lock():
+                        is_available = self.order._is_still_available()
+                        if is_available is True:
+                            self.form.save()
+                            messages.success(self.request, _('The payment term has been changed.'))
+                        else:
+                            messages.error(self.request, is_available)
+                except EventLock.LockTimeoutException:
+                    messages.error(self.request, _('We were not able to process the request completely as the '
+                                                   'server was too busy.'))
             return self._redirect_back()
         else:
             return self.get(*args, **kwargs)
