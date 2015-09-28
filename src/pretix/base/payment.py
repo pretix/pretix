@@ -11,7 +11,6 @@ from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import CartPosition, Order
-from pretix.base.services.orders import mark_order_paid
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
 from pretix.presale.views import user_cart_q
@@ -411,6 +410,7 @@ class FreeOrderProvider(BasePaymentProvider):
         return _("Free of charge")
 
     def payment_perform(self, request: HttpRequest, order: Order):
+        from pretix.base.services.orders import mark_order_paid
         mark_order_paid(order, 'free')
 
     @property

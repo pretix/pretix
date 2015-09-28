@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.base.models import (
     Event, EventLock, Order, OrderPosition, Quota, User,
 )
+from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.mail import mail
 from pretix.base.signals import order_paid, order_placed
 from pretix.helpers.urls import build_absolute_uri
@@ -119,8 +120,8 @@ def check_positions(event: Event, dt: datetime, positions: list):
         raise OrderError(err)
 
 
-def perform_order(event: Event, payment_provider: str, positions: list, user: User=None, email: str=None,
-                  locale: str=None):
+def perform_order(event: Event, payment_provider: BasePaymentProvider, positions: list, user: User=None,
+                  email: str=None, locale: str=None):
     error_messages = {
         'busy': _('We were not able to process your request completely as the '
                   'server was too busy. Please try again.'),
@@ -155,8 +156,8 @@ def perform_order(event: Event, payment_provider: str, positions: list, user: Us
 
 
 @transaction.atomic()
-def place_order(event: Event, user: User, email: str, positions: list, dt: datetime, payment_provider: str,
-                locale: str=None):
+def place_order(event: Event, user: User, email: str, positions: list, dt: datetime,
+                payment_provider: BasePaymentProvider, locale: str=None):
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
     total += payment_fee
