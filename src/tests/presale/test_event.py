@@ -140,54 +140,6 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
                       self.driver.find_elements_by_css_selector("section:nth-of-type(1) div.variation")[1].text)
 
 
-class LoginTest(EventTestMixin, TestCase):
-
-    def setUp(self):
-        super().setUp()
-        self.user = User.objects.create_user('demo@demo.dummy', 'demo')
-
-    def test_login_invalid(self):
-        response = self.client.post(
-            '/%s/%s/login' % (self.orga.slug, self.event.slug),
-            {
-                'form': 'login',
-                'email': 'demo@demo.foo',
-                'password': 'bar'
-            }
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('alert-danger', response.rendered_content)
-
-    def test_login_valid(self):
-        response = self.client.post(
-            '/%s/%s/login' % (self.orga.slug, self.event.slug),
-            {
-                'form': 'login',
-                'email': 'demo@demo.dummy',
-                'password': 'demo'
-            }
-        )
-        self.assertEqual(response.status_code, 302)
-
-    def test_login_already_logged_in(self):
-        self.assertTrue(self.client.login(email='demo@demo.dummy', password='demo'))
-        response = self.client.get(
-            '/%s/%s/login' % (self.orga.slug, self.event.slug),
-        )
-        self.assertEqual(response.status_code, 302)
-
-    def test_logout(self):
-        self.assertTrue(self.client.login(email='demo@demo.dummy', password='demo'))
-        response = self.client.get(
-            '/%s/%s/logout' % (self.orga.slug, self.event.slug),
-        )
-        self.assertEqual(response.status_code, 302)
-        response = self.client.get(
-            '/%s/%s/login' % (self.orga.slug, self.event.slug),
-        )
-        self.assertEqual(response.status_code, 200)
-
-
 class DeadlineTest(EventTestMixin, TestCase):
 
     def setUp(self):
