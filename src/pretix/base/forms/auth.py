@@ -147,9 +147,7 @@ class PasswordForgotForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
         try:
-            self.cleaned_data['user'] = User.objects.get(
-                email=email, event__isnull=True
-            )
+            self.cleaned_data['user'] = User.objects.get(email=email)
             return email
         except User.DoesNotExist:
             raise forms.ValidationError(

@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import (
     authenticate, login, logout, update_session_auth_hash,
 )
+from django.contrib.auth.tokens import default_token_generator
 from django.core import signing
 from django.core.signing import BadSignature, SignatureExpired
 from django.core.urlresolvers import reverse
@@ -170,12 +171,6 @@ class EventForgot(EventViewMixin, TemplateView):
                             event=self.request.event.slug)
         return super().get(request, *args, **kwargs)
 
-    def generate_token(self, user):
-        return signing.dumps({
-            "type": "reset",
-            "user": user.id
-        })
-
     def post(self, request, *args, **kwargs):
         if self.form.is_valid():
             user = self.form.cleaned_data['user']
@@ -187,7 +182,7 @@ class EventForgot(EventViewMixin, TemplateView):
                     'url': build_absolute_uri('presale:event.forgot.recover', kwargs={
                         'event': self.request.event.slug,
                         'organizer': self.request.event.organizer.slug,
-                    }) + '?token=' + self.generate_token(user),
+                    }) + '?id=%d&token=%s' % (user.id, default_token_generator.make_token(user)),
                 },
                 self.request.event, locale=user.locale
             )
@@ -216,9 +211,8 @@ class EventRecover(EventViewMixin, TemplateView):
 
     error_messages = {
         'invalid': _('You clicked on an invalid link. Please check that you copied the full '
-                     'web address into your address bar.'),
-        'expired': _('This password recovery link has expired. Please request a new e-mail and '
-                     'use the recovery link within 24 hours.'),
+                     'web address into your address bar. Please note that the link is only valid '
+                     'for three days and that the link can only be used once.'),
         'unknownuser': _('We were unable to find the user you requested a new password for.')
     }
 
@@ -228,21 +222,12 @@ class EventRecover(EventViewMixin, TemplateView):
                             organizer=self.request.event.organizer.slug,
                             event=self.request.event.slug)
         try:
-            self.get_user()
+            user = User.objects.get(id=self.request.GET.get('id'))
         except User.DoesNotExist:
             return self.invalid('unknownuser')
-        except SignatureExpired:
-            return self.invalid('expired')
-        except BadSignature:
+        if not default_token_generator.check_token(user, self.request.GET.get('token')):
             return self.invalid('invalid')
         return super().get(request, *args, **kwargs)
-
-    def get_user(self):
-        token = signing.loads(self.request.GET.get('token', ''),
-                              max_age=3600 * 24)
-        if token['type'] != 'reset':
-            raise BadSignature()
-        return User.objects.get(id=token['user'])
 
     def invalid(self, msg):
         messages.error(self.request, self.error_messages[msg])
@@ -253,17 +238,14 @@ class EventRecover(EventViewMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         if self.form.is_valid():
             try:
-                user = self.get_user()
+                user = User.objects.get(id=self.request.GET.get('id'))
             except User.DoesNotExist:
                 return self.invalid('unknownuser')
-            except SignatureExpired:
-                return self.invalid('expired')
-            except BadSignature:
+            if not default_token_generator.check_token(user, self.request.GET.get('token')):
                 return self.invalid('invalid')
-            else:
-                user.set_password(self.form.cleaned_data['password'])
-                user.save()
-                messages.success(request, _('You can now login using your new password.'))
+            user.set_password(self.form.cleaned_data['password'])
+            user.save()
+            messages.success(request, _('You can now login using your new password.'))
             return redirect('presale:event.checkout.login',
                             organizer=self.request.event.organizer.slug,
                             event=self.request.event.slug)
