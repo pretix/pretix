@@ -1,6 +1,7 @@
 import logging
 import time
 from datetime import timedelta
+import uuid
 
 from django.conf import settings
 from django.db import transaction
@@ -9,6 +10,7 @@ from django.utils.timezone import now
 from pretix.base.models import EventLock
 
 logger = logging.getLogger('pretix.base.locking')
+LOCK_TIMEOUT = 120
 
 
 class LockManager:
@@ -32,22 +34,25 @@ def lock_event(event):
     :raises EventLock.LockTimeoutException: if the event is locked every time we try
                                             to obtain the lock
     """
-    if event.locked_here:
+    if hasattr(event, '_lock') and event._lock:
         return True
+
     if settings.HAS_REDIS:
         return lock_event_redis(event)
     else:
         return lock_event_db(event)
 
 
-def release_event(event, force=False):
+def release_event(event):
     """
     Release a lock placed by :py:meth:`lock()`. If the parameter force is not set to ``True``,
     the lock will only be released if it was issued in _this_ python
     representation of the database object.
+
+    :raises EventLock.LockReleaseException: if we do not own the lock
     """
-    if not event.locked_here and not force:
-        return False
+    if not hasattr(event, '_lock') or not event._lock:
+        raise EventLock.LockReleaseException('')
     if settings.HAS_REDIS:
         return release_event_redis(event)
     else:
@@ -61,31 +66,39 @@ def lock_event_db(event):
             dt = now()
             l, created = EventLock.objects.get_or_create(event=event.identity)
             if created:
-                event.locked_here = dt
+                event._lock = l
                 return True
-            elif l.date < now() - timedelta(seconds=120):
-                updated = EventLock.objects.filter(event=event.identity, date=l.date).update(date=dt)
+            elif l.date < now() - timedelta(seconds=LOCK_TIMEOUT):
+                newtoken = uuid.uuid4()
+                updated = EventLock.objects.filter(event=event.identity, token=l.token).update(date=dt, token=newtoken)
                 if updated:
-                    event.locked_here = dt
+                    l.token = newtoken
+                    event._lock = l
                     return True
         time.sleep(2 ** i / 100)
     raise EventLock.LockTimeoutException()
 
 
+@transaction.atomic()
 def release_event_db(event):
-    deleted = EventLock.objects.filter(event=event.identity).delete()
-    event.locked_here = None
-    return deleted
+    if not hasattr(event, '_lock') or not event._lock:
+        raise EventLock.LockReleaseException('Lock is not owned by this thread')
+    try:
+        lock = EventLock.objects.get(event=event.identity, token=event._lock.token)
+        lock.delete()
+        event._lock = None
+    except EventLock.DoesNotExist:
+        raise EventLock.LockReleaseException('Lock is no longer owned by this thread')
 
 
 def redis_lock_from_event(event):
     from django_redis import get_redis_connection
     from redis.lock import Lock
 
-    if not hasattr(event, '_redis_lock'):
+    if not hasattr(event, '_lock') or not event._lock:
         rc = get_redis_connection("redis")
-        event._redis_lock = Lock(redis=rc, name='pretix_event_%s' % event.identity, timeout=120)
-    return event._redis_lock
+        event._lock = Lock(redis=rc, name='pretix_event_%s' % event.identity, timeout=LOCK_TIMEOUT)
+    return event._lock
 
 
 def lock_event_redis(event):
@@ -94,10 +107,8 @@ def lock_event_redis(event):
     lock = redis_lock_from_event(event)
     retries = 5
     for i in range(retries):
-        dt = now()
         try:
             if lock.acquire(False):
-                event.locked_here = dt
                 return True
         except RedisError:
             logger.exception('Error locking an event')
@@ -115,5 +126,4 @@ def release_event_redis(event):
     except RedisError:
         logger.exception('Error releasing an event lock')
         raise EventLock.LockTimeoutException()
-    event.locked_here = None
-    return True
+    event._lock = None
