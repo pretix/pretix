@@ -47,7 +47,7 @@ class BasePaymentProvider:
         """
         fee_abs = self.settings.get('_fee_abs', as_type=Decimal, default=0)
         fee_percent = self.settings.get('_fee_percent', as_type=Decimal, default=0)
-        return (price * fee_percent / 100).quantize('.01') + fee_abs
+        return (price * fee_percent / 100).quantize(Decimal('.01')) + fee_abs
 
     @property
     def verbose_name(self) -> str:
