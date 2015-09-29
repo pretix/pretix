@@ -7,6 +7,7 @@ from urllib.parse import urljoin
 import dateutil.parser
 from django.conf import settings
 from django.core.files import File
+from django.core.files.storage import default_storage
 from django.db.models import Model
 from versions.models import Versionable
 
@@ -139,9 +140,8 @@ class SettingsProxy:
             return value == 'True'
         elif as_type == File:
             try:
-                f = open(os.path.join(settings.MEDIA_ROOT, value[7:]), 'r')
-                fi = File(f)
-                fi.url = urljoin(settings.MEDIA_URL, value[7:])
+                fi = default_storage.open(value[7:], 'r')
+                fi.url = default_storage.url(value[7:])
                 return fi
             except OSError:
                 return False

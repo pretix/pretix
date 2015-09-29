@@ -5,6 +5,7 @@ import os
 from django import forms
 from django.conf import settings
 from django.core.files import File
+from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import UploadedFile
 from django.db import models
 from django.forms.models import BaseModelForm, ModelFormMetaclass
@@ -105,8 +106,7 @@ class SettingsForm(forms.Form):
                     )
                 else:
                     fname = '%s/%s.%s' % (self.obj.slug, name, value.name.split('.')[-1])
-                fpath = os.path.join(settings.MEDIA_ROOT, fname)
-                with open(fpath, 'wb+') as destination:
+                with default_storage.open(fname, 'wb+') as destination:
                     for chunk in value.chunks():
                         destination.write(chunk)
                 value._name = fname
@@ -118,7 +118,7 @@ class SettingsForm(forms.Form):
                 fname = self.obj.settings.get(name, as_type=File)
                 if fname:
                     try:
-                        os.unlink(fname.name)
+                        default_storage.delete(fname.name)
                     except OSError:
                         logger.error('Deleting file %s failed.' % fname.name)
 

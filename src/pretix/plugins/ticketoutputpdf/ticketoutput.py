@@ -5,6 +5,7 @@ from io import BytesIO
 from django import forms
 from django.contrib.staticfiles import finders
 from django.core.files import File
+from django.core.files.storage import default_storage
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 
@@ -36,12 +37,6 @@ class PdfTicketOutput(BaseTicketOutput):
         orientation = self.settings.get('orientation', default='portrait')
         if hasattr(pagesizes, orientation):
             pagesize = getattr(pagesizes, orientation)(pagesize)
-
-        fname = self.settings.get('background', as_type=File)
-        if isinstance(fname, File):
-            fname = fname.name
-        else:
-            fname = finders.find('pretixpresale/pdf/ticket_default_a4.pdf')
 
         buffer = BytesIO()
         p = canvas.Canvas(buffer, pagesize=pagesize)
@@ -98,11 +93,17 @@ class PdfTicketOutput(BaseTicketOutput):
         buffer.seek(0)
         new_pdf = PdfFileReader(buffer)
         output = PdfFileWriter()
+        bg_file = self.settings.get('background', as_type=File)
+        if isinstance(bg_file, File):
+            new_bg_file = lambda: default_storage.open(bg_file.name, "rb")
+        else:
+            new_bg_file = lambda: open(finders.find('pretixpresale/pdf/ticket_default_a4.pdf'), "rb")
         for page in new_pdf.pages:
-            bg_pdf = PdfFileReader(open(fname, "rb"))
-            bg_page = bg_pdf.getPage(0)
-            bg_page.mergePage(page)
-            output.addPage(bg_page)
+            with new_bg_file() as bgf:
+                bg_pdf = PdfFileReader(bgf)
+                bg_page = bg_pdf.getPage(0)
+                bg_page.mergePage(page)
+                output.addPage(bg_page)
 
         outbuffer = BytesIO()
         output.write(outbuffer)
