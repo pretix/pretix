@@ -1,10 +1,12 @@
 from datetime import timedelta
 
+from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    CartPosition, Event, Item, ItemCategory, ItemVariation, Order,
+    CachedFile, CartPosition, Event, Item, ItemCategory, ItemVariation, Order,
     OrderPosition, Organizer, Property, PropertyValue, Question, Quota, User,
 )
 from pretix.base.services.orders import mark_order_paid
@@ -16,6 +18,7 @@ class ItemVariationsTest(TestCase):
     This test case tests various methods around the properties /
     variations concept.
     """
+
     @classmethod
     def setUpTestData(cls):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
@@ -141,7 +144,6 @@ class ItemVariationsTest(TestCase):
 
 
 class VersionableTestCase(TestCase):
-
     def test_shallow_cone(self):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
         event = Event.objects.create(
@@ -159,7 +161,6 @@ class VersionableTestCase(TestCase):
 
 
 class UserTestCase(TestCase):
-
     def test_name(self):
         u = User.objects.create_user('test@foo.bar', 'test')
         u.givenname = "Christopher"
@@ -184,7 +185,6 @@ class UserTestCase(TestCase):
 
 
 class BaseQuotaTestCase(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
@@ -208,7 +208,6 @@ class BaseQuotaTestCase(TestCase):
 
 
 class QuotaTestCase(BaseQuotaTestCase):
-
     def test_available(self):
         self.quota.items.add(self.item1)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 2))
@@ -304,7 +303,6 @@ class QuotaTestCase(BaseQuotaTestCase):
 
 
 class OrderTestCase(BaseQuotaTestCase):
-
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
@@ -388,6 +386,7 @@ class ItemCategoryTest(TestCase):
     """
     This test case tests various methods around the category model.
     """
+
     @classmethod
     def setUpTestData(cls):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
@@ -409,3 +408,18 @@ class ItemCategoryTest(TestCase):
         c2.position = 2
         assert c1 < c2
         assert c2 > c1
+
+
+class CachedFileTestCase(TestCase):
+    def test_file_handling(self):
+        cf = CachedFile()
+        val = SimpleUploadedFile("testfile.txt", b"file_content")
+        cf.file.save("testfile.txt", val)
+        cf.type = "text/plain"
+        cf.filename = "testfile.txt"
+        cf.save()
+        assert default_storage.exists(cf.file.name)
+        with default_storage.open(cf.file.name, 'r') as f:
+            assert f.read().strip() == "file_content"
+        cf.delete()
+        assert not default_storage.exists(cf.file.name)

@@ -13,6 +13,8 @@ from django.contrib.auth.models import (
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Q, Count
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.template.defaultfilters import date as _date
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -964,7 +966,7 @@ class Item(Versionable):
             # that changes the price, the default price has no effect.
 
             newprice = None
-            for receiver, response in responses:
+            for rec, response in responses:
                 if 'available' in response[i] and not response[i]['available']:
                     var['available'] = False
                     break
@@ -1018,7 +1020,7 @@ class Item(Versionable):
             cache=self.event.get_cache()
         )
         price = self.default_price
-        for receiver, response in responses:
+        for rec, response in responses:
             if 'available' in response[0] and not response[0]['available']:
                 return False
             elif 'price' in response[0] and response[0]['price'] is not None and response[0]['price'] < price:
@@ -1126,7 +1128,7 @@ class ItemVariation(Versionable):
             cache=self.item.event.get_cache()
         )
         price = self.default_price if self.default_price is not None else self.item.default_price
-        for receiver, response in responses:
+        for rec, response in responses:
             if 'available' in response[0] and not response[0]['available']:
                 return False
             elif 'price' in response[0] and response[0]['price'] is not None and response[0]['price'] < price:
@@ -1821,3 +1823,10 @@ class EventLock(models.Model):
 
     class LockReleaseException(Exception):
         pass
+
+
+@receiver(post_delete, sender=CachedFile)
+def cached_file_delete(sender, instance, **kwargs):
+    if instance.file:
+        # Pass false so FileField doesn't save the model.
+        instance.file.delete(False)
