@@ -85,6 +85,9 @@ class SettingsTestCase(TestCase):
         self.assertEqual(self.event.settings.test_default, 'def')
         self.assertEqual(self.event.settings.get('nonexistant', default='abc'), 'abc')
 
+    def test_default_typing(self):
+        self.assertIs(type(self.event.settings.get('nonexistant', as_type=Decimal, default=0)), Decimal)
+
     def test_item_access(self):
         self.event.settings['foo'] = 'abc'
         self.assertEqual(self.event.settings['foo'], 'abc')
