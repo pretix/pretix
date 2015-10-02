@@ -88,69 +88,69 @@ class JSONExporter(BaseExporter):
                 },
                 'categories': [
                     {
-                        'id': c.identity,
-                        'name': str(c.name)
-                    } for c in self.event.categories.current.all()
+                        'id': category.identity,
+                        'name': str(category.name)
+                    } for category in self.event.categories.current.all()
                 ],
                 'items': [
                     {
-                        'id': i.identity,
-                        'name': str(i.name),
-                        'category': i.category_id,
-                        'price': i.default_price,
-                        'admission': i.admission,
-                        'active': i.active,
+                        'id': item.identity,
+                        'name': str(item.name),
+                        'category': item.category_id,
+                        'price': item.default_price,
+                        'admission': item.admission,
+                        'active': item.active,
                         'variations': [
                             {
-                                'id': v.identity,
-                                'active': v.active,
-                                'price': v.default_price if v.default_price is not None else i.default_price,
-                                'name': str(v)
-                            } for v in i.variations.current.all()
+                                'id': variation.identity,
+                                'active': variation.active,
+                                'price': variation.default_price if variation.default_price is not None else item.default_price,
+                                'name': str(variation)
+                            } for variation in item.variations.current.all()
                         ]
-                    } for i in self.event.items.current.all().prefetch_related('variations')
+                    } for item in self.event.items.current.all().prefetch_related('variations')
                 ],
                 'questions': [
                     {
-                        'id': q.identity,
-                        'question': str(q.question),
-                        'type': q.type
-                    } for q in self.event.questions.current.all()
+                        'id': question.identity,
+                        'question': str(question.question),
+                        'type': question.type
+                    } for question in self.event.questions.current.all()
                 ],
                 'orders': [
                     {
-                        'code': o.code,
-                        'status': o.status,
-                        'user': o.user.email,
-                        'datetime': o.datetime,
-                        'payment_fee': o.payment_fee,
-                        'total': o.total,
+                        'code': order.code,
+                        'status': order.status,
+                        'user': order.user.email,
+                        'datetime': order.datetime,
+                        'payment_fee': order.payment_fee,
+                        'total': order.total,
                         'positions': [
                             {
-                                'id': p.identity,
-                                'item': p.item_id,
-                                'variation': p.variation_id,
-                                'price': p.price,
-                                'attendee_name': p.attendee_name,
+                                'id': position.identity,
+                                'item': position.item_id,
+                                'variation': position.variation_id,
+                                'price': position.price,
+                                'attendee_name': position.attendee_name,
                                 'answers': [
                                     {
-                                        'question': a.question_id,
-                                        'answer': a.answer
-                                    } for a in p.answers.all()
+                                        'question': answer.question_id,
+                                        'answer': answer.answer
+                                    } for answer in position.answers.all()
                                 ]
-                            } for p in o.positions.current.all()
+                            } for position in order.positions.current.all()
                         ]
-                    } for o in
+                    } for order in
                     self.event.orders.current.all().prefetch_related('positions', 'positions__answers').select_related(
                         'user')
                 ],
                 'quotas': [
                     {
-                        'id': q.identity,
-                        'size': q.size,
-                        'items': [i.id for i in q.items.all()],
-                        'variations': [v.id for v in q.variations.all()],
-                    } for q in self.event.quotas.current.all().prefetch_related('items', 'variations')
+                        'id': quota.identity,
+                        'size': quota.size,
+                        'items': [item.id for item in quota.items.all()],
+                        'variations': [variation.id for variation in quota.variations.all()],
+                    } for quota in self.event.quotas.current.all().prefetch_related('items', 'variations')
                 ]
             }
         }
