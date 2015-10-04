@@ -18,7 +18,7 @@ def env():
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     Order.objects.create(
         code='FOO', event=event,
-        user=user, status=Order.STATUS_PENDING,
+        status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=0, payment_provider='banktransfer'
     )

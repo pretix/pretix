@@ -23,10 +23,8 @@ class OrderDetailMixin:
     @cached_property
     def order(self):
         try:
-            q = Q(Q(secret__isnull=False) & Q(secret__in=self.request.session['order_secrets']))
-            if self.request.user.is_authenticated():
-                q |= Q(user=self.request.user)
-            return Order.objects.current.get(q & Q(event=self.request.event) & Q(code=self.kwargs['order']))
+            return Order.objects.current.get(secret=self.kwargs['secret'],
+                                             event=self.request.event, code=self.kwargs['order'])
         except Order.DoesNotExist:
             return None
 
@@ -43,6 +41,7 @@ class OrderDetailMixin:
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
             'order': self.order.code,
+            'secret': self.order.secret
         })
 
 
@@ -52,7 +51,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartDisplayMixin, TemplateV
     def get(self, request, *args, **kwargs):
         self.kwargs = kwargs
         if not self.order:
-            raise Http404(_('Unknown order code or order does belong to another user.'))
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
         return super().get(request, *args, **kwargs)
 
     @cached_property
@@ -104,7 +103,7 @@ class OrderPay(EventViewMixin, OrderDetailMixin, TemplateView):
     def dispatch(self, request, *args, **kwargs):
         self.request = request
         if not self.order:
-            raise Http404(_('Unknown order code or order does belong to another user.'))
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
         if (self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED)
                 or not self.payment_provider.order_can_retry(self.order)
                 or not self.payment_provider.is_enabled):
@@ -138,6 +137,7 @@ class OrderPay(EventViewMixin, OrderDetailMixin, TemplateView):
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
             'order': self.order.code,
+            'secret': self.order.secret
         })
 
 
@@ -147,7 +147,7 @@ class OrderPayDo(EventViewMixin, OrderDetailMixin, TemplateView):
     def dispatch(self, request, *args, **kwargs):
         self.request = request
         if not self.order:
-            raise Http404(_('Unknown order code or order does belong to another user.'))
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
         if not self.payment_provider.order_can_retry(self.order) or not self.payment_provider.is_enabled:
             messages.error(request, _('The payment for this order cannot be continued.'))
             return redirect(self.get_order_url())
@@ -178,6 +178,7 @@ class OrderPayDo(EventViewMixin, OrderDetailMixin, TemplateView):
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
             'order': self.order.code,
+            'secret': self.order.secret
         })
 
 
@@ -210,7 +211,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
         self.request = request
         self.kwargs = kwargs
         if not self.order:
-            raise Http404(request, _('Unknown order code or order does belong to another user.'))
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
         if not self.order.can_modify_answers:
             messages.error(request, _('You cannot modify this order'))
             return redirect(self.get_order_url())
@@ -230,7 +231,7 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
         self.request = request
         self.kwargs = kwargs
         if not self.order:
-            raise Http404(_('Unknown order code or order does belong to another user.'))
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
         if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
             messages.error(request, _('You cannot cancel this order'))
             return redirect(self.get_order_url())
@@ -265,7 +266,7 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             messages.error(request, _('You requested an invalid ticket output type.'))
             return redirect(self.get_order_url())
         if not self.order:
-            raise Http404(_('Unknown order code or order does belong to another user.'))
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
         if self.order.status != Order.STATUS_PAID:
             messages.error(request, _('Order is not paid.'))
             return redirect(self.get_order_url())

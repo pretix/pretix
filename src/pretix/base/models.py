@@ -1366,7 +1366,7 @@ class Quota(Versionable):
 
 
 def generate_secret():
-    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(32))
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16))
 
 
 class Order(Versionable):
@@ -1393,8 +1393,10 @@ class Order(Versionable):
 
     :param event: The event this belongs to
     :type event: Event
-    :param user: The user who ordered this
-    :type user: User
+    :param email: The email of the person who ordered this
+    :type email: str
+    :param locale: The locale of this order
+    :type locale: str
     :param datetime: The datetime of the order placement
     :type datetime: datetime
     :param expires: The date until this order has to be paid to guarantee the
@@ -1438,16 +1440,11 @@ class Order(Versionable):
         verbose_name=_("Event"),
         related_name="orders"
     )
-    user = models.ForeignKey(
-        User, null=True, blank=True,
-        verbose_name=_("User"),
-        related_name="orders"
-    )
-    guest_email = models.EmailField(
+    email = models.EmailField(
         null=True, blank=True,
         verbose_name=_('E-mail')
     )
-    guest_locale = models.CharField(
+    locale = models.CharField(
         null=True, blank=True, max_length=32,
         verbose_name=_('Locale')
     )
@@ -1592,18 +1589,6 @@ class Order(Versionable):
             return str(e)
         return True
 
-    @property
-    def locale(self):
-        if self.user:
-            return self.user.locale
-        return self.guest_locale
-
-    @property
-    def email(self):
-        if self.user:
-            return self.user.email
-        return self.guest_email
-
 
 class CachedTicket(models.Model):
     order = VersionedForeignKey(Order, on_delete=models.CASCADE)
@@ -1736,8 +1721,8 @@ class CartPosition(ObjectWithAnswers, Versionable):
     :type event: Evnt
     :param item: The selected item
     :type item: Item
-    :param user: The user who has this in his cart
-    :type user: User
+    :param session: The user session that contains this cart position
+    :type session: str
     :param variation: The selected ItemVariation or null, if the item has no properties
     :type variation: ItemVariation
     :param datetime: The datetime this item was put into the cart
@@ -1752,10 +1737,6 @@ class CartPosition(ObjectWithAnswers, Versionable):
     event = VersionedForeignKey(
         Event,
         verbose_name=_("Event")
-    )
-    user = models.ForeignKey(
-        User, null=True, blank=True,
-        verbose_name=_("User")
     )
     session = models.CharField(
         max_length=255, null=True, blank=True,

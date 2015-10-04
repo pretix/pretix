@@ -142,12 +142,7 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
 
 class DeadlineTest(EventTestMixin, TestCase):
 
-    def setUp(self):
-        super().setUp()
-        self.user = User.objects.create_user('demo@demo.dummy', 'demo')
-
     def test_not_yet_started(self):
-        self.assertTrue(self.client.login(email='demo@demo.dummy', password='demo'))
         self.event.presale_start = now() + datetime.timedelta(days=1)
         self.event.save()
         response = self.client.get(
@@ -164,7 +159,6 @@ class DeadlineTest(EventTestMixin, TestCase):
         self.assertIn('not yet started', response.rendered_content)
 
     def test_over(self):
-        self.assertTrue(self.client.login(email='demo@demo.dummy', password='demo'))
         self.event.presale_end = now() - datetime.timedelta(days=1)
         self.event.save()
         response = self.client.get(

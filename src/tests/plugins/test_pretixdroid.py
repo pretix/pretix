@@ -30,8 +30,7 @@ def env():
     var2.values.add(val2)
     ticket = Item.objects.create(event=event, name='Ticket', default_price=23)
     o1 = Order.objects.create(
-        code='FOO', event=event,
-        user=user, status=Order.STATUS_PENDING,
+        code='FOO', event=event, status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=0, payment_provider='banktransfer'
     )

@@ -5,7 +5,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import (
-    CartPosition, Event, EventLock, Item, ItemVariation, Quota, User,
+    CartPosition, Event, EventLock, Item, ItemVariation, Quota,
 )
 
 
@@ -28,27 +28,21 @@ error_messages = {
 }
 
 
-def _user_cart_q(user=None, guest_session=None):
-    if user and user.is_authenticated():
-        return Q(Q(user=user) | Q(session=guest_session))
-    return Q(Q(user__isnull=True) & Q(session=guest_session))
-
-
-def _extend_existing(event, user, guest_session, expiry):
+def _extend_existing(event, session, expiry):
     # Extend this user's cart session to 30 minutes from now to ensure all items in the
     # cart expire at the same time
     # We can extend the reservation of items which are not yet expired without risk
     CartPosition.objects.current.filter(
-        _user_cart_q(user, guest_session) & Q(event=event) & Q(expires__gt=now())
+        Q(session=session) & Q(event=event) & Q(expires__gt=now())
     ).update(expires=expiry)
 
 
-def _re_add_expired_positions(items, event, user, guest_session):
+def _re_add_expired_positions(items, event, session):
     positions = set()
     # For items that are already expired, we have to delete and re-add them, as they might
     # be no longer available or prices might have changed. Sorry!
     expired = CartPosition.objects.current.filter(
-        _user_cart_q(user, guest_session) & Q(event=event) & Q(expires__lte=now())
+        Q(session=session) & Q(event=event) & Q(expires__lte=now())
     )
     for cp in expired:
         items.insert(0, (cp.item_id, cp.variation_id, 1, cp))
@@ -69,7 +63,7 @@ def _check_date(event):
         raise CartError(error_messages['ended'])
 
 
-def _add_items(event, items, user, guest_session, expiry):
+def _add_items(event, items, session, expiry):
     err = None
 
     # Fetch items from the database
@@ -129,40 +123,36 @@ def _add_items(event, items, user, guest_session, expiry):
             else:
                 CartPosition.objects.create(
                     event=event, item=item, variation=variation, price=price, expires=expiry,
-                    user=user if user and user.is_authenticated() else None,
-                    session=guest_session if not user or not user.is_authenticated() else None
+                    session=session
                 )
     return err
 
 
-def add_items_to_cart(event: str, items: list, user: int=None, guest_session: str=None):
+def add_items_to_cart(event: str, items: list, session: str=None):
     """
-    Adds a list of items to a user's or a guest's cart.
+    Adds a list of items to a user's cart.
     :param event: The event ID in question
     :param items: A list of tuple of the form (item id, variation id or None, number)
-    :param user: User ID
-    :param guest_session: Session ID of a guest
+    :param session: Session ID of a guest
     :raises CartError: On any error that occured
     """
-    if user:
-        user = User.objects.get(id=user)
     event = Event.objects.current.get(identity=event)
     try:
         with event.lock():
             _check_date(event)
-            existing = CartPosition.objects.current.filter(_user_cart_q(user, guest_session) & Q(event=event)).count()
+            existing = CartPosition.objects.current.filter(Q(session=session) & Q(event=event)).count()
             if sum(i[2] for i in items) + existing > int(event.settings.max_items_per_order):
                 # TODO: i18n plurals
                 raise CartError(error_messages['max_items'] % event.settings.max_items_per_order)
 
             expiry = now() + timedelta(minutes=event.settings.get('reservation_time', as_type=int))
-            _extend_existing(event, user, guest_session, expiry)
+            _extend_existing(event, session, expiry)
 
-            expired = _re_add_expired_positions(items, event, user, guest_session)
+            expired = _re_add_expired_positions(items, event, session)
             if not items:
                 raise CartError(error_messages['empty'])
 
-            err = _add_items(event, items, user, guest_session, expiry)
+            err = _add_items(event, items, session, expiry)
             _delete_expired(expired)
             if err:
                 raise CartError(err)
@@ -170,20 +160,17 @@ def add_items_to_cart(event: str, items: list, user: int=None, guest_session: st
         raise CartError(error_messages['busy'])
 
 
-def remove_items_from_cart(event: str, items: list, user: int=None, guest_session: str=None):
+def remove_items_from_cart(event: str, items: list, session: str=None):
     """
-    Removes a list of items from a user's or a guest's cart.
+    Removes a list of items from a user's cart.
     :param event: The event ID in question
     :param items: A list of tuple of the form (item id, variation id or None, number)
-    :param user: User ID
-    :param guest_session: Session ID of a guest
+    :param session: Session ID of a guest
     """
-    if user:
-        user = User.objects.get(id=user)
     event = Event.objects.current.get(identity=event)
 
     for item, variation, cnt in items:
-        cw = _user_cart_q(user, guest_session) & Q(item_id=item) & Q(event=event)
+        cw = Q(session=session) & Q(item_id=item) & Q(event=event)
         if variation:
             cw &= Q(variation_id=variation)
         else:

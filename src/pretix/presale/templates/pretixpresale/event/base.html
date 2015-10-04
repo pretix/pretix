@@ -36,18 +36,6 @@
                     {% endfor %}
                 </div> &middot;
             {% endif %}
-            {% if request.user.is_authenticated %}
-                {% blocktrans trimmed with name=request.user.get_short_name %}
-                    Hello, {{ name }}!
-                {% endblocktrans %} &middot;
-                <a href="{% url "presale:event.account" event=request.event.slug organizer=request.event.organizer.slug %}">
-                    {% trans "Your account" %}</a> &middot;
-                <a href="{% url "presale:event.logout" event=request.event.slug organizer=request.event.organizer.slug %}">
-                    {% trans "Logout" %}</a>
-            {% else %}
-                <a href="{% url "presale:event.checkout.login" event=request.event.slug organizer=request.event.organizer.slug %}">
-                    {% trans "Login" %}</a>
-            {% endif %}
         </div>
         <div class="clearfix"></div>
     </div>

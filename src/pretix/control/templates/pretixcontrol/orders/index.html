@@ -52,7 +52,7 @@
                     <td><strong><a
                             href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code%}"
                             >{{ o.code }}</a></strong></td>
-                    <td>{{ o.user.get_short_name }}</td>
+                    <td>{{ o.email }}</td>
                     <td>{{ o.total|floatformat:2 }} {{ request.event.currency }}</td>
                     <td>{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
                     <td>{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>

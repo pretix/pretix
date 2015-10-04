@@ -10,10 +10,9 @@ from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import CartPosition, Order
+from pretix.base.models import CartPosition, Order, Quota
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
-from pretix.presale.views import user_cart_q
 
 
 class BasePaymentProvider:
@@ -411,7 +410,10 @@ class FreeOrderProvider(BasePaymentProvider):
 
     def payment_perform(self, request: HttpRequest, order: Order):
         from pretix.base.services.orders import mark_order_paid
-        mark_order_paid(order, 'free')
+        try:
+            mark_order_paid(order, 'free')
+        except Quota.QuotaExceededException as e:
+            messages.error(request, str(e))
 
     @property
     def settings_form_fields(self) -> dict:
@@ -442,7 +444,7 @@ class FreeOrderProvider(BasePaymentProvider):
 
     def is_allowed(self, request: HttpRequest) -> bool:
         return CartPosition.objects.current.filter(
-            user_cart_q(request) & Q(event=request.event)
+            session=request.session.session_key, event=request.event
         ).aggregate(sum=Sum('price'))['sum'] == 0
 
 

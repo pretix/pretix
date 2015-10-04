@@ -3,6 +3,7 @@ import time
 from datetime import timedelta
 
 from bs4 import BeautifulSoup
+from django.conf import settings
 from django.test import TestCase
 from django.utils.timezone import now
 from tests.base import BrowserTest
@@ -14,7 +15,6 @@ from pretix.base.models import (
 
 
 class CartTestMixin:
-
     def setUp(self):
         super().setUp()
         self.orga = Organizer.objects.create(name='CCC', slug='ccc')
@@ -22,7 +22,6 @@ class CartTestMixin:
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc)
         )
-        self.user = User.objects.create_user('dummy@dummy.dummy', 'demo')
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
         self.quota_shirts = Quota.objects.create(event=self.event, name='Shirts', size=2)
         self.shirt = Item.objects.create(event=self.event, name='T-Shirt', category=self.category, default_price=12)
@@ -42,72 +41,11 @@ class CartTestMixin:
                                           category=self.category, default_price=23)
         self.quota_tickets.items.add(self.ticket)
 
-
-class CartBrowserTest(CartTestMixin, BrowserTest):
-
-    def test_not_logged_in(self):
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        # add the entry ticket to cart
-        self.driver.find_element_by_css_selector('input[type=number][name=item_%s]' % self.ticket.identity).send_keys('1')
-        self.scroll_and_click(self.driver.find_element_by_css_selector('.checkout-button-row button'))
-        # should redirect to login page
-        self.driver.find_element_by_name('email')
-
-    def test_simple_login(self):
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        # add the entry ticket to cart
-        self.driver.find_element_by_css_selector('input[type=number][name=item_%s]' % self.ticket.identity).send_keys('1')
-        self.scroll_and_click(self.driver.find_element_by_css_selector('.checkout-button-row button'))
-        # should redirect to login page
-        # open the login accordion
-        self.scroll_and_click(self.driver.find_element_by_css_selector('a[href*=loginForm]'))
-        time.sleep(1)
-        # enter login details
-        self.driver.find_element_by_css_selector('#loginForm input[name=email]').send_keys('dummy@dummy.dummy')
-        self.driver.find_element_by_css_selector('#loginForm input[name=password]').send_keys('demo')
-        self.scroll_and_click(self.driver.find_element_by_css_selector('#loginForm button.btn-primary'))
-        # should display our ticket
-        self.assertIn('Early-bird', self.driver.find_element_by_css_selector('.cart-row:first-child').text)
-
-    def test_simple_login_as_guest(self):
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        # add the entry ticket to cart
-        self.driver.find_element_by_css_selector('input[type=number][name=item_%s]' % self.ticket.identity).send_keys('1')
-        self.scroll_and_click(self.driver.find_element_by_css_selector('.checkout-button-row button'))
-        # should redirect to login page
-        # open the login accordion
-        self.scroll_and_click(self.driver.find_element_by_css_selector('a[href*=guestForm]'))
-        time.sleep(1)
-        # enter login details
-        self.driver.find_element_by_css_selector('#guestForm input[name=email]').send_keys('dummy@dummy.dummy')
-        self.scroll_and_click(self.driver.find_element_by_css_selector('#guestForm button.btn-primary'))
-        # should display our ticket
-        self.assertIn('Early-bird', self.driver.find_element_by_css_selector('.cart-row:first-child').text)
-
-    def test_registration(self):
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        # add the entry ticket to cart
-        self.driver.find_element_by_css_selector('input[type=number][name=item_%s]' % self.ticket.identity).send_keys('1')
-        self.scroll_and_click(self.driver.find_element_by_css_selector('.checkout-button-row button'))
-        # should redirect to login page
-        # open the login accordion
-        self.scroll_and_click(self.driver.find_element_by_css_selector('a[href*=registrationForm]'))
-        time.sleep(1)
-        # enter login details
-        self.driver.find_element_by_css_selector('#registrationForm input[name=email]').send_keys('demo@example.com')
-        self.driver.find_element_by_css_selector('#registrationForm input[name=password]').send_keys('demo')
-        self.driver.find_element_by_css_selector('#registrationForm input[name=password_repeat]').send_keys('demo')
-        self.scroll_and_click(self.driver.find_element_by_css_selector('#registrationForm button.btn-primary'))
-        # should display our ticket
-        self.assertIn('Early-bird', self.driver.find_element_by_css_selector('.cart-row:first-child').text)
+        self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.session_key = self.client.cookies.get(settings.SESSION_COOKIE_NAME).value
 
 
 class CartTest(CartTestMixin, TestCase):
-
-    def setUp(self):
-        super().setUp()
-        self.assertTrue(self.client.login(email='dummy@dummy.dummy', password='demo'))
-
     def test_simple(self):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_' + self.ticket.identity: '1'
@@ -119,7 +57,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIn('1', doc.select('.cart .cart-row')[0].select('.count')[0].text)
         self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[0].text)
         self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[1].text)
-        objs = list(CartPosition.objects.filter(user=self.user, event=self.event))
+        objs = list(CartPosition.objects.filter(session=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
@@ -137,7 +75,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIn('1', doc.select('.cart .cart-row')[0].select('.count')[0].text)
         self.assertIn('14', doc.select('.cart .cart-row')[0].select('.price')[0].text)
         self.assertIn('14', doc.select('.cart .cart-row')[0].select('.price')[1].text)
-        objs = list(CartPosition.objects.filter(user=self.user, event=self.event))
+        objs = list(CartPosition.objects.filter(session=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
         self.assertEqual(objs[0].item, self.shirt)
         self.assertEqual(objs[0].variation, self.shirt_red)
@@ -154,7 +92,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIn('2', doc.select('.cart .cart-row')[0].select('.count')[0].text)
         self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[0].text)
         self.assertIn('46', doc.select('.cart .cart-row')[0].select('.price')[1].text)
-        objs = list(CartPosition.objects.filter(user=self.user, event=self.event))
+        objs = list(CartPosition.objects.filter(session=self.session_key, event=self.event))
         self.assertEqual(len(objs), 2)
         for obj in objs:
             self.assertEqual(obj.item, self.ticket)
@@ -171,7 +109,7 @@ class CartTest(CartTestMixin, TestCase):
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('Early-bird', doc.select('.cart')[0].text)
         self.assertIn('Shirt', doc.select('.cart')[0].text)
-        objs = list(CartPosition.objects.filter(user=self.user, event=self.event))
+        objs = list(CartPosition.objects.filter(session=self.session_key, event=self.event))
         self.assertEqual(len(objs), 3)
         self.assertIn(self.shirt, [obj.item for obj in objs])
         self.assertIn(self.shirt_red, [obj.variation for obj in objs])
@@ -185,7 +123,7 @@ class CartTest(CartTestMixin, TestCase):
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('numbers only', doc.select('.alert-danger')[0].text)
-        self.assertFalse(CartPosition.objects.filter(user=self.user, event=self.event).exists())
+        self.assertFalse(CartPosition.objects.filter(session=self.session_key, event=self.event).exists())
 
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
         }, follow=True)
@@ -193,7 +131,7 @@ class CartTest(CartTestMixin, TestCase):
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('did not select any products', doc.select('.alert-warning')[0].text)
-        self.assertFalse(CartPosition.objects.filter(user=self.user, event=self.event).exists())
+        self.assertFalse(CartPosition.objects.filter(session=self.session_key, event=self.event).exists())
 
     def test_wrong_event(self):
         event2 = Event.objects.create(
@@ -208,7 +146,7 @@ class CartTest(CartTestMixin, TestCase):
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('not available', doc.select('.alert-danger')[0].text)
-        self.assertFalse(CartPosition.objects.filter(user=self.user, event=self.event).exists())
+        self.assertFalse(CartPosition.objects.filter(session=self.session_key, event=self.event).exists())
 
     def test_no_quota(self):
         shirt2 = Item.objects.create(event=self.event, name='T-Shirt', default_price=12)
@@ -219,11 +157,11 @@ class CartTest(CartTestMixin, TestCase):
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
-        self.assertFalse(CartPosition.objects.filter(user=self.user, event=self.event).exists())
+        self.assertFalse(CartPosition.objects.filter(session=self.session_key, event=self.event).exists())
 
     def test_max_items(self):
         CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.ticket,
+            event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         self.event.settings.max_items_per_order = 5
@@ -234,7 +172,7 @@ class CartTest(CartTestMixin, TestCase):
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('more than', doc.select('.alert-danger')[0].text)
-        self.assertEqual(CartPosition.objects.filter(user=self.user, event=self.event).count(), 1)
+        self.assertEqual(CartPosition.objects.filter(session=self.session_key, event=self.event).count(), 1)
 
     def test_quota_full(self):
         self.quota_tickets.size = 0
@@ -246,7 +184,7 @@ class CartTest(CartTestMixin, TestCase):
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
-        self.assertFalse(CartPosition.objects.filter(user=self.user, event=self.event).exists())
+        self.assertFalse(CartPosition.objects.filter(session=self.session_key, event=self.event).exists())
 
     def test_quota_partly(self):
         self.quota_tickets.size = 1
@@ -262,7 +200,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIn('1', doc.select('.cart .cart-row')[0].select('.count')[0].text)
         self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[0].text)
         self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[1].text)
-        objs = list(CartPosition.objects.filter(user=self.user, event=self.event))
+        objs = list(CartPosition.objects.filter(session=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
@@ -270,7 +208,7 @@ class CartTest(CartTestMixin, TestCase):
 
     def test_renew_in_time(self):
         cp = CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.ticket,
+            event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
@@ -280,12 +218,12 @@ class CartTest(CartTestMixin, TestCase):
 
     def test_renew_expired_successfully(self):
         CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.ticket,
+            event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
         )
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
         }, follow=True)
-        objs = list(CartPosition.objects.current.filter(user=self.user, event=self.event))
+        objs = list(CartPosition.objects.current.filter(session=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
@@ -297,7 +235,7 @@ class CartTest(CartTestMixin, TestCase):
         Currently fails. See: https://github.com/pretix/pretix/issues/20
         """
         cr1 = CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.ticket,
+            event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
         )
         q1 = Question.objects.create(
@@ -310,7 +248,7 @@ class CartTest(CartTestMixin, TestCase):
         ))
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
         }, follow=True)
-        objs = list(CartPosition.objects.current.filter(user=self.user, event=self.event))
+        objs = list(CartPosition.objects.current.filter(session=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
         self.assertEqual(objs[0].answers.get(question=q1).answer, '23')
 
@@ -318,14 +256,14 @@ class CartTest(CartTestMixin, TestCase):
         self.quota_tickets.size = 0
         self.quota_tickets.save()
         CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.ticket,
+            event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
         )
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
-        self.assertFalse(CartPosition.objects.current.filter(user=self.user, event=self.event).exists())
+        self.assertFalse(CartPosition.objects.current.filter(session=self.session_key, event=self.event).exists())
 
     def test_restriction_ok(self):
         self.event.plugins = 'tests.testdummy'
@@ -336,7 +274,7 @@ class CartTest(CartTestMixin, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        objs = list(CartPosition.objects.current.filter(user=self.user, event=self.event))
+        objs = list(CartPosition.objects.current.filter(session=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
@@ -353,11 +291,11 @@ class CartTest(CartTestMixin, TestCase):
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
-        self.assertFalse(CartPosition.objects.filter(user=self.user, event=self.event).exists())
+        self.assertFalse(CartPosition.objects.filter(session=self.session_key, event=self.event).exists())
 
     def test_remove_simple(self):
         CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.ticket,
+            event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
@@ -365,11 +303,11 @@ class CartTest(CartTestMixin, TestCase):
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('updated', doc.select('.alert-success')[0].text)
-        self.assertFalse(CartPosition.objects.current.filter(user=self.user, event=self.event).exists())
+        self.assertFalse(CartPosition.objects.current.filter(session=self.session_key, event=self.event).exists())
 
     def test_remove_variation(self):
         CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.shirt, variation=self.shirt_red,
+            event=self.event, session=self.session_key, item=self.shirt, variation=self.shirt_red,
             price=14, expires=now() + timedelta(minutes=10)
         )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
@@ -377,15 +315,15 @@ class CartTest(CartTestMixin, TestCase):
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('updated', doc.select('.alert-success')[0].text)
-        self.assertFalse(CartPosition.objects.current.filter(user=self.user, event=self.event).exists())
+        self.assertFalse(CartPosition.objects.current.filter(session=self.session_key, event=self.event).exists())
 
     def test_remove_one_of_multiple(self):
         CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.ticket,
+            event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.ticket,
+            event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
@@ -393,15 +331,15 @@ class CartTest(CartTestMixin, TestCase):
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('updated', doc.select('.alert-success')[0].text)
-        self.assertEqual(CartPosition.objects.current.filter(user=self.user, event=self.event).count(), 1)
+        self.assertEqual(CartPosition.objects.current.filter(session=self.session_key, event=self.event).count(), 1)
 
     def test_remove_multiple(self):
         CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.ticket,
+            event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.ticket,
+            event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
@@ -409,15 +347,15 @@ class CartTest(CartTestMixin, TestCase):
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('updated', doc.select('.alert-success')[0].text)
-        self.assertFalse(CartPosition.objects.current.filter(user=self.user, event=self.event).exists())
+        self.assertFalse(CartPosition.objects.current.filter(session=self.session_key, event=self.event).exists())
 
     def test_remove_most_expensive(self):
         CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.ticket,
+            event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         CartPosition.objects.create(
-            event=self.event, user=self.user, item=self.ticket,
+            event=self.event, session=self.session_key, item=self.ticket,
             price=20, expires=now() + timedelta(minutes=10)
         )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
@@ -425,7 +363,7 @@ class CartTest(CartTestMixin, TestCase):
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('updated', doc.select('.alert-success')[0].text)
-        objs = list(CartPosition.objects.current.filter(user=self.user, event=self.event))
+        objs = list(CartPosition.objects.current.filter(session=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)

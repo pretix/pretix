@@ -41,7 +41,7 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         if self.request.GET.get("user", "") != "":
             u = self.request.GET.get("user", "")
             qs = qs.filter(
-                Q(user__email__icontains=u) | Q(user__givenname__icontains=u) | Q(user__familyname__icontains=u)
+                Q(email__icontains=u)
             )
         if self.request.GET.get("status", "") != "":
             s = self.request.GET.get("status", "")
@@ -49,7 +49,7 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         if self.request.GET.get("item", "") != "":
             i = self.request.GET.get("item", "")
             qs = qs.filter(positions__item_id__in=(i,)).distinct()
-        return qs.select_related("user")
+        return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

@@ -12,9 +12,7 @@ from pretix.base.models import CartPosition, OrderPosition, QuestionAnswer
 from pretix.base.services.orders import OrderError, perform_order
 from pretix.base.signals import register_payment_providers
 from pretix.presale.forms.checkout import QuestionsForm
-from pretix.presale.views import (
-    CartDisplayMixin, EventViewMixin, LoginOrGuestRequiredMixin, user_cart_q,
-)
+from pretix.presale.views import CartDisplayMixin, EventViewMixin
 
 
 class CheckoutView(TemplateView):
@@ -43,12 +41,13 @@ class CheckoutView(TemplateView):
             'organizer': self.request.event.organizer.slug
         })
 
-    def get_order_url(self, order, add_secret):
+    def get_order_url(self, order):
         return reverse('presale:event.order', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
             'order': order.code,
-        }) + '?thanks=yes' + ('&order_secret=' + order.secret if add_secret else '')
+            'secret': order.secret
+        }) + '?thanks=yes'
 
 
 class QuestionsViewMixin:
@@ -108,8 +107,7 @@ class QuestionsViewMixin:
         return not failed
 
 
-class CheckoutStart(EventViewMixin, CartDisplayMixin, LoginOrGuestRequiredMixin,
-                    QuestionsViewMixin, CheckoutView):
+class CheckoutStart(EventViewMixin, CartDisplayMixin, QuestionsViewMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_questions.html"
 
     def post(self, *args, **kwargs):
@@ -140,13 +138,13 @@ class CheckoutStart(EventViewMixin, CartDisplayMixin, LoginOrGuestRequiredMixin,
         return ctx
 
 
-class PaymentDetails(EventViewMixin, CartDisplayMixin, LoginOrGuestRequiredMixin, CheckoutView):
+class PaymentDetails(EventViewMixin, CartDisplayMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_payment.html"
 
     @cached_property
     def _total_order_value(self):
         return CartPosition.objects.current.filter(
-            user_cart_q(self.request) & Q(event=self.request.event)
+            Q(session=self.request.session.session_key) & Q(event=self.request.event)
         ).aggregate(sum=Sum('price'))['sum']
 
     @cached_property
@@ -196,7 +194,7 @@ class PaymentDetails(EventViewMixin, CartDisplayMixin, LoginOrGuestRequiredMixin
         return self.get_questions_url() + "?back=true"
 
 
-class OrderConfirm(EventViewMixin, CartDisplayMixin, LoginOrGuestRequiredMixin, CheckoutView):
+class OrderConfirm(EventViewMixin, CartDisplayMixin, CheckoutView):
     template_name = "pretixpresale/event/checkout_confirm.html"
 
     def __init__(self, *args, **kwargs):
@@ -259,7 +257,6 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, LoginOrGuestRequiredMixin, 
     def perform_order(self, request: HttpRequest):
         try:
             order = perform_order(self.request.event, self.payment_provider, self.positions,
-                                  user=request.user if request.user.is_authenticated() else None,
                                   email=request.session.get('guest_email', None),
                                   locale=translation.get_language())
         except OrderError as e:
@@ -269,7 +266,7 @@ class OrderConfirm(EventViewMixin, CartDisplayMixin, LoginOrGuestRequiredMixin, 
             # Message is delivered via GET parameter
             # messages.success(request, _('Your order has been placed.'))
             resp = self.payment_provider.payment_perform(request, order)
-            return redirect(resp or self.get_order_url(order, not request.user.is_authenticated()))
+            return redirect(resp or self.get_order_url(order))
 
     def get_previous_url(self):
         if self.payment_provider.identifier != "free":

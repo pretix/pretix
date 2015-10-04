@@ -21,13 +21,13 @@ def env():
     EventPermission.objects.create(user=user, event=event)
     o1 = Order.objects.create(
         code='1234S', event=event,
-        user=user, status=Order.STATUS_PENDING,
+        status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=23, payment_provider='banktransfer'
     )
     o2 = Order.objects.create(
         code='6789Z', event=event,
-        user=user, status=Order.STATUS_CANCELLED,
+        status=Order.STATUS_CANCELLED,
         datetime=now(), expires=now() + timedelta(days=10),
         total=23, payment_provider='banktransfer'
     )

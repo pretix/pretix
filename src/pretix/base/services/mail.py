@@ -17,7 +17,7 @@ def mail(email: str, subject: str, template: str, context: dict=None, event: Eve
     """
     Sends out an email to a user.
 
-    :param user: The user this should be sent to.
+    :param email: The e-mail this should be sent to.
     :param subject: The e-mail subject. Should be localized.
     :param template: The filename of a template to be used. It will
                      be rendered with the recipient's locale. Alternatively, you
@@ -31,7 +31,8 @@ def mail(email: str, subject: str, template: str, context: dict=None, event: Eve
     backend.
     """
     _lng = translation.get_language()
-    translation.activate(locale or settings.LANGUAGE_CODE)
+    if locale:
+        translation.activate(locale or settings.LANGUAGE_CODE)
 
     if isinstance(template, LazyI18nString):
         body = str(template)
@@ -50,17 +51,6 @@ def mail(email: str, subject: str, template: str, context: dict=None, event: Eve
         body += "\r\n\r\n----\r\n"
         body += _(
             "You are receiving this e-mail because you placed an order for %s." % event.name
-        )
-        body += "\r\n"
-        body += _(
-            "You can view all of your orders at the following URL:"
-        )
-        body += "\r\n"
-        body += build_absolute_uri(
-            'presale:event.orders', kwargs={
-                'event': event.slug,
-                'organizer': event.organizer.slug
-            }
         )
         body += "\r\n"
     try:

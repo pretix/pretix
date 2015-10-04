@@ -28,9 +28,9 @@ Users and events
 Pretix is all about **events**, which are defined as something happening somewhere.
 Every event is managed by the **organizer**, an abstract entity running the event.
 
-Pretix is used by **users**. We want to enable global users who can just login into
-pretix and buy tickets for as many events as they like but at the same time it
-should be possible to order products **without** needing an user account.
+Pretix has a concept of **users** that is used for all the people who have to log
+in to the control panel to manage one or more events. No user is required to place an
+order.
 
 
 Items and variations

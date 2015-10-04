@@ -67,7 +67,8 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
                 'event': order.event.slug,
                 'organizer': order.event.organizer.slug,
                 'order': order.code,
-            }) + '?order_secret=' + order.secret,
+                'secret': order.secret
+            }),
             'downloads': order.event.settings.get('ticket_download', as_type=bool)
         },
         order.event, locale=order.locale
@@ -131,14 +132,14 @@ def check_positions(event: Event, dt: datetime, positions: list):
         raise OrderError(err)
 
 
-def perform_order(event: Event, payment_provider: BasePaymentProvider, positions: list, user: User=None,
+def perform_order(event: Event, payment_provider: BasePaymentProvider, positions: list,
                   email: str=None, locale: str=None):
     dt = now()
 
     try:
         with event.lock():
             check_positions(event, dt, positions)
-            order = place_order(event, user, email if user is None else None, positions, dt, payment_provider,
+            order = place_order(event, email, positions, dt, payment_provider,
                                 locale=locale)
             mail(
                 order.email, _('Your order: %(code)s') % {'code': order.code},
@@ -150,7 +151,8 @@ def perform_order(event: Event, payment_provider: BasePaymentProvider, positions
                         'event': event.slug,
                         'organizer': event.organizer.slug,
                         'order': order.code,
-                    }) + '?order_secret=' + order.secret,
+                        'secret': order.secret
+                    }),
                     'payment': payment_provider.order_pending_mail_render(order)
                 },
                 event, locale=order.locale
@@ -163,7 +165,7 @@ def perform_order(event: Event, payment_provider: BasePaymentProvider, positions
 
 
 @transaction.atomic()
-def place_order(event: Event, user: User, email: str, positions: list, dt: datetime,
+def place_order(event: Event, email: str, positions: list, dt: datetime,
                 payment_provider: BasePaymentProvider, locale: str=None):
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
@@ -174,8 +176,7 @@ def place_order(event: Event, user: User, email: str, positions: list, dt: datet
     order = Order.objects.create(
         status=Order.STATUS_PENDING,
         event=event,
-        user=user,
-        guest_email=email,
+        email=email,
         datetime=dt,
         expires=min(expires),
         locale=locale,

@@ -67,7 +67,7 @@
                     <dd>{{ order.expires }}</dd>
                 {% endif %}
                 <dt>{% trans "User" %}</dt>
-                <dd>{{ order.user|default:order.guest_email }}</dd>
+                <dd>{{ order.email }}</dd>
             </dl>
         </div>
     </div>

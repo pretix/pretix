@@ -308,7 +308,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         self.order = Order.objects.create(
             status=Order.STATUS_PENDING, event=self.event,
-            user=self.user, datetime=now() - timedelta(days=5),
+            datetime=now() - timedelta(days=5),
             expires=now() + timedelta(days=5), total=46
         )
         self.quota.items.add(self.item1)
