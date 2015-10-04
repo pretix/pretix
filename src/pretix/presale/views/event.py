@@ -6,8 +6,6 @@ from django.contrib.auth import (
     authenticate, login, logout, update_session_auth_hash,
 )
 from django.contrib.auth.tokens import default_token_generator
-from django.core import signing
-from django.core.signing import BadSignature, SignatureExpired
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.shortcuts import redirect
@@ -27,7 +25,6 @@ from pretix.presale.forms.checkout import GuestForm
 from pretix.presale.views import (
     CartDisplayMixin, EventViewMixin, LoginRequiredMixin,
 )
-from pretix.presale.views.cart import CartAdd
 
 
 class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):

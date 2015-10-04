@@ -3,20 +3,25 @@
 {% load i18n %}
 {% load staticfiles %}
 {% block content %}
-    <img src="{% static "pretixbase/img/pretix-logo.svg" %}" class="logo" />
-	<form class="form-signin" action="" method="post">
-		{% bootstrap_form_errors form type='all' layout='inline' %}
-		{% csrf_token %}
-		{% bootstrap_field form.email %}
-		{% bootstrap_field form.password %}
-		<div class="form-group buttons">
+    <form class="form-signin" action="" method="post">
+        {% bootstrap_form_errors form type='all' layout='inline' %}
+        {% csrf_token %}
+        {% bootstrap_field form.email %}
+        {% bootstrap_field form.password %}
+        <div class="form-group buttons">
+            <a href="{% url "control:auth.forgot" %}" class="btn btn-link">
+                {% trans "Lost password?" %}
+            </a>
+
+            <button type="submit" class="btn btn-primary">
+                {% trans "Log in" %}
+            </button>
+        </div>
+
+        <div class="form-group buttons">
             <a href="{% url "control:auth.register" %}" class="btn btn-link">
                 {% trans "Register" %}
             </a>
-
-			<button type="submit" class="btn btn-primary">
-				{% trans "Log in" %}
-			</button>
-		</div>
-	</form>
+        </div>
+    </form>
 {% endblock %}

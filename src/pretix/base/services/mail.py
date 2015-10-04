@@ -42,26 +42,27 @@ def mail(email: str, subject: str, template: str, context: dict=None, event: Eve
     sender = event.settings.get('mail_from') if event else settings.MAIL_FROM
 
     subject = str(subject)
-    prefix = event.settings.get('mail_prefix')
-    if prefix:
-        subject = "[%s] %s" % (prefix, subject)
+    if event:
+        prefix = event.settings.get('mail_prefix')
+        if prefix:
+            subject = "[%s] %s" % (prefix, subject)
 
-    body += "\r\n\r\n----\r\n"
-    body += _(
-        "You are receiving this e-mail because you placed an order for %s." % event.name
-    )
-    body += "\r\n"
-    body += _(
-        "You can view all of your orders at the following URL:"
-    )
-    body += "\r\n"
-    body += build_absolute_uri(
-        'presale:event.orders', kwargs={
-            'event': event.slug,
-            'organizer': event.organizer.slug
-        }
-    )
-    body += "\r\n"
+        body += "\r\n\r\n----\r\n"
+        body += _(
+            "You are receiving this e-mail because you placed an order for %s." % event.name
+        )
+        body += "\r\n"
+        body += _(
+            "You can view all of your orders at the following URL:"
+        )
+        body += "\r\n"
+        body += build_absolute_uri(
+            'presale:event.orders', kwargs={
+                'event': event.slug,
+                'organizer': event.organizer.slug
+            }
+        )
+        body += "\r\n"
     try:
         return mail_send([email], subject, body, sender)
     finally:

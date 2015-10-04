@@ -1,0 +1,9 @@
+{% load i18n %}{% blocktrans with url=url|safe %}Hello,
+
+you requested a new password. Please go to the following page to reset your password:
+
+{{ url }}
+
+Best regards,
+Your pretix team
+{% endblocktrans %}

@@ -140,8 +140,10 @@ class PasswordForgotForm(forms.Form):
         label=_('E-mail'),
     )
 
-    def __init__(self, event, *args, **kwargs):
-        self.event = event
+    def __init__(self, *args, **kwargs):
+        if 'event' in kwargs:
+            # Backwards compatibility
+            del kwargs['event']
         super().__init__(*args, **kwargs)
 
     def clean_email(self):
