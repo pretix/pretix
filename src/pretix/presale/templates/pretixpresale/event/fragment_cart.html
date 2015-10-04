@@ -37,7 +37,7 @@
             {{ line.count }}
             {% if editable %}
             <form action="{% url "presale:event.cart.add" event=event.slug organizer=event.organizer.slug %}"
-                method="post">
+                method="post" data-asynctask>
                 {% csrf_token %}
                 {% if line.variation %}
                     <input type="hidden" name="variation_{{ line.item.identity }}_{{ line.variation.identity }}"

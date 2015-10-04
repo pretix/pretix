@@ -5,7 +5,7 @@
 {% block content %}
     <h2>{% trans "Confirm order" %}</h2>
     <p>{% trans "Please review the details below and confirm your order." %}</p>
-    <form method="post">
+    <form method="post" data-asynctask>
         {% csrf_token %}
         <div class="panel panel-primary cart">
             <div class="panel-heading">

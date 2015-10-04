@@ -12,7 +12,6 @@ from pretix.base.models import (
 
 
 class EventTestMixin:
-
     def setUp(self):
         super().setUp()
         self.orga = Organizer.objects.create(name='CCC', slug='ccc')
@@ -23,7 +22,6 @@ class EventTestMixin:
 
 
 class EventMiddlewareTest(EventTestMixin, BrowserTest):
-
     def setUp(self):
         super().setUp()
         self.driver.implicitly_wait(10)
@@ -38,7 +36,6 @@ class EventMiddlewareTest(EventTestMixin, BrowserTest):
 
 
 class ItemDisplayTest(EventTestMixin, BrowserTest):
-
     def setUp(self):
         super().setUp()
         self.driver.implicitly_wait(10)
@@ -141,6 +138,11 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
 
 
 class DeadlineTest(EventTestMixin, TestCase):
+    def setUp(self):
+        super().setUp()
+        q = Quota.objects.create(event=self.event, name='Quota', size=2)
+        self.item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=False)
+        q.items.add(self.item)
 
     def test_not_yet_started(self):
         self.event.presale_start = now() + datetime.timedelta(days=1)
@@ -153,6 +155,9 @@ class DeadlineTest(EventTestMixin, TestCase):
         self.assertNotIn('checkout-button-row', response.rendered_content)
         response = self.client.post(
             '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
+            {
+                'item_' + self.item.identity: '1',
+            },
             follow=True
         )
         self.assertIn('alert-danger', response.rendered_content)
@@ -169,6 +174,9 @@ class DeadlineTest(EventTestMixin, TestCase):
         self.assertNotIn('checkout-button-row', response.rendered_content)
         response = self.client.post(
             '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
+            {
+                'item_' + self.item.identity: '1'
+            },
             follow=True
         )
         self.assertIn('alert-danger', response.rendered_content)
@@ -185,7 +193,10 @@ class DeadlineTest(EventTestMixin, TestCase):
         self.assertNotIn('alert-info', response.rendered_content)
         self.assertIn('checkout-button-row', response.rendered_content)
         response = self.client.post(
-            '/%s/%s/cart/add' % (self.orga.slug, self.event.slug)
+            '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
+            {
+                'item_' + self.item.identity: '1'
+            }
         )
         self.assertNotEqual(response.status_code, 403)
 
@@ -200,6 +211,9 @@ class DeadlineTest(EventTestMixin, TestCase):
         self.assertNotIn('alert-info', response.rendered_content)
         self.assertIn('checkout-button-row', response.rendered_content)
         response = self.client.post(
-            '/%s/%s/cart/add' % (self.orga.slug, self.event.slug)
+            '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
+            {
+                'item_' + self.item.identity: '1'
+            }
         )
         self.assertNotEqual(response.status_code, 403)

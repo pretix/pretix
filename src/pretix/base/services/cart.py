@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.conf import settings
 from django.db.models import Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -16,7 +17,7 @@ class CartError(Exception):
 error_messages = {
     'busy': _('We were not able to process your request completely as the '
               'server was too busy. Please try again.'),
-    'empty': _('You did not select any items.'),
+    'empty': _('You did not select any products.'),
     'not_for_sale': _('You selected a product which is not available for sale.'),
     'unavailable': _('Some of the products you selected were no longer available. '
                      'Please see below for details.'),
@@ -128,6 +129,27 @@ def _add_items(event, items, session, expiry):
     return err
 
 
+def _add_items_to_cart(event: Event, items: list, session: str=None):
+    with event.lock():
+        _check_date(event)
+        existing = CartPosition.objects.current.filter(Q(session=session) & Q(event=event)).count()
+        if sum(i[2] for i in items) + existing > int(event.settings.max_items_per_order):
+            # TODO: i18n plurals
+            raise CartError(error_messages['max_items'] % event.settings.max_items_per_order)
+
+        expiry = now() + timedelta(minutes=event.settings.get('reservation_time', as_type=int))
+        _extend_existing(event, session, expiry)
+
+        expired = _re_add_expired_positions(items, event, session)
+        if not items:
+            raise CartError(error_messages['empty'])
+
+        err = _add_items(event, items, session, expiry)
+        _delete_expired(expired)
+        if err:
+            raise CartError(err)
+
+
 def add_items_to_cart(event: str, items: list, session: str=None):
     """
     Adds a list of items to a user's cart.
@@ -138,24 +160,7 @@ def add_items_to_cart(event: str, items: list, session: str=None):
     """
     event = Event.objects.current.get(identity=event)
     try:
-        with event.lock():
-            _check_date(event)
-            existing = CartPosition.objects.current.filter(Q(session=session) & Q(event=event)).count()
-            if sum(i[2] for i in items) + existing > int(event.settings.max_items_per_order):
-                # TODO: i18n plurals
-                raise CartError(error_messages['max_items'] % event.settings.max_items_per_order)
-
-            expiry = now() + timedelta(minutes=event.settings.get('reservation_time', as_type=int))
-            _extend_existing(event, session, expiry)
-
-            expired = _re_add_expired_positions(items, event, session)
-            if not items:
-                raise CartError(error_messages['empty'])
-
-            err = _add_items(event, items, session, expiry)
-            _delete_expired(expired)
-            if err:
-                raise CartError(err)
+        return _add_items_to_cart(event, items, session)
     except EventLock.LockTimeoutException:
         raise CartError(error_messages['busy'])
 
@@ -177,3 +182,17 @@ def remove_items_from_cart(event: str, items: list, session: str=None):
             cw &= Q(variation__isnull=True)
         for cp in CartPosition.objects.current.filter(cw).order_by("-price")[:cnt]:
             cp.delete()
+
+
+if settings.HAS_CELERY:
+    from pretix.celery import app
+
+    @app.task(bind=True, max_retries=5, default_retry_delay=2)
+    def add_items_to_cart_task(self, event: str, items: list, session: str):
+        event = Event.objects.current.get(identity=event)
+        try:
+            return _add_items_to_cart(event, items, session)
+        except EventLock.LockTimeoutException:
+            self.retry(exc=CartError(error_messages['busy']))
+
+    add_items_to_cart.task = add_items_to_cart_task

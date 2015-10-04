@@ -20,7 +20,7 @@ def html_head_presale(sender, request=None, **kwargs):
 
     provider = Stripe(sender)
     url = resolve(request.path_info)
-    if provider.is_enabled and ("checkout.payment" in url.url_name or "order.pay" in url.url_name):
+    if provider.is_enabled and ("checkout" in url.url_name or "order.pay" in url.url_name):
         template = get_template('pretixplugins/stripe/presale_head.html')
         ctx = Context({'event': sender, 'settings': provider.settings})
         return template.render(ctx)

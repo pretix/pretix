@@ -8,7 +8,7 @@ class PretixBaseConfig(AppConfig):
     def ready(self):
         from . import exporter  # NOQA
         from . import payment  # NOQA
-        from .services import export, mail, tickets  # NOQA
+        from .services import export, mail, tickets, cart, orders  # NOQA
 
         try:
             from .celery import app as celery_app  # NOQA

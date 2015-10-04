@@ -12,7 +12,7 @@ from pretix.presale.views import CartMixin
 class CheckoutView(CartMixin, View):
     def dispatch(self, request, *args, **kwargs):
         self.request = request
-        if not self.positions:
+        if not self.positions and "async_id" not in request.GET:
             messages.error(request, _("Your cart is empty"))
             return redirect(reverse('presale:event.index', kwargs={
                 'organizer': self.request.event.organizer.slug,

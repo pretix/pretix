@@ -217,23 +217,20 @@ class CartTest(CartTestMixin, TestCase):
         self.assertGreater(cp.expires, now())
 
     def test_renew_expired_successfully(self):
-        CartPosition.objects.create(
+        cp1 = CartPosition.objects.create(
             event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
         )
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%s_%s' % (self.shirt.identity, self.shirt_red.identity): '1'
         }, follow=True)
-        objs = list(CartPosition.objects.current.filter(session=self.session_key, event=self.event))
-        self.assertEqual(len(objs), 1)
-        self.assertEqual(objs[0].item, self.ticket)
-        self.assertIsNone(objs[0].variation)
-        self.assertEqual(objs[0].price, 23)
-        self.assertGreater(objs[0].expires, now())
+        obj = CartPosition.objects.current.get(identity=cp1.identity)
+        self.assertEqual(obj.item, self.ticket)
+        self.assertIsNone(obj.variation)
+        self.assertEqual(obj.price, 23)
+        self.assertGreater(obj.expires, now())
 
     def test_renew_questions(self):
-        """
-        Currently fails. See: https://github.com/pretix/pretix/issues/20
-        """
         cr1 = CartPosition.objects.create(
             event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
@@ -247,23 +244,24 @@ class CartTest(CartTestMixin, TestCase):
             cartposition=cr1, question=q1, answer='23'
         ))
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_' + self.ticket.identity: '1',
         }, follow=True)
-        objs = list(CartPosition.objects.current.filter(session=self.session_key, event=self.event))
-        self.assertEqual(len(objs), 1)
-        self.assertEqual(objs[0].answers.get(question=q1).answer, '23')
+        obj = CartPosition.objects.current.get(identity=cr1.identity)
+        self.assertEqual(obj.answers.get(question=q1).answer, '23')
 
     def test_renew_expired_failed(self):
         self.quota_tickets.size = 0
         self.quota_tickets.save()
-        CartPosition.objects.create(
+        cp1 = CartPosition.objects.create(
             event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
         )
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_' + self.ticket.identity: '1',
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
-        self.assertFalse(CartPosition.objects.current.filter(session=self.session_key, event=self.event).exists())
+        self.assertFalse(CartPosition.objects.current.filter(identity=cp1.identity).exists())
 
     def test_restriction_ok(self):
         self.event.plugins = 'tests.testdummy'

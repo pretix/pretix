@@ -7,7 +7,7 @@ from django.utils.timezone import now
 
 from pretix.base.models import (
     Event, Item, ItemCategory, ItemVariation, Order, OrderPosition, Organizer,
-    Property, PropertyValue, Question, Quota, User,
+    Property, PropertyValue, Question, Quota,
 )
 
 

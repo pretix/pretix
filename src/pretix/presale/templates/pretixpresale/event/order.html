@@ -3,11 +3,16 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Order details" %}{% endblock %}
 {% block content %}
-    {% if "thanks" in request.GET %}
+    {% if "thanks" in request.GET or "paid" in request.GET %}
         <div class="thank-you">
             <span class="fa fa-check-circle"></span>
+
             <h2>{% trans "Thank you!" %}</h2>
-            <p>{% trans "Your order has been placed successfully. See below for details." %}</p>
+            {% if order.status != 'p' %}
+                <p>{% trans "Your order has been placed successfully. See below for details." %}</p>
+            {% else %}
+                <p>{% trans "We successfully received your payment. See below for details." %}</p>
+            {% endif %}
             <p>{% trans "We also sent you an email with a link to this page if you want to come back later." %}</p>
         </div>
     {% endif %}
@@ -18,7 +23,7 @@
         {% include "pretixpresale/event/fragment_order_status.html" with order=order class="pull-right" %}
         <div class="clearfix"></div>
     </h2>
-    {% if order.status == "n"  %}
+    {% if order.status == "n" %}
         <div class="panel panel-danger">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -28,12 +33,14 @@
             <div class="panel-body">
                 {% if can_retry %}
                     <a href="{% url "presale:event.order.pay" organizer=request.event.organizer.slug event=request.event.slug secret=order.secret order=order.code %}"
-                       class="btn btn-primary pull-right"><i class="fa fa-money"></i> {% trans "Complete payment" %}</a>
+                            class="btn btn-primary pull-right"><i class="fa fa-money"></i> {% trans "Complete payment" %}
+                    </a>
                 {% endif %}
                 {{ payment }}
                 <strong>{% blocktrans trimmed with date=order.expires|date:"SHORT_DATE_FORMAT" %}
                     Please complete your payment before {{ date }}
                 {% endblocktrans %}</strong>
+
                 <div class="clearfix"></div>
             </div>
         </div>
@@ -88,7 +95,7 @@
             <div class="col-md-12 text-right">
                 <p>
                     <a href="{% url 'presale:event.order.cancel' event=request.event.slug organizer=request.event.organizer.slug secret=order.secret order=order.code %}"
-                       class="btn btn-danger">
+                            class="btn btn-danger">
                         <span class="fa fa-remove"></span>
                         {% trans "Cancel order" %}
                     </a>

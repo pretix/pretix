@@ -107,7 +107,7 @@ class OrderPay(EventViewMixin, OrderDetailMixin, TemplateView):
                 or not self.payment_provider.order_can_retry(self.order)
                 or not self.payment_provider.is_enabled):
             messages.error(request, _('The payment for this order cannot be continued.'))
-            return redirect(self.get_order_url())
+            return redirect(self.get_order_url() + '?paid=yes')
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -168,9 +168,30 @@ class OrderPayDo(EventViewMixin, OrderDetailMixin, TemplateView):
         ctx['payment_provider'] = self.payment_provider
         return ctx
 
-    @cached_property
-    def form(self):
-        return self.payment_provider.payment_form_render(self.request)
+    def get_payment_url(self):
+        return reverse('presale:event.order.pay', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'order': self.order.code,
+            'secret': self.order.secret
+        })
+
+
+class OrderPayComplete(EventViewMixin, OrderDetailMixin, View):
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        if (not self.payment_provider.payment_is_valid_session(request)
+                or not self.payment_provider.is_enabled
+                or not self.payment_provider.is_allowed(request)):
+            messages.error(request, _('The payment information you entered was incomplete.'))
+            return redirect(self.get_payment_url())
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        resp = self.payment_provider.payment_perform(request, self.order)
+        return redirect(resp or self.get_order_url() + '?paid=yes')
 
     def get_payment_url(self):
         return reverse('presale:event.order.pay', kwargs={

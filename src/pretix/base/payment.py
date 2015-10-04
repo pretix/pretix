@@ -251,7 +251,7 @@ class BasePaymentProvider:
         """
         After the user confirmed his purchase, this method will be called to complete
         the payment process. This is the place to actually move the money, if applicable.
-        If you need any speical  behaviour,  you can return a string
+        If you need any special  behaviour,  you can return a string
         containing an URL the user will be redirected to. If you are done with your process
         you should return the user to the order's detail page.
 

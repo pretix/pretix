@@ -56,6 +56,44 @@ a:hover .panel-primary > .panel-heading {
         color: @brand-success;
     }
 }
+
+body.loading .container {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -ms-filter: blur(2px);
+    -o-filter: blur(2px);
+    filter: blur(2px);
+}
+
+#loadingmodal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, .7);
+    opacity: 0;
+    text-align: center;
+    z-index: 900000;
+    visibility: hidden;
+
+    .big-rotating-icon {
+        margin-top: 50px;
+        -webkit-animation: fa-spin 8s infinite linear;
+        animation: fa-spin 8s infinite linear;
+        font-size: 200px;
+        color: @brand-primary;
+    }
+}
+
+.loading #loadingmodal {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .5s ease-in-out;
+    -moz-transition: opacity .5s ease-in-out;
+    -webkit-transition: opacity .5s ease-in-out;
+}
+
 @media (min-width: @screen-md-min) {
     .thank-you {
         height: 170px;

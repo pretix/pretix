@@ -1,13 +1,19 @@
 from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.db import transaction
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Event, EventLock, Order, OrderPosition, Quota
+from pretix.base.models import (
+    CartPosition, Event, EventLock, Order, OrderPosition, Quota,
+)
 from pretix.base.payment import BasePaymentProvider
+from pretix.base.services.cart import CartError
 from pretix.base.services.mail import mail
-from pretix.base.signals import order_paid, order_placed
+from pretix.base.signals import (
+    order_paid, order_placed, register_payment_providers,
+)
 from pretix.helpers.urls import build_absolute_uri
 
 error_messages = {
@@ -18,6 +24,7 @@ error_messages = {
     'price_changed': _('The price of some of the items in your cart has changed in the '
                        'meantime. Please see below for details.'),
     'max_items': _("You cannot select more than %s items per order"),
+    'internal': _("An internal error occured, please try again."),
     'busy': _('We were not able to process your request completely as the '
               'server was too busy. Please try again.'),
 }
@@ -85,7 +92,7 @@ def _check_date(event):
         raise OrderError(error_messages['ended'])
 
 
-def check_positions(event: Event, dt: datetime, positions: list):
+def _check_positions(event: Event, dt: datetime, positions: list):
     err = None
     _check_date(event)
 
@@ -130,41 +137,9 @@ def check_positions(event: Event, dt: datetime, positions: list):
         raise OrderError(err)
 
 
-def perform_order(event: Event, payment_provider: BasePaymentProvider, positions: list,
-                  email: str=None, locale: str=None):
-    dt = now()
-
-    try:
-        with event.lock():
-            check_positions(event, dt, positions)
-            order = place_order(event, email, positions, dt, payment_provider,
-                                locale=locale)
-            mail(
-                order.email, _('Your order: %(code)s') % {'code': order.code},
-                'pretixpresale/email/order_placed.txt',
-                {
-                    'order': order,
-                    'event': event,
-                    'url': build_absolute_uri('presale:event.order', kwargs={
-                        'event': event.slug,
-                        'organizer': event.organizer.slug,
-                        'order': order.code,
-                        'secret': order.secret
-                    }),
-                    'payment': payment_provider.order_pending_mail_render(order)
-                },
-                event, locale=order.locale
-            )
-            return order
-    except EventLock.LockTimeoutException:
-        # Is raised when there are too many threads asking for event locks and we were
-        # unable to get one
-        raise OrderError(error_messages['busy'])
-
-
 @transaction.atomic()
-def place_order(event: Event, email: str, positions: list, dt: datetime,
-                payment_provider: BasePaymentProvider, locale: str=None):
+def _create_order(event: Event, email: str, positions: list, dt: datetime,
+                  payment_provider: BasePaymentProvider, locale: str=None):
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
     total += payment_fee
@@ -180,8 +155,72 @@ def place_order(event: Event, email: str, positions: list, dt: datetime,
         locale=locale,
         total=total,
         payment_fee=payment_fee,
-        payment_provider=payment_provider.identifier,
+        payment_provider=payment_provider.identifier
     )
     OrderPosition.transform_cart_positions(positions, order)
     order_placed.send(event, order=order)
     return order
+
+
+def _perform_order(event: Event, payment_provider: BasePaymentProvider, position_ids: list,
+                   email: str, locale: str):
+    event = Event.objects.current.get(identity=event)
+    responses = register_payment_providers.send(event)
+    pprov = None
+    for receiver, response in responses:
+        provider = response(event)
+        if provider.identifier == payment_provider:
+            pprov = provider
+    if not pprov:
+        raise OrderError(error_messages['internal'])
+
+    dt = now()
+    with event.lock():
+        positions = list(CartPosition.objects.current.filter(
+            identity__in=position_ids).select_related('item', 'variation'))
+        if len(position_ids) != len(positions):
+            raise OrderError(error_messages['internal'])
+        _check_positions(event, dt, positions)
+        order = _create_order(event, email, positions, dt, pprov,
+                              locale=locale)
+        mail(
+            order.email, _('Your order: %(code)s') % {'code': order.code},
+            'pretixpresale/email/order_placed.txt',
+            {
+                'order': order,
+                'event': event,
+                'url': build_absolute_uri('presale:event.order', kwargs={
+                    'event': event.slug,
+                    'organizer': event.organizer.slug,
+                    'order': order.code,
+                    'secret': order.secret
+                }),
+                'payment': pprov.order_pending_mail_render(order)
+            },
+            event, locale=order.locale
+        )
+        return order.identity
+
+
+def perform_order(event: str, payment_provider: str, positions: list,
+                  email: str=None, locale: str=None):
+    try:
+        return _perform_order(event, payment_provider, positions, email, locale)
+    except EventLock.LockTimeoutException:
+        # Is raised when there are too many threads asking for event locks and we were
+        # unable to get one
+        raise OrderError(error_messages['busy'])
+
+
+if settings.HAS_CELERY:
+    from pretix.celery import app
+
+    @app.task(bind=True, max_retries=5, default_retry_delay=2)
+    def perform_order_task(self, event: str, payment_provider: str, positions: list,
+                           email: str=None, locale: str=None):
+        try:
+            return _perform_order(event, payment_provider, positions, email, locale)
+        except EventLock.LockTimeoutException:
+            self.retry(exc=OrderError(error_messages['busy']))
+
+    perform_order.task = perform_order_task

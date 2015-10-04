@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
@@ -10,12 +11,13 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import TemplateResponseMixin
 
-from pretix.base.models import CartPosition
+from pretix.base.models import CartPosition, Order
 from pretix.base.services.orders import OrderError, perform_order
 from pretix.base.signals import register_payment_providers
 from pretix.presale.forms.checkout import ContactForm
 from pretix.presale.signals import checkout_flow_steps
 from pretix.presale.views import CartMixin
+from pretix.presale.views.async import AsyncAction
 from pretix.presale.views.questions import QuestionsViewMixin
 
 
@@ -278,10 +280,11 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         return True
 
 
-class ConfirmStep(CartMixin, TemplateFlowStep):
+class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
     priority = 1001
     identifier = "confirm"
     template_name = "pretixpresale/event/checkout_confirm.html"
+    task = perform_order
 
     def is_applicable(self, request):
         return True
@@ -304,28 +307,47 @@ class ConfirmStep(CartMixin, TemplateFlowStep):
             if provider.identifier == self.request.session['payment']:
                 return provider
 
+    def get(self, request):
+        self.request = request
+        if 'async_id' in request.GET and settings.HAS_CELERY:
+            return self.get_result(request)
+        return TemplateFlowStep.get(self, request)
+
     def post(self, request):
         self.request = request
-        try:
-            order = perform_order(self.request.event, self.payment_provider, self.positions,
-                                  email=request.session.get('email', None),
-                                  locale=translation.get_language())
-        except OrderError as e:
-            messages.error(request, str(e))
-            return redirect(self.get_step_url())
-        else:
-            # Message is delivered via GET parameter
-            # messages.success(request, _('Your order has been placed.'))
-            resp = self.payment_provider.payment_perform(request, order)
-            return redirect(resp or self.get_order_url(order))
+        return self.do(self.request.event.identity, self.payment_provider.identifier,
+                       [p.identity for p in self.positions], request.session.get('email'),
+                       translation.get_language())
+
+    def get_success_message(self, value):
+        return None
+
+    def success(self, value):
+        # Message is delivered via GET parameter
+        # messages.success(request, _('Your order has been placed.'))
+        return redirect(self.get_success_url(value))
+
+    def get_success_url(self, value):
+        order = Order.objects.current.get(identity=value)
+        return self.get_order_url(order)
+
+    def get_error_message(self, exception):
+        if isinstance(exception, dict) and exception['exc_type'] == 'OrderError':
+            return exception['exc_message']
+        elif isinstance(exception, OrderError):
+            return str(exception)
+        return super().get_error_message(exception)
+
+    def get_error_url(self):
+        return self.get_step_url()
 
     def get_order_url(self, order):
-        return reverse('presale:event.order', kwargs={
+        return reverse('presale:event.order.pay.complete', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
             'order': order.code,
             'secret': order.secret
-        }) + '?thanks=yes'
+        })
 
 
 DEFAULT_FLOW = (
