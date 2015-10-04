@@ -14,8 +14,8 @@ from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
-from pretix.presale.views import CartDisplayMixin, EventViewMixin
-from pretix.presale.views.checkout import QuestionsViewMixin
+from pretix.presale.views import CartMixin, EventViewMixin
+from pretix.presale.views.questions import QuestionsViewMixin
 
 
 class OrderDetailMixin:
@@ -44,7 +44,7 @@ class OrderDetailMixin:
         })
 
 
-class OrderDetails(EventViewMixin, OrderDetailMixin, CartDisplayMixin, TemplateView):
+class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
     template_name = "pretixpresale/event/order.html"
 
     def get(self, request, *args, **kwargs):

@@ -1,10 +1,10 @@
 from django.db.models import Count
 from django.views.generic import TemplateView
 
-from pretix.presale.views import CartDisplayMixin, EventViewMixin
+from pretix.presale.views import CartMixin, EventViewMixin
 
 
-class EventIndex(EventViewMixin, CartDisplayMixin, TemplateView):
+class EventIndex(EventViewMixin, CartMixin, TemplateView):
     template_name = "pretixpresale/event/index.html"
 
     def get_context_data(self, **kwargs):

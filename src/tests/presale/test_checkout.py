@@ -31,23 +31,11 @@ class CheckoutTestCase(TestCase):
 
         self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.session_key = self.client.cookies.get(settings.SESSION_COOKIE_NAME).value
+        self._set_session('email', 'admin@localhost')
 
     def test_empty_cart(self):
-        response = self.client.get('/%s/%s/checkout' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.get('/%s/%s/checkout/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
-                             target_status_code=200)
-
-    def test_no_questions(self):
-        CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
-            price=23, expires=now() + timedelta(minutes=10)
-        )
-        CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
-            price=20, expires=now() + timedelta(minutes=10)
-        )
-        response = self.client.get('/%s/%s/checkout' % (self.orga.slug, self.event.slug), follow=True)
-        self.assertRedirects(response, '/%s/%s/checkout/payment' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
     def test_questions(self):
@@ -69,7 +57,7 @@ class CheckoutTestCase(TestCase):
             event=self.event, session=self.session_key, item=self.ticket,
             price=20, expires=now() + timedelta(minutes=10)
         )
-        response = self.client.get('/%s/%s/checkout' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
 
         self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr1.identity, q1.identity))), 1)
@@ -78,23 +66,25 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr2.identity, q2.identity))), 1)
 
         # Not all required fields filled out, expect failure
-        response = self.client.post('/%s/%s/checkout' % (self.orga.slug, self.event.slug), {
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-question_%s' % (cr1.identity, q1.identity): '42',
             '%s-question_%s' % (cr2.identity, q1.identity): '',
             '%s-question_%s' % (cr1.identity, q2.identity): 'Internet',
             '%s-question_%s' % (cr2.identity, q2.identity): '',
+            'email': 'admin@localhost'
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
 
         # Corrected request
-        response = self.client.post('/%s/%s/checkout' % (self.orga.slug, self.event.slug), {
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-question_%s' % (cr1.identity, q1.identity): '42',
             '%s-question_%s' % (cr2.identity, q1.identity): '23',
             '%s-question_%s' % (cr1.identity, q2.identity): 'Internet',
             '%s-question_%s' % (cr2.identity, q2.identity): '',
+            'email': 'admin@localhost'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/checkout/payment' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
         cr1 = CartPosition.objects.current.get(identity=cr1.identity)
@@ -111,22 +101,24 @@ class CheckoutTestCase(TestCase):
             event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
-        response = self.client.get('/%s/%s/checkout' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % cr1.identity)), 1)
 
         # Not all required fields filled out, expect failure
-        response = self.client.post('/%s/%s/checkout' % (self.orga.slug, self.event.slug), {
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-attendee_name' % cr1.identity: '',
+            'email': 'admin@localhost'
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
 
         # Corrected request
-        response = self.client.post('/%s/%s/checkout' % (self.orga.slug, self.event.slug), {
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-attendee_name' % cr1.identity: 'Peter',
+            'email': 'admin@localhost'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/checkout/payment' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
         cr1 = CartPosition.objects.current.get(identity=cr1.identity)
@@ -139,15 +131,16 @@ class CheckoutTestCase(TestCase):
             event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
-        response = self.client.get('/%s/%s/checkout' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % cr1.identity)), 1)
 
         # Not all fields filled out, expect success
-        response = self.client.post('/%s/%s/checkout' % (self.orga.slug, self.event.slug), {
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-attendee_name' % cr1.identity: '',
+            'email': 'admin@localhost'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/checkout/payment' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
         cr1 = CartPosition.objects.current.get(identity=cr1.identity)
@@ -161,17 +154,17 @@ class CheckoutTestCase(TestCase):
             event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
-        response = self.client.get('/%s/%s/checkout/payment' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select('input[name=payment]')), 2)
-        response = self.client.post('/%s/%s/checkout/payment' % (self.orga.slug, self.event.slug), {
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'banktransfer'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
     def test_premature_confirm(self):
-        response = self.client.get('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
@@ -182,8 +175,8 @@ class CheckoutTestCase(TestCase):
             price=23, expires=now() + timedelta(minutes=10)
         )
 
-        response = self.client.get('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
-        self.assertRedirects(response, '/%s/%s/checkout/payment' % (self.orga.slug, self.event.slug),
+        response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
         self._set_session('payment', 'banktransfer')
@@ -191,8 +184,8 @@ class CheckoutTestCase(TestCase):
         self.event.settings.set('attendee_names_asked', True)
         self.event.settings.set('attendee_names_required', True)
 
-        response = self.client.get('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
-        self.assertRedirects(response, '/%s/%s/checkout' % (self.orga.slug, self.event.slug),
+        response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
         cr1 = cr1.clone()
@@ -204,15 +197,20 @@ class CheckoutTestCase(TestCase):
         )
         self.ticket.questions.add(q1)
 
-        response = self.client.get('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
-        self.assertRedirects(response, '/%s/%s/checkout' % (self.orga.slug, self.event.slug),
+        response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
         q1 = q1.clone()
         q1.required = False
         q1.save()
-        response = self.client.get('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertEqual(response.status_code, 200)
+
+        self._set_session('email', 'invalid')
+        response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
 
     def _set_session(self, key, value):
         session = self.client.session
@@ -226,7 +224,7 @@ class CheckoutTestCase(TestCase):
         )
         self._set_session('payment', 'banktransfer')
 
-        response = self.client.post('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertFalse(CartPosition.objects.current.filter(identity=cr1.identity).exists())
@@ -240,7 +238,7 @@ class CheckoutTestCase(TestCase):
         )
         self._set_session('payment', 'banktransfer')
 
-        response = self.client.post('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertFalse(CartPosition.objects.current.filter(identity=cr1.identity).exists())
@@ -257,7 +255,7 @@ class CheckoutTestCase(TestCase):
         )
         self._set_session('payment', 'banktransfer')
 
-        response = self.client.post('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select(".alert-danger")), 1)
         cr1 = CartPosition.objects.current.get(identity=cr1.identity)
@@ -276,7 +274,7 @@ class CheckoutTestCase(TestCase):
         )
         self._set_session('payment', 'banktransfer')
 
-        response = self.client.post('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select(".alert-danger")), 1)
         self.assertEqual(CartPosition.objects.current.filter(session=self.session_key).count(), 1)
@@ -291,9 +289,9 @@ class CheckoutTestCase(TestCase):
         )
         self._set_session('payment', 'banktransfer')
 
-        response = self.client.post('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
-        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
         self.assertFalse(CartPosition.objects.current.filter(identity=cr1.identity).exists())
 
     def test_confirm_expired_unavailable(self):
@@ -305,19 +303,20 @@ class CheckoutTestCase(TestCase):
         )
         self._set_session('payment', 'banktransfer')
 
-        response = self.client.post('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
-        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
         self.assertFalse(CartPosition.objects.current.filter(identity=cr1.identity).exists())
 
     def test_confirm_completely_unavailable(self):
         self.quota_tickets.items.remove(self.ticket)
-        CartPosition.objects.create(
+        cr1 = CartPosition.objects.create(
             event=self.event, session=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
         )
         self._set_session('payment', 'banktransfer')
 
-        response = self.client.post('/%s/%s/checkout/confirm' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
-        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+        self.assertFalse(CartPosition.objects.current.filter(identity=cr1.identity).exists())

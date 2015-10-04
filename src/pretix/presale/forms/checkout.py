@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.base.models import Question
 
 
-class GuestForm(forms.Form):
+class ContactForm(forms.Form):
     email = forms.EmailField(label=_('E-mail'))
 
 

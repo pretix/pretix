@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django import forms
 from django.contrib import messages
-from django.db.models import Sum
+from django.db.models import Q, Sum
 from django.dispatch import receiver
 from django.forms import Form
 from django.http import HttpRequest
@@ -402,7 +402,9 @@ class FreeOrderProvider(BasePaymentProvider):
         pass
 
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
-        return True
+        return CartPosition.objects.current.filter(
+            Q(session=request.session.session_key) & Q(event=request.event)
+        ).aggregate(sum=Sum('price'))['sum'] == 0
 
     @property
     def verbose_name(self) -> str:

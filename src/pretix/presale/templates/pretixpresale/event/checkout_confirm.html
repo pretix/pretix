@@ -10,7 +10,8 @@
         <div class="panel panel-primary cart">
             <div class="panel-heading">
                 <div class="pull-right">
-                    <a href="{% url "presale:event.index" organizer=request.event.organizer.slug  event=request.event.slug %}">
+                    <a href="
+                    {% url "presale:event.index" organizer=request.event.organizer.slug  event=request.event.slug %}">
                         <span class="fa fa-edit"></span>
                         {% trans "Modify" %}
                     </a>
@@ -39,12 +40,12 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     {% if payment_provider.identifier != "free" %}
-                    <div class="pull-right">
-                        <a href="{% url "presale:event.checkout.payment" organizer=request.event.organizer.slug  event=request.event.slug %}">
-                            <span class="fa fa-edit"></span>
-                            {% trans "Modify" %}
-                        </a>
-                    </div>
+                        <div class="pull-right">
+                            <a href="{% url "presale:event.checkout" step="payment" organizer=request.event.organizer.slug  event=request.event.slug %}">
+                                <span class="fa fa-edit"></span>
+                                {% trans "Modify" %}
+                            </a>
+                        </div>
                     {% endif %}
                     <h3 class="panel-title">
                         {% trans "Payment" %}
@@ -54,20 +55,41 @@
                     {{ payment }}
                 </div>
             </div>
-        </div>
-        <div class="row checkout-button-row">
-			<div class="col-md-4">
-				<a class="btn btn-block btn-default btn-lg"
-	   					href="{{ view.get_previous_url }}">
-					{% trans "Go back" %}
-				</a>
-			</div>
-            <div class="col-md-4 col-md-offset-4">
-                <button class="btn btn-block btn-primary btn-lg" type="submit">
-                    {% trans "Place binding order" %}
-                </button>
+            <div class="row-fluid">
+                <div class="panel panel-primary panel-contact">
+                    <div class="panel-heading">
+                        <div class="pull-right">
+                            <a href="{% url "presale:event.checkout" step="questions" organizer=request.event.organizer.slug  event=request.event.slug %}">
+                                <span class="fa fa-edit"></span>
+                                {% trans "Modify" %}
+                            </a>
+                        </div>
+                        <h3 class="panel-title">
+                            {% trans "Contact information" %}
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <dl class="dl-horizontal">
+                            <dt>{% trans "E-mail address" %}</dt>
+                            <dd>{{ request.session.email }}</dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
-            <div class="clearfix"></div>
+            <div class="row checkout-button-row">
+                <div class="col-md-4">
+                    <a class="btn btn-block btn-default btn-lg"
+                            href="{{ prev_url }}">
+                        {% trans "Go back" %}
+                    </a>
+                </div>
+                <div class="col-md-4 col-md-offset-4">
+                    <button class="btn btn-block btn-primary btn-lg" type="submit">
+                        {% trans "Place binding order" %}
+                    </button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
         </div>
     </form>
 {% endblock %}

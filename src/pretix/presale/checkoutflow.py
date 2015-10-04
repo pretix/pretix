@@ -1,0 +1,335 @@
+from django.contrib import messages
+from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
+from django.core.validators import EmailValidator
+from django.db.models import Q, Sum
+from django.http import HttpResponseNotAllowed
+from django.shortcuts import redirect
+from django.utils import translation
+from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic.base import TemplateResponseMixin
+
+from pretix.base.models import CartPosition
+from pretix.base.services.orders import OrderError, perform_order
+from pretix.base.signals import register_payment_providers
+from pretix.presale.forms.checkout import ContactForm
+from pretix.presale.signals import checkout_flow_steps
+from pretix.presale.views import CartMixin
+from pretix.presale.views.questions import QuestionsViewMixin
+
+
+class BaseCheckoutFlowStep:
+    def __init__(self, event):
+        self.event = event
+        self.request = None
+
+    @property
+    def identifier(self):
+        raise NotImplementedError()
+
+    @property
+    def priority(self):
+        return 100
+
+    def is_applicable(self, request):
+        return True
+
+    def is_completed(self, request, warn=False):
+        raise NotImplementedError()
+
+    def get_next_applicable(self, request):
+        if self._next:
+            if not self._next.is_applicable(request):
+                return self._next.get_next_applicable(request)
+            return self._next
+
+    def get_prev_applicable(self, request):
+        if self._previous:
+            if not self._previous.is_applicable(request):
+                return self._previous.get_prev_applicable(request)
+            return self._previous
+
+    def get(self, request):
+        return HttpResponseNotAllowed([])
+
+    def post(self, request):
+        return HttpResponseNotAllowed([])
+
+    def get_step_url(self):
+        return reverse(
+            'presale:event.checkout',
+            kwargs={
+                'event': self.event.slug,
+                'organizer': self.event.organizer.slug,
+                'step': self.identifier
+            }
+        )
+
+    def get_prev_url(self, request):
+        prev = self.get_prev_applicable(request)
+        if not prev:
+            return reverse('presale:event.index', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug
+            })
+        else:
+            return prev.get_step_url()
+
+    def get_next_url(self, request):
+        n = self.get_next_applicable(request)
+        if not n:
+            return reverse('presale:event.checkout.confirm', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug
+            })
+        else:
+            return n.get_step_url()
+
+
+def get_checkout_flow(event):
+    flow = list([step(event) for step in DEFAULT_FLOW])
+    for receiver, response in checkout_flow_steps.send(event):
+        step = response(event=event)
+        if step.priority > 1000:
+            raise ValueError('Plugins are not allowed to define a priority greater than 1000')
+        flow.append(step)
+
+    # Sort by priority
+    flow.sort(key=lambda p: p.priority)
+
+    # Create a double-linked-list for esasy forwards/backwards traversal
+    last = None
+    for step in flow:
+        step._previous = last
+        if last:
+            last._next = step
+        last = step
+    return flow
+
+
+class TemplateFlowStep(TemplateResponseMixin, BaseCheckoutFlowStep):
+    template_name = ""
+
+    def get_context_data(self, **kwargs):
+        kwargs.setdefault('step', self)
+        kwargs.setdefault('event', self.event)
+        kwargs.setdefault('prev_url', self.get_prev_url(self.request))
+        return kwargs
+
+    def render(self, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+    def get(self, request):
+        self.request = request
+        return self.render()
+
+    def post(self, request):
+        self.request = request
+        return self.render()
+
+    def is_completed(self, request, warn=False):
+        raise NotImplementedError()
+
+    @property
+    def identifier(self):
+        raise NotImplementedError()
+
+
+class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
+    priority = 50
+    identifier = "questions"
+    template_name = "pretixpresale/event/checkout_questions.html"
+
+    def is_applicable(self, request):
+        return True
+
+    @cached_property
+    def contact_form(self):
+        return ContactForm(data=self.request.POST if self.request.method == "POST" else None,
+                           initial={
+                               'email': self.request.session.get('email', '')
+                           })
+
+    def post(self, request):
+        self.request = request
+        failed = not self.save() or not self.contact_form.is_valid()
+        if failed:
+            messages.error(request,
+                           _("We had difficulties processing your input. Please review the errors below."))
+            return self.render()
+        request.session['email'] = self.contact_form.cleaned_data['email']
+        return redirect(self.get_next_url(request))
+
+    def is_completed(self, request, warn=False):
+        self.request = request
+        try:
+            emailval = EmailValidator()
+            if 'email' not in request.session:
+                if warn:
+                    messages.warning(request, _('Please enter a valid e-mail address.'))
+                return False
+            emailval(request.session.get('email'))
+        except ValidationError:
+            if warn:
+                messages.warning(request, _('Please enter a valid e-mail address.'))
+            return False
+
+        for cp in self.positions:
+            answ = {
+                aw.question_id: aw.answer for aw in cp.answers.all()
+            }
+            for q in cp.item.questions.all():
+                if q.required and q.identity not in answ:
+                    if warn:
+                        messages.warning(request, _('Please fill in answers to all required questions.'))
+                    return False
+            if cp.item.admission and self.request.event.settings.get('attendee_names_required', as_type=bool) \
+                    and cp.attendee_name is None:
+                if warn:
+                    messages.warning(request, _('Please fill in answers to all required questions.'))
+                return False
+        return True
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['forms'] = self.forms
+        ctx['contact_form'] = self.contact_form
+        return ctx
+
+
+class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
+    priority = 200
+    identifier = "payment"
+    template_name = "pretixpresale/event/checkout_payment.html"
+
+    @cached_property
+    def _total_order_value(self):
+        return CartPosition.objects.current.filter(
+            Q(session=self.request.session.session_key) & Q(event=self.request.event)
+        ).aggregate(sum=Sum('price'))['sum']
+
+    @cached_property
+    def provider_forms(self):
+        providers = []
+        responses = register_payment_providers.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if not provider.is_enabled or not provider.is_allowed(self.request):
+                continue
+            fee = provider.calculate_fee(self._total_order_value)
+            providers.append({
+                'provider': provider,
+                'fee': fee,
+                'form': provider.payment_form_render(self.request)
+            })
+        return providers
+
+    def post(self, request):
+        self.request = request
+        for p in self.provider_forms:
+            if p['provider'].identifier == request.POST.get('payment', ''):
+                request.session['payment'] = p['provider'].identifier
+                resp = p['provider'].checkout_prepare(
+                    request, self.get_cart(payment_fee=p['provider'].calculate_fee(self._total_order_value)))
+                if isinstance(resp, str):
+                    return redirect(resp)
+                elif resp is True:
+                    return redirect(self.get_next_url(request))
+                else:
+                    return self.render()
+        messages.error(self.request, _("Please select a payment method."))
+        return self.render()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['providers'] = self.provider_forms
+        ctx['selected'] = self.request.POST.get('payment', self.request.session.get('payment', ''))
+        return ctx
+
+    @cached_property
+    def payment_provider(self):
+        responses = register_payment_providers.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if provider.identifier == self.request.session['payment']:
+                return provider
+
+    def is_completed(self, request, warn=False):
+        self.request = request
+        if 'payment' not in request.session or not self.payment_provider:
+            if warn:
+                messages.error(request, _('The payment information you entered was incomplete.'))
+            return False
+        if not self.payment_provider.payment_is_valid_session(request) or \
+                not self.payment_provider.is_enabled or \
+                not self.payment_provider.is_allowed(request):
+            if warn:
+                messages.error(request, _('The payment information you entered was incomplete.'))
+            return False
+        return True
+
+    def is_applicable(self, request):
+        self.request = request
+        if self._total_order_value == 0:
+            request.session['payment'] = 'free'
+            return False
+        return True
+
+
+class ConfirmStep(CartMixin, TemplateFlowStep):
+    priority = 1001
+    identifier = "confirm"
+    template_name = "pretixpresale/event/checkout_confirm.html"
+
+    def is_applicable(self, request):
+        return True
+
+    def is_completed(self, request, warn=False):
+        pass
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['cart'] = self.get_cart(answers=True)
+        ctx['payment'] = self.payment_provider.checkout_confirm_render(self.request)
+        ctx['payment_provider'] = self.payment_provider
+        return ctx
+
+    @cached_property
+    def payment_provider(self):
+        responses = register_payment_providers.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if provider.identifier == self.request.session['payment']:
+                return provider
+
+    def post(self, request):
+        self.request = request
+        try:
+            order = perform_order(self.request.event, self.payment_provider, self.positions,
+                                  email=request.session.get('email', None),
+                                  locale=translation.get_language())
+        except OrderError as e:
+            messages.error(request, str(e))
+            return redirect(self.get_step_url())
+        else:
+            # Message is delivered via GET parameter
+            # messages.success(request, _('Your order has been placed.'))
+            resp = self.payment_provider.payment_perform(request, order)
+            return redirect(resp or self.get_order_url(order))
+
+    def get_order_url(self, order):
+        return reverse('presale:event.order', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'order': order.code,
+            'secret': order.secret
+        }) + '?thanks=yes'
+
+
+DEFAULT_FLOW = (
+    QuestionsStep,
+    PaymentStep,
+    ConfirmStep
+)

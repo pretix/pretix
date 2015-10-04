@@ -32,7 +32,7 @@ class LoginRequiredMixin:
         return login_required(view)
 
 
-class CartDisplayMixin:
+class CartMixin:
     @cached_property
     def positions(self):
         """
