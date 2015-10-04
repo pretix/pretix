@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.functional import cached_property

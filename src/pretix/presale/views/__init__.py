@@ -3,7 +3,6 @@ from itertools import groupby
 
 from django.contrib.auth.views import redirect_to_login
 from django.core.urlresolvers import reverse
-from django.db.models import Q
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 

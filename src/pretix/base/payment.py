@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django import forms
 from django.contrib import messages
-from django.db.models import Q, Sum
+from django.db.models import Sum
 from django.dispatch import receiver
 from django.forms import Form
 from django.http import HttpRequest

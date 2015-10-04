@@ -3,7 +3,6 @@ import json
 import logging
 import re
 import shutil
-import sys
 from decimal import Decimal
 
 from django import forms

@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 from django import forms
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Order

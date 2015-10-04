@@ -6,7 +6,6 @@ from django import forms
 from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.storage import default_storage
-from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.ticketoutput import BaseTicketOutput

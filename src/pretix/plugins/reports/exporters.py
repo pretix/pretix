@@ -2,7 +2,6 @@ import tempfile
 
 from django.conf import settings
 from django.contrib.staticfiles import finders
-from django.http import HttpResponse
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 

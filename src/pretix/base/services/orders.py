@@ -4,9 +4,7 @@ from django.db import transaction
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import (
-    Event, EventLock, Order, OrderPosition, Quota, User,
-)
+from pretix.base.models import Event, EventLock, Order, OrderPosition, Quota
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.mail import mail
 from pretix.base.signals import order_paid, order_placed

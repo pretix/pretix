@@ -1,9 +1,7 @@
-import decimal
 import json
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.dispatch import receiver
-from django.http import HttpRequest, HttpResponse, JsonResponse
 
 from pretix.base.signals import register_data_exporters
 

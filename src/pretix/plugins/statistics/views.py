@@ -1,10 +1,9 @@
 import datetime
 import json
-from decimal import Decimal
 
 import dateutil.parser
 import dateutil.rrule
-from django.db.models import Count, Sum
+from django.db.models import Count
 from django.views.generic import TemplateView
 
 from pretix.base.models import Item, Order, OrderPosition

@@ -7,8 +7,7 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import LazyI18nString
-from pretix.base.models import Event, User
-from pretix.helpers.urls import build_absolute_uri
+from pretix.base.models import Event
 
 logger = logging.getLogger('pretix.base.mail')
 

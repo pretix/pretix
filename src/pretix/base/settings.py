@@ -1,8 +1,6 @@
 import decimal
 import json
-import os
 from datetime import date, datetime, time
-from urllib.parse import urljoin
 
 import dateutil.parser
 from django.conf import settings
