@@ -773,13 +773,9 @@ class Item(Versionable):
         default=True,
         verbose_name=_("Active"),
     )
-    short_description = I18nTextField(
-        verbose_name=_("Short description"),
+    description = I18nTextField(
+        verbose_name=_("Description"),
         help_text=_("This is shown below the product name in lists."),
-        null=True, blank=True,
-    )
-    long_description = I18nTextField(
-        verbose_name=_("Long description"),
         null=True, blank=True,
     )
     default_price = models.DecimalField(
