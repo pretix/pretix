@@ -13,9 +13,11 @@ from pretix.base.models import *  # NOQA
 if Organizer.objects.exists():
     print("There already is data in your DB!")
     sys.exit(0)
-user = User.objects.get(
-    identifier='admin@localhost',
-)
+user = User.objects.get_or_create(
+    email='admin@localhost',
+)[0]
+user.set_password('admin')
+user.save()
 organizer = Organizer.objects.create(
     name='MRMCD e.V', slug='mrmcd'
 )

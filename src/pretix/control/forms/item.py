@@ -1,5 +1,6 @@
 import copy
 
+from django import forms
 from django.db import models
 from django.forms import BooleanField
 from django.utils.translation import ugettext_lazy as _
@@ -40,6 +41,10 @@ class PropertyValueForm(TolerantFormsetModelForm):
 
 
 class QuestionForm(VersionedModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['items'].queryset = self.instance.event.items.current.all()
+
     class Meta:
         model = Question
         localized_fields = '__all__'
@@ -47,7 +52,11 @@ class QuestionForm(VersionedModelForm):
             'question',
             'type',
             'required',
+            'items'
         ]
+        widgets = {
+            'items': forms.CheckboxSelectMultiple
+        }
 
 
 class QuotaForm(I18nModelForm):
@@ -116,7 +125,6 @@ class ItemFormGeneral(VersionedModelForm):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = self.instance.event.categories.current.all()
         self.fields['properties'].queryset = self.instance.event.properties.current.all()
-        self.fields['questions'].queryset = self.instance.event.questions.current.all()
 
     class Meta:
         model = Item
@@ -126,13 +134,11 @@ class ItemFormGeneral(VersionedModelForm):
             'name',
             'active',
             'admission',
-            'short_description',
-            'long_description',
+            'description',
             'picture',
             'default_price',
             'tax_rate',
             'properties',
-            'questions',
         ]
 
 

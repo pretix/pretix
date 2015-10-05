@@ -647,72 +647,6 @@ class PropertyValue(Versionable):
         return self.sortkey < other.sortkey
 
 
-class Question(Versionable):
-    """
-    A question is an input field that can be used to extend a ticket
-    by custom information, e.g. "Attendee age". A question can allow one o several
-    input types, currently:
-
-    * a number (``TYPE_NUMBER``)
-    * a one-line string (``TYPE_STRING``)
-    * a multi-line string (``TYPE_TEXT``)
-    * a boolean (``TYPE_BOOLEAN``)
-
-    :param event: The event this question belongs to
-    :type event: Event
-    :param question: The question text. This will be displayed next to the input field.
-    :type question: str
-    :param type: One of the above types
-    :param required: Whether answering this question is required for submiting an order including
-                     items associated with this question.
-    :type required: bool
-    """
-    TYPE_NUMBER = "N"
-    TYPE_STRING = "S"
-    TYPE_TEXT = "T"
-    TYPE_BOOLEAN = "B"
-    TYPE_CHOICES = (
-        (TYPE_NUMBER, _("Number")),
-        (TYPE_STRING, _("Text (one line)")),
-        (TYPE_TEXT, _("Multiline text")),
-        (TYPE_BOOLEAN, _("Yes/No")),
-    )
-
-    event = VersionedForeignKey(
-        Event,
-        related_name="questions",
-    )
-    question = I18nTextField(
-        verbose_name=_("Question"),
-    )
-    type = models.CharField(
-        max_length=5,
-        choices=TYPE_CHOICES,
-        verbose_name=_("Question type"),
-    )
-    required = models.BooleanField(
-        default=False,
-        verbose_name=_("Required question"),
-    )
-
-    class Meta:
-        verbose_name = _("Question")
-        verbose_name_plural = _("Questions")
-
-    def __str__(self):
-        return str(self.question)
-
-    def delete(self, *args, **kwargs):
-        super().delete(*args, **kwargs)
-        if self.event:
-            self.event.get_cache().clear()
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.event:
-            self.event.get_cache().clear()
-
-
 def itempicture_upload_to(instance, filename):
     return '%s/%s/item-%s.%s' % (
         instance.event.organizer.slug, instance.event.slug, instance.identity,
@@ -735,16 +669,13 @@ class Item(Versionable):
     :type name: str
     :param active: Whether this item is being sold
     :type active: bool
-    :param short_description: A short description
-    :type short_description: str
-    :param long_description: A long description
-    :type long_description: str
+    :param description: A short description
+    :type description: str
     :param default_price: The item's default price
     :type default_price: decimal.Decimal
     :param tax_rate: The VAT tax that is included in this item's price (in %)
     :type tax_rate: decimal.Decimal
     :param properties: A set of ``Property`` objects that should be applied to this item
-    :param questions: A set of ``Question`` objects that should be applied to this item
     :param admission: ``True``, if this item allows persons to enter the event (as opposed to e.g. merchandise)
     :type admission: bool
     :param picture: A product picture to be shown next to the product description.
@@ -796,16 +727,6 @@ class Item(Versionable):
             'The selected properties will be available for the user '
             'to select. After saving this field, move to the '
             '\'Variations\' tab to configure the details.'
-        )
-    )
-    questions = VersionedManyToManyField(
-        Question,
-        related_name='items',
-        verbose_name=_("Questions"),
-        blank=True,
-        help_text=_(
-            'The user will be asked to fill in answers for the '
-            'selected questions'
         )
     )
     admission = models.BooleanField(
@@ -1171,6 +1092,80 @@ class VariationsField(VersionedManyToManyField):
             defaults['initial'] = [i.identity for i in initial]
         # Skip ManyToManyField in dependency chain
         return super(RelatedField, self).formfield(**defaults)
+
+
+class Question(Versionable):
+    """
+    A question is an input field that can be used to extend a ticket
+    by custom information, e.g. "Attendee age". A question can allow one o several
+    input types, currently:
+
+    * a number (``TYPE_NUMBER``)
+    * a one-line string (``TYPE_STRING``)
+    * a multi-line string (``TYPE_TEXT``)
+    * a boolean (``TYPE_BOOLEAN``)
+
+    :param event: The event this question belongs to
+    :type event: Event
+    :param question: The question text. This will be displayed next to the input field.
+    :type question: str
+    :param type: One of the above types
+    :param required: Whether answering this question is required for submiting an order including
+                     items associated with this question.
+    :type required: bool
+    :param items: A set of ``Items`` objects that this question should be applied to
+    """
+    TYPE_NUMBER = "N"
+    TYPE_STRING = "S"
+    TYPE_TEXT = "T"
+    TYPE_BOOLEAN = "B"
+    TYPE_CHOICES = (
+        (TYPE_NUMBER, _("Number")),
+        (TYPE_STRING, _("Text (one line)")),
+        (TYPE_TEXT, _("Multiline text")),
+        (TYPE_BOOLEAN, _("Yes/No")),
+    )
+
+    event = VersionedForeignKey(
+        Event,
+        related_name="questions"
+    )
+    question = I18nTextField(
+        verbose_name=_("Question")
+    )
+    type = models.CharField(
+        max_length=5,
+        choices=TYPE_CHOICES,
+        verbose_name=_("Question type")
+    )
+    required = models.BooleanField(
+        default=False,
+        verbose_name=_("Required question")
+    )
+    items = VersionedManyToManyField(
+        Item,
+        related_name='questions',
+        verbose_name=_("Products"),
+        blank=True,
+        help_text=_('This question will be asked to buyers of the selected products')
+    )
+
+    class Meta:
+        verbose_name = _("Question")
+        verbose_name_plural = _("Questions")
+
+    def __str__(self):
+        return str(self.question)
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        if self.event:
+            self.event.get_cache().clear()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.event:
+            self.event.get_cache().clear()
 
 
 class BaseRestriction(Versionable):

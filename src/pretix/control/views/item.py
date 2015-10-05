@@ -466,6 +466,11 @@ class QuestionCreate(EventPermissionRequiredMixin, CreateView):
     permission = 'can_change_items'
     context_object_name = 'question'
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = Question(event=self.request.event)
+        return kwargs
+
     def get_success_url(self) -> str:
         return reverse('control:event.items.questions', kwargs={
             'organizer': self.request.event.organizer.slug,
@@ -473,7 +478,6 @@ class QuestionCreate(EventPermissionRequiredMixin, CreateView):
         })
 
     def form_valid(self, form):
-        form.instance.event = self.request.event
         messages.success(self.request, _('The new question has been created.'))
         return super().form_valid(form)
 
