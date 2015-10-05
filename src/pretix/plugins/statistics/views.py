@@ -39,7 +39,7 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
             data = []
             for d in dateutil.rrule.rrule(
                     dateutil.rrule.DAILY,
-                    dtstart=min(ordered_by_day.keys() if ordered_by_day else datetime.date.today()),
+                    dtstart=min(ordered_by_day.keys()) if ordered_by_day else datetime.date.today(),
                     until=max(
                         max(ordered_by_day.keys() if paid_by_day else [datetime.date.today()]),
                         max(paid_by_day.keys() if paid_by_day else [datetime.date(1970, 1, 1)])
