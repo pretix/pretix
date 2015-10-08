@@ -1,0 +1,147 @@
+{% extends "pretixcontrol/item/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load formset_tags %}
+{% block inside %}
+    <form class="form-horizontal branches" method="post" action="">
+        {% csrf_token %}
+        {% if state %}
+            <div class="alert alert-{{ state.class }}">{{ state.message|safe }}</div>
+        {% endif %}
+        <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+            {{ formset.management_form }}
+            <div data-formset-body>
+                {% for form in formset %}
+                    <div class="panel panel-default" data-formset-form>
+                        <div class="sr-only">
+                            {{ form.id }}
+                            {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                        </div>
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                {% bootstrap_field form.name layout='inline' form_group_class="" %}
+                            </h4>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="nested-formset" data-formset-prefix="{{ form.nested.0.prefix }}">
+                                <div data-nested-formset-body>
+                                    {{ form.nested.0.management_form }}
+                                    {% for f in form.nested.0 %}
+                                        <div class="form-group" data-nested-formset-form>
+                                            {{ f.id }}
+                                            <div class="col-sm-9">
+                                                {% bootstrap_field f.value form_group_class="" layout="inline" %}
+                                            </div>
+                                            <div class="sr-only">
+                                                {% bootstrap_field f.ORDER form_group_class="" layout="inline" %}
+                                                {% bootstrap_field f.DELETE form_group_class="" layout="inline" %}
+                                            </div>
+                                            <div class="col-sm-3 text-right">
+                                                <button type="button" class="btn btn-default"
+                                                        data-nested-formset-move-up-button>
+                                                    <i class="fa fa-arrow-up"></i></button>
+                                                <button type="button" class="btn btn-default"
+                                                        data-nested-formset-move-down-button>
+                                                    <i class="fa fa-arrow-down"></i></button>
+                                                <button type="button" class="btn btn-danger" data-nested-formset-delete-button>
+                                                    <i class="fa fa-trash"></i></button>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <script type="form-template" data-nested-formset-empty-form>
+                                    {% escapescript %}
+                                        <div class="form-group" data-nested-formset-form>
+                                            {{ form.nested.0.empty_form.id }}
+                                            <div class="col-sm-9">
+                                                {% bootstrap_field form.nested.0.empty_form.value form_group_class="" layout="inline" %}
+                                            </div>
+                                            <div class="sr-only">
+                                                {% bootstrap_field form.nested.0.empty_form.ORDER form_group_class="" layout="inline" %}
+                                                {% bootstrap_field form.nested.0.empty_form.DELETE form_group_class="" layout="inline" %}
+                                            </div>
+                                            <div class="col-sm-3 text-right">
+                                                <button type="button" class="btn btn-default"
+                                                        data-nested-formset-move-up-button>
+                                                    <i class="fa fa-arrow-up"></i></button>
+                                                <button type="button" class="btn btn-default"
+                                                        data-nested-formset-move-down-button>
+                                                    <i class="fa fa-arrow-down"></i></button>
+                                                <button type="button" class="btn btn-danger" data-nested-formset-delete-button>
+                                                    <i class="fa fa-trash"></i></button>
+                                            </div>
+                                        </div>
+                                    {% endescapescript %}
+                                </script>
+                                <p style="margin-top: 10px">
+                                    <button type="button" class="btn btn-default" data-nested-formset-add>
+                                        <i class="fa fa-plus"></i> {% trans "Add a new value" %}</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <script type="form-template" data-formset-empty-form>
+                {% escapescript %}
+                    <div class="panel panel-default" data-formset-form>
+                        <div class="sr-only">
+                            {{ formset.empty_form.id }}
+                            {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                        </div>
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                {% bootstrap_field formset.empty_form.name layout='inline' form_group_class="" %}
+                            </h4>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="nested-formset" data-formset-prefix="{{ formset.empty_form.nested.0.prefix }}">
+                                <div data-nested-formset-body>
+                                    {{ formset.empty_form.nested.0.management_form }}
+                                </div>
+                                {{ '<script type="form-template" data-nested-formset-empty-form>' }}
+                                <div class="form-group" data-nested-formset-form>
+                                    {{ formset.empty_form.nested.0.empty_form.id }}
+                                    <div class="col-sm-9">
+                                        {% bootstrap_field formset.empty_form.nested.0.empty_form.value form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="sr-only">
+                                        {% bootstrap_field formset.empty_form.nested.0.empty_form.ORDER form_group_class="" layout="inline" %}
+                                        {% bootstrap_field formset.empty_form.nested.0.empty_form.DELETE form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="col-sm-3 text-right">
+                                        <button type="button" class="btn btn-default"
+                                                data-nested-formset-move-up-button>
+                                            <i class="fa fa-arrow-up"></i></button>
+                                        <button type="button" class="btn btn-default"
+                                                data-nested-formset-move-down-button>
+                                            <i class="fa fa-arrow-down"></i></button>
+                                        <button type="button" class="btn btn-danger" data-nested-formset-delete-button>
+                                            <i class="fa fa-trash"></i></button>
+                                    </div>
+                                </div>
+                                {{ '</script>' }}
+
+                                <p style="margin-top: 10px">
+                                    <button type="button" class="btn btn-default" data-nested-formset-add>
+                                        <i class="fa fa-plus"></i> {% trans "Add a new value" %}</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endescapescript %}
+            </script>
+            <p>
+                <button type="button" class="btn btn-default" data-formset-add>
+                    <i class="fa fa-plus"></i> {% trans "Add a new property" %}</button>
+            </p>
+        </div>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

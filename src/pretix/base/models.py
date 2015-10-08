@@ -557,96 +557,6 @@ class ItemCategory(Versionable):
         return self.sortkey < other.sortkey
 
 
-class Property(Versionable):
-    """
-    A property is a modifier which can be applied to an Item. For example
-    'Size' would be a property associated with the item 'T-Shirt'.
-
-    :param event: The event this belongs to
-    :type event: Event
-    :param name: The name of this property.
-    :type name: str
-    """
-
-    event = VersionedForeignKey(
-        Event,
-        related_name="properties",
-    )
-    name = I18nCharField(
-        max_length=250,
-        verbose_name=_("Property name"),
-    )
-
-    class Meta:
-        verbose_name = _("Product property")
-        verbose_name_plural = _("Product properties")
-
-    def __str__(self):
-        return str(self.name)
-
-    def delete(self, *args, **kwargs):
-        super().delete(*args, **kwargs)
-        if self.event:
-            self.event.get_cache().clear()
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.event:
-            self.event.get_cache().clear()
-
-
-class PropertyValue(Versionable):
-    """
-    A value of a property. If the property would be 'T-Shirt size',
-    this could be 'M' or 'L'.
-
-    :param prop: The property this value is a valid option for.
-    :type prop: Property
-    :param value: The value, as a human-readable string
-    :type value: str
-    :param position: An integer, used for sorting
-    :type position: int
-    """
-
-    prop = VersionedForeignKey(
-        Property,
-        on_delete=models.CASCADE,
-        related_name="values"
-    )
-    value = I18nCharField(
-        max_length=250,
-        verbose_name=_("Value"),
-    )
-    position = models.IntegerField(
-        default=0
-    )
-
-    class Meta:
-        verbose_name = _("Property value")
-        verbose_name_plural = _("Property values")
-        ordering = ("position", "version_birth_date")
-
-    def __str__(self):
-        return "%s: %s" % (self.prop.name, self.value)
-
-    def delete(self, *args, **kwargs):
-        super().delete(*args, **kwargs)
-        if self.prop:
-            self.prop.event.get_cache().clear()
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.prop:
-            self.prop.event.get_cache().clear()
-
-    @property
-    def sortkey(self):
-        return self.position, self.version_birth_date
-
-    def __lt__(self, other):
-        return self.sortkey < other.sortkey
-
-
 def itempicture_upload_to(instance, filename):
     return '%s/%s/item-%s.%s' % (
         instance.event.organizer.slug, instance.event.slug, instance.identity,
@@ -675,7 +585,6 @@ class Item(Versionable):
     :type default_price: decimal.Decimal
     :param tax_rate: The VAT tax that is included in this item's price (in %)
     :type tax_rate: decimal.Decimal
-    :param properties: A set of ``Property`` objects that should be applied to this item
     :param admission: ``True``, if this item allows persons to enter the event (as opposed to e.g. merchandise)
     :type admission: bool
     :param picture: A product picture to be shown next to the product description.
@@ -717,17 +626,6 @@ class Item(Versionable):
         null=True, blank=True,
         verbose_name=_("Taxes included in percent"),
         max_digits=7, decimal_places=2
-    )
-    properties = VersionedManyToManyField(
-        Property,
-        related_name='items',
-        verbose_name=_("Properties"),
-        blank=True,
-        help_text=_(
-            'The selected properties will be available for the user '
-            'to select. After saving this field, move to the '
-            '\'Variations\' tab to configure the details.'
-        )
     )
     admission = models.BooleanField(
         verbose_name=_("Is an admission ticket"),
@@ -943,6 +841,99 @@ class Item(Versionable):
             elif 'price' in response[0] and response[0]['price'] is not None and response[0]['price'] < price:
                 price = response[0]['price']
         return price
+
+
+class Property(Versionable):
+    """
+    A property is a modifier which can be applied to an Item. For example
+    'Size' would be a property associated with the item 'T-Shirt'.
+
+    :param event: The event this belongs to
+    :type event: Event
+    :param name: The name of this property.
+    :type name: str
+    """
+
+    event = VersionedForeignKey(
+        Event,
+        related_name="properties"
+    )
+    item = VersionedForeignKey(
+        Item, related_name='properties', null=True, blank=True
+    )
+    name = I18nCharField(
+        max_length=250,
+        verbose_name=_("Property name")
+    )
+
+    class Meta:
+        verbose_name = _("Product property")
+        verbose_name_plural = _("Product properties")
+
+    def __str__(self):
+        return str(self.name)
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        if self.event:
+            self.event.get_cache().clear()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.event:
+            self.event.get_cache().clear()
+
+
+class PropertyValue(Versionable):
+    """
+    A value of a property. If the property would be 'T-Shirt size',
+    this could be 'M' or 'L'.
+
+    :param prop: The property this value is a valid option for.
+    :type prop: Property
+    :param value: The value, as a human-readable string
+    :type value: str
+    :param position: An integer, used for sorting
+    :type position: int
+    """
+
+    prop = VersionedForeignKey(
+        Property,
+        on_delete=models.CASCADE,
+        related_name="values"
+    )
+    value = I18nCharField(
+        max_length=250,
+        verbose_name=_("Value"),
+        )
+    position = models.IntegerField(
+        default=0
+    )
+
+    class Meta:
+        verbose_name = _("Property value")
+        verbose_name_plural = _("Property values")
+        ordering = ("position", "version_birth_date")
+
+    def __str__(self):
+        return "%s: %s" % (self.prop.name, self.value)
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        if self.prop:
+            self.prop.event.get_cache().clear()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.prop:
+            self.prop.event.get_cache().clear()
+
+    @property
+    def sortkey(self):
+        return self.position, self.version_birth_date
+
+    def __lt__(self, other):
+        return self.sortkey < other.sortkey
 
 
 class ItemVariation(Versionable):

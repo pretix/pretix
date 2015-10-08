@@ -17,7 +17,10 @@ from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Property, PropertyValue, Question,
     Quota,
 )
-from pretix.control.forms import I18nInlineFormSet, VariationsField
+from pretix.control.forms import (
+    I18nInlineFormSet, NestedInnerI18nInlineFormSet, VariationsField,
+    nestedformset_factory,
+)
 from pretix.control.forms.item import (
     CategoryForm, ItemFormGeneral, ItemVariationForm, PropertyForm,
     PropertyValueForm, QuestionForm, QuotaForm,
@@ -217,177 +220,6 @@ def category_move_down(request, organizer, event, category):
     return redirect('control:event.items.categories',
                     organizer=request.event.organizer.slug,
                     event=request.event.slug)
-
-
-class PropertyList(ListView):
-    model = Property
-    context_object_name = 'properties'
-    paginate_by = 30
-    template_name = 'pretixcontrol/items/properties.html'
-
-    def get_queryset(self):
-        return Property.objects.current.filter(
-            event=self.request.event
-        )
-
-
-class PropertyUpdate(EventPermissionRequiredMixin, UpdateView):
-    model = Property
-    form_class = PropertyForm
-    template_name = 'pretixcontrol/items/property.html'
-    permission = 'can_change_items'
-    context_object_name = 'property'
-
-    def get_object(self, queryset=None) -> Property:
-        try:
-            return self.request.event.properties.current.get(
-                identity=self.kwargs['property']
-            )
-        except Property.DoesNotExist:
-            raise Http404(_("The requested property does not exist."))
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.items.properties.edit', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug,
-            'property': self.kwargs['property']
-        })
-
-    def get_formset(self):
-        formsetclass = inlineformset_factory(
-            Property, PropertyValue,
-            form=PropertyValueForm,
-            formset=I18nInlineFormSet,
-            can_order=True,
-            extra=0,
-        )
-        kwargs = self.get_form_kwargs()
-        kwargs['queryset'] = self.object.values.current.all()
-        formset = formsetclass(**kwargs)
-        return formset
-
-    def get_context_data(self, *args, **kwargs) -> dict:
-        context = super().get_context_data(*args, **kwargs)
-        context['formset'] = self.get_formset()
-        return context
-
-    @transaction.atomic()
-    def form_valid(self, form, formset):
-        for f in formset.deleted_forms:
-            f.instance.delete()
-            f.instance.pk = None
-
-        for i, f in enumerate(formset.ordered_forms):
-            f.save(commit=False)
-            f.instance.position = i
-            f.instance.save()
-
-        messages.success(self.request, _('Your changes have been saved.'))
-        return super().form_valid(form)
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        formset = self.get_formset()
-        if form.is_valid() and formset.is_valid():
-            return self.form_valid(form, formset)
-        else:
-            return self.form_invalid(form)
-
-
-class PropertyCreate(EventPermissionRequiredMixin, CreateView):
-    model = Property
-    form_class = PropertyForm
-    template_name = 'pretixcontrol/items/property.html'
-    permission = 'can_change_items'
-    context_object_name = 'property'
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.items.properties', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug,
-        })
-
-    def get_formset(self):
-        formsetclass = inlineformset_factory(
-            Property, PropertyValue,
-            form=PropertyValueForm,
-            formset=I18nInlineFormSet,
-            can_order=True,
-            extra=3,
-        )
-        formset = formsetclass(**self.get_form_kwargs())
-        return formset
-
-    def get_context_data(self, *args, **kwargs) -> dict:
-        self.object = None
-        context = super().get_context_data(*args, **kwargs)
-        context['formset'] = self.get_formset()
-        return context
-
-    @transaction.atomic()
-    def form_valid(self, form, formset):
-        form.instance.event = self.request.event
-        resp = super().form_valid(form)
-        for i, f in enumerate(formset.ordered_forms):
-            f.instance.position = i
-            f.instance.prop = form.instance
-            f.instance.save()
-        messages.success(self.request, _('The new property has been created.'))
-        return resp
-
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        formset = self.get_formset()
-        if form.is_valid() and formset.is_valid():
-            return self.form_valid(form, formset)
-        else:
-            return self.form_invalid(form)
-
-
-class PropertyDelete(EventPermissionRequiredMixin, DeleteView):
-    model = Property
-    form_class = PropertyForm
-    template_name = 'pretixcontrol/items/property_delete.html'
-    permission = 'can_change_items'
-    context_object_name = 'property'
-
-    def get_context_data(self, *args, **kwargs) -> dict:
-        context = super().get_context_data(*args, **kwargs)
-        context['dependent'] = self.get_object().items.current.all()
-        context['possible'] = self.is_allowed()
-        return context
-
-    def is_allowed(self) -> bool:
-        return self.get_object().items.current.count() == 0
-
-    def get_object(self, queryset=None) -> Property:
-        if not hasattr(self, 'object') or not self.object:
-            try:
-                self.object = self.request.event.properties.current.get(
-                    identity=self.kwargs['property']
-                )
-            except Property.DoesNotExist:
-                raise Http404(_("The requested property does not exist."))
-        return self.object
-
-    def delete(self, request, *args, **kwargs):
-        if self.is_allowed():
-            success_url = self.get_success_url()
-            self.get_object().delete()
-            messages.success(request, _('The selected property has been deleted.'))
-            return HttpResponseRedirect(success_url)
-        else:
-            messages.error(request, _('The selected property can not be deleted.'))
-            return HttpResponseRedirect(self.get_success_url())
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.items.properties', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug,
-        })
 
 
 class QuestionList(ListView):
@@ -676,6 +508,75 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
         return super().form_valid(form)
 
 
+class ItemProperties(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
+    permission = 'can_change_items'
+    template_name = 'pretixcontrol/item/properties.html'
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.item.properties', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'item': self.get_object().identity,
+        })
+
+    def get_inner_formset_class(self):
+        formsetclass = inlineformset_factory(
+            Property, PropertyValue,
+            form=PropertyValueForm,
+            formset=NestedInnerI18nInlineFormSet,
+            can_order=True, extra=0
+        )
+        return formsetclass
+
+    def get_outer_formset(self):
+        formsetclass = nestedformset_factory(
+            Property, [self.get_inner_formset_class()],
+            form=PropertyForm, can_order=False, can_delete=True, extra=0
+        )
+        formset = formsetclass(self.request.POST if self.request.method == "POST" else None,
+                               queryset=Property.objects.current.filter(item=self.object).prefetch_related('values'),
+                               event=self.request.event)
+        return formset
+
+    def get_context_data(self, **kwargs):
+        self.object = self.get_object()
+        ctx = super().get_context_data(**kwargs)
+        ctx['formset'] = self.get_outer_formset()
+        return ctx
+
+    @transaction.atomic()
+    def form_valid(self, formset):
+        for f in formset:
+            f.instance.event = self.request.event
+            f.instance.item = self.get_object()
+            f.instance.save()
+            print(f.instance)
+
+            for n in f.nested:
+                print(n.deleted_forms, n.ordered_forms, n.extra_forms)
+
+                for fn in n.deleted_forms:
+                    fn.instance.delete()
+                    fn.instance.pk = None
+
+                for i, fn in enumerate(n.ordered_forms + [ef for ef in n.extra_forms if ef not in n.ordered_forms]):
+                    fn.instance.position = i
+                    fn.instance.prop = f.instance
+                    fn.save()
+
+                n.save_new_objects()
+        messages.success(self.request, _('Your changes have been saved.'))
+        return redirect(self.get_success_url())
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        formset = self.get_outer_formset()
+        if formset.is_valid():
+            return self.form_valid(formset)
+        else:
+            return self.get(request, *args, **kwargs)
+
+
 class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
     permission = 'can_change_items'
 
@@ -782,7 +683,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
 
                     grids.append({'row': val1, 'forms': formrow})
 
-                forms.append({'row': ", ".join([value.value for value in gridrow]), 'forms': grids})
+                forms.append({'row': ", ".join([str(value.value) for value in gridrow]), 'forms': grids})
 
         return forms, forms_flat
 

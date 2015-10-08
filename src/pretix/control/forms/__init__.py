@@ -5,7 +5,9 @@ from itertools import product
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.forms import BaseInlineFormSet
+from django.forms import (
+    BaseInlineFormSet, BaseModelFormSet, ModelForm, modelformset_factory,
+)
 from django.forms.widgets import flatatt
 from django.utils.encoding import force_text
 from django.utils.html import format_html
@@ -21,6 +23,7 @@ class I18nInlineFormSet(BaseInlineFormSet):
     This is equivalent to a normal BaseInlineFormset, but cares for the special needs
     of I18nForms (see there for more information).
     """
+
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event', None)
         super().__init__(*args, **kwargs)
@@ -28,6 +31,32 @@ class I18nInlineFormSet(BaseInlineFormSet):
     def _construct_form(self, i, **kwargs):
         kwargs['event'] = self.event
         return super()._construct_form(i, **kwargs)
+
+
+class I18nFormSet(BaseModelFormSet):
+    """
+    This is equivalent to a normal BaseModelFormset, but cares for the special needs
+    of I18nForms (see there for more information).
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event', None)
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['event'] = self.event
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            event=self.event
+        )
+        self.add_fields(form, None)
+        return form
 
 
 class TolerantFormsetModelForm(VersionedModelForm):
@@ -407,7 +436,6 @@ class VariationsField(forms.ModelMultipleChoiceField):
 
 
 class ExtFileField(forms.FileField):
-
     def __init__(self, *args, **kwargs):
         ext_whitelist = kwargs.pop("ext_whitelist")
         self.ext_whitelist = [i.lower() for i in ext_whitelist]
@@ -422,3 +450,108 @@ class ExtFileField(forms.FileField):
             if ext not in self.ext_whitelist:
                 raise forms.ValidationError(_("Filetype not allowed!"))
         return data
+
+
+class BaseNestedFormset(I18nFormSet):
+
+    def add_fields(self, form, index):
+        # allow the super class to create the fields as usual
+        super().add_fields(form, index)
+
+        form.nested = []
+        for f in self.nested_formset_class:
+            inner_formset = f(
+                instance=form.instance,
+                data=form.data if form.is_bound else None,
+                prefix='%s-%s' % (form.prefix, f.get_default_prefix()),
+                queryset=form.instance.values.all(),
+                event=self.event
+            )
+            form.nested.append(inner_formset)
+
+    def is_valid(self):
+        result = super(BaseNestedFormset, self).is_valid()
+
+        if self.is_bound:
+            # look at any nested formsets, as well
+            for form in self.forms:
+                if not self._should_delete_form(form):
+                    for n in form.nested:
+                        result = result and n.is_valid()
+
+        return result
+
+    def save(self, commit=True):
+        result = super(BaseNestedFormset, self).save(commit=commit)
+
+        for form in self.forms:
+            if not self._should_delete_form(form):
+                for n in form.nested:
+                    n.save(commit=commit)
+
+        return result
+
+
+def nestedformset_factory(model, nested_formset, form=ModelForm,
+                          formset=BaseNestedFormset, fk_name=None, fields=None,
+                          exclude=None, extra=3, can_order=False,
+                          can_delete=True, max_num=None,
+                          formfield_callback=None, widgets=None,
+                          validate_max=False, localized_fields=None,
+                          labels=None, help_texts=None, error_messages=None):
+    kwargs = {
+        'form': form,
+        'formfield_callback': formfield_callback,
+        'formset': formset,
+        'extra': extra,
+        'can_delete': can_delete,
+        'can_order': can_order,
+        'fields': fields,
+        'exclude': exclude,
+        'max_num': max_num,
+        'widgets': widgets,
+        'validate_max': validate_max,
+        'localized_fields': localized_fields,
+        'labels': labels,
+        'help_texts': help_texts,
+        'error_messages': error_messages,
+    }
+
+    nfs_class = modelformset_factory(model, **kwargs)
+    nfs_class.nested_formset_class = []
+    for f in nested_formset:
+        nfs_class.nested_formset_class.append(f)
+    return nfs_class
+
+
+class NestedInnerI18nInlineFormSet(I18nFormSet):
+    """A formset for child objects related to a parent."""
+
+    def __init__(self, data=None, files=None, instance=None,
+                 save_as_new=False, prefix=None, queryset=None, **kwargs):
+        if instance is None:
+            self.instance = self.fk.rel.to()
+        else:
+            self.instance = instance
+        self.save_as_new = save_as_new
+        if queryset is None:
+            if self.instance is not None:
+                queryset = getattr(self.instance, self.fk.related_query_name()).all()
+            else:
+                queryset = self.model._default_manager
+        if self.instance.pk is not None:
+            qs = queryset
+        else:
+            qs = self.model._default_manager.none()
+        super().__init__(data, files, prefix=prefix, queryset=qs, **kwargs)
+
+    @property
+    def empty_form(self):
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__inner_prefix__'),
+            empty_permitted=True,
+            event=self.event
+        )
+        self.add_fields(form, None)
+        return form

@@ -1,13 +1,14 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
-{% block title %}{{ item.name }} :: {% trans "Product" %}{% endblock %}
+{% block title %}{{ object.name }} :: {% trans "Product" %}{% endblock %}
 {% block content %}
-    {% if item.identity %}
-        <h1>{% trans "Modify product:" %} {{ item.name }}</h1>
+    {% if object.identity %}
+        <h1>{% trans "Modify product:" %} {{ object.name }}</h1>
         <ul class="nav nav-pills">
-            <li {% if "event.item" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "General information" %}</a></li>
-            <li {% if "event.item.variations" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "Variations" %}</a></li>
-            <li {% if "event.item.restrictions" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.restrictions' organizer=request.event.organizer.slug event=request.event.slug item=item.identity %}">{% trans "Restrictions" %}</a></li>
+            <li {% if "event.item" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=object.identity %}">{% trans "General information" %}</a></li>
+            <li {% if "event.item.properties" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.properties' organizer=request.event.organizer.slug event=request.event.slug item=object.identity %}">{% trans "Properties" %}</a></li>
+            <li {% if "event.item.variations" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=object.identity %}">{% trans "Variations" %}</a></li>
+            <li {% if "event.item.restrictions" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.restrictions' organizer=request.event.organizer.slug event=request.event.slug item=object.identity %}">{% trans "Restrictions" %}</a></li>
         </ul>
     {% else %}
         <h1>{% trans "Create product" %}</h1>
@@ -15,7 +16,7 @@
             You will be able to adjust further settings in the next step.
         {% endblocktrans %}</p>
     {% endif %}
-    {% if item.identity and not item.quotas.exists %}
+    {% if object.identity and not object.quotas.exists %}
         <div class="alert alert-warning">
         	{% blocktrans trimmed %}
                 Please note, that your product  will <strong>not</strong> be available for sale until you added your

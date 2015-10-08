@@ -39,18 +39,6 @@ cat_tickets = ItemCategory.objects.create(
 cat_merch = ItemCategory.objects.create(
     event=event, name='Merchandise'
 )
-size_prop = Property.objects.create(
-    event=event, name='Size'
-)
-size_s = PropertyValue.objects.create(
-    prop=size_prop, value='S'
-)
-size_l = PropertyValue.objects.create(
-    prop=size_prop, value='L'
-)
-size_m = PropertyValue.objects.create(
-    prop=size_prop, value='M'
-)
 question = Question.objects.create(
     event=event, question='Age',
     type=Question.TYPE_NUMBER, required=False
@@ -64,7 +52,18 @@ item_shirt = Item.objects.create(
     event=event, category=cat_merch, name='T-Shirt',
     default_price=15, tax_rate=19
 )
-item_shirt.properties.add(size_prop)
+size_prop = Property.objects.create(
+    event=event, name='Size', item=item_shirt
+)
+size_s = PropertyValue.objects.create(
+    prop=size_prop, value='S'
+)
+size_l = PropertyValue.objects.create(
+    prop=size_prop, value='L'
+)
+size_m = PropertyValue.objects.create(
+    prop=size_prop, value='M'
+)
 var_s = ItemVariation.objects.create(item=item_shirt)
 var_s.values.add(size_s)
 var_m = ItemVariation.objects.create(item=item_shirt)

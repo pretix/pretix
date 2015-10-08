@@ -124,7 +124,6 @@ class ItemFormGeneral(VersionedModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = self.instance.event.categories.current.all()
-        self.fields['properties'].queryset = self.instance.event.properties.current.all()
 
     class Meta:
         model = Item
@@ -138,7 +137,6 @@ class ItemFormGeneral(VersionedModelForm):
             'picture',
             'default_price',
             'tax_rate',
-            'properties',
         ]
 
 

@@ -217,7 +217,8 @@ class TimeRestrictionTest(TestCase):
         self.assertFalse(result[0]['available'])
 
     def test_variation_specific(self):
-        self.item.properties.add(self.property)
+        self.property.item = self.item
+        self.property.save()
 
         r1 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),
@@ -242,7 +243,8 @@ class TimeRestrictionTest(TestCase):
                 self.assertTrue(v['available'])
 
     def test_variation_specifics(self):
-        self.item.properties.add(self.property)
+        self.property.item = self.item
+        self.property.save()
 
         r1 = TimeRestriction.objects.create(
             timeframe_from=now() - timedelta(days=5),

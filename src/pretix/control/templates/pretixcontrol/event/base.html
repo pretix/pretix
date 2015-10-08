@@ -80,12 +80,6 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'control:event.items.properties' organizer=request.event.organizer.slug event=request.event.slug %}"
-                            {% if "event.items.properties" in url_name %}class="active"{% endif %}>
-                        {% trans "Properties" %}
-                    </a>
-                </li>
-                <li>
                     <a href="{% url 'control:event.items.questions' organizer=request.event.organizer.slug event=request.event.slug %}"
                             {% if "event.items.questions" in url_name %}class="active"{% endif %}>
                         {% trans "Questions" %}

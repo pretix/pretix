@@ -36,7 +36,8 @@ class ItemVariationsTest(TestCase):
 
     def test_variationdict(self):
         i = Item.objects.create(event=self.event, name='Dummy', default_price=0)
-        i.properties.add(self.p_size)
+        self.p_size.item = i
+        self.p_size.save()
         iv = ItemVariation.objects.create(item=i)
         iv.values.add(self.pv_size_s)
 
@@ -83,7 +84,8 @@ class ItemVariationsTest(TestCase):
         self.assertEqual(v[0], {})
 
         # One property, no variations
-        i.properties.add(self.p_size)
+        self.p_size.item = i
+        self.p_size.save()
         v = i.get_all_variations()
         self.assertIs(type(v), list)
         self.assertEqual(len(v), 3)
@@ -116,7 +118,8 @@ class ItemVariationsTest(TestCase):
         self.assertEqual(num_variations, 1)
 
         # Two properties, one variation
-        i.properties.add(self.p_color)
+        self.p_color.item = i
+        self.p_color.save()
         iv.values.add(self.pv_color_black)
         v = i.get_all_variations()
         self.assertIs(type(v), list)
@@ -150,14 +153,14 @@ class VersionableTestCase(TestCase):
             organizer=o, name='Dummy', slug='dummy',
             date_from=now(),
         )
-        old = Item.objects.create(event=event, name='Dummy', default_price=14)
-        prop = Property.objects.create(event=event, name='Size')
-        old.properties.add(prop)
-        new = old.clone_shallow()
-        self.assertIsNone(new.version_end_date)
-        self.assertIsNotNone(old.version_end_date)
-        self.assertEqual(new.properties.count(), 0)
-        self.assertEqual(old.properties.count(), 1)
+        item = Item.objects.create(event=event, name='Dummy', default_price=14)
+        quota_old = Quota.objects.create(event=event, name='All', size=5)
+        quota_old.items.add(item)
+        quota_new = quota_old.clone_shallow()
+        self.assertIsNone(quota_new.version_end_date)
+        self.assertIsNotNone(quota_old.version_end_date)
+        self.assertEqual(quota_new.items.count(), 0)
+        self.assertEqual(quota_old.items.count(), 1)
 
 
 class UserTestCase(TestCase):
@@ -198,13 +201,12 @@ class BaseQuotaTestCase(TestCase):
         self.item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
                                          admission=True)
         self.item2 = Item.objects.create(event=self.event, name="T-Shirt", default_price=23)
-        p = Property.objects.create(event=self.event, name='Size')
+        p = Property.objects.create(event=self.event, name='Size', item=self.item2)
         pv1 = PropertyValue.objects.create(prop=p, value='S')
         PropertyValue.objects.create(prop=p, value='M')
         PropertyValue.objects.create(prop=p, value='L')
         self.var1 = ItemVariation.objects.create(item=self.item2)
         self.var1.values.add(pv1)
-        self.item2.properties.add(p)
 
 
 class QuotaTestCase(BaseQuotaTestCase):
