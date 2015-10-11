@@ -355,4 +355,4 @@ class ExportView(EventPermissionRequiredMixin, TemplateView):
         cf.expires = now() + timedelta(days=3)
         cf.save()
         export(self.request.event.id, str(cf.id), self.exporter.identifier, self.exporter.form.cleaned_data)
-        return redirect(reverse('presale:cachedfile.download', kwargs={'id': cf.id}))
+        return redirect(reverse('cachedfile.download', kwargs={'id': str(cf.id)}))

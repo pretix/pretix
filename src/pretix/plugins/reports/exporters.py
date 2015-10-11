@@ -9,17 +9,26 @@ from pretix.base.exporter import BaseExporter
 from pretix.base.services.stats import order_overview
 
 
-class Report:
+class Report(BaseExporter):
     name = "report"
 
+    def verbose_name(self) -> str:
+        raise NotImplementedError()
+
+    def identifier(self) -> str:
+        raise NotImplementedError()
+
     def __init__(self, event):
-        self.event = event
+        super().__init__(event)
 
     @property
     def pagesize(self):
         from reportlab.lib import pagesizes
 
         return pagesizes.portrait(pagesizes.A4)
+
+    def render(self, form_data):
+        return 'report-%s.pdf' % self.event.slug, 'application/pdf', self.create()
 
     def get_filename(self):
         return "%s-%s.pdf" % (self.name, now().strftime("%Y-%m-%d-%H-%M-%S"))
@@ -104,6 +113,8 @@ class Report:
 
 class OverviewReport(Report):
     name = "overview"
+    identifier = 'pdfreport'
+    verbose_name = _('Order overview (PDF)')
 
     @property
     def pagesize(self):
@@ -197,12 +208,3 @@ class OverviewReport(Report):
         table.setStyle(TableStyle(tstyledata))
         story.append(table)
         return story
-
-
-class OverviewReportExporter(BaseExporter):
-    identifier = 'pdfreport'
-    verbose_name = _('Order overview (PDF)')
-
-    def render(self, form_data):
-        report = OverviewReport(self.event)
-        return 'report-%s.pdf' % self.event.slug, 'application/pdf', report.create()
