@@ -9,12 +9,11 @@ from pretix.base.models import (
     CartPosition, Event, EventLock, Order, OrderPosition, Quota,
 )
 from pretix.base.payment import BasePaymentProvider
-from pretix.base.services.cart import CartError
 from pretix.base.services.mail import mail
 from pretix.base.signals import (
     order_paid, order_placed, register_payment_providers,
 )
-from pretix.helpers.urls import build_absolute_uri
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 error_messages = {
     'unavailable': _('Some of the products you selected were no longer available. '
@@ -68,9 +67,7 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
         {
             'order': order,
             'event': order.event,
-            'url': build_absolute_uri('presale:event.order', kwargs={
-                'event': order.event.slug,
-                'organizer': order.event.organizer.slug,
+            'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
                 'order': order.code,
                 'secret': order.secret
             }),
@@ -189,9 +186,7 @@ def _perform_order(event: Event, payment_provider: BasePaymentProvider, position
             {
                 'order': order,
                 'event': event,
-                'url': build_absolute_uri('presale:event.order', kwargs={
-                    'event': event.slug,
-                    'organizer': event.organizer.slug,
+                'url': build_absolute_uri(event, 'presale:event.order', kwargs={
                     'order': order.code,
                     'secret': order.secret
                 }),

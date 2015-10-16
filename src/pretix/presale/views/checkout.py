@@ -1,10 +1,10 @@
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View
 
+from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.checkoutflow import get_checkout_flow
 from pretix.presale.views import CartMixin
 
@@ -14,10 +14,7 @@ class CheckoutView(CartMixin, View):
         self.request = request
         if not self.positions and "async_id" not in request.GET:
             messages.error(request, _("Your cart is empty"))
-            return redirect(reverse('presale:event.index', kwargs={
-                'organizer': self.request.event.organizer.slug,
-                'event': self.request.event.slug
-            }))
+            return redirect(eventreverse(self.request.event, 'presale:event.index'))
 
         flow = get_checkout_flow(self.request.event)
         for step in flow:

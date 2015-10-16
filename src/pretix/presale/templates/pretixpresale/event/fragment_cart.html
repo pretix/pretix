@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load eventurl %}
 {% for line in cart.positions %}
     <div class="row-fluid cart-row">
         <div class="col-md-4 col-xs-6">
@@ -21,7 +22,7 @@
         </div>
         <div class="col-md-2 col-xs-6 count">
             {% if editable %}
-            <form action="{% url "presale:event.cart.remove" event=event.slug organizer=event.organizer.slug %}"
+            <form action="{% eventurl event "presale:event.cart.remove" %}"
                     method="post">
                 {% csrf_token %}
                 {% if line.variation %}
@@ -36,7 +37,7 @@
             {% endif %}
             {{ line.count }}
             {% if editable %}
-            <form action="{% url "presale:event.cart.add" event=event.slug organizer=event.organizer.slug %}"
+            <form action="{% eventurl event "presale:event.cart.add" %}"
                 method="post" data-asynctask>
                 {% csrf_token %}
                 {% if line.variation %}

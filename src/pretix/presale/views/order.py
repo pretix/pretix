@@ -14,6 +14,7 @@ from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
+from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import CartMixin, EventViewMixin
 from pretix.presale.views.questions import QuestionsViewMixin
 
@@ -36,9 +37,7 @@ class OrderDetailMixin:
                 return provider
 
     def get_order_url(self):
-        return reverse('presale:event.order', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
+        return eventreverse(self.request.event, 'presale:event.order', kwargs={
             'order': self.order.code,
             'secret': self.order.secret
         })
@@ -132,9 +131,7 @@ class OrderPay(EventViewMixin, OrderDetailMixin, TemplateView):
         return self.payment_provider.payment_form_render(self.request)
 
     def get_confirm_url(self):
-        return reverse('presale:event.order.pay.confirm', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
+        return eventreverse(self.request.event, 'presale:event.order.pay.confirm', kwargs={
             'order': self.order.code,
             'secret': self.order.secret
         })
@@ -169,9 +166,7 @@ class OrderPayDo(EventViewMixin, OrderDetailMixin, TemplateView):
         return ctx
 
     def get_payment_url(self):
-        return reverse('presale:event.order.pay', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
+        return eventreverse(self.request.event, 'presale:event.order.pay', kwargs={
             'order': self.order.code,
             'secret': self.order.secret
         })
@@ -194,9 +189,7 @@ class OrderPayComplete(EventViewMixin, OrderDetailMixin, View):
         return redirect(resp or self.get_order_url() + '?paid=yes')
 
     def get_payment_url(self):
-        return reverse('presale:event.order.pay', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
+        return eventreverse(self.request.event, 'presale:event.order.pay', kwargs={
             'order': self.order.code,
             'secret': self.order.secret
         })

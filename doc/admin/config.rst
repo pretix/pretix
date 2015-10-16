@@ -27,8 +27,6 @@ Example::
     instance_name=pretix.de
     url=http://localhost
     currency=EUR
-    cookiedomain=.pretix.de
-    securecookie=on
     datadir=/data
     plugins_default=pretix.plugins.sendmail,pretix.plugins.statistics
 
@@ -40,13 +38,6 @@ Example::
 
 ``currency``
     The default currency as a three-letter code. Defaults to ``EUR``.
-
-``cookiedomain``
-    The domain to be used for session cookies, csrf protection cookies and locale cookies.
-    Empty by default.
-
-``securecookie``
-    Set the ``secure`` and ``httponly`` flags on session cookies. Off by default.
 
 ``datadir``
     The local path to a data directory that will be used for storing user uploads and similar

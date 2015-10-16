@@ -1,5 +1,6 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
+{% load eventurl %}
 {% block title %}{% trans "Pay order" %}{% endblock %}
 {% block content %}
     <h2>
@@ -16,7 +17,7 @@
         <div class="row checkout-button-row">
             <div class="col-md-4">
                 <a class="btn btn-block btn-default btn-lg"
-                   href="{% url "presale:event.order" event=request.event.slug organizer=request.event.organizer.slug secret=order.secret order=order.code %}">
+                   href="{% eventurl request.event "presale:event.order" secret=order.secret order=order.code %}">
                     {% trans "Cancel" %}
                 </a>
             </div>

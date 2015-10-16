@@ -8,6 +8,7 @@ from django.utils.translation import ugettext as __, ugettext_lazy as _
 
 from pretix.base.models import Event, Order
 from pretix.helpers.urls import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal.payment import Paypal
 
 logger = logging.getLogger('pretix.plugins.paypal')
@@ -23,10 +24,7 @@ def success(request):
         request.session['payment_paypal_payer'] = payer
         try:
             event = Event.objects.current.get(identity=request.session['payment_paypal_event'])
-            return redirect('presale:event.checkout',
-                            event=event.slug,
-                            organizer=event.organizer.slug,
-                            step='confirm')
+            return redirect(eventreverse(event, 'presale:event.checkout', kwargs={'step': 'confirm'}))
         except Event.DoesNotExist:
             pass  # TODO: Handle this
     else:
@@ -38,10 +36,7 @@ def abort(request):
     messages.error(request, _('It looks like you cancelled the PayPal payment'))
     try:
         event = Event.objects.current.get(identity=request.session['payment_paypal_event'])
-        return redirect('presale:event.checkout',
-                        event=event.slug,
-                        organizer=event.organizer.slug,
-                        step='payment')
+        return redirect(eventreverse(event, 'presale:event.checkout', kwargs={'step': 'payment'}))
     except Event.DoesNotExist:
         pass  # TODO: Handle this
 
@@ -103,8 +98,7 @@ def retry(request, order):
         if resp:
             return redirect(resp)
 
-    return redirect('presale:event.order',
-                    event=order.event.slug,
-                    organizer=order.event.organizer.slug,
-                    order=order.code,
-                    secret=order.secret) + '?paid=yes'
+    return redirect(eventreverse(order.event, 'presale:event.order', kwargs={
+        'order': order.code,
+        'secret': order.secret
+    }) + '?paid=yes')

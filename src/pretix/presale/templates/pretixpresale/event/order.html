@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load eventurl %}
 {% block title %}{% trans "Order details" %}{% endblock %}
 {% block content %}
     {% if "thanks" in request.GET or "paid" in request.GET %}
@@ -32,7 +33,7 @@
             </div>
             <div class="panel-body">
                 {% if can_retry %}
-                    <a href="{% url "presale:event.order.pay" organizer=request.event.organizer.slug event=request.event.slug secret=order.secret order=order.code %}"
+                    <a href="{% eventurl event "presale:event.order.pay" secret=order.secret order=order.code %}"
                             class="btn btn-primary pull-right"><i class="fa fa-money"></i> {% trans "Complete payment" %}
                     </a>
                 {% endif %}
@@ -59,7 +60,7 @@
                         {% endblocktrans %}
                     </p>
                     {% for b in download_buttons %}
-                        <a href="{% url "presale:event.order.download" organizer=request.event.organizer.slug event=request.event.slug secret=order.secret order=order.code output=b.identifier %}"
+                        <a href="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier %}"
                                 class="btn btn-primary">
                             <span class="fa {{ b.icon }}"></span> {{ b.text }}
                         </a>
@@ -76,7 +77,7 @@
         <div class="panel-heading">
             {% if order.can_modify_answers %}
                 <div class="pull-right">
-                    <a href="{% url "presale:event.order.modify" organizer=request.event.organizer.slug event=request.event.slug secret=order.secret order=order.code %}">
+                    <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}">
                         <span class="fa fa-edit"></span>
                         {% trans "Change details" %}
                     </a>
@@ -94,7 +95,7 @@
         <div class="row">
             <div class="col-md-12 text-right">
                 <p>
-                    <a href="{% url 'presale:event.order.cancel' event=request.event.slug organizer=request.event.organizer.slug secret=order.secret order=order.code %}"
+                    <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
                             class="btn btn-danger">
                         <span class="fa fa-remove"></span>
                         {% trans "Cancel order" %}

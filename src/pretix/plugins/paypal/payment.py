@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as __, ugettext_lazy as _
 from pretix.base.models import Quota
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.orders import mark_order_paid
-from pretix.helpers.urls import build_absolute_uri
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 logger = logging.getLogger('pretix.plugins.paypal')
 
@@ -87,8 +87,8 @@ class Paypal(BasePaymentProvider):
                 "payment_method": "paypal",
             },
             "redirect_urls": {
-                "return_url": build_absolute_uri('plugins:paypal:return'),
-                "cancel_url": build_absolute_uri('plugins:paypal:abort'),
+                "return_url": build_absolute_uri(request.event, 'plugins:paypal:return'),
+                "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort'),
             },
             "transactions": [
                 {

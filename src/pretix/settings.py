@@ -65,7 +65,7 @@ PRETIX_PLUGINS_DEFAULT = config.get('pretix', 'plugins_default',
 
 DEFAULT_CURRENCY = config.get('pretix', 'currency', fallback='EUR')
 
-ALLOWED_HOSTS = config.get('django', 'hosts', fallback='localhost').split(',')
+ALLOWED_HOSTS = ['*']
 
 LANGUAGE_CODE = config.get('locale', 'default', fallback='en')
 TIME_ZONE = config.get('locale', 'timezone', fallback='UTC')
@@ -78,11 +78,6 @@ EMAIL_HOST_USER = config.get('mail', 'user', fallback='')
 EMAIL_HOST_PASSWORD = config.get('mail', 'password', fallback='')
 
 ADMINS = [('Admin', n) for n in config.get('mail', 'admins', fallback='').split(",") if n]
-
-SESSION_COOKIE_SECURE = SESSION_COOKIE_HTTPONLY = config.getboolean(
-    'pretix', 'securecookie', fallback=False)
-LANGUAGE_COOKIE_DOMAIN = SESSION_COOKIE_DOMAIN = CSRF_COOKIE_DOMAIN = config.get(
-    'pretix', 'cookiedomain', fallback=None)
 
 CACHES = {
     'default': {
@@ -97,6 +92,8 @@ if HAS_MEMCACHED:
         'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
         'LOCATION': config.get('memcached', 'location'),
     }
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
 HAS_REDIS = config.has_option('redis', 'location')
 if HAS_REDIS:
@@ -126,6 +123,7 @@ STATIC_ROOT = '_static'
 SESSION_COOKIE_NAME = 'pretix_session'
 LANGUAGE_COOKIE_NAME = 'pretix_language'
 CSRF_COOKIE_NAME = 'pretix_csrftoken'
+SESSION_COOKIE_HTTPONLY = True
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -136,6 +134,7 @@ INSTALLED_APPS = (
     'pretix.base',
     'pretix.control',
     'pretix.presale',
+    'pretix.multidomain',
     'compressor',
     'bootstrap3',
     'debug_toolbar.apps.DebugToolbarConfig',
@@ -153,9 +152,10 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'pretix.multidomain.middlewares.MultiDomainMiddleware',
+    'pretix.multidomain.middlewares.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'pretix.multidomain.middlewares.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -272,6 +272,7 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.SUCCESS: 'alert-success',
 }
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 THUMBNAIL_ALIASES = {
     '': {

@@ -2,12 +2,12 @@ from datetime import timedelta
 from itertools import groupby
 
 from django.contrib.auth.views import redirect_to_login
-from django.core.urlresolvers import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
 from pretix.base.models import CartPosition
 from pretix.base.signals import register_payment_providers
+from pretix.multidomain.urlreverse import eventreverse
 
 
 def login_required(view_func):
@@ -15,12 +15,7 @@ def login_required(view_func):
         if request.user.is_authenticated():
             return view_func(request, *args, **kwargs)
         path = request.path
-        return redirect_to_login(
-            path, reverse('presale:event.checkout.login', kwargs={
-                'organizer': request.event.organizer.slug,
-                'event': request.event.slug,
-            }), 'next'
-        )
+        return redirect_to_login(path, eventreverse(request.event, 'presale:event.checkout.login'), 'next')
 
     return _wrapped_view
 

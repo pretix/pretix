@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load eventurl %}
 {% block title %}{% trans "Confirm order" %}{% endblock %}
 {% block content %}
     <h2>{% trans "Confirm order" %}</h2>
@@ -11,7 +12,7 @@
             <div class="panel-heading">
                 <div class="pull-right">
                     <a href="
-                    {% url "presale:event.index" organizer=request.event.organizer.slug  event=request.event.slug %}">
+                    {% eventurl request.event "presale:event.index" %}">
                         <span class="fa fa-edit"></span>
                         {% trans "Modify" %}
                     </a>
@@ -41,7 +42,7 @@
                 <div class="panel-heading">
                     {% if payment_provider.identifier != "free" %}
                         <div class="pull-right">
-                            <a href="{% url "presale:event.checkout" step="payment" organizer=request.event.organizer.slug  event=request.event.slug %}">
+                            <a href="{% eventurl request.event "presale:event.checkout" step="payment" %}">
                                 <span class="fa fa-edit"></span>
                                 {% trans "Modify" %}
                             </a>
@@ -59,7 +60,7 @@
                 <div class="panel panel-primary panel-contact">
                     <div class="panel-heading">
                         <div class="pull-right">
-                            <a href="{% url "presale:event.checkout" step="questions" organizer=request.event.organizer.slug  event=request.event.slug %}">
+                            <a href="{% eventurl request.event "presale:event.checkout" step="questions" %}">
                                 <span class="fa fa-edit"></span>
                                 {% trans "Modify" %}
                             </a>

@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
@@ -8,6 +7,7 @@ from django.views.generic import View
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, remove_items_from_cart,
 )
+from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import EventViewMixin
 from pretix.presale.views.async import AsyncAction
 
@@ -18,10 +18,7 @@ class CartActionMixin:
         if "next" in self.request.GET and '://' not in self.request.GET:
             return self.request.GET.get('next')
         else:
-            return reverse('presale:event.index', kwargs={
-                'event': self.request.event.slug,
-                'organizer': self.request.event.organizer.slug,
-            })
+            return eventreverse(self.request.event, 'presale:event.index')
 
     def get_success_url(self, value=None):
         return self.get_next_url()

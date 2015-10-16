@@ -31,6 +31,7 @@ for app in apps.get_app_configs():
             pluginpatterns.append(
                 url(r'', include(urlmod, namespace=app.label))
             )
+
 urlpatterns.append(
     url(r'', include(pluginpatterns, namespace='plugins'))
 )

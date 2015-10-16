@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
 from django.core.validators import EmailValidator
 from django.db.models import Q, Sum
 from django.http import HttpResponseNotAllowed
@@ -14,6 +13,7 @@ from django.views.generic.base import TemplateResponseMixin
 from pretix.base.models import CartPosition, Order
 from pretix.base.services.orders import OrderError, perform_order
 from pretix.base.signals import register_payment_providers
+from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import ContactForm
 from pretix.presale.signals import checkout_flow_steps
 from pretix.presale.views import CartMixin
@@ -59,32 +59,19 @@ class BaseCheckoutFlowStep:
         return HttpResponseNotAllowed([])
 
     def get_step_url(self):
-        return reverse(
-            'presale:event.checkout',
-            kwargs={
-                'event': self.event.slug,
-                'organizer': self.event.organizer.slug,
-                'step': self.identifier
-            }
-        )
+        return eventreverse(self.event, 'presale:event.checkout', kwargs={'step': self.identifier})
 
     def get_prev_url(self, request):
         prev = self.get_prev_applicable(request)
         if not prev:
-            return reverse('presale:event.index', kwargs={
-                'event': self.request.event.slug,
-                'organizer': self.request.event.organizer.slug
-            })
+            return eventreverse(self.event, 'presale:event.index')
         else:
             return prev.get_step_url()
 
     def get_next_url(self, request):
         n = self.get_next_applicable(request)
         if not n:
-            return reverse('presale:event.checkout.confirm', kwargs={
-                'event': self.request.event.slug,
-                'organizer': self.request.event.organizer.slug
-            })
+            return eventreverse(self.event, 'presale:event.checkout.confirm')
         else:
             return n.get_step_url()
 
@@ -342,9 +329,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         return self.get_step_url()
 
     def get_order_url(self, order):
-        return reverse('presale:event.order.pay.complete', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
+        return eventreverse(self.request.event, 'presale:event.order.pay.complete', kwargs={
             'order': order.code,
             'secret': order.secret
         })

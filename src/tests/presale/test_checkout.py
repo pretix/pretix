@@ -34,7 +34,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('email', 'admin@localhost')
 
     def test_empty_cart(self):
-        response = self.client.get('/%s/%s/checkout/' % (self.orga.slug, self.event.slug), follow=True)
+        response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 

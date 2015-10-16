@@ -1,10 +1,10 @@
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.urlresolvers import get_script_prefix, resolve
 from django.http import Http404
-from django.shortcuts import resolve_url
+from django.shortcuts import redirect, resolve_url
 from django.utils.encoding import force_str
 from django.utils.translation import ugettext as _
 
@@ -28,7 +28,13 @@ class PermissionMiddleware:
     def process_request(self, request):
         url = resolve(request.path_info)
         url_name = url.url_name
-        if not request.path.startswith(get_script_prefix() + 'control') or url_name in self.EXCEPTIONS:
+        if not request.path.startswith(get_script_prefix() + 'control'):
+            # This middleware should only touch the /control subpath
+            return
+        if hasattr(request, 'domain'):
+            # If the user is on a organizer's subdomain, he sould be redirected to pretix
+            return redirect(urljoin(settings.SITE_URL, request.get_full_path()))
+        if url_name in self.EXCEPTIONS:
             return
         if not request.user.is_authenticated():
             # Taken from django/contrib/auth/decorators.py
