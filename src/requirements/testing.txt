@@ -9,6 +9,7 @@ selenium
 pytest
 pytest-django
 isort
+pytest-mock
 # PyVirtualDisplay
 # -e git+https://github.com/pretix/sauceclient.git@master#egg=sauceclient
 # travis
