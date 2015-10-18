@@ -9,3 +9,4 @@ exclude_lines =
 	der __repr__
 	if settings.DEBUG
 	NOQA
+	NotImplementedError
