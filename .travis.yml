@@ -4,7 +4,7 @@ python:
     - "3.4"
 install:
     - pip install -U pip wheel
-    - pip install -q -r src/requirements.txt
+    - pip install -q -r src/requirements.txt -r src/requirements/dev.txt
     - npm install -g less@2.5.0
 before_script:
     - cd src
