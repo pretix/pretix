@@ -98,7 +98,12 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             return self.get(*self.args, **self.kwargs)
 
     def process_mt940(self):
-        return self.confirm_view(mt940import.parse(self.request.FILES.get('file')))
+        try:
+            return self.confirm_view(mt940import.parse(self.request.FILES.get('file')))
+        except:
+            logger.exception('Failed to import MT940 file')
+            messages.error(self.request, _('We were unable to process your input.'))
+            return self.redirect_back()
 
     @cached_property
     def hbci_form(self):
@@ -129,8 +134,8 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             hint = self.request.event.settings.get('banktransfer_csvhint', as_type=dict)
             try:
                 parsed = csvimport.parse(data, hint)
-            except csvimport.HintMismatchError as e:  # TODO: narrow down
-                logger.error('Import using stored hint failed: ' + str(e))
+            except csvimport.HintMismatchError:  # TODO: narrow down
+                logger.exception('Import using stored hint failed')
             else:
                 return self.confirm_view(parsed)
 
