@@ -1,5 +1,8 @@
-"use strict";
+/*global $*/
+
 $(function () {
+    "use strict";
+
     var nested_formset_config = {
         form: '[data-nested-formset-form]',
         emptyForm: 'script[type=form-template][data-nested-formset-empty-form]',
