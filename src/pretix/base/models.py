@@ -260,12 +260,28 @@ class Organizer(Versionable):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        obj = super().save(*args, **kwargs)
+        self.get_cache().clear()
+        return obj
+
     @cached_property
     def settings(self) -> SettingsProxy:
         """
         Returns an object representing this organizer's settings
         """
         return SettingsProxy(self, type=OrganizerSetting)
+
+    def get_cache(self) -> "pretix.base.cache.ObjectRelatedCache":
+        """
+        Returns an :py:class:`ObjectRelatedCache` object. This behaves equivalent to
+        Django's built-in cache backends, but puts you into an isolated environment for
+        this organizer, so you don't have to prefix your cache keys. In addition, the cache
+        is being cleared every time the organizer changes.
+        """
+        from pretix.base.cache import ObjectRelatedCache
+
+        return ObjectRelatedCache(self)
 
 
 class OrganizerPermission(Versionable):
@@ -414,16 +430,16 @@ class Event(Versionable):
             "DATETIME_FORMAT" if self.settings.show_times else "DATE_FORMAT"
         )
 
-    def get_cache(self) -> "pretix.base.cache.EventRelatedCache":
+    def get_cache(self) -> "pretix.base.cache.ObjectRelatedCache":
         """
-        Returns an :py:class:`EventRelatedCache` object. This behaves equivalent to
+        Returns an :py:class:`ObjectRelatedCache` object. This behaves equivalent to
         Django's built-in cache backends, but puts you into an isolated environment for
         this event, so you don't have to prefix your cache keys. In addition, the cache
         is being cleared every time the event or one of its related objects change.
         """
-        from pretix.base.cache import EventRelatedCache
+        from pretix.base.cache import ObjectRelatedCache
 
-        return EventRelatedCache(self)
+        return ObjectRelatedCache(self)
 
     @cached_property
     def settings(self) -> SettingsProxy:
