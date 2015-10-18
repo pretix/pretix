@@ -1,1 +1,13 @@
 django-debug-toolbar>=1.3.0,<2.0
+# Testing requirements
+pyflakes
+pep8==1.5.7  # exact requirement by flake8 2.4.0
+pep8-naming
+flake8
+coveralls
+coverage
+selenium
+pytest
+pytest-django
+isort
+pytest-mock
