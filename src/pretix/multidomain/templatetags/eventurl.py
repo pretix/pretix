@@ -53,7 +53,7 @@ def eventurl(parser, token):
     kwargs = {}
     asvar = None
     bits = bits[3:]
-    if len(bits) >= 3 and bits[-2] == 'as':
+    if len(bits) >= 2 and bits[-2] == 'as':
         asvar = bits[-1]
         bits = bits[:-2]
 
