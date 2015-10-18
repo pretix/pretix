@@ -86,3 +86,12 @@ def test_cookie_domain_on_main_domain(env, client):
     assert r.status_code == 200
     assert r.client.cookies['pretix_csrftoken']['domain'] == 'example.com'
     assert r.client.cookies['pretix_session']['domain'] == 'example.com'
+
+
+@pytest.mark.django_db
+def test_with_forwarded_host(env, client):
+    settings.USE_X_FORWARDED_HOST = True
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    r = client.get('/2015/', HTTP_X_FORWARDED_HOST='foobar')
+    assert r.status_code == 200
+    settings.USE_X_FORWARDED_HOST = False

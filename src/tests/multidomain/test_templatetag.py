@@ -1,6 +1,7 @@
 import pytest
 from django.conf import settings
-from django.template import Context, Template
+from django.core.urlresolvers import NoReverseMatch
+from django.template import Context, Template, TemplateSyntaxError
 from django.utils.timezone import now
 
 from pretix.base.models import Event, Organizer
@@ -54,3 +55,33 @@ def test_event_custom_domain_kwargs(env):
         'event': env[1]
     })).strip()
     assert rendered == 'http://foobar/2015/checkout/payment/'
+
+
+@pytest.mark.django_db
+def test_only_kwargs(env):
+    with pytest.raises(TemplateSyntaxError):
+        Template("{% load eventurl %} {% eventurl event 'presale:event.checkout' step %}")
+
+
+@pytest.mark.django_db
+def test_invalid_url(env):
+    tpl = Template("{% load eventurl %} {% eventurl event 'presale:event.foo' %}")
+    with pytest.raises(NoReverseMatch):
+        tpl.render(Context({
+            'event': env[1]
+        })).strip()
+
+
+@pytest.mark.django_db
+def test_without_event(env):
+    with pytest.raises(TemplateSyntaxError):
+        Template("{% load eventurl %} {% eventurl 'presale:event.index' %}")
+
+
+@pytest.mark.django_db
+def test_save_as(env):
+    tpl = Template("{% load eventurl %} {% eventurl event 'presale:event.index' as u %}{{ u }}")
+    rendered = tpl.render(Context({
+        'event': env[1]
+    })).strip()
+    assert rendered == '/mrmcd/2015/'
