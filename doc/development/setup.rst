@@ -37,7 +37,7 @@ Working with the code
 The first thing you need are all the main application's dependencies::
 
     cd src/
-    pip install -r requirements.txt requirements/dev.txt
+    pip install -r requirements.txt -r requirements/dev.txt
 
 Then, create the local database::
 
