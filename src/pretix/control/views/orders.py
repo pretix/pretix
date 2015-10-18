@@ -15,10 +15,10 @@ from django.views.generic import DetailView, ListView, TemplateView, View
 from pretix.base.models import (
     CachedFile, CachedTicket, EventLock, Item, Order, Quota,
 )
+from pretix.base.services import tickets
 from pretix.base.services.export import export
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.services.stats import order_overview
-from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     register_data_exporters, register_payment_providers,
     register_ticket_outputs,
@@ -232,7 +232,8 @@ class OrderDownload(OrderView):
             cf.save()
             ct.cachedfile = cf
         ct.save()
-        generate(self.order.identity, self.output.identifier)
+        if not ct.cachedfile.file.name:
+            tickets.generate(self.order.identity, self.output.identifier)
         return redirect(reverse('cachedfile.download', kwargs={'id': ct.cachedfile.id}))
 
 
