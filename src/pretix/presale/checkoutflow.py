@@ -41,13 +41,13 @@ class BaseCheckoutFlowStep:
         raise NotImplementedError()
 
     def get_next_applicable(self, request):
-        if self._next:
+        if hasattr(self, '_next') and self._next:
             if not self._next.is_applicable(request):
                 return self._next.get_next_applicable(request)
             return self._next
 
     def get_prev_applicable(self, request):
-        if self._previous:
+        if hasattr(self, '_previous') and self._previous:
             if not self._previous.is_applicable(request):
                 return self._previous.get_prev_applicable(request)
             return self._previous
@@ -70,9 +70,7 @@ class BaseCheckoutFlowStep:
 
     def get_next_url(self, request):
         n = self.get_next_applicable(request)
-        if not n:
-            return eventreverse(self.event, 'presale:event.checkout.confirm')
-        else:
+        if n:
             return n.get_step_url()
 
 
