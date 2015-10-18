@@ -5,7 +5,7 @@ from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -198,7 +198,7 @@ class OrderTransition(OrderView):
                 'payment': self.payment_provider.order_control_refund_render(self.order),
             })
         else:
-            return HttpResponse(status=405)
+            return HttpResponseNotAllowed(['POST'])
 
 
 class OrderDownload(OrderView):
