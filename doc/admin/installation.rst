@@ -30,6 +30,13 @@ Optionally, you can speed up pretix by adding
 
 * A memcached instance
 * A redis database
+* A celery background task-queue (using redis or RabbitMQ for messaging)
+
+Depending on your choice at this options, you should also install ``pip install -r requirements/<service>.txt``
+where ``<service>`` is one of ``celery``, ``memcached``, ``mysql``, ``postgres`` or ``redis``.
+
+If you want to use one of the payment providers shipping with pretix, you should also install
+``pip install -r requirements/<plugin>.txt`` where ``<plugin>`` is one of ``banktransfer``, ``paypal`` or ``stripe``.
 
 We will provide a step-by-step tutorial with the first stable release, but all configuration
 already :ref:`is documented <config>`.
