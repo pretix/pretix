@@ -250,7 +250,7 @@ class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
         for gridrow in product(*[prop.values.current.all() for prop in properties[2:]]):
             if len(gridrow) > 0:
                 output.append('<strong>')
-                output.append(", ".join([value.value for value in gridrow]))
+                output.append(", ".join([str(value.value) for value in gridrow]))
                 output.append('</strong>')
             output.append('<table class="table"><thead><tr><th></th>')
             for val2 in prop2v:
