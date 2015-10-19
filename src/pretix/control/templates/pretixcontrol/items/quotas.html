@@ -31,7 +31,7 @@
                         </ul>
                     </td>
                     <td>{{ q.size }}</td>
-                    <td></td>
+                    <td>{% include "pretixcontrol/items/fragment_quota_availability.html" with availability=q.availability %}</td>
                     <td class="text-right"><a href="{% url "control:event.items.quotas.delete" organizer=request.event.organizer.slug event=request.event.slug quota=q.identity %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></td>
                 </tr>
                 {% endfor %}
