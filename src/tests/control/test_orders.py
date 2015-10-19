@@ -336,7 +336,14 @@ def test_order_extend_expired_quota_empty(client, env):
 
 
 @pytest.mark.django_db
-def test_order_with_slug(client, env):
+def test_order_go_lowercase(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/event/dummy/dummy/orders/go?code=DuMmyfoO')
+    assert response['Location'].endswith('/control/event/dummy/dummy/orders/FOO/')
+
+
+@pytest.mark.django_db
+def test_order_go_with_slug(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/orders/go?code=DUMMYFOO')
     assert response['Location'].endswith('/control/event/dummy/dummy/orders/FOO/')
