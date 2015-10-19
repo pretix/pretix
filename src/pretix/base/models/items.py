@@ -1,7 +1,8 @@
 from itertools import product
 
 from django.db import models
-from django.db.models import Q, Count
+from django.db.models import Q, Case, Count, Sum, When
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from versions.models import VersionedForeignKey, VersionedManyToManyField
@@ -808,15 +809,55 @@ class Quota(Versionable):
         :returns: a tuple where the first entry is one of the ``Quota.AVAILABILITY_`` constants
                   and the second is the number of available tickets.
         """
-        from pretix.base.models import Order, OrderPosition, CartPosition
-        # TODO: These lookups are highly inefficient. However, we'll wait with optimizing
-        # until Django 1.8 is released, as the following feature might make it a
-        # lot easier:
-        #       https://docs.djangoproject.com/en/1.8/ref/models/conditional-expressions/
+        size_left = self.size
         # TODO: Test for interference with old versions of Item-Quota-relations, etc.
         # TODO: Prevent corner-cases like people having ordered an item before it got
-        #       its first variationsadded
-        quotalookup = (
+        # its first variationsadde
+        orders = self.count_orders()
+
+        size_left -= orders['paid']
+        if size_left <= 0:
+            return Quota.AVAILABILITY_GONE, 0
+
+        size_left -= orders['pending']
+        if size_left <= 0:
+            return Quota.AVAILABILITY_ORDERED, 0
+
+        size_left -= self.count_in_cart()
+        if size_left <= 0:
+            return Quota.AVAILABILITY_RESERVED, 0
+
+        return Quota.AVAILABILITY_OK, size_left
+
+    def count_in_cart(self) -> int:
+        from pretix.base.models import CartPosition
+
+        return CartPosition.objects.current.filter(
+            Q(expires__gte=now())
+            & self._position_lookup
+        ).count()
+
+    def count_orders(self) -> dict:
+        from pretix.base.models import Order, OrderPosition
+
+        o = OrderPosition.objects.current.filter(self._position_lookup).aggregate(
+            paid=Sum(
+                Case(When(order__status=Order.STATUS_PAID, then=1),
+                     output_field=models.IntegerField())
+            ),
+            pending=Sum(
+                Case(When(Q(order__status=Order.STATUS_PENDING) & Q(order__expires__gte=now()), then=1),
+                     output_field=models.IntegerField())
+            )
+        )
+        for k, v in o.items():
+            if v is None:
+                o[k] = 0
+        return o
+
+    @cached_property
+    def _position_lookup(self):
+        return (
             (  # Orders for items which do not have any variations
                Q(variation__isnull=True)
                & Q(item__quotas__in=[self])
@@ -824,31 +865,6 @@ class Quota(Versionable):
                    Q(variation__quotas__in=[self])
             )
         )
-
-        paid_orders = OrderPosition.objects.current.filter(
-            Q(order__status=Order.STATUS_PAID)
-            & quotalookup
-        ).count()
-
-        if paid_orders >= self.size:
-            return Quota.AVAILABILITY_GONE, 0
-
-        pending_valid_orders = OrderPosition.objects.current.filter(
-            Q(order__status=Order.STATUS_PENDING)
-            & Q(order__expires__gte=now())
-            & quotalookup
-        ).count()
-        if (paid_orders + pending_valid_orders) >= self.size:
-            return Quota.AVAILABILITY_ORDERED, 0
-
-        valid_cart_positions = CartPosition.objects.current.filter(
-            Q(expires__gte=now())
-            & quotalookup
-        ).count()
-        if (paid_orders + pending_valid_orders + valid_cart_positions) >= self.size:
-            return Quota.AVAILABILITY_RESERVED, 0
-
-        return Quota.AVAILABILITY_OK, self.size - paid_orders - pending_valid_orders - valid_cart_positions
 
     class QuotaExceededException(Exception):
         pass
