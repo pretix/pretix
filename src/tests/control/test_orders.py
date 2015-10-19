@@ -272,3 +272,85 @@ def test_order_download_success(client, env, mocker):
     assert response.status_code == 302
     assert tickets.generate.assert_not_called()
     assert dl == response['Location']
+
+
+@pytest.mark.django_db
+def test_order_extend_not_pending(client, env):
+    o = Order.objects.current.get(identity=env[2].identity)
+    o.status = Order.STATUS_PAID
+    o.save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/event/dummy/dummy/orders/FOO/extend', follow=True)
+    assert 'alert-danger' in response.rendered_content
+    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', follow=True)
+    assert 'alert-danger' in response.rendered_content
+
+
+@pytest.mark.django_db
+def test_order_extend_not_expired(client, env):
+    q = Quota.objects.create(event=env[0], size=0)
+    q.items.add(env[3])
+    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+        'expires': newdate
+    }, follow=True)
+    assert 'alert-success' in response.rendered_content
+    o = Order.objects.current.get(identity=env[2].identity)
+    assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate
+
+
+@pytest.mark.django_db
+def test_order_extend_expired_quota_left(client, env):
+    o = Order.objects.current.get(identity=env[2].identity)
+    o.expires = now() - timedelta(days=5)
+    o.save()
+    q = Quota.objects.create(event=env[0], size=3)
+    q.items.add(env[3])
+    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+        'expires': newdate
+    }, follow=True)
+    assert 'alert-success' in response.rendered_content
+    o = Order.objects.current.get(identity=env[2].identity)
+    assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate
+
+
+@pytest.mark.django_db
+def test_order_extend_expired_quota_empty(client, env):
+    o = Order.objects.current.get(identity=env[2].identity)
+    o.expires = now() - timedelta(days=5)
+    olddate = o.expires
+    o.save()
+    q = Quota.objects.create(event=env[0], size=0)
+    q.items.add(env[3])
+    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+        'expires': newdate
+    }, follow=True)
+    assert 'alert-danger' in response.rendered_content
+    o = Order.objects.current.get(identity=env[2].identity)
+    assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == olddate.strftime("%Y-%m-%d %H:%M:%S")
+
+
+@pytest.mark.django_db
+def test_order_with_slug(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/event/dummy/dummy/orders/go?code=DUMMYFOO')
+    assert response['Location'].endswith('/control/event/dummy/dummy/orders/FOO/')
+
+
+@pytest.mark.django_db
+def test_order_go_found(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/event/dummy/dummy/orders/go?code=FOO')
+    assert response['Location'].endswith('/control/event/dummy/dummy/orders/FOO/')
+
+
+@pytest.mark.django_db
+def test_order_go_not_found(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/event/dummy/dummy/orders/go?code=BAR')
+    assert response['Location'].endswith('/control/event/dummy/dummy/orders/')

@@ -248,6 +248,7 @@ class OrderExtend(OrderView):
 
         if self.form.is_valid():
             if oldvalue > now():
+                messages.success(self.request, _('The payment term has been changed.'))
                 self.form.save()
             else:
                 try:
@@ -300,10 +301,10 @@ class OrderGo(EventPermissionRequiredMixin, View):
     permission = 'can_view_orders'
 
     def get(self, request, *args, **kwargs):
-        code = request.GET.get("code")
+        code = request.GET.get("code", "").upper().strip()
         try:
-            if code.startswith(request.event.slug):
-                code = code[len(request.event.slug):]
+            if code.startswith(request.event.slug.upper()):
+                code = code[len(request.event.slug.upper()):]
             order = Order.objects.current.get(code=code, event=request.event)
             return redirect('control:event.order', event=request.event.slug, organizer=request.event.organizer.slug,
                             code=order.code)
