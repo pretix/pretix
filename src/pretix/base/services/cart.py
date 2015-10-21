@@ -104,7 +104,7 @@ def _add_items(event, items, session, expiry):
         quota_ok = i[2]
         for quota in quotas:
             avail = quota.availability()
-            if avail[1] < i[2]:
+            if avail[1] is not None and avail[1] < i[2]:
                 # This quota is not available or less than i[2] items are left, so we have to
                 # reduce the number of bought items
                 if avail[0] != Quota.AVAILABILITY_OK:

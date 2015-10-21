@@ -1,4 +1,5 @@
 from itertools import product
+import sys
 
 from django.db import models
 from django.db.models import Q, Case, Count, Sum, When
@@ -315,7 +316,8 @@ class Item(Versionable):
         if self.properties.count() > 0:  # NOQA
             raise ValueError('Do not call this directly on items which have properties '
                              'but call this on their ItemVariation objects')
-        return min([q.availability() for q in self.quotas.all()])
+        return min([q.availability() for q in self.quotas.all()],
+                   key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
     def check_restrictions(self):
         """
@@ -513,7 +515,8 @@ class ItemVariation(Versionable):
 
         :returns: any of the return codes of :py:meth:`Quota.availability()`.
         """
-        return min([q.availability() for q in self.quotas.all()])
+        return min([q.availability() for q in self.quotas.all()],
+                   key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
     def to_variation_dict(self):
         """
@@ -769,7 +772,9 @@ class Quota(Versionable):
         verbose_name=_("Name")
     )
     size = models.PositiveIntegerField(
-        verbose_name=_("Total capacity")
+        verbose_name=_("Total capacity"),
+        null=True, blank=True,
+        help_text=_("Leave empty for an unlimited number of tickets.")
     )
     items = VersionedManyToManyField(
         Item,
@@ -810,6 +815,9 @@ class Quota(Versionable):
                   and the second is the number of available tickets.
         """
         size_left = self.size
+        if size_left is None:
+            return Quota.AVAILABILITY_OK, None
+
         # TODO: Test for interference with old versions of Item-Quota-relations, etc.
         # TODO: Prevent corner-cases like people having ordered an item before it got
         # its first variationsadde

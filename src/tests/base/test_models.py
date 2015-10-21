@@ -303,6 +303,19 @@ class QuotaTestCase(BaseQuotaTestCase):
         quota2.save()
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_GONE, 0))
 
+    def test_unlimited(self):
+        self.quota.items.add(self.item1)
+        order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
+                                     expires=now() + timedelta(days=3),
+                                     total=2)
+        OrderPosition.objects.create(order=order, item=self.item1, price=2)
+        OrderPosition.objects.create(order=order, item=self.item1, price=2)
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_GONE, 0))
+
+        self.quota.size = None
+        self.quota.save()
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, None))
+
 
 class OrderTestCase(BaseQuotaTestCase):
     def setUp(self):

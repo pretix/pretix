@@ -228,10 +228,11 @@ class Order(Versionable):
                     else:
                         # Use cached version
                         quota = quota_cache[quota.identity]
-                    quota.cached_availability -= 1
-                    if quota.cached_availability < 0:
-                        # This quota is sold out/currently unavailable, so do not sell this at all
-                        raise Quota.QuotaExceededException(error_messages['unavailable'])
+                    if quota.cached_availability is not None:
+                        quota.cached_availability -= 1
+                        if quota.cached_availability < 0:
+                            # This quota is sold out/currently unavailable, so do not sell this at all
+                            raise Quota.QuotaExceededException(error_messages['unavailable'])
         except Quota.QuotaExceededException as e:
             return str(e)
         return True

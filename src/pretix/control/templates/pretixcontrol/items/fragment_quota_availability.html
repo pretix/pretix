@@ -2,8 +2,12 @@
 {% if availability.0 == 10 %}
     <span class="label label-warning">{% trans "Sold out (pending orders)" %}</span>
 {% elif availability.0 == 100 %}
-    <span class="label label-success">{% blocktrans trimmed with num=availability.1 %}
-        {{ num }} available{% endblocktrans %}</span>
+    {% if availability.1 != None %}
+        <span class="label label-success">{% blocktrans trimmed with num=availability.1 %}
+            {{ num }} available{% endblocktrans %}</span>
+    {% else %}
+        <span class="label label-success">{% trans "Unlimited" %}</span>
+    {% endif %}
 {% elif availability.0 == 20 %}
     <span class="label label-warning">{% trans "Sold out (or reserved)" %}</span>
 {% elif availability.0 == 0 %}
