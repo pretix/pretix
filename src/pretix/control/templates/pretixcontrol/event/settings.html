@@ -4,6 +4,7 @@
 {% block inside %}
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
+        {% bootstrap_form_errors form %}
         <fieldset>
             <legend>{% trans "General information" %}</legend>
             {% bootstrap_field form.name layout="horizontal" %}

@@ -4,6 +4,7 @@
 {% block inside %}
 	<form action="" method="post" class="form-horizontal form-plugins">
 		{% csrf_token %}
+        {% bootstrap_form_errors formset %}
 		<fieldset>
 			<legend>{% trans "Payment settings" %}</legend>
 			{% for provider in providers %}
@@ -16,7 +17,7 @@
 						</div>
 					</div>
 					<div class="panel-body">
-						{%  bootstrap_form provider.form layout='horizontal' %}
+						{% bootstrap_form provider.form layout='horizontal' %}
                         {% with c=provider.settings_content %}
                             {% if c %}{{ c|safe }}{% endif %}
                         {% endwith %}

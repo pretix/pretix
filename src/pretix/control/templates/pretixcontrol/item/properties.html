@@ -10,6 +10,7 @@
         {% endif %}
         <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
             {{ formset.management_form }}
+            {% bootstrap_formset_errors formset %}
             <div data-formset-body>
                 {% for form in formset %}
                     <div class="panel panel-default" data-formset-form>
@@ -24,6 +25,7 @@
                         </div>
 
                         <div class="panel-body">
+                            {% bootstrap_form_errors form %}
                             <div class="nested-formset" data-formset-prefix="{{ form.nested.0.prefix }}">
                                 <div data-nested-formset-body>
                                     {{ form.nested.0.management_form }}

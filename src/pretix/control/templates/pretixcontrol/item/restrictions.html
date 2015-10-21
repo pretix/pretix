@@ -12,6 +12,7 @@
         {% for set in formsets %}
             <fieldset>
                 <legend>{{ set.title }}</legend>
+                {% bootstrap_formset_errors set %}
                 <p>{{ set.description }}</p>
                 <div data-formset class="restriction-formset" data-formset-prefix="{{ set.formset.prefix }}">
                     <div data-formset-body class="panel-group collapsible" id="accordion_{{ set.formset.prefix }}">
