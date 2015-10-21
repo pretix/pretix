@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.sessions.middleware import \
     SessionMiddleware as BaseSessionMiddleware
 from django.core.exceptions import DisallowedHost
+from django.core.urlresolvers import set_urlconf
 from django.http.request import split_domain_port
 from django.middleware.csrf import CsrfViewMiddleware as BaseCsrfMiddleware
 from django.utils.cache import patch_vary_headers
@@ -37,12 +38,23 @@ class MultiDomainMiddleware:
                 request.domain = kd
             except:
                 if settings.DEBUG or domain in ('testserver', 'localhost') or domain == default_domain:
-                    return  # TODO: Select main page
-                raise DisallowedHost("Unknown host: %r" % host)
+                    request.urlconf = "pretix.multidomain.maindomain_urlconf"
+                else:
+                    raise DisallowedHost("Unknown host: %r" % host)
             else:
                 request.organizer = kd.organizer
+                request.urlconf = "pretix.multidomain.subdomain_urlconf"
         else:
             raise DisallowedHost("Invalid HTTP_HOST header: %r." % host)
+
+        # We need to manually set the urlconf for the whole thread. Normally, Django's basic request
+        # would do this for us, but we already need it in place for the other middlewares.
+        set_urlconf(request.urlconf)
+
+    def process_response(self, request, response):
+        if getattr(request, "urlconf", None):
+            patch_vary_headers(response, ('Host',))
+        return response
 
 
 class SessionMiddleware(BaseSessionMiddleware):

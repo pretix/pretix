@@ -3,7 +3,6 @@ from collections import OrderedDict
 import pytz
 from django.conf import settings
 from django.core.urlresolvers import get_script_prefix
-from django.middleware.locale import LocaleMiddleware as BaseLocaleMiddleware
 from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
 from django.utils.translation import LANGUAGE_SESSION_KEY
@@ -15,7 +14,7 @@ from django.utils.translation.trans_real import (
 _supported = None
 
 
-class LocaleMiddleware(BaseLocaleMiddleware):
+class LocaleMiddleware:
 
     """
     This middleware sets the correct locale and timezone

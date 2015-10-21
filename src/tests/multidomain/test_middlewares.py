@@ -1,6 +1,6 @@
 import pytest
 from django.conf import settings
-from django.template import Context, Template
+from django.http import Http404
 from django.utils.timezone import now
 
 from pretix.base.models import Event, Organizer
@@ -55,8 +55,8 @@ def test_event_on_custom_domain_only_with_wrong_organizer(env, client):
         date_from=now()
     )
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
-    r = client.get('/dummy/1234/', HTTP_HOST='foobar')
-    assert r.status_code == 404
+    with pytest.raises(Http404):
+        client.get('/dummy/1234/', HTTP_HOST='foobar')
 
 
 @pytest.mark.django_db

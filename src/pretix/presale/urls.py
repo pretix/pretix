@@ -6,7 +6,10 @@ import pretix.presale.views.event
 import pretix.presale.views.locale
 import pretix.presale.views.order
 
-eventurls = [
+# This is not a valid Django URL configuration, as the final
+# configuration is done by the pretix.multidomain package.
+
+event_patterns = [
     url(r'^cart/add$', pretix.presale.views.cart.CartAdd.as_view(), name='event.cart.add'),
     url(r'^cart/remove$', pretix.presale.views.cart.CartRemove.as_view(), name='event.cart.remove'),
     url(r'^checkout/start$', pretix.presale.views.checkout.CheckoutView.as_view(), name='event.checkout.start'),
@@ -34,8 +37,6 @@ eventurls = [
     url(r'^$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
 ]
 
-urlpatterns = [
+locale_patterns = [
     url(r'^locale/set$', pretix.presale.views.locale.LocaleSet.as_view(), name='locale.set'),
-    url(r'^(?P<event>[^/]+)/', include(eventurls)),
-    url(r'^(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include(eventurls)),
 ]

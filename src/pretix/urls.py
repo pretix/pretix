@@ -9,33 +9,35 @@ import pretix.base.views.cachedfiles
 import pretix.control.urls
 import pretix.presale.urls
 
-urlpatterns = [
+# This is not a valid Django URL configuration, as the final
+# configuration is done by the pretix.multidomain package.
+
+base_patterns = [
     url(r'^download/(?P<id>[^/]+)/$', pretix.base.views.cachedfiles.DownloadView.as_view(),
-        name='cachedfile.download'),
-    url(r'^control/', include(pretix.control.urls, namespace='control')),
-    # The pretixpresale namespace is configured at the bottom of this file, because it
-    # contains a wildcard-style URL which has to be configured _after_ debug settings.
+        name='cachedfile.download')
 ]
 
+control_patterns = [
+    url(r'^control/', include(pretix.control.urls, namespace='control')),
+]
+
+debug_patterns = []
 if settings.DEBUG:
     import debug_toolbar
-    urlpatterns.append(
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-    )
 
-pluginpatterns = []
+    debug_patterns.append(url(r'^__debug__/', include(debug_toolbar.urls)))
+
+raw_plugin_patterns = []
 for app in apps.get_app_configs():
     if hasattr(app, 'PretixPluginMeta'):
         if importlib.util.find_spec(app.name + '.urls'):
             urlmod = importlib.import_module(app.name + '.urls')
-            pluginpatterns.append(
+            raw_plugin_patterns.append(
                 url(r'', include(urlmod, namespace=app.label))
             )
 
-urlpatterns.append(
-    url(r'', include(pluginpatterns, namespace='plugins'))
-)
+plugin_patterns = [
+    url(r'', include(raw_plugin_patterns, namespace='plugins'))
+]
 
-urlpatterns.append(
-    url(r'', include(pretix.presale.urls, namespace='presale'))
-)
+common_patterns = base_patterns + control_patterns + debug_patterns + plugin_patterns
