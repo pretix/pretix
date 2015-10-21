@@ -339,3 +339,7 @@ LOGGING = {
 
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+BOOTSTRAP3 = {
+    'success_css_class': ''
+}
