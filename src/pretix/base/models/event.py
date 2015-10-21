@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django.template.defaultfilters import date as _date
@@ -100,6 +101,13 @@ class Event(Versionable):
         obj = super().save(*args, **kwargs)
         self.get_cache().clear()
         return obj
+
+    def clean(self):
+        if self.presale_start and self.presale_end and self.presale_start > self.presale_end:
+            raise ValidationError({'presale_end': _('The end of the presale period has to be later than it\'s start.')})
+        if self.date_from and self.date_to and self.date_from > self.date_to:
+            raise ValidationError({'date_to': _('The end of the event has to be later than it\'s start.')})
+        super().clean()
 
     def get_plugins(self) -> "list[str]":
         """

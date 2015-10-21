@@ -1,5 +1,5 @@
-from itertools import product
 import sys
+from itertools import product
 
 from django.db import models
 from django.db.models import Q, Case, Count, Sum, When
