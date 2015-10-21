@@ -159,7 +159,7 @@ def _create_order(event: Event, email: str, positions: list, dt: datetime,
     return order
 
 
-def _perform_order(event: Event, payment_provider: BasePaymentProvider, position_ids: list,
+def _perform_order(event: str, payment_provider: str, position_ids: list,
                    email: str, locale: str):
     event = Event.objects.current.get(identity=event)
     responses = register_payment_providers.send(event)
