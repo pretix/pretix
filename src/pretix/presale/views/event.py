@@ -1,3 +1,5 @@
+import sys
+
 from django.db.models import Count
 from django.views.generic import TemplateView
 
@@ -28,7 +30,8 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
                                    or not item.available_variations[0].empty())
             if not item.has_variations:
                 item.cached_availability = list(item.check_quotas())
-                item.cached_availability[1] = min(item.cached_availability[1],
+                item.cached_availability[1] = min((item.cached_availability[1]
+                                                   if item.cached_availability[1] is not None else sys.maxsize),
                                                   int(self.request.event.settings.max_items_per_order))
                 item.price = item.available_variations[0]['price']
             else:
