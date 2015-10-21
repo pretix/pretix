@@ -1,5 +1,6 @@
 from django import forms
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from pytz import common_timezones
 
@@ -160,6 +161,18 @@ class EventSettingsForm(SettingsForm):
         label=_("Sender address"),
         help_text=_("Sender address for outgoing e-mails")
     )
+
+    def clean(self):
+        data = super().clean()
+        if data['locale'] not in data['locales']:
+            raise ValidationError({
+                'locale': _('Your default locale must also be enebled for your event (see box above).')
+            })
+        if data['attendee_names_required'] and not data['attendee_names_asked']:
+            raise ValidationError({
+                'attendee_names_required': _('You cannot require specifying attendee names if you do not ask for them.')
+            })
+        return data
 
 
 class ProviderForm(SettingsForm):

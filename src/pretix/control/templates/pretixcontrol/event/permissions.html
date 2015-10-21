@@ -6,7 +6,7 @@
 		{% csrf_token %}
 		<fieldset>
 			<legend>{% trans "Permissions" %}</legend>
-            {% bootstrap_form_errors formset %}
+            {% bootstrap_formset_errors formset %}
             {{ formset.management_form }}
             <div class="table-responsive">
                 <table class="table table-striped table-condensed">
