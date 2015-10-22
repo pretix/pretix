@@ -1,0 +1,61 @@
+{% extends "pretixpresale/organizers/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% block title %}Event list{% endblock %}
+{% block content %}
+    {% if "old" in request.GET %}
+        <h3>Past events</h3>
+        <p>
+            <small><a href="?">{% trans "Show upcoming" %}</a></small>
+        </p>
+    {% else %}
+        <h3>Upcoming events </h3>
+        <p>
+            <small><a href="?old=1">{% trans "Show past events" %}</a></small>
+        </p>
+    {% endif %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Date" %}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for e in events %}{% eventurl e "presale:event.index" as url %}
+                <tr>
+                    <td><a href="{{ url }}">{{ e.name }}</a></td>
+                    <td>
+                        {{ e.date_from|date:"DATE_FORMAT" }}
+                        {% if e.settings.show_date_to %} – {{ e.date_to|date:"DATE_FORMAT" }}{% endif %}
+                    </td>
+                    <td class="text-right">
+                        <a class="btn btn-primary" href="{{ url }}">
+                            {% if e.presale_is_running %}{% trans "Buy tickets" %}
+                                {% else %}{% trans "More info" %}
+                            {% endif %}
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                {% if "old" in request.GET %}
+                    <tr>
+                        <td colspan="3">
+                            <em>{% trans "No archived events found." %}</em>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3">
+                            <em>{% trans "No public upcoming events found." %}</em>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include "pretixpresale/pagination.html" %}
+{% endblock %}

@@ -1,12 +1,14 @@
 from django.conf.urls import include, url
 
-from pretix.presale.urls import event_patterns, locale_patterns
+from pretix.presale.urls import (
+    event_patterns, locale_patterns, organizer_patterns,
+)
 from pretix.urls import common_patterns
 
-print(event_patterns)
 presale_patterns = [
     url(r'', include(locale_patterns + [
-        url(r'^(?P<event>[^/]+)/', include(event_patterns))
+        url(r'^(?P<event>[^/]+)/', include(event_patterns)),
+        url(r'', include(organizer_patterns))
     ], namespace='presale'))
 ]
 

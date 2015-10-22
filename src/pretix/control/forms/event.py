@@ -56,6 +56,7 @@ class EventUpdateForm(VersionedModelForm):
             'currency',
             'date_from',
             'date_to',
+            'is_public',
             'presale_start',
             'presale_end',
         ]

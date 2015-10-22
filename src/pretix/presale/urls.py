@@ -5,6 +5,7 @@ import pretix.presale.views.checkout
 import pretix.presale.views.event
 import pretix.presale.views.locale
 import pretix.presale.views.order
+import pretix.presale.views.organizer
 
 # This is not a valid Django URL configuration, as the final
 # configuration is done by the pretix.multidomain package.
@@ -35,6 +36,10 @@ event_patterns = [
         pretix.presale.views.order.OrderDownload.as_view(),
         name='event.order.download'),
     url(r'^$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
+]
+
+organizer_patterns = [
+    url(r'^$', pretix.presale.views.organizer.OrganizerIndex.as_view(), name='organizer.index'),
 ]
 
 locale_patterns = [

@@ -48,6 +48,14 @@ def test_event_with_custom_domain_on_main_domain(env, client):
 
 
 @pytest.mark.django_db
+def test_organizer_with_custom_domain_on_main_domain(env, client):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    r = client.get('/mrmcd/', HTTP_HOST='example.com')
+    assert r.status_code == 302
+    assert r['Location'] == 'http://foobar'
+
+
+@pytest.mark.django_db
 def test_event_on_custom_domain_only_with_wrong_organizer(env, client):
     organizer2 = Organizer.objects.create(name='Dummy', slug='dummy')
     Event.objects.create(

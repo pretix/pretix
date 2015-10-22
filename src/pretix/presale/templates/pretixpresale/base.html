@@ -1,0 +1,49 @@
+{% load compress %}
+{% load staticfiles %}
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block thetitle %}{% endblock %}</title>
+    {% compress css %}
+        <link rel="stylesheet" type="text/less" href="{% static "pretixpresale/less/main.less" %}" />
+    {% endcompress %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
+        <script type="text/javascript" src="{% static "bootstrap/dist/js/bootstrap.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixpresale/js/ui/main.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixpresale/js/ui/asynctask.js" %}"></script>
+    {% endcompress %}
+    {{ html_head|safe }}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="container">
+    {% block page %}
+    {% endblock %}
+</div>
+<footer>
+    {% block footer %}
+    {% endblock %}
+    {% with "href='http://pretix.eu'" as a_attr %}
+        {% blocktrans trimmed %}
+            powered by <a {{ a_attr }}>pretix</a>
+        {% endblocktrans %}
+    {% endwith %}
+</footer>
+<script type="text/javascript">
+    var default_loading_message = '{% trans "We are processing your request…" %}';
+</script>
+<div id="loadingmodal">
+    <i class="fa fa-cog big-rotating-icon"></i>
+    <h1>{% trans "We are processing your request…" %}</h1>
+    <p>
+        {% trans "If this takes longer than a few minutes, please contact us." %}
+    </p>
+</div>
+{% compress js %}
+    <script type="text/javascript" src="{% static "lightbox/js/lightbox.min.js" %}"></script>
+{% endcompress %}
+</body>
+</html>

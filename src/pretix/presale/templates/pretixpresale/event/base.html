@@ -1,26 +1,11 @@
-{% load compress %}
-{% load staticfiles %}
+{% extends "pretixpresale/base.html" %}
 {% load i18n %}
+{% load static %}
 {% load eventurl %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{% block title %}{% endblock %}{% if url_name != "event.index" %} :: {% endif %}{{ event.name }}</title>
-    {% compress css %}
-        <link rel="stylesheet" type="text/less" href="{% static "pretixpresale/less/main.less" %}" />
-    {% endcompress %}
-    {% compress js %}
-        <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
-        <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
-        <script type="text/javascript" src="{% static "bootstrap/dist/js/bootstrap.js" %}"></script>
-        <script type="text/javascript" src="{% static "pretixpresale/js/ui/main.js" %}"></script>
-        <script type="text/javascript" src="{% static "pretixpresale/js/ui/asynctask.js" %}"></script>
-    {% endcompress %}
-    {{ html_head|safe }}
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-<div class="container event">
+{% block thetitle %}
+    {% block title %}{% endblock %}{% if url_name != "event.index" %} :: {% endif %}{{ event.name }}
+{% endblock %}
+{% block page %}
     <div class="page-header">
         <h1 class="pull-left">
             <a href="{% eventurl event "presale:event.index" %}">{{ event.name }}</a>
@@ -50,8 +35,8 @@
     {% endif %}
     {% block content %}
     {% endblock %}
-</div>
-<footer>
+{% endblock %}
+{% block footer %}
     {% if request.event.settings.contact_mail %}
         <a href="mailto:{{ request.event.settings.contact_mail }}">{% trans "Contact event organizer" %}</a> &middot;
     {% endif %}
@@ -59,24 +44,4 @@
         <a href="{{ request.event.settings.imprint_url }}" target="_blank">{% trans "Imprint" %}</a>
         &middot;
     {% endif %}
-    {% with "href='http://pretix.eu'" as a_attr %}
-        {% blocktrans trimmed %}
-            powered by <a {{ a_attr }}>pretix</a>
-        {% endblocktrans %}
-    {% endwith %}
-</footer>
-<script type="text/javascript">
-    var default_loading_message = '{% trans "We are processing your request…" %}';
-</script>
-<div id="loadingmodal">
-    <i class="fa fa-cog big-rotating-icon"></i>
-    <h1>{% trans "We are processing your request…" %}</h1>
-    <p>
-        {% trans "If this takes longer than a few minutes, please contact us." %}
-    </p>
-</div>
-{% compress js %}
-    <script type="text/javascript" src="{% static "lightbox/js/lightbox.min.js" %}"></script>
-{% endcompress %}
-</body>
-</html>
+{% endblock %}

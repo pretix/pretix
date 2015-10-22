@@ -5,7 +5,7 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Event
+from pretix.base.models import Event, Organizer
 from pretix.multidomain.urlreverse import get_domain
 
 
@@ -13,11 +13,10 @@ class EventMiddleware:
     def process_request(self, request):
         url = resolve(request.path_info)
         url_namespace = url.namespace
-        url_name = url.url_name
         if url_namespace != 'presale':
             return
 
-        if 'event.' in url_name and 'event' in url.kwargs:
+        if 'organizer' in url.kwargs or 'event' in url.kwargs:
             try:
                 if hasattr(request, 'organizer'):
                     # We are on an organizer's custom domain
@@ -31,18 +30,24 @@ class EventMiddleware:
                         slug=url.kwargs['event'],
                         organizer=request.organizer,
                     ).select_related('organizer')[0]
+                    request.organizer = request.event.organizer
                 else:
                     # We are on our main domain
-                    if 'organizer' not in url.kwargs:
-                        raise Http404(_('The selected event was not found.'))
-
-                    request.event = Event.objects.current.filter(
-                        slug=url.kwargs['event'],
-                        organizer__slug=url.kwargs['organizer']
-                    ).select_related('organizer')[0]
+                    if 'event' in url.kwargs and 'organizer' in url.kwargs:
+                        request.event = Event.objects.current.filter(
+                            slug=url.kwargs['event'],
+                            organizer__slug=url.kwargs['organizer']
+                        ).select_related('organizer')[0]
+                        request.organizer = request.event.organizer
+                    elif 'organizer' in url.kwargs:
+                        request.organizer = Organizer.objects.current.filter(
+                            slug=url.kwargs['organizer']
+                        )[0]
+                    else:
+                        raise Http404()
 
                     # If this organizer has a custom domain, send the user there
-                    domain = get_domain(request.event)
+                    domain = get_domain(request.organizer)
                     if domain:
                         if request.port and request.port not in (80, 443):
                             domain = '%s:%d' % (domain, request.port)
@@ -50,7 +55,7 @@ class EventMiddleware:
                         return redirect(urljoin('%s://%s' % (request.scheme, domain), path))
 
             except IndexError:
-                raise Http404(_('The selected event was not found.'))
+                raise Http404(_('The selected event or organizer was not found.'))
 
         if '_' not in request.session:
             # We need to create session even if we do not yet store something there, because we need the session

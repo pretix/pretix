@@ -22,6 +22,7 @@ def env():
 @pytest.mark.django_db
 def test_event_main_domain_front_page(env):
     assert eventreverse(env[1], 'presale:event.index') == '/mrmcd/2015/'
+    assert eventreverse(env[0], 'presale:organizer.index') == '/mrmcd/'
 
 
 @pytest.mark.django_db
@@ -39,6 +40,7 @@ def test_event_main_domain_kwargs(env):
 def test_event_custom_domain_front_page(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     assert eventreverse(env[1], 'presale:event.index') == 'http://foobar/2015/'
+    assert eventreverse(env[0], 'presale:organizer.index') == 'http://foobar/'
 
 
 @pytest.mark.django_db

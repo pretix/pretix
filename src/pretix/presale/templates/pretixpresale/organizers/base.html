@@ -1,0 +1,26 @@
+{% extends "pretixpresale/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load eventurl %}
+{% block thetitle %}
+    {% block title %}{% endblock %}{% if url_name != "organizer.index" %} :: {% endif %}{{ organizer.name }}
+{% endblock %}
+{% block page %}
+    <div class="page-header">
+        <h1 class="pull-left">
+            <a href="{% eventurl organizer "presale:organizer.index" %}">{{ organizer.name }}</a>
+        </h1>
+        <div class="clearfix"></div>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+{% endblock %}
+{% block footer %}
+{% endblock %}

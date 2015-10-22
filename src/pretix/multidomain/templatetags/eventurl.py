@@ -43,7 +43,7 @@ def eventurl(parser, token):
     """
     Similar to {% url %} in the same way that eventreverse() is similar to reverse().
 
-    Takes an event object, an url name and optional keyword arguments
+    Takes an event or organizer object, an url name and optional keyword arguments
     """
     bits = token.split_contents()
     if len(bits) < 3:

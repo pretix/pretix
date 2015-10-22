@@ -73,6 +73,10 @@ class Event(Versionable):
     date_from = models.DateTimeField(verbose_name=_("Event start time"))
     date_to = models.DateTimeField(null=True, blank=True,
                                    verbose_name=_("Event end time"))
+    is_public = models.BooleanField(default=False,
+                                    verbose_name=_("Visible in public lists"),
+                                    help_text=_("If selected, this event may show up on the ticket system's start page "
+                                                "or an organization profile."))
     presale_end = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("End of presale"),
