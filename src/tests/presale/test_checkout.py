@@ -50,11 +50,11 @@ class CheckoutTestCase(TestCase):
         self.ticket.questions.add(q1)
         self.ticket.questions.add(q2)
         cr1 = CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         cr2 = CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=20, expires=now() + timedelta(minutes=10)
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
@@ -98,7 +98,7 @@ class CheckoutTestCase(TestCase):
         self.event.settings.set('attendee_names_asked', True)
         self.event.settings.set('attendee_names_required', True)
         cr1 = CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
@@ -128,7 +128,7 @@ class CheckoutTestCase(TestCase):
         self.event.settings.set('attendee_names_asked', True)
         self.event.settings.set('attendee_names_required', False)
         cr1 = CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
@@ -151,7 +151,7 @@ class CheckoutTestCase(TestCase):
         self.event.settings.set('payment_stripe__enabled', True)
         self.event.settings.set('payment_banktransfer__enabled', True)
         CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
@@ -171,7 +171,7 @@ class CheckoutTestCase(TestCase):
         self.event.settings.set('payment_stripe__enabled', True)
         self.event.settings.set('payment_banktransfer__enabled', True)
         cr1 = CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
 
@@ -219,7 +219,7 @@ class CheckoutTestCase(TestCase):
 
     def test_confirm_in_time(self):
         cr1 = CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         self._set_session('payment', 'banktransfer')
@@ -233,7 +233,7 @@ class CheckoutTestCase(TestCase):
 
     def test_confirm_expired_available(self):
         cr1 = CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
         )
         self._set_session('payment', 'banktransfer')
@@ -250,7 +250,7 @@ class CheckoutTestCase(TestCase):
         self.ticket.default_price = 24
         self.ticket.save()
         cr1 = CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
         )
         self._set_session('payment', 'banktransfer')
@@ -265,11 +265,11 @@ class CheckoutTestCase(TestCase):
         self.quota_tickets.size = 1
         self.quota_tickets.save()
         CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
         )
         CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
         )
         self._set_session('payment', 'banktransfer')
@@ -277,14 +277,14 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select(".alert-danger")), 1)
-        self.assertEqual(CartPosition.objects.current.filter(session=self.session_key).count(), 1)
+        self.assertEqual(CartPosition.objects.current.filter(cart_id=self.session_key).count(), 1)
 
     def test_confirm_inactive(self):
         self.ticket = self.ticket.clone()
         self.ticket.active = False
         self.ticket.save()
         cr1 = CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
         )
         self._set_session('payment', 'banktransfer')
@@ -298,7 +298,7 @@ class CheckoutTestCase(TestCase):
         self.quota_tickets.size = 0
         self.quota_tickets.save()
         cr1 = CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
         )
         self._set_session('payment', 'banktransfer')
@@ -311,7 +311,7 @@ class CheckoutTestCase(TestCase):
     def test_confirm_completely_unavailable(self):
         self.quota_tickets.items.remove(self.ticket)
         cr1 = CartPosition.objects.create(
-            event=self.event, session=self.session_key, item=self.ticket,
+            event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() - timedelta(minutes=10)
         )
         self._set_session('payment', 'banktransfer')

@@ -369,8 +369,8 @@ class CartPosition(ObjectWithAnswers, Versionable):
     :type event: Evnt
     :param item: The selected item
     :type item: Item
-    :param session: The user session that contains this cart position
-    :type session: str
+    :param cart_id: The user session that contains this cart position
+    :type cart_id: str
     :param variation: The selected ItemVariation or null, if the item has no properties
     :type variation: ItemVariation
     :param datetime: The datetime this item was put into the cart
@@ -386,9 +386,9 @@ class CartPosition(ObjectWithAnswers, Versionable):
         Event,
         verbose_name=_("Event")
     )
-    session = models.CharField(
+    cart_id = models.CharField(
         max_length=255, null=True, blank=True,
-        verbose_name=_("Session")
+        verbose_name=_("Cart ID (e.g. session key)")
     )
     item = VersionedForeignKey(
         Item,

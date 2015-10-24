@@ -194,7 +194,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     @cached_property
     def _total_order_value(self):
         return CartPosition.objects.current.filter(
-            Q(session=self.request.session.session_key) & Q(event=self.request.event)
+            Q(cart_id=self.request.session.session_key) & Q(event=self.request.event)
         ).aggregate(sum=Sum('price'))['sum']
 
     @cached_property

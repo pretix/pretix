@@ -29,21 +29,21 @@ error_messages = {
 }
 
 
-def _extend_existing(event, session, expiry):
+def _extend_existing(event, cart_id, expiry):
     # Extend this user's cart session to 30 minutes from now to ensure all items in the
     # cart expire at the same time
     # We can extend the reservation of items which are not yet expired without risk
     CartPosition.objects.current.filter(
-        Q(session=session) & Q(event=event) & Q(expires__gt=now())
+        Q(cart_id=cart_id) & Q(event=event) & Q(expires__gt=now())
     ).update(expires=expiry)
 
 
-def _re_add_expired_positions(items, event, session):
+def _re_add_expired_positions(items, event, cart_id):
     positions = set()
     # For items that are already expired, we have to delete and re-add them, as they might
     # be no longer available or prices might have changed. Sorry!
     expired = CartPosition.objects.current.filter(
-        Q(session=session) & Q(event=event) & Q(expires__lte=now())
+        Q(cart_id=cart_id) & Q(event=event) & Q(expires__lte=now())
     )
     for cp in expired:
         items.insert(0, (cp.item_id, cp.variation_id, 1, cp))
@@ -64,7 +64,7 @@ def _check_date(event):
         raise CartError(error_messages['ended'])
 
 
-def _add_items(event, items, session, expiry):
+def _add_items(event, items, cart_id, expiry):
     err = None
 
     # Fetch items from the database
@@ -124,33 +124,33 @@ def _add_items(event, items, session, expiry):
             else:
                 CartPosition.objects.create(
                     event=event, item=item, variation=variation, price=price, expires=expiry,
-                    session=session
+                    cart_id=cart_id
                 )
     return err
 
 
-def _add_items_to_cart(event: Event, items: list, session: str=None):
+def _add_items_to_cart(event: Event, items: list, cart_id: str=None):
     with event.lock():
         _check_date(event)
-        existing = CartPosition.objects.current.filter(Q(session=session) & Q(event=event)).count()
+        existing = CartPosition.objects.current.filter(Q(cart_id=cart_id) & Q(event=event)).count()
         if sum(i[2] for i in items) + existing > int(event.settings.max_items_per_order):
             # TODO: i18n plurals
             raise CartError(error_messages['max_items'] % event.settings.max_items_per_order)
 
         expiry = now() + timedelta(minutes=event.settings.get('reservation_time', as_type=int))
-        _extend_existing(event, session, expiry)
+        _extend_existing(event, cart_id, expiry)
 
-        expired = _re_add_expired_positions(items, event, session)
+        expired = _re_add_expired_positions(items, event, cart_id)
         if not items:
             raise CartError(error_messages['empty'])
 
-        err = _add_items(event, items, session, expiry)
+        err = _add_items(event, items, cart_id, expiry)
         _delete_expired(expired)
         if err:
             raise CartError(err)
 
 
-def add_items_to_cart(event: str, items: list, session: str=None):
+def add_items_to_cart(event: str, items: list, cart_id: str=None):
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
@@ -160,12 +160,12 @@ def add_items_to_cart(event: str, items: list, session: str=None):
     """
     event = Event.objects.current.get(identity=event)
     try:
-        return _add_items_to_cart(event, items, session)
+        return _add_items_to_cart(event, items, cart_id)
     except EventLock.LockTimeoutException:
         raise CartError(error_messages['busy'])
 
 
-def remove_items_from_cart(event: str, items: list, session: str=None):
+def remove_items_from_cart(event: str, items: list, cart_id: str=None):
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
@@ -175,7 +175,7 @@ def remove_items_from_cart(event: str, items: list, session: str=None):
     event = Event.objects.current.get(identity=event)
 
     for item, variation, cnt in items:
-        cw = Q(session=session) & Q(item_id=item) & Q(event=event)
+        cw = Q(cart_id=cart_id) & Q(item_id=item) & Q(event=event)
         if variation:
             cw &= Q(variation_id=variation)
         else:
@@ -188,10 +188,10 @@ if settings.HAS_CELERY:
     from pretix.celery import app
 
     @app.task(bind=True, max_retries=5, default_retry_delay=2)
-    def add_items_to_cart_task(self, event: str, items: list, session: str):
+    def add_items_to_cart_task(self, event: str, items: list, cart_id: str):
         event = Event.objects.current.get(identity=event)
         try:
-            return _add_items_to_cart(event, items, session)
+            return _add_items_to_cart(event, items, cart_id)
         except EventLock.LockTimeoutException:
             self.retry(exc=CartError(error_messages['busy']))
 

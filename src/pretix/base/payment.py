@@ -403,7 +403,7 @@ class FreeOrderProvider(BasePaymentProvider):
 
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
         return CartPosition.objects.current.filter(
-            Q(session=request.session.session_key) & Q(event=request.event)
+            Q(cart_id=request.session.session_key) & Q(event=request.event)
         ).aggregate(sum=Sum('price'))['sum'] == 0
 
     @property
@@ -446,7 +446,7 @@ class FreeOrderProvider(BasePaymentProvider):
 
     def is_allowed(self, request: HttpRequest) -> bool:
         return CartPosition.objects.current.filter(
-            session=request.session.session_key, event=request.event
+            cart_id=request.session.session_key, event=request.event
         ).aggregate(sum=Sum('price'))['sum'] == 0
 
 

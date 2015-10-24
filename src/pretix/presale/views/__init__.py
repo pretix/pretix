@@ -15,7 +15,7 @@ class CartMixin:
         A list of this users cart position
         """
         return list(CartPosition.objects.current.filter(
-            session=self.request.session.session_key, event=self.request.event
+            cart_id=self.request.session.session_key, event=self.request.event
         ).order_by(
             'item', 'variation'
         ).select_related(
@@ -27,7 +27,7 @@ class CartMixin:
 
     def get_cart(self, answers=False, queryset=None, payment_fee=None):
         queryset = queryset or CartPosition.objects.current.filter(
-            session=self.request.session.session_key, event=self.request.event
+            cart_id=self.request.session.session_key, event=self.request.event
         )
 
         prefetch = ['variation__values', 'variation__values__prop']
