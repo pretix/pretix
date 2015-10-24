@@ -1,6 +1,7 @@
 import random
 import string
 from datetime import datetime
+from decimal import Decimal
 
 from django.db import models, transaction
 from django.utils.timezone import now
@@ -263,7 +264,63 @@ class QuestionAnswer(models.Model):
     answer = models.TextField()
 
 
-class ObjectWithAnswers:
+class AbstractPosition(models.Model):
+    """
+    A position can either be one line of an order or an item placed in a cart.
+
+    :param item: The selected item
+    :type item: Item
+    :param variation: The selected ItemVariation or null, if the item has no properties
+    :type variation: ItemVariation
+    :param datetime: The datetime this item was put into the cart
+    :type datetime: datetime
+    :param expires: The date until this item is guarenteed to be reserved
+    :type expires: datetime
+    :param price: The price of this item
+    :type price: decimal.Decimal
+    :param attendee_name: The attendee's name, if entered.
+    :type attendee_name: str
+    :param voucher: A voucher that has been applied to this sale
+    :type voucher: Voucher
+    :param voucher_discount: The absolute discount granted by the applied voucher
+    :type voucher_discount: decimal.Decimal
+    :param base_price: The base price without any discounts applied
+    :type base_price: decimal.Decimal
+    """
+    item = models.ForeignKey(
+        Item,
+        verbose_name=_("Item"),
+        on_delete=models.PROTECT
+    )
+    variation = models.ForeignKey(
+        ItemVariation,
+        null=True, blank=True,
+        verbose_name=_("Variation"),
+        on_delete=models.PROTECT
+    )
+    price = models.DecimalField(
+        decimal_places=2, max_digits=10,
+        verbose_name=_("Price")
+    )
+    attendee_name = models.CharField(
+        max_length=255,
+        verbose_name=_("Attendee name"),
+        blank=True, null=True,
+        help_text=_("Empty, if this product is not an admission ticket")
+    )
+    voucher = models.ForeignKey(
+        'Voucher', null=True, blank=True
+    )
+    voucher_discount = models.DecimalField(
+        default=Decimal('0.00'), decimal_places=2, max_digits=10
+    )
+    base_price = models.DecimalField(
+        decimal_places=2, max_digits=10, null=True, blank=True
+    )
+
+    class Meta:
+        abstract = True
+
     def cache_answers(self):
         """
         Creates two properties on the object.
@@ -281,50 +338,28 @@ class ObjectWithAnswers:
                 q.answer = ""
             self.questions.append(q)
 
+    def save(self, *args, **kwargs):
+        if self.voucher is None and self.base_price is None:
+            self.base_price = self.price
+        if self.voucher_discount != Decimal('0.00') and self.base_price is not None:
+            self.price = self.base_price - self.voucher_discount
+        return super().save(*args, **kwargs)
 
-class OrderPosition(ObjectWithAnswers, models.Model):
+
+class OrderPosition(AbstractPosition):
     """
     An OrderPosition is one line of an order, representing one ordered items
-    of a specified type (or variation).
+    of a specified type (or variation). This has all properties of
+    AbstractPosition.
 
     :param order: The order this is a part of
     :type order: Order
-    :param item: The ordered item
-    :type item: Item
-    :param variation: The ordered ItemVariation or null, if the item has no properties
-    :type variation: ItemVariation
-    :param price: The price of this item
-    :type price: decimal.Decimal
-    :param attendee_name: The attendee's name, if entered.
-    :type attendee_name: str
     """
     order = models.ForeignKey(
         Order,
         verbose_name=_("Order"),
         related_name='positions',
         on_delete=models.PROTECT
-    )
-    item = models.ForeignKey(
-        Item,
-        verbose_name=_("Item"),
-        related_name='positions',
-        on_delete=models.PROTECT
-    )
-    variation = models.ForeignKey(
-        ItemVariation,
-        null=True, blank=True,
-        verbose_name=_("Variation"),
-        on_delete=models.PROTECT
-    )
-    price = models.DecimalField(
-        decimal_places=2, max_digits=10,
-        verbose_name=_("Price")
-    )
-    attendee_name = models.CharField(
-        max_length=255,
-        verbose_name=_("Attendee name"),
-        blank=True, null=True,
-        help_text=_("Empty, if this product is not an admission ticket")
     )
 
     class Meta:
@@ -335,11 +370,9 @@ class OrderPosition(ObjectWithAnswers, models.Model):
     def transform_cart_positions(cls, cp: List, order) -> list:
         ops = []
         for cartpos in cp:
-            op = OrderPosition(
-                order=order, item=cartpos.item, variation=cartpos.variation,
-                price=cartpos.price, attendee_name=cartpos.attendee_name
-            )
-            op.save()
+            op = OrderPosition(order=order)
+            for f in AbstractPosition._meta.fields:
+                setattr(op, f.name, getattr(cartpos, f.name))
             for answ in cartpos.answers.all():
                 answ.orderposition = op
                 answ.cartposition = None
@@ -348,31 +381,19 @@ class OrderPosition(ObjectWithAnswers, models.Model):
             ops.append(op)
 
 
-class CartPosition(ObjectWithAnswers, models.Model):
+class CartPosition(AbstractPosition):
     """
     A cart position is similar to a order line, except that it is not
     yet part of a binding order but just placed by some user in his or
     her cart. It therefore normally has a much shorter expiration time
     than an ordered position, but still blocks an item in the quota pool
     as we do not want to throw out users while they're clicking through
-    the checkout process.
+    the checkout process. This has all properties of AbstractPosition.
 
     :param event: The event this belongs to
     :type event: Evnt
-    :param item: The selected item
-    :type item: Item
     :param cart_id: The user session that contains this cart position
     :type cart_id: str
-    :param variation: The selected ItemVariation or null, if the item has no properties
-    :type variation: ItemVariation
-    :param datetime: The datetime this item was put into the cart
-    :type datetime: datetime
-    :param expires: The date until this item is guarenteed to be reserved
-    :type expires: datetime
-    :param price: The price of this item
-    :type price: decimal.Decimal
-    :param attendee_name: The attendee's name, if entered.
-    :type attendee_name: str
     """
     event = models.ForeignKey(
         Event,
@@ -382,33 +403,12 @@ class CartPosition(ObjectWithAnswers, models.Model):
         max_length=255, null=True, blank=True,
         verbose_name=_("Cart ID (e.g. session key)")
     )
-    item = models.ForeignKey(
-        Item,
-        verbose_name=_("Item"),
-        on_delete=models.CASCADE
-    )
-    variation = models.ForeignKey(
-        ItemVariation,
-        null=True, blank=True,
-        verbose_name=_("Variation"),
-        on_delete=models.CASCADE
-    )
-    price = models.DecimalField(
-        decimal_places=2, max_digits=10,
-        verbose_name=_("Price")
-    )
     datetime = models.DateTimeField(
         verbose_name=_("Date"),
         auto_now_add=True
     )
     expires = models.DateTimeField(
         verbose_name=_("Expiration date")
-    )
-    attendee_name = models.CharField(
-        max_length=255,
-        verbose_name=_("Attendee name"),
-        blank=True, null=True,
-        help_text=_("Empty, if this product is not an admission ticket")
     )
 
     class Meta:

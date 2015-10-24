@@ -54,6 +54,9 @@ Carts and Orders
 .. autoclass:: pretix.base.models.Order
    :members:
 
+.. autoclass:: pretix.base.models.AbstractPosition
+:members:
+
 .. autoclass:: pretix.base.models.OrderPosition
    :members:
 
@@ -68,3 +71,11 @@ Logging
 
 .. autoclass:: pretix.base.models.LogEntry
    :members:
+
+Vouchers
+--------
+
+.. autoclass:: pretix.base.models.Voucher
+   :members:
+
+.. _cleanerversion: https://github.com/swisscom/cleanerversion
