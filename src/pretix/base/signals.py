@@ -1,6 +1,7 @@
 import django.dispatch
 from django.apps import apps
 from django.dispatch.dispatcher import NO_RECEIVERS
+from typing import Any, Callable, List, Tuple
 
 from .models import Event
 
@@ -12,7 +13,7 @@ class EventPluginSignal(django.dispatch.Signal):
     Event.
     """
 
-    def send(self, sender, **named):
+    def send(self, sender: Event, **named) -> List[Tuple[Callable, Any]]:
         """
         Send signal from sender to all connected receivers that belong to
         plugins enabled for the given Event.

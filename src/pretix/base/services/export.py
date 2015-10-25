@@ -1,11 +1,12 @@
 from django.conf import settings
 from django.core.files.base import ContentFile
+from typing import Any, Dict
 
 from pretix.base.models import CachedFile, Event, cachedfile_name
 from pretix.base.signals import register_data_exporters
 
 
-def export(event, fileid, provider, form_data):
+def export(event: str, fileid: str, provider: str, form_data: Dict[str, Any]) -> None:
     event = Event.objects.current.get(identity=event)
     file = CachedFile.objects.get(id=fileid)
     responses = register_data_exporters.send(event)

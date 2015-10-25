@@ -1,3 +1,6 @@
+from typing import Iterable, List, Tuple
+
+
 class VariationDict(dict):
     """
     A VariationDict object behaves exactle the same as the Python built-in
@@ -7,7 +10,7 @@ class VariationDict(dict):
     """
     IGNORE_KEYS = ('variation', 'key', 'available', 'price')
 
-    def relevant_items(self) -> "list[(str, PropertyValue)]":
+    def relevant_items(self) -> Iterable[Tuple]:
         """
         Iterate over all items with numeric keys.
 
@@ -16,7 +19,7 @@ class VariationDict(dict):
         """
         return (i for i in self.items() if i[0] not in self.IGNORE_KEYS)
 
-    def relevant_values(self) -> "list[PropertyValue]":
+    def relevant_values(self) -> Iterable["PropertyValue"]:
         """
         Iterate over all values with numeric keys.
 
@@ -60,14 +63,14 @@ class VariationDict(dict):
         else:
             return super().__eq__(other)
 
-    def empty(self):
+    def empty(self) -> bool:
         """
         Returns true, if this VariationDict does not contain any "real" data like
         references to PropertyValues, but only "metadata".
         """
         return not next(self.relevant_items(), False)
 
-    def ordered_values(self) -> "list[ItemVariation]":
+    def ordered_values(self) -> List["ItemVariation"]:
         """
         Returns a list of values ordered by their keys
         """
@@ -79,7 +82,7 @@ class VariationDict(dict):
             )
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return " – ".join([str(v.value) for v in self.ordered_values()])
 
     def copy(self) -> "VariationDict":

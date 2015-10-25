@@ -5,6 +5,7 @@ from datetime import datetime
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+from typing import List, Union
 from versions.models import VersionedForeignKey
 
 from .base import CachedFile, Versionable
@@ -133,7 +134,7 @@ class Order(Versionable):
         verbose_name_plural = _("Orders")
         ordering = ("-datetime",)
 
-    def str(self):
+    def __str__(self):
         return self.full_code
 
     @property
@@ -160,7 +161,7 @@ class Order(Versionable):
                 return
 
     @property
-    def can_modify_answers(self):
+    def can_modify_answers(self) -> bool:
         """
         Is ``True`` if the user can change the question answers / attendee names that are
         related to the order. This checks order status and modification deadlines. It also
@@ -187,7 +188,7 @@ class Order(Versionable):
         order.save()
         return order
 
-    def _can_be_paid(self):
+    def _can_be_paid(self) -> Union[bool, str]:
         error_messages = {
             'late': _("The payment is too late to be accepted."),
         }
@@ -202,7 +203,7 @@ class Order(Versionable):
 
         return self._is_still_available()
 
-    def _is_still_available(self):
+    def _is_still_available(self) -> Union[bool, str]:
         error_messages = {
             'unavailable': _('Some of the ordered products were no longer available.'),
         }
@@ -339,7 +340,7 @@ class OrderPosition(ObjectWithAnswers, Versionable):
         verbose_name_plural = _("Order positions")
 
     @classmethod
-    def transform_cart_positions(cls, cp: list, order) -> list:
+    def transform_cart_positions(cls, cp: List, order) -> list:
         ops = []
         for cartpos in cp:
             op = OrderPosition(

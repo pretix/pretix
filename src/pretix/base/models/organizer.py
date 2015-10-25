@@ -45,7 +45,7 @@ class Organizer(Versionable):
         verbose_name_plural = _("Organizers")
         ordering = ("name",)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def save(self, *args, **kwargs):
@@ -97,7 +97,7 @@ class OrganizerPermission(Versionable):
         verbose_name = _("Organizer permission")
         verbose_name_plural = _("Organizer permissions")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return _("%(name)s on %(object)s") % {
             'name': str(self.user),
             'object': str(self.organizer),

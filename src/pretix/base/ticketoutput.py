@@ -3,8 +3,9 @@ from collections import OrderedDict
 from django import forms
 from django.http import HttpRequest
 from django.utils.translation import ugettext_lazy as _
+from typing import Tuple
 
-from pretix.base.models import Order
+from pretix.base.models import Event, Order
 from pretix.base.settings import SettingsSandbox
 
 
@@ -13,7 +14,7 @@ class BaseTicketOutput:
     This is the base class for all ticket outputs.
     """
 
-    def __init__(self, event):
+    def __init__(self, event: Event):
         self.event = event
         self.settings = SettingsSandbox('ticketoutput', self.identifier, event)
 
@@ -28,7 +29,7 @@ class BaseTicketOutput:
         """
         return self.settings.get('_enabled', as_type=bool)
 
-    def generate(self, order: Order) -> tuple:
+    def generate(self, order: Order) -> Tuple[str, str, str]:
         """
         This method should generate the download file and return a tuple consisting of a
         filename, a file type and file content.

@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db.models import SubfieldBase, TextField
 from django.utils import translation
 from django.utils.safestring import mark_safe
+from typing import Dict, List
 
 
 class LazyI18nString:
@@ -13,7 +14,7 @@ class LazyI18nString:
     This represents an internationalized string that is/was/will be stored in the database.
     """
 
-    def __init__(self, data):
+    def __init__(self, data: Dict[str, str]):
         """
         Input data should be a dictionary which maps language codes to content.
         """
@@ -26,7 +27,7 @@ class LazyI18nString:
             else:
                 self.data = j
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Evaluate the given string with respect to the currently active locale.
         This will rather return you a string in a wrong language than give you an
@@ -53,10 +54,10 @@ class LazyI18nString:
         else:
             return str(self.data)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return '<LazyI18nString: %s>' % repr(self.data)
 
-    def __lt__(self, other):  # NOQA
+    def __lt__(self, other) -> bool:  # NOQA
         return str(self) < str(other)
 
 
@@ -68,7 +69,7 @@ class I18nWidget(forms.MultiWidget):
     """
     widget = forms.TextInput
 
-    def __init__(self, langcodes, field, attrs=None):
+    def __init__(self, langcodes: List[str], field: forms.Field, attrs=None):
         widgets = []
         self.langcodes = langcodes
         self.enabled_langcodes = langcodes

@@ -1,5 +1,6 @@
 import copy
 import uuid
+from datetime import datetime
 
 import six
 from django.db import models
@@ -12,7 +13,7 @@ class Versionable(BaseVersionable):
     class Meta:
         abstract = True
 
-    def clone_shallow(self, forced_version_date=None):
+    def clone_shallow(self, forced_version_date: datetime=None):
         """
         This behaves like clone(), but misses all the Many2Many-relation-handling. This is
         a performance optimization for cases in which we have to handle the Many2Many relations
@@ -63,7 +64,7 @@ class Versionable(BaseVersionable):
         })
 
 
-def cachedfile_name(instance, filename):
+def cachedfile_name(instance, filename: str) -> str:
     return 'cachedfiles/%s.%s' % (instance.id, filename.split('.')[-1])
 
 

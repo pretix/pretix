@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import transaction
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+from typing import List
 
 from pretix.base.models import (
     CartPosition, Event, EventLock, Order, OrderPosition, Quota,
@@ -30,7 +31,7 @@ error_messages = {
 
 
 def mark_order_paid(order: Order, provider: str=None, info: str=None, date: datetime=None, manual: bool=None,
-                    force: bool=False):
+                    force: bool=False) -> Order:
     """
     Marks an order as paid. This clones the order object, sets the payment provider,
     info and date and returns the cloned order object.
@@ -82,14 +83,14 @@ class OrderError(Exception):
     pass
 
 
-def _check_date(event):
+def _check_date(event: Event):
     if event.presale_start and now() < event.presale_start:
         raise OrderError(error_messages['not_started'])
     if event.presale_end and now() > event.presale_end:
         raise OrderError(error_messages['ended'])
 
 
-def _check_positions(event: Event, dt: datetime, positions: list):
+def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
     err = None
     _check_date(event)
 
@@ -135,7 +136,7 @@ def _check_positions(event: Event, dt: datetime, positions: list):
 
 
 @transaction.atomic()
-def _create_order(event: Event, email: str, positions: list, dt: datetime,
+def _create_order(event: Event, email: str, positions: List[CartPosition], dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None):
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
@@ -159,7 +160,7 @@ def _create_order(event: Event, email: str, positions: list, dt: datetime,
     return order
 
 
-def _perform_order(event: str, payment_provider: str, position_ids: list,
+def _perform_order(event: str, payment_provider: str, position_ids: List[str],
                    email: str, locale: str):
     event = Event.objects.current.get(identity=event)
     responses = register_payment_providers.send(event)
@@ -197,7 +198,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: list,
         return order.identity
 
 
-def perform_order(event: str, payment_provider: str, positions: list,
+def perform_order(event: str, payment_provider: str, positions: List[str],
                   email: str=None, locale: str=None):
     try:
         return _perform_order(event, payment_provider, positions, email, locale)
@@ -211,7 +212,7 @@ if settings.HAS_CELERY:
     from pretix.celery import app
 
     @app.task(bind=True, max_retries=5, default_retry_delay=2)
-    def perform_order_task(self, event: str, payment_provider: str, positions: list,
+    def perform_order_task(self, event: str, payment_provider: str, positions: List[str],
                            email: str=None, locale: str=None):
         try:
             return _perform_order(event, payment_provider, positions, email, locale)

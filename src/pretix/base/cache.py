@@ -3,11 +3,12 @@ import time
 
 from django.core.cache import caches
 from django.db.models import Model
+from typing import Dict, List
 
 
 class NamespacedCache:
 
-    def __init__(self, prefixkey, cache: str='default'):
+    def __init__(self, prefixkey: str, cache: str='default'):
         self.cache = caches[cache]
         self.prefixkey = prefixkey
 
@@ -30,7 +31,7 @@ class NamespacedCache:
     def _strip_prefix(self, key: str) -> str:
         return key.split(":", 2 + self.prefixkey.count(":"))[-1]
 
-    def clear(self):
+    def clear(self) -> None:
         try:
             prefix = self.cache.incr(self.prefixkey, 1)
         except ValueError:
@@ -43,14 +44,14 @@ class NamespacedCache:
     def get(self, key: str) -> str:
         return self.cache.get(self._prefix_key(key))
 
-    def get_many(self, keys: "list[str]") -> "dict[str, str]":
+    def get_many(self, keys: List[str]) -> Dict[str, str]:
         values = self.cache.get_many([self._prefix_key(key) for key in keys])
         newvalues = {}
         for k, v in values.items():
             newvalues[self._strip_prefix(k)] = v
         return newvalues
 
-    def set_many(self, values: "dict[str, str]", timeout=3600):
+    def set_many(self, values: Dict[str, str], timeout=3600):
         newvalues = {}
         for k, v in values.items():
             newvalues[self._prefix_key(k)] = v
@@ -59,7 +60,7 @@ class NamespacedCache:
     def delete(self, key: str):  # NOQA
         return self.cache.delete(self._prefix_key(key))
 
-    def delete_many(self, keys: "list[str]"):  # NOQA
+    def delete_many(self, keys: List[str]):  # NOQA
         return self.cache.delete_many([self._prefix_key(key) for key in keys])
 
     def incr(self, key: str, by: int=1):  # NOQA
@@ -86,6 +87,6 @@ class ObjectRelatedCache(NamespacedCache):
     times as you want.
     """
 
-    def __init__(self, obj, cache: str='default'):
+    def __init__(self, obj: Model, cache: str='default'):
         assert isinstance(obj, Model)
         super().__init__('%s:%s' % (obj._meta.object_name, obj.pk), cache)

@@ -5,6 +5,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.utils import translation
 from django.utils.translation import ugettext as _
+from typing import Any, Dict
 
 from pretix.base.i18n import LazyI18nString
 from pretix.base.models import Event
@@ -12,7 +13,8 @@ from pretix.base.models import Event
 logger = logging.getLogger('pretix.base.mail')
 
 
-def mail(email: str, subject: str, template: str, context: dict=None, event: Event=None, locale: str=None):
+def mail(email: str, subject: str, template: str,
+         context: Dict[str, Any]=None, event: Event=None, locale: str=None):
     """
     Sends out an email to a user.
 
@@ -58,7 +60,7 @@ def mail(email: str, subject: str, template: str, context: dict=None, event: Eve
         translation.activate(_lng)
 
 
-def mail_send(to, subject, body, sender):
+def mail_send(to: str, subject: str, body: str, sender: str) -> bool:
     email = EmailMessage(subject, body, sender, to=to)
 
     try:

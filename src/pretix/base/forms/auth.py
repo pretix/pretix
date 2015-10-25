@@ -43,7 +43,7 @@ class LoginForm(forms.Form):
 
         return self.cleaned_data
 
-    def confirm_login_allowed(self, user):
+    def confirm_login_allowed(self, user: User):
         """
         Controls whether the given User may log in. This is a policy setting,
         independent of end-user authentication. This default behavior is to

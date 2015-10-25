@@ -1,6 +1,7 @@
 from enum import Enum
 
 from django.apps import apps
+from typing import List
 
 
 class PluginType(Enum):
@@ -10,7 +11,7 @@ class PluginType(Enum):
     EXPORT = 4
 
 
-def get_all_plugins() -> "List[class]":
+def get_all_plugins() -> List[type]:
     """
     Returns the PretixPluginMeta classes of all plugins found in the installed Django apps.
     """

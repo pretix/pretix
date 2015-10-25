@@ -1,7 +1,10 @@
+from decimal import Decimal
+
 from django.db.models import Count, Sum
 from django.utils.translation import ugettext_lazy as _
+from typing import Any, Dict, Iterable, List, Tuple
 
-from pretix.base.models import ItemCategory, Order, OrderPosition
+from pretix.base.models import Event, Item, ItemCategory, Order, OrderPosition
 from pretix.base.signals import register_payment_providers
 
 
@@ -10,14 +13,14 @@ class DummyObject:
 
 
 class Dontsum:
-    def __init__(self, value):
+    def __init__(self, value: Any):
         self.value = value
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.value)
 
 
-def tuplesum(tuples):
+def tuplesum(tuples: Iterable[Tuple]) -> Tuple:
     def mysum(it):
         sit = [i for i in it if not isinstance(i, Dontsum)]
         return sum(sit)
@@ -25,7 +28,7 @@ def tuplesum(tuples):
     return tuple(map(mysum, zip(*list(tuples))))
 
 
-def order_overview(event):
+def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]], Dict[str, Tuple[Decimal, Decimal]]]:
     items = event.items.all().select_related(
         'category',  # for re-grouping
     ).prefetch_related(

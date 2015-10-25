@@ -2,6 +2,7 @@ import json
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.dispatch import receiver
+from typing import Tuple
 
 from pretix.base.signals import register_data_exporters
 
@@ -60,7 +61,7 @@ class BaseExporter:
         """
         return {}
 
-    def render(self, form_data: dict) -> tuple:
+    def render(self, form_data: dict) -> Tuple[str, str, str]:
         """
         Render the exported file and return a tuple consisting of a filename, a file type
         and file content.

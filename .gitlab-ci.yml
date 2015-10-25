@@ -6,7 +6,7 @@ tests:
         - virtualenv-3.4 env
         - source env/bin/activate
         - cd src
-        - XDG_CACHE_HOME=/cache pip3 install -r requirements.txt -r requirements/dev.txt
+        - XDG_CACHE_HOME=/cache pip3 install -r requirements.txt -r requirements/dev.txt -r requirements/py34.txt
         - flake8 --ignore=E123,F403,F401,N802,C901,W503 .
         - isort -c -rc .
         - python3 manage.py check

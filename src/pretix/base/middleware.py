@@ -3,6 +3,7 @@ from collections import OrderedDict
 import pytz
 from django.conf import settings
 from django.core.urlresolvers import get_script_prefix
+from django.http import HttpRequest, HttpResponse
 from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
 from django.utils.translation import LANGUAGE_SESSION_KEY
@@ -21,7 +22,7 @@ class LocaleMiddleware:
     for a request.
     """
 
-    def process_request(self, request):
+    def process_request(self, request: HttpRequest):
         language = get_language_from_request(request)
         if hasattr(request, 'event') and not request.path.startswith(get_script_prefix() + 'control'):
             if language not in request.event.settings.locales:
@@ -51,7 +52,7 @@ class LocaleMiddleware:
         else:
             timezone.deactivate()
 
-    def process_response(self, request, response):
+    def process_response(self, request: HttpRequest, response: HttpResponse):
         language = translation.get_language()
         patch_vary_headers(response, ('Accept-Language',))
         if 'Content-Language' not in response:
@@ -59,14 +60,14 @@ class LocaleMiddleware:
         return response
 
 
-def get_language_from_user_settings(request) -> str:
+def get_language_from_user_settings(request: HttpRequest) -> str:
     if request.user.is_authenticated():
         lang_code = request.user.locale
         if lang_code in _supported and lang_code is not None and check_for_language(lang_code):
             return lang_code
 
 
-def get_language_from_session_or_cookie(request) -> str:
+def get_language_from_session_or_cookie(request: HttpRequest) -> str:
     if hasattr(request, 'session'):
         lang_code = request.session.get(LANGUAGE_SESSION_KEY)
         if lang_code in _supported and lang_code is not None and check_for_language(lang_code):
@@ -79,7 +80,7 @@ def get_language_from_session_or_cookie(request) -> str:
         pass
 
 
-def get_language_from_event(request) -> str:
+def get_language_from_event(request: HttpRequest) -> str:
     if hasattr(request, 'event'):
         lang_code = request.event.settings.locale
         try:
@@ -88,7 +89,7 @@ def get_language_from_event(request) -> str:
             pass
 
 
-def get_language_from_browser(request) -> str:
+def get_language_from_browser(request: HttpRequest) -> str:
     accept = request.META.get('HTTP_ACCEPT_LANGUAGE', '')
     for accept_lang, unused in parse_accept_lang_header(accept):
         if accept_lang == '*':
@@ -110,7 +111,7 @@ def get_default_language():
         return settings.LANGUAGE_CODE
 
 
-def get_language_from_request(request) -> str:
+def get_language_from_request(request: HttpRequest) -> str:
     """
     Analyzes the request to find what language the user wants the system to
     show. Only languages listed in settings.LANGUAGES are taken into account.

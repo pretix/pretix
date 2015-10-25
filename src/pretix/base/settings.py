@@ -7,6 +7,7 @@ from django.conf import settings
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.db.models import Model
+from typing import Any, Callable, Dict, Optional, TypeVar, Union
 from versions.models import Versionable
 
 DEFAULTS = {
@@ -109,23 +110,23 @@ class SettingsProxy:
     you. It will return None for non-existing properties.
     """
 
-    def __init__(self, obj, parent=None, type=None):
+    def __init__(self, obj: Model, parent: Optional[Model]=None, type=None):
         self._obj = obj
         self._parent = parent
         self._cached_obj = None
         self._type = type
 
-    def _cache(self):
+    def _cache(self) -> Dict[str, Any]:
         if self._cached_obj is None:
             self._cached_obj = {}
             for setting in self._obj.setting_objects.current.all():
                 self._cached_obj[setting.key] = setting
         return self._cached_obj
 
-    def _flush(self):
+    def _flush(self) -> None:
         self._cached_obj = None
 
-    def _unserialize(self, value, as_type):
+    def _unserialize(self, value: str, as_type: type) -> Any:
         if as_type is not None and isinstance(value, as_type):
             return value
         elif value is None:
@@ -155,7 +156,7 @@ class SettingsProxy:
             return as_type.objects.get(pk=value)
         return value
 
-    def _serialize(self, value):
+    def _serialize(self, value: Any) -> str:
         if isinstance(value, str):
             return value
         elif isinstance(value, int) or isinstance(value, float) \
@@ -174,7 +175,7 @@ class SettingsProxy:
 
         raise TypeError('Unable to serialize %s into a setting.' % str(type(value)))
 
-    def get(self, key, default=None, as_type=None):
+    def get(self, key: str, default: Any=None, as_type: type=None):
         """
         Get a setting specified by key 'key'. Normally, settings are strings, but
         if you put non-strings into the settings object, you can request unserialization
@@ -199,21 +200,21 @@ class SettingsProxy:
 
         return self._unserialize(value, as_type)
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Any:
         return self.get(key)
 
-    def __getattr__(self, key):
+    def __getattr__(self, key: str) -> Any:
         return self.get(key)
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key: str, value: Any) -> None:
         if key.startswith('_'):
             return super().__setattr__(key, value)
         self.set(key, value)
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: str, value: Any) -> None:
         self.set(key, value)
 
-    def set(self, key, value):
+    def set(self, key: str, value: Any) -> None:
         if key in self._cache():
             s = self._cache()[key]
             s = s.clone()
@@ -223,12 +224,12 @@ class SettingsProxy:
         s.save()
         self._cache()[key] = s
 
-    def __delattr__(self, key):
+    def __delattr__(self, key: str) -> None:
         if key.startswith('_'):
             return super().__delattr__(key)
         return self.__delitem__(key)
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: str) -> None:
         if key in self._cache():
             self._cache()[key].delete()
             del self._cache()[key]
@@ -240,36 +241,36 @@ class SettingsSandbox:
     prefixes for you.
     """
 
-    def __init__(self, type, key, event):
+    def __init__(self, type: str, key: str, event: Versionable):
         self._event = event
         self._type = type
         self._key = key
 
-    def _convert_key(self, key):
+    def _convert_key(self, key: str) -> str:
         return '%s_%s_%s' % (self._type, self._key, key)
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: str, value: Any) -> None:
         self.set(key, value)
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key: str, value: Any) -> None:
         if key.startswith('_'):
             return super().__setattr__(key, value)
         self.set(key, value)
 
-    def __getattr__(self, item):
+    def __getattr__(self, item: str) -> Any:
         return self.get(item)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: str) -> Any:
         return self.get(item)
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: str) -> None:
         del self._event.settings[self._convert_key(key)]
 
-    def __delattr__(self, key):
+    def __delattr__(self, key: str) -> None:
         del self._event.settings[self._convert_key(key)]
 
-    def get(self, key, default=None, as_type=str):
+    def get(self, key: str, default: Any=None, as_type: type=str):
         return self._event.settings.get(self._convert_key(key), default=default, as_type=as_type)
 
-    def set(self, key, value):
+    def set(self, key: str, value: Any):
         self._event.settings.set(self._convert_key(key), value)

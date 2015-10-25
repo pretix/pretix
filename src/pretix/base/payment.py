@@ -9,8 +9,9 @@ from django.forms import Form
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
+from typing import Any, Dict
 
-from pretix.base.models import CartPosition, Order, Quota
+from pretix.base.models import CartPosition, Event, Order, Quota
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
 
@@ -20,7 +21,7 @@ class BasePaymentProvider:
     This is the base class for all payment providers.
     """
 
-    def __init__(self, event):
+    def __init__(self, event: Event):
         self.event = event
         self.settings = SettingsSandbox('payment', self.identifier, event)
 
@@ -193,7 +194,7 @@ class BasePaymentProvider:
         """
         raise NotImplementedError()  # NOQA
 
-    def checkout_prepare(self, request: HttpRequest, cart: dict) -> "bool|str":
+    def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> "bool|str":
         """
         Will be called after the user selected this provider as his payment method.
         If you provided a form to the user to enter payment data, this method should
@@ -395,7 +396,7 @@ class FreeOrderProvider(BasePaymentProvider):
     def identifier(self) -> str:
         return "free"
 
-    def checkout_confirm_render(self, request) -> str:
+    def checkout_confirm_render(self, request: HttpRequest) -> str:
         return _("No payment is required as this order only includes products which are free of charge.")
 
     def order_pending_render(self, request: HttpRequest, order: Order) -> str:

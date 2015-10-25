@@ -1,4 +1,6 @@
 import sys
+from datetime import datetime
+from decimal import Decimal
 from itertools import product
 
 from django.db import models
@@ -6,6 +8,7 @@ from django.db.models import Q, Case, Count, Sum, When
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+from typing import List, Tuple, Union
 from versions.models import VersionedForeignKey, VersionedManyToManyField
 
 from pretix.base.i18n import I18nCharField, I18nTextField
@@ -61,11 +64,11 @@ class ItemCategory(Versionable):
     def sortkey(self):
         return self.position, self.version_birth_date
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
 
 
-def itempicture_upload_to(instance, filename):
+def itempicture_upload_to(instance, filename: str) -> str:
     return '%s/%s/item-%s.%s' % (
         instance.event.organizer.slug, instance.event.slug, instance.identity,
         filename.split('.')[-1]
@@ -170,7 +173,7 @@ class Item(Versionable):
         if self.event:
             self.event.get_cache().clear()
 
-    def get_all_variations(self, use_cache: bool=False) -> "list[VariationDict]":
+    def get_all_variations(self, use_cache: bool=False) -> List[VariationDict]:
         """
         This method returns a list containing all variations of this
         item. The list contains one VariationDict per variation, where
@@ -438,10 +441,10 @@ class PropertyValue(Versionable):
             self.prop.event.get_cache().clear()
 
     @property
-    def sortkey(self):
+    def sortkey(self) -> Tuple[int, datetime]:
         return self.position, self.version_birth_date
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
 
 
@@ -508,7 +511,7 @@ class ItemVariation(Versionable):
         if self.item:
             self.item.event.get_cache().clear()
 
-    def check_quotas(self):
+    def check_quotas(self) -> Tuple[int, int]:
         """
         This method is used to determine whether this ItemVariation is currently
         available for sale in terms of quotas.
@@ -518,7 +521,7 @@ class ItemVariation(Versionable):
         return min([q.availability() for q in self.quotas.all()],
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
-    def to_variation_dict(self):
+    def to_variation_dict(self) -> VariationDict:
         """
         :return: a :py:class:`VariationDict` representing this variation.
         """
@@ -528,7 +531,7 @@ class ItemVariation(Versionable):
         vd['variation'] = self
         return vd
 
-    def check_restrictions(self):
+    def check_restrictions(self) -> Union[bool, Decimal]:
         """
         This method is used to determine whether this ItemVariation is restricted
         in sale by any restriction plugins.
@@ -806,7 +809,7 @@ class Quota(Versionable):
         if self.event:
             self.event.get_cache().clear()
 
-    def availability(self):
+    def availability(self) -> Tuple[int, int]:
         """
         This method is used to determine whether Items or ItemVariations belonging
         to this quota should currently be available for sale.
@@ -864,7 +867,7 @@ class Quota(Versionable):
         return o
 
     @cached_property
-    def _position_lookup(self):
+    def _position_lookup(self) -> Q:
         return (
             (  # Orders for items which do not have any variations
                Q(variation__isnull=True)

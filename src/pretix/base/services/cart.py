@@ -1,9 +1,10 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.db.models import Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+from typing import List, Optional, Tuple
 
 from pretix.base.models import (
     CartPosition, Event, EventLock, Item, ItemVariation, Quota,
@@ -29,7 +30,7 @@ error_messages = {
 }
 
 
-def _extend_existing(event, cart_id, expiry):
+def _extend_existing(event: Event, cart_id: str, expiry: datetime) -> None:
     # Extend this user's cart session to 30 minutes from now to ensure all items in the
     # cart expire at the same time
     # We can extend the reservation of items which are not yet expired without risk
@@ -38,7 +39,7 @@ def _extend_existing(event, cart_id, expiry):
     ).update(expires=expiry)
 
 
-def _re_add_expired_positions(items, event, cart_id):
+def _re_add_expired_positions(items: List[CartPosition], event: Event, cart_id: str) -> List[CartPosition]:
     positions = set()
     # For items that are already expired, we have to delete and re-add them, as they might
     # be no longer available or prices might have changed. Sorry!
@@ -51,20 +52,21 @@ def _re_add_expired_positions(items, event, cart_id):
     return positions
 
 
-def _delete_expired(expired):
+def _delete_expired(expired: List[CartPosition]) -> None:
     for cp in expired:
         if cp.version_end_date is None:
             cp.delete()
 
 
-def _check_date(event):
+def _check_date(event: Event) -> None:
     if event.presale_start and now() < event.presale_start:
         raise CartError(error_messages['not_started'])
     if event.presale_end and now() > event.presale_end:
         raise CartError(error_messages['ended'])
 
 
-def _add_items(event, items, cart_id, expiry):
+def _add_items(event: Event, items: List[Tuple[str, Optional[str], int]],
+               cart_id: str, expiry: datetime) -> Optional[str]:
     err = None
 
     # Fetch items from the database
@@ -129,7 +131,7 @@ def _add_items(event, items, cart_id, expiry):
     return err
 
 
-def _add_items_to_cart(event: Event, items: list, cart_id: str=None):
+def _add_items_to_cart(event: Event, items: List[Tuple[str, Optional[str], int]], cart_id: str=None) -> None:
     with event.lock():
         _check_date(event)
         existing = CartPosition.objects.current.filter(Q(cart_id=cart_id) & Q(event=event)).count()
@@ -150,7 +152,7 @@ def _add_items_to_cart(event: Event, items: list, cart_id: str=None):
             raise CartError(err)
 
 
-def add_items_to_cart(event: str, items: list, cart_id: str=None):
+def add_items_to_cart(event: str, items: List[Tuple[str, Optional[str], int]], cart_id: str=None) -> None:
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
@@ -160,12 +162,12 @@ def add_items_to_cart(event: str, items: list, cart_id: str=None):
     """
     event = Event.objects.current.get(identity=event)
     try:
-        return _add_items_to_cart(event, items, cart_id)
+        _add_items_to_cart(event, items, cart_id)
     except EventLock.LockTimeoutException:
         raise CartError(error_messages['busy'])
 
 
-def remove_items_from_cart(event: str, items: list, cart_id: str=None):
+def remove_items_from_cart(event: str, items: List[Tuple[str, Optional[str], int]], cart_id: str=None) -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
@@ -188,10 +190,10 @@ if settings.HAS_CELERY:
     from pretix.celery import app
 
     @app.task(bind=True, max_retries=5, default_retry_delay=2)
-    def add_items_to_cart_task(self, event: str, items: list, cart_id: str):
+    def add_items_to_cart_task(self, event: str, items: List[Tuple[str, Optional[str], int]], cart_id: str):
         event = Event.objects.current.get(identity=event)
         try:
-            return _add_items_to_cart(event, items, cart_id)
+            _add_items_to_cart(event, items, cart_id)
         except EventLock.LockTimeoutException:
             self.retry(exc=CartError(error_messages['busy']))
 

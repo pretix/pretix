@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
@@ -10,10 +10,10 @@ class DownloadView(TemplateView):
     template_name = "pretixbase/cachedfiles/pending.html"
 
     @cached_property
-    def object(self):
+    def object(self) -> CachedFile:
         return get_object_or_404(CachedFile, id=self.kwargs['id'])
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         if 'ajax' in request.GET:
             return HttpResponse('1' if self.object.file else '0')
         elif self.object.file:
