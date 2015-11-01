@@ -15,7 +15,7 @@ from pretix.presale.views.async import AsyncAction
 class CartActionMixin:
 
     def get_next_url(self):
-        if "next" in self.request.GET and '://' not in self.request.GET:
+        if "next" in self.request.GET and '://' not in self.request.GET.get('next'):
             return self.request.GET.get('next')
         else:
             return eventreverse(self.request.event, 'presale:event.index')
