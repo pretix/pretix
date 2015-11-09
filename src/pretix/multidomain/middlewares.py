@@ -60,6 +60,12 @@ class MultiDomainMiddleware:
 
 
 class SessionMiddleware(BaseSessionMiddleware):
+    """
+    We override the default implementation from django because we need to handle
+    cookie domains differently depending on whether we are on the main domain or
+    a custom domain.
+    """
+
     def process_response(self, request, response):
         try:
             accessed = request.session.accessed
@@ -98,6 +104,12 @@ class SessionMiddleware(BaseSessionMiddleware):
 
 
 class CsrfViewMiddleware(BaseCsrfMiddleware):
+    """
+    We override the default implementation from django because we need to handle
+    cookie domains differently depending on whether we are on the main domain or
+    a custom domain.
+    """
+
     def process_response(self, request, response):
         if getattr(response, 'csrf_processing_done', False):
             return response
