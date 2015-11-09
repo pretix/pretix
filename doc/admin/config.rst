@@ -29,6 +29,7 @@ Example::
     currency=EUR
     datadir=/data
     plugins_default=pretix.plugins.sendmail,pretix.plugins.statistics
+    cookie_domain=.pretix.de
 
 ``instance_name``
     The name of this installation. Default: ``pretix.de``
@@ -46,6 +47,9 @@ Example::
 ``plugins_default``
     A comma-separated list of plugins that are enabled by default for all new events.
     Defaults to ``pretix.plugins.sendmail,pretix.plugins.statistics``.
+
+``cookie_domain``
+    The cookie domain to be set. Defaults to ``None``.
 
 
 Locale settings

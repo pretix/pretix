@@ -118,6 +118,8 @@ if HAS_CELERY:
     CELERY_RESULT_BACKEND = config.get('celery', 'backend')
     CELERY_SEND_TASK_ERROR_EMAILS = bool(ADMINS)
 
+SESSION_COOKIE_DOMAIN = config.get('pretix', 'cookie_domain', fallback=None)
+
 # Internal settings
 
 STATIC_ROOT = '_static'

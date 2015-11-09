@@ -13,6 +13,8 @@ from django.utils.http import cookie_date
 
 from pretix.multidomain.models import KnownDomain
 
+LOCAL_HOST_NAMES = ('testserver', 'localhost')
+
 
 class MultiDomainMiddleware:
     def process_request(self, request):
@@ -37,7 +39,7 @@ class MultiDomainMiddleware:
                 kd = KnownDomain.objects.get(domainname=domain)  # noqa
                 request.domain = kd
             except:
-                if settings.DEBUG or domain in ('testserver', 'localhost') or domain == default_domain:
+                if settings.DEBUG or domain in LOCAL_HOST_NAMES or domain == default_domain:
                     request.urlconf = "pretix.multidomain.maindomain_urlconf"
                 else:
                     raise DisallowedHost("Unknown host: %r" % host)
@@ -87,7 +89,8 @@ class SessionMiddleware(BaseSessionMiddleware):
                         request.session.save()
                         response.set_cookie(settings.SESSION_COOKIE_NAME,
                                             request.session.session_key, max_age=max_age,
-                                            expires=expires, domain=request.host,
+                                            expires=expires,
+                                            domain=get_cookie_domain(request),
                                             path=settings.SESSION_COOKIE_PATH,
                                             secure=request.scheme == 'https',
                                             httponly=settings.SESSION_COOKIE_HTTPONLY or None)
@@ -113,7 +116,7 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
         response.set_cookie(settings.CSRF_COOKIE_NAME,
                             request.META["CSRF_COOKIE"],
                             max_age=settings.CSRF_COOKIE_AGE,
-                            domain=request.host,
+                            domain=get_cookie_domain(request),
                             path=settings.CSRF_COOKIE_PATH,
                             secure=request.scheme == 'https',
                             httponly=settings.CSRF_COOKIE_HTTPONLY
@@ -122,3 +125,19 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
         patch_vary_headers(response, ('Cookie',))
         response.csrf_processing_done = True
         return response
+
+
+def get_cookie_domain(request):
+    if '.' not in request.host:
+        # As per spec, browsers do not accept cookie domains without dots in it,
+        # e.g. "localhost", see http://curl.haxx.se/rfc/cookie_spec.html
+        return None
+    default_domain, default_port = split_domain_port(urlparse(settings.SITE_URL).netloc)
+    if request.host == default_domain:
+        # We are on our main domain, set the cookie domain the user has chosen
+        return settings.SESSION_COOKIE_DOMAIN
+    else:
+        # We are on an organizer's custom domain, set no cookie domain, as we do not want
+        # the cookies to be present on any other domain. Setting an explicit value can be
+        # dangerous, see http://erik.io/blog/2014/03/04/definitive-guide-to-cookie-domains/
+        return None
