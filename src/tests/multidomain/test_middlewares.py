@@ -1,6 +1,7 @@
 import pytest
 from django.conf import settings
 from django.http import Http404
+from django.test.utils import override_settings
 from django.utils.timezone import now
 
 from pretix.base.models import Event, Organizer
@@ -84,16 +85,17 @@ def test_cookie_domain_on_custom_domain(env, client):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     r = client.get('/2015/', HTTP_HOST='foobar')
     assert r.status_code == 200
-    assert r.client.cookies['pretix_csrftoken']['domain'] == 'foobar'
-    assert r.client.cookies['pretix_session']['domain'] == 'foobar'
+    assert r.client.cookies['pretix_csrftoken']['domain'] == ''
+    assert r.client.cookies['pretix_session']['domain'] == ''
 
 
 @pytest.mark.django_db
 def test_cookie_domain_on_main_domain(env, client):
-    r = client.get('/mrmcd/2015/', HTTP_HOST='example.com')
-    assert r.status_code == 200
-    assert r.client.cookies['pretix_csrftoken']['domain'] == 'example.com'
-    assert r.client.cookies['pretix_session']['domain'] == 'example.com'
+    with override_settings(SESSION_COOKIE_DOMAIN='example.com'):
+        r = client.get('/mrmcd/2015/', HTTP_HOST='example.com')
+        assert r.status_code == 200
+        assert r.client.cookies['pretix_csrftoken']['domain'] == 'example.com'
+        assert r.client.cookies['pretix_session']['domain'] == 'example.com'
 
 
 @pytest.mark.django_db
