@@ -307,11 +307,6 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
     def get_success_message(self, value):
         return None
 
-    def success(self, value):
-        # Message is delivered via GET parameter
-        # messages.success(request, _('Your order has been placed.'))
-        return redirect(self.get_success_url(value))
-
     def get_success_url(self, value):
         order = Order.objects.current.get(identity=value)
         return self.get_order_url(order)
