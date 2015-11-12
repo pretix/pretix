@@ -93,6 +93,22 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
         var1 = ItemVariation.objects.create(item=item)
         var1.values.add(val1)
         q.variations.add(var1)
+        self._assert_variation_found()
+
+    def test_one_variation_in_unlimited_quota(self):
+        c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+        q = Quota.objects.create(event=self.event, name='Quota', size=None)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
+        prop1 = Property.objects.create(event=self.event, name="Color", item=item)
+        val1 = PropertyValue.objects.create(prop=prop1, value="Red")
+        PropertyValue.objects.create(prop=prop1, value="Black")
+        q.items.add(item)
+        var1 = ItemVariation.objects.create(item=item)
+        var1.values.add(val1)
+        q.variations.add(var1)
+        self._assert_variation_found()
+
+    def _assert_variation_found(self):
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
         self.assertIn("Early-bird",
                       self.driver.find_element_by_css_selector("section:nth-of-type(1) div:nth-of-type(1)").text)
