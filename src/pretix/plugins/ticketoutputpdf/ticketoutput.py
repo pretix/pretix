@@ -1,3 +1,4 @@
+import copy
 import logging
 from collections import OrderedDict
 from io import BytesIO
@@ -94,15 +95,14 @@ class PdfTicketOutput(BaseTicketOutput):
         output = PdfFileWriter()
         bg_file = self.settings.get('background', as_type=File)
         if isinstance(bg_file, File):
-            new_bg_file = lambda: default_storage.open(bg_file.name, "rb")
+            bgf = default_storage.open(bg_file.name, "rb")
         else:
-            new_bg_file = lambda: open(finders.find('pretixpresale/pdf/ticket_default_a4.pdf'), "rb")
+            bgf = open(finders.find('pretixpresale/pdf/ticket_default_a4.pdf'), "rb")
+        bg_pdf = PdfFileReader(bgf)
         for page in new_pdf.pages:
-            with new_bg_file() as bgf:
-                bg_pdf = PdfFileReader(bgf)
-                bg_page = bg_pdf.getPage(0)
-                bg_page.mergePage(page)
-                output.addPage(bg_page)
+            bg_page = copy.copy(bg_pdf.getPage(0))
+            bg_page.mergePage(page)
+            output.addPage(bg_page)
 
         outbuffer = BytesIO()
         output.write(outbuffer)
