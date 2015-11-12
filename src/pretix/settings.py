@@ -129,7 +129,7 @@ LANGUAGE_COOKIE_NAME = 'pretix_language'
 CSRF_COOKIE_NAME = 'pretix_csrftoken'
 SESSION_COOKIE_HTTPONLY = True
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -141,7 +141,6 @@ INSTALLED_APPS = (
     'pretix.multidomain',
     'compressor',
     'bootstrap3',
-    'debug_toolbar.apps.DebugToolbarConfig',
     'djangoformsetjs',
     'pretix.plugins.timerestriction',
     'pretix.plugins.banktransfer',
@@ -152,23 +151,29 @@ INSTALLED_APPS = (
     'pretix.plugins.statistics',
     'pretix.plugins.reports',
     'pretix.plugins.pretixdroid',
-    'easy_thumbnails',
-)
+    'easy_thumbnails'
+]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'pretix.multidomain.middlewares.MultiDomainMiddleware',
     'pretix.multidomain.middlewares.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'pretix.multidomain.middlewares.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pretix.control.middleware.PermissionMiddleware',
     'pretix.presale.middleware.EventMiddleware',
     'pretix.base.middleware.LocaleMiddleware',
-)
+]
+
+try:
+    import debug_toolbar
+    INSTALLED_APPS.append('debug_toolbar.apps.DebugToolbarConfig')
+    MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+except ImportError:
+    pass
 
 ROOT_URLCONF = 'pretix.urls'
 
