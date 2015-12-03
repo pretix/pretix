@@ -119,11 +119,6 @@ class EventSettingsForm(SettingsForm):
         choices=settings.LANGUAGES,
         label=_("Default language"),
     )
-    user_mail_required = forms.BooleanField(
-        label=_("Require e-mail adresses"),
-        help_text=_("Require all customers to provide an e-mail address."),
-        required=False
-    )
     attendee_names_asked = forms.BooleanField(
         label=_("Ask for attendee names"),
         help_text=_("Ask for a name for all tickets which include admission to the event."),

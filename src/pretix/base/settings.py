@@ -11,10 +11,6 @@ from typing import Any, Callable, Dict, Optional, TypeVar, Union
 from versions.models import Versionable
 
 DEFAULTS = {
-    'user_mail_required': {
-        'default': 'False',
-        'type': bool
-    },
     'max_items_per_order': {
         'default': '10',
         'type': int
