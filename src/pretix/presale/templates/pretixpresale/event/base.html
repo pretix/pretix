@@ -1,6 +1,6 @@
 {% extends "pretixpresale/base.html" %}
 {% load i18n %}
-{% load static %}
+{% load staticfiles %}
 {% load eventurl %}
 {% block thetitle %}
     {% block title %}{% endblock %}{% if url_name != "event.index" %} :: {% endif %}{{ event.name }}
