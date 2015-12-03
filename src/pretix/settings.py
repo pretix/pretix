@@ -87,15 +87,16 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+REAL_CACHE_USED = False
+SESSION_ENGINE = None
 
 HAS_MEMCACHED = config.has_option('memcached', 'location')
 if HAS_MEMCACHED:
+    REAL_CACHE_USED = True
     CACHES['default'] = {
         'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
         'LOCATION': config.get('memcached', 'location'),
     }
-
-SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
 HAS_REDIS = config.has_option('redis', 'location')
 if HAS_REDIS:
@@ -108,9 +109,15 @@ if HAS_REDIS:
     }
     if not HAS_MEMCACHED:
         CACHES['default'] = CACHES['redis']
+        REAL_CACHE_USED = True
     if config.getboolean('redis', 'sessions', fallback=False):
         SESSION_ENGINE = "django.contrib.sessions.backends.cache"
         SESSION_CACHE_ALIAS = "redis"
+
+if not SESSION_ENGINE and REAL_CACHE_USED:
+    SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+else:
+    SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 HAS_CELERY = config.has_option('celery', 'broker')
 if HAS_CELERY:
