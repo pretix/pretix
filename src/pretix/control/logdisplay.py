@@ -11,6 +11,7 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
         'pretix.event.order.unpaid': _('The order has been marked as unpaid.'),
         'pretix.event.order.resend': _('The link to the order detail page has been resent to the user.'),
         'pretix.event.order.expirychanged': _('The order\'s expiry date has been changed.'),
+        'pretix.event.order.expired': _('The order has been marked as expired.'),
         'pretix.event.order.paid': _('The order has been marked as paid.'),
         'pretix.event.order.refunded': _('The order has been refunded.'),
         'pretix.event.order.cancelled': _('The order has been cancelled.'),

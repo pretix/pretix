@@ -117,11 +117,17 @@ class EventSettingsForm(SettingsForm):
                     "days configured above."),
         required=False
     )
+    payment_term_expire_automatically = forms.BooleanField(
+        label=_('Automatically expire unpaid orders'),
+        help_text=_("If checked, all unpaid orders will automatically go from 'pending' to 'expired' "
+                    "after the end of their payment deadline. This means that those tickets go back to "
+                    "the pool and can be ordered by other people."),
+        required=False
+    )
     payment_term_accept_late = forms.BooleanField(
         label=_('Accept late payments'),
-        help_text=_("Accept payments that come after the end of the order's payment term. "
-                    "Payments will only be accepted if the regarding quotas have remaining "
-                    "capacity. No payments will be accepted after the 'Last date of payments' "
+        help_text=_("Accept payments for orders even when they are in 'expired' state as long as enough "
+                    "capacity is available. No payments will ever be accepted after the 'Last date of payments' "
                     "configured above."),
         required=False
     )
