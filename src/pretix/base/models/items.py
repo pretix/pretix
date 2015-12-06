@@ -1,6 +1,5 @@
 import sys
 from datetime import datetime
-from decimal import Decimal
 from itertools import product
 
 from django.db import models
@@ -8,7 +7,7 @@ from django.db.models import Q, Case, Count, Sum, When
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from typing import List, Tuple, Union
+from typing import List, Tuple
 from versions.models import VersionedForeignKey, VersionedManyToManyField
 
 from pretix.base.i18n import I18nCharField, I18nTextField
@@ -98,6 +97,10 @@ class Item(Versionable):
     :type admission: bool
     :param picture: A product picture to be shown next to the product description.
     :type picture: File
+    :param available_from: The date this product goes on sale
+    :type available_from: datetime
+    :param available_until: The date until when the product is on sale
+    :type available_until: datetime
 
     """
 
@@ -152,6 +155,16 @@ class Item(Versionable):
         null=True, blank=True,
         upload_to=itempicture_upload_to
     )
+    available_from = models.DateTimeField(
+        verbose_name=_("Available from"),
+        null=True, blank=True,
+        help_text=_('This product will not be sold before the given date.')
+    )
+    available_until = models.DateTimeField(
+        verbose_name=_("Available until"),
+        null=True, blank=True,
+        help_text=_('This product will not be sold after the given date.')
+    )
 
     class Meta:
         verbose_name = _("Product")
@@ -170,6 +183,19 @@ class Item(Versionable):
         super().delete(*args, **kwargs)
         if self.event:
             self.event.get_cache().clear()
+
+    def is_available(self) -> bool:
+        """
+        Returns whether this item is available according to its ``active`` flag
+        and its ``available_from`` and ``available_until`` fields
+        """
+        if not self.active:
+            return False
+        if self.available_from and self.available_from > now():
+            return False
+        if self.available_until and self.available_until < now():
+            return False
+        return True
 
     def get_all_variations(self, use_cache: bool=False) -> List[VariationDict]:
         """

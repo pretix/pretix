@@ -93,7 +93,7 @@ def _add_items(event: Event, items: List[Tuple[str, Optional[str], int]],
         # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
         quotas = list(item.quotas.all()) if variation is None else list(variation.quotas.all())
 
-        if len(quotas) == 0 or not item.active:
+        if len(quotas) == 0 or not item.is_available():
             err = err or error_messages['unavailable']
             continue
 

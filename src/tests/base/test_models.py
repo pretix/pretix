@@ -425,6 +425,40 @@ class ItemCategoryTest(TestCase):
         assert c2 > c1
 
 
+class ItemTest(TestCase):
+    """
+    This test case tests various methods around the item model.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        o = Organizer.objects.create(name='Dummy', slug='dummy')
+        cls.event = Event.objects.create(
+            organizer=o, name='Dummy', slug='dummy',
+            date_from=now(),
+        )
+
+    def test_is_available(self):
+        i = Item.objects.create(
+            event=self.event, name="Ticket", default_price=23,
+            active=True, available_until=now() + timedelta(days=1),
+        )
+        assert i.is_available()
+        i.available_from = now() - timedelta(days=1)
+        assert i.is_available()
+        i.available_from = now() + timedelta(days=1)
+        i.available_until = None
+        assert not i.is_available()
+        i.available_from = None
+        i.available_until = now() - timedelta(days=1)
+        assert not i.is_available()
+        i.available_from = None
+        i.available_until = None
+        assert i.is_available()
+        i.active = False
+        assert not i.is_available()
+
+
 class CachedFileTestCase(TestCase):
     def test_file_handling(self):
         cf = CachedFile()

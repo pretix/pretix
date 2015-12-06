@@ -1,12 +1,10 @@
 import datetime
-import time
 from datetime import timedelta
 
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.test import TestCase
 from django.utils.timezone import now
-from tests.base import BrowserTest
 
 from pretix.base.models import (
     CartPosition, Event, Item, ItemCategory, ItemVariation, Organizer,
@@ -158,6 +156,31 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
         self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
 
+    def test_in_time_available(self):
+        self.ticket.available_until = now() + timedelta(days=2)
+        self.ticket.available_from = now() - timedelta(days=2)
+        self.ticket.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_' + self.ticket.identity: '1',
+        }, follow=True)
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
+
+    def test_no_longer_available(self):
+        self.ticket.available_until = now() - timedelta(days=2)
+        self.ticket.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_' + self.ticket.identity: '1',
+        }, follow=True)
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
+
+    def test_not_yet_available(self):
+        self.ticket.available_from = now() + timedelta(days=2)
+        self.ticket.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_' + self.ticket.identity: '1',
+        }, follow=True)
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
+
     def test_max_items(self):
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -261,21 +284,6 @@ class CartTest(CartTestMixin, TestCase):
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
         self.assertFalse(CartPosition.objects.current.filter(identity=cp1.identity).exists())
-
-    def test_restriction_ok(self):
-        self.event.plugins = 'tests.testdummy'
-        self.event.save()
-        self.event.settings.testdummy_available = 'yes'
-        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'item_' + self.ticket.identity: '1',
-        }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
-                             target_status_code=200)
-        objs = list(CartPosition.objects.current.filter(cart_id=self.session_key, event=self.event))
-        self.assertEqual(len(objs), 1)
-        self.assertEqual(objs[0].item, self.ticket)
-        self.assertIsNone(objs[0].variation)
-        self.assertEqual(objs[0].price, 23)
 
     def test_remove_simple(self):
         CartPosition.objects.create(

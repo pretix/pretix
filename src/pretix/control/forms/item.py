@@ -137,6 +137,8 @@ class ItemFormGeneral(VersionedModelForm):
             'picture',
             'default_price',
             'tax_rate',
+            'available_from',
+            'available_until',
         ]
 
 
