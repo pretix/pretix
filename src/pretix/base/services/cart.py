@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from django.conf import settings
+from django.db import transaction
 from django.db.models import Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -65,7 +66,7 @@ def _check_date(event: Event) -> None:
         raise CartError(error_messages['ended'])
 
 
-def _add_items(event: Event, items: List[Tuple[str, Optional[str], int]],
+def _add_new_items(event: Event, items: List[Tuple[str, Optional[str], int]],
                cart_id: str, expiry: datetime) -> Optional[str]:
     err = None
 
@@ -145,7 +146,7 @@ def _add_items_to_cart(event: Event, items: List[Tuple[str, Optional[str], int]]
         if not items:
             raise CartError(error_messages['empty'])
 
-        err = _add_items(event, items, cart_id, expiry)
+        err = _add_new_items(event, items, cart_id, expiry)
         _delete_expired(expired)
         if err:
             raise CartError(err)

@@ -182,21 +182,22 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
         _check_positions(event, dt, positions)
         order = _create_order(event, email, positions, dt, pprov,
                               locale=locale)
-        mail(
-            order.email, _('Your order: %(code)s') % {'code': order.code},
-            'pretixpresale/email/order_placed.txt',
-            {
-                'order': order,
-                'event': event,
-                'url': build_absolute_uri(event, 'presale:event.order', kwargs={
-                    'order': order.code,
-                    'secret': order.secret
-                }),
-                'payment': pprov.order_pending_mail_render(order)
-            },
-            event, locale=order.locale
-        )
-        return order.identity
+
+    mail(
+        order.email, _('Your order: %(code)s') % {'code': order.code},
+        'pretixpresale/email/order_placed.txt',
+        {
+            'order': order,
+            'event': event,
+            'url': build_absolute_uri(event, 'presale:event.order', kwargs={
+                'order': order.code,
+                'secret': order.secret
+            }),
+            'payment': pprov.order_pending_mail_render(order)
+        },
+        event, locale=order.locale
+    )
+    return order.identity
 
 
 def perform_order(event: str, payment_provider: str, positions: List[str],
