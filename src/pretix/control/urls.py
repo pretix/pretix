@@ -30,8 +30,6 @@ urlpatterns = [
         url(r'^items/(?P<item>[0-9a-f-]+)/$', item.ItemUpdateGeneral.as_view(), name='event.item'),
         url(r'^items/(?P<item>[0-9a-f-]+)/variations$', item.ItemVariations.as_view(),
             name='event.item.variations'),
-        url(r'^items/(?P<item>[0-9a-f-]+)/restrictions$', item.ItemRestrictions.as_view(),
-            name='event.item.restrictions'),
         url(r'^items/(?P<item>[0-9a-f-]+)/properties$', item.ItemProperties.as_view(),
             name='event.item.properties'),
         url(r'^items/(?P<item>[0-9a-f-]+)/up$', item.item_move_up, name='event.items.up'),

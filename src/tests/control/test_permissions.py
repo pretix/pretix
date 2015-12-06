@@ -36,7 +36,6 @@ event_urls = [
     "items/abc/",
     "items/abc/variations",
     "items/abc/properties",
-    "items/abc/restrictions",
     "categories/",
     "categories/add",
     "categories/abc/",

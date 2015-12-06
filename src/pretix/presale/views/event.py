@@ -1,6 +1,7 @@
 import sys
 
-from django.db.models import Count
+from django.db.models import Q, Count
+from django.utils.timezone import now
 from django.views.generic import TemplateView
 
 from pretix.presale.views import CartMixin, EventViewMixin
@@ -13,7 +14,9 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         # Fetch all items
         items = self.request.event.items.all().filter(
-            active=True
+            Q(active=True)
+            & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
+            & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
         ).select_related(
             'category',  # for re-grouping
         ).prefetch_related(

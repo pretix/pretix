@@ -103,7 +103,8 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
         if cp.expires >= dt:
             # Other checks are not necessary
             continue
-        price = cp.item.check_restrictions() if cp.variation is None else cp.variation.check_restrictions()
+        price = cp.item.default_price if cp.variation is None else (
+            cp.variation.default_price if cp.variation.default_price is not None else cp.item.default_price)
         if price is False or len(quotas) == 0:
             err = err or error_messages['unavailable']
             cp.delete()

@@ -90,15 +90,10 @@ def _add_items(event: Event, items: List[Tuple[str, Optional[str], int]],
         item = items_cache[i[0]]
         variation = variations_cache[i[1]] if i[1] is not None else None
 
-        # Execute restriction plugins to check whether they (a) change the price or
-        # (b) make the item/variation unavailable. If neither is the case, check_restriction
-        # will correctly return the default price
-        price = item.check_restrictions() if variation is None else variation.check_restrictions()
-
         # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
         quotas = list(item.quotas.all()) if variation is None else list(variation.quotas.all())
 
-        if price is False or len(quotas) == 0 or not item.active:
+        if len(quotas) == 0 or not item.is_available():
             err = err or error_messages['unavailable']
             continue
 
@@ -121,11 +116,15 @@ def _add_items(event: Event, items: List[Tuple[str, Optional[str], int]],
                 # Recreating
                 cp = i[3].clone()
                 cp.expires = expiry
-                cp.price = price
+                cp.price = item.default_price if variation is None else (
+                    variation.default_price if variation.default_price is not None else item.default_price)
                 cp.save()
             else:
                 CartPosition.objects.create(
-                    event=event, item=item, variation=variation, price=price, expires=expiry,
+                    event=event, item=item, variation=variation,
+                    price=item.default_price if variation is None else (
+                        variation.default_price if variation.default_price is not None else item.default_price),
+                    expires=expiry,
                     cart_id=cart_id
                 )
     return err

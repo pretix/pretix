@@ -54,6 +54,31 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
         self.assertIn("Early-bird", self.driver.find_element_by_css_selector("section .product-row:first-child").text)
 
+    def test_timely_available(self):
+        q = Quota.objects.create(event=self.event, name='Quota', size=2)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                   available_until=now() + datetime.timedelta(days=2),
+                                   available_from=now() - datetime.timedelta(days=2))
+        q.items.add(item)
+        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
+        self.assertIn("Early-bird", self.driver.find_element_by_css_selector("body").text)
+
+    def test_no_longer_available(self):
+        q = Quota.objects.create(event=self.event, name='Quota', size=2)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                   available_until=now() - datetime.timedelta(days=2))
+        q.items.add(item)
+        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
+        self.assertNotIn("Early-bird", self.driver.find_element_by_css_selector("body").text)
+
+    def test_not_yet_available(self):
+        q = Quota.objects.create(event=self.event, name='Quota', size=2)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                   available_from=now() + datetime.timedelta(days=2))
+        q.items.add(item)
+        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
+        self.assertNotIn("Early-bird", self.driver.find_element_by_css_selector("body").text)
+
     def test_simple_with_category(self):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=2)

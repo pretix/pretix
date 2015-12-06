@@ -740,68 +740,6 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
         return context
 
 
-class ItemRestrictions(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
-    permission = 'can_change_items'
-    template_name = 'pretixcontrol/item/restrictions.html'
-
-    def get_formsets(self):
-        responses = restriction_formset.send(self.object.event, item=self.object)
-        formsets = []
-        for receiver, response in responses:
-            response['formset'] = response['formsetclass'](
-                self.request.POST if self.request.method == 'POST' else None,
-                instance=self.object,
-                prefix=response['prefix'],
-            )
-            formsets.append(response)
-        return formsets
-
-    def main(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.request = request
-        self.formsets = self.get_formsets()
-
-    def get(self, request, *args, **kwargs):
-        self.main(request, *args, **kwargs)
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
-
-    @transaction.atomic()
-    def post(self, request, *args, **kwargs):
-        self.main(request, *args, **kwargs)
-        valid = True
-        for f in self.formsets:
-            valid &= f['formset'].is_valid()
-        if valid:
-            for f in self.formsets:
-                for form in f['formset']:
-                    if 'DELETE' in form.cleaned_data and form.cleaned_data['DELETE'] is True:
-                        if form.instance.pk is None:
-                            continue
-                        form.instance.delete()
-                    else:
-                        form.instance.event = request.event
-                        form.instance.item = self.object
-                        form.save()
-            messages.success(self.request, _('Your changes have been saved.'))
-            return redirect(self.get_success_url())
-        else:
-            context = self.get_context_data(object=self.object)
-            return self.render_to_response(context)
-
-    def get_context_data(self, *args, **kwargs) -> dict:
-        context = super().get_context_data(*args, **kwargs)
-        context['formsets'] = self.formsets
-        return context
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.item.restrictions', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug,
-            'item': self.object.identity
-        })
-
-
 class ItemDelete(EventPermissionRequiredMixin, DeleteView):
     model = Item
     template_name = 'pretixcontrol/item/delete.html'

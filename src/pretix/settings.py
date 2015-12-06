@@ -149,7 +149,6 @@ INSTALLED_APPS = [
     'compressor',
     'bootstrap3',
     'djangoformsetjs',
-    'pretix.plugins.timerestriction',
     'pretix.plugins.banktransfer',
     'pretix.plugins.stripe',
     'pretix.plugins.paypal',

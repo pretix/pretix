@@ -53,49 +53,6 @@ An item can be extended using **questions**. Questions enable items to be extend
 additional information which can be entered by the user. Examples of possible questions
 include 'Name' or 'age'.
 
-.. _restrictionconcept:
-
-Restrictions
-^^^^^^^^^^^^
-
-The probably most powerful concepts of pretix is the very abstract concept of **restrictions**. 
-We already know that **items** can come in very different **variations**, but a 
-**restriction** decides whether an variation is available for sale and assign **prices** 
-to **variations**. There are **restriction types** (pieces of code implementing the 
-restriction logic) and **restriction instances** (the specific configurations made by the 
-organizer). Although **restrictions** are a very abstract concept which can be used 
-to do nearly anything, there are a few obvious examples:
-
-* One easy example is a restriction by time, which allows the sale of certain item variations 
-  only within a certain time frame. As restrictions can also assign a price to a variation, 
-  this can also be used to implement something like 'early-bird prices' for your tickets by 
-  using multiple time restrictions with different prices.
-* The most obvious example is the restriction by number, which limits the sale of the tickets to 
-  a maximum number. You can use this either to stop selling tickets completely when your house
-  is full or for creating limited 'VIP tickets'. We'll come to this again later.
-* A more advanced example is a restriction by user, for example reduced ticket prices for 
-  users who are members of a special group.
-* Arbitrary sophisticated features like coupon codes can also be implemented using 
-  this feature.
-
-Any number of **restrictions** can be applied to the whole of a **item** or even to a specific 
-**variation**. The processing of the restriction follows the following set of rules:
-
-* Variation-specific rules have precedence over item-specific rules.
-* The restrictions are being processed in random order (there may not be any assumptions about 
-  the evaluation order).
-* Multiple restriction instances of **different restriction types** are linked with *and*, so 
-  if both a time frame and a restriction by number are applied to an item, the item is only available 
-  for sale during the given time frame *and* only as long as items are available.
-* Multiple restriction instances of the **same restriction type** are typically linked with *or*, 
-  although this is the decision of the restriction logic itself and not mandatory. So for example
-  the restriction by time would implement this default logic, because if two time frames are applied 
-  to an item, the item should be available for sale in both of the time frames (it just does not make
-  sense otherwise on an one-dimensional time axis).
-* If multiple restrictions apply which set the price, the *cheapest* price determines the final price.
-
-Restrictions can be implemented using a plugin system and do not require changes to the pretix codebase.
-
 Restriction by number
 """""""""""""""""""""
 

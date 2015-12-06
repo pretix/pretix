@@ -1,6 +1,5 @@
 import sys
 from datetime import datetime
-from decimal import Decimal
 from itertools import product
 
 from django.db import models
@@ -8,7 +7,7 @@ from django.db.models import Q, Case, Count, Sum, When
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from typing import List, Tuple, Union
+from typing import List, Tuple
 from versions.models import VersionedForeignKey, VersionedManyToManyField
 
 from pretix.base.i18n import I18nCharField, I18nTextField
@@ -80,8 +79,6 @@ class Item(Versionable):
     An item is a thing which can be sold. It belongs to an event and may or may not belong to a category.
     Items are often also called 'products' but are named 'items' internally due to historic reasons.
 
-    It has a default price which might by overriden by restrictions.
-
     :param event: The event this belongs to.
     :type event: Event
     :param category: The category this belongs to. May be null.
@@ -100,6 +97,10 @@ class Item(Versionable):
     :type admission: bool
     :param picture: A product picture to be shown next to the product description.
     :type picture: File
+    :param available_from: The date this product goes on sale
+    :type available_from: datetime
+    :param available_until: The date until when the product is on sale
+    :type available_until: datetime
 
     """
 
@@ -154,6 +155,16 @@ class Item(Versionable):
         null=True, blank=True,
         upload_to=itempicture_upload_to
     )
+    available_from = models.DateTimeField(
+        verbose_name=_("Available from"),
+        null=True, blank=True,
+        help_text=_('This product will not be sold before the given date.')
+    )
+    available_until = models.DateTimeField(
+        verbose_name=_("Available until"),
+        null=True, blank=True,
+        help_text=_('This product will not be sold after the given date.')
+    )
 
     class Meta:
         verbose_name = _("Product")
@@ -172,6 +183,19 @@ class Item(Versionable):
         super().delete(*args, **kwargs)
         if self.event:
             self.event.get_cache().clear()
+
+    def is_available(self) -> bool:
+        """
+        Returns whether this item is available according to its ``active`` flag
+        and its ``available_from`` and ``available_until`` fields
+        """
+        if not self.active:
+            return False
+        if self.available_from and self.available_from > now():
+            return False
+        if self.available_until and self.available_until < now():
+            return False
+        return True
 
     def get_all_variations(self, use_cache: bool=False) -> List[VariationDict]:
         """
@@ -249,10 +273,9 @@ class Item(Versionable):
     def get_all_available_variations(self, use_cache: bool=False):
         """
         This method returns a list of all variations which are theoretically
-        possible for sale. It DOES call all activated restriction plugins, and it
-        DOES only return variations which DO have an ItemVariation object, as all
-        variations without one CAN NOT be part of a Quota and therefore can never
-        be available for sale. The only exception is the empty variation
+        possible for sale. It DOES only return variations which DO have an ItemVariation
+        object, as all variations without one CAN NOT be part of a Quota and therefore can
+        never be available for sale. The only exception is the empty variation
         for items without properties, which never has an ItemVariation object.
 
         This DOES NOT take into account quotas itself. Use ``is_available`` on the
@@ -268,38 +291,17 @@ class Item(Versionable):
         if use_cache and hasattr(self, '_get_all_available_variations_cache'):
             return self._get_all_available_variations_cache
 
-        from pretix.base.signals import determine_availability
-
         variations = self._get_all_generated_variations()
-        responses = determine_availability.send(
-            self.event, item=self,
-            variations=variations, context=None,
-            cache=self.event.get_cache()
-        )
 
         for i, var in enumerate(variations):
             var['available'] = var['variation'].active if 'variation' in var else True
             if 'variation' in var:
-                if var['variation'].default_price:
+                if var['variation'].default_price is not None:
                     var['price'] = var['variation'].default_price
                 else:
                     var['price'] = self.default_price
             else:
                 var['price'] = self.default_price
-
-            # It is possible, that *multiple* restriction plugins change the default price.
-            # In this case, the cheapest one wins. As soon as there is a restriction
-            # that changes the price, the default price has no effect.
-
-            newprice = None
-            for rec, response in responses:
-                if 'available' in response[i] and not response[i]['available']:
-                    var['available'] = False
-                    break
-                if 'price' in response[i] and response[i]['price'] is not None \
-                        and (newprice is None or response[i]['price'] < newprice):
-                    newprice = response[i]['price']
-            var['price'] = newprice or var['price']
 
         variations = [var for var in variations if var['available']]
 
@@ -321,38 +323,6 @@ class Item(Versionable):
                              'but call this on their ItemVariation objects')
         return min([q.availability() for q in self.quotas.all()],
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
-
-    def check_restrictions(self):
-        """
-        This method is used to determine whether this ItemVariation is restricted
-        in sale by any restriction plugins.
-
-        :returns:
-
-            * ``False``, if the item is unavailable
-            * the item's price, otherwise
-
-        :raises ValueError: if you call this on an item which has properties associated with it.
-                            Please use the method on the ItemVariation object you are interested in.
-        """
-        if self.properties.count() > 0:  # NOQA
-            raise ValueError('Do not call this directly on items which have properties '
-                             'but call this on their ItemVariation objects')
-        from pretix.base.signals import determine_availability
-
-        vd = VariationDict()
-        responses = determine_availability.send(
-            self.event, item=self,
-            variations=[vd], context=None,
-            cache=self.event.get_cache()
-        )
-        price = self.default_price
-        for rec, response in responses:
-            if 'available' in response[0] and not response[0]['available']:
-                return False
-            elif 'price' in response[0] and response[0]['price'] is not None and response[0]['price'] < price:
-                price = response[0]['price']
-        return price
 
 
 class Property(Versionable):
@@ -466,8 +436,6 @@ class ItemVariation(Versionable):
     values by creating an ItemVariation object for them with active set to
     False.
 
-    Restrictions can be not only set to items but also directly to variations.
-
     :param item: The item this variation belongs to
     :type item: Item
     :param values: A set of ``PropertyValue`` objects defining this variation
@@ -530,31 +498,6 @@ class ItemVariation(Versionable):
             vd[v.prop.identity] = v
         vd['variation'] = self
         return vd
-
-    def check_restrictions(self) -> Union[bool, Decimal]:
-        """
-        This method is used to determine whether this ItemVariation is restricted
-        in sale by any restriction plugins.
-
-        :returns:
-
-            * ``False``, if the item is unavailable
-            * the item's price, otherwise
-        """
-        from pretix.base.signals import determine_availability
-
-        responses = determine_availability.send(
-            self.item.event, item=self.item,
-            variations=[self.to_variation_dict()], context=None,
-            cache=self.item.event.get_cache()
-        )
-        price = self.default_price if self.default_price is not None else self.item.default_price
-        for rec, response in responses:
-            if 'available' in response[0] and not response[0]['available']:
-                return False
-            elif 'price' in response[0] and response[0]['price'] is not None and response[0]['price'] < price:
-                price = response[0]['price']
-        return price
 
     def add_values_from_string(self, pk):
         """
@@ -660,47 +603,6 @@ class Question(Versionable):
 
     def __str__(self):
         return str(self.question)
-
-    def delete(self, *args, **kwargs):
-        super().delete(*args, **kwargs)
-        if self.event:
-            self.event.get_cache().clear()
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.event:
-            self.event.get_cache().clear()
-
-
-class BaseRestriction(Versionable):
-    """
-    A restriction is the abstract concept of a rule that limits the availability
-    of Items or ItemVariations. This model is just an abstract base class to be
-    extended by restriction plugins.
-    """
-    event = VersionedForeignKey(
-        Event,
-        on_delete=models.CASCADE,
-        related_name="restrictions_%(app_label)s_%(class)s",
-        verbose_name=_("Event"),
-    )
-    item = VersionedForeignKey(
-        Item,
-        blank=True, null=True,
-        verbose_name=_("Item"),
-        related_name="restrictions_%(app_label)s_%(class)s",
-    )
-    variations = VariationsField(
-        'pretixbase.ItemVariation',
-        blank=True,
-        verbose_name=_("Variations"),
-        related_name="restrictions_%(app_label)s_%(class)s",
-    )
-
-    class Meta:
-        abstract = True
-        verbose_name = _("Restriction")
-        verbose_name_plural = _("Restrictions")
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)

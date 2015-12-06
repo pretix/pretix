@@ -47,15 +47,6 @@ class EventPluginSignal(django.dispatch.Signal):
         return responses
 
 """
-This signal is sent out every time some component of pretix wants to know whether a specific
-item or variation is available for sell. The item will only be sold, if all (active) receivers
-return a positive result (see plugin API documentation for details).
-"""
-determine_availability = EventPluginSignal(
-    providing_args=["item", "variations", "context", "cache"]
-)
-
-"""
 This signal is sent out to get all known payment providers. Receivers should return a
 subclass of pretix.base.payment.BasePaymentProvider
 """
