@@ -67,7 +67,7 @@ def _check_date(event: Event) -> None:
 
 
 def _add_new_items(event: Event, items: List[Tuple[str, Optional[str], int]],
-               cart_id: str, expiry: datetime) -> Optional[str]:
+                   cart_id: str, expiry: datetime) -> Optional[str]:
     err = None
 
     # Fetch items from the database
