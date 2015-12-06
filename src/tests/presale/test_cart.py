@@ -277,19 +277,6 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 23)
 
-    def test_restriction_failed(self):
-        self.event.plugins = 'tests.testdummy'
-        self.event.save()
-        self.event.settings.testdummy_available = 'no'
-        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'item_' + self.ticket.identity: '1',
-        }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
-                             target_status_code=200)
-        doc = BeautifulSoup(response.rendered_content)
-        self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
-        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
-
     def test_remove_simple(self):
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,

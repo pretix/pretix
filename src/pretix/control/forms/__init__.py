@@ -99,60 +99,6 @@ class TolerantFormsetModelForm(VersionedModelForm):
         return False
 
 
-class RestrictionForm(TolerantFormsetModelForm):
-    """
-    The restriction form provides useful functionality for all forms
-    representing a restriction instance. To be concret, this form does
-    the necessary magic to make the 'variations' field work correctly
-     and look beautiful.
-    """
-
-    def __init__(self, *args, **kwargs):
-        if 'item' in kwargs:
-            self.item = kwargs['item']
-            del kwargs['item']
-            super().__init__(*args, **kwargs)
-            if 'variations' in self.fields and isinstance(self.fields['variations'], VariationsField):
-                self.fields['variations'].set_item(self.item)
-
-
-class RestrictionInlineFormset(forms.BaseInlineFormSet):
-    """
-    This is the base class you should use for any formset you return
-    from a ``restriction_formset`` signal receiver that contains
-    RestrictionForm objects as its forms, as it correcly handles the
-    necessary item parameter for the RestrictionForm. While this could
-    be achieved with a regular formset, this also adds a
-    ``initialized_empty_form`` method which is the only way to correctly
-    render a working empty form for a JavaScript-enabled restriction formset.
-    """
-
-    def __init__(self, data=None, files=None, instance=None,
-                 save_as_new=False, prefix=None, queryset=None, **kwargs):
-        super().__init__(
-            data, files, instance, save_as_new, prefix, queryset, **kwargs
-        )
-        if isinstance(self.instance, Item):
-            self.queryset = self.queryset.as_of().prefetch_related("variations")
-
-    def initialized_empty_form(self):
-        form = self.form(
-            auto_id=self.auto_id,
-            prefix=self.add_prefix('__prefix__'),
-            empty_permitted=True,
-            item=self.instance
-        )
-        self.add_fields(form, None)
-        return form
-
-    def _construct_form(self, i, **kwargs):
-        kwargs['item'] = self.instance
-        return super()._construct_form(i, **kwargs)
-
-    class Meta:
-        exclude = ['item']
-
-
 def selector(values, prop):
     # Given an iterable of PropertyValue objects, this will return a
     # list of their primary keys, ordered by the primary keys of the

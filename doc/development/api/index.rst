@@ -7,7 +7,6 @@ Contents:
    :maxdepth: 2
 
    plugins
-   restriction
    payment
    ticketoutput
    exporter

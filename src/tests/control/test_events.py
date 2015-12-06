@@ -66,9 +66,9 @@ class EventsTest(BrowserTest):
     def test_plugins(self):
         self.driver.get('%s/control/event/%s/%s/settings/plugins' % (self.live_server_url, self.orga1.slug,
                                                                      self.event1.slug))
-        self.assertIn("Restriction by time", self.driver.find_element_by_class_name("form-plugins").text)
-        self.assertIn("Enable", self.driver.find_element_by_name("plugin:pretix.plugins.timerestriction").text)
-        self.driver.find_element_by_name("plugin:pretix.plugins.timerestriction").click()
-        self.assertIn("Disable", self.driver.find_element_by_name("plugin:pretix.plugins.timerestriction").text)
-        self.driver.find_element_by_name("plugin:pretix.plugins.timerestriction").click()
-        self.assertIn("Enable", self.driver.find_element_by_name("plugin:pretix.plugins.timerestriction").text)
+        self.assertIn("Bank transfer", self.driver.find_element_by_class_name("form-plugins").text)
+        self.assertIn("Enable", self.driver.find_element_by_name("plugin:pretix.plugins.banktransfer").text)
+        self.driver.find_element_by_name("plugin:pretix.plugins.banktransfer").click()
+        self.assertIn("Disable", self.driver.find_element_by_name("plugin:pretix.plugins.banktransfer").text)
+        self.driver.find_element_by_name("plugin:pretix.plugins.banktransfer").click()
+        self.assertIn("Enable", self.driver.find_element_by_name("plugin:pretix.plugins.banktransfer").text)
