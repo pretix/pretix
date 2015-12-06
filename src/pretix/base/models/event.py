@@ -95,7 +95,6 @@ class Event(Versionable):
     class Meta:
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
-        # unique_together = (("organizer", "slug"),)  # TODO: Enforce manually
         ordering = ("date_from", "name")
 
     def __str__(self):
