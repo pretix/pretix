@@ -11,13 +11,14 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.i18n import I18nCharField
+from pretix.base.models.base import LoggedModel
 from pretix.base.settings import SettingsProxy
 
 from .auth import User
 from .organizer import Organizer
 
 
-class Event(models.Model):
+class Event(LoggedModel):
     """
     This model represents an event. An event is anything you can buy
     tickets for.

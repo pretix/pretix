@@ -70,4 +70,8 @@ Carts and Orders
 .. autoclass:: pretix.base.models.QuestionAnswer
    :members:
 
-.. _cleanerversion: https://github.com/swisscom/cleanerversion
+Logging
+-------
+
+.. autoclass:: pretix.base.models.LogEntry
+   :members:

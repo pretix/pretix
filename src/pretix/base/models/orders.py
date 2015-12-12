@@ -7,7 +7,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from typing import List, Union
 
-from .base import CachedFile
+from .base import CachedFile, LoggedModel
 from .event import Event
 from .items import Item, ItemVariation, Question, Quota
 
@@ -16,7 +16,7 @@ def generate_secret():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16))
 
 
-class Order(models.Model):
+class Order(LoggedModel):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
     several OrderPositions and is connected to an user. It has an

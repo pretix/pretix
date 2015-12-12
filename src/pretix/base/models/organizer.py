@@ -3,12 +3,13 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.models.base import LoggedModel
 from pretix.base.settings import SettingsProxy
 
 from .auth import User
 
 
-class Organizer(models.Model):
+class Organizer(LoggedModel):
     """
     This model represents an entity organizing events, e.g. a company, institution,
     charity, person, …

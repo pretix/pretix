@@ -10,12 +10,13 @@ from django.utils.translation import ugettext_lazy as _
 from typing import List, Tuple
 
 from pretix.base.i18n import I18nCharField, I18nTextField
+from pretix.base.models.base import LoggedModel
 
 from ..types import VariationDict
 from .event import Event
 
 
-class ItemCategory(models.Model):
+class ItemCategory(LoggedModel):
     """
     Items can be sorted into these categories.
 
@@ -72,7 +73,7 @@ def itempicture_upload_to(instance, filename: str) -> str:
     )
 
 
-class Item(models.Model):
+class Item(LoggedModel):
     """
     An item is a thing which can be sold. It belongs to an event and may or may not belong to a category.
     Items are often also called 'products' but are named 'items' internally due to historic reasons.
@@ -539,7 +540,7 @@ class VariationsField(models.ManyToManyField):
         return super(RelatedField, self).formfield(**defaults)
 
 
-class Question(models.Model):
+class Question(LoggedModel):
     """
     A question is an input field that can be used to extend a ticket
     by custom information, e.g. "Attendee age". A question can allow one o several
@@ -613,7 +614,7 @@ class Question(models.Model):
             self.event.get_cache().clear()
 
 
-class Quota(models.Model):
+class Quota(LoggedModel):
     """
     A quota is a "pool of tickets". It is there to limit the number of items
     of a certain type to be sold. For example, you could have a quota of 500

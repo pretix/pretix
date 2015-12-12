@@ -5,6 +5,7 @@ from .items import (
     Item, ItemCategory, ItemVariation, Property, PropertyValue, Question,
     Quota, VariationsField, itempicture_upload_to,
 )
+from .log import LogEntry
 from .orders import (
     CachedTicket, CartPosition, ObjectWithAnswers, Order, OrderPosition,
     QuestionAnswer, generate_secret,
@@ -16,5 +17,5 @@ __all__ = [
     'ItemCategory', 'Item', 'Property', 'PropertyValue', 'ItemVariation', 'VariationsField', 'Question',
     'Quota', 'Order', 'CachedTicket', 'QuestionAnswer', 'ObjectWithAnswers', 'OrderPosition',
     'CartPosition', 'EventSetting', 'OrganizerSetting', 'EventLock', 'cachedfile_name', 'itempicture_upload_to',
-    'generate_secret'
+    'generate_secret', 'LogEntry'
 ]
