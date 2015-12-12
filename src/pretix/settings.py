@@ -181,7 +181,7 @@ try:
 except ImportError:
     pass
 
-ROOT_URLCONF = 'pretix.urls'
+ROOT_URLCONF = 'pretix.multidomain.maindomain_urlconf'
 
 WSGI_APPLICATION = 'pretix.wsgi.application'
 
