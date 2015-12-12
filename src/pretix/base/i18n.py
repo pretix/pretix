@@ -4,7 +4,7 @@ import json
 from django import forms
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db.models import Model, QuerySet, SubfieldBase, TextField
+from django.db.models import Model, QuerySet, TextField
 from django.utils import translation
 from django.utils.safestring import mark_safe
 from typing import Dict, List
@@ -214,13 +214,16 @@ class I18nFieldMixin:
     def get_prep_lookup(self, lookup_type, value):  # NOQA
         raise TypeError('Lookups on i18n string currently not supported.')
 
+    def from_db_value(self, value, expression, connection, context):
+        return LazyI18nString(value)
+
     def formfield(self, **kwargs):
         defaults = {'form_class': self.form_class, 'widget': self.widget}
         defaults.update(kwargs)
         return super().formfield(**defaults)
 
 
-class I18nCharField(I18nFieldMixin, TextField, metaclass=SubfieldBase):
+class I18nCharField(I18nFieldMixin, TextField):
     """
     A CharField which takes internationalized data. Internally, a TextField dabase
     field is used to store JSON. If you interact with this field, you will work
@@ -229,7 +232,7 @@ class I18nCharField(I18nFieldMixin, TextField, metaclass=SubfieldBase):
     widget = I18nTextInput
 
 
-class I18nTextField(I18nFieldMixin, TextField, metaclass=SubfieldBase):
+class I18nTextField(I18nFieldMixin, TextField):
     """
     Like I18nCharField, but for TextFields.
     """
