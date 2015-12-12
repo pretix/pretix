@@ -83,6 +83,8 @@ class I18nWidget(forms.MultiWidget):
 
     def decompress(self, value):
         data = []
+        if not isinstance(value, LazyI18nString):
+            value = LazyI18nString(value)
         for lng in self.langcodes:
             data.append(
                 value.data[lng]
