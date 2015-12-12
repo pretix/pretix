@@ -121,7 +121,20 @@ class SettingsProxy:
     def _flush(self) -> None:
         self._cached_obj = None
 
+    def freeze(self):
+        settings = {}
+        for key, v in DEFAULTS.items():
+            settings[key] = self._unserialize(v['default'], v['type'])
+        if self._parent:
+            settings.update(self._parent.settings.freeze())
+        for key, value in self._cache().items():
+            settings[key] = self.get(key)
+        return settings
+
     def _unserialize(self, value: str, as_type: type) -> Any:
+        if as_type is None and value is not None and value.startswith('file://'):
+            as_type = File
+
         if as_type is not None and isinstance(value, as_type):
             return value
         elif value is None:
@@ -186,15 +199,14 @@ class SettingsProxy:
             if value is None and default is not None:
                 value = default
 
-        if as_type is None and value is not None and value.startswith('file://'):
-            as_type = File
-
         return self._unserialize(value, as_type)
 
     def __getitem__(self, key: str) -> Any:
         return self.get(key)
 
     def __getattr__(self, key: str) -> Any:
+        if key.startswith('_'):
+            return super().__getattr__(key)
         return self.get(key)
 
     def __setattr__(self, key: str, value: Any) -> None:

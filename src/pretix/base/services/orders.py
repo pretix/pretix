@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from typing import List
 
 from pretix.base.models import (
-    CartPosition, Event, EventLock, Order, OrderPosition, Quota,
+    CartPosition, Event, EventLock, Order, OrderPosition, Quota, User,
 )
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.mail import mail
@@ -31,7 +31,7 @@ error_messages = {
 
 
 def mark_order_paid(order: Order, provider: str=None, info: str=None, date: datetime=None, manual: bool=None,
-                    force: bool=False) -> Order:
+                    force: bool=False, user: User=None) -> Order:
     """
     Marks an order as paid. This sets the payment provider, info and date and returns
     the order object.
@@ -46,6 +46,7 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     :param force: Whether this payment should be marked as paid even if no remaining
                   quota is available (default: ``False``).
     :type force: boolean
+    :param user: The user that performed the change
     :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
     """
     with order.event.lock():
@@ -59,6 +60,13 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
             order.payment_manual = manual
         order.status = Order.STATUS_PAID
         order.save()
+        order.log_action('pretix.event.order.paid', {
+            'provider': provider,
+            'info': info,
+            'date': date,
+            'manual': manual,
+            'force': force
+        }, user=user)
         order_paid.send(order.event, order=order)
 
     mail(
@@ -75,6 +83,32 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
         },
         order.event, locale=order.locale
     )
+    return order
+
+
+@transaction.atomic
+def mark_order_refunded(order: Order, user: User=None):
+    """
+    Mark this order as refunded. This sets the payment status and returns the order object.
+    :param order: The order to change
+    :param user: The user that performed the change
+    """
+    order.status = Order.STATUS_REFUNDED
+    order.save()
+    order.log_action('pretix.event.order.refunded', user=user)
+    return order
+
+
+@transaction.atomic
+def cancel_order(order: Order, user: User=None):
+    """
+    Mark this order as canceled
+    :param order: The order to change
+    :param user: The user that performed the change
+    """
+    order.status = Order.STATUS_CANCELLED
+    order.save()
+    order.log_action('pretix.event.order.cancelled', user=user)
     return order
 
 
@@ -154,6 +188,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], dt: d
         payment_provider=payment_provider.identifier
     )
     OrderPosition.transform_cart_positions(positions, order)
+    order.log_action('pretix.event.order.placed')
     order_placed.send(event, order=order)
     return order
 

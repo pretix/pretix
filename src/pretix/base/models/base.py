@@ -1,9 +1,12 @@
+import json
 import uuid
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+
+from pretix.base.i18n import I18nJSONEncoder
 
 
 def cachedfile_name(instance, filename: str) -> str:
@@ -29,10 +32,18 @@ def cached_file_delete(sender, instance, **kwargs):
         instance.file.delete(False)
 
 
-class LoggedModel(models.Model):
+class LoggingMixin:
     logentries = GenericRelation('LogEntry')
 
-    def log_action(self, user, action, data):
+    def log_action(self, action, data=None, user=None):
+        """
+        Create a LogEntry object that is related to this object.
+        See the LogEntry documentation for details.
+
+        :param action: The namespaced action code
+        :param data: Any JSON-serializable object
+        :param user: The user performing the action (optional)
+        """
         from .log import LogEntry
         from .event import Event
 
@@ -41,7 +52,13 @@ class LoggedModel(models.Model):
             event = self
         elif hasattr(self, 'event'):
             event = self.event
-        LogEntry.objects.create(content_object=self, user=user, action=action, data=data, event=event)
+        l = LogEntry(content_object=self, user=user, action_type=action, event=event)
+        if data:
+            l.data = json.dumps(data, cls=I18nJSONEncoder)
+        l.save()
+
+
+class LoggedModel(models.Model, LoggingMixin):
 
     class Meta:
         abstract = True

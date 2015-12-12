@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from pretix.base.models import Event, Order
+from pretix.base.services.orders import mark_order_refunded
 from pretix.plugins.stripe.payment import Stripe
 
 logger = logging.getLogger('pretix.plugins.stripe')
@@ -42,6 +43,8 @@ def webhook(request):
     prov = Stripe(event)
     prov._init_api()
 
+    order.log_action('pretix.plugins.stripe.event', data=event_json)
+
     try:
         charge = stripe.Charge.retrieve(charge['id'])
     except stripe.error.StripeError as err:
@@ -49,6 +52,6 @@ def webhook(request):
         return HttpResponse('StripeError', status=500)
 
     if charge['refunds']['total_count'] > 0 and order.status == Order.STATUS_PAID:
-        order.mark_refunded()
+        mark_order_refunded(order)
 
     return HttpResponse(status=200)

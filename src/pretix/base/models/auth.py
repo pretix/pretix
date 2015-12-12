@@ -5,6 +5,8 @@ from django.contrib.auth.models import (
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from .base import LoggingMixin
+
 
 class UserManager(BaseUserManager):
     """
@@ -30,7 +32,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     """
     This is the user model used by pretix for authentication.
 

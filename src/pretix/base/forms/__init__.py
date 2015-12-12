@@ -50,7 +50,7 @@ class SettingsForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.obj = kwargs.pop('obj')
-        kwargs['initial'] = self.obj.settings
+        kwargs['initial'] = self.obj.settings.freeze()
         super().__init__(*args, **kwargs)
 
     def save(self):

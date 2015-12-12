@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as __, ugettext_lazy as _
 
 from pretix.base.models import Quota
 from pretix.base.payment import BasePaymentProvider
-from pretix.base.services.orders import mark_order_paid
+from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 logger = logging.getLogger('pretix.plugins.paypal')
@@ -218,7 +218,7 @@ class Paypal(BasePaymentProvider):
             payment_info = None
 
         if not payment_info:
-            order.mark_refunded()
+            mark_order_refunded(order)
             messages.warning(request, _('We were unable to transfer the money back automatically. '
                                         'Please get in touch with the customer and transfer it back manually.'))
             return
@@ -231,11 +231,11 @@ class Paypal(BasePaymentProvider):
 
         refund = sale.refund({})
         if not refund.success():
-            order.mark_refunded()
+            mark_order_refunded(order, user=request.user)
             messages.warning(request, _('We were unable to transfer the money back automatically. '
                                         'Please get in touch with the customer and transfer it back manually.'))
         else:
             sale = paypalrestsdk.Payment.find(payment_info['id'])
-            order = order.mark_refunded()
+            order = mark_order_refunded(order)
             order.payment_info = json.dumps(sale.to_dict())
             order.save()

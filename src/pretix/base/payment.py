@@ -359,6 +359,7 @@ class BasePaymentProvider:
 
         :param order: The order object
         """
+        self.order.log_action('pretix.base.order.refunded')
         return '<div class="alert alert-warning">%s</div>' % _('The money can not be automatically refunded, '
                                                                'please transfer the money back manually.')
 
@@ -379,7 +380,9 @@ class BasePaymentProvider:
         :param request: The HTTP request
         :param order: The order object
         """
-        order.mark_refunded()
+        from pretix.base.services.orders import mark_order_refunded
+
+        mark_order_refunded(order, user=request.user)
         messages.success(request, _('The order has been marked as refunded. Please transfer the money '
                                     'back to the buyer manually.'))
 
@@ -440,7 +443,9 @@ class FreeOrderProvider(BasePaymentProvider):
         :param request: The HTTP request
         :param order: The order object
         """
-        order.mark_refunded()
+        from pretix.base.services.orders import mark_order_refunded
+
+        mark_order_refunded(order, user=request.user)
         messages.success(request, _('The order has been marked as refunded.'))
 
     def is_allowed(self, request: HttpRequest) -> bool:

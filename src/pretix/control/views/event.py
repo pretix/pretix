@@ -3,6 +3,7 @@ from collections import OrderedDict
 from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.db import transaction
 from django.db.models import Sum
 from django.forms import modelformset_factory
 from django.shortcuts import redirect, render
@@ -53,8 +54,17 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
         context['sform'] = self.sform
         return context
 
+    @transaction.atomic()
     def form_valid(self, form):
         self.sform.save()
+        if self.sform.has_changed():
+            self.request.event.log_action('pretix.event.settings', user=self.request.user, data={
+                k: self.request.event.settings.get(k) for k in self.sform.changed_data
+            })
+        if form.has_changed():
+            self.request.event.log_action('pretix.event.changed', user=self.request.user, data={
+                k: getattr(self.request.event, k) for k in form.changed_data
+            })
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
@@ -97,15 +107,20 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         plugins_active = self.object.get_plugins()
-        for key, value in request.POST.items():
-            if key.startswith("plugin:"):
-                module = key.split(":")[1]
-                if value == "enable":
-                    plugins_active.append(module)
-                else:
-                    plugins_active.remove(module)
-        self.object.plugins = ",".join(plugins_active)
-        self.object.save()
+        with transaction.atomic():
+            for key, value in request.POST.items():
+                if key.startswith("plugin:"):
+                    module = key.split(":")[1]
+                    if value == "enable":
+                        self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
+                                                      data={'plugin': module})
+                        plugins_active.append(module)
+                    else:
+                        self.request.event.log_action('pretix.event.plugins.disabled', user=self.request.user,
+                                                      data={'plugin': module})
+                        plugins_active.remove(module)
+            self.object.plugins = ",".join(plugins_active)
+            self.object.save()
         messages.success(self.request, _('Your changes have been saved.'))
         return redirect(self.get_success_url())
 
@@ -159,11 +174,18 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
         context['providers'] = self.provider_forms
         return self.render_to_response(context)
 
+    @transaction.atomic()
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         success = True
         for provider in self.provider_forms:
             if provider.form.is_valid():
+                if provider.form.has_changed():
+                    self.request.event.log_action(
+                        'pretix.event.payment.provider.' + provider.identifier, user=self.request.user, data={
+                            k: provider.form.cleaned_data.get(k) for k in provider.form.changed_data
+                        }
+                    )
                 provider.form.save()
             else:
                 success = False
@@ -207,16 +229,29 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
         form.prepare_fields()
         return form
 
+    @transaction.atomic()
     def post(self, request, *args, **kwargs):
         success = True
         for provider in self.provider_forms:
             if provider.form.is_valid():
                 provider.form.save()
+                if provider.form.has_changed():
+                    self.request.event.log_action(
+                        'pretix.event.tickets.provider.' + provider.identifier, user=self.request.user, data={
+                            k: provider.form.cleaned_data.get(k) for k in provider.form.changed_data
+                        }
+                    )
             else:
                 success = False
         form = self.get_form(self.get_form_class())
         if success and form.is_valid():
             form.save()
+            if form.has_changed():
+                self.request.event.log_action(
+                    'pretix.event.tickets.settings', user=self.request.user, data={
+                        k: form.cleaned_data.get(k) for k in form.changed_data
+                    }
+                )
             messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
@@ -310,6 +345,7 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
         ctx['add_form'] = self.add_form
         return ctx
 
+    @transaction.atomic()
     def post(self, *args, **kwargs):
         if self.formset.is_valid() and self.add_form.is_valid():
             if self.add_form.has_changed():
@@ -327,7 +363,22 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
                         messages.error(self.request, _('This user already has permissions for this event.'))
                         return self.get(*args, **kwargs)
                     self.add_form.save()
+                    logdata = {
+                        k: v for k, v in self.add_form.cleaned_data.items()
+                    }
+                    logdata['user'] = self.add_form.instance.user_id
+                    self.request.event.log_action(
+                        'pretix.event.permissions.added', user=self.request.user, data=logdata
+                    )
             for form in self.formset.forms:
+                if form.has_changed():
+                    changedata = {
+                        k: form.cleaned_data.get(k) for k in form.changed_data
+                    }
+                    changedata['user'] = form.instance.user_id
+                    self.request.event.log_action(
+                        'pretix.event.permissions.changed', user=self.request.user, data=changedata
+                    )
                 if form.instance.user_id == self.request.user.pk:
                     if not form.cleaned_data['can_change_permissions'] or form in self.formset.deleted_forms:
                         messages.error(self.request, _('You cannot remove your own permission to view this page.'))

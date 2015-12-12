@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import CachedFile, CachedTicket, Order, OrderPosition
+from pretix.base.services.orders import cancel_order
 from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
@@ -215,6 +216,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
             messages.error(self.request,
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.get(request, *args, **kwargs)
+        self.order.log_action('pretix.event.order.modified')
         return redirect(self.get_order_url())
 
     def get(self, request, *args, **kwargs):
@@ -251,8 +253,7 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.order.status = Order.STATUS_CANCELLED
-        self.order.save()
+        cancel_order(self.order)
         return redirect(self.get_order_url())
 
     def get(self, request, *args, **kwargs):

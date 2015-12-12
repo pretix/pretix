@@ -2,7 +2,7 @@ import random
 import string
 from datetime import datetime
 
-from django.db import models
+from django.db import models, transaction
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from typing import List, Union
@@ -176,14 +176,6 @@ class Order(LoggedModel):
             if (cp.item.admission and ask_names) or cp.item.questions.all():
                 return True
         return False  # nothing there to modify
-
-    def mark_refunded(self):
-        """
-        Mark this order as refunded. This sets the payment status and returns the order object.
-        """
-        self.status = Order.STATUS_REFUNDED
-        self.save()
-        return self
 
     def _can_be_paid(self) -> Union[bool, str]:
         error_messages = {

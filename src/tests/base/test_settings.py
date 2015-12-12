@@ -12,7 +12,6 @@ from pretix.base.settings import SettingsSandbox
 
 
 class SettingsTestCase(TestCase):
-
     def setUp(self):
         settings.DEFAULTS['test_default'] = {
             'default': 'def',
@@ -149,6 +148,7 @@ class SettingsTestCase(TestCase):
     def test_serialize_unknown(self):
         class Type:
             pass
+
         try:
             self._test_serialization(Type(), Type)
             self.assertTrue(False, 'No exception thrown!')
@@ -195,3 +195,23 @@ class SettingsTestCase(TestCase):
 
         self.assertIsNone(sandbox.bar)
         self.assertIsNone(sandbox['baz'])
+
+    def test_freeze(self):
+        olddef = settings.DEFAULTS
+        settings.DEFAULTS = {
+            'test_default': {
+                'default': 'def',
+                'type': str
+            }
+        }
+        self.event.organizer.settings.set('bar', 'baz')
+        self.event.organizer.settings.set('foo', 'baz')
+        self.event.settings.set('foo', 'bar')
+        try:
+            self.assertEqual(self.event.settings.freeze(), {
+                'test_default': 'def',
+                'bar': 'baz',
+                'foo': 'bar'
+            })
+        finally:
+            settings.DEFAULTS = olddef

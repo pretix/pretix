@@ -62,6 +62,7 @@ def register(request):
                 timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
             )
             user = authenticate(email=user.email, password=form.cleaned_data['password'])
+            user.log_action('pretix.control.auth.user.created', user=user)
             auth_login(request, user)
             return redirect('control:index')
     else:
@@ -90,6 +91,7 @@ class Forgot(TemplateView):
                 },
                 None, locale=user.locale
             )
+            user.log_action('pretix.control.auth.user.forgot_password.mail_sent')
             messages.success(request, _('We sent you an e-mail containing further instructions.'))
             return redirect('control:auth.forgot')
         else:
@@ -141,6 +143,7 @@ class Recover(TemplateView):
             user.set_password(self.form.cleaned_data['password'])
             user.save()
             messages.success(request, _('You can now login using your new password.'))
+            user.log_action('pretix.control.auth.user.forgot_password.recovered')
             return redirect('control:auth.login')
         else:
             return self.get(request, *args, **kwargs)

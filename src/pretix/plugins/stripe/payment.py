@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Quota
 from pretix.base.payment import BasePaymentProvider
-from pretix.base.services.orders import mark_order_paid
+from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.helpers.urls import build_absolute_uri
 
 logger = logging.getLogger('pretix.plugins.stripe')
@@ -157,7 +157,7 @@ class Stripe(BasePaymentProvider):
             payment_info = None
 
         if not payment_info:
-            order.mark_refunded()
+            mark_order_refunded(order, user=request.user)
             messages.warning(request, _('We were unable to transfer the money back automatically. '
                                         'Please get in touch with the customer and transfer it back manually.'))
             return
@@ -173,10 +173,10 @@ class Stripe(BasePaymentProvider):
                                       'support if the problem persists.'))
             logger.error('Stripe error: %s' % str(err))
         except stripe.error.StripeError:
-            order.mark_refunded()
+            mark_order_refunded(order)
             messages.warning(request, _('We were unable to transfer the money back automatically. '
                                         'Please get in touch with the customer and transfer it back manually.'))
         else:
-            order = order.mark_refunded()
+            order = mark_order_refunded(order)
             order.payment_info = str(ch)
             order.save()

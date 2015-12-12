@@ -17,7 +17,7 @@ from pretix.base.models import (
 )
 from pretix.base.services import tickets
 from pretix.base.services.export import export
-from pretix.base.services.orders import mark_order_paid
+from pretix.base.services.orders import cancel_order, mark_order_paid
 from pretix.base.services.stats import order_overview
 from pretix.base.signals import (
     register_data_exporters, register_payment_providers,
@@ -136,8 +136,8 @@ class OrderDetail(OrderView):
         def keyfunc(pos):
             if (pos.item.admission and self.request.event.settings.attendee_names_asked) \
                     or pos.item.questions.all():
-                return pos.id, "", "", ""
-            return "", pos.item_id, pos.variation_id, pos.price
+                return pos.id, 0, 0, 0
+            return 0, pos.item_id, pos.variation_id, pos.price
 
         positions = []
         for k, g in groupby(sorted(list(cartpos), key=keyfunc), key=keyfunc):
@@ -164,19 +164,19 @@ class OrderTransition(OrderView):
         to = self.request.POST.get('status', '')
         if self.order.status == 'n' and to == 'p':
             try:
-                mark_order_paid(self.order, manual=True)
+                mark_order_paid(self.order, manual=True, user=self.request.user)
             except Quota.QuotaExceededException as e:
                 messages.error(self.request, str(e))
             else:
                 messages.success(self.request, _('The order has been marked as paid.'))
         elif self.order.status == 'n' and to == 'c':
-            self.order.status = Order.STATUS_CANCELLED
-            self.order.save()
+            cancel_order(self.order, user=self.request.user)
             messages.success(self.request, _('The order has been cancelled.'))
         elif self.order.status == 'p' and to == 'n':
             self.order.status = Order.STATUS_PENDING
             self.order.payment_manual = True
             self.order.save()
+            self.order.log_action('pretix.base.order.unpaid', user=self.request.user)
             messages.success(self.request, _('The order has been marked as not paid.'))
         elif self.order.status == 'p' and to == 'r':
             ret = self.payment_provider.order_control_refund_perform(self.request, self.order)
@@ -247,6 +247,9 @@ class OrderExtend(OrderView):
         if self.form.is_valid():
             if oldvalue > now():
                 messages.success(self.request, _('The payment term has been changed.'))
+                self.order.log_action('pretix.order.changed', user=self.request.user, data={
+                    'expires': self.order.expires
+                })
                 self.form.save()
             else:
                 try:
@@ -254,6 +257,9 @@ class OrderExtend(OrderView):
                         is_available = self.order._is_still_available()
                         if is_available is True:
                             self.form.save()
+                            self.order.log_action('pretix.order.changed', user=self.request.user, data={
+                                'expires': self.order.expires
+                            })
                             messages.success(self.request, _('The payment term has been changed.'))
                         else:
                             messages.error(self.request, is_available)

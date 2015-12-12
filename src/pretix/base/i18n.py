@@ -3,7 +3,8 @@ import json
 
 from django import forms
 from django.conf import settings
-from django.db.models import SubfieldBase, TextField
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Model, QuerySet, SubfieldBase, TextField
 from django.utils import translation
 from django.utils.safestring import mark_safe
 from typing import Dict, List
@@ -233,3 +234,15 @@ class I18nTextField(I18nFieldMixin, TextField, metaclass=SubfieldBase):
     Like I18nCharField, but for TextFields.
     """
     widget = I18nTextarea
+
+
+class I18nJSONEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, LazyI18nString):
+            return obj.data
+        elif isinstance(obj, QuerySet):
+            return list(obj)
+        elif isinstance(obj, Model):
+            return {'type': obj.__class__.__name__, 'id': obj.id}
+        else:
+            return super().default(obj)

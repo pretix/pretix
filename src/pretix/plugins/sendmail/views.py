@@ -27,12 +27,15 @@ class SenderView(EventPermissionRequiredMixin, FormView):
     def form_valid(self, form):
         orders = Order.objects.filter(
             event=self.request.event, status__in=form.cleaned_data['sendto']
-        ).select_related("user")
-        users = set([o.user for o in orders])
+        )
+        mails = set([o.email for o in orders])
 
-        for u in users:
-            mail(u.email, form.cleaned_data['subject'], form.cleaned_data['message'],
-                 None, self.request.event, locale=u.locale)
+        self.request.event.log_action('pretix.plugins.sendmail.sent', user=self.request.user, data=dict(
+            form.cleaned_data))
+
+        for m in mails:
+            mail(m, form.cleaned_data['subject'], form.cleaned_data['message'],
+                 None, self.request.event, locale=m.locale)
 
         messages.success(self.request, _('Your message will be sent to the selected users.'))
 

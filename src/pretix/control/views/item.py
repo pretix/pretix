@@ -103,12 +103,14 @@ class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
         except ItemCategory.DoesNotExist:
             raise Http404(_("The requested product category does not exist."))
 
+    @transaction.atomic()
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         for item in self.object.items.all():
             item.category = None
             item.save()
         success_url = self.get_success_url()
+        self.object.log_action('pretix.event.category.deleted', user=self.request.user)
         self.object.delete()
         messages.success(request, _('The selected category has been deleted.'))
         return HttpResponseRedirect(success_url)
@@ -136,8 +138,15 @@ class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
         except ItemCategory.DoesNotExist:
             raise Http404(_("The requested product category does not exist."))
 
+    @transaction.atomic()
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
+        if form.has_changed():
+            self.object.log_action(
+                'pretix.event.category.changed', user=self.request.user, data={
+                    k: form.cleaned_data.get(k) for k in form.changed_data
+                }
+            )
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
@@ -160,10 +169,13 @@ class CategoryCreate(EventPermissionRequiredMixin, CreateView):
             'event': self.request.event.slug,
         })
 
+    @transaction.atomic()
     def form_valid(self, form):
         form.instance.event = self.request.event
         messages.success(self.request, _('The new category has been created.'))
-        return super().form_valid(form)
+        ret = super().form_valid(form)
+        form.instance.log_action('pretix.event.category.added', data=dict(form.cleaned_data), user=self.request.user)
+        return ret
 
 
 class CategoryList(ListView):
@@ -248,9 +260,11 @@ class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
         context['dependent'] = list(self.get_object().items.all())
         return context
 
+    @transaction.atomic()
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
+        self.object.log_action(action='pretix.event.question.deleted', user=request.user)
         self.object.delete()
         messages.success(request, _('The selected question has been deleted.'))
         return HttpResponseRedirect(success_url)
@@ -277,7 +291,14 @@ class QuestionUpdate(EventPermissionRequiredMixin, UpdateView):
         except Question.DoesNotExist:
             raise Http404(_("The requested question does not exist."))
 
+    @transaction.atomic()
     def form_valid(self, form):
+        if form.has_changed():
+            self.object.log_action(
+                'pretix.event.question.changed', user=self.request.user, data={
+                    k: form.cleaned_data.get(k) for k in form.changed_data
+                }
+            )
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
@@ -306,9 +327,12 @@ class QuestionCreate(EventPermissionRequiredMixin, CreateView):
             'event': self.request.event.slug,
         })
 
+    @transaction.atomic()
     def form_valid(self, form):
         messages.success(self.request, _('The new question has been created.'))
-        return super().form_valid(form)
+        ret = super().form_valid(form)
+        form.instance.log_action('pretix.event.question.added', user=self.request.user, data=dict(form.cleaned_data))
+        return ret
 
 
 class QuotaList(ListView):
@@ -378,10 +402,13 @@ class QuotaCreate(EventPermissionRequiredMixin, QuotaEditorMixin, CreateView):
             'event': self.request.event.slug,
         })
 
+    @transaction.atomic()
     def form_valid(self, form):
         form.instance.event = self.request.event
         messages.success(self.request, _('The new quota has been created.'))
-        return super().form_valid(form)
+        ret = super().form_valid(form)
+        form.instance.log_action('pretix.event.quota.added', user=self.request.user, data=dict(form.cleaned_data))
+        return ret
 
 
 class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
@@ -399,8 +426,15 @@ class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
         except Quota.DoesNotExist:
             raise Http404(_("The requested quota does not exist."))
 
+    @transaction.atomic()
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
+        if form.has_changed():
+            self.object.log_action(
+                'pretix.event.quota.changed', user=self.request.user, data={
+                    k: form.cleaned_data.get(k) for k in form.changed_data
+                }
+            )
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
@@ -429,9 +463,11 @@ class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
         context['dependent'] = list(self.get_object().items.all())
         return context
 
+    @transaction.atomic()
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
+        self.object.log_action(action='pretix.event.quota.deleted', user=request.user)
         self.object.delete()
         messages.success(self.request, _('The selected quota has been deleted.'))
         return HttpResponseRedirect(success_url)
@@ -471,9 +507,12 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
             'item': self.object.id,
         })
 
+    @transaction.atomic()
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
-        return super().form_valid(form)
+        ret = super().form_valid(form)
+        form.instance.log_action('pretix.event.item.added', user=self.request.user, data=dict(form.cleaned_data))
+        return ret
 
     def get_form_kwargs(self):
         """
@@ -497,8 +536,15 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
             'item': self.get_object().id,
         })
 
+    @transaction.atomic()
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
+        if form.has_changed():
+            self.object.log_action(
+                'pretix.event.item.changed', user=self.request.user, data={
+                    k: form.cleaned_data.get(k) for k in form.changed_data
+                }
+            )
         return super().form_valid(form)
 
 
@@ -543,13 +589,31 @@ class ItemProperties(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
         for f in formset:
             f.instance.event = self.request.event
             f.instance.item = self.get_object()
+            is_created = not f.instance.pk
             f.instance.save()
-            print(f.instance)
+            if f.has_changed() and not is_created:
+                change_data = {
+                    k: f.cleaned_data.get(k) for k in f.changed_data
+                }
+                change_data['id'] = f.instance.pk
+                f.instance.item.log_action(
+                    'pretix.event.item.property.changed', user=self.request.user, data=change_data
+                )
+            elif is_created:
+                change_data = dict(f.cleaned_data)
+                change_data['id'] = f.instance.pk
+                f.instance.item.log_action(
+                    'pretix.event.item.property.added', user=self.request.user, data=change_data
+                )
 
             for n in f.nested:
-                print(n.deleted_forms, n.ordered_forms, n.extra_forms)
 
                 for fn in n.deleted_forms:
+                    f.instance.item.log_action(
+                        'pretix.event.item.property.value.deleted', user=self.request.user, data={
+                            'id': fn.instance.pk
+                        }
+                    )
                     fn.instance.delete()
                     fn.instance.pk = None
 
@@ -557,8 +621,24 @@ class ItemProperties(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
                     fn.instance.position = i
                     fn.instance.prop = f.instance
                     fn.save()
+                    if f.has_changed():
+                        change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
+                        change_data['id'] = f.instance.pk
+                        f.instance.item.log_action(
+                            'pretix.event.item.property.value.changed', user=self.request.user, data=change_data
+                        )
 
-                n.save_new_objects()
+                for form in n.extra_forms:
+                    if not form.has_changed():
+                        continue
+                    if n.can_delete and n._should_delete_form(form):
+                        continue
+                    change_data = dict(f.cleaned_data)
+                    n.save_new(form)
+                    change_data['id'] = form.instance.pk
+                    f.instance.item.log_action(
+                        'pretix.event.item.property.value.added', user=self.request.user, data=change_data
+                    )
         messages.success(self.request, _('Your changes have been saved.'))
         return redirect(self.get_success_url())
 
@@ -700,6 +780,13 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
             for form in self.forms_flat:
                 if form.is_valid() and form.has_changed():
                     form.save()
+                    change_data = {
+                        k: form.cleaned_data.get(k) for k in form.changed_data
+                    }
+                    change_data['id'] = form.instance.pk
+                    self.object.log_action(
+                        'pretix.event.item.variation.changed', user=self.request.user, data=change_data
+                    )
                     if hasattr(form.instance, 'creation') and form.instance.creation:
                         # We need this special 'creation' field set to true in get_form
                         # for newly created items as cleanerversion does already set the
@@ -758,9 +845,11 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
                 raise Http404(_("The requested product does not exist."))
         return self.object
 
+    @transaction.atomic
     def delete(self, request, *args, **kwargs):
         success_url = self.get_success_url()
         if self.is_allowed():
+            self.get_object().log_action('pretix.event.item.deleted', user=self.request.user)
             self.get_object().delete()
             messages.success(request, _('The selected product has been deleted.'))
             return HttpResponseRedirect(success_url)
@@ -768,6 +857,9 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
             o = self.get_object()
             o.active = False
             o.save()
+            o.log_action('pretix.event.item.changed', user=self.request.user, data={
+                'active': False
+            })
             messages.success(request, _('The selected product has been deactivated.'))
             return HttpResponseRedirect(success_url)
 
