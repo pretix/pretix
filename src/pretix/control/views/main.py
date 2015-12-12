@@ -17,7 +17,7 @@ class EventList(ListView):
     template_name = 'pretixcontrol/events/index.html'
 
     def get_queryset(self):
-        return Event.objects.current.filter(
+        return Event.objects.filter(
             permitted__id__exact=self.request.user.pk
         ).prefetch_related(
             "organizer",
@@ -34,7 +34,7 @@ class EventCreateStart(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['organizers'] = [
-            p.organizer for p in OrganizerPermission.objects.current.filter(
+            p.organizer for p in OrganizerPermission.objects.filter(
                 user=self.request.user, can_create_events=True
             ).select_related("organizer")
         ]

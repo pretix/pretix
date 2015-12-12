@@ -9,7 +9,7 @@ from pretix.base.signals import register_ticket_outputs
 
 
 def generate(order: str, provider: str):
-    order = Order.objects.current.select_related('event').get(identity=order)
+    order = Order.objects.select_related('event').get(id=order)
     ct = CachedTicket.objects.get_or_create(order=order, provider=provider)[0]
     if not ct.cachedfile:
         cf = CachedFile()

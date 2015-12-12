@@ -64,13 +64,13 @@ def lock_event_db(event):
     for i in range(retries):
         with transaction.atomic():
             dt = now()
-            l, created = EventLock.objects.get_or_create(event=event.identity)
+            l, created = EventLock.objects.get_or_create(event=event.id)
             if created:
                 event._lock = l
                 return True
             elif l.date < now() - timedelta(seconds=LOCK_TIMEOUT):
                 newtoken = uuid.uuid4()
-                updated = EventLock.objects.filter(event=event.identity, token=l.token).update(date=dt, token=newtoken)
+                updated = EventLock.objects.filter(event=event.id, token=l.token).update(date=dt, token=newtoken)
                 if updated:
                     l.token = newtoken
                     event._lock = l
@@ -84,7 +84,7 @@ def release_event_db(event):
     if not hasattr(event, '_lock') or not event._lock:
         raise EventLock.LockReleaseException('Lock is not owned by this thread')
     try:
-        lock = EventLock.objects.get(event=event.identity, token=event._lock.token)
+        lock = EventLock.objects.get(event=event.id, token=event._lock.token)
         lock.delete()
         event._lock = None
     except EventLock.DoesNotExist:
@@ -97,7 +97,7 @@ def redis_lock_from_event(event):
 
     if not hasattr(event, '_lock') or not event._lock:
         rc = get_redis_connection("redis")
-        event._lock = Lock(redis=rc, name='pretix_event_%s' % event.identity, timeout=LOCK_TIMEOUT)
+        event._lock = Lock(redis=rc, name='pretix_event_%s' % event.id, timeout=LOCK_TIMEOUT)
     return event._lock
 
 

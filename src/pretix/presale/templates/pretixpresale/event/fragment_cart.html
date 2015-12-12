@@ -26,10 +26,10 @@
                     method="post">
                 {% csrf_token %}
                 {% if line.variation %}
-                    <input type="hidden" name="variation_{{ line.item.identity }}_{{ line.variation.identity }}"
+                    <input type="hidden" name="variation_{{ line.item.id }}_{{ line.variation.id }}"
                             value="1" />
                 {% else %}
-                    <input type="hidden" name="item_{{ line.item.identity }}"
+                    <input type="hidden" name="item_{{ line.item.id }}"
                             value="1" />
                 {% endif %}
                 <button class="btn btn-mini btn-link"><i class="fa fa-minus"></i></button>
@@ -41,10 +41,10 @@
                 method="post" data-asynctask>
                 {% csrf_token %}
                 {% if line.variation %}
-                    <input type="hidden" name="variation_{{ line.item.identity }}_{{ line.variation.identity }}"
+                    <input type="hidden" name="variation_{{ line.item.id }}_{{ line.variation.id }}"
                         value="1" />
                 {% else %}
-                    <input type="hidden" name="item_{{ line.item.identity }}"
+                    <input type="hidden" name="item_{{ line.item.id }}"
                             value="1" />
                 {% endif %}
                 <button class="btn btn-mini btn-link"><i class="fa fa-plus"></i></button>

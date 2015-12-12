@@ -8,7 +8,6 @@ from django.core.files import File
 from django.core.files.storage import default_storage
 from django.db.models import Model
 from typing import Any, Callable, Dict, Optional, TypeVar, Union
-from versions.models import Versionable
 
 DEFAULTS = {
     'max_items_per_order': {
@@ -115,7 +114,7 @@ class SettingsProxy:
     def _cache(self) -> Dict[str, Any]:
         if self._cached_obj is None:
             self._cached_obj = {}
-            for setting in self._obj.setting_objects.current.all():
+            for setting in self._obj.setting_objects.all():
                 self._cached_obj[setting.key] = setting
         return self._cached_obj
 
@@ -146,8 +145,6 @@ class SettingsProxy:
             return dateutil.parser.parse(value).date()
         elif as_type == time:
             return dateutil.parser.parse(value).time()
-        elif as_type is not None and issubclass(as_type, Versionable):
-            return as_type.objects.current.get(identity=value)
         elif as_type is not None and issubclass(as_type, Model):
             return as_type.objects.get(pk=value)
         return value
@@ -162,8 +159,6 @@ class SettingsProxy:
             return json.dumps(value)
         elif isinstance(value, datetime) or isinstance(value, date) or isinstance(value, time):
             return value.isoformat()
-        elif isinstance(value, Versionable):
-            return value.identity
         elif isinstance(value, Model):
             return value.pk
         elif isinstance(value, File):
@@ -213,7 +208,6 @@ class SettingsProxy:
     def set(self, key: str, value: Any) -> None:
         if key in self._cache():
             s = self._cache()[key]
-            s = s.clone()
         else:
             s = self._type(object=self._obj, key=key)
         s.value = self._serialize(value)
@@ -237,7 +231,7 @@ class SettingsSandbox:
     prefixes for you.
     """
 
-    def __init__(self, type: str, key: str, event: Versionable):
+    def __init__(self, type: str, key: str, event: Model):
         self._event = event
         self._type = type
         self._key = key

@@ -194,7 +194,7 @@ class DeadlineTest(EventTestMixin, TestCase):
         response = self.client.post(
             '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
             {
-                'item_' + self.item.identity: '1',
+                'item_%d' % self.item.id: '1',
             },
             follow=True
         )
@@ -213,7 +213,7 @@ class DeadlineTest(EventTestMixin, TestCase):
         response = self.client.post(
             '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
             {
-                'item_' + self.item.identity: '1'
+                'item_%d' % self.item.id: '1'
             },
             follow=True
         )
@@ -233,7 +233,7 @@ class DeadlineTest(EventTestMixin, TestCase):
         response = self.client.post(
             '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
             {
-                'item_' + self.item.identity: '1'
+                'item_%d' % self.item.id: '1'
             }
         )
         self.assertNotEqual(response.status_code, 403)
@@ -251,7 +251,7 @@ class DeadlineTest(EventTestMixin, TestCase):
         response = self.client.post(
             '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
             {
-                'item_' + self.item.identity: '1'
+                'item_%d' % self.item.id: '1'
             }
         )
         self.assertNotEqual(response.status_code, 403)

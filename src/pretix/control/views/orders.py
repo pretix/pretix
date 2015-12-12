@@ -35,7 +35,7 @@ class OrderList(EventPermissionRequiredMixin, ListView):
     permission = 'can_view_orders'
 
     def get_queryset(self):
-        qs = Order.objects.current.filter(
+        qs = Order.objects.filter(
             event=self.request.event
         )
         if self.request.GET.get("user", "") != "":
@@ -53,7 +53,7 @@ class OrderList(EventPermissionRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['items'] = Item.objects.current.filter(event=self.request.event)
+        ctx['items'] = Item.objects.filter(event=self.request.event)
         return ctx
 
 
@@ -62,7 +62,7 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
     model = Order
 
     def get_object(self, queryset=None):
-        return Order.objects.current.get(
+        return Order.objects.get(
             event=self.request.event,
             code=self.kwargs['code'].upper()
         )
@@ -170,15 +170,13 @@ class OrderTransition(OrderView):
             else:
                 messages.success(self.request, _('The order has been marked as paid.'))
         elif self.order.status == 'n' and to == 'c':
-            order = self.order.clone()
-            order.status = Order.STATUS_CANCELLED
-            order.save()
+            self.order.status = Order.STATUS_CANCELLED
+            self.order.save()
             messages.success(self.request, _('The order has been cancelled.'))
         elif self.order.status == 'p' and to == 'n':
-            order = self.order.clone()
-            order.status = Order.STATUS_PENDING
-            order.payment_manual = True
-            order.save()
+            self.order.status = Order.STATUS_PENDING
+            self.order.payment_manual = True
+            self.order.save()
             messages.success(self.request, _('The order has been marked as not paid.'))
         elif self.order.status == 'p' and to == 'r':
             ret = self.payment_provider.order_control_refund_perform(self.request, self.order)
@@ -233,7 +231,7 @@ class OrderDownload(OrderView):
             ct.cachedfile = cf
         ct.save()
         if not ct.cachedfile.file.name:
-            tickets.generate(self.order.identity, self.output.identifier)
+            tickets.generate(self.order.id, self.output.identifier)
         return redirect(reverse('cachedfile.download', kwargs={'id': ct.cachedfile.id}))
 
 
@@ -305,7 +303,7 @@ class OrderGo(EventPermissionRequiredMixin, View):
         try:
             if code.startswith(request.event.slug.upper()):
                 code = code[len(request.event.slug.upper()):]
-            order = Order.objects.current.get(code=code, event=request.event)
+            order = Order.objects.get(code=code, event=request.event)
             return redirect('control:event.order', event=request.event.slug, organizer=request.event.organizer.slug,
                             code=order.code)
         except Order.DoesNotExist:

@@ -25,8 +25,8 @@
             <select name="item" class="form-control">
                 <option value="">{% trans "All products" %}</option>
                 {% for item in items %}
-                    <option value="{{ item.identity }}"
-                            {% if request.GET.item == item.identity %}selected="selected"{% endif %}>
+                    <option value="{{ item.id }}"
+                            {% if request.GET.item == item.id %}selected="selected"{% endif %}>
                         {{ item.name }}
                     </option>
                 {% endfor %}

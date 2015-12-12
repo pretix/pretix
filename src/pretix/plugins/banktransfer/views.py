@@ -50,8 +50,8 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             return self.process_mt940()
 
         if 'confirm' in self.request.POST:
-            orders = Order.objects.current.filter(event=self.request.event,
-                                                  code__in=self.request.POST.getlist('mark_paid'))
+            orders = Order.objects.filter(event=self.request.event,
+                                          code__in=self.request.POST.getlist('mark_paid'))
             some_failed = False
             for order in orders:
                 try:
@@ -210,8 +210,7 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
 
             code = match.group(1)
             try:
-                order = Order.objects.current.get(event=self.request.event,
-                                                  code=code)
+                order = Order.objects.get(event=self.request.event, code=code)
             except Order.DoesNotExist:
                 row['class'] = 'danger'
                 row['message'] = _('Unknown order code detected')

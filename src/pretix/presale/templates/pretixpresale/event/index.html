@@ -65,7 +65,7 @@
                                         {% if item.picture %}
                                             <a href="{{ item.picture.url }}" class="productpicture"
                                                     data-title="{{ item.name }}"
-                                                    data-lightbox="{{ item.identity }}">
+                                                    data-lightbox="{{ item.id }}">
                                                 <img src="{{ item.picture|thumbnail_url:'productlist' }}"
                                                         alt="{{ item.name }}" />
                                             </a>
@@ -109,7 +109,7 @@
                                                 <div class="col-md-2 col-xs-6 availability-box available">
                                                     <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                             max="{{ var.cached_availability.1 }}"
-                                                            name="variation_{{ item.identity }}_{{ var.variation.identity }}">
+                                                            name="variation_{{ item.id }}_{{ var.variation.id }}">
                                                 </div>
                                             {% else %}
                                                 {% include "pretixpresale/event/fragment_availability.html" with avail=var.cached_availability.0 %}
@@ -125,7 +125,7 @@
                                     {% if item.picture %}
                                         <a href="{{ item.picture.url }}" class="productpicture"
                                                 data-title="{{ item.name }}"
-                                                data-lightbox="{{ item.identity }}">
+                                                data-lightbox="{{ item.id }}">
                                             <img src="{{ item.picture|thumbnail_url:'productlist' }}"
                                                     alt="{{ item.name }}" />
                                         </a>
@@ -144,7 +144,7 @@
                                 {% if item.cached_availability.0 == 100 %}
                                     <div class="col-md-2 col-xs-6 availability-box available">
                                         <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                max="{{ item.cached_availability.1 }}" name="item_{{ item.identity }}">
+                                                max="{{ item.cached_availability.1 }}" name="item_{{ item.id }}">
                                     </div>
                                 {% else %}
                                     {% include "pretixpresale/event/fragment_availability.html" with avail=item.cached_availability.0 %}

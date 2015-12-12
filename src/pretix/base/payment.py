@@ -258,9 +258,7 @@ class BasePaymentProvider:
 
         If the payment is completed, you should call ``pretix.base.services.orders.mark_order_paid(order, provider, info)``
         with ``provider`` being your :py:attr:`identifier` and ``info`` being any string
-        you might want to store for later usage. Please note, that if you want to store
-        something inside ``order.payment_info``, please do it after the ``mark_order_paid`` call,
-        as this call does a object clone for you. Please also note that ``mark_order_paid`` might
+        you might want to store for later usage. Please note that ``mark_order_paid`` might
         raise a ``Quota.QuotaExceededException`` if (and only if) the payment term of this
         order is over and some of the items are sold out. You should use the exception message
         to display a meaningful error to the user.
@@ -403,7 +401,7 @@ class FreeOrderProvider(BasePaymentProvider):
         pass
 
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
-        return CartPosition.objects.current.filter(
+        return CartPosition.objects.filter(
             Q(cart_id=request.session.session_key) & Q(event=request.event)
         ).aggregate(sum=Sum('price'))['sum'] == 0
 
@@ -446,7 +444,7 @@ class FreeOrderProvider(BasePaymentProvider):
         messages.success(request, _('The order has been marked as refunded.'))
 
     def is_allowed(self, request: HttpRequest) -> bool:
-        return CartPosition.objects.current.filter(
+        return CartPosition.objects.filter(
             cart_id=request.session.session_key, event=request.event
         ).aggregate(sum=Sum('price'))['sum'] == 0
 

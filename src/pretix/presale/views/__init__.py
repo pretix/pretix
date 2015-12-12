@@ -14,7 +14,7 @@ class CartMixin:
         """
         A list of this users cart position
         """
-        return list(CartPosition.objects.current.filter(
+        return list(CartPosition.objects.filter(
             cart_id=self.request.session.session_key, event=self.request.event
         ).order_by(
             'item', 'variation'
@@ -26,7 +26,7 @@ class CartMixin:
         ))
 
     def get_cart(self, answers=False, queryset=None, payment_fee=None):
-        queryset = queryset or CartPosition.objects.current.filter(
+        queryset = queryset or CartPosition.objects.filter(
             cart_id=self.request.session.session_key, event=self.request.event
         )
 
@@ -49,8 +49,8 @@ class CartMixin:
         def keyfunc(pos):
             if answers and ((pos.item.admission and self.request.event.settings.attendee_names_asked)
                             or pos.item.questions.all()):
-                return pos.id, "", "", ""
-            return "", pos.item_id, pos.variation_id, pos.price
+                return pos.id, 0, 0, 0
+            return 0, pos.item_id, pos.variation_id, pos.price
 
         positions = []
         for k, g in groupby(sorted(list(cartpos), key=keyfunc), key=keyfunc):

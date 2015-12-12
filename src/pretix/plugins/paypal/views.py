@@ -23,7 +23,7 @@ def success(request):
         request.session['payment_paypal_token'] = token
         request.session['payment_paypal_payer'] = payer
         try:
-            event = Event.objects.current.get(identity=request.session['payment_paypal_event'])
+            event = Event.objects.get(id=request.session['payment_paypal_event'])
             return redirect(eventreverse(event, 'presale:event.checkout', kwargs={'step': 'confirm'}))
         except Event.DoesNotExist:
             pass  # TODO: Handle this
@@ -35,7 +35,7 @@ def success(request):
 def abort(request):
     messages.error(request, _('It looks like you cancelled the PayPal payment'))
     try:
-        event = Event.objects.current.get(identity=request.session['payment_paypal_event'])
+        event = Event.objects.get(id=request.session['payment_paypal_event'])
         return redirect(eventreverse(event, 'presale:event.checkout', kwargs={'step': 'payment'}))
     except Event.DoesNotExist:
         pass  # TODO: Handle this
@@ -44,7 +44,7 @@ def abort(request):
 @login_required
 def retry(request, order):
     try:
-        order = Order.objects.current.get(
+        order = Order.objects.get(
             user=request.user,
             code=order,
         )

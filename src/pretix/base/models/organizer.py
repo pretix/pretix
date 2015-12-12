@@ -2,15 +2,13 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
-from versions.models import VersionedForeignKey
 
 from pretix.base.settings import SettingsProxy
 
 from .auth import User
-from .base import Versionable
 
 
-class Organizer(Versionable):
+class Organizer(models.Model):
     """
     This model represents an entity organizing events, e.g. a company, institution,
     charity, person, …
@@ -72,7 +70,7 @@ class Organizer(Versionable):
         return ObjectRelatedCache(self)
 
 
-class OrganizerPermission(Versionable):
+class OrganizerPermission(models.Model):
     """
     The relation between an Organizer and an User who has permissions to
     access an organizer profile.
@@ -86,7 +84,7 @@ class OrganizerPermission(Versionable):
     :type can_create_events: bool
     """
 
-    organizer = VersionedForeignKey(Organizer)
+    organizer = models.ForeignKey(Organizer, related_name="user_perms", on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name="organizer_perms")
     can_create_events = models.BooleanField(
         default=True,
@@ -104,11 +102,11 @@ class OrganizerPermission(Versionable):
         }
 
 
-class OrganizerSetting(Versionable):
+class OrganizerSetting(models.Model):
     """
     An event option is a key-value setting which can be set for an
     organizer. It will be inherited by the events of this organizer
     """
-    object = VersionedForeignKey(Organizer, related_name='setting_objects')
+    object = models.ForeignKey(Organizer, related_name='setting_objects', on_delete=models.CASCADE)
     key = models.CharField(max_length=255)
     value = models.TextField()

@@ -12,4 +12,4 @@ class DummyTicketOutput(BaseTicketOutput):
     download_button_icon = 'fa-print'
 
     def generate(self, order):
-        return 'test.txt', 'text/plain', order.identity
+        return 'test.txt', 'text/plain', str(order.id)

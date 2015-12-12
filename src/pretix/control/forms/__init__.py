@@ -14,7 +14,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.forms import VersionedModelForm
+from pretix.base.forms import I18nModelForm
 from pretix.base.models import Item, ItemVariation
 
 
@@ -59,9 +59,9 @@ class I18nFormSet(BaseModelFormSet):
         return form
 
 
-class TolerantFormsetModelForm(VersionedModelForm):
+class TolerantFormsetModelForm(I18nModelForm):
     """
-    This is equivalent to a normal VersionedModelForm, but works around a problem that
+    This is equivalent to a normal I18nModelForm, but works around a problem that
     arises when the form is used inside a FormSet with can_order=True and django-formset-js
     enabled. In this configuration, even empty "extra" forms might have an ORDER value
     sent and Django marks the form as empty and raises validation errors because the other
@@ -105,15 +105,15 @@ def selector(values, prop):
     # properties they belong to EXCEPT the value for the property prop2.
     # We'll see later why we need this.
     return [
-        v.identity for v in sorted(values, key=lambda v: v.prop.identity)
-        if v.prop.identity != prop.identity
+        v.id for v in sorted(values, key=lambda v: v.prop.id)
+        if v.prop.id != prop.id
     ]
 
 
 def sort(v, prop):
     # Given a list of variations, this will sort them by their position
     # on the x-axis
-    return v[prop.identity].sortkey
+    return v[prop.id].sortkey
 
 
 class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
@@ -175,7 +175,7 @@ class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
                 final_attrs['checked'] = 'checked'
             w = self.choice_input_class(
                 self.name, self.value, self.attrs.copy(),
-                (variation['key'], variation[properties[0].identity].value),
+                (variation['key'], variation[properties[0].id].value),
                 i
             )
             output.append(format_html('<li>{0}</li>', force_text(w)))
@@ -185,15 +185,15 @@ class VariationsFieldRenderer(forms.widgets.CheckboxFieldRenderer):
     def render_nd(self, output, variations, properties):
         # prop1 is the property on all the grid's y-axes
         prop1 = properties[0]
-        prop1v = list(prop1.values.current.all())
+        prop1v = list(prop1.values.all())
         # prop2 is the property on all the grid's x-axes
         prop2 = properties[1]
-        prop2v = list(prop2.values.current.all())
+        prop2v = list(prop2.values.all())
 
         # We now iterate over the cartesian product of all the other
         # properties which are NOT on the axes of the grid because we
         # create one grid for any combination of them.
-        for gridrow in product(*[prop.values.current.all() for prop in properties[2:]]):
+        for gridrow in product(*[prop.values.all() for prop in properties[2:]]):
             if len(gridrow) > 0:
                 output.append('<strong>')
                 output.append(", ".join([str(value.value) for value in gridrow]))
@@ -281,7 +281,7 @@ class VariationsField(forms.ModelMultipleChoiceField):
         variations = self.item.get_all_variations(use_cache=True)
         return (
             (
-                v['variation'].identity if 'variation' in v else v.key(),
+                v['variation'].id if 'variation' in v else v.key(),
                 v
             ) for v in variations
         )
@@ -312,10 +312,10 @@ class VariationsField(forms.ModelMultipleChoiceField):
 
         cleaned_value = self._clean_value(value)
 
-        qs = self.item.variations.current.filter(identity__in=cleaned_value)
+        qs = self.item.variations.filter(id__in=cleaned_value)
 
         # Re-check for consistency
-        pks = set(force_text(getattr(o, "identity")) for o in qs)
+        pks = set(force_text(getattr(o, "id")) for o in qs)
         for val in cleaned_value:
             if force_text(val) not in pks:
                 raise ValidationError(
@@ -335,7 +335,7 @@ class VariationsField(forms.ModelMultipleChoiceField):
         # which uses a very similar method
         all_variations = self.item.variations.all().prefetch_related("values")
         variations_cache = {
-            var.to_variation_dict().identify(): var.identity for var in all_variations
+            var.to_variation_dict().identify(): var.id for var in all_variations
         }
 
         cleaned_value = []
@@ -360,7 +360,7 @@ class VariationsField(forms.ModelMultipleChoiceField):
 
                     # No ItemVariation present, create one!
                     var = ItemVariation()
-                    var.item_id = self.item.identity
+                    var.item_id = self.item.id
                     var.save()
                     # Add the values to the ItemVariation object
                     try:
@@ -371,8 +371,8 @@ class VariationsField(forms.ModelMultipleChoiceField):
                             code='invalid_pk_value',
                             params={'pk': value},
                         )
-                    variations_cache[key] = var.identity
-                    cleaned_value.append(str(var.identity))
+                    variations_cache[key] = var.id
+                    cleaned_value.append(str(var.id))
                 else:
                     # An ItemVariation id was given
                     cleaned_value.append(pk)

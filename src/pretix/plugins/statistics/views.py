@@ -27,12 +27,12 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
         ctx['obd_data'] = cache.get('statistics_obd_data')
         if not ctx['obd_data']:
             ordered_by_day = {}
-            for o in Order.objects.current.filter(event=self.request.event).values('datetime'):
+            for o in Order.objects.filter(event=self.request.event).values('datetime'):
                 day = o['datetime'].date()
                 ordered_by_day[day] = ordered_by_day.get(day, 0) + 1
             paid_by_day = {}
-            for o in Order.objects.current.filter(event=self.request.event,
-                                                  payment_date__isnull=False).values('payment_date'):
+            for o in Order.objects.filter(event=self.request.event,
+                                          payment_date__isnull=False).values('payment_date'):
                 day = o['payment_date'].date()
                 paid_by_day[day] = paid_by_day.get(day, 0) + 1
 
@@ -59,21 +59,21 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
         if not ctx['obp_data']:
             num_ordered = {
                 p['item']: p['cnt']
-                for p in (OrderPosition.objects.current
+                for p in (OrderPosition.objects
                           .filter(order__event=self.request.event)
                           .values('item')
                           .annotate(cnt=Count('id')))
             }
             num_paid = {
                 p['item']: p['cnt']
-                for p in (OrderPosition.objects.current
+                for p in (OrderPosition.objects
                           .filter(order__event=self.request.event, order__status=Order.STATUS_PAID)
                           .values('item')
                           .annotate(cnt=Count('id')))
             }
             item_names = {
-                i.identity: str(i.name)
-                for i in Item.objects.current.filter(event=self.request.event)
+                i.id: str(i.name)
+                for i in Item.objects.filter(event=self.request.event)
             }
             ctx['obp_data'] = [
                 {
@@ -87,9 +87,9 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
         ctx['rev_data'] = cache.get('statistics_rev_data')
         if not ctx['rev_data']:
             rev_by_day = {}
-            for o in Order.objects.current.filter(event=self.request.event,
-                                                  status=Order.STATUS_PAID,
-                                                  payment_date__isnull=False).values('payment_date', 'total'):
+            for o in Order.objects.filter(event=self.request.event,
+                                          status=Order.STATUS_PAID,
+                                          payment_date__isnull=False).values('payment_date', 'total'):
                 day = o['payment_date'].date()
                 rev_by_day[day] = rev_by_day.get(day, 0) + o['total']
 

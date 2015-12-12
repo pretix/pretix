@@ -1,11 +1,11 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.forms import VersionedModelForm
+from pretix.base.forms import I18nModelForm
 from pretix.base.models import Organizer
 
 
-class OrganizerForm(VersionedModelForm):
+class OrganizerForm(I18nModelForm):
     error_messages = {
         'duplicate_slug': _("This slug is already in use. Please choose a different one."),
     }

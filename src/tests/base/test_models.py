@@ -146,23 +146,6 @@ class ItemVariationsTest(TestCase):
         self.assertEqual(num_variations, 1)
 
 
-class VersionableTestCase(TestCase):
-    def test_shallow_cone(self):
-        o = Organizer.objects.create(name='Dummy', slug='dummy')
-        event = Event.objects.create(
-            organizer=o, name='Dummy', slug='dummy',
-            date_from=now(),
-        )
-        item = Item.objects.create(event=event, name='Dummy', default_price=14)
-        quota_old = Quota.objects.create(event=event, name='All', size=5)
-        quota_old.items.add(item)
-        quota_new = quota_old.clone_shallow()
-        self.assertIsNone(quota_new.version_end_date)
-        self.assertIsNotNone(quota_old.version_end_date)
-        self.assertEqual(quota_new.items.count(), 0)
-        self.assertEqual(quota_old.items.count(), 1)
-
-
 class UserTestCase(TestCase):
     def test_name(self):
         u = User.objects.create_user('test@foo.bar', 'test')
@@ -336,14 +319,14 @@ class OrderTestCase(BaseQuotaTestCase):
         self.quota.size = 0
         self.quota.save()
         mark_order_paid(self.order)
-        self.order = Order.objects.current.get(identity=self.order.identity)
+        self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
     def test_paid_expired_available(self):
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
         mark_order_paid(self.order)
-        self.order = Order.objects.current.get(identity=self.order.identity)
+        self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
     def test_paid_expired_partial(self):
@@ -356,7 +339,7 @@ class OrderTestCase(BaseQuotaTestCase):
             self.assertFalse(True, 'This should have raised an exception.')
         except Quota.QuotaExceededException:
             pass
-        self.order = Order.objects.current.get(identity=self.order.identity)
+        self.order = Order.objects.get(id=self.order.id)
         self.assertIn(self.order.status, (Order.STATUS_PENDING, Order.STATUS_EXPIRED))
 
     def test_paid_expired_unavailable(self):
@@ -369,7 +352,7 @@ class OrderTestCase(BaseQuotaTestCase):
             self.assertFalse(True, 'This should have raised an exception.')
         except Quota.QuotaExceededException:
             pass
-        self.order = Order.objects.current.get(identity=self.order.identity)
+        self.order = Order.objects.get(id=self.order.id)
         self.assertIn(self.order.status, (Order.STATUS_PENDING, Order.STATUS_EXPIRED))
 
     def test_paid_expired_unavailable_force(self):
@@ -378,7 +361,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.quota.size = 0
         self.quota.save()
         mark_order_paid(self.order, force=True)
-        self.order = Order.objects.current.get(identity=self.order.identity)
+        self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
     def test_can_modify_answers(self):

@@ -59,7 +59,8 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
                 # insert categories into a set for uniqueness
                 # a set is unsorted, so sort again by category
             ],
-            key=lambda group: (group[0].position, group[0].identity) if group[0] is not None else (0, "")
+            key=lambda group: (group[0].position, group[0].id) if (
+                group[0] is not None and group[0].id is not None) else (0, 0)
         )
 
         context['cart'] = self.get_cart()

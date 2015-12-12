@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import versions.models
 from django.db import migrations, models
 
 
@@ -15,8 +14,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='KnownDomain',
             fields=[
-                ('domainname', models.CharField(serialize=False, max_length=255, primary_key=True)),
-                ('organizer', versions.models.VersionedForeignKey(blank=True, to='pretixbase.Organizer', null=True)),
+                ('domainname', models.CharField(primary_key=True, max_length=255, serialize=False)),
+                ('organizer', models.ForeignKey(to='pretixbase.Organizer', null=True, blank=True, related_name='domains')),
             ],
+            options={
+                'verbose_name_plural': 'Known domains',
+                'verbose_name': 'Known domain',
+            },
         ),
     ]

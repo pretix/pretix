@@ -19,10 +19,10 @@
                 {% for q in questions %}
                 <tr>
                     <td><strong><a href="
-                    {% url "control:event.items.questions.edit" organizer=request.event.organizer.slug event=request.event.slug question=q.identity %}">{{ q.question }}</a></strong></td>
+                    {% url "control:event.items.questions.edit" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}">{{ q.question }}</a></strong></td>
                     <td>{{ q.get_type_display }}</td>
                     <td class="text-right"><a href="
-                    {% url "control:event.items.questions.delete" organizer=request.event.organizer.slug event=request.event.slug question=q.identity %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></td>
+                    {% url "control:event.items.questions.delete" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></td>
                 </tr>
                 {% endfor %}
             </tbody>

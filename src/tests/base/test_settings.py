@@ -29,7 +29,7 @@ class SettingsTestCase(TestCase):
         self.assertEqual(self.organizer.settings.test, 'foo')
 
         # Reload object
-        self.organizer = Organizer.objects.get(identity=self.organizer.identity)
+        self.organizer = Organizer.objects.get(id=self.organizer.id)
         self.assertEqual(self.organizer.settings.test, 'foo')
 
     def test_event_set_explicit(self):
@@ -37,7 +37,7 @@ class SettingsTestCase(TestCase):
         self.assertEqual(self.event.settings.test, 'foo')
 
         # Reload object
-        self.event = Event.objects.get(identity=self.event.identity)
+        self.event = Event.objects.get(id=self.event.id)
         self.assertEqual(self.event.settings.test, 'foo')
 
     def test_event_set_twice(self):
@@ -46,7 +46,7 @@ class SettingsTestCase(TestCase):
         self.assertEqual(self.event.settings.test, 'foo')
 
         # Reload object
-        self.event = Event.objects.get(identity=self.event.identity)
+        self.event = Event.objects.get(id=self.event.id)
         self.assertEqual(self.event.settings.test, 'foo')
 
     def test_event_set_on_organizer(self):
@@ -55,18 +55,7 @@ class SettingsTestCase(TestCase):
         self.assertEqual(self.event.settings.test, 'foo')
 
         # Reload object
-        self.organizer = Organizer.objects.get(identity=self.organizer.identity)
-
-    def test_versioning(self):
-        self.organizer.settings.test = 'foo'
-        t1 = now()
-        self.assertEqual(self.organizer.settings.test, 'foo')
-        self.assertEqual(self.event.settings.test, 'foo')
-
-        self.organizer.settings.test = 'bar'
-
-        assert OrganizerSetting.objects.as_of(t1).get(object=self.organizer, key='test').value == 'foo'
-        assert OrganizerSetting.objects.current.get(object=self.organizer, key='test').value == 'bar'
+        self.organizer = Organizer.objects.get(id=self.organizer.id)
 
     def test_override_organizer(self):
         self.organizer.settings.test = 'foo'
@@ -75,8 +64,8 @@ class SettingsTestCase(TestCase):
         self.assertEqual(self.event.settings.test, 'bar')
 
         # Reload object
-        self.organizer = Organizer.objects.get(identity=self.organizer.identity)
-        self.event = Event.objects.get(identity=self.event.identity)
+        self.organizer = Organizer.objects.get(id=self.organizer.id)
+        self.event = Event.objects.get(id=self.event.id)
         self.assertEqual(self.organizer.settings.test, 'foo')
         self.assertEqual(self.event.settings.test, 'bar')
 
@@ -103,13 +92,13 @@ class SettingsTestCase(TestCase):
         del self.event.settings.test
         self.assertEqual(self.event.settings.test, 'foo')
 
-        self.event = Event.objects.get(identity=self.event.identity)
+        self.event = Event.objects.get(id=self.event.id)
         self.assertEqual(self.event.settings.test, 'foo')
 
         del self.organizer.settings.test
         self.assertIsNone(self.organizer.settings.test)
 
-        self.organizer = Organizer.objects.get(identity=self.organizer.identity)
+        self.organizer = Organizer.objects.get(id=self.organizer.id)
         self.assertIsNone(self.organizer.settings.test)
 
     def test_serialize_str(self):
@@ -196,7 +185,7 @@ class SettingsTestCase(TestCase):
         sandbox['bar'] = 'baz'
         sandbox.baz = 42
 
-        self.event = Event.objects.get(identity=self.event.identity)
+        self.event = Event.objects.get(id=self.event.id)
         sandbox = SettingsSandbox('testing', 'foo', self.event)
         self.assertEqual(sandbox['bar'], 'baz')
         self.assertEqual(sandbox.baz, '42')

@@ -6,9 +6,8 @@ from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from typing import List, Union
-from versions.models import VersionedForeignKey
 
-from .base import CachedFile, Versionable
+from .base import CachedFile
 from .event import Event
 from .items import Item, ItemVariation, Question, Quota
 
@@ -17,7 +16,7 @@ def generate_secret():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16))
 
 
-class Order(Versionable):
+class Order(models.Model):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
     several OrderPositions and is connected to an user. It has an
@@ -83,7 +82,7 @@ class Order(Versionable):
         choices=STATUS_CHOICE,
         verbose_name=_("Status")
     )
-    event = VersionedForeignKey(
+    event = models.ForeignKey(
         Event,
         verbose_name=_("Event"),
         related_name="orders"
@@ -180,13 +179,11 @@ class Order(Versionable):
 
     def mark_refunded(self):
         """
-        Mark this order as refunded. This clones the order object, sets the payment status and
-        returns the cloned order object.
+        Mark this order as refunded. This sets the payment status and returns the order object.
         """
-        order = self.clone()
-        order.status = Order.STATUS_REFUNDED
-        order.save()
-        return order
+        self.status = Order.STATUS_REFUNDED
+        self.save()
+        return self
 
     def _can_be_paid(self) -> Union[bool, str]:
         error_messages = {
@@ -223,12 +220,12 @@ class Order(Versionable):
                 for quota in quotas:
                     # Lock the quota, so no other thread is allowed to perform sales covered by this
                     # quota while we're doing so.
-                    if quota.identity not in quota_cache:
-                        quota_cache[quota.identity] = quota
+                    if quota.id not in quota_cache:
+                        quota_cache[quota.id] = quota
                         quota.cached_availability = quota.availability()[1]
                     else:
                         # Use cached version
-                        quota = quota_cache[quota.identity]
+                        quota = quota_cache[quota.id]
                     if quota.cached_availability is not None:
                         quota.cached_availability -= 1
                         if quota.cached_availability < 0:
@@ -240,12 +237,12 @@ class Order(Versionable):
 
 
 class CachedTicket(models.Model):
-    order = VersionedForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
     cachedfile = models.ForeignKey(CachedFile, on_delete=models.CASCADE)
     provider = models.CharField(max_length=255)
 
 
-class QuestionAnswer(Versionable):
+class QuestionAnswer(models.Model):
     """
     The answer to a Question, connected to an OrderPosition or CartPosition.
 
@@ -268,7 +265,7 @@ class QuestionAnswer(Versionable):
         'CartPosition', null=True, blank=True,
         related_name='answers'
     )
-    question = VersionedForeignKey(
+    question = models.ForeignKey(
         Question, related_name='answers'
     )
     answer = models.TextField()
@@ -286,14 +283,14 @@ class ObjectWithAnswers:
             self.answ[a.question_id] = a.answer
         self.questions = []
         for q in self.item.questions.all():
-            if q.identity in self.answ:
-                q.answer = self.answ[q.identity]
+            if q.id in self.answ:
+                q.answer = self.answ[q.id]
             else:
                 q.answer = ""
             self.questions.append(q)
 
 
-class OrderPosition(ObjectWithAnswers, Versionable):
+class OrderPosition(ObjectWithAnswers, models.Model):
     """
     An OrderPosition is one line of an order, representing one ordered items
     of a specified type (or variation).
@@ -309,20 +306,23 @@ class OrderPosition(ObjectWithAnswers, Versionable):
     :param attendee_name: The attendee's name, if entered.
     :type attendee_name: str
     """
-    order = VersionedForeignKey(
+    order = models.ForeignKey(
         Order,
         verbose_name=_("Order"),
-        related_name='positions'
+        related_name='positions',
+        on_delete=models.PROTECT
     )
-    item = VersionedForeignKey(
+    item = models.ForeignKey(
         Item,
         verbose_name=_("Item"),
-        related_name='positions'
+        related_name='positions',
+        on_delete=models.PROTECT
     )
-    variation = VersionedForeignKey(
+    variation = models.ForeignKey(
         ItemVariation,
         null=True, blank=True,
-        verbose_name=_("Variation")
+        verbose_name=_("Variation"),
+        on_delete=models.PROTECT
     )
     price = models.DecimalField(
         decimal_places=2, max_digits=10,
@@ -347,17 +347,16 @@ class OrderPosition(ObjectWithAnswers, Versionable):
                 order=order, item=cartpos.item, variation=cartpos.variation,
                 price=cartpos.price, attendee_name=cartpos.attendee_name
             )
+            op.save()
             for answ in cartpos.answers.all():
-                answ = answ.clone()
                 answ.orderposition = op
                 answ.cartposition = None
                 answ.save()
-            op.save()
             cartpos.delete()
             ops.append(op)
 
 
-class CartPosition(ObjectWithAnswers, Versionable):
+class CartPosition(ObjectWithAnswers, models.Model):
     """
     A cart position is similar to a order line, except that it is not
     yet part of a binding order but just placed by some user in his or
@@ -383,7 +382,7 @@ class CartPosition(ObjectWithAnswers, Versionable):
     :param attendee_name: The attendee's name, if entered.
     :type attendee_name: str
     """
-    event = VersionedForeignKey(
+    event = models.ForeignKey(
         Event,
         verbose_name=_("Event")
     )
@@ -391,14 +390,16 @@ class CartPosition(ObjectWithAnswers, Versionable):
         max_length=255, null=True, blank=True,
         verbose_name=_("Cart ID (e.g. session key)")
     )
-    item = VersionedForeignKey(
+    item = models.ForeignKey(
         Item,
-        verbose_name=_("Item")
+        verbose_name=_("Item"),
+        on_delete=models.CASCADE
     )
-    variation = VersionedForeignKey(
+    variation = models.ForeignKey(
         ItemVariation,
         null=True, blank=True,
-        verbose_name=_("Variation")
+        verbose_name=_("Variation"),
+        on_delete=models.CASCADE
     )
     price = models.DecimalField(
         decimal_places=2, max_digits=10,
@@ -421,3 +422,8 @@ class CartPosition(ObjectWithAnswers, Versionable):
     class Meta:
         verbose_name = _("Cart position")
         verbose_name_plural = _("Cart positions")
+
+    def __str__(self):
+        return '<CartPosition: item %d, variation %d for cart %s>' % (
+            self.item.id, self.variation.id if self.variation else 0, self.cart_id
+        )

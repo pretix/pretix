@@ -23,8 +23,8 @@ class OrderDetailMixin:
     @cached_property
     def order(self):
         try:
-            return Order.objects.current.get(secret=self.kwargs['secret'],
-                                             event=self.request.event, code=self.kwargs['order'])
+            return Order.objects.get(secret=self.kwargs['secret'],
+                                     event=self.request.event, code=self.kwargs['order'])
         except Order.DoesNotExist:
             return None
 
@@ -80,7 +80,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         ctx['download_buttons'] = self.download_buttons
         ctx['cart'] = self.get_cart(
             answers=True,
-            queryset=OrderPosition.objects.current.filter(order=self.order)
+            queryset=OrderPosition.objects.filter(order=self.order)
         )
         if self.order.status == Order.STATUS_PENDING:
             ctx['payment'] = self.payment_provider.order_pending_render(self.request, self.order)
@@ -251,9 +251,8 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        order = self.order.clone()
-        order.status = Order.STATUS_CANCELLED
-        order.save()
+        self.order.status = Order.STATUS_CANCELLED
+        self.order.save()
         return redirect(self.get_order_url())
 
     def get(self, request, *args, **kwargs):
@@ -302,5 +301,5 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             cf.save()
             ct.cachedfile = cf
         ct.save()
-        generate(self.order.identity, self.output.identifier)
+        generate(self.order.id, self.output.identifier)
         return redirect(reverse('cachedfile.download', kwargs={'id': ct.cachedfile.id}))

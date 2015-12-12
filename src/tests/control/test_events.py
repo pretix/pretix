@@ -26,15 +26,8 @@ class EventsTest(BrowserTest):
             organizer=self.orga2, name='MRMCD14', slug='mrmcd14',
             date_from=datetime.datetime(2014, 9, 5, tzinfo=datetime.timezone.utc),
         )
-        self.event4 = Event.objects.create(
-            organizer=self.orga2, name='MRMCD00', slug='mrmcd00',
-            date_from=datetime.datetime(2000, 9, 5, tzinfo=datetime.timezone.utc),
-        )
-        self.event4.delete()
         OrganizerPermission.objects.create(organizer=self.orga1, user=self.user)
         EventPermission.objects.create(event=self.event1, user=self.user, can_change_items=True,
-                                       can_change_settings=True)
-        EventPermission.objects.create(event=self.event4, user=self.user, can_change_items=True,
                                        can_change_settings=True)
         self.driver.implicitly_wait(10)
         self.driver.get('%s%s' % (self.live_server_url, '/control/login'))
@@ -51,7 +44,6 @@ class EventsTest(BrowserTest):
         self.assertIn("30C3", tabletext)
         self.assertNotIn("31C3", tabletext)
         self.assertNotIn("MRMCD14", tabletext)
-        self.assertNotIn("MRMCD00", tabletext)
 
     def test_settings(self):
         self.driver.get('%s/control/event/%s/%s/settings/' % (self.live_server_url, self.orga1.slug,

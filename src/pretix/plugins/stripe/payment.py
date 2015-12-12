@@ -83,18 +83,17 @@ class Stripe(BasePaymentProvider):
                 currency=request.event.currency.lower(),
                 source=request.session['payment_stripe_token'],
                 metadata={
-                    'order': order.identity,
-                    'event': self.event.identity,
+                    'order': order.id,
+                    'event': self.event.id,
                     'code': order.code
                 },
                 # TODO: Is this sufficient?
-                idempotency_key=self.event.identity + order.code + request.session['payment_stripe_token']
+                idempotency_key=self.event.id + order.code + request.session['payment_stripe_token']
             )
         except stripe.error.CardError as e:
             err = e.json_body['error']
             messages.error(request, _('Stripe reported an error with your card: %s' % err['message']))
             logger.info('Stripe card error: %s' % str(err))
-            order = order.clone()
             order.payment_info = json.dumps({
                 'error': True,
                 'message': err['message'],
@@ -106,7 +105,6 @@ class Stripe(BasePaymentProvider):
             messages.error(request, _('We had trouble communicating with Stripe. Please try again and get in touch '
                                       'with us if this problem persists.'))
             logger.error('Stripe error: %s' % str(err))
-            order = order.clone()
             order.payment_info = json.dumps({
                 'error': True,
                 'message': err['message'],
@@ -121,7 +119,6 @@ class Stripe(BasePaymentProvider):
             else:
                 messages.warning(request, _('Stripe reported an error: %s' % charge.failure_message))
                 logger.info('Charge failed: %s' % str(charge))
-                order = order.clone()
                 order.payment_info = str(charge)
                 order.save()
         del request.session['payment_stripe_token']

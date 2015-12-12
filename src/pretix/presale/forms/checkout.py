@@ -42,7 +42,7 @@ class QuestionsForm(forms.Form):
             answers = [
                 a for a
                 in (cartpos.answers.all() if cartpos else orderpos.answers.all())
-                if a.question_id == q.identity
+                if a.question_id == q.id
             ]
             if answers:
                 initial = answers[0].answer
@@ -73,4 +73,4 @@ class QuestionsForm(forms.Form):
             if answers:
                 # Cache the answer object for later use
                 field.answer = answers[0]
-            self.fields['question_%s' % q.identity] = field
+            self.fields['question_%s' % q.id] = field

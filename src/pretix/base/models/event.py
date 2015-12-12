@@ -9,17 +9,15 @@ from django.template.defaultfilters import date as _date
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from versions.models import VersionedForeignKey
 
 from pretix.base.i18n import I18nCharField
 from pretix.base.settings import SettingsProxy
 
 from .auth import User
-from .base import Versionable
 from .organizer import Organizer
 
 
-class Event(Versionable):
+class Event(models.Model):
     """
     This model represents an event. An event is anything you can buy
     tickets for.
@@ -46,8 +44,7 @@ class Event(Versionable):
     :type plugins: str
     """
 
-    organizer = VersionedForeignKey(Organizer, related_name="events",
-                                    on_delete=models.PROTECT)
+    organizer = models.ForeignKey(Organizer, related_name="events", on_delete=models.PROTECT)
     name = I18nCharField(
         max_length=200,
         verbose_name=_("Name"),
@@ -184,7 +181,7 @@ class Event(Versionable):
         return locking.LockManager(self)
 
 
-class EventPermission(Versionable):
+class EventPermission(models.Model):
     """
     The relation between an Event and an User who has permissions to
     access an event.
@@ -203,8 +200,8 @@ class EventPermission(Versionable):
     :type can_change_orders: bool
     """
 
-    event = VersionedForeignKey(Event)
-    user = models.ForeignKey(User, related_name="event_perms")
+    event = models.ForeignKey(Event, related_name="user_perms", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="event_perms", on_delete=models.CASCADE)
     can_change_settings = models.BooleanField(
         default=True,
         verbose_name=_("Can change event settings")
@@ -237,12 +234,12 @@ class EventPermission(Versionable):
         }
 
 
-class EventSetting(Versionable):
+class EventSetting(models.Model):
     """
     An event settings is a key-value setting which can be set for a
     specific event
     """
-    object = VersionedForeignKey(Event, related_name='setting_objects')
+    object = models.ForeignKey(Event, related_name='setting_objects', on_delete=models.CASCADE)
     key = models.CharField(max_length=255)
     value = models.TextField()
 

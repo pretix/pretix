@@ -17,7 +17,7 @@ class QuestionsViewMixin:
             cartpos = cr if isinstance(cr, CartPosition) else None
             orderpos = cr if isinstance(cr, OrderPosition) else None
             form = QuestionsForm(event=self.request.event,
-                                 prefix=cr.identity,
+                                 prefix=cr.id,
                                  cartpos=cartpos,
                                  orderpos=orderpos,
                                  data=(self.request.POST if self.request.method == 'POST' else None))
@@ -37,7 +37,6 @@ class QuestionsViewMixin:
                 # answers to the questions / in the CartPosition object
                 for k, v in form.cleaned_data.items():
                     if k == 'attendee_name':
-                        form.pos = form.pos.clone()
                         form.pos.attendee_name = v if v != '' else None
                         form.pos.save()
                     elif k.startswith('question_') and v is not None:
@@ -48,7 +47,6 @@ class QuestionsViewMixin:
                             if v == '':
                                 field.answer.delete()
                             else:
-                                field.answer = field.answer.clone()
                                 field.answer.answer = v
                                 field.answer.save()
                         elif v != '':

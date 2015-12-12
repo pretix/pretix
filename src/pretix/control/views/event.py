@@ -12,7 +12,7 @@ from django.views.generic import FormView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 
-from pretix.base.forms import VersionedModelForm
+from pretix.base.forms import I18nModelForm
 from pretix.base.models import (
     Event, EventPermission, Item, Order, OrderPosition, User,
 )
@@ -248,19 +248,19 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
 
 def index(request, organizer, event):
     ctx = {
-        'products_active': Item.objects.current.filter(
+        'products_active': Item.objects.filter(
             event=request.event,
             active=True,
         ).count(),
-        'tickets_total': OrderPosition.objects.current.filter(
+        'tickets_total': OrderPosition.objects.filter(
             order__event=request.event,
             item__admission=True
         ).count(),
-        'tickets_revenue': Order.objects.current.filter(
+        'tickets_revenue': Order.objects.filter(
             event=request.event,
             status=Order.STATUS_PAID,
         ).aggregate(sum=Sum('total'))['sum'],
-        'tickets_sold': OrderPosition.objects.current.filter(
+        'tickets_sold': OrderPosition.objects.filter(
             order__event=request.event,
             order__status=Order.STATUS_PAID,
             item__admission=True
@@ -269,7 +269,7 @@ def index(request, organizer, event):
     return render(request, 'pretixcontrol/event/index.html', ctx)
 
 
-class EventPermissionForm(VersionedModelForm):
+class EventPermissionForm(I18nModelForm):
     class Meta:
         model = EventPermission
         fields = (
@@ -297,7 +297,7 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
         )
         return fs(data=self.request.POST if self.request.method == "POST" else None,
                   prefix="formset",
-                  queryset=EventPermission.objects.current.filter(event=self.request.event))
+                  queryset=EventPermission.objects.filter(event=self.request.event))
 
     @cached_property
     def add_form(self):
@@ -317,13 +317,13 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
                     self.add_form.instance.user = User.objects.get(email=self.add_form.cleaned_data['user'])
                     self.add_form.instance.user_id = self.add_form.instance.user.id
                     self.add_form.instance.event = self.request.event
-                    self.add_form.instance.event_id = self.request.event.identity
+                    self.add_form.instance.event_id = self.request.event.id
                 except User.DoesNotExist:
                     messages.error(self.request, _('There is no user with the email address you entered.'))
                     return self.get(*args, **kwargs)
                 else:
-                    if EventPermission.objects.current.filter(user=self.add_form.instance.user,
-                                                              event=self.request.event).exists():
+                    if EventPermission.objects.filter(user=self.add_form.instance.user,
+                                                      event=self.request.event).exists():
                         messages.error(self.request, _('This user already has permissions for this event.'))
                         return self.get(*args, **kwargs)
                     self.add_form.save()

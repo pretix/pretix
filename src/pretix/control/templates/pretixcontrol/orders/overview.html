@@ -40,27 +40,27 @@
                         <tr class="item {% if tup.0 %}categorized{% endif %}">
                             <td>{{ item.name }}</td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.identity }}">
+                                <a href="{{ listurl }}?item={{ item.id }}">
                                     {{ item.num_total|togglesum }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.identity }}&amp;status=n">
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=n">
                                     {{ item.num_pending|togglesum }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.identity }}&amp;status=c">
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=c">
                                     {{ item.num_cancelled|togglesum }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.identity }}&amp;status=r">
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=r">
                                     {{ item.num_refunded|togglesum }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.identity }}&amp;status=p">
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=p">
                                     {{ item.num_paid|togglesum }}
                                 </a>
                             </td>

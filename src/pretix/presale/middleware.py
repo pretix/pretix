@@ -26,7 +26,7 @@ class EventMiddleware:
                         path = "/" + request.get_full_path().split("/", 2)[-1]
                         return redirect(path)
 
-                    request.event = Event.objects.current.filter(
+                    request.event = Event.objects.filter(
                         slug=url.kwargs['event'],
                         organizer=request.organizer,
                     ).select_related('organizer')[0]
@@ -34,13 +34,13 @@ class EventMiddleware:
                 else:
                     # We are on our main domain
                     if 'event' in url.kwargs and 'organizer' in url.kwargs:
-                        request.event = Event.objects.current.filter(
+                        request.event = Event.objects.filter(
                             slug=url.kwargs['event'],
                             organizer__slug=url.kwargs['organizer']
                         ).select_related('organizer')[0]
                         request.organizer = request.event.organizer
                     elif 'organizer' in url.kwargs:
-                        request.organizer = Organizer.objects.current.filter(
+                        request.organizer = Organizer.objects.filter(
                             slug=url.kwargs['organizer']
                         )[0]
                     else:

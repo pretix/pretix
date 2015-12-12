@@ -60,17 +60,17 @@ class CheckoutTestCase(TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
 
-        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr1.identity, q1.identity))), 1)
-        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr2.identity, q1.identity))), 1)
-        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr1.identity, q2.identity))), 1)
-        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr2.identity, q2.identity))), 1)
+        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr1.id, q1.id))), 1)
+        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr2.id, q1.id))), 1)
+        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr1.id, q2.id))), 1)
+        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr2.id, q2.id))), 1)
 
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            '%s-question_%s' % (cr1.identity, q1.identity): '42',
-            '%s-question_%s' % (cr2.identity, q1.identity): '',
-            '%s-question_%s' % (cr1.identity, q2.identity): 'Internet',
-            '%s-question_%s' % (cr2.identity, q2.identity): '',
+            '%s-question_%s' % (cr1.id, q1.id): '42',
+            '%s-question_%s' % (cr2.id, q1.id): '',
+            '%s-question_%s' % (cr1.id, q2.id): 'Internet',
+            '%s-question_%s' % (cr2.id, q2.id): '',
             'email': 'admin@localhost'
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
@@ -78,17 +78,17 @@ class CheckoutTestCase(TestCase):
 
         # Corrected request
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            '%s-question_%s' % (cr1.identity, q1.identity): '42',
-            '%s-question_%s' % (cr2.identity, q1.identity): '23',
-            '%s-question_%s' % (cr1.identity, q2.identity): 'Internet',
-            '%s-question_%s' % (cr2.identity, q2.identity): '',
+            '%s-question_%s' % (cr1.id, q1.id): '42',
+            '%s-question_%s' % (cr2.id, q1.id): '23',
+            '%s-question_%s' % (cr1.id, q2.id): 'Internet',
+            '%s-question_%s' % (cr2.id, q2.id): '',
             'email': 'admin@localhost'
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
-        cr1 = CartPosition.objects.current.get(identity=cr1.identity)
-        cr2 = CartPosition.objects.current.get(identity=cr2.identity)
+        cr1 = CartPosition.objects.get(id=cr1.id)
+        cr2 = CartPosition.objects.get(id=cr2.id)
         self.assertEqual(cr1.answers.filter(question=q1).count(), 1)
         self.assertEqual(cr2.answers.filter(question=q1).count(), 1)
         self.assertEqual(cr1.answers.filter(question=q2).count(), 1)
@@ -103,11 +103,11 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % cr1.identity)), 1)
+        self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % cr1.id)), 1)
 
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            '%s-attendee_name' % cr1.identity: '',
+            '%s-attendee_name' % cr1.id: '',
             'email': 'admin@localhost'
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
@@ -115,13 +115,13 @@ class CheckoutTestCase(TestCase):
 
         # Corrected request
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            '%s-attendee_name' % cr1.identity: 'Peter',
+            '%s-attendee_name' % cr1.id: 'Peter',
             'email': 'admin@localhost'
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
-        cr1 = CartPosition.objects.current.get(identity=cr1.identity)
+        cr1 = CartPosition.objects.get(id=cr1.id)
         self.assertEqual(cr1.attendee_name, 'Peter')
 
     def test_attendee_name_optional(self):
@@ -133,17 +133,17 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % cr1.identity)), 1)
+        self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % cr1.id)), 1)
 
         # Not all fields filled out, expect success
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            '%s-attendee_name' % cr1.identity: '',
+            '%s-attendee_name' % cr1.id: '',
             'email': 'admin@localhost'
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
-        cr1 = CartPosition.objects.current.get(identity=cr1.identity)
+        cr1 = CartPosition.objects.get(id=cr1.id)
         self.assertIsNone(cr1.attendee_name)
 
     def test_payment(self):
@@ -188,7 +188,6 @@ class CheckoutTestCase(TestCase):
         self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
-        cr1 = cr1.clone()
         cr1.attendee_name = 'Peter'
         cr1.save()
         q1 = Question.objects.create(
@@ -201,7 +200,6 @@ class CheckoutTestCase(TestCase):
         self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
-        q1 = q1.clone()
         q1.required = False
         q1.save()
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
@@ -227,9 +225,9 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select(".thank-you")), 1)
-        self.assertFalse(CartPosition.objects.current.filter(identity=cr1.identity).exists())
-        self.assertEqual(Order.objects.current.count(), 1)
-        self.assertEqual(OrderPosition.objects.current.count(), 1)
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.count(), 1)
 
     def test_confirm_expired_available(self):
         cr1 = CartPosition.objects.create(
@@ -241,12 +239,11 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select(".thank-you")), 1)
-        self.assertFalse(CartPosition.objects.current.filter(identity=cr1.identity).exists())
-        self.assertEqual(Order.objects.current.count(), 1)
-        self.assertEqual(OrderPosition.objects.current.count(), 1)
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.count(), 1)
 
     def test_confirm_price_changed(self):
-        self.ticket = self.ticket.clone()
         self.ticket.default_price = 24
         self.ticket.save()
         cr1 = CartPosition.objects.create(
@@ -258,7 +255,7 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select(".alert-danger")), 1)
-        cr1 = CartPosition.objects.current.get(identity=cr1.identity)
+        cr1 = CartPosition.objects.get(id=cr1.id)
         self.assertEqual(cr1.price, 24)
 
     def test_confirm_expired_partial(self):
@@ -277,10 +274,9 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select(".alert-danger")), 1)
-        self.assertEqual(CartPosition.objects.current.filter(cart_id=self.session_key).count(), 1)
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key).count(), 1)
 
     def test_confirm_inactive(self):
-        self.ticket = self.ticket.clone()
         self.ticket.active = False
         self.ticket.save()
         cr1 = CartPosition.objects.create(
@@ -292,7 +288,7 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
-        self.assertFalse(CartPosition.objects.current.filter(identity=cr1.identity).exists())
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
 
     def test_confirm_expired_unavailable(self):
         self.quota_tickets.size = 0
@@ -306,7 +302,7 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
-        self.assertFalse(CartPosition.objects.current.filter(identity=cr1.identity).exists())
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
 
     def test_confirm_completely_unavailable(self):
         self.quota_tickets.items.remove(self.ticket)
@@ -319,4 +315,4 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
-        self.assertFalse(CartPosition.objects.current.filter(identity=cr1.identity).exists())
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())

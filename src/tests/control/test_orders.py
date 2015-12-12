@@ -60,7 +60,7 @@ def test_order_list(client, env):
     assert 'FOO' in response.rendered_content
     response = client.get('/control/event/dummy/dummy/orders/?item=15')
     assert 'FOO' not in response.rendered_content
-    response = client.get('/control/event/dummy/dummy/orders/?item=%s' % env[3].identity)
+    response = client.get('/control/event/dummy/dummy/orders/?item=%s' % env[3].id)
     assert 'FOO' in response.rendered_content
 
 
@@ -80,13 +80,13 @@ def test_order_transition_to_paid_in_time_success(client, env):
     client.post('/control/event/dummy/dummy/orders/FOO/transition', {
         'status': 'p'
     })
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     assert o.status == Order.STATUS_PAID
 
 
 @pytest.mark.django_db
 def test_order_transition_to_paid_expired_quota_left(client, env):
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.expires = now() - timedelta(days=2)
     o.save()
     q = Quota.objects.create(event=env[0], size=10)
@@ -95,13 +95,13 @@ def test_order_transition_to_paid_expired_quota_left(client, env):
     client.post('/control/event/dummy/dummy/orders/FOO/transition', {
         'status': 'p'
     })
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     assert o.status == Order.STATUS_PAID
 
 
 @pytest.mark.django_db
 def test_order_transition_to_paid_expired_quota_full(client, env):
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.expires = now() - timedelta(days=2)
     o.save()
     q = Quota.objects.create(event=env[0], size=0)
@@ -110,7 +110,7 @@ def test_order_transition_to_paid_expired_quota_full(client, env):
     client.post('/control/event/dummy/dummy/orders/FOO/transition', {
         'status': 'p'
     })
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     assert o.status == Order.STATUS_PENDING
 
 
@@ -134,14 +134,14 @@ def test_order_transition_to_paid_expired_quota_full(client, env):
     (Order.STATUS_REFUNDED, Order.STATUS_PENDING, False)
 ])
 def test_order_transition(client, env, process):
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.status = process[0]
     o.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
     client.post('/control/event/dummy/dummy/orders/FOO/transition', {
         'status': process[1]
     })
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     if process[2]:
         assert o.status == process[1]
     else:
@@ -150,7 +150,7 @@ def test_order_transition(client, env, process):
 
 @pytest.mark.django_db
 def test_order_detail_download_buttons_hidden_if_not_paid(client, env):
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.status = Order.STATUS_PENDING
     o.save()
     env[0].settings.set('ticket_download', True)
@@ -163,7 +163,7 @@ def test_order_detail_download_buttons_hidden_if_not_paid(client, env):
 
 @pytest.mark.django_db
 def test_order_detail_download_buttons_visible(client, env):
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.status = Order.STATUS_PAID
     o.save()
     env[0].settings.set('ticket_download', True)
@@ -176,7 +176,7 @@ def test_order_detail_download_buttons_visible(client, env):
 
 @pytest.mark.django_db
 def test_order_detail_download_buttons_hidden_of(client, env):
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.status = Order.STATUS_PAID
     o.save()
     env[0].settings.set('ticket_download', False)
@@ -189,7 +189,7 @@ def test_order_detail_download_buttons_hidden_of(client, env):
 
 @pytest.mark.django_db
 def test_order_detail_download_buttons_visible_before_date(client, env):
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.status = Order.STATUS_PAID
     o.save()
     env[0].settings.set('ticket_download', True)
@@ -202,7 +202,7 @@ def test_order_detail_download_buttons_visible_before_date(client, env):
 
 @pytest.mark.django_db
 def test_order_detail_download_buttons_hidden_if_provider_disabled(client, env):
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.status = Order.STATUS_PAID
     o.save()
     env[0].settings.set('ticket_download', True)
@@ -225,7 +225,7 @@ def test_order_download_unpaid(client, env):
 
 @pytest.mark.django_db
 def test_order_download_unknown_provider(client, env):
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.status = Order.STATUS_PAID
     o.save()
     env[0].settings.set('ticket_download', True)
@@ -237,7 +237,7 @@ def test_order_download_unknown_provider(client, env):
 
 @pytest.mark.django_db
 def test_order_download_disabled_provider(client, env):
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.status = Order.STATUS_PAID
     o.save()
     env[0].settings.set('ticket_download', True)
@@ -252,7 +252,7 @@ def test_order_download_disabled_provider(client, env):
 def test_order_download_success(client, env, mocker):
     from pretix.base.services import tickets
     mocker.patch('pretix.base.services.tickets.generate')
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.status = Order.STATUS_PAID
     o.save()
     env[0].settings.set('ticket_download', True)
@@ -261,7 +261,7 @@ def test_order_download_success(client, env, mocker):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/orders/FOO/download/testdummy')
     assert response.status_code == 302
-    tickets.generate.assert_any_call(o.identity, 'testdummy')
+    tickets.generate.assert_any_call(o.id, 'testdummy')
     assert 'download' in response['Location']
     dl = response['Location']
     assert CachedTicket.objects.filter(order=o, provider='testdummy').exists()
@@ -276,7 +276,7 @@ def test_order_download_success(client, env, mocker):
 
 @pytest.mark.django_db
 def test_order_extend_not_pending(client, env):
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.status = Order.STATUS_PAID
     o.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
@@ -296,13 +296,13 @@ def test_order_extend_not_expired(client, env):
         'expires': newdate
     }, follow=True)
     assert 'alert-success' in response.rendered_content
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate
 
 
 @pytest.mark.django_db
 def test_order_extend_expired_quota_left(client, env):
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.expires = now() - timedelta(days=5)
     o.save()
     q = Quota.objects.create(event=env[0], size=3)
@@ -313,13 +313,13 @@ def test_order_extend_expired_quota_left(client, env):
         'expires': newdate
     }, follow=True)
     assert 'alert-success' in response.rendered_content
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate
 
 
 @pytest.mark.django_db
 def test_order_extend_expired_quota_empty(client, env):
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     o.expires = now() - timedelta(days=5)
     olddate = o.expires
     o.save()
@@ -331,7 +331,7 @@ def test_order_extend_expired_quota_empty(client, env):
         'expires': newdate
     }, follow=True)
     assert 'alert-danger' in response.rendered_content
-    o = Order.objects.current.get(identity=env[2].identity)
+    o = Order.objects.get(id=env[2].id)
     assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == olddate.strftime("%Y-%m-%d %H:%M:%S")
 
 

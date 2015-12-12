@@ -21,7 +21,7 @@ def event():
 def test_locking_exclusive(event):
     with event.lock():
         with pytest.raises(EventLock.LockTimeoutException):
-            ev = Event.objects.current.get(identity=event.identity)
+            ev = Event.objects.get(id=event.id)
             with ev.lock():
                 pass
 
@@ -42,7 +42,7 @@ def test_lock_timeout_steal(event):
     locking.LOCK_TIMEOUT = 5
     locking.lock_event(event)
     with pytest.raises(EventLock.LockTimeoutException):
-        ev = Event.objects.current.get(identity=event.identity)
+        ev = Event.objects.get(id=event.id)
         locking.lock_event(ev)
     time.sleep(6)
     locking.lock_event(ev)

@@ -20,6 +20,6 @@ class OrganizerIndex(OrganizerViewMixin, ListView):
         else:
             query &= Q(Q(date_from__gte=now()) | Q(date_to__gte=now()))
             order = 'date_from'
-        return Event.objects.current.filter(
+        return Event.objects.filter(
             Q(organizer=self.request.organizer) & query
         ).order_by(order)

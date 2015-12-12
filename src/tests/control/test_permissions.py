@@ -33,29 +33,28 @@ event_urls = [
     "settings/tickets",
     "items/",
     "items/add",
-    "items/abc/",
-    "items/abc/variations",
-    "items/abc/properties",
+    "items/1/",
+    "items/1/variations",
+    "items/1/properties",
     "categories/",
     "categories/add",
-    "categories/abc/",
-    "categories/abc/up",
-    "categories/abc/down",
-    "categories/abc/delete",
+    "categories/2/",
+    "categories/2/up",
+    "categories/2/down",
+    "categories/2/delete",
     "questions/",
-    "questions/abc/delete",
-    "questions/abc/",
+    "questions/2/delete",
+    "questions/2/",
     "questions/add",
     "quotas/",
-    "quotas/abc/delete",
-    "quotas/abc/",
+    "quotas/2/delete",
+    "quotas/2/",
     "quotas/add",
     "orders/ABC/transition",
     "orders/ABC/extend",
     "orders/ABC/",
     "orders/",
 ]
-
 
 organizer_urls = [
     'organizer/abc/edit',
@@ -101,16 +100,16 @@ event_permission_urls = [
     # We don't have to create categories and similar objects
     # for testing this, it is enough to test that a 404 error
     # is returned instead of a 403 one.
-    ("can_change_items", "categories/abc/", 404),
-    ("can_change_items", "categories/abc/delete", 404),
+    ("can_change_items", "categories/2/", 404),
+    ("can_change_items", "categories/2/delete", 404),
     ("can_change_items", "categories/add", 200),
     # ("can_change_items", "questions/", 200),
-    ("can_change_items", "questions/abc/", 404),
-    ("can_change_items", "questions/abc/delete", 404),
+    ("can_change_items", "questions/2/", 404),
+    ("can_change_items", "questions/2/delete", 404),
     ("can_change_items", "questions/add", 200),
     # ("can_change_items", "quotas/", 200),
-    ("can_change_items", "quotas/abc/", 404),
-    ("can_change_items", "quotas/abc/delete", 404),
+    ("can_change_items", "quotas/2/", 404),
+    ("can_change_items", "quotas/2/delete", 404),
     ("can_change_items", "quotas/add", 200),
     ("can_view_orders", "orders/overview/", 200),
     ("can_view_orders", "orders/", 200),
@@ -143,7 +142,6 @@ def test_current_permission(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/settings/')
     assert response.status_code == 200
-    ep = ep.clone()
     setattr(ep, 'can_change_settings', False)
     ep.save()
     response = client.get('/control/event/dummy/dummy/settings/')

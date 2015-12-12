@@ -25,7 +25,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        orders = Order.objects.current.filter(
+        orders = Order.objects.filter(
             event=self.request.event, status__in=form.cleaned_data['sendto']
         ).select_related("user")
         users = set([o.user for o in orders])

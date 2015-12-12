@@ -4,11 +4,11 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from pytz import common_timezones
 
-from pretix.base.forms import SettingsForm, VersionedModelForm
+from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.models import Event
 
 
-class EventCreateForm(VersionedModelForm):
+class EventCreateForm(I18nModelForm):
     error_messages = {
         'duplicate_slug': _("You already used this slug for a different event. Please choose a new one."),
     }
@@ -39,7 +39,7 @@ class EventCreateForm(VersionedModelForm):
         return slug
 
 
-class EventUpdateForm(VersionedModelForm):
+class EventUpdateForm(I18nModelForm):
     def clean_slug(self):
         return self.instance.slug
 

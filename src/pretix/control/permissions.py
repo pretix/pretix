@@ -15,7 +15,7 @@ def event_permission_required(permission):
                 # just a double check, should not ever happen
                 raise PermissionDenied()
             try:
-                perm = EventPermission.objects.current.get(
+                perm = EventPermission.objects.get(
                     event=request.event,
                     user=request.user
                 )
@@ -59,7 +59,7 @@ def organizer_permission_required(permission):
                 # just a double check, should not ever happen
                 raise PermissionDenied()
             try:
-                perm = OrganizerPermission.objects.current.get(
+                perm = OrganizerPermission.objects.get(
                     organizer=request.organizer,
                     user=request.user
                 )

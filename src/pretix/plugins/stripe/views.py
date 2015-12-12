@@ -30,12 +30,12 @@ def webhook(request):
         return HttpResponse('Event not given', status=200)
 
     try:
-        event = Event.objects.current.get(identity=metadata['event'])
+        event = Event.objects.get(id=metadata['event'])
     except Event.DoesNotExist:
         return HttpResponse('Event not found', status=200)
 
     try:
-        order = Order.objects.current.get(identity=metadata['order'])
+        order = Order.objects.get(id=metadata['order'])
     except Order.DoesNotExist:
         return HttpResponse('Order not found', status=200)
 

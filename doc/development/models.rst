@@ -8,26 +8,6 @@ Pretix provides the following data(base) models. Every model and every model met
 documented here is considered private and should not be used by third-party plugins, as it may change
 without advance notice.
 
-.. IMPORTANT::
-   pretix's models are built with `cleanerversion`_, which extends the default Django ORM by adding versioning
-   information to the database. There are basically three things you absolutely need to know about cleanerversion:
-
-   * When querying the database, make sure you only get the current versions::
-
-        queryset = Model.objects.current.filter(…)
-
-   * Before you modify an object, clone it::
-
-        obj = Model.objects.current.get(identity=1)  # Prefer identities over primary keys
-        obj = obj.clone()  # Saves the old version to the database and creates the new one
-        obj.foo = 'bar'
-        obj.save()
-
-   * Beware of batch operations, use ``queryset.update()``, ``queryset.delete()`` etc. only if
-     you know what you're doing.
-
-   There is one exception: The ``User`` model is a classic Django model!
-
 User model
 ----------
 

@@ -1,19 +1,18 @@
 import copy
 
 from django import forms
-from django.db import models
 from django.forms import BooleanField
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.forms import I18nModelForm, VersionedModelForm
+from pretix.base.forms import I18nModelForm
 from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Property, PropertyValue, Question,
-    Quota, Versionable,
+    Quota,
 )
 from pretix.control.forms import TolerantFormsetModelForm, VariationsField
 
 
-class CategoryForm(VersionedModelForm):
+class CategoryForm(I18nModelForm):
     class Meta:
         model = ItemCategory
         localized_fields = '__all__'
@@ -22,7 +21,7 @@ class CategoryForm(VersionedModelForm):
         ]
 
 
-class PropertyForm(VersionedModelForm):
+class PropertyForm(I18nModelForm):
     class Meta:
         model = Property
         localized_fields = '__all__'
@@ -40,10 +39,10 @@ class PropertyValueForm(TolerantFormsetModelForm):
         ]
 
 
-class QuestionForm(VersionedModelForm):
+class QuestionForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['items'].queryset = self.instance.event.items.current.all()
+        self.fields['items'].queryset = self.instance.event.items.all()
 
     class Meta:
         model = Question
@@ -60,10 +59,6 @@ class QuestionForm(VersionedModelForm):
 
 
 class QuotaForm(I18nModelForm):
-    """
-    The form for quotas does not derive from VersionedModelForm as it does not
-    perform a 'full clone' as part of a performance optimization
-    """
 
     def __init__(self, **kwargs):
         items = kwargs['items']
@@ -72,7 +67,7 @@ class QuotaForm(I18nModelForm):
         self.original_instance = copy.copy(instance) if instance else None
         super().__init__(**kwargs)
 
-        if hasattr(self, 'instance'):
+        if hasattr(self, 'instance') and self.instance.pk:
             active_items = set(self.instance.items.all())
             active_variations = set(self.instance.variations.all())
         else:
@@ -81,35 +76,18 @@ class QuotaForm(I18nModelForm):
 
         for item in items:
             if len(item.properties.all()) > 0:
-                self.fields['item_%s' % item.identity] = VariationsField(
+                self.fields['item_%s' % item.id] = VariationsField(
                     item, label=_("Activate for"),
                     required=False,
                     initial=active_variations
                 )
-                self.fields['item_%s' % item.identity].set_item(item)
+                self.fields['item_%s' % item.id].set_item(item)
             else:
-                self.fields['item_%s' % item.identity] = BooleanField(
+                self.fields['item_%s' % item.id] = BooleanField(
                     label=_("Activate"),
                     required=False,
                     initial=(item in active_items)
                 )
-
-    def save(self, commit=True):
-        if self.instance.pk is not None and isinstance(self.instance, Versionable):
-            if self.has_changed() and self.original_instance:
-                new = self.instance
-                old = self.original_instance
-                clone = old.clone_shallow()
-                for f in type(self.instance)._meta.get_fields():
-                    if f.name not in (
-                            'id', 'identity', 'version_start_date', 'version_end_date',
-                            'version_birth_date'
-                    ) and not isinstance(f, (
-                            models.ManyToOneRel, models.ManyToManyRel, models.ManyToManyField
-                    )):
-                        setattr(clone, f.name, getattr(new, f.name))
-                self.instance = clone
-        return super().save(commit)
 
     class Meta:
         model = Quota
@@ -120,10 +98,10 @@ class QuotaForm(I18nModelForm):
         ]
 
 
-class ItemFormGeneral(VersionedModelForm):
+class ItemFormGeneral(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['category'].queryset = self.instance.event.categories.current.all()
+        self.fields['category'].queryset = self.instance.event.categories.all()
 
     class Meta:
         model = Item
@@ -142,7 +120,7 @@ class ItemFormGeneral(VersionedModelForm):
         ]
 
 
-class ItemVariationForm(VersionedModelForm):
+class ItemVariationForm(I18nModelForm):
     class Meta:
         model = ItemVariation
         localized_fields = '__all__'

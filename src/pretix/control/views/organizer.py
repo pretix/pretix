@@ -17,9 +17,9 @@ class OrganizerList(ListView):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return Organizer.objects.current.all()
+            return Organizer.objects.all()
         else:
-            return Organizer.objects.current.filter(
+            return Organizer.objects.filter(
                 permitted__id__exact=self.request.user.pk
             )
 

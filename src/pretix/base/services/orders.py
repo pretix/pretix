@@ -33,8 +33,8 @@ error_messages = {
 def mark_order_paid(order: Order, provider: str=None, info: str=None, date: datetime=None, manual: bool=None,
                     force: bool=False) -> Order:
     """
-    Marks an order as paid. This clones the order object, sets the payment provider,
-    info and date and returns the cloned order object.
+    Marks an order as paid. This sets the payment provider, info and date and returns
+    the order object.
 
     :param provider: The payment provider that marked this as paid
     :type provider: str
@@ -52,7 +52,6 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
         can_be_paid = order._can_be_paid()
         if not force and can_be_paid is not True:
             raise Quota.QuotaExceededException(can_be_paid)
-        order = order.clone()
         order.payment_provider = provider or order.payment_provider
         order.payment_info = info or order.payment_info
         order.payment_date = date or now()
@@ -110,7 +109,6 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
             cp.delete()
             continue
         if price != cp.price:
-            cp = cp.clone()
             positions[i] = cp
             cp.price = price
             cp.save()
@@ -125,7 +123,6 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
                 quota_ok = False
                 break
         if quota_ok:
-            cp = cp.clone()
             positions[i] = cp
             cp.expires = now() + timedelta(
                 minutes=event.settings.get('reservation_time', as_type=int))
@@ -163,7 +160,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], dt: d
 
 def _perform_order(event: str, payment_provider: str, position_ids: List[str],
                    email: str, locale: str):
-    event = Event.objects.current.get(identity=event)
+    event = Event.objects.get(id=event)
     responses = register_payment_providers.send(event)
     pprov = None
     for receiver, response in responses:
@@ -175,8 +172,8 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
 
     dt = now()
     with event.lock():
-        positions = list(CartPosition.objects.current.filter(
-            identity__in=position_ids).select_related('item', 'variation'))
+        positions = list(CartPosition.objects.filter(
+            id__in=position_ids).select_related('item', 'variation'))
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
         _check_positions(event, dt, positions)
@@ -197,7 +194,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
         },
         event, locale=order.locale
     )
-    return order.identity
+    return order.id
 
 
 def perform_order(event: str, payment_provider: str, positions: List[str],

@@ -8,16 +8,14 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from typing import List, Tuple
-from versions.models import VersionedForeignKey, VersionedManyToManyField
 
 from pretix.base.i18n import I18nCharField, I18nTextField
 
 from ..types import VariationDict
-from .base import Versionable
 from .event import Event
 
 
-class ItemCategory(Versionable):
+class ItemCategory(models.Model):
     """
     Items can be sorted into these categories.
 
@@ -28,7 +26,7 @@ class ItemCategory(Versionable):
     :param position: An integer, used for sorting
     :type position: int
     """
-    event = VersionedForeignKey(
+    event = models.ForeignKey(
         Event,
         on_delete=models.CASCADE,
         related_name='categories',
@@ -44,7 +42,7 @@ class ItemCategory(Versionable):
     class Meta:
         verbose_name = _("Product category")
         verbose_name_plural = _("Product categories")
-        ordering = ('position', 'version_birth_date')
+        ordering = ('position', 'id')
 
     def __str__(self):
         return str(self.name)
@@ -61,7 +59,7 @@ class ItemCategory(Versionable):
 
     @property
     def sortkey(self):
-        return self.position, self.version_birth_date
+        return self.position, self.id
 
     def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
@@ -69,12 +67,12 @@ class ItemCategory(Versionable):
 
 def itempicture_upload_to(instance, filename: str) -> str:
     return '%s/%s/item-%s.%s' % (
-        instance.event.organizer.slug, instance.event.slug, instance.identity,
+        instance.event.organizer.slug, instance.event.slug, instance.id,
         filename.split('.')[-1]
     )
 
 
-class Item(Versionable):
+class Item(models.Model):
     """
     An item is a thing which can be sold. It belongs to an event and may or may not belong to a category.
     Items are often also called 'products' but are named 'items' internally due to historic reasons.
@@ -104,13 +102,13 @@ class Item(Versionable):
 
     """
 
-    event = VersionedForeignKey(
+    event = models.ForeignKey(
         Event,
         on_delete=models.PROTECT,
         related_name="items",
         verbose_name=_("Event"),
     )
-    category = VersionedForeignKey(
+    category = models.ForeignKey(
         ItemCategory,
         on_delete=models.PROTECT,
         related_name="items",
@@ -222,7 +220,7 @@ class Item(Versionable):
         for var in all_variations:
             key = []
             for v in var.values.all():
-                key.append((v.prop_id, v.identity))
+                key.append((v.prop_id, v.id))
             key = tuple(sorted(key))
             variations_cache[key] = var
 
@@ -234,8 +232,8 @@ class Item(Versionable):
             key = []
             var = VariationDict()
             for v in comb:
-                key.append((v.prop.identity, v.identity))
-                var[v.prop.identity] = v
+                key.append((v.prop.id, v.id))
+                var[v.prop.id] = v
             key = tuple(sorted(key))
             if key in variations_cache:
                 var['variation'] = variations_cache[key]
@@ -245,7 +243,7 @@ class Item(Versionable):
         return result
 
     def _get_all_generated_variations(self):
-        propids = set([p.identity for p in self.properties.all()])
+        propids = set([p.id for p in self.properties.all()])
         if len(propids) == 0:
             variations = [VariationDict()]
         else:
@@ -261,11 +259,11 @@ class Item(Versionable):
                 values = list(var.values.all())
                 # Make sure we don't expose stale ItemVariation objects which are
                 # still around altough they have an old set of properties
-                if set([v.prop.identity for v in values]) != propids:
+                if set([v.prop.id for v in values]) != propids:
                     continue
                 vardict = VariationDict()
                 for v in values:
-                    vardict[v.prop.identity] = v
+                    vardict[v.prop.id] = v
                 vardict['variation'] = var
                 variations.append(vardict)
         return variations
@@ -325,7 +323,7 @@ class Item(Versionable):
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
 
-class Property(Versionable):
+class Property(models.Model):
     """
     A property is a modifier which can be applied to an Item. For example
     'Size' would be a property associated with the item 'T-Shirt'.
@@ -336,11 +334,11 @@ class Property(Versionable):
     :type name: str
     """
 
-    event = VersionedForeignKey(
+    event = models.ForeignKey(
         Event,
         related_name="properties"
     )
-    item = VersionedForeignKey(
+    item = models.ForeignKey(
         Item, related_name='properties', null=True, blank=True
     )
     name = I18nCharField(
@@ -366,7 +364,7 @@ class Property(Versionable):
             self.event.get_cache().clear()
 
 
-class PropertyValue(Versionable):
+class PropertyValue(models.Model):
     """
     A value of a property. If the property would be 'T-Shirt size',
     this could be 'M' or 'L'.
@@ -379,7 +377,7 @@ class PropertyValue(Versionable):
     :type position: int
     """
 
-    prop = VersionedForeignKey(
+    prop = models.ForeignKey(
         Property,
         on_delete=models.CASCADE,
         related_name="values"
@@ -395,7 +393,7 @@ class PropertyValue(Versionable):
     class Meta:
         verbose_name = _("Property value")
         verbose_name_plural = _("Property values")
-        ordering = ("position", "version_birth_date")
+        ordering = ("position", "id")
 
     def __str__(self):
         return "%s: %s" % (self.prop.name, self.value)
@@ -412,13 +410,13 @@ class PropertyValue(Versionable):
 
     @property
     def sortkey(self) -> Tuple[int, datetime]:
-        return self.position, self.version_birth_date
+        return self.position, self.id
 
     def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
 
 
-class ItemVariation(Versionable):
+class ItemVariation(models.Model):
     """
     A variation is an item combined with values for all properties
     associated with the item. For example, if your item is 'T-Shirt'
@@ -444,11 +442,11 @@ class ItemVariation(Versionable):
     :param default_price: This variation's default price
     :type default_price: decimal.Decimal
     """
-    item = VersionedForeignKey(
+    item = models.ForeignKey(
         Item,
         related_name='variations'
     )
-    values = VersionedManyToManyField(
+    values = models.ManyToManyField(
         PropertyValue,
         related_name='variations',
     )
@@ -495,7 +493,7 @@ class ItemVariation(Versionable):
         """
         vd = VariationDict()
         for v in self.values.all():
-            vd[v.prop.identity] = v
+            vd[v.prop.id] = v
         vd['variation'] = self
         return vd
 
@@ -507,14 +505,14 @@ class ItemVariation(Versionable):
         for pair in pk.split(","):
             prop, value = pair.split(":")
             self.values.add(
-                PropertyValue.objects.current.get(
-                    identity=value,
+                PropertyValue.objects.get(
+                    id=value,
                     prop_id=prop
                 )
             )
 
 
-class VariationsField(VersionedManyToManyField):
+class VariationsField(models.ManyToManyField):
     """
     This is a ManyToManyField using the pretixcontrol.views.forms.VariationsField
     form field by default.
@@ -536,12 +534,12 @@ class VariationsField(VersionedManyToManyField):
             initial = defaults['initial']
             if callable(initial):
                 initial = initial()
-            defaults['initial'] = [i.identity for i in initial]
+            defaults['initial'] = [i.id for i in initial]
         # Skip ManyToManyField in dependency chain
         return super(RelatedField, self).formfield(**defaults)
 
 
-class Question(Versionable):
+class Question(models.Model):
     """
     A question is an input field that can be used to extend a ticket
     by custom information, e.g. "Attendee age". A question can allow one o several
@@ -573,7 +571,7 @@ class Question(Versionable):
         (TYPE_BOOLEAN, _("Yes/No")),
     )
 
-    event = VersionedForeignKey(
+    event = models.ForeignKey(
         Event,
         related_name="questions"
     )
@@ -589,7 +587,7 @@ class Question(Versionable):
         default=False,
         verbose_name=_("Required question")
     )
-    items = VersionedManyToManyField(
+    items = models.ManyToManyField(
         Item,
         related_name='questions',
         verbose_name=_("Products"),
@@ -615,7 +613,7 @@ class Question(Versionable):
             self.event.get_cache().clear()
 
 
-class Quota(Versionable):
+class Quota(models.Model):
     """
     A quota is a "pool of tickets". It is there to limit the number of items
     of a certain type to be sold. For example, you could have a quota of 500
@@ -666,7 +664,7 @@ class Quota(Versionable):
     AVAILABILITY_RESERVED = 20
     AVAILABILITY_OK = 100
 
-    event = VersionedForeignKey(
+    event = models.ForeignKey(
         Event,
         on_delete=models.CASCADE,
         related_name="quotas",
@@ -681,7 +679,7 @@ class Quota(Versionable):
         null=True, blank=True,
         help_text=_("Leave empty for an unlimited number of tickets.")
     )
-    items = VersionedManyToManyField(
+    items = models.ManyToManyField(
         Item,
         verbose_name=_("Item"),
         related_name="quotas",
@@ -745,7 +743,7 @@ class Quota(Versionable):
     def count_in_cart(self) -> int:
         from pretix.base.models import CartPosition
 
-        return CartPosition.objects.current.filter(
+        return CartPosition.objects.filter(
             Q(expires__gte=now())
             & self._position_lookup
         ).count()
@@ -753,7 +751,7 @@ class Quota(Versionable):
     def count_orders(self) -> dict:
         from pretix.base.models import Order, OrderPosition
 
-        o = OrderPosition.objects.current.filter(self._position_lookup).aggregate(
+        o = OrderPosition.objects.filter(self._position_lookup).aggregate(
             paid=Sum(
                 Case(When(order__status=Order.STATUS_PAID, then=1),
                      output_field=models.IntegerField())

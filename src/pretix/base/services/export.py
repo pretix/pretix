@@ -7,7 +7,7 @@ from pretix.base.signals import register_data_exporters
 
 
 def export(event: str, fileid: str, provider: str, form_data: Dict[str, Any]) -> None:
-    event = Event.objects.current.get(identity=event)
+    event = Event.objects.get(id=event)
     file = CachedFile.objects.get(id=fileid)
     responses = register_data_exporters.send(event)
     for receiver, response in responses:

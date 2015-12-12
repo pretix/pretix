@@ -168,7 +168,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 aw.question_id: aw.answer for aw in cp.answers.all()
             }
             for q in cp.item.questions.all():
-                if q.required and q.identity not in answ:
+                if q.required and q.id not in answ:
                     if warn:
                         messages.warning(request, _('Please fill in answers to all required questions.'))
                     return False
@@ -193,7 +193,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     @cached_property
     def _total_order_value(self):
-        return CartPosition.objects.current.filter(
+        return CartPosition.objects.filter(
             Q(cart_id=self.request.session.session_key) & Q(event=self.request.event)
         ).aggregate(sum=Sum('price'))['sum']
 
@@ -300,15 +300,15 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
     def post(self, request):
         self.request = request
-        return self.do(self.request.event.identity, self.payment_provider.identifier,
-                       [p.identity for p in self.positions], request.session.get('email'),
+        return self.do(self.request.event.id, self.payment_provider.identifier,
+                       [p.id for p in self.positions], request.session.get('email'),
                        translation.get_language())
 
     def get_success_message(self, value):
         return None
 
     def get_success_url(self, value):
-        order = Order.objects.current.get(identity=value)
+        order = Order.objects.get(id=value)
         return self.get_order_url(order)
 
     def get_error_message(self, exception):

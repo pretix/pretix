@@ -69,7 +69,7 @@ class PdfTicketOutput(BaseTicketOutput):
             qr_s = self.settings.get('qr_s', default=80, as_type=float)
             if qr_s:
                 reqs = qr_s * units.mm
-                qrw = QrCodeWidget(op.identity, barLevel='H')
+                qrw = QrCodeWidget(op.id, barLevel='H')
                 b = qrw.getBounds()
                 w = b[2] - b[0]
                 h = b[3] - b[1]
@@ -84,7 +84,7 @@ class PdfTicketOutput(BaseTicketOutput):
                 p.setFont("Helvetica", code_s)
                 code_x = self.settings.get('code_x', default=15, as_type=float)
                 code_y = self.settings.get('code_y', default=130, as_type=float)
-                p.drawString(code_x * units.mm, code_y * units.mm, op.identity)
+                p.drawString(code_x * units.mm, code_y * units.mm, op.id)
 
             p.showPage()
 

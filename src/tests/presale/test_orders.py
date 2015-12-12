@@ -129,7 +129,7 @@ class OrdersTest(TestCase):
         self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
-        self.order = Order.objects.current.get(identity=self.order.identity)
+        self.order = Order.objects.get(id=self.order.id)
         assert self.order.status == Order.STATUS_REFUNDED
 
     def test_orders_modify_attendee_optional(self):
@@ -139,18 +139,18 @@ class OrdersTest(TestCase):
         response = self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
         doc = BeautifulSoup(response.rendered_content)
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % self.ticket_pos.identity)), 1)
+        self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % self.ticket_pos.id)), 1)
 
         # Not all fields filled out, expect success
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                '%s-attendee_name' % self.ticket_pos.identity: '',
+                '%s-attendee_name' % self.ticket_pos.id: '',
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                       self.order.secret),
                              target_status_code=200)
-        self.ticket_pos = OrderPosition.objects.current.get(identity=self.ticket_pos.identity)
+        self.ticket_pos = OrderPosition.objects.get(id=self.ticket_pos.id)
         assert self.ticket_pos.attendee_name in (None, '')
 
     def test_orders_modify_attendee_required(self):
@@ -160,24 +160,24 @@ class OrdersTest(TestCase):
         response = self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
         doc = BeautifulSoup(response.rendered_content)
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % self.ticket_pos.identity)), 1)
+        self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % self.ticket_pos.id)), 1)
 
         # Not all required fields filled out, expect failure
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                '%s-attendee_name' % self.ticket_pos.identity: '',
+                '%s-attendee_name' % self.ticket_pos.id: '',
             }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
 
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                '%s-attendee_name' % self.ticket_pos.identity: 'Peter',
+                '%s-attendee_name' % self.ticket_pos.id: 'Peter',
             }, follow=True)
         self.assertRedirects(response, '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                                 self.order.secret),
                              target_status_code=200)
-        self.ticket_pos = OrderPosition.objects.current.get(identity=self.ticket_pos.identity)
+        self.ticket_pos = OrderPosition.objects.get(id=self.ticket_pos.id)
         assert self.ticket_pos.attendee_name == 'Peter'
 
     def test_orders_questions_optional(self):
@@ -188,12 +188,12 @@ class OrdersTest(TestCase):
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (
-            self.ticket_pos.identity, self.question.identity))), 1)
+            self.ticket_pos.id, self.question.id))), 1)
 
         # Not all fields filled out, expect success
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                '%s-question_%s' % (self.ticket_pos.identity, self.question.identity): '',
+                '%s-question_%s' % (self.ticket_pos.id, self.question.id): '',
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
@@ -211,19 +211,19 @@ class OrdersTest(TestCase):
                                                                   self.order.secret))
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (
-            self.ticket_pos.identity, self.question.identity))), 1)
+            self.ticket_pos.id, self.question.id))), 1)
 
         # Not all required fields filled out, expect failure
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                '%s-question_%s' % (self.ticket_pos.identity, self.question.identity): '',
+                '%s-question_%s' % (self.ticket_pos.id, self.question.id): '',
             }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
 
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                '%s-question_%s' % (self.ticket_pos.identity, self.question.identity): 'ABC',
+                '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
@@ -237,7 +237,7 @@ class OrdersTest(TestCase):
         self.client.get(
             '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
-        self.order = Order.objects.current.get(identity=self.order.identity)
+        self.order = Order.objects.get(id=self.order.id)
         assert self.order.status == Order.STATUS_PAID
 
     def test_orders_cancel(self):
@@ -252,7 +252,7 @@ class OrdersTest(TestCase):
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                       self.order.secret),
                              target_status_code=200)
-        assert Order.objects.current.get(identity=self.order.identity).status == Order.STATUS_CANCELLED
+        assert Order.objects.get(id=self.order.id).status == Order.STATUS_CANCELLED
 
     def test_orders_download(self):
         self.event.settings.set('ticket_download', True)

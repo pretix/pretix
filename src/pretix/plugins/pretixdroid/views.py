@@ -42,7 +42,7 @@ class ConfigView(EventPermissionRequiredMixin, TemplateView):
 class ApiView(View):
     def get(self, request, **kwargs):
         try:
-            event = Event.objects.current.get(
+            event = Event.objects.get(
                 slug=self.kwargs['event'],
                 organizer__slug=self.kwargs['organizer']
             )
@@ -53,12 +53,12 @@ class ApiView(View):
                 or event.settings.get('pretixdroid_key') != request.GET.get('key', '')):
             return HttpResponseForbidden('Invalid key')
 
-        ops = OrderPosition.objects.current.filter(
+        ops = OrderPosition.objects.filter(
             order__event=event, order__status=Order.STATUS_PAID,
         ).select_related('item', 'variation')
         data = [
             {
-                'id': op.identity,
+                'id': op.id,
                 'item': str(op.item),
                 'variation': str(op.variation) if op.variation else None,
                 'attendee_name': op.attendee_name

@@ -18,8 +18,7 @@ from pretix.base.models import (
     Quota,
 )
 from pretix.control.forms import (
-    I18nInlineFormSet, NestedInnerI18nInlineFormSet, VariationsField,
-    nestedformset_factory,
+    NestedInnerI18nInlineFormSet, VariationsField, nestedformset_factory,
 )
 from pretix.control.forms.item import (
     CategoryForm, ItemFormGeneral, ItemVariationForm, PropertyForm,
@@ -28,7 +27,6 @@ from pretix.control.forms.item import (
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
 )
-from pretix.control.signals import restriction_formset
 
 from . import CreateView, UpdateView
 
@@ -42,7 +40,7 @@ class ItemList(ListView):
     template_name = 'pretixcontrol/items/index.html'
 
     def get_queryset(self):
-        return Item.objects.current.filter(
+        return Item.objects.filter(
             event=self.request.event
         ).prefetch_related("category")
 
@@ -54,12 +52,12 @@ def item_move(request, item, up=True):
     all items for this category in a new order.
     """
     try:
-        item = request.event.items.current.get(
-            identity=item
+        item = request.event.items.get(
+            id=item
         )
     except Item.DoesNotExist:
         raise Http404(_("The requested product does not exist."))
-    items = list(request.event.items.current.filter(category=item.category).order_by("position"))
+    items = list(request.event.items.filter(category=item.category).order_by("position"))
 
     index = items.index(item)
     if index != 0 and up:
@@ -70,7 +68,7 @@ def item_move(request, item, up=True):
     for i, item in enumerate(items):
         if item.position != i:
             item.position = i
-            item.save()  # TODO: Clone or document sloppiness?
+            item.save()
     messages.success(request, _('The order of items as been updated.'))
 
 
@@ -99,16 +97,15 @@ class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None) -> ItemCategory:
         try:
-            return self.request.event.categories.current.get(
-                identity=self.kwargs['category']
+            return self.request.event.categories.get(
+                id=self.kwargs['category']
             )
         except ItemCategory.DoesNotExist:
             raise Http404(_("The requested product category does not exist."))
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        for item in self.object.items.current.all():
-            # TODO: Clone!?
+        for item in self.object.items.all():
             item.category = None
             item.save()
         success_url = self.get_success_url()
@@ -133,8 +130,8 @@ class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
     def get_object(self, queryset=None) -> ItemCategory:
         url = resolve(self.request.path_info)
         try:
-            return self.request.event.categories.current.get(
-                identity=url.kwargs['category']
+            return self.request.event.categories.get(
+                id=url.kwargs['category']
             )
         except ItemCategory.DoesNotExist:
             raise Http404(_("The requested product category does not exist."))
@@ -176,7 +173,7 @@ class CategoryList(ListView):
     template_name = 'pretixcontrol/items/categories.html'
 
     def get_queryset(self):
-        return self.request.event.categories.current.all()
+        return self.request.event.categories.all()
 
 
 def category_move(request, category, up=True):
@@ -186,12 +183,12 @@ def category_move(request, category, up=True):
     all categories for this event in a new order.
     """
     try:
-        category = request.event.categories.current.get(
-            identity=category
+        category = request.event.categories.get(
+            id=category
         )
     except ItemCategory.DoesNotExist:
         raise Http404(_("The requested product category does not exist."))
-    categories = list(request.event.categories.current.order_by("position"))
+    categories = list(request.event.categories.order_by("position"))
 
     index = categories.index(category)
     if index != 0 and up:
@@ -202,7 +199,7 @@ def category_move(request, category, up=True):
     for i, cat in enumerate(categories):
         if cat.position != i:
             cat.position = i
-            cat.save()  # TODO: Clone or document sloppiness?
+            cat.save()
     messages.success(request, _('The order of categories as been updated.'))
 
 
@@ -229,7 +226,7 @@ class QuestionList(ListView):
     template_name = 'pretixcontrol/items/questions.html'
 
     def get_queryset(self):
-        return self.request.event.questions.current.all()
+        return self.request.event.questions.all()
 
 
 class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
@@ -240,15 +237,15 @@ class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None) -> Question:
         try:
-            return self.request.event.questions.current.get(
-                identity=self.kwargs['question']
+            return self.request.event.questions.get(
+                id=self.kwargs['question']
             )
         except Question.DoesNotExist:
             raise Http404(_("The requested question does not exist."))
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
-        context['dependent'] = list(self.get_object().items.current.all())
+        context['dependent'] = list(self.get_object().items.all())
         return context
 
     def delete(self, request, *args, **kwargs):
@@ -274,8 +271,8 @@ class QuestionUpdate(EventPermissionRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None) -> Question:
         try:
-            return self.request.event.questions.current.get(
-                identity=self.kwargs['question']
+            return self.request.event.questions.get(
+                id=self.kwargs['question']
             )
         except Question.DoesNotExist:
             raise Http404(_("The requested question does not exist."))
@@ -321,7 +318,7 @@ class QuotaList(ListView):
     template_name = 'pretixcontrol/items/quotas.html'
 
     def get_queryset(self):
-        return Quota.objects.current.filter(
+        return Quota.objects.filter(
             event=self.request.event
         ).prefetch_related("items")
 
@@ -342,32 +339,29 @@ class QuotaEditorMixin:
         context = super().get_context_data(*args, **kwargs)
         context['items'] = self.items
         for item in context['items']:
-            item.field = self.get_form(QuotaForm)['item_%s' % item.identity]
+            item.field = self.get_form(QuotaForm)['item_%s' % item.id]
         return context
 
     @transaction.atomic()
     def form_valid(self, form):
         res = super().form_valid(form)
-        # The following commented-out checks are not necessary as both self.object.items
-        # and self.object.variations can be expected empty due to the performance
-        # optimization of pretixbase.models.Versionable.clone_shallow()
-        # items = self.object.items.all()
-        # variations = self.object.variations.all()
+        items = self.object.items.all()
+        variations = self.object.variations.all()
         selected_variations = []
         self.object = form.instance
         for item in self.items:
-            field = form.fields['item_%s' % item.identity]
-            data = form.cleaned_data['item_%s' % item.identity]
+            field = form.fields['item_%s' % item.id]
+            data = form.cleaned_data['item_%s' % item.id]
             if isinstance(field, VariationsField):
                 for v in data:
                     selected_variations.append(v)
-            if data:  # and item not in items:
+            if data and item not in items:
                 self.object.items.add(item)
-                # elif not data and item in items:
-                # self.object.items.remove(item)
+            elif not data and item in items:
+                self.object.items.remove(item)
 
-        self.object.variations.add(*[v for v in selected_variations])  # if v not in variations])
-        # self.object.variations.remove(*[v for v in variations if v not in selected_variations])
+        self.object.variations.add(*[v for v in selected_variations if v not in variations])
+        self.object.variations.remove(*[v for v in variations if v not in selected_variations])
         return res
 
 
@@ -399,8 +393,8 @@ class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
 
     def get_object(self, queryset=None) -> Quota:
         try:
-            return self.request.event.quotas.current.get(
-                identity=self.kwargs['quota']
+            return self.request.event.quotas.get(
+                id=self.kwargs['quota']
             )
         except Quota.DoesNotExist:
             raise Http404(_("The requested quota does not exist."))
@@ -424,15 +418,15 @@ class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None) -> Quota:
         try:
-            return self.request.event.quotas.current.get(
-                identity=self.kwargs['quota']
+            return self.request.event.quotas.get(
+                id=self.kwargs['quota']
             )
         except Quota.DoesNotExist:
             raise Http404(_("The requested quota does not exist."))
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
-        context['dependent'] = list(self.get_object().items.current.all())
+        context['dependent'] = list(self.get_object().items.all())
         return context
 
     def delete(self, request, *args, **kwargs):
@@ -456,8 +450,8 @@ class ItemDetailMixin(SingleObjectMixin):
     def get_object(self, queryset=None) -> Item:
         try:
             if not hasattr(self, 'object') or not self.object:
-                self.item = self.request.event.items.current.get(
-                    identity=self.kwargs['item']
+                self.item = self.request.event.items.get(
+                    id=self.kwargs['item']
                 )
                 self.object = self.item
             return self.object
@@ -474,7 +468,7 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
         return reverse('control:event.item', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-            'item': self.object.identity,
+            'item': self.object.id,
         })
 
     def form_valid(self, form):
@@ -500,7 +494,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
         return reverse('control:event.item', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-            'item': self.get_object().identity,
+            'item': self.get_object().id,
         })
 
     def form_valid(self, form):
@@ -516,7 +510,7 @@ class ItemProperties(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
         return reverse('control:event.item.properties', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-            'item': self.get_object().identity,
+            'item': self.get_object().id,
         })
 
     def get_inner_formset_class(self):
@@ -534,7 +528,7 @@ class ItemProperties(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
             form=PropertyForm, can_order=False, can_delete=True, extra=0
         )
         formset = formsetclass(self.request.POST if self.request.method == "POST" else None,
-                               queryset=Property.objects.current.filter(item=self.object).prefetch_related('values'),
+                               queryset=Property.objects.filter(item=self.object).prefetch_related('values'),
                                event=self.request.event)
         return formset
 
@@ -595,16 +589,16 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
             form = ItemVariationForm(
                 data,
                 instance=variation['variation'],
-                prefix=",".join([str(i.identity) for i in values]),
+                prefix=",".join([str(i.id) for i in values]),
             )
         else:
             inst = ItemVariation(item=self.object)
-            inst.item_id = self.object.identity
+            inst.item_id = self.object.id
             inst.creation = True
             form = ItemVariationForm(
                 data,
                 instance=inst,
-                prefix=",".join([str(i.identity) for i in values]),
+                prefix=",".join([str(i.id) for i in values]),
             )
         form.values = values
         return form
@@ -649,21 +643,21 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
                 # properties they belong to EXCEPT the value for the property prop2.
                 # We'll see later why we need this.
                 return [
-                    v.identity for v in sorted(values, key=lambda v: v.prop.identity)
-                    if v.prop.identity != prop2.identity
+                    v.id for v in sorted(values, key=lambda v: v.prop.id)
+                    if v.prop.id != prop2.id
                 ]
 
             def sort(v):
                 # Given a list of variations, this will sort them by their position
                 # on the x-axis
-                return v[prop2.identity].sortkey
+                return v[prop2.id].sortkey
 
             # We now iterate over the cartesian product of all the other
             # properties which are NOT on the axes of the grid because we
             # create one grid for any combination of them.
-            for gridrow in product(*[prop.values.current.all() for prop in self.properties[2:]]):
+            for gridrow in product(*[prop.values.all() for prop in self.properties[2:]]):
                 grids = []
-                for val1 in prop1.values.current.all():
+                for val1 in prop1.values.all():
                     formrow = []
                     # We are now inside one of the rows of the grid and have to
                     # select the variations to display in this row. In order to
@@ -689,7 +683,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
 
     def main(self, request, *args, **kwargs):
         self.object = self.get_object()
-        self.properties = list(self.object.properties.current.all().prefetch_related("values"))
+        self.properties = list(self.object.properties.all().prefetch_related("values"))
         self.dimension = len(self.properties)
         self.forms, self.forms_flat = self.get_forms()
 
@@ -730,7 +724,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
         return reverse('control:event.item.variations', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-            'item': self.get_object().identity,
+            'item': self.get_object().id,
         })
 
     def get_context_data(self, **kwargs) -> dict:
@@ -757,8 +751,8 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
     def get_object(self, queryset=None) -> Property:
         if not hasattr(self, 'object') or not self.object:
             try:
-                self.object = self.request.event.items.current.get(
-                    identity=self.kwargs['item']
+                self.object = self.request.event.items.get(
+                    id=self.kwargs['item']
                 )
             except Property.DoesNotExist:
                 raise Http404(_("The requested product does not exist."))

@@ -68,5 +68,5 @@ def test_pretixdroid(client, env):
     jdata = json.loads(response.content.decode("utf-8"))
     assert jdata['version'] == 1
     assert len(jdata['data']) == 2
-    assert {"id": env[3].identity, "variation": "Red", "attendee_name": None, "item": "T-Shirt"} in jdata['data']
-    assert {"id": env[4].identity, "variation": None, "attendee_name": "Peter", "item": "Ticket"} in jdata['data']
+    assert {"id": env[3].id, "variation": "Red", "attendee_name": None, "item": "T-Shirt"} in jdata['data']
+    assert {"id": env[4].id, "variation": None, "attendee_name": "Peter", "item": "Ticket"} in jdata['data']

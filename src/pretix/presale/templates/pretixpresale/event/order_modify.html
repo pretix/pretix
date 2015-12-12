@@ -15,7 +15,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#cp{{ form.pos.identity }}"
+                            <a data-toggle="collapse" href="#cp{{ form.pos.id }}"
                                     data-parent="#questions_accordion">
                                 <strong>{{ form.pos.item }}</strong>
                                 {% if form.pos.variation %}
@@ -24,7 +24,7 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="cp{{ form.pos.identity }}"
+                    <div id="cp{{ form.pos.id }}"
                             class="panel-collapse collapsed {% if forloop.counter0 == 0 %}in{% endif %}">
                         <div class="panel-body">
                             {% bootstrap_form form layout="horizontal" %}

@@ -105,5 +105,5 @@ Buchungstag;Valuta;Buchungstext;Auftraggeber / Empfänger;Verwendungszweck;Betra
         data[inp.attrs['name']] = inp.attrs['value']
     client.post('/control/event/dummy/dummy/banktransfer/import/', data)
 
-    assert Order.objects.current.get(identity=env[2].identity).status == Order.STATUS_PAID
-    assert Order.objects.current.get(identity=env[3].identity).status == Order.STATUS_CANCELLED
+    assert Order.objects.get(id=env[2].id).status == Order.STATUS_PAID
+    assert Order.objects.get(id=env[3].id).status == Order.STATUS_CANCELLED

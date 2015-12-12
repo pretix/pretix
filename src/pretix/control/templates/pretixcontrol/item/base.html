@@ -2,12 +2,12 @@
 {% load i18n %}
 {% block title %}{{ object.name }} :: {% trans "Product" %}{% endblock %}
 {% block content %}
-    {% if object.identity %}
+    {% if object.id %}
         <h1>{% trans "Modify product:" %} {{ object.name }}</h1>
         <ul class="nav nav-pills">
-            <li {% if "event.item" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=object.identity %}">{% trans "General information" %}</a></li>
-            <li {% if "event.item.properties" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.properties' organizer=request.event.organizer.slug event=request.event.slug item=object.identity %}">{% trans "Properties" %}</a></li>
-            <li {% if "event.item.variations" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=object.identity %}">{% trans "Variations" %}</a></li>
+            <li {% if "event.item" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">{% trans "General information" %}</a></li>
+            <li {% if "event.item.properties" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.properties' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">{% trans "Properties" %}</a></li>
+            <li {% if "event.item.variations" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">{% trans "Variations" %}</a></li>
         </ul>
     {% else %}
         <h1>{% trans "Create product" %}</h1>
@@ -15,7 +15,7 @@
             You will be able to adjust further settings in the next step.
         {% endblocktrans %}</p>
     {% endif %}
-    {% if object.identity and not object.quotas.exists %}
+    {% if object.id and not object.quotas.exists %}
         <div class="alert alert-warning">
         	{% blocktrans trimmed %}
                 Please note, that your product  will <strong>not</strong> be available for sale until you added your

@@ -37,13 +37,13 @@ class CartActionMixin:
                 continue
             if key.startswith('item_'):
                 try:
-                    items.append((key.split("_")[1], None, int(value)))
+                    items.append((int(key.split("_")[1]), None, int(value)))
                 except ValueError:
                     messages.error(self.request, _('Please enter numbers only.'))
                     return []
             elif key.startswith('variation_'):
                 try:
-                    items.append((key.split("_")[1], key.split("_")[2], int(value)))
+                    items.append((int(key.split("_")[1]), int(key.split("_")[2]), int(value)))
                 except ValueError:
                     messages.error(self.request, _('Please enter numbers only.'))
                     return []
@@ -60,7 +60,7 @@ class CartRemove(EventViewMixin, CartActionMixin, View):
         if not items:
             return redirect(self.get_error_url())
 
-        remove_items_from_cart(self.request.event.identity, items, self.request.session.session_key)
+        remove_items_from_cart(self.request.event.id, items, self.request.session.session_key)
         messages.success(self.request, _('Your cart has been updated.'))
         return redirect(self.get_success_url())
 
@@ -81,7 +81,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
         if items:
-            return self.do(self.request.event.identity, items, self.request.session.session_key)
+            return self.do(self.request.event.id, items, self.request.session.session_key)
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({

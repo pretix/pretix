@@ -35,7 +35,7 @@ def _extend_existing(event: Event, cart_id: str, expiry: datetime) -> None:
     # Extend this user's cart session to 30 minutes from now to ensure all items in the
     # cart expire at the same time
     # We can extend the reservation of items which are not yet expired without risk
-    CartPosition.objects.current.filter(
+    CartPosition.objects.filter(
         Q(cart_id=cart_id) & Q(event=event) & Q(expires__gt=now())
     ).update(expires=expiry)
 
@@ -44,7 +44,7 @@ def _re_add_expired_positions(items: List[CartPosition], event: Event, cart_id: 
     positions = set()
     # For items that are already expired, we have to delete and re-add them, as they might
     # be no longer available or prices might have changed. Sorry!
-    expired = CartPosition.objects.current.filter(
+    expired = CartPosition.objects.filter(
         Q(cart_id=cart_id) & Q(event=event) & Q(expires__lte=now())
     )
     for cp in expired:
@@ -55,7 +55,7 @@ def _re_add_expired_positions(items: List[CartPosition], event: Event, cart_id: 
 
 def _delete_expired(expired: List[CartPosition]) -> None:
     for cp in expired:
-        if cp.version_end_date is None:
+        if cp.expires <= now():
             cp.delete()
 
 
@@ -66,19 +66,19 @@ def _check_date(event: Event) -> None:
         raise CartError(error_messages['ended'])
 
 
-def _add_new_items(event: Event, items: List[Tuple[str, Optional[str], int]],
+def _add_new_items(event: Event, items: List[Tuple[int, Optional[int], int]],
                    cart_id: str, expiry: datetime) -> Optional[str]:
     err = None
 
     # Fetch items from the database
-    items_query = Item.objects.current.filter(event=event, identity__in=[i[0] for i in items]).prefetch_related(
+    items_query = Item.objects.filter(event=event, id__in=[i[0] for i in items]).prefetch_related(
         "quotas")
-    items_cache = {i.identity: i for i in items_query}
-    variations_query = ItemVariation.objects.current.filter(
+    items_cache = {i.id: i for i in items_query}
+    variations_query = ItemVariation.objects.filter(
         item__event=event,
-        identity__in=[i[1] for i in items if i[1] is not None]
+        id__in=[i[1] for i in items if i[1] is not None]
     ).select_related("item", "item__event").prefetch_related("quotas", "values", "values__prop")
-    variations_cache = {v.identity: v for v in variations_query}
+    variations_cache = {v.id: v for v in variations_query}
 
     for i in items:
         # Check whether the specified items are part of what we just fetched from the database
@@ -115,7 +115,7 @@ def _add_new_items(event: Event, items: List[Tuple[str, Optional[str], int]],
         for k in range(quota_ok):
             if len(i) > 3 and i[2] == 1:
                 # Recreating
-                cp = i[3].clone()
+                cp = i[3]
                 cp.expires = expiry
                 cp.price = item.default_price if variation is None else (
                     variation.default_price if variation.default_price is not None else item.default_price)
@@ -131,10 +131,10 @@ def _add_new_items(event: Event, items: List[Tuple[str, Optional[str], int]],
     return err
 
 
-def _add_items_to_cart(event: Event, items: List[Tuple[str, Optional[str], int]], cart_id: str=None) -> None:
+def _add_items_to_cart(event: Event, items: List[Tuple[int, Optional[int], int]], cart_id: str=None) -> None:
     with event.lock():
         _check_date(event)
-        existing = CartPosition.objects.current.filter(Q(cart_id=cart_id) & Q(event=event)).count()
+        existing = CartPosition.objects.filter(Q(cart_id=cart_id) & Q(event=event)).count()
         if sum(i[2] for i in items) + existing > int(event.settings.max_items_per_order):
             # TODO: i18n plurals
             raise CartError(error_messages['max_items'] % event.settings.max_items_per_order)
@@ -152,7 +152,7 @@ def _add_items_to_cart(event: Event, items: List[Tuple[str, Optional[str], int]]
             raise CartError(err)
 
 
-def add_items_to_cart(event: str, items: List[Tuple[str, Optional[str], int]], cart_id: str=None) -> None:
+def add_items_to_cart(event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str=None) -> None:
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
@@ -160,21 +160,21 @@ def add_items_to_cart(event: str, items: List[Tuple[str, Optional[str], int]], c
     :param session: Session ID of a guest
     :raises CartError: On any error that occured
     """
-    event = Event.objects.current.get(identity=event)
+    event = Event.objects.get(id=event)
     try:
         _add_items_to_cart(event, items, cart_id)
     except EventLock.LockTimeoutException:
         raise CartError(error_messages['busy'])
 
 
-def remove_items_from_cart(event: str, items: List[Tuple[str, Optional[str], int]], cart_id: str=None) -> None:
+def remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int]], cart_id: int=None) -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
     :param items: A list of tuple of the form (item id, variation id or None, number)
     :param session: Session ID of a guest
     """
-    event = Event.objects.current.get(identity=event)
+    event = Event.objects.get(id=event)
 
     for item, variation, cnt in items:
         cw = Q(cart_id=cart_id) & Q(item_id=item) & Q(event=event)
@@ -182,7 +182,7 @@ def remove_items_from_cart(event: str, items: List[Tuple[str, Optional[str], int
             cw &= Q(variation_id=variation)
         else:
             cw &= Q(variation__isnull=True)
-        for cp in CartPosition.objects.current.filter(cw).order_by("-price")[:cnt]:
+        for cp in CartPosition.objects.filter(cw).order_by("-price")[:cnt]:
             cp.delete()
 
 
@@ -190,8 +190,8 @@ if settings.HAS_CELERY:
     from pretix.celery import app
 
     @app.task(bind=True, max_retries=5, default_retry_delay=2)
-    def add_items_to_cart_task(self, event: str, items: List[Tuple[str, Optional[str], int]], cart_id: str):
-        event = Event.objects.current.get(identity=event)
+    def add_items_to_cart_task(self, event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str):
+        event = Event.objects.get(id=event)
         try:
             _add_items_to_cart(event, items, cart_id)
         except EventLock.LockTimeoutException:

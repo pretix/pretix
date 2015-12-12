@@ -168,7 +168,6 @@ class Paypal(BasePaymentProvider):
         if payment.state == 'pending':
             messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as soon as the '
                                         'payment completed.'))
-            order = order.clone()
             order.payment_info = json.dumps(payment.to_dict())
             order.save()
             return
