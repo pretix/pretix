@@ -271,7 +271,7 @@ COMPRESS_ENABLED = COMPRESS_OFFLINE = not DEBUG
 
 COMPRESS_CSS_FILTERS = (
     'compressor.filters.css_default.CssAbsoluteFilter',
-    'compressor.filters.cssmin.CSSMinFilter',
+    'compressor.filters.cssmin.CSSCompressorFilter',
 )
 
 # Debug toolbar
