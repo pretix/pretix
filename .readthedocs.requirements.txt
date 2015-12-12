@@ -1,0 +1,3 @@
+-r src/requirements.txt
+-r src/requirements/py34.txt
+-r doc/requirements.txt
