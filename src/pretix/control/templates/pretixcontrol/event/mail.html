@@ -15,9 +15,22 @@
             {% bootstrap_field form.mail_text_order_placed layout="horizontal" %}
             {% bootstrap_field form.mail_text_order_paid layout="horizontal" %}
         </fieldset>
+        <fieldset>
+            <legend>{% trans "SMTP settings" %}</legend>
+            {% bootstrap_field form.smtp_use_custom layout="horizontal" %}
+            {% bootstrap_field form.smtp_host layout="horizontal" %}
+            {% bootstrap_field form.smtp_port layout="horizontal" %}
+            {% bootstrap_field form.smtp_username layout="horizontal" %}
+            {% bootstrap_field form.smtp_password layout="horizontal" %}
+            {% bootstrap_field form.smtp_use_tls layout="horizontal" %}
+            {% bootstrap_field form.smtp_use_ssl layout="horizontal" %}
+        </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
+            </button>
+            <button type="submit" class="btn btn-default btn-save pull-left" name="test" value="1">
+                {% trans "Save and test custom SMTP connection" %}
             </button>
         </div>
     </form>

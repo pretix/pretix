@@ -3,6 +3,8 @@ from datetime import datetime
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.mail import get_connection
+from django.core.mail.backends.smtp import EmailBackend
 from django.core.validators import RegexValidator
 from django.db import models
 from django.template.defaultfilters import date as _date
@@ -180,6 +182,18 @@ class Event(LoggedModel):
         from pretix.base.services import locking
 
         return locking.LockManager(self)
+
+    def get_mail_backend(self, force_custom=False):
+        if self.settings.smtp_use_custom or force_custom:
+            return EmailBackend(host=self.settings.smtp_host,
+                                port=self.settings.smtp_port,
+                                username=self.settings.smtp_username,
+                                password=self.settings.smtp_password,
+                                use_tls=self.settings.smtp_use_tls,
+                                use_ssl=self.settings.smtp_use_ssl,
+                                fail_silently=False)
+        else:
+            return get_connection(fail_silently=False)
 
 
 class EventPermission(models.Model):

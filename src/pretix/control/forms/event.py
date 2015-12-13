@@ -212,6 +212,38 @@ class MailSettingsForm(SettingsForm):
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {url}")
     )
+    smtp_use_custom = forms.BooleanField(
+        label=_("Use custom SMTP server"),
+        help_text=_("All mail related to your event will be sent over the smtp server specified by you."),
+        required=False
+    )
+    smtp_host = forms.CharField(
+        label=_("Hostname"),
+        required=False
+    )
+    smtp_port = forms.IntegerField(
+        label=_("Port"),
+        required=False
+    )
+    smtp_username = forms.CharField(
+        label=_("Username"),
+        required=False
+    )
+    smtp_password = forms.CharField(
+        label=_("Password"),
+        required=False,
+        widget=forms.PasswordInput
+    )
+    smtp_use_tls = forms.BooleanField(
+        label=_("Use STARTTLS"),
+        help_text=_("Commonly enabled on port 587."),
+        required=False
+    )
+    smtp_use_ssl = forms.BooleanField(
+        label=_("Use SSL"),
+        help_text=_("Commonly enabled on port 465."),
+        required=False
+    )
 
 
 class TicketSettingsForm(SettingsForm):

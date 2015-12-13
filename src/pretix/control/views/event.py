@@ -235,7 +235,20 @@ class MailSettings(EventPermissionRequiredMixin, FormView):
                         k: form.cleaned_data.get(k) for k in form.changed_data
                     }
                 )
-            messages.success(self.request, _('Your changes have been saved.'))
+
+            if request.POST.get('test', '0').strip() == '1':
+                backend = self.request.event.get_mail_backend(force_custom=True)
+                try:
+                    backend.open()
+                except Exception as e:
+                    messages.warning(self.request, _('An error occured while contacting the SMTP server: %s') % str(e))
+                else:
+                    messages.success(self.request, _('Your changes have been saved and the connection attempt to '
+                                                     'your SMTP server was successful.'))
+                finally:
+                    backend.close()
+            else:
+                messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
             return self.get(request)

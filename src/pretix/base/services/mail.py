@@ -65,16 +65,18 @@ def mail(email: str, subject: str, template: str,
         )
         body += "\r\n"
     try:
-        return mail_send([email], subject, body, sender)
+        return mail_send([email], subject, body, sender, event.id)
     finally:
         translation.activate(_lng)
 
 
-def mail_send(to: str, subject: str, body: str, sender: str) -> bool:
+def mail_send(to: str, subject: str, body: str, sender: str, event: int) -> bool:
     email = EmailMessage(subject, body, sender, to=to)
+    event = Event.objects.get(id=event)
+    backend = event.get_mail_backend()
 
     try:
-        email.send(fail_silently=False)
+        backend.send_messages([email])
         return True
     except Exception:
         logger.exception('Error sending e-mail')

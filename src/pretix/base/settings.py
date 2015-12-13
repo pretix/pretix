@@ -123,7 +123,35 @@ You can change your order details and view the status of your order at
 
 Best regards,
 Your {event} team"""))
-    }
+    },
+    'smtp_use_custom': {
+        'default': 'False',
+        'type': bool
+    },
+    'smtp_host': {
+        'default': '',
+        'type': str
+    },
+    'smtp_port': {
+        'default': 587,
+        'type': int
+    },
+    'smtp_username': {
+        'default': '',
+        'type': str
+    },
+    'smtp_password': {
+        'default': '',
+        'type': str
+    },
+    'smtp_use_tls': {
+        'default': 'True',
+        'type': bool
+    },
+    'smtp_use_ssl': {
+        'default': 'False',
+        'type': bool
+    },
 }
 
 
