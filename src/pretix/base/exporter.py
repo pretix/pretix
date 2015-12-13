@@ -120,7 +120,7 @@ class JSONExporter(BaseExporter):
                     {
                         'code': order.code,
                         'status': order.status,
-                        'user': order.user.email,
+                        'user': order.email,
                         'datetime': order.datetime,
                         'payment_fee': order.payment_fee,
                         'total': order.total,
@@ -140,8 +140,7 @@ class JSONExporter(BaseExporter):
                             } for position in order.positions.all()
                         ]
                     } for order in
-                    self.event.orders.all().prefetch_related('positions', 'positions__answers').select_related(
-                        'user')
+                    self.event.orders.all().prefetch_related('positions', 'positions__answers')
                 ],
                 'quotas': [
                     {

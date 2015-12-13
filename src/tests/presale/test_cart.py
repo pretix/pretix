@@ -8,7 +8,7 @@ from django.utils.timezone import now
 
 from pretix.base.models import (
     CartPosition, Event, Item, ItemCategory, ItemVariation, Organizer,
-    Property, PropertyValue, Question, QuestionAnswer, Quota, User,
+    Question, QuestionAnswer, Quota,
 )
 
 
@@ -23,14 +23,9 @@ class CartTestMixin:
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
         self.quota_shirts = Quota.objects.create(event=self.event, name='Shirts', size=2)
         self.shirt = Item.objects.create(event=self.event, name='T-Shirt', category=self.category, default_price=12)
-        prop1 = Property.objects.create(event=self.event, name="Color", item=self.shirt)
-        val1 = PropertyValue.objects.create(prop=prop1, value="Red", position=0)
-        val2 = PropertyValue.objects.create(prop=prop1, value="Black", position=1)
         self.quota_shirts.items.add(self.shirt)
-        self.shirt_red = ItemVariation.objects.create(item=self.shirt, default_price=14)
-        self.shirt_red.values.add(val1)
-        var2 = ItemVariation.objects.create(item=self.shirt)
-        var2.values.add(val2)
+        self.shirt_red = ItemVariation.objects.create(item=self.shirt, default_price=14, value='Red')
+        var2 = ItemVariation.objects.create(item=self.shirt, value='Blue')
         self.quota_shirts.variations.add(self.shirt_red)
         self.quota_shirts.variations.add(var2)
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=5)

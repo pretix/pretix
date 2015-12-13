@@ -6,7 +6,7 @@ from django.utils.timezone import now
 
 from pretix.base.models import (
     Event, EventPermission, Item, ItemVariation, Order, OrderPosition,
-    Organizer, Property, PropertyValue, User,
+    Organizer, User,
 )
 
 
@@ -20,13 +20,8 @@ def env():
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     EventPermission.objects.create(user=user, event=event)
     shirt = Item.objects.create(event=event, name='T-Shirt', default_price=12)
-    prop1 = Property.objects.create(event=event, name="Color", item=shirt)
-    val1 = PropertyValue.objects.create(prop=prop1, value="Red", position=0)
-    val2 = PropertyValue.objects.create(prop=prop1, value="Black", position=1)
-    shirt_red = ItemVariation.objects.create(item=shirt, default_price=14)
-    shirt_red.values.add(val1)
-    var2 = ItemVariation.objects.create(item=shirt)
-    var2.values.add(val2)
+    shirt_red = ItemVariation.objects.create(item=shirt, default_price=14, value="Red")
+    ItemVariation.objects.create(item=shirt, value="Blue")
     ticket = Item.objects.create(event=event, name='Ticket', default_price=23)
     o1 = Order.objects.create(
         code='FOO', event=event, status=Order.STATUS_PENDING,

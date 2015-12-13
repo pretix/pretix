@@ -35,7 +35,6 @@ event_urls = [
     "items/add",
     "items/1/",
     "items/1/variations",
-    "items/1/properties",
     "categories/",
     "categories/add",
     "categories/2/",

@@ -5,6 +5,7 @@ from django import forms
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model, QuerySet, TextField
+from django.forms import BaseModelFormSet
 from django.utils import translation
 from django.utils.safestring import mark_safe
 from typing import Dict, List
@@ -251,3 +252,29 @@ class I18nJSONEncoder(DjangoJSONEncoder):
             return {'type': obj.__class__.__name__, 'id': obj.id}
         else:
             return super().default(obj)
+
+
+class I18nFormSet(BaseModelFormSet):
+    """
+    This is equivalent to a normal BaseModelFormset, but cares for the special needs
+    of I18nForms (see there for more information).
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event', None)
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['event'] = self.event
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            event=self.event
+        )
+        self.add_fields(form, None)
+        return form

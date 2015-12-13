@@ -126,8 +126,7 @@ class OrderDetail(OrderView):
         ).select_related(
             'item', 'variation'
         ).prefetch_related(
-            'variation__values', 'variation__values__prop', 'item__questions',
-            'answers'
+            'item__questions', 'answers'
         )
 
         # Group items of the same variation

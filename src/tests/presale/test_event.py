@@ -6,8 +6,7 @@ from django.utils.timezone import now
 from tests.base import BrowserTest
 
 from pretix.base.models import (
-    Event, Item, ItemCategory, ItemVariation, Organizer, Property,
-    PropertyValue, Quota, User,
+    Event, Item, ItemCategory, ItemVariation, Organizer, Quota,
 )
 
 
@@ -99,9 +98,7 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
-        prop1 = Property.objects.create(event=self.event, name="Color", item=item)
-        PropertyValue.objects.create(prop=prop1, value="Red")
-        PropertyValue.objects.create(prop=prop1, value="Black")
+        ItemVariation.objects.create(item=item, value='Blue')
         q.items.add(item)
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
         resp = self.client.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
@@ -111,12 +108,9 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
-        prop1 = Property.objects.create(event=self.event, name="Color", item=item)
-        val1 = PropertyValue.objects.create(prop=prop1, value="Red")
-        PropertyValue.objects.create(prop=prop1, value="Black")
+        var1 = ItemVariation.objects.create(item=item, value='Red')
+        ItemVariation.objects.create(item=item, value='Blue')
         q.items.add(item)
-        var1 = ItemVariation.objects.create(item=item)
-        var1.values.add(val1)
         q.variations.add(var1)
         self._assert_variation_found()
 
@@ -124,12 +118,9 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=None)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
-        prop1 = Property.objects.create(event=self.event, name="Color", item=item)
-        val1 = PropertyValue.objects.create(prop=prop1, value="Red")
-        PropertyValue.objects.create(prop=prop1, value="Black")
+        var1 = ItemVariation.objects.create(item=item, value='Red')
+        ItemVariation.objects.create(item=item, value='Blue')
         q.items.add(item)
-        var1 = ItemVariation.objects.create(item=item)
-        var1.values.add(val1)
         q.variations.add(var1)
         self._assert_variation_found()
 
@@ -149,16 +140,11 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=12)
-        prop1 = Property.objects.create(event=self.event, name="Color", item=item)
-        val1 = PropertyValue.objects.create(prop=prop1, value="Red", position=0)
-        val2 = PropertyValue.objects.create(prop=prop1, value="Black", position=1)
-        q.items.add(item)
-        var1 = ItemVariation.objects.create(item=item, default_price=14)
-        var1.values.add(val1)
-        var2 = ItemVariation.objects.create(item=item)
-        var2.values.add(val2)
+        var1 = ItemVariation.objects.create(item=item, value='Red', default_price=14, position=1)
+        var2 = ItemVariation.objects.create(item=item, value='Black', position=2)
         q.variations.add(var1)
         q.variations.add(var2)
+        q.items.add(item)
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
         self.assertIn("Early-bird",
                       self.driver.find_element_by_css_selector("section:nth-of-type(1) div:nth-of-type(1)").text)

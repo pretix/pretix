@@ -21,7 +21,6 @@ class CartMixin:
         ).select_related(
             'item', 'variation'
         ).prefetch_related(
-            'variation__values', 'variation__values__prop',
             'item__questions', 'answers'
         ))
 
@@ -30,7 +29,7 @@ class CartMixin:
             cart_id=self.request.session.session_key, event=self.request.event
         )
 
-        prefetch = ['variation__values', 'variation__values__prop']
+        prefetch = []
         if answers:
             prefetch.append('item__questions')
             prefetch.append('answers')

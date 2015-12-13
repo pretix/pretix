@@ -1,9 +1,7 @@
-from itertools import product
-
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.forms.models import inlineformset_factory
+from django.forms.models import ModelMultipleChoiceField, inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
@@ -13,16 +11,12 @@ from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import DeleteView
 
+from pretix.base.i18n import I18nFormSet
 from pretix.base.models import (
-    Item, ItemCategory, ItemVariation, Property, PropertyValue, Question,
-    Quota,
-)
-from pretix.control.forms import (
-    NestedInnerI18nInlineFormSet, VariationsField, nestedformset_factory,
+    Item, ItemCategory, ItemVariation, Question, Quota,
 )
 from pretix.control.forms.item import (
-    CategoryForm, ItemFormGeneral, ItemVariationForm, PropertyForm,
-    PropertyValueForm, QuestionForm, QuotaForm,
+    CategoryForm, ItemFormGeneral, ItemVariationForm, QuestionForm, QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -350,7 +344,7 @@ class QuotaList(ListView):
 class QuotaEditorMixin:
     @cached_property
     def items(self) -> "List[Item]":
-        return list(self.request.event.items.all().prefetch_related("properties", "variations"))
+        return list(self.request.event.items.all().prefetch_related("variations"))
 
     def get_form(self, form_class=QuotaForm):
         if not hasattr(self, '_form'):
@@ -376,7 +370,7 @@ class QuotaEditorMixin:
         for item in self.items:
             field = form.fields['item_%s' % item.id]
             data = form.cleaned_data['item_%s' % item.id]
-            if isinstance(field, VariationsField):
+            if isinstance(field, ModelMultipleChoiceField):
                 for v in data:
                     selected_variations.append(v)
             if data and item not in items:
@@ -548,264 +542,59 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
         return super().form_valid(form)
 
 
-class ItemProperties(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
-    permission = 'can_change_items'
-    template_name = 'pretixcontrol/item/properties.html'
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.item.properties', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug,
-            'item': self.get_object().id,
-        })
-
-    def get_inner_formset_class(self):
-        formsetclass = inlineformset_factory(
-            Property, PropertyValue,
-            form=PropertyValueForm,
-            formset=NestedInnerI18nInlineFormSet,
-            can_order=True, extra=0
-        )
-        return formsetclass
-
-    def get_outer_formset(self):
-        formsetclass = nestedformset_factory(
-            Property, [self.get_inner_formset_class()],
-            form=PropertyForm, can_order=False, can_delete=True, extra=0
-        )
-        formset = formsetclass(self.request.POST if self.request.method == "POST" else None,
-                               queryset=Property.objects.filter(item=self.object).prefetch_related('values'),
-                               event=self.request.event)
-        return formset
-
-    def get_context_data(self, **kwargs):
-        self.object = self.get_object()
-        ctx = super().get_context_data(**kwargs)
-        ctx['formset'] = self.get_outer_formset()
-        return ctx
-
-    @transaction.atomic()
-    def form_valid(self, formset):
-        for f in formset:
-            f.instance.event = self.request.event
-            f.instance.item = self.get_object()
-            is_created = not f.instance.pk
-            f.instance.save()
-            if f.has_changed() and not is_created:
-                change_data = {
-                    k: f.cleaned_data.get(k) for k in f.changed_data
-                }
-                change_data['id'] = f.instance.pk
-                f.instance.item.log_action(
-                    'pretix.event.item.property.changed', user=self.request.user, data=change_data
-                )
-            elif is_created:
-                change_data = dict(f.cleaned_data)
-                change_data['id'] = f.instance.pk
-                f.instance.item.log_action(
-                    'pretix.event.item.property.added', user=self.request.user, data=change_data
-                )
-
-            for n in f.nested:
-
-                for fn in n.deleted_forms:
-                    f.instance.item.log_action(
-                        'pretix.event.item.property.value.deleted', user=self.request.user, data={
-                            'id': fn.instance.pk
-                        }
-                    )
-                    fn.instance.delete()
-                    fn.instance.pk = None
-
-                for i, fn in enumerate(n.ordered_forms + [ef for ef in n.extra_forms if ef not in n.ordered_forms]):
-                    fn.instance.position = i
-                    fn.instance.prop = f.instance
-                    fn.save()
-                    if f.has_changed():
-                        change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
-                        change_data['id'] = f.instance.pk
-                        f.instance.item.log_action(
-                            'pretix.event.item.property.value.changed', user=self.request.user, data=change_data
-                        )
-
-                for form in n.extra_forms:
-                    if not form.has_changed():
-                        continue
-                    if n.can_delete and n._should_delete_form(form):
-                        continue
-                    change_data = dict(f.cleaned_data)
-                    n.save_new(form)
-                    change_data['id'] = form.instance.pk
-                    f.instance.item.log_action(
-                        'pretix.event.item.property.value.added', user=self.request.user, data=change_data
-                    )
-        messages.success(self.request, _('Your changes have been saved.'))
-        return redirect(self.get_success_url())
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        formset = self.get_outer_formset()
-        if formset.is_valid():
-            return self.form_valid(formset)
-        else:
-            return self.get(request, *args, **kwargs)
-
-
 class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
     permission = 'can_change_items'
+    template_name = 'pretixcontrol/item/variations.html'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.item = None
 
-    def get_form(self, variation, data=None) -> ItemVariationForm:
-        """
-        Return the dict for one given variation. Variations are expected to be
-        dictionaries in the format of Item.get_all_variations()
-        """
-        # Values are all dictionary ite
-        values = [i[1] for i in sorted([it for it in variation.items() if it[0] != 'variation'])]
-        if 'variation' in variation:
-            form = ItemVariationForm(
-                data,
-                instance=variation['variation'],
-                prefix=",".join([str(i.id) for i in values]),
-            )
-        else:
-            inst = ItemVariation(item=self.object)
-            inst.item_id = self.object.id
-            inst.creation = True
-            form = ItemVariationForm(
-                data,
-                instance=inst,
-                prefix=",".join([str(i.id) for i in values]),
-            )
-        form.values = values
-        return form
-
-    def get_forms(self) -> tuple:
-        """
-        Returns one form per possible item variation. The forms are returned
-        twice: The first entry in the returned tuple contains a 1-, 2- or
-        3-dimensional list, depending on the number of properties associated
-        with this item (this is being used for form display), the second
-        contains all forms in one single list (this is used for processing).
-
-        The first, hierarchical list, is a list of dicts on all levels but the
-        last one, where the dict contains the two entries 'row' containing a
-        string describing this layer and 'forms' which contains the forms or
-        the next list of dicts.
-        """
-        forms = []
-        forms_flat = []
-        variations = self.object.get_all_variations()
-        data = self.request.POST if self.request.method == 'POST' else None
-
-        if self.dimension == 1:
-            # For one-dimensional structures we just have a list of forms
-            for variation in variations:
-                form = self.get_form(variation, data)
-                forms.append(form)
-            forms_flat = forms
-
-        elif self.dimension >= 2:
-            # For 2 or more dimensional structures we display a list of grids
-            # of forms
-
-            # prop1 is the property on all the grid's y-axes
-            prop1 = self.properties[0]
-            # prop2 is the property on all the grid's x-axes
-            prop2 = self.properties[1]
-
-            def selector(values):
-                # Given an iterable of PropertyValue objects, this will return a
-                # list of their primary keys, ordered by the primary keys of the
-                # properties they belong to EXCEPT the value for the property prop2.
-                # We'll see later why we need this.
-                return [
-                    v.id for v in sorted(values, key=lambda v: v.prop.id)
-                    if v.prop.id != prop2.id
-                ]
-
-            def sort(v):
-                # Given a list of variations, this will sort them by their position
-                # on the x-axis
-                return v[prop2.id].sortkey
-
-            # We now iterate over the cartesian product of all the other
-            # properties which are NOT on the axes of the grid because we
-            # create one grid for any combination of them.
-            for gridrow in product(*[prop.values.all() for prop in self.properties[2:]]):
-                grids = []
-                for val1 in prop1.values.all():
-                    formrow = []
-                    # We are now inside one of the rows of the grid and have to
-                    # select the variations to display in this row. In order to
-                    # achieve this, we use the 'selector' lambda defined above.
-                    # It gives us a normalized, comparable version of a set of
-                    # PropertyValue objects. In this case, we compute the
-                    # selector of our row as the selector of the sum of the
-                    # values defining our grind and the value defining our row.
-                    selection = selector(gridrow + (val1,))
-                    # We now iterate over all variations who generate the same
-                    # selector as 'selection'.
-                    filtered = [v for v in variations if selector(v.relevant_values()) == selection]
-                    for variation in sorted(filtered, key=sort):
-                        form = self.get_form(variation, data)
-                        formrow.append(form)
-                        forms_flat.append(form)
-
-                    grids.append({'row': val1, 'forms': formrow})
-
-                forms.append({'row': ", ".join([str(value.value) for value in gridrow]), 'forms': grids})
-
-        return forms, forms_flat
-
-    def main(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.properties = list(self.object.properties.all().prefetch_related("values"))
-        self.dimension = len(self.properties)
-        self.forms, self.forms_flat = self.get_forms()
-
-    def get(self, request, *args, **kwargs):
-        self.main(request, *args, **kwargs)
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
+    @cached_property
+    def formset(self):
+        formsetclass = inlineformset_factory(
+            Item, ItemVariation,
+            form=ItemVariationForm, formset=I18nFormSet,
+            can_order=True, can_delete=True, extra=0
+        )
+        return formsetclass(self.request.POST if self.request.method == "POST" else None,
+                            queryset=ItemVariation.objects.filter(item=self.get_object()),
+                            event=self.request.event)
 
     def post(self, request, *args, **kwargs):
-        self.main(request, *args, **kwargs)
-        context = self.get_context_data(object=self.object)
-        valid = True
         with transaction.atomic():
-            for form in self.forms_flat:
-                if form.is_valid() and form.has_changed():
-                    form.save()
-                    change_data = {
-                        k: form.cleaned_data.get(k) for k in form.changed_data
-                    }
-                    change_data['id'] = form.instance.pk
-                    self.object.log_action(
-                        'pretix.event.item.variation.changed', user=self.request.user, data=change_data
+            if self.formset.is_valid():
+                for form in self.formset.deleted_forms:
+                    if not form.instance.pk:
+                        continue
+                    self.get_object().log_action(
+                        'pretix.event.item.variation.deleted', user=self.request.user, data={
+                            'id': form.instance.pk
+                        }
                     )
-                    if hasattr(form.instance, 'creation') and form.instance.creation:
-                        # We need this special 'creation' field set to true in get_form
-                        # for newly created items as cleanerversion does already set the
-                        # primary key in its post_init hook
-                        form.instance.values.add(*form.values)
-                elif not form.is_valid and form.has_changed():
-                    valid = False
-        if valid:
-            messages.success(self.request, _('Your changes have been saved.'))
-            return redirect(self.get_success_url())
-        return self.render_to_response(context)
+                    form.instance.delete()
+                    form.instance.pk = None
 
-    def get_template_names(self) -> "List[str]":
-        if self.dimension == 0:
-            return ['pretixcontrol/item/variations_0d.html']
-        elif self.dimension == 1:
-            return ['pretixcontrol/item/variations_1d.html']
-        elif self.dimension >= 2:
-            return ['pretixcontrol/item/variations_nd.html']
+                for i, form in enumerate(self.formset.ordered_forms + [
+                    ef for ef in self.formset.extra_forms if (ef not in self.formset.ordered_forms and ef not in
+                        self.formset.deleted_forms)
+                ]):
+                    form.instance.position = i
+                    form.instance.item = self.get_object()
+                    created = not form.instance.pk
+                    form.save()
+                    if form.has_changed():
+                        change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
+                        change_data['id'] = form.instance.pk
+                        self.get_object().log_action(
+                            'pretix.event.item.variation.changed' if not created else
+                            'pretix.event.item.variation.added',
+                            user=self.request.user, data=change_data
+                        )
+
+                messages.success(self.request, _('Your changes have been saved.'))
+                return redirect(self.get_success_url())
+        return self.get(request, *args, **kwargs)
 
     def get_success_url(self) -> str:
         return reverse('control:event.item.variations', kwargs={
@@ -815,9 +604,9 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
         })
 
     def get_context_data(self, **kwargs) -> dict:
+        self.object = self.get_object()
         context = super().get_context_data(**kwargs)
-        context['forms'] = self.forms
-        context['properties'] = self.properties
+        context['formset'] = self.formset
         return context
 
 
@@ -835,13 +624,13 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
     def is_allowed(self) -> bool:
         return not self.get_object().positions.exists()
 
-    def get_object(self, queryset=None) -> Property:
+    def get_object(self, queryset=None) -> Item:
         if not hasattr(self, 'object') or not self.object:
             try:
                 self.object = self.request.event.items.get(
                     id=self.kwargs['item']
                 )
-            except Property.DoesNotExist:
+            except Item.DoesNotExist:
                 raise Http404(_("The requested product does not exist."))
         return self.object
 

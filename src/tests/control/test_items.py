@@ -3,13 +3,12 @@ import os
 import time
 import unittest
 
-from django.utils.timezone import now
 from selenium.webdriver.support.select import Select
 from tests.base import BrowserTest
 
 from pretix.base.models import (
-    Event, EventPermission, Item, ItemCategory, Organizer, OrganizerPermission,
-    Property, PropertyValue, Question, Quota, User,
+    Event, EventPermission, Item, ItemCategory, ItemVariation, Organizer,
+    OrganizerPermission, Question, Quota, User,
 )
 
 
@@ -105,62 +104,6 @@ class CategoriesTest(ItemFormTest):
         assert not ItemCategory.objects.filter(id=c.id).exists()
 
 
-class PropertiesTest(ItemFormTest):
-    """
-    Properties have moved from their original place, skip this for now
-    """
-
-    @unittest.skip
-    def test_create(self):
-        self.driver.get('%s/control/event/%s/%s/properties/add' % (
-            self.live_server_url, self.orga1.slug, self.event1.slug
-        ))
-        self.driver.find_element_by_css_selector("#id_name_0").send_keys('Size')
-        self.driver.find_element_by_name("values-0-value_0").send_keys('S')
-        self.driver.find_element_by_name("values-1-value_0").send_keys('M')
-        self.scroll_and_click(self.driver.find_element_by_class_name("btn-save"))
-        self.driver.find_element_by_class_name("alert-success")
-        self.assertIn("Size", self.driver.find_element_by_css_selector("#page-wrapper table").text)
-        self.driver.find_element_by_partial_link_text("Size").click()
-        self.assertEqual("S", self.driver.find_element_by_name("values-0-value_0").get_attribute("value"))
-        self.assertEqual("M", self.driver.find_element_by_name("values-1-value_0").get_attribute("value"))
-
-    @unittest.skip
-    def test_update(self):
-        c = Property.objects.create(event=self.event1, name="Size")
-        p1 = PropertyValue.objects.create(prop=c, position=0, value="S")
-        p2 = PropertyValue.objects.create(prop=c, position=1, value="M")
-        self.driver.get('%s/control/event/%s/%s/properties/%s/' % (
-            self.live_server_url, self.orga1.slug, self.event1.slug, c.id
-        ))
-        self.driver.find_element_by_css_selector("#id_name_0").clear()
-        self.driver.find_element_by_css_selector("#id_name_0").send_keys('Color')
-        self.driver.find_elements_by_css_selector("div.form-group button.btn-danger")[0].click()
-        self.scroll_into_view(self.driver.find_element_by_name("values-1-value_0"))
-        self.driver.find_element_by_name("values-1-value_0").clear()
-        self.driver.find_element_by_name("values-1-value_0").send_keys('red')
-        self.driver.find_element_by_css_selector("button[data-formset-add]").click()
-        self.driver.find_element_by_name("values-2-value_0").send_keys('blue')
-        self.driver.find_element_by_class_name("btn-save").click()
-        self.driver.find_element_by_class_name("alert-success")
-        self.assertEqual("red", self.driver.find_element_by_name("values-0-value_0").get_attribute("value"))
-        self.assertEqual("blue", self.driver.find_element_by_name("values-1-value_0").get_attribute("value"))
-        assert str(Property.objects.get(id=c.id).name) == 'Color'
-        assert str(PropertyValue.objects.get(id=p2.id).value) == 'red'
-        assert not PropertyValue.objects.filter(id=p1.id).exists()
-
-    @unittest.skip
-    def test_delete(self):
-        c = Property.objects.create(event=self.event1, name="Size")
-        self.driver.get('%s/control/event/%s/%s/properties/%s/delete' % (
-            self.live_server_url, self.orga1.slug, self.event1.slug, c.id
-        ))
-        self.driver.find_element_by_class_name("btn-danger").click()
-        self.driver.find_element_by_class_name("alert-success")
-        self.assertNotIn("Size", self.driver.find_element_by_css_selector("#page-wrapper table").text)
-        assert not Property.objects.filter(id=c.id).exists()
-
-
 class QuestionsTest(ItemFormTest):
 
     def test_create(self):
@@ -215,9 +158,8 @@ class QuotaTest(ItemFormTest):
         c = Quota.objects.create(event=self.event1, name="Full house", size=500)
         item1 = Item.objects.create(event=self.event1, name="Standard", default_price=0)
         item2 = Item.objects.create(event=self.event1, name="Business", default_price=0)
-        prop1 = Property.objects.create(event=self.event1, name="Level", item=item2)
-        PropertyValue.objects.create(prop=prop1, value="Silver")
-        PropertyValue.objects.create(prop=prop1, value="Gold")
+        ItemVariation.objects.create(item=item2, value="Silver")
+        ItemVariation.objects.create(item=item2, value="Gold")
         self.driver.get('%s/control/event/%s/%s/quotas/%s/' % (
             self.live_server_url, self.orga1.slug, self.event1.slug, c.id
         ))

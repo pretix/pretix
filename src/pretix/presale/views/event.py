@@ -20,35 +20,32 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         ).select_related(
             'category',  # for re-grouping
         ).prefetch_related(
-            'properties',  # for .get_all_available_variations()
             'quotas', 'variations__quotas', 'quotas__event'  # for .availability()
         ).annotate(quotac=Count('quotas')).filter(
             quotac__gt=0
         ).order_by('category__position', 'category_id', 'position', 'name')
 
         for item in items:
-            item.available_variations = sorted(item.get_all_available_variations(),
-                                               key=lambda vd: vd.ordered_values())
-            item.has_variations = (len(item.available_variations) != 1
-                                   or not item.available_variations[0].empty())
+            item.available_variations = list(item.variations.filter(active=True, quotas__isnull=False).distinct())
+            item.has_variations = item.variations.exists()
             if not item.has_variations:
                 item.cached_availability = list(item.check_quotas())
                 item.cached_availability[1] = min((item.cached_availability[1]
                                                    if item.cached_availability[1] is not None else sys.maxsize),
                                                   int(self.request.event.settings.max_items_per_order))
-                item.price = item.available_variations[0]['price']
+                item.price = item.default_price
             else:
                 for var in item.available_variations:
-                    var.cached_availability = list(var['variation'].check_quotas())
+                    var.cached_availability = list(var.check_quotas())
                     var.cached_availability[1] = min(var.cached_availability[1]
                                                      if var.cached_availability[1] is not None else sys.maxsize,
                                                      int(self.request.event.settings.max_items_per_order))
-                    var.price = var.get('price', item.default_price)
+                    var.price = var.default_price if var.default_price is not None else item.default_price
                 if len(item.available_variations) > 0:
                     item.min_price = min([v.price for v in item.available_variations])
                     item.max_price = max([v.price for v in item.available_variations])
 
-        items = [item for item in items if len(item.available_variations) > 0]
+        items = [item for item in items if len(item.available_variations) > 0 or not item.has_variations]
 
         # Regroup those by category
         context['items_by_category'] = sorted(

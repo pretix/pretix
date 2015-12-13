@@ -6,7 +6,6 @@
         <h1>{% trans "Modify product:" %} {{ object.name }}</h1>
         <ul class="nav nav-pills">
             <li {% if "event.item" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">{% trans "General information" %}</a></li>
-            <li {% if "event.item.properties" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.properties' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">{% trans "Properties" %}</a></li>
             <li {% if "event.item.variations" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">{% trans "Variations" %}</a></li>
         </ul>
     {% else %}

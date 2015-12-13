@@ -39,18 +39,11 @@ Items
 .. autoclass:: pretix.base.models.ItemCategory
    :members:
 
-.. autoclass:: pretix.base.models.Property
-   :members:
-
-.. autoclass:: pretix.base.models.PropertyValue
+.. autoclass:: pretix.base.models.ItemVariation
    :members:
 
 .. autoclass:: pretix.base.models.Question
    :members:
-
-.. autoclass:: pretix.base.models.ItemVariation
-   :members:
-   :exclude-members: add_values_from_string
 
 .. autoclass:: pretix.base.models.Quota
    :members:

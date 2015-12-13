@@ -77,7 +77,7 @@ def _add_new_items(event: Event, items: List[Tuple[int, Optional[int], int]],
     variations_query = ItemVariation.objects.filter(
         item__event=event,
         id__in=[i[1] for i in items if i[1] is not None]
-    ).select_related("item", "item__event").prefetch_related("quotas", "values", "values__prop")
+    ).select_related("item", "item__event").prefetch_related("quotas")
     variations_cache = {v.id: v for v in variations_query}
 
     for i in items:

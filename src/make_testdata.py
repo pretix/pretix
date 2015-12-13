@@ -52,24 +52,9 @@ item_shirt = Item.objects.create(
     event=event, category=cat_merch, name='T-Shirt',
     default_price=15, tax_rate=19
 )
-size_prop = Property.objects.create(
-    event=event, name='Size', item=item_shirt
-)
-size_s = PropertyValue.objects.create(
-    prop=size_prop, value='S'
-)
-size_l = PropertyValue.objects.create(
-    prop=size_prop, value='L'
-)
-size_m = PropertyValue.objects.create(
-    prop=size_prop, value='M'
-)
-var_s = ItemVariation.objects.create(item=item_shirt)
-var_s.values.add(size_s)
-var_m = ItemVariation.objects.create(item=item_shirt)
-var_m.values.add(size_m)
-var_l = ItemVariation.objects.create(item=item_shirt)
-var_l.values.add(size_l)
+var_s = ItemVariation.objects.create(item=item_shirt, value='S')
+var_m = ItemVariation.objects.create(item=item_shirt, value='M')
+var_l = ItemVariation.objects.create(item=item_shirt, value='L')
 ticket_quota = Quota.objects.create(
     event=event, name='Ticket quota', size=400,
 )

@@ -1,15 +1,13 @@
 import copy
 
 from django import forms
-from django.forms import BooleanField
+from django.forms import BooleanField, ModelMultipleChoiceField
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import (
-    Item, ItemCategory, ItemVariation, Property, PropertyValue, Question,
-    Quota,
+    Item, ItemCategory, ItemVariation, Question, Quota,
 )
-from pretix.control.forms import TolerantFormsetModelForm, VariationsField
 
 
 class CategoryForm(I18nModelForm):
@@ -18,24 +16,6 @@ class CategoryForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'name'
-        ]
-
-
-class PropertyForm(I18nModelForm):
-    class Meta:
-        model = Property
-        localized_fields = '__all__'
-        fields = [
-            'name',
-        ]
-
-
-class PropertyValueForm(TolerantFormsetModelForm):
-    class Meta:
-        model = PropertyValue
-        localized_fields = '__all__'
-        fields = [
-            'value',
         ]
 
 
@@ -75,13 +55,14 @@ class QuotaForm(I18nModelForm):
             active_variations = set()
 
         for item in items:
-            if len(item.properties.all()) > 0:
-                self.fields['item_%s' % item.id] = VariationsField(
-                    item, label=_("Activate for"),
+            if len(item.variations.all()) > 0:
+                self.fields['item_%s' % item.id] = ModelMultipleChoiceField(
+                    label=_("Activate for"),
                     required=False,
-                    initial=active_variations
+                    initial=active_variations,
+                    queryset=item.variations.all(),
+                    widget=forms.CheckboxSelectMultiple
                 )
-                self.fields['item_%s' % item.id].set_item(item)
             else:
                 self.fields['item_%s' % item.id] = BooleanField(
                     label=_("Activate"),
@@ -125,6 +106,7 @@ class ItemVariationForm(I18nModelForm):
         model = ItemVariation
         localized_fields = '__all__'
         fields = [
+            'value',
             'active',
             'default_price',
         ]

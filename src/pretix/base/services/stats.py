@@ -31,8 +31,6 @@ def tuplesum(tuples: Iterable[Tuple]) -> Tuple:
 def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]], Dict[str, Tuple[Decimal, Decimal]]]:
     items = event.items.all().select_related(
         'category',  # for re-grouping
-    ).prefetch_related(
-        'properties',  # for .get_all_available_variations()
     ).order_by('category__position', 'category_id', 'name')
 
     num_total = {
@@ -73,22 +71,27 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
     }
 
     for item in items:
-        item.all_variations = sorted(item.get_all_variations(),
-                                     key=lambda vd: vd.ordered_values())
-        for var in item.all_variations:
-            variid = var['variation'].id if 'variation' in var else None
-            var.num_total = num_total.get((item.id, variid), (0, 0))
-            var.num_pending = num_pending.get((item.id, variid), (0, 0))
-            var.num_cancelled = num_cancelled.get((item.id, variid), (0, 0))
-            var.num_refunded = num_refunded.get((item.id, variid), (0, 0))
-            var.num_paid = num_paid.get((item.id, variid), (0, 0))
-        item.has_variations = (len(item.all_variations) != 1
-                               or not item.all_variations[0].empty())
-        item.num_total = tuplesum(var.num_total for var in item.all_variations)
-        item.num_pending = tuplesum(var.num_pending for var in item.all_variations)
-        item.num_cancelled = tuplesum(var.num_cancelled for var in item.all_variations)
-        item.num_refunded = tuplesum(var.num_refunded for var in item.all_variations)
-        item.num_paid = tuplesum(var.num_paid for var in item.all_variations)
+        item.all_variations = list(item.variations.all())
+        item.has_variations = (len(item.all_variations) > 0)
+        if item.has_variations:
+            for var in item.all_variations:
+                variid = var.id
+                var.num_total = num_total.get((item.id, variid), (0, 0))
+                var.num_pending = num_pending.get((item.id, variid), (0, 0))
+                var.num_cancelled = num_cancelled.get((item.id, variid), (0, 0))
+                var.num_refunded = num_refunded.get((item.id, variid), (0, 0))
+                var.num_paid = num_paid.get((item.id, variid), (0, 0))
+            item.num_total = tuplesum(var.num_total for var in item.all_variations)
+            item.num_pending = tuplesum(var.num_pending for var in item.all_variations)
+            item.num_cancelled = tuplesum(var.num_cancelled for var in item.all_variations)
+            item.num_refunded = tuplesum(var.num_refunded for var in item.all_variations)
+            item.num_paid = tuplesum(var.num_paid for var in item.all_variations)
+        else:
+            item.num_total = num_total.get((item.id, None), (0, 0))
+            item.num_pending = num_pending.get((item.id, None), (0, 0))
+            item.num_cancelled = num_cancelled.get((item.id, None), (0, 0))
+            item.num_refunded = num_refunded.get((item.id, None), (0, 0))
+            item.num_paid = num_paid.get((item.id, None), (0, 0))
 
     nonecat = ItemCategory(name=_('Uncategorized'))
     # Regroup those by category
@@ -106,6 +109,7 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
 
     for c in items_by_category:
         c[0].num_total = tuplesum(item.num_total for item in c[1])
+        print(c[1], c[0].num_total, [item.num_total for item in c[1]])
         c[0].num_pending = tuplesum(item.num_pending for item in c[1])
         c[0].num_cancelled = tuplesum(item.num_cancelled for item in c[1])
         c[0].num_refunded = tuplesum(item.num_refunded for item in c[1])
