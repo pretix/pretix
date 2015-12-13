@@ -1,7 +1,7 @@
 import logging
 
 from django.conf import settings
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, get_connection
 from django.template.loader import get_template
 from django.utils import translation
 from django.utils.translation import ugettext as _
@@ -65,15 +65,18 @@ def mail(email: str, subject: str, template: str,
         )
         body += "\r\n"
     try:
-        return mail_send([email], subject, body, sender, event.id)
+        return mail_send([email], subject, body, sender, event.id if event else None)
     finally:
         translation.activate(_lng)
 
 
-def mail_send(to: str, subject: str, body: str, sender: str, event: int) -> bool:
+def mail_send(to: str, subject: str, body: str, sender: str, event: int=None) -> bool:
     email = EmailMessage(subject, body, sender, to=to)
-    event = Event.objects.get(id=event)
-    backend = event.get_mail_backend()
+    if event:
+        event = Event.objects.get(id=event)
+        backend = event.get_mail_backend()
+    else:
+        backend = get_connection(fail_silently=False)
 
     try:
         backend.send_messages([email])
