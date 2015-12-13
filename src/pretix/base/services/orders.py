@@ -4,9 +4,9 @@ from django.conf import settings
 from django.db import transaction
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.i18n import LazyDate, LazyNumber
 from typing import List
 
+from pretix.base.i18n import LazyDate, LazyNumber
 from pretix.base.models import (
     CartPosition, Event, EventLock, Order, OrderPosition, Quota, User,
 )

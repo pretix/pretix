@@ -148,16 +148,6 @@ class EventSettingsForm(SettingsForm):
         required=False,
         help_text=_("Public email address for contacting the organizer")
     )
-    mail_prefix = forms.CharField(
-        label=_("Subject prefix"),
-        help_text=_("This will be prepended to the subject of all outgoing emails. This could be a short form of "
-                    "your event name."),
-        required=False
-    )
-    mail_from = forms.EmailField(
-        label=_("Sender address"),
-        help_text=_("Sender address for outgoing e-mails")
-    )
 
     def clean(self):
         data = super().clean()
@@ -200,6 +190,16 @@ class ProviderForm(SettingsForm):
 
 
 class MailSettingsForm(SettingsForm):
+    mail_prefix = forms.CharField(
+        label=_("Subject prefix"),
+        help_text=_("This will be prepended to the subject of all outgoing emails. This could be a short form of "
+                    "your event name."),
+        required=False
+    )
+    mail_from = forms.EmailField(
+        label=_("Sender address"),
+        help_text=_("Sender address for outgoing e-mails")
+    )
     mail_text_order_placed = I18nFormField(
         label=_("Placed order"),
         required=False,

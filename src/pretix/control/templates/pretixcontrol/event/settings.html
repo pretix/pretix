@@ -42,11 +42,6 @@
             {% bootstrap_field sform.attendee_names_asked layout="horizontal" %}
             {% bootstrap_field sform.attendee_names_required layout="horizontal" %}
         </fieldset>
-        <fieldset>
-            <legend>{% trans "E-Mail settings" %}</legend>
-            {% bootstrap_field sform.mail_prefix layout="horizontal" %}
-            {% bootstrap_field sform.mail_from layout="horizontal" %}
-        </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
