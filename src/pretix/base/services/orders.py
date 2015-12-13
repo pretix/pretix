@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import transaction
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+from pretix.base.i18n import LazyDate, LazyNumber
 from typing import List
 
 from pretix.base.models import (
@@ -71,10 +72,9 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
 
     mail(
         order.email, _('Payment received for your order: %(code)s') % {'code': order.code},
-        'pretixpresale/email/order_paid.txt',
+        order.event.settings.mail_text_order_paid,
         {
-            'order': order,
-            'event': order.event,
+            'event': order.event.name,
             'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
                 'order': order.code,
                 'secret': order.secret
@@ -217,15 +217,17 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
 
     mail(
         order.email, _('Your order: %(code)s') % {'code': order.code},
-        'pretixpresale/email/order_placed.txt',
+        event.settings.mail_text_order_placed,
         {
-            'order': order,
-            'event': event,
+            'total': LazyNumber(order.total),
+            'currency': event.currency,
+            'date': LazyDate(order.expires),
+            'event': event.name,
             'url': build_absolute_uri(event, 'presale:event.order', kwargs={
                 'order': order.code,
                 'secret': order.secret
             }),
-            'payment': pprov.order_pending_mail_render(order)
+            'paymentinfo': str(pprov.order_pending_mail_render(order))
         },
         event, locale=order.locale
     )

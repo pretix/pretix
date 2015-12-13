@@ -7,7 +7,10 @@ from django.conf import settings
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.db.models import Model
-from typing import Any, Callable, Dict, Optional, TypeVar, Union
+from django.utils.translation import ugettext_noop
+from typing import Any, Dict, Optional
+
+from pretix.base.i18n import LazyI18nString
 
 DEFAULTS = {
     'max_items_per_order': {
@@ -93,6 +96,33 @@ DEFAULTS = {
     'mail_from': {
         'default': settings.MAIL_FROM,
         'type': str
+    },
+    'mail_text_order_placed': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+we successfully received your order for {event} with a total value
+of {total} {currency}. Please complete your payment before {date}.
+
+{paymentinfo}
+
+You can change your order details and view the status of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
+    'mail_text_order_paid': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+we successfully received your payment for {event}. Thank you!
+
+You can change your order details and view the status of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
     }
 }
 
@@ -158,6 +188,11 @@ class SettingsProxy:
             return dateutil.parser.parse(value).date()
         elif as_type == time:
             return dateutil.parser.parse(value).time()
+        elif as_type == LazyI18nString and not isinstance(value, LazyI18nString):
+            try:
+                return LazyI18nString(json.loads(value))
+            except ValueError:
+                return LazyI18nString(str(value))
         elif as_type is not None and issubclass(as_type, Model):
             return as_type.objects.get(pk=value)
         return value
@@ -174,6 +209,8 @@ class SettingsProxy:
             return value.isoformat()
         elif isinstance(value, Model):
             return value.pk
+        elif isinstance(value, LazyI18nString):
+            return json.dumps(value.data)
         elif isinstance(value, File):
             return 'file://' + value.name
 

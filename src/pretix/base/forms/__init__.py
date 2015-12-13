@@ -52,11 +52,13 @@ class SettingsForm(forms.Form):
         self.obj = kwargs.pop('obj')
         kwargs['initial'] = self.obj.settings.freeze()
         super().__init__(*args, **kwargs)
+        for k, field in self.fields.items():
+            if isinstance(field, I18nFormField):
+                field.widget.enabled_langcodes = self.obj.settings.get('locales')
 
     def save(self):
         for name, field in self.fields.items():
             value = self.cleaned_data[name]
-
             if isinstance(value, UploadedFile):
                 if isinstance(self.obj, Event):
                     fname = '%s/%s/%s.%s' % (

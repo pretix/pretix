@@ -13,6 +13,12 @@ from pretix.base.models import Event
 logger = logging.getLogger('pretix.base.mail')
 
 
+class TolerantDict(dict):
+
+    def __missing__(self, key):
+        return key
+
+
 def mail(email: str, subject: str, template: str,
          context: Dict[str, Any]=None, event: Event=None, locale: str=None):
     """
@@ -22,9 +28,11 @@ def mail(email: str, subject: str, template: str,
     :param subject: The e-mail subject. Should be localized.
     :param template: The filename of a template to be used. It will
                      be rendered with the recipient's locale. Alternatively, you
-                     can pass a LazyI18nString and leave ``context`` empty
+                     can pass a LazyI18nString and ``context`` will be used
+                     for a Python .format() call.
     :param context: The context for rendering the template.
     :param event: The event, used for determining the sender of the e-mail
+    :param locale: The locale used while rendering the template
 
     :return: ``False`` on obvious failures, like the user having to e-mail
     address, ``True`` otherwise. ``True`` does not necessarily mean that
@@ -37,6 +45,8 @@ def mail(email: str, subject: str, template: str,
 
     if isinstance(template, LazyI18nString):
         body = str(template)
+        if context:
+            body = body.format_map(TolerantDict(context))
     else:
         tpl = get_template(template)
         body = tpl.render(context)

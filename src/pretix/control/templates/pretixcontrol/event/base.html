@@ -32,14 +32,20 @@
                     </li>
                     <li>
                         <a href="{% url 'control:event.settings.plugins' organizer=request.event.organizer.slug event=request.event.slug %}"
-                                {% if "event.settings.plugins" == url_name %}class="active"{% endif %} >
+                                {% if "event.settings.plugins" == url_name %}class="active"{% endif %}>
                             {% trans "Plugins" %}
                         </a>
                     </li>
                     <li>
                         <a href="{% url 'control:event.settings.tickets' organizer=request.event.organizer.slug event=request.event.slug %}"
-                                {% if "event.settings.tickets" == url_name %}class="active"{% endif %} >
+                                {% if "event.settings.tickets" == url_name %}class="active"{% endif %}>
                             {% trans "Tickets" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'control:event.settings.mail' organizer=request.event.organizer.slug event=request.event.slug %}"
+                                {% if "event.settings.mail" == url_name %}class="active"{% endif %}>
+                            {% trans "Email" %}
                         </a>
                     </li>
                 {% endif %}

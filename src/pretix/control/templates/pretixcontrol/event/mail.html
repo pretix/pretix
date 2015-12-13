@@ -1,0 +1,19 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            <legend>{% trans "E-mail content" %}</legend>
+            {% bootstrap_form_errors form %}
+            {% bootstrap_field form.mail_text_order_placed layout="horizontal" %}
+            {% bootstrap_field form.mail_text_order_paid layout="horizontal" %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

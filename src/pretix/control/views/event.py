@@ -21,7 +21,8 @@ from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
 from pretix.control.forms.event import (
-    EventSettingsForm, EventUpdateForm, ProviderForm, TicketSettingsForm,
+    EventSettingsForm, EventUpdateForm, MailSettingsForm, ProviderForm,
+    TicketSettingsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 
@@ -200,6 +201,44 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
             'organizer': self.get_object().organizer.slug,
             'event': self.get_object().slug,
         })
+
+
+class MailSettings(EventPermissionRequiredMixin, FormView):
+    model = Event
+    form_class = MailSettingsForm
+    template_name = 'pretixcontrol/event/mail.html'
+    permission = 'can_change_settings'
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        return context
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.mail', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['obj'] = self.request.event
+        return kwargs
+
+    @transaction.atomic()
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            if form.has_changed():
+                self.request.event.log_action(
+                    'pretix.event.settings', user=self.request.user, data={
+                        k: form.cleaned_data.get(k) for k in form.changed_data
+                    }
+                )
+            messages.success(self.request, _('Your changes have been saved.'))
+            return redirect(self.get_success_url())
+        else:
+            return self.get(request)
 
 
 class TicketSettings(EventPermissionRequiredMixin, FormView):

@@ -7,8 +7,10 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model, QuerySet, TextField
 from django.forms import BaseModelFormSet
 from django.utils import translation
+from django.utils.formats import date_format, number_format
 from django.utils.safestring import mark_safe
-from typing import Dict, List
+from django.utils.translation import ugettext
+from typing import Dict, List, Union, Optional
 
 
 class LazyI18nString:
@@ -16,7 +18,7 @@ class LazyI18nString:
     This represents an internationalized string that is/was/will be stored in the database.
     """
 
-    def __init__(self, data: Dict[str, str]):
+    def __init__(self, data: Optional[Union[str, Dict[str, str]]]):
         """
         Input data should be a dictionary which maps language codes to content.
         """
@@ -62,6 +64,32 @@ class LazyI18nString:
     def __lt__(self, other) -> bool:  # NOQA
         return str(self) < str(other)
 
+    def __format__(self, format_spec):
+        return self.__str__()
+
+    class LazyGettextProxy:
+        def __init__(self, lazygettext):
+            self.lazygettext = lazygettext
+
+        def __getitem__(self, item):
+            lng = translation.get_language()
+            translation.activate(item)
+            s = str(ugettext(self.lazygettext))
+            translation.activate(lng)
+            return s
+
+        def __contains__(self, item):
+            return True
+
+        def __str__(self):
+            return str(self.lazygettext)
+
+    @classmethod
+    def from_gettext(cls, lazygettext):
+        l = LazyI18nString({})
+        l.data = cls.LazyGettextProxy(lazygettext)
+        return l
+
 
 class I18nWidget(forms.MultiWidget):
     """
@@ -89,7 +117,9 @@ class I18nWidget(forms.MultiWidget):
         for lng in self.langcodes:
             data.append(
                 value.data[lng]
-                if value is not None and isinstance(value.data, dict) and lng in value.data
+                if value is not None and (
+                    isinstance(value.data, dict) or isinstance(value.data, LazyI18nString.LazyGettextProxy)
+                ) and lng in value.data
                 else None
             )
         if value and not isinstance(value.data, dict):
@@ -278,3 +308,26 @@ class I18nFormSet(BaseModelFormSet):
         )
         self.add_fields(form, None)
         return form
+
+
+class LazyDate:
+    def __init__(self, value):
+        self.value = value
+
+    def __format__(self, format_spec):
+        return self.__str__()
+
+    def __str__(self):
+        return date_format(self.value, "SHORT_DATE_FORMAT")
+
+
+class LazyNumber:
+    def __init__(self, value, decimal_pos=2):
+        self.value = value
+        self.decimal_pos = decimal_pos
+
+    def __format__(self, format_spec):
+        return self.__str__()
+
+    def __str__(self):
+        return number_format(self.value, decimal_pos=self.decimal_pos)

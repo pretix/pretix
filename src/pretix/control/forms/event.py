@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from pytz import common_timezones
 
 from pretix.base.forms import I18nModelForm, SettingsForm
+from pretix.base.i18n import I18nFormField, I18nTextarea
 from pretix.base.models import Event
 
 
@@ -196,6 +197,21 @@ class ProviderForm(SettingsForm):
             val = cleaned_data.get(k)
             if v._required and (val is None or val == ""):
                 self.add_error(k, _('This field is required.'))
+
+
+class MailSettingsForm(SettingsForm):
+    mail_text_order_placed = I18nFormField(
+        label=_("Placed order"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {total}, {currency}, {date}, {paymentinfo}, {url}")
+    )
+    mail_text_order_paid = I18nFormField(
+        label=_("Paid order"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {url}")
+    )
 
 
 class TicketSettingsForm(SettingsForm):
