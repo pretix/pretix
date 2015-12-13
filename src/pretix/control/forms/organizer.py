@@ -27,7 +27,7 @@ class OrganizerForm(I18nModelForm):
 class OrganizerUpdateForm(OrganizerForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['slug'].widget.attrs['disabled'] = 'disabled'
+        self.fields['slug'].widget.attrs['readonly'] = 'readonly'
 
     def clean_slug(self):
         return self.instance.slug
