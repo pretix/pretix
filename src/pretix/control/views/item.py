@@ -575,10 +575,11 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
                     form.instance.delete()
                     form.instance.pk = None
 
-                for i, form in enumerate(self.formset.ordered_forms + [
-                    ef for ef in self.formset.extra_forms if (ef not in self.formset.ordered_forms and ef not in
-                        self.formset.deleted_forms)
-                ]):
+                forms = self.formset.ordered_forms + [
+                    ef for ef in self.formset.extra_forms
+                    if ef not in self.formset.ordered_forms and ef not in self.formset.deleted_forms
+                ]
+                for i, form in enumerate(forms):
                     form.instance.position = i
                     form.instance.item = self.get_object()
                     created = not form.instance.pk
