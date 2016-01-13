@@ -53,16 +53,30 @@ class CartActionMixin:
         return items
 
 
-class CartRemove(EventViewMixin, CartActionMixin, View):
+class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
+    task = remove_items_from_cart
 
-    def post(self, *args, **kwargs):
+    def get_success_message(self, value):
+        return _('Your cart has been updated.')
+
+    def get_error_message(self, exception):
+        if isinstance(exception, dict) and exception['exc_type'] == 'CartError':
+            return exception['exc_message']
+        elif isinstance(exception, CartError):
+            return str(exception)
+        return super().get_error_message(exception)
+
+    def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
-        if not items:
-            return redirect(self.get_error_url())
-
-        remove_items_from_cart(self.request.event.id, items, self.request.session.session_key)
-        messages.success(self.request, _('Your cart has been updated.'))
-        return redirect(self.get_success_url())
+        if items:
+            return self.do(self.request.event.id, items, self.request.session.session_key)
+        else:
+            if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
+                return JsonResponse({
+                    'redirect': self.get_error_url()
+                })
+            else:
+                return redirect(self.get_error_url())
 
 
 class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):

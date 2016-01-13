@@ -167,6 +167,18 @@ def add_items_to_cart(event: int, items: List[Tuple[int, Optional[int], int]], c
         raise CartError(error_messages['busy'])
 
 
+def _remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int]], cart_id: int) -> None:
+    with event.lock():
+        for item, variation, cnt in items:
+            cw = Q(cart_id=cart_id) & Q(item_id=item) & Q(event=event)
+            if variation:
+                cw &= Q(variation_id=variation)
+            else:
+                cw &= Q(variation__isnull=True)
+            for cp in CartPosition.objects.filter(cw).order_by("-price")[:cnt]:
+                cp.delete()
+
+
 def remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int]], cart_id: int=None) -> None:
     """
     Removes a list of items from a user's cart.
@@ -175,15 +187,10 @@ def remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int
     :param session: Session ID of a guest
     """
     event = Event.objects.get(id=event)
-
-    for item, variation, cnt in items:
-        cw = Q(cart_id=cart_id) & Q(item_id=item) & Q(event=event)
-        if variation:
-            cw &= Q(variation_id=variation)
-        else:
-            cw &= Q(variation__isnull=True)
-        for cp in CartPosition.objects.filter(cw).order_by("-price")[:cnt]:
-            cp.delete()
+    try:
+        _remove_items_from_cart(event, items, cart_id)
+    except EventLock.LockTimeoutException:
+        raise CartError(error_messages['busy'])
 
 
 if settings.HAS_CELERY:
@@ -197,4 +204,13 @@ if settings.HAS_CELERY:
         except EventLock.LockTimeoutException:
             self.retry(exc=CartError(error_messages['busy']))
 
+    @app.task(bind=True, max_retries=5, default_retry_delay=2)
+    def remove_items_from_cart_task(self, event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str):
+        event = Event.objects.get(id=event)
+        try:
+            _remove_items_from_cart(event, items, cart_id)
+        except EventLock.LockTimeoutException:
+            self.retry(exc=CartError(error_messages['busy']))
+
     add_items_to_cart.task = add_items_to_cart_task
+    remove_items_from_cart.task = remove_items_from_cart_task

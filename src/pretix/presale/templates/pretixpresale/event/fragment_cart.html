@@ -23,7 +23,7 @@
         <div class="col-md-2 col-xs-6 count">
             {% if editable %}
             <form action="{% eventurl event "presale:event.cart.remove" %}"
-                    method="post">
+                    method="post" data-asynctask>
                 {% csrf_token %}
                 {% if line.variation %}
                     <input type="hidden" name="variation_{{ line.item.id }}_{{ line.variation.id }}"
