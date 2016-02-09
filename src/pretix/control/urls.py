@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 
 from pretix.control.views import (
-    auth, event, item, main, orders, organizer, user,
+    auth, event, item, main, orders, organizer, user, vouchers,
 )
 
 urlpatterns = [
@@ -54,6 +54,11 @@ urlpatterns = [
         url(r'^quotas/(?P<quota>\d+)/delete$', item.QuotaDelete.as_view(),
             name='event.items.quotas.delete'),
         url(r'^quotas/add$', item.QuotaCreate.as_view(), name='event.items.quotas.add'),
+        url(r'^vouchers/$', vouchers.VoucherList.as_view(), name='event.vouchers'),
+        url(r'^vouchers/(?P<voucher>\d+)/$', vouchers.VoucherUpdate.as_view(), name='event.voucher'),
+        url(r'^vouchers/(?P<voucher>\d+)/delete$', vouchers.VoucherDelete.as_view(),
+            name='event.voucher.delete'),
+        url(r'^vouchers/add$', vouchers.VoucherCreate.as_view(), name='event.vouchers.add'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/transition$', orders.OrderTransition.as_view(),
             name='event.order.transition'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/extend$', orders.OrderExtend.as_view(),

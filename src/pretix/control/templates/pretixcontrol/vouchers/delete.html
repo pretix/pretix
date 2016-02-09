@@ -1,0 +1,26 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Delete voucher" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Delete voucher" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% if not allowed %}
+            <p>{% trans "You can not delete this voucher after it has been redeemed" %}</p>
+        {% else %}
+            <p>{% blocktrans %}Are you sure you want to delete the voucher
+                <strong>{{ voucher }}</strong>?{% endblocktrans %}</p>
+        {% endif %}
+        <div class="form-group submit-group">
+            <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            {% if allowed %}
+                <button type="submit" class="btn btn-danger btn-save">
+                    {% trans "Delete" %}
+                </button>
+            {% endif %}
+        </div>
+    </form>
+{% endblock %}

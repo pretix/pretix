@@ -237,6 +237,10 @@ class EventPermission(models.Model):
         default=True,
         verbose_name=_("Can change orders")
     )
+    can_change_vouchers = models.BooleanField(
+        default=True,
+        verbose_name=_("Can change vouchers")
+    )
 
     class Meta:
         verbose_name = _("Event permission")

@@ -1,0 +1,40 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Vouchers" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Vouchers" %}</h1>
+    <p>
+        <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
+    </p>
+    <div class="table-responsive">
+        <table class="table table-hover table-quotas">
+            <thead>
+            <tr>
+                <th>{% trans "Voucher code" %}</th>
+                <th>{% trans "Is redeemed" %}</th>
+                <th>{% trans "Expiry" %}</th>
+                <th>{% trans "Product" %}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for v in vouchers %}
+                <tr>
+                    <td>
+                        <strong><a href="
+                        {% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}">{{ v.code }}</a></strong>
+                    </td>
+                    <td>{% if v.is_ordered %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
+                    <td>{{ v.valid_until|date }}</td>
+                    <td>{{ v.item }}</td>
+                    <td class="text-right">
+                        <a href="{% url "control:event.voucher.delete" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

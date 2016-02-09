@@ -1,12 +1,23 @@
+import random
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from .base import LoggedModel
 from .event import Event
 from .items import Item
 from .orders import CartPosition, OrderPosition
 
 
-class Voucher(models.Model):
+def generate_code():
+    charset = list('ABCDEFGHKLMNPQRSTUVWXYZ23456789')
+    while True:
+        code = "".join([random.choice(charset) for i in range(16)])
+        if not Voucher.objects.filter(code=code).exists():
+            return code
+
+
+class Voucher(LoggedModel):
     event = models.ForeignKey(
         Event,
         on_delete=models.CASCADE,
@@ -15,7 +26,7 @@ class Voucher(models.Model):
     )
     code = models.CharField(
         verbose_name=_("Voucher code"),
-        max_length=255
+        max_length=255, default=generate_code
     )
     valid_until = models.DateTimeField(
         blank=True, null=True,
@@ -38,9 +49,10 @@ class Voucher(models.Model):
     )
     price = models.DecimalField(
         verbose_name=_("Set product price to"),
-        decimal_places=2, max_digits=10, null=True, blank=True
+        decimal_places=2, max_digits=10, null=True, blank=True,
+        help_text=_('If empty, the product will cost its normal price.')
     )
-    item = models.ManyToManyField(
+    item = models.ForeignKey(
         Item, related_name='vouchers',
         verbose_name=_("Product"),
         help_text=_(
@@ -53,16 +65,19 @@ class Voucher(models.Model):
         verbose_name_plural = _("Vouchers")
         unique_together = (("event", "code"),)
 
+    def __str__(self):
+        return self.code
+
     def save(self, *args, **kwargs):
         self.code = self.code.upper()
         super().save(*args, **kwargs)
 
     def is_ordered(self) -> int:
-        return OrderPosition.objects.current.filter(
-            voucher=self.voucher
+        return OrderPosition.objects.filter(
+            voucher=self
         ).exists()
 
     def is_in_cart(self) -> int:
-        return CartPosition.objects.current.filter(
-            voucher=self.voucher
+        return CartPosition.objects.filter(
+            voucher=self
         ).count()

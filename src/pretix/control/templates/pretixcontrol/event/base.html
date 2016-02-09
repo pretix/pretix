@@ -4,7 +4,7 @@
 {% block nav %}
     <li>
         <a href="{% url 'control:event.index' organizer=request.event.organizer.slug event=request.event.slug %}"
-                 {% if url_name == "event.index" %}class="active"{% endif %}>
+                {% if url_name == "event.index" %}class="active"{% endif %}>
             <i class="fa fa-dashboard fa-fw"></i>
             {% trans "Dashboard" %}
         </a>
@@ -52,7 +52,7 @@
                 {% if request.eventperm.can_change_permissions %}
                     <li>
                         <a href="{% url 'control:event.settings.permissions' organizer=request.event.organizer.slug event=request.event.slug %}"
-                           {% if "event.settings.permissions" == url_name %}class="active"{% endif %}>
+                                {% if "event.settings.permissions" == url_name %}class="active"{% endif %}>
                             {% trans "Permissions" %}
                         </a>
                     </li>
@@ -110,17 +110,26 @@
                 </li>
                 <li>
                     <a href="{% url 'control:event.orders.overview' organizer=request.event.organizer.slug event=request.event.slug %}"
-                       {% if url_name == "event.orders.overview" %}class="active"{% endif %}>
+                            {% if url_name == "event.orders.overview" %}class="active"{% endif %}>
                         {% trans "Overview" %}
                     </a>
                 </li>
                 <li>
                     <a href="{% url 'control:event.orders.export' organizer=request.event.organizer.slug event=request.event.slug %}"
-                       {% if url_name == "event.orders.export" %}class="active"{% endif %}>
+                            {% if url_name == "event.orders.export" %}class="active"{% endif %}>
                         {% trans "Export" %}
                     </a>
                 </li>
             </ul>
+        </li>
+    {% endif %}
+    {% if request.eventperm.can_change_vouchers %}
+        <li>
+            <a href="{% url 'control:event.vouchers' organizer=request.event.organizer.slug event=request.event.slug %}"
+                    {% if url_name == "event.vouchers" %}class="active"{% endif %}>
+                <i class="fa fa-tags fa-fw"></i>
+                {% trans "Vouchers" %}
+            </a>
         </li>
     {% endif %}
     {% for nav in nav_event %}
