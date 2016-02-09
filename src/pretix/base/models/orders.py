@@ -379,6 +379,13 @@ class OrderPosition(AbstractPosition):
                 answ.save()
             cartpos.delete()
             ops.append(op)
+        OrderPosition.objects.bulk_create(ops)
+        return ops
+
+    def __repr__(self):
+        return '<OrderPosition: item %d, variation %d for order %s>' % (
+            self.item.id, self.variation.id if self.variation else 0, self.order_id
+        )
 
 
 class CartPosition(AbstractPosition):
@@ -415,7 +422,7 @@ class CartPosition(AbstractPosition):
         verbose_name = _("Cart position")
         verbose_name_plural = _("Cart positions")
 
-    def __str__(self):
+    def __repr__(self):
         return '<CartPosition: item %d, variation %d for cart %s>' % (
             self.item.id, self.variation.id if self.variation else 0, self.cart_id
         )
