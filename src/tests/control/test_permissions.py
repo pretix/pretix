@@ -45,6 +45,10 @@ event_urls = [
     "questions/2/delete",
     "questions/2/",
     "questions/add",
+    "vouchers/",
+    "vouchers/2/delete",
+    "vouchers/2/",
+    "vouchers/add",
     "quotas/",
     "quotas/2/delete",
     "quotas/2/",
@@ -115,6 +119,10 @@ event_permission_urls = [
     ("can_view_orders", "orders/FOO/", 200),
     ("can_change_orders", "orders/FOO/extend", 200),
     ("can_change_orders", "orders/FOO/transition", 405),
+    ("can_change_vouchers", "vouchers/add", 200),
+    ("can_change_vouchers", "vouchers/", 200),
+    ("can_change_vouchers", "vouchers/1234/", 404),
+    ("can_change_vouchers", "vouchers/1234/delete", 404),
 ]
 
 
