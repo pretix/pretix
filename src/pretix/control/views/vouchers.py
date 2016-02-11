@@ -35,10 +35,11 @@ class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
         except Voucher.DoesNotExist:
             raise Http404(_("The requested voucher does not exist."))
 
-    def get_context_data(self, *args, **kwargs) -> dict:
-        context = super().get_context_data(*args, **kwargs)
-        context['allowed'] = not self.get_object().is_ordered()
-        return context
+    def get(self, request, *args, **kwargs):
+        if self.get_object().is_ordered():
+            messages.error(request, _('A voucher can not be deleted if it already has been redeemed.'))
+            return HttpResponseRedirect(self.get_success_url())
+        super().get(request, *args, **kwargs)
 
     @transaction.atomic()
     def delete(self, request, *args, **kwargs):
