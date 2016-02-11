@@ -1,7 +1,8 @@
 import io
-from decimal import Decimal
 
 import mt940
+
+from pretix.base.decimal import round_decimal
 
 
 def parse(file):
@@ -20,7 +21,7 @@ def parse(file):
             'reference': "\n".join([
                 t.data.get(f) for f in ('transaction_details', 'customer_reference', 'bank_reference',
                                         'extra_details') if t.data.get(f, '')]),
-            'amount': str(t.data['amount'].amount.quantize(Decimal('.01'))),
+            'amount': str(round_decimal(t.data['amount'].amount)),
             'date': t.data['date'].isoformat()
         })
     return result

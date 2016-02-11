@@ -11,6 +11,7 @@ from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from typing import Any, Dict
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import CartPosition, Event, Order, Quota
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
@@ -47,7 +48,7 @@ class BasePaymentProvider:
         """
         fee_abs = self.settings.get('_fee_abs', as_type=Decimal, default=0)
         fee_percent = self.settings.get('_fee_percent', as_type=Decimal, default=0)
-        return (price * fee_percent / 100).quantize(Decimal('.01')) + fee_abs
+        return round_decimal(price * fee_percent / 100) + fee_abs
 
     @property
     def verbose_name(self) -> str:

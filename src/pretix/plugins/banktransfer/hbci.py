@@ -3,6 +3,8 @@ import tempfile
 import time
 from decimal import Decimal
 
+from pretix.base.decimal import round_decimal
+
 
 def hbci_transactions(event, conf):
     try:
@@ -92,7 +94,7 @@ def hbci_transactions(event, conf):
                     num = int(parts[0])
                     denom = int(parts[1])
                     value = Decimal(num) / Decimal(denom)
-                    value = str(value.quantize(Decimal('.01')))
+                    value = str(round_decimal(value))
                 data.append({
                     'payer': "\n".join(payer),
                     'reference': trans.find('purpose').find('value').text,
