@@ -123,9 +123,9 @@
                     </div>
                     <div class="col-md-3 col-xs-6 price">
                         <strong>{{ event.currency }} {{ line.total|floatformat:2 }}</strong>
-                        {% if line.item.tax_rate %}
+                        {% if line.tax_rate %}
                             <br/>
-                            <small>{% blocktrans trimmed with rate=line.item.tax_rate %}
+                            <small>{% blocktrans trimmed with rate=line.tax_rate %}
                                 incl. {{ rate }}% taxes
                             {% endblocktrans %}</small>
                         {% endif %}

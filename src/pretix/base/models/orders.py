@@ -3,11 +3,12 @@ import string
 from datetime import datetime
 from decimal import Decimal
 
-from django.db import models, transaction
+from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from typing import List, Union
 
+from ..decimal import round_decimal
 from .base import CachedFile, LoggedModel
 from .event import Event
 from .items import Item, ItemVariation, Question, Quota
@@ -361,6 +362,14 @@ class OrderPosition(AbstractPosition):
         related_name='positions',
         on_delete=models.PROTECT
     )
+    tax_rate = models.DecimalField(
+        max_digits=7, decimal_places=2,
+        verbose_name=_('Tax rate')
+    )
+    tax_value = models.DecimalField(
+        max_digits=10, decimal_places=2,
+        verbose_name=_('Tax value')
+    )
 
     class Meta:
         verbose_name = _("Order position")
@@ -381,6 +390,7 @@ class OrderPosition(AbstractPosition):
                 cartpos.voucher.redeemed = True
                 cartpos.voucher.save()
             cartpos.delete()
+            op._calculate_tax()
             ops.append(op)
         OrderPosition.objects.bulk_create(ops)
         return ops
@@ -389,6 +399,18 @@ class OrderPosition(AbstractPosition):
         return '<OrderPosition: item %d, variation %d for order %s>' % (
             self.item.id, self.variation.id if self.variation else 0, self.order_id
         )
+
+    def _calculate_tax(self):
+        self.tax_rate = self.item.tax_rate
+        if self.tax_rate:
+            self.tax_value = round_decimal(self.price * (1 - 100 / (100 + self.item.tax_rate)))
+        else:
+            self.tax_value = Decimal('0.00')
+
+    def save(self, *args, **kwargs):
+        if self.tax_rate is None:
+            self._calculate_tax()
+        return super().save(*args, **kwargs)
 
 
 class CartPosition(AbstractPosition):
@@ -429,3 +451,13 @@ class CartPosition(AbstractPosition):
         return '<CartPosition: item %d, variation %d for cart %s>' % (
             self.item.id, self.variation.id if self.variation else 0, self.cart_id
         )
+
+    @property
+    def tax_rate(self):
+        return self.item.tax_rate
+
+    @property
+    def tax_value(self):
+        if not self.tax_rate:
+            return Decimal('0.00')
+        return round_decimal(self.price * (1 - 100 / (100 + self.item.tax_rate)))
