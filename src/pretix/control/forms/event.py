@@ -212,6 +212,12 @@ class MailSettingsForm(SettingsForm):
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {url}")
     )
+    mail_text_order_resend = I18nFormField(
+        label=_("Resend link"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {url}")
+    )
     smtp_use_custom = forms.BooleanField(
         label=_("Use custom SMTP server"),
         help_text=_("All mail related to your event will be sent over the smtp server specified by you."),

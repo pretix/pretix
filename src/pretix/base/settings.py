@@ -97,6 +97,19 @@ DEFAULTS = {
         'default': settings.MAIL_FROM,
         'type': str
     },
+    'mail_text_resend_link': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+you receive this message because you asked us to send you the link
+to your order for {event}.
+
+You can change your order details and view the status of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
     'mail_text_order_placed': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,

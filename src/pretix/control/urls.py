@@ -61,6 +61,8 @@ urlpatterns = [
         url(r'^vouchers/add$', vouchers.VoucherCreate.as_view(), name='event.vouchers.add'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/transition$', orders.OrderTransition.as_view(),
             name='event.order.transition'),
+        url(r'^orders/(?P<code>[0-9A-Z]+)/resend$', orders.OrderResendLink.as_view(),
+            name='event.order.resendlink'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/extend$', orders.OrderExtend.as_view(),
             name='event.order.extend'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/$', orders.OrderDetail.as_view(), name='event.order'),

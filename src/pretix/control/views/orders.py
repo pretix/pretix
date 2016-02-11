@@ -17,6 +17,7 @@ from pretix.base.models import (
 )
 from pretix.base.services import tickets
 from pretix.base.services.export import export
+from pretix.base.services.mail import mail
 from pretix.base.services.orders import cancel_order, mark_order_paid
 from pretix.base.services.stats import order_overview
 from pretix.base.signals import (
@@ -25,6 +26,7 @@ from pretix.base.signals import (
 )
 from pretix.control.forms.orders import ExtendForm
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 
 class OrderList(EventPermissionRequiredMixin, ListView):
@@ -196,6 +198,27 @@ class OrderTransition(OrderView):
             })
         else:
             return HttpResponseNotAllowed(['POST'])
+
+
+class OrderResendLink(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        mail(
+            self.order.email, _('Your order: %(code)s') % {'code': self.order.code},
+            self.order.event.settings.mail_text_resend_link,
+            {
+                'event': self.order.event.name,
+                'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
+                    'order': self.order.code,
+                    'secret': self.order.secret
+                }),
+            },
+            self.order.event, locale=self.order.locale
+        )
+        messages.success(self.request, _('The order has been marked as paid.'))
+        self.order.log_action('pretix.base.order.resend', user=self.request.user)
+        return redirect(self.get_order_url())
 
 
 class OrderDownload(OrderView):

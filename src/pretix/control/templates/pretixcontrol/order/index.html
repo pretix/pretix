@@ -37,7 +37,7 @@
                         {% if can_download %}
                             {% for b in download_buttons %}
                                 <a href="{% url "control:event.order.download" organizer=request.event.organizer.slug event=request.event.slug code=order.code output=b.identifier %}"
-                                   class="btn btn-default">
+                                        class="btn btn-default">
                                     <span class="fa {{ b.icon }}"></span> {{ b.text }}
                                 </a>
                             {% endfor %}
@@ -67,7 +67,16 @@
                     <dd>{{ order.expires }}</dd>
                 {% endif %}
                 <dt>{% trans "User" %}</dt>
-                <dd>{{ order.email }}</dd>
+                <dd>
+                    {{ order.email }}&nbsp;&nbsp;
+                    <form class="form-inline" style="display: inline;" method="post"
+                            action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                        {% csrf_token %}
+                        <button class="btn btn-default btn-xs">
+                            {% trans "Resend link" %}
+                        </button>
+                    </form>
+                </dd>
             </dl>
         </div>
     </div>
@@ -86,7 +95,7 @@
                             – {{ line.variation }}
                         {% endif %}
                         {% if line.voucher %}
-                            <br /><span class="fa fa-ticket"></span> {% trans "Voucher code used:" %}
+                            <br/><span class="fa fa-ticket"></span> {% trans "Voucher code used:" %}
                             <a href="{% url "control:event.voucher" event=request.event.slug organizer=request.event.organizer.slug voucher=line.voucher.pk %}">
                                 {{ line.voucher.code }}
                             </a>
@@ -95,11 +104,13 @@
                             <dl>
                                 {% if line.item.admission and event.settings.attendee_names_asked %}
                                     <dt>{% trans "Attendee name" %}</dt>
-                                    <dd>{% if line.attendee_name %}{{ line.attendee_name }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
+                                    <dd>{% if line.attendee_name %}{{ line.attendee_name }}{% else %}
+                                        <em>{% trans "not answered" %}</em>{% endif %}</dd>
                                 {% endif %}
                                 {% for q in line.questions %}
                                     <dt>{{ q.question }}</dt>
-                                    <dd>{% if q.answer %}{{ q.answer }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
+                                    <dd>{% if q.answer %}{{ q.answer }}{% else %}
+                                        <em>{% trans "not answered" %}</em>{% endif %}</dd>
                                 {% endfor %}
                             </dl>
                         {% endif %}
@@ -113,9 +124,10 @@
                     <div class="col-md-3 col-xs-6 price">
                         <strong>{{ event.currency }} {{ line.total|floatformat:2 }}</strong>
                         {% if line.item.tax_rate %}
-                            <br /><small>{% blocktrans trimmed with rate=line.item.tax_rate %}
-                            incl. {{ rate }}% taxes
-                        {% endblocktrans %}</small>
+                            <br/>
+                            <small>{% blocktrans trimmed with rate=line.item.tax_rate %}
+                                incl. {{ rate }}% taxes
+                            {% endblocktrans %}</small>
                         {% endif %}
                     </div>
                     <div class="clearfix"></div>
