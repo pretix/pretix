@@ -377,6 +377,9 @@ class OrderPosition(AbstractPosition):
                 answ.orderposition = op
                 answ.cartposition = None
                 answ.save()
+            if cartpos.voucher:
+                cartpos.voucher.redeemed = True
+                cartpos.voucher.save()
             cartpos.delete()
             ops.append(op)
         OrderPosition.objects.bulk_create(ops)

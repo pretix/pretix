@@ -140,8 +140,6 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
             if cp.voucher.redeemed:
                 err = err or error_messages['voucher_redeemed']
                 continue
-            cp.voucher.redeemed = True
-            cp.voucher.save()
 
         if cp.expires >= dt:
             # Other checks are not necessary
@@ -150,17 +148,17 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
         price = cp.item.default_price if cp.variation is None else (
             cp.variation.default_price if cp.variation.default_price is not None else cp.item.default_price)
 
-        if cp.voucher:
-            if cp.voucher.valid_until < now():
-                err = err or error_messages['voucher_expired']
-                continue
-            if price is not False and cp.voucher.price is not None:
-                price = cp.voucher.price
-
         if price is False or len(quotas) == 0:
             err = err or error_messages['unavailable']
             cp.delete()
             continue
+
+        if cp.voucher:
+            if cp.voucher.valid_until < now():
+                err = err or error_messages['voucher_expired']
+                continue
+            if cp.voucher.price is not None:
+                price = cp.voucher.price
 
         if price != cp.price:
             positions[i] = cp
@@ -191,6 +189,7 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
         raise OrderError(err)
 
 
+@transaction.atomic()
 def _create_order(event: Event, email: str, positions: List[CartPosition], dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None):
     total = sum([c.price for c in positions])
@@ -234,10 +233,9 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             id__in=position_ids).select_related('item', 'variation'))
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
-        with transaction.atomic():
-            _check_positions(event, dt, positions)
-            order = _create_order(event, email, positions, dt, pprov,
-                                  locale=locale)
+        _check_positions(event, dt, positions)
+        order = _create_order(event, email, positions, dt, pprov,
+                              locale=locale)
 
     mail(
         order.email, _('Your order: %(code)s') % {'code': order.code},
