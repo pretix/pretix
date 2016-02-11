@@ -26,7 +26,7 @@ class CartActionMixin:
     def get_error_url(self):
         return self.get_next_url()
 
-    def _items_from_post_data(self):
+    def _items_from_post_data(self, warn=True):
         """
         Parses the POST data and returns a list of tuples in the
         form (item id, variation id or None, number)
@@ -47,7 +47,7 @@ class CartActionMixin:
                 except ValueError:
                     messages.error(self.request, _('Please enter numbers only.'))
                     return []
-        if len(items) == 0:
+        if len(items) == 0 and warn:
             messages.warning(self.request, _('You did not select any products.'))
             return []
         return items
@@ -93,9 +93,11 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
         return super().get_error_message(exception)
 
     def post(self, request, *args, **kwargs):
-        items = self._items_from_post_data()
-        if items:
-            return self.do(self.request.event.id, items, self.request.session.session_key)
+        voucher = self.request.POST.get('voucher')
+        items = self._items_from_post_data(warn=not voucher)
+        if items or voucher:
+            return self.do(self.request.event.id, items, self.request.session.session_key,
+                           voucher)
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({

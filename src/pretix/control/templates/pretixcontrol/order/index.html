@@ -85,6 +85,12 @@
                         {% if line.variation %}
                             – {{ line.variation }}
                         {% endif %}
+                        {% if line.voucher %}
+                            <br /><span class="fa fa-ticket"></span> {% trans "Voucher code used:" %}
+                            <a href="{% url "control:event.voucher" event=request.event.slug organizer=request.event.organizer.slug voucher=line.voucher.pk %}">
+                                {{ line.voucher.code }}
+                            </a>
+                        {% endif %}
                         {% if line.has_questions %}
                             <dl>
                                 {% if line.item.admission and event.settings.attendee_names_asked %}

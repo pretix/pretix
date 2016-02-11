@@ -475,11 +475,23 @@ class Quota(LoggedModel):
         if size_left <= 0:
             return Quota.AVAILABILITY_ORDERED, 0
 
+        size_left -= self.count_blocking_vouchers()
+        if size_left <= 0:
+            return Quota.AVAILABILITY_ORDERED, 0
+
         size_left -= self.count_in_cart()
         if size_left <= 0:
             return Quota.AVAILABILITY_RESERVED, 0
 
         return Quota.AVAILABILITY_OK, size_left
+
+    def count_blocking_vouchers(self) -> int:
+        from pretix.base.models import Voucher
+        return Voucher.objects.filter(
+            item__quotas__in=[self],
+            block_quota=True,
+            redeemed=False
+        ).count()
 
     def count_in_cart(self) -> int:
         from pretix.base.models import CartPosition

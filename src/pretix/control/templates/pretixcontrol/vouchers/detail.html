@@ -4,6 +4,11 @@
 {% block title %}{% trans "Voucher" %}{% endblock %}
 {% block inside %}
 	<h1>{% trans "Voucher" %}</h1>
+    {% if voucher.redeemed %}
+        <div class="alert alert-warning">
+            {% trans "This voucher already has been used. It is not recommended to modify it." %}
+        </div>
+    {% endif %}
 	<form action="" method="post" class="form-horizontal">
 		{% csrf_token %}
         {% bootstrap_form_errors form %}

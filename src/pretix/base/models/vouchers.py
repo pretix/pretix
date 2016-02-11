@@ -28,6 +28,10 @@ class Voucher(LoggedModel):
         verbose_name=_("Voucher code"),
         max_length=255, default=generate_code
     )
+    redeemed = models.BooleanField(
+        verbose_name=_("Redeemed"),
+        default=False
+    )
     valid_until = models.DateTimeField(
         blank=True, null=True,
         verbose_name=_("Valid until")
@@ -71,6 +75,11 @@ class Voucher(LoggedModel):
     def save(self, *args, **kwargs):
         self.code = self.code.upper()
         super().save(*args, **kwargs)
+        self.event.get_cache().set('vouchers_exist', True)
+
+    def delete(self, using=None, keep_parents=False):
+        super().delete(using, keep_parents)
+        self.event.get_cache().delete('vouchers_exist')
 
     def is_ordered(self) -> int:
         return OrderPosition.objects.filter(

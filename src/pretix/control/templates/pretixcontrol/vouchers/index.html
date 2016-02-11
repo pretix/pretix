@@ -25,7 +25,7 @@
                         <strong><a href="
                         {% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}">{{ v.code }}</a></strong>
                     </td>
-                    <td>{% if v.is_ordered %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
+                    <td>{% if v.redeemed %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
                     <td>{{ v.valid_until|date }}</td>
                     <td>{{ v.item }}</td>
                     <td class="text-right">

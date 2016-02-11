@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from typing import List, Optional, Tuple
 
 from pretix.base.models import (
-    CartPosition, Event, EventLock, Item, ItemVariation, Quota,
+    CartPosition, Event, EventLock, Item, ItemVariation, Quota, Voucher,
 )
 
 
@@ -27,7 +27,10 @@ error_messages = {
                  'the quantity you selected. Please see below for details.'),
     'max_items': _("You cannot select more than %s items per order"),
     'not_started': _('The presale period for this event has not yet started.'),
-    'ended': _('The presale period has ended.')
+    'ended': _('The presale period has ended.'),
+    'voucher_invalid': _('This voucher code is not known in our database.'),
+    'voucher_redeemed': _('This voucher code has already been used an can only be used once.'),
+    'voucher_expired': _('This voucher is expired'),
 }
 
 
@@ -98,7 +101,7 @@ def _add_new_items(event: Event, items: List[Tuple[int, Optional[int], int]],
             err = err or error_messages['unavailable']
             continue
 
-        # Assume that all quotas allow us to buy i[2] instances of the object
+        # Check that all quotas allow us to buy i[2] instances of the object
         quota_ok = i[2]
         for quota in quotas:
             avail = quota.availability()
@@ -131,7 +134,35 @@ def _add_new_items(event: Event, items: List[Tuple[int, Optional[int], int]],
     return err
 
 
-def _add_items_to_cart(event: Event, items: List[Tuple[int, Optional[int], int]], cart_id: str=None) -> None:
+def _add_voucher(event: Event, voucher: str, expiry: datetime, cart_id: str):
+    try:
+        v = Voucher.objects.get(code=voucher, event=event)
+        if v.redeemed:
+            raise CartError(error_messages['voucher_redeemed'])
+        if v.valid_until is not None and v.valid_until < now():
+            raise CartError(error_messages['voucher_expired'])
+
+        quotas = list(v.item.quotas.all())
+        if len(quotas) == 0 or not v.item.is_available():
+            raise CartError(error_messages['unavailable'])
+
+        if not v.allow_ignore_quota and not v.block_quota:
+            for quota in quotas:
+                avail = quota.availability()
+                if avail[1] is not None and avail[1] < 1:
+                    raise CartError(error_messages['unavailable'])
+
+        CartPosition.objects.create(
+            event=event, item=v.item, variation=None,
+            price=v.price if v.price is not None else v.item.default_price,
+            expires=expiry, cart_id=cart_id, voucher=v
+        )
+    except Voucher.DoesNotExist:
+        raise CartError(error_messages['voucher_invalid'])
+
+
+def _add_items_to_cart(event: Event, items: List[Tuple[int, Optional[int], int]], cart_id: str=None,
+                       voucher: str=None) -> None:
     with event.lock():
         _check_date(event)
         existing = CartPosition.objects.filter(Q(cart_id=cart_id) & Q(event=event)).count()
@@ -143,31 +174,36 @@ def _add_items_to_cart(event: Event, items: List[Tuple[int, Optional[int], int]]
         _extend_existing(event, cart_id, expiry)
 
         expired = _re_add_expired_positions(items, event, cart_id)
-        if not items:
+        if items:
+            err = _add_new_items(event, items, cart_id, expiry)
+            _delete_expired(expired)
+            if err:
+                raise CartError(err)
+        elif not voucher:
             raise CartError(error_messages['empty'])
 
-        err = _add_new_items(event, items, cart_id, expiry)
-        _delete_expired(expired)
-        if err:
-            raise CartError(err)
+        if voucher:
+            _add_voucher(event, voucher, expiry, cart_id)
 
 
-def add_items_to_cart(event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str=None) -> None:
+def add_items_to_cart(event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str=None,
+                      voucher: str=None) -> None:
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
     :param items: A list of tuple of the form (item id, variation id or None, number)
     :param session: Session ID of a guest
+    :param coupon: A coupon that should also be reeemed
     :raises CartError: On any error that occured
     """
     event = Event.objects.get(id=event)
     try:
-        _add_items_to_cart(event, items, cart_id)
+        _add_items_to_cart(event, items, cart_id, voucher)
     except EventLock.LockTimeoutException:
         raise CartError(error_messages['busy'])
 
 
-def _remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int]], cart_id: int) -> None:
+def _remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str) -> None:
     with event.lock():
         for item, variation, cnt in items:
             cw = Q(cart_id=cart_id) & Q(item_id=item) & Q(event=event)
@@ -179,7 +215,7 @@ def _remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], in
                 cp.delete()
 
 
-def remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int]], cart_id: int=None) -> None:
+def remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str=None) -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
@@ -197,10 +233,11 @@ if settings.HAS_CELERY:
     from pretix.celery import app
 
     @app.task(bind=True, max_retries=5, default_retry_delay=2)
-    def add_items_to_cart_task(self, event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str):
+    def add_items_to_cart_task(self, event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str,
+                               voucher: str=None):
         event = Event.objects.get(id=event)
         try:
-            _add_items_to_cart(event, items, cart_id)
+            _add_items_to_cart(event, items, cart_id, voucher)
         except EventLock.LockTimeoutException:
             self.retry(exc=CartError(error_messages['busy']))
 

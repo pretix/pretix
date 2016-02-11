@@ -60,5 +60,11 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
                 group[0] is not None and group[0].id is not None) else (0, 0)
         )
 
+        vouchers_exist = self.request.event.get_cache().get('vouchers_exist')
+        if vouchers_exist is None:
+            vouchers_exist = self.request.event.vouchers.exists()
+            self.request.event.get_cache().set('vouchers_exist', vouchers_exist)
+        context['vouchers_exist'] = vouchers_exist
+
         context['cart'] = self.get_cart()
         return context

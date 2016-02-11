@@ -48,8 +48,8 @@ class CartMixin:
         def keyfunc(pos):
             if answers and ((pos.item.admission and self.request.event.settings.attendee_names_asked)
                             or pos.item.questions.all()):
-                return pos.id, 0, 0, 0
-            return 0, pos.item_id, pos.variation_id, pos.price
+                return pos.id, 0, 0, 0, None
+            return 0, pos.item_id, pos.variation_id, pos.price, pos.voucher
 
         positions = []
         for k, g in groupby(sorted(list(cartpos), key=keyfunc), key=keyfunc):

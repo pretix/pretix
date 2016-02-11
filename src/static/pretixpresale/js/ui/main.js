@@ -12,6 +12,12 @@ $(function () {
         $(this).parent().parent().parent().find(".variations").slideToggle();
     });
     $(".collapsed").removeClass("collapsed").addClass("collapse");
+
+    $("#voucher-box").hide();
+    $("#voucher-toggle a").click(function () {
+        $("#voucher-box").slideDown();
+        $("#voucher-toggle").slideUp();
+    });
 });
 
 var waitingDialog = {

@@ -28,6 +28,8 @@ error_messages = {
     'internal': _("An internal error occured, please try again."),
     'busy': _('We were not able to process your request completely as the '
               'server was too busy. Please try again.'),
+    'voucher_redeemed': _('A voucher you tried to use already has been used.'),
+    'voucher_expired': _('A voucher you tried to use has expired.'),
 }
 
 
@@ -133,29 +135,51 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
             cp.delete()
             continue
         quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
+
+        if cp.voucher:
+            if cp.voucher.redeemed:
+                err = err or error_messages['voucher_redeemed']
+                continue
+            cp.voucher.redeemed = True
+            cp.voucher.save()
+
         if cp.expires >= dt:
             # Other checks are not necessary
             continue
+
         price = cp.item.default_price if cp.variation is None else (
             cp.variation.default_price if cp.variation.default_price is not None else cp.item.default_price)
+
+        if cp.voucher:
+            if cp.voucher.valid_until < now():
+                err = err or error_messages['voucher_expired']
+                continue
+            if price is not False and cp.voucher.price is not None:
+                price = cp.voucher.price
+
         if price is False or len(quotas) == 0:
             err = err or error_messages['unavailable']
             cp.delete()
             continue
+
         if price != cp.price:
             positions[i] = cp
             cp.price = price
             cp.save()
             err = err or error_messages['price_changed']
             continue
+
         quota_ok = True
-        for quota in quotas:
-            avail = quota.availability()
-            if avail[0] != Quota.AVAILABILITY_OK:
-                # This quota is sold out/currently unavailable, so do not sell this at all
-                err = err or error_messages['unavailable']
-                quota_ok = False
-                break
+
+        if not cp.voucher or not (cp.voucher.allow_ignore_quota or cp.voucher.block_quota):
+            for quota in quotas:
+                avail = quota.availability()
+                if avail[0] != Quota.AVAILABILITY_OK:
+                    # This quota is sold out/currently unavailable, so do not sell this at all
+                    err = err or error_messages['unavailable']
+                    quota_ok = False
+                    break
+
         if quota_ok:
             positions[i] = cp
             cp.expires = now() + timedelta(
@@ -167,7 +191,6 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
         raise OrderError(err)
 
 
-@transaction.atomic()
 def _create_order(event: Event, email: str, positions: List[CartPosition], dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None):
     total = sum([c.price for c in positions])
@@ -211,9 +234,10 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             id__in=position_ids).select_related('item', 'variation'))
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
-        _check_positions(event, dt, positions)
-        order = _create_order(event, email, positions, dt, pprov,
-                              locale=locale)
+        with transaction.atomic():
+            _check_positions(event, dt, positions)
+            order = _create_order(event, email, positions, dt, pprov,
+                                  locale=locale)
 
     mail(
         order.email, _('Your order: %(code)s') % {'code': order.code},
