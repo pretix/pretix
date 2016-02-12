@@ -99,8 +99,8 @@ class Stripe(BasePaymentProvider):
                 'message': err['message'],
             })
             order.save()
-        except stripe.error.InvalidRequestError or stripe.error.AuthenticationError or stripe.error.APIConnectionError \
-                or stripe.error.StripeError as e:
+        except (stripe.error.InvalidRequestError, stripe.error.AuthenticationError, stripe.error.APIConnectionError,
+                stripe.error.StripeError) as e:
             err = e.json_body['error']
             messages.error(request, _('We had trouble communicating with Stripe. Please try again and get in touch '
                                       'with us if this problem persists.'))
@@ -166,7 +166,7 @@ class Stripe(BasePaymentProvider):
             ch = stripe.Charge.retrieve(payment_info['id'])
             ch.refunds.create()
             ch.refresh()
-        except stripe.error.InvalidRequestError or stripe.error.AuthenticationError or stripe.error.APIConnectionError \
+        except (stripe.error.InvalidRequestError, stripe.error.AuthenticationError, stripe.error.APIConnectionError) \
                 as e:
             err = e.json_body['error']
             messages.error(request, _('We had trouble communicating with Stripe. Please try again and contact '
