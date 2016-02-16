@@ -190,7 +190,7 @@ USE_L10N = True
 USE_TZ = True
 
 LOCALE_PATHS = (
-    'locale',
+    os.path.join(os.path.dirname(__file__), 'locale'),
 )
 
 LANGUAGES = (
@@ -257,7 +257,7 @@ STATICFILES_FINDERS = (
 )
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(os.path.dirname(__file__), 'static')
 ]
 
 if os.path.exists(os.path.join(DATA_DIR, 'static')):
