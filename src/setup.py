@@ -1,6 +1,3 @@
-
-# Always prefer setuptools over distutils
-# To use a consistent encoding
 from codecs import open
 from os import path
 
@@ -31,9 +28,7 @@ setup(
         'Framework :: Django :: 1.8'
     ],
 
-    # What does your project relate to?
     keywords='tickets web shop ecommerce',
-    packages=['pretix'],
     install_requires=[
         'Django>=1.8,<1.9', 'python-dateutil>=2.4,<2.5',
         'pytz', 'django-bootstrap3>=6.1,<6.2', 'django-formset-js',
@@ -52,5 +47,7 @@ setup(
         'redis': ['django-redis>=4.1,<4.2', 'django-redis>=4.1,<4.2'],
         'stripe': ['stripe>=1.22,<1.23']
     },
+
+    packages=find_packages(exclude=['tests']),
     include_package_data=True,
 )
