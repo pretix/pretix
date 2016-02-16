@@ -2,3 +2,5 @@ data/
 pretix.cfg
 *.sqlite
 .cache
+static.dist/
+
