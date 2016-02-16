@@ -129,7 +129,7 @@ SESSION_COOKIE_DOMAIN = config.get('pretix', 'cookie_domain', fallback=None)
 
 # Internal settings
 
-STATIC_ROOT = '_static'
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static.dist')
 
 SESSION_COOKIE_NAME = 'pretix_session'
 LANGUAGE_COOKIE_NAME = 'pretix_language'
@@ -257,11 +257,11 @@ STATICFILES_FINDERS = (
 )
 
 STATICFILES_DIRS = [
-    os.path.join(os.path.dirname(__file__), 'static')
+    os.path.join(BASE_DIR, 'static')
 ]
 
-if os.path.exists(os.path.join(DATA_DIR, 'static')):
-    STATICFILES_DIRS.insert(0, os.path.join(DATA_DIR, 'static'))
+# if os.path.exists(os.path.join(DATA_DIR, 'static')):
+#     STATICFILES_DIRS.insert(0, os.path.join(DATA_DIR, 'static'))
 
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'pretix.helpers.lessabsolutefilter.LessFilter'),

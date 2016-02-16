@@ -1,4 +1,6 @@
+import os
 from codecs import open
+from distutils.command.build import build
 from os import path
 
 from setuptools import find_packages, setup
@@ -8,6 +10,28 @@ here = path.abspath(path.dirname(__file__))
 # Get the long description from the relevant file
 with open(path.join(here, '../README.md'), encoding='utf-8') as f:
     long_description = f.read()
+
+
+class CustomBuild(build):
+    def run(self):
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pretix.settings")
+        import django
+        django.setup()
+        from django.conf import settings
+        from django.core import management
+
+        settings.COMPRESS_ENABLED = True
+        settings.COMPRESS_OFFLINE = True
+
+        management.call_command('collectstatic', verbosity=1, interactive=False)
+        management.call_command('compress', verbosity=1, interactive=False)
+        build.run(self)
+
+
+cmdclass = {
+    'build': CustomBuild
+}
+
 
 setup(
     name='pretix',
@@ -52,4 +76,5 @@ setup(
 
     packages=find_packages(exclude=['tests', 'tests.*']),
     include_package_data=True,
+    cmdclass=cmdclass
 )

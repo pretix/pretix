@@ -1,6 +1,6 @@
 include LICENSE
 include README.rst
-recursive-include pretix/static *
+recursive-include pretix/static.dist *
 recursive-include pretix/locale *
 recursive-include pretix/base/templates *
 recursive-include pretix/control/templates *
