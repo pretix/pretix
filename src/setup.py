@@ -48,6 +48,6 @@ setup(
         'stripe': ['stripe>=1.22,<1.23']
     },
 
-    packages=find_packages(exclude=['tests']),
+    packages=find_packages(exclude=['tests', 'tests.*']),
     include_package_data=True,
 )
