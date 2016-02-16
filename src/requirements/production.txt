@@ -15,5 +15,5 @@ html5lib
 slimit
 lxml
 static3==0.6.1
-git+https://github.com/pretix/dj-static.git@script-path#egg=dj-static
+dj-static
 csscompressor
