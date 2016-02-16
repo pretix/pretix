@@ -4,8 +4,7 @@ python-dateutil
 pytz
 django-bootstrap3>=6.2,<6.3
 git+https://github.com/pretix/django-formset-js.git@master#egg=django-formset-js
-#django-compressor>=1.6,<2.0
-git+https://github.com/django-compressor/django-compressor.git@develop#egg=django-compressor
+django-compressor==2.0
 reportlab>=3.2,<3.3
 git+https://github.com/pretix/PyPDF2.git@pretix#egg=PyPDF2
 easy-thumbnails>=2.2,<3

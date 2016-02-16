@@ -30,11 +30,13 @@ setup(
 
     keywords='tickets web shop ecommerce',
     install_requires=[
-        'Django>=1.8,<1.9', 'python-dateutil>=2.4,<2.5',
-        'pytz', 'django-bootstrap3>=6.1,<6.2', 'django-formset-js',
-        'cleanerversion>=1.5,<1.7', 'django-compressor>=1.6,<2.0',
-        'reportlab>=3.1.44,<3.2', 'PyPDF2', 'BeautifulSoup4', 'html5lib',
-        'slimit', 'lxml', 'static3==0.6.1', 'dj-static', 'chardet'
+        'Django>=1.9,<1.10', 'python-dateutil>=2.4,<2.5',
+        'pytz', 'django-bootstrap3>=6.2,<6.3', 'django-formset-js',
+        'django-compressor==2.0', 'reportlab>=3.2,<3.3',
+        'easy-thumbnails>=2.2,<3'
+        'PyPDF2', 'BeautifulSoup4', 'html5lib',
+        'slimit', 'lxml', 'static3==0.6.1', 'dj-static', 'chardet',
+        'csscompressor'
     ],
     extras_require={
         'dev': ['django-debug-toolbar>=1.3.0,<2.0'],
@@ -44,7 +46,7 @@ setup(
         'mysql': ['mysqlclient'],
         'paypal': ['paypalrestsdk>=1.9,<1.10,<2.0'],
         'postgres': ['psycopg2'],
-        'redis': ['django-redis>=4.1,<4.2', 'django-redis>=4.1,<4.2'],
+        'redis': ['django-redis>=4.1,<4.2', 'redis>=2.10,<2.11'],
         'stripe': ['stripe>=1.22,<1.23']
     },
 
