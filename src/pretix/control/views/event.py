@@ -96,7 +96,8 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
         from pretix.base.plugins import get_all_plugins
 
         context = super().get_context_data(*args, **kwargs)
-        context['plugins'] = [p for p in get_all_plugins() if not p.name.startswith('.')]
+        context['plugins'] = [p for p in get_all_plugins() if not p.name.startswith('.')
+                              if getattr(p, 'visible', True)]
         context['plugins_active'] = self.object.get_plugins()
         return context
 

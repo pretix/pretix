@@ -6,6 +6,7 @@ import django.conf.locale
 from django.contrib.messages import constants as messages  # NOQA
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _  # NOQA
+from pkg_resources import iter_entry_points
 
 config = configparser.ConfigParser()
 config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
@@ -159,6 +160,9 @@ INSTALLED_APPS = [
     'pretix.plugins.pretixdroid',
     'easy_thumbnails'
 ]
+
+for entry_point in iter_entry_points(group='pretix.plugin', name=None):
+    INSTALLED_APPS.append(entry_point.module_name)
 
 MIDDLEWARE_CLASSES = [
     'pretix.multidomain.middlewares.MultiDomainMiddleware',
