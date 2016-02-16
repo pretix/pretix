@@ -1,3 +1,7 @@
+import importlib
+import importlib.util
+
+from django.apps import apps
 from django.conf.urls import include, url
 from django.views.generic import TemplateView
 
@@ -14,5 +18,18 @@ presale_patterns_main = [
     ], namespace='presale'))
 ]
 
+raw_plugin_patterns = []
+for app in apps.get_app_configs():
+    if hasattr(app, 'PretixPluginMeta'):
+        if importlib.util.find_spec(app.name + '.maindomain_urls'):
+            urlmod = importlib.import_module(app.name + '.maindomain_urls')
+            raw_plugin_patterns.append(
+                url(r'', include(urlmod, namespace=app.label))
+            )
+
+plugin_patterns = [
+    url(r'', include(raw_plugin_patterns, namespace='plugins'))
+]
+
 # The presale namespace comes last, because it contains a wildcard catch
-urlpatterns = common_patterns + presale_patterns_main
+urlpatterns = common_patterns + plugin_patterns + presale_patterns_main
