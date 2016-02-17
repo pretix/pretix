@@ -1,4 +1,4 @@
-from django.core.urlresolvers import resolve
+from django.core.urlresolvers import Resolver404, resolve
 
 from .signals import html_head
 
@@ -7,7 +7,10 @@ def contextprocessor(request):
     """
     Adds data to all template contexts
     """
-    url = resolve(request.path_info)
+    try:
+        url = resolve(request.path_info)
+    except Resolver404:
+        return {}
     if url.namespace != 'presale':
         return {}
 

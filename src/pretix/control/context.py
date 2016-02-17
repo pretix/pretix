@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.urlresolvers import get_script_prefix, resolve
+from django.core.urlresolvers import Resolver404, get_script_prefix, resolve
 
 from .signals import html_head, nav_event
 
@@ -8,7 +8,11 @@ def contextprocessor(request):
     """
     Adds data to all template contexts
     """
-    url = resolve(request.path_info)
+    try:
+        url = resolve(request.path_info)
+    except Resolver404:
+        return {}
+
     if not request.path.startswith(get_script_prefix() + 'control'):
         return {}
     ctx = {
