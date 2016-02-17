@@ -271,7 +271,7 @@ COMPRESS_PRECOMPILERS = (
     ('text/less', 'pretix.helpers.lessabsolutefilter.LessFilter'),
 )
 
-COMPRESS_ENABLED = COMPRESS_OFFLINE = not DEBUG
+COMPRESS_ENABLED = COMPRESS_OFFLINE = not debug_fallback
 
 COMPRESS_CSS_FILTERS = (
     'compressor.filters.css_default.CssAbsoluteFilter',
