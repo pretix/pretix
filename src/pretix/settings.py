@@ -280,8 +280,16 @@ COMPRESS_CSS_FILTERS = (
 
 # Debug toolbar
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
+
+
+def show_toolbar(request):
+    from debug_toolbar.middleware import show_toolbar
+    return show_toolbar(request) or request.user.is_superuser
+
+
 DEBUG_TOOLBAR_CONFIG = {
-    'JQUERY_URL': ''
+    'JQUERY_URL': '',
+    "SHOW_TOOLBAR_CALLBACK": show_toolbar,
 }
 
 INTERNAL_IPS = ('127.0.0.1', '::1')
