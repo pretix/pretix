@@ -13,7 +13,7 @@ from .organizer import Organizer, OrganizerPermission, OrganizerSetting
 from .vouchers import Voucher
 
 __all__ = [
-    'Versionable', 'User', 'CachedFile', 'Organizer', 'OrganizerPermission', 'Event', 'EventPermission',
+    'User', 'CachedFile', 'Organizer', 'OrganizerPermission', 'Event', 'EventPermission',
     'ItemCategory', 'Item', 'Property', 'PropertyValue', 'ItemVariation', 'VariationsField', 'Question',
     'BaseRestriction', 'Quota', 'Order', 'CachedTicket', 'QuestionAnswer', 'AbstractPosition', 'OrderPosition',
     'CartPosition', 'EventSetting', 'OrganizerSetting', 'EventLock', 'cachedfile_name', 'itempicture_upload_to',
