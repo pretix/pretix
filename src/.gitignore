@@ -3,4 +3,7 @@ pretix.cfg
 *.sqlite
 .cache
 static.dist/
+build/
+dist/
+*.egg-info/
 
