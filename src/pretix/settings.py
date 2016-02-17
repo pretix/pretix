@@ -262,7 +262,7 @@ STATICFILES_FINDERS = (
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
-]
+] if os.path.exists(os.path.join(BASE_DIR, 'static')) else []
 
 # if os.path.exists(os.path.join(DATA_DIR, 'static')):
 #     STATICFILES_DIRS.insert(0, os.path.join(DATA_DIR, 'static'))
