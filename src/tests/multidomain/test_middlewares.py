@@ -64,8 +64,8 @@ def test_event_on_custom_domain_only_with_wrong_organizer(env, client):
         date_from=now()
     )
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
-    with pytest.raises(Http404):
-        client.get('/dummy/1234/', HTTP_HOST='foobar')
+    r = client.get('/dummy/1234/', HTTP_HOST='foobar')
+    assert r.status_code == 404
 
 
 @pytest.mark.django_db
