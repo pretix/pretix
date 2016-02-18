@@ -42,14 +42,16 @@ else:
 debug_fallback = "runserver" in sys.argv
 DEBUG = config.getboolean('django', 'debug', fallback=debug_fallback)
 
+db_backend = config.get('database', 'backend', fallback='sqlite3')
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.' + config.get('database', 'backend', fallback='sqlite3'),
+        'ENGINE': 'django.db.backends.' + db_backend,
         'NAME': config.get('database', 'name', fallback=os.path.join(DATA_DIR, 'db.sqlite3')),
         'USER': config.get('database', 'user', fallback=''),
         'PASSWORD': config.get('database', 'password', fallback=''),
         'HOST': config.get('database', 'host', fallback=''),
-        'PORT': config.get('database', 'port', fallback='')
+        'PORT': config.get('database', 'port', fallback=''),
+        'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120
     }
 }
 
