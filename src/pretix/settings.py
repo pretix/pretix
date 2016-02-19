@@ -188,6 +188,10 @@ try:
 except ImportError:
     pass
 
+# Security settings
+X_FRAME_OPTIONS = 'DENY'
+
+# URL settings
 ROOT_URLCONF = 'pretix.multidomain.maindomain_urlconf'
 
 WSGI_APPLICATION = 'pretix.wsgi.application'
