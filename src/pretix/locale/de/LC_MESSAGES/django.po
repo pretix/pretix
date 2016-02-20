@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-18 13:40+0000\n"
-"PO-Revision-Date: 2016-02-18 14:49+0100\n"
+"POT-Creation-Date: 2016-02-20 14:56+0000\n"
+"PO-Revision-Date: 2016-02-20 15:57+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -226,7 +226,7 @@ msgid "Event"
 msgstr "Veranstaltung"
 
 #: pretix/base/models/event.py:97
-#: pretix/control/templates/pretixcontrol/base.html:97
+#: pretix/control/templates/pretixcontrol/base.html:98
 #: pretix/control/templates/pretixcontrol/events/index.html:3
 #: pretix/control/templates/pretixcontrol/events/index.html:5
 msgid "Events"
@@ -506,7 +506,7 @@ msgid "Date"
 msgstr "Datum"
 
 #: pretix/base/models/orders.py:105 pretix/base/models/orders.py:443
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:18
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:23
 msgid "Expiration date"
 msgstr "Ablaufdatum"
 
@@ -614,7 +614,7 @@ msgid "Organizer"
 msgstr "Veranstalter"
 
 #: pretix/base/models/organizer.py:44
-#: pretix/control/templates/pretixcontrol/base.html:103
+#: pretix/control/templates/pretixcontrol/base.html:104
 #: pretix/control/templates/pretixcontrol/organizers/index.html:3
 #: pretix/control/templates/pretixcontrol/organizers/index.html:5
 msgid "Organizers"
@@ -1012,7 +1012,7 @@ msgid "We are preparing your file for download…"
 msgstr "Wir bereiten Ihre Datei zum Download vor…"
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:21
-#: pretix/presale/templates/pretixpresale/base.html:42
+#: pretix/presale/templates/pretixpresale/base.html:43
 #: pretix/presale/templates/pretixpresale/waiting.html:24
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
@@ -1378,8 +1378,8 @@ msgid "You do not have permission to view this content."
 msgstr "Sie haben keine Berechtigung, diese Inhalte aufzurufen."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:29
-#: pretix/control/templates/pretixcontrol/base.html:125
-#: pretix/presale/templates/pretixpresale/base.html:30
+#: pretix/control/templates/pretixcontrol/base.html:126
+#: pretix/presale/templates/pretixpresale/base.html:31
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
 msgstr "powered by <a %(a_attr)s>pretix</a>"
@@ -1438,21 +1438,21 @@ msgstr "Neuen Benutzer erstellen"
 msgid "Login"
 msgstr "Login"
 
-#: pretix/control/templates/pretixcontrol/base.html:29
+#: pretix/control/templates/pretixcontrol/base.html:30
 msgid "Toggle navigation"
 msgstr "Navigation umschalten"
 
-#: pretix/control/templates/pretixcontrol/base.html:48
-#: pretix/control/templates/pretixcontrol/base.html:75
+#: pretix/control/templates/pretixcontrol/base.html:49
+#: pretix/control/templates/pretixcontrol/base.html:76
 msgid "Event overview"
 msgstr "Überblick"
 
-#: pretix/control/templates/pretixcontrol/base.html:66
-#: pretix/control/templates/pretixcontrol/base.html:68
+#: pretix/control/templates/pretixcontrol/base.html:67
+#: pretix/control/templates/pretixcontrol/base.html:69
 msgid "Log out"
 msgstr "Abmelden"
 
-#: pretix/control/templates/pretixcontrol/base.html:91
+#: pretix/control/templates/pretixcontrol/base.html:92
 #: pretix/control/templates/pretixcontrol/dashboard.html:3
 #: pretix/control/templates/pretixcontrol/dashboard.html:5
 #: pretix/control/templates/pretixcontrol/event/base.html:9
@@ -3091,30 +3091,36 @@ msgid "Card number"
 msgstr "Kreditkartennummer"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:9
+msgid "For a credit card payment, please turn on JavaScript."
+msgstr ""
+"Bitte aktivieren Sie JavaScript in Ihrem Browser, um mit Kreditkarte "
+"bezahlen zu können."
+
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:14
 msgid "Credit card number"
 msgstr "Kreditkartennummer"
 
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:22
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:27
 msgid "Month"
 msgstr "Monat"
 
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:27
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:32
 msgid "Year"
 msgstr "Jahr"
 
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:33
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:38
 msgid "Security code (CVC)"
 msgstr "Sicherheitscode (CVC)"
 
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:37
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:42
 msgid "123"
 msgstr "123"
 
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:43
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:48
 msgid "Cardholder name"
 msgstr "Karteninhaber"
 
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:50
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:55
 msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
@@ -3167,7 +3173,7 @@ msgstr ""
 msgid "Unknown reason"
 msgstr "Unbekannter Grund"
 
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/presale_head.html:11
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/presale_head.html:10
 msgid "Contacting Stripe…"
 msgstr "Kontaktiere Stripe…"
 
@@ -3300,8 +3306,8 @@ msgstr ""
 "Die ausgewählte Veranstaltung oder der gesuchte Veranstalter wurde nicht "
 "gefunden."
 
-#: pretix/presale/templates/pretixpresale/base.html:36
-#: pretix/presale/templates/pretixpresale/base.html:40
+#: pretix/presale/templates/pretixpresale/base.html:37
+#: pretix/presale/templates/pretixpresale/base.html:41
 #: pretix/presale/templates/pretixpresale/waiting.html:21
 msgid "We are processing your request…"
 msgstr "Wir verarbeiten Ihre Anfrage…"
@@ -3432,6 +3438,7 @@ msgid "Show variants"
 msgstr "Varianten zeigen"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:165
+#: pretix/presale/templates/pretixpresale/event/index.html:175
 msgid "Redeem a voucher"
 msgstr "Gutschein einlösen"
 
@@ -3611,15 +3618,15 @@ msgstr "Sie können diese Bestellung nicht stornieren"
 msgid "Ticket download is not (yet) enabled."
 msgstr "Der Ticket-Download ist (noch) nicht freigeschaltet."
 
-#: pretix/settings.py:204
+#: pretix/settings.py:208
 msgid "English"
 msgstr "Englisch"
 
-#: pretix/settings.py:205
+#: pretix/settings.py:209
 msgid "German"
 msgstr "Deutsch"
 
-#: pretix/settings.py:206
+#: pretix/settings.py:210
 msgid "German (informal)"
 msgstr "Deutsch (Du)"
 

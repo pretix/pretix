@@ -4,6 +4,11 @@
     <div class="stripe-errors sr-only">
 
     </div>
+    <noscript>
+        <div class="alert alert-warning">
+            {% trans "For a credit card payment, please turn on JavaScript." %}
+        </div>
+    </noscript>
     <div class="form-group stripe-number">
         <label class="control-label col-sm-2">
             {% trans "Credit card number" %}

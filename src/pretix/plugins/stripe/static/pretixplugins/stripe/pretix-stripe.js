@@ -1,5 +1,7 @@
+/*global $, stripe_pubkey, stripe_loadingmessage */
 'use strict';
 
+var Stripe = null;
 var pretixstripe = {
     'validate_number': function () {
         var numb = $("#stripe_number").val();
@@ -50,7 +52,7 @@ var pretixstripe = {
                 cvc: $('#stripe_cvc').val(),
                 exp_month: $('#stripe_exp_month').val(),
                 exp_year: $('#stripe_exp_year').val(),
-                name: $('#stripe_name').val(),
+                name: $('#stripe_name').val()
             },
             pretixstripe.response
         );
@@ -71,11 +73,35 @@ var pretixstripe = {
             // and submit
             $form.get(0).submit();
         }
+    },
+    'load': function () {
+        $.ajax(
+            {
+                url: 'https://js.stripe.com/v2/',
+                dataType: 'script',
+                success: function () {
+                    Stripe.setPublishableKey(stripe_pubkey);
+                }
+            }
+        );
     }
 };
-$(function() {
+$(function () {
     if (!$("#stripe_number").length) // Not on the checkout page
         return;
+
+    if ($("input[name=payment][value=stripe]").is(':checked')) {
+        pretixstripe.load();
+    } else {
+        $("input[name=payment]").change(function() {
+            if ($(this).val() == 'stripe') {
+                pretixstripe.load();
+            }
+        })
+    }
+
+    // Stripe.setPublishableKey('{{ settings.publishable_key }}');
+    // <script type="text/javascript" src=""></script>
 
     $("#stripe_number").change(pretixstripe.validate_number).keydown(pretixstripe.validate_number)
         .keyup(pretixstripe.validate_number);
@@ -86,7 +112,7 @@ $(function() {
     $("#stripe_number").parents("form").submit(
         function () {
             if (($("input[name=payment][value=stripe]").prop('checked') || $("input[name=payment]").length === 0)
-                 && $("#stripe_token").val() == "") {
+                && $("#stripe_token").val() == "") {
                 pretixstripe.request();
                 return false;
             }
