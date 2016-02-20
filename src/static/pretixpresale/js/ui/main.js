@@ -14,6 +14,7 @@ $(function () {
     $(".collapsed").removeClass("collapsed").addClass("collapse");
 
     $("#voucher-box").hide();
+    $("#voucher-toggle").show();
     $("#voucher-toggle a").click(function () {
         $("#voucher-box").slideDown();
         $("#voucher-toggle").slideUp();
