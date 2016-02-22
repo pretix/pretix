@@ -214,9 +214,9 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
 
     @cached_property
     def invoice_address(self):
-        if self.order.invoice_address:
+        try:
             return self.order.invoice_address
-        else:
+        except InvoiceAddress.DoesNotExist:
             return InvoiceAddress(order=self.order)
 
     @cached_property
