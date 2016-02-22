@@ -74,6 +74,20 @@ def base_widgets(sender, **kwargs):
     ]
 
 
+@receiver(signal=event_dashboard_widgets)
+def quota_widgets(sender, **kwargs):
+    widgets = []
+    for q in sender.quotas.all():
+        status, left = q.availability()
+        widgets.append({
+            'content': NUM_WIDGET.format(num='{}/{}'.format(left, q.size) if q.size is not None else '\u221e',
+                                         text=_('{quota} left').format(quota=q.name)),
+            'width': 3,
+            'priority': 50,
+        })
+    return widgets
+
+
 def index(request, organizer, event):
     widgets = []
     for r, result in event_dashboard_widgets.send(sender=request.event):

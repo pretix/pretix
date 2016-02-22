@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-22 12:43+0000\n"
-"PO-Revision-Date: 2016-02-22 13:45+0100\n"
+"POT-Creation-Date: 2016-02-22 15:29+0000\n"
+"PO-Revision-Date: 2016-02-22 16:30+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: pretix/base/forms/__init__.py:47
 msgid "disabled"
@@ -135,7 +135,7 @@ msgstr "Zeitzone"
 #: pretix/control/templates/pretixcontrol/event/permissions.html:15
 #: pretix/control/templates/pretixcontrol/order/index.html:69
 #: pretix/control/templates/pretixcontrol/orders/index.html:43
-#: pretix/control/views/event.py:370 tests/base/test_mail.py:68
+#: pretix/control/views/event.py:344
 msgid "User"
 msgstr "Benutzer"
 
@@ -229,7 +229,7 @@ msgid "Event"
 msgstr "Veranstaltung"
 
 #: pretix/base/models/event.py:97
-#: pretix/control/templates/pretixcontrol/base.html:98
+#: pretix/control/templates/pretixcontrol/base.html:99
 #: pretix/control/templates/pretixcontrol/events/index.html:3
 #: pretix/control/templates/pretixcontrol/events/index.html:5
 msgid "Events"
@@ -654,7 +654,7 @@ msgid "Organizer"
 msgstr "Veranstalter"
 
 #: pretix/base/models/organizer.py:44
-#: pretix/control/templates/pretixcontrol/base.html:104
+#: pretix/control/templates/pretixcontrol/base.html:105
 #: pretix/control/templates/pretixcontrol/organizers/index.html:3
 #: pretix/control/templates/pretixcontrol/organizers/index.html:5
 msgid "Organizers"
@@ -1437,7 +1437,7 @@ msgid "You do not have permission to view this content."
 msgstr "Sie haben keine Berechtigung, diese Inhalte aufzurufen."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:29
-#: pretix/control/templates/pretixcontrol/base.html:126
+#: pretix/control/templates/pretixcontrol/base.html:127
 #: pretix/presale/templates/pretixpresale/base.html:31
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
@@ -1497,21 +1497,21 @@ msgstr "Neuen Benutzer erstellen"
 msgid "Login"
 msgstr "Login"
 
-#: pretix/control/templates/pretixcontrol/base.html:30
+#: pretix/control/templates/pretixcontrol/base.html:31
 msgid "Toggle navigation"
 msgstr "Navigation umschalten"
 
-#: pretix/control/templates/pretixcontrol/base.html:49
-#: pretix/control/templates/pretixcontrol/base.html:76
+#: pretix/control/templates/pretixcontrol/base.html:50
+#: pretix/control/templates/pretixcontrol/base.html:77
 msgid "Event overview"
 msgstr "Überblick"
 
-#: pretix/control/templates/pretixcontrol/base.html:67
-#: pretix/control/templates/pretixcontrol/base.html:69
+#: pretix/control/templates/pretixcontrol/base.html:68
+#: pretix/control/templates/pretixcontrol/base.html:70
 msgid "Log out"
 msgstr "Abmelden"
 
-#: pretix/control/templates/pretixcontrol/base.html:92
+#: pretix/control/templates/pretixcontrol/base.html:93
 #: pretix/control/templates/pretixcontrol/dashboard.html:3
 #: pretix/control/templates/pretixcontrol/dashboard.html:5
 #: pretix/control/templates/pretixcontrol/event/base.html:9
@@ -1587,35 +1587,6 @@ msgstr "Überblick"
 msgid "Export"
 msgstr "Export"
 
-#: pretix/control/templates/pretixcontrol/event/index.html:16
-msgid "Tickets sold"
-msgstr "Tickets verkauft"
-
-#: pretix/control/templates/pretixcontrol/event/index.html:22
-#: pretix/control/templates/pretixcontrol/event/index.html:66
-msgid "Orders overview"
-msgstr "Bestellübersicht"
-
-#: pretix/control/templates/pretixcontrol/event/index.html:38
-msgid "Total items ordered"
-msgstr "Produkte bestellt"
-
-#: pretix/control/templates/pretixcontrol/event/index.html:44
-msgid "View all orders"
-msgstr "Alle Bestellungen"
-
-#: pretix/control/templates/pretixcontrol/event/index.html:60
-msgid "Total Revenue"
-msgstr "Gesamtumsatz"
-
-#: pretix/control/templates/pretixcontrol/event/index.html:82
-msgid "Active Products"
-msgstr "Aktive Produkte"
-
-#: pretix/control/templates/pretixcontrol/event/index.html:88
-msgid "View details"
-msgstr "Details anzeigen"
-
 #: pretix/control/templates/pretixcontrol/event/mail.html:9
 msgid "E-mail settings"
 msgstr "E-Mail-Einstellungen"
@@ -1678,9 +1649,9 @@ msgid "Installed plugins"
 msgstr "Installierte Erweiterungen"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:11
-#: pretix/control/views/event.py:69 pretix/control/views/event.py:126
-#: pretix/control/views/event.py:195 pretix/control/views/event.py:252
-#: pretix/control/views/event.py:308 pretix/control/views/event.py:441
+#: pretix/control/views/event.py:66 pretix/control/views/event.py:123
+#: pretix/control/views/event.py:192 pretix/control/views/event.py:249
+#: pretix/control/views/event.py:305 pretix/control/views/event.py:415
 #: pretix/control/views/item.py:137 pretix/control/views/item.py:296
 #: pretix/control/views/item.py:425 pretix/control/views/item.py:506
 #: pretix/control/views/item.py:535 pretix/control/views/item.py:596
@@ -2352,12 +2323,12 @@ msgstr ""
 msgid "You can now login using your new password."
 msgstr "Sie können sich nun mit Ihrem neuen Passwort anmelden."
 
-#: pretix/control/views/event.py:245
+#: pretix/control/views/event.py:242
 #, python-format
 msgid "An error occured while contacting the SMTP server: %s"
 msgstr "Ein Fehler trat auf beim Versuch, den SMTP-Server zu erreichen: %s"
 
-#: pretix/control/views/event.py:247
+#: pretix/control/views/event.py:244
 msgid ""
 "Your changes have been saved and the connection attempt to your SMTP server "
 "was successful."
@@ -2365,22 +2336,44 @@ msgstr ""
 "Ihre Änderungen wurden gespeichert und die Verbindung zum SMTP-Server war "
 "erfolgreich."
 
-#: pretix/control/views/event.py:411
+#: pretix/control/views/event.py:385
 msgid "There is no user with the email address you entered."
 msgstr ""
 "Es existiert kein Benutzer mit der E-Mail-Adresse, die Sie eingegeben haben."
 
-#: pretix/control/views/event.py:416
+#: pretix/control/views/event.py:390
 msgid "This user already has permissions for this event."
 msgstr "Dieser Benutzer hat bereits Zugriff auf diese Veranstaltung."
 
-#: pretix/control/views/event.py:437
+#: pretix/control/views/event.py:411
 msgid "You cannot remove your own permission to view this page."
 msgstr "Sie können Ihre eigene Berechtigung nicht entfernen."
 
-#: pretix/control/views/event.py:444
+#: pretix/control/views/event.py:418
 msgid "Your changes could not be saved."
 msgstr "Die Änderungen konnten nicht gespeichert werden."
+
+#: pretix/control/views/event_dashboard.py:38
+msgid "Attendees (ordered)"
+msgstr "Teilnehmer (bestellt)"
+
+#: pretix/control/views/event_dashboard.py:47
+msgid "Attendees (paid)"
+msgstr "Teilnehmer (bezahlt)"
+
+#: pretix/control/views/event_dashboard.py:57
+#, python-brace-format
+msgid "Total revenue ({currency})"
+msgstr "Gesamtumsatz ({currency})"
+
+#: pretix/control/views/event_dashboard.py:66
+msgid "Active products"
+msgstr "Aktive Produkte"
+
+#: pretix/control/views/event_dashboard.py:84
+#, python-brace-format
+msgid "{quota} left"
+msgstr "{quota} übrig"
 
 #: pretix/control/views/item.py:53 pretix/control/views/item.py:635
 msgid "The requested product does not exist."
@@ -3724,6 +3717,21 @@ msgstr "Deutsch"
 #: pretix/settings.py:210
 msgid "German (informal)"
 msgstr "Deutsch (Du)"
+
+#~ msgid "Tickets sold"
+#~ msgstr "Tickets verkauft"
+
+#~ msgid "Orders overview"
+#~ msgstr "Bestellübersicht"
+
+#~ msgid "View all orders"
+#~ msgstr "Alle Bestellungen"
+
+#~ msgid "Total Revenue"
+#~ msgstr "Gesamtumsatz"
+
+#~ msgid "View details"
+#~ msgstr "Details anzeigen"
 
 #~ msgid ""
 #~ "Hello,\n"
