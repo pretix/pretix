@@ -10,6 +10,7 @@ from pretix.base.i18n import LazyDate, LazyNumber
 from pretix.base.models import (
     CartPosition, Event, EventLock, Order, OrderPosition, Quota, User,
 )
+from pretix.base.models.orders import InvoiceAddress
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.mail import mail
 from pretix.base.signals import (
@@ -216,7 +217,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], dt: d
 
 
 def _perform_order(event: str, payment_provider: str, position_ids: List[str],
-                   email: str, locale: str):
+                   email: str, locale: str, address: int):
     event = Event.objects.get(id=event)
     responses = register_payment_providers.send(event)
     pprov = None
@@ -236,6 +237,18 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
         _check_positions(event, dt, positions)
         order = _create_order(event, email, positions, dt, pprov,
                               locale=locale)
+
+    if address is not None:
+        try:
+            addr = InvoiceAddress.objects.get(
+                pk=address
+            )
+            if addr.order is not None:
+                addr.pk = None
+            addr.order = order
+            addr.save()
+        except InvoiceAddress.DoesNotExist:
+            pass
 
     mail(
         order.email, _('Your order: %(code)s') % {'code': order.code},
@@ -257,9 +270,9 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
 
 
 def perform_order(event: str, payment_provider: str, positions: List[str],
-                  email: str=None, locale: str=None):
+                  email: str=None, locale: str=None, address: int=None):
     try:
-        return _perform_order(event, payment_provider, positions, email, locale)
+        return _perform_order(event, payment_provider, positions, email, locale, address)
     except EventLock.LockTimeoutException:
         # Is raised when there are too many threads asking for event locks and we were
         # unable to get one
@@ -271,9 +284,9 @@ if settings.HAS_CELERY:
 
     @app.task(bind=True, max_retries=5, default_retry_delay=2)
     def perform_order_task(self, event: str, payment_provider: str, positions: List[str],
-                           email: str=None, locale: str=None):
+                           email: str=None, locale: str=None, address: int=None):
         try:
-            return _perform_order(event, payment_provider, positions, email, locale)
+            return _perform_order(event, payment_provider, positions, email, locale, address)
         except EventLock.LockTimeoutException:
             self.retry(exc=OrderError(error_messages['busy']))
 

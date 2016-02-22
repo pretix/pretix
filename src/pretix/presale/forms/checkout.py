@@ -1,11 +1,40 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Question
+from pretix.base.models.orders import InvoiceAddress
 
 
 class ContactForm(forms.Form):
     email = forms.EmailField(label=_('E-mail'))
+
+
+class InvoiceAddressForm(forms.ModelForm):
+
+    class Meta:
+        model = InvoiceAddress
+        fields = ('company', 'name', 'street', 'zipcode', 'city', 'country', 'phone', 'vat_id')
+        widgets = {
+            'street': forms.Textarea(attrs={'rows': 2, 'placeholder': _('Street and Number')}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.event = event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+        if not event.settings.invoice_address_vatid:
+            del self.fields['vat_id']
+        if not event.settings.invoice_address_required:
+            for k, f in self.fields.items():
+                f.required = False
+                f.widget.is_required = False
+                if 'required' in f.widget.attrs:
+                    del f.widget.attrs['required']
+
+    def clean(self):
+        data = self.cleaned_data
+        if not data['name'] and not data['company'] and self.event.settings.invoice_address_required:
+            raise ValidationError(_('You need to provide either a company name or your name.'))
 
 
 class QuestionsForm(forms.Form):

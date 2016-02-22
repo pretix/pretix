@@ -3,6 +3,7 @@ import string
 from datetime import datetime
 from decimal import Decimal
 
+from django import forms
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -461,3 +462,16 @@ class CartPosition(AbstractPosition):
         if not self.tax_rate:
             return Decimal('0.00')
         return round_decimal(self.price * (1 - 100 / (100 + self.item.tax_rate)))
+
+
+class InvoiceAddress(models.Model):
+    last_modified = models.DateTimeField(auto_now=True)
+    order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address')
+    company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
+    name = models.CharField(max_length=255, verbose_name=_('Name'), blank=True)
+    street = models.TextField(verbose_name=_('Address'), blank=False)
+    zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=False)
+    city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)
+    country = models.CharField(max_length=255, verbose_name=_('Country'), blank=False)
+    phone = models.CharField(max_length=255, blank=True, verbose_name=_('Phone number'))
+    vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'))

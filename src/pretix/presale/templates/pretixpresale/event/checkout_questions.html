@@ -22,6 +22,22 @@
                     </div>
                 </div>
             </div>
+            {% if event.settings.invoice_address_asked %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#invoice" data-parent="#questions_accordion">
+                                <strong>{% trans "Invoice information" %}</strong>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="invoice" class="panel-collapse collapsed in">
+                        <div class="panel-body">
+                            {% bootstrap_form invoice_form layout="horizontal" %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
             {% for form in forms %}
                 <div class="panel panel-default">
                     <div class="panel-heading">

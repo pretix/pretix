@@ -37,26 +37,63 @@
                 </div>
             </div>
         </div>
-        <div class="row-fluid">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    {% if payment_provider.identifier != "free" %}
-                        <div class="pull-right">
-                            <a href="{% eventurl request.event "presale:event.checkout" step="payment" %}">
-                                <span class="fa fa-edit"></span>
-                                {% trans "Modify" %}
-                            </a>
-                        </div>
-                    {% endif %}
-                    <h3 class="panel-title">
-                        {% trans "Payment" %}
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    {{ payment }}
-                </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                {% if payment_provider.identifier != "free" %}
+                    <div class="pull-right">
+                        <a href="{% eventurl request.event "presale:event.checkout" step="payment" %}">
+                            <span class="fa fa-edit"></span>
+                            {% trans "Modify" %}
+                        </a>
+                    </div>
+                {% endif %}
+                <h3 class="panel-title">
+                    {% trans "Payment" %}
+                </h3>
             </div>
-            <div class="row-fluid">
+            <div class="panel-body">
+                {{ payment }}
+            </div>
+        </div>
+        <div class="row">
+            {% if request.event.settings.invoice_address_asked %}
+                <div class="col-md-6 col-xs-12">
+                    <div class="panel panel-primary panel-contact">
+                        <div class="panel-heading">
+                            <div class="pull-right">
+                                <a href="{% eventurl request.event "presale:event.checkout" step="questions" %}">
+                                    <span class="fa fa-edit"></span>
+                                    {% trans "Modify" %}
+                                </a>
+                            </div>
+                            <h3 class="panel-title">
+                                {% trans "Invoice information" %}
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <dl class="dl-horizontal">
+                                <dt>{% trans "Company" %}</dt>
+                                <dd>{{ addr.company }}</dd>
+                                <dt>{% trans "Name" %}</dt>
+                                <dd>{{ addr.name }}</dd>
+                                <dt>{% trans "Address" %}</dt>
+                                <dd>{{ addr.street|linebreaksbr }}</dd>
+                                <dt>{% trans "ZIP code and city" %}</dt>
+                                <dd>{{ addr.zipcode }} {{ addr.city }}</dd>
+                                <dt>{% trans "Country" %}</dt>
+                                <dd>{{ addr.country }}</dd>
+                                <dt>{% trans "Phone" %}</dt>
+                                <dd>{{ addr.phone }}</dd>
+                                {% if request.event.settings.invoice_address_vatid %}
+                                    <dt>{% trans "VAT ID" %}</dt>
+                                    <dd>{{ addr.vat_id }}</dd>
+                                {% endif %}
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="{% if request.event.settings.invoice_address_asked %}col-md-6{% endif %} col-xs-12">
                 <div class="panel panel-primary panel-contact">
                     <div class="panel-heading">
                         <div class="pull-right">
@@ -77,20 +114,20 @@
                     </div>
                 </div>
             </div>
-            <div class="row checkout-button-row">
-                <div class="col-md-4">
-                    <a class="btn btn-block btn-default btn-lg"
-                            href="{{ prev_url }}">
-                        {% trans "Go back" %}
-                    </a>
-                </div>
-                <div class="col-md-4 col-md-offset-4">
-                    <button class="btn btn-block btn-primary btn-lg" type="submit">
-                        {% trans "Place binding order" %}
-                    </button>
-                </div>
-                <div class="clearfix"></div>
+        </div>
+        <div class="row checkout-button-row clearfix">
+            <div class="col-md-4">
+                <a class="btn btn-block btn-default btn-lg"
+                        href="{{ prev_url }}">
+                    {% trans "Go back" %}
+                </a>
             </div>
+            <div class="col-md-4 col-md-offset-4">
+                <button class="btn btn-block btn-primary btn-lg" type="submit">
+                    {% trans "Place binding order" %}
+                </button>
+            </div>
+            <div class="clearfix"></div>
         </div>
     </form>
 {% endblock %}

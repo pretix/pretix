@@ -91,6 +91,43 @@
             {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=False %}
         </div>
     </div>
+    {% if request.event.settings.invoice_address_asked %}
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                {% if order.can_modify_answers %}
+                    <div class="pull-right">
+                        <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}">
+                            <span class="fa fa-edit"></span>
+                            {% trans "Change details" %}
+                        </a>
+                    </div>
+                {% endif %}
+                <h3 class="panel-title">
+                    {% trans "Invoice information" %}
+                </h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>{% trans "Company" %}</dt>
+                    <dd>{{ order.invoice_address.company }}</dd>
+                    <dt>{% trans "Name" %}</dt>
+                    <dd>{{ order.invoice_address.name }}</dd>
+                    <dt>{% trans "Address" %}</dt>
+                    <dd>{{ order.invoice_address.street|linebreaksbr }}</dd>
+                    <dt>{% trans "ZIP code and city" %}</dt>
+                    <dd>{{ order.invoice_address.zipcode }} {{ addr.city }}</dd>
+                    <dt>{% trans "Country" %}</dt>
+                    <dd>{{ order.invoice_address.country }}</dd>
+                    <dt>{% trans "Phone" %}</dt>
+                    <dd>{{ order.invoice_address.phone }}</dd>
+                    {% if request.event.settings.invoice_address_vatid %}
+                        <dt>{% trans "VAT ID" %}</dt>
+                        <dd>{{ order.invoice_address.vat_id }}</dd>
+                    {% endif %}
+                </dl>
+            </div>
+        </div>
+    {% endif %}
     {% if order.status == "n" %}
         <div class="row">
             <div class="col-md-12 text-right">

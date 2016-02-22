@@ -130,6 +130,19 @@ class EventSettingsForm(SettingsForm):
         help_text=_("Require customers to fill in the names of all attendees."),
         required=False
     )
+    invoice_address_asked = forms.BooleanField(
+        label=_("Ask for invoice address"),
+        required=False
+    )
+    invoice_address_required = forms.BooleanField(
+        label=_("Require invoice address"),
+        required=False
+    )
+    invoice_address_vatid = forms.BooleanField(
+        label=_("Ask for VAT ID"),
+        help_text=_("Does only work if an invoice address is asked for. VAT ID is not required."),
+        required=False
+    )
     max_items_per_order = forms.IntegerField(
         min_value=1,
         label=_("Maximum number of items per order")

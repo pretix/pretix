@@ -25,6 +25,18 @@ DEFAULTS = {
         'default': 'False',
         'type': bool
     },
+    'invoice_address_asked': {
+        'default': 'True',
+        'type': bool,
+    },
+    'invoice_address_required': {
+        'default': 'False',
+        'type': bool,
+    },
+    'invoice_address_vatid': {
+        'default': 'False',
+        'type': bool,
+    },
     'reservation_time': {
         'default': '30',
         'type': int

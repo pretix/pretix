@@ -11,10 +11,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import TemplateResponseMixin
 
 from pretix.base.models import CartPosition, Order
+from pretix.base.models.orders import InvoiceAddress
 from pretix.base.services.orders import OrderError, perform_order
 from pretix.base.signals import register_payment_providers
 from pretix.multidomain.urlreverse import eventreverse
-from pretix.presale.forms.checkout import ContactForm
+from pretix.presale.forms.checkout import ContactForm, InvoiceAddressForm
 from pretix.presale.signals import checkout_flow_steps
 from pretix.presale.views import CartMixin
 from pretix.presale.views.async import AsyncAction
@@ -139,14 +140,36 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                                'email': self.request.session.get('email', '')
                            })
 
+    @cached_property
+    def invoice_address(self):
+        try:
+            return InvoiceAddress.objects.get(
+                pk=self.request.session.get('invoice_address'),
+                order__isnull=True
+            )
+        except InvoiceAddress.DoesNotExist:
+            return InvoiceAddress()
+
+    @cached_property
+    def invoice_form(self):
+        return InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
+                                  event=self.request.event,
+                                  instance=self.invoice_address)
+
     def post(self, request):
         self.request = request
         failed = not self.save() or not self.contact_form.is_valid()
+        if request.event.settings.invoice_address_asked:
+            failed = failed or not self.invoice_form.is_valid()
         if failed:
             messages.error(request,
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.render()
         request.session['email'] = self.contact_form.cleaned_data['email']
+        if request.event.settings.invoice_address_asked:
+            addr = self.invoice_form.save()
+            request.session['invoice_address'] = addr.pk
+
         return redirect(self.get_next_url(request))
 
     def is_completed(self, request, warn=False):
@@ -183,6 +206,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx = super().get_context_data(**kwargs)
         ctx['forms'] = self.forms
         ctx['contact_form'] = self.contact_form
+        ctx['invoice_form'] = self.invoice_form
         return ctx
 
 
@@ -282,6 +306,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['cart'] = self.get_cart(answers=True)
         ctx['payment'] = self.payment_provider.checkout_confirm_render(self.request)
         ctx['payment_provider'] = self.payment_provider
+        ctx['addr'] = self.invoice_address
         return ctx
 
     @cached_property
@@ -291,6 +316,16 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             provider = response(self.request.event)
             if provider.identifier == self.request.session['payment']:
                 return provider
+
+    @cached_property
+    def invoice_address(self):
+        try:
+            return InvoiceAddress.objects.get(
+                pk=self.request.session.get('invoice_address'),
+                order__isnull=True
+            )
+        except InvoiceAddress.DoesNotExist:
+            return InvoiceAddress()
 
     def get(self, request):
         self.request = request
@@ -302,7 +337,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         self.request = request
         return self.do(self.request.event.id, self.payment_provider.identifier,
                        [p.id for p in self.positions], request.session.get('email'),
-                       translation.get_language())
+                       translation.get_language(), self.invoice_address.pk)
 
     def get_success_message(self, value):
         return None

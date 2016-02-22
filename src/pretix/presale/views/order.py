@@ -10,12 +10,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import CachedFile, CachedTicket, Order, OrderPosition
+from pretix.base.models.orders import InvoiceAddress
 from pretix.base.services.orders import cancel_order
 from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
 from pretix.multidomain.urlreverse import eventreverse
+from pretix.presale.forms.checkout import InvoiceAddressForm
 from pretix.presale.views import CartMixin, EventViewMixin
 from pretix.presale.views.questions import QuestionsViewMixin
 
@@ -210,12 +212,26 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
             'item__questions', 'answers'
         ))
 
+    @cached_property
+    def invoice_address(self):
+        if self.order.invoice_address:
+            return self.order.invoice_address
+        else:
+            return InvoiceAddress(order=self.order)
+
+    @cached_property
+    def invoice_form(self):
+        return InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
+                                  event=self.request.event,
+                                  instance=self.invoice_address)
+
     def post(self, request, *args, **kwargs):
-        failed = not self.save()
+        failed = not self.save() or not self.invoice_form.is_valid()
         if failed:
             messages.error(self.request,
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.get(request, *args, **kwargs)
+        self.invoice_form.save()
         self.order.log_action('pretix.event.order.modified')
         return redirect(self.get_order_url())
 
@@ -236,6 +252,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
         ctx['forms'] = self.forms
+        ctx['invoice_form'] = self.invoice_form
         return ctx
 
 
