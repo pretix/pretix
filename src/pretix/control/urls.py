@@ -1,7 +1,8 @@
 from django.conf.urls import include, url
 
 from pretix.control.views import (
-    auth, event, item, main, orders, organizer, user, vouchers,
+    auth, event, event_dashboard, item, main, orders, organizer, user,
+    vouchers,
 )
 
 urlpatterns = [
@@ -19,7 +20,7 @@ urlpatterns = [
     url(r'^events/add$', main.EventCreateStart.as_view(), name='events.add'),
     url(r'^event/(?P<organizer>[^/]+)/add', main.EventCreate.as_view(), name='events.create'),
     url(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
-        url(r'^$', event.index, name='event.index'),
+        url(r'^$', event_dashboard.index, name='event.index'),
         url(r'^settings/$', event.EventUpdate.as_view(), name='event.settings'),
         url(r'^settings/plugins$', event.EventPlugins.as_view(), name='event.settings.plugins'),
         url(r'^settings/permissions$', event.EventPermissions.as_view(), name='event.settings.permissions'),

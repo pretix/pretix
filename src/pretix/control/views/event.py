@@ -4,9 +4,8 @@ from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.db.models import Sum
 from django.forms import modelformset_factory
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
@@ -14,9 +13,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 
 from pretix.base.forms import I18nModelForm
-from pretix.base.models import (
-    Event, EventPermission, Item, Order, OrderPosition, User,
-)
+from pretix.base.models import Event, EventPermission, User
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
@@ -332,29 +329,6 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
             provider.form.prepare_fields()
             providers.append(provider)
         return providers
-
-
-def index(request, organizer, event):
-    ctx = {
-        'products_active': Item.objects.filter(
-            event=request.event,
-            active=True,
-        ).count(),
-        'tickets_total': OrderPosition.objects.filter(
-            order__event=request.event,
-            item__admission=True
-        ).count(),
-        'tickets_revenue': Order.objects.filter(
-            event=request.event,
-            status=Order.STATUS_PAID,
-        ).aggregate(sum=Sum('total'))['sum'],
-        'tickets_sold': OrderPosition.objects.filter(
-            order__event=request.event,
-            order__status=Order.STATUS_PAID,
-            item__admission=True
-        ).count()
-    }
-    return render(request, 'pretixcontrol/event/index.html', ctx)
 
 
 class EventPermissionForm(I18nModelForm):
