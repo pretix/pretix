@@ -82,6 +82,17 @@ class Forgot(TemplateView):
     def post(self, request, *args, **kwargs):
         if self.form.is_valid():
             user = self.form.cleaned_data['user']
+
+            if settings.HAS_REDIS:
+                from django_redis import get_redis_connection
+                rc = get_redis_connection("redis")
+                if rc.exists('pretix_pwreset_%s' % (user.id)):
+                    user.log_action('pretix.control.auth.user.forgot_password.denied.repeated')
+                    messages.error(request, _('We already sent you an email in the last 24 hours.'))
+                    return redirect('control:auth.forgot')
+                else:
+                    rc.setex('pretix_pwreset_%s' % (user.id), 3600 * 24, '1')
+
             mail(
                 user.email, _('Password recovery'), 'pretixcontrol/email/forgot.txt',
                 {
