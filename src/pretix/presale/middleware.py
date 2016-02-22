@@ -1,11 +1,12 @@
 from urllib.parse import urljoin
 
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import resolve
 from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Event, Organizer
+from pretix.base.models import Event, EventPermission, Organizer
 from pretix.multidomain.urlreverse import get_domain
 
 
@@ -53,6 +54,11 @@ class EventMiddleware:
                             domain = '%s:%d' % (domain, request.port)
                         path = request.get_full_path().split("/", 2)[-1]
                         return redirect(urljoin('%s://%s' % (request.scheme, domain), path))
+
+                if not request.event.live:
+                    if not request.user.is_authenticated() or not EventPermission.objects.filter(
+                            event=request.event, user=request.user).exists():
+                        raise PermissionDenied(_('The selected ticket shop is currently not available.'))
 
             except IndexError:
                 raise Http404(_('The selected event or organizer was not found.'))

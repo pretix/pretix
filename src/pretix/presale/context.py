@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.urlresolvers import Resolver404, resolve
 
 from .signals import html_head
@@ -21,5 +22,6 @@ def contextprocessor(request):
         for receiver, response in html_head.send(request.event, request=request):
             _html_head.append(response)
     ctx['html_head'] = "".join(_html_head)
+    ctx['site_url'] = settings.SITE_URL
 
     return ctx

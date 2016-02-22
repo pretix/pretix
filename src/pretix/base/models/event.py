@@ -32,6 +32,8 @@ class Event(LoggedModel):
     :param slug: A short, alphanumeric, all-lowercase name for use in URLs. The slug has to
                  be unique among the events of the same organizer.
     :type slug: str
+    :param live: Whether or not the shop is publicly accessible
+    :type live: bool
     :param currency: The currency of all prices and payments of this event
     :type currency: str
     :param date_from: The datetime this event starts
@@ -65,6 +67,7 @@ class Event(LoggedModel):
         ],
         verbose_name=_("Slug"),
     )
+    live = models.BooleanField(default=False, verbose_name=_("Shop is live"))
     permitted = models.ManyToManyField(User, through='EventPermission',
                                        related_name="events", )
     currency = models.CharField(max_length=10,

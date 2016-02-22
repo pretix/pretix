@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/base.html" %}
 {% load i18n %}
+{% block title %}{{ request.event.name }}{% endblock %}
 
 {% block nav %}
     <li>

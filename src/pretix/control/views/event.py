@@ -13,7 +13,9 @@ from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 
 from pretix.base.forms import I18nModelForm
-from pretix.base.models import Event, EventPermission, User
+from pretix.base.models import (
+    Event, EventPermission, Item, ItemVariation, User,
+)
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
@@ -420,6 +422,54 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings.permissions', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })
+
+
+class EventLive(EventPermissionRequiredMixin, TemplateView):
+    permission = 'can_change_settings'
+    template_name = 'pretixcontrol/event/live.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['issues'] = self.issues
+        return ctx
+
+    @cached_property
+    def issues(self):
+        issues = []
+        has_paid_things = (
+            Item.objects.filter(event=self.request.event, default_price__gt=0).exists()
+            or ItemVariation.objects.filter(item__event=self.request.event, default_price__gt=0).exists()
+        )
+
+        has_payment_provider = False
+        responses = register_payment_providers.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if provider.is_enabled:
+                has_payment_provider = True
+                break
+
+        if has_paid_things and not has_payment_provider:
+            issues.append(_('You have configured at least one paid product but have not enabled any payment methods.'))
+
+        return issues
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get("live") == "true" and not self.issues:
+            request.event.live = True
+            request.event.save()
+            messages.success(self.request, _('Your shop is live now!'))
+        elif request.POST.get("live") == "false":
+            request.event.live = False
+            request.event.save()
+            messages.success(self.request, _('We\'ve taken your shop down. You can re-enable it whenever you want!'))
+        return redirect(self.get_success_url())
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.live', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug
         })

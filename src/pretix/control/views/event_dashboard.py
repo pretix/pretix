@@ -88,6 +88,24 @@ def quota_widgets(sender, **kwargs):
     return widgets
 
 
+@receiver(signal=event_dashboard_widgets)
+def shop_state_widget(sender, **kwargs):
+    return [{
+        'width': 3,
+        'priority': 1000,
+        'content': '<div class="shopstate">{t1}<br><span class="{cls}"><span class="fa {icon}"></span> {state}</span>{t2}</div>'.format(
+            t1=_('Your ticket shop is'), t2=_('Click here to change'),
+            state=_('live') if sender.live else _('not yet public'),
+            icon='fa-check-circle' if sender.live else 'fa-times-circle',
+            cls='live' if sender.live else 'off'
+        ),
+        'url': reverse('control:event.live', kwargs={
+            'event': sender.slug,
+            'organizer': sender.organizer.slug
+        })
+    }]
+
+
 def index(request, organizer, event):
     widgets = []
     for r, result in event_dashboard_widgets.send(sender=request.event):
