@@ -19,7 +19,8 @@ class CheckoutTestCase(TestCase):
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
-            plugins='pretix.plugins.stripe,pretix.plugins.banktransfer'
+            plugins='pretix.plugins.stripe,pretix.plugins.banktransfer',
+            live=True
         )
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=5)

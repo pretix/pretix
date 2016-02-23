@@ -12,7 +12,7 @@ def event():
     o = Organizer.objects.create(name='MRMCD', slug='mrmcd')
     e = Event.objects.create(
         organizer=o, name='MRMCD2015', slug='2015',
-        date_from=now()
+        date_from=now(), live=True
     )
     return e
 

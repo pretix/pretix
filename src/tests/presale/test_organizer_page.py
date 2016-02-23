@@ -11,7 +11,8 @@ def env():
     o = Organizer.objects.create(name='MRMCD e.V.', slug='mrmcd')
     event = Event.objects.create(
         organizer=o, name='MRMCD2015', slug='2015',
-        date_from=now() + timedelta(days=10)
+        date_from=now() + timedelta(days=10),
+        live=True
     )
     return o, event
 

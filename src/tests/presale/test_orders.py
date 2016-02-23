@@ -18,7 +18,8 @@ class OrdersTest(TestCase):
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
-            plugins='pretix.plugins.stripe,pretix.plugins.banktransfer,tests.testdummy'
+            plugins='pretix.plugins.stripe,pretix.plugins.banktransfer,tests.testdummy',
+            live=True
         )
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.event.settings.set('ticketoutput_testdummy__enabled', True)

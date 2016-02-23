@@ -13,7 +13,7 @@ def env():
     o = Organizer.objects.create(name='MRMCD', slug='mrmcd')
     event = Event.objects.create(
         organizer=o, name='MRMCD2015', slug='2015',
-        date_from=now()
+        date_from=now(), live=True
     )
     settings.SITE_URL = 'http://example.com'
     return o, event
@@ -61,7 +61,7 @@ def test_event_on_custom_domain_only_with_wrong_organizer(env, client):
     organizer2 = Organizer.objects.create(name='Dummy', slug='dummy')
     Event.objects.create(
         organizer=organizer2, name='D1234', slug='1234',
-        date_from=now()
+        date_from=now(), live=True
     )
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     r = client.get('/dummy/1234/', HTTP_HOST='foobar')
@@ -73,7 +73,7 @@ def test_unknown_event_on_custom_domain(env, client):
     organizer2 = Organizer.objects.create(name='Dummy', slug='dummy')
     Event.objects.create(
         organizer=organizer2, name='D1234', slug='1234',
-        date_from=now()
+        date_from=now(), live=True
     )
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     r = client.get('/1234/', HTTP_HOST='foobar')

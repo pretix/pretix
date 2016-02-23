@@ -55,7 +55,7 @@ class EventMiddleware:
                         path = request.get_full_path().split("/", 2)[-1]
                         return redirect(urljoin('%s://%s' % (request.scheme, domain), path))
 
-                if not request.event.live:
+                if hasattr(request, 'event') and not request.event.live:
                     if not request.user.is_authenticated() or not EventPermission.objects.filter(
                             event=request.event, user=request.user).exists():
                         raise PermissionDenied(_('The selected ticket shop is currently not available.'))
