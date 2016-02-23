@@ -127,8 +127,8 @@ def user_event_widgets(**kwargs):
     for event in events:
         widgets.append({
             'content': '<div class="event">{event}<span class="from">{df}</span><span class="to">{dt}</span></div>'.format(
-                event=event.name, df=date_format(event.date_from, 'SHORT_DATE_FORMAT'),
-                dt=date_format(event.date_to, 'SHORT_DATE_FORMAT')
+                event=event.name, df=date_format(event.date_from, 'SHORT_DATE_FORMAT') if event.date_from else '',
+                dt=date_format(event.date_to, 'SHORT_DATE_FORMAT') if event.date_to else ''
             ),
             'width': 3,
             'priority': 100,
