@@ -302,6 +302,7 @@ class Question(LoggedModel):
     * a one-line string (``TYPE_STRING``)
     * a multi-line string (``TYPE_TEXT``)
     * a boolean (``TYPE_BOOLEAN``)
+    * a multiple choice option (``TYPE_CHOICE`` and ``TYPE_CHOICE_MULTIPLE``)
 
     :param event: The event this question belongs to
     :type event: Event
@@ -317,11 +318,15 @@ class Question(LoggedModel):
     TYPE_STRING = "S"
     TYPE_TEXT = "T"
     TYPE_BOOLEAN = "B"
+    TYPE_CHOICE = "C"
+    TYPE_CHOICE_MULTIPLE = "M"
     TYPE_CHOICES = (
         (TYPE_NUMBER, _("Number")),
         (TYPE_STRING, _("Text (one line)")),
         (TYPE_TEXT, _("Multiline text")),
         (TYPE_BOOLEAN, _("Yes/No")),
+        (TYPE_CHOICE, _("Choose one from a list")),
+        (TYPE_CHOICE_MULTIPLE, _("Choose multiple from a list"))
     )
 
     event = models.ForeignKey(
@@ -364,6 +369,14 @@ class Question(LoggedModel):
         super().save(*args, **kwargs)
         if self.event:
             self.event.get_cache().clear()
+
+
+class QuestionOption(models.Model):
+    question = models.ForeignKey('Question', related_name='options')
+    answer = I18nCharField(verbose_name=_('Answer'))
+
+    def __str__(self):
+        return str(self.answer)
 
 
 class Quota(LoggedModel):

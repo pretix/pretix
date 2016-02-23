@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load formset_tags %}
 {% block title %}{% trans "Question" %}{% endblock %}
 {% block inside %}
     <h1>{% trans "Question" %}</h1>
@@ -23,6 +24,59 @@
                 accepted. If you want to allow both options, do not make this field required.
             {% endblocktrans %}
         </div>
+        <fieldset id="answer-options">
+            <legend>{% trans "Answer options" %}</legend>
+            <noscript>
+                <p>{% trans "Only applicable if you choose 'Choose one/multiple from a list' above." %}</p>
+            </noscript>
+            <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+                {{ formset.management_form }}
+                {% bootstrap_formset_errors formset %}
+                <div data-formset-body>
+                    {% for form in formset %}
+                        <div data-formset-form>
+                            <div class="sr-only">
+                                {{ form.id }}
+                                {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                            </div>
+                            <div class="row question-option-row">
+                                <div class="col-xs-10">
+                                    {% bootstrap_form_errors form %}
+                                    {% bootstrap_field form.answer layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-xs-2 text-right">
+                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                        <i class="fa fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <script type="form-template" data-formset-empty-form>
+                    {% escapescript %}
+                        <div data-formset-form>
+                            <div class="sr-only">
+                                {{ formset.empty_form.id }}
+                                {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                            </div>
+                            <div class="row question-option-row">
+                                <div class="col-xs-10">
+                                    {% bootstrap_field formset.empty_form.answer layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-xs-2 text-right">
+                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                        <i class="fa fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endescapescript %}
+                </script>
+                <p>
+                    <button type="button" class="btn btn-default" data-formset-add>
+                        <i class="fa fa-plus"></i> {% trans "Add a new option" %}</button>
+                </p>
+            </div>
+        </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
@@ -31,14 +85,17 @@
     </form>
     <script type="text/javascript">
         $(function () {
-            function alert_required_boolean() {
-                var show = $("#id_type").val() == "B" && $("#id_required").prop("checked");
+            function toggle_view() {
+                var show = $("#id_type").val() == "C" || $("#id_type").val() == "M";
+                $("#answer-options").toggle(show);
+
+                show = $("#id_type").val() == "B" && $("#id_required").prop("checked");
                 $(".alert-required-boolean").toggle(show);
             }
 
-            $("#id_type").change(alert_required_boolean);
-            $("#id_required").change(alert_required_boolean);
-            alert_required_boolean();
+            $("#id_type").change(toggle_view);
+            $("#id_required").change(toggle_view);
+            toggle_view();
         });
     </script>
 {% endblock %}

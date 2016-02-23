@@ -5,8 +5,9 @@ from django.forms import BooleanField, ModelMultipleChoiceField
 from django.utils.translation import ugettext as __, ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
+from pretix.base.i18n import I18nFormField, I18nTextarea
 from pretix.base.models import (
-    Item, ItemCategory, ItemVariation, Question, Quota,
+    Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
 )
 
 
@@ -20,6 +21,12 @@ class CategoryForm(I18nModelForm):
 
 
 class QuestionForm(I18nModelForm):
+    question = I18nFormField(
+        label=_("Question"),
+        widget_kwargs={'attrs': {'rows': 5}},
+        widget=I18nTextarea
+    )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['items'].queryset = self.instance.event.items.all()
@@ -34,8 +41,18 @@ class QuestionForm(I18nModelForm):
             'items'
         ]
         widgets = {
-            'items': forms.CheckboxSelectMultiple
+            'items': forms.CheckboxSelectMultiple,
         }
+
+
+class QuestionOptionForm(I18nModelForm):
+
+    class Meta:
+        model = QuestionOption
+        localized_fields = '__all__'
+        fields = [
+            'answer',
+        ]
 
 
 class QuotaForm(I18nModelForm):

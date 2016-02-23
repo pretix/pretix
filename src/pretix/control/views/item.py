@@ -14,11 +14,11 @@ from django.views.generic.edit import DeleteView
 
 from pretix.base.i18n import I18nFormSet
 from pretix.base.models import (
-    Item, ItemCategory, ItemVariation, Question, Quota,
+    Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
 )
 from pretix.control.forms.item import (
     CategoryForm, ItemCreateForm, ItemFormGeneral, ItemVariationForm,
-    QuestionForm, QuotaForm,
+    QuestionForm, QuestionOptionForm, QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -272,7 +272,67 @@ class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
         })
 
 
-class QuestionUpdate(EventPermissionRequiredMixin, UpdateView):
+class QuestionMixin:
+
+    @cached_property
+    def formset(self):
+        formsetclass = inlineformset_factory(
+            Question, QuestionOption,
+            form=QuestionOptionForm, formset=I18nFormSet,
+            can_order=False, can_delete=True, extra=0
+        )
+        return formsetclass(self.request.POST if self.request.method == "POST" else None,
+                            queryset=(QuestionOption.objects.filter(question=self.get_object())
+                                      if self.get_object() else QuestionOption.objects.none()),
+                            event=self.request.event)
+
+    def save_formset(self, obj):
+        if self.formset.is_valid():
+            for form in self.formset.initial_forms:
+                if form in self.formset.deleted_forms:
+                    if not form.instance.pk:
+                        continue
+                    self.get_object().log_action(
+                        'pretix.event.question.option.deleted', user=self.request.user, data={
+                            'id': form.instance.pk
+                        }
+                    )
+                    form.instance.delete()
+                    form.instance.pk = None
+                elif form.has_changed():
+                    form.instance.question = self.get_object()
+                    form.save()
+                    change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
+                    change_data['id'] = form.instance.pk
+                    self.get_object().log_action(
+                        'pretix.event.question.option.changed',
+                        user=self.request.user, data=change_data
+                    )
+
+            for form in self.formset.extra_forms:
+                if not form.has_changed():
+                    continue
+                if self.formset._should_delete_form(form):
+                    continue
+                form.instance.question = self.get_object()
+                form.save()
+                change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
+                change_data['id'] = form.instance.pk
+                self.get_object().log_action(
+                    'pretix.event.question.option.added',
+                    user=self.request.user, data=change_data
+                )
+
+            return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['formset'] = self.formset
+        return ctx
+
+
+class QuestionUpdate(EventPermissionRequiredMixin, QuestionMixin, UpdateView):
     model = Question
     form_class = QuestionForm
     template_name = 'pretixcontrol/items/question.html'
@@ -289,6 +349,10 @@ class QuestionUpdate(EventPermissionRequiredMixin, UpdateView):
 
     @transaction.atomic()
     def form_valid(self, form):
+        if form.cleaned_data.get('type') in ('M', 'C'):
+            if not self.save_formset(self.get_object):
+                return self.get(self.request, *self.args, **self.kwargs)
+
         if form.has_changed():
             self.object.log_action(
                 'pretix.event.question.changed', user=self.request.user, data={
@@ -305,7 +369,7 @@ class QuestionUpdate(EventPermissionRequiredMixin, UpdateView):
         })
 
 
-class QuestionCreate(EventPermissionRequiredMixin, CreateView):
+class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
     model = Question
     form_class = QuestionForm
     template_name = 'pretixcontrol/items/question.html'
@@ -323,11 +387,19 @@ class QuestionCreate(EventPermissionRequiredMixin, CreateView):
             'event': self.request.event.slug,
         })
 
+    def get_object(self):
+        return None
+
     @transaction.atomic()
     def form_valid(self, form):
+        if form.cleaned_data.get('type') in ('M', 'C'):
+            if not self.save_formset(self.get_object):
+                return self.get(self.request, *self.args, **self.kwargs)
+
         messages.success(self.request, _('The new question has been created.'))
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.question.added', user=self.request.user, data=dict(form.cleaned_data))
+        self.save_formset(form.instance)
         return ret
 
 

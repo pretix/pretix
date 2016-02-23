@@ -76,7 +76,7 @@ class QuestionsForm(forms.Form):
                 if a.question_id == q.id
             ]
             if answers:
-                initial = answers[0].answer
+                initial = answers[0]
             else:
                 initial = None
             if q.type == Question.TYPE_BOOLEAN:
@@ -87,27 +87,45 @@ class QuestionsForm(forms.Form):
                 else:
                     widget = forms.CheckboxInput()
 
-                initial = (initial == "True")
+                if initial:
+                    initialbool = (initial.answer == "True")
+                else:
+                    initialbool = False
 
                 field = forms.BooleanField(
                     label=q.question, required=q.required,
-                    initial=initial, widget=widget
+                    initial=initialbool, widget=widget
                 )
             elif q.type == Question.TYPE_NUMBER:
                 field = forms.DecimalField(
                     label=q.question, required=q.required,
-                    initial=initial, min_value=Decimal('0.00')
+                    initial=initial.answer if initial else None,
+                    min_value=Decimal('0.00')
                 )
             elif q.type == Question.TYPE_STRING:
                 field = forms.CharField(
                     label=q.question, required=q.required,
-                    initial=initial
+                    initial=initial.answer if initial else None,
                 )
             elif q.type == Question.TYPE_TEXT:
                 field = forms.CharField(
                     label=q.question, required=q.required,
                     widget=forms.Textarea,
-                    initial=initial
+                    initial=initial.answer if initial else None,
+                )
+            elif q.type == Question.TYPE_CHOICE:
+                field = forms.ModelChoiceField(
+                    queryset=q.options.all(),
+                    label=q.question, required=q.required,
+                    widget=forms.RadioSelect,
+                    initial=initial.options.first() if initial else None,
+                )
+            elif q.type == Question.TYPE_CHOICE_MULTIPLE:
+                field = forms.ModelMultipleChoiceField(
+                    queryset=q.options.all(),
+                    label=q.question, required=q.required,
+                    widget=forms.CheckboxSelectMultiple,
+                    initial=initial.options.all() if initial else None,
                 )
             field.question = q
             if answers:

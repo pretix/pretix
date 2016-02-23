@@ -225,10 +225,10 @@ class I18nFormField(forms.MultiValueField):
             'max_length': kwargs.pop('max_length', None),
         }
         self.langcodes = kwargs.pop('langcodes', [l[0] for l in settings.LANGUAGES])
-        self.one_required = kwargs['required']
+        self.one_required = kwargs.get('required', True)
         kwargs['required'] = False
         kwargs['widget'] = kwargs['widget'](
-            langcodes=self.langcodes, field=self
+            langcodes=self.langcodes, field=self, **kwargs.pop('widget_kwargs', {})
         )
         defaults.update(**kwargs)
         for lngcode in self.langcodes:

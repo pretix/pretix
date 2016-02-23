@@ -1,3 +1,4 @@
+from django import forms
 from django.utils.functional import cached_property
 
 from pretix.base.models import CartPosition, OrderPosition, QuestionAnswer
@@ -47,13 +48,33 @@ class QuestionsViewMixin:
                             if v == '':
                                 field.answer.delete()
                             else:
-                                field.answer.answer = v
+                                self._save_to_answer(field, field.answer, v)
                                 field.answer.save()
                         elif v != '':
-                            QuestionAnswer.objects.create(
+                            answer = QuestionAnswer(
                                 cartposition=(form.pos if isinstance(form.pos, CartPosition) else None),
                                 orderposition=(form.pos if isinstance(form.pos, OrderPosition) else None),
                                 question=field.question,
-                                answer=v
                             )
+                            self._save_to_answer(field, answer, v)
+                            answer.save()
         return not failed
+
+    def _save_to_answer(self, field, answer, value):
+        if isinstance(field, forms.ModelMultipleChoiceField):
+            answstr = ", ".join([str(o) for o in value])
+            if not answer.pk:
+                answer.save()
+            else:
+                answer.options.clear()
+            answer.answer = answstr
+            answer.options.add(*value)
+        elif isinstance(field, forms.ModelChoiceField):
+            if not answer.pk:
+                answer.save()
+            else:
+                answer.options.clear()
+            answer.options.add(value)
+            answer.answer = value.answer
+        else:
+            answer.answer = value

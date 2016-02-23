@@ -12,7 +12,7 @@ from typing import List, Union
 from ..decimal import round_decimal
 from .base import CachedFile, LoggedModel
 from .event import Event
-from .items import Item, ItemVariation, Question, Quota
+from .items import Item, ItemVariation, Question, QuestionOption, Quota
 
 
 def generate_secret():
@@ -285,6 +285,9 @@ class QuestionAnswer(models.Model):
     )
     question = models.ForeignKey(
         Question, related_name='answers'
+    )
+    options = models.ManyToManyField(
+        QuestionOption, related_name='answers', blank=True
     )
     answer = models.TextField()
 
