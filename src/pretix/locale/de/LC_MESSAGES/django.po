@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-22 20:48+0000\n"
-"PO-Revision-Date: 2016-02-22 21:52+0100\n"
+"POT-Creation-Date: 2016-02-23 08:31+0000\n"
+"PO-Revision-Date: 2016-02-23 09:31+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.8.7\n"
 
 #: pretix/base/forms/__init__.py:47
 msgid "disabled"
@@ -1448,7 +1448,7 @@ msgid "powered by <a %(a_attr)s>pretix</a>"
 msgstr "powered by <a %(a_attr)s>pretix</a>"
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:7
-#: pretix/control/views/auth.py:86
+#: pretix/control/views/auth.py:97
 msgid "Password recovery"
 msgstr "Passwortwiederherstellung"
 
@@ -1590,6 +1590,10 @@ msgstr "Überblick"
 #: pretix/control/templates/pretixcontrol/event/base.html:121
 msgid "Export"
 msgstr "Export"
+
+#: pretix/control/templates/pretixcontrol/event/index.html:9
+msgid "Go to shop"
+msgstr "Shop aufrufen"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:5
 msgid "Shop status"
@@ -1771,6 +1775,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:9
 #: pretix/control/templates/pretixcontrol/events/start.html:3
 #: pretix/control/templates/pretixcontrol/events/start.html:5
+#: pretix/control/views/dashboards.py:148
 msgid "Create a new event"
 msgstr "Neue Veranstaltung erstellen"
 
@@ -2342,11 +2347,16 @@ msgstr "Ja"
 msgid "No"
 msgstr "Nein"
 
-#: pretix/control/views/auth.py:95
+#: pretix/control/views/auth.py:91
+msgid "We already sent you an email in the last 24 hours."
+msgstr ""
+"Wir haben Ihnen in den letzten 24 Stunden bereits eine E-Mail geschickt."
+
+#: pretix/control/views/auth.py:106
 msgid "We sent you an e-mail containing further instructions."
 msgstr "Wir haben Ihnen eine E-Mail mit weiteren Instruktionen geschickt."
 
-#: pretix/control/views/auth.py:114
+#: pretix/control/views/auth.py:125
 msgid ""
 "You clicked on an invalid link. Please check that you copied the full web "
 "address into your address bar. Please note that the link is only valid for "
@@ -2356,15 +2366,53 @@ msgstr ""
 "Sie die volle Adresse in Ihre Adresszeile kopiert haben. Bitte beachten Sie, "
 "dass der Link nur drei Tage gültig ist und nur einmal benutzt werden kann."
 
-#: pretix/control/views/auth.py:117
+#: pretix/control/views/auth.py:128
 msgid "We were unable to find the user you requested a new password for."
 msgstr ""
 "Wir konnten den Benutzer, zu dem ein neues Passwort angefordert wurde, nicht "
 "finden."
 
-#: pretix/control/views/auth.py:145
+#: pretix/control/views/auth.py:156
 msgid "You can now login using your new password."
 msgstr "Sie können sich nun mit Ihrem neuen Passwort anmelden."
+
+#: pretix/control/views/dashboards.py:41
+msgid "Attendees (ordered)"
+msgstr "Teilnehmer (bestellt)"
+
+#: pretix/control/views/dashboards.py:50
+msgid "Attendees (paid)"
+msgstr "Teilnehmer (bezahlt)"
+
+#: pretix/control/views/dashboards.py:60
+#, python-brace-format
+msgid "Total revenue ({currency})"
+msgstr "Gesamtumsatz ({currency})"
+
+#: pretix/control/views/dashboards.py:69
+msgid "Active products"
+msgstr "Aktive Produkte"
+
+#: pretix/control/views/dashboards.py:87
+#, python-brace-format
+msgid "{quota} left"
+msgstr "{quota} übrig"
+
+#: pretix/control/views/dashboards.py:100
+msgid "Your ticket shop is"
+msgstr "Ihr Ticket-Shop ist"
+
+#: pretix/control/views/dashboards.py:100
+msgid "Click here to change"
+msgstr "Hier klicken zum Ändern"
+
+#: pretix/control/views/dashboards.py:101
+msgid "live"
+msgstr "online"
+
+#: pretix/control/views/dashboards.py:101
+msgid "not yet public"
+msgstr "deaktiviert"
 
 #: pretix/control/views/event.py:244
 #, python-format
@@ -2413,44 +2461,6 @@ msgid "We've taken your shop down. You can re-enable it whenever you want!"
 msgstr ""
 "Wir haben Ihren Shop ausgeschaltet. Sie können ihn hier jederzeit wieder "
 "einschalten."
-
-#: pretix/control/views/event_dashboard.py:38
-msgid "Attendees (ordered)"
-msgstr "Teilnehmer (bestellt)"
-
-#: pretix/control/views/event_dashboard.py:47
-msgid "Attendees (paid)"
-msgstr "Teilnehmer (bezahlt)"
-
-#: pretix/control/views/event_dashboard.py:57
-#, python-brace-format
-msgid "Total revenue ({currency})"
-msgstr "Gesamtumsatz ({currency})"
-
-#: pretix/control/views/event_dashboard.py:66
-msgid "Active products"
-msgstr "Aktive Produkte"
-
-#: pretix/control/views/event_dashboard.py:84
-#, python-brace-format
-msgid "{quota} left"
-msgstr "{quota} übrig"
-
-#: pretix/control/views/event_dashboard.py:97
-msgid "Your ticket shop is"
-msgstr "Ihr Ticket-Shop ist"
-
-#: pretix/control/views/event_dashboard.py:97
-msgid "Click here to change"
-msgstr "Hier klicken zum Ändern"
-
-#: pretix/control/views/event_dashboard.py:98
-msgid "live"
-msgstr "online"
-
-#: pretix/control/views/event_dashboard.py:98
-msgid "not yet public"
-msgstr "deaktiviert"
 
 #: pretix/control/views/item.py:53 pretix/control/views/item.py:635
 msgid "The requested product does not exist."
@@ -2513,7 +2523,7 @@ msgstr "Das ausgewählte Produkt wurde gelöscht."
 msgid "The selected product has been deactivated."
 msgstr "Das ausgewählte Produkt wurde deaktiviert."
 
-#: pretix/control/views/main.py:60
+#: pretix/control/views/main.py:56
 msgid "The new event has been created."
 msgstr "Eine neue Veranstaltung wurde erstellt."
 
