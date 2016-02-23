@@ -3,11 +3,19 @@
 {% block title %}{% trans "Dashboard" %}{% endblock %}
 {% block content %}
 	<h1>{% trans "Dashboard" %}</h1>
-    <p>
-        There is nothing yet to see on this dashboard. If you have any ideas what to put here, just <a
-            href="https://github.com/pretix/pretix/issues">tell us</a>!
-    </p>
-    <p>
-        Probably, you are looking for your <a href="{% url "control:events" %}">events</a>.
-    </p>
+    <div class="row dashboard">
+        {% for w in widgets %}
+            <div class="col-xs-12 col-sm-{% if w.width > 6 %}12{% else %}6{% endif %} col-md-{{ w.width }}">
+                {% if w.url %}
+                    <a href="{{ w.url }}" class="widget">
+                        {{ w.content|safe }}
+                    </a>
+                {% else %}
+                    <div class="widget">
+                        {{ w.content|safe }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

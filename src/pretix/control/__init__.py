@@ -6,6 +6,6 @@ class PretixControlConfig(AppConfig):
     label = 'pretixcontrol'
 
     def ready(self):
-        from .views import event_dashboard  # noqa
+        from .views import dashboards  # noqa
 
 default_app_config = 'pretix.control.PretixControlConfig'

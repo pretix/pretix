@@ -5,10 +5,13 @@ from django.db.models import Sum
 from django.dispatch import receiver
 from django.shortcuts import render
 from django.utils import formats
+from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Item, Order, OrderPosition
-from pretix.control.signals import event_dashboard_widgets
+from pretix.base.models import Event, Item, Order, OrderPosition
+from pretix.control.signals import (
+    event_dashboard_widgets, user_dashboard_widgets,
+)
 
 NUM_WIDGET = '<div class="numwidget"><span class="num">{num}</span><span class="text">{text}</span></div>'
 
@@ -106,7 +109,7 @@ def shop_state_widget(sender, **kwargs):
     }]
 
 
-def index(request, organizer, event):
+def event_index(request, organizer, event):
     widgets = []
     for r, result in event_dashboard_widgets.send(sender=request.event):
         widgets.extend(result)
@@ -114,6 +117,51 @@ def index(request, organizer, event):
         'widgets': rearrange(widgets),
     }
     return render(request, 'pretixcontrol/event/index.html', ctx)
+
+
+@receiver(signal=user_dashboard_widgets)
+def user_event_widgets(**kwargs):
+    user = kwargs.pop('user')
+    widgets = []
+    events = Event.objects.filter(permitted__id__exact=user.pk).select_related("organizer").order_by('-date_from')
+    for event in events:
+        widgets.append({
+            'content': '<div class="event">{event}<span class="from">{df}</span><span class="to">{dt}</span></div>'.format(
+                event=event.name, df=date_format(event.date_from, 'SHORT_DATE_FORMAT'),
+                dt=date_format(event.date_to, 'SHORT_DATE_FORMAT')
+            ),
+            'width': 3,
+            'priority': 100,
+            'url': reverse('control:event.index', kwargs={
+                'event': event.slug,
+                'organizer': event.organizer.slug
+            })
+        })
+    return widgets
+
+
+@receiver(signal=user_dashboard_widgets)
+def new_event_widgets(**kwargs):
+    return [
+        {
+            'content': '<div class="newevent"><span class="fa fa-plus-circle"></span>{t}</div>'.format(
+                t=_('Create a new event')
+            ),
+            'width': 3,
+            'priority': 50,
+            'url': reverse('control:events.add')
+        }
+    ]
+
+
+def user_index(request):
+    widgets = []
+    for r, result in user_dashboard_widgets.send(request, user=request.user):
+        widgets.extend(result)
+    ctx = {
+        'widgets': rearrange(widgets),
+    }
+    return render(request, 'pretixcontrol/dashboard.html', ctx)
 
 
 def rearrange(widgets: list):
