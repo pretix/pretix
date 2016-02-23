@@ -1,8 +1,14 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
+{% load eventurl %}
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
-    <h1>{{ request.event.name }}</h1>
+    <h1>
+        {{ request.event.name }}
+        <a href="{% eventurl request.event "presale:event.index" %}" class="btn btn-default btn-sm" target="_blank">
+            {% trans "Go to shop" %}
+        </a>
+    </h1>
     <div class="row dashboard">
         {% for w in widgets %}
             <div class="col-xs-12 col-sm-{% if w.width > 6 %}12{% else %}6{% endif %} col-md-{{ w.width }}">
