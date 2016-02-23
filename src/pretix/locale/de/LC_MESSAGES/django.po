@@ -1600,8 +1600,8 @@ msgid ""
 "Your shop is currently live. If you take it down, it will only be visible to "
 "you and your team."
 msgstr ""
-"Dein Shop ist aktuell öffentlich verfügbar. Wenn du ihn ausschaltest, ist er "
-"nur für dich und dein Team sichtbar."
+"Ihr Shop ist aktuell öffentlich verfügbar. Wenn Sie Ihn ausschalten, ist er "
+"nur für Sie und Ihr Team sichtbar."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:16
 msgid "Go offline"
@@ -1612,19 +1612,19 @@ msgid ""
 "Your ticket shop is currently not live. It is thus only visible to you and "
 "your team, not to any visitors."
 msgstr ""
-"Dein Ticket-Shop ist zur Zeit offline und daher nur für dich und dein Team "
+"IhrTicket-Shop ist zur Zeit offline und daher nur für Sie und Ihr Team "
 "verfügbar und nicht für Besucher."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:26
 msgid ""
 "To publish your ticket shop, you first need to resolve the following issues:"
 msgstr ""
-"Um deinen Ticket-Shop zu veröffentlichen, musst du zuerst die folgenden "
+"Um Ihren Ticket-Shop zu veröffentlichen, müssen Sie zuerst die folgenden "
 "Probleme beheben:"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:35
 msgid "If you want to, you can publish your ticket shop now."
-msgstr "Du kannst deinen Ticket-Shop jederzeit veröffentlichen."
+msgstr "Sie können Ihren Ticket-Shop jederzeit veröffentlichen."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:43
 msgid "Go live"
@@ -2401,17 +2401,17 @@ msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
 msgstr ""
-"Du hast mindestens ein kostenpflichtiges Produkt konfiguriert aber noch "
+"Sie haben mindestens ein kostenpflichtiges Produkt konfiguriert aber noch "
 "keine Zahlungsmethoden aktiviert."
 
 #: pretix/control/views/event.py:464
 msgid "Your shop is live now!"
-msgstr "Dein Shop ist nun online!"
+msgstr "Ihr Shop ist nun online!"
 
 #: pretix/control/views/event.py:468
 msgid "We've taken your shop down. You can re-enable it whenever you want!"
 msgstr ""
-"Wir haben deinen Shop ausgeschaltet. Du kannst ihn hier jederzeit wieder "
+"Wir haben Ihren Shop ausgeschaltet. Sie können ihn hier jederzeit wieder "
 "einschalten."
 
 #: pretix/control/views/event_dashboard.py:38
@@ -2438,7 +2438,7 @@ msgstr "{quota} übrig"
 
 #: pretix/control/views/event_dashboard.py:97
 msgid "Your ticket shop is"
-msgstr "Dein Ticket-Shop ist"
+msgstr "Ihr Ticket-Shop ist"
 
 #: pretix/control/views/event_dashboard.py:97
 msgid "Click here to change"
@@ -3481,7 +3481,7 @@ msgstr "Wir verarbeiten Ihre Anfrage…"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:13
 msgid "This shop is currently only visible to you and your team."
-msgstr "Dieser Shop ist aktuell nur für dich und dein Team sichtbar."
+msgstr "Dieser Shop ist aktuell nur für Sie und Ihr Team sichtbar."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:15
 msgid "Take it live now"

@@ -920,7 +920,7 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"du erhältst diese Nachricht weil du einen neuen Link zu Ihrer Bestellung "
+"du erhältst diese Nachricht weil du einen neuen Link zu deiner Bestellung "
 "für\n"
 "{event} angefordert hast.\n"
 "\n"
@@ -1309,7 +1309,7 @@ msgid ""
 "a short form of your event name."
 msgstr ""
 "Dies wird jedem E-Mail-Betreff vorangestellt und könnten z.B. eine Kurzform "
-"Ihres Veranstaltungsnamens enthalten."
+"deines Veranstaltungsnamens enthalten."
 
 #: pretix/control/forms/event.py:213
 msgid "Sender address"
@@ -1594,8 +1594,8 @@ msgid ""
 "Your shop is currently live. If you take it down, it will only be visible to "
 "you and your team."
 msgstr ""
-"Ihr Shop ist aktuell öffentlich verfügbar. Wenn Sie ihn ausschalten, ist er "
-"nur für Sie und Ihr Team sichtbar."
+"Dein Shop ist aktuell öffentlich verfügbar. Wenn du ihn ausschaltest, ist er "
+"nur für dich und dein Team sichtbar."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:16
 msgid "Go offline"
@@ -1606,19 +1606,19 @@ msgid ""
 "Your ticket shop is currently not live. It is thus only visible to you and "
 "your team, not to any visitors."
 msgstr ""
-"Ihr Ticket-Shop ist zur Zeit offline und daher nur für Sie und Ihr Team "
+"Dein Ticket-Shop ist zur Zeit offline und daher nur für dich und dein Team "
 "verfügbar und nicht für Besucher."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:26
 msgid ""
 "To publish your ticket shop, you first need to resolve the following issues:"
 msgstr ""
-"Um Ihren Ticket-Shop zu veröffentlichen, müssen Sie zuerst die folgenden "
+"Um deinen Ticket-Shop zu veröffentlichen, musst du zuerst die folgenden "
 "Probleme beheben:"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:35
 msgid "If you want to, you can publish your ticket shop now."
-msgstr "Sie können Ihren Ticket-Shop jederzeit veröffentlichen."
+msgstr "Du kannst deinen Ticket-Shop jederzeit veröffentlichen."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:43
 msgid "Go live"
@@ -1859,7 +1859,7 @@ msgstr "Abbrechen"
 #: pretix/control/templates/pretixcontrol/item/delete.html:19
 #, python-format
 msgid "Are you sure you want to delete the product <strong>%(item)s</strong>?"
-msgstr "Möchten Sie das Produkt <strong>%(item)s</strong> wirklich löschen?"
+msgstr "Möchtest du das Produkt <strong>%(item)s</strong> wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:21
 #, python-format
@@ -1868,7 +1868,7 @@ msgid ""
 "has been ordered, but you can deactive it."
 msgstr ""
 "Das Produkt <strong>%(item)s</strong> kann nicht gelöscht werden, da es "
-"bereits bestellt wurde, aber Sie können es deaktivieren."
+"bereits bestellt wurde, aber du kannst es deaktivieren."
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:28
 msgid "Deactivate"
@@ -2346,7 +2346,7 @@ msgid ""
 "three days and that the link can only be used once."
 msgstr ""
 "Du hsat auf einen ungültigen Link geklickt. Bitte prüfe, ob du die volle "
-"Adresse in Ihre Adresszeile kopiert hast. Bitte beachtee, dass der Link nur "
+"Adresse in deine Adresszeile kopiert hast. Bitte beachte, dass der Link nur "
 "drei Tage gültig ist und nur einmal benutzt werden kann."
 
 #: pretix/control/views/auth.py:117
@@ -2357,7 +2357,7 @@ msgstr ""
 
 #: pretix/control/views/auth.py:145
 msgid "You can now login using your new password."
-msgstr "Du kannst dich nun mit Ihrem neuen Passwort anmelden."
+msgstr "Du kannst dich nun mit deinem neuen Passwort anmelden."
 
 #: pretix/control/views/event.py:244
 #, python-format
@@ -2394,17 +2394,17 @@ msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
 msgstr ""
-"Sie haben mindestens ein kostenpflichtiges Produkt konfiguriert aber noch "
+"Du hast mindestens ein kostenpflichtiges Produkt konfiguriert aber noch "
 "keine Zahlungsmethoden aktiviert."
 
 #: pretix/control/views/event.py:464
 msgid "Your shop is live now!"
-msgstr "Ihr Shop ist nun online!"
+msgstr "Dein Shop ist nun online!"
 
 #: pretix/control/views/event.py:468
 msgid "We've taken your shop down. You can re-enable it whenever you want!"
 msgstr ""
-"Wir haben Ihren Shop ausgeschaltet. Sie können ihn hier jederzeit wieder "
+"Wir haben deinen Shop ausgeschaltet. Du kannst ihn hier jederzeit wieder "
 "einschalten."
 
 #: pretix/control/views/event_dashboard.py:38
@@ -2431,7 +2431,7 @@ msgstr "{quota} übrig"
 
 #: pretix/control/views/event_dashboard.py:97
 msgid "Your ticket shop is"
-msgstr "Ihr Ticket-Shop ist"
+msgstr "Dein Ticket-Shop ist"
 
 #: pretix/control/views/event_dashboard.py:97
 msgid "Click here to change"
@@ -3062,7 +3062,7 @@ msgid ""
 "entrance of your event. If you try to configure the app, it will ask you to "
 "scan the QR code below."
 msgstr ""
-"pretixdroid ist eine Android-App, mit der du am Eingang Ihrer Veranstaltung "
+"pretixdroid ist eine Android-App, mit der du am Eingang deiner Veranstaltung "
 "die Tickets konfigurieren kannst. Bei der Einrichtung der App wirst du "
 "aufgefordert, den untenstehenden Code zu scannen."
 
@@ -3471,7 +3471,7 @@ msgstr "Wir verarbeiten deine Anfrage…"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:13
 msgid "This shop is currently only visible to you and your team."
-msgstr "Dieser Shop ist aktuell nur für Sie und Ihr Team sichtbar."
+msgstr "Dieser Shop ist aktuell nur für dich und dein Team sichtbar."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:15
 msgid "Take it live now"
@@ -3775,11 +3775,11 @@ msgstr "Diese Bestellung kann nicht mehr bezahlt werden."
 
 #: pretix/presale/views/order.py:247
 msgid "You cannot modify this order"
-msgstr "Sie können diese Bestellung nicht bearbeiten"
+msgstr "Du kannst diese Bestellung nicht bearbeiten"
 
 #: pretix/presale/views/order.py:268
 msgid "You cannot cancel this order"
-msgstr "Sie können diese Bestellung nicht stornieren"
+msgstr "Du kannst diese Bestellung nicht stornieren"
 
 #: pretix/presale/views/order.py:306
 msgid "Ticket download is not (yet) enabled."
