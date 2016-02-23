@@ -6,8 +6,8 @@ from .items import (
 )
 from .log import LogEntry
 from .orders import (
-    AbstractPosition, CachedTicket, CartPosition, Order, OrderPosition,
-    QuestionAnswer, generate_secret,
+    AbstractPosition, CachedTicket, CartPosition, InvoiceAddress, Order,
+    OrderPosition, QuestionAnswer, generate_secret,
 )
 from .organizer import Organizer, OrganizerPermission, OrganizerSetting
 from .vouchers import Voucher
@@ -17,5 +17,5 @@ __all__ = [
     'ItemCategory', 'Item', 'Property', 'PropertyValue', 'ItemVariation', 'VariationsField', 'Question',
     'BaseRestriction', 'Quota', 'Order', 'CachedTicket', 'QuestionAnswer', 'AbstractPosition', 'OrderPosition',
     'CartPosition', 'EventSetting', 'OrganizerSetting', 'EventLock', 'cachedfile_name', 'itempicture_upload_to',
-    'generate_secret', 'Voucher', 'LogEntry'
+    'generate_secret', 'Voucher', 'LogEntry', 'InvoiceAddress'
 ]
