@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.core.files import File
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
 from django.forms.models import ModelMultipleChoiceField, inlineformset_factory
@@ -536,7 +537,10 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
         if form.has_changed():
             self.object.log_action(
                 'pretix.event.item.changed', user=self.request.user, data={
-                    k: form.cleaned_data.get(k) for k in form.changed_data
+                    k: (form.cleaned_data.get(k).name
+                        if isinstance(form.cleaned_data.get(k), File)
+                        else form.cleaned_data.get(k))
+                    for k in form.changed_data
                 }
             )
         return super().form_valid(form)
