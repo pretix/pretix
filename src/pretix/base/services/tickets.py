@@ -32,4 +32,6 @@ if settings.HAS_CELERY:
     from pretix.celery import app
 
     generate_task = app.task(generate)
-    generate = lambda *args, **kwargs: generate_task.apply_async(args=args, kwargs=kwargs)
+
+    def generate(*args, **kwargs):
+        generate_task.apply_async(args=args, kwargs=kwargs)

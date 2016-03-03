@@ -90,4 +90,6 @@ if settings.HAS_CELERY and settings.EMAIL_BACKEND != 'django.core.mail.outbox':
     from pretix.celery import app
 
     mail_send_task = app.task(mail_send)
-    mail_send = lambda *args, **kwargs: mail_send_task.apply_async(args=args, kwargs=kwargs)
+
+    def mail_send(*args, **kwargs):
+        mail_send_task.apply_async(args=args, kwargs=kwargs)

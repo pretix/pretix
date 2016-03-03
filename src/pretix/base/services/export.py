@@ -22,4 +22,6 @@ if settings.HAS_CELERY:
     from pretix.celery import app
 
     export_task = app.task(export)
-    export = lambda *args, **kwargs: export_task.apply_async(args=args, kwargs=kwargs)
+
+    def export(*args, **kwargs):
+        export_task.apply_async(args=args, kwargs=kwargs)
