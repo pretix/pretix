@@ -131,6 +131,7 @@ class JSONExporter(BaseExporter):
                                 'variation': position.variation_id,
                                 'price': position.price,
                                 'attendee_name': position.attendee_name,
+                                'secret': position.secret,
                                 'answers': [
                                     {
                                         'question': answer.question_id,

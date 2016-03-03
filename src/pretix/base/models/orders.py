@@ -19,6 +19,11 @@ def generate_secret():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16))
 
 
+def generate_position_secret():
+    # Exclude o,0,1,i,l to avoid confusion with bad fonts/printers
+    return ''.join(random.choice('abcdefghjkmnpqrstuvwxyz23456789') for _ in range(32))
+
+
 class Order(LoggedModel):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
@@ -371,6 +376,7 @@ class OrderPosition(AbstractPosition):
         max_digits=10, decimal_places=2,
         verbose_name=_('Tax value')
     )
+    secret = models.CharField(max_length=64, default=generate_position_secret)
 
     class Meta:
         verbose_name = _("Order position")
