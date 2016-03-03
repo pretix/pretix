@@ -216,7 +216,7 @@ class OrderResendLink(OrderView):
             },
             self.order.event, locale=self.order.locale
         )
-        messages.success(self.request, _('The order has been marked as paid.'))
+        messages.success(self.request, _('The email has been queued to be sent.'))
         self.order.log_action('pretix.base.order.resend', user=self.request.user)
         return redirect(self.get_order_url())
 
