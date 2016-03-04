@@ -2,6 +2,7 @@ from collections import OrderedDict
 
 from django import forms
 from django.contrib import messages
+from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.forms import modelformset_factory
@@ -290,7 +291,10 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
                 if provider.form.has_changed():
                     self.request.event.log_action(
                         'pretix.event.tickets.provider.' + provider.identifier, user=self.request.user, data={
-                            k: provider.form.cleaned_data.get(k) for k in provider.form.changed_data
+                            k: (provider.form.cleaned_data.get(k).name
+                                if isinstance(provider.form.cleaned_data.get(k), File)
+                                else provider.form.cleaned_data.get(k))
+                            for k in provider.form.changed_data
                         }
                     )
             else:
