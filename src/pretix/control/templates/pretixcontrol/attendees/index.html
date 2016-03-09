@@ -1,0 +1,55 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Attendees" %}{% endblock %}
+{% block content %}
+	<h1>{% trans "Attendees" %}</h1>
+    <p>
+        <form class="form-inline" action="" method="get" style="display: inline;">
+            <select name="status" class="form-control">
+                <option value="">{% trans "All attendees" %}</option>
+                <option value="p" {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "Paid" %}</option>
+                <option value="n" {% if request.GET.status == "n" %}selected="selected"{% endif %}>{% trans "Pending" %}</option>
+                <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Pending (expired)" %}</option>
+                <option value="c" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Cancelled" %}</option>
+                <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Refunded" %}</option>
+            </select>
+            <select name="item" class="form-control">
+                <option value="">{% trans "All tickets" %}</option>
+                {% for item in items %}
+                    <option value="{{ item.id }}"
+                            {% if request.GET.item == item.id %}selected="selected"{% endif %}>
+                        {{ item.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+        </form>
+    </p>
+    <div class="table-responsive">
+        <table class="table table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th>{% trans "Order code" %}</th>
+                    <th>{% trans "Product" %}</th>
+                    <th>{% trans "Attendee name" %}</th>
+                    <th>{% trans "Order date" %}</th>
+                    <th>{% trans "Status" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in attendees %}
+                <tr>
+                    <td><strong><a
+                            href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=a.order.code%}"
+                            >{{ a.order.code }}</a></strong></td>
+                    <td>{{ a.item.name }}</td>
+                    <td>{{ a.attendee_name|default:"" }}</td>
+                    <td>{{ a.order.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
+                    <td>{% include "pretixcontrol/orders/fragment_order_status.html" with order=a.order %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}
