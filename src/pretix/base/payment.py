@@ -162,7 +162,8 @@ class BasePaymentProvider:
         """
         You can use this method to disable this payment provider for certain groups
         of users, products or other criteria. If this method returns ``False``, the
-        user will not be able to select this payment method.
+        user will not be able to select this payment method. This will only be called
+        during checkout, not on retrying.
 
         The default implementation always returns ``True``.
         """
@@ -405,9 +406,7 @@ class FreeOrderProvider(BasePaymentProvider):
         pass
 
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
-        return CartPosition.objects.filter(
-            Q(cart_id=request.session.session_key) & Q(event=request.event)
-        ).aggregate(sum=Sum('price'))['sum'] == 0
+        return True
 
     @property
     def verbose_name(self) -> str:

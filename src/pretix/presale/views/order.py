@@ -151,8 +151,7 @@ class OrderPayDo(EventViewMixin, OrderDetailMixin, TemplateView):
             messages.error(request, _('The payment for this order cannot be continued.'))
             return redirect(self.get_order_url())
         if (not self.payment_provider.payment_is_valid_session(request)
-                or not self.payment_provider.is_enabled
-                or not self.payment_provider.is_allowed(request)):
+                or not self.payment_provider.is_enabled):
             messages.error(request, _('The payment information you entered was incomplete.'))
             return redirect(self.get_payment_url())
         return super().dispatch(request, *args, **kwargs)
@@ -181,8 +180,7 @@ class OrderPayComplete(EventViewMixin, OrderDetailMixin, View):
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         if (not self.payment_provider.payment_is_valid_session(request)
-                or not self.payment_provider.is_enabled
-                or not self.payment_provider.is_allowed(request)):
+                or not self.payment_provider.is_enabled):
             messages.error(request, _('The payment information you entered was incomplete.'))
             return redirect(self.get_payment_url())
         return super().dispatch(request, *args, **kwargs)
