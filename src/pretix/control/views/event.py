@@ -244,8 +244,13 @@ class MailSettings(EventPermissionRequiredMixin, FormView):
                 except Exception as e:
                     messages.warning(self.request, _('An error occured while contacting the SMTP server: %s') % str(e))
                 else:
-                    messages.success(self.request, _('Your changes have been saved and the connection attempt to '
-                                                     'your SMTP server was successful.'))
+                    if form.cleaned_data.get('smtp_use_custom'):
+                        messages.success(self.request, _('Your changes have been saved and the connection attempt to '
+                                                         'your SMTP server was successful. Reme'))
+                    else:
+                        messages.success(self.request, _('We\'ve been able to contact the SMTP server you configured. '
+                                                         'Remember to check the "use custom SMTP server" checkbox, '
+                                                         'otherwise your SMTP server will not be used.'))
                 finally:
                     backend.close()
             else:
