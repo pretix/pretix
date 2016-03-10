@@ -102,6 +102,7 @@ class Paypal(BasePaymentProvider):
                 }
             ]
         })
+        request.session['payment_paypal_order'] = None
         return self._create_payment(request, payment)
 
     def _create_payment(self, request, payment):
@@ -238,3 +239,40 @@ class Paypal(BasePaymentProvider):
             order = mark_order_refunded(order)
             order.payment_info = json.dumps(sale.to_dict())
             order.save()
+
+    def order_can_retry(self, order):
+        return True
+
+    def retry_prepare(self, request, order):
+        self.init_api()
+        payment = paypalrestsdk.Payment({
+            'intent': 'sale',
+            'payer': {
+                "payment_method": "paypal",
+            },
+            "redirect_urls": {
+                "return_url": build_absolute_uri(request.event, 'plugins:paypal:return'),
+                "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort'),
+            },
+            "transactions": [
+                {
+                    "item_list": {
+                        "items": [
+                            {
+                                "name": 'Order %s' % order.code,
+                                "quantity": 1,
+                                "price": str(order.total),
+                                "currency": order.event.currency
+                            }
+                        ]
+                    },
+                    "amount": {
+                        "currency": request.event.currency,
+                        "total": str(order.total)
+                    },
+                    "description": __('Event tickets for %s') % request.event.name
+                }
+            ]
+        })
+        request.session['payment_paypal_order'] = order.pk
+        return self._create_payment(request, payment)
