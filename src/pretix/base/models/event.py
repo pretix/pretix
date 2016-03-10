@@ -4,7 +4,6 @@ from datetime import datetime
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.mail import get_connection
-from django.core.mail.backends.smtp import EmailBackend
 from django.core.validators import RegexValidator
 from django.db import models
 from django.template.defaultfilters import date as _date
@@ -12,6 +11,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.email import CustomSMTPBackend
 from pretix.base.i18n import I18nCharField
 from pretix.base.models.base import LoggedModel
 from pretix.base.settings import SettingsProxy
@@ -188,13 +188,13 @@ class Event(LoggedModel):
 
     def get_mail_backend(self, force_custom=False):
         if self.settings.smtp_use_custom or force_custom:
-            return EmailBackend(host=self.settings.smtp_host,
-                                port=self.settings.smtp_port,
-                                username=self.settings.smtp_username,
-                                password=self.settings.smtp_password,
-                                use_tls=self.settings.smtp_use_tls,
-                                use_ssl=self.settings.smtp_use_ssl,
-                                fail_silently=False)
+            return CustomSMTPBackend(host=self.settings.smtp_host,
+                                     port=self.settings.smtp_port,
+                                     username=self.settings.smtp_username,
+                                     password=self.settings.smtp_password,
+                                     use_tls=self.settings.smtp_use_tls,
+                                     use_ssl=self.settings.smtp_use_ssl,
+                                     fail_silently=False)
         else:
             return get_connection(fail_silently=False)
 

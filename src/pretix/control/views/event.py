@@ -240,7 +240,7 @@ class MailSettings(EventPermissionRequiredMixin, FormView):
             if request.POST.get('test', '0').strip() == '1':
                 backend = self.request.event.get_mail_backend(force_custom=True)
                 try:
-                    backend.open()
+                    backend.test(self.request.event.settings.mail_from)
                 except Exception as e:
                     messages.warning(self.request, _('An error occured while contacting the SMTP server: %s') % str(e))
                 else:
@@ -251,8 +251,6 @@ class MailSettings(EventPermissionRequiredMixin, FormView):
                         messages.success(self.request, _('We\'ve been able to contact the SMTP server you configured. '
                                                          'Remember to check the "use custom SMTP server" checkbox, '
                                                          'otherwise your SMTP server will not be used.'))
-                finally:
-                    backend.close()
             else:
                 messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
