@@ -4,10 +4,20 @@
 {% block content %}
     {% if object.id %}
         <h1>{% trans "Modify product:" %} {{ object.name }}</h1>
+        {% if object.has_variations %}
         <ul class="nav nav-pills">
-            <li {% if "event.item" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">{% trans "General information" %}</a></li>
-            <li {% if "event.item.variations" == url_name %}class="active"{% endif %}><a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">{% trans "Variations" %}</a></li>
+            <li {% if "event.item" == url_name %}class="active"{% endif %}>
+                <a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">
+                    {% trans "General information" %}
+                </a>
+            </li>
+            <li {% if "event.item.variations" == url_name %}class="active"{% endif %}>
+                <a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">
+                    {% trans "Variations" %}
+                </a>
+            </li>
         </ul>
+        {% endif %}
     {% else %}
         <h1>{% trans "Create product" %}</h1>
         <p>{% blocktrans trimmed %}

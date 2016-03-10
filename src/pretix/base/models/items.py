@@ -211,6 +211,10 @@ class Item(LoggedModel):
         return min([q.availability() for q in self.quotas.all()],
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
+    @cached_property
+    def has_variations(self):
+        return self.variations.exists()
+
 
 class ItemVariation(models.Model):
     """

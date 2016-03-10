@@ -2,7 +2,7 @@ import copy
 
 from django import forms
 from django.forms import BooleanField, ModelMultipleChoiceField
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as __, ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import (
@@ -99,6 +99,20 @@ class ItemFormGeneral(I18nModelForm):
             'available_from',
             'available_until',
         ]
+
+
+class ItemCreateForm(ItemFormGeneral):
+    has_variations = forms.BooleanField(label=_('The product should exist in multiple variations'),
+                                        help_text=_('Select this option e.g. for t-shirts that come in multiple sizes. '
+                                                    'You can select the variations in the next step.'))
+
+    def save(self, *args, **kwargs):
+        instance = super().save(*args, **kwargs)
+        if self.cleaned_data.get('has_variations'):
+            ItemVariation.objects.create(
+                item=instance, value=__('Standard')
+            )
+        return instance
 
 
 class ItemVariationForm(I18nModelForm):

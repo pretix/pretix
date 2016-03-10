@@ -8,6 +8,9 @@
 			<legend>{% trans "General information" %}</legend>
 			{% bootstrap_field form.name layout="horizontal" %}
 			{% bootstrap_field form.active layout="horizontal" %}
+            {% if form.has_variations %}
+                {% bootstrap_field form.has_variations layout="horizontal" %}
+            {% endif %}
 			{% bootstrap_field form.category layout="horizontal" %}
             {% bootstrap_field form.admission layout="horizontal" %}
 			{% bootstrap_field form.description layout="horizontal" %}

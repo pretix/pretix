@@ -17,7 +17,8 @@ from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Question, Quota,
 )
 from pretix.control.forms.item import (
-    CategoryForm, ItemFormGeneral, ItemVariationForm, QuestionForm, QuotaForm,
+    CategoryForm, ItemCreateForm, ItemFormGeneral, ItemVariationForm,
+    QuestionForm, QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -491,7 +492,7 @@ class ItemDetailMixin(SingleObjectMixin):
 
 
 class ItemCreate(EventPermissionRequiredMixin, CreateView):
-    form_class = ItemFormGeneral
+    form_class = ItemCreateForm
     template_name = 'pretixcontrol/item/index.html'
     permission = 'can_change_items'
 
