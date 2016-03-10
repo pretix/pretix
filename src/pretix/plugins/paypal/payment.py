@@ -17,7 +17,6 @@ logger = logging.getLogger('pretix.plugins.paypal')
 
 
 class Paypal(BasePaymentProvider):
-
     identifier = 'paypal'
     verbose_name = _('PayPal')
     payment_form_fields = OrderedDict([
@@ -67,7 +66,7 @@ class Paypal(BasePaymentProvider):
         items = []
         for cp in cart['positions']:
             items.append({
-                "name": cp.item.name,
+                "name": str(cp.item.name),
                 "description": str(cp.variation) if cp.variation else "",
                 "quantity": cp.count,
                 "price": str(cp.price),
@@ -187,7 +186,7 @@ class Paypal(BasePaymentProvider):
     def order_pending_render(self, request, order) -> str:
         retry = True
         try:
-            if order.payment_info and json.loads(order.payment_info)['state'] != 'pending':
+            if order.payment_info and json.loads(order.payment_info)['state'] == 'pending':
                 retry = False
         except KeyError:
             pass
