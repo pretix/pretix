@@ -264,6 +264,14 @@ class MailSettingsForm(SettingsForm):
         required=False
     )
 
+    def clean(self):
+        data = self.cleaned_data
+        if not data.get('smtp_password') and data.get('smtp_username'):
+            # Leave password unchanged if the username is set and the password field is empty.
+            # This makes it impossible to set an empty password as long as a username is set, but
+            # Python's smtplib does not support password-less schemes anyway.
+            data['smtp_password'] = self.initial.get('smtp_password')
+
 
 class TicketSettingsForm(SettingsForm):
     ticket_download = forms.BooleanField(
