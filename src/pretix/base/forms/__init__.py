@@ -1,5 +1,6 @@
 import copy
 import logging
+import os
 
 from django import forms
 from django.core.files import File
@@ -66,6 +67,8 @@ class SettingsForm(forms.Form):
                     )
                 else:
                     fname = '%s/%s.%s' % (self.obj.slug, name, value.name.split('.')[-1])
+                if not os.path.exists(os.path.dirname(fname)):
+                    os.makedirs(os.path.dirname(fname))
                 with default_storage.open(fname, 'wb+') as destination:
                     for chunk in value.chunks():
                         destination.write(chunk)
