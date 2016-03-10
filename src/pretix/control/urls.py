@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 
 from pretix.control.views import (
-    auth, attendees, event, dashboards, item, main, orders, organizer, user,
+    attendees, auth, dashboards, event, item, main, orders, organizer, user,
     vouchers,
 )
 

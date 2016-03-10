@@ -1,5 +1,6 @@
 from django.views.generic import ListView
-from pretix.base.models import OrderPosition, Item
+
+from pretix.base.models import Item, OrderPosition
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 
