@@ -246,7 +246,7 @@ class MailSettings(EventPermissionRequiredMixin, FormView):
                 else:
                     if form.cleaned_data.get('smtp_use_custom'):
                         messages.success(self.request, _('Your changes have been saved and the connection attempt to '
-                                                         'your SMTP server was successful. Reme'))
+                                                         'your SMTP server was successful.'))
                     else:
                         messages.success(self.request, _('We\'ve been able to contact the SMTP server you configured. '
                                                          'Remember to check the "use custom SMTP server" checkbox, '
