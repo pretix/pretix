@@ -36,14 +36,18 @@
             {% bootstrap_field sform.last_order_modification_date layout="horizontal" %}
         </fieldset>
         <fieldset>
-            <legend>{% trans "Order process settings" %}</legend>
+            <legend>{% trans "Orders" %}</legend>
             {% bootstrap_field sform.reservation_time layout="horizontal" %}
             {% bootstrap_field sform.max_items_per_order layout="horizontal" %}
             {% bootstrap_field sform.attendee_names_asked layout="horizontal" %}
             {% bootstrap_field sform.attendee_names_required layout="horizontal" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Invoicing" %}</legend>
             {% bootstrap_field sform.invoice_address_asked layout="horizontal" %}
             {% bootstrap_field sform.invoice_address_required layout="horizontal" %}
             {% bootstrap_field sform.invoice_address_vatid layout="horizontal" %}
+            {% bootstrap_field sform.tax_rate_default layout="horizontal" %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

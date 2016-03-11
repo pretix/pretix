@@ -134,13 +134,18 @@
                 </div>
             {% endfor %}
             {% if items.payment_fee %}
-                {# TODO: Tax rate? #}
                 <div class="row-fluid product-row">
                     <div class="col-md-4 col-xs-6">
                         <strong>{% trans "Payment method fee" %}</strong>
                     </div>
                     <div class="col-md-3 col-xs-6 col-md-offset-5 price">
                         <strong>{{ event.currency }} {{ items.payment_fee|floatformat:2 }}</strong>
+                        {% if order.payment_fee_tax_rate %}
+                            <br/>
+                            <small>{% blocktrans trimmed with rate=order.payment_fee_tax_rate %}
+                                incl. {{ rate }}% taxes
+                            {% endblocktrans %}</small>
+                        {% endif %}
                     </div>
                     <div class="clearfix"></div>
                 </div>

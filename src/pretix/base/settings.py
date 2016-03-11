@@ -57,6 +57,10 @@ DEFAULTS = {
         'default': 'True',
         'type': bool
     },
+    'tax_rate_default': {
+        'default': '0.00',
+        'type': decimal.Decimal
+    },
     'show_items_outside_presale_period': {
         'default': 'True',
         'type': bool

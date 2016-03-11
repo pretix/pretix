@@ -108,6 +108,11 @@ class EventSettingsForm(SettingsForm):
                     "answers to questions."),
         required=False
     )
+    tax_rate_default = forms.DecimalField(
+        label=_('Tax rate for payment fees'),
+        help_text=_("The tax rate that applies for additional fees you configured for single payment methods "
+                    "(in percent)."),
+    )
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
         label=_("Default timezone"),

@@ -123,6 +123,14 @@ class Order(LoggedModel):
         decimal_places=2, max_digits=10,
         default=0, verbose_name=_("Payment method fee")
     )
+    payment_fee_tax_rate = models.DecimalField(
+        decimal_places=2, max_digits=10,
+        verbose_name=_("Payment method fee tax rate")
+    )
+    payment_fee_tax_value = models.DecimalField(
+        decimal_places=2, max_digits=10,
+        default=0, verbose_name=_("Payment method fee tax")
+    )
     payment_info = models.TextField(
         verbose_name=_("Payment information"),
         null=True, blank=True
@@ -157,7 +165,17 @@ class Order(LoggedModel):
             self.assign_code()
         if not self.datetime:
             self.datetime = now()
+        if self.payment_fee_tax_rate is None:
+            self._calculate_tax()
         super().save(*args, **kwargs)
+
+    def _calculate_tax(self):
+        self.payment_fee_tax_rate = self.event.settings.get('tax_rate_default')
+        if self.payment_fee_tax_rate:
+            self.payment_fee_tax_value = round_decimal(
+                self.payment_fee * (1 - 100 / (100 + self.payment_fee_tax_rate)))
+        else:
+            self.payment_fee_tax_value = Decimal('0.00')
 
     def assign_code(self):
         charset = list('ABCDEFGHKLMNPQRSTUVWXYZ23456789')
