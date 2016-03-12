@@ -407,6 +407,8 @@ class OrderPosition(AbstractPosition):
             op = OrderPosition(order=order)
             for f in AbstractPosition._meta.fields:
                 setattr(op, f.name, getattr(cartpos, f.name))
+            op._calculate_tax()
+            op.save()
             for answ in cartpos.answers.all():
                 answ.orderposition = op
                 answ.cartposition = None
@@ -415,9 +417,6 @@ class OrderPosition(AbstractPosition):
                 cartpos.voucher.redeemed = True
                 cartpos.voucher.save()
             cartpos.delete()
-            op._calculate_tax()
-            ops.append(op)
-        OrderPosition.objects.bulk_create(ops)
         return ops
 
     def __repr__(self):
