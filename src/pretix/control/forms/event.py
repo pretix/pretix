@@ -148,6 +148,26 @@ class EventSettingsForm(SettingsForm):
         help_text=_("Does only work if an invoice address is asked for. VAT ID is not required."),
         required=False
     )
+    invoice_generate = forms.BooleanField(
+        label=_("Generate invoices"),
+        required=False
+    )
+    invoice_address_from = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 5}), required=False,
+        label=_("Your address"),
+        help_text=_("Will be printed as the sender on invoices. Be sure to include relevant details required in "
+                    "your jurisdiction (e.g. your VAT ID).")
+    )
+    invoice_additional_text = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 5}), required=False,
+        label=_("Additional text"),
+        help_text=_("Will be printed on every invoice below the invoice total.")
+    )
+    invoice_language = forms.ChoiceField(
+        widget=forms.Select, required=True,
+        label=_("Invoice language"),
+        choices=[('__user__', _('The user\'s language'))] + settings.LANGUAGES,
+    )
     max_items_per_order = forms.IntegerField(
         min_value=1,
         label=_("Maximum number of items per order")

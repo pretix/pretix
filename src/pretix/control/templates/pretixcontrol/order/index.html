@@ -77,6 +77,19 @@
                         </button>
                     </form>
                 </dd>
+                {% if invoices %}
+                    <dt>{% trans "Invoices" %}</dt>
+                    <dd>
+                        {% for i in invoices %}
+                            <a href="{% url "control:event.invoice.download" invoice=i.pk event=request.event.slug organizer=request.event.organizer.slug %}">
+                                {% if i.is_cancellation %}{% trans "Cancellation" %}{% else %}{% trans "Invoice" %}{% endif %}
+                                {{ i.number }}</a> ({{ i.date|date:"SHORT_DATE_FORMAT" }})
+                            {% if forloop.revcounter0 > 0 %}
+                                <br />
+                            {% endif %}
+                        {% endfor %}
+                    </dd>
+                {% endif %}
             </dl>
         </div>
     </div>

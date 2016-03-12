@@ -204,11 +204,11 @@ LOCALE_PATHS = (
     os.path.join(os.path.dirname(__file__), 'locale'),
 )
 
-LANGUAGES = (
+LANGUAGES = [
     ('en', _('English')),
     ('de', _('German')),
     ('de-informal', _('German (informal)')),
-)
+]
 
 EXTRA_LANG_INFO = {
     'de-informal': {

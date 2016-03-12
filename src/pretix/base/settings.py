@@ -61,6 +61,22 @@ DEFAULTS = {
         'default': '0.00',
         'type': decimal.Decimal
     },
+    'invoice_generate': {
+        'default': 'False',
+        'type': bool
+    },
+    'invoice_address_from': {
+        'default': '',
+        'type': str
+    },
+    'invoice_additional_text': {
+        'default': '',
+        'type': str
+    },
+    'invoice_language': {
+        'default': '__user__',
+        'type': str
+    },
     'show_items_outside_presale_period': {
         'default': 'True',
         'type': bool

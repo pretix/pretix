@@ -9,8 +9,11 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, View
 
-from pretix.base.models import CachedFile, CachedTicket, Order, OrderPosition
+from pretix.base.models import (
+    CachedFile, CachedTicket, Invoice, Order, OrderPosition,
+)
 from pretix.base.models.orders import InvoiceAddress
+from pretix.base.services.invoices import invoice_pdf
 from pretix.base.services.orders import cancel_order
 from pretix.base.services.tickets import generate
 from pretix.base.signals import (
@@ -85,6 +88,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
             answers=True,
             queryset=OrderPosition.objects.filter(order=self.order)
         )
+        ctx['invoices'] = list(self.order.invoices.all())
         if self.order.status == Order.STATUS_PENDING:
             ctx['payment'] = self.payment_provider.order_pending_render(self.request, self.order)
             ctx['can_retry'] = (
@@ -319,3 +323,31 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
         ct.save()
         generate(self.order.id, self.output.identifier)
         return redirect(reverse('cachedfile.download', kwargs={'id': ct.cachedfile.id}))
+
+
+class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+
+        try:
+            invoice = Invoice.objects.get(
+                event=self.request.event,
+                order=self.order,
+                id=self.kwargs['invoice']
+            )
+        except Invoice.DoesNotExist:
+            raise Http404(_('This invoice has not been found'))
+
+        if not invoice.file:
+            invoice_pdf(invoice.pk)
+            invoice = Invoice.objects.get(pk=invoice.pk)
+
+        if not invoice.file:
+            # This happens if we have celery installed and the file will be generated in the background
+            messages.warning(request, _('The invoice file has not yet been generated, we will generate it for you '
+                                        'now. Please try again in a few seconds.'))
+            return redirect(self.get_order_url())
+
+        return redirect(invoice.file.url)

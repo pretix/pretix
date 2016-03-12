@@ -91,43 +91,70 @@
             {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=False %}
         </div>
     </div>
-    {% if request.event.settings.invoice_address_asked %}
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                {% if order.can_modify_answers %}
-                    <div class="pull-right">
-                        <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}">
-                            <span class="fa fa-edit"></span>
-                            {% trans "Change details" %}
-                        </a>
+    <div class="row">
+        {% if invoices %}
+            <div class="col-xs-12 {% if request.event.settings.invoice_address_asked %}col-md-6{% endif %}">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            {% trans "Invoices" %}
+                        </h3>
                     </div>
-                {% endif %}
-                <h3 class="panel-title">
-                    {% trans "Invoice information" %}
-                </h3>
+                    <div class="panel-body">
+                        <ul>
+                            {% for i in invoices %}
+                                <li>
+                                    <a href="{% eventurl event "presale:event.invoice.download" invoice=i.pk secret=order.secret order=order.code %}">
+                                        {% if i.is_cancellation %}{% trans "Cancellation" %}{% else %}{% trans "Invoice" %}{% endif %}
+                                        {{ i.number }}</a> ({{ i.date|date:"SHORT_DATE_FORMAT" }})
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                <dl class="dl-horizontal">
-                    <dt>{% trans "Company" %}</dt>
-                    <dd>{{ order.invoice_address.company }}</dd>
-                    <dt>{% trans "Name" %}</dt>
-                    <dd>{{ order.invoice_address.name }}</dd>
-                    <dt>{% trans "Address" %}</dt>
-                    <dd>{{ order.invoice_address.street|linebreaksbr }}</dd>
-                    <dt>{% trans "ZIP code and city" %}</dt>
-                    <dd>{{ order.invoice_address.zipcode }} {{ addr.city }}</dd>
-                    <dt>{% trans "Country" %}</dt>
-                    <dd>{{ order.invoice_address.country }}</dd>
-                    <dt>{% trans "Phone" %}</dt>
-                    <dd>{{ order.invoice_address.phone }}</dd>
-                    {% if request.event.settings.invoice_address_vatid %}
-                        <dt>{% trans "VAT ID" %}</dt>
-                        <dd>{{ order.invoice_address.vat_id }}</dd>
-                    {% endif %}
-                </dl>
+        {% endif %}
+        {% if request.event.settings.invoice_address_asked %}
+            <div class="col-xs-12 {% if invoices %}col-md-6{% endif %}">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        {% if order.can_modify_answers %}
+                            <div class="pull-right">
+                                <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}">
+                                    <span class="fa fa-edit"></span>
+                                    {% trans "Change details" %}
+                                </a>
+                            </div>
+                        {% endif %}
+                        <h3 class="panel-title">
+                            {% trans "Invoice information" %}
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <dl class="dl-horizontal">
+                            <dt>{% trans "Company" %}</dt>
+                            <dd>{{ order.invoice_address.company }}</dd>
+                            <dt>{% trans "Name" %}</dt>
+                            <dd>{{ order.invoice_address.name }}</dd>
+                            <dt>{% trans "Address" %}</dt>
+                            <dd>{{ order.invoice_address.street|linebreaksbr }}</dd>
+                            <dt>{% trans "ZIP code and city" %}</dt>
+                            <dd>{{ order.invoice_address.zipcode }} {{ addr.city }}</dd>
+                            <dt>{% trans "Country" %}</dt>
+                            <dd>{{ order.invoice_address.country }}</dd>
+                            <dt>{% trans "Phone" %}</dt>
+                            <dd>{{ order.invoice_address.phone }}</dd>
+                            {% if request.event.settings.invoice_address_vatid %}
+                                <dt>{% trans "VAT ID" %}</dt>
+                                <dd>{{ order.invoice_address.vat_id }}</dd>
+                            {% endif %}
+                        </dl>
+                    </div>
+                </div>
             </div>
-        </div>
-    {% endif %}
+        {% endif %}
+        <div class="clearfix"></div>
+    </div>
     {% if order.status == "n" %}
         <div class="row">
             <div class="col-md-12 text-right">

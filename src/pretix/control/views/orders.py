@@ -5,7 +5,7 @@ from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseNotAllowed
+from django.http import Http404, HttpResponseNotAllowed
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -13,10 +13,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DetailView, ListView, TemplateView, View
 
 from pretix.base.models import (
-    CachedFile, CachedTicket, EventLock, Item, Order, Quota,
+    CachedFile, CachedTicket, EventLock, Invoice, Item, Order, Quota,
 )
 from pretix.base.services import tickets
 from pretix.base.services.export import export
+from pretix.base.services.invoices import invoice_pdf
 from pretix.base.services.mail import mail
 from pretix.base.services.orders import cancel_order, mark_order_paid
 from pretix.base.services.stats import order_overview
@@ -118,6 +119,7 @@ class OrderDetail(OrderView):
             and self.order.status == Order.STATUS_PAID
         )
         ctx['payment'] = self.payment_provider.order_control_render(self.request, self.object)
+        ctx['invoices'] = list(self.order.invoices.all())
         return ctx
 
     def get_items(self):
@@ -137,8 +139,8 @@ class OrderDetail(OrderView):
         def keyfunc(pos):
             if (pos.item.admission and self.request.event.settings.attendee_names_asked) \
                     or pos.item.questions.all():
-                return pos.id, 0, 0, 0, None
-            return 0, pos.item_id, pos.variation_id, pos.price, pos.voucher
+                return pos.id, 0, 0, 0, 0, None
+            return 0, pos.item_id, pos.variation_id, pos.price, pos.tax_rate, pos.voucher
 
         positions = []
         for k, g in groupby(sorted(list(cartpos), key=keyfunc), key=keyfunc):
@@ -219,6 +221,38 @@ class OrderResendLink(OrderView):
         messages.success(self.request, _('The email has been queued to be sent.'))
         self.order.log_action('pretix.base.order.resend', user=self.request.user)
         return redirect(self.get_order_url())
+
+
+class InvoiceDownload(EventPermissionRequiredMixin, View):
+    permission = 'can_view_orders'
+
+    def get_order_url(self):
+        return reverse('control:event.order', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'code': self.invoice.order.code
+        })
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.invoice = Invoice.objects.get(
+                event=self.request.event,
+                id=self.kwargs['invoice']
+            )
+        except Invoice.DoesNotExist:
+            raise Http404(_('This invoice has not been found'))
+
+        if not self.invoice.file:
+            invoice_pdf(self.invoice.pk)
+            self.invoice = Invoice.objects.get(pk=self.invoice.pk)
+
+        if not self.invoice.file:
+            # This happens if we have celery installed and the file will be generated in the background
+            messages.warning(request, _('The invoice file has not yet been generated, we will generate it for you '
+                                        'now. Please try again in a few seconds.'))
+            return redirect(self.get_order_url())
+
+        return redirect(self.invoice.file.url)
 
 
 class OrderDownload(OrderView):

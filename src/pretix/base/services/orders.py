@@ -12,6 +12,9 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.payment import BasePaymentProvider
+from pretix.base.services.invoices import (
+    generate_cancellation, generate_invoice, invoice_pdf,
+)
 from pretix.base.services.mail import mail
 from pretix.base.signals import (
     order_paid, order_placed, register_payment_providers,
@@ -99,6 +102,11 @@ def mark_order_refunded(order: Order, user: User=None):
     order.status = Order.STATUS_REFUNDED
     order.save()
     order.log_action('pretix.event.order.refunded', user=user)
+
+    i = order.invoices.filter(is_cancellation=False).last()
+    if i:
+        generate_cancellation(i)
+
     return order
 
 
@@ -112,6 +120,11 @@ def cancel_order(order: Order, user: User=None):
     order.status = Order.STATUS_CANCELLED
     order.save()
     order.log_action('pretix.event.order.cancelled', user=user)
+
+    i = order.invoices.filter(is_cancellation=False).last()
+    if i:
+        generate_cancellation(i)
+
     return order
 
 
@@ -249,6 +262,9 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             addr.save()
         except InvoiceAddress.DoesNotExist:
             pass
+
+    if event.settings.get('invoice_generate'):
+        generate_invoice(order)
 
     mail(
         order.email, _('Your order: %(code)s') % {'code': order.code},
