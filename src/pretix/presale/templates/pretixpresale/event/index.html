@@ -132,7 +132,7 @@
                                         </a>
                                     {% endif %}
                                     <strong>{{ item.name }}</strong>
-                                    {% if item.short_description %}<p>{{ item.short_description }}</p>{% endif %}
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
                                 </div>
                                 <div class="col-md-2 col-xs-6 price">
                                     {{ event.currency }} {{ item.price|floatformat:2 }}
