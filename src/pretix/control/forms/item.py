@@ -104,7 +104,8 @@ class ItemFormGeneral(I18nModelForm):
 class ItemCreateForm(ItemFormGeneral):
     has_variations = forms.BooleanField(label=_('The product should exist in multiple variations'),
                                         help_text=_('Select this option e.g. for t-shirts that come in multiple sizes. '
-                                                    'You can select the variations in the next step.'))
+                                                    'You can select the variations in the next step.'),
+                                        required=False)
 
     def save(self, *args, **kwargs):
         instance = super().save(*args, **kwargs)
