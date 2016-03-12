@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
@@ -85,7 +87,7 @@ class QuestionsForm(forms.Form):
             elif q.type == Question.TYPE_NUMBER:
                 field = forms.DecimalField(
                     label=q.question, required=q.required,
-                    initial=initial
+                    initial=initial, min_value=Decimal('0.00')
                 )
             elif q.type == Question.TYPE_STRING:
                 field = forms.CharField(
