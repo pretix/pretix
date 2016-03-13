@@ -55,6 +55,8 @@ event_urls = [
     "quotas/add",
     "orders/ABC/transition",
     "orders/ABC/extend",
+    "orders/ABC/download/pdf",
+    "orders/ABC/invoice/1",
     "orders/ABC/",
     "orders/",
 ]
