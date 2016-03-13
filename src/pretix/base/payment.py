@@ -25,6 +25,9 @@ class BasePaymentProvider:
     def __init__(self, event: Event):
         self.event = event
         self.settings = SettingsSandbox('payment', self.identifier, event)
+        # Default values
+        if self.settings.get('_fee_reverse_calc') is None:
+            self.settings.set('_fee_reverse_calc', True)
 
     def __str__(self):
         return self.identifier
@@ -48,7 +51,11 @@ class BasePaymentProvider:
         """
         fee_abs = self.settings.get('_fee_abs', as_type=Decimal, default=0)
         fee_percent = self.settings.get('_fee_percent', as_type=Decimal, default=0)
-        return round_decimal(price * fee_percent / 100) + fee_abs
+        fee_reverse_calc = self.settings.get('_fee_reverse_calc', as_type=bool, default=True)
+        if fee_reverse_calc:
+            return round_decimal((price + fee_abs) * (1 / (1 - fee_percent / 100)) - price)
+        else:
+            return round_decimal(price * fee_percent / 100) + fee_abs
 
     @property
     def verbose_name(self) -> str:
@@ -116,6 +123,14 @@ class BasePaymentProvider:
              forms.DecimalField(
                  label=_('Additional fee'),
                  help_text=_('Percentage'),
+                 required=False
+             )),
+            ('_fee_reverse_calc',
+             forms.BooleanField(
+                 label=_('Calculate the fee from the total value including the fee.'),
+                 help_text=_('We recommend you to enable this if you want your users to pay the payment fees of your '
+                             'payment provider. <a href="/control/help/payment/fee_reverse" target="_blank">Click here '
+                             'for detailled information on what this does.</a>'),
                  required=False
              )),
         ])

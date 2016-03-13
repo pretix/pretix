@@ -1,8 +1,8 @@
 from django.conf.urls import include, url
 
 from pretix.control.views import (
-    attendees, auth, dashboards, event, item, main, orders, organizer, user,
-    vouchers,
+    attendees, auth, dashboards, event, help, item, main, orders, organizer,
+    user, vouchers,
 )
 
 urlpatterns = [
@@ -78,4 +78,5 @@ urlpatterns = [
         url(r'^orders/$', orders.OrderList.as_view(), name='event.orders'),
         url(r'^attendees/$', attendees.AttendeeList.as_view(), name='event.attendees'),
     ])),
+    url(r'^help/(?P<topic>[^.]+)$', help.HelpView.as_view(), name='help'),
 ]
