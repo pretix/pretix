@@ -37,10 +37,13 @@ class LazyI18nString:
         This will rather return you a string in a wrong language than give you an
         empty value.
         """
+        return self.localize(translation.get_language())
+
+    def localize(self, lng):
         if self.data is None:
             return ""
+
         if isinstance(self.data, dict):
-            lng = translation.get_language()
             firstpart = lng.split('-')[0]
             similar = [l for l in self.data.keys() if l.startswith(firstpart + "-")]
             if lng in self.data and self.data[lng]:

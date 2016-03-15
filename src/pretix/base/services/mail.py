@@ -61,8 +61,8 @@ def mail(email: str, subject: str, template: str,
 
         body += "\r\n\r\n----\r\n"
         body += _(
-            "You are receiving this e-mail because you placed an order for %s." % event.name
-        )
+            "You are receiving this e-mail because you placed an order for {event}."
+        ).format(event=event.name)
         body += "\r\n"
     try:
         return mail_send([email], subject, body, sender, event.id if event else None)
