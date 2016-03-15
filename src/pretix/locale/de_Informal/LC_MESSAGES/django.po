@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-15 16:08+0000\n"
-"PO-Revision-Date: 2016-03-15 17:11+0100\n"
+"POT-Creation-Date: 2016-03-15 16:16+0000\n"
+"PO-Revision-Date: 2016-03-15 17:17+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -775,7 +775,6 @@ msgid "Percentage"
 msgstr "Prozentsatz"
 
 #: pretix/base/payment.py:130
-#, fuzzy
 msgid "Calculate the fee from the total value including the fee."
 msgstr "Berechne die Gebühr als Anteil vom Endbetrag."
 
@@ -973,13 +972,13 @@ msgid "Order date"
 msgstr "Bestelldatum"
 
 #: pretix/base/services/invoices.py:217
-#, python-format
+#, python-brace-format
 msgid ""
-"%s\n"
-"until %s"
+"{from_date}\n"
+"until {to_date}"
 msgstr ""
-"%s\n"
-"bis %s"
+"{from_date}\n"
+"bis {to_date}"
 
 #: pretix/base/services/invoices.py:244
 msgctxt "invoice"
@@ -1032,11 +1031,11 @@ msgid "Tax"
 msgstr "Steuer"
 
 #: pretix/base/services/mail.py:64
-#, python-format
-msgid "You are receiving this e-mail because you placed an order for %s."
+#, python-brace-format
+msgid "You are receiving this e-mail because you placed an order for {event}."
 msgstr ""
-"Du erhältst diese E-Mail, weil du eine Bestellung für die Veranstaltung %s "
-"getätigt hast."
+"Du erhältst diese E-Mail, weil du eine Bestellung für die Veranstaltung "
+"{event} getätigt hast."
 
 #: pretix/base/services/orders.py:29
 msgid ""
@@ -1965,8 +1964,6 @@ msgid "Change permissions"
 msgstr "Berechtigungen verändern"
 
 #: pretix/control/templates/pretixcontrol/event/permissions.html:21
-#, fuzzy
-#| msgid "Can change vouchers"
 msgid "Change vouchers"
 msgstr "Gutscheine bearbeiten"
 
@@ -2114,7 +2111,6 @@ msgid "Organizer name"
 msgstr "Veranstaltername"
 
 #: pretix/control/templates/pretixcontrol/help/base.html:4
-#, fuzzy
 msgid "Help center"
 msgstr "Hilfe"
 
@@ -4097,6 +4093,13 @@ msgstr "Deutsch"
 #: pretix/settings.py:210
 msgid "German (informal)"
 msgstr "Deutsch (Du)"
+
+#~ msgid ""
+#~ "%s\n"
+#~ "until %s"
+#~ msgstr ""
+#~ "%s\n"
+#~ "bis %s"
 
 #~ msgid "Order process settings"
 #~ msgstr "Bestellzeile"

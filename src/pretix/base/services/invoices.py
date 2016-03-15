@@ -214,8 +214,8 @@ def _invoice_generate_german(invoice, f):
         textobject.textLine(str(invoice.event.name))
         if invoice.event.settings.show_date_to:
             textobject.textLines(
-                _('%s\nuntil %s') % (invoice.event.get_date_from_display(),
-                                     invoice.event.get_date_to_display()))
+                _('{from_date}\nuntil {to_date}').format(from_date=invoice.event.get_date_from_display(),
+                                                         to_date=invoice.event.get_date_to_display()))
         else:
             textobject.textLine(invoice.event.get_date_from_display())
         canvas.drawText(textobject)
