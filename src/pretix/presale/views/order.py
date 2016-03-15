@@ -210,7 +210,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
         ).select_related(
             'item', 'variation'
         ).prefetch_related(
-            'variation__value', 'item__questions', 'answers'
+            'variation', 'item__questions', 'answers'
         ))
 
     @cached_property
