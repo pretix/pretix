@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-13 14:52+0000\n"
-"PO-Revision-Date: 2016-03-13 15:58+0100\n"
+"POT-Creation-Date: 2016-03-15 16:08+0000\n"
+"PO-Revision-Date: 2016-03-15 17:10+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -758,28 +758,42 @@ msgstr "Gutschein"
 msgid "Vouchers"
 msgstr "Gutscheine"
 
-#: pretix/base/payment.py:106
+#: pretix/base/payment.py:113
 msgid "Enable payment method"
 msgstr "Aktiviere Zahlungsmethode"
 
-#: pretix/base/payment.py:111 pretix/base/payment.py:117
+#: pretix/base/payment.py:118 pretix/base/payment.py:124
 msgid "Additional fee"
 msgstr "Zusätzliche Gebühr"
 
-#: pretix/base/payment.py:112
+#: pretix/base/payment.py:119
 msgid "Absolute value"
 msgstr "Fester Betrag"
 
-#: pretix/base/payment.py:118
+#: pretix/base/payment.py:125
 msgid "Percentage"
 msgstr "Prozentsatz"
 
-#: pretix/base/payment.py:351
+#: pretix/base/payment.py:130
+msgid "Calculate the fee from the total value including the fee."
+msgstr "Berechne die Gebühr als Anteil vom Endbetrag."
+
+#: pretix/base/payment.py:131
+msgid ""
+"We recommend you to enable this if you want your users to pay the payment "
+"fees of your payment provider. <a href=\"/control/help/payment/fee_reverse\" "
+"target=\"_blank\">Click here for detailled information on what this does.</a>"
+msgstr ""
+"Wir empfehlen, diese Option zu aktivieren, wenn Sie die Gebühren Ihres "
+"Zahlungsdienstleisters an Ihre Kunden weitergeben wollen. <a href=\"/control/"
+"help/payment/fee_reverse\" target=\"_blank\">Weitere Informationen</a>"
+
+#: pretix/base/payment.py:366
 #, python-format
 msgid "Payment provider: %s"
 msgstr "Zahlungsanbieter: %s"
 
-#: pretix/base/payment.py:365
+#: pretix/base/payment.py:380
 msgid ""
 "The money can not be automatically refunded, please transfer the money back "
 "manually."
@@ -787,7 +801,7 @@ msgstr ""
 "Das Geld konnte nicht automatisch erstattet werden, bitte überweisen Sie es "
 "manuell zurück."
 
-#: pretix/base/payment.py:388
+#: pretix/base/payment.py:403
 msgid ""
 "The order has been marked as refunded. Please transfer the money back to the "
 "buyer manually."
@@ -795,7 +809,7 @@ msgstr ""
 "Die Bestellung wurde als erstattet markiert. Bitte überweisen Sie den Betrag "
 "manuell an den Käufer zurück."
 
-#: pretix/base/payment.py:403
+#: pretix/base/payment.py:418
 msgid ""
 "No payment is required as this order only includes products which are free "
 "of charge."
@@ -803,11 +817,11 @@ msgstr ""
 "Es ist keine Zahlung erforderlich, da diese Bestellung nur kostenlose "
 "Produkte enthält."
 
-#: pretix/base/payment.py:413
+#: pretix/base/payment.py:428
 msgid "Free of charge"
 msgstr "Kostenlos"
 
-#: pretix/base/payment.py:449
+#: pretix/base/payment.py:464
 msgid "The order has been marked as refunded."
 msgstr "Die Bestellung wurde als zurückerstattet markiert."
 
@@ -1748,7 +1762,7 @@ msgstr "Neues Passwort setzen"
 #: pretix/control/templates/pretixcontrol/auth/recover.html:15
 #: pretix/control/templates/pretixcontrol/event/mail.html:30
 #: pretix/control/templates/pretixcontrol/event/payment.html:31
-#: pretix/control/templates/pretixcontrol/event/permissions.html:56
+#: pretix/control/templates/pretixcontrol/event/permissions.html:59
 #: pretix/control/templates/pretixcontrol/event/settings.html:58
 #: pretix/control/templates/pretixcontrol/event/tickets.html:36
 #: pretix/control/templates/pretixcontrol/events/create.html:30
@@ -1955,6 +1969,10 @@ msgid "Change permissions"
 msgstr "Berechtigungen verändern"
 
 #: pretix/control/templates/pretixcontrol/event/permissions.html:21
+msgid "Change vouchers"
+msgstr "Gutscheine bearbeiten"
+
+#: pretix/control/templates/pretixcontrol/event/permissions.html:22
 #: pretix/control/templates/pretixcontrol/item/delete.html:28
 #: pretix/control/templates/pretixcontrol/items/category_delete.html:17
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:21
@@ -2097,6 +2115,10 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/index.html:16
 msgid "Organizer name"
 msgstr "Veranstaltername"
+
+#: pretix/control/templates/pretixcontrol/help/base.html:4
+msgid "Help center"
+msgstr "Hilfe"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:6
 msgid "Modify product:"
@@ -2798,11 +2820,11 @@ msgstr "Die Bestellung wurde als unbezahlt markiert."
 msgid "The email has been queued to be sent."
 msgstr "Die E-Mail wurde zum Versenden gespeichert."
 
-#: pretix/control/views/orders.py:243 pretix/presale/views/order.py:341
+#: pretix/control/views/orders.py:243 pretix/presale/views/order.py:340
 msgid "This invoice has not been found"
 msgstr "Diese Rechnung wurde nicht gefunden"
 
-#: pretix/control/views/orders.py:251 pretix/presale/views/order.py:349
+#: pretix/control/views/orders.py:251 pretix/presale/views/order.py:348
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
@@ -2810,11 +2832,11 @@ msgstr ""
 "Diese Rechnung wurde bisher noch nicht fertig erstellt, wir werden die PDF-"
 "Datei jetzt erstellen. Bitte probieren Sie es in wenigen Sekunden erneut."
 
-#: pretix/control/views/orders.py:270 pretix/presale/views/order.py:298
+#: pretix/control/views/orders.py:270 pretix/presale/views/order.py:297
 msgid "You requested an invalid ticket output type."
 msgstr "Sie haben einen ungültigen Ausgabetyp gewählt."
 
-#: pretix/control/views/orders.py:273 pretix/presale/views/order.py:303
+#: pretix/control/views/orders.py:273 pretix/presale/views/order.py:302
 msgid "Order is not paid."
 msgstr "Bestellung ist nicht bezahlt."
 
@@ -3705,7 +3727,7 @@ msgstr "Veranstaltungsname-y-Position (mm)"
 msgid "Event name size (mm)"
 msgstr "Veranstaltungsname-Größe (mm)"
 
-#: pretix/presale/checkoutflow.py:166 pretix/presale/views/order.py:234
+#: pretix/presale/checkoutflow.py:166 pretix/presale/views/order.py:233
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
 msgstr "Wir hatten Schwierigkeiten, Ihre Eingabe zu verarbeiten."
@@ -4049,8 +4071,8 @@ msgstr "Ihr Warenkorb ist leer."
 
 #: pretix/presale/views/order.py:58 pretix/presale/views/order.py:111
 #: pretix/presale/views/order.py:153 pretix/presale/views/order.py:185
-#: pretix/presale/views/order.py:247 pretix/presale/views/order.py:268
-#: pretix/presale/views/order.py:301 pretix/presale/views/order.py:332
+#: pretix/presale/views/order.py:246 pretix/presale/views/order.py:267
+#: pretix/presale/views/order.py:300 pretix/presale/views/order.py:331
 msgid "Unknown order code or not authorized to access this order."
 msgstr ""
 "Unbekannte Bestellnummer oder Bestellung gehört einem anderen Benutzer."
@@ -4059,15 +4081,15 @@ msgstr ""
 msgid "The payment for this order cannot be continued."
 msgstr "Diese Bestellung kann nicht mehr bezahlt werden."
 
-#: pretix/presale/views/order.py:249
+#: pretix/presale/views/order.py:248
 msgid "You cannot modify this order"
 msgstr "Sie können diese Bestellung nicht bearbeiten"
 
-#: pretix/presale/views/order.py:270
+#: pretix/presale/views/order.py:269
 msgid "You cannot cancel this order"
 msgstr "Sie können diese Bestellung nicht stornieren"
 
-#: pretix/presale/views/order.py:308
+#: pretix/presale/views/order.py:307
 msgid "Ticket download is not (yet) enabled."
 msgstr "Der Ticket-Download ist (noch) nicht freigeschaltet."
 
