@@ -23,7 +23,7 @@ class CheckoutView(CartMixin, View):
             if 'step' not in kwargs:
                 return redirect(step.get_step_url())
             is_selected = (step.identifier == kwargs.get('step', ''))
-            if not is_selected and not step.is_completed(request, warn=not is_selected):
+            if "async_id" not in request.GET and not is_selected and not step.is_completed(request, warn=not is_selected):
                 return redirect(step.get_step_url())
             if is_selected:
                 if request.method.lower() in self.http_method_names:
