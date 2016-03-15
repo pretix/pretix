@@ -209,8 +209,7 @@ class OrderResendLink(OrderView):
     def post(self, *args, **kwargs):
         with language(self.order.locale):
             mail(
-                self.order.email,
-                _('Your order: %(code)s') % {'code': self.order.code},
+                self.order.email, _('Your order: %(code)s') % {'code': self.order.code},
                 self.order.event.settings.mail_text_resend_link,
                 {
                     'event': self.order.event.name,
