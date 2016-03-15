@@ -7,7 +7,7 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 from typing import Any, Dict
 
-from pretix.base.i18n import LazyI18nString
+from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import Event
 
 logger = logging.getLogger('pretix.base.mail')
@@ -39,35 +39,29 @@ def mail(email: str, subject: str, template: str,
     the email has been sent, just that it has been queued by the e-mail
     backend.
     """
-    _lng = translation.get_language()
-    if locale:
-        translation.activate(locale or settings.LANGUAGE_CODE)
+    with language(locale):
+        if isinstance(template, LazyI18nString):
+            body = str(template)
+            if context:
+                body = body.format_map(TolerantDict(context))
+        else:
+            tpl = get_template(template)
+            body = tpl.render(context)
 
-    if isinstance(template, LazyI18nString):
-        body = str(template)
-        if context:
-            body = body.format_map(TolerantDict(context))
-    else:
-        tpl = get_template(template)
-        body = tpl.render(context)
+        sender = event.settings.get('mail_from') if event else settings.MAIL_FROM
 
-    sender = event.settings.get('mail_from') if event else settings.MAIL_FROM
+        subject = str(subject)
+        if event:
+            prefix = event.settings.get('mail_prefix')
+            if prefix:
+                subject = "[%s] %s" % (prefix, subject)
 
-    subject = str(subject)
-    if event:
-        prefix = event.settings.get('mail_prefix')
-        if prefix:
-            subject = "[%s] %s" % (prefix, subject)
-
-        body += "\r\n\r\n----\r\n"
-        body += _(
-            "You are receiving this e-mail because you placed an order for {event}."
-        ).format(event=event.name)
-        body += "\r\n"
-    try:
+            body += "\r\n\r\n----\r\n"
+            body += _(
+                "You are receiving this e-mail because you placed an order for {event}."
+            ).format(event=event.name)
+            body += "\r\n"
         return mail_send([email], subject, body, sender, event.id if event else None)
-    finally:
-        translation.activate(_lng)
 
 
 def mail_send(to: str, subject: str, body: str, sender: str, event: int=None) -> bool:

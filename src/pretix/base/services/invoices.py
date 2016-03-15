@@ -22,6 +22,7 @@ from reportlab.platypus import (
     Table, TableStyle,
 )
 
+from pretix.base.i18n import language
 from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
 from pretix.base.signals import register_payment_providers
 
@@ -47,58 +48,56 @@ def generate_cancellation(invoice: Invoice):
 @transaction.atomic
 def generate_invoice(order: Order):
     locale = order.event.settings.get('invoice_language')
-    _lng = translation.get_language()
     if locale:
         if locale == '__user__':
             locale = order.locale
-        translation.activate(locale or settings.LANGUAGE_CODE)
 
-    i = Invoice(order=order, event=order.event)
-    i.invoice_from = order.event.settings.get('invoice_address_from')
-    i.additional_text = order.event.settings.get('invoice_additional_text')
+    with language(locale):
+        i = Invoice(order=order, event=order.event)
+        i.invoice_from = order.event.settings.get('invoice_address_from')
+        i.additional_text = order.event.settings.get('invoice_additional_text')
 
-    try:
-        addr_template = pgettext("invoice", """{i.company}
-{i.name}
-{i.street}
-{i.zipcode} {i.city}
-{i.country}""")
-        i.invoice_to = addr_template.format(i=order.invoice_address).strip()
-        if order.invoice_address.vat_id:
-            i.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % {i.vat_id}
-    except InvoiceAddress.DoesNotExist:
-        i.invoice_to = ""
+        try:
+            addr_template = pgettext("invoice", """{i.company}
+    {i.name}
+    {i.street}
+    {i.zipcode} {i.city}
+    {i.country}""")
+            i.invoice_to = addr_template.format(i=order.invoice_address).strip()
+            if order.invoice_address.vat_id:
+                i.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % {i.vat_id}
+        except InvoiceAddress.DoesNotExist:
+            i.invoice_to = ""
 
-    i.date = date.today()
-    i.locale = locale
-    i.save()
+        i.date = date.today()
+        i.locale = locale
+        i.save()
 
-    responses = register_payment_providers.send(order.event)
-    for receiver, response in responses:
-        provider = response(order.event)
-        if provider.identifier == order.payment_provider:
-            payment_provider = provider
-            break
+        responses = register_payment_providers.send(order.event)
+        for receiver, response in responses:
+            provider = response(order.event)
+            if provider.identifier == order.payment_provider:
+                payment_provider = provider
+                break
 
-    for p in order.positions.all():
-        desc = str(p.item.name)
-        if p.variation:
-            desc += " - " + str(p.variation.value)
-        InvoiceLine.objects.create(
-            invoice=i, description=desc,
-            gross_value=p.price, tax_value=p.tax_value,
-            tax_rate=p.tax_rate
-        )
+        for p in order.positions.all():
+            desc = str(p.item.name)
+            if p.variation:
+                desc += " - " + str(p.variation.value)
+            InvoiceLine.objects.create(
+                invoice=i, description=desc,
+                gross_value=p.price, tax_value=p.tax_value,
+                tax_rate=p.tax_rate
+            )
 
-    if order.payment_fee:
-        InvoiceLine.objects.create(
-            invoice=i, description=_('Payment via {method}').format(method=str(payment_provider.verbose_name)),
-            gross_value=order.payment_fee, tax_value=order.payment_fee_tax_value,
-            tax_rate=order.payment_fee_tax_rate
-        )
+        if order.payment_fee:
+            InvoiceLine.objects.create(
+                invoice=i, description=_('Payment via {method}').format(method=str(payment_provider.verbose_name)),
+                gross_value=order.payment_fee, tax_value=order.payment_fee_tax_value,
+                tax_rate=order.payment_fee_tax_rate
+            )
 
-    translation.activate(_lng)
-    invoice_pdf(i.pk)
+        invoice_pdf(i.pk)
 
 
 def _invoice_get_stylesheet():
@@ -316,17 +315,13 @@ def _invoice_generate_german(invoice, f):
 
 def invoice_pdf(invoice: int):
     i = Invoice.objects.get(pk=invoice)
-    _lng = translation.get_language()
-    translation.activate(i.locale)
-
-    with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
-        _invoice_generate_german(i, f)
-        f.seek(0)
-        i.file.save('invoice.pdf', ContentFile(f.read()))
-    i.save()
-
-    translation.activate(_lng)
-    return i.file.name
+    with language(i.locale):
+        with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
+            _invoice_generate_german(i, f)
+            f.seek(0)
+            i.file.save('invoice.pdf', ContentFile(f.read()))
+        i.save()
+        return i.file.name
 
 
 if settings.HAS_CELERY:

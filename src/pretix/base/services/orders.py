@@ -2,11 +2,12 @@ from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.db import transaction
+from django.utils import translation
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from typing import List
 
-from pretix.base.i18n import LazyDate, LazyNumber
+from pretix.base.i18n import LazyDate, LazyNumber, language
 from pretix.base.models import (
     CartPosition, Event, EventLock, Order, OrderPosition, Quota, User,
 )
@@ -231,6 +232,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], dt: d
 
 def _perform_order(event: str, payment_provider: str, position_ids: List[str],
                    email: str, locale: str, address: int):
+
     event = Event.objects.get(id=event)
     responses = register_payment_providers.send(event)
     pprov = None
@@ -266,22 +268,24 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
     if event.settings.get('invoice_generate'):
         generate_invoice(order)
 
-    mail(
-        order.email, _('Your order: %(code)s') % {'code': order.code},
-        event.settings.mail_text_order_placed,
-        {
-            'total': LazyNumber(order.total),
-            'currency': event.currency,
-            'date': LazyDate(order.expires),
-            'event': event.name,
-            'url': build_absolute_uri(event, 'presale:event.order', kwargs={
-                'order': order.code,
-                'secret': order.secret
-            }),
-            'paymentinfo': str(pprov.order_pending_mail_render(order))
-        },
-        event, locale=order.locale
-    )
+    with language(order.locale):
+        mail(
+            order.email, _('Your order: %(code)s') % {'code': order.code},
+            event.settings.mail_text_order_placed,
+            {
+                'total': LazyNumber(order.total),
+                'currency': event.currency,
+                'date': LazyDate(order.expires),
+                'event': event.name,
+                'url': build_absolute_uri(event, 'presale:event.order', kwargs={
+                    'order': order.code,
+                    'secret': order.secret
+                }),
+                'paymentinfo': str(pprov.order_pending_mail_render(order))
+            },
+            event, locale=order.locale
+        )
+
     return order.id
 
 

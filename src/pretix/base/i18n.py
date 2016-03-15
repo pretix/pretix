@@ -1,5 +1,6 @@
 import copy
 import json
+from contextlib import contextmanager
 
 from django import forms
 from django.conf import settings
@@ -75,11 +76,8 @@ class LazyI18nString:
             self.lazygettext = lazygettext
 
         def __getitem__(self, item):
-            lng = translation.get_language()
-            translation.activate(item)
-            s = str(ugettext(self.lazygettext))
-            translation.activate(lng)
-            return s
+            with language(item):
+                return str(ugettext(self.lazygettext))
 
         def __contains__(self, item):
             return True
@@ -334,3 +332,13 @@ class LazyNumber:
 
     def __str__(self):
         return number_format(self.value, decimal_pos=self.decimal_pos)
+
+
+@contextmanager
+def language(lng):
+    _lng = translation.get_language()
+    translation.activate(lng or settings.LANGUAGE_CODE)
+    try:
+        yield
+    finally:
+        translation.activate(_lng)

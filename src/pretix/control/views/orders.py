@@ -7,11 +7,12 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import Http404, HttpResponseNotAllowed
 from django.shortcuts import redirect, render
-from django.utils.functional import cached_property
+from django.utils.functional import cached_property, lazy
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext, ugettext_lazy as _
 from django.views.generic import DetailView, ListView, TemplateView, View
 
+from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, CachedTicket, EventLock, Invoice, Item, Order, Quota,
 )
@@ -206,18 +207,20 @@ class OrderResendLink(OrderView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        mail(
-            self.order.email, _('Your order: %(code)s') % {'code': self.order.code},
-            self.order.event.settings.mail_text_resend_link,
-            {
-                'event': self.order.event.name,
-                'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
-                    'order': self.order.code,
-                    'secret': self.order.secret
-                }),
-            },
-            self.order.event, locale=self.order.locale
-        )
+        with language(self.order.locale):
+            mail(
+                self.order.email,
+                _('Your order: %(code)s') % {'code': self.order.code},
+                self.order.event.settings.mail_text_resend_link,
+                {
+                    'event': self.order.event.name,
+                    'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
+                        'order': self.order.code,
+                        'secret': self.order.secret
+                    }),
+                },
+                self.order.event, locale=self.order.locale
+            )
         messages.success(self.request, _('The email has been queued to be sent.'))
         self.order.log_action('pretix.base.order.resend', user=self.request.user)
         return redirect(self.get_order_url())
