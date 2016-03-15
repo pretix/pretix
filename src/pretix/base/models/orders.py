@@ -288,6 +288,14 @@ class QuestionAnswer(models.Model):
     )
     answer = models.TextField()
 
+    def __str__(self):
+        if self.question.type == Question.TYPE_BOOLEAN and self.answer == "True":
+            return str(_("Yes"))
+        elif self.question.type == Question.TYPE_BOOLEAN and self.answer == "False":
+            return str(_("No"))
+        else:
+            return self.answer
+
 
 class AbstractPosition(models.Model):
     """
@@ -354,7 +362,7 @@ class AbstractPosition(models.Model):
         """
         self.answ = {}
         for a in self.answers.all():
-            self.answ[a.question_id] = a.answer
+            self.answ[a.question_id] = a
         self.questions = []
         for q in self.item.questions.all():
             if q.id in self.answ:
