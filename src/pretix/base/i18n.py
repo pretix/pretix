@@ -83,7 +83,7 @@ class LazyI18nString:
             return True
 
         def __str__(self):
-            return str(self.lazygettext)
+            return str(ugettext(self.lazygettext))
 
     @classmethod
     def from_gettext(cls, lazygettext):
