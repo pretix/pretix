@@ -6,6 +6,7 @@
 <head>
     <title>{% block thetitle %}{% endblock %}</title>
     {% compress css %}
+        <link rel="stylesheet" type="text/css" href="{% static "lightbox/css/lightbox.css" %}" />
         <link rel="stylesheet" type="text/less" href="{% static "pretixpresale/less/main.less" %}" />
     {% endcompress %}
     {% compress js %}
