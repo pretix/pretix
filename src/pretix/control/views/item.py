@@ -644,6 +644,7 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         success_url = self.get_success_url()
         if self.is_allowed():
+            self.get_object().cartposition_set.all().delete()
             self.get_object().log_action('pretix.event.item.deleted', user=self.request.user)
             self.get_object().delete()
             messages.success(request, _('The selected product has been deleted.'))
