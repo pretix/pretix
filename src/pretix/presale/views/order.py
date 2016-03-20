@@ -6,7 +6,7 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _, gettext
+from django.utils.translation import gettext, ugettext_lazy as _
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import (
@@ -14,7 +14,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.services.invoices import invoice_pdf
-from pretix.base.services.orders import cancel_order, OrderError
+from pretix.base.services.orders import OrderError, cancel_order
 from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
