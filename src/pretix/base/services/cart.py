@@ -153,7 +153,7 @@ def _add_voucher(event: Event, voucher: str, expiry: datetime, cart_id: str):
                     raise CartError(error_messages['unavailable'])
 
         CartPosition.objects.create(
-            event=event, item=v.item, variation=None,
+            event=event, item=v.item, variation=v.variation,
             price=v.price if v.price is not None else v.item.default_price,
             expires=expiry, cart_id=cart_id, voucher=v
         )

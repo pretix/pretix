@@ -493,17 +493,18 @@ class Quota(LoggedModel):
     def count_blocking_vouchers(self) -> int:
         from pretix.base.models import Voucher
         return Voucher.objects.filter(
-            item__quotas__in=[self],
-            block_quota=True,
-            redeemed=False
+            Q(item__quotas__in=[self]) &
+            Q(block_quota=True) &
+            Q(redeemed=False) &
+            self._position_lookup
         ).count()
 
     def count_in_cart(self) -> int:
         from pretix.base.models import CartPosition
 
         return CartPosition.objects.filter(
-            Q(expires__gte=now())
-            & self._position_lookup
+            Q(expires__gte=now()) &
+            self._position_lookup
         ).count()
 
     def count_orders(self) -> dict:

@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .base import LoggedModel
 from .event import Event
-from .items import Item
+from .items import Item, ItemVariation
 from .orders import CartPosition, OrderPosition
 
 
@@ -61,6 +61,14 @@ class Voucher(LoggedModel):
         verbose_name=_("Product"),
         help_text=_(
             "This product is added to the user's cart if the voucher is redeemed."
+        )
+    )
+    variation = models.ForeignKey(
+        ItemVariation, related_name='vouchers',
+        null=True, blank=True,
+        verbose_name=_("Product variation"),
+        help_text=_(
+            "This variation of the product select above is being used."
         )
     )
 
