@@ -78,6 +78,9 @@ class LazyI18nString:
     def __format__(self, format_spec):
         return self.__str__()
 
+    def __eq__(self, other):
+        return self.data == other.data
+
     class LazyGettextProxy:
         def __init__(self, lazygettext):
             self.lazygettext = lazygettext

@@ -7,6 +7,7 @@ from django.test import TestCase
 from django.utils.timezone import now
 
 from pretix.base import settings
+from pretix.base.i18n import LazyI18nString
 from pretix.base.models import Event, Organizer, OrganizerSetting, User
 from pretix.base.settings import SettingsSandbox
 
@@ -126,6 +127,9 @@ class SettingsTestCase(TestCase):
 
     def test_serialize_list(self):
         self._test_serialization([1, 2, 'a'], list)
+
+    def test_serialize_lazyi18nstring(self):
+        self._test_serialization(LazyI18nString({'de': 'Hallo', 'en': 'Hello'}), LazyI18nString)
 
     def test_serialize_bool(self):
         self._test_serialization(True, bool)
