@@ -1,3 +1,4 @@
+import pytest
 from django.conf import settings
 from django.test import TestCase
 from django.utils.timezone import now
@@ -6,28 +7,21 @@ from pretix.base.models import Event, Organizer
 from pretix.base.plugins import get_all_plugins
 from pretix.base.signals import register_ticket_outputs
 
+plugins = get_all_plugins()
 
-class PluginRegistryTest(TestCase):
-    """
-    This test case performs tests for the plugin registry.
-    """
 
-    def setUp(self):
-        o = Organizer.objects.create(name='Dummy', slug='dummy')
-        self.event = Event.objects.create(
-            organizer=o, name='Dummy', slug='dummy',
-            date_from=now(),
-        )
+@pytest.mark.django_db
+@pytest.mark.parametrize("plugin", plugins)
+def test_metadata(plugin):
+    assert hasattr(plugin, 'name')
+    assert hasattr(plugin, 'version')
+    assert hasattr(plugin, 'type')
 
-    def test_plugin_names(self):
-        for mod in get_all_plugins():
-            self.assertIn(mod.module, settings.INSTALLED_APPS)
 
-    def test_metadata(self):
-        for mod in get_all_plugins():
-            self.assertTrue(hasattr(mod, 'name'))
-            self.assertTrue(hasattr(mod, 'version'))
-            self.assertTrue(hasattr(mod, 'type'))
+@pytest.mark.django_db
+@pytest.mark.parametrize("plugin", plugins)
+def test_plugin_installed(plugin):
+    assert plugin.module in settings.INSTALLED_APPS
 
 
 class PluginSignalTest(TestCase):
