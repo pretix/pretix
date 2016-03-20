@@ -6,7 +6,7 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, gettext
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import (
@@ -14,7 +14,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.services.invoices import invoice_pdf
-from pretix.base.services.orders import cancel_order
+from pretix.base.services.orders import cancel_order, OrderError
 from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
@@ -22,6 +22,7 @@ from pretix.base.signals import (
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm
 from pretix.presale.views import CartMixin, EventViewMixin
+from pretix.presale.views.async import AsyncAction
 from pretix.presale.views.questions import QuestionsViewMixin
 
 
@@ -270,10 +271,6 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
             return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        cancel_order(self.order)
-        return redirect(self.get_order_url())
-
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
@@ -281,6 +278,36 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
         return ctx
+
+
+class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
+    task = cancel_order
+
+    def get_success_url(self, value):
+        return self.get_order_url()
+
+    def get_error_url(self):
+        return self.get_order_url()
+
+    def post(self, request, *args, **kwargs):
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        return self.do(self.order)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['order'] = self.order
+        return ctx
+
+    def get_success_message(self, value):
+        return _('The order has been cancelled.')
+
+    def get_error_message(self, exception):
+        if isinstance(exception, dict) and exception['exc_type'] == 'OrderError':
+            return gettext(exception['exc_message'])
+        elif isinstance(exception, OrderError):
+            return str(exception)
+        return super().get_error_message(exception)
 
 
 class OrderDownload(EventViewMixin, OrderDetailMixin, View):

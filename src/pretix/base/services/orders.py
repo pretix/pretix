@@ -94,39 +94,51 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
 
 
 @transaction.atomic
-def mark_order_refunded(order: Order, user: User=None):
+def mark_order_refunded(order, user=None):
     """
     Mark this order as refunded. This sets the payment status and returns the order object.
     :param order: The order to change
     :param user: The user that performed the change
     """
-    order.status = Order.STATUS_REFUNDED
-    order.save()
-    order.log_action('pretix.event.order.refunded', user=user)
+    if isinstance(order, int):
+        order = Order.objects.get(pk=order)
+    if isinstance(user, int):
+        user = User.objects.get(pk=user)
+    with order.event.lock():
+        order.status = Order.STATUS_REFUNDED
+        order.save()
+        order.log_action('pretix.event.order.refunded', user=user)
 
-    i = order.invoices.filter(is_cancellation=False).last()
-    if i:
-        generate_cancellation(i)
+        i = order.invoices.filter(is_cancellation=False).last()
+        if i:
+            generate_cancellation(i)
 
-    return order
+        return order
 
 
 @transaction.atomic
-def cancel_order(order: Order, user: User=None):
+def cancel_order(order, user=None):
     """
     Mark this order as canceled
     :param order: The order to change
     :param user: The user that performed the change
     """
-    order.status = Order.STATUS_CANCELLED
-    order.save()
-    order.log_action('pretix.event.order.cancelled', user=user)
+    if isinstance(order, int):
+        order = Order.objects.get(pk=order)
+    if isinstance(user, int):
+        user = User.objects.get(pk=user)
+    with order.event.lock():
+        if order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
+            raise OrderError(_('You cannot cancel this order'))
+        order.status = Order.STATUS_CANCELLED
+        order.save()
+        order.log_action('pretix.event.order.cancelled', user=user)
 
-    i = order.invoices.filter(is_cancellation=False).last()
-    if i:
-        generate_cancellation(i)
+        i = order.invoices.filter(is_cancellation=False).last()
+        if i:
+            generate_cancellation(i)
 
-    return order
+        return order
 
 
 class OrderError(Exception):
@@ -310,4 +322,12 @@ if settings.HAS_CELERY:
         except EventLock.LockTimeoutException:
             self.retry(exc=OrderError(error_messages['busy']))
 
+    @app.task(bind=True, max_retries=5, default_retry_delay=2)
+    def cancel_order_task(self, order: int, user: int=None):
+        try:
+            return cancel_order(order, user)
+        except EventLock.LockTimeoutException:
+            self.retry(exc=OrderError(error_messages['busy']))
+
     perform_order.task = perform_order_task
+    cancel_order.task = cancel_order_task

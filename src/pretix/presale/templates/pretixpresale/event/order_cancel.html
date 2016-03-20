@@ -12,7 +12,7 @@
         Do you really want to cancel this order? You cannot revert this action.
     {% endblocktrans %}</p>
 
-    <form method="post" href="">
+    <form method="post" action="{% eventurl request.event "presale:event.order.cancel.do" secret=order.secret order=order.code %}" data-asynctask>
         {% csrf_token %}
         <div class="row checkout-button-row">
             <div class="col-md-4">
