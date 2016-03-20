@@ -68,14 +68,15 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
             order.payment_manual = manual
         order.status = Order.STATUS_PAID
         order.save()
-        order.log_action('pretix.event.order.paid', {
-            'provider': provider,
-            'info': info,
-            'date': date,
-            'manual': manual,
-            'force': force
-        }, user=user)
-        order_paid.send(order.event, order=order)
+
+    order.log_action('pretix.event.order.paid', {
+        'provider': provider,
+        'info': info,
+        'date': date,
+        'manual': manual,
+        'force': force
+    }, user=user)
+    order_paid.send(order.event, order=order)
 
     mail(
         order.email, _('Payment received for your order: %(code)s') % {'code': order.code},
@@ -107,13 +108,13 @@ def mark_order_refunded(order, user=None):
     with order.event.lock():
         order.status = Order.STATUS_REFUNDED
         order.save()
-        order.log_action('pretix.event.order.refunded', user=user)
 
-        i = order.invoices.filter(is_cancellation=False).last()
-        if i:
-            generate_cancellation(i)
+    order.log_action('pretix.event.order.refunded', user=user)
+    i = order.invoices.filter(is_cancellation=False).last()
+    if i:
+        generate_cancellation(i)
 
-        return order
+    return order
 
 
 @transaction.atomic
@@ -132,13 +133,13 @@ def cancel_order(order, user=None):
             raise OrderError(_('You cannot cancel this order'))
         order.status = Order.STATUS_CANCELLED
         order.save()
-        order.log_action('pretix.event.order.cancelled', user=user)
 
-        i = order.invoices.filter(is_cancellation=False).last()
-        if i:
-            generate_cancellation(i)
+    order.log_action('pretix.event.order.cancelled', user=user)
+    i = order.invoices.filter(is_cancellation=False).last()
+    if i:
+        generate_cancellation(i)
 
-        return order
+    return order
 
 
 class OrderError(Exception):
