@@ -1,0 +1,70 @@
+# This file is distributed under the same license as the Django package.
+#
+# Modified informal version by
+# Raphael Michel <mail@raphaelmichel.de>, 2016
+#
+# Original Translators:
+# André Hagenbruch, 2011-2012
+# Florian Apolloner <florian@apolloner.eu>, 2011
+# Jannis Vajen, 2011,2013
+# Jannis Leidel <jannis@leidel.info>, 2013-2015
+# Markus Holtermann <inyoka@markusholtermann.eu>, 2013,2015
+msgid ""
+msgstr ""
+"Project-Id-Version: django\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-10-09 17:42+0200\n"
+"PO-Revision-Date: 2016-03-18 21:22+0100\n"
+"Last-Translator: Raphael Michel <mail@raphaelmichel.de>\n"
+"Language-Team: German (http://www.transifex.com/django/django/language/de/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.7\n"
+
+
+
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+"Bitte wähle entweder eine Datei aus oder wähle \"Löschen\", nicht "
+"beides."
+
+msgid ""
+"You are seeing this message because this HTTPS site requires a 'Referer "
+"header' to be sent by your Web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+"Du siehst diese Fehlermeldung da diese HTTPS-Seite einen „Referer“-Header "
+"von deinem Webbrowser erwartet, aber keinen erhalten hat. Dieser Header ist "
+"aus Sicherheitsgründen notwendig, um sicherzustellen, dass dein Webbrowser "
+"nicht von Dritten missbraucht wird."
+
+msgid ""
+"If you have configured your browser to disable 'Referer' headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for 'same-"
+"origin' requests."
+msgstr ""
+"Falls du deinen Webbrowser so konfiguriert hast, dass „Referer“-Header "
+"nicht gesendet werden, musst du diese Funktion mindestens für diese Seite, "
+"für sichere HTTPS-Verbindungen oder für „Same-Origin“-Verbindungen "
+"reaktivieren."
+
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+"Du siehst Diese Nachricht, da diese Seite einen CSRF-Cookie beim Verarbeiten "
+"von Formulardaten benötigt. Dieses Cookie ist aus Sicherheitsgründen "
+"notwendig, um sicherzustellen, dass dein Webbrowser nicht von Dritten "
+"missbraucht wird."
+
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for 'same-origin' requests."
+msgstr ""
+"Falls du Cookies in Ihren Webbrowser deaktiviert hast, musst du sie "
+"mindestens für diese Seite oder für „Same-Origin“-Verbindungen reaktivieren."

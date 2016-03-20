@@ -5,7 +5,7 @@ localecompile:
 	./manage.py compilemessages
 
 localegen:
-	./manage.py makemessages --all
+	./manage.py makemessages --all --ignore "pretix/helpers/*"
 
 staticfiles:
 	./manage.py collectstatic --noinput
