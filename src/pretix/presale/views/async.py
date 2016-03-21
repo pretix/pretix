@@ -116,6 +116,7 @@ class AsyncAction:
         return redirect(self.get_error_url())
 
     def get_error_message(self, exception):
+        logger.error('Unexpected exception: %r' % exception)
         return _('An unexpected error has occured')
 
     def get_success_message(self, value):
