@@ -23,7 +23,7 @@ function async_task_check_callback(data, jqXHR, status) {
         location.href = data.redirect;
         return;
     }
-    async_task_timeout = window.setTimeout(async_task_check, 500);
+    async_task_timeout = window.setTimeout(async_task_check, 250);
 }
 
 function async_task_callback(data, jqXHR, status) {
@@ -35,7 +35,7 @@ function async_task_callback(data, jqXHR, status) {
     }
     async_task_id = data.async_id;
     async_task_check_url = data.check_url;
-    async_task_timeout = window.setTimeout(async_task_check, 500);
+    async_task_timeout = window.setTimeout(async_task_check, 250);
 }
 
 function async_task_error(jqXHR, textStatus, errorThrown) {
