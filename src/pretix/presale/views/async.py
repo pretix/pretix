@@ -48,7 +48,7 @@ class AsyncAction:
                 'ready': res.ready()
             }
             if res.ready():
-                if res.successful():
+                if res.successful() and not isinstance(res.info, Exception):
                     smes = self.get_success_message(res.info)
                     if smes:
                         messages.success(self.request, smes)

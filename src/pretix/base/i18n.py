@@ -342,3 +342,16 @@ def language(lng):
         yield
     finally:
         translation.activate(_lng)
+
+
+class LazyLocaleException(Exception):
+    def __init__(self, msg, msgargs=None):
+        self.msg = msg
+        self.msgargs = msgargs
+        super().__init__(msg, msgargs)
+
+    def __str__(self):
+        if self.msgargs:
+            return ugettext(self.msg) % self.msgargs
+        else:
+            return ugettext(self.msg)

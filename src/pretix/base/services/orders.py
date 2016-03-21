@@ -7,7 +7,9 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from typing import List
 
-from pretix.base.i18n import LazyDate, LazyNumber, language
+from pretix.base.i18n import (
+    LazyDate, LazyLocaleException, LazyNumber, language,
+)
 from pretix.base.models import (
     CartPosition, Event, EventLock, Order, OrderPosition, Quota, User,
 )
@@ -29,7 +31,6 @@ error_messages = {
                  'the quantity you selected. Please see below for details.'),
     'price_changed': _('The price of some of the items in your cart has changed in the '
                        'meantime. Please see below for details.'),
-    'max_items': _("You cannot select more than %s items per order"),
     'internal': _("An internal error occured, please try again."),
     'busy': _('We were not able to process your request completely as the '
               'server was too busy. Please try again.'),
@@ -142,7 +143,7 @@ def cancel_order(order, user=None):
     return order
 
 
-class OrderError(Exception):
+class OrderError(LazyLocaleException):
     pass
 
 
@@ -315,20 +316,26 @@ def perform_order(event: str, payment_provider: str, positions: List[str],
 if settings.HAS_CELERY:
     from pretix.celery import app
 
-    @app.task(bind=True, max_retries=5, default_retry_delay=2)
+    @app.task(bind=True, max_retries=5, default_retry_delay=1)
     def perform_order_task(self, event: str, payment_provider: str, positions: List[str],
                            email: str=None, locale: str=None, address: int=None):
         try:
-            return _perform_order(event, payment_provider, positions, email, locale, address)
-        except EventLock.LockTimeoutException:
-            self.retry(exc=OrderError(error_messages['busy']))
+            try:
+                return _perform_order(event, payment_provider, positions, email, locale, address)
+            except EventLock.LockTimeoutException:
+                self.retry(exc=OrderError(error_messages['busy']))
+        except OrderError as e:
+            return e
 
-    @app.task(bind=True, max_retries=5, default_retry_delay=2)
+    @app.task(bind=True, max_retries=5, default_retry_delay=1)
     def cancel_order_task(self, order: int, user: int=None):
         try:
-            return cancel_order(order, user)
-        except EventLock.LockTimeoutException:
-            self.retry(exc=OrderError(error_messages['busy']))
+            try:
+                return cancel_order(order, user)
+            except EventLock.LockTimeoutException:
+                self.retry(exc=OrderError(error_messages['busy']))
+        except OrderError as e:
+            return e
 
     perform_order.task = perform_order_task
     cancel_order.task = cancel_order_task

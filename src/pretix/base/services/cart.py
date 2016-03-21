@@ -1,18 +1,18 @@
 from datetime import datetime, timedelta
 
 from django.conf import settings
-from django.db import transaction
 from django.db.models import Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from typing import List, Optional, Tuple
 
+from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import (
     CartPosition, Event, EventLock, Item, ItemVariation, Quota, Voucher,
 )
 
 
-class CartError(Exception):
+class CartError(LazyLocaleException):
     pass
 
 
@@ -168,7 +168,7 @@ def _add_items_to_cart(event: Event, items: List[Tuple[int, Optional[int], int]]
         existing = CartPosition.objects.filter(Q(cart_id=cart_id) & Q(event=event)).count()
         if sum(i[2] for i in items) + existing > int(event.settings.max_items_per_order):
             # TODO: i18n plurals
-            raise CartError(error_messages['max_items'] % event.settings.max_items_per_order)
+            raise CartError(error_messages['max_items'], (event.settings.max_items_per_order,))
 
         expiry = now() + timedelta(minutes=event.settings.get('reservation_time', as_type=int))
         _extend_existing(event, cart_id, expiry)
@@ -232,22 +232,28 @@ def remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int
 if settings.HAS_CELERY:
     from pretix.celery import app
 
-    @app.task(bind=True, max_retries=5, default_retry_delay=2)
+    @app.task(bind=True, max_retries=5, default_retry_delay=1)
     def add_items_to_cart_task(self, event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str,
                                voucher: str=None):
         event = Event.objects.get(id=event)
         try:
-            _add_items_to_cart(event, items, cart_id, voucher)
-        except EventLock.LockTimeoutException:
-            self.retry(exc=CartError(error_messages['busy']))
+            try:
+                _add_items_to_cart(event, items, cart_id, voucher)
+            except EventLock.LockTimeoutException:
+                self.retry(exc=CartError(error_messages['busy']))
+        except CartError as e:
+            return e
 
-    @app.task(bind=True, max_retries=5, default_retry_delay=2)
+    @app.task(bind=True, max_retries=5, default_retry_delay=1)
     def remove_items_from_cart_task(self, event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str):
         event = Event.objects.get(id=event)
         try:
-            _remove_items_from_cart(event, items, cart_id)
-        except EventLock.LockTimeoutException:
-            self.retry(exc=CartError(error_messages['busy']))
+            try:
+                _remove_items_from_cart(event, items, cart_id)
+            except EventLock.LockTimeoutException:
+                self.retry(exc=CartError(error_messages['busy']))
+        except CartError as e:
+            return e
 
     add_items_to_cart.task = add_items_to_cart_task
     remove_items_from_cart.task = remove_items_from_cart_task
