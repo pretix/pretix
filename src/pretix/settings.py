@@ -374,7 +374,9 @@ LOGGING = {
 }
 
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+# We need to use pickle for now, because kombu/celery are unable to serialize
+# exceptions (that we also use as return values) into any other format.
+CELERY_RESULT_SERIALIZER = 'pickle'
 
 BOOTSTRAP3 = {
     'success_css_class': ''
