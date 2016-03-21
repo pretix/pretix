@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.db.models import Q
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 from typing import List, Optional, Tuple
 
 from pretix.base.i18n import LazyLocaleException

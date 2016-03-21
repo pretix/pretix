@@ -2,9 +2,8 @@ from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.db import transaction
-from django.utils import translation
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 from typing import List
 
 from pretix.base.i18n import (
@@ -79,19 +78,20 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     }, user=user)
     order_paid.send(order.event, order=order)
 
-    mail(
-        order.email, _('Payment received for your order: %(code)s') % {'code': order.code},
-        order.event.settings.mail_text_order_paid,
-        {
-            'event': order.event.name,
-            'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
-                'order': order.code,
-                'secret': order.secret
-            }),
-            'downloads': order.event.settings.get('ticket_download', as_type=bool)
-        },
-        order.event, locale=order.locale
-    )
+    with language(order.locale):
+        mail(
+            order.email, _('Payment received for your order: %(code)s') % {'code': order.code},
+            order.event.settings.mail_text_order_paid,
+            {
+                'event': order.event.name,
+                'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
+                    'order': order.code,
+                    'secret': order.secret
+                }),
+                'downloads': order.event.settings.get('ticket_download', as_type=bool)
+            },
+            order.event, locale=order.locale
+        )
     return order
 
 
