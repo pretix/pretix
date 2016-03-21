@@ -1,5 +1,6 @@
 import logging
 
+import celery.exceptions
 from django.conf import settings
 from django.contrib import messages
 from django.http import JsonResponse
@@ -43,11 +44,18 @@ class AsyncAction:
         from celery.result import AsyncResult
         res = AsyncResult(request.GET.get('async_id'))
         if 'ajax' in self.request.GET:
+            if not res.ready():
+                try:
+                    res.get(timeout=0.5)
+                except celery.exceptions.TimeoutError:
+                    pass
+
+            ready = res.ready()
             data = {
                 'async_id': res.id,
-                'ready': res.ready()
+                'ready': ready
             }
-            if res.ready():
+            if ready:
                 if res.successful() and not isinstance(res.info, Exception):
                     smes = self.get_success_message(res.info)
                     if smes:
