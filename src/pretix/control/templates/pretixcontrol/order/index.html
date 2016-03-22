@@ -47,186 +47,202 @@
             </form>
         {% endif %}
     {% endif %}
-    <div class="panel panel-primary items">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                {% trans "Order details" %}
-            </h3>
-        </div>
-        <div class="panel-body">
-            <dl class="dl-horizontal">
-                <dt>{% trans "Order code" %}</dt>
-                <dd>{{ order.code }}</dd>
-                <dt>{% trans "Order date" %}</dt>
-                <dd>{{ order.datetime }}</dd>
-                {% if order.status == "p" %}
-                    <dt>{% trans "Payment date" %}</dt>
-                    <dd>{{ order.payment_date }}</dd>
-                {% elif order.status == "n" %}
-                    <dt>{% trans "Expiry date" %}</dt>
-                    <dd>{{ order.expires }}</dd>
-                {% endif %}
-                <dt>{% trans "User" %}</dt>
-                <dd>
-                    {{ order.email }}&nbsp;&nbsp;
-                    <form class="form-inline" style="display: inline;" method="post"
-                            action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
-                        {% csrf_token %}
-                        <button class="btn btn-default btn-xs">
-                            {% trans "Resend link" %}
-                        </button>
-                    </form>
-                </dd>
-                {% if invoices %}
-                    <dt>{% trans "Invoices" %}</dt>
-                    <dd>
-                        {% for i in invoices %}
-                            <a href="{% url "control:event.invoice.download" invoice=i.pk event=request.event.slug organizer=request.event.organizer.slug %}">
-                                {% if i.is_cancellation %}{% trans "Cancellation" %}{% else %}{% trans "Invoice" %}{% endif %}
-                                {{ i.number }}</a> ({{ i.date|date:"SHORT_DATE_FORMAT" }})
-                            {% if forloop.revcounter0 > 0 %}
-                                <br/>
-                            {% endif %}
-                        {% endfor %}
-                    </dd>
-                {% endif %}
-            </dl>
-        </div>
-    </div>
-    <div class="panel panel-default items">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                {% trans "Ordered items" %}
-            </h3>
-        </div>
-        <div class="panel-body">
-            {% for line in items.positions %}
-                <div class="row-fluid product-row">
-                    <div class="col-md-4 col-xs-6">
-                        <strong>{{ line.item.name }}</strong>
-                        {% if line.variation %}
-                            – {{ line.variation }}
-                        {% endif %}
-                        {% if line.voucher %}
-                            <br/><span class="fa fa-ticket"></span> {% trans "Voucher code used:" %}
-                            <a href="{% url "control:event.voucher" event=request.event.slug organizer=request.event.organizer.slug voucher=line.voucher.pk %}">
-                                {{ line.voucher.code }}
-                            </a>
-                        {% endif %}
-                        {% if line.has_questions %}
-                            <dl>
-                                {% if line.item.admission and event.settings.attendee_names_asked %}
-                                    <dt>{% trans "Attendee name" %}</dt>
-                                    <dd>{% if line.attendee_name %}{{ line.attendee_name }}{% else %}
-                                        <em>{% trans "not answered" %}</em>{% endif %}</dd>
-                                {% endif %}
-                                {% for q in line.questions %}
-                                    <dt>{{ q.question }}</dt>
-                                    <dd>{% if q.answer %}{{ q.answer }}{% else %}
-                                        <em>{% trans "not answered" %}</em>{% endif %}</dd>
-                                {% endfor %}
-                            </dl>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-2 col-xs-6 count">
-                        {{ line.count }}
-                    </div>
-                    <div class="col-md-3 col-xs-6 price">
-                        {{ event.currency }} {{ line.price|floatformat:2 }}
-                    </div>
-                    <div class="col-md-3 col-xs-6 price">
-                        <strong>{{ event.currency }} {{ line.total|floatformat:2 }}</strong>
-                        {% if line.tax_rate %}
-                            <br/>
-                            <small>{% blocktrans trimmed with rate=line.tax_rate %}
-                                incl. {{ rate }}% taxes
-                            {% endblocktrans %}</small>
-                        {% endif %}
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            {% endfor %}
-            {% if items.payment_fee %}
-                <div class="row-fluid product-row">
-                    <div class="col-md-4 col-xs-6">
-                        <strong>{% trans "Payment method fee" %}</strong>
-                    </div>
-                    <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-                        <strong>{{ event.currency }} {{ items.payment_fee|floatformat:2 }}</strong>
-                        {% if order.payment_fee_tax_rate %}
-                            <br/>
-                            <small>{% blocktrans trimmed with rate=order.payment_fee_tax_rate %}
-                                incl. {{ rate }}% taxes
-                            {% endblocktrans %}</small>
-                        {% endif %}
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            {% endif %}
-            <div class="row-fluid product-row total">
-                <div class="col-md-4 col-xs-6">
-                    <strong>{% trans "Total" %}</strong>
-                </div>
-                <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-                    <strong>{{ event.currency }} {{ items.total|floatformat:2 }}</strong>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
+
     <div class="row">
-        <div class="{% if request.event.settings.invoice_address_asked %}col-md-6{% else %}col-md-12{% endif %}">
-            <div class="panel panel-default items">
+        <div class="col-xs-12 col-lg-10">
+            <div class="panel panel-primary items">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-                        {% trans "Payment information" %}
+                        {% trans "Order details" %}
                     </h3>
                 </div>
                 <div class="panel-body">
-                    {% if order.payment_manual %}
-                        <div class="alert alert-info">
-                            {% trans "The payment state of this order was manually modified." %}
+                    <dl class="dl-horizontal">
+                        <dt>{% trans "Order code" %}</dt>
+                        <dd>{{ order.code }}</dd>
+                        <dt>{% trans "Order date" %}</dt>
+                        <dd>{{ order.datetime }}</dd>
+                        {% if order.status == "p" %}
+                            <dt>{% trans "Payment date" %}</dt>
+                            <dd>{{ order.payment_date }}</dd>
+                        {% elif order.status == "n" %}
+                            <dt>{% trans "Expiry date" %}</dt>
+                            <dd>{{ order.expires }}</dd>
+                        {% endif %}
+                        <dt>{% trans "User" %}</dt>
+                        <dd>
+                            {{ order.email }}&nbsp;&nbsp;
+                            <form class="form-inline" style="display: inline;" method="post"
+                                    action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                {% csrf_token %}
+                                <button class="btn btn-default btn-xs">
+                                    {% trans "Resend link" %}
+                                </button>
+                            </form>
+                        </dd>
+                        {% if invoices %}
+                            <dt>{% trans "Invoices" %}</dt>
+                            <dd>
+                                {% for i in invoices %}
+                                    <a href="{% url "control:event.invoice.download" invoice=i.pk event=request.event.slug organizer=request.event.organizer.slug %}">
+                                        {% if i.is_cancellation %}{% trans "Cancellation" %}{% else %}{% trans "Invoice" %}{% endif %}
+                                        {{ i.number }}</a> ({{ i.date|date:"SHORT_DATE_FORMAT" }})
+                                    {% if forloop.revcounter0 > 0 %}
+                                        <br/>
+                                    {% endif %}
+                                {% endfor %}
+                            </dd>
+                        {% endif %}
+                    </dl>
+                </div>
+            </div>
+            <div class="panel panel-default items">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Ordered items" %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    {% for line in items.positions %}
+                        <div class="row-fluid product-row">
+                            <div class="col-md-4 col-xs-6">
+                                <strong>{{ line.item.name }}</strong>
+                                {% if line.variation %}
+                                    – {{ line.variation }}
+                                {% endif %}
+                                {% if line.voucher %}
+                                    <br/><span class="fa fa-ticket"></span> {% trans "Voucher code used:" %}
+                                    <a href="{% url "control:event.voucher" event=request.event.slug organizer=request.event.organizer.slug voucher=line.voucher.pk %}">
+                                        {{ line.voucher.code }}
+                                    </a>
+                                {% endif %}
+                                {% if line.has_questions %}
+                                    <dl>
+                                        {% if line.item.admission and event.settings.attendee_names_asked %}
+                                            <dt>{% trans "Attendee name" %}</dt>
+                                            <dd>{% if line.attendee_name %}{{ line.attendee_name }}{% else %}
+                                                <em>{% trans "not answered" %}</em>{% endif %}</dd>
+                                        {% endif %}
+                                        {% for q in line.questions %}
+                                            <dt>{{ q.question }}</dt>
+                                            <dd>{% if q.answer %}{{ q.answer }}{% else %}
+                                                <em>{% trans "not answered" %}</em>{% endif %}</dd>
+                                        {% endfor %}
+                                    </dl>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-2 col-xs-6 count">
+                                {{ line.count }}
+                            </div>
+                            <div class="col-md-3 col-xs-6 price">
+                                {{ event.currency }} {{ line.price|floatformat:2 }}
+                            </div>
+                            <div class="col-md-3 col-xs-6 price">
+                                <strong>{{ event.currency }} {{ line.total|floatformat:2 }}</strong>
+                                {% if line.tax_rate %}
+                                    <br/>
+                                    <small>{% blocktrans trimmed with rate=line.tax_rate %}
+                                        incl. {{ rate }}% taxes
+                                    {% endblocktrans %}</small>
+                                {% endif %}
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    {% endfor %}
+                    {% if items.payment_fee %}
+                        <div class="row-fluid product-row">
+                            <div class="col-md-4 col-xs-6">
+                                <strong>{% trans "Payment method fee" %}</strong>
+                            </div>
+                            <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+                                <strong>{{ event.currency }} {{ items.payment_fee|floatformat:2 }}</strong>
+                                {% if order.payment_fee_tax_rate %}
+                                    <br/>
+                                    <small>{% blocktrans trimmed with rate=order.payment_fee_tax_rate %}
+                                        incl. {{ rate }}% taxes
+                                    {% endblocktrans %}</small>
+                                {% endif %}
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
                     {% endif %}
-                    {{ payment }}
-                    {% if order.status == 'n' %}
-                        <p>{% blocktrans trimmed with date=order.expires %}
-                            The payment has to be completed before {{ date }}.
-                        {% endblocktrans %}</p>
-                    {% endif %}
+                    <div class="row-fluid product-row total">
+                        <div class="col-md-4 col-xs-6">
+                            <strong>{% trans "Total" %}</strong>
+                        </div>
+                        <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+                            <strong>{{ event.currency }} {{ items.total|floatformat:2 }}</strong>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
+            </div>
+            <div class="row">
+                <div class="{% if request.event.settings.invoice_address_asked %}col-md-6{% else %}col-md-12{% endif %}">
+                    <div class="panel panel-default items">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                {% trans "Payment information" %}
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            {% if order.payment_manual %}
+                                <div class="alert alert-info">
+                                    {% trans "The payment state of this order was manually modified." %}
+                                </div>
+                            {% endif %}
+                            {{ payment }}
+                            {% if order.status == 'n' %}
+                                <p>{% blocktrans trimmed with date=order.expires %}
+                                    The payment has to be completed before {{ date }}.
+                                {% endblocktrans %}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% if request.event.settings.invoice_address_asked %}
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    {% trans "Invoice information" %}
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <dl class="dl-horizontal">
+                                    <dt>{% trans "Company" %}</dt>
+                                    <dd>{{ order.invoice_address.company }}</dd>
+                                    <dt>{% trans "Name" %}</dt>
+                                    <dd>{{ order.invoice_address.name }}</dd>
+                                    <dt>{% trans "Address" %}</dt>
+                                    <dd>{{ order.invoice_address.street|linebreaksbr }}</dd>
+                                    <dt>{% trans "ZIP code and city" %}</dt>
+                                    <dd>{{ order.invoice_address.zipcode }} {{ addr.city }}</dd>
+                                    <dt>{% trans "Country" %}</dt>
+                                    <dd>{{ order.invoice_address.country }}</dd>
+                                    <dt>{% trans "Phone" %}</dt>
+                                    <dd>{{ order.invoice_address.phone }}</dd>
+                                    {% if request.event.settings.invoice_address_vatid %}
+                                        <dt>{% trans "VAT ID" %}</dt>
+                                        <dd>{{ order.invoice_address.vat_id }}</dd>
+                                    {% endif %}
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
-        {% if request.event.settings.invoice_address_asked %}
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">
-                            {% trans "Invoice information" %}
-                        </h3>
-                    </div>
-                    <div class="panel-body">
-                        <dl class="dl-horizontal">
-                            <dt>{% trans "Company" %}</dt>
-                            <dd>{{ order.invoice_address.company }}</dd>
-                            <dt>{% trans "Name" %}</dt>
-                            <dd>{{ order.invoice_address.name }}</dd>
-                            <dt>{% trans "Address" %}</dt>
-                            <dd>{{ order.invoice_address.street|linebreaksbr }}</dd>
-                            <dt>{% trans "ZIP code and city" %}</dt>
-                            <dd>{{ order.invoice_address.zipcode }} {{ addr.city }}</dd>
-                            <dt>{% trans "Country" %}</dt>
-                            <dd>{{ order.invoice_address.country }}</dd>
-                            <dt>{% trans "Phone" %}</dt>
-                            <dd>{{ order.invoice_address.phone }}</dd>
-                            {% if request.event.settings.invoice_address_vatid %}
-                                <dt>{% trans "VAT ID" %}</dt>
-                                <dd>{{ order.invoice_address.vat_id }}</dd>
-                            {% endif %}
-                        </dl>
-                    </div>
+
+        <div class="col-xs-12 col-lg-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Order history" %}
+                    </h3>
                 </div>
+                {% include "pretixcontrol/includes/logs.html" with obj=order %}
             </div>
-        {% endif %}
+        </div>
     </div>
 {% endblock %}

@@ -180,7 +180,7 @@ class OrderTransition(OrderView):
             self.order.status = Order.STATUS_PENDING
             self.order.payment_manual = True
             self.order.save()
-            self.order.log_action('pretix.base.order.unpaid', user=self.request.user)
+            self.order.log_action('pretix.event.order.unpaid', user=self.request.user)
             messages.success(self.request, _('The order has been marked as not paid.'))
         elif self.order.status == 'p' and to == 'r':
             ret = self.payment_provider.order_control_refund_perform(self.request, self.order)
@@ -221,7 +221,7 @@ class OrderResendLink(OrderView):
                 self.order.event, locale=self.order.locale
             )
         messages.success(self.request, _('The email has been queued to be sent.'))
-        self.order.log_action('pretix.base.order.resend', user=self.request.user)
+        self.order.log_action('pretix.event.order.resend', user=self.request.user)
         return redirect(self.get_order_url())
 
 
@@ -305,7 +305,7 @@ class OrderExtend(OrderView):
         if self.form.is_valid():
             if oldvalue > now():
                 messages.success(self.request, _('The payment term has been changed.'))
-                self.order.log_action('pretix.order.changed', user=self.request.user, data={
+                self.order.log_action('pretix.event.order.expirychanged', user=self.request.user, data={
                     'expires': self.order.expires
                 })
                 self.form.save()
@@ -315,7 +315,7 @@ class OrderExtend(OrderView):
                         is_available = self.order._is_still_available()
                         if is_available is True:
                             self.form.save()
-                            self.order.log_action('pretix.order.changed', user=self.request.user, data={
+                            self.order.log_action('pretix.event.order.expirychanged', user=self.request.user, data={
                                 'expires': self.order.expires
                             })
                             messages.success(self.request, _('The payment term has been changed.'))

@@ -7,5 +7,6 @@ class PretixControlConfig(AppConfig):
 
     def ready(self):
         from .views import dashboards  # noqa
+        from . import logdisplay  # noqa
 
 default_app_config = 'pretix.control.PretixControlConfig'

@@ -87,3 +87,11 @@ as the first argument.
 order_paid = EventPluginSignal(
     providing_args=["order"]
 )
+
+"""
+This signal is sent out every time we need to display a LogEntry object and we
+don't know how to turn it into human-readable text.
+"""
+logentry_display = EventPluginSignal(
+    providing_args=["logentry"]
+)

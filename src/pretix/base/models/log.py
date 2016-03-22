@@ -28,3 +28,14 @@ class LogEntry(models.Model):
     event = models.ForeignKey('Event', null=True, blank=True, on_delete=models.CASCADE)
     action_type = models.CharField(max_length=255)
     data = models.TextField(default='{}')
+
+    class Meta:
+        ordering = ('-datetime', )
+
+    def display(self):
+        from ..signals import logentry_display
+
+        for receiver, response in logentry_display.send(self.event, logentry=self):
+            if response:
+                return response
+        return self.action_type

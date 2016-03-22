@@ -33,7 +33,6 @@ def cached_file_delete(sender, instance, **kwargs):
 
 
 class LoggingMixin:
-    logentries = GenericRelation('LogEntry')
 
     def log_action(self, action, data=None, user=None):
         """
@@ -59,6 +58,10 @@ class LoggingMixin:
 
 
 class LoggedModel(models.Model, LoggingMixin):
+    logentries = GenericRelation('LogEntry')
 
     class Meta:
         abstract = True
+
+    def all_logentries(self):
+        return self.logentries.all().select_related('user')
