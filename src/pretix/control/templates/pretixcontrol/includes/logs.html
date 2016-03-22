@@ -4,7 +4,7 @@
             <p class="meta">
                 <span class="fa fa-clock-o"></span> {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
                 {% if log.user %}
-                    <br/><span class="fa fa-user"></span> {{ log.user }}
+                    <br/><span class="fa fa-user"></span> {{ log.user.get_full_name }}
                 {% endif %}
             </p>
 
