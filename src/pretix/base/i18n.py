@@ -40,6 +40,9 @@ class LazyI18nString:
         """
         return self.localize(translation.get_language())
 
+    def __bool__(self):
+        return bool(len(self.data)) and any(self.data.values())
+
     def localize(self, lng):
         if self.data is None:
             return ""
