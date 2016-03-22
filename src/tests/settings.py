@@ -9,3 +9,5 @@ INSTALLED_APPS.append('tests.testdummy')
 MEDIA_ROOT = os.path.join(TEST_DIR, 'media')
 
 EMAIL_BACKEND = 'django.core.mail.outbox'
+
+COMPRESS_ENABLED = COMPRESS_OFFLINE = False
