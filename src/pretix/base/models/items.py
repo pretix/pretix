@@ -470,13 +470,13 @@ class Quota(LoggedModel):
         # TODO: Test for interference with old versions of Item-Quota-relations, etc.
         # TODO: Prevent corner-cases like people having ordered an item before it got
         # its first variationsadde
-        orders = self.count_orders()
+        paid, pending = self.count_orders()
 
-        size_left -= orders['paid']
+        size_left -= paid
         if size_left <= 0:
             return Quota.AVAILABILITY_GONE, 0
 
-        size_left -= orders['pending']
+        size_left -= pending
         if size_left <= 0:
             return Quota.AVAILABILITY_ORDERED, 0
 
@@ -497,7 +497,7 @@ class Quota(LoggedModel):
             Q(block_quota=True) &
             Q(redeemed=False) &
             self._position_lookup
-        ).count()
+        ).distinct().count()
 
     def count_in_cart(self) -> int:
         from pretix.base.models import CartPosition
@@ -505,25 +505,19 @@ class Quota(LoggedModel):
         return CartPosition.objects.filter(
             Q(expires__gte=now()) &
             self._position_lookup
-        ).count()
+        ).distinct().count()
 
     def count_orders(self) -> dict:
         from pretix.base.models import Order, OrderPosition
 
-        o = OrderPosition.objects.filter(self._position_lookup).aggregate(
-            paid=Sum(
-                Case(When(order__status=Order.STATUS_PAID, then=1),
-                     output_field=models.IntegerField())
-            ),
-            pending=Sum(
-                Case(When(Q(order__status=Order.STATUS_PENDING) & Q(order__expires__gte=now()), then=1),
-                     output_field=models.IntegerField())
-            )
-        )
-        for k, v in o.items():
-            if v is None:
-                o[k] = 0
-        return o
+        paid = OrderPosition.objects.filter(
+            self._position_lookup, order__status=Order.STATUS_PAID
+        ).distinct().count()
+        pending = OrderPosition.objects.filter(
+            self._position_lookup, order__status=Order.STATUS_PENDING,
+            order__expires__gte=now()
+        ).distinct().count()
+        return paid, pending
 
     @cached_property
     def _position_lookup(self) -> Q:
