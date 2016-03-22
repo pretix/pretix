@@ -120,7 +120,7 @@ class OrderDetail(OrderView):
             and self.order.status == Order.STATUS_PAID
         )
         ctx['payment'] = self.payment_provider.order_control_render(self.request, self.object)
-        ctx['invoices'] = list(self.order.invoices.all())
+        ctx['invoices'] = list(self.order.invoices.all().select_related('event'))
         return ctx
 
     def get_items(self):
@@ -131,7 +131,7 @@ class OrderDetail(OrderView):
         ).select_related(
             'item', 'variation'
         ).prefetch_related(
-            'item__questions', 'answers'
+            'item__questions', 'answers', 'answers__question'
         )
 
         # Group items of the same variation
