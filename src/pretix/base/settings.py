@@ -101,6 +101,10 @@ DEFAULTS = {
         'default': 'True',
         'type': bool
     },
+    'show_quota_left': {
+        'default': 'False',
+        'type': bool
+    },
     'ticket_download': {
         'default': 'False',
         'type': bool

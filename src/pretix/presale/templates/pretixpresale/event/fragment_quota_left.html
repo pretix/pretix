@@ -1,0 +1,8 @@
+{% load i18n %}
+{% if avail.0 > 0 and avail.1 != None %}
+    <p><small>
+        {% blocktrans trimmed with num=avail.1 %}
+            {{ num }} currently available
+        {% endblocktrans %}
+    </small></p>
+{% endif %}

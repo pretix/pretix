@@ -96,6 +96,9 @@
                                         <div class="row-fluid product-row variation">
                                             <div class="col-md-8 col-xs-12">
                                                 {{ var }}
+                                                {% if event.settings.show_quota_left %}
+                                                    {% include "pretixpresale/event/fragment_quota_left.html" with avail=var.cached_availability %}
+                                                {% endif %}
                                             </div>
                                             <div class="col-md-2 col-xs-6 price">
                                                 {{ event.currency }} {{ var.price|floatformat:2 }}
@@ -109,7 +112,7 @@
                                             {% if var.cached_availability.0 == 100 %}
                                                 <div class="col-md-2 col-xs-6 availability-box available">
                                                     <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                            max="{{ var.cached_availability.1 }}"
+                                                            max="{{ var.order_max }}"
                                                             name="variation_{{ item.id }}_{{ var.id }}">
                                                 </div>
                                             {% else %}
@@ -132,7 +135,10 @@
                                         </a>
                                     {% endif %}
                                     <strong>{{ item.name }}</strong>
-                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    {% if item.description %}<p class="description">{{ item.description }}</p>{% endif %}
+                                    {% if event.settings.show_quota_left %}
+                                        {% include "pretixpresale/event/fragment_quota_left.html" with avail=item.cached_availability %}
+                                    {% endif %}
                                 </div>
                                 <div class="col-md-2 col-xs-6 price">
                                     {{ event.currency }} {{ item.price|floatformat:2 }}
@@ -146,7 +152,7 @@
                                 {% if item.cached_availability.0 == 100 %}
                                     <div class="col-md-2 col-xs-6 availability-box available">
                                         <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                max="{{ item.cached_availability.1 }}" name="item_{{ item.id }}">
+                                                max="{{ item.order_max }}" name="item_{{ item.id }}">
                                     </div>
                                 {% else %}
                                     {% include "pretixpresale/event/fragment_availability.html" with avail=item.cached_availability.0 %}

@@ -125,6 +125,11 @@ class EventSettingsForm(SettingsForm):
         choices=settings.LANGUAGES,
         label=_("Default language"),
     )
+    show_quota_left = forms.BooleanField(
+        label=_("Show number of tickets left"),
+        help_text=_("Publicly show how many tickets of a certain type are still available."),
+        required=False
+    )
     attendee_names_asked = forms.BooleanField(
         label=_("Ask for attendee names"),
         help_text=_("Ask for a name for all tickets which include admission to the event."),
