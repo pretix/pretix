@@ -79,7 +79,11 @@ class LazyI18nString:
         return self.__str__()
 
     def __eq__(self, other):
-        return self.data == other.data
+        if other is None:
+            return False
+        if hasattr(other, 'data'):
+            return self.data == other.data
+        return self.data == other
 
     class LazyGettextProxy:
         def __init__(self, lazygettext):
