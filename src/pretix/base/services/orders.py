@@ -189,7 +189,7 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
             if cp.voucher.price is not None:
                 price = cp.voucher.price
 
-        if price != cp.price:
+        if price != cp.price and not (cp.item.free_price and cp.price > price):
             positions[i] = cp
             cp.price = price
             cp.save()

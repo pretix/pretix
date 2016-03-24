@@ -57,6 +57,66 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 23)
 
+    def test_free_price(self):
+        self.ticket.free_price = True
+        self.ticket.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'price_%d' % self.ticket.id: '24.00'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
+        self.assertIn('1', doc.select('.cart .cart-row')[0].select('.count')[0].text)
+        self.assertIn('24', doc.select('.cart .cart-row')[0].select('.price')[0].text)
+        self.assertIn('24', doc.select('.cart .cart-row')[0].select('.price')[1].text)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 24)
+
+    def test_free_price_only_if_allowed(self):
+        self.ticket.free_price = False
+        self.ticket.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'price_%d' % self.ticket.id: '24.00'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
+        self.assertIn('1', doc.select('.cart .cart-row')[0].select('.count')[0].text)
+        self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[0].text)
+        self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[1].text)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+
+    def test_free_price_lower_bound(self):
+        self.ticket.free_price = False
+        self.ticket.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'price_%d' % self.ticket.id: '12.00'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
+        self.assertIn('1', doc.select('.cart .cart-row')[0].select('.count')[0].text)
+        self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[0].text)
+        self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[1].text)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+
     def test_variation(self):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1'
@@ -74,6 +134,27 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].item, self.shirt)
         self.assertEqual(objs[0].variation, self.shirt_red)
         self.assertEqual(objs[0].price, 14)
+
+    def test_variation_free_price(self):
+        self.shirt.free_price = True
+        self.shirt.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+            'price_%d_%d' % (self.shirt.id, self.shirt_red.id): '16',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertIn('Shirt', doc.select('.cart .cart-row')[0].select('strong')[0].text)
+        self.assertIn('Red', doc.select('.cart .cart-row')[0].text)
+        self.assertIn('1', doc.select('.cart .cart-row')[0].select('.count')[0].text)
+        self.assertIn('16', doc.select('.cart .cart-row')[0].select('.price')[0].text)
+        self.assertIn('16', doc.select('.cart .cart-row')[0].select('.price')[1].text)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.shirt)
+        self.assertEqual(objs[0].variation, self.shirt_red)
+        self.assertEqual(objs[0].price, 16)
 
     def test_count(self):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {

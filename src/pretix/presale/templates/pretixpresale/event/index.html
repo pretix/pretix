@@ -76,7 +76,7 @@
                                         {% if item.description %}<p>{{ item.description }}</p>{% endif %}
                                     </div>
                                     <div class="col-md-2 col-xs-6 price">
-                                        {% if item.min_price != item.max_price %}
+                                        {% if item.min_price != item.max_price or item.free_price %}
                                             {% blocktrans trimmed with minprice=item.min_price|floatformat:2 currency=event.currency %}
                                                 from {{ currency }} {{ minprice }}
                                             {% endblocktrans %}
@@ -101,7 +101,18 @@
                                                 {% endif %}
                                             </div>
                                             <div class="col-md-2 col-xs-6 price">
-                                                {{ event.currency }} {{ var.price|floatformat:2 }}
+                                                {% if item.free_price %}
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">{{ event.currency }}</span>
+                                                        <input type="number" class="form-control input-item-price"
+                                                                placeholder="0"
+                                                                min="{{ var.price|stringformat:"0.2f" }}"
+                                                                name="price_{{ item.id }}_{{ var.id }}"
+                                                                step="0.01" value="{{ var.price|stringformat:"0.2f" }}">
+                                                    </div>
+                                                {% else %}
+                                                    {{ event.currency }} {{ var.price|floatformat:2 }}
+                                                {% endif %}
                                                 {% if item.tax_rate %}
                                                     <br/>
                                                     <small>{% blocktrans trimmed with rate=item.tax_rate %}
@@ -135,13 +146,24 @@
                                         </a>
                                     {% endif %}
                                     <strong>{{ item.name }}</strong>
-                                    {% if item.description %}<p class="description">{{ item.description }}</p>{% endif %}
+                                    {% if item.description %}
+                                        <p class="description">{{ item.description }}</p>{% endif %}
                                     {% if event.settings.show_quota_left %}
                                         {% include "pretixpresale/event/fragment_quota_left.html" with avail=item.cached_availability %}
                                     {% endif %}
                                 </div>
                                 <div class="col-md-2 col-xs-6 price">
-                                    {{ event.currency }} {{ item.price|floatformat:2 }}
+                                    {% if item.free_price %}
+                                        <div class="input-group">
+                                            <span class="input-group-addon">{{ event.currency }}</span>
+                                            <input type="number" class="form-control input-item-price" placeholder="0"
+                                                    min="{{ item.price|stringformat:"0.2f" }}"
+                                                    name="price_{{ item.id }}"
+                                                    step="0.01" value="{{ item.price|stringformat:"0.2f" }}">
+                                        </div>
+                                    {% else %}
+                                        {{ event.currency }} {{ item.price|floatformat:2 }}
+                                    {% endif %}
                                     {% if item.tax_rate %}
                                         <br/>
                                         <small>{% blocktrans trimmed with rate=item.tax_rate %}

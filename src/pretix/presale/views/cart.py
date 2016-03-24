@@ -33,17 +33,19 @@ class CartActionMixin:
         """
         items = []
         for key, value in self.request.POST.items():
-            if value.strip() == '':
+            if value.strip() == '' or '_' not in key:
                 continue
+
+            price = self.request.POST.get('price_' + key.split("_", 1)[1], "")
             if key.startswith('item_'):
                 try:
-                    items.append((int(key.split("_")[1]), None, int(value)))
+                    items.append((int(key.split("_")[1]), None, int(value), price))
                 except ValueError:
                     messages.error(self.request, _('Please enter numbers only.'))
                     return []
             elif key.startswith('variation_'):
                 try:
-                    items.append((int(key.split("_")[1]), int(key.split("_")[2]), int(value)))
+                    items.append((int(key.split("_")[1]), int(key.split("_")[2]), int(value), price))
                 except ValueError:
                     messages.error(self.request, _('Please enter numbers only.'))
                     return []

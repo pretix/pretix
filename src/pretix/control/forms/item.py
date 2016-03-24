@@ -95,6 +95,7 @@ class ItemFormGeneral(I18nModelForm):
             'description',
             'picture',
             'default_price',
+            'free_price',
             'tax_rate',
             'available_from',
             'available_until',

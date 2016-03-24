@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from decimal import Decimal
 
 from django.conf import settings
 from django.db.models import Q
@@ -51,7 +52,7 @@ def _re_add_expired_positions(items: List[CartPosition], event: Event, cart_id: 
         Q(cart_id=cart_id) & Q(event=event) & Q(expires__lte=now())
     )
     for cp in expired:
-        items.insert(0, (cp.item_id, cp.variation_id, 1, cp))
+        items.insert(0, (cp.item_id, cp.variation_id, 1, cp.price, cp))
         positions.add(cp)
     return positions
 
@@ -69,7 +70,7 @@ def _check_date(event: Event) -> None:
         raise CartError(error_messages['ended'])
 
 
-def _add_new_items(event: Event, items: List[Tuple[int, Optional[int], int]],
+def _add_new_items(event: Event, items: List[Tuple[int, Optional[int], int, Optional[str]]],
                    cart_id: str, expiry: datetime) -> Optional[str]:
     err = None
 
@@ -114,20 +115,24 @@ def _add_new_items(event: Event, items: List[Tuple[int, Optional[int], int]],
                     err = err or error_messages['in_part']
                 quota_ok = min(quota_ok, avail[1])
 
+        price = item.default_price if variation is None else (
+            variation.default_price if variation.default_price is not None else item.default_price)
+        if item.free_price and len(i) > 3 and i[3]:
+            custom_price = Decimal(i[3].replace(",", "."))
+            price = max(custom_price, price)
+
         # Create a CartPosition for as much items as we can
         for k in range(quota_ok):
-            if len(i) > 3 and i[2] == 1:
+            if len(i) > 4 and i[2] == 1:
                 # Recreating
-                cp = i[3]
+                cp = i[4]
                 cp.expires = expiry
-                cp.price = item.default_price if variation is None else (
-                    variation.default_price if variation.default_price is not None else item.default_price)
+                cp.price = price
                 cp.save()
             else:
                 CartPosition.objects.create(
                     event=event, item=item, variation=variation,
-                    price=item.default_price if variation is None else (
-                        variation.default_price if variation.default_price is not None else item.default_price),
+                    price=price,
                     expires=expiry,
                     cart_id=cart_id
                 )
@@ -161,7 +166,7 @@ def _add_voucher(event: Event, voucher: str, expiry: datetime, cart_id: str):
         raise CartError(error_messages['voucher_invalid'])
 
 
-def _add_items_to_cart(event: Event, items: List[Tuple[int, Optional[int], int]], cart_id: str=None,
+def _add_items_to_cart(event: Event, items: List[Tuple[int, Optional[int], int, Optional[str]]], cart_id: str=None,
                        voucher: str=None) -> None:
     with event.lock():
         _check_date(event)
@@ -186,12 +191,12 @@ def _add_items_to_cart(event: Event, items: List[Tuple[int, Optional[int], int]]
             _add_voucher(event, voucher, expiry, cart_id)
 
 
-def add_items_to_cart(event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str=None,
+def add_items_to_cart(event: int, items: List[Tuple[int, Optional[int], int, Optional[str]]], cart_id: str=None,
                       voucher: str=None) -> None:
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
-    :param items: A list of tuple of the form (item id, variation id or None, number)
+    :param items: A list of tuple of the form (item id, variation id or None, number, custom_price)
     :param session: Session ID of a guest
     :param coupon: A coupon that should also be reeemed
     :raises CartError: On any error that occured
@@ -203,19 +208,29 @@ def add_items_to_cart(event: int, items: List[Tuple[int, Optional[int], int]], c
         raise CartError(error_messages['busy'])
 
 
-def _remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str) -> None:
+def _remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int, Optional[str]]],
+                            cart_id: str) -> None:
     with event.lock():
-        for item, variation, cnt in items:
+        for item, variation, cnt, price in items:
             cw = Q(cart_id=cart_id) & Q(item_id=item) & Q(event=event)
             if variation:
                 cw &= Q(variation_id=variation)
             else:
                 cw &= Q(variation__isnull=True)
-            for cp in CartPosition.objects.filter(cw).order_by("-price")[:cnt]:
-                cp.delete()
+            # Prefer to delete positions that have the same price as the one the user clicked on, after thet
+            # prefer the most expensive ones.
+            if price:
+                correctprice = CartPosition.objects.filter(cw).filter(price=Decimal(price.replace(",", ".")))[:cnt]
+                for cp in correctprice:
+                    cp.delete()
+                cnt -= len(correctprice)
+            if cnt > 0:
+                for cp in CartPosition.objects.filter(cw).order_by("-price")[:cnt]:
+                    cp.delete()
 
 
-def remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str=None) -> None:
+def remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int, Optional[str]]],
+                           cart_id: str=None) -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
@@ -233,8 +248,8 @@ if settings.HAS_CELERY:
     from pretix.celery import app
 
     @app.task(bind=True, max_retries=5, default_retry_delay=1)
-    def add_items_to_cart_task(self, event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str,
-                               voucher: str=None):
+    def add_items_to_cart_task(self, event: int, items: List[Tuple[int, Optional[int], int, Optional[str]]],
+                               cart_id: str, voucher: str=None):
         event = Event.objects.get(id=event)
         try:
             try:
@@ -245,7 +260,8 @@ if settings.HAS_CELERY:
             return e
 
     @app.task(bind=True, max_retries=5, default_retry_delay=1)
-    def remove_items_from_cart_task(self, event: int, items: List[Tuple[int, Optional[int], int]], cart_id: str):
+    def remove_items_from_cart_task(self, event: int, items: List[Tuple[int, Optional[int], int]],
+                                    cart_id: str):
         event = Event.objects.get(id=event)
         try:
             try:

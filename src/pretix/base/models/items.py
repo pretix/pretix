@@ -3,7 +3,7 @@ from datetime import datetime
 from decimal import Decimal
 
 from django.db import models
-from django.db.models import Q, Case, Count, Sum, When
+from django.db.models import Q
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -131,6 +131,13 @@ class Item(LoggedModel):
     default_price = models.DecimalField(
         verbose_name=_("Default price"),
         max_digits=7, decimal_places=2, null=True
+    )
+    free_price = models.BooleanField(
+        default=False,
+        verbose_name=_("Free price input"),
+        help_text=_("If this option is active, your users can choose the price themselves. The price configured above "
+                    "is then interpreted as the minimum price a user has to enter. You could use this e.g. to collect "
+                    "additional donations for your event.")
     )
     tax_rate = models.DecimalField(
         verbose_name=_("Taxes included in percent"),

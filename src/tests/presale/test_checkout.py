@@ -217,6 +217,23 @@ class CheckoutTestCase(TestCase):
         session[key] = value
         session.save()
 
+    def test_free_price(self):
+        self.ticket.free_price = True
+        self.ticket.save()
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=42, expires=now() + timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.first().price, 42)
+
     def test_confirm_in_time(self):
         cr1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -247,6 +264,22 @@ class CheckoutTestCase(TestCase):
 
     def test_confirm_price_changed(self):
         self.ticket.default_price = 24
+        self.ticket.save()
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        cr1 = CartPosition.objects.get(id=cr1.id)
+        self.assertEqual(cr1.price, 24)
+
+    def test_confirm_free_price_increased(self):
+        self.ticket.default_price = 24
+        self.ticket.free_price = True
         self.ticket.save()
         cr1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
