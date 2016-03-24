@@ -1,5 +1,6 @@
 import datetime
 from datetime import timedelta
+from decimal import Decimal
 
 from bs4 import BeautifulSoup
 from django.conf import settings
@@ -8,7 +9,7 @@ from django.utils.timezone import now
 
 from pretix.base.models import (
     CartPosition, Event, Item, ItemCategory, ItemVariation, Organizer,
-    Question, QuestionAnswer, Quota,
+    Question, QuestionAnswer, Quota, Voucher,
 )
 
 
@@ -356,3 +357,107 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 20)
+
+    def test_voucher(self):
+        v = Voucher.objects.create(item=self.ticket, event=self.event)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+
+    def test_voucher_variation(self):
+        v = Voucher.objects.create(item=self.shirt, variation=self.shirt_red, event=self.event)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.shirt)
+        self.assertEqual(objs[0].variation, self.shirt_red)
+
+    def test_voucher_price(self):
+        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, Decimal('12.00'))
+
+    def test_voucher_redemed(self):
+        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event, redeemed=True)
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertIn('already been used', doc.select('.alert-danger')[0].text)
+        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
+
+    def test_voucher_expired(self):
+        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+                                   valid_until=now() - timedelta(days=2))
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertIn('expired', doc.select('.alert-danger')[0].text)
+        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
+
+    def test_voucher_invalid(self):
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'voucher': 'ABC'
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertIn('not known', doc.select('.alert-danger')[0].text)
+        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
+
+    def test_voucher_quota_empty(self):
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event)
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
+        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
+
+    def test_voucher_quota_ignore(self):
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+                                   allow_ignore_quota=True)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, Decimal('12.00'))
+
+    def test_voucher_quota_block(self):
+        self.quota_tickets.size = 1
+        self.quota_tickets.save()
+        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+                                   block_quota=True)
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
+        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, Decimal('12.00'))
