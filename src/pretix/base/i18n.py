@@ -41,7 +41,11 @@ class LazyI18nString:
         return self.localize(translation.get_language())
 
     def __bool__(self):
-        return bool(len(self.data)) and (any(self.data.values()) if isinstance(self.data, dict) else bool(self.data))
+        if not self.data:
+            return False
+        if isinstance(self.data, dict):
+            return any(self.data.values())
+        return True
 
     def localize(self, lng):
         if self.data is None:
