@@ -43,6 +43,7 @@ def generate_cancellation(invoice: Invoice):
         line.save()
 
     invoice_pdf(cancellation.pk)
+    return cancellation
 
 
 @transaction.atomic
@@ -59,13 +60,13 @@ def generate_invoice(order: Order):
 
         try:
             addr_template = pgettext("invoice", """{i.company}
-    {i.name}
-    {i.street}
-    {i.zipcode} {i.city}
-    {i.country}""")
+{i.name}
+{i.street}
+{i.zipcode} {i.city}
+{i.country}""")
             i.invoice_to = addr_template.format(i=order.invoice_address).strip()
             if order.invoice_address.vat_id:
-                i.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % {i.vat_id}
+                i.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % order.invoice_address.vat_id
         except InvoiceAddress.DoesNotExist:
             i.invoice_to = ""
 
@@ -98,6 +99,7 @@ def generate_invoice(order: Order):
             )
 
         invoice_pdf(i.pk)
+    return i
 
 
 def _invoice_get_stylesheet():
