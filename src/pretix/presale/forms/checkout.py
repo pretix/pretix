@@ -80,9 +80,18 @@ class QuestionsForm(forms.Form):
             else:
                 initial = None
             if q.type == Question.TYPE_BOOLEAN:
+                if q.required:
+                    # For some reason, django-bootstrap3 does not set the required attribute
+                    # itself.
+                    widget = forms.CheckboxInput(attrs={'required': 'required'})
+                else:
+                    widget = forms.CheckboxInput()
+
+                initial = (initial == "True")
+
                 field = forms.BooleanField(
                     label=q.question, required=q.required,
-                    initial=initial
+                    initial=initial, widget=widget
                 )
             elif q.type == Question.TYPE_NUMBER:
                 field = forms.DecimalField(
