@@ -292,7 +292,7 @@ class QuestionMixin:
                 if form in self.formset.deleted_forms:
                     if not form.instance.pk:
                         continue
-                    self.get_object().log_action(
+                    obj.log_action(
                         'pretix.event.question.option.deleted', user=self.request.user, data={
                             'id': form.instance.pk
                         }
@@ -300,11 +300,11 @@ class QuestionMixin:
                     form.instance.delete()
                     form.instance.pk = None
                 elif form.has_changed():
-                    form.instance.question = self.get_object()
+                    form.instance.question = obj
                     form.save()
                     change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
                     change_data['id'] = form.instance.pk
-                    self.get_object().log_action(
+                    obj.log_action(
                         'pretix.event.question.option.changed',
                         user=self.request.user, data=change_data
                     )
@@ -314,11 +314,11 @@ class QuestionMixin:
                     continue
                 if self.formset._should_delete_form(form):
                     continue
-                form.instance.question = self.get_object()
+                form.instance.question = obj
                 form.save()
                 change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
                 change_data['id'] = form.instance.pk
-                self.get_object().log_action(
+                obj.log_action(
                     'pretix.event.question.option.added',
                     user=self.request.user, data=change_data
                 )
@@ -393,13 +393,16 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
     @transaction.atomic()
     def form_valid(self, form):
         if form.cleaned_data.get('type') in ('M', 'C'):
-            if not self.save_formset(self.get_object):
+            if not self.formset.is_valid():
                 return self.get(self.request, *self.args, **self.kwargs)
 
         messages.success(self.request, _('The new question has been created.'))
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.question.added', user=self.request.user, data=dict(form.cleaned_data))
-        self.save_formset(form.instance)
+
+        if form.cleaned_data.get('type') in ('M', 'C'):
+            self.save_formset(form.instance)
+
         return ret
 
 
