@@ -299,6 +299,11 @@ class QuestionAnswer(models.Model):
         else:
             return self.answer
 
+    def save(self, *args, **kwargs):
+        if self.orderposition and self.cartposition:
+            raise ValueError('QuestionAnswer cannot be linked to an order and a cart position at the same time.')
+        super().save(*args, **kwargs)
+
 
 class AbstractPosition(models.Model):
     """

@@ -9,6 +9,7 @@ To use pretix, the most minimal setup consists of:
 
 * **pretix** and the python packages it depends on
 * An **WSGI application server** (we recommend gunicorn)
+* A periodic task runner, e.g. ``cron``
 
 You get those two bundled in the ``pretix/standalone`` docker image.
 
@@ -40,3 +41,11 @@ If you want to use one of the payment providers shipping with pretix, you should
 
 We will provide a step-by-step tutorial with the first stable release, but all configuration
 already :ref:`is documented <config>`.
+
+Set up a cronjob
+----------------
+
+You need to set up a cronjob that runs the management command ``runperiodic``. The exact interval is not important
+but should be something between every minute and every hour. You could for example configure cron like this::
+
+    15,45 * * * * python3 /path/to/pretix/manage.py runperiodic
