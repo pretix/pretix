@@ -488,15 +488,11 @@ class Quota(LoggedModel):
             return Quota.AVAILABILITY_OK, None
 
         # TODO: Test for interference with old versions of Item-Quota-relations, etc.
-        # TODO: Prevent corner-cases like people having ordered an item before it got
-        # its first variationsadde
-        paid, pending = self.count_orders()
-
-        size_left -= paid
+        size_left -= self.count_paid_orders()
         if size_left <= 0:
             return Quota.AVAILABILITY_GONE, 0
 
-        size_left -= pending
+        size_left -= self.count_pending_orders()
         if size_left <= 0:
             return Quota.AVAILABILITY_ORDERED, 0
 
@@ -527,17 +523,20 @@ class Quota(LoggedModel):
             self._position_lookup
         ).distinct().count()
 
-    def count_orders(self) -> dict:
+    def count_pending_orders(self) -> dict:
         from pretix.base.models import Order, OrderPosition
 
-        paid = OrderPosition.objects.filter(
-            self._position_lookup, order__status=Order.STATUS_PAID
-        ).distinct().count()
-        pending = OrderPosition.objects.filter(
+        return OrderPosition.objects.filter(
             self._position_lookup, order__status=Order.STATUS_PENDING,
             order__expires__gte=now()
         ).distinct().count()
-        return paid, pending
+
+    def count_paid_orders(self):
+        from pretix.base.models import Order, OrderPosition
+
+        return OrderPosition.objects.filter(
+            self._position_lookup, order__status=Order.STATUS_PAID
+        ).distinct().count()
 
     @cached_property
     def _position_lookup(self) -> Q:
