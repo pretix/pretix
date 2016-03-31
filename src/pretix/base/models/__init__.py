@@ -19,3 +19,4 @@ from .orders import (
 )
 from .organizer import Organizer, OrganizerPermission, OrganizerSetting
 from .vouchers import Voucher
+from .waitinglist import WaitingListEntry

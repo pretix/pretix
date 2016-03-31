@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 
 from pretix.control.views import (
     auth, dashboards, event, global_settings, help, item, main, orders,
-    organizer, user, vouchers,
+    organizer, user, vouchers, waitinglist,
 )
 
 urlpatterns = [
@@ -121,6 +121,8 @@ urlpatterns = [
         url(r'^orders/export/$', orders.ExportView.as_view(), name='event.orders.export'),
         url(r'^orders/go$', orders.OrderGo.as_view(), name='event.orders.go'),
         url(r'^orders/$', orders.OrderList.as_view(), name='event.orders'),
+        url(r'^waitinglist/$', waitinglist.WaitingListView.as_view(), name='event.orders.waitinglist'),
+        url(r'^waitinglist/auto_assign$', waitinglist.AutoAssign.as_view(), name='event.orders.waitinglist.auto'),
     ])),
     url(r'^help/(?P<topic>[a-zA-Z0-9_/]+)$', help.HelpView.as_view(), name='help'),
 ]

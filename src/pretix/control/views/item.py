@@ -607,24 +607,33 @@ class QuotaView(ChartContainingView, DetailView):
         data = [
             {
                 'label': ugettext('Paid orders'),
-                'value': self.object.count_paid_orders()
+                'value': self.object.count_paid_orders(),
+                'sum': True,
             },
             {
                 'label': ugettext('Pending orders'),
-                'value': self.object.count_pending_orders()
+                'value': self.object.count_pending_orders(),
+                'sum': True,
             },
             {
                 'label': ugettext('Vouchers'),
-                'value': self.object.count_blocking_vouchers()
+                'value': self.object.count_blocking_vouchers(),
+                'sum': True,
             },
             {
                 'label': ugettext('Current user\'s carts'),
-                'value': self.object.count_in_cart()
-            }
+                'value': self.object.count_in_cart(),
+                'sum': True,
+            },
+            {
+                'label': ugettext('Waiting list'),
+                'value': self.object.count_waiting_list_pending(),
+                'sum': False,
+            },
         ]
         ctx['quota_table_rows'] = list(data)
 
-        sum_values = sum([d['value'] for d in data])
+        sum_values = sum([d['value'] for d in data if d['sum']])
 
         if self.object.size is not None:
             data.append({

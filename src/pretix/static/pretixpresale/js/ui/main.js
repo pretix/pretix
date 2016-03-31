@@ -33,6 +33,8 @@ $(function () {
         $("#voucher-box").slideDown();
         $("#voucher-toggle").slideUp();
     });
+    
+    $('[data-toggle="tooltip"]').tooltip();
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
     

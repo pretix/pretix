@@ -7,6 +7,7 @@ import pretix.presale.views.locale
 import pretix.presale.views.order
 import pretix.presale.views.organizer
 import pretix.presale.views.user
+import pretix.presale.views.waiting
 
 # This is not a valid Django URL configuration, as the final
 # configuration is done by the pretix.multidomain package.
@@ -14,6 +15,7 @@ import pretix.presale.views.user
 event_patterns = [
     url(r'^cart/add$', pretix.presale.views.cart.CartAdd.as_view(), name='event.cart.add'),
     url(r'^cart/remove$', pretix.presale.views.cart.CartRemove.as_view(), name='event.cart.remove'),
+    url(r'^waitinglist', pretix.presale.views.waiting.WaitingView.as_view(), name='event.waitinglist'),
     url(r'^checkout/start$', pretix.presale.views.checkout.CheckoutView.as_view(), name='event.checkout.start'),
     url(r'^redeem$', pretix.presale.views.cart.RedeemView.as_view(),
         name='event.redeem'),

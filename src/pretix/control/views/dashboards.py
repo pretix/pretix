@@ -12,7 +12,9 @@ from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Event, Item, Order, OrderPosition, Voucher
+from pretix.base.models import (
+    Event, Item, Order, OrderPosition, Voucher, WaitingListEntry,
+)
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,
 )
@@ -86,8 +88,52 @@ def base_widgets(sender, **kwargs):
 
 
 @receiver(signal=event_dashboard_widgets)
+def waitinglist_widgets(sender, **kwargs):
+    widgets = []
+
+    wles = WaitingListEntry.objects.filter(event=sender)
+    if wles.count():
+        quota_cache = {}
+        itemvar_cache = {}
+        happy = 0
+
+        for wle in wles:
+            if (wle.item, wle.variation) not in itemvar_cache:
+                itemvar_cache[(wle.item, wle.variation)] = (
+                    wle.variation.check_quotas(count_waitinglist=False, _cache=quota_cache)
+                    if wle.variation
+                    else wle.item.check_quotas(count_waitinglist=False, _cache=quota_cache)
+                )
+            row = itemvar_cache.get((wle.item, wle.variation))
+            if row[1] > 0:
+                itemvar_cache[(wle.item, wle.variation)] = (row[0], row[1] - 1)
+                happy += 1
+
+        widgets.append({
+            'content': NUM_WIDGET.format(num=str(happy), text=_('available to give to people on waiting list')),
+            'priority': 50,
+            'url': reverse('control:event.orders.waitinglist', kwargs={
+                'event': sender.slug,
+                'organizer': sender.organizer.slug,
+            })
+        })
+        widgets.append({
+            'content': NUM_WIDGET.format(num=str(wles.count()), text=_('total waiting list length')),
+            'display_size': 'small',
+            'priority': 50,
+            'url': reverse('control:event.orders.waitinglist', kwargs={
+                'event': sender.slug,
+                'organizer': sender.organizer.slug,
+            })
+        })
+
+    return widgets
+
+
+@receiver(signal=event_dashboard_widgets)
 def quota_widgets(sender, **kwargs):
     widgets = []
+
     for q in sender.quotas.all():
         status, left = q.availability()
         widgets.append({

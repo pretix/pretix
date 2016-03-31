@@ -132,6 +132,18 @@ DEFAULTS = {
         'default': 'False',
         'type': bool
     },
+    'waiting_list_enabled': {
+        'default': 'False',
+        'type': bool
+    },
+    'waiting_list_auto': {
+        'default': 'True',
+        'type': bool
+    },
+    'waiting_list_hours': {
+        'default': '48',
+        'type': int
+    },
     'ticket_download': {
         'default': 'False',
         'type': bool
@@ -257,6 +269,29 @@ your payment before {expire_date}.
 
 You can view the payment information and the status of your order at
 {url}
+
+Best regards,
+Your {event} team"""))
+    },
+    'mail_text_waiting_list': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+you submitted yourself to the waiting list for {event},
+for the product {product}.
+
+We now have a ticket ready for you! You can redeem it in our ticket shop
+within the next {hours} hours by entering the following voucher code:
+
+{code}
+
+Alternatively, you can just click on the following link:
+
+{url}
+
+Please note that this link is only valid within the next {hours} hours!
+We will reassign the ticket to the next person on the list if you do not
+redeem the voucher within that timeframe.
 
 Best regards,
 Your {event} team"""))

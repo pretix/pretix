@@ -156,7 +156,7 @@
                                                             name="variation_{{ item.id }}_{{ var.id }}">
                                                 </div>
                                             {% else %}
-                                                {% include "pretixpresale/event/fragment_availability.html" with avail=var.cached_availability.0 %}
+                                                {% include "pretixpresale/event/fragment_availability.html" with avail=var.cached_availability.0 event=event item=item var=var %}
                                             {% endif %}
                                             <div class="clearfix"></div>
                                         </div>
@@ -211,7 +211,7 @@
                                                 max="{{ item.order_max }}" name="item_{{ item.id }}">
                                     </div>
                                 {% else %}
-                                    {% include "pretixpresale/event/fragment_availability.html" with avail=item.cached_availability.0 %}
+                                    {% include "pretixpresale/event/fragment_availability.html" with avail=item.cached_availability.0 event=event item=item var=0 %}
                                 {% endif %}
                                 <div class="clearfix"></div>
                             </div>

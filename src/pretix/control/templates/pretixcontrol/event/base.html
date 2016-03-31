@@ -84,6 +84,12 @@
                         {% trans "Export" %}
                     </a>
                 </li>
+                <li>
+                    <a href="{% url 'control:event.orders.waitinglist' organizer=request.event.organizer.slug event=request.event.slug %}"
+                       {% if url_name == "event.orders.waitinglist" %}class="active"{% endif %}>
+                        {% trans "Waiting list" %}
+                    </a>
+                </li>
             </ul>
         </li>
     {% endif %}
