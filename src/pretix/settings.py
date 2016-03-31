@@ -276,7 +276,7 @@ STATICFILES_DIRS = [
 #     STATICFILES_DIRS.insert(0, os.path.join(DATA_DIR, 'static'))
 
 COMPRESS_PRECOMPILERS = (
-    ('text/less', 'pretix.helpers.lessabsolutefilter.LessFilter'),
+    ('text/x-scss', 'django_libsass.SassCompiler'),
 )
 
 COMPRESS_ENABLED = COMPRESS_OFFLINE = not debug_fallback

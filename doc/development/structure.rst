@@ -40,28 +40,28 @@ The language files live in ``locale/*/LC_MESSAGES/``.
 Static files
 ------------
 
-LESS source code
+Sass source code
 ^^^^^^^^^^^^^^^^
 
-We use less as a preprocessor for CSS. Our own less code is built in the same
+We use libsass as a preprocessor for CSS. Our own sass code is built in the same
 step as Bootstrap and FontAwesome, so their mixins etc. are fully available.
 
 pretix.control
-    pretixcontrol has two main LESS files, ``pretix/control/static/pretixcontrol/less/main.less`` and
-    ``pretix/control/static/pretixcontrol/less/auth.less``, importing everything else.
+    pretixcontrol has two main SCSS files, ``pretix/control/static/pretixcontrol/scss/main.scss`` and
+    ``pretix/control/static/pretixcontrol/scss/auth.scss``, importing everything else.
 
 pretix.presale
-    pretixpresale has one main LESS files, ``pretix/control/static/pretix/presale/less/main.less``,
+    pretixpresale has one main SCSS files, ``pretix/control/static/pretix/presale/scss/main.scss``,
     importing everything else.
 
 3rd-party assets
 ^^^^^^^^^^^^^^^^
 
 Bootstrap
-    Bootstrap lives as a git submodule at ``static/bootstrap/``
+    Bootstrap lives vendored at ``static/bootstrap/``
 
 Font Awesome
-    Font Awesome lives as a git submodule at ``static/fontawesome/``
+    Font Awesome lives vendored at ``static/fontawesome/``
 
 jQuery
     jQuery lives as a single JavaScript file in ``static/jquery/js/``

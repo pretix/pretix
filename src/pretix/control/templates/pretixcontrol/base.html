@@ -7,12 +7,12 @@
 		<title>{% block title %}{% endblock %}{% if url_name != "index" %} :: {% endif %}
             {{ settings.PRETIX_INSTANCE_NAME }}</title>
 		{% compress css %}
-    		<link rel="stylesheet" type="text/less" href="{% static "pretixcontrol/less/main.less" %}" />
+    		<link rel="stylesheet" type="text/x-scss" href="{% static "pretixcontrol/scss/main.scss" %}" />
 		{% endcompress %}
 		{% compress js %}
             <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
             <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
-            <script type="text/javascript" src="{% static "bootstrap/dist/js/bootstrap.js" %}"></script>
+            <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/metisMenu.min.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/sb-admin-2.js" %}"></script>
 		    <script type="text/javascript" src="{% static "pretixcontrol/js/ui/main.js" %}"></script>

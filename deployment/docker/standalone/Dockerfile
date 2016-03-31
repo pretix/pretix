@@ -2,15 +2,12 @@ FROM debian:jessie
 
 RUN apt-get update && apt-get install -y python3 git python3-pip \
 	libxml2-dev libxslt1-dev python-dev python-virtualenv locales libffi-dev \
-	build-essential python3-dev zlib1g-dev libssl-dev npm gettext git \
+	build-essential python3-dev zlib1g-dev libssl-dev gettext git \
 	libpq-dev libmysqlclient-dev libmemcached-dev libjpeg-dev \
 	aqbanking-tools \
 	--no-install-recommends
 
 WORKDIR /
-RUN npm install -g less@2.5.0
-RUN ln -s /usr/bin/nodejs /usr/bin/node
-RUN ln -s /node_modules/.bin/lessc /usr/bin/lessc
 
 RUN dpkg-reconfigure locales && \
 	locale-gen C.UTF-8 && \

@@ -1,0 +1,16 @@
+.panel-title .radio {
+    margin-left: 20px;
+}
+.form-control + .form-control-feedback {
+    /* Fix for https://github.com/FortAwesome/Font-Awesome/issues/4313 */
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2; // Ensure icon is above input groups
+    display: block;
+    width: $input-height-base;
+    height: $input-height-base;
+    line-height: $input-height-base;
+    text-align: center;
+    pointer-events: none;
+}

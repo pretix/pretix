@@ -8,6 +8,7 @@ django-compressor==2.0
 reportlab>=3.2,<3.3
 git+https://github.com/pretix/PyPDF2.git@pretix#egg=PyPDF2
 easy-thumbnails>=2.2,<3
+django-libsass
 
 # Deployment / static file compilation requirements
 BeautifulSoup4

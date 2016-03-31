@@ -1,0 +1,110 @@
+.product-row {
+    border-top: 1px solid $table-border-color;
+
+    &:last-child {
+    }
+    p  {
+        margin-bottom: 0;
+    }
+
+    .input-item-count {
+        text-align: center;
+    }
+    .input-group-price {
+        margin-bottom: 3px;
+    }
+    .input-item-price {
+        text-align: right;
+    }
+    .availability-box {
+        text-align: center;
+
+        &.gone {
+            color: $alert-danger-text;
+        }
+        &.unavailable {
+            color: $alert-warning-text;
+        }
+    }
+
+    .productpicture {
+        float: left;
+        margin-right: 10px;
+        text-decoration: none;
+        display: block;
+    }
+}
+.voucher-row {
+    margin-top: 10px;
+}
+#voucher-toggle {
+    display: none;
+}
+.item-with-variations .product-row.headline, .product-row.simple {
+    border-top: 2px solid $table-border-color;
+}
+.item-with-variations:last-child {
+    border-bottom: 2px solid $table-border-color;
+}
+
+.panel-body address:last-child {
+    margin-bottom: 0;
+}
+
+.cart-row, .product-row {
+    padding: 10px 0;
+
+    .count form {
+        display: inline;
+    }
+    .price, .count {
+        text-align: right;
+    }
+    .price small,
+    .availability-box small {
+        display: block;
+        line-height: 1;
+    }
+
+    &.total {
+        border-top: 1px solid $table-border-color;
+    }
+
+    dl {
+        padding-left: 20px;
+        margin-bottom: 0;
+
+        dd {
+            padding-left: 20px;
+        }
+    }
+}
+.panel-contact dl {
+    margin-bottom: 0;
+}
+.panel-primary .panel-heading a {
+    color: white;
+}
+.checkout-button-row {
+    padding: 15px 0;
+}
+.offline-banner {
+    background: $brand-danger;
+    color: white;
+    width: 100%;
+    padding: 5px;
+    text-align: center;
+
+    a {
+        text-decoration: underline;
+        color: white;
+    }
+}
+@media (max-width: $screen-sm-max) {
+    .checkout-button-row div {
+        margin-bottom: 10px;
+    }
+    .page-header h1 small {
+        display: block;
+    }
+}

@@ -6,7 +6,7 @@
 <head>
     <title>{{ settings.PRETIX_INSTANCE_NAME }}</title>
     {% compress css %}
-        <link rel="stylesheet" type="text/less" href="{% static "pretixpresale/less/waiting.less" %}"/>
+        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/waiting.scss" %}"/>
     {% endcompress %}
     {% compress js %}
         <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
