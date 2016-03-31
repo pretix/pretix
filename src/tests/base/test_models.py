@@ -13,7 +13,7 @@ from django.utils.timezone import now
 
 from pretix.base.models import (
     CachedFile, CartPosition, Event, Item, ItemCategory, ItemVariation, Order,
-    OrderPosition, Organizer, Question, Quota, User, Voucher,
+    OrderPosition, Organizer, Question, Quota, User, Voucher, WaitingListEntry,
 )
 from pretix.base.services.orders import (
     OrderError, cancel_order, mark_order_paid, perform_order,
@@ -316,6 +316,104 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.assertEqual(self.quota.count_in_cart(), 1)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
 
+    def test_waitinglist_item_active(self):
+        self.quota.items.add(self.item1)
+        self.quota.size = 1
+        self.quota.save()
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='foo@bar.com'
+        )
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_RESERVED, 0))
+        self.assertEqual(self.item1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+    def test_waitinglist_variation_active(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = 1
+        self.quota.save()
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com'
+        )
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_RESERVED, 0))
+        self.assertEqual(self.var1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+    def test_waitinglist_variation_fulfilled(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = 1
+        self.quota.save()
+        v = Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, redeemed=1)
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com', voucher=v
+        )
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+        self.assertEqual(self.var1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+    def test_waitinglist_variation_other(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = 1
+        self.quota.save()
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var2, email='foo@bar.com'
+        )
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+        self.assertEqual(self.var1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+    def test_quota_cache(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = 1
+        self.quota.save()
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com'
+        )
+
+        cache = {}
+
+        self.assertEqual(self.var1.check_quotas(_cache=cache), (Quota.AVAILABILITY_RESERVED, 0))
+
+        with self.assertNumQueries(1):
+            self.assertEqual(self.var1.check_quotas(_cache=cache), (Quota.AVAILABILITY_RESERVED, 0))
+
+        # Do not reuse cache for count_waitinglist=False
+        self.assertEqual(self.var1.check_quotas(_cache=cache, count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+        with self.assertNumQueries(1):
+            self.assertEqual(self.var1.check_quotas(_cache=cache, count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+
+class WaitingListTestCase(BaseQuotaTestCase):
+
+    def test_duplicate(self):
+        w1 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com'
+        )
+        w1.clean()
+        w2 = WaitingListEntry(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com'
+        )
+        with self.assertRaises(ValidationError):
+            w2.clean()
+
+    def test_duplicate_of_successful(self):
+        v = Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, redeemed=1)
+        w1 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com',
+            voucher=v
+        )
+        w1.clean()
+        w2 = WaitingListEntry(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com'
+        )
+        w2.clean()
+
+    def test_missing_variation(self):
+        w2 = WaitingListEntry(
+            event=self.event, item=self.item2, email='foo@bar.com'
+        )
+        with self.assertRaises(ValidationError):
+            w2.clean()
+
+
+class VoucherTestCase(BaseQuotaTestCase):
+
     def test_voucher_reuse(self):
         self.quota.items.add(self.item1)
         v = Voucher.objects.create(quota=self.quota, event=self.event, valid_until=now() + timedelta(days=5))
@@ -395,9 +493,6 @@ class QuotaTestCase(BaseQuotaTestCase):
         with self.assertRaises(ValidationError):
             v = Voucher(variation=self.var1, event=self.event)
             v.clean()
-
-
-class VoucherTestCase(BaseQuotaTestCase):
 
     def test_calculate_price_none(self):
         v = Voucher.objects.create(event=self.event, price_mode='none', value=Decimal('10.00'))

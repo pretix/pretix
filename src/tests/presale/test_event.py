@@ -9,7 +9,7 @@ from tests.base import SoupTest
 
 from pretix.base.models import (
     Event, EventPermission, Item, ItemCategory, ItemVariation, Order,
-    Organizer, Quota, User,
+    Organizer, Quota, User, WaitingListEntry,
 )
 
 
@@ -341,6 +341,72 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         self.event.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, 'ABC'), follow=True)
         assert "alert-danger" in html.rendered_content
+
+
+class WaitingListTest(EventTestMixin, SoupTest):
+    def setUp(self):
+        super().setUp()
+        self.q = Quota.objects.create(event=self.event, name='Quota', size=0)
+        self.v = self.event.vouchers.create(quota=self.q)
+        self.item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=Decimal('12.00'),
+                                        active=True)
+        self.q.items.add(self.item)
+        self.event.settings.set('waiting_list_enabled', True)
+
+    def test_disabled(self):
+        self.event.settings.set('waiting_list_enabled', False)
+        response = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('waitinglist', response.rendered_content)
+        response = self.client.get(
+            '/%s/%s/waitinglist?item=%d' % (self.orga.slug, self.event.slug, self.item.pk + 1)
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_display_link(self):
+        response = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('waitinglist', response.rendered_content)
+
+    def test_submit_form(self):
+        response = self.client.get(
+            '/%s/%s/waitinglist?item=%d' % (self.orga.slug, self.event.slug, self.item.pk)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('waiting list', response.rendered_content)
+        response = self.client.post(
+            '/%s/%s/waitinglist?item=%d' % (self.orga.slug, self.event.slug, self.item.pk), {
+                'email': 'foo@bar.com'
+            }
+        )
+        self.assertEqual(response.status_code, 302)
+        wle = WaitingListEntry.objects.get(email='foo@bar.com')
+        assert wle.event == self.event
+        assert wle.item == self.item
+        assert wle.variation is None
+        assert wle.voucher is None
+        assert wle.locale == 'en'
+
+    def test_invalid_item(self):
+        response = self.client.get(
+            '/%s/%s/waitinglist?item=%d' % (self.orga.slug, self.event.slug, self.item.pk + 1)
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_available(self):
+        self.q.size = 1
+        self.q.save()
+        response = self.client.post(
+            '/%s/%s/waitinglist?item=%d' % (self.orga.slug, self.event.slug, self.item.pk), {
+                'email': 'foo@bar.com'
+            }
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(WaitingListEntry.objects.filter(email='foo@bar.com').exists())
 
 
 class DeadlineTest(EventTestMixin, TestCase):
