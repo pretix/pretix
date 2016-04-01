@@ -1,6 +1,6 @@
 import sys
 
-from django.db.models import Q, Count
+from django.db.models import Count, Q
 from django.utils.timezone import now
 from django.views.generic import TemplateView
 
