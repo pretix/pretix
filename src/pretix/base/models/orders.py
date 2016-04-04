@@ -222,12 +222,7 @@ class Order(LoggedModel):
         error_messages = {
             'unavailable': _('Some of the ordered products were no longer available.'),
         }
-        positions = list(self.positions.all().select_related(
-            'item', 'variation'
-        ).prefetch_related(
-            'variation__values', 'variation__values__prop',
-            'item__questions', 'answers'
-        ))
+        positions = self.positions.all().select_related('item', 'variation')
         quota_cache = {}
         try:
             for i, op in enumerate(positions):

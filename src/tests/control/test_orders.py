@@ -92,10 +92,11 @@ def test_order_transition_to_paid_expired_quota_left(client, env):
     q = Quota.objects.create(event=env[0], size=10)
     q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    res = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
         'status': 'p'
     })
     o = Order.objects.get(id=env[2].id)
+    assert res.status_code < 400
     assert o.status == Order.STATUS_PAID
 
 
