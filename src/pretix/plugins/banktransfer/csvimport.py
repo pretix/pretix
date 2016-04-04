@@ -78,7 +78,7 @@ def get_rows_from_file(file):
 def new_hint(data):
     return {
         'payer': data.getlist('payer') if 'payer' in data else None,
-        'reference': data.getlist('reference') if 'date' in data else None,
+        'reference': data.getlist('reference') if 'reference' in data else None,
         'date': int(data.get('date')) if 'date' in data else None,
         'amount': int(data.get('amount')) if 'amount' in data else None,
         'cols': int(data.get('cols')) if 'cols' in data else None
