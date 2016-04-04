@@ -23,7 +23,8 @@ def base_widgets(sender, **kwargs):
     ).count()
 
     tickc = OrderPosition.objects.filter(
-        order__event=sender, item__admission=True
+        order__event=sender, item__admission=True,
+        order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING)
     ).count()
 
     paidc = OrderPosition.objects.filter(
