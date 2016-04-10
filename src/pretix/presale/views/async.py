@@ -110,7 +110,7 @@ class AsyncAction:
             return JsonResponse({
                 'ready': True,
                 'redirect': self.get_success_url(value),
-                'message': self.get_success_message(value)
+                'message': str(self.get_success_message(value))
             })
         return redirect(self.get_success_url(value))
 
@@ -120,7 +120,7 @@ class AsyncAction:
             return JsonResponse({
                 'ready': True,
                 'redirect': self.get_error_url(),
-                'message': self.get_error_message(exception)
+                'message': str(self.get_error_message(exception))
             })
         return redirect(self.get_error_url())
 

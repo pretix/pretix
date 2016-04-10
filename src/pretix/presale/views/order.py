@@ -292,7 +292,7 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
     def post(self, request, *args, **kwargs):
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        return self.do(self.order)
+        return self.do(self.order.pk)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
