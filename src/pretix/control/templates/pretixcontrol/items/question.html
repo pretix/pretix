@@ -83,19 +83,4 @@
             </button>
         </div>
     </form>
-    <script type="text/javascript">
-        $(function () {
-            function toggle_view() {
-                var show = $("#id_type").val() == "C" || $("#id_type").val() == "M";
-                $("#answer-options").toggle(show);
-
-                show = $("#id_type").val() == "B" && $("#id_required").prop("checked");
-                $(".alert-required-boolean").toggle(show);
-            }
-
-            $("#id_type").change(toggle_view);
-            $("#id_required").change(toggle_view);
-            toggle_view();
-        });
-    </script>
 {% endblock %}

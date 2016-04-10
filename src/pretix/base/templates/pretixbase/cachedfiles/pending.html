@@ -10,6 +10,7 @@
     {% endcompress %}
     {% compress js %}
         <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixbase/js/reloadpending.js" %}"></script>
     {% endcompress %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -21,14 +22,5 @@
         {% trans "If this takes longer than a few minutes, please contact us." %}
     </p>
 </div>
-<script type="text/javascript">
-    window.setInterval(function() {
-        $.get(location.href + '?ajax=1', function(data, status) {
-            if (data === "1") {
-                location.reload();
-            }
-        });
-    }, 500);
-</script>
 </body>
 </html>

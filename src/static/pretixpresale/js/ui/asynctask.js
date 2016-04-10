@@ -1,4 +1,4 @@
-/*global $, waitingDialog, default_loading_message */
+/*global $, waitingDialog, gettext */
 var async_task_id = null;
 var async_task_timeout = null;
 var async_task_check_url = null;
@@ -56,7 +56,7 @@ $(function () {
             return;
         }
         $(this).data('ajaxing', true);
-        waitingDialog.show(default_loading_message);
+        waitingDialog.show(gettext('We are processing your request…'));
 
         $.ajax(
             {

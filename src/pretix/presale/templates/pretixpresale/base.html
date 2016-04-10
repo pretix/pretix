@@ -9,6 +9,7 @@
         <link rel="stylesheet" type="text/css" href="{% static "lightbox/css/lightbox.css" %}" />
         <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}" />
     {% endcompress %}
+    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
     {% compress js %}
         <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
         <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
@@ -36,9 +37,6 @@
         {% endblocktrans %}
     {% endwith %}
 </footer>
-<script type="text/javascript">
-    var default_loading_message = '{% trans "We are processing your request…" %}';
-</script>
 <div id="loadingmodal">
     <i class="fa fa-cog big-rotating-icon"></i>
     <h1>{% trans "We are processing your request…" %}</h1>
