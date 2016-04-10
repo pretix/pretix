@@ -83,12 +83,12 @@ class Stripe(BasePaymentProvider):
                 currency=request.event.currency.lower(),
                 source=request.session['payment_stripe_token'],
                 metadata={
-                    'order': order.id,
+                    'order': str(order.id),
                     'event': self.event.id,
                     'code': order.code
                 },
                 # TODO: Is this sufficient?
-                idempotency_key=self.event.id + order.code + request.session['payment_stripe_token']
+                idempotency_key=str(self.event.id) + order.code + request.session['payment_stripe_token']
             )
         except stripe.error.CardError as e:
             err = e.json_body['error']
