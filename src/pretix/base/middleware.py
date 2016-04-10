@@ -149,9 +149,9 @@ class SecurityMiddleware:
             'default-src': "{static}",
             'script-src': '{static} https://js.stripe.com',
             'object-src': "'none'",
-            'frame-src': "'none'",
+            'frame-src': '{static} https://js.stripe.com',
             'style-src': "{static}",
-            'img-src': "{static} data:",
+            'img-src': "{static} data: https://*.stripe.com",
             'form-action': "{dynamic}",
         }
         if 'Content-Security-Policy' in resp:
