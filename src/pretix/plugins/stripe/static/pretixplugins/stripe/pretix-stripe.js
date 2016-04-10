@@ -90,7 +90,7 @@ $(function () {
     if (!$("#stripe_number").length) // Not on the checkout page
         return;
 
-    if ($("input[name=payment][value=stripe]").is(':checked')) {
+    if ($("input[name=payment][value=stripe]").is(':checked') || $(".payment-redo-form").length) {
         pretixstripe.load();
     } else {
         $("input[name=payment]").change(function() {
