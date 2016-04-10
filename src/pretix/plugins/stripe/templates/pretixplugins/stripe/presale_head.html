@@ -5,7 +5,5 @@
 {% compress js %}
     <script type="text/javascript" src="{% static "pretixplugins/stripe/pretix-stripe.js" %}"></script>
 {% endcompress %}
-<script type="text/javascript">
-    var stripe_pubkey = '{{ settings.publishable_key }}';
-    var stripe_loading_message = '{% trans "Contacting Stripe…" %}';
-</script>
+<script type="text/plain" id="stripe_pubkey">{{ settings.publishable_key }}</script>
+

@@ -1,4 +1,4 @@
-/*global $, stripe_pubkey, stripe_loadingmessage */
+/*global $, stripe_pubkey, stripe_loadingmessage, gettext */
 'use strict';
 
 var Stripe = null;
@@ -44,7 +44,7 @@ var pretixstripe = {
         }
     },
     'request': function () {
-        waitingDialog.show(stripe_loading_message);
+        waitingDialog.show(gettext("Contacting Stripe…"));
         $(".stripe-errors").hide();
         Stripe.card.createToken(
             {
@@ -80,7 +80,7 @@ var pretixstripe = {
                 url: 'https://js.stripe.com/v2/',
                 dataType: 'script',
                 success: function () {
-                    Stripe.setPublishableKey(stripe_pubkey);
+                    Stripe.setPublishableKey($.trim($("#stripe_pubkey").html()));
                 }
             }
         );

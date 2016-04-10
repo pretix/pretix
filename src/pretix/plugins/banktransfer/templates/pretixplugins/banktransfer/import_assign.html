@@ -7,10 +7,10 @@
     {% endblocktrans %}</p>
     <form method="post" action="">
         {% csrf_token %}
-        <button class="btn btn-primary pull-right" type="submit" style="margin-bottom: 10px">
+        <button class="btn btn-primary pull-right helper-space-below" type="submit">
             <span class="icon icon-upload"></span> {% trans "Continue" %}
         </button>
-        <div class="flipped-scroll-wrapper" style="clear: both;">
+        <div class="flipped-scroll-wrapper clearfix">
             <table class="table table-condensed flipped-scroll-inner">
                 <thead>
                     <tr>

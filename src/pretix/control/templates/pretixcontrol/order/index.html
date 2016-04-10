@@ -72,7 +72,7 @@
                         <dt>{% trans "User" %}</dt>
                         <dd>
                             {{ order.email }}&nbsp;&nbsp;
-                            <form class="form-inline" style="display: inline;" method="post"
+                            <form class="form-inline helper-display-inline" method="post"
                                     action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                 {% csrf_token %}
                                 <button class="btn btn-default btn-xs">

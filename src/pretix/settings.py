@@ -179,6 +179,7 @@ MIDDLEWARE_CLASSES = [
     'pretix.control.middleware.PermissionMiddleware',
     'pretix.presale.middleware.EventMiddleware',
     'pretix.base.middleware.LocaleMiddleware',
+    'pretix.base.middleware.SecurityMiddleware',
 ]
 
 try:

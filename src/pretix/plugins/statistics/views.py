@@ -15,6 +15,12 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixplugins/statistics/index.html'
     permission = 'can_view_orders'
 
+    def get(self, request, *args, **kwargs):
+        resp = super().get(request, *args, **kwargs)
+        # required by raphael.js
+        resp['Content-Security-Policy'] = "script-src {static} 'unsafe-eval'; style-src {static} 'unsafe-inline'"
+        return resp
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
@@ -75,13 +81,13 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
                 i.id: str(i.name)
                 for i in Item.objects.filter(event=self.request.event)
             }
-            ctx['obp_data'] = [
+            ctx['obp_data'] = json.dumps([
                 {
                     'item': item_names[item],
                     'ordered': cnt,
                     'paid': num_paid.get(item, 0)
                 } for item, cnt in num_ordered.items()
-            ]
+            ])
             cache.set('statistics_obp_data', ctx['obp_data'])
 
         ctx['rev_data'] = cache.get('statistics_rev_data')

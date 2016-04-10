@@ -4,7 +4,7 @@
 {% block content %}
 	<h1>{% trans "Attendees" %}</h1>
     <p>
-        <form class="form-inline" action="" method="get" style="display: inline;">
+        <form class="form-inline helper-display-inline" action="" method="get">
             <select name="status" class="form-control">
                 <option value="">{% trans "All attendees" %}</option>
                 <option value="p" {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "Paid" %}</option>

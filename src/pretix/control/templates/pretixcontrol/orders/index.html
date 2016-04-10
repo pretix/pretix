@@ -4,7 +4,7 @@
 {% block content %}
 	<h1>{% trans "Orders" %}</h1>
     <p>
-        <form class="form-inline" style="display: inline;"
+        <form class="form-inline helper-display-inline"
               action="{% url "control:event.orders.go" event=request.event.slug organizer=request.event.organizer.slug %}">
             <div class="input-group">
                 <input type="text" name="code" class="form-control" placeholder="{% trans "Order code" %}">
@@ -13,7 +13,7 @@
                 </span>
             </div>
         </form>
-        <form class="form-inline" action="" method="get" style="display: inline;">
+        <form class="form-inline helper-display-inline" action="" method="get">
             <select name="status" class="form-control">
                 <option value="">{% trans "All orders" %}</option>
                 <option value="p" {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "Paid" %}</option>

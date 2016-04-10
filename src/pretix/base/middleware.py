@@ -129,3 +129,44 @@ def get_language_from_request(request: HttpRequest) -> str:
         or get_language_from_browser(request)
         or get_default_language()
     )
+
+
+class SecurityMiddleware:
+
+    def _parse_csp(self, header):
+        h = {}
+        for part in header.split(';'):
+            k, v = part.split(' ', 1)
+            h[k] = v
+        return h
+
+    def _render_csp(self, h):
+        return "; ".join(k + ' ' + v for k, v in h.items())
+
+    def process_response(self, request, resp):
+        resp['X-XSS-Protection'] = '1'
+        h = {
+            'default-src': "{static}",
+            'script-src': '{static} https://js.stripe.com',
+            'object-src': "'none'",
+            'frame-src': "'none'",
+            'style-src': "{static}",
+            'img-src': "{static} data:",
+            'form-action': "{dynamic}",
+        }
+        if 'Content-Security-Policy' in resp:
+            h.update(self._parse_csp(resp['Content-Security-Policy']))
+
+        staticdomain = "'self'"
+        dynamicdomain = "'self'"
+        if settings.STATIC_URL.startswith('http'):
+            staticdomain += " " + settings.STATIC_URL[:settings.STATIC_URL.find('/', 9)]
+        if settings.SITE_URL.startswith('http'):
+            if settings.SITE_URL.find('/', 9) > 0:
+                staticdomain += " " + settings.SITE_URL[:settings.SITE_URL.find('/', 9)]
+                dynamicdomain += " " + settings.SITE_URL[:settings.SITE_URL.find('/', 9)]
+            else:
+                staticdomain += " " + settings.SITE_URL
+                dynamicdomain += " " + settings.SITE_URL
+        resp['Content-Security-Policy'] = self._render_csp(h).format(static=staticdomain, dynamic=dynamicdomain)
+        return resp

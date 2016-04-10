@@ -10,7 +10,7 @@
             <h3 class="panel-title">{% trans "Orders by day" %}</h3>
         </div>
         <div class="panel-body">
-            <div id="obd_chart" style="height: 250px;"></div>
+            <div id="obd_chart" class="chart"></div>
         </div>
     </div>
     <div class="panel panel-default">
@@ -18,7 +18,7 @@
             <h3 class="panel-title">{% trans "Revenue over time" %}</h3>
         </div>
         <div class="panel-body">
-            <div id="rev_chart" style="height: 250px;"></div>
+            <div id="rev_chart" class="chart"></div>
         </div>
     </div>
     <div class="panel panel-default">
@@ -26,12 +26,13 @@
             <h3 class="panel-title">{% trans "Orders by product" %}</h3>
         </div>
         <div class="panel-body">
-            <div id="obp_chart" style="height: 250px;"></div>
+            <div id="obp_chart" class="chart"></div>
         </div>
     </div>
     <script type="application/json" id="obd-data">{{ obd_data|safe }}</script>
     <script type="application/json" id="rev-data">{{ rev_data|safe }}</script>
     <script type="application/json" id="obp-data">{{ obp_data|safe }}</script>
+    <script type="application/text" id="currency">{{ request.event.currency }}</script>
     <script type="application/javascript" src="{% static "pretixplugins/statistics/statistics.js" %}"></script>
 {% endblock %}
 
