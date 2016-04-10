@@ -118,7 +118,9 @@ def _add_new_items(event: Event, items: List[Tuple[int, Optional[int], int, Opti
         price = item.default_price if variation is None else (
             variation.default_price if variation.default_price is not None else item.default_price)
         if item.free_price and len(i) > 3 and i[3]:
-            custom_price = Decimal(i[3].replace(",", "."))
+            custom_price = i[3]
+            if not isinstance(custom_price, Decimal):
+                custom_price = Decimal(custom_price.replace(",", "."))
             price = max(custom_price, price)
 
         # Create a CartPosition for as much items as we can
