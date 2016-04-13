@@ -39,7 +39,7 @@ class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
         if self.get_object().is_ordered():
             messages.error(request, _('A voucher can not be deleted if it already has been redeemed.'))
             return HttpResponseRedirect(self.get_success_url())
-        super().get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     @transaction.atomic()
     def delete(self, request, *args, **kwargs):
