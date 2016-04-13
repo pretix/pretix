@@ -65,7 +65,7 @@ class AsyncAction:
                     # but handle the mssage itself
                     data.update({
                         'redirect': self.get_success_url(res.info),
-                        'message': self.get_success_message(res.info)
+                        'message': str(self.get_success_message(res.info))
                     })
                 else:
                     messages.error(self.request, self.get_error_message(res.info))
@@ -73,7 +73,7 @@ class AsyncAction:
                     # but handle the mssage itself
                     data.update({
                         'redirect': self.get_error_url(),
-                        'message': self.get_error_message(res.info)
+                        'message': str(self.get_error_message(res.info))
                     })
             return JsonResponse(data)
         else:
