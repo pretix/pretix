@@ -140,8 +140,8 @@ class OrderDetail(OrderView):
         def keyfunc(pos):
             if (pos.item.admission and self.request.event.settings.attendee_names_asked) \
                     or pos.item.questions.all():
-                return pos.id, 0, 0, 0, 0, None
-            return 0, pos.item_id, pos.variation_id, pos.price, pos.tax_rate, pos.voucher
+                return pos.id, 0, 0, 0, 0, 0
+            return 0, pos.item_id, pos.variation_id, pos.price, pos.tax_rate, (pos.voucher_id or 0)
 
         positions = []
         for k, g in groupby(sorted(list(cartpos), key=keyfunc), key=keyfunc):
