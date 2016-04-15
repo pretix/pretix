@@ -1,3 +1,4 @@
+import copy
 import random
 import string
 from datetime import datetime
@@ -366,13 +367,16 @@ class AbstractPosition(models.Model):
         self.answ = {}
         for a in self.answers.all():
             self.answ[a.question_id] = a
-        self.questions = []
-        for q in self.item.questions.all():
+
+        # We need to clone our question objects, otherwise we will override the cached
+        # answers of other items in the same cart if the question objects have been
+        # selected via prefetch_related
+        self.questions = list(copy.copy(q) for q in self.item.questions.all())
+        for q in self.questions:
             if q.id in self.answ:
                 q.answer = self.answ[q.id]
             else:
                 q.answer = ""
-            self.questions.append(q)
 
     def save(self, *args, **kwargs):
         if self.voucher is None and self.base_price is None:
