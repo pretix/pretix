@@ -332,4 +332,7 @@ if settings.HAS_CELERY:
     invoice_pdf_task = app.task(invoice_pdf)
 
     def invoice_pdf(*args, **kwargs):
-        invoice_pdf_task.apply_async(args=args, kwargs=kwargs)
+        # We introduce a 2 second delay, because otherwise we run into conditions where
+        # the task worker tries to generate the PDF even before our database transaction
+        # was committed and therefore fails to find the invoice object.
+        invoice_pdf_task.apply_async(args=args, kwargs=kwargs, countdown=2)
