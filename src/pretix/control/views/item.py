@@ -350,7 +350,7 @@ class QuestionUpdate(EventPermissionRequiredMixin, QuestionMixin, UpdateView):
     @transaction.atomic()
     def form_valid(self, form):
         if form.cleaned_data.get('type') in ('M', 'C'):
-            if not self.save_formset(self.get_object):
+            if not self.save_formset(self.get_object()):
                 return self.get(self.request, *self.args, **self.kwargs)
 
         if form.has_changed():
@@ -387,7 +387,7 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
             'event': self.request.event.slug,
         })
 
-    def get_object(self):
+    def get_object(self, **kwargs):
         return None
 
     @transaction.atomic()
