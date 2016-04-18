@@ -1,4 +1,5 @@
 import sys
+import uuid
 from datetime import datetime
 from decimal import Decimal
 
@@ -66,9 +67,9 @@ class ItemCategory(LoggedModel):
 
 
 def itempicture_upload_to(instance, filename: str) -> str:
-    return '%s/%s/item-%s.%s' % (
+    return '%s/%s/item-%s-%s.%s' % (
         instance.event.organizer.slug, instance.event.slug, instance.id,
-        filename.split('.')[-1]
+        str(uuid.uuid4()), filename.split('.')[-1]
     )
 
 

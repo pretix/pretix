@@ -582,7 +582,12 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
         ret = super().form_valid(form)
-        form.instance.log_action('pretix.event.item.added', user=self.request.user, data=dict(form.cleaned_data))
+        form.instance.log_action('pretix.event.item.added', user=self.request.user, data={
+            k: (form.cleaned_data.get(k).name
+                if isinstance(form.cleaned_data.get(k), File)
+                else form.cleaned_data.get(k))
+            for k in form.changed_data
+        })
         return ret
 
     def get_form_kwargs(self):
