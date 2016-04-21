@@ -36,6 +36,9 @@ class ItemCategory(LoggedModel):
         max_length=255,
         verbose_name=_("Category name"),
     )
+    description = I18nTextField(
+        blank=True, verbose_name=_("Category description")
+    )
     position = models.IntegerField(
         default=0
     )

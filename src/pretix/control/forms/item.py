@@ -16,7 +16,8 @@ class CategoryForm(I18nModelForm):
         model = ItemCategory
         localized_fields = '__all__'
         fields = [
-            'name'
+            'name',
+            'description'
         ]
 
 
