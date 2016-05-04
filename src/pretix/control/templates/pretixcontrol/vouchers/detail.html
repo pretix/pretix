@@ -3,28 +3,35 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Voucher" %}{% endblock %}
 {% block inside %}
-	<h1>{% trans "Voucher" %}</h1>
+    <h1>{% trans "Voucher" %}</h1>
     {% if voucher.redeemed %}
         <div class="alert alert-warning">
             {% trans "This voucher already has been used. It is not recommended to modify it." %}
         </div>
     {% endif %}
-	<form action="" method="post" class="form-horizontal">
-		{% csrf_token %}
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
         {% bootstrap_form_errors form %}
-		<fieldset>
-			<legend>{% trans "Voucher details" %}</legend>
-			{% bootstrap_field form.code layout="horizontal" %}
+        <fieldset>
+            <legend>{% trans "Voucher details" %}</legend>
+            {% bootstrap_field form.code layout="horizontal" %}
             {% bootstrap_field form.valid_until layout="horizontal" %}
             {% bootstrap_field form.block_quota layout="horizontal" %}
             {% bootstrap_field form.allow_ignore_quota layout="horizontal" %}
             {% bootstrap_field form.price layout="horizontal" %}
             {% bootstrap_field form.itemvar layout="horizontal" %}
-		</fieldset>
-		<div class="form-group submit-group">
+            <div class="alert alert-info">
+                {% blocktrans trimmed %}
+                    If you choose "any product" for a specific quota and choose to reserve quota for this
+                    voucher above, the product can still be unavailable to the voucher holder if another quota
+                    associated with the product is sold out!
+                {% endblocktrans %}
+            </div>
+        </fieldset>
+        <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
             </button>
-		</div>
-	</form>
+        </div>
+    </form>
 {% endblock %}
