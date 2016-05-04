@@ -1,10 +1,12 @@
+import os
+
 from pretix.settings import *  # NOQA
 
 TEST_DIR = os.path.dirname(__file__)
 
-TEMPLATES[0]['DIRS'].append(os.path.join(TEST_DIR, 'templates'))
+TEMPLATES[0]['DIRS'].append(os.path.join(TEST_DIR, 'templates'))  # NOQA
 
-INSTALLED_APPS.append('tests.testdummy')
+INSTALLED_APPS.append('tests.testdummy')  # NOQA
 
 MEDIA_ROOT = os.path.join(TEST_DIR, 'media')
 
