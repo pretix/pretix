@@ -27,7 +27,15 @@
                     </td>
                     <td>{% if v.redeemed %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
                     <td>{{ v.valid_until|date }}</td>
-                    <td>{{ v.item }}</td>
+                    <td>
+                        {% if v.item %}
+                            {{ v.item }}
+                        {% else %}
+                            {% blocktrans trimmed with quota=v.quota.name %}
+                                Any product in quota "{{ quota }}"
+                            {% endblocktrans %}
+                        {% endif %}
+                    </td>
                     <td class="text-right">
                         <a href="{% url "control:event.voucher.delete" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                     </td>

@@ -158,6 +158,7 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
     err = None
     _check_date(event)
 
+    voucherids = set()
     for i, cp in enumerate(positions):
         if not cp.item.active:
             err = err or error_messages['unavailable']
@@ -166,11 +167,13 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
         quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
 
         if cp.voucher:
-            if cp.voucher.redeemed:
+            if cp.voucher.redeemed or cp.voucher_id in voucherids:
                 err = err or error_messages['voucher_redeemed']
+                cp.delete()  # Sorry! But you should have never gotten into this state at all.
                 continue
+            voucherids.add(cp.voucher_id)
 
-        if cp.expires >= dt:
+        if cp.expires >= dt and not cp.voucher:
             # Other checks are not necessary
             continue
 
@@ -183,7 +186,7 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
             continue
 
         if cp.voucher:
-            if cp.voucher.valid_until < now():
+            if cp.voucher.valid_until and cp.voucher.valid_until < now():
                 err = err or error_messages['voucher_expired']
                 continue
             if cp.voucher.price is not None:

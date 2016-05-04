@@ -1,11 +1,13 @@
 import random
+from decimal import Decimal
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from .base import LoggedModel
 from .event import Event
-from .items import Item, ItemVariation
+from .items import Item, ItemVariation, Quota
 from .orders import CartPosition, OrderPosition
 
 
@@ -59,6 +61,7 @@ class Voucher(LoggedModel):
     item = models.ForeignKey(
         Item, related_name='vouchers',
         verbose_name=_("Product"),
+        null=True, blank=True,
         help_text=_(
             "This product is added to the user's cart if the voucher is redeemed."
         )
@@ -71,6 +74,14 @@ class Voucher(LoggedModel):
             "This variation of the product select above is being used."
         )
     )
+    quota = models.ForeignKey(
+        Quota, related_name='quota',
+        null=True, blank=True,
+        verbose_name=_("Quota"),
+        help_text=_(
+            "If enabled, the voucher is valid for any product affected by this quota."
+        )
+    )
 
     class Meta:
         verbose_name = _("Voucher")
@@ -79,6 +90,21 @@ class Voucher(LoggedModel):
 
     def __str__(self):
         return self.code
+
+    def clean(self):
+        super().clean()
+        if self.quota:
+            if self.item:
+                raise ValidationError(_('You cannot select a quota and a specific product at the same time.'))
+        elif self.item:
+            if self.variation and (not self.item or not self.item.has_variations):
+                raise ValidationError(_('You cannot select a variation without having selected a product that provides '
+                                        'variations.'))
+            if self.item.has_variations and not self.variation and self.block_quota:
+                raise ValidationError(_('You can only block quota if you specify a specific product variation. '
+                                        'Otherwise it might be unclear which quotas to block.'))
+        else:
+            raise ValidationError(_('You need to specify either a quota or a product.'))
 
     def save(self, *args, **kwargs):
         self.code = self.code.upper()

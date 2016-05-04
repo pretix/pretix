@@ -33,6 +33,16 @@
         text-decoration: none;
         display: block;
     }
+
+    .radio-box {
+        text-align: center;
+        label {
+            display: block;
+            width: 100%;
+            line-height: 19px;
+            margin: 0;
+        }
+    }
 }
 .voucher-row {
     margin-top: 10px;

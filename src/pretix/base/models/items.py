@@ -513,10 +513,9 @@ class Quota(LoggedModel):
     def count_blocking_vouchers(self) -> int:
         from pretix.base.models import Voucher
         return Voucher.objects.filter(
-            Q(item__quotas__in=[self]) &
             Q(block_quota=True) &
             Q(redeemed=False) &
-            self._position_lookup
+            Q(Q(self._position_lookup) | Q(quota=self))
         ).distinct().count()
 
     def count_in_cart(self) -> int:
@@ -546,8 +545,8 @@ class Quota(LoggedModel):
     def _position_lookup(self) -> Q:
         return (
             (  # Orders for items which do not have any variations
-               Q(variation__isnull=True)
-               & Q(item__quotas__in=[self])
+               Q(variation__isnull=True) &
+               Q(item__quotas__in=[self])
             ) | (  # Orders for items which do have any variations
                    Q(variation__quotas__in=[self])
             )

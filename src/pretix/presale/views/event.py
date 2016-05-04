@@ -4,7 +4,21 @@ from django.db.models import Count, Q
 from django.utils.timezone import now
 from django.views.generic import TemplateView
 
-from pretix.presale.views import CartMixin, EventViewMixin
+from . import CartMixin, EventViewMixin
+
+
+def item_group_by_category(items):
+    return sorted(
+        [
+            # a group is a tuple of a category and a list of items
+            (cat, [i for i in items if i.category == cat])
+            for cat in set([i.category for i in items])
+            # insert categories into a set for uniqueness
+            # a set is unsorted, so sort again by category
+        ],
+        key=lambda group: (group[0].position, group[0].id) if (
+            group[0] is not None and group[0].id is not None) else (0, 0)
+    )
 
 
 class EventIndex(EventViewMixin, CartMixin, TemplateView):
@@ -48,17 +62,7 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         items = [item for item in items if len(item.available_variations) > 0 or not item.has_variations]
 
         # Regroup those by category
-        context['items_by_category'] = sorted(
-            [
-                # a group is a tuple of a category and a list of items
-                (cat, [i for i in items if i.category == cat])
-                for cat in set([i.category for i in items])
-                # insert categories into a set for uniqueness
-                # a set is unsorted, so sort again by category
-            ],
-            key=lambda group: (group[0].position, group[0].id) if (
-                group[0] is not None and group[0].id is not None) else (0, 0)
-        )
+        context['items_by_category'] = item_group_by_category(items)
 
         vouchers_exist = self.request.event.get_cache().get('vouchers_exist')
         if vouchers_exist is None:

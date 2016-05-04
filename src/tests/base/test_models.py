@@ -7,7 +7,7 @@ from django.utils.timezone import now
 
 from pretix.base.models import (
     CachedFile, CartPosition, Event, Item, ItemCategory, ItemVariation, Order,
-    OrderPosition, Organizer, Question, Quota, User,
+    OrderPosition, Organizer, Question, Quota, User, Voucher,
 )
 from pretix.base.services.orders import mark_order_paid
 
@@ -173,6 +173,42 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.quota.size = None
         self.quota.save()
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, None))
+
+    def test_voucher_product(self):
+        self.quota.items.add(self.item1)
+        self.quota.size = 1
+        self.quota.save()
+
+        v = Voucher.objects.create(item=self.item1, event=self.event)
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+
+        v.block_quota = True
+        v.save()
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
+
+    def test_voucher_variation(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = 1
+        self.quota.save()
+
+        v = Voucher.objects.create(item=self.item2, variation=self.var1, event=self.event)
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+
+        v.block_quota = True
+        v.save()
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
+
+    def test_voucher_quota(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = 1
+        self.quota.save()
+
+        v = Voucher.objects.create(quota=self.quota, event=self.event)
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+
+        v.block_quota = True
+        v.save()
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
 
 
 class OrderTestCase(BaseQuotaTestCase):

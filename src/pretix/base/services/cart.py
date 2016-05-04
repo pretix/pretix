@@ -31,7 +31,8 @@ error_messages = {
     'ended': _('The presale period has ended.'),
     'voucher_invalid': _('This voucher code is not known in our database.'),
     'voucher_redeemed': _('This voucher code has already been used an can only be used once.'),
-    'voucher_expired': _('This voucher is expired'),
+    'voucher_expired': _('This voucher is expired.'),
+    'voucher_invalid_item': _('This voucher is not valid for this item.'),
 }
 
 
@@ -44,7 +45,7 @@ def _extend_existing(event: Event, cart_id: str, expiry: datetime) -> None:
     ).update(expires=expiry)
 
 
-def _re_add_expired_positions(items: List[CartPosition], event: Event, cart_id: str) -> List[CartPosition]:
+def _re_add_expired_positions(items: List[dict], event: Event, cart_id: str) -> List[CartPosition]:
     positions = set()
     # For items that are already expired, we have to delete and re-add them, as they might
     # be no longer available or prices might have changed. Sorry!
@@ -52,7 +53,14 @@ def _re_add_expired_positions(items: List[CartPosition], event: Event, cart_id: 
         Q(cart_id=cart_id) & Q(event=event) & Q(expires__lte=now())
     )
     for cp in expired:
-        items.insert(0, (cp.item_id, cp.variation_id, 1, cp.price, cp))
+        items.insert(0, {
+            'item': cp.item_id,
+            'variation': cp.variation_id,
+            'count': 1,
+            'price': cp.price,
+            'cp': cp,
+            'voucher': cp.voucher
+        })
         positions.add(cp)
     return positions
 
@@ -70,17 +78,17 @@ def _check_date(event: Event) -> None:
         raise CartError(error_messages['ended'])
 
 
-def _add_new_items(event: Event, items: List[Tuple[int, Optional[int], int, Optional[str]]],
+def _add_new_items(event: Event, items: List[dict],
                    cart_id: str, expiry: datetime) -> Optional[str]:
     err = None
 
     # Fetch items from the database
-    items_query = Item.objects.filter(event=event, id__in=[i[0] for i in items]).prefetch_related(
+    items_query = Item.objects.filter(event=event, id__in=[i['item'] for i in items]).prefetch_related(
         "quotas")
     items_cache = {i.id: i for i in items_query}
     variations_query = ItemVariation.objects.filter(
         item__event=event,
-        id__in=[i[1] for i in items if i[1] is not None]
+        id__in=[i['variation'] for i in items if i['variation'] is not None]
     ).select_related("item", "item__event").prefetch_related("quotas")
     variations_cache = {v.id: v for v in variations_query}
 
@@ -88,46 +96,75 @@ def _add_new_items(event: Event, items: List[Tuple[int, Optional[int], int, Opti
         # Check whether the specified items are part of what we just fetched from the database
         # If they are not, the user supplied item IDs which either do not exist or belong to
         # a different event
-        if i[0] not in items_cache or (i[1] is not None and i[1] not in variations_cache):
+        if i['item'] not in items_cache or (i['variation'] is not None and i['variation'] not in variations_cache):
             err = err or error_messages['not_for_sale']
             continue
 
-        item = items_cache[i[0]]
-        variation = variations_cache[i[1]] if i[1] is not None else None
+        item = items_cache[i['item']]
+        variation = variations_cache[i['variation']] if i['variation'] is not None else None
+
+        # Check whether a voucher has been provided
+        voucher = None
+        if i.get('voucher'):
+            try:
+                voucher = Voucher.objects.get(code=i.get('voucher'), event=event)
+                if voucher.redeemed:
+                    return error_messages['voucher_redeemed']
+                if voucher.valid_until is not None and voucher.valid_until < now():
+                    return error_messages['voucher_expired']
+                if voucher.item and voucher.item.pk != item.pk:
+                    return error_messages['voucher_invalid_item']
+                if voucher.variation and (not variation or variation.pk != voucher.variation.pk):
+                    return error_messages['voucher_invalid_item']
+                doubleuse = CartPosition.objects.filter(voucher=voucher, cart_id=cart_id, event=event)
+                if 'cp' in i:
+                    doubleuse = doubleuse.exclude(pk=i['cp'].pk)
+                if doubleuse.exists():
+                    return error_messages['voucher_redeemed']
+            except Voucher.DoesNotExist:
+                return error_messages['voucher_invalid']
 
         # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
         quotas = list(item.quotas.all()) if variation is None else list(variation.quotas.all())
+
+        if voucher and voucher.quota and voucher.quota.pk not in [q.pk for q in quotas]:
+            return error_messages['voucher_invalid_item']
 
         if len(quotas) == 0 or not item.is_available():
             err = err or error_messages['unavailable']
             continue
 
-        # Check that all quotas allow us to buy i[2] instances of the object
-        quota_ok = i[2]
-        for quota in quotas:
-            avail = quota.availability()
-            if avail[1] is not None and avail[1] < i[2]:
-                # This quota is not available or less than i[2] items are left, so we have to
-                # reduce the number of bought items
-                if avail[0] != Quota.AVAILABILITY_OK:
-                    err = err or error_messages['unavailable']
-                else:
-                    err = err or error_messages['in_part']
-                quota_ok = min(quota_ok, avail[1])
+        # Check that all quotas allow us to buy i['count'] instances of the object
+        quota_ok = i['count']
+        if not voucher or (not voucher.allow_ignore_quota and not voucher.block_quota):
+            for quota in quotas:
+                avail = quota.availability()
+                if avail[1] is not None and avail[1] < i['count']:
+                    # This quota is not available or less than i['count'] items are left, so we have to
+                    # reduce the number of bought items
+                    if avail[0] != Quota.AVAILABILITY_OK:
+                        err = err or error_messages['unavailable']
+                    else:
+                        err = err or error_messages['in_part']
+                    quota_ok = min(quota_ok, avail[1])
 
-        price = item.default_price if variation is None else (
-            variation.default_price if variation.default_price is not None else item.default_price)
-        if item.free_price and len(i) > 3 and i[3]:
-            custom_price = i[3]
+        if voucher and voucher.price is not None:
+            price = voucher.price
+        else:
+            price = item.default_price if variation is None else (
+                variation.default_price if variation.default_price is not None else item.default_price)
+
+        if item.free_price and 'price' in i and i['price'] is not None and i['price'] != "":
+            custom_price = i['price']
             if not isinstance(custom_price, Decimal):
                 custom_price = Decimal(custom_price.replace(",", "."))
             price = max(custom_price, price)
 
         # Create a CartPosition for as much items as we can
         for k in range(quota_ok):
-            if len(i) > 4 and i[2] == 1:
+            if 'cp' in i and i['count'] == 1:
                 # Recreating
-                cp = i[4]
+                cp = i['cp']
                 cp.expires = expiry
                 cp.price = price
                 cp.save()
@@ -136,44 +173,16 @@ def _add_new_items(event: Event, items: List[Tuple[int, Optional[int], int, Opti
                     event=event, item=item, variation=variation,
                     price=price,
                     expires=expiry,
-                    cart_id=cart_id
+                    cart_id=cart_id, voucher=voucher
                 )
     return err
 
 
-def _add_voucher(event: Event, voucher: str, expiry: datetime, cart_id: str):
-    try:
-        v = Voucher.objects.get(code=voucher, event=event)
-        if v.redeemed:
-            raise CartError(error_messages['voucher_redeemed'])
-        if v.valid_until is not None and v.valid_until < now():
-            raise CartError(error_messages['voucher_expired'])
-
-        quotas = list(v.item.quotas.all())
-        if len(quotas) == 0 or not v.item.is_available():
-            raise CartError(error_messages['unavailable'])
-
-        if not v.allow_ignore_quota and not v.block_quota:
-            for quota in quotas:
-                avail = quota.availability()
-                if avail[1] is not None and avail[1] < 1:
-                    raise CartError(error_messages['unavailable'])
-
-        CartPosition.objects.create(
-            event=event, item=v.item, variation=v.variation,
-            price=v.price if v.price is not None else v.item.default_price,
-            expires=expiry, cart_id=cart_id, voucher=v
-        )
-    except Voucher.DoesNotExist:
-        raise CartError(error_messages['voucher_invalid'])
-
-
-def _add_items_to_cart(event: Event, items: List[Tuple[int, Optional[int], int, Optional[str]]], cart_id: str=None,
-                       voucher: str=None) -> None:
+def _add_items_to_cart(event: Event, items: List[dict], cart_id: str=None) -> None:
     with event.lock():
         _check_date(event)
         existing = CartPosition.objects.filter(Q(cart_id=cart_id) & Q(event=event)).count()
-        if sum(i[2] for i in items) + existing > int(event.settings.max_items_per_order):
+        if sum(i['count'] for i in items) + existing > int(event.settings.max_items_per_order):
             # TODO: i18n plurals
             raise CartError(error_messages['max_items'], (event.settings.max_items_per_order,))
 
@@ -186,43 +195,37 @@ def _add_items_to_cart(event: Event, items: List[Tuple[int, Optional[int], int, 
             _delete_expired(expired)
             if err:
                 raise CartError(err)
-        elif not voucher:
-            raise CartError(error_messages['empty'])
-
-        if voucher:
-            _add_voucher(event, voucher, expiry, cart_id)
 
 
-def add_items_to_cart(event: int, items: List[Tuple[int, Optional[int], int, Optional[str]]], cart_id: str=None,
-                      voucher: str=None) -> None:
+def add_items_to_cart(event: int, items: List[dict], cart_id: str=None) -> None:
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
-    :param items: A list of tuple of the form (item id, variation id or None, number, custom_price)
+    :param items: A list of tuple of the form (item id, variation id or None, number, custom_price, voucher)
     :param session: Session ID of a guest
     :param coupon: A coupon that should also be reeemed
     :raises CartError: On any error that occured
     """
     event = Event.objects.get(id=event)
     try:
-        _add_items_to_cart(event, items, cart_id, voucher)
+        _add_items_to_cart(event, items, cart_id)
     except EventLock.LockTimeoutException:
         raise CartError(error_messages['busy'])
 
 
-def _remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int, Optional[str]]],
-                            cart_id: str) -> None:
+def _remove_items_from_cart(event: Event, items: List[dict], cart_id: str) -> None:
     with event.lock():
-        for item, variation, cnt, price in items:
-            cw = Q(cart_id=cart_id) & Q(item_id=item) & Q(event=event)
-            if variation:
-                cw &= Q(variation_id=variation)
+        for i in items:
+            cw = Q(cart_id=cart_id) & Q(item_id=i['item']) & Q(event=event)
+            if i['variation']:
+                cw &= Q(variation_id=i['variation'])
             else:
                 cw &= Q(variation__isnull=True)
             # Prefer to delete positions that have the same price as the one the user clicked on, after thet
             # prefer the most expensive ones.
-            if price:
-                correctprice = CartPosition.objects.filter(cw).filter(price=Decimal(price.replace(",", ".")))[:cnt]
+            cnt = i['count']
+            if i['price']:
+                correctprice = CartPosition.objects.filter(cw).filter(price=Decimal(i['price'].replace(",", ".")))[:cnt]
                 for cp in correctprice:
                     cp.delete()
                 cnt -= len(correctprice)
@@ -231,8 +234,7 @@ def _remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], in
                     cp.delete()
 
 
-def remove_items_from_cart(event: int, items: List[Tuple[int, Optional[int], int, Optional[str]]],
-                           cart_id: str=None) -> None:
+def remove_items_from_cart(event: int, items: List[dict], cart_id: str=None) -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
@@ -250,20 +252,18 @@ if settings.HAS_CELERY:
     from pretix.celery import app
 
     @app.task(bind=True, max_retries=5, default_retry_delay=1)
-    def add_items_to_cart_task(self, event: int, items: List[Tuple[int, Optional[int], int, Optional[str]]],
-                               cart_id: str, voucher: str=None):
+    def add_items_to_cart_task(self, event: int, items: List[dict], cart_id: str):
         event = Event.objects.get(id=event)
         try:
             try:
-                _add_items_to_cart(event, items, cart_id, voucher)
+                _add_items_to_cart(event, items, cart_id)
             except EventLock.LockTimeoutException:
                 self.retry(exc=CartError(error_messages['busy']))
         except CartError as e:
             return e
 
     @app.task(bind=True, max_retries=5, default_retry_delay=1)
-    def remove_items_from_cart_task(self, event: int, items: List[Tuple[int, Optional[int], int]],
-                                    cart_id: str):
+    def remove_items_from_cart_task(self, event: int, items: List[dict], cart_id: str):
         event = Event.objects.get(id=event)
         try:
             try:

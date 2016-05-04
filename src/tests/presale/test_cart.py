@@ -442,7 +442,7 @@ class CartTest(CartTestMixin, TestCase):
     def test_voucher(self):
         v = Voucher.objects.create(item=self.ticket, event=self.event)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'voucher': v.code
+            'item_%d_voucher' % self.ticket.id: v.code,
         }, follow=True)
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
@@ -453,17 +453,35 @@ class CartTest(CartTestMixin, TestCase):
     def test_voucher_variation(self):
         v = Voucher.objects.create(item=self.shirt, variation=self.shirt_red, event=self.event)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'voucher': v.code
+            'variation_%d_%d_voucher' % (self.shirt.id, self.shirt_red.id): v.code,
         }, follow=True)
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
         self.assertEqual(objs[0].item, self.shirt)
         self.assertEqual(objs[0].variation, self.shirt_red)
 
+    def test_voucher_quota(self):
+        v = Voucher.objects.create(quota=self.quota_shirts, event=self.event)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d_voucher' % (self.shirt.id, self.shirt_red.id): v.code,
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.shirt)
+        self.assertEqual(objs[0].variation, self.shirt_red)
+
+    def test_voucher_quota_invalid_item(self):
+        v = Voucher.objects.create(quota=self.quota_tickets, event=self.event)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d_voucher' % (self.shirt.id, self.shirt_red.id): v.code,
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
     def test_voucher_price(self):
         v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'voucher': v.code
+            'item_%d_voucher' % self.ticket.id: v.code,
         }, follow=True)
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
@@ -474,7 +492,7 @@ class CartTest(CartTestMixin, TestCase):
     def test_voucher_redemed(self):
         v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event, redeemed=True)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'voucher': v.code
+            'item_%d_voucher' % self.ticket.id: v.code,
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('already been used', doc.select('.alert-danger')[0].text)
@@ -484,7 +502,7 @@ class CartTest(CartTestMixin, TestCase):
         v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
                                    valid_until=now() - timedelta(days=2))
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'voucher': v.code
+            'item_%d_voucher' % self.ticket.id: v.code,
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('expired', doc.select('.alert-danger')[0].text)
@@ -492,7 +510,7 @@ class CartTest(CartTestMixin, TestCase):
 
     def test_voucher_invalid(self):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'voucher': 'ABC'
+            'item_%d_voucher' % self.ticket.id: 'ABC',
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('not known', doc.select('.alert-danger')[0].text)
@@ -503,7 +521,7 @@ class CartTest(CartTestMixin, TestCase):
         self.quota_tickets.save()
         v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'voucher': v.code
+            'item_%d_voucher' % self.ticket.id: v.code,
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
@@ -515,7 +533,7 @@ class CartTest(CartTestMixin, TestCase):
         v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
                                    allow_ignore_quota=True)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'voucher': v.code
+            'item_%d_voucher' % self.ticket.id: v.code,
         }, follow=True)
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
@@ -535,10 +553,28 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
         self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'voucher': v.code
+            'item_%d_voucher' % self.ticket.id: v.code,
         }, follow=True)
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, Decimal('12.00'))
+
+    def test_voucher_doubled(self):
+        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event)
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d_voucher' % self.ticket.id: v.code,
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, Decimal('12.00'))
+
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d_voucher' % self.ticket.id: v.code,
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertIn('already been used', doc.select('.alert-danger')[0].text)
+        self.assertEqual(1, CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count())

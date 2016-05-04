@@ -309,6 +309,7 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.first().voucher, v)
+        self.assertTrue(Voucher.objects.get(pk=v.pk).redeemed)
 
     def test_voucher_price_changed(self):
         v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
@@ -389,6 +390,34 @@ class CheckoutTestCase(TestCase):
         doc = BeautifulSoup(response.rendered_content)
         self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.count(), 1)
+
+    def test_voucher_double(self):
+        self.quota_tickets.size = 2
+        self.quota_tickets.save()
+        v = Voucher.objects.create(item=self.ticket, event=self.event,
+                                   valid_until=now() + timedelta(days=2), block_quota=True)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10), voucher=v
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10), voucher=v
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, voucher=v).count(), 1)
+        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        self.assertFalse(Order.objects.exists())
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, voucher=v).exists())
+        self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.count(), 1)
 

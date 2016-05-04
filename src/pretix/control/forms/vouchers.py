@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
-from pretix.base.models import Item, ItemVariation, Voucher
+from pretix.base.models import Item, ItemVariation, Quota, Voucher
 
 
 class VoucherForm(I18nModelForm):
@@ -29,6 +29,8 @@ class VoucherForm(I18nModelForm):
                     initial['itemvar'] = '%d-%d' % (instance.item.pk, instance.variation.pk)
                 elif instance.item:
                     initial['itemvar'] = str(instance.item.pk)
+                elif instance.quota:
+                    initial['itemvar'] = 'q-%d' % instance.quota.pk
             except Item.DoesNotExist:
                 pass
         super().__init__(*args, **kwargs)
@@ -36,22 +38,39 @@ class VoucherForm(I18nModelForm):
         for i in self.instance.event.items.prefetch_related('variations').all():
             variations = list(i.variations.all())
             if variations:
+                choices.append((str(i.pk), _('{product} – Any variation').format(product=i.name)))
                 for v in variations:
                     choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i.name, v.value)))
             else:
                 choices.append((str(i.pk), i.name))
+        for q in self.instance.event.quotas.all():
+            choices.append(('q-%d' % q.pk, 'Any product in quota "{quota}"'.format(quota=q)))
         self.fields['itemvar'].choices = choices
 
-    def save(self, commit=True):
-        if '-' in self.cleaned_data['itemvar']:
-            itemid, varid = self.cleaned_data['itemvar'].split('-')
+    def clean(self):
+        data = super().clean()
+        itemid = quotaid = None
+        if self.data['itemvar'].startswith('q-'):
+            quotaid = self.data['itemvar'][2:]
+        elif '-' in self.data['itemvar']:
+            itemid, varid = self.data['itemvar'].split('-')
         else:
-            itemid, varid = self.cleaned_data['itemvar'], None
-        self.instance.item = Item.objects.get(pk=itemid, event=self.instance.event)
-        if varid:
-            self.instance.variation = ItemVariation.objects.get(pk=varid, item=self.instance.item)
+            itemid, varid = self.data['itemvar'], None
+
+        if itemid:
+            self.instance.item = Item.objects.get(pk=itemid, event=self.instance.event)
+            if varid:
+                self.instance.variation = ItemVariation.objects.get(pk=varid, item=self.instance.item)
+            else:
+                self.instance.variation = None
+            self.instance.quota = None
         else:
+            self.instance.quota = Quota.objects.get(pk=quotaid, event=self.instance.event)
+            self.instance.item = None
             self.instance.variation = None
+        return data
+
+    def save(self, commit=True):
         super().save(commit)
 
         return ['item']
