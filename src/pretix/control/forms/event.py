@@ -40,6 +40,29 @@ class EventCreateForm(I18nModelForm):
         return slug
 
 
+class EventCreateSettingsForm(SettingsForm):
+    timezone = forms.ChoiceField(
+        choices=((a, a) for a in common_timezones),
+        label=_("Default timezone"),
+    )
+    locales = forms.MultipleChoiceField(
+        choices=settings.LANGUAGES,
+        label=_("Available langauges"),
+    )
+    locale = forms.ChoiceField(
+        choices=settings.LANGUAGES,
+        label=_("Default language"),
+    )
+
+    def clean(self):
+        data = super().clean()
+        if data['locale'] not in data['locales']:
+            raise ValidationError({
+                'locale': _('Your default locale must also be enebled for your event (see box above).')
+            })
+        return data
+
+
 class EventUpdateForm(I18nModelForm):
     def clean_slug(self):
         return self.instance.slug

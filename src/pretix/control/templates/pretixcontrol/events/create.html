@@ -16,6 +16,12 @@
             {% bootstrap_field form.currency layout="horizontal" %}
         </fieldset>
         <fieldset>
+            <legend>{% trans "Display settings" %}</legend>
+            {% bootstrap_field sform.locales layout="horizontal" %}
+            {% bootstrap_field sform.locale layout="horizontal" %}
+            {% bootstrap_field sform.timezone layout="horizontal" %}
+        </fieldset>
+        <fieldset>
             <legend>{% trans "Timeline" %}</legend>
             {% bootstrap_field form.presale_start layout="horizontal" %}
             {% bootstrap_field form.presale_end layout="horizontal" %}

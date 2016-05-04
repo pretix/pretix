@@ -162,7 +162,11 @@ class Event(LoggedModel):
         """
         Returns an object representing this event's settings
         """
-        return SettingsProxy(self, type=EventSetting, parent=self.organizer)
+        try:
+            return SettingsProxy(self, type=EventSetting, parent=self.organizer)
+        except Organizer.DoesNotExist:
+            # Should only happen when creating new events
+            return SettingsProxy(self, type=EventSetting)
 
     @property
     def presale_has_ended(self):
