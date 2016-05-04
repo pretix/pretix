@@ -1,11 +1,10 @@
 import django.dispatch
 from django.apps import apps
+from django.conf import settings
 from django.dispatch.dispatcher import NO_RECEIVERS
 from typing import Any, Callable, List, Tuple
 
 from .models import Event
-
-CORE_MODULES = {("pretix", "base"), ("pretix", "presale"), ("pretix", "control")}
 
 
 class EventPluginSignal(django.dispatch.Signal):
@@ -42,7 +41,7 @@ class EventPluginSignal(django.dispatch.Signal):
                 searchpath, mod = searchpath.rsplit(".", 1)
 
             # Only fire receivers from active plugins and core modules
-            if (searchpath, mod) in CORE_MODULES or (app and app.name in sender.get_plugins()):
+            if (searchpath, mod) in settings.CORE_MODULES or (app and app.name in sender.get_plugins()):
                 if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
                     response = receiver(signal=self, sender=sender, **named)
                     responses.append((receiver, response))

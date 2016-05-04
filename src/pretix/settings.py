@@ -167,6 +167,12 @@ INSTALLED_APPS = [
 for entry_point in iter_entry_points(group='pretix.plugin', name=None):
     INSTALLED_APPS.append(entry_point.module_name)
 
+CORE_MODULES = {
+    ("pretix", "base"),
+    ("pretix", "presale"),
+    ("pretix", "control")
+}
+
 MIDDLEWARE_CLASSES = [
     'pretix.multidomain.middlewares.MultiDomainMiddleware',
     'pretix.multidomain.middlewares.SessionMiddleware',
