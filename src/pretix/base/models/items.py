@@ -531,7 +531,6 @@ class Quota(LoggedModel):
 
         return OrderPosition.objects.filter(
             self._position_lookup, order__status=Order.STATUS_PENDING,
-            order__expires__gte=now()
         ).distinct().count()
 
     def count_paid_orders(self):

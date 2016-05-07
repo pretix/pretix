@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.db import transaction
+from django.dispatch import receiver
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from typing import List
@@ -19,7 +20,7 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.mail import mail
 from pretix.base.signals import (
-    order_paid, order_placed, register_payment_providers,
+    order_paid, order_placed, periodic_task, register_payment_providers,
 )
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -253,7 +254,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
     event = Event.objects.get(id=event)
     responses = register_payment_providers.send(event)
     pprov = None
-    for receiver, response in responses:
+    for rec, response in responses:
         provider = response(event)
         if provider.identifier == payment_provider:
             pprov = provider
@@ -314,6 +315,20 @@ def perform_order(event: str, payment_provider: str, positions: List[str],
         # Is raised when there are too many threads asking for event locks and we were
         # unable to get one
         raise OrderError(error_messages['busy'])
+
+
+@receiver(signal=periodic_task)
+def expire_orders(sender, **kwargs):
+    eventcache = {}
+    for o in Order.objects.filter(expires__lt=now(), status=Order.STATUS_PENDING).select_related('event'):
+        expire = eventcache.get(o.event.pk, None)
+        if expire is None:
+            expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)
+            eventcache[o.event.pk] = expire
+        if expire:
+            o.status = Order.STATUS_EXPIRED
+            o.log_action('pretix.event.order.expired')
+            o.save()
 
 
 if settings.HAS_CELERY:

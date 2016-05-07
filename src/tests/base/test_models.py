@@ -103,6 +103,10 @@ class QuotaTestCase(BaseQuotaTestCase):
 
         order.expires = now() - timedelta(days=3)
         order.save()
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
+
+        order.status = Order.STATUS_EXPIRED
+        order.save()
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
 
     def test_ordered_multi_quota(self):
@@ -234,6 +238,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
     def test_paid_expired_available(self):
+        self.order.status = Order.STATUS_EXPIRED
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
         mark_order_paid(self.order)
@@ -241,6 +246,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
     def test_paid_expired_partial(self):
+        self.order.status = Order.STATUS_EXPIRED
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
         self.quota.size = 1
@@ -255,6 +261,7 @@ class OrderTestCase(BaseQuotaTestCase):
 
     def test_paid_expired_unavailable(self):
         self.order.expires = now() - timedelta(days=2)
+        self.order.status = Order.STATUS_EXPIRED
         self.order.save()
         self.quota.size = 0
         self.quota.save()
@@ -265,6 +272,13 @@ class OrderTestCase(BaseQuotaTestCase):
             pass
         self.order = Order.objects.get(id=self.order.id)
         self.assertIn(self.order.status, (Order.STATUS_PENDING, Order.STATUS_EXPIRED))
+
+    def test_paid_after_deadline_but_not_expired(self):
+        self.order.expires = now() - timedelta(days=2)
+        self.order.save()
+        mark_order_paid(self.order)
+        self.order = Order.objects.get(identity=self.order.identity)
+        self.assertEqual(self.order.status, Order.STATUS_PAID)
 
     def test_paid_expired_unavailable_force(self):
         self.order.expires = now() - timedelta(days=2)

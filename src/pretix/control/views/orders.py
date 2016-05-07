@@ -167,23 +167,28 @@ class OrderTransition(OrderView):
 
     def post(self, *args, **kwargs):
         to = self.request.POST.get('status', '')
-        if self.order.status == 'n' and to == 'p':
+        if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p':
             try:
                 mark_order_paid(self.order, manual=True, user=self.request.user)
             except Quota.QuotaExceededException as e:
                 messages.error(self.request, str(e))
             else:
                 messages.success(self.request, _('The order has been marked as paid.'))
-        elif self.order.status == 'n' and to == 'c':
+        elif self.order.status == Order.STATUS_PENDING and to == 'c':
             cancel_order(self.order, user=self.request.user)
             messages.success(self.request, _('The order has been cancelled.'))
-        elif self.order.status == 'p' and to == 'n':
+        elif self.order.status == Order.STATUS_PAID and to == 'n':
             self.order.status = Order.STATUS_PENDING
             self.order.payment_manual = True
             self.order.save()
             self.order.log_action('pretix.event.order.unpaid', user=self.request.user)
             messages.success(self.request, _('The order has been marked as not paid.'))
-        elif self.order.status == 'p' and to == 'r':
+        elif self.order.status == Order.STATUS_PENDING and to == 'e':
+            self.order.status = Order.STATUS_EXPIRED
+            self.order.save()
+            self.order.log_action('pretix.event.order.expired', user=self.request.user)
+            messages.success(self.request, _('The order has been marked as expired.'))
+        elif self.order.status == Order.STATUS_PAID and to == 'r':
             ret = self.payment_provider.order_control_refund_perform(self.request, self.order)
             if ret:
                 return redirect(ret)
@@ -191,11 +196,11 @@ class OrderTransition(OrderView):
 
     def get(self, *args, **kwargs):
         to = self.request.GET.get('status', '')
-        if self.order.status == 'n' and to == 'c':
+        if self.order.status == Order.STATUS_PENDING and to == 'c':
             return render(self.request, 'pretixcontrol/order/cancel.html', {
                 'order': self.order,
             })
-        elif self.order.status == 'p' and to == 'r':
+        elif self.order.status == Order.STATUS_PAID and to == 'r':
             return render(self.request, 'pretixcontrol/order/refund.html', {
                 'order': self.order,
                 'payment': self.payment_provider.order_control_refund_render(self.order),

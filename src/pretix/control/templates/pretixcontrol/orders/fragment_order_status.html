@@ -5,7 +5,7 @@
 {% elif order.status == "p" %}
     <span class="label label-success {{ class }}">{% trans "Paid" %}</span>
 {% elif order.status == "e" %} {# expired #}
-    <span class="label label-danger {{ class }}">{% trans "Pending (expired)" %}</span>
+    <span class="label label-danger {{ class }}">{% trans "Expired" %}</span>
 {% elif order.status == "c" %}
     <span class="label label-danger {{ class }}">{% trans "Cancelled" %}</span>
 {% elif order.status == "r" %}

@@ -49,6 +49,10 @@ DEFAULTS = {
         'default': None,
         'type': datetime,
     },
+    'payment_term_expire_automatically': {
+        'default': 'True',
+        'type': bool
+    },
     'payment_term_accept_late': {
         'default': 'True',
         'type': bool

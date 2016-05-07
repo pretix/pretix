@@ -87,7 +87,7 @@ def test_order_transition_to_paid_in_time_success(client, env):
 @pytest.mark.django_db
 def test_order_transition_to_paid_expired_quota_left(client, env):
     o = Order.objects.get(id=env[2].id)
-    o.expires = now() - timedelta(days=2)
+    o.status = Order.STATUS_EXPIRED
     o.save()
     q = Quota.objects.create(event=env[0], size=10)
     q.items.add(env[3])
@@ -103,7 +103,7 @@ def test_order_transition_to_paid_expired_quota_left(client, env):
 @pytest.mark.django_db
 def test_order_transition_to_paid_expired_quota_full(client, env):
     o = Order.objects.get(id=env[2].id)
-    o.expires = now() - timedelta(days=2)
+    o.status = Order.STATUS_EXPIRED
     o.save()
     q = Quota.objects.create(event=env[0], size=0)
     q.items.add(env[3])
@@ -112,7 +112,7 @@ def test_order_transition_to_paid_expired_quota_full(client, env):
         'status': 'p'
     })
     o = Order.objects.get(id=env[2].id)
-    assert o.status == Order.STATUS_PENDING
+    assert o.status == Order.STATUS_EXPIRED
 
 
 @pytest.mark.django_db
