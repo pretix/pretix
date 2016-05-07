@@ -1,0 +1,12 @@
+<div class="welcome-wizard">
+    <h3>{{ title }}</h3>
+    {% if subtitle %}
+        <div class="attentionline">{{ subtitle }}</div>
+    {% endif %}
+    {% if text %}
+        <p>{{ text }}</p>
+    {% endif %}
+    {% if button_text %}
+        <p><a href="{{ button_url }}" class="btn btn-default btn-lg">{{ button_text }}</a></p>
+    {% endif %}
+</div>

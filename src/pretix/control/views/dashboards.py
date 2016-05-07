@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Sum
 from django.dispatch import receiver
 from django.shortcuts import render
+from django.template.loader import get_template
 from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
@@ -107,6 +108,40 @@ def shop_state_widget(sender, **kwargs):
             'event': sender.slug,
             'organizer': sender.organizer.slug
         })
+    }]
+
+
+@receiver(signal=event_dashboard_widgets)
+def welcome_wizard_widget(sender, **kwargs):
+    template = get_template('pretixcontrol/event/dashboard_widget_welcome.html')
+    ctx = {
+        'title': _('Welcome to pretix!')
+    }
+    kwargs = {'event': sender.slug, 'organizer': sender.organizer.slug}
+
+    if not sender.items.exists():
+        ctx.update({
+            'subtitle': _('Get started by creating a product'),
+            'text': _('The first thing you need for selling tickets to your conference is one or more "products" your '
+                      'participants can choose from. A product can be a ticket or anything else that you want to sell, '
+                      'e.g. additional merchandise in form of t-shirts.'),
+            'button_text': _('Create a first product'),
+            'button_url': reverse('control:event.items.add', kwargs=kwargs)
+        })
+    elif not sender.quotas.exists():
+        ctx.update({
+            'subtitle': _('Create quotas that apply to your products'),
+            'text': _('Your tickets will only be available for sale if you create a matching quota, i.e. if you tell '
+                      'pretix how many tickets it should sell for your event.'),
+            'button_text': _('Create a first quota'),
+            'button_url': reverse('control:event.items.quotas.add', kwargs=kwargs)
+        })
+    else:
+        return []
+    return [{
+        'width': 12,
+        'priority': 2000,
+        'content': template.render(ctx)
     }]
 
 
