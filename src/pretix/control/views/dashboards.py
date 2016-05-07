@@ -122,7 +122,7 @@ def welcome_wizard_widget(sender, **kwargs):
     if not sender.items.exists():
         ctx.update({
             'subtitle': _('Get started by creating a product'),
-            'text': _('The first thing you need for selling tickets to your conference is one or more "products" your '
+            'text': _('The first thing you need for selling tickets to your event is one or more "products" your '
                       'participants can choose from. A product can be a ticket or anything else that you want to sell, '
                       'e.g. additional merchandise in form of t-shirts.'),
             'button_text': _('Create a first product'),
