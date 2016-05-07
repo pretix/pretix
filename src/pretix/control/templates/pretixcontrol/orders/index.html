@@ -1,11 +1,32 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
+{% load eventurl %}
 {% block title %}{% trans "Orders" %}{% endblock %}
 {% block content %}
-	<h1>{% trans "Orders" %}</h1>
-    <p>
+    <h1>{% trans "Orders" %}</h1>
+    {% if questions|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    Nobody ordered a ticket yet.
+                {% endblocktrans %}
+            </p>
+
+            {% if not request.event.live %}
+                <a href="{% url "control:event.live" event=request.event.slug organizer=request.event.organizer.slug %}"
+                        class="btn btn-primary btn-lg">
+                    {% trans "Take your shop live" %}
+                </a>
+            {% else %}
+                <a href="{% eventurl request.event "presale:event.index" %}" class="btn btn-primary btn-lg">
+                    {% trans "Go to the ticket shop" %}
+                </a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>
         <form class="form-inline helper-display-inline"
-              action="{% url "control:event.orders.go" event=request.event.slug organizer=request.event.organizer.slug %}">
+                action="{% url "control:event.orders.go" event=request.event.slug organizer=request.event.organizer.slug %}">
             <div class="input-group">
                 <input type="text" name="code" class="form-control" placeholder="{% trans "Order code" %}">
                 <span class="input-group-btn">
@@ -34,10 +55,10 @@
             <input type="text" name="user" class="form-control" placeholder="{% trans "Search user" %}" value="{{ request.GET.user }}">
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
         </form>
-    </p>
-    <div class="table-responsive">
-        <table class="table table-condensed table-hover">
-            <thead>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+                <thead>
                 <tr>
                     <th>{% trans "Order code" %}</th>
                     <th>{% trans "User" %}</th>
@@ -45,21 +66,22 @@
                     <th>{% trans "Order date" %}</th>
                     <th>{% trans "Status" %}</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 {% for o in orders %}
-                <tr>
-                    <td><strong><a
-                            href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code%}"
-                            >{{ o.code }}</a></strong></td>
-                    <td>{{ o.email }}</td>
-                    <td>{{ o.total|floatformat:2 }} {{ request.event.currency }}</td>
-                    <td>{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
-                    <td>{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
-                </tr>
+                    <tr>
+                        <td><strong><a
+                                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code %}"
+                        >{{ o.code }}</a></strong></td>
+                        <td>{{ o.email }}</td>
+                        <td>{{ o.total|floatformat:2 }} {{ request.event.currency }}</td>
+                        <td>{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        <td>{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
+                    </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% include "pretixcontrol/pagination.html" %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
 {% endblock %}
