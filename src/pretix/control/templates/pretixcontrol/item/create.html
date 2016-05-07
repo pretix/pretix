@@ -7,26 +7,17 @@
         <fieldset>
             <legend>{% trans "General information" %}</legend>
             {% bootstrap_field form.name layout="horizontal" %}
-            {% bootstrap_field form.active layout="horizontal" %}
-            {% bootstrap_field form.category layout="horizontal" %}
+            {% bootstrap_field form.has_variations layout="horizontal" %}
             {% bootstrap_field form.admission layout="horizontal" %}
-            {% bootstrap_field form.description layout="horizontal" %}
-            {% bootstrap_field form.picture layout="horizontal" %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Price settings" %}</legend>
             {% bootstrap_field form.default_price layout="horizontal" %}
             {% bootstrap_field form.tax_rate layout="horizontal" %}
-            {% bootstrap_field form.free_price layout="horizontal" %}
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "Availability" %}</legend>
-            {% bootstrap_field form.available_from layout="horizontal" %}
-            {% bootstrap_field form.available_until layout="horizontal" %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
+                {% trans "Save and continue with more settings" %}
             </button>
         </div>
     </form>

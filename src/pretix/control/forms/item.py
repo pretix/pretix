@@ -97,7 +97,32 @@ class QuotaForm(I18nModelForm):
         ]
 
 
-class ItemFormGeneral(I18nModelForm):
+class ItemCreateForm(I18nModelForm):
+    has_variations = forms.BooleanField(label=_('The product should exist in multiple variations'),
+                                        help_text=_('Select this option e.g. for t-shirts that come in multiple sizes. '
+                                                    'You can select the variations in the next step.'),
+                                        required=False)
+
+    def save(self, *args, **kwargs):
+        instance = super().save(*args, **kwargs)
+        if self.cleaned_data.get('has_variations'):
+            ItemVariation.objects.create(
+                item=instance, value=__('Standard')
+            )
+        return instance
+
+    class Meta:
+        model = Item
+        localized_fields = '__all__'
+        fields = [
+            'name',
+            'admission',
+            'default_price',
+            'tax_rate',
+        ]
+
+
+class ItemUpdateForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = self.instance.event.categories.all()
@@ -118,21 +143,6 @@ class ItemFormGeneral(I18nModelForm):
             'available_from',
             'available_until',
         ]
-
-
-class ItemCreateForm(ItemFormGeneral):
-    has_variations = forms.BooleanField(label=_('The product should exist in multiple variations'),
-                                        help_text=_('Select this option e.g. for t-shirts that come in multiple sizes. '
-                                                    'You can select the variations in the next step.'),
-                                        required=False)
-
-    def save(self, *args, **kwargs):
-        instance = super().save(*args, **kwargs)
-        if self.cleaned_data.get('has_variations'):
-            ItemVariation.objects.create(
-                item=instance, value=__('Standard')
-            )
-        return instance
 
 
 class ItemVariationForm(I18nModelForm):
