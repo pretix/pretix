@@ -4,7 +4,7 @@
 {% block title %}{% trans "Attendees" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Attendees" %}</h1>
-    {% if attendees|length == 0 %}
+    {% if not filtered and attendees|length == 0 %}
         <div class="empty-collection">
             <p>
                 {% blocktrans trimmed %}

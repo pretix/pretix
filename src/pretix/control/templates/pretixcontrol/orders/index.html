@@ -4,7 +4,7 @@
 {% block title %}{% trans "Orders" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Orders" %}</h1>
-    {% if questions|length == 0 %}
+    {% if not filtered and orders|length == 0 %}
         <div class="empty-collection">
             <p>
                 {% blocktrans trimmed %}

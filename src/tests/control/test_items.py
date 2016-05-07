@@ -100,7 +100,7 @@ class CategoriesTest(ItemFormTest):
         ))
         self.driver.find_element_by_class_name("btn-danger").click()
         self.driver.find_element_by_class_name("alert-success")
-        self.assertNotIn("Entry tickets", self.driver.find_element_by_css_selector("#page-wrapper table").text)
+        self.assertNotIn("Entry tickets", self.driver.find_element_by_css_selector("#page-wrapper").text)
         assert not ItemCategory.objects.filter(id=c.id).exists()
 
 
@@ -138,7 +138,7 @@ class QuestionsTest(ItemFormTest):
         ))
         self.driver.find_element_by_class_name("btn-danger").click()
         self.driver.find_element_by_class_name("alert-success")
-        self.assertNotIn("shoe size", self.driver.find_element_by_css_selector("#page-wrapper table").text)
+        self.assertNotIn("shoe size", self.driver.find_element_by_css_selector("#page-wrapper").text)
         assert not Question.objects.filter(id=c.id).exists()
 
 
@@ -186,5 +186,5 @@ class QuotaTest(ItemFormTest):
         ))
         self.driver.find_element_by_class_name("btn-danger").click()
         self.driver.find_element_by_class_name("alert-success")
-        self.assertNotIn("Full house", self.driver.find_element_by_css_selector("#page-wrapper table").text)
+        self.assertNotIn("Full house", self.driver.find_element_by_css_selector("#page-wrapper").text)
         assert not Quota.objects.filter(id=c.id).exists()

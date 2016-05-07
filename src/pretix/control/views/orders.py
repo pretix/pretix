@@ -58,6 +58,7 @@ class OrderList(EventPermissionRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['items'] = Item.objects.filter(event=self.request.event)
+        ctx['filtered'] = ("status" in self.request.GET or "item" in self.request.GET or "user" in self.request.GET)
         return ctx
 
 
