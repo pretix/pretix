@@ -114,4 +114,6 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
             ctx['rev_data'] = json.dumps(data)
             cache.set('statistics_rev_data', ctx['rev_data'])
 
+        ctx['has_orders'] = self.request.event.orders.exists()
+
         return ctx
