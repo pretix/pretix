@@ -161,7 +161,8 @@ class Recover(TemplateView):
 
     @cached_property
     def form(self):
-        return PasswordRecoverForm(data=self.request.POST if self.request.method == 'POST' else None)
+        return PasswordRecoverForm(data=self.request.POST if self.request.method == 'POST' else None,
+                                   user_id=self.request.GET.get('id'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -67,13 +67,33 @@ class UserSettingsTest(BrowserTest):
         assert self.user.password == pw
 
     def test_change_password_success(self):
-        self.driver.find_element_by_name("new_pw").send_keys("foo")
-        self.driver.find_element_by_name("new_pw_repeat").send_keys("foo")
+        self.driver.find_element_by_name("new_pw").send_keys("foobarbar")
+        self.driver.find_element_by_name("new_pw_repeat").send_keys("foobarbar")
         self.driver.find_element_by_name("old_pw").send_keys("dummy")
         self.scroll_and_click(self.driver.find_element_by_class_name('btn-save'))
         self.driver.find_element_by_class_name("alert-success")
         self.user = User.objects.get(pk=self.user.pk)
-        assert self.user.check_password("foo")
+        assert self.user.check_password("foobarbar")
+
+    def test_change_password_short(self):
+        self.driver.find_element_by_name("new_pw").send_keys("foobar")
+        self.driver.find_element_by_name("new_pw_repeat").send_keys("foobar")
+        self.driver.find_element_by_name("old_pw").send_keys("dummy")
+        self.scroll_and_click(self.driver.find_element_by_class_name('btn-save'))
+        self.driver.find_element_by_class_name("alert-danger")
+        pw = self.user.password
+        self.user = User.objects.get(pk=self.user.pk)
+        assert self.user.password == pw
+
+    def test_change_password_user_attribute_similarity(self):
+        self.driver.find_element_by_name("new_pw").send_keys("dummy123")
+        self.driver.find_element_by_name("new_pw_repeat").send_keys("dummy123")
+        self.driver.find_element_by_name("old_pw").send_keys("dummy")
+        self.scroll_and_click(self.driver.find_element_by_class_name('btn-save'))
+        self.driver.find_element_by_class_name("alert-danger")
+        pw = self.user.password
+        self.user = User.objects.get(pk=self.user.pk)
+        assert self.user.password == pw
 
     def test_change_password_require_repeat(self):
         self.driver.find_element_by_name("new_pw").send_keys("foo")

@@ -1,5 +1,8 @@
 from django import forms
 from django.contrib.auth import authenticate
+from django.contrib.auth.password_validation import (
+    password_validators_help_texts, validate_password,
+)
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import User
@@ -84,7 +87,7 @@ class RegistrationForm(forms.Form):
     )
 
     def clean(self):
-        password1 = self.cleaned_data.get('password')
+        password1 = self.cleaned_data.get('password', '')
         password2 = self.cleaned_data.get('password_repeat')
 
         if password1 and password1 != password2:
@@ -93,6 +96,12 @@ class RegistrationForm(forms.Form):
                 code='pw_mismatch'
             )
 
+        user = User(email=self.cleaned_data.get('email'))
+        if validate_password(password1, user=user) is not None:
+            raise forms.ValidationError(
+                _(password_validators_help_texts()),
+                code='pw_invalid'
+            )
         return self.cleaned_data
 
     def clean_email(self):
@@ -107,7 +116,7 @@ class RegistrationForm(forms.Form):
 
 class PasswordRecoverForm(forms.Form):
     error_messages = {
-        'pw_mismatch': _("Please enter the same password twice")
+        'pw_mismatch': _("Please enter the same password twice"),
     }
     password = forms.CharField(
         label=_('Password'),
@@ -119,17 +128,28 @@ class PasswordRecoverForm(forms.Form):
         widget=forms.PasswordInput
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user_id=None, *args, **kwargs):
+        self.user_id = user_id
         super().__init__(*args, **kwargs)
 
     def clean(self):
-        password1 = self.cleaned_data.get('password')
+        password1 = self.cleaned_data.get('password', '')
         password2 = self.cleaned_data.get('password_repeat')
 
         if password1 and password1 != password2:
             raise forms.ValidationError(
                 self.error_messages['pw_mismatch'],
                 code='pw_mismatch'
+            )
+
+        try:
+            user = User.objects.get(id=self.user_id)
+        except User.DoesNotExist:
+            user = None
+        if validate_password(password1, user=user) is not None:
+            raise forms.ValidationError(
+                _(password_validators_help_texts()),
+                code='pw_invalid'
             )
 
         return self.cleaned_data

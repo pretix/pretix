@@ -1,5 +1,8 @@
 from django import forms
 from django.contrib.auth.hashers import check_password
+from django.contrib.auth.password_validation import (
+    password_validators_help_texts, validate_password,
+)
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
@@ -65,6 +68,15 @@ class UserSettingsForm(forms.ModelForm):
                 code='duplicate_identifier',
             )
         return email
+
+    def clean_new_pw(self):
+        password1 = self.cleaned_data.get('new_pw', '')
+        if password1 and validate_password(password1, user=self.user) is not None:
+            raise forms.ValidationError(
+                _(password_validators_help_texts()),
+                code='pw_invalid'
+            )
+        return password1
 
     def clean_new_pw_repeat(self):
         password1 = self.cleaned_data.get('new_pw')
