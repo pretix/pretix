@@ -6,3 +6,4 @@ Contribution guide
 
    general
    style
+   codeofconduct

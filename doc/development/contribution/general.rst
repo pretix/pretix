@@ -9,6 +9,8 @@ constructive and friendly feedback on your changes.
 First of all, you'll need pretix running locally on your machine. Head over to :ref:`devsetup` to learn how to do this.
 If you run into any problems on your way, please do not hesitate to ask us anytime!
 
+Please note that we have a :ref:`coc` in place that applies to all communication around the project.
+
 Sending a patch
 ---------------
 
@@ -29,7 +31,6 @@ If you add a new feature, please include appropriate documentation into your pat
 please include a regression test, i.e. a test that fails without your changes and passes after applying your changes.
 
 Again: If you get stuck, do not hesitate to contact any of us, or Raphael personally at mail@raphaelmichel.de.
-
 
 .. _create a pull request: https://help.github.com/articles/creating-a-pull-request/
 .. _GitHub repository: https://github.com/pretix/pretix
