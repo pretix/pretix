@@ -55,7 +55,7 @@ Carts and Orders
    :members:
 
 .. autoclass:: pretix.base.models.AbstractPosition
-:members:
+   :members:
 
 .. autoclass:: pretix.base.models.OrderPosition
    :members:
@@ -70,6 +70,15 @@ Logging
 -------
 
 .. autoclass:: pretix.base.models.LogEntry
+   :members:
+
+Invoicing
+---------
+
+.. autoclass:: pretix.base.models.Invoice
+   :members:
+
+.. autoclass:: pretix.base.models.InvoiceLine
    :members:
 
 Vouchers

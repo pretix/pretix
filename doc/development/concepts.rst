@@ -38,13 +38,8 @@ Items and variations
 
 The purpose of pretix is to sell **items** (which belong to **events**) to **users**. 
 An **item** is a abstract thing, popular examples being event tickets or a piece of 
-merchandise, like 'T-shirt'. An **item** can have multiple **properties** with multiple 
-**values** each. For example, the **item** 'T-Shirt' could have the **property** 'Size' 
-with **values** 'S', 'M' and 'L' and the **property** 'Color' with **values** 'black' 
-and 'blue'.
-
-Any combination of those **values** is called a **variation**. Using the examples from 
-above, a possible **variation** would be 'T-Shirt, S, blue'.
+merchandise, like 'T-shirt'. An **item** can have multiple **variations**. For example,
+the **item** 'T-Shirt' could have the **variations** S', 'M' and 'L'.
 
 Questions
 ^^^^^^^^^
@@ -61,22 +56,22 @@ special care in the implementation to never sell more tickets than allowed, even
 
 * There is a concept of **quotas**. A quota is basically a number of items combined with information
   about how many of them are still available.
-* Every time a user places a item in the cart, a **cart lock** is created, reducing the number of
-  available items in the pool by one. The lock is valid for a fixed time (e.g. 30 minutes), but not
+* Every time a user places a item in the cart, a **cart position** is created, reducing the number of
+  available items in the pool by one. The position is valid for a fixed time (e.g. 30 minutes), but not
   instantly deleted after those 30 minutes (we'll get to that).
-* Every time a user places a binding order, the lock object is replaced by an **order** which behaves
-  much the same as the lock. It reduces the number of available item and is valid for a fixed time, this
+* Every time a user places a binding order, the position object is replaced by an **order position** which behaves
+  much the same as the cart position. It reduces the number of available item and is valid for a fixed time, this
   time for the configured payment term (e.g. 14 days).
 * If the order is being paid, the **order** becomes permanent.
 * Once there are no available tickets left and user A wants to buy a ticket, he can do so, as long as 
-  there are *expired* cart locks in the system. In this case, user A gets a new cart lock, so that there 
-  are  more cart locks than available tickets and therefore have to remove one of the expired cart locks.
+  there are *expired* cart position in the system. In this case, user A gets a new cart position, so that there
+  are more cart position than available tickets and therefore have to remove one of the expired cart positions.
   However, we do not choose one by random, but keep the surplus in a way that leads to the deletion
-  of the cart lock of the user who tries *last* to use his lock.
+  of the cart position f the user who tries *last* to use his cart position.
 * The same goes for orders which are not paid within the specified timeframe. This policy allows the organizer to
   sell as much items as possible. Moreover, it guarantees the users to get their items if they check out within the validity 
-  period of their locks and pay within the validity period of their orders. It does not guarantee them anything
+  period of their positions and pay within the validity period of their orders. It does not guarantee them anything
   any longer, but it tries to be *as tolerant as possible* to users who are paying after their payment
-  period or click checkout after the expiry of their lock.
+  period or click checkout after the expiry of their position.
 * The same quota can apply to multiple items and one item can be affected by multiple quotas.
 

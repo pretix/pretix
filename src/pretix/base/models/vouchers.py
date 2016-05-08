@@ -20,6 +20,25 @@ def generate_code():
 
 
 class Voucher(LoggedModel):
+    """
+    Represents a voucher. A voucher can reserve ticket quota or allow special prices.
+
+    :param event: The event this voucher is valid for
+    :param code: The secret voucher code
+    :param redeemed: Whether or not this voucher has already been redeemed
+    :param valid_until: The expiration date of this voucher (optional)
+    :param block_quota: If set to true, this voucher will reserve quota for its holder
+    :param allow_ignore_quota: If set to true, this voucher can be redeemed even if the event is sold out
+    :param price: If set, the voucher will allow the sale of associated items for this price
+    :param item: If set, the item to sell
+    :param variation: If set, the variation to sell
+    :param quota: If set, the quota to choose an item from
+
+    Various constraints apply:
+
+    * You can either select a quota or an item and you need to select one of those
+    * If you select an item that as variations but not select a variation, you cannot set block_quota
+    """
     event = models.ForeignKey(
         Event,
         on_delete=models.CASCADE,
@@ -116,11 +135,17 @@ class Voucher(LoggedModel):
         self.event.get_cache().delete('vouchers_exist')
 
     def is_ordered(self) -> int:
+        """
+        Returns whether an order position exists that uses this voucher.
+        """
         return OrderPosition.objects.filter(
             voucher=self
         ).exists()
 
     def is_in_cart(self) -> int:
+        """
+        Returns whether a cart position exists that uses this voucher.
+        """
         return CartPosition.objects.filter(
             voucher=self
         ).count()

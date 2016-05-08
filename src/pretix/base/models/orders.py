@@ -52,6 +52,8 @@ class Order(LoggedModel):
     :type email: str
     :param locale: The locale of this order
     :type locale: str
+    :param secret: A secret string that is required to modify the order
+    :type secret: str
     :param datetime: The datetime of the order placement
     :type datetime: datetime
     :param expires: The date until this order has to be paid to guarantee the
@@ -62,6 +64,10 @@ class Order(LoggedModel):
     :type payment_provider: str
     :param payment_fee: The payment fee calculated at checkout time
     :type payment_fee: decimal.Decimal
+    :param payment_fee_tax_value: The absolute amound of tax included in the payment fee
+    :type payment_fee_tax_value: decimal.Decimal
+    :param payment_fee_tax_rate: The tax rate applied to the payment fee (in percent)
+    :type payment_fee_tax_rate: decimal.Decimal
     :param payment_info: Arbitrary information stored by the payment provider
     :type payment_info: str
     :param total: The total amount of the order, including the payment fee
@@ -170,6 +176,10 @@ class Order(LoggedModel):
         super().save(*args, **kwargs)
 
     def _calculate_tax(self):
+        """
+        Calculates the taxes on the payment fees and sets the parameters payment_fee_tax_rate
+        and payment_fee_tax_value accordingly.
+        """
         self.payment_fee_tax_rate = self.event.settings.get('tax_rate_default')
         if self.payment_fee_tax_rate:
             self.payment_fee_tax_value = round_decimal(

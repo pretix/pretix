@@ -9,6 +9,7 @@ class LogEntry(models.Model):
     in the database. This uses django.contrib.contenttypes to allow a
     relation to an arbitrary database object.
 
+    :param datatime: The timestamp of the logged action
     :param user: The user that performed the action
     :type user: User
     :param action_type: The type of action that has been performed. This is

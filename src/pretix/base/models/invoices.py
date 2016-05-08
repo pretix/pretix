@@ -17,6 +17,22 @@ def invoice_filename(instance, filename: str) -> str:
 
 
 class Invoice(models.Model):
+    """
+    Represents an invoice that is issued because of an order. Because invoices are legally required
+    not to change, this object duplicates a log of data (e.g. the invoice address).
+
+    :param order: The associated order
+    :param event: The event this belongs to (for convenience)
+    :param invoice_no: The human-readable, event-unique invoice number
+    :param is_cancellation: Whether or not this is a cancellation instead of an invoice
+    :param refers: A link to another invoice this invoice referse to, e.g. the cancelled invoice in an cancellation
+    :param invoice_from: The sender address
+    :param invoice_to: The receiver address
+    :param date: The invoice date
+    :param locale: The locale in which the invoice should be printed
+    :param additional_text: Additional text for the invoice
+    :param file: The filename of the rendered invoice
+    """
     order = models.ForeignKey('Order', related_name='invoices', db_index=True)
     event = models.ForeignKey('Event', related_name='invoices', db_index=True)
     invoice_no = models.PositiveIntegerField(db_index=True)
@@ -48,6 +64,9 @@ class Invoice(models.Model):
 
     @property
     def number(self):
+        """
+        Returns the invoice number in a human-readable way with the event slug prepended.
+        """
         return '%s-%05d' % (self.event.slug.upper(), self.invoice_no)
 
     class Meta:
@@ -55,6 +74,15 @@ class Invoice(models.Model):
 
 
 class InvoiceLine(models.Model):
+    """
+    One position listed on an invoice.
+
+    :param invoice: The invoice this belongs to
+    :param description: The item description
+    :param gross_value: The gross value
+    :param tax_value: The included tax (as an absolute value)
+    :param tax_rate: The applied tax rate in percent
+    """
     invoice = models.ForeignKey('Invoice', related_name='lines')
     description = models.TextField()
     gross_value = models.DecimalField(max_digits=10, decimal_places=2)
