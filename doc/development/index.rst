@@ -8,8 +8,8 @@ Contents:
 
    concepts
    setup
-   style
    structure
+   contribution/index
    models
    api/index
 

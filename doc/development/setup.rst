@@ -1,3 +1,5 @@
+.. _`devsetup`:
+
 The development setup
 =====================
 
@@ -70,6 +72,8 @@ and head to http://localhost:8000/
 As we did not implement an overall front page yet, you need to go directly to
 http://localhost:8000/control/ for the admin view or, if you imported the test
 data as suggested above, to the event page at http://localhost:8000/mrmcd/2015/
+
+.. _`checksandtests`:
 
 Code checks and unit tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
