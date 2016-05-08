@@ -277,7 +277,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
         mark_order_paid(self.order)
-        self.order = Order.objects.get(identity=self.order.identity)
+        self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
     def test_paid_expired_unavailable_force(self):
