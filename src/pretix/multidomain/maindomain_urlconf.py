@@ -1,4 +1,3 @@
-import importlib
 import importlib.util
 
 from django.apps import apps

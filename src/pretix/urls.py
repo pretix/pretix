@@ -36,8 +36,11 @@ control_patterns = [
 
 debug_patterns = []
 if settings.DEBUG:
-    import debug_toolbar
+    try:
+        import debug_toolbar
 
-    debug_patterns.append(url(r'^__debug__/', include(debug_toolbar.urls)))
+        debug_patterns.append(url(r'^__debug__/', include(debug_toolbar.urls)))
+    except ImportError:
+        pass
 
 common_patterns = base_patterns + control_patterns + debug_patterns

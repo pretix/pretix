@@ -1,7 +1,7 @@
 General remarks
 ===============
 
-You are interesting in contributing to pretix? That is awesome!
+You are interested in contributing to pretix? That is awesome!
 
 If you’re new to contributing to open source software, don’t be afraid. We’ll happily review your code and give you
 constructive and friendly feedback on your changes.

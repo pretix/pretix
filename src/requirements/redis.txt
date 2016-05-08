@@ -1,2 +1,4 @@
 django-redis>=4.1,<4.2
 redis>=2.10,<2.11
+# until the following issue is fixed, we need our own kombu version
+git+https://github.com/pretix/kombu.git@pretix#egg=kombu

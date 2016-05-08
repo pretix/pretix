@@ -8,5 +8,5 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   installation
+   installation/index
    config

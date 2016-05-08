@@ -111,6 +111,8 @@ Example::
     The URL to be used to serve static files. You should not need to modify
     this. Default: ``/static/``
 
+.. _`mail-settings`:
+
 Email
 -----
 
