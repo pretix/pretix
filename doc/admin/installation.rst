@@ -19,8 +19,7 @@ If you want to set them up manually, you can also get pretix from GitHub or wait
 To run pretix, you will need **at least Python 3.4**.
 
 You can get the direct dependencies by doing a ``pip install -r requirements.txt`` in the pretix source
-directory. You'll also need ``nodejs`` and the ``less`` node package. We'll provide detailled documentation
-on this as soon as pretix will be officially released.
+directory. We'll provide detailled documentation on this as soon as pretix will be officially released.
 
 If you have real users on your system you'll **really** want to use
 

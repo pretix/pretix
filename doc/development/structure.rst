@@ -21,8 +21,7 @@ pretix/
 
     helpers/
         Helpers contain a very few modules providing workarounds for low-level flaws in
-        Django or installed 3rd-party packages, like a filter to combine the ``lessc``
-        preprocessor with ``django-compressor``'s URL rewriting.
+        Django or installed 3rd-party packages.
 
 static/
     Contains all static files (CSS, JavaScript, images)

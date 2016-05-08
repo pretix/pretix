@@ -15,7 +15,6 @@ External Dependencies
 * ``pyvenv`` for Python 3 (Debian package: ``python3-venv``)
 * ``libffi`` (Debian package: ``libffi-dev``)
 * ``git``
-* ``lessc`` (Debian package: ``node-less``)
 
 Your local python environment
 -----------------------------

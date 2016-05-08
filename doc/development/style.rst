@@ -32,26 +32,8 @@ Python code
 
 * Always mark all strings ever displayed to any user for translation.
 
-LESS stylesheets
-----------------
-
-* Indent your code with four spaces.
-* Make use of the nesting feature of LESS to put your code in logical groups, but avoid using 
-  more than three levels of nesting.
-* Put spaces after ``:`` in declarations.
-* Put spaces before ``{`` in rulesets.
-* When grouping selectors, use one line per selector.
-* Place closing brackets on an own line.
-* Use only one declaration per line.
-* Use the `mixins`_ feature from LESS, especially when dealing with browser-specific statements
-  like ``-webkit-transform``, ``-moz-transform``, etc.
-* Use hex color codes (or ``rgba()``, if needed)
-* Put colors into variables, if you use them more than once (and maybe even then)
-
-
 
 .. _PEP 8: http://legacy.python.org/dev/peps/pep-0008/
 .. _flake8: https://pypi.python.org/pypi/flake8
 .. _Django Coding Style: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
-.. _mixins: http://lesscss.org/features/#mixins-feature
 .. [#f1] But Python's very own ``unittest`` module forces us to use ``setUp`` as a method name...
