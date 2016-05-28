@@ -121,7 +121,7 @@ class I18nWidget(forms.MultiWidget):
         self.field = field
         for lng in self.langcodes:
             a = copy.copy(attrs) or {}
-            a['data-lang'] = lng
+            a['lang'] = lng
             widgets.append(self.widget(attrs=a))
         super().__init__(widgets, attrs)
 
