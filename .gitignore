@@ -18,6 +18,7 @@ _static/
 .secret
 atlassian-ide-plugin.xml
 pretixeu/
+local/
 .project
 .pydevproject
 

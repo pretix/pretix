@@ -6,16 +6,12 @@ Plugin basics
 
 It is possible to extend pretix with custom Python code using the official plugin
 API. Every plugin has to be implemented as an independent Django 'app' living
-either in an own python package either installed like any python module or in 
-the ``pretixplugins/`` directory of your pretix installation. A plugin may only
-require two steps to install:
-
-* Add it to the ``INSTALLED_APPS`` setting of Django in ``pretix/settings.py``
-* Perform database migrations by using ``python manage.py migrate``
+in an own python package nstalled like any other python module. There are also some
+official plugins inside the ``pretix/plugins/`` directory of your pretix installation.
 
 The communication between pretix and the plugins happens mostly using Django's
-`signal dispatcher`_ feature. The core modules of pretix, ``pretixbase``,
-``pretixcontrol`` and ``pretixpresale`` expose a number of signals which are documented 
+`signal dispatcher`_ feature. The core modules of pretix, ``pretix.base``,
+``pretix.control`` and ``pretix.presale`` expose a number of signals which are documented
 on the next pages.
 
 .. _`pluginsetup`:
@@ -82,6 +78,27 @@ human-readable error messages. We recommend using the ``django.utils.functional.
 decorator, as it might get called a lot. You can also implement ``compatibility_warnings``,
 those will be displayed but not block the plugin execution.
 
+Plugin registration
+-------------------
+
+Somehow, pretix needs to know that your plugin exists at all. For this purpose, we
+make use of the `entry point`_ feature of setuptools. To register a plugin that lives
+in a seperate python package, your ``setup.py`` sould contain something like this::
+
+    setup(
+        …
+
+        entry_points="""
+    [pretix.plugin]
+    sampleplugin=sampleplugin:PretixPluginMeta
+    """
+    )
+
+
+This will automatically make pretix discover this plugin as soon as it is installed e.g.
+through ``pip``. During development, you can just run ``python setup.py develop`` inside
+your plugin source directory to make it discoverable.
+
 Signals
 -------
 
@@ -112,3 +129,4 @@ your Django app label.
 .. _Django app: https://docs.djangoproject.com/en/1.7/ref/applications/
 .. _signal dispatcher: https://docs.djangoproject.com/en/1.7/topics/signals/
 .. _namespace packages: http://legacy.python.org/dev/peps/pep-0420/
+.. _entry point: https://pythonhosted.org/setuptools/setuptools.html#dynamic-discovery-of-services-and-plugins
