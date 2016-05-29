@@ -213,7 +213,7 @@ class SettingsProxy:
     This objects allows convenient access to settings stored in the
     EventSettings/OrganizerSettings database model. It exposes all settings as
     properties and it will do all the nasty inheritance and defaults stuff for
-    you. It will return None for non-existing properties.
+    you.
     """
 
     def __init__(self, obj: Model, parent: Optional[Model]=None, type=None):
@@ -232,7 +232,11 @@ class SettingsProxy:
     def _flush(self) -> None:
         self._cached_obj = None
 
-    def freeze(self):
+    def freeze(self) -> dict:
+        """
+        Returns a dictionary of all settings set for this object, including
+        any default values of its parents or hardcoded in pretix.
+        """
         settings = {}
         for key, v in DEFAULTS.items():
             settings[key] = self._unserialize(v['default'], v['type'])
@@ -297,11 +301,17 @@ class SettingsProxy:
 
         raise TypeError('Unable to serialize %s into a setting.' % str(type(value)))
 
-    def get(self, key: str, default: Any=None, as_type: type=None):
+    def get(self, key: str, default=None, as_type: type=None):
         """
-        Get a setting specified by key 'key'. Normally, settings are strings, but
+        Get a setting specified by key ``key``. Normally, settings are strings, but
         if you put non-strings into the settings object, you can request unserialization
-        by specifying 'as_type'
+        by specifying ``as_type``. If the key does not have a harcdoded type in the pretix source,
+        omitting ``as_type`` always will get you a string.
+
+        If the setting with the specified name does not exist on this object, any parent object
+        will be queried (e.g. the organizer of an event). If still no value is found, a default
+        value hardcoded will be returned if one exists. If not, the value of the ``default`` argument
+        will be returned instead.
         """
         if as_type is None and key in DEFAULTS:
             as_type = DEFAULTS[key]['type']
@@ -336,6 +346,9 @@ class SettingsProxy:
         self.set(key, value)
 
     def set(self, key: str, value: Any) -> None:
+        """
+        Stores a setting to the database of this object.
+        """
         if key in self._cache():
             s = self._cache()[key]
         else:
@@ -347,9 +360,15 @@ class SettingsProxy:
     def __delattr__(self, key: str) -> None:
         if key.startswith('_'):
             return super().__delattr__(key)
-        return self.__delitem__(key)
+        self.delete(key)
 
     def __delitem__(self, key: str) -> None:
+        self.delete(key)
+
+    def delete(self, key: str) -> None:
+        """
+        Deletes a setting from this object's storage.
+        """
         if key in self._cache():
             self._cache()[key].delete()
             del self._cache()[key]
@@ -357,13 +376,16 @@ class SettingsProxy:
 
 class SettingsSandbox:
     """
-    Transparently proxied access to event settings, handling your domain-
-    prefixes for you.
+    Transparently proxied access to event settings, handling your prefixes for you.
+
+    :param typestr: The first part of the pretix, e.g. ``plugin``
+    :param key: The prefix, e.g. the name of your plugin
+    :param obj: The event or organizer that should be queried
     """
 
-    def __init__(self, type: str, key: str, event: Model):
-        self._event = event
-        self._type = type
+    def __init__(self, typestr: str, key: str, obj: Model):
+        self._event = obj
+        self._type = typestr
         self._key = key
 
     def _convert_key(self, key: str) -> str:

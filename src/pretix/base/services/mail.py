@@ -3,7 +3,6 @@ import logging
 from django.conf import settings
 from django.core.mail import EmailMessage, get_connection
 from django.template.loader import get_template
-from django.utils import translation
 from django.utils.translation import ugettext as _
 from typing import Any, Dict
 
@@ -22,22 +21,26 @@ class TolerantDict(dict):
 def mail(email: str, subject: str, template: str,
          context: Dict[str, Any]=None, event: Event=None, locale: str=None):
     """
-    Sends out an email to a user.
+    Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
-    :param email: The e-mail this should be sent to.
-    :param subject: The e-mail subject. Should be localized.
-    :param template: The filename of a template to be used. It will
-                     be rendered with the recipient's locale. Alternatively, you
-                     can pass a LazyI18nString and ``context`` will be used
-                     for a Python .format() call.
-    :param context: The context for rendering the template.
-    :param event: The event, used for determining the sender of the e-mail
-    :param locale: The locale used while rendering the template
+    :param email: The e-mail address of the recipient.
 
-    :return: ``False`` on obvious failures, like the user having to e-mail
-    address, ``True`` otherwise. ``True`` does not necessarily mean that
-    the email has been sent, just that it has been queued by the e-mail
-    backend.
+    :param subject: The e-mail subject. Should be localized to the recipients's locale or a lazy object that will be
+        localized by being casted to a string.
+
+    :param template: The filename of a template to be used. It will be rendered with the locale given in the locale
+        argument and the context given in the next argument. Alternatively, you can pass a LazyI18nString and
+        ``context`` will be used as the argument to a  Python ``.format()`` call on the template.
+
+    :param context: The context for rendering the template (see ``template`` parameter).
+
+    :param event: The event this email is related to (optional). If set, this will be used to determine the sender,
+        a possible prefix for the subject and the SMTP server that should be used to send this email.
+
+    :param locale: The locale to be used while evaluating the subject and the template.
+
+    :return: ``False`` on obvious, immediate failures, ``True`` otherwise. ``True`` does not necessarily mean that
+        the email has been sent, just that it has been queued by the e-mail backend.
     """
     with language(locale):
         if isinstance(template, LazyI18nString):

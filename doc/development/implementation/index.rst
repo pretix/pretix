@@ -11,6 +11,8 @@ Contents:
    :maxdepth: 2
 
    models
-   background
    urlconfig
    i18n
+   settings
+   background
+   email

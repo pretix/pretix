@@ -83,7 +83,12 @@ class I18nInlineFormSet(BaseInlineFormSet):
 
 class SettingsForm(forms.Form):
     """
-    This form is meant to be used for modifying Event- or OrganizerSettings
+    This form is meant to be used for modifying Event- or OrganizerSettings. It takes
+    care of loading the current values of the fields and saving the field inputs to the
+    settings storage. It also deals with setting the available languages for internationalized
+    fields.
+
+    :param obj: The event or organizer object which should be used for the settings storage
     """
     BOOL_CHOICES = (
         ('False', _('disabled')),
@@ -99,6 +104,9 @@ class SettingsForm(forms.Form):
                 field.widget.enabled_langcodes = self.obj.settings.get('locales')
 
     def save(self):
+        """
+        Performs the save operation
+        """
         for name, field in self.fields.items():
             value = self.cleaned_data[name]
             if isinstance(value, UploadedFile):
