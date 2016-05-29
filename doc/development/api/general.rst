@@ -29,7 +29,7 @@ on the type of navigation. You should also return an ``active`` key with a boole
 set to ``True``, when this item should be marked as active. The ``request`` object
 will have an attribute ``event``.
 
-``pretix.control.signals.nav_event``:
+``pretix.control.signals.nav_event``
     The sidebar navigation when the admin has selected an event.
 
 Order events
@@ -37,11 +37,11 @@ Order events
 
 There are multiple signals that will be sent out in the ordering cycle:
 
-``pretix.base.signals.order_placed``:
+``pretix.base.signals.order_placed``
     Sent out every time an order has been created. Provides the ``order`` as the only
     keyword argument.
 
-``pretix.base.signals.order_paid``:
+``pretix.base.signals.order_paid``
     Sent out every time an order has been paid. Provides the ``order`` as the only
     keyword argument.
 

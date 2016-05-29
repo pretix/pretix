@@ -12,6 +12,7 @@ Contents:
    contribution/index
    models
    api/index
+   urlconfig
 
 .. TODO::
    Document settings objects, ItemVariation objects, form fields.
