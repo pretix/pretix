@@ -10,9 +10,8 @@ Contents:
    setup
    structure
    contribution/index
-   models
+   implementation/index
    api/index
-   urlconfig
 
 .. TODO::
    Document settings objects, ItemVariation objects, form fields.

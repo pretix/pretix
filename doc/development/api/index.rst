@@ -1,5 +1,5 @@
-Plugin API
-==========
+Plugin hooks
+============
 
 Contents:
 

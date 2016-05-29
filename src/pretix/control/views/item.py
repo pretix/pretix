@@ -12,7 +12,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import DeleteView
 
-from pretix.base.i18n import I18nFormSet
+from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
 )

@@ -1,10 +1,10 @@
 .. highlight:: python
    :linenothreshold: 5
 
-Data models
-===========
+Data model
+==========
 
-Pretix provides the following data(base) models. Every model and every model method or field that is not
+pretix provides the following data(base) models. Every model and every model method or field that is not
 documented here is considered private and should not be used by third-party plugins, as it may change
 without advance notice.
 

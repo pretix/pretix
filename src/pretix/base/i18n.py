@@ -6,7 +6,6 @@ from django import forms
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model, QuerySet, TextField
-from django.forms import BaseModelFormSet
 from django.utils import translation
 from django.utils.formats import date_format, number_format
 from django.utils.safestring import mark_safe
@@ -21,7 +20,11 @@ class LazyI18nString:
 
     def __init__(self, data: Optional[Union[str, Dict[str, str]]]):
         """
-        Input data should be a dictionary which maps language codes to content.
+        Creates a new i18n-aware string.
+
+        :param data: If this is a dictionary, it is expected to map language codes to translations.
+            If this is a string that can be parsed as JSON, it will be parsed and used as such a dictionary.
+            If this is anything else, it will be casted to a string and used for all languages.
         """
         self.data = data
         if isinstance(self.data, str) and self.data is not None:
@@ -35,8 +38,10 @@ class LazyI18nString:
     def __str__(self) -> str:
         """
         Evaluate the given string with respect to the currently active locale.
-        This will rather return you a string in a wrong language than give you an
-        empty value.
+
+        If no string is available in the currently active language, this will give you
+        the string in the system's default language. If this is unavailable as well, it
+        will give you the string in the first language available.
         """
         return self.localize(translation.get_language())
 
@@ -47,13 +52,24 @@ class LazyI18nString:
             return any(self.data.values())
         return True
 
-    def localize(self, lng):
+    def localize(self, lng: str) -> str:
+        """
+        Evaluate the given string with respect to the locale defined by ``lng``.
+
+        If no string is available in the currently active language, this will give you
+        the string in the system's default language. If this is unavailable as well, it
+        will give you the string in the first language available.
+
+        :param lng: A locale code, e.g. ``de``. If you specify a code including a country
+            or region like ``de-AT``, exact matches will be used preferably, but if only
+            a ``de`` or ``de-AT`` translation exists, this might be returned as well.
+        """
         if self.data is None:
             return ""
 
         if isinstance(self.data, dict):
             firstpart = lng.split('-')[0]
-            similar = [l for l in self.data.keys() if l.startswith(firstpart + "-")]
+            similar = [l for l in self.data.keys() if l.startswith(firstpart + "-") or firstpart == l]
             if lng in self.data and self.data[lng]:
                 return self.data[lng]
             elif firstpart in self.data:
@@ -181,6 +197,14 @@ class I18nFormField(forms.MultiValueField):
     The form field that is used by I18nCharField and I18nTextField. It makes use
     of Django's MultiValueField mechanism to create one sub-field per available
     language.
+
+    It contains special treatment to make sure that a field marked as "required" is validated
+    as "filled out correctly" if *at least one* translation is filled it. It is never required
+    to fill in all of them. This has the drawback that the HTML property ``required`` is set on
+    none of the fields as this would lead to irritating behaviour.
+
+    :param langcodes: An iterable of locale codes that the widget should render a field for. If
+        omitted, fields will be rendered for all languages supported by pretix.
     """
 
     def compress(self, data_list):
@@ -297,32 +321,6 @@ class I18nJSONEncoder(DjangoJSONEncoder):
             return {'type': obj.__class__.__name__, 'id': obj.id}
         else:
             return super().default(obj)
-
-
-class I18nFormSet(BaseModelFormSet):
-    """
-    This is equivalent to a normal BaseModelFormset, but cares for the special needs
-    of I18nForms (see there for more information).
-    """
-
-    def __init__(self, *args, **kwargs):
-        self.event = kwargs.pop('event', None)
-        super().__init__(*args, **kwargs)
-
-    def _construct_form(self, i, **kwargs):
-        kwargs['event'] = self.event
-        return super()._construct_form(i, **kwargs)
-
-    @property
-    def empty_form(self):
-        form = self.form(
-            auto_id=self.auto_id,
-            prefix=self.add_prefix('__prefix__'),
-            empty_permitted=True,
-            event=self.event
-        )
-        self.add_fields(form, None)
-        return form
 
 
 class LazyDate:

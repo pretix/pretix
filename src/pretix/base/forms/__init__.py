@@ -1,12 +1,12 @@
-import copy
 import logging
-import os
 
 from django import forms
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import UploadedFile
-from django.forms.models import BaseModelForm, ModelFormMetaclass
+from django.forms.models import (
+    BaseInlineFormSet, BaseModelForm, BaseModelFormSet, ModelFormMetaclass,
+)
 from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 
@@ -18,7 +18,7 @@ logger = logging.getLogger('pretix.plugins.ticketoutputpdf')
 
 class BaseI18nModelForm(BaseModelForm):
     """
-    This is a helperclass to construct I18nModelForm
+    This is a helperclass to construct an I18nModelForm.
     """
     def __init__(self, *args, **kwargs):
         event = kwargs.pop('event', None)
@@ -33,11 +33,52 @@ class I18nModelForm(six.with_metaclass(ModelFormMetaclass, BaseI18nModelForm)):
     """
     This is a modified version of Django's ModelForm which differs from ModelForm in
     only one way: The constructor takes one additional optional argument ``event``
-    which may be given an :pyclass:`pretix.base.models.Event` instance. If given, this
-    instance is used to select the visible languages in all I18nFormFields of the form. If
-    not given, all languages will be displayed.
+    which may be given an `Event` instance. If given, this instance is used to select
+    the visible languages in all I18nFormFields of the form. If not given, all languages
+    will be displayed.
     """
     pass
+
+
+class I18nFormSet(BaseModelFormSet):
+    """
+    This is equivalent to a normal BaseModelFormset, but cares for the special needs
+    of I18nForms (see there for more information).
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event', None)
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['event'] = self.event
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            event=self.event
+        )
+        self.add_fields(form, None)
+        return form
+
+
+class I18nInlineFormSet(BaseInlineFormSet):
+    """
+    This is equivalent to a normal BaseInlineFormset, but cares for the special needs
+    of I18nForms (see there for more information).
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event', None)
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['event'] = self.event
+        return super()._construct_form(i, **kwargs)
 
 
 class SettingsForm(forms.Form):

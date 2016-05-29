@@ -29,6 +29,9 @@ on the type of navigation. You should also return an ``active`` key with a boole
 set to ``True``, when this item should be marked as active. The ``request`` object
 will have an attribute ``event``.
 
+If you use this, you should read the documentation on :ref:`how to deal with URLs <urlconf>`
+in pretix.
+
 ``pretix.control.signals.nav_event``
     The sidebar navigation when the admin has selected an event.
 
