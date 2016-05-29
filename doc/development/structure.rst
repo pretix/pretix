@@ -23,6 +23,9 @@ pretix/
         Helpers contain a very few modules providing workarounds for low-level flaws in
         Django or installed 3rd-party packages.
 
+    multidomain/
+        Additional code implementing our customized :ref:`URL handling <urlconf>`.
+
 static/
     Contains all static files (CSS, JavaScript, images)
 

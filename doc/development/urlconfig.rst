@@ -1,3 +1,5 @@
+.. _`urlconf`:
+
 Working with URLs
 =================
 
