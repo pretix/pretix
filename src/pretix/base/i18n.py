@@ -43,7 +43,7 @@ class LazyI18nString:
         the string in the system's default language. If this is unavailable as well, it
         will give you the string in the first language available.
         """
-        return self.localize(translation.get_language())
+        return self.localize(translation.get_language() or settings.LANGUAGE_CODE)
 
     def __bool__(self):
         if not self.data:
