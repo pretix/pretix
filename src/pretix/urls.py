@@ -8,7 +8,7 @@ from django.views.i18n import javascript_catalog
 import pretix.control.urls
 import pretix.presale.urls
 
-from .base.views import cachedfiles
+from .base.views import cachedfiles, health
 
 # This is not a valid Django URL configuration, as the final
 # configuration is done by the pretix.multidomain package.
@@ -22,6 +22,8 @@ import_date = timezone.now().strftime("%Y%m%d%H%M")
 
 base_patterns = [
     url(r'^download/(?P<id>[^/]+)/$', cachedfiles.DownloadView.as_view(),
+        name='cachedfile.download'),
+    url(r'^healthcheck/$', health.healthcheck,
         name='cachedfile.download'),
     url(r'^jsi18n/$',
         etag(lambda *s, **k: import_date)(cache_page(3600, key_prefix='js18n-%s' % import_date)(javascript_catalog)),
