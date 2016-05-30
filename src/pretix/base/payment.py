@@ -130,7 +130,8 @@ class BasePaymentProvider:
                  label=_('Calculate the fee from the total value including the fee.'),
                  help_text=_('We recommend you to enable this if you want your users to pay the payment fees of your '
                              'payment provider. <a href="/control/help/payment/fee_reverse" target="_blank">Click here '
-                             'for detailled information on what this does.</a>'),
+                             'for detailled information on what this does.</a> Don\'t forget to set the correct fees '
+                             'above!'),
                  required=False
              )),
         ])
