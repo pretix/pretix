@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
@@ -68,6 +69,10 @@ class VoucherForm(I18nModelForm):
             self.instance.quota = Quota.objects.get(pk=quotaid, event=self.instance.event)
             self.instance.item = None
             self.instance.variation = None
+
+        if not self.instance.pk and Voucher.objects.filter(code=data['code'], event=self.instance.event).exists():
+            raise ValidationError(_('A voucher with this code already exists.'))
+
         return data
 
     def save(self, commit=True):
