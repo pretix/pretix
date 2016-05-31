@@ -86,6 +86,13 @@ class PdfTicketOutput(BaseTicketOutput):
                 code_y = self.settings.get('code_y', default=130, as_type=float)
                 p.drawString(code_x * units.mm, code_y * units.mm, op.secret)
 
+            attendee_s = self.settings.get('attendee_s', default=0, as_type=float)
+            if code_s:
+                p.setFont("Helvetica", attendee_s)
+                attendee_x = self.settings.get('attendee_x', default=15, as_type=float)
+                attendee_y = self.settings.get('code_y', default=100, as_type=float)
+                p.drawString(attendee_x * units.mm, attendee_y * units.mm, op.attendee_name)
+
             p.showPage()
 
         p.save()
@@ -146,15 +153,24 @@ class PdfTicketOutput(BaseTicketOutput):
                 ('qr_s', forms.FloatField(label=_('QR-Code size (mm)'), required=False)),
                 ('code_x', forms.FloatField(label=_('Ticket code x position (mm)'), required=False)),
                 ('code_y', forms.FloatField(label=_('Ticket code y position (mm)'), required=False)),
-                ('code_s', forms.FloatField(label=_('Ticket code size (mm)'), required=False)),
+                ('code_s', forms.FloatField(label=_('Ticket code size (mm)'), required=False,
+                                            help_text=_('Visible by default, set this to 0 to hide the element.'))),
                 ('name_x', forms.FloatField(label=_('Product name x position (mm)'), required=False)),
                 ('name_y', forms.FloatField(label=_('Product name y position (mm)'), required=False)),
-                ('name_s', forms.FloatField(label=_('Product name size (mm)'), required=False)),
+                ('name_s', forms.FloatField(label=_('Product name size (mm)'), required=False,
+                                            help_text=_('Visible by default, set this to 0 to hide the element.'))),
                 ('price_x', forms.FloatField(label=_('Price x position (mm)'), required=False)),
                 ('price_y', forms.FloatField(label=_('Price y position (mm)'), required=False)),
-                ('price_s', forms.FloatField(label=_('Price size (mm)'), required=False)),
+                ('price_s', forms.FloatField(label=_('Price size (mm)'), required=False,
+                                             help_text=_('Visible by default, set this to 0 to hide the element.'))),
                 ('event_x', forms.FloatField(label=_('Event name x position (mm)'), required=False)),
                 ('event_y', forms.FloatField(label=_('Event name y position (mm)'), required=False)),
-                ('event_s', forms.FloatField(label=_('Event name size (mm)'), required=False)),
+                ('event_s', forms.FloatField(label=_('Event name size (mm)'), required=False,
+                                             help_text=_('Visible by default, set this to 0 to hide the element.'))),
+                ('attendee_x', forms.FloatField(label=_('Attendee name x position (mm)'), required=False)),
+                ('attendee_y', forms.FloatField(label=_('Attendee name y position (mm)'), required=False)),
+                ('attendee_s', forms.FloatField(label=_('Attendee name size (mm)'), required=False,
+                                                help_text=_('Invisible by default, set this to a number greater than 0 '
+                                                            'to show.')))
             ]
         )
