@@ -157,6 +157,21 @@ class JSONExporter(BaseExporter):
         return 'pretixdata.json', 'application/json', json.dumps(jo, cls=DjangoJSONEncoder)
 
 
+class MailExporter(BaseExporter):
+    identifier = 'mailaddrs'
+    verbose_name = 'Email addresses (text file)'
+
+    def render(self, form_data: dict):
+        addrs = self.event.orders.values('email')
+        data = "\r\n".join(set(a['email'] for a in addrs))
+        return 'pretixemails.txt', 'text/plain', data.encode("utf-8")
+
+
 @receiver(register_data_exporters, dispatch_uid="exporter_json")
 def register_json_export(sender, **kwargs):
     return JSONExporter
+
+
+@receiver(register_data_exporters, dispatch_uid="exporter_mail")
+def register_mail_export(sender, **kwargs):
+    return MailExporter

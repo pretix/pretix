@@ -160,6 +160,7 @@ INSTALLED_APPS = [
     'pretix.plugins.sendmail',
     'pretix.plugins.statistics',
     'pretix.plugins.reports',
+    'pretix.plugins.checkinlists',
     'pretix.plugins.pretixdroid',
     'easy_thumbnails'
 ]
