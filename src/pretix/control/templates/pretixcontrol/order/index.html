@@ -13,14 +13,16 @@
         {% include "pretixcontrol/orders/fragment_order_status.html" with order=order class="pull-right" %}
     </h1>
     {% if request.eventperm.can_change_orders %}
-        {% if order.status == 'n' or order.status == 'p' %}
+        {% if order.status == 'n' or order.status == 'p' or order.status == 'e' %}
             <form action="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
                     method="post">
                 {% csrf_token %}
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group" role="group">
-                        {% if order.status == 'n' %}
+                        {% if order.status == 'n' or order.status == 'e' %}
                             <button name="status" value="p" class="btn btn-default">{% trans "Mark as paid" %}</button>
+                        {% endif %}
+                        {% if order.status == 'n' %}
                             <a href="{% url "control:event.order.extend" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
                                 {% trans "Extend payment term" %}
                             </a>
