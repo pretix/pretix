@@ -25,6 +25,11 @@
             <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                     class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
         </p>
+        <form class="form-inline helper-display-inline" action="" method="get">
+            <input type="text" name="search" class="form-control" placeholder="{% trans "Search voucher" %}"
+                    value="{{ request.GET.search }}">
+            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+        </form>
         <div class="table-responsive">
             <table class="table table-hover table-quotas">
                 <thead>

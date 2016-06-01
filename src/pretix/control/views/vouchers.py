@@ -18,7 +18,12 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
     permission = 'can_change_vouchers'
 
     def get_queryset(self):
-        return self.request.event.vouchers.all().select_related('item')
+        qs = self.request.event.vouchers.all().select_related('item')
+        if self.request.GET.get("search", "") != "":
+            s = self.request.GET.get("search", "")
+            qs = qs.filter(code__contains=s)
+        return qs
+
 
 
 class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
