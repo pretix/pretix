@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
+from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
@@ -21,9 +22,8 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
         qs = self.request.event.vouchers.all().select_related('item')
         if self.request.GET.get("search", "") != "":
             s = self.request.GET.get("search", "")
-            qs = qs.filter(code__contains=s)
+            qs = qs.filter(Q(code__icontains=s) | Q(tag__icontains=s) | Q(comment__icontains=s))
         return qs
-
 
 
 class VoucherDelete(EventPermissionRequiredMixin, DeleteView):

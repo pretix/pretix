@@ -18,7 +18,8 @@ class VoucherForm(I18nModelForm):
         model = Voucher
         localized_fields = '__all__'
         fields = [
-            'code', 'valid_until', 'block_quota', 'allow_ignore_quota', 'price'
+            'code', 'valid_until', 'block_quota', 'allow_ignore_quota', 'price', 'tag',
+            'comment'
         ]
 
     def __init__(self, *args, **kwargs):

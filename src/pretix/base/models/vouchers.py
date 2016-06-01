@@ -101,6 +101,18 @@ class Voucher(LoggedModel):
             "If enabled, the voucher is valid for any product affected by this quota."
         )
     )
+    tag = models.CharField(
+        max_length=255,
+        verbose_name=_("Tag"),
+        blank=True,
+        help_text=_("You can use this field to group multiple vouchers together. If you enter the same value for "
+                    "multiple vouchers, you can get statistics on how many of them have been redeemed etc.")
+    )
+    comment = models.TextField(
+        blank=True, verbose_name=_("Comment"),
+        help_text=_("The text entered in this field will not be visible to the user and is available for your "
+                    "convenience.")
+    )
 
     class Meta:
         verbose_name = _("Voucher")

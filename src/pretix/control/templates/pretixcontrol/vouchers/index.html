@@ -37,6 +37,7 @@
                     <th>{% trans "Voucher code" %}</th>
                     <th>{% trans "Is redeemed" %}</th>
                     <th>{% trans "Expiry" %}</th>
+                    <th>{% trans "Tag" %}</th>
                     <th>{% trans "Product" %}</th>
                     <th></th>
                 </tr>
@@ -50,6 +51,9 @@
                         </td>
                         <td>{% if v.redeemed %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
                         <td>{{ v.valid_until|date }}</td>
+                        <td>
+                            {{ v.tag }}
+                        </td>
                         <td>
                             {% if v.item %}
                                 {{ v.item }}
