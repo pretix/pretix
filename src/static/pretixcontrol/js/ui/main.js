@@ -53,4 +53,29 @@ $(function () {
         $("#id_required").change(question_page_toggle_view);
         question_page_toggle_view();
     }
+
+    // Vouchers
+    $("#voucher-bulk-codes-generate").click(function () {
+        var charset = "ABCDEFGHKLMNPQRSTUVWXYZ23456789",
+            i = 0, j = 0, len = 16,
+            num = parseInt($("#voucher-bulk-codes-num").val()), text = "";
+        for (j = 0; j < num; j++) {
+            var key = [];
+            if (window.crypto && window.crypto.getRandomValues && Uint8Array) {
+                key = new Uint8Array(len);
+                window.crypto.getRandomValues(key);
+            } else {
+                for (i = 0; i < len; i++) {
+                    key.push(Math.floor(Math.random() * charset.length));
+                }
+            }
+            if (i > 0) {
+                text += "\n";
+            }
+            for (i = 0; i < len; i++) {
+                text += charset.charAt(key[i] % charset.length);
+            }
+        }
+        $("#id_codes").html(text);
+    });
 });

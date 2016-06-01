@@ -9,6 +9,20 @@
         {% bootstrap_form_errors form %}
         <fieldset>
             <legend>{% trans "Voucher codes" %}</legend>
+            <div class="form-group">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-xs"
+                               id="voucher-bulk-codes-num"
+                               placeholder="{% trans "Number" %}">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="button" id="voucher-bulk-codes-generate">
+                                {% trans "Generate random codes" %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% bootstrap_field form.codes layout="horizontal" %}
         </fieldset>
         <fieldset>

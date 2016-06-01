@@ -87,7 +87,7 @@ class VoucherBulkForm(VoucherForm):
         widget=forms.Textarea,
         label=_("Codes"),
         help_text=_(
-            "Add one voucher code per line"
+            "Add one voucher code per line. We suggest that you copy this list and save it into a file."
         )
     )
 
