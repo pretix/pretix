@@ -89,6 +89,11 @@ def quota_widgets(sender, **kwargs):
                                          text=_('{quota} left').format(quota=q.name)),
             'width': 3,
             'priority': 50,
+            'url': reverse('control:event.items.quotas.edit', kwargs={
+                'event': sender.slug,
+                'organizer': sender.organizer.slug,
+                'quota': q.id
+            })
         })
     return widgets
 
