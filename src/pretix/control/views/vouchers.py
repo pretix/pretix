@@ -1,3 +1,5 @@
+import copy
+
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
@@ -7,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from pretix.base.models import Voucher
-from pretix.control.forms.vouchers import VoucherForm
+from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 
@@ -125,3 +127,38 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
         ret = super().form_valid(form)
         form.instance.log_action('pretix.voucher.added', data=dict(form.cleaned_data), user=self.request.user)
         return ret
+
+
+class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
+    model = Voucher
+    form_class = VoucherBulkForm
+    template_name = 'pretixcontrol/vouchers/bulk.html'
+    permission = 'can_change_vouchers'
+    context_object_name = 'voucher'
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.vouchers', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = Voucher(event=self.request.event)
+        return kwargs
+
+    @transaction.atomic()
+    def form_valid(self, form):
+        for code in form.cleaned_data['codes']:
+            obj = copy.copy(form.instance)
+            obj.event = self.request.event
+            obj.code = code
+            data = dict(form.cleaned_data)
+            data['code'] = code
+            data['bulk'] = True
+            del data['codes']
+            obj.save()
+            obj.log_action('pretix.voucher.added', data=data, user=self.request.user)
+
+        messages.success(self.request, _('The new vouchers have been created.'))
+        return HttpResponseRedirect(self.get_success_url())

@@ -19,11 +19,16 @@
 
             <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                     class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
+            <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create multiple new vouchers" %}</a>
         </div>
     {% else %}
         <p>
             <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                     class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
+            <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-default"><i class="fa fa-plus"></i>
+                {% trans "Create multiple new vouchers" %}</a>
         </p>
         <form class="form-inline helper-display-inline" action="" method="get">
             <input type="text" name="search" class="form-control" placeholder="{% trans "Search voucher" %}"

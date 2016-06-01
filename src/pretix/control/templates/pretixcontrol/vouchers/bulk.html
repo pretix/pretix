@@ -1,0 +1,43 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Voucher" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Create multiple voucher" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <fieldset>
+            <legend>{% trans "Voucher codes" %}</legend>
+            {% bootstrap_field form.codes layout="horizontal" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Voucher details" %}</legend>
+            {% bootstrap_field form.valid_until layout="horizontal" %}
+            {% bootstrap_field form.block_quota layout="horizontal" %}
+            {% bootstrap_field form.allow_ignore_quota layout="horizontal" %}
+            {% bootstrap_field form.price layout="horizontal" %}
+            {% bootstrap_field form.itemvar layout="horizontal" %}
+            <div class="form-group">
+                <div class="col-md-9 col-md-offset-3">
+                    <div class="controls">
+                        <div class="alert alert-info">
+                            {% blocktrans trimmed %}
+                                If you choose "any product" for a specific quota and choose to reserve quota for this
+                                voucher above, the product can still be unavailable to the voucher holder if another quota
+                                associated with the product is sold out!
+                            {% endblocktrans %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% bootstrap_field form.tag layout="horizontal" %}
+            {% bootstrap_field form.comment layout="horizontal" %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

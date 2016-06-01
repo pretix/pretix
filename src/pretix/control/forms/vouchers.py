@@ -71,7 +71,7 @@ class VoucherForm(I18nModelForm):
             self.instance.item = None
             self.instance.variation = None
 
-        if not self.instance.pk and Voucher.objects.filter(code=data['code'], event=self.instance.event).exists():
+        if 'code' in data and not self.instance.pk and Voucher.objects.filter(code=data['code'], event=self.instance.event).exists():
             raise ValidationError(_('A voucher with this code already exists.'))
 
         return data
@@ -80,3 +80,29 @@ class VoucherForm(I18nModelForm):
         super().save(commit)
 
         return ['item']
+
+
+class VoucherBulkForm(VoucherForm):
+    codes = forms.CharField(
+        widget=forms.Textarea,
+        label=_("Codes"),
+        help_text=_(
+            "Add one voucher code per line"
+        )
+    )
+
+    class Meta:
+        model = Voucher
+        localized_fields = '__all__'
+        fields = [
+            'valid_until', 'block_quota', 'allow_ignore_quota', 'price', 'tag', 'comment'
+        ]
+
+    def clean(self):
+        data = super().clean()
+        data['codes'] = [a.strip() for a in data['codes'].strip().split("\n")]
+
+        if Voucher.objects.filter(code__in=data['codes'], event=self.instance.event).exists():
+            raise ValidationError(_('A voucher with one of this codes already exists.'))
+
+        return data
