@@ -87,7 +87,7 @@ class PdfTicketOutput(BaseTicketOutput):
                 p.drawString(code_x * units.mm, code_y * units.mm, op.secret)
 
             attendee_s = self.settings.get('attendee_s', default=0, as_type=float)
-            if code_s:
+            if code_s and op.attendee_name:
                 p.setFont("Helvetica", attendee_s)
                 attendee_x = self.settings.get('attendee_x', default=15, as_type=float)
                 attendee_y = self.settings.get('code_y', default=100, as_type=float)
