@@ -6,7 +6,7 @@ from django import forms
 from django.utils.translation import ugettext as _
 
 from pretix.base.exporter import BaseExporter
-from pretix.base.models import Order, OrderPosition
+from pretix.base.models import Order, OrderPosition, Question
 
 
 class BaseCheckinList(BaseExporter):
@@ -65,9 +65,9 @@ class CSVCheckinList(BaseCheckinList):
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
 
-        questions = list(form_data['questions'])
+        questions = list(Question.objects.filter(event=self.event, id__in=form_data['questions']))
         qs = OrderPosition.objects.filter(
-            order__event=self.event, item__in=form_data['items']
+            order__event=self.event, item_id__in=form_data['items']
         ).prefetch_related(
             'answers', 'answers__question'
         ).select_related('order', 'item', 'variation')

@@ -68,6 +68,11 @@ class BaseExporter:
 
         :type form_data: dict
         :param form_data: The form data of the export details form
+
+        Note: If you use a ``ModelChoiceField`` (or a ``ModelMultipleChoiceField``), the
+        ``form_data`` will not contain the model instance but only it's primary key (or
+        a list of primary keys) for reasons of internal serialization when using background
+        tasks.
         """
         raise NotImplementedError()  # NOQA
 

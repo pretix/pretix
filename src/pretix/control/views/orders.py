@@ -26,7 +26,7 @@ from pretix.base.signals import (
     register_data_exporters, register_payment_providers,
     register_ticket_outputs,
 )
-from pretix.control.forms.orders import ExtendForm
+from pretix.control.forms.orders import ExporterForm, ExtendForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -391,7 +391,7 @@ class ExportView(EventPermissionRequiredMixin, TemplateView):
         responses = register_data_exporters.send(self.request.event)
         for receiver, response in responses:
             ex = response(self.request.event)
-            ex.form = forms.Form(
+            ex.form = ExporterForm(
                 data=(self.request.POST if self.request.method == 'POST' else None)
             )
             ex.form.fields = ex.export_form_fields
