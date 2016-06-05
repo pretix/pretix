@@ -18,7 +18,7 @@ from pretix.base.models import (
 )
 from pretix.base.services import tickets
 from pretix.base.services.export import export
-from pretix.base.services.invoices import invoice_pdf
+from pretix.base.services.invoices import generate_invoice, invoice_pdf
 from pretix.base.services.mail import mail
 from pretix.base.services.orders import cancel_order, mark_order_paid
 from pretix.base.services.stats import order_overview
@@ -207,6 +207,21 @@ class OrderTransition(OrderView):
             })
         else:
             return HttpResponseNotAllowed(['POST'])
+
+
+class OrderInvoiceCreate(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user'):
+            messages.error(self.request, _('You cannot generate an invoice for this order.'))
+        elif self.order.invoices.exists():
+            messages.error(self.request, _('An invoice for this order already exists.'))
+        else:
+            generate_invoice(self.order)
+            self.order.log_action('pretix.event.order.invoice.generate', user=self.request.user)
+            messages.success(self.request, _('The invoice has been generated.'))
+        return redirect(self.get_order_url())
 
 
 class OrderResendLink(OrderView):

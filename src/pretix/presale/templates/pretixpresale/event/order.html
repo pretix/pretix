@@ -113,9 +113,28 @@
                     </div>
                 </div>
             </div>
+        {% elif request.event.settings.invoice_generate == 'user' %}
+            <div class="col-xs-12 {% if request.event.settings.invoice_address_asked %}col-md-6{% endif %}">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            {% trans "Invoices" %}
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-inline helper-display-inline" method="post"
+                                action="{% eventurl event "presale:event.order.geninvoice" order=order.code secret=order.secret %}">
+                            {% csrf_token %}
+                            <button class="btn btn-default">
+                                {% trans "Request invoice" %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         {% endif %}
         {% if request.event.settings.invoice_address_asked %}
-            <div class="col-xs-12 {% if invoices %}col-md-6{% endif %}">
+            <div class="col-xs-12 {% if invoices or request.event.settings.invoice_generate == 'user' %}col-md-6{% endif %}">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         {% if order.can_modify_answers %}

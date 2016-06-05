@@ -182,9 +182,15 @@ class EventSettingsForm(SettingsForm):
         help_text=_("Does only work if an invoice address is asked for. VAT ID is not required."),
         required=False
     )
-    invoice_generate = forms.BooleanField(
+    invoice_generate = forms.ChoiceField(
         label=_("Generate invoices"),
-        required=False
+        required=False,
+        choices=(
+            ('False', _('No')),
+            ('admin', _('Manually in admin panel')),
+            ('user', _('Automatically on user request')),
+            ('True', _('Automatically for all created orders'))
+        )
     )
     invoice_address_from = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 5}), required=False,

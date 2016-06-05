@@ -283,7 +283,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
         except InvoiceAddress.DoesNotExist:
             pass
 
-    if event.settings.get('invoice_generate'):
+    if event.settings.get('invoice_generate') == 'True':
         generate_invoice(order)
 
     with language(order.locale):

@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
+{% load eventurl %}
 {% block title %}
     {% blocktrans trimmed with code=order.code %}
         Order details: {{ code }}
@@ -104,6 +105,17 @@
                                         <br/>
                                     {% endif %}
                                 {% endfor %}
+                            </dd>
+                        {% elif request.event.settings.invoice_generate == 'admin' or request.event.settings.invoice_generate == 'user' %}
+                            <dt>{% trans "Invoices" %}</dt>
+                            <dd>
+                                <form class="form-inline helper-display-inline" method="post"
+                                        action="{% url "control:event.order.geninvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                    {% csrf_token %}
+                                    <button class="btn btn-default btn-xs">
+                                        {% trans "Generate invoice" %}
+                                    </button>
+                                </form>
                             </dd>
                         {% endif %}
                     </dl>
