@@ -45,6 +45,10 @@
                                 </a>
                             {% endfor %}
                         {% endif %}
+                        <a href="{% eventurl request.event "presale:event.order" order=order.code secret=order.secret %}"
+                                class="btn btn-default" target="_blank">
+                            {% trans "View order as user" %}
+                        </a>
                     </div>
                 </div>
             </form>
