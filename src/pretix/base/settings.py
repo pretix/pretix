@@ -67,7 +67,7 @@ DEFAULTS = {
     },
     'invoice_generate': {
         'default': 'False',
-        'type': bool
+        'type': str
     },
     'invoice_address_from': {
         'default': '',

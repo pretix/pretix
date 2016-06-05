@@ -9,7 +9,7 @@ from django.db.models import Max
 
 def invoice_filename(instance, filename: str) -> str:
     secret = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(14))
-    return 'invoices/{org}/{ev}/{ev}-{no}-{code}-{secret}.pdf'.format(
+    return 'invoices/{org}/{ev}/{ev}-{no:05d}-{code}-{secret}.pdf'.format(
         org=instance.event.organizer.slug, ev=instance.event.slug,
         no=instance.invoice_no, code=instance.order.code,
         secret=secret
