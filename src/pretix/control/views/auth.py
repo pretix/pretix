@@ -4,6 +4,7 @@ from django.contrib.auth import (
     authenticate, login as auth_login, logout as auth_logout,
 )
 from django.contrib.auth.tokens import default_token_generator
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -35,6 +36,8 @@ def login(request):
     else:
         form = LoginForm()
     ctx['form'] = form
+    ctx['can_register'] = settings.PRETIX_REGISTRATION
+    ctx['can_reset'] = settings.PRETIX_PASSWORD_RESET
     return render(request, 'pretixcontrol/auth/login.html', ctx)
 
 
@@ -50,6 +53,8 @@ def register(request):
     """
     Render and process a basic registration form.
     """
+    if not settings.PRETIX_REGISTRATION:
+        raise PermissionDenied('Registration is disabled')
     ctx = {}
     if request.user.is_authenticated():
         return redirect(request.GET.get("next", 'control:index'))
@@ -73,6 +78,11 @@ def register(request):
 
 class Forgot(TemplateView):
     template_name = 'pretixcontrol/auth/forgot.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not settings.PRETIX_PASSWORD_RESET:
+            raise PermissionDenied('Password reset is disabled')
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated():
@@ -127,6 +137,11 @@ class Recover(TemplateView):
                      'for three days and that the link can only be used once.'),
         'unknownuser': _('We were unable to find the user you requested a new password for.')
     }
+
+    def dispatch(self, request, *args, **kwargs):
+        if not settings.PRETIX_PASSWORD_RESET:
+            raise PermissionDenied('Password reset is disabled')
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated():
