@@ -316,7 +316,9 @@ class MailSettingsForm(SettingsForm):
     smtp_password = forms.CharField(
         label=_("Password"),
         required=False,
-        widget=forms.PasswordInput
+        widget=forms.PasswordInput(attrs={
+            'autocomplete': 'new-password'  # see https://bugs.chromium.org/p/chromium/issues/detail?id=370363#c7
+        }),
     )
     smtp_use_tls = forms.BooleanField(
         label=_("Use STARTTLS"),

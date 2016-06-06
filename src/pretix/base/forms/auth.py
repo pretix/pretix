@@ -78,12 +78,17 @@ class RegistrationForm(forms.Form):
     )
     password = forms.CharField(
         label=_('Password'),
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={
+            'autocomplete': 'new-password'  # see https://bugs.chromium.org/p/chromium/issues/detail?id=370363#c7
+        }),
         required=True
     )
     password_repeat = forms.CharField(
         label=_('Repeat password'),
-        widget=forms.PasswordInput
+        widget=forms.PasswordInput(attrs={
+            'autocomplete': 'new-password'  # see https://bugs.chromium.org/p/chromium/issues/detail?id=370363#c7
+        }),
+        required=True
     )
 
     def clean(self):
