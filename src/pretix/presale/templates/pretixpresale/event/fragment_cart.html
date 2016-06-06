@@ -85,9 +85,9 @@
         </div>
         <div class="col-md-3 col-xs-6 col-md-offset-5 price">
             <strong>{{ event.currency }} {{ cart.payment_fee|floatformat:2 }}</strong>
-            {% if event.settings.tax_rate_default %}
+            {% if cart.payment_fee_tax_rate %}
                 <br/>
-                <small>{% blocktrans trimmed with rate=event.settings.tax_rate_default %}
+                <small>{% blocktrans trimmed with rate=cart.payment_fee_tax_rate %}
                     incl. {{ rate }}% taxes
                 {% endblocktrans %}</small>
             {% endif %}

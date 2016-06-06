@@ -24,7 +24,7 @@ class CartMixin:
             'item__questions', 'answers'
         ))
 
-    def get_cart(self, answers=False, queryset=None, payment_fee=None):
+    def get_cart(self, answers=False, queryset=None, payment_fee=None, payment_fee_tax_rate=None):
         queryset = queryset or CartPosition.objects.filter(
             cart_id=self.request.session.session_key, event=self.request.event
         )
@@ -65,6 +65,7 @@ class CartMixin:
         total = sum(p.total for p in positions)
 
         payment_fee = payment_fee or self.get_payment_fee(total)
+        payment_fee_tax_rate = payment_fee_tax_rate or self.request.event.settings.tax_rate_default
 
         try:
             minutes_left = max(min(p.expires for p in positions) - now(), timedelta()).seconds // 60 if positions else 0
@@ -76,6 +77,7 @@ class CartMixin:
             'raw': cartpos,
             'total': total + payment_fee,
             'payment_fee': payment_fee,
+            'payment_fee_tax_rate': payment_fee_tax_rate,
             'answers': answers,
             'minutes_left': minutes_left,
         }

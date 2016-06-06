@@ -88,7 +88,8 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         ctx['download_buttons'] = self.download_buttons
         ctx['cart'] = self.get_cart(
             answers=True,
-            queryset=OrderPosition.objects.filter(order=self.order)
+            queryset=OrderPosition.objects.filter(order=self.order),
+            payment_fee=self.order.payment_fee, payment_fee_tax_rate=self.order.payment_fee_tax_rate
         )
         ctx['invoices'] = list(self.order.invoices.all())
         if self.order.status == Order.STATUS_PENDING:
