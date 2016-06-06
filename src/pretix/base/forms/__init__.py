@@ -116,8 +116,8 @@ class SettingsForm(forms.Form):
                     )
                 else:
                     fname = '%s/%s.%s' % (self.obj.slug, name, value.name.split('.')[-1])
-                default_storage.save(fname, value)
-                value._name = fname
+                newname = default_storage.save(fname, value)
+                value._name = newname
             elif isinstance(value, File):
                 # file is unchanged
                 continue
