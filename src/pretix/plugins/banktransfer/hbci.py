@@ -14,7 +14,7 @@ def hbci_transactions(event, conf):
 
     log = []
     data = []
-    accname = event.id + '_' + str(int(time.time()))
+    accname = 'pretix_%d_%d' % (event.id, int(time.time() * 1000))
     try:
         try:
             subprocess.call([
