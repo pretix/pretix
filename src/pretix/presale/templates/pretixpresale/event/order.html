@@ -158,7 +158,7 @@
                             <dt>{% trans "Address" %}</dt>
                             <dd>{{ order.invoice_address.street|linebreaksbr }}</dd>
                             <dt>{% trans "ZIP code and city" %}</dt>
-                            <dd>{{ order.invoice_address.zipcode }} {{ addr.city }}</dd>
+                            <dd>{{ order.invoice_address.zipcode }} {{ order.invoice_address.city }}</dd>
                             <dt>{% trans "Country" %}</dt>
                             <dd>{{ order.invoice_address.country }}</dd>
                             <dt>{% trans "Phone" %}</dt>
