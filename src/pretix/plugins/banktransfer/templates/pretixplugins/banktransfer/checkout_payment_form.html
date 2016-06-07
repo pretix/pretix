@@ -6,5 +6,8 @@
 {% endblocktrans %}</p>
 
 <address>
-    {{ settings.bank_details|linebreaksbr }}
+    {{ settings.bank_details|linebreaksbr }}<br>
+    <strong>
+        {% trans "We will assign you a personal reference code to use after you completed the order." %}
+    </strong>
 </address>
