@@ -52,8 +52,12 @@ def hbci_transactions(event, conf):
                 'aqhbci-tool4',
                 '-P', f.name,
                 '-n', '-A',
-                'getsysid'
+                'getsysid',
+                '-u', conf['hbci_userid'],
+                '-b', conf['hbci_blz'],
             ]
+            if conf['hbci_customerid']:
+                aqhbci_params += ['-c', conf['hbci_customerid']]
             aqhbci_test = subprocess.check_output(aqhbci_params)
             log.append("$ " + " ".join(aqhbci_params))
             log.append(aqhbci_test.decode("utf-8"))
@@ -62,7 +66,8 @@ def hbci_transactions(event, conf):
                 '-P', f.name, '-A', '-n',
                 'request',
                 '--transactions',
-                '-c', g.name
+                '-c', g.name,
+                '-n', accname
             ]
             aqbanking_trans = subprocess.check_output(aqbanking_params)
             log.append("$ " + " ".join(aqbanking_params))
@@ -102,7 +107,7 @@ def hbci_transactions(event, conf):
                     'date': date
                 })
     except subprocess.CalledProcessError as e:
-        log.append("Command %s failed with %d and output:" % (e.cmd, e.returncode))
+        log.append("Command '%s' failed with %d and output:" % (" ".join(e.cmd), e.returncode))
         log.append(e.output.decode("utf-8"))
     except Exception as e:
         log.append(str(e))
