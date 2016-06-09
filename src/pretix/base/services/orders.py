@@ -36,6 +36,12 @@ error_messages = {
               'server was too busy. Please try again.'),
     'voucher_redeemed': _('A voucher you tried to use already has been used.'),
     'voucher_expired': _('A voucher you tried to use has expired.'),
+    'not_started': _('The presale period for this event has not yet started.'),
+    'ended': _('The presale period has ended.'),
+    'voucher_invalid': _('This voucher code is not known in our database.'),
+    'voucher_redeemed': _('This voucher code has already been used an can only be used once.'),
+    'voucher_expired': _('This voucher is expired.'),
+    'voucher_invalid_item': _('This voucher is not valid for this item.'),
 }
 
 
