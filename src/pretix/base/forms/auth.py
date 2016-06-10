@@ -96,18 +96,17 @@ class RegistrationForm(forms.Form):
         password2 = self.cleaned_data.get('password_repeat')
 
         if password1 and password1 != password2:
-            raise forms.ValidationError(
-                self.error_messages['pw_mismatch'],
-                code='pw_mismatch'
-            )
+            raise forms.ValidationError({
+                'password_repeat': self.error_messages['pw_mismatch'],
+            }, code='pw_mismatch')
+        return self.cleaned_data
 
+    def clean_password(self):
+        password1 = self.cleaned_data.get('password', '')
         user = User(email=self.cleaned_data.get('email'))
         if validate_password(password1, user=user) is not None:
-            raise forms.ValidationError(
-                _(password_validators_help_texts()),
-                code='pw_invalid'
-            )
-        return self.cleaned_data
+            raise forms.ValidationError(_(password_validators_help_texts()), code='pw_invalid')
+        return password1
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -142,22 +141,21 @@ class PasswordRecoverForm(forms.Form):
         password2 = self.cleaned_data.get('password_repeat')
 
         if password1 and password1 != password2:
-            raise forms.ValidationError(
-                self.error_messages['pw_mismatch'],
-                code='pw_mismatch'
-            )
+            raise forms.ValidationError({
+                'password_repeat': self.error_messages['pw_mismatch'],
+            }, code='pw_mismatch')
 
+        return self.cleaned_data
+
+    def clean_password(self):
+        password1 = self.cleaned_data.get('password', '')
         try:
             user = User.objects.get(id=self.user_id)
         except User.DoesNotExist:
             user = None
         if validate_password(password1, user=user) is not None:
-            raise forms.ValidationError(
-                _(password_validators_help_texts()),
-                code='pw_invalid'
-            )
-
-        return self.cleaned_data
+            raise forms.ValidationError(_(password_validators_help_texts()), code='pw_invalid')
+        return password1
 
 
 class PasswordForgotForm(forms.Form):
