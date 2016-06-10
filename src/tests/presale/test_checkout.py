@@ -348,7 +348,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
-        self.assertIn("already has been", doc.select(".alert-danger")[0].text)
+        self.assertIn("has already been", doc.select(".alert-danger")[0].text)
 
     def test_voucher_ignore_quota(self):
         self.quota_tickets.size = 0
