@@ -223,6 +223,9 @@ class OrderInvoiceCreate(OrderView):
             messages.success(self.request, _('The invoice has been generated.'))
         return redirect(self.get_order_url())
 
+    def get(self, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])
+
 
 class OrderResendLink(OrderView):
     permission = 'can_change_orders'
@@ -244,6 +247,9 @@ class OrderResendLink(OrderView):
         messages.success(self.request, _('The email has been queued to be sent.'))
         self.order.log_action('pretix.event.order.resend', user=self.request.user)
         return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])
 
 
 class InvoiceDownload(EventPermissionRequiredMixin, View):
