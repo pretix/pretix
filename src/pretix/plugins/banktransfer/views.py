@@ -38,8 +38,8 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        if 'hbci_server' in self.request.POST:
-            return self.process_hbci()
+        # if 'hbci_server' in self.request.POST:
+        #     return self.process_hbci()
 
         if ('file' in self.request.FILES and 'csv' in self.request.FILES.get('file').name.lower()) \
                 or 'amount' in self.request.POST:
