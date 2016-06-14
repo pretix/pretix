@@ -8,6 +8,13 @@ html_head = EventPluginSignal(
 )
 
 """
+This signal is sent out to include links in the footer
+"""
+footer_link = EventPluginSignal(
+    providing_args=["request"]
+)
+
+"""
 This signal is sent out to retrieve pages for the checkout flow
 """
 checkout_flow_steps = EventPluginSignal()

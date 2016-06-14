@@ -58,4 +58,8 @@
         <a href="{{ request.event.settings.imprint_url }}" target="_blank">{% trans "Imprint" %}</a>
         &middot;
     {% endif %}
+    {% for f in footer %}
+        <a href="{{ f.url }}" target="_blank">{{ f.label }}</a>
+        &middot;
+    {% endfor %}
 {% endblock %}

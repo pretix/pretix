@@ -35,6 +35,11 @@ in pretix.
 ``pretix.control.signals.nav_event``
     The sidebar navigation when the admin has selected an event.
 
+Footer links
+------------
+The signal ``pretix.presale.signals.footer_links`` allows you to add links to the footer of an event page. You
+are expected to return a dictionary containing the keys ``label`` and ``url``.
+
 Order events
 ------------
 
