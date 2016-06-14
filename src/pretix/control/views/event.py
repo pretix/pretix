@@ -18,6 +18,7 @@ from pretix.base.forms import I18nModelForm
 from pretix.base.models import (
     Event, EventPermission, Item, ItemVariation, User,
 )
+from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
@@ -376,6 +377,35 @@ class MailSettings(EventSettingsFormView):
         else:
             messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.get(request)
+
+
+class TicketSettingsPreview(EventPermissionRequiredMixin, View):
+    permission = 'can_change_settings'
+
+    @cached_property
+    def output(self):
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if provider.identifier == self.kwargs.get('output'):
+                return provider
+
+    def get(self, request, *args, **kwargs):
+        if not self.output:
+            messages.error(request, _('You requested an invalid ticket output type.'))
+            return redirect(self.get_error_url())
+
+        fname, mimet, data = tickets.preview(self.request.event.pk, self.output.identifier)
+        resp = HttpResponse(data, content_type=mimet)
+        ftype = fname.split(".")[-1]
+        resp['Content-Disposition'] = 'attachment; filename="ticket-preview.{}"'.format(ftype)
+        return resp
+
+    def get_error_url(self) -> str:
+        return reverse('control:event.settings.tickets', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })
 
 
 class TicketSettings(EventPermissionRequiredMixin, FormView):

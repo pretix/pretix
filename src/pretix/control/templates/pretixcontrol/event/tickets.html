@@ -10,13 +10,14 @@
             {% bootstrap_field form.ticket_download layout="horizontal" %}
             {% bootstrap_field form.ticket_download_date layout="horizontal" %}
             {% for provider in providers %}
-                <div class="panel panel-default">
+                <div class="panel panel-default ticketoutput-panel">
                     <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-sm-10">
-                                <h3 class="panel-title">{{ provider.verbose_name }}</h3>
-                            </div>
-                        </div>
+                        <a href="{% url "control:event.settings.tickets.preview" event=request.event.slug organizer=request.organizer.slug output=provider.identifier %}"
+                            class="btn btn-default btn-sm pull-right" target="_blank">
+                            {% trans "Preview" %}
+                        </a>
+                        <h3 class="panel-title">{{ provider.verbose_name }}</h3>
+                        <div class="clear"></div>
                     </div>
                     <div class="panel-body">
                         {% bootstrap_form provider.form layout='horizontal' %}

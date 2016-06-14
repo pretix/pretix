@@ -42,6 +42,8 @@ urlpatterns = [
         url(r'^settings/permissions$', event.EventPermissions.as_view(), name='event.settings.permissions'),
         url(r'^settings/payment$', event.PaymentSettings.as_view(), name='event.settings.payment'),
         url(r'^settings/tickets$', event.TicketSettings.as_view(), name='event.settings.tickets'),
+        url(r'^settings/tickets/preview/(?P<output>[^/]+)$', event.TicketSettingsPreview.as_view(),
+            name='event.settings.tickets.preview'),
         url(r'^settings/email$', event.MailSettings.as_view(), name='event.settings.mail'),
         url(r'^settings/invoice$', event.InvoiceSettings.as_view(), name='event.settings.invoice'),
         url(r'^settings/invoice/preview$', event.InvoicePreview.as_view(), name='event.settings.invoice.preview'),
