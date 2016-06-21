@@ -339,6 +339,9 @@ class MailSettingsForm(SettingsForm):
             # Python's smtplib does not support password-less schemes anyway.
             data['smtp_password'] = self.initial.get('smtp_password')
 
+        if data.get('smtp_use_tls') and data.get('smtp_use_ssl'):
+            raise ValidationError(_('You can activate either SSL or STARTTLS security, but not both at the same time.'))
+
 
 class TicketSettingsForm(SettingsForm):
     ticket_download = forms.BooleanField(
