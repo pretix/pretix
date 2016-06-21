@@ -88,7 +88,8 @@ class VoucherBulkForm(VoucherForm):
         label=_("Codes"),
         help_text=_(
             "Add one voucher code per line. We suggest that you copy this list and save it into a file."
-        )
+        ),
+        required=True
     )
 
     class Meta:
@@ -100,7 +101,7 @@ class VoucherBulkForm(VoucherForm):
 
     def clean(self):
         data = super().clean()
-        data['codes'] = [a.strip() for a in data['codes'].strip().split("\n")]
+        data['codes'] = [a.strip() for a in data.get('codes', '').strip().split("\n") if a]
 
         if Voucher.objects.filter(code__in=data['codes'], event=self.instance.event).exists():
             raise ValidationError(_('A voucher with one of this codes already exists.'))
