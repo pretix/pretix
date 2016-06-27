@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-27 17:24+0000\n"
+"POT-Creation-Date: 2016-06-27 17:50+0000\n"
 "PO-Revision-Date: 2016-06-27 19:25+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
@@ -4314,12 +4314,12 @@ msgstr ""
 "Die ausgewählte Veranstaltung oder der gesuchte Veranstalter wurde nicht "
 "gefunden."
 
-#: pretix/presale/templates/pretixpresale/base.html:42
+#: pretix/presale/templates/pretixpresale/base.html:44
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request…"
 msgstr "Wir verarbeiten Ihre Anfrage…"
 
-#: pretix/presale/templates/pretixpresale/base.html:44
+#: pretix/presale/templates/pretixpresale/base.html:46
 #: pretix/presale/templates/pretixpresale/waiting.html:25
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""

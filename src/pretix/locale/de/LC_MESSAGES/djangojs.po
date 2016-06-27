@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-27 17:24+0000\n"
-"PO-Revision-Date: 2016-04-10 17:20+0200\n"
+"POT-Creation-Date: 2016-06-27 17:50+0000\n"
+"PO-Revision-Date: 2016-06-27 19:51+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -36,6 +36,14 @@ msgstr "Gesamtumsatz"
 msgid "Contacting Stripe…"
 msgstr "Kontaktiere Stripe…"
 
-#: static/pretixpresale/js/ui/asynctask.js:59
+#: static/pretixpresale/js/ui/asynctask.js:49
+msgid "Unknown error."
+msgstr "Unbekannter Fehler."
+
+#: static/pretixpresale/js/ui/asynctask.js:61
 msgid "We are processing your request…"
 msgstr "Wir verarbeiten deine Anfrage…"
+
+#: static/pretixpresale/js/ui/main.js:43
+msgid "Close message"
+msgstr "Schließen"
