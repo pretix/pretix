@@ -64,7 +64,7 @@ body.loading .container {
     filter: blur(2px);
 }
 
-#loadingmodal {
+#loadingmodal, #ajaxerr {
     position: fixed;
     top: 0;
     left: 0;
@@ -76,16 +76,25 @@ body.loading .container {
     z-index: 900000;
     visibility: hidden;
 
-    .big-rotating-icon {
+    .big-icon {
         margin-top: 50px;
+        font-size: 200px;
+        color: $brand-primary;
+    }
+
+    .big-rotating-icon {
         -webkit-animation: fa-spin 8s infinite linear;
         animation: fa-spin 8s infinite linear;
+        margin-top: 50px;
         font-size: 200px;
         color: $brand-primary;
     }
 }
+#ajaxerr {
+    background: rgba(236, 236, 236, .9);
+}
 
-.loading #loadingmodal {
+.loading #loadingmodal, .ajaxerr #ajaxerr {
     opacity: 1;
     visibility: visible;
     transition: opacity .5s ease-in-out;

@@ -6,7 +6,7 @@
     <h1>{% trans "Bad Request" %}</h1>
     <p>{% trans "We were unable to parse your request." %}</p>
     <p>{{ exception }}</p>
-    <p>
+    <p class="links">
         <a href="javascript:history.back()">{% trans "Take a step back" %}</a>
         &middot; <a href="javascript:location.reload()">{% trans "Try again" %}</a>
     </p>

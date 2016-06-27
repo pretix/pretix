@@ -42,10 +42,12 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
     "use strict";
     waitingDialog.hide();
     // TODO: Handle status codes != 200
-    // if(jqXHR.status == 500) {
-    // } if(jqXHR.status == 403) {
-    // } if(jqXHR.status == 503) {
-    // }
+    var c = $(jqXHR.responseText).filter('.container');
+    if (c.length > 0) {
+        ajaxErrDialog.show(c.first().html());
+    } else {
+        alert(gettext('Unknown error.'));
+    }
 }
 
 $(function () {

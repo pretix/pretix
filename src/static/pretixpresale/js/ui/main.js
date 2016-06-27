@@ -19,6 +19,8 @@ $(function () {
         $("#voucher-box").slideDown();
         $("#voucher-toggle").slideUp();
     });
+
+    $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
 });
 
 var waitingDialog = {
@@ -30,5 +32,19 @@ var waitingDialog = {
     hide: function () {
         "use strict";
         $("body").removeClass("loading");
+    }
+};
+
+var ajaxErrDialog = {
+    show: function (c) {
+        "use strict";
+        $("#ajaxerr").html(c);
+        $("#ajaxerr .links").html("<a class='btn btn-default ajaxerr-close'>"
+                                  + gettext("Close message") + "</a>");
+        $("body").addClass("ajaxerr");
+    },
+    hide: function () {
+        "use strict";
+        $("body").removeClass("ajaxerr");
     }
 };
