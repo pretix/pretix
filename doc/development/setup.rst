@@ -40,6 +40,10 @@ The first thing you need are all the main application's dependencies::
     cd src/
     pip install -r requirements.txt -r requirements/dev.txt
 
+If you are working with Python 3.4, you will also need (you can skip this for Python 3.5)::
+
+    pip install -r requirements/py34.txt
+
 Then, create the local database::
 
     python manage.py migrate
