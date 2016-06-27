@@ -12,7 +12,7 @@ Just clone our git repository including its submodules::
 
 External Dependencies
 ---------------------
-* Python 3.4 or newer
+* Python 3.5 or newer
 * ``pip`` for Python 3 (Debian package: ``python3-pip``)
 * ``pyvenv`` for Python 3 (Debian package: ``python3-venv``)
 * ``libffi`` (Debian package: ``libffi-dev``)
@@ -21,9 +21,9 @@ External Dependencies
 Your local python environment
 -----------------------------
 
-Please execute ``python -V`` or ``python3 -V`` to make sure you have Python 3.4 
+Please execute ``python -V`` or ``python3 -V`` to make sure you have Python 3.5 
 installed. Also make sure you have pip for Python 3 installed, you can execute 
-``pip3 -V`` to check. Then use Python 3.4's internal tools to create a virtual 
+``pip3 -V`` to check. Then use Python 3.5's internal tools to create a virtual 
 environment and activate it for your current session::
 
     pyvenv env
