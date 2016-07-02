@@ -58,7 +58,7 @@ class ApiView(View):
         ).select_related('item', 'variation')
         data = [
             {
-                'id': op.id,
+                'secret': op.secret,
                 'item': str(op.item),
                 'variation': str(op.variation) if op.variation else None,
                 'attendee_name': op.attendee_name
