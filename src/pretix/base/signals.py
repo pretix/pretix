@@ -47,55 +47,70 @@ class EventPluginSignal(django.dispatch.Signal):
                     responses.append((receiver, response))
         return responses
 
-"""
-This signal is sent out to get all known payment providers. Receivers should return a
-subclass of pretix.base.payment.BasePaymentProvider
-"""
 register_payment_providers = EventPluginSignal(
     providing_args=[]
 )
+"""
+This signal is sent out to get all known payment providers. Receivers should return a
+subclass of pretix.base.payment.BasePaymentProvider
 
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
-This signal is sent out to get all known ticket outputs. Receivers should return a
-subclass of pretix.base.ticketoutput.BaseTicketOutput
-"""
+
 register_ticket_outputs = EventPluginSignal(
     providing_args=[]
 )
+"""
+This signal is sent out to get all known ticket outputs. Receivers should return a
+subclass of pretix.base.ticketoutput.BaseTicketOutput
 
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
-This signal is sent out to get all known data exporters. Receivers should return a
-subclass of pretix.base.exporter.BaseExporter
-"""
+
 register_data_exporters = EventPluginSignal(
     providing_args=[]
 )
+"""
+This signal is sent out to get all known data exporters. Receivers should return a
+subclass of pretix.base.exporter.BaseExporter
 
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
-This signal is sent out every time an order is placed. The order object is given
-as the first argument.
-"""
+
 order_placed = EventPluginSignal(
     providing_args=["order"]
 )
-
 """
-This signal is sent out every time an order is paid. The order object is given
+This signal is sent out every time an order is placed. The order object is given
 as the first argument.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
+
 order_paid = EventPluginSignal(
     providing_args=["order"]
 )
+"""
+This signal is sent out every time an order is paid. The order object is given
+as the first argument.
 
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
-This signal is sent out every time we need to display a LogEntry object and we
-don't know how to turn it into human-readable text.
-"""
+
 logentry_display = EventPluginSignal(
     providing_args=["logentry"]
 )
+"""
+To display an instance of the ``LogEntry`` model to a human user,
+``pretix.base.signals.logentry_display`` will be sent out with a ``logentry`` argument.
 
+The first received response that is not ``None`` will be used to display the log entry
+to the user.
 
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+periodic_task = django.dispatch.Signal()
 """
 This is a regular django signal (no pretix event signal) that we send out every
 time the periodic task cronjob runs. This interval is not sharply defined, it can
@@ -103,4 +118,3 @@ be everything between a minute and a day. The actions you perform should be
 idempotent, i.e. it should not make a difference if this is send out more often
 than expected.
 """
-periodic_task = django.dispatch.Signal()

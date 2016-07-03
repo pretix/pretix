@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load eventurl %}
+{% load eventsignal %}
 {% load thumbnail %}
 {% block title %}{% trans "Voucher redemption" %}{% endblock %}
 
@@ -139,6 +140,7 @@
                     {% endfor %}
                 </section>
             {% endfor %}
+            {% eventsignal event "pretix.presale.signals.voucher_redeem_info" voucher=voucher %}
             {% if event.presale_is_running %}
                 <div class="row-fluid checkout-button-row">
                     <div class="col-md-4 col-md-offset-8 col-xs-12">
