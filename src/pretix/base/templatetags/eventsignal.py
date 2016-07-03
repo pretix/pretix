@@ -1,6 +1,7 @@
 import importlib
 
 from django import template
+from django.utils.safestring import mark_safe
 
 from pretix.base.models import Event
 
@@ -21,5 +22,6 @@ def eventsignal(event: Event, signame: str, **kwargs):
     signal = getattr(sigmod, sigstr[1])
     _html = []
     for receiver, response in signal.send(event, **kwargs):
-        _html.append(response)
-    return "".join(_html)
+        if response:
+            _html.append(response)
+    return mark_safe("".join(_html))
