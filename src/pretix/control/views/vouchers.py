@@ -11,6 +11,7 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from pretix.base.models import Voucher
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.signals import voucher_form_class
 
 
 class VoucherList(EventPermissionRequiredMixin, ListView):
@@ -70,10 +71,16 @@ class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
 
 class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
     model = Voucher
-    form_class = VoucherForm
     template_name = 'pretixcontrol/vouchers/detail.html'
     permission = 'can_change_vouchers'
     context_object_name = 'voucher'
+
+    def get_form_class(self):
+        form_class = VoucherForm
+        for receiver, response in voucher_form_class.send(self.request.event, cls=form_class):
+            if response:
+                form_class = response
+        return form_class
 
     def get_object(self, queryset=None) -> VoucherForm:
         url = resolve(self.request.path_info)
@@ -104,10 +111,16 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
 
 class VoucherCreate(EventPermissionRequiredMixin, CreateView):
     model = Voucher
-    form_class = VoucherForm
     template_name = 'pretixcontrol/vouchers/detail.html'
     permission = 'can_change_vouchers'
     context_object_name = 'voucher'
+
+    def get_form_class(self):
+        form_class = VoucherForm
+        for receiver, response in voucher_form_class.send(self.request.event, cls=form_class):
+            if response:
+                form_class = response
+        return form_class
 
     def get_success_url(self) -> str:
         return reverse('control:event.vouchers', kwargs={

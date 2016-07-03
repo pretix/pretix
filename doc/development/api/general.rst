@@ -43,6 +43,9 @@ Voucher system
 .. automodule:: pretix.presale.signals
    :members: voucher_redeem_info
 
+.. automodule:: pretix.control.signals
+   :members: voucher_form_class, voucher_form_html
+
 
 Dashboards
 ----------

@@ -73,3 +73,24 @@ should return a list of dictionaries, where each dictionary can have the keys:
 
 This is a regular django signal (no pretix event signal).
 """
+
+voucher_form_html = EventPluginSignal(
+    providing_args=['form']
+)
+"""
+This signal allows you to add additional HTML to the form that is used for modifying vouchers.
+You receive the form object in the ``form`` keyword argument.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+voucher_form_class = EventPluginSignal(
+    providing_args=['cls']
+)
+"""
+This signal allows you to replace the form class that is used for modifying vouchers.
+You will receive the default form class (or the class set by a previous plugin) in the
+``cls`` argument such that you can inherit from it.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
