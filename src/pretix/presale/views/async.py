@@ -39,43 +39,46 @@ class AsyncAction:
             return self.get_result(request)
         return self.http_method_not_allowed(request)
 
+    def _return_celery_result(self, res, timeout=.5):
+        import celery.exceptions
+
+        if not res.ready():
+            try:
+                res.get(timeout=timeout)
+            except celery.exceptions.TimeoutError:
+                pass
+        ready = res.ready()
+        data = {
+            'async_id': res.id,
+            'ready': ready
+        }
+        if ready:
+            if res.successful() and not isinstance(res.info, Exception):
+                smes = self.get_success_message(res.info)
+                if smes:
+                    messages.success(self.request, smes)
+                # TODO: Do not store message if the ajax client stats that it will not redirect
+                # but handle the mssage itself
+                data.update({
+                    'redirect': self.get_success_url(res.info),
+                    'message': str(self.get_success_message(res.info))
+                })
+            else:
+                messages.error(self.request, self.get_error_message(res.info))
+                # TODO: Do not store message if the ajax client stats that it will not redirect
+                # but handle the mssage itself
+                data.update({
+                    'redirect': self.get_error_url(),
+                    'message': str(self.get_error_message(res.info))
+                })
+        return data
+
     def get_result(self, request):
         from celery.result import AsyncResult
-        import celery.exceptions
 
         res = AsyncResult(request.GET.get('async_id'))
         if 'ajax' in self.request.GET:
-            if not res.ready():
-                try:
-                    res.get(timeout=0.5)
-                except celery.exceptions.TimeoutError:
-                    pass
-
-            ready = res.ready()
-            data = {
-                'async_id': res.id,
-                'ready': ready
-            }
-            if ready:
-                if res.successful() and not isinstance(res.info, Exception):
-                    smes = self.get_success_message(res.info)
-                    if smes:
-                        messages.success(self.request, smes)
-                    # TODO: Do not store message if the ajax client stats that it will not redirect
-                    # but handle the mssage itself
-                    data.update({
-                        'redirect': self.get_success_url(res.info),
-                        'message': str(self.get_success_message(res.info))
-                    })
-                else:
-                    messages.error(self.request, self.get_error_message(res.info))
-                    # TODO: Do not store message if the ajax client stats that it will not redirect
-                    # but handle the mssage itself
-                    data.update({
-                        'redirect': self.get_error_url(),
-                        'message': str(self.get_error_message(res.info))
-                    })
-            return JsonResponse(data)
+            return JsonResponse(self._return_celery_result(res, timeout=0.25))
         else:
             if res.ready():
                 if res.successful():
@@ -85,14 +88,13 @@ class AsyncAction:
             return render(request, 'pretixpresale/waiting.html')
 
     def _do_celery(self, args):
-        rs = self.task.task.apply_async(args=args)
+        res = self.task.task.apply_async(args=args)
         if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
-            return JsonResponse({
-                'async_id': rs.id,
-                'check_url': self.get_check_url(rs.id, True)
-            })
+            data = self._return_celery_result(res)
+            data['check_url'] = self.get_check_url(res.id, True)
+            return JsonResponse(data)
         else:
-            return redirect(self.get_check_url(rs.id, False))
+            return redirect(self.get_check_url(res.id, False))
 
     def _do_sync(self, args):
         try:
