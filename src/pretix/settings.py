@@ -35,6 +35,8 @@ else:
         chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
         SECRET_KEY = get_random_string(50, chars)
         with open(SECRET_FILE, 'w') as f:
+            os.chmod(SECRET_FILE, 0o600)
+            os.chown(SECRET_FILE, os.getuid(), os.getgid())
             f.write(SECRET_KEY)
 
 # Adjustable settings
