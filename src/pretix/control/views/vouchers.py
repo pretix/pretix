@@ -144,7 +144,6 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
 
 class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
     model = Voucher
-    form_class = VoucherBulkForm
     template_name = 'pretixcontrol/vouchers/bulk.html'
     permission = 'can_change_vouchers'
     context_object_name = 'voucher'
@@ -162,16 +161,14 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
 
     @transaction.atomic()
     def form_valid(self, form):
-        for code in form.cleaned_data['codes']:
-            obj = copy.copy(form.instance)
-            obj.event = self.request.event
-            obj.code = code
-            data = dict(form.cleaned_data)
-            data['code'] = code
-            data['bulk'] = True
-            del data['codes']
-            obj.save()
-            obj.log_action('pretix.voucher.added', data=data, user=self.request.user)
-
+        for o in form.save(self.request.event):
+            o.log_action('pretix.voucher.added', data=form.cleaned_data, user=self.request.user)
         messages.success(self.request, _('The new vouchers have been created.'))
         return HttpResponseRedirect(self.get_success_url())
+
+    def get_form_class(self):
+        form_class = VoucherBulkForm
+        for receiver, response in voucher_form_class.send(self.request.event, cls=form_class):
+            if response:
+                form_class = response
+        return form_class

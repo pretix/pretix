@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
+{% load eventsignal %}
 {% load bootstrap3 %}
 {% block title %}{% trans "Voucher" %}{% endblock %}
 {% block inside %}
@@ -48,6 +49,7 @@
             {% bootstrap_field form.tag layout="horizontal" %}
             {% bootstrap_field form.comment layout="horizontal" %}
         </fieldset>
+        {% eventsignal request.event "pretix.control.signals.voucher_form_html" form=form %}
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}

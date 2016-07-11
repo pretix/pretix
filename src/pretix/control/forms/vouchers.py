@@ -1,3 +1,5 @@
+import copy
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
@@ -107,3 +109,17 @@ class VoucherBulkForm(VoucherForm):
             raise ValidationError(_('A voucher with one of this codes already exists.'))
 
         return data
+
+    def save(self, event, *args, **kwargs):
+        objs = []
+        for code in self.cleaned_data['codes']:
+            obj = copy.copy(self.instance)
+            obj.event = event
+            obj.code = code
+            data = dict(self.cleaned_data)
+            data['code'] = code
+            data['bulk'] = True
+            del data['codes']
+            obj.save()
+            objs.append(obj)
+        return objs
