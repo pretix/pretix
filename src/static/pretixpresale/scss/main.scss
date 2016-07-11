@@ -30,6 +30,12 @@ footer {
     a {
         text-decoration: none;
     }
+    a:hover {
+        border-bottom: 2px solid $gray-light;
+    }
+    a.active {
+        border-bottom: 2px solid $brand-primary;
+    }
     img {
         vertical-align: baseline;
     }
