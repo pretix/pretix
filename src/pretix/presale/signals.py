@@ -36,3 +36,12 @@ This signal is sent out to display additional information on the "redeem a vouch
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
+
+order_info = EventPluginSignal(
+    providing_args=["order"]
+)
+"""
+This signal is sent out to display additional information on the order detail page
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""

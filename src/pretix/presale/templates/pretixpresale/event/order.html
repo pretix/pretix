@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load eventsignal %}
 {% load eventurl %}
 {% block title %}{% trans "Order details" %}{% endblock %}
 {% block content %}
@@ -91,6 +92,7 @@
             {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=False %}
         </div>
     </div>
+    {% eventsignal event "pretix.presale.signals.order_info" order=order %}
     <div class="row">
         {% if invoices %}
             <div class="col-xs-12 {% if request.event.settings.invoice_address_asked %}col-md-6{% endif %}">
