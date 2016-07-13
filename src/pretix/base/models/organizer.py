@@ -73,7 +73,7 @@ class Organizer(LoggedModel):
 
 class OrganizerPermission(models.Model):
     """
-    The relation between an Organizer and an User who has permissions to
+    The relation between an Organizer and a User who has permissions to
     access an organizer profile.
 
     :param organizer: The organizer this relation refers to

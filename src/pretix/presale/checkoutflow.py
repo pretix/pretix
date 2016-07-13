@@ -178,12 +178,12 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             emailval = EmailValidator()
             if 'email' not in request.session:
                 if warn:
-                    messages.warning(request, _('Please enter a valid e-mail address.'))
+                    messages.warning(request, _('Please enter a valid email address.'))
                 return False
             emailval(request.session.get('email'))
         except ValidationError:
             if warn:
-                messages.warning(request, _('Please enter a valid e-mail address.'))
+                messages.warning(request, _('Please enter a valid email address.'))
             return False
 
         for cp in self.positions:

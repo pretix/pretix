@@ -36,14 +36,12 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     """
     This is the user model used by pretix for authentication.
 
-    :param email: The user's e-mail address, used for identification.
+    :param email: The user's email address, used for identification.
     :type email: str
     :param givenname: The user's given name. May be empty or null.
     :type givenname: str
     :param familyname: The user's given name. May be empty or null.
     :type familyname: str
-    :param givenname: The user's given name. May be empty or null.
-    :type givenname: str
     :param is_active: Whether this user account is activated.
     :type is_active: bool
     :param is_staff: ``True`` for system operators.
@@ -98,7 +96,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
         * Given name
         * Family name
-        * E-mail address
+        * Email address
         """
         if self.givenname:
             return self.givenname

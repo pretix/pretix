@@ -147,7 +147,7 @@ Example::
     Use STARTTLS or SSL for the SMTP connection. Off by default.
 
 ``admins``
-    Comma-separated list of e-mail addresses that should receive a report about every error 500 thrown by pretix.
+    Comma-separated list of email addresses that should receive a report about every error code 500 thrown by pretix.
 
 Django settings
 ---------------
@@ -160,13 +160,13 @@ Example::
     debug=off
 
 ``hosts``
-    Comma-seperated list of allowed host names for this installation.
+    Comma-separated list of allowed host names for this installation.
     Default: ``localhost``
 
 ``secret``
     The secret to be used by Django for signing and verification purposes. If this
     setting is not provided, pretix will generate a random secret on the first start
-    and store it in the filesystem for later usage.
+    and will store it in the filesystem for later usage.
 
 ``debug``
     Whether or not to run in debug mode. Default is ``False``.
@@ -185,7 +185,7 @@ You can use an existing memcached server as pretix's caching backend::
 ``location``
     The location of memcached, either a host:port combination or a socket file.
 
-If no memcached is configures, pretix will use Django's built-in local-memory caching method.
+If no memcached is configured, pretix will use Django's built-in local-memory caching method.
 
 
 Redis
@@ -199,22 +199,22 @@ to speed up various operations::
     sessions=false
 
 ``location``
-    The location of memcached, as an URL of the form ``redis://[:password]@localhost:6379/0``
+    The location of redis, as a URL of the form ``redis://[:password]@localhost:6379/0``
     or ``unix://[:password]@/path/to/socket.sock?db=0``
 
 ``session``
-    When this is set to true, redis will be used as the session storage.
+    When this is set to ``True``, redis will be used as the session storage.
 
-If no redis is configured, pretix will store sessions and locks in the database. If memcached
+If redis is not configured, pretix will store sessions and locks in the database. If memcached
 is configured, memcached will be used for caching instead of redis.
 
 Celery task queue
 -----------------
 
-For processing long-running tasks asynchronously, pretix needs help of the celery task queue.
-For communicating between the web server and the task workers in both direction, a messaging
+For processing long-running tasks asynchronously, pretix requires the celery task queue.
+For communication between the web server and the task workers in both direction, a messaging
 queue and a result backend is needed. You can use a redis database for both directions, or
-an AMQP server (e.h. RabbitMQ) as a broker and redis or your database as a result backend::
+an AMQP server (e.g. RabbitMQ) as a broker and redis or your database as a result backend::
 
     [celery]
     broker=amqp://guest:guest@localhost:5672//

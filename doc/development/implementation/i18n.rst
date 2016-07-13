@@ -1,11 +1,10 @@
 Internationalization
 ====================
 
-One of pretix' major selling points is it's multi-language capability. We make heavy use of Django's
+One of pretix's major selling points is its multi-language capability. We make heavy use of Django's
 `translation features`_ that are built upon `GNU gettext`_. However, Django does not provide a standard
 way to translate *user-generated content*. In our case, we need to translate strings like product names
-or event descriptions, so we need event organizers to be able to fill in all fields in multiple languages
-at the same time.
+or event descriptions, so we need event organizers to be able to fill in all fields in multiple languages.
 
 .. note:: Implementing object-level translation in a relational database is a task that requires some difficult
           trade-off. We decided for a design that is not elegant on the database level (as it violates the `1NF`_) and
@@ -21,8 +20,8 @@ pretix provides two custom model field types that allow you to work with localiz
 ``I18nTextField``. Both of them are stored in the database as a ``TextField`` internally, they only differ in the
 default form widget that is used by ``ModelForm``.
 
-Yes, we know that this has negative impact on performance when indexing or searching them, but as mentioned above,
-within pretix this is not used in places that need to be searched. Lookups are currently not even implemented on these
+As pretix does not use these fields in places that need to be searched, the negative performance impact when searching
+and indexing these fields in negligible, as mentioned above. Lookups are currently not even implemented on these
 fields. In the database, the strings will be stored as a JSON-encoded mapping of language codes to strings.
 
 Whenever you interact with those fields, you will either provide or receive an instance of the following class:
@@ -58,8 +57,8 @@ The ``i18n`` module contains a few more useful utilities, starting with simple l
 numbers and dates, ``LazyDate`` and ``LazyNumber``. There also is a ``LazyLocaleException`` base class that provides
 exceptions with gettext-localized exception messages.
 
-Last, but definitely not least, we have the ``language`` context manager that allows you to execute a piece of code with
-a different locale::
+Last, but definitely not least, we have the ``language`` context manager (``pretix.base.i18n.language``) that allows
+you to execute a piece of code with a different locale::
 
     with language('de'):
         render_mail_template()

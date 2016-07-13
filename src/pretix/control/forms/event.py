@@ -276,7 +276,7 @@ class MailSettingsForm(SettingsForm):
     )
     mail_from = forms.EmailField(
         label=_("Sender address"),
-        help_text=_("Sender address for outgoing e-mails")
+        help_text=_("Sender address for outgoing emails")
     )
     mail_text_order_placed = I18nFormField(
         label=_("Placed order"),

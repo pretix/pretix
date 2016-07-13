@@ -29,7 +29,7 @@ Database
 
 Reverse proxy
     pretix needs to deliver some static content to your users (e.g. CSS, images, ...). While pretix is capable of
-    doing this, having this handled by a proper webserver like **nginx** or **Apache** will be much faster. Also, you
+    doing this, having this handled by a proper web server like **nginx** or **Apache** will be much faster. Also, you
     need a proxying web server in front to provide SSL encryption.
 
     .. warning:: Do not ever run without SSL in production. Your users deserve encrypted connections and thanks to
@@ -50,6 +50,6 @@ Redis
     * Queuing and result storage for the task worker queue
 
 RabbitMQ
-    RabbitMQ can be used as a more advanced queue manager for the task workers, if necessary.
+    RabbitMQ can be used as a more advanced queue manager for the task workers if necessary.
 
 .. _Let's Encrypt: https://letsencrypt.org/

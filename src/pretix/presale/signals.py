@@ -5,8 +5,8 @@ html_head = EventPluginSignal(
 )
 """
 This signal allows you to put code inside the HTML ``<head>`` tag
-of every page in the frontend. You will get the request as a keyword argument
-``request`` and can return plain HTML.
+of every page in the frontend. You will get the request as the keyword argument
+``request`` and are expected to return plain HTML.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """

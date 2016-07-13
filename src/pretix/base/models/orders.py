@@ -27,17 +27,18 @@ def generate_position_secret():
 class Order(LoggedModel):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
-    several OrderPositions and is connected to an user. It has an
+    several OrderPositions and is connected to a user. It has an
     expiration date: If items run out of capacity, orders which are over
     their expiration date might be cancelled.
 
     An order -- like all objects -- has an ID, which is globally unique,
     but also a code, which is shorter and easier to memorize, but only
-    unique among a single conference.
+    unique within a single conference.
 
     :param code: In addition to the ID, which is globally unique, every
                  order has an order code, which is shorter and easier to
-                 memorize, but is only unique among a single conference.
+                 memorize, but is only unique within a single conference.
+    :type code: str
     :param status: The status of this order. One of:
 
         * ``STATUS_PENDING``
@@ -46,7 +47,7 @@ class Order(LoggedModel):
         * ``STATUS_CANCELLED``
         * ``STATUS_REFUNDED``
 
-    :param event: The event this belongs to
+    :param event: The event this order belongs to
     :type event: Event
     :param email: The email of the person who ordered this
     :type email: str
@@ -56,15 +57,15 @@ class Order(LoggedModel):
     :type secret: str
     :param datetime: The datetime of the order placement
     :type datetime: datetime
-    :param expires: The date until this order has to be paid to guarantee the
+    :param expires: The date until this order has to be paid to guarantee the fulfillment
     :type expires: datetime
-    :param payment_date: The date of the payment completion (null, if not yet paid).
+    :param payment_date: The date of the payment completion (null if not yet paid)
     :type payment_date: datetime
     :param payment_provider: The payment provider selected by the user
     :type payment_provider: str
     :param payment_fee: The payment fee calculated at checkout time
     :type payment_fee: decimal.Decimal
-    :param payment_fee_tax_value: The absolute amound of tax included in the payment fee
+    :param payment_fee_tax_value: The absolute amount of tax included in the payment fee
     :type payment_fee_tax_value: decimal.Decimal
     :param payment_fee_tax_rate: The tax rate applied to the payment fee (in percent)
     :type payment_fee_tax_rate: decimal.Decimal
@@ -161,7 +162,7 @@ class Order(LoggedModel):
     @property
     def full_code(self):
         """
-        A order code which is unique among all events of a single organizer,
+        An order code which is unique among all events of a single organizer,
         built by contatenating the event slug and the order code.
         """
         return self.event.slug.upper() + self.code
@@ -198,9 +199,9 @@ class Order(LoggedModel):
     @property
     def can_modify_answers(self) -> bool:
         """
-        Is ``True`` if the user can change the question answers / attendee names that are
+        ``True`` if the user can change the question answers / attendee names that are
         related to the order. This checks order status and modification deadlines. It also
-        returns ``False``, if there are no questions that can be answered.
+        returns ``False`` if there are no questions that can be answered.
         """
         if self.status not in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED):
             return False
@@ -323,7 +324,7 @@ class AbstractPosition(models.Model):
 
     :param item: The selected item
     :type item: Item
-    :param variation: The selected ItemVariation or null, if the item has no properties
+    :param variation: The selected ItemVariation or null, if the item has no variations
     :type variation: ItemVariation
     :param datetime: The datetime this item was put into the cart
     :type datetime: datetime
@@ -404,11 +405,11 @@ class AbstractPosition(models.Model):
 
 class OrderPosition(AbstractPosition):
     """
-    An OrderPosition is one line of an order, representing one ordered items
+    An OrderPosition is one line of an order, representing one ordered item
     of a specified type (or variation). This has all properties of
     AbstractPosition.
 
-    :param order: The order this is a part of
+    :param order: The order this position is a part of
     :type order: Order
     """
     order = models.ForeignKey(
@@ -470,7 +471,7 @@ class OrderPosition(AbstractPosition):
 
 class CartPosition(AbstractPosition):
     """
-    A cart position is similar to a order line, except that it is not
+    A cart position is similar to an order line, except that it is not
     yet part of a binding order but just placed by some user in his or
     her cart. It therefore normally has a much shorter expiration time
     than an ordered position, but still blocks an item in the quota pool

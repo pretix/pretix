@@ -20,7 +20,7 @@ class ItemCategory(LoggedModel):
     """
     Items can be sorted into these categories.
 
-    :param event: The event this belongs to
+    :param event: The event this category belongs to
     :type event: Event
     :param name: The name of this category
     :type name: str
@@ -81,13 +81,13 @@ class Item(LoggedModel):
     An item is a thing which can be sold. It belongs to an event and may or may not belong to a category.
     Items are often also called 'products' but are named 'items' internally due to historic reasons.
 
-    :param event: The event this belongs to.
+    :param event: The event this item belongs to
     :type event: Event
     :param category: The category this belongs to. May be null.
     :type category: ItemCategory
-    :param name: The name of this item:
+    :param name: The name of this item
     :type name: str
-    :param active: Whether this item is being sold
+    :param active: Whether this item is being sold.
     :type active: bool
     :param description: A short description
     :type description: str
@@ -97,7 +97,7 @@ class Item(LoggedModel):
     :type tax_rate: decimal.Decimal
     :param admission: ``True``, if this item allows persons to enter the event (as opposed to e.g. merchandise)
     :type admission: bool
-    :param picture: A product picture to be shown next to the product description.
+    :param picture: A product picture to be shown next to the product description
     :type picture: File
     :param available_from: The date this product goes on sale
     :type available_from: datetime
@@ -235,7 +235,8 @@ class ItemVariation(models.Model):
     :param item: The item this variation belongs to
     :type item: Item
     :param value: A string defining this variation
-    :param active: Whether this value is to be sold.
+    :type value: str
+    :param active: Whether this variation is being sold.
     :type active: bool
     :param default_price: This variation's default price
     :type default_price: decimal.Decimal
@@ -299,7 +300,7 @@ class ItemVariation(models.Model):
 class Question(LoggedModel):
     """
     A question is an input field that can be used to extend a ticket
-    by custom information, e.g. "Attendee age". A question can allow one o several
+    by custom information, e.g. "Attendee age". A question can allow one of several
     input types, currently:
 
     * a number (``TYPE_NUMBER``)
@@ -387,11 +388,11 @@ class Quota(LoggedModel):
     """
     A quota is a "pool of tickets". It is there to limit the number of items
     of a certain type to be sold. For example, you could have a quota of 500
-    applied to all your items (because you only have that much space in your
-    building), and also a quota of 100 applied to the VIP tickets for
-    exclusivity. In this case, no more than 500 tickets will be sold in total
-    and no more than 100 of them will be VIP tickets (but 450 normal and 50
-    VIP tickets will be fine).
+    applied to all of your items (because you only have that much space in your
+    venue), and also a quota of 100 applied to the VIP tickets for exclusivity.
+    In this case, no more than 500 tickets will be sold in total and no more
+    than 100 of them will be VIP tickets (but 450 normal and 50 VIP tickets
+    will be fine).
 
     As always, a quota can not only be tied to an item, but also to specific
     variations.
@@ -400,19 +401,19 @@ class Quota(LoggedModel):
     anything with quotas. This might confuse you otherwise.
     http://docs.pretix.eu/en/latest/development/concepts.html#restriction-by-number
 
-    The AVAILABILITY_* constants represent various states of an quota allowing
-    its items/variations being for sale.
+    The AVAILABILITY_* constants represent various states of a quota allowing
+    its items/variations to be up for sale.
 
     AVAILABILITY_OK
         This item is available for sale.
 
     AVAILABILITY_RESERVED
-        This item is currently not available for sale, because all available
+        This item is currently not available for sale because all available
         items are in people's shopping carts. It might become available
-        again if those people do not proceed with checkout.
+        again if those people do not proceed to the checkout.
 
     AVAILABILITY_ORDERED
-        This item is currently not availalbe for sale, because all available
+        This item is currently not availalbe for sale because all available
         items are ordered. It might become available again if those people
         do not pay.
 
@@ -422,7 +423,7 @@ class Quota(LoggedModel):
     :param event: The event this belongs to
     :type event: Event
     :param name: This quota's name
-    :type str:
+    :type name: str
     :param size: The number of items in this quota
     :type size: int
     :param items: The set of :py:class:`Item` objects this quota applies to

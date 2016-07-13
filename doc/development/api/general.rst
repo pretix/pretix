@@ -60,8 +60,8 @@ Dashboards
    :members: event_dashboard_widgets, user_dashboard_widgets
 
 
-Displaying of log entries
--------------------------
+Display of log entries
+----------------------
 
 .. automodule:: pretix.base.signals
    :members: logentry_display

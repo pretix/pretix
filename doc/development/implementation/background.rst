@@ -2,7 +2,7 @@ Background tasks
 ================
 
 pretix provides the ability to run all longer-running tasks like generating ticket files or sending emails
-in a background thread instead of the webserver process. We use the well-established `Celery`_ project to
+in a background thread instead of the web server process. We use the well-established `Celery`_ project to
 implement this. However, as celery requires running a task queue like RabbitMQ and a result storage such as
 Redis to work efficiently, we don't like to *depend* on celery being available to make small-scale installations
 of pretix more straightforward. For this reason, the "background" in "background task" is always optional.
@@ -13,8 +13,8 @@ in the current installation.
 Implementing a task
 -------------------
 
-A common pattern for implementing "optionally-asynchronous" tasks that can be seen a lot in ``pretix.base.services``
-looks like this::
+A common pattern for implementing "optionally-asynchronous" tasks can be seen a lot in ``pretix.base.services``
+and looks like this::
 
     def my_task(argument1, argument2):
         # Important: All arguments and return values need to be serializable into JSON.
@@ -45,7 +45,7 @@ A usage example taken directly from the code is::
     class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
         """
         A view that executes a task asynchronously. A POST request will kick of the
-        task into the background or run it in the foreground, if celery is not installed.
+        task into the background or run it in the foreground if celery is not installed.
         In the former case, subsequent GET calls can be used to determinine the current
         status of the task.
         """

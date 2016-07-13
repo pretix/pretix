@@ -21,23 +21,33 @@ def generate_code():
 
 class Voucher(LoggedModel):
     """
-    Represents a voucher. A voucher can reserve ticket quota or allow special prices.
+    A Voucher can reserve ticket quota or allow special prices.
 
     :param event: The event this voucher is valid for
+    :type event: Event
     :param code: The secret voucher code
+    :type code: str
     :param redeemed: Whether or not this voucher has already been redeemed
+    :type redeemed: bool
     :param valid_until: The expiration date of this voucher (optional)
+    :type valid_until: datetime
     :param block_quota: If set to true, this voucher will reserve quota for its holder
+    :type block_quota: bool
     :param allow_ignore_quota: If set to true, this voucher can be redeemed even if the event is sold out
+    :type allow_ignore_quota: bool
     :param price: If set, the voucher will allow the sale of associated items for this price
+    :type price: decimal.Decimal
     :param item: If set, the item to sell
+    :type item: Item
     :param variation: If set, the variation to sell
+    :type variation: ItemVariation
     :param quota: If set, the quota to choose an item from
+    :type quota: Quota
 
     Various constraints apply:
 
-    * You can either select a quota or an item and you need to select one of those
-    * If you select an item that as variations but not select a variation, you cannot set block_quota
+    * You need to either select a quota or an item
+    * If you select an item that has variations but do not select a variation, you cannot set block_quota
     """
     event = models.ForeignKey(
         Event,

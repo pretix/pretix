@@ -42,7 +42,7 @@ class BaseExporter:
     @property
     def export_form_fields(self) -> dict:
         """
-        When the event's administrator administrator visits the export page, this method
+        When the event's administrator visits the export page, this method
         is called to return the configuration fields available.
 
         It should therefore return a dictionary where the keys should be field names and
