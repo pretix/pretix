@@ -24,7 +24,7 @@ class BaseTicketOutput:
     @property
     def is_enabled(self) -> bool:
         """
-        Returns, whether or whether not this output is enabled.
+        Returns whether or whether not this output is enabled.
         By default, this is determined by the value of the ``_enabled`` setting.
         """
         return self.settings.get('_enabled', as_type=bool)
@@ -57,7 +57,7 @@ class BaseTicketOutput:
     @property
     def settings_form_fields(self) -> dict:
         """
-        When the event's administrator administrator visits the event configuration
+        When the event's administrator visits the event configuration
         page, this method is called to return the configuration fields available.
 
         It should therefore return a dictionary where the keys should be (unprefixed)
@@ -95,7 +95,7 @@ class BaseTicketOutput:
 
     def settings_content_render(self, request: HttpRequest) -> str:
         """
-        When the event's administrator administrator visits the event configuration
+        When the event's administrator visits the event configuration
         page, this method is called. It may return HTML containing additional information
         that is displayed below the form fields configured in ``settings_form_fields``.
         """

@@ -17,8 +17,8 @@ html_head = EventPluginSignal(
 )
 """
 This signal allows you to put code inside the HTML ``<head>`` tag
-of every page in the backend. You will get the request as a keyword argument
-``request`` and can return plain HTML.
+of every page in the backend. You will get the request as the keyword argument
+``request`` and are expected to return plain HTML.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -46,7 +46,7 @@ event_dashboard_widgets = EventPluginSignal(
     providing_args=[]
 )
 """
-This signal is sent out to include widgets to the event dashboard. Receivers
+This signal is sent out to include widgets in the event dashboard. Receivers
 should return a list of dictionaries, where each dictionary can have the keys:
 
 * content (str, containing HTML)
@@ -62,7 +62,7 @@ user_dashboard_widgets = Signal(
     providing_args=['user']
 )
 """
-This signal is sent out to include widgets to the personal user dashboard. Receivers
+This signal is sent out to include widgets in the personal user dashboard. Receivers
 should return a list of dictionaries, where each dictionary can have the keys:
 
 * content (str, containing HTML)
@@ -90,7 +90,7 @@ voucher_form_class = EventPluginSignal(
 """
 This signal allows you to replace the form class that is used for modifying vouchers.
 You will receive the default form class (or the class set by a previous plugin) in the
-``cls`` argument such that you can inherit from it.
+``cls`` argument so that you can inherit from it.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """

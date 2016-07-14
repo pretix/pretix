@@ -27,7 +27,7 @@ class Event(LoggedModel):
 
     :param organizer: The organizer this event belongs to
     :type organizer: Organizer
-    :param name: This events full title
+    :param name: This event's full title
     :type name: str
     :param slug: A short, alphanumeric, all-lowercase name for use in URLs. The slug has to
                  be unique among the events of the same organizer.
@@ -42,7 +42,7 @@ class Event(LoggedModel):
     :type date_to: datetime
     :param presale_start: No tickets will be sold before this date.
     :type presale_start: datetime
-    :param presale_end: No tickets will be sold before this date.
+    :param presale_end: No tickets will be sold after this date.
     :type presale_end: datetime
     :param plugins: A comma-separated list of plugin names that are active for this
                     event.
@@ -110,14 +110,14 @@ class Event(LoggedModel):
 
     def clean(self):
         if self.presale_start and self.presale_end and self.presale_start > self.presale_end:
-            raise ValidationError({'presale_end': _('The end of the presale period has to be later than it\'s start.')})
+            raise ValidationError({'presale_end': _('The end of the presale period has to be later than its start.')})
         if self.date_from and self.date_to and self.date_from > self.date_to:
-            raise ValidationError({'date_to': _('The end of the event has to be later than it\'s start.')})
+            raise ValidationError({'date_to': _('The end of the event has to be later than its start.')})
         super().clean()
 
     def get_plugins(self) -> "list[str]":
         """
-        Get the names of the plugins activated for this event as a list.
+        Returns the names of the plugins activated for this event as a list.
         """
         if self.plugins is None:
             return []
@@ -160,7 +160,7 @@ class Event(LoggedModel):
     @cached_property
     def settings(self) -> SettingsProxy:
         """
-        Returns an object representing this event's settings
+        Returns an object representing this event's settings.
         """
         try:
             return SettingsProxy(self, type=EventSetting, parent=self.organizer)
@@ -184,7 +184,7 @@ class Event(LoggedModel):
 
     def lock(self):
         """
-        Returns a contextmanager that can be used to lock an event for bookings
+        Returns a contextmanager that can be used to lock an event for bookings.
         """
         from pretix.base.services import locking
 
@@ -205,12 +205,12 @@ class Event(LoggedModel):
 
 class EventPermission(models.Model):
     """
-    The relation between an Event and an User who has permissions to
+    The relation between an Event and a User who has permissions to
     access an event.
 
-    :param event: The event this refers to
+    :param event: The event this permission refers to
     :type event: Event
-    :param user: The user these permission set applies to
+    :param user: The user this permission set applies to
     :type user: User
     :param can_change_settings: If ``True``, the user can change all basic settings for this event.
     :type can_change_settings: bool

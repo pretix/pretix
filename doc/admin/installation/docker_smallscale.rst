@@ -18,8 +18,8 @@ modern distributions, especially on all systemd-based ones.
 Requirements
 ------------
 
-Please set up the following systems beforehand, we'll not explain them here (but link to installation guides
-somewhere else):
+Please set up the following systems beforehand, we'll not explain them here (but see these links for external
+installation guides):
 
 * `Docker`_
 * A SMTP server to send out mails, e.g. `Postfix`_ on your machine or some third-party server you have credentials for
@@ -43,8 +43,8 @@ all lines prepended with a ``$`` symbol can also be run by an unprivileged user.
 Data files
 ----------
 
-First of all, you need a directory on your server that pretix can use to store data files and make that directory
-writable to the user that runs pretix inside the docker container::
+First of all, you need to create a directory on your server that pretix can use to store data files and make that
+directory writable to the user that runs pretix inside the docker container::
 
     # mkdir /var/pretix-data
     # chown -R 15371:15371 /var/pretix-data
@@ -52,7 +52,7 @@ writable to the user that runs pretix inside the docker container::
 Database
 --------
 
-Next, we need a database and a database user. We create this with any kind of database managing tool or directly on
+Next, we need a database and a database user. We can create these with any kind of database managing tool or directly on
 our database's shell, e.g. for MySQL::
 
     $ mysql -u root -p
@@ -61,15 +61,15 @@ our database's shell, e.g. for MySQL::
     mysql> FLUSH PRIVILEGES;
 
 Replace the asterisks with a password of your own. For MySQL, we will use a unix domain socket to connect to the
-database. For PostgreSQL, be sure to configure the interface binding and your firewall such that the docker container
+database. For PostgreSQL, be sure to configure the interface binding and your firewall so that the docker container
 can reach PostgreSQL.
 
 Redis
 -----
 
-For caching and messaging in small-scale setups, pretix recomments using redis. In this small-scale setup we assume a
-redis instance running on the same host. To avoid the hassle about network configurations and firewalls, we recommend
-connecting to redis via an unix socket. To enable redis on unix sockets, add the following to your
+For caching and messaging in small-scale setups, pretix recommends using redis. In this small-scale setup we assume a
+redis instance to be running on the same host. To avoid the hassle with network configurations and firewalls, we
+recommend connecting to redis via a unix socket. To enable redis on unix sockets, add the following to your
 ``/etc/redis/redis.conf``::
 
     unixsocket /tmp/redis.sock
@@ -85,7 +85,7 @@ Now restart redis-server::
              can easily become an even worse security hole when configured slightly wrong. Read more about security
              on the `redis website`_.
 
-             Another possible solution is to run `redis in docker`_ and link the containers using dockers networking
+             Another possible solution is to run `redis in docker`_ and link the containers using docker's networking
              features.
 
 Config file
@@ -212,7 +212,7 @@ Next steps
 ----------
 
 Yay, you are done! You should now be able to reach pretix at https://pretix.yourdomain.com/control/ and log in as
-*admin@localhost* with a passwort of *admin*. Don't forget to change that password! Create an organizer first, then
+*admin@localhost* with a password of *admin*. Don't forget to change that password! Create an organizer first, then
 create an event and start selling tickets!
 
 Updates
@@ -220,7 +220,7 @@ Updates
 
 .. warning:: While we try hard not to break things, **please perform a backup before every upgrade**.
 
-Updates are fairly simple, but require at least a small downtime::
+Updates are fairly simple, but require at least a short downtime::
 
     # docker pull pretix/standalone
     # systemctl restart pretix.service

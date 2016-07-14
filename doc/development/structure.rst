@@ -10,14 +10,14 @@ pretix/
     This directory contains nearly all source code.
 
     base/
-        This is the django app containing all the models and methods which are
+        This is the Django app containing all the models and methods which are
         essential to all of pretix's features.
 
     control/
-        This is the django app containing the front end for organizers.
+        This is the Django app containing the front end for organizers.
 
     presale/
-        This is the django app containing the front end for users buying tickets.
+        This is the Django app containing the front end for users buying tickets.
 
     helpers/
         Helpers contain a very few modules providing workarounds for low-level flaws in

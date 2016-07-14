@@ -17,7 +17,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
     error_messages = {
-        'invalid_login': _("Please enter a correct e-mail address and password."),
+        'invalid_login': _("Please enter a correct email address and password."),
         'inactive': _("This account is inactive.")
     }
 
@@ -69,7 +69,7 @@ class LoginForm(forms.Form):
 
 class RegistrationForm(forms.Form):
     error_messages = {
-        'duplicate_email': _("You already registered with that e-mail address, please use the login form."),
+        'duplicate_email': _("You already registered with that email address, please use the login form."),
         'pw_mismatch': _("Please enter the same password twice"),
     }
     email = forms.EmailField(

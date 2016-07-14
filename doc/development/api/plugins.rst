@@ -6,7 +6,7 @@ Plugin basics
 
 It is possible to extend pretix with custom Python code using the official plugin
 API. Every plugin has to be implemented as an independent Django 'app' living
-in an own python package nstalled like any other python module. There are also some
+in its own python package installed like any other python module. There are also some
 official plugins inside the ``pretix/plugins/`` directory of your pretix installation.
 
 The communication between pretix and the plugins happens mostly using Django's
@@ -16,13 +16,13 @@ on the next pages.
 
 .. _`pluginsetup`:
 
-To create a new plugin, create a new python package which must be a vaild `Django app`_
+To create a new plugin, create a new python package which must be a valid `Django app`_
 and must contain plugin metadata, as described below.
 
 The following pages go into detail about the several types of plugins currently
 supported. While these instructions don't assume that you know a lot about pretix,
-they do assume that you have prior knowledge about Django (e.g. it's view layer,
-how it's ORM works, etc.).
+they do assume that you have prior knowledge about Django (e.g. its view layer,
+how its ORM works, etc.).
 
 Plugin metadata
 ---------------
@@ -83,7 +83,7 @@ Plugin registration
 
 Somehow, pretix needs to know that your plugin exists at all. For this purpose, we
 make use of the `entry point`_ feature of setuptools. To register a plugin that lives
-in a seperate python package, your ``setup.py`` sould contain something like this::
+in a separate python package, your ``setup.py`` should contain something like this::
 
     setup(
         …

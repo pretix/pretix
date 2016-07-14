@@ -22,8 +22,8 @@ Your local python environment
 -----------------------------
 
 Please execute ``python -V`` or ``python3 -V`` to make sure you have Python 3.4 
-installed. Also make sure you have pip for Python 3 installed, you can execute 
-``pip3 -V`` to check. Then use Python 3.4's internal tools to create a virtual 
+(or newer) installed. Also make sure you have pip for Python 3 installed, you can
+execute ``pip3 -V`` to check. Then use Python's internal tools to create a virtual
 environment and activate it for your current session::
 
     pyvenv env

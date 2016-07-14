@@ -14,7 +14,7 @@ Provider registration
 The payment provider API does not make a lot of usage from signals, however, it
 does use a signal to get a list of all available payment providers. Your plugin
 should listen for this signal and return the subclass of ``pretix.base.payment.BasePaymentProvider``
-that we'll soon create::
+that the plugin will provide::
 
     from django.dispatch import receiver
 
@@ -32,8 +32,7 @@ The provider class
 
 .. class:: pretix.base.payment.BasePaymentProvider
 
-   The central object of each payment provider is the subclass of ``BasePaymentProvider``
-   we already mentioned above. In this section, we will discuss it's interface in detail.
+   The central object of each payment provider is the subclass of ``BasePaymentProvider``.
 
    .. py:attribute:: BasePaymentProvider.event
 
@@ -105,9 +104,9 @@ Additional views
 For most simple payment providers it is more than sufficient to implement
 some of the :py:class:`BasePaymentProvider` methods. However, in some cases
 it is necessary to introduce additional views. One example is the PayPal
-provider. It redirects the user to a paypal website in the
-:py:meth:`BasePaymentProvider.checkout_prepare`` step of the checkout process
-and provides PayPal with an URL to redirect back to. This URL points to a
+provider. It redirects the user to a PayPal website in the
+:py:meth:`BasePaymentProvider.checkout_prepare` step of the checkout process
+and provides PayPal with a URL to redirect back to. This URL points to a
 view which looks roughly like this::
 
     @login_required
@@ -123,7 +122,7 @@ view which looks roughly like this::
             try:
                 # Redirect back to the confirm page. We chose to save the
                 # event ID in the user's session. We could also put this
-                # information into an URL parameter.
+                # information into a URL parameter.
                 event = Event.objects.current.get(identity=request.session['payment_paypal_event'])
                 return redirect(reverse('presale:event.checkout.confirm', kwargs={
                     'event': event.slug,
@@ -136,6 +135,6 @@ view which looks roughly like this::
 
 If you do not want to provide a view of your own, you could even let PayPal
 redirect directly back to the confirm page and handle the query parameters
-inside :py:meth:`BasePaymentProvider.checkout_is_valid_session``. However,
+inside :py:meth:`BasePaymentProvider.checkout_is_valid_session`. However,
 because some external providers (not PayPal) force you to have a *constant*
 redirect URL, it might be necessary to define custom views.

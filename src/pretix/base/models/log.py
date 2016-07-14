@@ -10,12 +10,13 @@ class LogEntry(models.Model):
     relation to an arbitrary database object.
 
     :param datatime: The timestamp of the logged action
+    :type datetime: datetime
     :param user: The user that performed the action
     :type user: User
     :param action_type: The type of action that has been performed. This is
        used to look up the renderer used to describe the action in a human-
        readable way. This should be some namespaced value using dotted
-       notationto avaoid duplicates, e.g.
+       notation to avoid duplicates, e.g.
        ``"pretix.plugins.banktransfer.incoming_transfer"``.
     :type action_type: str
     :param data: Arbitrary data that can be used by the log action renderer

@@ -35,7 +35,7 @@ class BasePaymentProvider:
     @property
     def is_enabled(self) -> bool:
         """
-        Returns, whether or whether not this payment provider is enabled.
+        Returns whether or whether not this payment provider is enabled.
         By default, this is determined by the value of the ``_enabled`` setting.
         """
         return self.settings.get('_enabled', as_type=bool)
@@ -78,7 +78,7 @@ class BasePaymentProvider:
     @property
     def settings_form_fields(self) -> dict:
         """
-        When the event's administrator administrator visits the event configuration
+        When the event's administrator visits the event configuration
         page, this method is called to return the configuration fields available.
 
         It should therefore return a dictionary where the keys should be (unprefixed)
@@ -138,7 +138,7 @@ class BasePaymentProvider:
 
     def settings_content_render(self, request: HttpRequest) -> str:
         """
-        When the event's administrator administrator visits the event configuration
+        When the event's administrator visits the event configuration
         page, this method is called. It may return HTML containing additional information
         that is displayed below the form fields configured in ``settings_form_fields``.
         """
@@ -188,12 +188,12 @@ class BasePaymentProvider:
     def payment_form_render(self, request: HttpRequest) -> str:
         """
         When the user selects this provider as his prefered payment method,
-        he will be shown the HTML you return from this method.
+        they will be shown the HTML you return from this method.
 
         The default implementation will call :py:meth:`checkout_form`
         and render the returned form. If your payment method doesn't require
         the user to fill out form fields, you should just return a paragraph
-        of explainatory text.
+        of explanatory text.
         """
         form = self.payment_form(request)
         template = get_template('pretixpresale/event/checkout_payment_form_default.html')
@@ -202,25 +202,25 @@ class BasePaymentProvider:
 
     def checkout_confirm_render(self, request) -> str:
         """
-        If the user successfully filled in his payment data, he will be redirected
+        If the user has successfully filled in his payment data, they will be redirected
         to a confirmation page which lists all details of his order for a final review.
         This method should return the HTML which should be displayed inside the
         'Payment' box on this page.
 
         In most cases, this should include a short summary of the user's input and
-        a short explaination on how the payment process will continue.
+        a short explanation on how the payment process will continue.
         """
         raise NotImplementedError()  # NOQA
 
     def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> "bool|str":
         """
-        Will be called after the user selected this provider as his payment method.
+        Will be called after the user selects this provider as his payment method.
         If you provided a form to the user to enter payment data, this method should
         at least store the user's input into his session.
 
-        This method should return ``False``, if the user's input was invalid, ``True``
+        This method should return ``False`` if the user's input was invalid, ``True``
         if the input was valid and the frontend should continue with default behaviour
-        or a string containing an URL, if the user should be redirected somewhere else.
+        or a string containing a URL if the user should be redirected somewhere else.
 
         On errors, you should use Django's message framework to display an error message
         to the user (or the normal form validation error messages).
@@ -261,17 +261,17 @@ class BasePaymentProvider:
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
         """
         This is called at the time the user tries to place the order. It should return
-        ``True``, if the user's session is valid and all data your payment provider requires
+        ``True`` if the user's session is valid and all data your payment provider requires
         in future steps is present.
         """
         raise NotImplementedError()  # NOQA
 
     def payment_perform(self, request: HttpRequest, order: Order) -> str:
         """
-        After the user confirmed his purchase, this method will be called to complete
-        the payment process. This is the place to actually move the money, if applicable.
+        After the user has confirmed their purchase, this method will be called to complete
+        the payment process. This is the place to actually move the money if applicable.
         If you need any special  behaviour,  you can return a string
-        containing an URL the user will be redirected to. If you are done with your process
+        containing the URL the user will be redirected to. If you are done with your process
         you should return the user to the order's detail page.
 
         If the payment is completed, you should call ``pretix.base.services.orders.mark_order_paid(order, provider, info)``
@@ -293,9 +293,9 @@ class BasePaymentProvider:
 
     def order_pending_mail_render(self, order: Order) -> str:
         """
-        After the user submitted his order, he or she will receive a confirmation
-        e-mail. You can return a string from this method if you want to add additional
-        information to this e-mail.
+        After the user has submitted their order, they will receive a confirmation
+        email. You can return a string from this method if you want to add additional
+        information to this email.
 
         :param order: The order object
         """
@@ -342,7 +342,7 @@ class BasePaymentProvider:
 
     def order_paid_render(self, request: HttpRequest, order: Order) -> str:
         """
-        Will be called if the user views the detail page of an paid order which is
+        Will be called if the user views the detail page of a paid order which is
         associated with this payment provider.
 
         It should return HTML code which should be displayed to the user or None,
@@ -385,14 +385,14 @@ class BasePaymentProvider:
         """
         Will be called if the event administrator confirms the refund.
 
-        This should transfer the money back (if possible). You can return an URL the
+        This should transfer the money back (if possible). You can return the URL the
         user should be redirected to if you need special behaviour or None to continue
         with default behaviour.
 
         On failure, you should use Django's message framework to display an error message
         to the user.
 
-        The default implementation sets the Orders state to refunded and shows a success
+        The default implementation sets the Order's state to refunded and shows a success
         message.
 
         :param request: The HTTP request
@@ -446,14 +446,14 @@ class FreeOrderProvider(BasePaymentProvider):
         """
         Will be called if the event administrator confirms the refund.
 
-        This should transfer the money back (if possible). You can return an URL the
+        This should transfer the money back (if possible). You can return the URL the
         user should be redirected to if you need special behaviour or None to continue
         with default behaviour.
 
         On failure, you should use Django's message framework to display an error message
         to the user.
 
-        The default implementation sets the Orders state to refunded and shows a success
+        The default implementation sets the Order's state to refunded and shows a success
         message.
 
         :param request: The HTTP request

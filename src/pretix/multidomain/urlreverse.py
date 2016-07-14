@@ -28,6 +28,7 @@ def eventreverse(obj, name, kwargs=None):
 
     :param obj: An ``Event`` or ``Organizer`` object
     :param name: The name of the URL route
+    :type name: str
     :param kwargs: A dictionary of additional keyword arguments that should be used. You do not
         need to provide the organizer or event slug here, it will be added automatically as
         needed.

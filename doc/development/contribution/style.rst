@@ -6,7 +6,7 @@ Python code
 
 * Basically: Follow `PEP 8`_.
 
-  Use `flake8`_ to check for conformance problems. The project includes a setup.cfg
+  Use `flake8`_ to check for conformance problems. The project includes a setup.cfg file
   with a default configuration for flake8 that excludes migrations and other non-relevant
   code parts. It also silences a few checks, e.g. ``N802`` (function names should be lowercase) 
   and increases the maximum line length to more than 79 characters. **However** you should 

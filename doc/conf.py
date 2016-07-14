@@ -54,7 +54,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pretix'
-copyright = '2014, Raphael Michel'
+copyright = '2014-2016, Raphael Michel'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

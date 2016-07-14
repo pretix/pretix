@@ -19,19 +19,30 @@ def invoice_filename(instance, filename: str) -> str:
 class Invoice(models.Model):
     """
     Represents an invoice that is issued because of an order. Because invoices are legally required
-    not to change, this object duplicates a log of data (e.g. the invoice address).
+    not to change, this object duplicates a lot of data (e.g. the invoice address).
 
     :param order: The associated order
+    :type order: Order
     :param event: The event this belongs to (for convenience)
+    :type event: Event
     :param invoice_no: The human-readable, event-unique invoice number
+    :type invoice_no: int
     :param is_cancellation: Whether or not this is a cancellation instead of an invoice
-    :param refers: A link to another invoice this invoice referse to, e.g. the cancelled invoice in an cancellation
+    :type is_cancellation: bool
+    :param refers: A link to another invoice this invoice refers to, e.g. the cancelled invoice in a cancellation
+    :type refers: Invoice
     :param invoice_from: The sender address
+    :type invoice_from: str
     :param invoice_to: The receiver address
+    :type invoice_to: str
     :param date: The invoice date
+    :type date: date
     :param locale: The locale in which the invoice should be printed
+    :type locale: str
     :param additional_text: Additional text for the invoice
+    :type additional_text: str
     :param file: The filename of the rendered invoice
+    :type file: File
     """
     order = models.ForeignKey('Order', related_name='invoices', db_index=True)
     event = models.ForeignKey('Event', related_name='invoices', db_index=True)
@@ -47,7 +58,7 @@ class Invoice(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.order:
-            raise ValueError('Any invoice needs to be connected to an order')
+            raise ValueError('Every invoice needs to be connected to an order')
         if not self.event:
             self.event = self.order.event
         if not self.invoice_no:
@@ -65,7 +76,7 @@ class Invoice(models.Model):
     @property
     def number(self):
         """
-        Returns the invoice number in a human-readable way with the event slug prepended.
+        Returns the invoice number in a human-readable string with the event slug prepended.
         """
         return '%s-%05d' % (self.event.slug.upper(), self.invoice_no)
 
@@ -75,13 +86,18 @@ class Invoice(models.Model):
 
 class InvoiceLine(models.Model):
     """
-    One position listed on an invoice.
+    One position listed on an Invoice.
 
     :param invoice: The invoice this belongs to
+    :type invoice: Invoice
     :param description: The item description
+    :type description: str
     :param gross_value: The gross value
+    :type gross_value: decimal.Decimal
     :param tax_value: The included tax (as an absolute value)
+    :type tax_value: decimal.Decimal
     :param tax_rate: The applied tax rate in percent
+    :type tax_rate: decimal.Decimal
     """
     invoice = models.ForeignKey('Invoice', related_name='lines')
     description = models.TextField()

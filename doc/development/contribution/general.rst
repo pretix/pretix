@@ -20,11 +20,11 @@ on our `GitHub repository`_.
 
 Before you do so, please `squash all your changes`_ into one single commit. Please
 use the test suite to check whether your changes break any existing features and run
-the code style checks to confirm you are consistent with pretix' coding style. You'll
+the code style checks to confirm you are consistent with pretix's coding style. You'll
 find instructions on this in the :ref:`checksandtests` section of the development setup guide.
 
 We automatically run the tests and the code style check on every pull request on Travis CI and we won’t
-accept any pull requets without all tests passing. However, if you don't find out *why* they are not passing,
+accept any pull requests without all tests passing. However, if you don't find out *why* they are not passing,
 just send the pull request and tell us – we'll be glad to help.
 
 If you add a new feature, please include appropriate documentation into your patch. If you fix a bug,

@@ -17,7 +17,7 @@ Output registration
 The ticket output API does not make a lot of usage from signals, however, it
 does use a signal to get a list of all available ticket outputs. Your plugin
 should listen for this signal and return the subclass of ``pretix.base.ticketoutput.BaseTicketOutput``
-that we'll soon create::
+that we'll provide in this plugin::
 
     from django.dispatch import receiver
 
@@ -35,8 +35,7 @@ The output class
 
 .. class:: pretix.base.ticketoutput.BaseTicketOutput
 
-   The central object of each ticket output is the subclass of ``BaseTicketOutput``
-   we already mentioned above. In this section, we will discuss it's interface in detail.
+   The central object of each ticket output is the subclass of ``BaseTicketOutput``.
 
    .. py:attribute:: BaseTicketOutput.event
 

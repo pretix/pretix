@@ -3,7 +3,8 @@ Settings storage
 
 pretix is highly configurable and therefore needs to store a lot of per-event and per-organizer settings.
 Those settings are stored in the database and accessed through a ``SettingsProxy`` instance. You can obtain
-such an instance from any event or organizer model instance by just accessing ``event.settings``.
+such an instance from any event or organizer model instance by just accessing ``event.settings`` or
+``organizer.settings``, respectively.
 
 Any setting consists of a key and a value. By default, all settings are strings, but the settings system
 includes serializers for serializing the following types:

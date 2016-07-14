@@ -23,24 +23,24 @@ def mail(email: str, subject: str, template: str,
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
-    :param email: The e-mail address of the recipient.
+    :param email: The email address of the recipient
 
-    :param subject: The e-mail subject. Should be localized to the recipients's locale or a lazy object that will be
+    :param subject: The email subject. Should be localized to the recipients's locale or a lazy object that will be
         localized by being casted to a string.
 
     :param template: The filename of a template to be used. It will be rendered with the locale given in the locale
         argument and the context given in the next argument. Alternatively, you can pass a LazyI18nString and
         ``context`` will be used as the argument to a  Python ``.format()`` call on the template.
 
-    :param context: The context for rendering the template (see ``template`` parameter).
+    :param context: The context for rendering the template (see ``template`` parameter)
 
     :param event: The event this email is related to (optional). If set, this will be used to determine the sender,
         a possible prefix for the subject and the SMTP server that should be used to send this email.
 
-    :param locale: The locale to be used while evaluating the subject and the template.
+    :param locale: The locale to be used while evaluating the subject and the template
 
     :return: ``False`` on obvious, immediate failures, ``True`` otherwise. ``True`` does not necessarily mean that
-        the email has been sent, just that it has been queued by the e-mail backend.
+        the email has been sent, just that it has been queued by the email backend.
     """
     with language(locale):
         if isinstance(template, LazyI18nString):
@@ -61,7 +61,7 @@ def mail(email: str, subject: str, template: str,
 
             body += "\r\n\r\n----\r\n"
             body += _(
-                "You are receiving this e-mail because you placed an order for {event}."
+                "You are receiving this email because you placed an order for {event}."
             ).format(event=event.name)
             body += "\r\n"
         return mail_send([email], subject, body, sender, event.id if event else None)
@@ -79,7 +79,7 @@ def mail_send(to: str, subject: str, body: str, sender: str, event: int=None) ->
         backend.send_messages([email])
         return True
     except Exception:
-        logger.exception('Error sending e-mail')
+        logger.exception('Error sending email')
         return False
 
 

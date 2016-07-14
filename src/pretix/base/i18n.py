@@ -24,7 +24,7 @@ class LazyI18nString:
 
         :param data: If this is a dictionary, it is expected to map language codes to translations.
             If this is a string that can be parsed as JSON, it will be parsed and used as such a dictionary.
-            If this is anything else, it will be casted to a string and used for all languages.
+            If this is anything else, it will be cast to a string and used for all languages.
         """
         self.data = data
         if isinstance(self.data, str) and self.data is not None:

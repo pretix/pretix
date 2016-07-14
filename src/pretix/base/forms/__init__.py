@@ -33,7 +33,7 @@ class I18nModelForm(six.with_metaclass(ModelFormMetaclass, BaseI18nModelForm)):
     """
     This is a modified version of Django's ModelForm which differs from ModelForm in
     only one way: The constructor takes one additional optional argument ``event``
-    which may be given an `Event` instance. If given, this instance is used to select
+    expecting an `Event` instance. If given, this instance is used to select
     the visible languages in all I18nFormFields of the form. If not given, all languages
     will be displayed.
     """
@@ -83,7 +83,7 @@ class I18nInlineFormSet(BaseInlineFormSet):
 
 class SettingsForm(forms.Form):
     """
-    This form is meant to be used for modifying Event- or OrganizerSettings. It takes
+    This form is meant to be used for modifying EventSettings or OrganizerSettings. It takes
     care of loading the current values of the fields and saving the field inputs to the
     settings storage. It also deals with setting the available languages for internationalized
     fields.
