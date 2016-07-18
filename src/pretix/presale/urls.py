@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.conf.urls import url
 
 import pretix.presale.views.cart
 import pretix.presale.views.checkout

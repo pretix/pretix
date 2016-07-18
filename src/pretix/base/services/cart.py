@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db.models import Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import (

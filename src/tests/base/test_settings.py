@@ -8,7 +8,7 @@ from django.utils.timezone import now
 
 from pretix.base import settings
 from pretix.base.i18n import LazyI18nString
-from pretix.base.models import Event, Organizer, OrganizerSetting, User
+from pretix.base.models import Event, Organizer, User
 from pretix.base.settings import SettingsSandbox
 
 

@@ -194,7 +194,7 @@ MIDDLEWARE_CLASSES = [
 ]
 
 try:
-    import debug_toolbar
+    import debug_toolbar  # noqa
     if DEBUG:
         INSTALLED_APPS.append('debug_toolbar.apps.DebugToolbarConfig')
         MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')

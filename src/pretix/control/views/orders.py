@@ -1,15 +1,14 @@
 from datetime import timedelta
 from itertools import groupby
 
-from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import Http404, HttpResponseNotAllowed
 from django.shortcuts import redirect, render
-from django.utils.functional import cached_property, lazy
+from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import gettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DetailView, ListView, TemplateView, View
 
 from pretix.base.i18n import language

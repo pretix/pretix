@@ -16,7 +16,7 @@ from pretix.base.models import (
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.invoices import (
-    generate_cancellation, generate_invoice, invoice_pdf,
+    generate_cancellation, generate_invoice,
 )
 from pretix.base.services.mail import mail
 from pretix.base.signals import (

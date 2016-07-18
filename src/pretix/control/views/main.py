@@ -7,9 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, ListView, TemplateView
 
 from pretix.base.models import Event, EventPermission, OrganizerPermission
-from pretix.control.forms.event import (
-    EventCreateForm, EventCreateSettingsForm, EventSettingsForm,
-)
+from pretix.control.forms.event import EventCreateForm, EventCreateSettingsForm
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
 
 

@@ -1,5 +1,3 @@
-import copy
-
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction

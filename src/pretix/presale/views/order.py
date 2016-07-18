@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import redirect

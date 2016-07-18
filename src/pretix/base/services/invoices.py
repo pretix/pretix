@@ -9,7 +9,6 @@ from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.files.base import ContentFile
 from django.db import transaction
-from django.utils import translation
 from django.utils.formats import date_format
 from django.utils.translation import pgettext, ugettext as _
 from reportlab.lib import pagesizes

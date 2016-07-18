@@ -1,6 +1,5 @@
 import pytest
 from django.conf import settings
-from django.http import Http404
 from django.test.utils import override_settings
 from django.utils.timezone import now
 

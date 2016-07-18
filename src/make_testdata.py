@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
+from datetime import datetime
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pretix.settings")
 
