@@ -241,7 +241,7 @@ class Order(LoggedModel):
 
     def _is_still_available(self) -> Union[bool, str]:
         error_messages = {
-            'unavailable': _('Some of the ordered products were no longer available.'),
+            'unavailable': _('Some of the ordered products are no longer available.'),
         }
         positions = self.positions.all().select_related('item', 'variation')
         quota_cache = {}
