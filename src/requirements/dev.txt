@@ -1,4 +1,5 @@
-django-debug-toolbar>=1.3.0,<2.0
+django-debug-toolbar==1.4
+sqlparse==0.1.19  # not yet supported by django-debug-toolbar 1.4
 # Testing requirements
 pep8==1.5.7  # exact requirement by flake8 2.4.0
 pyflakes==1.1.0  # later version causes problems currently
