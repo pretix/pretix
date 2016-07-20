@@ -188,8 +188,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pretix.control.middleware.PermissionMiddleware',
-    'pretix.presale.middleware.EventMiddleware',
     'pretix.base.middleware.LocaleMiddleware',
+    'pretix.presale.middleware.EventMiddleware',
     'pretix.base.middleware.SecurityMiddleware',
 ]
 

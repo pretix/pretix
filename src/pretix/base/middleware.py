@@ -24,6 +24,9 @@ class LocaleMiddleware:
 
     def process_request(self, request: HttpRequest):
         language = get_language_from_request(request)
+        # Normally, this middleware runs *before* the event is set. However, on event frontend pages it
+        # might be run a second time by pretix.presale.EventMiddleware and in this case the event is already
+        # set and can be taken into account for the decision.
         if hasattr(request, 'event') and not request.path.startswith(get_script_prefix() + 'control'):
             if language not in request.event.settings.locales:
                 firstpart = language.split('-')[0]
