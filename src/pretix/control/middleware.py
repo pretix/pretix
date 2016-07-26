@@ -32,7 +32,7 @@ class PermissionMiddleware:
             # This middleware should only touch the /control subpath
             return
         if hasattr(request, 'domain'):
-            # If the user is on a organizer's subdomain, he sould be redirected to pretix
+            # If the user is on a organizer's subdomain, he should be redirected to pretix
             return redirect(urljoin(settings.SITE_URL, request.get_full_path()))
         if url_name in self.EXCEPTIONS:
             return

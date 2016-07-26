@@ -10,4 +10,5 @@ Contents:
    payment
    ticketoutput
    exporter
+   customview
    general
