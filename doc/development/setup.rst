@@ -85,7 +85,7 @@ Before you check in your code into git, always run the static checkers and unit 
 
     flake8 .
     isort -c -rc .
-    python manage.py validate
+    python manage.py check
     py.test
 
 The ``flake8`` command by default is a bit stricter than what we really enforce, but we do enforce that all commits
