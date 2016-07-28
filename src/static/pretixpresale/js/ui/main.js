@@ -8,8 +8,9 @@ $(function () {
     });
     $(".js-only").removeClass("js-only");
     $(".variations").hide();
-    $("a[data-toggle=variations]").click(function () {
+    $("a[data-toggle=variations]").click(function (e) {
         $(this).parent().parent().parent().find(".variations").slideToggle();
+        e.preventDefault();
     });
     $(".collapsed").removeClass("collapsed").addClass("collapse");
 
