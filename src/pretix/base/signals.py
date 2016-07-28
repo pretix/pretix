@@ -32,12 +32,14 @@ class EventPluginSignal(django.dispatch.Signal):
             searchpath = receiver.__module__
             app = None
             mod = None
-            while "." in searchpath:
+            while True:
                 try:
                     if apps.is_installed(searchpath):
                         app = apps.get_app_config(searchpath.split(".")[-1])
                 except LookupError:
                     pass
+                if "." not in searchpath:
+                    break
                 searchpath, mod = searchpath.rsplit(".", 1)
 
             # Only fire receivers from active plugins and core modules
