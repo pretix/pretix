@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.base.middleware import LocaleMiddleware
 from pretix.base.models import Event, EventPermission, Organizer
 from pretix.multidomain.urlreverse import get_domain
+from pretix.presale.signals import process_request
 
 
 def _detect_event(request):
@@ -62,6 +63,10 @@ def _detect_event(request):
                 if not request.user.is_authenticated() or not EventPermission.objects.filter(
                         event=request.event, user=request.user).exists():
                     raise PermissionDenied(_('The selected ticket shop is currently not available.'))
+
+            for receiver, response in process_request.send(request.event, request=request):
+                if response:
+                    return response
 
     except Event.DoesNotExist:
         raise Http404(_('The selected event was not found.'))

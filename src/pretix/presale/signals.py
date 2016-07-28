@@ -45,3 +45,19 @@ This signal is sent out to display additional information on the order detail pa
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
+
+process_request = EventPluginSignal(
+    providing_args=["request"]
+)
+"""
+This signal is sent out whenever a request is made to a event presale page. Most of the
+time, this will be called from the middleware layer (except on plugin-provided pages
+this will be caled by the @event_view decorator). Similarly to Django's process_request
+middleware method, if you return a Response, that response will be used and the request
+won't be processed any further down the stack.
+
+WARNING: Be very careful about using this signal as listening to it makes it really
+easy to cause serious performance problems.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""

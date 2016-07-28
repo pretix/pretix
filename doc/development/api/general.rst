@@ -72,3 +72,9 @@ Periodic tasks
 
 .. automodule:: pretix.base.signals
    :members: periodic_task
+
+Request flow
+------------
+
+.. automodule:: pretix.presale.signals
+   :members: process_request
