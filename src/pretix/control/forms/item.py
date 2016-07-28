@@ -142,6 +142,8 @@ class ItemUpdateForm(I18nModelForm):
             'tax_rate',
             'available_from',
             'available_until',
+            'require_voucher',
+            'hide_without_voucher',
         ]
 
 

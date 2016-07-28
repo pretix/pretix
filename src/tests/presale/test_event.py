@@ -96,6 +96,14 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
         self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
         self.assertNotIn("Early-bird", self.driver.find_element_by_css_selector("body").text)
 
+    def test_hidden_without_voucher(self):
+        q = Quota.objects.create(event=self.event, name='Quota', size=2)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                   hide_without_voucher=True)
+        q.items.add(item)
+        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
+        self.assertNotIn("Early-bird", self.driver.find_element_by_css_selector("body").text)
+
     def test_simple_with_category(self):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=2)

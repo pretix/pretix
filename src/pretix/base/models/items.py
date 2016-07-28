@@ -173,6 +173,18 @@ class Item(LoggedModel):
         null=True, blank=True,
         help_text=_('This product will not be sold after the given date.')
     )
+    require_voucher = models.BooleanField(
+        verbose_name=_('This product can only be bought using a voucher.'),
+        default=False,
+        help_text=_('To buy this product, the user needs a voucher that applies to this product '
+                    'either directly or via a quota.')
+    )
+    hide_without_voucher = models.BooleanField(
+        verbose_name=_('This product will only be shown if a voucher is redeemed.'),
+        default=False,
+        help_text=_('This product will be hidden from the event page until the user enters a voucher '
+                    'code that is specifically tied to this product (and not via a quota).')
+    )
 
     class Meta:
         verbose_name = _("Product")

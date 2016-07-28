@@ -31,6 +31,7 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
             Q(active=True)
             & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
             & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+            & Q(hide_without_voucher=False)
         ).select_related(
             'category',  # for re-grouping
         ).prefetch_related(

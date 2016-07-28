@@ -578,3 +578,45 @@ class CartTest(CartTestMixin, TestCase):
         doc = BeautifulSoup(response.rendered_content)
         self.assertIn('already been used', doc.select('.alert-danger')[0].text)
         self.assertEqual(1, CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count())
+
+    def test_require_voucher(self):
+        v = Voucher.objects.create(quota=self.quota_shirts, event=self.event)
+        self.shirt.require_voucher = True
+        self.shirt.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d_voucher' % (self.shirt.id, self.shirt_red.id): v.code,
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.shirt)
+        self.assertEqual(objs[0].variation, self.shirt_red)
+
+    def test_require_voucher_failed(self):
+        self.shirt.require_voucher = True
+        self.shirt.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
+    def test_hide_without_voucher(self):
+        v = Voucher.objects.create(item=self.shirt, event=self.event)
+        self.shirt.hide_without_voucher = True
+        self.shirt.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d_voucher' % (self.shirt.id, self.shirt_red.id): v.code,
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.shirt)
+        self.assertEqual(objs[0].variation, self.shirt_red)
+
+    def test_hide_without_voucher_failed(self):
+        self.shirt.hide_without_voucher = True
+        self.shirt.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)

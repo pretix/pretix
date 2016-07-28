@@ -154,12 +154,15 @@ class RedeemView(EventViewMixin, TemplateView):
             & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
         )
 
+        vouchq = Q(hide_without_voucher=False)
+
         if self.voucher.item_id:
+            vouchq |= Q(pk=self.voucher.item_id)
             items = items.filter(pk=self.voucher.item_id)
         elif self.voucher.quota_id:
             items = items.filter(quotas__in=[self.voucher.quota_id])
 
-        items = items.select_related(
+        items = items.filter(vouchq).select_related(
             'category',  # for re-grouping
         ).prefetch_related(
             'quotas', 'variations__quotas', 'quotas__event'  # for .availability()

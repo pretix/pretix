@@ -32,7 +32,8 @@ error_messages = {
     'voucher_invalid': _('This voucher code is not known in our database.'),
     'voucher_redeemed': _('This voucher code has already been used an can only be used once.'),
     'voucher_expired': _('This voucher is expired.'),
-    'voucher_invalid_item': _('This voucher is not valid for this item.'),
+    'voucher_invalid_item': _('This voucher is not valid for this product.'),
+    'voucher_required': _('You need a valid voucher code to order this product.'),
 }
 
 
@@ -129,6 +130,12 @@ def _add_new_items(event: Event, items: List[dict],
 
         if voucher and voucher.quota and voucher.quota.pk not in [q.pk for q in quotas]:
             return error_messages['voucher_invalid_item']
+
+        if item.require_voucher and voucher is None:
+            return error_messages['voucher_required']
+
+        if item.hide_without_voucher and (voucher is None or voucher.item is None or voucher.item.pk != item.pk):
+            return error_messages['voucher_required']
 
         if len(quotas) == 0 or not item.is_available():
             err = err or error_messages['unavailable']
