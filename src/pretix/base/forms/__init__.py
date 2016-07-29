@@ -130,7 +130,7 @@ class SettingsForm(forms.Form):
                     except OSError:
                         logger.error('Deleting file %s failed.' % fname.name)
 
-            if value is None:
+            if value is None or value is False:
                 del self.obj.settings[name]
             elif self.obj.settings.get(name, as_type=type(value)) != value:
                 self.obj.settings.set(name, value)
