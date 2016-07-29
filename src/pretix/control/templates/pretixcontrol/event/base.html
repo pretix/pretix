@@ -12,53 +12,10 @@
     </li>
     {% if request.eventperm.can_change_settings or request.eventperm.can_change_permissions %}
         <li>
-            <a href="#">
+            <a href="{% url 'control:event.settings' organizer=request.event.organizer.slug event=request.event.slug %}">
                 <i class="fa fa-wrench fa-fw"></i>
                 {% trans "Settings" %}
-                <span class="fa arrow"></span>
             </a>
-            <ul class="nav nav-second-level">
-                {% if request.eventperm.can_change_settings %}
-                    <li>
-                        <a href="{% url 'control:event.settings' organizer=request.event.organizer.slug event=request.event.slug %}"
-                                {% if "event.settings" == url_name %}class="active"{% endif %}>
-                            {% trans "General" %}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'control:event.settings.payment' organizer=request.event.organizer.slug event=request.event.slug %}"
-                                {% if "event.settings.payment" == url_name %}class="active"{% endif %}>
-                            {% trans "Payment" %}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'control:event.settings.plugins' organizer=request.event.organizer.slug event=request.event.slug %}"
-                                {% if "event.settings.plugins" == url_name %}class="active"{% endif %}>
-                            {% trans "Plugins" %}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'control:event.settings.tickets' organizer=request.event.organizer.slug event=request.event.slug %}"
-                                {% if "event.settings.tickets" == url_name %}class="active"{% endif %}>
-                            {% trans "Tickets" %}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'control:event.settings.mail' organizer=request.event.organizer.slug event=request.event.slug %}"
-                                {% if "event.settings.mail" == url_name %}class="active"{% endif %}>
-                            {% trans "Email" %}
-                        </a>
-                    </li>
-                {% endif %}
-                {% if request.eventperm.can_change_permissions %}
-                    <li>
-                        <a href="{% url 'control:event.settings.permissions' organizer=request.event.organizer.slug event=request.event.slug %}"
-                                {% if "event.settings.permissions" == url_name %}class="active"{% endif %}>
-                            {% trans "Permissions" %}
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
         </li>
     {% endif %}
     {% if request.eventperm.can_change_items %}
