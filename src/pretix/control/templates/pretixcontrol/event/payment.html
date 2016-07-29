@@ -6,6 +6,14 @@
 		{% csrf_token %}
 		<fieldset>
 			<legend>{% trans "Payment settings" %}</legend>
+            {% bootstrap_field sform.payment_term_days layout="horizontal" %}
+            {% bootstrap_field sform.payment_term_last layout="horizontal" %}
+            {% bootstrap_field sform.payment_term_expire_automatically layout="horizontal" %}
+            {% bootstrap_field sform.payment_term_accept_late layout="horizontal" %}
+            {% bootstrap_field sform.tax_rate_default layout="horizontal" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Payment providers" %}</legend>
 			{% for provider in providers %}
 				<div class="panel panel-default">
 					<div class="panel-heading">

@@ -28,6 +28,7 @@ urlpatterns = [
         url(r'^settings/payment$', event.PaymentSettings.as_view(), name='event.settings.payment'),
         url(r'^settings/tickets$', event.TicketSettings.as_view(), name='event.settings.tickets'),
         url(r'^settings/email$', event.MailSettings.as_view(), name='event.settings.mail'),
+        url(r'^settings/invoice$', event.InvoiceSettings.as_view(), name='event.settings.invoice'),
         url(r'^items/$', item.ItemList.as_view(), name='event.items'),
         url(r'^items/add$', item.ItemCreate.as_view(), name='event.items.add'),
         url(r'^items/(?P<item>\d+)/$', item.ItemUpdateGeneral.as_view(), name='event.item'),

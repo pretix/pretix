@@ -1,0 +1,24 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <fieldset>
+            <legend>{% trans "Invoicing" %}</legend>
+            {% bootstrap_field form.invoice_address_asked layout="horizontal" %}
+            {% bootstrap_field form.invoice_address_required layout="horizontal" %}
+            {% bootstrap_field form.invoice_address_vatid layout="horizontal" %}
+            {% bootstrap_field form.invoice_generate layout="horizontal" %}
+            {% bootstrap_field form.invoice_language layout="horizontal" %}
+            {% bootstrap_field form.invoice_address_from layout="horizontal" %}
+            {% bootstrap_field form.invoice_additional_text layout="horizontal" %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

@@ -31,10 +31,6 @@
             {% bootstrap_field sform.presale_start_show_date layout="horizontal" %}
             {% bootstrap_field form.presale_end layout="horizontal" %}
             {% bootstrap_field sform.show_items_outside_presale_period layout="horizontal" %}
-            {% bootstrap_field sform.payment_term_days layout="horizontal" %}
-            {% bootstrap_field sform.payment_term_last layout="horizontal" %}
-            {% bootstrap_field sform.payment_term_expire_automatically layout="horizontal" %}
-            {% bootstrap_field sform.payment_term_accept_late layout="horizontal" %}
             {% bootstrap_field sform.last_order_modification_date layout="horizontal" %}
         </fieldset>
         <fieldset>
@@ -43,17 +39,6 @@
             {% bootstrap_field sform.max_items_per_order layout="horizontal" %}
             {% bootstrap_field sform.attendee_names_asked layout="horizontal" %}
             {% bootstrap_field sform.attendee_names_required layout="horizontal" %}
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "Invoicing" %}</legend>
-            {% bootstrap_field sform.invoice_address_asked layout="horizontal" %}
-            {% bootstrap_field sform.invoice_address_required layout="horizontal" %}
-            {% bootstrap_field sform.invoice_address_vatid layout="horizontal" %}
-            {% bootstrap_field sform.tax_rate_default layout="horizontal" %}
-            {% bootstrap_field sform.invoice_generate layout="horizontal" %}
-            {% bootstrap_field sform.invoice_language layout="horizontal" %}
-            {% bootstrap_field sform.invoice_address_from layout="horizontal" %}
-            {% bootstrap_field sform.invoice_additional_text layout="horizontal" %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

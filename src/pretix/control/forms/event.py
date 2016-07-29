@@ -97,10 +97,6 @@ class EventSettingsForm(SettingsForm):
         help_text=_("If disabled, the event's start and end date will be displayed without the time of day."),
         required=False
     )
-    payment_term_days = forms.IntegerField(
-        label=_('Payment term in days'),
-        help_text=_("The number of days after placing an order the user has to pay to preserve his reservation."),
-    )
     show_items_outside_presale_period = forms.BooleanField(
         label=_("Show items outside presale period"),
         help_text=_("Show item details before presale has started and after presale has ended"),
@@ -111,36 +107,11 @@ class EventSettingsForm(SettingsForm):
         help_text=_("Show the presale start date before presale has started"),
         required=False
     )
-    payment_term_last = forms.DateTimeField(
-        label=_('Last date of payments'),
-        help_text=_("The last date any payments are accepted. This has precedence over the number of "
-                    "days configured above."),
-        required=False
-    )
-    payment_term_expire_automatically = forms.BooleanField(
-        label=_('Automatically expire unpaid orders'),
-        help_text=_("If checked, all unpaid orders will automatically go from 'pending' to 'expired' "
-                    "after the end of their payment deadline. This means that those tickets go back to "
-                    "the pool and can be ordered by other people."),
-        required=False
-    )
-    payment_term_accept_late = forms.BooleanField(
-        label=_('Accept late payments'),
-        help_text=_("Accept payments for orders even when they are in 'expired' state as long as enough "
-                    "capacity is available. No payments will ever be accepted after the 'Last date of payments' "
-                    "configured above."),
-        required=False
-    )
     last_order_modification_date = forms.DateTimeField(
         label=_('Last date of modifications'),
         help_text=_("The last date users can modify details of their orders, such as attendee names or "
                     "answers to questions."),
         required=False
-    )
-    tax_rate_default = forms.DecimalField(
-        label=_('Tax rate for payment fees'),
-        help_text=_("The tax rate that applies for additional fees you configured for single payment methods "
-                    "(in percent)."),
     )
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
@@ -169,6 +140,98 @@ class EventSettingsForm(SettingsForm):
         help_text=_("Require customers to fill in the names of all attendees."),
         required=False
     )
+    max_items_per_order = forms.IntegerField(
+        min_value=1,
+        label=_("Maximum number of items per order")
+    )
+    reservation_time = forms.IntegerField(
+        min_value=0,
+        label=_("Reservation period"),
+        help_text=_("The number of minutes the items in a user's card are reserved for this user."),
+    )
+    imprint_url = forms.URLField(
+        label=_("Imprint URL"),
+        required=False,
+    )
+    contact_mail = forms.EmailField(
+        label=_("Contact address"),
+        required=False,
+        help_text=_("Public email address for contacting the organizer")
+    )
+
+    def clean(self):
+        data = super().clean()
+        if data['locale'] not in data['locales']:
+            raise ValidationError({
+                'locale': _('Your default locale must also be enebled for your event (see box above).')
+            })
+        if data['attendee_names_required'] and not data['attendee_names_asked']:
+            raise ValidationError({
+                'attendee_names_required': _('You cannot require specifying attendee names if you do not ask for them.')
+            })
+        return data
+
+
+class PaymentSettingsForm(SettingsForm):
+    payment_term_days = forms.IntegerField(
+        label=_('Payment term in days'),
+        help_text=_("The number of days after placing an order the user has to pay to preserve his reservation."),
+    )
+    payment_term_last = forms.DateTimeField(
+        label=_('Last date of payments'),
+        help_text=_("The last date any payments are accepted. This has precedence over the number of "
+                    "days configured above."),
+        required=False
+    )
+    payment_term_expire_automatically = forms.BooleanField(
+        label=_('Automatically expire unpaid orders'),
+        help_text=_("If checked, all unpaid orders will automatically go from 'pending' to 'expired' "
+                    "after the end of their payment deadline. This means that those tickets go back to "
+                    "the pool and can be ordered by other people."),
+        required=False
+    )
+    payment_term_accept_late = forms.BooleanField(
+        label=_('Accept late payments'),
+        help_text=_("Accept payments for orders even when they are in 'expired' state as long as enough "
+                    "capacity is available. No payments will ever be accepted after the 'Last date of payments' "
+                    "configured above."),
+        required=False
+    )
+    tax_rate_default = forms.DecimalField(
+        label=_('Tax rate for payment fees'),
+        help_text=_("The tax rate that applies for additional fees you configured for single payment methods "
+                    "(in percent)."),
+    )
+
+
+class ProviderForm(SettingsForm):
+    """
+    This is a SettingsForm, but if fields are set to required=True, validation
+    errors are only raised if the payment method is enabled.
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.settingspref = kwargs.pop('settingspref')
+        super().__init__(*args, **kwargs)
+
+    def prepare_fields(self):
+        for k, v in self.fields.items():
+            v._required = v.required
+            v.required = False
+            v.widget.is_required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        enabled = cleaned_data.get(self.settingspref + '_enabled') == 'True'
+        if not enabled:
+            return
+        for k, v in self.fields.items():
+            val = cleaned_data.get(k)
+            if v._required and (val is None or val == ""):
+                self.add_error(k, _('This field is required.'))
+
+
+class InvoiceSettingsForm(SettingsForm):
     invoice_address_asked = forms.BooleanField(
         label=_("Ask for invoice address"),
         required=False
@@ -208,63 +271,6 @@ class EventSettingsForm(SettingsForm):
         label=_("Invoice language"),
         choices=[('__user__', _('The user\'s language'))] + settings.LANGUAGES,
     )
-    max_items_per_order = forms.IntegerField(
-        min_value=1,
-        label=_("Maximum number of items per order")
-    )
-    reservation_time = forms.IntegerField(
-        min_value=0,
-        label=_("Reservation period"),
-        help_text=_("The number of minutes the items in a user's card are reserved for this user."),
-    )
-    imprint_url = forms.URLField(
-        label=_("Imprint URL"),
-        required=False,
-    )
-    contact_mail = forms.EmailField(
-        label=_("Contact address"),
-        required=False,
-        help_text=_("Public email address for contacting the organizer")
-    )
-
-    def clean(self):
-        data = super().clean()
-        if data['locale'] not in data['locales']:
-            raise ValidationError({
-                'locale': _('Your default locale must also be enebled for your event (see box above).')
-            })
-        if data['attendee_names_required'] and not data['attendee_names_asked']:
-            raise ValidationError({
-                'attendee_names_required': _('You cannot require specifying attendee names if you do not ask for them.')
-            })
-        return data
-
-
-class ProviderForm(SettingsForm):
-    """
-    This is a SettingsForm, but if fields are set to required=True, validation
-    errors are only raised if the payment method is enabled.
-    """
-
-    def __init__(self, *args, **kwargs):
-        self.settingspref = kwargs.pop('settingspref')
-        super().__init__(*args, **kwargs)
-
-    def prepare_fields(self):
-        for k, v in self.fields.items():
-            v._required = v.required
-            v.required = False
-            v.widget.is_required = False
-
-    def clean(self):
-        cleaned_data = super().clean()
-        enabled = cleaned_data.get(self.settingspref + '_enabled') == 'True'
-        if not enabled:
-            return
-        for k, v in self.fields.items():
-            val = cleaned_data.get(k)
-            if v._required and (val is None or val == ""):
-                self.add_error(k, _('This field is required.'))
 
 
 class MailSettingsForm(SettingsForm):

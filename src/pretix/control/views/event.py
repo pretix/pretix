@@ -21,8 +21,8 @@ from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
 from pretix.control.forms.event import (
-    EventSettingsForm, EventUpdateForm, MailSettingsForm, ProviderForm,
-    TicketSettingsForm,
+    EventSettingsForm, EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
+    PaymentSettingsForm, ProviderForm, TicketSettingsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 
@@ -168,7 +168,16 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
+        context['sform'] = self.sform
         return context
+
+    @cached_property
+    def sform(self):
+        return PaymentSettingsForm(
+            obj=self.object,
+            prefix='settings',
+            data=self.request.POST if self.request.method == 'POST' else None
+        )
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -179,7 +188,13 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
     @transaction.atomic()
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        success = True
+        success = self.sform.is_valid()
+        if success:
+            self.sform.save()
+            if self.sform.has_changed():
+                self.request.event.log_action('pretix.event.settings', user=self.request.user, data={
+                    k: self.request.event.settings.get(k) for k in self.sform.changed_data
+                })
         for provider in self.provider_forms:
             if provider.form.is_valid():
                 if provider.form.has_changed():
@@ -204,21 +219,13 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
         })
 
 
-class MailSettings(EventPermissionRequiredMixin, FormView):
+class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
     model = Event
-    form_class = MailSettingsForm
-    template_name = 'pretixcontrol/event/mail.html'
     permission = 'can_change_settings'
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
         return context
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.settings.mail', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug
-        })
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -234,7 +241,49 @@ class MailSettings(EventPermissionRequiredMixin, FormView):
                 self.request.event.log_action(
                     'pretix.event.settings', user=self.request.user, data={
                         k: form.cleaned_data.get(k) for k in form.changed_data
-                    }
+                        }
+                )
+            messages.success(self.request, _('Your changes have been saved.'))
+            return redirect(self.get_success_url())
+        else:
+            return self.get(request)
+
+
+class InvoiceSettings(EventSettingsFormView):
+    model = Event
+    form_class = InvoiceSettingsForm
+    template_name = 'pretixcontrol/event/invoicing.html'
+    permission = 'can_change_settings'
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.invoice', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })
+
+
+class MailSettings(EventSettingsFormView):
+    model = Event
+    form_class = MailSettingsForm
+    template_name = 'pretixcontrol/event/mail.html'
+    permission = 'can_change_settings'
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.mail', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })
+
+    @transaction.atomic()
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            if form.has_changed():
+                self.request.event.log_action(
+                    'pretix.event.settings', user=self.request.user, data={
+                        k: form.cleaned_data.get(k) for k in form.changed_data
+                        }
                 )
 
             if request.POST.get('test', '0').strip() == '1':
