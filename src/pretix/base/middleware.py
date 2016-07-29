@@ -147,6 +147,11 @@ class SecurityMiddleware:
         return "; ".join(k + ' ' + v for k, v in h.items())
 
     def process_response(self, request, resp):
+        if settings.DEBUG and resp.status_code >= 400:
+            # Don't use CSP on debug error page as it breaks of Django's fancy error
+            # pages
+            return resp
+
         resp['X-XSS-Protection'] = '1'
         h = {
             'default-src': "{static}",
