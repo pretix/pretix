@@ -46,4 +46,4 @@ RUN make production
 EXPOSE 80
 
 ENTRYPOINT ["pretix"]
-CMD ["web"]
+CMD ["all"]

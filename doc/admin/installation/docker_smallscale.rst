@@ -224,6 +224,7 @@ Updates are fairly simple, but require at least a short downtime::
 
     # docker pull pretix/standalone
     # systemctl restart pretix.service
+    # docker exec -it pretix.service pretix upgrade
 
 Restarting the service can take a few seconds, especially if the update requires changes to the database.
 

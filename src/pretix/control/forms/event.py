@@ -1,6 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
 from pytz import common_timezones
 
@@ -347,6 +348,17 @@ class MailSettingsForm(SettingsForm):
 
         if data.get('smtp_use_tls') and data.get('smtp_use_ssl'):
             raise ValidationError(_('You can activate either SSL or STARTTLS security, but not both at the same time.'))
+
+
+class DisplaySettingsForm(SettingsForm):
+    primary_color = forms.CharField(
+        label=_("Primary color"),
+        required=False,
+        validators=[
+            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.'))
+        ]
+    )
 
 
 class TicketSettingsForm(SettingsForm):

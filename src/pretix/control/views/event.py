@@ -21,10 +21,12 @@ from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
 from pretix.control.forms.event import (
-    EventSettingsForm, EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
-    PaymentSettingsForm, ProviderForm, TicketSettingsForm,
+    DisplaySettingsForm, EventSettingsForm, EventUpdateForm,
+    InvoiceSettingsForm, MailSettingsForm, PaymentSettingsForm, ProviderForm,
+    TicketSettingsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.presale.style import regenerate_css
 
 from . import UpdateView
 
@@ -241,7 +243,7 @@ class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
                 self.request.event.log_action(
                     'pretix.event.settings', user=self.request.user, data={
                         k: form.cleaned_data.get(k) for k in form.changed_data
-                        }
+                    }
                 )
             messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
@@ -260,6 +262,38 @@ class InvoiceSettings(EventSettingsFormView):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug
         })
+
+
+class DisplaySettings(EventSettingsFormView):
+    model = Event
+    form_class = DisplaySettingsForm
+    template_name = 'pretixcontrol/event/display.html'
+    permission = 'can_change_settings'
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.display', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })
+
+    @transaction.atomic()
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            if form.has_changed():
+                self.request.event.log_action(
+                    'pretix.event.settings', user=self.request.user, data={
+                        k: form.cleaned_data.get(k) for k in form.changed_data
+                    }
+                )
+            regenerate_css(self.request.event.pk)
+            messages.success(self.request, _('Your changes have been saved. Please note that it can '
+                                             'take a short period of time until your changes become '
+                                             'active.'))
+            return redirect(self.get_success_url())
+        else:
+            return self.get(request)
 
 
 class MailSettings(EventSettingsFormView):

@@ -7,8 +7,14 @@
     <title>{% block thetitle %}{% endblock %}</title>
     {% compress css %}
         <link rel="stylesheet" type="text/css" href="{% static "lightbox/css/lightbox.css" %}" />
-        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}" />
     {% endcompress %}
+    {% if css_file %}
+        <link rel="stylesheet" type="text/css" href="{{ css_file }}"/>
+    {% else %}
+        {% compress css %}
+            <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}"/>
+        {% endcompress %}
+    {% endif %}
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
     {% compress js %}
         <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>

@@ -40,5 +40,9 @@ if [ "$1" == "shell" ]; then
     exec python3 -m pretix shell
 fi
 
-echo "Specify argument: all|cron|webworker|taskworker|shell"
+if [ "$1" == "upgrade" ]; then
+    exec python3 -m pretix updatestyles
+fi
+
+echo "Specify argument: all|cron|webworker|taskworker|shell|upgrade"
 exit 1

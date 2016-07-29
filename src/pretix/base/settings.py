@@ -205,6 +205,18 @@ Your {event} team"""))
         'default': 'False',
         'type': bool
     },
+    'primary_color': {
+        'default': '#8E44B3',
+        'type': str
+    },
+    'presale_css_file': {
+        'default': None,
+        'type': str
+    },
+    'presale_css_checksum': {
+        'default': None,
+        'type': str
+    },
 }
 
 
