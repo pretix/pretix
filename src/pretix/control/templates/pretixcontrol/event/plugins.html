@@ -26,15 +26,21 @@
                                         {% elif plugin.module in plugins_active %}
                                             <button class="btn btn-default btn-block" name="plugin:{{ plugin.module }}" value="disable">{% trans "Disable" %}</button>
                                         {% else %}
-                                            <button class="btn btn-primary btn-block" name="plugin:{{ plugin.module }}" value="enable">{% trans "Enable" %}</button>
+                                            <button class="btn btn-default btn-block" name="plugin:{{ plugin.module }}" value="enable">{% trans "Enable" %}</button>
                                         {% endif %}
                                     </div>
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <p class="meta">{% blocktrans trimmed with v=plugin.version a=plugin.author %}
-                                    Version {{ v }} by <em>{{ a }}</em>
-                                {% endblocktrans %}</p>
+                                {% if plugin.author %}
+                                    <p class="meta">{% blocktrans trimmed with v=plugin.version a=plugin.author %}
+                                        Version {{ v }} by <em>{{ a }}</em>
+                                    {% endblocktrans %}</p>
+                                {% else %}
+                                    <p class="meta">{% blocktrans trimmed with v=plugin.version a=plugin.author %}
+                                        Version {{ v }}
+                                    {% endblocktrans %}</p>
+                                {% endif %}
                                 <p>{{ plugin.description }}</p>
                                 {% if plugin.app.compatibility_errors %}
                                     <div class="alert alert-warning">
