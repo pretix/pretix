@@ -242,7 +242,10 @@ class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
             if form.has_changed():
                 self.request.event.log_action(
                     'pretix.event.settings', user=self.request.user, data={
-                        k: form.cleaned_data.get(k) for k in form.changed_data
+                        k: (form.cleaned_data.get(k).name
+                            if isinstance(form.cleaned_data.get(k), File)
+                            else form.cleaned_data.get(k))
+                        for k in form.changed_data
                     }
                 )
             messages.success(self.request, _('Your changes have been saved.'))
@@ -284,7 +287,10 @@ class DisplaySettings(EventSettingsFormView):
             if form.has_changed():
                 self.request.event.log_action(
                     'pretix.event.settings', user=self.request.user, data={
-                        k: form.cleaned_data.get(k) for k in form.changed_data
+                        k: (form.cleaned_data.get(k).name
+                            if isinstance(form.cleaned_data.get(k), File)
+                            else form.cleaned_data.get(k))
+                        for k in form.changed_data
                     }
                 )
             regenerate_css(self.request.event.pk)

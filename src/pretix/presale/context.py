@@ -29,6 +29,7 @@ def contextprocessor(request):
 
         if request.event.settings.presale_css_file:
             ctx['css_file'] = default_storage.url(request.event.settings.presale_css_file)
+        ctx['event_logo'] = request.event.settings.get('logo_image', as_type=str, default='')[7:]
 
     ctx['html_head'] = "".join(_html_head)
     ctx['footer'] = _footer

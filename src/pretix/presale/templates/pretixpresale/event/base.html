@@ -1,6 +1,7 @@
 {% extends "pretixpresale/base.html" %}
 {% load i18n %}
 {% load staticfiles %}
+{% load thumbnail %}
 {% load eventurl %}
 {% block thetitle %}
     {% block title %}{% endblock %}{% if url_name != "event.index" %} :: {% endif %}{{ event.name }}
@@ -21,9 +22,15 @@
 {% block page %}
     <div class="page-header">
         <h1 class="pull-left">
-            <a href="{% eventurl event "presale:event.index" %}">{{ event.name }}</a>
-            <small>{{ event.date_from|date:"DATE_FORMAT" }}{% if event.settings.show_date_to %} –
-                {{ event.date_to|date:"DATE_FORMAT" }}{% endif %}</small>
+            {% if event_logo %}
+                <a href="{% eventurl event "presale:event.index" %}" title="{{ event.name }}">
+                    <img src="{{ event_logo|thumbnail_url:'logo' }}" alt="{{ event.name }}" class="event-logo" />
+                </a>
+            {% else %}
+                <a href="{% eventurl event "presale:event.index" %}">{{ event.name }}</a>
+                <small>{{ event.date_from|date:"DATE_FORMAT" }}{% if event.settings.show_date_to %} –
+                    {{ event.date_to|date:"DATE_FORMAT" }}{% endif %}</small>
+            {% endif %}
         </h1>
         <div class="pull-right loginbox">
             {% if request.event.settings.locales|length > 1 %}

@@ -325,6 +325,7 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 THUMBNAIL_ALIASES = {
     '': {
         'productlist': {'size': (60, 60), 'crop': True},
+        'logo': {'size': (5000, 120), 'crop': False},
     },
 }
 

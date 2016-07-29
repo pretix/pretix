@@ -8,6 +8,7 @@ from pytz import common_timezones
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.i18n import I18nFormField, I18nTextarea
 from pretix.base.models import Event
+from pretix.control.forms import ExtFileField
 
 
 class EventCreateForm(I18nModelForm):
@@ -358,6 +359,13 @@ class DisplaySettingsForm(SettingsForm):
             RegexValidator(regex='^#[0-9a-fA-F]{6}$',
                            message=_('Please enter the hexadecimal code of a color, e.g. #990000.'))
         ]
+    )
+    logo_image = ExtFileField(
+        label=_('Logo image'),
+        ext_whitelist=(".png", ".jpg", ".svg", ".gif", ".jpeg"),
+        required=False,
+        help_text=_('If you provide a logo image, we will by default not show your events name and date '
+                    'in the page header. We will show your logo with a maximal height of 120 pixels.')
     )
 
 

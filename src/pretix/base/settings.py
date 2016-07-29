@@ -217,6 +217,10 @@ Your {event} team"""))
         'default': None,
         'type': str
     },
+    'logo_image': {
+        'default': None,
+        'type': File
+    },
 }
 
 
