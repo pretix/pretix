@@ -1,20 +1,38 @@
-{% extends "pretixcontrol/items/base.html" %}
+{% extends "pretixcontrol/vouchers/base.html" %}
 {% load i18n %}
 {% block title %}{% trans "Vouchers" %}{% endblock %}
 {% block inside %}
-    <h1>{% trans "Vouchers" %}</h1>
     <p>
         {% blocktrans trimmed %}
             Vouchers allow you to assign tickets to specific persons for a lower price. They also enable you to
             reserve some quota for your very special guests.
         {% endblocktrans %}
     </p>
+    <form class="form-inline helper-display-inline" action="" method="get">
+        <p>
+            <input type="text" name="search" class="form-control" placeholder="{% trans "Search voucher" %}"
+                   value="{{ request.GET.search }}">
+            <input type="text" name="tag" class="form-control" placeholder="{% trans "Filter by tag" %}"
+                   value="{{ request.GET.tag }}">
+            <select name="status" class="form-control">
+                <option value="">{% trans "All vouchers" %}</option>
+                <option value="v" {% if request.GET.status == "v" %}selected="selected"{% endif %}>{% trans "Valid" %}</option>
+                <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Redeemd" %}</option>
+                <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
+            </select>
+            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+        </p>
+    </form>
     {% if vouchers|length == 0 %}
         <div class="empty-collection">
             <p>
-                {% blocktrans trimmed %}
-                    You haven't created any vouchers yet.
-                {% endblocktrans %}
+                {% if request.GET.search or request.GET.tag or request.GET.status %}
+                    {% trans "Your search did not match any vouchers." %}
+                {% else %}
+                    {% blocktrans trimmed %}
+                        You haven't created any vouchers yet.
+                    {% endblocktrans %}
+                {% endif %}
             </p>
 
             <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
@@ -30,11 +48,6 @@
                     class="btn btn-default"><i class="fa fa-plus"></i>
                 {% trans "Create multiple new vouchers" %}</a>
         </p>
-        <form class="form-inline helper-display-inline" action="" method="get">
-            <input type="text" name="search" class="form-control" placeholder="{% trans "Search voucher" %}"
-                    value="{{ request.GET.search }}">
-            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
-        </form>
         <div class="table-responsive">
             <table class="table table-hover table-quotas">
                 <thead>

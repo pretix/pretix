@@ -3,6 +3,7 @@ from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
@@ -24,6 +25,17 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
         if self.request.GET.get("search", "") != "":
             s = self.request.GET.get("search", "")
             qs = qs.filter(Q(code__icontains=s) | Q(tag__icontains=s) | Q(comment__icontains=s))
+        if self.request.GET.get("tag", "") != "":
+            s = self.request.GET.get("tag", "")
+            qs = qs.filter(tag=s)
+        if self.request.GET.get("status", "") != "":
+            s = self.request.GET.get("status", "")
+            if s == 'v':
+                qs = qs.filter(Q(valid_until__isnull=True) | Q(valid_until__gt=now())).filter(redeemed=False)
+            elif s == 'r':
+                qs = qs.filter(redeemed=True)
+            elif s == 'e':
+                qs = qs.filter(Q(valid_until__isnull=False) & Q(valid_until__lt=now())).filter(redeemed=False)
         return qs
 
 
