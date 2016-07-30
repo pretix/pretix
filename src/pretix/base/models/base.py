@@ -58,7 +58,7 @@ class LoggingMixin:
 
 
 class LoggedModel(models.Model, LoggingMixin):
-    logentries = GenericRelation('LogEntry')
+    logentries = GenericRelation('pretixbase.LogEntry')
 
     class Meta:
         abstract = True
