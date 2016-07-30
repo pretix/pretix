@@ -49,12 +49,12 @@ class EventsTest(BrowserTest):
         self.driver.get('%s/control/event/%s/%s/settings/' % (self.live_server_url, self.orga1.slug,
                                                               self.event1.slug))
         self.driver.find_element_by_name("date_to").send_keys("2013-12-30 17:00:00")
-        self.driver.find_element_by_name("settings-payment_term_days").clear()
-        self.driver.find_element_by_name("settings-payment_term_days").send_keys("12")
+        self.driver.find_element_by_name("settings-max_items_per_order").clear()
+        self.driver.find_element_by_name("settings-max_items_per_order").send_keys("12")
         self.driver.find_element_by_class_name("btn-save").click()
         self.driver.find_element_by_class_name("alert-success")
         self.assertIn("2013-12-30 17:00:00", self.driver.find_element_by_name("date_to").get_attribute("value"))
-        self.assertIn("12", self.driver.find_element_by_name("settings-payment_term_days").get_attribute("value"))
+        self.assertIn("12", self.driver.find_element_by_name("settings-max_items_per_order").get_attribute("value"))
 
     def test_plugins(self):
         self.driver.get('%s/control/event/%s/%s/settings/plugins' % (self.live_server_url, self.orga1.slug,
