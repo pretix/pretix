@@ -50,6 +50,9 @@
             {% endif %}
         </div>
     {% endif %}
+    {% if frontpage_text %}
+        {{ frontpage_text|linebreaks }}
+    {% endif %}
     {% if event.presale_is_running or event.settings.show_items_outside_presale_period %}
         <form method="post" data-asynctask
                 action="{% eventurl request.event "presale:event.cart.add" %}?next={{ request.path|urlencode }}">

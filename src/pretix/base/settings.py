@@ -221,6 +221,10 @@ Your {event} team"""))
         'default': None,
         'type': File
     },
+    'frontpage_text': {
+        'default': '',
+        'type': LazyI18nString
+    }
 }
 
 

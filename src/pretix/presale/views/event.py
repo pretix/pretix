@@ -72,4 +72,5 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         context['vouchers_exist'] = vouchers_exist
 
         context['cart'] = self.get_cart()
+        context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
         return context

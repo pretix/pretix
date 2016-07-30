@@ -367,6 +367,11 @@ class DisplaySettingsForm(SettingsForm):
         help_text=_('If you provide a logo image, we will by default not show your events name and date '
                     'in the page header. We will show your logo with a maximal height of 120 pixels.')
     )
+    frontpage_text = I18nFormField(
+        label=_("Frontpage text"),
+        required=False,
+        widget=I18nTextarea
+    )
 
 
 class TicketSettingsForm(SettingsForm):
