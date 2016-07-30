@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-18 20:47+0000\n"
+"POT-Creation-Date: 2016-07-30 20:44+0000\n"
 "PO-Revision-Date: 2016-06-27 19:51+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
@@ -44,6 +44,6 @@ msgstr "Unbekannter Fehler."
 msgid "We are processing your request…"
 msgstr "Wir verarbeiten deine Anfrage…"
 
-#: static/pretixpresale/js/ui/main.js:43
+#: static/pretixpresale/js/ui/main.js:44
 msgid "Close message"
 msgstr "Schließen"

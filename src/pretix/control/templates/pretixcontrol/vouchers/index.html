@@ -17,7 +17,7 @@
             <select name="status" class="form-control">
                 <option value="">{% trans "All vouchers" %}</option>
                 <option value="v" {% if request.GET.status == "v" %}selected="selected"{% endif %}>{% trans "Valid" %}</option>
-                <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Redeemd" %}</option>
+                <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Redeemed" %}</option>
                 <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
             </select>
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
