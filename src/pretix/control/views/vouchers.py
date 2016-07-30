@@ -1,11 +1,13 @@
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Count, Q, Sum
 from django.http import Http404, HttpResponseRedirect
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.views.generic import (
+    CreateView, DeleteView, ListView, TemplateView, UpdateView,
+)
 
 from pretix.base.models import Voucher
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
@@ -37,6 +39,24 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
             elif s == 'e':
                 qs = qs.filter(Q(valid_until__isnull=False) & Q(valid_until__lt=now())).filter(redeemed=False)
         return qs
+
+
+class VoucherTags(EventPermissionRequiredMixin, TemplateView):
+    template_name = 'pretixcontrol/vouchers/tags.html'
+    permission = 'can_change_vouchers'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        tags = self.request.event.vouchers.order_by().filter(tag__isnull=False).values('tag').annotate(
+            total=Count('id'),
+            redeemed=Sum('redeemed')
+        )
+        for t in tags:
+            t['percentage'] = int((t['redeemed'] / t['total']) * 100)
+
+        ctx['tags'] = tags
+        return ctx
 
 
 class VoucherDelete(EventPermissionRequiredMixin, DeleteView):

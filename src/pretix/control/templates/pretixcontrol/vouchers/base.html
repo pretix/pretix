@@ -10,6 +10,11 @@
                 {% trans "All Vouchers" %}
             </a>
         </li>
+        <li {% if "event.vouchers.tags" == url_name %}class="active"{% endif %}>
+            <a href="{% url 'control:event.vouchers.tags' organizer=request.event.organizer.slug event=request.event.slug %}">
+                {% trans "Tags" %}
+            </a>
+        </li>
     </ul>
     {% block inside %}
     {% endblock %}

@@ -112,3 +112,11 @@ h1 .btn-sm {
         color: #ccc;
     }
 }
+.table .progress {
+    margin-bottom: 0;
+}
+
+@for $i from 0 through 100 {
+  .progress-bar-#{$i} { width: 1% * $i; }
+}
+
