@@ -2,7 +2,7 @@ FROM debian:jessie
 
 RUN apt-get update && apt-get install -y python3 git python3-pip \
 	libxml2-dev libxslt1-dev python-dev python-virtualenv locales libffi-dev \
-	build-essential python3-dev zlib1g-dev libssl-dev gettext git \
+	build-essential python3-dev zlib1g-dev libssl-dev gettext \
 	libpq-dev libmysqlclient-dev libmemcached-dev libjpeg-dev \
 	aqbanking-tools supervisor nginx sudo \
 	--no-install-recommends

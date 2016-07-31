@@ -1,5 +1,7 @@
 .. highlight:: none
 
+.. _`dockersmallscale`:
+
 Small-scale deployment with Docker
 ==================================
 
@@ -166,7 +168,12 @@ named ``/etc/systemd/system/pretix.service`` with the following content::
     [Install]
     WantedBy=multi-user.target
 
-You can leave the MySQL socket volume out if you're using PostgreSQL.
+You can leave the MySQL socket volume out if you're using PostgreSQL. You can now run the following comamnds
+to enable and start the service::
+
+    # systemctl daemon-reload
+    # systemctl enable pretix
+    # systemctl start pretix
 
 Cronjob
 -------
