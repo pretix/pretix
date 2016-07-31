@@ -64,4 +64,9 @@ class LoggedModel(models.Model, LoggingMixin):
         abstract = True
 
     def all_logentries(self):
+        """
+        Returns all log entries that are attached to this object.
+
+        :return: A QuerySet of LogEntry objects
+        """
         return self.logentries.all().select_related('user')
