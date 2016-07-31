@@ -52,9 +52,26 @@ process_request = EventPluginSignal(
 """
 This signal is sent out whenever a request is made to a event presale page. Most of the
 time, this will be called from the middleware layer (except on plugin-provided pages
-this will be caled by the @event_view decorator). Similarly to Django's process_request
+this will be called by the @event_view decorator). Similarly to Django's process_request
 middleware method, if you return a Response, that response will be used and the request
 won't be processed any further down the stack.
+
+WARNING: Be very careful about using this signal as listening to it makes it really
+easy to cause serious performance problems.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+process_response = EventPluginSignal(
+    providing_args=["request", "response"]
+)
+"""
+This signal is sent out whenever a response is sent from a event presale page. Most of
+the time, this will be called from the middleware layer (except on plugin-provided pages
+this will be called by the @event_view decorator). Similarly to Django's process_response
+middleware method you must return a response object, that will be passed further up the
+stack to other handlers of the signal. If you do not want to alter the response, just
+return the ``response`` parameter.
 
 WARNING: Be very careful about using this signal as listening to it makes it really
 easy to cause serious performance problems.

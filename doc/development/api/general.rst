@@ -35,7 +35,7 @@ Request flow
 """"""""""""
 
 .. automodule:: pretix.presale.signals
-   :members: process_request
+   :members: process_request, process_response
 
 Vouchers
 """"""""

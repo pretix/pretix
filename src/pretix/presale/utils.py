@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.base.middleware import LocaleMiddleware
 from pretix.base.models import Event, EventPermission, Organizer
 from pretix.multidomain.urlreverse import get_domain
-from pretix.presale.signals import process_request
+from pretix.presale.signals import process_request, process_response
 
 
 def _detect_event(request):
@@ -80,5 +80,8 @@ def event_view(func):
         if ret:
             return ret
         else:
-            return func(request=request, *args, **kwargs)
+            response = func(request=request, *args, **kwargs)
+            for receiver, r in process_response.send(request.event, request=request, response=response):
+                response = r
+            return response
     return wrap

@@ -1,5 +1,7 @@
 from django.core.urlresolvers import resolve
 
+from pretix.presale.signals import process_response
+
 from .utils import _detect_event
 
 
@@ -19,3 +21,8 @@ class EventMiddleware:
             # We need to create session even if we do not yet store something there, because we need the session
             # key for e.g. saving the user's cart
             request.session['_'] = '_'
+
+    def process_response(self, request, response):
+        for receiver, r in process_response.send(request.event, request=request, response=response):
+            response = r
+        return response
