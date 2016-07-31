@@ -8,7 +8,7 @@ from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from pkg_resources import iter_entry_points
 
-config = configparser.ConfigParser()
+config = configparser.RawConfigParser()
 config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
             encoding='utf-8')
 
