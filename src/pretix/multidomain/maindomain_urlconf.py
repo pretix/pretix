@@ -22,9 +22,10 @@ for app in apps.get_app_configs():
     if hasattr(app, 'PretixPluginMeta'):
         if importlib.util.find_spec(app.name + '.urls'):
             urlmod = importlib.import_module(app.name + '.urls')
-            raw_plugin_patterns.append(
-                url(r'', include(urlmod, namespace=app.label))
-            )
+            if hasattr(urlmod, 'urlpatterns'):
+                raw_plugin_patterns.append(
+                    url(r'', include(urlmod, namespace=app.label))
+                )
             if hasattr(urlmod, 'event_patterns'):
                 raw_plugin_patterns.append(
                     url(r'^(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include(urlmod.event_patterns, namespace=app.label))
