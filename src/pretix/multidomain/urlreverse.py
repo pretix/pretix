@@ -18,6 +18,27 @@ def get_domain(organizer):
     return domain
 
 
+def mainreverse(name, kwargs=None):
+    """
+    Works similar to ``django.core.urlresolvers.reverse`` but uses the maindomain URLconf even
+    if on a subpath.
+
+    Non-keyword arguments are not supported as we want do discourage using them for better
+    readability.
+
+    :param name: The name of the URL route
+    :type name: str
+    :param kwargs: A dictionary of additional keyword arguments that should be used. You do not
+        need to provide the organizer or event slug here, it will be added automatically as
+        needed.
+    :returns: An absolute URL (including scheme and host) as a string
+    """
+    from pretix.multidomain import maindomain_urlconf
+
+    kwargs = kwargs or {}
+    return reverse(name, kwargs=kwargs, urlconf=maindomain_urlconf)
+
+
 def eventreverse(obj, name, kwargs=None):
     """
     Works similar to ``django.core.urlresolvers.reverse`` but takes into account that some
