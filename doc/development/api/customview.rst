@@ -12,7 +12,7 @@ Control panel views
 -------------------
 
 If you want to add a custom view to the control area of an event, just register an URL in your
-``maindomain_urls.py`` that lives in the ``/control/`` subpath::
+``urls.py`` that lives in the ``/control/`` subpath::
 
     from django.conf.urls import url
 
@@ -66,26 +66,14 @@ Frontend views
 Including a custom view into the participant-facing frontend is a little bit different as there is
 no path prefix like ``control/``.
 
-First, define your URL in your ``maindomain_urls.py``::
+First, define your URL in your ``urls.py``, but this time in the ``event_patterns`` section::
 
     from django.conf.urls import url
 
     from . import views
 
-    urlpatterns = [
-        url(r'^(?P<organizer>[^/]+)/(?P<event>[^/]+)/mypluginname/',
-            views.frontend_view, name='frontend'),
-    ]
-
-And for the case of custom domains in your ``subdomain_urls.py``::
-
-    from django.conf.urls import url
-
-    from . import views
-
-    urlpatterns = [
-        url(r'^(?P<event>[^/]+)/mypluginname/',
-            views.frontend_view, name='frontend'),
+    event_patterns = [
+        url(r'^mypluginname/', views.frontend_view, name='frontend'),
     ]
 
 You can then implement a view as you would normally do, but you need to apply a decorator to your

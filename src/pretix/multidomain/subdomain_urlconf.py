@@ -19,7 +19,13 @@ presale_patterns = [
 raw_plugin_patterns = []
 for app in apps.get_app_configs():
     if hasattr(app, 'PretixPluginMeta'):
-        if importlib.util.find_spec(app.name + '.subdomain_urls'):
+        if importlib.util.find_spec(app.name + '.urls'):
+            urlmod = importlib.import_module(app.name + '.urls')
+            if hasattr(urlmod, 'event_patterns'):
+                raw_plugin_patterns.append(
+                    url(r'^(?P<event>[^/]+)/', include(urlmod.event_patterns, namespace=app.label))
+                )
+        elif importlib.util.find_spec(app.name + '.subdomain_urls'):
             urlmod = importlib.import_module(app.name + '.subdomain_urls')
             raw_plugin_patterns.append(
                 url(r'', include(urlmod, namespace=app.label))

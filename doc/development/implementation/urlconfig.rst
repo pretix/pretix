@@ -29,8 +29,8 @@ former our ``maindomain`` config and the latter our ``subdomain`` config. For pr
 modules we do some magic to avoid duplicate configuration, but for a fairly simple plugin with
 only a handful of routes, we recommend just configuring the two URL sets separately.
 
-The file ``maindomain_urls.py`` inside your plugin package will be loaded and scanned for
-URL configuration automatically and should be provided by any plugin that provides any view.
+The file ``urls.py`` inside your plugin package will be loaded and scanned for URL configuration
+automatically and  should be provided by any plugin that provides any view.
 
 A very basic example that provides one view in the admin panel and one view in the frontend
 could look like this::
@@ -42,23 +42,19 @@ could look like this::
     urlpatterns = [
         url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/mypluginname/',
             views.AdminView.as_view(), name='backend'),
-        url(r'^(?P<organizer>[^/]+)/(?P<event>[^/]+)/mypluginname/',
-            views.FrontendView.as_view(), name='frontend'),
     ]
 
-A matching configuration for custom domains will be expected in the ``subdomain_urls.py`` file
-of your package and would look like this::
-
-    from django.conf.urls import url
-
-    from . import views
-
-    urlpatterns = [
-        url(r'^(?P<event>[^/]+)/mypluginname/',
-            views.FrontendView.as_view(), name='frontend'),
+    event_patterns = [
+        url(r'^mypluginname/', views.FrontendView.as_view(), name='frontend'),
     ]
 
-If you only provide URLs in the admin area, you do not need to provide a ``subdomain_urls`` module.
+.. note::
+    As you can see, the view in the frontend is not included in the standard Django ``urlpatterns``
+    setting but in a separate list with the name ``event_patterns``. This will automatically prepend
+    the appropriate parameters to the regex (e.g. the event or the event and the organizer, depending
+    on the called domain).
+
+If you only provide URLs in the admin area, you do not need to provide a ``event_patterns`` attribute.
 
 URL reversal
 ------------

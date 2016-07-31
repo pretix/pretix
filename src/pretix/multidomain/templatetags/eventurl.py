@@ -47,7 +47,7 @@ def eventurl(parser, token):
     """
     bits = token.split_contents()
     if len(bits) < 3:
-        raise TemplateSyntaxError("'%s' takes at least one argument, an event and the name of a url()." % bits[0])
+        raise TemplateSyntaxError("'%s' takes at least two arguments, an event and the name of a url()." % bits[0])
     viewname = parser.compile_filter(bits[2])
     event = parser.compile_filter(bits[1])
     kwargs = {}
