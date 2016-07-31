@@ -7,8 +7,8 @@ Contents:
    :maxdepth: 2
 
    plugins
-   payment
-   ticketoutput
    exporter
+   ticketoutput
+   payment
    customview
    general

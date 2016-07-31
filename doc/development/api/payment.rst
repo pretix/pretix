@@ -4,7 +4,8 @@
 Writing a payment provider plugin
 =================================
 
-In this document, we will walk through the creation of a payment provider plugin.
+In this document, we will walk through the creation of a payment provider plugin. This
+is very similar to creating an export output.
 
 Please read :ref:`Creating a plugin <pluginsetup>` first, if you haven't already.
 
@@ -100,6 +101,8 @@ The provider class
 
 Additional views
 ----------------
+
+See also: :ref:`customview`.
 
 For most simple payment providers it is more than sufficient to implement
 some of the :py:class:`BasePaymentProvider` methods. However, in some cases

@@ -7,7 +7,7 @@ Writing a ticket output plugin
 A ticket output is a method to offer a ticket (an order) for the user to download.
 
 In this document, we will walk through the creation of a ticket output plugin. This
-is very similar to creating a payment provider.
+is very similar to creating an export output.
 
 Please read :ref:`Creating a plugin <pluginsetup>` first, if you haven't already.
 

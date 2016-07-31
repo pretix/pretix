@@ -5,10 +5,9 @@ Writing an exporter plugin
 ==========================
 
 An Exporter is a method to export the product and order data in pretix for later use in another
-context.
+program.
 
-In this document, we will walk through the creation of an exporter output plugin. This
-is very similar to creating a payment provider.
+In this document, we will walk through the creation of an exporter output plugin step by step.
 
 Please read :ref:`Creating a plugin <pluginsetup>` first, if you haven't already.
 
