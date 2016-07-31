@@ -23,6 +23,7 @@ class EventMiddleware:
             request.session['_'] = '_'
 
     def process_response(self, request, response):
-        for receiver, r in process_response.send(request.event, request=request, response=response):
-            response = r
+        if hasattr(request, 'event'):
+            for receiver, r in process_response.send(request.event, request=request, response=response):
+                response = r
         return response
