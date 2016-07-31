@@ -118,6 +118,7 @@ class SettingsForm(forms.Form):
                     fname = '%s/%s.%s' % (self.obj.slug, name, value.name.split('.')[-1])
                 newname = default_storage.save(fname, value)
                 value._name = newname
+                self.obj.settings.set(name, value)
             elif isinstance(value, File):
                 # file is unchanged
                 continue
@@ -129,8 +130,8 @@ class SettingsForm(forms.Form):
                         default_storage.delete(fname.name)
                     except OSError:
                         logger.error('Deleting file %s failed.' % fname.name)
-
-            if value is None or value is False:
+                del self.obj.settings[name]
+            elif value is None:
                 del self.obj.settings[name]
             elif self.obj.settings.get(name, as_type=type(value)) != value:
                 self.obj.settings.set(name, value)
