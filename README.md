@@ -14,7 +14,7 @@ The basic features are present and sufficiently stable. pretix has been in use f
 sold a few hundred tickets so far. There is still a bunch of features to come and there is probably
 still a lot of bugs in there, but we consider it stable enough that we use it in production ourselves.
 
-Therefore, we will upgrade path for all changes to come. If you want to use pretix in production, 
+Therefore, we will provide an upgrade path for future changes. If you want to use pretix in production, 
 I invite you to send me an email so that I can notify you of changes and bugs that require your 
 attention.
 
