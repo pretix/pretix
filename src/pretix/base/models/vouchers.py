@@ -56,7 +56,8 @@ class Voucher(LoggedModel):
     )
     code = models.CharField(
         verbose_name=_("Voucher code"),
-        max_length=255, default=generate_code
+        max_length=255, default=generate_code,
+        db_index=True,
     )
     redeemed = models.BooleanField(
         verbose_name=_("Redeemed"),
@@ -114,6 +115,7 @@ class Voucher(LoggedModel):
         max_length=255,
         verbose_name=_("Tag"),
         blank=True,
+        db_index=True,
         help_text=_("You can use this field to group multiple vouchers together. If you enter the same value for "
                     "multiple vouchers, you can get statistics on how many of them have been redeemed etc.")
     )

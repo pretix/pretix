@@ -90,12 +90,14 @@ class Order(LoggedModel):
 
     code = models.CharField(
         max_length=16,
-        verbose_name=_("Order code")
+        verbose_name=_("Order code"),
+        db_index=True
     )
     status = models.CharField(
         max_length=3,
         choices=STATUS_CHOICE,
-        verbose_name=_("Status")
+        verbose_name=_("Status"),
+        db_index=True
     )
     event = models.ForeignKey(
         Event,
@@ -426,7 +428,7 @@ class OrderPosition(AbstractPosition):
         max_digits=10, decimal_places=2,
         verbose_name=_('Tax value')
     )
-    secret = models.CharField(max_length=64, default=generate_position_secret)
+    secret = models.CharField(max_length=64, default=generate_position_secret, db_index=True)
 
     class Meta:
         verbose_name = _("Order position")
