@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
@@ -202,3 +203,8 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
             if response:
                 form_class = response
         return form_class
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['code_length'] = settings.ENTROPY['voucher_code']
+        return ctx
