@@ -1,7 +1,9 @@
 import logging
 
 from django.contrib import messages
+from django.db.models import Q
 from django.shortcuts import redirect
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 
@@ -25,17 +27,18 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        orders = Order.objects.filter(
-            event=self.request.event, status__in=form.cleaned_data['sendto']
-        )
-        mails = set([(o.email, o.locale) for o in orders])
+        qs = Order.objects.filter(event=self.request.event)
+        statusq = Q(status__in=form.cleaned_data['sendto'])
+        if 'overdue' in form.cleaned_data['sendto']:
+            statusq |= Q(status=Order.STATUS_PENDING, expires__lt=now())
+        orders = qs.filter(statusq)
 
         self.request.event.log_action('pretix.plugins.sendmail.sent', user=self.request.user, data=dict(
             form.cleaned_data))
 
-        for m, l in mails:
-            mail(m, form.cleaned_data['subject'], form.cleaned_data['message'],
-                 None, self.request.event, locale=l)
+        for o in orders:
+            mail(o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
+                 None, self.request.event, locale=o.locale, order=o)
 
         messages.success(self.request, _('Your message will be sent to the selected users.'))
 
