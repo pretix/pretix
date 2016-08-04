@@ -64,7 +64,7 @@
                     {% if tup.0 %}
                         <h3>{{ tup.0.name }}</h3>
                         {% if tup.0.description %}
-                            <p>{{ tup.0.description }}</p>
+                            <p>{{ tup.0.description|localize|apply_markup:"markdown" }}</p>
                         {% endif %}
                     {% endif %}
                     {% for item in tup.1 %}
