@@ -30,7 +30,7 @@ modules we do some magic to avoid duplicate configuration, but for a fairly simp
 only a handful of routes, we recommend just configuring the two URL sets separately.
 
 The file ``urls.py`` inside your plugin package will be loaded and scanned for URL configuration
-automatically and  should be provided by any plugin that provides any view.
+automatically and should be provided by any plugin that provides any view.
 
 A very basic example that provides one view in the admin panel and one view in the frontend
 could look like this::
