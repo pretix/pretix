@@ -25,7 +25,7 @@ Frontend
 --------
 
 .. automodule:: pretix.presale.signals
-   :members: html_head, nav_event
+   :members: html_head, footer_links
 
 
 .. automodule:: pretix.presale.signals
@@ -47,7 +47,8 @@ Backend
 -------
 
 .. automodule:: pretix.control.signals
-   :members: html_head, footer_links
+   :members: nav_event, html_head
+
 
 .. automodule:: pretix.base.signals
    :members: logentry_display
