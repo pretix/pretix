@@ -214,6 +214,22 @@ class QuotaTestCase(BaseQuotaTestCase):
         v.save()
         self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
 
+    def test_voucher_quota_expiring_soon(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = 1
+        self.quota.save()
+        Voucher.objects.create(quota=self.quota, event=self.event, valid_until=now() + timedelta(days=5),
+                               block_quota=True)
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
+
+    def test_voucher_quota_expired(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = 1
+        self.quota.save()
+        Voucher.objects.create(quota=self.quota, event=self.event, valid_until=now() - timedelta(days=5),
+                               block_quota=True)
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+
 
 class OrderTestCase(BaseQuotaTestCase):
     def setUp(self):

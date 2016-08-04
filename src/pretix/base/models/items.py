@@ -527,6 +527,7 @@ class Quota(LoggedModel):
         return Voucher.objects.filter(
             Q(block_quota=True) &
             Q(redeemed=False) &
+            Q(Q(valid_until__isnull=True) | Q(valid_until__gte=now())) &
             Q(Q(self._position_lookup) | Q(quota=self))
         ).distinct().count()
 
