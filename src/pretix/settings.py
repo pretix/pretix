@@ -135,6 +135,12 @@ if HAS_CELERY:
 
 SESSION_COOKIE_DOMAIN = config.get('pretix', 'cookie_domain', fallback=None)
 
+ENTROPY = {
+    'order_code': config.getint('entropy', 'order_code', fallback=5),
+    'ticket_secret': config.getint('entropy', 'ticket_secret', fallback=32),
+    'voucher_code': config.getint('entropy', 'voucher_code', fallback=16),
+}
+
 # Internal settings
 
 STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static.dist')

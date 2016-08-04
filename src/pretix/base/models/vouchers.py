@@ -1,5 +1,6 @@
 import random
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -13,7 +14,7 @@ from .orders import CartPosition, OrderPosition
 def generate_code():
     charset = list('ABCDEFGHKLMNPQRSTUVWXYZ23456789')
     while True:
-        code = "".join([random.choice(charset) for i in range(16)])
+        code = "".join([random.choice(charset) for i in range(settings.ENTROPY['voucher_code'])])
         if not Voucher.objects.filter(code=code).exists():
             return code
 
@@ -56,7 +57,8 @@ class Voucher(LoggedModel):
     )
     code = models.CharField(
         verbose_name=_("Voucher code"),
-        max_length=255, default=generate_code
+        max_length=255, default=generate_code,
+        db_index=True,
     )
     redeemed = models.BooleanField(
         verbose_name=_("Redeemed"),
@@ -114,6 +116,7 @@ class Voucher(LoggedModel):
         max_length=255,
         verbose_name=_("Tag"),
         blank=True,
+        db_index=True,
         help_text=_("You can use this field to group multiple vouchers together. If you enter the same value for "
                     "multiple vouchers, you can get statistics on how many of them have been redeemed etc.")
     )

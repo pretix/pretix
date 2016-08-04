@@ -224,5 +224,19 @@ RabbitMQ might be the better choice if you have a complex, multi-server, high-pe
 but as you already should have a redis instance ready for session and lock storage, we recommend
 redis for convenience. See the `Celery documentation`_ for more details.
 
+Secret length
+-------------
+
+If you are really paranoid, you can increase the length of random strings pretix uses in
+various places like order codes, secrets in the ticket QR codes, etc. Example::
+
+    [entropy]
+    ; Order code needs to be < 16 characters, default is 5
+    order_code=5
+    ; Ticket secret needs to be < 64 characters, default is 32
+    ticket_secret=32
+    ; Voucher code needs to be < 255 characters, default is 16
+    voucher_code=16
+
 .. _Python documentation: https://docs.python.org/3/library/configparser.html?highlight=configparser#supported-ini-file-structure
 .. _Celery documentation: http://docs.celeryproject.org/en/latest/configuration.html

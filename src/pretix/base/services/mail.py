@@ -7,7 +7,8 @@ from django.utils.translation import ugettext as _
 from typing import Any, Dict
 
 from pretix.base.i18n import LazyI18nString, language
-from pretix.base.models import Event
+from pretix.base.models import Event, Order
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 logger = logging.getLogger('pretix.base.mail')
 
@@ -19,7 +20,8 @@ class TolerantDict(dict):
 
 
 def mail(email: str, subject: str, template: str,
-         context: Dict[str, Any]=None, event: Event=None, locale: str=None):
+         context: Dict[str, Any]=None, event: Event=None, locale: str=None,
+         order: Order=None):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -36,6 +38,9 @@ def mail(email: str, subject: str, template: str,
 
     :param event: The event this email is related to (optional). If set, this will be used to determine the sender,
         a possible prefix for the subject and the SMTP server that should be used to send this email.
+
+    :param order: The order this email is related to (optional). If set, this will be used to include a link to the
+        order below the email.
 
     :param locale: The locale to be used while evaluating the subject and the template
 
@@ -63,6 +68,14 @@ def mail(email: str, subject: str, template: str,
             body += _(
                 "You are receiving this email because you placed an order for {event}."
             ).format(event=event.name)
+            if order:
+                body += "\r\n"
+                body += _(
+                    "You can view your order details at the following URL:\r\n{orderurl}."
+                ).format(event=event.name, orderurl=build_absolute_uri(order.event, 'presale:event.order', kwargs={
+                    'order': order.code,
+                    'secret': order.secret
+                }))
             body += "\r\n"
         return mail_send([email], subject, body, sender, event.id if event else None)
 

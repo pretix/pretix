@@ -4,6 +4,7 @@ import string
 from datetime import datetime
 from decimal import Decimal
 
+from django.conf import settings
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -21,7 +22,7 @@ def generate_secret():
 
 def generate_position_secret():
     # Exclude o,0,1,i,l to avoid confusion with bad fonts/printers
-    return ''.join(random.choice('abcdefghjkmnpqrstuvwxyz23456789') for _ in range(32))
+    return ''.join(random.choice('abcdefghjkmnpqrstuvwxyz23456789') for _ in range(settings.ENTROPY['ticket_secret']))
 
 
 class Order(LoggedModel):
@@ -90,12 +91,14 @@ class Order(LoggedModel):
 
     code = models.CharField(
         max_length=16,
-        verbose_name=_("Order code")
+        verbose_name=_("Order code"),
+        db_index=True
     )
     status = models.CharField(
         max_length=3,
         choices=STATUS_CHOICE,
-        verbose_name=_("Status")
+        verbose_name=_("Status"),
+        db_index=True
     )
     event = models.ForeignKey(
         Event,
@@ -191,7 +194,7 @@ class Order(LoggedModel):
     def assign_code(self):
         charset = list('ABCDEFGHKLMNPQRSTUVWXYZ23456789')
         while True:
-            code = "".join([random.choice(charset) for i in range(5)])
+            code = "".join([random.choice(charset) for i in range(settings.ENTROPY['order_code'])])
             if not Order.objects.filter(event=self.event, code=code).exists():
                 self.code = code
                 return
@@ -426,7 +429,7 @@ class OrderPosition(AbstractPosition):
         max_digits=10, decimal_places=2,
         verbose_name=_('Tax value')
     )
-    secret = models.CharField(max_length=64, default=generate_position_secret)
+    secret = models.CharField(max_length=64, default=generate_position_secret, db_index=True)
 
     class Meta:
         verbose_name = _("Order position")

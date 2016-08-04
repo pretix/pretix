@@ -57,7 +57,7 @@ $(function () {
     // Vouchers
     $("#voucher-bulk-codes-generate").click(function () {
         var charset = "ABCDEFGHKLMNPQRSTUVWXYZ23456789",
-            i = 0, j = 0, len = 16,
+            i = 0, j = 0, len = parseInt($(this).attr("data-length")),
             num = parseInt($("#voucher-bulk-codes-num").val()), text = "";
         for (j = 0; j < num; j++) {
             var key = [];
