@@ -3,6 +3,7 @@ import warnings
 
 from django.apps import apps
 from django.conf.urls import include, url
+
 from pretix.presale.urls import (
     event_patterns, locale_patterns, organizer_patterns,
 )
