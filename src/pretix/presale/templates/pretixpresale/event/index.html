@@ -1,7 +1,9 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
+{% load l10n %}
 {% load eventurl %}
 {% load thumbnail %}
+{% load markup_tags %}
 {% block title %}{% trans "Presale" %}{% endblock %}
 
 {% block content %}
@@ -62,7 +64,7 @@
                     {% if tup.0 %}
                         <h3>{{ tup.0.name }}</h3>
                         {% if tup.0.description %}
-                            <p>{{ tup.0.description }}</p>
+                            <p>{{ tup.0.description|localize|apply_markup:"markdown" }}</p>
                         {% endif %}
                     {% endif %}
                     {% for item in tup.1 %}
@@ -81,7 +83,8 @@
                                         <a href="#" data-toggle="variations">
                                             <strong>{{ item.name }}</strong>
                                         </a>
-                                        {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                        {% if item.description %}<p>{{ item.description|localize|apply_markup:"markdown" }}</p>
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-2 col-xs-6 price">
                                         {% if item.min_price != item.max_price or item.free_price %}
@@ -154,7 +157,7 @@
                                     {% endif %}
                                     <strong>{{ item.name }}</strong>
                                     {% if item.description %}
-                                        <p class="description">{{ item.description }}</p>{% endif %}
+                                        <p class="description">{{ item.description|localize|apply_markup:"markdown" }}</p>{% endif %}
                                     {% if event.settings.show_quota_left %}
                                         {% include "pretixpresale/event/fragment_quota_left.html" with avail=item.cached_availability %}
                                     {% endif %}

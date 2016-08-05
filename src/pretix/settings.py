@@ -172,7 +172,8 @@ INSTALLED_APPS = [
     'pretix.plugins.reports',
     'pretix.plugins.checkinlists',
     'pretix.plugins.pretixdroid',
-    'easy_thumbnails'
+    'easy_thumbnails',
+    'django_markup',
 ]
 
 for entry_point in iter_entry_points(group='pretix.plugin', name=None):
