@@ -5,6 +5,7 @@ from decimal import Decimal
 
 from django.db import DatabaseError, models
 from django.db.models import Max
+from django.utils.functional import cached_property
 
 
 def invoice_filename(instance, filename: str) -> str:
@@ -79,6 +80,10 @@ class Invoice(models.Model):
         Returns the invoice number in a human-readable string with the event slug prepended.
         """
         return '%s-%05d' % (self.event.slug.upper(), self.invoice_no)
+
+    @cached_property
+    def canceled(self):
+        return self.refered.filter(is_cancellation=True).exists()
 
     class Meta:
         unique_together = ('event', 'invoice_no')

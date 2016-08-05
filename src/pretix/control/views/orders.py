@@ -18,7 +18,7 @@ from pretix.base.models import (
 from pretix.base.services import tickets
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
-    generate_invoice, invoice_pdf, invoice_qualified,
+    generate_invoice, invoice_pdf, invoice_qualified, regenerate_invoice,
 )
 from pretix.base.services.mail import mail
 from pretix.base.services.orders import cancel_order, mark_order_paid
@@ -228,9 +228,31 @@ class OrderInvoiceCreate(OrderView):
         elif self.order.invoices.exists():
             messages.error(self.request, _('An invoice for this order already exists.'))
         else:
-            generate_invoice(self.order)
-            self.order.log_action('pretix.event.order.invoice.generate', user=self.request.user)
+            inv = generate_invoice(self.order)
+            self.order.log_action('pretix.event.order.invoice.generate', user=self.request.user, data={
+                'invoice': inv.pk
+            })
             messages.success(self.request, _('The invoice has been generated.'))
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])
+
+
+class OrderInvoiceRegenerate(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        try:
+            inv = self.order.invoices.get(pk=kwargs.get('id'))
+        except Order.DoesNotExist:
+            messages.error(self.request, _('Unknown invoice.'))
+
+        inv = regenerate_invoice(inv)
+        self.order.log_action('pretix.event.order.invoice.regenerate', user=self.request.user, data={
+            'invoice': inv.pk
+        })
+        messages.success(self.request, _('The invoice has been regenerated.'))
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):

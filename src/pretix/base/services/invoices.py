@@ -46,6 +46,56 @@ def generate_cancellation(invoice: Invoice):
 
 
 @transaction.atomic
+def regenerate_invoice(invoice: Invoice):
+    with language(invoice.locale):
+        invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
+        invoice.additional_text = invoice.event.settings.get('invoice_additional_text')
+
+        try:
+            addr_template = pgettext("invoice", """{i.company}
+{i.name}
+{i.street}
+{i.zipcode} {i.city}
+{i.country}""")
+            invoice.invoice_to = addr_template.format(i=invoice.order.invoice_address).strip()
+            if invoice.order.invoice_address.vat_id:
+                invoice.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % invoice.order.invoice_address.vat_id
+        except InvoiceAddress.DoesNotExist:
+            invoice.invoice_to = ""
+
+        invoice.file = None
+        invoice.save()
+
+        responses = register_payment_providers.send(invoice.event)
+        for receiver, response in responses:
+            provider = response(invoice.event)
+            if provider.identifier == invoice.order.payment_provider:
+                payment_provider = provider
+                break
+
+        invoice.lines.all().delete()
+        for p in invoice.order.positions.all():
+            desc = str(p.item.name)
+            if p.variation:
+                desc += " - " + str(p.variation.value)
+            InvoiceLine.objects.create(
+                invoice=invoice, description=desc,
+                gross_value=p.price, tax_value=p.tax_value,
+                tax_rate=p.tax_rate
+            )
+
+        if invoice.order.payment_fee:
+            InvoiceLine.objects.create(
+                invoice=invoice, description=_('Payment via {method}').format(method=str(payment_provider.verbose_name)),
+                gross_value=invoice.order.payment_fee, tax_value=invoice.order.payment_fee_tax_value,
+                tax_rate=invoice.order.payment_fee_tax_rate
+            )
+
+        invoice_pdf(invoice.pk)
+    return invoice
+
+
+@transaction.atomic
 def generate_invoice(order: Order):
     locale = order.event.settings.get('invoice_language')
     if locale:
