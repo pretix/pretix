@@ -172,6 +172,11 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
         form.instance.log_action('pretix.voucher.added', data=dict(form.cleaned_data), user=self.request.user)
         return ret
 
+    def post(self, request, *args, **kwargs):
+        # TODO: Transform this into an asynchronous call?
+        with request.event.lock():
+            return super().post(request, *args, **kwargs)
+
 
 class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
     model = Voucher
@@ -208,3 +213,8 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
         ctx = super().get_context_data(**kwargs)
         ctx['code_length'] = settings.ENTROPY['voucher_code']
         return ctx
+
+    def post(self, request, *args, **kwargs):
+        # TODO: Transform this into an asynchronous call?
+        with request.event.lock():
+            return super().post(request, *args, **kwargs)
