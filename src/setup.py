@@ -61,7 +61,7 @@ setup(
         'easy-thumbnails>=2.2,<3'
         'PyPDF2', 'BeautifulSoup4', 'html5lib',
         'slimit', 'lxml', 'static3==0.6.1', 'dj-static', 'chardet',
-        'csscompressor', 'defusedxml', 'mt-940', 'django-markup'
+        'csscompressor', 'defusedxml', 'mt-940', 'django-markup', 'markdown'
     ],
     extras_require={
         'dev': ['django-debug-toolbar>=1.3.0,<2.0'],

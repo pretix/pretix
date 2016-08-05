@@ -20,3 +20,4 @@ static3==0.6.1
 dj-static
 csscompressor
 django-markup
+markdown
