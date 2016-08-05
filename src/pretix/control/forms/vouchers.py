@@ -3,6 +3,7 @@ import copy
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import Item, ItemVariation, Quota, Voucher
 
@@ -47,7 +48,7 @@ class VoucherForm(I18nModelForm):
             else:
                 choices.append((str(i.pk), i.name))
         for q in self.instance.event.quotas.all():
-            choices.append(('q-%d' % q.pk, 'Any product in quota "{quota}"'.format(quota=q)))
+            choices.append(('q-%d' % q.pk, _('Any product in quota "{quota}"').format(quota=q)))
         self.fields['itemvar'].choices = choices
 
     def clean(self):
