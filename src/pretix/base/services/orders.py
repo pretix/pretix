@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from decimal import Decimal
 
 from django.conf import settings
 from django.db import transaction
@@ -16,7 +17,7 @@ from pretix.base.models import (
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.invoices import (
-    generate_cancellation, generate_invoice,
+    generate_cancellation, generate_invoice, invoice_qualified,
 )
 from pretix.base.services.mail import mail
 from pretix.base.signals import (
@@ -46,7 +47,7 @@ error_messages = {
 
 
 def mark_order_paid(order: Order, provider: str=None, info: str=None, date: datetime=None, manual: bool=None,
-                    force: bool=False, user: User=None) -> Order:
+                    force: bool=False, send_mail: bool=True, user: User=None) -> Order:
     """
     Marks an order as paid. This sets the payment provider, info and date and returns
     the order object.
@@ -61,6 +62,8 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     :param force: Whether this payment should be marked as paid even if no remaining
                   quota is available (default: ``False``).
     :type force: boolean
+    :param send_mail: Whether an email should be sent to the user about this event (default: ``True``).
+    :type send_mail: boolean
     :param user: The user that performed the change
     :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
     """
@@ -85,20 +88,21 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     }, user=user)
     order_paid.send(order.event, order=order)
 
-    with language(order.locale):
-        mail(
-            order.email, _('Payment received for your order: %(code)s') % {'code': order.code},
-            order.event.settings.mail_text_order_paid,
-            {
-                'event': order.event.name,
-                'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
-                    'order': order.code,
-                    'secret': order.secret
-                }),
-                'downloads': order.event.settings.get('ticket_download', as_type=bool)
-            },
-            order.event, locale=order.locale
-        )
+    if send_mail:
+        with language(order.locale):
+            mail(
+                order.email, _('Payment received for your order: %(code)s') % {'code': order.code},
+                order.event.settings.mail_text_order_paid,
+                {
+                    'event': order.event.name,
+                    'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
+                        'order': order.code,
+                        'secret': order.secret
+                    }),
+                    'downloads': order.event.settings.get('ticket_download', as_type=bool)
+                },
+                order.event, locale=order.locale
+            )
     return order
 
 
@@ -289,13 +293,17 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
         except InvoiceAddress.DoesNotExist:
             pass
 
-    if event.settings.get('invoice_generate') == 'True':
+    if event.settings.get('invoice_generate') == 'True' and invoice_qualified(order):
         generate_invoice(order)
 
     with language(order.locale):
+        if order.total == Decimal('0.00'):
+            mailtext = event.settings.mail_text_order_free
+        else:
+            mailtext = event.settings.mail_text_order_placed
         mail(
             order.email, _('Your order: %(code)s') % {'code': order.code},
-            event.settings.mail_text_order_placed,
+            mailtext,
             {
                 'total': LazyNumber(order.total),
                 'currency': event.currency,

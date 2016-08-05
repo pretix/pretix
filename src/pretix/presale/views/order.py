@@ -13,7 +13,9 @@ from pretix.base.models import (
     CachedFile, CachedTicket, Invoice, Order, OrderPosition,
 )
 from pretix.base.models.orders import InvoiceAddress
-from pretix.base.services.invoices import generate_invoice, invoice_pdf
+from pretix.base.services.invoices import (
+    generate_invoice, invoice_pdf, invoice_qualified,
+)
 from pretix.base.services.orders import OrderError, cancel_order
 from pretix.base.services.tickets import generate
 from pretix.base.signals import (
@@ -91,6 +93,10 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
             payment_fee=self.order.payment_fee, payment_fee_tax_rate=self.order.payment_fee_tax_rate
         )
         ctx['invoices'] = list(self.order.invoices.all())
+        ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
+            self.request.event.settings.invoice_generate == 'user'
+        )
+
         if self.order.status == Order.STATUS_PENDING:
             ctx['payment'] = self.payment_provider.order_pending_render(self.request, self.order)
             ctx['can_retry'] = (
@@ -155,7 +161,7 @@ class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        if self.request.event.settings.get('invoice_generate') != 'user':
+        if self.request.event.settings.get('invoice_generate') != 'user' or not invoice_qualified(self.order):
             messages.error(self.request, _('You cannot generate an invoice for this order.'))
         elif self.order.invoices.exists():
             messages.error(self.request, _('An invoice for this order already exists.'))

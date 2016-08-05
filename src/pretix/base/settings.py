@@ -150,6 +150,19 @@ You can change your order details and view the status of your order at
 Best regards,
 Your {event} team"""))
     },
+    'mail_text_order_free': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+we successfully received your order for {event}. As you only ordered
+free products, no payment is required.
+
+You can change your order details and view the status of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
     'mail_text_order_placed': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,

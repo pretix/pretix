@@ -17,7 +17,9 @@ from pretix.base.models import (
 )
 from pretix.base.services import tickets
 from pretix.base.services.export import export
-from pretix.base.services.invoices import generate_invoice, invoice_pdf
+from pretix.base.services.invoices import (
+    generate_invoice, invoice_pdf, invoice_qualified,
+)
 from pretix.base.services.mail import mail
 from pretix.base.services.orders import cancel_order, mark_order_paid
 from pretix.base.services.stats import order_overview
@@ -74,6 +76,14 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
     @cached_property
     def order(self):
         return self.get_object()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
+            self.request.event.settings.invoice_generate == 'admin' or
+            self.request.event.settings.invoice_generate == 'user'
+        )
+        return ctx
 
     @cached_property
     def payment_provider(self):
@@ -212,7 +222,8 @@ class OrderInvoiceCreate(OrderView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user'):
+        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user') or not invoice_qualified(
+                self.order):
             messages.error(self.request, _('You cannot generate an invoice for this order.'))
         elif self.order.invoices.exists():
             messages.error(self.request, _('An invoice for this order already exists.'))

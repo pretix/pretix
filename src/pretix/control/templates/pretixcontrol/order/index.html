@@ -110,7 +110,7 @@
                                     {% endif %}
                                 {% endfor %}
                             </dd>
-                        {% elif request.event.settings.invoice_generate == 'admin' or request.event.settings.invoice_generate == 'user' %}
+                        {% elif can_generate_invoice %}
                             <dt>{% trans "Invoices" %}</dt>
                             <dd>
                                 <form class="form-inline helper-display-inline" method="post"

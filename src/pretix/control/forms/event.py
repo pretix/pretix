@@ -298,6 +298,12 @@ class MailSettingsForm(SettingsForm):
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {url}")
     )
+    mail_text_order_free = I18nFormField(
+        label=_("Free order"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {url}")
+    )
     mail_text_resend_link = I18nFormField(
         label=_("Resend link"),
         required=False,

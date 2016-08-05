@@ -431,7 +431,7 @@ class FreeOrderProvider(BasePaymentProvider):
     def payment_perform(self, request: HttpRequest, order: Order):
         from pretix.base.services.orders import mark_order_paid
         try:
-            mark_order_paid(order, 'free')
+            mark_order_paid(order, 'free', send_mail=False)
         except Quota.QuotaExceededException as e:
             messages.error(request, str(e))
 

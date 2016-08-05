@@ -325,6 +325,12 @@ def invoice_pdf(invoice: int):
         return i.file.name
 
 
+def invoice_qualified(order: Order):
+    if order.total == Decimal('0.00'):
+        return False
+    return True
+
+
 if settings.HAS_CELERY:
     from pretix.celery import app
 
