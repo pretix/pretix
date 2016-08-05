@@ -166,8 +166,10 @@ class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
         elif self.order.invoices.exists():
             messages.error(self.request, _('An invoice for this order already exists.'))
         else:
-            generate_invoice(self.order)
-            self.order.log_action('pretix.event.order.invoice.generate')
+            i = generate_invoice(self.order)
+            self.order.log_action('pretix.event.order.invoice.generated', data={
+                'invoice': i.pk
+            })
             messages.success(self.request, _('The invoice has been generated.'))
         return redirect(self.get_order_url())
 

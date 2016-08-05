@@ -110,9 +110,18 @@
                                                 action="{% url "control:event.order.regeninvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
                                             {% csrf_token %}
                                             <button class="btn btn-default btn-xs">
-                                                {% trans "Regenerate invoice" %}
+                                                {% trans "Regenerate" %}
                                             </button>
                                         </form>
+                                        {% if not i.is_cancellation %}
+                                            <form class="form-inline helper-display-inline" method="post"
+                                                    action="{% url "control:event.order.reissueinvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
+                                                {% csrf_token %}
+                                                <button class="btn btn-default btn-xs">
+                                                    {% trans "Cancel and reissue" %}
+                                                </button>
+                                            </form>
+                                        {% endif %}
                                     {% endif %}
                                     {% if forloop.revcounter0 > 0 %}
                                         <br/>
