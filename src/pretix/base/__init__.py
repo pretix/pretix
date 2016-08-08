@@ -8,6 +8,7 @@ class PretixBaseConfig(AppConfig):
     def ready(self):
         from . import exporter  # NOQA
         from . import payment  # NOQA
+        from . import exporters  # NOQA
         from .services import export, mail, tickets, cart, orders, cleanup  # NOQA
 
         try:

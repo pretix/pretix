@@ -1,9 +1,13 @@
+import csv
+import io
+
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
 from django.db.models import Count, Q, Sum
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
@@ -40,6 +44,45 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
             elif s == 'e':
                 qs = qs.filter(Q(valid_until__isnull=False) & Q(valid_until__lt=now())).filter(redeemed=False)
         return qs
+
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("download", "") == "yes":
+            return self._download_csv()
+        return super().get(request, *args, **kwargs)
+
+    def _download_csv(self):
+        output = io.StringIO()
+        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
+
+        headers = [
+            _('Voucher code'), _('Valid until'), _('Product'), _('Reserve quota'), _('Bypass quota'),
+            _('Price'), _('Tag'), _('Redeemed')
+        ]
+        writer.writerow(headers)
+
+        for v in self.get_queryset():
+            if v.item:
+                if v.variation:
+                    prod = '%s – %s' % (str(v.item.name), str(v.variation.name))
+                else:
+                    prod = '%s' % str(v.item.name)
+            elif v.quota:
+                prod = _('Any product in quota "{quota}"').format(quota=str(v.quota.name))
+            row = [
+                v.code,
+                v.valid_until.isoformat() if v.valid_until else "",
+                prod,
+                _("Yes") if v.block_quota else _("No"),
+                _("Yes") if v.allow_ignore_quota else _("No"),
+                str(v.price) if v.price else "",
+                v.tag,
+                _("Yes") if v.redeemed else _("No"),
+            ]
+            writer.writerow(row)
+
+        r = HttpResponse(output.getvalue().encode("utf-8"), content_type='text/csv')
+        r['Content-Disposition'] = 'attachment; filename="vouchers.csv"'
+        return r
 
 
 class VoucherTags(EventPermissionRequiredMixin, TemplateView):
@@ -172,6 +215,11 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
         form.instance.log_action('pretix.voucher.added', data=dict(form.cleaned_data), user=self.request.user)
         return ret
 
+    def post(self, request, *args, **kwargs):
+        # TODO: Transform this into an asynchronous call?
+        with request.event.lock():
+            return super().post(request, *args, **kwargs)
+
 
 class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
     model = Voucher
@@ -208,3 +256,8 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
         ctx = super().get_context_data(**kwargs)
         ctx['code_length'] = settings.ENTROPY['voucher_code']
         return ctx
+
+    def post(self, request, *args, **kwargs):
+        # TODO: Transform this into an asynchronous call?
+        with request.event.lock():
+            return super().post(request, *args, **kwargs)

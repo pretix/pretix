@@ -16,6 +16,9 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
         'pretix.event.order.refunded': _('The order has been refunded.'),
         'pretix.event.order.cancelled': _('The order has been cancelled.'),
         'pretix.event.order.placed': _('The order has been created.'),
+        'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
+        'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),
+        'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
     }
     if logentry.action_type in plains:
         return plains[logentry.action_type]

@@ -1,4 +1,5 @@
 from datetime import timedelta
+from decimal import Decimal
 from itertools import groupby
 
 from django.utils.functional import cached_property
@@ -83,6 +84,8 @@ class CartMixin:
         }
 
     def get_payment_fee(self, total):
+        if total == 0:
+            return Decimal('0.00')
         payment_fee = 0
         if 'payment' in self.request.session:
             responses = register_payment_providers.send(self.request.event)

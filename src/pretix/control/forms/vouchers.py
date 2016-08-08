@@ -48,7 +48,7 @@ class VoucherForm(I18nModelForm):
             else:
                 choices.append((str(i.pk), i.name))
         for q in self.instance.event.quotas.all():
-            choices.append(('q-%d' % q.pk, 'Any product in quota "{quota}"'.format(quota=q)))
+            choices.append(('q-%d' % q.pk, _('Any product in quota "{quota}"').format(quota=q)))
         self.fields['itemvar'].choices = choices
 
     def clean(self):
@@ -65,16 +65,30 @@ class VoucherForm(I18nModelForm):
             self.instance.item = Item.objects.get(pk=itemid, event=self.instance.event)
             if varid:
                 self.instance.variation = ItemVariation.objects.get(pk=varid, item=self.instance.item)
+                avail = self.instance.variation.check_quotas()
             else:
                 self.instance.variation = None
+                avail = self.instance.item.check_quotas()
             self.instance.quota = None
         else:
             self.instance.quota = Quota.objects.get(pk=quotaid, event=self.instance.event)
             self.instance.item = None
             self.instance.variation = None
+            avail = self.instance.quota.availability()
 
-        if 'code' in data and not self.instance.pk and Voucher.objects.filter(code=data['code'], event=self.instance.event).exists():
-            raise ValidationError(_('A voucher with this code already exists.'))
+        if 'codes' in data:
+            data['codes'] = [a.strip() for a in data.get('codes', '').strip().split("\n") if a]
+            cnt = len(data['codes'])
+        else:
+            cnt = 1
+
+        if data.get('block_quota', False):
+            if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < cnt):
+                raise ValidationError(_('You cannot create a voucher that blocks quota as the selected product or quota is '
+                                        'currently sold out or completely reserved.'))
+
+            if 'code' in data and not self.instance.pk and Voucher.objects.filter(code=data['code'], event=self.instance.event).exists():
+                raise ValidationError(_('A voucher with this code already exists.'))
 
         return data
 
@@ -103,7 +117,6 @@ class VoucherBulkForm(VoucherForm):
 
     def clean(self):
         data = super().clean()
-        data['codes'] = [a.strip() for a in data.get('codes', '').strip().split("\n") if a]
 
         if Voucher.objects.filter(code__in=data['codes'], event=self.instance.event).exists():
             raise ValidationError(_('A voucher with one of this codes already exists.'))

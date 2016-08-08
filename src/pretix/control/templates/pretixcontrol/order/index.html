@@ -105,12 +105,30 @@
                                     <a href="{% url "control:event.invoice.download" invoice=i.pk event=request.event.slug organizer=request.event.organizer.slug %}">
                                         {% if i.is_cancellation %}{% trans "Cancellation" %}{% else %}{% trans "Invoice" %}{% endif %}
                                         {{ i.number }}</a> ({{ i.date|date:"SHORT_DATE_FORMAT" }})
+                                    {% if not i.canceled %}
+                                        <form class="form-inline helper-display-inline" method="post"
+                                                action="{% url "control:event.order.regeninvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
+                                            {% csrf_token %}
+                                            <button class="btn btn-default btn-xs">
+                                                {% trans "Regenerate" %}
+                                            </button>
+                                        </form>
+                                        {% if not i.is_cancellation %}
+                                            <form class="form-inline helper-display-inline" method="post"
+                                                    action="{% url "control:event.order.reissueinvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
+                                                {% csrf_token %}
+                                                <button class="btn btn-default btn-xs">
+                                                    {% trans "Cancel and reissue" %}
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    {% endif %}
                                     {% if forloop.revcounter0 > 0 %}
                                         <br/>
                                     {% endif %}
                                 {% endfor %}
                             </dd>
-                        {% elif request.event.settings.invoice_generate == 'admin' or request.event.settings.invoice_generate == 'user' %}
+                        {% elif can_generate_invoice %}
                             <dt>{% trans "Invoices" %}</dt>
                             <dd>
                                 <form class="form-inline helper-display-inline" method="post"

@@ -21,6 +21,7 @@
                 <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
             </select>
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+            <button class="btn btn-default" type="submit" name="download" value="yes">{% trans "Download list" %}</button>
         </p>
     </form>
     {% if vouchers|length == 0 %}
