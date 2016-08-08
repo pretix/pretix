@@ -151,6 +151,11 @@ def cancel_order(order, user=None):
     if i:
         generate_cancellation(i)
 
+    for position in order.positions.all():
+        if position.voucher:
+            position.voucher.redeemed = False
+            position.voucher.save()
+
     return order
 
 
