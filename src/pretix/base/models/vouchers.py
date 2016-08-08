@@ -162,10 +162,12 @@ class Voucher(LoggedModel):
 
     def is_ordered(self) -> int:
         """
-        Returns whether an order position exists that uses this voucher.
+        Returns whether a non-canceled order position exists that uses this voucher.
         """
         return OrderPosition.objects.filter(
             voucher=self
+        ).exclude(
+            order__status=Order.STATUS_CANCELLED
         ).exists()
 
     def is_in_cart(self) -> int:
