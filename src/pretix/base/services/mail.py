@@ -44,8 +44,8 @@ def mail(email: str, subject: str, template: str,
 
     :param locale: The locale to be used while evaluating the subject and the template
 
-    :return: ``False`` on obvious, immediate failures, ``True`` otherwise. ``True`` does not necessarily mean that
-        the email has been sent, just that it has been queued by the email backend.
+    :raises Exception: on obvious, immediate failures. Not raising an exception does not necessarily mean that the
+        email has been sent, just that it has been queued by the email backend.
     """
     with language(locale):
         if isinstance(template, LazyI18nString):
@@ -90,10 +90,9 @@ def mail_send(to: str, subject: str, body: str, sender: str, event: int=None) ->
 
     try:
         backend.send_messages([email])
-        return True
     except Exception:
         logger.exception('Error sending email')
-        return False
+        raise
 
 
 if settings.HAS_CELERY and settings.EMAIL_BACKEND != 'django.core.mail.outbox':
