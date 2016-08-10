@@ -68,7 +68,15 @@ class VoucherForm(I18nModelForm):
                 avail = self.instance.variation.check_quotas()
             else:
                 self.instance.variation = None
-                avail = self.instance.item.check_quotas()
+                variations = self.instance.item.variations.all()
+                if variations:
+                    available, count = zip(*[v.check_quotas() for v in variations])
+                    avail = (
+                        Quota.AVAILABILITY_OK if Quota.AVAILABILITY_OK in available else None,
+                        sum(filter(None, count))
+                    )
+                else:
+                    avail = self.instance.item.check_quotas()
             self.instance.quota = None
         else:
             self.instance.quota = Quota.objects.get(pk=quotaid, event=self.instance.event)
