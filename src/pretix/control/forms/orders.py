@@ -23,3 +23,15 @@ class ExporterForm(forms.Form):
                 data[k] = [m.pk for m in v]
 
         return data
+
+
+class CommentForm(I18nModelForm):
+    class Meta:
+        model = Order
+        fields = ['comment']
+        widgets = {
+            'comment': forms.Textarea(attrs={
+                'rows': 3,
+                'class': 'helper-width-100',
+            }),
+        }

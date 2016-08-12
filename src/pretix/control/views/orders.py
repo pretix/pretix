@@ -28,7 +28,7 @@ from pretix.base.signals import (
     register_data_exporters, register_payment_providers,
     register_ticket_outputs,
 )
-from pretix.control.forms.orders import ExporterForm, ExtendForm
+from pretix.control.forms.orders import CommentForm, ExporterForm, ExtendForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -132,6 +132,7 @@ class OrderDetail(OrderView):
         )
         ctx['payment'] = self.payment_provider.order_control_render(self.request, self.object)
         ctx['invoices'] = list(self.order.invoices.all().select_related('event'))
+        ctx['comment_form'] = CommentForm(initial={'comment': self.order.comment})
         return ctx
 
     def get_items(self):
@@ -170,6 +171,21 @@ class OrderDetail(OrderView):
             'total': self.object.total,
             'payment_fee': self.object.payment_fee,
         }
+
+
+class OrderComment(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        form = CommentForm(self.request.POST)
+        if form.is_valid():
+            self.order.comment = form.cleaned_data.get('comment')
+            self.order.save()
+            self.order.log_action('pretix.event.order.comment', user=self.request.user)
+            messages.success(self.request, _('The comment has been updated.'))
+        else:
+            messages.error(self.request, _('Could not update the comment.'))
+        return redirect(self.get_order_url())
 
 
 class OrderTransition(OrderView):
