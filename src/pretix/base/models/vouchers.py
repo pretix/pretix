@@ -43,6 +43,8 @@ class Voucher(LoggedModel):
     :type variation: ItemVariation
     :param quota: If set, the quota to choose an item from
     :type quota: Quota
+    :param comment: An internal comment that will only be visible to staff, and never displayed to the user
+    :type comment: str
 
     Various constraints apply:
 

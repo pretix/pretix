@@ -19,6 +19,7 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
         'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
         'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),
         'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
+        'pretix.event.order.comment': _('The order\'s internal comment has been updated.'),
     }
     if logentry.action_type in plains:
         return plains[logentry.action_type]

@@ -77,6 +77,8 @@ urlpatterns = [
             name='event.order.reissueinvoice'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/extend$', orders.OrderExtend.as_view(),
             name='event.order.extend'),
+        url(r'^orders/(?P<code>[0-9A-Z]+)/comment$', orders.OrderComment.as_view(),
+            name='event.order.comment'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/$', orders.OrderDetail.as_view(), name='event.order'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/download/(?P<output>[^/]+)$', orders.OrderDownload.as_view(),
             name='event.order.download'),

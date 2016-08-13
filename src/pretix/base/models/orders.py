@@ -74,6 +74,8 @@ class Order(LoggedModel):
     :type payment_info: str
     :param total: The total amount of the order, including the payment fee
     :type total: decimal.Decimal
+    :param comment: An internal comment that will only be visible to staff, and never displayed to the user
+    :type comment: str
     """
 
     STATUS_PENDING = "n"
@@ -152,6 +154,11 @@ class Order(LoggedModel):
     total = models.DecimalField(
         decimal_places=2, max_digits=10,
         verbose_name=_("Total amount")
+    )
+    comment = models.TextField(
+        blank=True, verbose_name=_("Comment"),
+        help_text=_("The text entered in this field will not be visible to the user and is available for your "
+                    "convenience.")
     )
 
     class Meta:
