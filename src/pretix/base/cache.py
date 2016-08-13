@@ -1,9 +1,9 @@
 import hashlib
 import time
+from typing import Dict, List
 
 from django.core.cache import caches
 from django.db.models import Model
-from typing import Dict, List
 
 
 class NamespacedCache:

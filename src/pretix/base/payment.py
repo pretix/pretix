@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from decimal import Decimal
+from typing import Any, Dict
 
 from django import forms
 from django.contrib import messages
@@ -9,7 +10,6 @@ from django.forms import Form
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
-from typing import Any, Dict
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import CartPosition, Event, Order, Quota

@@ -1,6 +1,7 @@
+from typing import Any, Dict
+
 from django.conf import settings
 from django.core.files.base import ContentFile
-from typing import Any, Dict
 
 from pretix.base.models import CachedFile, Event, cachedfile_name
 from pretix.base.signals import register_data_exporters

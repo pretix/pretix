@@ -1,10 +1,10 @@
 import logging
+from typing import Any, Dict
 
 from django.conf import settings
 from django.core.mail import EmailMessage, get_connection
 from django.template.loader import get_template
 from django.utils.translation import ugettext as _
-from typing import Any, Dict
 
 from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import Event, Order

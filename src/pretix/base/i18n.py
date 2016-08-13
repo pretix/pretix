@@ -1,6 +1,7 @@
 import copy
 import json
 from contextlib import contextmanager
+from typing import Dict, List, Optional, Union
 
 from django import forms
 from django.conf import settings
@@ -10,7 +11,6 @@ from django.utils import translation
 from django.utils.formats import date_format, number_format
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext
-from typing import Dict, List, Optional, Union
 
 
 class LazyI18nString:

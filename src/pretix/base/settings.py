@@ -1,6 +1,7 @@
 import decimal
 import json
 from datetime import date, datetime, time
+from typing import Any, Dict, Optional
 
 import dateutil.parser
 from django.conf import settings
@@ -8,7 +9,6 @@ from django.core.files import File
 from django.core.files.storage import default_storage
 from django.db.models import Model
 from django.utils.translation import ugettext_noop
-from typing import Any, Dict, Optional
 
 from pretix.base.i18n import LazyI18nString
 

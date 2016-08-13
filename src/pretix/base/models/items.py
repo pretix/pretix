@@ -1,13 +1,13 @@
 import sys
 import uuid
 from decimal import Decimal
+from typing import Tuple
 
 from django.db import models
 from django.db.models import Q
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from typing import Tuple
 
 from pretix.base.i18n import I18nCharField, I18nTextField
 from pretix.base.models.base import LoggedModel

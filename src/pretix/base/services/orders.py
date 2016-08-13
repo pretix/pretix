@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta
 from decimal import Decimal
+from typing import List
 
 from django.conf import settings
 from django.db import transaction
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
-from typing import List
 
 from pretix.base.i18n import (
     LazyDate, LazyLocaleException, LazyNumber, language,

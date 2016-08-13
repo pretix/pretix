@@ -1,9 +1,9 @@
 from collections import OrderedDict
+from typing import Tuple
 
 from django import forms
 from django.http import HttpRequest
 from django.utils.translation import ugettext_lazy as _
-from typing import Tuple
 
 from pretix.base.models import Event, Order
 from pretix.base.settings import SettingsSandbox

@@ -1,7 +1,7 @@
 from enum import Enum
+from typing import List
 
 from django.apps import apps
-from typing import List
 
 
 class PluginType(Enum):

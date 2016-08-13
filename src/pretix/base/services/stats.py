@@ -1,8 +1,8 @@
 from decimal import Decimal
+from typing import Any, Dict, Iterable, List, Tuple
 
 from django.db.models import Count, Sum
 from django.utils.translation import ugettext_lazy as _
-from typing import Any, Dict, Iterable, List, Tuple
 
 from pretix.base.models import Event, Item, ItemCategory, Order, OrderPosition
 from pretix.base.signals import register_payment_providers

@@ -3,12 +3,12 @@ import random
 import string
 from datetime import datetime
 from decimal import Decimal
+from typing import List, Union
 
 from django.conf import settings
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from typing import List, Union
 
 from ..decimal import round_decimal
 from .base import CachedFile, LoggedModel

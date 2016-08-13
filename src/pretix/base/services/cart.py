@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta
 from decimal import Decimal
+from typing import List, Optional
 
 from django.conf import settings
 from django.db.models import Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
-from typing import List, Optional
 
 from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import (
