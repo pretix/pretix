@@ -180,7 +180,7 @@ class Item(LoggedModel):
                     'either directly or via a quota.')
     )
     hide_without_voucher = models.BooleanField(
-        verbose_name=_('This product will only be shown if a voucher is redeemed.'),
+        verbose_name=_('This product will only be shown if a voucher matching the product is redeemed.'),
         default=False,
         help_text=_('This product will be hidden from the event page until the user enters a voucher '
                     'code that is specifically tied to this product (and not via a quota).')

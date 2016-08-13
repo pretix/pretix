@@ -142,7 +142,7 @@ def cancel_order(order, user=None):
         user = User.objects.get(pk=user)
     with order.event.lock():
         if order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
-            raise OrderError(_('You cannot cancel this order'))
+            raise OrderError(_('You cannot cancel this order.'))
         order.status = Order.STATUS_CANCELLED
         order.save()
 

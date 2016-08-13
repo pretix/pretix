@@ -22,11 +22,11 @@ error_messages = {
               'server was too busy. Please try again.'),
     'empty': _('You did not select any products.'),
     'not_for_sale': _('You selected a product which is not available for sale.'),
-    'unavailable': _('Some of the products you selected were no longer available. '
+    'unavailable': _('Some of the products you selected are no longer available. '
                      'Please see below for details.'),
-    'in_part': _('Some of the products you selected were no longer available in '
+    'in_part': _('Some of the products you selected are no longer available in '
                  'the quantity you selected. Please see below for details.'),
-    'max_items': _("You cannot select more than %s items per order"),
+    'max_items': _("You cannot select more than %s items per order."),
     'not_started': _('The presale period for this event has not yet started.'),
     'ended': _('The presale period has ended.'),
     'voucher_invalid': _('This voucher code is not known in our database.'),
