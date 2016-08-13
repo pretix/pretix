@@ -102,6 +102,19 @@ for example::
     flake8 --ignore=E123,E128,F403,F401,N802,W503 .
 
 
+Working with mails
+^^^^^^^^^^^^^^^^^^
+If you want to test anything regarding emails in your development setup, we recommend
+starting Python's debugging SMTP server in a separate shell and configuring pretix to use it.
+Every email will then be printed to the debugging SMTP server's stdout.
+
+Add this to your ``src/pretix.cfg``::
+
+    [mail]
+    port = 1025
+
+Then execute ``python -m smtpd -n -c DebuggingServer localhost:1025``.
+
 
 Working with the documentation
 ------------------------------
