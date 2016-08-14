@@ -536,7 +536,7 @@ class InvoiceAddress(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
     order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address')
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
-    name = models.CharField(max_length=255, verbose_name=_('Name'), blank=True)
+    name = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
     street = models.TextField(verbose_name=_('Address'), blank=False)
     zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=False)
     city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)
