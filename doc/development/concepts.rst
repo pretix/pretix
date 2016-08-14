@@ -9,67 +9,74 @@ The components
 
 The project pretix is split into several components. The main three of them are:
 
-**pretix.base**
-    Pretixbase is the foundation below all other components. It is primarily
+**base**
+    This is the foundation below all other components. It is primarily
     responsible for the data structures and database communication. It also hosts
     several utilities which are used by multiple other components.
 
-**pretix.control**
-    Pretixcontrol is the web-based backend software which allows organizers to
+**control**
+    This is the web-based backend software which allows organizers to
     create and manage their events, items, orders and tickets.
 
-**pretix.presale**
-    Pretixpresale is the ticket-shop itself, containing all of the parts visible to the
+**presale**
+    This is the ticket-shop itself, containing all of the parts visible to the
     end user.
 
 Users and events
 ^^^^^^^^^^^^^^^^
 
-Pretix is all about **events**, which are defined as something happening somewhere.
+pretix is all about **events**, which are defined as something happening somewhere.
 Every event is managed by the **organizer**, an abstract entity running the event.
 
-Pretix has a concept of **users** that is used for all people who have to log in to the
+pretix has a concept of **users** that is used for all people who have to log in to the
 control panel to manage one or more events. No user is required to place an order.
 
 
 Items and variations
 ^^^^^^^^^^^^^^^^^^^^
 
-The purpose of pretix is to sell **items** (which belong to **events**) to **users**.
-An **item** is a abstract thing, popular examples being an event ticket or a piece of
-merchandise, like 'T-shirt'. An **item** can have multiple **variations**. For example,
-the **item** 'T-Shirt' could have the **variations** 'S', 'M' and 'L'.
-
-Questions
-^^^^^^^^^
+The purpose of pretix is to sell products, e.g. tickets or merchandise for an event. Internally,
+those products are called **items**. An item can have multiple **variations**. For example,
+the item 'T-Shirt' could have the **variations** 'S', 'M' and 'L'.
 
 An item can be extended using **questions**. Questions enable items to be extended by
 additional information which can be entered by the user. Examples of possible questions
 include 'name' or 'age'.
 
-Restriction by number
-"""""""""""""""""""""
+Quotas
+^^^^^^
 
-The restriction by number is a special case, as it is the only (planned) restriction type demanding
-special care in the implementation to never sell more tickets than allowed, even under heavy load.
+Every item needs to belong to one or more **quotas**. The quota contains the information on how many
+times an item can be sold. A quota can have a limited amount of tickets (e.g. if you have a room that
+fits a defined maximum number of persons) or it can be unlimited. In the former case, the quota can be
+available or sold out, in the latter case it is always treated as available.
 
-* There is a concept of **quotas**. A quota is basically a number of items combined with information
-  about how many of them are still available.
-* Every time a user places a item in the cart, a **cart position** is created, reducing the number of
-  available items in the pool by one. The position is valid for a fixed time (e.g. 30 minutes), but not
-  instantly deleted after those 30 minutes (we'll get to that).
-* Every time a user places a binding order, the **cart position** object is replaced by an **order position**
-  object which behaves much the same as the cart position. It reduces the number of available items and is valid
-  for a fixed time, this time for the configured payment term (e.g. 14 days).
-* If the order is being paid, the **order** becomes permanent.
-* Once there are no available tickets left and user A wants to buy a ticket, they can do so, as long as
-  there are *expired* cart position in the system. In this case, user A gets a new cart position. Now there are
-  more cart positions than available tickets and therefore we have to remove one of the expired cart positions.
-  We will choose to delete the cart position of the user who tries *last* to use his cart position.
-* The same goes for orders which are not paid within the configured time frame. This policy allows the organizer to
-  sell as many items as possible. Moreover, it guarantees the users to get their items if they check out within the validity
-  period of their positions and pay within the validity period of their orders. It does not guarantee them anything
-  any longer, but it tries to be *as tolerant as possible* to users who are paying after their payment
-  period or click checkout after the expiry of their position.
-* The same quota can apply to multiple items and one item can be affected by multiple quotas.
+If an item is assigned to multiple quotas, it can only be bought if *all of them* still are available.
+If multiple items are assigned to the same quota, the quota will be counted as sold out as soon as the
+*sum* of the two items exceeds the quota limit.
 
+The availability of a quota is currently calculated by substracting the following numbers from the quota
+limit:
+
+* The number of orders placed for an item that are either already paid or within their granted payment period
+* The number of non-expired items currently in the shopping cart of users
+* The number of vouchers defined as "quota blocking" (see blow)
+
+The quota system tries very hard to be as friendly as possible to your event attendees while still making sure
+your limit is never exceeded. For  example, when the payment period of an order expires without the order being
+paid for, the quota will be freed to allow new persons to buy a ticket. However, if you then receive a payment
+for the expired order, it will be accepted – unless the quota has sold out in the meantime.
+
+Vouchers
+^^^^^^^^
+
+A voucher is an object that can be used to grant a single user something special, e.g. a reduced price for a
+product or reserved quota space.
+
+Orders
+^^^^^^
+
+If a customer completes the checkout process, an **Order** will be created containing all the entered information.
+An order can be in one of currently five states that are listed in the diagram below:
+
+.. image:: /images/order_states.png
