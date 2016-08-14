@@ -227,6 +227,7 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
                 order = orders[row['code']]
                 row['order'] = order
                 if order.status == Order.STATUS_PENDING:
+                    amount = Decimal(row['amount'])
                     if amount != order.total:
                         row['class'] = 'danger'
                         row['message'] = _('Found wrong amount. Expected: %s' % str(order.total))
