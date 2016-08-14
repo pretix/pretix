@@ -194,27 +194,37 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
     def annotate_data(self, data):
         pattern = re.compile(self.request.event.slug.upper() + "[ ]*([A-Z0-9]{5})")
         amount_pattern = re.compile("[^0-9.-]")
+        order_codes = []
         for row in data:
             row['ok'] = False
-            match = pattern.search(row['reference'].upper())
             try:
                 amount = Decimal(amount_pattern.sub("", row['amount'].replace(",", ".")))
                 row['amount'] = str(amount)
             except:
                 logger.exception('Could not parse amount of transaction')
                 amount = 0
+            match = pattern.search(row['reference'].upper())
             if not match:
                 row['class'] = 'warning' if amount > 0 else ''
                 row['message'] = _('No order code detected')
                 continue
 
             code = match.group(1)
-            try:
-                order = Order.objects.get(event=self.request.event, code=code)
-            except Order.DoesNotExist:
-                row['class'] = 'danger'
-                row['message'] = _('Unknown order code detected')
-            else:
+            row['code'] = code
+            order_codes.append(code)
+
+        orders = {}
+        # Perform query in bulks because of SQLite's default of SQLITE_MAX_VARIABLE_NUMBER = 999
+        for i in range(0, len(order_codes), 500):
+            orders.update({
+                o.code: o for o in self.request.event.orders.filter(code__in=order_codes[i:500])
+            })
+
+        for row in data:
+            if 'code' not in row:
+                continue
+            if row['code'] in orders:
+                order = orders[row['code']]
                 row['order'] = order
                 if order.status == Order.STATUS_PENDING:
                     if amount != order.total:
@@ -233,4 +243,7 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
                 elif order.status == Order.STATUS_REFUNDED:
                     row['class'] = 'warning'
                     row['message'] = _('Order has been refunded')
+            else:
+                row['class'] = 'danger'
+                row['message'] = _('Unknown order code detected')
         return data
