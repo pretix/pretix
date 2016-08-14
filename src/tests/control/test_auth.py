@@ -6,36 +6,8 @@ from django.contrib.auth.tokens import (
 )
 from django.core import mail as djmail
 from django.test import TestCase
-from tests.base import BrowserTest
 
 from pretix.base.models import User
-
-
-class LoginFormBrowserTest(BrowserTest):
-
-    def setUp(self):
-        super().setUp()
-        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-
-    def test_login(self):
-        self.driver.implicitly_wait(10)
-        self.driver.get('%s%s' % (self.live_server_url, '/control/login'))
-        username_input = self.driver.find_element_by_name("email")
-        username_input.send_keys('dummy@dummy.dummy')
-        password_input = self.driver.find_element_by_name("password")
-        password_input.send_keys('dummy')
-        self.driver.find_element_by_css_selector('button[type="submit"]').click()
-        self.driver.find_element_by_class_name("navbar-right")
-
-    def test_login_fail(self):
-        self.driver.implicitly_wait(10)
-        self.driver.get('%s%s' % (self.live_server_url, '/control/login'))
-        username_input = self.driver.find_element_by_name("email")
-        username_input.send_keys('dummy@dummy.dummy')
-        password_input = self.driver.find_element_by_name("password")
-        password_input.send_keys('wrong')
-        self.driver.find_element_by_css_selector('button[type="submit"]').click()
-        self.driver.find_element_by_class_name("alert-danger")
 
 
 class LoginFormTest(TestCase):

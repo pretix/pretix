@@ -3,7 +3,7 @@ import time
 
 from django.test import TestCase
 from django.utils.timezone import now
-from tests.base import BrowserTest
+from tests.base import BrowserTest, SoupTest
 
 from pretix.base.models import (
     Event, EventPermission, Item, ItemCategory, ItemVariation, Organizer,
@@ -24,23 +24,22 @@ class EventTestMixin:
         EventPermission.objects.create(user=self.user, event=self.event)
 
 
-class EventMiddlewareTest(EventTestMixin, BrowserTest):
+class EventMiddlewareTest(EventTestMixin, SoupTest):
     def setUp(self):
         super().setUp()
-        self.driver.implicitly_wait(10)
 
     def test_event_header(self):
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        self.assertIn(str(self.event.name), self.driver.find_element_by_css_selector("h1").text)
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn(str(self.event.name), doc.find("h1").text)
 
     def test_not_found(self):
-        resp = self.client.get('%s/%s/%s/' % (self.live_server_url, 'foo', 'bar'))
+        resp = self.client.get('/%s/%s/' % ('foo', 'bar'))
         self.assertEqual(resp.status_code, 404)
 
     def test_not_live(self):
         self.event.live = False
         self.event.save()
-        resp = self.client.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
+        resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertEqual(resp.status_code, 403)
 
     def test_not_live_logged_in(self):
@@ -48,7 +47,7 @@ class EventMiddlewareTest(EventTestMixin, BrowserTest):
         self.event.save()
 
         self.client.login(email='dummy@dummy.dummy', password='dummy')
-        resp = self.client.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
+        resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertEqual(resp.status_code, 200)
 
 
