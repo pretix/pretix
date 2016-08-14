@@ -118,7 +118,7 @@ class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
             raise Http404(_("The requested voucher does not exist."))
 
     def get(self, request, *args, **kwargs):
-        if self.get_object().is_ordered():
+        if self.get_object().redeemed:
             messages.error(request, _('A voucher can not be deleted if it already has been redeemed.'))
             return HttpResponseRedirect(self.get_success_url())
         return super().get(request, *args, **kwargs)
@@ -128,7 +128,7 @@ class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
         self.object = self.get_object()
         success_url = self.get_success_url()
 
-        if self.object.is_ordered():
+        if self.object.redeemed:
             messages.error(request, _('A voucher can not be deleted if it already has been redeemed.'))
         else:
             self.object.log_action('pretix.voucher.deleted', user=self.request.user)
