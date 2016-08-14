@@ -5,7 +5,6 @@ python:
 install:
     - pip install -U pip wheel setuptools
     - pip install -q -U -r src/requirements.txt -r src/requirements/dev.txt -r src/requirements/py34.txt
-    - npm install -g less@2.5.0
 before_script:
     - cd src
 script:
