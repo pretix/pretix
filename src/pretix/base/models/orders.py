@@ -218,10 +218,13 @@ class Order(LoggedModel):
         modify_deadline = self.event.settings.get('last_order_modification_date', as_type=datetime)
         if modify_deadline is not None and now() > modify_deadline:
             return False
+        if self.event.settings.get('invoice_address_asked', as_type=bool):
+            return True
         ask_names = self.event.settings.get('attendee_names_asked', as_type=bool)
         for cp in self.positions.all().prefetch_related('item__questions'):
             if (cp.item.admission and ask_names) or cp.item.questions.all():
                 return True
+
         return False  # nothing there to modify
 
     @property
