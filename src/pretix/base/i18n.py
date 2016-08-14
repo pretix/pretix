@@ -215,6 +215,9 @@ class I18nFormField(forms.MultiValueField):
         return LazyI18nString(data)
 
     def clean(self, value):
+        if isinstance(value, LazyI18nString):
+            # This happens e.g. if the field is disabled
+            return value
         found = False
         clean_data = []
         errors = []
