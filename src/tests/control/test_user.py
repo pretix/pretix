@@ -1,106 +1,108 @@
-from tests.base import BrowserTest
+from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import User
 
 
-class UserSettingsTest(BrowserTest):
+class UserSettingsTest(SoupTest):
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-        self.driver.implicitly_wait(10)
-        self.driver.get('%s%s' % (self.live_server_url, '/control/login'))
-        username_input = self.driver.find_element_by_name("email")
-        username_input.send_keys('dummy@dummy.dummy')
-        password_input = self.driver.find_element_by_name("password")
-        password_input.send_keys('dummy')
-        self.driver.find_element_by_css_selector('button[type="submit"]').click()
-        self.driver.find_element_by_class_name("navbar-right")
-        self.driver.get('%s%s' % (self.live_server_url, '/control/settings'))
+        self.client.login(email='dummy@dummy.dummy', password='dummy')
+        doc = self.get_doc('/control/settings')
+        self.form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+
+    def save(self, data):
+        form_data = self.form_data.copy()
+        form_data.update(data)
+        print(form_data)
+        return self.post_doc('/control/settings', form_data)
 
     def test_set_name(self):
-        self.driver.find_element_by_name("givenname").clear()
-        self.driver.find_element_by_name("familyname").clear()
-        self.driver.find_element_by_name("givenname").send_keys("Peter")
-        self.driver.find_element_by_name("familyname").send_keys("Miller")
-        self.scroll_and_click(self.driver.find_element_by_class_name('btn-save'))
-        self.driver.find_element_by_class_name("alert-success")
+        doc = self.save({
+            'givenname': 'Peter',
+            'familyname': 'Miller'
+        })
+        assert doc.select(".alert-success")
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.givenname == 'Peter'
         assert self.user.familyname == 'Miller'
 
     def test_change_email_require_password(self):
-        self.driver.find_element_by_name("email").clear()
-        self.driver.find_element_by_name("email").send_keys("foo@example.com")
-        self.scroll_and_click(self.driver.find_element_by_class_name('btn-save'))
-        self.driver.find_element_by_class_name("alert-danger")
+        doc = self.save({
+            'email': 'foo@example.com',
+        })
+        assert doc.select(".alert-danger")
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.email == 'dummy@dummy.dummy'
 
     def test_change_email_success(self):
-        self.driver.find_element_by_name("email").clear()
-        self.driver.find_element_by_name("email").send_keys("foo@example.com")
-        self.driver.find_element_by_name("old_pw").clear()
-        self.driver.find_element_by_name("old_pw").send_keys("dummy")
-        self.scroll_and_click(self.driver.find_element_by_class_name('btn-save'))
-        self.driver.find_element_by_class_name("alert-success")
+        doc = self.save({
+            'email': 'foo@example.com',
+            'old_pw': 'dummy'
+        })
+        assert doc.select(".alert-success")
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.email == 'foo@example.com'
 
     def test_change_email_no_duplicates(self):
         User.objects.create_user('foo@example.com', 'foo')
-        self.driver.find_element_by_name("email").clear()
-        self.driver.find_element_by_name("email").send_keys("foo@example.com")
-        self.driver.find_element_by_name("old_pw").clear()
-        self.driver.find_element_by_name("old_pw").send_keys("dummy")
-        self.scroll_and_click(self.driver.find_element_by_class_name('btn-save'))
-        self.driver.find_element_by_class_name("alert-danger")
+        doc = self.save({
+            'email': 'foo@example.com',
+            'old_pw': 'dummy'
+        })
+        assert doc.select(".alert-danger")
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.email == 'dummy@dummy.dummy'
 
     def test_change_password_require_password(self):
-        self.driver.find_element_by_name("new_pw").send_keys("foo")
-        self.driver.find_element_by_name("new_pw_repeat").send_keys("foo")
-        self.scroll_and_click(self.driver.find_element_by_class_name('btn-save'))
-        self.driver.find_element_by_class_name("alert-danger")
+        doc = self.save({
+            'new_pw': 'foo',
+            'new_pw_repeat': 'foo',
+        })
+        assert doc.select(".alert-danger")
         pw = self.user.password
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.password == pw
 
     def test_change_password_success(self):
-        self.driver.find_element_by_name("new_pw").send_keys("foobarbar")
-        self.driver.find_element_by_name("new_pw_repeat").send_keys("foobarbar")
-        self.driver.find_element_by_name("old_pw").send_keys("dummy")
-        self.scroll_and_click(self.driver.find_element_by_class_name('btn-save'))
-        self.driver.find_element_by_class_name("alert-success")
+        doc = self.save({
+            'new_pw': 'foobarbar',
+            'new_pw_repeat': 'foobarbar',
+            'old_pw': 'dummy',
+        })
+        assert doc.select(".alert-success")
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.check_password("foobarbar")
 
     def test_change_password_short(self):
-        self.driver.find_element_by_name("new_pw").send_keys("foobar")
-        self.driver.find_element_by_name("new_pw_repeat").send_keys("foobar")
-        self.driver.find_element_by_name("old_pw").send_keys("dummy")
-        self.scroll_and_click(self.driver.find_element_by_class_name('btn-save'))
-        self.driver.find_element_by_class_name("alert-danger")
+        doc = self.save({
+            'new_pw': 'foo',
+            'new_pw_repeat': 'foo',
+            'old_pw': 'dummy',
+        })
+        assert doc.select(".alert-danger")
         pw = self.user.password
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.password == pw
 
     def test_change_password_user_attribute_similarity(self):
-        self.driver.find_element_by_name("new_pw").send_keys("dummy123")
-        self.driver.find_element_by_name("new_pw_repeat").send_keys("dummy123")
-        self.driver.find_element_by_name("old_pw").send_keys("dummy")
-        self.scroll_and_click(self.driver.find_element_by_class_name('btn-save'))
-        self.driver.find_element_by_class_name("alert-danger")
+        doc = self.save({
+            'new_pw': 'dummy123',
+            'new_pw_repeat': 'dummy123',
+            'old_pw': 'dummy',
+        })
+        assert doc.select(".alert-danger")
         pw = self.user.password
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.password == pw
 
     def test_change_password_require_repeat(self):
-        self.driver.find_element_by_name("new_pw").send_keys("foo")
-        self.driver.find_element_by_name("new_pw_repeat").send_keys("bar")
-        self.driver.find_element_by_name("old_pw").send_keys("dummy")
-        self.scroll_and_click(self.driver.find_element_by_class_name('btn-save'))
-        self.driver.find_element_by_class_name("alert-danger")
+        doc = self.save({
+            'new_pw': 'foooooooooooooo',
+            'new_pw_repeat': 'baaaaaaaaaaaar',
+            'old_pw': 'dummy',
+        })
+        assert doc.select(".alert-danger")
         pw = self.user.password
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.password == pw

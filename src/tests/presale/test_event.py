@@ -3,7 +3,7 @@ import time
 
 from django.test import TestCase
 from django.utils.timezone import now
-from tests.base import BrowserTest, SoupTest
+from tests.base import SoupTest
 
 from pretix.base.models import (
     Event, EventPermission, Item, ItemCategory, ItemVariation, Organizer,
@@ -25,9 +25,6 @@ class EventTestMixin:
 
 
 class EventMiddlewareTest(EventTestMixin, SoupTest):
-    def setUp(self):
-        super().setUp()
-
     def test_event_header(self):
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn(str(self.event.name), doc.find("h1").text)
@@ -51,24 +48,20 @@ class EventMiddlewareTest(EventTestMixin, SoupTest):
         self.assertEqual(resp.status_code, 200)
 
 
-class ItemDisplayTest(EventTestMixin, BrowserTest):
-    def setUp(self):
-        super().setUp()
-        self.driver.implicitly_wait(10)
-
+class ItemDisplayTest(EventTestMixin, SoupTest):
     def test_not_active(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=False)
         q.items.add(item)
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        self.assertNotIn("Early-bird", self.driver.find_element_by_css_selector("body").text)
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertNotIn("Early-bird", html)
 
     def test_without_category(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
         q.items.add(item)
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        self.assertIn("Early-bird", self.driver.find_element_by_css_selector("section .product-row:first-child").text)
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn("Early-bird", doc.select("section .product-row")[0].text)
 
     def test_timely_available(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
@@ -76,47 +69,46 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
                                    available_until=now() + datetime.timedelta(days=2),
                                    available_from=now() - datetime.timedelta(days=2))
         q.items.add(item)
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        self.assertIn("Early-bird", self.driver.find_element_by_css_selector("body").text)
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn("Early-bird", doc.select("body")[0].text)
 
     def test_no_longer_available(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
                                    available_until=now() - datetime.timedelta(days=2))
         q.items.add(item)
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        self.assertNotIn("Early-bird", self.driver.find_element_by_css_selector("body").text)
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertNotIn("Early-bird", html)
 
     def test_not_yet_available(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
                                    available_from=now() + datetime.timedelta(days=2))
         q.items.add(item)
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        self.assertNotIn("Early-bird", self.driver.find_element_by_css_selector("body").text)
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertNotIn("Early-bird", html)
 
     def test_hidden_without_voucher(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
                                    hide_without_voucher=True)
         q.items.add(item)
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        self.assertNotIn("Early-bird", self.driver.find_element_by_css_selector("body").text)
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertNotIn("Early-bird", html)
 
     def test_simple_with_category(self):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         q.items.add(item)
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        self.assertIn("Entry tickets", self.driver.find_element_by_css_selector("section:nth-of-type(1) h3").text)
-        self.assertIn("Early-bird",
-                      self.driver.find_element_by_css_selector("section:nth-of-type(1) div:nth-of-type(1)").text)
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn("Entry tickets", doc.select("section:nth-of-type(1) h3")[0].text)
+        self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
 
     def test_simple_without_quota(self):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
         Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
-        resp = self.client.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
+        resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertNotIn("Early-bird", resp.rendered_content)
 
     def test_no_variations_in_quota(self):
@@ -125,8 +117,7 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
         item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         ItemVariation.objects.create(item=item, value='Blue')
         q.items.add(item)
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        resp = self.client.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
+        resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertNotIn("Early-bird", resp.rendered_content)
 
     def test_one_variation_in_quota(self):
@@ -150,16 +141,10 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
         self._assert_variation_found()
 
     def _assert_variation_found(self):
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        self.assertIn("Early-bird",
-                      self.driver.find_element_by_css_selector("section:nth-of-type(1) div:nth-of-type(1)").text)
-        for el in self.driver.find_elements_by_link_text('Show variants'):
-            self.scroll_and_click(el)
-        time.sleep(2)
-        self.assertIn("Red",
-                      self.driver.find_element_by_css_selector("section:nth-of-type(1)").text)
-        self.assertNotIn("Black",
-                         self.driver.find_element_by_css_selector("section:nth-of-type(1)").text)
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
+        self.assertIn("Red", doc.select("section:nth-of-type(1)")[0].text)
+        self.assertNotIn("Black", doc.select("section:nth-of-type(1)")[0].text)
 
     def test_variation_prices_in_quota(self):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
@@ -170,20 +155,12 @@ class ItemDisplayTest(EventTestMixin, BrowserTest):
         q.variations.add(var1)
         q.variations.add(var2)
         q.items.add(item)
-        self.driver.get('%s/%s/%s/' % (self.live_server_url, self.orga.slug, self.event.slug))
-        self.assertIn("Early-bird",
-                      self.driver.find_element_by_css_selector("section:nth-of-type(1) div:nth-of-type(1)").text)
-        for el in self.driver.find_elements_by_link_text('Show variants'):
-            self.scroll_and_click(el)
-        time.sleep(2)
-        self.assertIn("Red",
-                      self.driver.find_elements_by_css_selector("section:nth-of-type(1) div.variation")[0].text)
-        self.assertIn("14.00",
-                      self.driver.find_elements_by_css_selector("section:nth-of-type(1) div.variation")[0].text)
-        self.assertIn("Black",
-                      self.driver.find_elements_by_css_selector("section:nth-of-type(1) div.variation")[1].text)
-        self.assertIn("12.00",
-                      self.driver.find_elements_by_css_selector("section:nth-of-type(1) div.variation")[1].text)
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
+        self.assertIn("Red", doc.select("section:nth-of-type(1) div.variation")[0].text)
+        self.assertIn("14.00", doc.select("section:nth-of-type(1) div.variation")[0].text)
+        self.assertIn("Black", doc.select("section:nth-of-type(1) div.variation")[1].text)
+        self.assertIn("12.00", doc.select("section:nth-of-type(1) div.variation")[1].text)
 
 
 class DeadlineTest(EventTestMixin, TestCase):

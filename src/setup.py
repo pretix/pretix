@@ -66,7 +66,7 @@ setup(
     extras_require={
         'dev': ['django-debug-toolbar>=1.3.0,<2.0'],
         'test': ['pep8==1.5.7', 'pyflakes', 'pep8-naming', 'flake8', 'coverage',
-                 'selenium', 'pytest', 'pytest-django'],
+                 'pytest', 'pytest-django'],
         'memcached': ['pylibmc'],
         'mysql': ['mysqlclient'],
         'paypal': ['paypalrestsdk>=1.9,<1.10,<2.0'],
