@@ -76,6 +76,12 @@ organizer_urls = [
 ]
 
 
+@pytest.fixture
+def perf_patch(monkeypatch):
+    # Patch out template rendering for performance improvements
+    monkeypatch.setattr("django.template.backends.django.Template.render", lambda *args, **kwargs: "mocked template")
+
+
 @pytest.mark.django_db
 @pytest.mark.parametrize("url", [
     "",
@@ -94,7 +100,7 @@ def test_logged_out(client, env, url):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("url", event_urls)
-def test_wrong_event(client, env, url):
+def test_wrong_event(perf_patch, client, env, url):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/' + url)
     # These permission violations do not yield a 403 error, but
@@ -150,7 +156,7 @@ event_permission_urls = [
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code", event_permission_urls)
-def test_wrong_event_permission(client, env, perm, url, code):
+def test_wrong_event_permission(perf_patch, client, env, perm, url, code):
     ep = EventPermission(
         event=env[0], user=env[1],
     )
@@ -179,7 +185,7 @@ def test_current_permission(client, env):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code", event_permission_urls)
-def test_correct_event_permission(client, env, perm, url, code):
+def test_correct_event_permission(perf_patch, client, env, perm, url, code):
     ep = EventPermission(
         event=env[0], user=env[1],
     )
@@ -192,7 +198,7 @@ def test_correct_event_permission(client, env, perm, url, code):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("url", organizer_urls)
-def test_wrong_organizer(client, env, url):
+def test_wrong_organizer(perf_patch, client, env, url):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/' + url)
     # These permission violations do not yield a 403 error, but
@@ -207,7 +213,7 @@ organizer_permission_urls = [
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code", organizer_permission_urls)
-def test_wrong_organizer_permission(client, env, perm, url, code):
+def test_wrong_organizer_permission(perf_patch, client, env, perm, url, code):
     if perm:
         op = OrganizerPermission(
             organizer=env[2], user=env[1],
@@ -221,7 +227,7 @@ def test_wrong_organizer_permission(client, env, perm, url, code):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code", organizer_permission_urls)
-def test_correct_organizer_permission(client, env, perm, url, code):
+def test_correct_organizer_permission(perf_patch, client, env, perm, url, code):
     op = OrganizerPermission(
         organizer=env[2], user=env[1],
     )

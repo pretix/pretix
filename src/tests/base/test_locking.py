@@ -39,12 +39,12 @@ def test_locking_different_events(event):
 
 @pytest.mark.django_db
 def test_lock_timeout_steal(event):
-    locking.LOCK_TIMEOUT = 5
+    locking.LOCK_TIMEOUT = 1
     locking.lock_event(event)
     with pytest.raises(EventLock.LockTimeoutException):
         ev = Event.objects.get(id=event.id)
         locking.lock_event(ev)
-    time.sleep(6)
+    time.sleep(1.5)
     locking.lock_event(ev)
     with pytest.raises(EventLock.LockReleaseException):
         locking.release_event(event)

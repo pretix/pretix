@@ -83,15 +83,14 @@ Code checks and unit tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 Before you check in your code into git, always run the static checkers and unit tests::
 
-    flake8 .
+    flake8 --ignore=E123,E128,F403,F401,N802,W503 .
     isort -c -rc .
     python manage.py check
     py.test
 
-The ``flake8`` command by default is a bit stricter than what we really enforce, but we do enforce that all commits
-produce no output from::
-
-    flake8 --ignore=E123,E128,F403,F401,N802,W503 .
+If you have multiple CPU cores and want to speed up the test suite, you can install the python
+package ``pytest-xdist`` using ``pip install pytest-xdist`` and then run ``py.test -n NUM`` with
+``NUM`` being the number of threads you want to use.
 
 It is therefore a good idea to put this command into your git hook ``.git/hooks/pre-commit``,
 for example::

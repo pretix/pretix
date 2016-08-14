@@ -13,3 +13,5 @@ MEDIA_ROOT = os.path.join(TEST_DIR, 'media')
 EMAIL_BACKEND = 'django.core.mail.outbox'
 
 COMPRESS_ENABLED = COMPRESS_OFFLINE = False
+
+PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher']
