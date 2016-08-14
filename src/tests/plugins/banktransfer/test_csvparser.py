@@ -121,3 +121,27 @@ class CsvImportTest(TestCase):
         ]
         filename = "csvimport_data_de_dab.csv"
         self._test_from_sample_file(filename, expected, hint, expected_parsed)
+
+    def test_sample_file_postbank(self):
+        expected = [
+            ['Buchungstag', 'Wertstellung', 'Umsatzart', 'Buchungsdetails', 'Auftraggeber', 'Empfänger',
+             'Betrag (\x80)', 'Saldo (\x80)'],
+            ['07.08.2016', '01.08.2016', 'Gutschrift', 'Verwendungszweck 2015ABCDE', 'Karla Kundin',
+             'Fiktive Veranstaltungsgesellschaft mbH', '\xA4 42,00', '\xA4 1.337,42'],
+            ['29.07.2016', '29.07.2016', 'Gutschrift', 'Referenz NOTPROVIDED', 'Lars Lieferant',
+             'Fiktive Veranstaltungsgesellschaft mbH', '\xA4 56,76', '\xA4 1.337,42'],
+        ]
+        hint = {
+            'payer': [4],
+            'reference': [3],
+            'date': 0,
+            'amount': 6,
+            'cols': 8,
+        }
+        expected_parsed = [
+            {'payer': 'Karla Kundin', 'reference': 'Verwendungszweck 2015ABCDE', 'amount': '42,00',
+             'date': '07.08.2016'},
+            {'payer': 'Lars Lieferant', 'reference': 'Referenz NOTPROVIDED', 'amount': '56,76', 'date': '29.07.2016'}
+        ]
+        filename = "csvimport_data_de_postbank.csv"
+        self._test_from_sample_file(filename, expected, hint, expected_parsed)

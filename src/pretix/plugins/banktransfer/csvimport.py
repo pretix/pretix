@@ -1,5 +1,6 @@
 import csv
 import io
+import re
 
 
 class HintMismatchError(Exception):
@@ -23,10 +24,10 @@ def parse(data, hint):
             resrow['reference'] = "\n".join([row[int(i)].strip() for i in hint.get('reference')]).strip()
         if hint.get('amount') is not None:
             resrow['amount'] = row[int(hint.get('amount'))].strip()
+            resrow['amount'] = re.sub('[^0-9,+.-]', '', resrow['amount'])
         if hint.get('date') is not None:
             resrow['date'] = row[int(hint.get('date'))].strip()
         if len(resrow['amount']) == 0 or 'amount' not in resrow \
-                or resrow['amount'][0] not in list("1234567890," "+- ") \
                 or len(resrow['reference']) == 0 or resrow['date'] == '':
             # This is probably a headline or something other special.
             continue
