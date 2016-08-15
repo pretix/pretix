@@ -121,6 +121,10 @@ DEFAULTS = {
         'default': None,
         'type': datetime
     },
+    'cancel_allow_user': {
+        'default': 'True',
+        'type': bool
+    },
     'contact_mail': {
         'default': None,
         'type': str

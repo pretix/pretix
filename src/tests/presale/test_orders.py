@@ -229,10 +229,10 @@ class OrdersTest(TestCase):
     def test_orders_cancel_invalid(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
-        self.client.get(
-            '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
-        )
-        self.order = Order.objects.get(id=self.order.id)
+        self.client.post(
+            '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+            }, follow=True)
+        self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PAID
 
     def test_orders_cancel(self):
@@ -247,7 +247,16 @@ class OrdersTest(TestCase):
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                       self.order.secret),
                              target_status_code=200)
-        assert Order.objects.get(id=self.order.id).status == Order.STATUS_CANCELLED
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_CANCELLED
+
+    def test_orders_cancel_forbidden(self):
+        self.event.settings.set('cancel_allow_user', False)
+        self.client.post(
+            '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+            }, follow=True)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PENDING
 
     def test_orders_download(self):
         self.event.settings.set('ticket_download', True)

@@ -295,7 +295,7 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
         self.kwargs = kwargs
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
+        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) or not self.order.can_user_cancel:
             messages.error(request, _('You cannot cancel this order.'))
             return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
@@ -321,6 +321,9 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
     def post(self, request, *args, **kwargs):
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
+        if not self.order.can_user_cancel:
+            messages.error(request, _('You cannot cancel this order.'))
+            return redirect(self.get_order_url())
         return self.do(self.order.pk)
 
     def get_context_data(self, **kwargs):

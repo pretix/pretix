@@ -160,6 +160,11 @@ class EventSettingsForm(SettingsForm):
         required=False,
         help_text=_("Public email address for contacting the organizer")
     )
+    cancel_allow_user = forms.BooleanField(
+        label=_("Allow user to cancel unpaid orders"),
+        help_text=_("If unchecked, users cannot cancel orders by themselves"),
+        required=False
+    )
 
     def clean(self):
         data = super().clean()

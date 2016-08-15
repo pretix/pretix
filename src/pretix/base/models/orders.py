@@ -228,6 +228,10 @@ class Order(LoggedModel):
         return False  # nothing there to modify
 
     @property
+    def can_user_cancel(self) -> bool:
+        return self.event.settings.cancel_allow_user
+
+    @property
     def is_expired_by_time(self):
         return (
             self.status == Order.STATUS_PENDING and self.expires < now()

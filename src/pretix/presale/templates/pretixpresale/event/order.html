@@ -178,7 +178,7 @@
         {% endif %}
         <div class="clearfix"></div>
     </div>
-    {% if order.status == "n" %}
+    {% if order.status == "n" and order.can_user_cancel %}
         <div class="row">
             <div class="col-md-12 text-right">
                 <p>
