@@ -29,7 +29,7 @@ def extract_form_fields(soup):
             if field.has_attr('checked'):
                 data[field['name']] = field.get('value', 'on')
             continue
-        else:
+        elif field.has_attr('name'):
             # single element name/value fields
             data[field['name']] = field.get('value', '')
             continue

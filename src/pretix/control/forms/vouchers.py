@@ -2,6 +2,9 @@ import copy
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.db.models import Q
+from django.forms import model_to_dict
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
@@ -28,6 +31,7 @@ class VoucherForm(I18nModelForm):
         instance = kwargs.get('instance')
         initial = kwargs.get('initial')
         if instance:
+            self.initial_instance_data = copy.copy(instance)
             try:
                 if instance.variation:
                     initial['itemvar'] = '%d-%d' % (instance.item.pk, instance.variation.pk)
@@ -37,6 +41,8 @@ class VoucherForm(I18nModelForm):
                     initial['itemvar'] = 'q-%d' % instance.quota.pk
             except Item.DoesNotExist:
                 pass
+        else:
+            self.initial_instance_data = None
         super().__init__(*args, **kwargs)
         choices = []
         for i in self.instance.event.items.prefetch_related('variations').all():
@@ -65,16 +71,13 @@ class VoucherForm(I18nModelForm):
             self.instance.item = Item.objects.get(pk=itemid, event=self.instance.event)
             if varid:
                 self.instance.variation = ItemVariation.objects.get(pk=varid, item=self.instance.item)
-                avail = self.instance.variation.check_quotas()
             else:
                 self.instance.variation = None
-                avail = self.instance.item.check_quotas()
             self.instance.quota = None
         else:
             self.instance.quota = Quota.objects.get(pk=quotaid, event=self.instance.event)
             self.instance.item = None
             self.instance.variation = None
-            avail = self.instance.quota.availability()
 
         if 'codes' in data:
             data['codes'] = [a.strip() for a in data.get('codes', '').strip().split("\n") if a]
@@ -82,15 +85,76 @@ class VoucherForm(I18nModelForm):
         else:
             cnt = 1
 
-        if data.get('block_quota', False):
-            if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < cnt):
-                raise ValidationError(_('You cannot create a voucher that blocks quota as the selected product or quota is '
-                                        'currently sold out or completely reserved.'))
+        if self._clean_quota_needs_checking(data):
+            self._clean_quota_check(data, cnt)
 
-            if 'code' in data and not self.instance.pk and Voucher.objects.filter(code=data['code'], event=self.instance.event).exists():
-                raise ValidationError(_('A voucher with this code already exists.'))
+        if 'code' in data and Voucher.objects.filter(Q(code=data['code']) & Q(event=self.instance.event) & ~Q(pk=self.instance.pk)).exists():
+            raise ValidationError(_('A voucher with this code already exists.'))
 
         return data
+
+    def _clean_quota_needs_checking(self, data):
+        # We only need to check for quota on vouchers that are now blocking quota and haven't
+        # before (or have blocked a different quota before)
+        if data.get('block_quota', False):
+            is_valid = data.get('valid_until') is None or data.get('valid_until') >= now()
+            if not is_valid:
+                # If the voucher is not valid, it won't block any quota
+                return False
+
+            if not self.instance.pk:
+                # This is a new voucher
+                return True
+
+            if not self.initial_instance_data.block_quota:
+                # Change from nonblocking to blocking
+                return True
+
+            if not self._clean_was_valid():
+                # This voucher has been expired and is now valid again and therefore blocks quota again
+                return True
+
+            if data.get('itemvar') != self.initial.get('itemvar'):
+                # The voucher has been reassigned to a different item, variation or quota
+                return True
+
+        return False
+
+    def _clean_was_valid(self):
+        return self.initial_instance_data.valid_until is None or self.initial_instance_data.valid_until >= now()
+
+    def _clean_quota_get_ignored(self):
+        quotas = set()
+        if self.initial_instance_data and self.initial_instance_data.block_quota and self._clean_was_valid():
+            if self.initial_instance_data.quota:
+                quotas.add(self.initial_instance_data.quota)
+            elif self.initial_instance_data.variation:
+                quotas |= set(self.initial_instance_data.variation.quotas.all())
+            elif self.initial_instance_data.item:
+                quotas |= set(self.initial_instance_data.item.quotas.all())
+        return quotas
+
+    def _clean_quota_check(self, data, cnt):
+        old_quotas = self._clean_quota_get_ignored()
+
+        if self.instance.quota:
+            if self.instance.quota in old_quotas:
+                return
+            else:
+                avail = self.instance.quota.availability()
+        elif self.instance.item.has_variations and not self.instance.variation:
+            raise ValidationError(_('You can only block quota if you specify a specific product variation. '
+                                    'Otherwise it might be unclear which quotas to block.'))
+        elif self.instance.item and self.instance.variation:
+            avail = self.instance.variation.check_quotas(ignored_quotas=old_quotas)
+        elif self.instance.item and not self.instance.item.has_variations:
+            avail = self.instance.item.check_quotas(ignored_quotas=old_quotas)
+        else:
+            raise ValidationError(_('You need to specify either a quota or a product.'))
+
+        if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < cnt):
+            raise ValidationError(_('You cannot create a voucher that blocks quota as the selected product or '
+                                    'quota is currently sold out or completely reserved.'))
 
     def save(self, commit=True):
         super().save(commit)
