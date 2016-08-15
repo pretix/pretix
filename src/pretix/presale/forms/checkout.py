@@ -16,7 +16,7 @@ class InvoiceAddressForm(forms.ModelForm):
 
     class Meta:
         model = InvoiceAddress
-        fields = ('company', 'name', 'street', 'zipcode', 'city', 'country', 'phone', 'vat_id')
+        fields = ('company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id')
         widgets = {
             'street': forms.Textarea(attrs={'rows': 2, 'placeholder': _('Street and Number')}),
         }
