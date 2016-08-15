@@ -409,6 +409,24 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.count(), 1)
 
+    def test_voucher_block_quota_other_quota_full(self):
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        q2 = self.event.quotas.create(name='Testquota', size=0)
+        q2.items.add(self.ticket)
+        v = Voucher.objects.create(quota=self.quota_tickets, price=Decimal('12.00'), event=self.event,
+                                   valid_until=now() - timedelta(days=2), block_quota=True)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() + timedelta(minutes=10), voucher=v
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        self.assertFalse(Order.objects.exists())
+
     def test_voucher_double(self):
         self.quota_tickets.size = 2
         self.quota_tickets.save()
@@ -536,3 +554,60 @@ class CheckoutTestCase(TestCase):
         doc = BeautifulSoup(response.rendered_content)
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+
+    def test_confirm_expired_with_blocking_voucher_unavailable(self):
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        v = Voucher.objects.create(quota=self.quota_tickets, event=self.event, block_quota=True)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+
+    def test_confirm_expired_with_non_blocking_voucher_unavailable(self):
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        v = Voucher.objects.create(quota=self.quota_tickets, event=self.event)
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+
+    def test_confirm_not_expired_with_blocking_voucher_unavailable(self):
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        v = Voucher.objects.create(quota=self.quota_tickets, event=self.event, block_quota=True)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+
+    def test_confirm_not_expired_with_non_blocking_voucher_unavailable(self):
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        v = Voucher.objects.create(quota=self.quota_tickets, event=self.event)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertEqual(len(doc.select(".thank-you")), 1)

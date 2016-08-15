@@ -600,6 +600,15 @@ class CartTest(CartTestMixin, TestCase):
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 0)
 
+    def test_voucher_quota_other_quota_full(self):
+        quota2 = self.event.quotas.create(name='Test', size=0)
+        quota2.variations.add(self.shirt_red)
+        v = Voucher.objects.create(quota=self.quota_shirts, event=self.event)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d_voucher' % (self.shirt.id, self.shirt_red.id): v.code,
+        }, follow=True)
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
+
     def test_hide_without_voucher(self):
         v = Voucher.objects.create(item=self.shirt, event=self.event)
         self.shirt.hide_without_voucher = True

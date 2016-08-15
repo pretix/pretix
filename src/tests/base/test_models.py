@@ -240,6 +240,44 @@ class QuotaTestCase(BaseQuotaTestCase):
                                block_quota=True)
         self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
 
+    def test_blocking_voucher_in_cart(self):
+        self.quota.items.add(self.item1)
+        v = Voucher.objects.create(quota=self.quota, event=self.event, valid_until=now() + timedelta(days=5),
+                                   block_quota=True)
+        CartPosition.objects.create(event=self.event, item=self.item1, price=2,
+                                    expires=now() + timedelta(days=3), voucher=v)
+        self.assertEqual(self.quota.count_blocking_vouchers(), 1)
+        self.assertEqual(self.quota.count_in_cart(), 0)
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+
+    def test_blocking_voucher_in_cart_inifinitely_valid(self):
+        self.quota.items.add(self.item1)
+        v = Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True)
+        CartPosition.objects.create(event=self.event, item=self.item1, price=2,
+                                    expires=now() + timedelta(days=3), voucher=v)
+        self.assertEqual(self.quota.count_blocking_vouchers(), 1)
+        self.assertEqual(self.quota.count_in_cart(), 0)
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+
+    def test_blocking_expired_voucher_in_cart(self):
+        self.quota.items.add(self.item1)
+        v = Voucher.objects.create(quota=self.quota, event=self.event, valid_until=now() - timedelta(days=5),
+                                   block_quota=True)
+        CartPosition.objects.create(event=self.event, item=self.item1, price=2,
+                                    expires=now() + timedelta(days=3), voucher=v)
+        self.assertEqual(self.quota.count_blocking_vouchers(), 0)
+        self.assertEqual(self.quota.count_in_cart(), 1)
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+
+    def test_nonblocking_voucher_in_cart(self):
+        self.quota.items.add(self.item1)
+        v = Voucher.objects.create(quota=self.quota, event=self.event)
+        CartPosition.objects.create(event=self.event, item=self.item1, price=2,
+                                    expires=now() + timedelta(days=3), voucher=v)
+        self.assertEqual(self.quota.count_blocking_vouchers(), 0)
+        self.assertEqual(self.quota.count_in_cart(), 1)
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+
 
 class OrderTestCase(BaseQuotaTestCase):
     def setUp(self):

@@ -222,8 +222,13 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
 
         quota_ok = True
 
-        if not cp.voucher or not (cp.voucher.allow_ignore_quota or cp.voucher.block_quota):
+        ignore_all_quotas = cp.expires >= dt or (
+            cp.voucher and (cp.voucher.allow_ignore_quota or (cp.voucher.block_quota and cp.voucher.quota is None)))
+
+        if not ignore_all_quotas:
             for quota in quotas:
+                if cp.voucher and cp.voucher.block_quota and cp.voucher.quota_id == quota.pk:
+                    continue
                 avail = quota.availability()
                 if avail[0] != Quota.AVAILABILITY_OK:
                     # This quota is sold out/currently unavailable, so do not sell this at all
