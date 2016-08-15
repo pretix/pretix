@@ -23,14 +23,15 @@ for app in apps.get_app_configs():
     if hasattr(app, 'PretixPluginMeta'):
         if importlib.util.find_spec(app.name + '.urls'):
             urlmod = importlib.import_module(app.name + '.urls')
+            single_plugin_patterns = []
             if hasattr(urlmod, 'urlpatterns'):
-                raw_plugin_patterns.append(
-                    url(r'', include(urlmod, namespace=app.label))
-                )
+                single_plugin_patterns += urlmod.urlpatterns
             if hasattr(urlmod, 'event_patterns'):
-                raw_plugin_patterns.append(
-                    url(r'^(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include(urlmod.event_patterns, namespace=app.label))
-                )
+                single_plugin_patterns.append(url(r'^(?P<organizer>[^/]+)/(?P<event>[^/]+)/',
+                                                  include(urlmod.event_patterns)))
+            raw_plugin_patterns.append(
+                url(r'', include(single_plugin_patterns, namespace=app.label))
+            )
         elif importlib.util.find_spec(app.name + '.maindomain_urls'):
             warnings.warn('Please put your config in an \'urls\' module using the urlpatterns and event_patterns '
                           'attribute. Support for maindomain_urls in plugins will be dropped in the future.',
