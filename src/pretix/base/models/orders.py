@@ -541,5 +541,4 @@ class InvoiceAddress(models.Model):
     zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=False)
     city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)
     country = models.CharField(max_length=255, verbose_name=_('Country'), blank=False)
-    phone = models.CharField(max_length=255, blank=True, verbose_name=_('Phone number'))
     vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'))
