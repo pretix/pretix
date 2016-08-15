@@ -43,6 +43,7 @@ error_messages = {
     'voucher_redeemed': _('This voucher code has already been used an can only be used once.'),
     'voucher_expired': _('This voucher is expired.'),
     'voucher_invalid_item': _('This voucher is not valid for this item.'),
+    'voucher_required': _('You need a valid voucher code to order one of the products in your cart.'),
 }
 
 
@@ -183,6 +184,15 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
                 cp.delete()  # Sorry! But you should have never gotten into this state at all.
                 continue
             voucherids.add(cp.voucher_id)
+
+        if cp.item.require_voucher and cp.voucher is None:
+            cp.delete()
+            return error_messages['voucher_required']
+
+        if cp.item.hide_without_voucher and (cp.voucher is None or cp.voucher.item is None
+                                             or cp.voucher.item.pk != cp.item.pk):
+            cp.delete()
+            return error_messages['voucher_required']
 
         if cp.expires >= dt and not cp.voucher:
             # Other checks are not necessary

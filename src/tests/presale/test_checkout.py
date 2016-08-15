@@ -311,6 +311,22 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(OrderPosition.objects.first().voucher, v)
         self.assertTrue(Voucher.objects.get(pk=v.pk).redeemed)
 
+    def test_voucher_required(self):
+        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+                                   valid_until=now() + timedelta(days=2))
+        self.ticket.require_voucher = True
+        self.ticket.save()
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() + timedelta(minutes=10), voucher=v
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertTrue(Voucher.objects.get(pk=v.pk).redeemed)
+
     def test_voucher_price_changed(self):
         v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
                                    valid_until=now() + timedelta(days=2))
@@ -451,6 +467,34 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content)
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+
+    def test_confirm_require_voucher(self):
+        self.ticket.require_voucher = True
+        self.ticket.save()
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+
+    def test_confirm_require_hide_without_voucher(self):
+        self.ticket.require_voucher = True
+        self.ticket.save()
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
 
     def test_confirm_inactive(self):
         self.ticket.active = False
