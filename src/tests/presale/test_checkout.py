@@ -439,6 +439,19 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(len(doc.select(".alert-danger")), 1)
         self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key).count(), 1)
 
+    def test_confirm_presale_over(self):
+        self.event.presale_end = now() - datetime.timedelta(days=1)
+        self.event.save()
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content)
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+
     def test_confirm_inactive(self):
         self.ticket.active = False
         self.ticket.save()
