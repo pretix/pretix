@@ -3,7 +3,6 @@ import copy
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.forms import model_to_dict
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
