@@ -78,3 +78,25 @@ easy to cause serious performance problems.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
+
+front_page_top = EventPluginSignal(
+    providing_args=[]
+)
+"""
+This signal is sent out to display additional information on the frontpage above the list
+of products and but below a custom frontpage text.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event. The
+receivers are expected to return HTML.
+"""
+
+front_page_bottom = EventPluginSignal(
+    providing_args=[]
+)
+"""
+This signal is sent out to display additional information on the frontpage below the list
+of products.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event. The
+receivers are expected to return HTML.
+"""

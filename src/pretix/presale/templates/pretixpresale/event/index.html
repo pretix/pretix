@@ -3,6 +3,7 @@
 {% load l10n %}
 {% load eventurl %}
 {% load thumbnail %}
+{% load eventsignal %}
 {% load markup_tags %}
 {% block title %}{% trans "Presale" %}{% endblock %}
 
@@ -55,6 +56,7 @@
     {% if frontpage_text %}
         {{ frontpage_text|apply_markup:"markdown"|linebreaks }}
     {% endif %}
+    {% eventsignal event "pretix.presale.signals.front_page_top" %}
     {% if event.presale_is_running or event.settings.show_items_outside_presale_period %}
         <form method="post" data-asynctask
                 action="{% eventurl request.event "presale:event.cart.add" %}?next={{ request.path|urlencode }}">
@@ -213,23 +215,26 @@
         </form>
     {% endif %}
     {% if vouchers_exist %}
-        <h2>{% trans "Redeem a voucher" %}</h2>
-        <form method="get" action="{% eventurl event "presale:event.redeem" %}">
-            <div class="row-fluid">
-                <div class="col-md-8 col-sm-6 col-xs-12">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-ticket fa-fw"></i></span>
-                        <input type="text" class="form-control" name="voucher" id="voucher"
-                                placeholder="{% trans "Voucher code" %}">
+        <section class="front-page">
+            <h2>{% trans "Redeem a voucher" %}</h2>
+            <form method="get" action="{% eventurl event "presale:event.redeem" %}">
+                <div class="row-fluid">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-ticket fa-fw"></i></span>
+                            <input type="text" class="form-control" name="voucher" id="voucher"
+                                    placeholder="{% trans "Voucher code" %}">
+                        </div>
                     </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <button class="btn btn-block btn-primary" type="submit">
+                            {% trans "Redeem voucher" %}
+                        </button>
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <button class="btn btn-block btn-primary" type="submit">
-                        {% trans "Redeem voucher" %}
-                    </button>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </form>
+            </form>
+        </section>
     {% endif %}
+    {% eventsignal event "pretix.presale.signals.front_page_bottom" %}
 {% endblock %}

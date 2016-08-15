@@ -25,7 +25,7 @@ Frontend
 --------
 
 .. automodule:: pretix.presale.signals
-   :members: html_head, footer_links
+   :members: html_head, footer_links, front_page_top, front_page_bottom
 
 
 .. automodule:: pretix.presale.signals
