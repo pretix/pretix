@@ -27,9 +27,9 @@ class CartTestMixin:
         self.shirt = Item.objects.create(event=self.event, name='T-Shirt', category=self.category, default_price=12)
         self.quota_shirts.items.add(self.shirt)
         self.shirt_red = ItemVariation.objects.create(item=self.shirt, default_price=14, value='Red')
-        var2 = ItemVariation.objects.create(item=self.shirt, value='Blue')
+        self.shirt_blue = ItemVariation.objects.create(item=self.shirt, value='Blue')
         self.quota_shirts.variations.add(self.shirt_red)
-        self.quota_shirts.variations.add(var2)
+        self.quota_shirts.variations.add(self.shirt_blue)
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=5)
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                           category=self.category, default_price=23)
@@ -472,6 +472,22 @@ class CartTest(CartTestMixin, TestCase):
 
     def test_voucher_quota_invalid_item(self):
         v = Voucher.objects.create(quota=self.quota_tickets, event=self.event)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d_voucher' % (self.shirt.id, self.shirt_red.id): v.code,
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
+    def test_voucher_item_invalid_item(self):
+        v = Voucher.objects.create(item=self.shirt, event=self.event)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d_voucher' % self.ticket.id: v.code,
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
+    def test_voucher_item_invalid_variation(self):
+        v = Voucher.objects.create(item=self.shirt, variation=self.shirt_blue, event=self.event)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d_voucher' % (self.shirt.id, self.shirt_red.id): v.code,
         }, follow=True)
