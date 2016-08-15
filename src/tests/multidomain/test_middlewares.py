@@ -14,6 +14,7 @@ def env():
         organizer=o, name='MRMCD2015', slug='2015',
         date_from=now(), live=True
     )
+    event.get_cache().clear()
     settings.SITE_URL = 'http://example.com'
     return o, event
 

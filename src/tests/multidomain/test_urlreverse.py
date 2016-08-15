@@ -16,6 +16,7 @@ def env():
         date_from=now()
     )
     settings.SITE_URL = 'http://example.com'
+    event.get_cache().clear()
     return o, event
 
 
