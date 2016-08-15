@@ -217,20 +217,29 @@ class Item(LoggedModel):
             return False
         return True
 
-    def check_quotas(self):
+    def check_quotas(self, ignored_quotas=None):
         """
         This method is used to determine whether this Item is currently available
         for sale.
 
+        :param ignored_quotas: If a collection if quota objects is given here, those
+                               quotas will be ignored in the calculation. If this leads
+                               to no quotas being checked at all, this method will return
+                               unlimited availability.
         :returns: any of the return codes of :py:meth:`Quota.availability()`.
 
         :raises ValueError: if you call this on an item which has variations associated with it.
                             Please use the method on the ItemVariation object you are interested in.
         """
+        check_quotas = set(self.quotas.all())
+        if ignored_quotas:
+            check_quotas -= set(ignored_quotas)
+        if not check_quotas:
+            return Quota.AVAILABILITY_OK, sys.maxsize
         if self.variations.count() > 0:  # NOQA
             raise ValueError('Do not call this directly on items which have variations '
                              'but call this on their ItemVariation objects')
-        return min([q.availability() for q in self.quotas.all()],
+        return min([q.availability() for q in check_quotas],
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
     @cached_property
@@ -292,14 +301,24 @@ class ItemVariation(models.Model):
         if self.item:
             self.item.event.get_cache().clear()
 
-    def check_quotas(self) -> Tuple[int, int]:
+    def check_quotas(self, ignored_quotas=None) -> Tuple[int, int]:
         """
         This method is used to determine whether this ItemVariation is currently
         available for sale in terms of quotas.
 
+        :param ignored_quotas: If a collection if quota objects is given here, those
+                               quotas will be ignored in the calculation. If this leads
+                               to no quotas being checked at all, this method will return
+                               unlimited availability.
         :returns: any of the return codes of :py:meth:`Quota.availability()`.
         """
-        return min([q.availability() for q in self.quotas.all()],
+        check_quotas = set(self.quotas.all())
+        if ignored_quotas:
+            check_quotas -= set(ignored_quotas)
+        print(check_quotas, ignored_quotas)
+        if not check_quotas:
+            return Quota.AVAILABILITY_OK, sys.maxsize
+        return min([q.availability() for q in check_quotas],
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
     def __lt__(self, other):

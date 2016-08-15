@@ -1,3 +1,4 @@
+import sys
 from datetime import timedelta
 
 from django.core.files.storage import default_storage
@@ -164,6 +165,15 @@ class QuotaTestCase(BaseQuotaTestCase):
         quota2.size = 0
         quota2.save()
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_GONE, 0))
+
+    def test_ignore_quotas(self):
+        self.quota.items.add(self.item1)
+        quota2 = Quota.objects.create(event=self.event, name="Test 2", size=0)
+        quota2.items.add(self.item1)
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_GONE, 0))
+        self.assertEqual(self.item1.check_quotas(ignored_quotas=[quota2]), (Quota.AVAILABILITY_OK, 2))
+        self.assertEqual(self.item1.check_quotas(ignored_quotas=[self.quota, quota2]),
+                         (Quota.AVAILABILITY_OK, sys.maxsize))
 
     def test_unlimited(self):
         self.quota.items.add(self.item1)
