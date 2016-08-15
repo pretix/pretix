@@ -315,7 +315,6 @@ class ItemVariation(models.Model):
         check_quotas = set(self.quotas.all())
         if ignored_quotas:
             check_quotas -= set(ignored_quotas)
-        print(check_quotas, ignored_quotas)
         if not check_quotas:
             return Quota.AVAILABILITY_OK, sys.maxsize
         return min([q.availability() for q in check_quotas],
