@@ -176,6 +176,12 @@ INSTALLED_APPS = [
     'django_markup',
 ]
 
+try:
+    import django_extensions
+    INSTALLED_APPS.append('django_extensions')
+except ImportError:
+    pass
+
 for entry_point in iter_entry_points(group='pretix.plugin', name=None):
     INSTALLED_APPS.append(entry_point.module_name)
 
