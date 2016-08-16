@@ -6,6 +6,7 @@ import shutil
 from decimal import Decimal
 
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
@@ -192,7 +193,8 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
                         organizer=self.request.event.organizer.slug)
 
     def annotate_data(self, data):
-        pattern = re.compile(self.request.event.slug.upper() + "[ ]*([A-Z0-9]{5})")
+        code_len = settings.ENTROPY['order_code']
+        pattern = re.compile(self.request.event.slug.upper() + "[ -_]*([A-Z0-9]{%s})" % code_len)
         amount_pattern = re.compile("[^0-9.-]")
         order_codes = []
         for row in data:
