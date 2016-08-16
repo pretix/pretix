@@ -21,7 +21,7 @@ class TolerantDict(dict):
 
 def mail(email: str, subject: str, template: str,
          context: Dict[str, Any]=None, event: Event=None, locale: str=None,
-         order: Order=None):
+         order: Order=None, headers: dict=None):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -41,6 +41,8 @@ def mail(email: str, subject: str, template: str,
 
     :param order: The order this email is related to (optional). If set, this will be used to include a link to the
         order below the email.
+
+    :param headers: A dict of custom mail headers to add to the mail
 
     :param locale: The locale to be used while evaluating the subject and the template
 
@@ -77,11 +79,11 @@ def mail(email: str, subject: str, template: str,
                     'secret': order.secret
                 }))
             body += "\r\n"
-        return mail_send([email], subject, body, sender, event.id if event else None)
+        return mail_send([email], subject, body, sender, event.id if event else None, headers)
 
 
-def mail_send(to: str, subject: str, body: str, sender: str, event: int=None) -> bool:
-    email = EmailMessage(subject, body, sender, to=to)
+def mail_send(to: str, subject: str, body: str, sender: str, event: int=None, headers: dict=None) -> bool:
+    email = EmailMessage(subject, body, sender, to=to, headers=headers)
     if event:
         event = Event.objects.get(id=event)
         backend = event.get_mail_backend()
