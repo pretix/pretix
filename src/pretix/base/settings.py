@@ -37,6 +37,10 @@ DEFAULTS = {
         'default': 'False',
         'type': bool,
     },
+    'invoice_numbers_consecutive': {
+        'default': 'True',
+        'type': bool,
+    },
     'reservation_time': {
         'default': '30',
         'type': int

@@ -10,10 +10,9 @@ from django.utils.functional import cached_property
 
 def invoice_filename(instance, filename: str) -> str:
     secret = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16))
-    return 'invoices/{org}/{ev}/{ev}-{no:05d}-{code}-{secret}.pdf'.format(
+    return 'invoices/{org}/{ev}/{no}-{code}-{secret}.pdf'.format(
         org=instance.event.organizer.slug, ev=instance.event.slug,
-        no=instance.invoice_no, code=instance.order.code,
-        secret=secret
+        no=instance.number, code=instance.order.code, secret=secret
     )
 
 
@@ -47,7 +46,7 @@ class Invoice(models.Model):
     """
     order = models.ForeignKey('Order', related_name='invoices', db_index=True)
     event = models.ForeignKey('Event', related_name='invoices', db_index=True)
-    invoice_no = models.PositiveIntegerField(db_index=True)
+    invoice_no = models.CharField(max_length=19, db_index=True)
     is_cancellation = models.BooleanField(default=False)
     refers = models.ForeignKey('Invoice', related_name='refered', null=True, blank=True)
     invoice_from = models.TextField()
@@ -57,6 +56,20 @@ class Invoice(models.Model):
     additional_text = models.TextField(blank=True)
     file = models.FileField(null=True, blank=True, upload_to=invoice_filename)
 
+    @staticmethod
+    def _to_numeric_invoice_number(number):
+        return '{:05d}'.format(int(number))
+
+    def _get_numeric_invoice_number(self):
+        numeric_invoices = Invoice.objects.filter(event=self.event).exclude(invoice_no__contains='-')
+        return self._to_numeric_invoice_number(numeric_invoices.count() + 1)
+
+    def _get_invoice_number_from_order(self):
+        return '{order}-{count}'.format(
+            order=self.order.code,
+            count=Invoice.objects.filter(event=self.event, order=self.order).count() + 1,
+        )
+
     def save(self, *args, **kwargs):
         if not self.order:
             raise ValueError('Every invoice needs to be connected to an order')
@@ -64,8 +77,10 @@ class Invoice(models.Model):
             self.event = self.order.event
         if not self.invoice_no:
             for i in range(10):
-                self.invoice_no = (Invoice.objects.filter(
-                    event=self.event).aggregate(m=Max('invoice_no'))['m'] or 0) + 1
+                if self.event.settings.get('invoice_numbers_consecutive'):
+                    self.invoice_no = self._get_numeric_invoice_number()
+                else:
+                    self.invoice_no = self._get_invoice_number_from_order()
                 try:
                     return super().save(*args, **kwargs)
                 except DatabaseError:
@@ -74,12 +89,23 @@ class Invoice(models.Model):
                         raise
         return super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        """
+        Deleting an Invoice would allow for the creation of another Invoice object
+        with the same invoice_no as the deleted one. For various reasons, invoice_no
+        should be reliably unique for an event.
+        """
+        raise Exception('Invoices cannot be deleted, to guarantee uniqueness of Invoice.invoice_no in any event.')
+
     @property
     def number(self):
         """
         Returns the invoice number in a human-readable string with the event slug prepended.
         """
-        return '%s-%05d' % (self.event.slug.upper(), self.invoice_no)
+        return '{event}-{code}'.format(
+            event=self.event.slug.upper(),
+            code=self.invoice_no
+        )
 
     @cached_property
     def canceled(self):

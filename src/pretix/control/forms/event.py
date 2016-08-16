@@ -252,6 +252,11 @@ class InvoiceSettingsForm(SettingsForm):
         help_text=_("Does only work if an invoice address is asked for. VAT ID is not required."),
         required=False
     )
+    invoice_numbers_consecutive = forms.BooleanField(
+        label=_("Generate invoices with consecutive numbers"),
+        help_text=_("If deactivated, the order code will be used in the invoice number."),
+        required=False
+    )
     invoice_generate = forms.ChoiceField(
         label=_("Generate invoices"),
         required=False,
