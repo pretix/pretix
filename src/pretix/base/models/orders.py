@@ -353,10 +353,6 @@ class AbstractPosition(models.Model):
     :type attendee_name: str
     :param voucher: A voucher that has been applied to this sale
     :type voucher: Voucher
-    :param voucher_discount: The absolute discount granted by the applied voucher
-    :type voucher_discount: decimal.Decimal
-    :param base_price: The base price without any discounts applied
-    :type base_price: decimal.Decimal
     """
     item = models.ForeignKey(
         Item,
@@ -382,12 +378,6 @@ class AbstractPosition(models.Model):
     voucher = models.ForeignKey(
         'Voucher', null=True, blank=True
     )
-    voucher_discount = models.DecimalField(
-        default=Decimal('0.00'), decimal_places=2, max_digits=10
-    )
-    base_price = models.DecimalField(
-        decimal_places=2, max_digits=10, null=True, blank=True
-    )
 
     class Meta:
         abstract = True
@@ -411,13 +401,6 @@ class AbstractPosition(models.Model):
                 q.answer = self.answ[q.id]
             else:
                 q.answer = ""
-
-    def save(self, *args, **kwargs):
-        if self.voucher is None and self.base_price is None:
-            self.base_price = self.price
-        if self.voucher_discount != Decimal('0.00') and self.base_price is not None:
-            self.price = self.base_price - self.voucher_discount
-        return super().save(*args, **kwargs)
 
 
 class OrderPosition(AbstractPosition):
