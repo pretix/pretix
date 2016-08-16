@@ -19,6 +19,6 @@
     {% endblocktrans %}</p>
     <dl class="dl-horizontal">
         <dt>{% trans "Reference code" %}</dt>
-        <dd>{{ event.slug|upper }}{{ order.code }}</dd>
+        <dd>{{ order.full_code }}</dd>
     </dl>
 {% endif %}
