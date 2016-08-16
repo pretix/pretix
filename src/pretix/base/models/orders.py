@@ -175,7 +175,7 @@ class Order(LoggedModel):
         An order code which is unique among all events of a single organizer,
         built by contatenating the event slug and the order code.
         """
-        return self.event.slug.upper() + self.code
+        return '{event}-{code}'.format(event=self.event.slug.upper(), code=self.code)
 
     def save(self, *args, **kwargs):
         if not self.code:

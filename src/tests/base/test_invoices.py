@@ -91,3 +91,45 @@ def test_positions(env):
     assert last.tax_rate == order.payment_fee_tax_rate
     assert last.tax_value == order.payment_fee_tax_value
     assert inv.invoice_to == ""
+
+
+@pytest.mark.django_db
+def test_invoice_numbers(env):
+    event, order = env
+    order2 = Order.objects.create(
+        code='BAR', event=event, email='dummy2@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() + timedelta(days=10),
+        total=0, payment_provider='banktransfer',
+        payment_fee=Decimal('0.25'), payment_fee_tax_rate=0,
+        payment_fee_tax_value=0, locale='en'
+    )
+    inv1 = generate_invoice(order)
+    inv2 = generate_invoice(order)
+
+    event.settings.set('invoice_numbers_consecutive', False)
+    inv3 = generate_invoice(order)
+    inv4 = generate_invoice(order)
+    inv21 = generate_invoice(order2)
+    inv22 = generate_invoice(order2)
+
+    event.settings.set('invoice_numbers_consecutive', True)
+    inv5 = generate_invoice(order)
+    inv23 = generate_invoice(order2)
+
+    # expected behaviour for switching between numbering formats
+    assert inv1.invoice_no == '00001'
+    assert inv2.invoice_no == '00002'
+    assert inv3.invoice_no == '{}-3'.format(order.code)
+    assert inv4.invoice_no == '{}-4'.format(order.code)
+    assert inv5.invoice_no == '00003'
+
+    # test that separate orders are counted separately in this mode
+    assert inv21.invoice_no == '{}-1'.format(order2.code)
+    assert inv22.invoice_no == '{}-2'.format(order2.code)
+    # but consecutively in this mode
+    assert inv23.invoice_no == '00004'
+
+    # test Invoice.number, too
+    assert inv1.number == '{}-00001'.format(event.slug.upper())
+    assert inv3.number == '{}-{}-3'.format(event.slug.upper(), order.code)
