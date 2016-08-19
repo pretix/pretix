@@ -1,13 +1,14 @@
 import datetime
 import time
 
+from django.core import mail
 from django.test import TestCase
 from django.utils.timezone import now
 from tests.base import SoupTest
 
 from pretix.base.models import (
-    Event, EventPermission, Item, ItemCategory, ItemVariation, Organizer,
-    Quota, User,
+    Event, EventPermission, Item, ItemCategory, ItemVariation, Order,
+    Organizer, Quota, User,
 )
 
 
@@ -245,3 +246,60 @@ class DeadlineTest(EventTestMixin, TestCase):
             }
         )
         self.assertNotEqual(response.status_code, 403)
+
+
+class TestResendLink(EventTestMixin, SoupTest):
+    def test_no_orders(self):
+        mail.outbox = []
+        url = '/{}/{}/resend/'.format(self.orga.slug, self.event.slug)
+        resp = self.client.post(url, data={'email': 'dummy@dummy.dummy'})
+
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_no_orders_from_user(self):
+        Order.objects.create(
+            code='DUMMY1', status=Order.STATUS_PENDING, event=self.event,
+            email='dummy@dummy.dummy', datetime=now(), expires=now(),
+            total=0,
+        )
+        mail.outbox = []
+        url = '/{}/{}/resend/'.format(self.orga.slug, self.event.slug)
+        resp = self.client.post(url, data={'email': 'dummy@dummy.different'})
+
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_one_order(self):
+        Order.objects.create(
+            code='DUMMY1', status=Order.STATUS_PENDING, event=self.event,
+            email='dummy@dummy.dummy', datetime=now(), expires=now(),
+            total=0,
+        )
+        mail.outbox = []
+        url = '/{}/{}/resend/'.format(self.orga.slug, self.event.slug)
+        resp = self.client.post(url, data={'email': 'dummy@dummy.dummy'})
+
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('DUMMY1', mail.outbox[0].body)
+
+    def test_multiple_orders(self):
+        Order.objects.create(
+            code='DUMMY1', status=Order.STATUS_PENDING, event=self.event,
+            email='dummy@dummy.dummy', datetime=now(), expires=now(),
+            total=0,
+        )
+        Order.objects.create(
+            code='DUMMY2', status=Order.STATUS_PENDING, event=self.event,
+            email='dummy@dummy.dummy', datetime=now(), expires=now(),
+            total=0,
+        )
+        mail.outbox = []
+        url = '/{}/{}/resend/'.format(self.orga.slug, self.event.slug)
+        resp = self.client.post(url, data={'email': 'dummy@dummy.dummy'})
+
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('DUMMY1', mail.outbox[0].body)
+        self.assertIn('DUMMY2', mail.outbox[0].body)

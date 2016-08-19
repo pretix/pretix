@@ -11,6 +11,7 @@ from pretix.base.models import Event, Order
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 logger = logging.getLogger('pretix.base.mail')
+INVALID_ADDRESS = 'invalid-pretix-mail-address'
 
 
 class TolerantDict(dict):
@@ -53,6 +54,9 @@ def mail(email: str, subject: str, template: str,
     :raises MailOrderException: on obvious, immediate failures. Not raising an exception does not necessarily mean
         that the email has been sent, just that it has been queued by the email backend.
     """
+    if email == INVALID_ADDRESS:
+        return
+
     with language(locale):
         if isinstance(template, LazyI18nString):
             body = str(template)

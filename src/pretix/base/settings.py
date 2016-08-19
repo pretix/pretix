@@ -166,6 +166,18 @@ You can change your order details and view the status of your order at
 Best regards,
 Your {event} team"""))
     },
+    'mail_text_resend_all_links': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+somebody requested a list of your orders for {event}.
+The list is as follows:
+
+{orders}
+
+Best regards,
+Your {event} team"""))
+    },
     'mail_text_order_free': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
