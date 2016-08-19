@@ -182,7 +182,7 @@ msgstr ""
 #: pretix/base/models/event.py:64 pretix/base/models/organizer.py:34
 msgid "The slug may only contain letters, numbers, dots and dashes."
 msgstr ""
-"Die Kurzform darf nur Buchstaben, Zahlen, Punkte und Bindestriche enthalten"
+"Die Kurzform darf nur Buchstaben, Zahlen, Punkte und Bindestriche enthalten."
 
 #: pretix/base/models/event.py:67 pretix/base/models/organizer.py:37
 msgid "Slug"
@@ -1288,7 +1288,7 @@ msgstr "Zahlung erhalten für die Bestellung: %(code)s"
 #: pretix/base/services/orders.py:146 pretix/presale/views/order.py:299
 #: pretix/presale/views/order.py:325
 msgid "You cannot cancel this order."
-msgstr "Sie können diese Bestellung nicht stornieren"
+msgstr "Sie können diese Bestellung nicht stornieren."
 
 #: pretix/base/services/orders.py:315 pretix/control/views/orders.py:312
 #: pretix/presale/templates/pretixpresale/event/order.html:27
@@ -2599,8 +2599,8 @@ msgstr "Produkt hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:29
 msgid ""
-"Please note, that your product  will <strong>not</strong> be available for "
-"sale until you added your item to an existing or newly created quota."
+"Please note that your product will <strong>not</strong> be available for "
+"sale until you have added your item to an existing or newly created quota."
 msgstr ""
 "Bitte beachten Sie, dass das Produkt <strong>nicht</strong> verkauft wird, "
 "bevor Sie es zu einem bestehenden oder neuen Kontingent hinzugefügt haben."
@@ -3078,7 +3078,7 @@ msgstr "Kommentar speichern"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:306
 msgid "Order history"
-msgstr "Bestellhistorie"
+msgstr "Bestellverlauf"
 
 #: pretix/control/templates/pretixcontrol/order/refund.html:10
 msgid "Do you really want to refund this order? You cannot revert this action."
@@ -3320,7 +3320,7 @@ msgid ""
 "address into your address bar. Please note that the link is only valid for "
 "three days and that the link can only be used once."
 msgstr ""
-"Sie haben auf einen ungültigen Link geklickt. Bitte überprüfen Sie, dass Sie "
+"Sie haben auf einen ungültigen Link geklickt. Bitte prüfen Sie, dass Sie "
 "die volle Adresse in Ihre Adresszeile kopiert haben. Bitte beachten Sie, "
 "dass der Link nur drei Tage gültig ist und nur einmal benutzt werden kann."
 
@@ -3714,11 +3714,11 @@ msgstr "Bankdaten importieren"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:3
 msgid ""
 "After completing your purchase, we will ask you to transfer the money to the "
-"following bank account, using a personal reference code."
+"following bank account, using a personal reference code:"
 msgstr ""
 "Nach Abschluss der Bestellung werden wir Sie auffordern, das Geld unter "
 "Verwendung eines persönlich generierten Verwendungszwecks auf das folgende "
-"Bankkonto zu überweisen."
+"Bankkonto zu überweisen:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_confirm.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
