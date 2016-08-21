@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from .base import LoggedModel
 from .event import Event
 from .items import Item, ItemVariation, Quota
-from .orders import CartPosition, OrderPosition
+from .orders import CartPosition, Order, OrderPosition
 
 
 def generate_code():
