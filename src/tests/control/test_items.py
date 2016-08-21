@@ -97,6 +97,23 @@ class QuestionsTest(ItemFormTest):
         self.assertTrue(c.required)
         assert str(Question.objects.get(id=c.id).question) == 'How old are you?'
 
+    def test_sort(self):
+        c1 = Question.objects.create(event=self.event1, question="Vegetarian?", type="N", required=True, position=0)
+        Question.objects.create(event=self.event1, question="Food allergies?", position=1)
+        doc = self.get_doc('/control/event/%s/%s/questions/' % (self.orga1.slug, self.event1.slug))
+        self.assertIn("Vegetarian?", doc.select("table > tbody > tr")[0].text)
+        self.assertIn("Food allergies?", doc.select("table > tbody > tr")[1].text)
+
+        self.client.get('/control/event/%s/%s/questions/%s/down' % (self.orga1.slug, self.event1.slug, c1.id))
+        doc = self.get_doc('/control/event/%s/%s/questions/' % (self.orga1.slug, self.event1.slug))
+        self.assertIn("Vegetarian?", doc.select("table > tbody > tr")[1].text)
+        self.assertIn("Food allergies?", doc.select("table > tbody > tr")[0].text)
+
+        self.client.get('/control/event/%s/%s/questions/%s/up' % (self.orga1.slug, self.event1.slug, c1.id))
+        doc = self.get_doc('/control/event/%s/%s/questions/' % (self.orga1.slug, self.event1.slug))
+        self.assertIn("Vegetarian?", doc.select("table > tbody > tr")[0].text)
+        self.assertIn("Food allergies?", doc.select("table > tbody > tr")[1].text)
+
     def test_delete(self):
         c = Question.objects.create(event=self.event1, question="What is your shoe size?", type="N", required=True)
         doc = self.get_doc('/control/event/%s/%s/questions/%s/delete' % (self.orga1.slug, self.event1.slug, c.id))
