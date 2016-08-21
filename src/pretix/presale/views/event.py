@@ -39,7 +39,6 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         ).annotate(quotac=Count('quotas')).filter(
             quotac__gt=0
         ).order_by('category__position', 'category_id', 'position', 'name')
-        
         display_add_to_cart = False
         for item in items:
             item.available_variations = list(item.variations.filter(active=True, quotas__isnull=False).distinct())
@@ -62,7 +61,6 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
                 if len(item.available_variations) > 0:
                     item.min_price = min([v.price for v in item.available_variations])
                     item.max_price = max([v.price for v in item.available_variations])
-
 
         items = [item for item in items if len(item.available_variations) > 0 or not item.has_variations]
 
