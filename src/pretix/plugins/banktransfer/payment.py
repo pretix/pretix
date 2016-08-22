@@ -36,10 +36,7 @@ class BankTransfer(BasePaymentProvider):
         return True
 
     def checkout_confirm_render(self, request):
-        form = self.payment_form(request)
-        template = get_template('pretixplugins/banktransfer/checkout_payment_confirm.html')
-        ctx = {'request': request, 'form': form, 'settings': self.settings}
-        return template.render(ctx)
+        return self.payment_form_render(request)
 
     def order_pending_mail_render(self, order) -> str:
         template = get_template('pretixplugins/banktransfer/email/order_pending.txt')
