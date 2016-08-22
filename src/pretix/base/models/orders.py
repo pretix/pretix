@@ -229,7 +229,14 @@ class Order(LoggedModel):
 
     @property
     def can_user_cancel(self) -> bool:
-        return self.event.settings.cancel_allow_user
+        positions = self.positions.all().prefetch_related('item')
+        cancelable = True
+        cancelable_products = []
+        for i, op in enumerate(positions):
+            cancelable_products.append(op.item.allow_cancel)
+        if False in cancelable_products:
+            cancelable = False
+        return self.event.settings.cancel_allow_user and cancelable
 
     @property
     def is_expired_by_time(self):
