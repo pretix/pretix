@@ -77,9 +77,17 @@ DEFAULTS = {
         'default': '',
         'type': str
     },
+    'invoice_introductory_text': {
+        'default': '',
+        'type': LazyI18nString
+    },
     'invoice_additional_text': {
         'default': '',
-        'type': str
+        'type': LazyI18nString
+    },
+    'invoice_footer_text': {
+        'default': '',
+        'type': LazyI18nString
     },
     'invoice_language': {
         'default': '__user__',
