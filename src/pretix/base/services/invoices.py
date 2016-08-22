@@ -309,20 +309,26 @@ def _invoice_generate_german(invoice, f):
         ('LEFTPADDING', (0, 0), (0, -1), 0),
         ('RIGHTPADDING', (-1, 0), (-1, -1), 0),
     ]
-    tdata = [(pgettext('invoice', 'Description'), pgettext('invoice', 'Tax rate'), pgettext('invoice', 'Price'))]
+    tdata = [(
+        pgettext('invoice', 'Description'),
+        pgettext('invoice', 'Tax rate'),
+        pgettext('invoice', 'Net'),
+        pgettext('invoice', 'Gross'),
+    )]
     total = Decimal('0.00')
     for line in invoice.lines.all():
         tdata.append((
             line.description,
             lformat("%.2f", line.tax_rate) + " %",
+            lformat("%.2f", line.net_value) + " " + invoice.event.currency,
             lformat("%.2f", line.gross_value) + " " + invoice.event.currency,
         ))
         taxvalue_map[line.tax_rate] += line.tax_value
         grossvalue_map[line.tax_rate] += line.gross_value
         total += line.gross_value
 
-    tdata.append([pgettext('invoice', 'Invoice total'), '', lformat("%.2f", total) + " " + invoice.event.currency])
-    colwidths = [a * doc.width for a in (.60, .20, .20)]
+    tdata.append([pgettext('invoice', 'Invoice total'), '', '', lformat("%.2f", total) + " " + invoice.event.currency])
+    colwidths = [a * doc.width for a in (.55, .15, .15, .15)]
     table = Table(tdata, colWidths=colwidths, repeatRows=1)
     table.setStyle(TableStyle(tstyledata))
     story.append(table)

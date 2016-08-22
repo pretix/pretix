@@ -135,3 +135,7 @@ class InvoiceLine(models.Model):
     gross_value = models.DecimalField(max_digits=10, decimal_places=2)
     tax_value = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     tax_rate = models.DecimalField(max_digits=7, decimal_places=2, default=Decimal('0.00'))
+
+    @property
+    def net_value(self):
+        return self.gross_value - self.tax_value
