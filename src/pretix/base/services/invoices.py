@@ -49,7 +49,7 @@ def generate_cancellation(invoice: Invoice):
 def regenerate_invoice(invoice: Invoice):
     with language(invoice.locale):
         invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
-        invoice.additional_text = invoice.event.settings.get('invoice_additional_text')
+        invoice.additional_text = invoice.event.settings.get('invoice_additional_text').replace('\n','<br />')
 
         try:
             addr_template = pgettext("invoice", """{i.company}
@@ -105,7 +105,7 @@ def generate_invoice(order: Order):
     with language(locale):
         i = Invoice(order=order, event=order.event)
         i.invoice_from = order.event.settings.get('invoice_address_from')
-        i.additional_text = order.event.settings.get('invoice_additional_text')
+        i.additional_text = order.event.settings.get('invoice_additional_text').replace('\n','<br />')
 
         try:
             addr_template = pgettext("invoice", """{i.company}
