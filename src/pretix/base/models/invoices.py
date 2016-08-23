@@ -1,15 +1,15 @@
-import random
 import string
 from datetime import date
 from decimal import Decimal
 
 from django.db import DatabaseError, models
 from django.db.models import Max
+from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 
 
 def invoice_filename(instance, filename: str) -> str:
-    secret = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16))
+    secret = get_random_string(length=16, allowed_chars=string.ascii_letters + string.digits)
     return 'invoices/{org}/{ev}/{no}-{code}-{secret}.pdf'.format(
         org=instance.event.organizer.slug, ev=instance.event.slug,
         no=instance.number, code=instance.order.code, secret=secret

@@ -1,8 +1,7 @@
-import random
-
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
 from .base import LoggedModel
@@ -14,7 +13,7 @@ from .orders import CartPosition, OrderPosition
 def generate_code():
     charset = list('ABCDEFGHKLMNPQRSTUVWXYZ23456789')
     while True:
-        code = "".join([random.choice(charset) for i in range(settings.ENTROPY['voucher_code'])])
+        code = get_random_string(length=settings.ENTROPY['voucher_code'], allowed_chars=charset)
         if not Voucher.objects.filter(code=code).exists():
             return code
 
