@@ -176,7 +176,11 @@ class I18nWidget(forms.MultiWidget):
             except IndexError:
                 widget_value = None
             if id_:
-                final_attrs = dict(final_attrs, id='%s_%s' % (id_, i))
+                final_attrs = dict(
+                    final_attrs,
+                    id='%s_%s' % (id_, i),
+                    title=self.langcodes[i]
+                )
             output.append(widget.render(name + '_%s' % i, widget_value, final_attrs))
         return mark_safe(self.format_output(output))
 
