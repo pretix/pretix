@@ -51,7 +51,10 @@ class OrderList(EventPermissionRequiredMixin, ListView):
             )
         if self.request.GET.get("status", "") != "":
             s = self.request.GET.get("status", "")
-            qs = qs.filter(status=s)
+            if s == 'o':
+                qs = qs.filter(status=Order.STATUS_PENDING, expires__lt=now())
+            else:
+                qs = qs.filter(status=s)
         if self.request.GET.get("item", "") != "":
             i = self.request.GET.get("item", "")
             qs = qs.filter(positions__item_id__in=(i,)).distinct()
