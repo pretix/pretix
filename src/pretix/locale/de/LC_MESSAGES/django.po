@@ -4252,8 +4252,9 @@ msgid "Send"
 msgstr "Senden"
 
 #: pretix/plugins/sendmail/views.py:43
-msgid "Your message will be sent to the selected users."
-msgstr "Die Nachricht wird an die ausgewählten Benutzer verschickt."
+msgid "Your message has been queued to be sent to the selected users."
+msgstr ""
+"Die Nachricht wurde zum Versenden an die ausgewählten Benutzer gespeichert."
 
 #: pretix/plugins/statistics/__init__.py:10
 #: pretix/plugins/statistics/__init__.py:14
