@@ -23,7 +23,7 @@ def test_expiry_days(event):
     today = now()
     event.settings.set('payment_term_days', 5)
     order = _create_order(event, email='dummy@example.org', positions=[],
-                          dt=today, payment_provider=FreeOrderProvider(event),
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
                           locale='de')
     assert (order.expires - today).days == 5
 
@@ -34,12 +34,12 @@ def test_expiry_last(event):
     event.settings.set('payment_term_days', 5)
     event.settings.set('payment_term_last', now() + timedelta(days=3))
     order = _create_order(event, email='dummy@example.org', positions=[],
-                          dt=today, payment_provider=FreeOrderProvider(event),
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
                           locale='de')
     assert (order.expires - today).days == 3
     event.settings.set('payment_term_last', now() + timedelta(days=7))
     order = _create_order(event, email='dummy@example.org', positions=[],
-                          dt=today, payment_provider=FreeOrderProvider(event),
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
                           locale='de')
     assert (order.expires - today).days == 5
 

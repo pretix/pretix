@@ -253,10 +253,11 @@ class Order(LoggedModel):
 
         return self._is_still_available()
 
-    def _is_still_available(self) -> Union[bool, str]:
+    def _is_still_available(self, now_dt: datetime=None) -> Union[bool, str]:
         error_messages = {
             'unavailable': _('Some of the ordered products are no longer available.'),
         }
+        now_dt = now_dt or now()
         positions = self.positions.all().select_related('item', 'variation')
         quota_cache = {}
         try:
@@ -270,7 +271,7 @@ class Order(LoggedModel):
                     # quota while we're doing so.
                     if quota.id not in quota_cache:
                         quota_cache[quota.id] = quota
-                        quota.cached_availability = quota.availability()[1]
+                        quota.cached_availability = quota.availability(now_dt)[1]
                     else:
                         # Use cached version
                         quota = quota_cache[quota.id]

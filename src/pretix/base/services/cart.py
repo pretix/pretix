@@ -4,7 +4,6 @@ from typing import List, Optional
 
 from django.conf import settings
 from django.db.models import Q
-from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import LazyLocaleException
@@ -37,21 +36,21 @@ error_messages = {
 }
 
 
-def _extend_existing(event: Event, cart_id: str, expiry: datetime) -> None:
+def _extend_existing(event: Event, cart_id: str, expiry: datetime, now_dt: datetime) -> None:
     # Extend this user's cart session to 30 minutes from now to ensure all items in the
     # cart expire at the same time
     # We can extend the reservation of items which are not yet expired without risk
     CartPosition.objects.filter(
-        Q(cart_id=cart_id) & Q(event=event) & Q(expires__gt=now())
+        Q(cart_id=cart_id) & Q(event=event) & Q(expires__gt=now_dt)
     ).update(expires=expiry)
 
 
-def _re_add_expired_positions(items: List[dict], event: Event, cart_id: str) -> List[CartPosition]:
+def _re_add_expired_positions(items: List[dict], event: Event, cart_id: str, now_dt: datetime) -> List[CartPosition]:
     positions = set()
     # For items that are already expired, we have to delete and re-add them, as they might
     # be no longer available or prices might have changed. Sorry!
     expired = CartPosition.objects.filter(
-        Q(cart_id=cart_id) & Q(event=event) & Q(expires__lte=now())
+        Q(cart_id=cart_id) & Q(event=event) & Q(expires__lte=now_dt)
     )
     for cp in expired:
         items.insert(0, {
@@ -66,21 +65,21 @@ def _re_add_expired_positions(items: List[dict], event: Event, cart_id: str) -> 
     return positions
 
 
-def _delete_expired(expired: List[CartPosition]) -> None:
+def _delete_expired(expired: List[CartPosition], now_dt: datetime) -> None:
     for cp in expired:
-        if cp.expires <= now():
+        if cp.expires <= now_dt:
             cp.delete()
 
 
-def _check_date(event: Event) -> None:
-    if event.presale_start and now() < event.presale_start:
+def _check_date(event: Event, now_dt: datetime) -> None:
+    if event.presale_start and now_dt < event.presale_start:
         raise CartError(error_messages['not_started'])
-    if event.presale_end and now() > event.presale_end:
+    if event.presale_end and now_dt > event.presale_end:
         raise CartError(error_messages['ended'])
 
 
 def _add_new_items(event: Event, items: List[dict],
-                   cart_id: str, expiry: datetime) -> Optional[str]:
+                   cart_id: str, expiry: datetime, now_dt: datetime) -> Optional[str]:
     err = None
 
     # Fetch items from the database
@@ -111,7 +110,7 @@ def _add_new_items(event: Event, items: List[dict],
                 voucher = Voucher.objects.get(code=i.get('voucher'), event=event)
                 if voucher.redeemed:
                     return error_messages['voucher_redeemed']
-                if voucher.valid_until is not None and voucher.valid_until < now():
+                if voucher.valid_until is not None and voucher.valid_until < now_dt:
                     return error_messages['voucher_expired']
                 if voucher.item and voucher.item.pk != item.pk:
                     return error_messages['voucher_invalid_item']
@@ -186,20 +185,20 @@ def _add_new_items(event: Event, items: List[dict],
 
 
 def _add_items_to_cart(event: Event, items: List[dict], cart_id: str=None) -> None:
-    with event.lock():
-        _check_date(event)
+    with event.lock() as now_dt:
+        _check_date(event, now_dt)
         existing = CartPosition.objects.filter(Q(cart_id=cart_id) & Q(event=event)).count()
         if sum(i['count'] for i in items) + existing > int(event.settings.max_items_per_order):
             # TODO: i18n plurals
             raise CartError(error_messages['max_items'], (event.settings.max_items_per_order,))
 
-        expiry = now() + timedelta(minutes=event.settings.get('reservation_time', as_type=int))
-        _extend_existing(event, cart_id, expiry)
+        expiry = now_dt + timedelta(minutes=event.settings.get('reservation_time', as_type=int))
+        _extend_existing(event, cart_id, expiry, now_dt)
 
-        expired = _re_add_expired_positions(items, event, cart_id)
+        expired = _re_add_expired_positions(items, event, cart_id, now_dt)
         if items:
-            err = _add_new_items(event, items, cart_id, expiry)
-            _delete_expired(expired)
+            err = _add_new_items(event, items, cart_id, expiry, now_dt)
+            _delete_expired(expired, now_dt)
             if err:
                 raise CartError(err)
 

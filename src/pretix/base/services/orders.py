@@ -68,13 +68,13 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     :param user: The user that performed the change
     :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
     """
-    with order.event.lock():
+    with order.event.lock() as now_dt:
         can_be_paid = order._can_be_paid()
         if not force and can_be_paid is not True:
             raise Quota.QuotaExceededException(can_be_paid)
         order.payment_provider = provider or order.payment_provider
         order.payment_info = info or order.payment_info
-        order.payment_date = date or now()
+        order.payment_date = date or now_dt
         if manual is not None:
             order.payment_manual = manual
         order.status = Order.STATUS_PAID
@@ -164,16 +164,16 @@ class OrderError(LazyLocaleException):
     pass
 
 
-def _check_date(event: Event):
-    if event.presale_start and now() < event.presale_start:
+def _check_date(event: Event, now_dt: datetime):
+    if event.presale_start and now_dt < event.presale_start:
         raise OrderError(error_messages['not_started'])
-    if event.presale_end and now() > event.presale_end:
+    if event.presale_end and now_dt > event.presale_end:
         raise OrderError(error_messages['ended'])
 
 
-def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
+def _check_positions(event: Event, now_dt: datetime, positions: List[CartPosition]):
     err = None
-    _check_date(event)
+    _check_date(event, now_dt)
 
     voucherids = set()
     for i, cp in enumerate(positions):
@@ -199,7 +199,7 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
             cp.delete()
             return error_messages['voucher_required']
 
-        if cp.expires >= dt and not cp.voucher:
+        if cp.expires >= now_dt and not cp.voucher:
             # Other checks are not necessary
             continue
 
@@ -212,7 +212,7 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
             continue
 
         if cp.voucher:
-            if cp.voucher.valid_until and cp.voucher.valid_until < now():
+            if cp.voucher.valid_until and cp.voucher.valid_until < now_dt:
                 err = err or error_messages['voucher_expired']
                 continue
             if cp.voucher.price is not None:
@@ -227,14 +227,14 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
 
         quota_ok = True
 
-        ignore_all_quotas = cp.expires >= dt or (
+        ignore_all_quotas = cp.expires >= now_dt or (
             cp.voucher and (cp.voucher.allow_ignore_quota or (cp.voucher.block_quota and cp.voucher.quota is None)))
 
         if not ignore_all_quotas:
             for quota in quotas:
                 if cp.voucher and cp.voucher.block_quota and cp.voucher.quota_id == quota.pk:
                     continue
-                avail = quota.availability()
+                avail = quota.availability(now_dt)
                 if avail[0] != Quota.AVAILABILITY_OK:
                     # This quota is sold out/currently unavailable, so do not sell this at all
                     err = err or error_messages['unavailable']
@@ -243,7 +243,7 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
 
         if quota_ok:
             positions[i] = cp
-            cp.expires = now() + timedelta(
+            cp.expires = now_dt + timedelta(
                 minutes=event.settings.get('reservation_time', as_type=int))
             cp.save()
         else:
@@ -253,19 +253,19 @@ def _check_positions(event: Event, dt: datetime, positions: List[CartPosition]):
 
 
 @transaction.atomic()
-def _create_order(event: Event, email: str, positions: List[CartPosition], dt: datetime,
+def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None):
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
     total += payment_fee
-    expires = [dt + timedelta(days=event.settings.get('payment_term_days', as_type=int))]
+    expires = [now_dt + timedelta(days=event.settings.get('payment_term_days', as_type=int))]
     if event.settings.get('payment_term_last'):
         expires.append(event.settings.get('payment_term_last', as_type=datetime))
     order = Order.objects.create(
         status=Order.STATUS_PENDING,
         event=event,
         email=email,
-        datetime=dt,
+        datetime=now_dt,
         expires=min(expires),
         locale=locale,
         total=total,
@@ -291,14 +291,13 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
     if not pprov:
         raise OrderError(error_messages['internal'])
 
-    dt = now()
-    with event.lock():
+    with event.lock() as now_dt:
         positions = list(CartPosition.objects.filter(
             id__in=position_ids).select_related('item', 'variation'))
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
-        _check_positions(event, dt, positions)
-        order = _create_order(event, email, positions, dt, pprov,
+        _check_positions(event, now_dt, positions)
+        order = _create_order(event, email, positions, now_dt, pprov,
                               locale=locale)
 
     if address is not None:

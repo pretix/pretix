@@ -1,5 +1,6 @@
 import sys
 import uuid
+from datetime import datetime
 from decimal import Decimal
 from typing import Tuple
 
@@ -204,16 +205,17 @@ class Item(LoggedModel):
         if self.event:
             self.event.get_cache().clear()
 
-    def is_available(self) -> bool:
+    def is_available(self, now_dt: datetime=None) -> bool:
         """
         Returns whether this item is available according to its ``active`` flag
         and its ``available_from`` and ``available_until`` fields
         """
+        now_dt = now_dt or now()
         if not self.active:
             return False
-        if self.available_from and self.available_from > now():
+        if self.available_from and self.available_from > now_dt:
             return False
-        if self.available_until and self.available_until < now():
+        if self.available_until and self.available_until < now_dt:
             return False
         return True
 
@@ -520,7 +522,7 @@ class Quota(LoggedModel):
         if self.event:
             self.event.get_cache().clear()
 
-    def availability(self) -> Tuple[int, int]:
+    def availability(self, now_dt: datetime=None) -> Tuple[int, int]:
         """
         This method is used to determine whether Items or ItemVariations belonging
         to this quota should currently be available for sale.
@@ -528,6 +530,7 @@ class Quota(LoggedModel):
         :returns: a tuple where the first entry is one of the ``Quota.AVAILABILITY_`` constants
                   and the second is the number of available tickets.
         """
+        now_dt = now_dt or now()
         size_left = self.size
         if size_left is None:
             return Quota.AVAILABILITY_OK, None
@@ -541,33 +544,36 @@ class Quota(LoggedModel):
         if size_left <= 0:
             return Quota.AVAILABILITY_ORDERED, 0
 
-        size_left -= self.count_blocking_vouchers()
+        size_left -= self.count_blocking_vouchers(now_dt)
         if size_left <= 0:
             return Quota.AVAILABILITY_ORDERED, 0
 
-        size_left -= self.count_in_cart()
+        size_left -= self.count_in_cart(now_dt)
         if size_left <= 0:
             return Quota.AVAILABILITY_RESERVED, 0
 
         return Quota.AVAILABILITY_OK, size_left
 
-    def count_blocking_vouchers(self) -> int:
+    def count_blocking_vouchers(self, now_dt: datetime=None) -> int:
         from pretix.base.models import Voucher
+
+        now_dt = now_dt or now()
         return Voucher.objects.filter(
             Q(block_quota=True) &
             Q(redeemed=False) &
-            Q(Q(valid_until__isnull=True) | Q(valid_until__gte=now())) &
+            Q(Q(valid_until__isnull=True) | Q(valid_until__gte=now_dt)) &
             Q(Q(self._position_lookup) | Q(quota=self))
         ).distinct().count()
 
-    def count_in_cart(self) -> int:
+    def count_in_cart(self, now_dt: datetime=None) -> int:
         from pretix.base.models import CartPosition
 
+        now_dt = now_dt or now()
         return CartPosition.objects.filter(
-            Q(expires__gte=now()) &
+            Q(expires__gte=now_dt) &
             ~Q(
                 Q(voucher__isnull=False) & Q(voucher__block_quota=True)
-                & Q(Q(voucher__valid_until__isnull=True) | Q(voucher__valid_until__gte=now()))
+                & Q(Q(voucher__valid_until__isnull=True) | Q(voucher__valid_until__gte=now_dt))
             ) &
             self._position_lookup
         ).distinct().count()

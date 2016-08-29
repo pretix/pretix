@@ -417,8 +417,8 @@ class OrderExtend(OrderView):
                 self.form.save()
             else:
                 try:
-                    with self.order.event.lock():
-                        is_available = self.order._is_still_available()
+                    with self.order.event.lock() as now_dt:
+                        is_available = self.order._is_still_available(now_dt)
                         if is_available is True:
                             self.form.save()
                             self.order.log_action('pretix.event.order.expirychanged', user=self.request.user, data={
