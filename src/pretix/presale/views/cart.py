@@ -57,6 +57,9 @@ class CartActionMixin:
             else:
                 voucher = None
 
+            if not key.startswith('item_') and not key.startswith('variation_'):
+                continue
+
             try:
                 amount = int(value)
             except ValueError:
