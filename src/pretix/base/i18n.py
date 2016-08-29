@@ -143,18 +143,24 @@ class I18nWidget(forms.MultiWidget):
 
     def decompress(self, value):
         data = []
+        first_enabled = None
+        any_filled = False
         if not isinstance(value, LazyI18nString):
             value = LazyI18nString(value)
-        for lng in self.langcodes:
-            data.append(
+        for i, lng in enumerate(self.langcodes):
+            dataline = (
                 value.data[lng]
                 if value is not None and (
                     isinstance(value.data, dict) or isinstance(value.data, LazyI18nString.LazyGettextProxy)
                 ) and lng in value.data
                 else None
             )
+            any_filled = any_filled or (lng in self.enabled_langcodes and dataline)
+            if not first_enabled and lng in self.enabled_langcodes:
+                first_enabled = i
+            data.append(dataline)
         if value and not isinstance(value.data, dict):
-            data[0] = value.data
+            data[first_enabled] = value.data
         return data
 
     def render(self, name, value, attrs=None):
