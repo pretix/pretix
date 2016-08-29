@@ -93,5 +93,5 @@ urlpatterns = [
         url(r'^orders/$', orders.OrderList.as_view(), name='event.orders'),
         url(r'^attendees/$', attendees.AttendeeList.as_view(), name='event.attendees'),
     ])),
-    url(r'^help/(?P<topic>[^.]+)$', help.HelpView.as_view(), name='help'),
+    url(r'^help/(?P<topic>[a-zA-Z0-9_/]+)$', help.HelpView.as_view(), name='help'),
 ]
