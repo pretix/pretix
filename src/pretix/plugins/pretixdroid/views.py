@@ -1,11 +1,11 @@
 import json
 import logging
-import random
 import string
 
 from django.http import (
     HttpResponseForbidden, HttpResponseNotFound, JsonResponse,
 )
+from django.utils.crypto import get_random_string
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import Event, Order, OrderPosition
@@ -23,9 +23,7 @@ class ConfigView(EventPermissionRequiredMixin, TemplateView):
         ctx = super().get_context_data()
         key = self.request.event.settings.get('pretixdroid_key')
         if not key or 'flush_key' in self.request.GET:
-            key = ''.join(
-                random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in
-                range(32))
+            key = get_random_string(length=32, allowed_chars=string.ascii_uppercase + string.ascii_lowercase + string.digits)
             self.request.event.settings.set('pretixdroid_key', key)
 
         ctx['qrdata'] = json.dumps({
