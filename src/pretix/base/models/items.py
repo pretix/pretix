@@ -386,10 +386,14 @@ class Question(LoggedModel):
         blank=True,
         help_text=_('This question will be asked to buyers of the selected products')
     )
+    position = models.IntegerField(
+        default=0
+    )
 
     class Meta:
         verbose_name = _("Question")
         verbose_name_plural = _("Questions")
+        ordering = ('position', 'id')
 
     def __str__(self):
         return str(self.question)
@@ -403,6 +407,13 @@ class Question(LoggedModel):
         super().save(*args, **kwargs)
         if self.event:
             self.event.get_cache().clear()
+
+    @property
+    def sortkey(self):
+        return self.position, self.id
+
+    def __lt__(self, other) -> bool:
+        return self.sortkey < other.sortkey
 
 
 class QuestionOption(models.Model):

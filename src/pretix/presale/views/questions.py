@@ -9,7 +9,7 @@ class QuestionsViewMixin:
     @cached_property
     def forms(self):
         """
-        A list of forms with one form for each cart cart position that has questions
+        A list of forms with one form for each cart position that has questions
         the user can answer. All forms have a custom prefix, so that they can all be
         submitted at once.
         """
