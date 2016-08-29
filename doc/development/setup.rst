@@ -18,11 +18,6 @@ External Dependencies
 * ``libffi`` (Debian package: ``libffi-dev``)
 * ``git``
 
-For testing:
-
-* ``phantomjs``
-* ``ChromeDriver`` for testing with Chrome
-
 Your local python environment
 -----------------------------
 
