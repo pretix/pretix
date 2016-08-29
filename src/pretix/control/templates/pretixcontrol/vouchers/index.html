@@ -76,6 +76,9 @@
                         <td>
                             {% if v.item %}
                                 {{ v.item }}
+                                {% if v.variation %}
+                                    – {{ v.variation }}
+                                {% endif %}
                             {% else %}
                                 {% blocktrans trimmed with quota=v.quota.name %}
                                     Any product in quota "{{ quota }}"
