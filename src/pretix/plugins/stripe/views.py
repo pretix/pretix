@@ -15,7 +15,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 
 @csrf_exempt
 @require_POST
-def webhook(request):
+def webhook(request, *args, **kwargs):
     event_json = json.loads(request.body.decode('utf-8'))
     event_type = event_json['type']
     if event_type != 'charge.refunded':
