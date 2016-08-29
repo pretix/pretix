@@ -2,14 +2,18 @@ from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.shortcuts import redirect
+from django.utils.http import is_safe_url
 from django.views.generic import View
 
 
 class LocaleSet(View):
 
     def get(self, request, *args, **kwargs):
+        url = request.GET.get('next', request.META.get('HTTP_REFERER', '/'))
+        url = url if is_safe_url(url, host=request.get_host()) else '/'
+        resp = redirect(url)
+
         locale = request.GET.get('locale')
-        resp = redirect(request.GET.get('next', request.META.get('HTTP_REFERER', '/')))
         if locale in [lc for lc, ll in settings.LANGUAGES]:
             if request.user.is_authenticated():
                 request.user.locale = locale
@@ -20,4 +24,5 @@ class LocaleSet(View):
                             expires=(datetime.utcnow() + timedelta(seconds=max_age)).strftime(
                                 '%a, %d-%b-%Y %H:%M:%S GMT'),
                             domain=settings.SESSION_COOKIE_DOMAIN)
+
         return resp
