@@ -214,6 +214,9 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             code = match.group(1)
             row['code'] = code
             order_codes.append(code)
+            normalized_code = Order.normalize_code(code)
+            if normalized_code != code:
+                order_codes.append(normalized_code)
 
         orders = {}
         # Perform query in bulks because of SQLite's default of SQLITE_MAX_VARIABLE_NUMBER = 999
@@ -225,8 +228,9 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
         for row in data:
             if 'code' not in row:
                 continue
-            if row['code'] in orders:
-                order = orders[row['code']]
+            normalized_code = Order.normalize_code(row['code'])
+            if row['code'] in orders or normalized_code in orders:
+                order = orders[row['code']] if row['code'] in orders else orders[normalized_code]
                 row['order'] = order
                 if order.status == Order.STATUS_PENDING:
                     amount = Decimal(row['amount'])

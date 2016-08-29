@@ -198,8 +198,22 @@ class Order(LoggedModel):
         else:
             self.payment_fee_tax_value = Decimal('0.00')
 
+    @staticmethod
+    def normalize_code(code):
+        tr = str.maketrans({
+            '2': 'Z',
+            '4': 'A',
+            '5': 'S',
+            '6': 'G',
+        })
+        return code.upper().translate(tr)
+
     def assign_code(self):
-        charset = list('ABCDEFGHKLMNPQRSTUVWXYZ23456789')
+        # This omits some character pairs completely because they are hard to read even on screens (1/I and O/0)
+        # and includes only one of two characters for some pairs because they are sometimes hard to distinguish in
+        # handwriting (2/Z, 4/A, 5/S, 6/G). This allows for better detection e.g. in incoming wire transfers that
+        # might include OCR'd handwritten text
+        charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
         while True:
             code = get_random_string(length=settings.ENTROPY['order_code'], allowed_chars=charset)
             if not Order.objects.filter(event=self.event, code=code).exists():

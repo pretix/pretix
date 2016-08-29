@@ -468,12 +468,20 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
 class OrderGo(EventPermissionRequiredMixin, View):
     permission = 'can_view_orders'
 
+    def get_order(self, code):
+        try:
+            return Order.objects.get(code=code, event=self.request.event)
+        except Order.DoesNotExist:
+            return Order.objects.get(code=Order.normalize_code(code), event=self.request.event)
+
     def get(self, request, *args, **kwargs):
         code = request.GET.get("code", "").upper().strip()
         try:
             if code.startswith(request.event.slug.upper()):
-                code = code[len(request.event.slug.upper()):]
-            order = Order.objects.get(code=code, event=request.event)
+                code = code[len(request.event.slug):]
+            if code.startswith('-'):
+                code = code[1:]
+            order = self.get_order(code)
             return redirect('control:event.order', event=request.event.slug, organizer=request.event.organizer.slug,
                             code=order.code)
         except Order.DoesNotExist:
