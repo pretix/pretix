@@ -142,7 +142,7 @@ def cancel_order(order, user=None):
     if isinstance(user, int):
         user = User.objects.get(pk=user)
     with order.event.lock():
-        if order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
+        if order.status != Order.STATUS_PENDING:
             raise OrderError(_('You cannot cancel this order.'))
         order.status = Order.STATUS_CANCELLED
         order.save()
@@ -151,6 +151,11 @@ def cancel_order(order, user=None):
     i = order.invoices.filter(is_cancellation=False).last()
     if i:
         generate_cancellation(i)
+
+    for position in order.positions.all():
+        if position.voucher:
+            position.voucher.redeemed = False
+            position.voucher.save()
 
     return order
 

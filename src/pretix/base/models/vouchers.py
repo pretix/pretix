@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from .base import LoggedModel
 from .event import Event
 from .items import Item, ItemVariation, Quota
-from .orders import CartPosition, OrderPosition
+from .orders import CartPosition, Order, OrderPosition
 
 
 def generate_code():
@@ -161,10 +161,12 @@ class Voucher(LoggedModel):
 
     def is_ordered(self) -> int:
         """
-        Returns whether an order position exists that uses this voucher.
+        Returns whether a non-canceled order position exists that uses this voucher.
         """
         return OrderPosition.objects.filter(
             voucher=self
+        ).exclude(
+            order__status=Order.STATUS_CANCELLED
         ).exists()
 
     def is_in_cart(self) -> int:
