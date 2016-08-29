@@ -55,6 +55,7 @@ event_urls = [
     "vouchers/2/",
     "vouchers/add",
     "vouchers/bulk_add",
+    "vouchers/rng",
     "quotas/",
     "quotas/2/delete",
     "quotas/2/",

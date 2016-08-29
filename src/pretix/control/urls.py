@@ -63,6 +63,7 @@ urlpatterns = [
         url(r'^quotas/add$', item.QuotaCreate.as_view(), name='event.items.quotas.add'),
         url(r'^vouchers/$', vouchers.VoucherList.as_view(), name='event.vouchers'),
         url(r'^vouchers/tags/$', vouchers.VoucherTags.as_view(), name='event.vouchers.tags'),
+        url(r'^vouchers/rng$', vouchers.VoucherRNG.as_view(), name='event.vouchers.rng'),
         url(r'^vouchers/(?P<voucher>\d+)/$', vouchers.VoucherUpdate.as_view(), name='event.voucher'),
         url(r'^vouchers/(?P<voucher>\d+)/delete$', vouchers.VoucherDelete.as_view(),
             name='event.voucher.delete'),

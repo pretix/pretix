@@ -10,10 +10,14 @@ from .items import Item, ItemVariation, Quota
 from .orders import CartPosition, Order, OrderPosition
 
 
-def generate_code():
+def _generate_random_code():
     charset = list('ABCDEFGHKLMNPQRSTUVWXYZ23456789')
+    return get_random_string(length=settings.ENTROPY['voucher_code'], allowed_chars=charset)
+
+
+def generate_code():
     while True:
-        code = get_random_string(length=settings.ENTROPY['voucher_code'], allowed_chars=charset)
+        code = _generate_random_code()
         if not Voucher.objects.filter(code=code).exists():
             return code
 
