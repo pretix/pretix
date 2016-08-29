@@ -56,13 +56,23 @@ class CartActionMixin:
                 parts = parts[:-1]
             else:
                 voucher = None
+
+            try:
+                amount = int(value)
+            except ValueError:
+                messages.error(self.request, _('Please enter numbers only.'))
+                return []
+            if amount <= 0:
+                messages.error(self.request, _('Please enter positive numbers only.'))
+                return []
+
             price = self.request.POST.get('price_' + "_".join(parts[1:]), "")
             if key.startswith('item_'):
                 try:
                     items.append({
                         'item': int(parts[1]),
                         'variation': None,
-                        'count': int(value),
+                        'count': amount,
                         'price': price,
                         'voucher': voucher
                     })
@@ -74,7 +84,7 @@ class CartActionMixin:
                     items.append({
                         'item': int(parts[1]),
                         'variation': int(parts[2]),
-                        'count': int(value),
+                        'count': amount,
                         'price': price,
                         'voucher': voucher
                     })
