@@ -19,7 +19,6 @@ class BankTransfer(BasePaymentProvider):
             label=_('Bank account details'),
             widget=I18nTextarea,
         )
-        form_field.widget.enabled_langcodes = self.event.settings.get('locales')
         return OrderedDict(
             list(super().settings_form_fields.items()) + [('bank_details', form_field)]
         )

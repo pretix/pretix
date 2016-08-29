@@ -226,6 +226,8 @@ class ProviderForm(SettingsForm):
             v._required = v.required
             v.required = False
             v.widget.is_required = False
+            if isinstance(v, I18nFormField):
+                v.widget.enabled_langcodes = self.obj.settings.get('locales')
 
     def clean(self):
         cleaned_data = super().clean()
