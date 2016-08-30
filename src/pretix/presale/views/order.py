@@ -264,6 +264,10 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
             return self.get(request, *args, **kwargs)
         self.invoice_form.save()
         self.order.log_action('pretix.event.order.modified')
+        if self.invoice_form.has_changed():
+            success_message = ('Your invoice address has been updated. Please contact us if you need us '
+                               'to regenerate your invoice.')
+            messages.success(self.request, _(success_message))
         return redirect(self.get_order_url())
 
     def get(self, request, *args, **kwargs):
