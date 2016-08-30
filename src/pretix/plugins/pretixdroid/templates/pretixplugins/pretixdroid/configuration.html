@@ -10,6 +10,9 @@
         If you try to configure the app, it will ask you to scan the QR code below.
     {% endblocktrans %}</p>
     <div id="qrcodeCanvas"></div>
+    <script type="text/json" id="qrdata">
+        {{ qrdata|safe }}
+    </script>
     <script type="text/javascript" src="{% static "pretixplugins/pretixdroid/pretixdroid.js" %}"></script>
     <a href="?flush_key=1" class="btn btn-default">{% trans "Reset authentication token" %}</a>
 {% endblock %}
