@@ -21,7 +21,7 @@ from reportlab.platypus import (
     Table, TableStyle,
 )
 
-from pretix.base.i18n import language
+from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
 from pretix.base.signals import register_payment_providers
 
@@ -49,7 +49,14 @@ def generate_cancellation(invoice: Invoice):
 def regenerate_invoice(invoice: Invoice):
     with language(invoice.locale):
         invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
-        invoice.additional_text = invoice.event.settings.get('invoice_additional_text')
+
+        introductory = invoice.event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
+        additional = invoice.event.settings.get('invoice_additional_text', as_type=LazyI18nString)
+        footer = invoice.event.settings.get('invoice_footer_text', as_type=LazyI18nString)
+
+        invoice.introductory_text = str(introductory).replace('\n', '<br />')
+        invoice.additional_text = str(additional).replace('\n', '<br /')
+        invoice.footer_text = str(footer)
 
         try:
             addr_template = pgettext("invoice", """{i.company}
@@ -105,7 +112,14 @@ def generate_invoice(order: Order):
     with language(locale):
         i = Invoice(order=order, event=order.event)
         i.invoice_from = order.event.settings.get('invoice_address_from')
-        i.additional_text = order.event.settings.get('invoice_additional_text')
+
+        introductory = i.event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
+        additional = i.event.settings.get('invoice_additional_text', as_type=LazyI18nString)
+        footer = i.event.settings.get('invoice_footer_text', as_type=LazyI18nString)
+
+        i.introductory_text = str(introductory).replace('\n', '<br />')
+        i.additional_text = str(additional).replace('\n', '<br /')
+        i.footer_text = str(footer)
 
         try:
             addr_template = pgettext("invoice", """{i.company}
@@ -173,6 +187,10 @@ def _invoice_generate_german(invoice, f):
         canvas.saveState()
         canvas.setFont('OpenSans', 8)
         canvas.drawRightString(pagesize[0] - 20 * mm, 10 * mm, _("Page %d") % (doc.page,))
+
+        for i, line in enumerate(invoice.footer_text.split('\n')[::-1]):
+            canvas.drawCentredString(pagesize[0] / 2, 25 + (3.5 * i) * mm, line.strip())
+
         canvas.restoreState()
 
     def on_first_page(canvas, doc):
@@ -182,6 +200,9 @@ def _invoice_generate_german(invoice, f):
         canvas.saveState()
         canvas.setFont('OpenSans', 8)
         canvas.drawRightString(pagesize[0] - 20 * mm, 10 * mm, _("Page %d") % (doc.page,))
+
+        for i, line in enumerate(invoice.footer_text.split('\n')[::-1]):
+            canvas.drawCentredString(pagesize[0] / 2, 25 + (3.5 * i) * mm, line.strip())
 
         textobject = canvas.beginText(25 * mm, (297 - 15) * mm)
         textobject.setFont('OpenSansBd', 8)
@@ -275,14 +296,16 @@ def _invoice_generate_german(invoice, f):
     doc = BaseDocTemplate(f.name, pagesize=pagesizes.A4,
                           leftMargin=25 * mm, rightMargin=20 * mm,
                           topMargin=20 * mm, bottomMargin=15 * mm)
+
+    footer_length = 3.5 * len(invoice.footer_text.split('\n')) * mm
     frames_p1 = [
         Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height - 75 * mm,
-              leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0,
+              leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=footer_length,
               id='normal')
     ]
     frames = [
         Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height,
-              leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0,
+              leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=footer_length,
               id='normal')
     ]
     doc.addPageTemplates([
@@ -299,6 +322,10 @@ def _invoice_generate_german(invoice, f):
         NextPageTemplate('OtherPages'),
     ]
 
+    if invoice.introductory_text:
+        story.append(Paragraph(invoice.introductory_text, styles['Normal']))
+        story.append(Spacer(1, 10 * mm))
+
     taxvalue_map = defaultdict(Decimal)
     grossvalue_map = defaultdict(Decimal)
 
@@ -309,27 +336,35 @@ def _invoice_generate_german(invoice, f):
         ('LEFTPADDING', (0, 0), (0, -1), 0),
         ('RIGHTPADDING', (-1, 0), (-1, -1), 0),
     ]
-    tdata = [(pgettext('invoice', 'Description'), pgettext('invoice', 'Tax rate'), pgettext('invoice', 'Price'))]
+    tdata = [(
+        pgettext('invoice', 'Description'),
+        pgettext('invoice', 'Tax rate'),
+        pgettext('invoice', 'Net'),
+        pgettext('invoice', 'Gross'),
+    )]
     total = Decimal('0.00')
     for line in invoice.lines.all():
         tdata.append((
             line.description,
             lformat("%.2f", line.tax_rate) + " %",
+            lformat("%.2f", line.net_value) + " " + invoice.event.currency,
             lformat("%.2f", line.gross_value) + " " + invoice.event.currency,
         ))
         taxvalue_map[line.tax_rate] += line.tax_value
         grossvalue_map[line.tax_rate] += line.gross_value
         total += line.gross_value
 
-    tdata.append([pgettext('invoice', 'Invoice total'), '', lformat("%.2f", total) + " " + invoice.event.currency])
-    colwidths = [a * doc.width for a in (.60, .20, .20)]
+    tdata.append([pgettext('invoice', 'Invoice total'), '', '', lformat("%.2f", total) + " " + invoice.event.currency])
+    colwidths = [a * doc.width for a in (.55, .15, .15, .15)]
     table = Table(tdata, colWidths=colwidths, repeatRows=1)
     table.setStyle(TableStyle(tstyledata))
     story.append(table)
 
     story.append(Spacer(1, 15 * mm))
-    story.append(Paragraph(invoice.additional_text, styles['Normal']))
-    story.append(Spacer(1, 15 * mm))
+
+    if invoice.additional_text:
+        story.append(Paragraph(invoice.additional_text, styles['Normal']))
+        story.append(Spacer(1, 15 * mm))
 
     tstyledata = [
         ('SPAN', (1, 0), (-1, 0)),

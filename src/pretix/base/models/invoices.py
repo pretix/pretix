@@ -39,8 +39,12 @@ class Invoice(models.Model):
     :type date: date
     :param locale: The locale in which the invoice should be printed
     :type locale: str
+    :param introductory_text: Introductory text for the invoice, e.g. for a greeting
+    :type introductory_text: str
     :param additional_text: Additional text for the invoice
     :type additional_text: str
+    :param footer_text: A footer text, displayed smaller and centered on every page
+    :type footer_text: str
     :param file: The filename of the rendered invoice
     :type file: File
     """
@@ -53,7 +57,9 @@ class Invoice(models.Model):
     invoice_to = models.TextField()
     date = models.DateField(default=date.today)
     locale = models.CharField(max_length=50, default='en')
+    introductory_text = models.TextField(blank=True)
     additional_text = models.TextField(blank=True)
+    footer_text = models.TextField(blank=True)
     file = models.FileField(null=True, blank=True, upload_to=invoice_filename)
 
     @staticmethod
@@ -135,3 +141,7 @@ class InvoiceLine(models.Model):
     gross_value = models.DecimalField(max_digits=10, decimal_places=2)
     tax_value = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     tax_rate = models.DecimalField(max_digits=7, decimal_places=2, default=Decimal('0.00'))
+
+    @property
+    def net_value(self):
+        return self.gross_value - self.tax_value

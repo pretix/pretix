@@ -275,10 +275,23 @@ class InvoiceSettingsForm(SettingsForm):
         help_text=_("Will be printed as the sender on invoices. Be sure to include relevant details required in "
                     "your jurisdiction (e.g. your VAT ID).")
     )
-    invoice_additional_text = forms.CharField(
-        widget=forms.Textarea(attrs={'rows': 5}), required=False,
+    invoice_introductory_text = I18nFormField(
+        widget=I18nTextarea,
+        required=False,
+        label=_("Introductory text"),
+        help_text=_("Will be printed on every invoice above the invoice rows.")
+    )
+    invoice_additional_text = I18nFormField(
+        widget=I18nTextarea,
+        required=False,
         label=_("Additional text"),
         help_text=_("Will be printed on every invoice below the invoice total.")
+    )
+    invoice_footer_text = I18nFormField(
+        widget=I18nTextarea,
+        required=False,
+        label=_("Footer"),
+        help_text=_("Will be printed centered and in a smaller font at the end of every invoice page.")
     )
     invoice_language = forms.ChoiceField(
         widget=forms.Select, required=True,
