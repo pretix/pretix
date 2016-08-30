@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Quota
 from pretix.base.payment import BasePaymentProvider
+from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -116,6 +117,9 @@ class Stripe(BasePaymentProvider):
                     mark_order_paid(order, 'stripe', str(charge))
                 except Quota.QuotaExceededException as e:
                     messages.error(request, str(e))
+                except SendMailException:
+                    messages.warning(request, _('There was an error sending the confirmation mail.'))
+
             else:
                 messages.warning(request, _('Stripe reported an error: %s' % charge.failure_message))
                 logger.info('Charge failed: %s' % str(charge))

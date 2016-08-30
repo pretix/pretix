@@ -21,7 +21,7 @@ from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
     regenerate_invoice,
 )
-from pretix.base.services.mail import mail
+from pretix.base.services.mail import SendMailException, mail
 from pretix.base.services.orders import cancel_order, mark_order_paid
 from pretix.base.services.stats import order_overview
 from pretix.base.signals import (
@@ -201,6 +201,8 @@ class OrderTransition(OrderView):
                 mark_order_paid(self.order, manual=True, user=self.request.user)
             except Quota.QuotaExceededException as e:
                 messages.error(self.request, str(e))
+            except SendMailException:
+                messages.warning(self.request, _('The order has been marked as paid, but we were unable to send a confirmation mail.'))
             else:
                 messages.success(self.request, _('The order has been marked as paid.'))
         elif self.order.status == Order.STATUS_PENDING and to == 'c':
@@ -311,18 +313,23 @@ class OrderResendLink(OrderView):
 
     def post(self, *args, **kwargs):
         with language(self.order.locale):
-            mail(
-                self.order.email, _('Your order: %(code)s') % {'code': self.order.code},
-                self.order.event.settings.mail_text_resend_link,
-                {
-                    'event': self.order.event.name,
-                    'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
-                        'order': self.order.code,
-                        'secret': self.order.secret
-                    }),
-                },
-                self.order.event, locale=self.order.locale
-            )
+            try:
+                mail(
+                    self.order.email, _('Your order: %(code)s') % {'code': self.order.code},
+                    self.order.event.settings.mail_text_resend_link,
+                    {
+                        'event': self.order.event.name,
+                        'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
+                            'order': self.order.code,
+                            'secret': self.order.secret
+                        }),
+                    },
+                    self.order.event, locale=self.order.locale
+                )
+            except SendMailException:
+                messages.error(self.request, _('There was an error sending the mail. Please try again later.'))
+                return redirect(self.get_order_url())
+
         messages.success(self.request, _('The email has been queued to be sent.'))
         self.order.log_action('pretix.event.order.resend', user=self.request.user)
         return redirect(self.get_order_url())

@@ -15,6 +15,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 
 from pretix.base.models import Order, Quota
+from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.settings import SettingsSandbox
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -54,6 +55,7 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             orders = Order.objects.filter(event=self.request.event,
                                           code__in=self.request.POST.getlist('mark_paid'))
             some_failed = False
+            mail_failures = False
             for order in orders:
                 try:
                     mark_order_paid(order, provider='banktransfer', info=json.dumps({
@@ -64,6 +66,8 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
                     }))
                 except Quota.QuotaExceededException:
                     some_failed = True
+                except SendMailException:
+                    mail_failures = True
 
             if some_failed:
                 messages.warning(self.request, _('Not all of the selected orders could be marked as '
@@ -72,6 +76,8 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             else:
                 messages.success(self.request, _('The selected orders have been marked as paid.'))
                 # TODO: Display a list of them!
+            if mail_failures:
+                messages.warning(self.request, _('Some confirmation mails could not be sent.'))
             return self.redirect_back()
 
         messages.error(self.request, _('We were unable to detect the file type of this import. Please '

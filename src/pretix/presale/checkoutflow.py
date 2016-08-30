@@ -12,6 +12,7 @@ from django.views.generic.base import TemplateResponseMixin
 
 from pretix.base.models import CartPosition, Order
 from pretix.base.models.orders import InvoiceAddress
+from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import OrderError, perform_order
 from pretix.base.signals import register_payment_providers
 from pretix.multidomain.urlreverse import eventreverse
@@ -351,6 +352,8 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             return exception['exc_message']
         elif isinstance(exception, OrderError):
             return str(exception)
+        elif isinstance(exception, SendMailException):
+            return _('There was an error sending the confirmation mail. Please try again later.')
         return super().get_error_message(exception)
 
     def get_error_url(self):
