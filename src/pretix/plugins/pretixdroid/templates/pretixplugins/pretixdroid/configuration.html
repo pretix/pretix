@@ -7,13 +7,34 @@
     <h1>{% trans "pretixdroid configuration" %}</h1>
     <p>{% blocktrans trimmed %}
         pretixdroid is an Android app that you can use to control tickets at the entrance of your event.
-        If you try to configure the app, it will ask you to scan the QR code below.
     {% endblocktrans %}</p>
+    <h2>{% trans "App download" %}</h2>
+    <p>
+        <a href="http://play.google.com/store/apps/details?id=eu.pretix.pretixdroid">
+            <img src="{% static "pretixplugins/pretixdroid/play_store_en.png" %}" alt="
+{% trans "Download the app from the Google Play Store" %}" height="70">
+        </a>
+    </p>
+    <p>
+        <small>
+            {% blocktrans trimmed %}
+                Android, Google Play and the Google Play logo are trademarks of Google Inc.
+            {% endblocktrans %}
+        </small>
+    </p>
+    <h2>{% trans "App configuration" %}</h2>
+    <p>
+        {% blocktrans trimmed %}
+            If you start the app for the first time, it will request that you scan the following code.
+            The code tells the app all it needs about your event.
+        {% endblocktrans %}
+    </p>
     <div id="qrcodeCanvas"></div>
+    <a href="?flush_key=1" class="btn btn-default">{% trans "Reset authentication token" %}</a>
     <script type="text/json" id="qrdata">
         {{ qrdata|safe }}
+
     </script>
     <script type="text/javascript" src="{% static "pretixplugins/pretixdroid/pretixdroid.js" %}"></script>
-    <a href="?flush_key=1" class="btn btn-default">{% trans "Reset authentication token" %}</a>
 {% endblock %}
 
