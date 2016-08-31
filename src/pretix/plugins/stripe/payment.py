@@ -46,7 +46,7 @@ class Stripe(BasePaymentProvider):
     def payment_is_valid_session(self, request):
         return request.session.get('payment_stripe_token') != ''
 
-    def retry_prepare(self, request, order):
+    def order_prepare(self, request, order):
         return self.checkout_prepare(request, None)
 
     def checkout_prepare(self, request, cart):

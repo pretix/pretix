@@ -246,7 +246,7 @@ class Paypal(BasePaymentProvider):
     def order_can_retry(self, order):
         return True
 
-    def retry_prepare(self, request, order):
+    def order_prepare(self, request, order):
         self.init_api()
         payment = paypalrestsdk.Payment({
             'intent': 'sale',
