@@ -6,15 +6,18 @@ from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
 from django.db.models import Count, Q, Sum
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.utils.formats import date_format
+from django.http import (
+    Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
+    JsonResponse,
+)
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
-    CreateView, DeleteView, ListView, TemplateView, UpdateView,
+    CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
 )
 
 from pretix.base.models import Voucher
+from pretix.base.models.vouchers import _generate_random_code
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
@@ -28,7 +31,7 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
     permission = 'can_change_vouchers'
 
     def get_queryset(self):
-        qs = self.request.event.vouchers.all().select_related('item')
+        qs = self.request.event.vouchers.all().select_related('item', 'variation')
         if self.request.GET.get("search", "") != "":
             s = self.request.GET.get("search", "")
             qs = qs.filter(Q(code__icontains=s) | Q(tag__icontains=s) | Q(comment__icontains=s))
@@ -261,3 +264,32 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
         # TODO: Transform this into an asynchronous call?
         with request.event.lock():
             return super().post(request, *args, **kwargs)
+
+
+class VoucherRNG(EventPermissionRequiredMixin, View):
+    template_name = 'pretixcontrol/vouchers/bulk.html'
+    permission = 'can_change_vouchers'
+
+    def get(self, request, *args, **kwargs):
+        codes = set()
+        try:
+            num = int(request.GET.get('num', '5'))
+        except ValueError:
+            return HttpResponseBadRequest()
+
+        while len(codes) < num:
+            new_codes = set()
+            for i in range(min(num - len(codes), 500)):  # Work around SQLite's SQLITE_MAX_VARIABLE_NUMBER
+                new_codes.add(_generate_random_code())
+            new_codes -= set([v['code'] for v in Voucher.objects.filter(code__in=new_codes).values('code')])
+            codes |= new_codes
+
+        return JsonResponse({
+            'codes': list(codes)
+        })
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.vouchers', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })

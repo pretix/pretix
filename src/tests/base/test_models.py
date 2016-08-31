@@ -10,7 +10,9 @@ from pretix.base.models import (
     CachedFile, CartPosition, Event, Item, ItemCategory, ItemVariation, Order,
     OrderPosition, Organizer, Question, Quota, User, Voucher,
 )
-from pretix.base.services.orders import mark_order_paid
+from pretix.base.services.orders import (
+    OrderError, cancel_order, mark_order_paid, perform_order,
+)
 
 
 class UserTestCase(TestCase):
@@ -277,6 +279,26 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.assertEqual(self.quota.count_blocking_vouchers(), 0)
         self.assertEqual(self.quota.count_in_cart(), 1)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+
+    def test_voucher_reuse(self):
+        self.quota.items.add(self.item1)
+        v = Voucher.objects.create(quota=self.quota, event=self.event, valid_until=now() + timedelta(days=5))
+
+        # use a voucher normally
+        cart = CartPosition.objects.create(event=self.event, item=self.item1, price=self.item1.default_price,
+                                           expires=now() + timedelta(days=3), voucher=v)
+        order = perform_order(event=self.event.id, payment_provider='free', positions=[cart.id])
+
+        # assert that the voucher cannot be reused
+        cart = CartPosition.objects.create(event=self.event, item=self.item1, price=self.item1.default_price,
+                                           expires=now() + timedelta(days=3), voucher=v)
+        self.assertRaises(OrderError, perform_order, event=self.event.id, payment_provider='free', positions=[cart.id])
+
+        # assert that the voucher can be re-used after cancelling the successful order
+        cancel_order(order)
+        cart = CartPosition.objects.create(event=self.event, item=self.item1, price=self.item1.default_price,
+                                           expires=now() + timedelta(days=3), voucher=v)
+        perform_order(event=self.event.id, payment_provider='free', positions=[cart.id])
 
 
 class OrderTestCase(BaseQuotaTestCase):

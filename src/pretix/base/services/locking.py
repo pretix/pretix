@@ -19,6 +19,7 @@ class LockManager:
 
     def __enter__(self):
         lock_event(self.event)
+        return now()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         release_event(self.event)

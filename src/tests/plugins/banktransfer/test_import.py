@@ -31,6 +31,12 @@ def env():
         datetime=now(), expires=now() + timedelta(days=10),
         total=23, payment_provider='banktransfer'
     )
+    Order.objects.create(
+        code='GS89Z', event=event,
+        status=Order.STATUS_CANCELLED,
+        datetime=now(), expires=now() + timedelta(days=10),
+        total=23, payment_provider='banktransfer'
+    )
     quota = Quota.objects.create(name="Test", size=2, event=event)
     item1 = Item.objects.create(event=event, name="Ticket", default_price=23)
     quota.items.add(item1)
@@ -51,6 +57,7 @@ Buchungstag;Valuta;Buchungstext;Auftraggeber / Empfänger;Verwendungszweck;Betra
 09.04.2015;09.04.2015;SEPA-Überweisung;Karla Kundin;Bestellung DUMMY1234S;42,00;
 09.04.2015;09.04.2015;SEPA-Überweisung;Karla Kundin;Bestellung DUMMY1234S;23,00;
 09.04.2015;09.04.2015;SEPA-Überweisung;Karla Kundin;Bestellung DUMMY6789Z;23,00;
+09.04.2015;09.04.2015;SEPA-Überweisung;Karla Kundin;Bestellung DUMMY65892;23,00;
 
 """.encode("utf-8"), content_type="text/csv")
 
@@ -72,7 +79,7 @@ Buchungstag;Valuta;Buchungstext;Auftraggeber / Empfänger;Verwendungszweck;Betra
     r = client.post('/control/event/dummy/dummy/banktransfer/import/', data)
     doc = BeautifulSoup(r.content)
     assert r.status_code == 200
-    assert len(doc.select("form table tbody tr")) == 5
+    assert len(doc.select("form table tbody tr")) == 6
     trs = doc.select("form table tbody tr")
     assert trs[0].select("td")[0].text == "09.04.2015"
     assert trs[0].select("td")[1].text == "Bestellung 2015ABCDE"
@@ -99,6 +106,13 @@ Buchungstag;Valuta;Buchungstext;Auftraggeber / Empfänger;Verwendungszweck;Betra
     assert trs[4].select("td")[2].text == "23.00"
     assert trs[4].select("td")[3].text == "Karla Kundin"
     assert trs[4].select("td")[5].text == "Order has been cancelled"
+    assert trs[5].select("td")[0].text == "09.04.2015"
+    # Test "autocorrection"
+    assert trs[5].select("td")[1].text == "Bestellung DUMMY65892"
+    assert trs[5].select("td")[2].text == "23.00"
+    assert trs[5].select("td")[3].text == "Karla Kundin"
+    assert "GS89Z" in trs[5].select("td")[4].text
+    assert trs[5].select("td")[5].text == "Order has been cancelled"
 
     data = {}
     for inp in doc.select("form input"):

@@ -19,6 +19,10 @@ class TolerantDict(dict):
         return key
 
 
+class SendMailException(Exception):
+    pass
+
+
 def mail(email: str, subject: str, template: str,
          context: Dict[str, Any]=None, event: Event=None, locale: str=None,
          order: Order=None, headers: dict=None):
@@ -46,8 +50,8 @@ def mail(email: str, subject: str, template: str,
 
     :param locale: The locale to be used while evaluating the subject and the template
 
-    :raises Exception: on obvious, immediate failures. Not raising an exception does not necessarily mean that the
-        email has been sent, just that it has been queued by the email backend.
+    :raises MailOrderException: on obvious, immediate failures. Not raising an exception does not necessarily mean
+        that the email has been sent, just that it has been queued by the email backend.
     """
     with language(locale):
         if isinstance(template, LazyI18nString):
@@ -94,7 +98,7 @@ def mail_send(to: str, subject: str, body: str, sender: str, event: int=None, he
         backend.send_messages([email])
     except Exception:
         logger.exception('Error sending email')
-        raise
+        raise SendMailException('Failed to send an email to {}.'.format(to))
 
 
 if settings.HAS_CELERY and settings.EMAIL_BACKEND != 'django.core.mail.outbox':

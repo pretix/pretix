@@ -314,11 +314,25 @@ class BasePaymentProvider:
         """
         raise NotImplementedError()  # NOQA
 
+    def order_change_allowed(self, order: Order) -> bool:
+        """
+        Will be called to check whether it is allowed to change the payment method of
+        an order to this one.
+
+        The default implementation always returns ``True``.
+
+        :param order: The order object
+        """
+        return True
+
     def order_can_retry(self, order: Order) -> bool:
         """
         Will be called if the user views the detail page of an unpaid order to determine
         whether the user should be presented with an option to retry the payment. The default
         implementation always returns False.
+
+        The retry workflow is also used if a user switches to this payment method for an existing
+        order! Therefore, they can only switch to your p
 
         :param order: The order object
         """
@@ -326,8 +340,16 @@ class BasePaymentProvider:
 
     def retry_prepare(self, request: HttpRequest, order: Order) -> "bool|str":
         """
+        Deprecated, use order_prepare instead
+        """
+        raise DeprecationWarning('retry_prepare is deprecated, use order_prepare instead')
+        return self.order_prepare(request, order)
+
+    def order_prepare(self, request: HttpRequest, order: Order) -> "bool|str":
+        """
         Will be called if the user retries to pay an unpaid order (after the user filled in
-        e.g. the form returned by :py:meth:`payment_form`).
+        e.g. the form returned by :py:meth:`payment_form`) or if the user changes the payment
+        method.
 
         It should return and report errors the same way as :py:meth:`checkout_prepare`, but
         receives an ``Order`` object instead of a cart object.
@@ -468,6 +490,9 @@ class FreeOrderProvider(BasePaymentProvider):
         return CartPosition.objects.filter(
             cart_id=request.session.session_key, event=request.event
         ).aggregate(sum=Sum('price'))['sum'] == 0
+
+    def order_change_allowed(self, order: Order) -> bool:
+        return False
 
 
 @receiver(register_payment_providers, dispatch_uid="payment_free")

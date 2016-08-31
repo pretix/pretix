@@ -1,5 +1,4 @@
 import copy
-import random
 import string
 from datetime import datetime
 from decimal import Decimal
@@ -7,6 +6,7 @@ from typing import List, Union
 
 from django.conf import settings
 from django.db import models
+from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -17,12 +17,12 @@ from .items import Item, ItemVariation, Question, QuestionOption, Quota
 
 
 def generate_secret():
-    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16))
+    return get_random_string(length=16, allowed_chars=string.ascii_letters + string.digits)
 
 
 def generate_position_secret():
     # Exclude o,0,1,i,l to avoid confusion with bad fonts/printers
-    return ''.join(random.choice('abcdefghjkmnpqrstuvwxyz23456789') for _ in range(settings.ENTROPY['ticket_secret']))
+    return get_random_string(length=settings.ENTROPY['ticket_secret'], allowed_chars='abcdefghjkmnpqrstuvwxyz23456789')
 
 
 class Order(LoggedModel):
@@ -198,10 +198,24 @@ class Order(LoggedModel):
         else:
             self.payment_fee_tax_value = Decimal('0.00')
 
+    @staticmethod
+    def normalize_code(code):
+        tr = str.maketrans({
+            '2': 'Z',
+            '4': 'A',
+            '5': 'S',
+            '6': 'G',
+        })
+        return code.upper().translate(tr)
+
     def assign_code(self):
-        charset = list('ABCDEFGHKLMNPQRSTUVWXYZ23456789')
+        # This omits some character pairs completely because they are hard to read even on screens (1/I and O/0)
+        # and includes only one of two characters for some pairs because they are sometimes hard to distinguish in
+        # handwriting (2/Z, 4/A, 5/S, 6/G). This allows for better detection e.g. in incoming wire transfers that
+        # might include OCR'd handwritten text
+        charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
         while True:
-            code = "".join([random.choice(charset) for i in range(settings.ENTROPY['order_code'])])
+            code = get_random_string(length=settings.ENTROPY['order_code'], allowed_chars=charset)
             if not Order.objects.filter(event=self.event, code=code).exists():
                 self.code = code
                 return
@@ -260,10 +274,11 @@ class Order(LoggedModel):
 
         return self._is_still_available()
 
-    def _is_still_available(self) -> Union[bool, str]:
+    def _is_still_available(self, now_dt: datetime=None) -> Union[bool, str]:
         error_messages = {
             'unavailable': _('Some of the ordered products are no longer available.'),
         }
+        now_dt = now_dt or now()
         positions = self.positions.all().select_related('item', 'variation')
         quota_cache = {}
         try:
@@ -277,7 +292,7 @@ class Order(LoggedModel):
                     # quota while we're doing so.
                     if quota.id not in quota_cache:
                         quota_cache[quota.id] = quota
-                        quota.cached_availability = quota.availability()[1]
+                        quota.cached_availability = quota.availability(now_dt)[1]
                     else:
                         # Use cached version
                         quota = quota_cache[quota.id]

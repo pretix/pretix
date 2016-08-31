@@ -1,7 +1,7 @@
 $(function () {
     jQuery('#qrcodeCanvas').qrcode(
         {
-            text: '{{ qrdata|safe }}'
+            text: $("#qrdata").html()
         }
     );
 });

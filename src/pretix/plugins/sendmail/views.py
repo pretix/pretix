@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 
 from pretix.base.models import Order
-from pretix.base.services.mail import mail
+from pretix.base.services.mail import SendMailException, mail
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 from . import forms
@@ -36,11 +36,18 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         self.request.event.log_action('pretix.plugins.sendmail.sent', user=self.request.user, data=dict(
             form.cleaned_data))
 
+        failures = []
         for o in orders:
-            mail(o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
-                 None, self.request.event, locale=o.locale, order=o)
+            try:
+                mail(o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
+                     None, self.request.event, locale=o.locale, order=o)
+            except SendMailException:
+                failures.append(o.email)
 
-        messages.success(self.request, _('Your message will be sent to the selected users.'))
+        if failures:
+            messages.error(self.request, _('Failed to send mails to the following users: {}'.format(' '.join(failures))))
+        else:
+            messages.success(self.request, _('Your message has been queued to be sent to the selected users.'))
 
         return redirect(
             'plugins:sendmail:send',

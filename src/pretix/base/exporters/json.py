@@ -32,6 +32,7 @@ class JSONExporter(BaseExporter):
                         'name': str(item.name),
                         'category': item.category_id,
                         'price': item.default_price,
+                        'tax_rate': item.tax_rate,
                         'admission': item.admission,
                         'active': item.active,
                         'variations': [

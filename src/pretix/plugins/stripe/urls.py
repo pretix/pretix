@@ -7,3 +7,9 @@ urlpatterns = [
         url(r'^webhook/$', webhook, name='webhook'),
     ])),
 ]
+
+event_patterns = [
+    url(r'^stripe/', include([
+        url(r'^webhook/$', webhook, name='webhook'),
+    ])),
+]

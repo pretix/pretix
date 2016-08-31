@@ -10,6 +10,7 @@ from django.utils.translation import ugettext as __, ugettext_lazy as _
 
 from pretix.base.models import Quota
 from pretix.base.payment import BasePaymentProvider
+from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -182,6 +183,8 @@ class Paypal(BasePaymentProvider):
             mark_order_paid(order, 'paypal', json.dumps(payment.to_dict()))
         except Quota.QuotaExceededException as e:
             messages.error(request, str(e))
+        except SendMailException:
+            messages.warning(request, _('There was an error sending the confirmation mail.'))
         return None
 
     def order_pending_render(self, request, order) -> str:
@@ -243,7 +246,7 @@ class Paypal(BasePaymentProvider):
     def order_can_retry(self, order):
         return True
 
-    def retry_prepare(self, request, order):
+    def order_prepare(self, request, order):
         self.init_api()
         payment = paypalrestsdk.Payment({
             'intent': 'sale',

@@ -6,7 +6,7 @@
 {% endblocktrans %}</p>
 
 <address>
-    {{ settings.bank_details|linebreaksbr }}<br />
+    {{ details|linebreaksbr }}<br />
     {% trans "Amount:" %} {{ order.total|localize }} {{ request.event.currency }}<br />
     <strong>{% trans "Reference code (important):" %} {{ order.full_code }}</strong>
 </address>

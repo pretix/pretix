@@ -5,6 +5,7 @@ from django import forms
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.i18n import I18nFormField, I18nTextarea, LazyI18nString
 from pretix.base.payment import BasePaymentProvider
 
 
@@ -14,19 +15,21 @@ class BankTransfer(BasePaymentProvider):
 
     @property
     def settings_form_fields(self):
+        form_field = I18nFormField(
+            label=_('Bank account details'),
+            widget=I18nTextarea,
+        )
         return OrderedDict(
-            list(super().settings_form_fields.items()) + [
-                ('bank_details',
-                 forms.CharField(
-                     widget=forms.Textarea,
-                     label=_('Bank account details'),
-                 ))
-            ]
+            list(super().settings_form_fields.items()) + [('bank_details', form_field)]
         )
 
     def payment_form_render(self, request) -> str:
         template = get_template('pretixplugins/banktransfer/checkout_payment_form.html')
-        ctx = {'request': request, 'event': self.event, 'settings': self.settings}
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'details': self.settings.get('bank_details', as_type=LazyI18nString),
+        }
         return template.render(ctx)
 
     def checkout_prepare(self, request, total):
@@ -36,19 +39,24 @@ class BankTransfer(BasePaymentProvider):
         return True
 
     def checkout_confirm_render(self, request):
-        form = self.payment_form(request)
-        template = get_template('pretixplugins/banktransfer/checkout_payment_confirm.html')
-        ctx = {'request': request, 'form': form, 'settings': self.settings}
-        return template.render(ctx)
+        return self.payment_form_render(request)
 
     def order_pending_mail_render(self, order) -> str:
         template = get_template('pretixplugins/banktransfer/email/order_pending.txt')
-        ctx = {'event': self.event, 'order': order, 'settings': self.settings}
+        ctx = {
+            'event': self.event,
+            'order': order,
+            'details': self.settings.get('bank_details', as_type=LazyI18nString),
+        }
         return template.render(ctx)
 
     def order_pending_render(self, request, order) -> str:
         template = get_template('pretixplugins/banktransfer/pending.html')
-        ctx = {'request': request, 'order': order, 'settings': self.settings}
+        ctx = {
+            'event': self.event,
+            'order': order,
+            'details': self.settings.get('bank_details', as_type=LazyI18nString),
+        }
         return template.render(ctx)
 
     def order_control_render(self, request, order) -> str:
@@ -57,6 +65,6 @@ class BankTransfer(BasePaymentProvider):
         else:
             payment_info = None
         template = get_template('pretixplugins/banktransfer/control.html')
-        ctx = {'request': request, 'event': self.event, 'settings': self.settings,
+        ctx = {'request': request, 'event': self.event,
                'payment_info': payment_info, 'order': order}
         return template.render(ctx)

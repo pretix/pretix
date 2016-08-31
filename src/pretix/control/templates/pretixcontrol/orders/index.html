@@ -39,6 +39,7 @@
                 <option value="">{% trans "All orders" %}</option>
                 <option value="p" {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "Paid" %}</option>
                 <option value="n" {% if request.GET.status == "n" %}selected="selected"{% endif %}>{% trans "Pending" %}</option>
+                <option value="o" {% if request.GET.status == "o" %}selected="selected"{% endif %}>{% trans "Pending (overdue)" %}</option>
                 <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Pending (expired)" %}</option>
                 <option value="c" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Cancelled" %}</option>
                 <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Refunded" %}</option>
@@ -56,6 +57,7 @@
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
         </form>
         </p>
+        {% include "pretixcontrol/pagination.html" %}
         <div class="table-responsive">
             <table class="table table-condensed table-hover">
                 <thead>

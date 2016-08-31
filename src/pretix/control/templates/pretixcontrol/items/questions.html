@@ -41,6 +41,10 @@
                     {% url "control:event.items.questions.edit" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}">{{ q.question }}</a></strong>
                         </td>
                         <td>{{ q.get_type_display }}</td>
+                        <td>
+                            <a href="{% url "control:event.items.questions.up" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
+                            <a href="{% url "control:event.items.questions.down" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
+                        </td>
                         <td class="text-right"><a href="
                     {% url "control:event.items.questions.delete" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                         </td>

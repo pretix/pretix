@@ -14,7 +14,7 @@ from pretix.base.forms.auth import (
     LoginForm, PasswordForgotForm, PasswordRecoverForm, RegistrationForm,
 )
 from pretix.base.models import User
-from pretix.base.services.mail import mail
+from pretix.base.services.mail import SendMailException, mail
 from pretix.helpers.urls import build_absolute_uri
 
 
@@ -103,15 +103,20 @@ class Forgot(TemplateView):
                 else:
                     rc.setex('pretix_pwreset_%s' % (user.id), 3600 * 24, '1')
 
-            mail(
-                user.email, _('Password recovery'), 'pretixcontrol/email/forgot.txt',
-                {
-                    'user': user,
-                    'url': (build_absolute_uri('control:auth.forgot.recover')
-                            + '?id=%d&token=%s' % (user.id, default_token_generator.make_token(user)))
-                },
-                None, locale=user.locale
-            )
+            try:
+                mail(
+                    user.email, _('Password recovery'), 'pretixcontrol/email/forgot.txt',
+                    {
+                        'user': user,
+                        'url': (build_absolute_uri('control:auth.forgot.recover')
+                                + '?id=%d&token=%s' % (user.id, default_token_generator.make_token(user)))
+                    },
+                    None, locale=user.locale
+                )
+            except SendMailException:
+                messages.error(request, _('There was an error sending the mail. Please try again later.'))
+                return self.get(request, *args, **kwargs)
+
             user.log_action('pretix.control.auth.user.forgot_password.mail_sent')
             messages.success(request, _('We sent you an e-mail containing further instructions.'))
             return redirect('control:auth.forgot')

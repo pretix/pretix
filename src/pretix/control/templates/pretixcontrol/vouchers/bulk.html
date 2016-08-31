@@ -18,7 +18,7 @@
                                placeholder="{% trans "Number" %}">
                         <div class="input-group-btn">
                             <button class="btn btn-default" type="button" id="voucher-bulk-codes-generate"
-                                data-length="{{ code_length }}">
+                                    data-rng-url="{% url 'control:event.vouchers.rng' organizer=request.event.organizer.slug event=request.event.slug %}">
                                 {% trans "Generate random codes" %}
                             </button>
                         </div>

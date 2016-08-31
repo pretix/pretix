@@ -55,6 +55,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         q.items.add(item)
         html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertNotIn("Early-bird", html)
+        self.assertNotIn('checkout-button-row', html)
 
     def test_without_category(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
@@ -62,6 +63,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         q.items.add(item)
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Early-bird", doc.select("section .product-row")[0].text)
+        self.assertIn("Add to cart", doc.select("div button")[0].text)
 
     def test_timely_available(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
@@ -217,7 +219,7 @@ class DeadlineTest(EventTestMixin, TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertNotIn('alert-info', response.rendered_content)
-        self.assertIn('checkout-button-row', response.rendered_content)
+        self.assertNotIn('checkout-button-row', response.rendered_content)
         response = self.client.post(
             '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
             {
@@ -235,7 +237,7 @@ class DeadlineTest(EventTestMixin, TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertNotIn('alert-info', response.rendered_content)
-        self.assertIn('checkout-button-row', response.rendered_content)
+        self.assertNotIn('checkout-button-row', response.rendered_content)
         response = self.client.post(
             '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
             {

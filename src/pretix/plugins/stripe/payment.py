@@ -10,8 +10,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Quota
 from pretix.base.payment import BasePaymentProvider
+from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
-from pretix.helpers.urls import build_absolute_uri
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
@@ -39,13 +40,13 @@ class Stripe(BasePaymentProvider):
         return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
             _('Please configure a <a href="https://dashboard.stripe.com/account/webhooks">Stripe Webhook</a> to '
               'the following endpoint in order to automatically cancel orders when a charges are refunded externally.'),
-            build_absolute_uri('plugins:stripe:webhook')
+            build_absolute_uri(self.event, 'plugins:stripe:webhook')
         )
 
     def payment_is_valid_session(self, request):
         return request.session.get('payment_stripe_token') != ''
 
-    def retry_prepare(self, request, order):
+    def order_prepare(self, request, order):
         return self.checkout_prepare(request, None)
 
     def checkout_prepare(self, request, cart):
@@ -116,6 +117,9 @@ class Stripe(BasePaymentProvider):
                     mark_order_paid(order, 'stripe', str(charge))
                 except Quota.QuotaExceededException as e:
                     messages.error(request, str(e))
+                except SendMailException:
+                    messages.warning(request, _('There was an error sending the confirmation mail.'))
+
             else:
                 messages.warning(request, _('Stripe reported an error: %s' % charge.failure_message))
                 logger.info('Charge failed: %s' % str(charge))

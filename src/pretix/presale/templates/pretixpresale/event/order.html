@@ -33,6 +33,12 @@
     {% if order.status == "n" %}
         <div class="panel panel-danger">
             <div class="panel-heading">
+                <div class="pull-right">
+                    <a href="{% eventurl event "presale:event.order.pay.change" secret=order.secret order=order.code %}">
+                        <span class="fa fa-edit"></span>
+                        {% trans "Use different payment method" %}
+                    </a>
+                </div>
                 <h3 class="panel-title">
                     {% trans "Payment" %}
                 </h3>

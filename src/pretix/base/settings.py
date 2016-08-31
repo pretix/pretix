@@ -77,9 +77,17 @@ DEFAULTS = {
         'default': '',
         'type': str
     },
+    'invoice_introductory_text': {
+        'default': '',
+        'type': LazyI18nString
+    },
     'invoice_additional_text': {
         'default': '',
-        'type': str
+        'type': LazyI18nString
+    },
+    'invoice_footer_text': {
+        'default': '',
+        'type': LazyI18nString
     },
     'invoice_language': {
         'default': '__user__',
@@ -181,6 +189,18 @@ of {total} {currency}. Please complete your payment before {date}.
 {paymentinfo}
 
 You can change your order details and view the status of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
+    'mail_text_order_changed': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+your order for {event} has been changed.
+
+You can view the status of your order at
 {url}
 
 Best regards,

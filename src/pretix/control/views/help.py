@@ -13,6 +13,10 @@ class HelpView(View):
     paginate_by = 30
 
     def get(self, request, *args, **kwargs):
+        # In a security review, this came up as a possible path traversal issue. However, the URL regex
+        # does not allow any dots in the argument (which forbids traversing upwards in the directory tree).
+        # Even if it *was* possbile, it'd be loaded through django's template loader and therefore limited
+        # to TEMPLATE_DIR.
         try:
             locale = request.LANGUAGE_CODE
             return render(request, 'pretixcontrol/help/%s.%s.html' % (kwargs.get('topic'), locale), {})

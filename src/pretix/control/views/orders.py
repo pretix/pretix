@@ -13,7 +13,8 @@ from django.views.generic import DetailView, ListView, TemplateView, View
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, CachedTicket, EventLock, Invoice, Item, Order, Quota,
+    CachedFile, CachedTicket, EventLock, Invoice, Item, ItemVariation, Order,
+    Quota,
 )
 from pretix.base.services import tickets
 from pretix.base.services.export import export
@@ -21,14 +22,18 @@ from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
     regenerate_invoice,
 )
-from pretix.base.services.mail import mail
-from pretix.base.services.orders import cancel_order, mark_order_paid
+from pretix.base.services.mail import SendMailException, mail
+from pretix.base.services.orders import (
+    OrderChangeManager, OrderError, cancel_order, mark_order_paid,
+)
 from pretix.base.services.stats import order_overview
 from pretix.base.signals import (
     register_data_exporters, register_payment_providers,
     register_ticket_outputs,
 )
-from pretix.control.forms.orders import CommentForm, ExporterForm, ExtendForm
+from pretix.control.forms.orders import (
+    CommentForm, ExporterForm, ExtendForm, OrderPositionChangeForm,
+)
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -51,7 +56,10 @@ class OrderList(EventPermissionRequiredMixin, ListView):
             )
         if self.request.GET.get("status", "") != "":
             s = self.request.GET.get("status", "")
-            qs = qs.filter(status=s)
+            if s == 'o':
+                qs = qs.filter(status=Order.STATUS_PENDING, expires__lt=now())
+            else:
+                qs = qs.filter(status=s)
         if self.request.GET.get("item", "") != "":
             i = self.request.GET.get("item", "")
             qs = qs.filter(positions__item_id__in=(i,)).distinct()
@@ -73,6 +81,12 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
             event=self.request.event,
             code=self.kwargs['code'].upper()
         )
+
+    def _redirect_back(self):
+        return redirect('control:event.order',
+                        event=self.request.event.slug,
+                        organizer=self.request.event.organizer.slug,
+                        code=self.order.code)
 
     @cached_property
     def order(self):
@@ -198,6 +212,8 @@ class OrderTransition(OrderView):
                 mark_order_paid(self.order, manual=True, user=self.request.user)
             except Quota.QuotaExceededException as e:
                 messages.error(self.request, str(e))
+            except SendMailException:
+                messages.warning(self.request, _('The order has been marked as paid, but we were unable to send a confirmation mail.'))
             else:
                 messages.success(self.request, _('The order has been marked as paid.'))
         elif self.order.status == Order.STATUS_PENDING and to == 'c':
@@ -308,18 +324,23 @@ class OrderResendLink(OrderView):
 
     def post(self, *args, **kwargs):
         with language(self.order.locale):
-            mail(
-                self.order.email, _('Your order: %(code)s') % {'code': self.order.code},
-                self.order.event.settings.mail_text_resend_link,
-                {
-                    'event': self.order.event.name,
-                    'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
-                        'order': self.order.code,
-                        'secret': self.order.secret
-                    }),
-                },
-                self.order.event, locale=self.order.locale
-            )
+            try:
+                mail(
+                    self.order.email, _('Your order: %(code)s') % {'code': self.order.code},
+                    self.order.event.settings.mail_text_resend_link,
+                    {
+                        'event': self.order.event.name,
+                        'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
+                            'order': self.order.code,
+                            'secret': self.order.secret
+                        }),
+                    },
+                    self.order.event, locale=self.order.locale
+                )
+            except SendMailException:
+                messages.error(self.request, _('There was an error sending the mail. Please try again later.'))
+                return redirect(self.get_order_url())
+
         messages.success(self.request, _('The email has been queued to be sent.'))
         self.order.log_action('pretix.event.order.resend', user=self.request.user)
         return redirect(self.get_order_url())
@@ -414,8 +435,8 @@ class OrderExtend(OrderView):
                 self.form.save()
             else:
                 try:
-                    with self.order.event.lock():
-                        is_available = self.order._is_still_available()
+                    with self.order.event.lock() as now_dt:
+                        is_available = self.order._is_still_available(now_dt)
                         if is_available is True:
                             self.form.save()
                             self.order.log_action('pretix.event.order.expirychanged', user=self.request.user, data={
@@ -430,12 +451,6 @@ class OrderExtend(OrderView):
             return self._redirect_back()
         else:
             return self.get(*args, **kwargs)
-
-    def _redirect_back(self):
-        return redirect('control:event.order',
-                        event=self.request.event.slug,
-                        organizer=self.request.event.organizer.slug,
-                        code=self.order.code)
 
     def get(self, *args, **kwargs):
         if self.order.status != Order.STATUS_PENDING:
@@ -452,6 +467,75 @@ class OrderExtend(OrderView):
                           data=self.request.POST if self.request.method == "POST" else None)
 
 
+class OrderChange(OrderView):
+    permission = 'can_change_orders'
+    template_name = 'pretixcontrol/order/change.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.order.status != Order.STATUS_PENDING:
+            messages.error(self.request, _('This action is only allowed for pending orders.'))
+            return self._redirect_back()
+        return super().dispatch(request, *args, **kwargs)
+
+    @cached_property
+    def positions(self):
+        positions = list(self.order.positions.all())
+        for p in positions:
+            p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p,
+                                             data=self.request.POST if self.request.method == "POST" else None)
+        return positions
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['positions'] = self.positions
+        return ctx
+
+    def post(self, *args, **kwargs):
+        ocm = OrderChangeManager(self.order, self.request.user)
+        form_valid = True
+        for p in self.positions:
+            if not p.form.is_valid():
+                print(p.pk, 'Form invalid')
+                form_valid = False
+                break
+
+            try:
+                if p.form.cleaned_data['operation'] == 'product':
+                    if '-' in p.form.cleaned_data['itemvar']:
+                        itemid, varid = p.form.cleaned_data['itemvar'].split('-')
+                    else:
+                        itemid, varid = p.form.cleaned_data['itemvar'], None
+
+                    item = Item.objects.get(pk=itemid, event=self.request.event)
+                    if varid:
+                        variation = ItemVariation.objects.get(pk=varid, item=item)
+                    else:
+                        variation = None
+                    ocm.change_item(p, item, variation)
+                elif p.form.cleaned_data['operation'] == 'price':
+                    ocm.change_price(p, p.form.cleaned_data['price'])
+                elif p.form.cleaned_data['operation'] == 'cancel':
+                    ocm.cancel(p)
+
+            except OrderError as e:
+                p.custom_error = str(e)
+                form_valid = False
+                break
+
+        if not form_valid:
+            messages.error(self.request, _('An error occured. Please see the details below.'))
+        else:
+            try:
+                ocm.commit()
+            except OrderError as e:
+                messages.error(self.request, str(e))
+            else:
+                messages.success(self.request, _('The order has been changed and the user has been notified.'))
+                return self._redirect_back()
+
+        return self.get(*args, **kwargs)
+
+
 class OverView(EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/orders/overview.html'
     permission = 'can_view_orders'
@@ -465,12 +549,20 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
 class OrderGo(EventPermissionRequiredMixin, View):
     permission = 'can_view_orders'
 
+    def get_order(self, code):
+        try:
+            return Order.objects.get(code=code, event=self.request.event)
+        except Order.DoesNotExist:
+            return Order.objects.get(code=Order.normalize_code(code), event=self.request.event)
+
     def get(self, request, *args, **kwargs):
         code = request.GET.get("code", "").upper().strip()
         try:
             if code.startswith(request.event.slug.upper()):
-                code = code[len(request.event.slug.upper()):]
-            order = Order.objects.get(code=code, event=request.event)
+                code = code[len(request.event.slug):]
+            if code.startswith('-'):
+                code = code[1:]
+            order = self.get_order(code)
             return redirect('control:event.order', event=request.event.slug, organizer=request.event.organizer.slug,
                             code=order.code)
         except Order.DoesNotExist:

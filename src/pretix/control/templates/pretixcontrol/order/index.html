@@ -91,13 +91,15 @@
                         <dt>{% trans "User" %}</dt>
                         <dd>
                             {{ order.email }}&nbsp;&nbsp;
-                            <form class="form-inline helper-display-inline" method="post"
-                                    action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
-                                {% csrf_token %}
-                                <button class="btn btn-default btn-xs">
-                                    {% trans "Resend link" %}
-                                </button>
-                            </form>
+                            {% if order.status != "c" %}
+                                <form class="form-inline helper-display-inline" method="post"
+                                        action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                    {% csrf_token %}
+                                    <button class="btn btn-default btn-xs">
+                                        {% trans "Resend link" %}
+                                    </button>
+                                </form>
+                            {% endif %}
                         </dd>
                         {% if invoices %}
                             <dt>{% trans "Invoices" %}</dt>
@@ -146,6 +148,14 @@
             </div>
             <div class="panel panel-default items">
                 <div class="panel-heading">
+                    <div class="pull-right">
+                        {% if order.status == "n" and request.eventperm.can_change_orders %}
+                            <a href="{% url "control:event.order.change" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                <span class="fa fa-edit"></span>
+                                {% trans "Change products" %}
+                            </a>
+                        {% endif %}
+                    </div>
                     <h3 class="panel-title">
                         {% trans "Ordered items" %}
                     </h3>

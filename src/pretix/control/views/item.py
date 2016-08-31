@@ -208,7 +208,7 @@ def category_move(request, category, up=True):
         if cat.position != i:
             cat.position = i
             cat.save()
-    messages.success(request, _('The order of categories as been updated.'))
+    messages.success(request, _('The order of categories has been updated.'))
 
 
 @event_permission_required("can_change_items")
@@ -235,6 +235,49 @@ class QuestionList(ListView):
 
     def get_queryset(self):
         return self.request.event.questions.all()
+
+
+def question_move(request, question, up=True):
+    """
+    This is a helper function to avoid duplicating code in question_move_up and
+    question_move_down. It takes a question and a direction and then tries to bring
+    all items for this question in a new order.
+    """
+    try:
+        question = request.event.questions.get(
+            id=question
+        )
+    except Question.DoesNotExist:
+        raise Http404(_("The selected question does not exist."))
+    questions = list(request.event.questions.order_by("position"))
+
+    index = questions.index(question)
+    if index != 0 and up:
+        questions[index - 1], questions[index] = questions[index], questions[index - 1]
+    elif index != len(questions) - 1 and not up:
+        questions[index + 1], questions[index] = questions[index], questions[index + 1]
+
+    for i, qt in enumerate(questions):
+        if qt.position != i:
+            qt.position = i
+            qt.save()
+    messages.success(request, _('The order of questions has been updated.'))
+
+
+@event_permission_required("can_change_items")
+def question_move_up(request, organizer, event, question):
+    question_move(request, question, up=True)
+    return redirect('control:event.items.questions',
+                    organizer=request.event.organizer.slug,
+                    event=request.event.slug)
+
+
+@event_permission_required("can_change_items")
+def question_move_down(request, organizer, event, question):
+    question_move(request, question, up=False)
+    return redirect('control:event.items.questions',
+                    organizer=request.event.organizer.slug,
+                    event=request.event.slug)
 
 
 class QuestionDelete(EventPermissionRequiredMixin, DeleteView):

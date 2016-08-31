@@ -1,20 +1,23 @@
-import random
-
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
 from .base import LoggedModel
 from .event import Event
 from .items import Item, ItemVariation, Quota
-from .orders import CartPosition, OrderPosition
+from .orders import CartPosition, Order, OrderPosition
+
+
+def _generate_random_code():
+    charset = list('ABCDEFGHKLMNPQRSTUVWXYZ23456789')
+    return get_random_string(length=settings.ENTROPY['voucher_code'], allowed_chars=charset)
 
 
 def generate_code():
-    charset = list('ABCDEFGHKLMNPQRSTUVWXYZ23456789')
     while True:
-        code = "".join([random.choice(charset) for i in range(settings.ENTROPY['voucher_code'])])
+        code = _generate_random_code()
         if not Voucher.objects.filter(code=code).exists():
             return code
 
@@ -162,10 +165,12 @@ class Voucher(LoggedModel):
 
     def is_ordered(self) -> int:
         """
-        Returns whether an order position exists that uses this voucher.
+        Returns whether a non-canceled order position exists that uses this voucher.
         """
         return OrderPosition.objects.filter(
             voucher=self
+        ).exclude(
+            order__status=Order.STATUS_CANCELLED
         ).exists()
 
     def is_in_cart(self) -> int:

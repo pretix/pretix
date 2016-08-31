@@ -7,7 +7,7 @@ Obtain a copy of the source code
 --------------------------------
 Just clone our git repository including its submodules::
 
-    git clone --recursive https://github.com/pretix/pretix.git 
+    git clone --recursive https://github.com/pretix/pretix.git
     cd pretix/
 
 External Dependencies
@@ -21,7 +21,7 @@ External Dependencies
 Your local python environment
 -----------------------------
 
-Please execute ``python -V`` or ``python3 -V`` to make sure you have Python 3.4 
+Please execute ``python -V`` or ``python3 -V`` to make sure you have Python 3.4
 (or newer) installed. Also make sure you have pip for Python 3 installed, you can
 execute ``pip3 -V`` to check. Then use Python's internal tools to create a virtual
 environment and activate it for your current session::
@@ -30,7 +30,7 @@ environment and activate it for your current session::
     source env/bin/activate
 
 You should now see a ``(env)`` prepended to your shell prompt. You have to do this
-in every shell you use to work with pretix (or configure your shell to do so 
+in every shell you use to work with pretix (or configure your shell to do so
 automatically).
 
 Working with the code
@@ -43,6 +43,10 @@ The first thing you need are all the main application's dependencies::
 If you are working with Python 3.4, you will also need (you can skip this for Python 3.5)::
 
     pip install -r requirements/py34.txt
+
+Next, you need to copy the SCSS files from the source folder to the STATIC_ROOT directory::
+
+    python manage.py collectstatic
 
 Then, create the local database::
 
@@ -117,8 +121,8 @@ Then execute ``python -m smtpd -n -c DebuggingServer localhost:1025``.
 
 Working with the documentation
 ------------------------------
-First, you should install the requirements necessary for building the documentation. 
-Make sure you have your virtual python environment activated (see above). Then, install the 
+First, you should install the requirements necessary for building the documentation.
+Make sure you have your virtual python environment activated (see above). Then, install the
 packages by executing::
 
     cd doc/
