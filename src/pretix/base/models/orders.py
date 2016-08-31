@@ -243,13 +243,8 @@ class Order(LoggedModel):
 
     @property
     def can_user_cancel(self) -> bool:
-        positions = self.positions.all().prefetch_related('item')
-        cancelable = True
-        cancelable_products = []
-        for i, op in enumerate(positions):
-            cancelable_products.append(op.item.allow_cancel)
-        if False in cancelable_products:
-            cancelable = False
+        positions = self.positions.all().select_related('item')
+        cancelable = not all([op.item.allow_cancel for op in positions])
         return self.event.settings.cancel_allow_user and cancelable
 
     @property
