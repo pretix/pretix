@@ -244,7 +244,7 @@ class Order(LoggedModel):
     @property
     def can_user_cancel(self) -> bool:
         positions = self.positions.all().select_related('item')
-        cancelable = not all([op.item.allow_cancel for op in positions])
+        cancelable = all([op.item.allow_cancel for op in positions])
         return self.event.settings.cancel_allow_user and cancelable
 
     @property
