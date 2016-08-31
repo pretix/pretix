@@ -13,7 +13,8 @@ from django.views.generic import DetailView, ListView, TemplateView, View
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, CachedTicket, EventLock, Invoice, Item, Order, Quota,
+    CachedFile, CachedTicket, EventLock, Invoice, Item, ItemVariation, Order,
+    Quota,
 )
 from pretix.base.services import tickets
 from pretix.base.services.export import export
@@ -22,13 +23,17 @@ from pretix.base.services.invoices import (
     regenerate_invoice,
 )
 from pretix.base.services.mail import SendMailException, mail
-from pretix.base.services.orders import cancel_order, mark_order_paid
+from pretix.base.services.orders import (
+    OrderChangeManager, OrderError, cancel_order, mark_order_paid,
+)
 from pretix.base.services.stats import order_overview
 from pretix.base.signals import (
     register_data_exporters, register_payment_providers,
     register_ticket_outputs,
 )
-from pretix.control.forms.orders import CommentForm, ExporterForm, ExtendForm
+from pretix.control.forms.orders import (
+    CommentForm, ExporterForm, ExtendForm, OrderPositionChangeForm,
+)
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -76,6 +81,12 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
             event=self.request.event,
             code=self.kwargs['code'].upper()
         )
+
+    def _redirect_back(self):
+        return redirect('control:event.order',
+                        event=self.request.event.slug,
+                        organizer=self.request.event.organizer.slug,
+                        code=self.order.code)
 
     @cached_property
     def order(self):
@@ -441,12 +452,6 @@ class OrderExtend(OrderView):
         else:
             return self.get(*args, **kwargs)
 
-    def _redirect_back(self):
-        return redirect('control:event.order',
-                        event=self.request.event.slug,
-                        organizer=self.request.event.organizer.slug,
-                        code=self.order.code)
-
     def get(self, *args, **kwargs):
         if self.order.status != Order.STATUS_PENDING:
             messages.error(self.request, _('This action is only allowed for pending orders.'))
@@ -460,6 +465,75 @@ class OrderExtend(OrderView):
     def form(self):
         return ExtendForm(instance=self.order,
                           data=self.request.POST if self.request.method == "POST" else None)
+
+
+class OrderChange(OrderView):
+    permission = 'can_change_orders'
+    template_name = 'pretixcontrol/order/change.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.order.status != Order.STATUS_PENDING:
+            messages.error(self.request, _('This action is only allowed for pending orders.'))
+            return self._redirect_back()
+        return super().dispatch(request, *args, **kwargs)
+
+    @cached_property
+    def positions(self):
+        positions = list(self.order.positions.all())
+        for p in positions:
+            p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p,
+                                             data=self.request.POST if self.request.method == "POST" else None)
+        return positions
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['positions'] = self.positions
+        return ctx
+
+    def post(self, *args, **kwargs):
+        ocm = OrderChangeManager(self.order, self.request.user)
+        form_valid = True
+        for p in self.positions:
+            if not p.form.is_valid():
+                print(p.pk, 'Form invalid')
+                form_valid = False
+                break
+
+            try:
+                if p.form.cleaned_data['operation'] == 'product':
+                    if '-' in p.form.cleaned_data['itemvar']:
+                        itemid, varid = p.form.cleaned_data['itemvar'].split('-')
+                    else:
+                        itemid, varid = p.form.cleaned_data['itemvar'], None
+
+                    item = Item.objects.get(pk=itemid, event=self.request.event)
+                    if varid:
+                        variation = ItemVariation.objects.get(pk=varid, item=item)
+                    else:
+                        variation = None
+                    ocm.change_item(p, item, variation)
+                elif p.form.cleaned_data['operation'] == 'price':
+                    ocm.change_price(p, p.form.cleaned_data['price'])
+                elif p.form.cleaned_data['operation'] == 'cancel':
+                    ocm.cancel(p)
+
+            except OrderError as e:
+                p.custom_error = str(e)
+                form_valid = False
+                break
+
+        if not form_valid:
+            messages.error(self.request, _('An error occured. Please see the details below.'))
+        else:
+            try:
+                ocm.commit()
+            except OrderError as e:
+                messages.error(self.request, str(e))
+            else:
+                messages.success(self.request, _('The order has been changed and the user has been notified.'))
+                return self._redirect_back()
+
+        return self.get(*args, **kwargs)
 
 
 class OverView(EventPermissionRequiredMixin, TemplateView):

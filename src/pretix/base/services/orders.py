@@ -1,6 +1,7 @@
+from collections import Counter, namedtuple
 from datetime import datetime, timedelta
 from decimal import Decimal
-from typing import List
+from typing import List, Optional
 
 from django.conf import settings
 from django.db import transaction
@@ -12,7 +13,8 @@ from pretix.base.i18n import (
     LazyDate, LazyLocaleException, LazyNumber, language,
 )
 from pretix.base.models import (
-    CartPosition, Event, EventLock, Order, OrderPosition, Quota, User,
+    CartPosition, Event, EventLock, Item, ItemVariation, Order, OrderPosition,
+    Quota, User,
 )
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.payment import BasePaymentProvider
@@ -362,6 +364,168 @@ def expire_orders(sender, **kwargs):
             o.status = Order.STATUS_EXPIRED
             o.log_action('pretix.event.order.expired')
             o.save()
+
+
+class OrderChangeManager:
+    error_messages = {
+        'free_to_paid': _('You cannot change a free order to a paid order.'),
+        'product_without_variation': _('You need to select a variation of the product.'),
+        'quota': _('The quota {name} does not have enough capacity left to perform the operation.'),
+        'product_invalid': _('The selected product is not active or has no price set.'),
+        'complete_cancel': _('This operation would leave the order empty. Please cancel the order itself instead.'),
+        'not_pending': _('Only pending orders can be changed.'),
+        'paid_to_free_exceeded': _('This operation would make the order free and therefore immediately paid, however '
+                                   'no quota is available.'),
+    }
+    ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation', 'price'))
+    PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
+    CancelOperation = namedtuple('CancelOperation', ('position',))
+
+    def __init__(self, order: Order, user):
+        self.order = order
+        self.user = user
+        self._totaldiff = 0
+        self._quotadiff = Counter()
+        self._operations = []
+
+    def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation]):
+        if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
+            raise OrderError(self.error_messages['product_without_variation'])
+        price = item.default_price if variation is None else (
+            variation.default_price if variation.default_price is not None else item.default_price)
+        if not price:
+            raise OrderError(self.error_messages['product_invalid'])
+        self._totaldiff = price - position.price
+        self._quotadiff.update(variation.quotas.all() if variation else item.quotas.all())
+        self._quotadiff.subtract(position.variation.quotas.all() if position.variation else position.item.quotas.all())
+        self._operations.append(self.ItemOperation(position, item, variation, price))
+
+    def change_price(self, position: OrderPosition, price: Decimal):
+        self._totaldiff = price - position.price
+        self._operations.append(self.PriceOperation(position, price))
+
+    def cancel(self, position: OrderPosition):
+        self._totaldiff = -position.price
+        self._quotadiff.subtract(position.variation.quotas.all() if position.variation else position.item.quotas.all())
+        self._operations.append(self.CancelOperation(position))
+
+    def _check_quotas(self):
+        for quota, diff in self._quotadiff.items():
+            if diff <= 0:
+                continue
+            avail = quota.availability()
+            if avail[0] != Quota.AVAILABILITY_OK or avail[1] < diff:
+                raise OrderError(self.error_messages['quota'].format(name=quota.name))
+
+    def _check_free_to_paid(self):
+        if self.order.total == Decimal('0.00') and self._totaldiff > 0:
+            raise OrderError(self.error_messages['free_to_paid'])
+
+    def _check_paid_to_free(self):
+        if self.order.total == 0:
+            try:
+                mark_order_paid(self.order, 'free', send_mail=False)
+            except Quota.QuotaExceededException:
+                raise OrderError(self.error_messages['paid_to_free_exceeded'])
+
+    def _perform_operations(self):
+        for op in self._operations:
+            if isinstance(op, self.ItemOperation):
+                self.order.log_action('pretix.event.order.changed.item', user=self.user, data={
+                    'position': op.position.pk,
+                    'old_item': op.position.item.pk,
+                    'old_variation': op.position.variation.pk if op.position.variation else None,
+                    'new_item': op.item.pk,
+                    'new_variation': op.variation.pk if op.variation else None,
+                    'old_price': op.position.price,
+                    'new_price': op.price
+                })
+                op.position.item = op.item
+                op.position.variation = op.variation
+                op.position.price = op.price
+                op.position._calculate_tax()
+                op.position.save()
+            elif isinstance(op, self.PriceOperation):
+                self.order.log_action('pretix.event.order.changed.price', user=self.user, data={
+                    'position': op.position.pk,
+                    'old_price': op.position.price,
+                    'new_price': op.price
+                })
+                op.position.price = op.price
+                op.position._calculate_tax()
+                op.position.save()
+            elif isinstance(op, self.CancelOperation):
+                self.order.log_action('pretix.event.order.changed.cancel', user=self.user, data={
+                    'position': op.position.pk,
+                    'old_item': op.position.item.pk,
+                    'old_variation': op.position.variation.pk if op.position.variation else None,
+                    'old_price': op.position.price,
+                })
+                op.position.delete()
+
+    def _recalculate_total_and_payment_fee(self):
+        self.order.total = sum([p.price for p in self.order.positions.all()])
+        if self.order.total == 0:
+            payment_fee = Decimal('0.00')
+        else:
+            payment_fee = self._get_payment_provider().calculate_fee(self.order.total)
+        self.order.payment_fee = payment_fee
+        self.order.total += payment_fee
+        self.order._calculate_tax()
+        self.order.save()
+
+    def _reissue_invoice(self):
+        i = self.order.invoices.filter(is_cancellation=False).last()
+        if i:
+            generate_cancellation(i)
+            generate_invoice(self.order)
+
+    def _check_complete_cancel(self):
+        cancels = len([o for o in self._operations if isinstance(o, self.CancelOperation)])
+        if cancels == self.order.positions.count():
+            raise OrderError(self.error_messages['complete_cancel'])
+
+    def _notify_user(self):
+        with language(self.order.locale):
+            mail(
+                self.order.email, _('Your order has been changed: %(code)s') % {'code': self.order.code},
+                self.order.event.settings.mail_text_order_changed,
+                {
+                    'event': self.order.event.name,
+                    'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
+                        'order': self.order.code,
+                        'secret': self.order.secret
+                    }),
+                },
+                self.order.event, locale=self.order.locale
+            )
+
+    def commit(self):
+        if not self._operations:
+            # Do nothing
+            return
+        with transaction.atomic():
+            with self.order.event.lock():
+                if self.order.status != Order.STATUS_PENDING:
+                    raise OrderError(self.error_messages['not_pending'])
+                self._check_free_to_paid()
+                self._check_quotas()
+                self._check_complete_cancel()
+                self._perform_operations()
+            self._recalculate_total_and_payment_fee()
+            self._reissue_invoice()
+        self._check_paid_to_free()
+        self._notify_user()
+
+    def _get_payment_provider(self):
+        responses = register_payment_providers.send(self.order.event)
+        pprov = None
+        for rec, response in responses:
+            provider = response(self.order.event)
+            if provider.identifier == self.order.payment_provider:
+                return provider
+        if not pprov:
+            raise OrderError(error_messages['internal'])
 
 
 if settings.HAS_CELERY:

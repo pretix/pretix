@@ -1,0 +1,105 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}
+    {% blocktrans trimmed with code=order.code %}
+        Change order: {{ code }}
+    {% endblocktrans %}
+{% endblock %}
+{% block content %}
+    <h1>
+        {% blocktrans trimmed with code=order.code %}
+            Change order: {{ code }}
+        {% endblocktrans %}
+    </h1>
+    <p>
+        {% blocktrans trimmed %}
+            You can use this tool to change the ordered products or to partially cancel the order. Please keep
+            in mind that changing an order can have several implications, e.g. the payment method fee might change or
+            additional questions can be added to the order that need to be answered by the user.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed %}
+            The user will receive a notification about the change but in the case of new required questions, the user
+            will not be forced to answer them. You cannot use this form to add something to the order, please create
+            a second order instead.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed %}
+            If an invoice is attached to the order, a cancellation will be created together with a new invoice.
+        {% endblocktrans %}
+    </p>
+    <div class="alert alert-warning">
+        {% blocktrans trimmed %}
+            Please use this tool carefully. Changes you make here are not reversible. In most cases it is easier to
+            cancel the order completely and create a new one.
+        {% endblocktrans %}
+    </div>
+    <form method="post" class="form-horizontal" href="">
+        {% csrf_token %}
+        {% for position in positions %}
+            <div class="panel panel-default items">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <strong>{{ position.item.name }}</strong>
+                        {% if position.variation %}
+                            – {{ position.variation }}
+                        {% endif %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-inline form-order-change">
+                        {% bootstrap_form_errors position.form %}
+                        {% if position.custom_error %}
+                            <div class="alert alert-danger">
+                                {{ position.custom_error }}
+                            </div>
+                        {% endif %}
+                        <div class="radio">
+                            <label>
+                                <input name="{{ position.form.prefix }}-operation" type="radio" value=""
+                                        {% if not position.form.operation.value %}checked="checked"{% endif %}>
+                                {% trans "Keep unchanged" %}
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input name="{{ position.form.prefix }}-operation" type="radio" value="product"
+                                        {% if position.form.operation.value == "product" %}checked="checked"{% endif %}>
+                                {% trans "Change product to" %}
+                                {% bootstrap_field position.form.itemvar layout='inline' %}
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input name="{{ position.form.prefix }}-operation" type="radio" value="price"
+                                        {% if position.form.operation.value == "price" %}checked="checked"{% endif %}>
+                                {% trans "Change price to" %}
+                                {% bootstrap_field position.form.price layout='inline' %}
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input name="{{ position.form.prefix }}-operation" type="radio" value="cancel"
+                                        {% if position.form.operation.value == "cancel" %}checked="checked"{% endif %}>
+                                {% trans "Remove from order" %}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="form-group submit-group">
+            <a class="btn btn-default btn-lg"
+                    href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                {% trans "Cancel" %}
+            </a>
+            <button class="btn btn-primary btn-save btn-lg" type="submit">
+                {% trans "Perform changes" %}
+            </button>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}

@@ -68,6 +68,8 @@ The provider class
 
    .. automethod:: is_allowed
 
+   .. automethod:: is_allowed_for_order
+
    .. autoattribute:: payment_form_fields
 
    .. automethod:: checkout_prepare
@@ -86,9 +88,11 @@ The provider class
 
       This is an abstract method, you **must** override this!
 
+   .. automethod:: order_change_allowed
+
    .. automethod:: order_can_retry
 
-   .. automethod:: retry_prepare
+   .. automethod:: order_prepare
 
    .. automethod:: order_paid_render
 
