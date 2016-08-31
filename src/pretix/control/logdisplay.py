@@ -1,11 +1,50 @@
+import json
+from decimal import Decimal
+
 from django.dispatch import receiver
+from django.utils import formats
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.models import Event, ItemVariation, LogEntry
 from pretix.base.signals import logentry_display
 
 
+def _display_order_changed(event: Event, logentry: LogEntry):
+    data = json.loads(logentry.data)
+
+    text = _('The order has been changed:')
+    if logentry.action_type == 'pretix.event.order.changed.item':
+        old_item = str(event.items.get(pk=data['old_item']))
+        if data['old_variation']:
+            old_item += ' - ' + str(event.itemvariations.get(pk=data['old_variation']))
+        new_item = str(event.items.get(pk=data['new_item']))
+        if data['new_variation']:
+            new_item += ' - ' + str(event.itemvariations.get(pk=data['new_variation']))
+        return text + ' ' + _('{old_item} ({old_price} {currency}) changed to {new_item} ({new_price} {currency}).').format(
+            old_item=old_item, new_item=new_item,
+            old_price=formats.localize(Decimal(data['old_price'])),
+            new_price=formats.localize(Decimal(data['new_price'])),
+            currency=event.currency
+        )
+    elif logentry.action_type == 'pretix.event.order.changed.price':
+        return text + ' ' + _('Price of a position changed from {old_price} {currency} to {new_price} {currency}.').format(
+            old_price=formats.localize(Decimal(data['old_price'])),
+            new_price=formats.localize(Decimal(data['new_price'])),
+            currency=event.currency
+        )
+    elif logentry.action_type == 'pretix.event.order.changed.cancel':
+        old_item = str(event.items.get(pk=data['old_item']))
+        if data['old_variation']:
+            old_item += ' - ' + str(ItemVariation.objects.get(pk=data['old_variation']))
+        return text + ' ' + _('{old_item} ({old_price} {currency}) removed.').format(
+            old_item=old_item,
+            old_price=formats.localize(Decimal(data['old_price'])),
+            currency=event.currency
+        )
+
+
 @receiver(signal=logentry_display, dispatch_uid="pretixcontrol_logentry_display")
-def pretixcontrol_logentry_display(sender, logentry, **kwargs):
+def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
     plains = {
         'pretix.event.order.modified': _('The order details have been modified.'),
         'pretix.event.order.unpaid': _('The order has been marked as unpaid.'),
@@ -23,3 +62,6 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
     }
     if logentry.action_type in plains:
         return plains[logentry.action_type]
+
+    if logentry.action_type.startswith('pretix.event.order.changed'):
+        return _display_order_changed(sender, logentry)

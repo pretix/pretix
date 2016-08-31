@@ -123,3 +123,9 @@ h1 .btn-sm {
   .progress-bar-#{$i} { width: 1% * $i; }
 }
 
+.form-order-change .radio {
+    display: block;
+}
+.form-order-change .form-group {
+    margin: 0;
+}

@@ -3,6 +3,7 @@ from decimal import Decimal
 
 import pytest
 from django.utils.timezone import now
+from tests.base import SoupTest
 
 from pretix.base.models import (
     CachedTicket, Event, EventPermission, Item, Order, OrderPosition,
@@ -362,3 +363,84 @@ def test_order_go_not_found(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/orders/go?code=BAR')
     assert response['Location'].endswith('/control/event/dummy/dummy/orders/')
+
+
+class OrderChangeTests(SoupTest):
+    def setUp(self):
+        super().setUp()
+        o = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.event = Event.objects.create(organizer=o, name='Dummy', slug='dummy', date_from=now(),
+                                          plugins='pretix.plugins.banktransfer')
+        self.order = Order.objects.create(
+            code='FOO', event=self.event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=Decimal('46.00'), payment_provider='banktransfer'
+        )
+        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket', tax_rate=Decimal('7.00'),
+                                          default_price=Decimal('23.00'), admission=True)
+        self.shirt = Item.objects.create(event=self.event, name='T-Shirt', tax_rate=Decimal('19.00'),
+                                         default_price=Decimal('12.00'))
+        self.op1 = OrderPosition.objects.create(
+            order=self.order, item=self.ticket, variation=None,
+            price=Decimal("23.00"), attendee_name="Peter"
+        )
+        self.op2 = OrderPosition.objects.create(
+            order=self.order, item=self.ticket, variation=None,
+            price=Decimal("23.00"), attendee_name="Dieter"
+        )
+        user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
+        EventPermission.objects.create(
+            event=self.event,
+            user=user,
+            can_view_orders=True,
+            can_change_orders=True
+        )
+        self.client.login(email='dummy@dummy.dummy', password='dummy')
+
+    def test_change_item_success(self):
+        self.client.post('/control/event/{}/{}/orders/{}/change'.format(
+            self.event.organizer.slug, self.event.slug, self.order.code
+        ), {
+            'op-{}-operation'.format(self.op1.pk): 'product',
+            'op-{}-itemvar'.format(self.op1.pk): str(self.shirt.pk),
+            'op-{}-operation'.format(self.op2.pk): '',
+            'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+        })
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.item == self.shirt
+        assert self.op1.price == self.shirt.default_price
+        assert self.op1.tax_rate == self.shirt.tax_rate
+        assert self.order.total == self.op1.price + self.op2.price
+
+    def test_change_price_success(self):
+        self.client.post('/control/event/{}/{}/orders/{}/change'.format(
+            self.event.organizer.slug, self.event.slug, self.order.code
+        ), {
+            'op-{}-operation'.format(self.op1.pk): 'price',
+            'op-{}-itemvar'.format(self.op1.pk): str(self.ticket.pk),
+            'op-{}-price'.format(self.op1.pk): '24.00',
+            'op-{}-operation'.format(self.op2.pk): '',
+            'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+        })
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.item == self.ticket
+        assert self.op1.price == Decimal('24.00')
+        assert self.order.total == self.op1.price + self.op2.price
+
+    def test_cancel_success(self):
+        self.client.post('/control/event/{}/{}/orders/{}/change'.format(
+            self.event.organizer.slug, self.event.slug, self.order.code
+        ), {
+            'op-{}-operation'.format(self.op1.pk): 'cancel',
+            'op-{}-itemvar'.format(self.op1.pk): str(self.ticket.pk),
+            'op-{}-price'.format(self.op1.pk): str(self.op1.price),
+            'op-{}-operation'.format(self.op2.pk): '',
+            'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+            'op-{}-price'.format(self.op2.pk): str(self.op2.price),
+        })
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 1
+        assert self.order.total == self.op2.price

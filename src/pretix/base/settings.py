@@ -194,6 +194,18 @@ You can change your order details and view the status of your order at
 Best regards,
 Your {event} team"""))
     },
+    'mail_text_order_changed': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+your order for {event} has been changed.
+
+You can view the status of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
     'mail_text_order_paid': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
