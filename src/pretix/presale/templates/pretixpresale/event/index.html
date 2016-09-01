@@ -237,4 +237,15 @@
         </section>
     {% endif %}
     {% eventsignal event "pretix.presale.signals.front_page_bottom" %}
+    <section class="front-page">
+        <h3>{% trans "If you already ordered a ticket" %}</h3>
+        <p>
+            {% eventurl event "presale:event.resend_link" as resend_url %}
+            {% blocktrans trimmed with a_href=resend_url %}
+                If you want to see or change the status and details of your order, click on the link in one of the
+                emails we sent you during the order process. If you cannot find the link, click
+                <a href="{{ a_href }}">here</a> to request the link to your order to be sent to you again.
+            {% endblocktrans %}
+        </p>
+    </section>
 {% endblock %}
