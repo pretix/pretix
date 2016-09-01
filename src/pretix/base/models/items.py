@@ -103,7 +103,12 @@ class Item(LoggedModel):
     :type available_from: datetime
     :param available_until: The date until when the product is on sale
     :type available_until: datetime
-
+    :param require_voucher: If set to ``True``, this item can only be bought using a voucher.
+    :type require_voucher: bool
+    :param hide_without_voucher: If set to ``True``, this item is only visible and available when a voucher is used.
+    :type hide_without_voucher: bool
+    :param allow_cancel: If set to ``False``, an order with this product can not be cancelled by the user.
+    :type allow_cancel: bool
     """
 
     event = models.ForeignKey(
@@ -189,7 +194,8 @@ class Item(LoggedModel):
     allow_cancel = models.BooleanField(
         verbose_name=_('Allow product to be cancelled'),
         default=True,
-        help_text=_('Whether this product might or not be cancelled.')
+        help_text=_('If you deactivate this, an order including this product might not be cancelled by the user. '
+                    'It may still be cancelled by you.')
     )
 
     class Meta:
