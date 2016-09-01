@@ -4,18 +4,12 @@ python:
     - "3.4"
 install:
     - pip install -U pip wheel setuptools
-    - pip install -q -U -r src/requirements.txt -r src/requirements/dev.txt -r src/requirements/py34.txt
-before_script:
-    - cd src
 script:
-    - flake8 --ignore=E123,F403,F401,N802,C901,W503,E402 .
-    - isort -c -rc .
-    - python manage.py check
-    - make
-    - make compress
-    - coverage run -m py.test tests
-after_success:
-    - coveralls
+    - bash .travis.sh $JOB
 cache:
     directories:
         - $HOME/.cache/pip
+env:
+    - JOB=style
+    - JOB=doctests
+    - JOB=tests-cov

@@ -29,6 +29,73 @@ Whenever you interact with those fields, you will either provide or receive an i
 .. autoclass:: pretix.base.i18n.LazyI18nString
    :members: __init__, localize, __str__
 
+Usage
+-----
+
+The following examples are given to illustrate how you can work with ``LazyI18nString``.
+
+.. testsetup:: *
+
+   from pretix.base.i18n import LazyI18nString, language
+
+To create a LazyI18nString, we can cast a simple string:
+
+.. doctest::
+
+   >>> naive = LazyI18nString('Naive untranslated string')
+   >>> naive
+   <LazyI18nString: 'Naive untranslated string'>
+
+Or we can provide a dictionary with multiple translations:
+
+.. doctest::
+
+   >>> translated = LazyI18nString({'en': 'English String', 'de': 'Deutscher String'})
+
+We can use ``localize`` to get the string in a specific language:
+
+.. doctest::
+
+   >>> translated.localize('de')
+   'Deutscher String'
+
+   >>> translated.localize('en')
+   'English String'
+
+If we try a locale that does not exist for the string, we might get a it either in a similar locale or in the system's default language:
+
+.. doctest::
+
+   >>> translated.localize('de-AT')
+   'Deutscher String'
+
+   >>> translated.localize('zh')
+   'English String'
+
+   >>> naive.localize('de')
+   'Naive untranslated string'
+
+If we cast a ``LazyI18nString`` to ``str``, ``localize`` will be called with the currently active language:
+
+.. doctest::
+
+   >>> from django.utils import translation
+   >>> str(translated)
+   'English String'
+   >>> translation.activate('de')
+   >>> str(translated)
+   'Deutscher String'
+
+You can also use our handy context manager to set the locale temporarily:
+
+.. doctest::
+
+   >>> translation.activate('en')
+   >>> with language('de'):
+   ...     str(translated)
+   'Deutscher String'
+   >>> str(translated)
+   'English String'
 
 Forms
 -----

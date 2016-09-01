@@ -7,7 +7,7 @@ pep8-naming
 flake8
 coveralls
 coverage
-pytest
+pytest==2.9.*
 pytest-django
 isort
 pytest-mock
