@@ -32,7 +32,7 @@ class ResendLinkView(EventViewMixin, TemplateView):
             rc = get_redis_connection("redis")
             if rc.exists('pretix_resend_{}'.format(user)):
                 messages.error(request, _('We already sent you an email in the last 24 hours.'))
-                return redirect('presale:user.resend')
+                return redirect(eventreverse(self.request.event, 'presale:event.resend_link'))
             else:
                 rc.setex('pretix_resend_{}'.format(user), 3600 * 24, '1')
 
