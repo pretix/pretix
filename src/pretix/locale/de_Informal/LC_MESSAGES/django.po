@@ -5147,7 +5147,7 @@ msgstr "Zahlung abschließen"
 #: pretix/presale/templates/pretixpresale/event/order.html:53
 #, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr "Bitte schließen deine Zahlung bis zum %(date)s ab."
+msgstr "Bitte schließe deine Zahlung bis zum %(date)s ab."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:69
 msgid ""
