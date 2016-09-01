@@ -32,7 +32,8 @@ from pretix.base.signals import (
     register_ticket_outputs,
 )
 from pretix.control.forms.orders import (
-    CommentForm, ExporterForm, ExtendForm, OrderPositionChangeForm,
+    CommentForm, ExporterForm, ExtendForm, OrderContactForm,
+    OrderPositionChangeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -533,6 +534,34 @@ class OrderChange(OrderView):
                 messages.success(self.request, _('The order has been changed and the user has been notified.'))
                 return self._redirect_back()
 
+        return self.get(*args, **kwargs)
+
+
+class OrderContactChange(OrderView):
+    permission = 'can_change_orders'
+    template_name = 'pretixcontrol/order/change_contact.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['form'] = self.form
+        return ctx
+
+    @cached_property
+    def form(self):
+        return OrderContactForm(
+            instance=self.order,
+            data=self.request.POST if self.request.method == "POST" else None
+        )
+
+    def post(self, *args, **kwargs):
+        if self.form.is_valid():
+            self.order.log_action('pretix.event.order.contact.changed', {
+                'old_email': self.order.email,
+                'new_email': self.form.cleaned_data['email']
+            })
+            self.form.save()
+            messages.success(self.request, _('The order has been changed.'))
+            return redirect(self.get_order_url())
         return self.get(*args, **kwargs)
 
 

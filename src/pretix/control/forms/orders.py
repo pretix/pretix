@@ -88,3 +88,9 @@ class OrderPositionChangeForm(forms.Form):
     def clean(self):
         if self.cleaned_data.get('operation') == 'price' and not self.cleaned_data.get('price', '') != '':
             raise ValidationError(_('You need to enter a price if you want to change the product price.'))
+
+
+class OrderContactForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['email']

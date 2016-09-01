@@ -59,6 +59,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),
         'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
         'pretix.event.order.comment': _('The order\'s internal comment has been updated.'),
+        'pretix.event.order.contact.changed': _('The email address has been changed.'),
+        'pretix.event.order.payment.changed': _('The payment method has been changed.'),
     }
     if logentry.action_type in plains:
         return plains[logentry.action_type]
