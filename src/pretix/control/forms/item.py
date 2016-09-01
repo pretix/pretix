@@ -119,6 +119,7 @@ class ItemCreateForm(I18nModelForm):
             'admission',
             'default_price',
             'tax_rate',
+            'allow_cancel'
         ]
 
 
@@ -144,6 +145,7 @@ class ItemUpdateForm(I18nModelForm):
             'available_until',
             'require_voucher',
             'hide_without_voucher',
+            'allow_cancel'
         ]
 
 

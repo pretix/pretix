@@ -186,6 +186,11 @@ class Item(LoggedModel):
         help_text=_('This product will be hidden from the event page until the user enters a voucher '
                     'code that is specifically tied to this product (and not via a quota).')
     )
+    allow_cancel = models.BooleanField(
+        verbose_name=_('Allow product to be cancelled'),
+        default=True,
+        help_text=_('Whether this product might or not be cancelled.')
+    )
 
     class Meta:
         verbose_name = _("Product")

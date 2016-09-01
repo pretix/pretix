@@ -393,6 +393,53 @@ class OrderTestCase(BaseQuotaTestCase):
         self.event.settings.set('last_order_modification_date', now() - timedelta(days=1))
         assert not self.order.can_modify_answers
 
+    def test_can_cancel_order(self):
+        item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
+                                    admission=True, allow_cancel=True)
+        OrderPosition.objects.create(order=self.order, item=item1,
+                                     variation=None, price=23)
+        assert self.order.can_user_cancel
+
+    def test_can_cancel_order_multiple(self):
+        item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
+                                    admission=True, allow_cancel=True)
+        item2 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
+                                    admission=True, allow_cancel=True)
+        OrderPosition.objects.create(order=self.order, item=item1,
+                                     variation=None, price=23)
+        OrderPosition.objects.create(order=self.order, item=item2,
+                                     variation=None, price=23)
+        assert self.order.can_user_cancel
+
+    def test_can_not_cancel_order(self):
+        item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
+                                    admission=True, allow_cancel=False)
+        OrderPosition.objects.create(order=self.order, item=item1,
+                                     variation=None, price=23)
+        assert self.order.can_user_cancel is False
+
+    def test_can_not_cancel_order_multiple(self):
+        item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
+                                    admission=True, allow_cancel=False)
+        item2 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
+                                    admission=True, allow_cancel=True)
+        OrderPosition.objects.create(order=self.order, item=item1,
+                                     variation=None, price=23)
+        OrderPosition.objects.create(order=self.order, item=item2,
+                                     variation=None, price=23)
+        assert self.order.can_user_cancel is False
+
+    def test_can_not_cancel_order_multiple_mixed(self):
+        item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
+                                    admission=True, allow_cancel=False)
+        item2 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
+                                    admission=True, allow_cancel=True)
+        OrderPosition.objects.create(order=self.order, item=item1,
+                                     variation=None, price=23)
+        OrderPosition.objects.create(order=self.order, item=item2,
+                                     variation=None, price=23)
+        assert self.order.can_user_cancel is False
+
 
 class ItemCategoryTest(TestCase):
     """

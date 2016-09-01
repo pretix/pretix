@@ -243,7 +243,9 @@ class Order(LoggedModel):
 
     @property
     def can_user_cancel(self) -> bool:
-        return self.event.settings.cancel_allow_user
+        positions = self.positions.all().select_related('item')
+        cancelable = all([op.item.allow_cancel for op in positions])
+        return self.event.settings.cancel_allow_user and cancelable
 
     @property
     def is_expired_by_time(self):
