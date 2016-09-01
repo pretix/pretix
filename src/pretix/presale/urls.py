@@ -6,6 +6,7 @@ import pretix.presale.views.event
 import pretix.presale.views.locale
 import pretix.presale.views.order
 import pretix.presale.views.organizer
+import pretix.presale.views.user
 
 # This is not a valid Django URL configuration, as the final
 # configuration is done by the pretix.multidomain package.
@@ -18,6 +19,7 @@ event_patterns = [
         name='event.redeem'),
     url(r'^checkout/(?P<step>[^/]+)/$', pretix.presale.views.checkout.CheckoutView.as_view(),
         name='event.checkout'),
+    url(r'resend/$', pretix.presale.views.user.ResendLinkView.as_view(), name='event.resend_link'),
     url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/$', pretix.presale.views.order.OrderDetails.as_view(),
         name='event.order'),
     url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/invoice$',

@@ -1,0 +1,31 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Resend order links" %}{% endblock %}
+{% block content %}
+    <h2>
+        {% trans "Resend order links" %}
+    </h2>
+    <div class="row">
+        <div class="panel-body">
+        {% blocktrans trimmed %}
+            If you lost the link to your order or orders, please enter the email address you
+            used for your order. We will send you an email with links to all orders you placed
+            using this email address.
+        {% endblocktrans %}
+    </div>
+    </div>
+    <div class="row">
+    <form class="form" method="post">
+        {% csrf_token %}
+        <div class="col-md-8 col-sm-6 col-xs-12">
+                {% bootstrap_form form layout="inline" %}
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <button class="btn btn-primary btn-block" type="submit">
+                {% trans "Send links" %}
+            </button>
+        </div>
+    </form>
+    </div>
+{% endblock %}
