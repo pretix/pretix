@@ -5,9 +5,9 @@ The development setup
 
 Obtain a copy of the source code
 --------------------------------
-Just clone our git repository including its submodules::
+You can just clone our git repository::
 
-    git clone --recursive https://github.com/pretix/pretix.git
+    git clone https://github.com/pretix/pretix.git
     cd pretix/
 
 External Dependencies
