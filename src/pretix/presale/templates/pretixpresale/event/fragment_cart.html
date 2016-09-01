@@ -18,7 +18,7 @@
                 {% endif %}
                 {% for q in line.questions %}
                     <dt>{{ q.question }}</dt>
-                    <dd>{% if q.answer %}{{ q.answer|linebreaks }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
+                    <dd>{% if q.answer %}{{ q.answer|linebreaksbr }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
                 {% endfor %}
             </dl>
         {% endif %}
