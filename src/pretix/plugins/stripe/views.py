@@ -17,14 +17,24 @@ logger = logging.getLogger('pretix.plugins.stripe')
 @require_POST
 def webhook(request, *args, **kwargs):
     event_json = json.loads(request.body.decode('utf-8'))
-    event_type = event_json['type']
-    if event_type != 'charge.refunded':
-        # Not interested
-        return HttpResponse('Event is not a refund', status=200)
 
-    charge = event_json['data']['object']
-    if charge['object'] != 'charge':
-        return HttpResponse('Object is not a charge', status=200)
+    # We do not check for the event type as we are not interested in the event it self,
+    # we just use it as a trigger to look the charge up to be absolutely sure.
+    # Another reason for this is that stripe events are not authenticated, so they could
+    # come from anywhere.
+
+    if event_json['data']['object']['object'] == "charge":
+        charge_id = event_json['data']['object']['id']
+    elif event_json['data']['object']['object'] == "dispute":
+        charge_id = event_json['data']['object']['charge']
+    else:
+        return HttpResponse("unhandled", status=200)
+
+    try:
+        charge = stripe.Charge.retrieve(charge_id)
+    except stripe.error.StripeError:
+        logger.exception('Stripe error on webhook. Event data: %s' % str(event_json))
+        return HttpResponse('Charge not found', status=500)
 
     metadata = charge['metadata']
     if 'event' not in metadata:
@@ -45,13 +55,7 @@ def webhook(request, *args, **kwargs):
 
     order.log_action('pretix.plugins.stripe.event', data=event_json)
 
-    try:
-        charge = stripe.Charge.retrieve(charge['id'])
-    except stripe.error.StripeError as err:
-        logger.error('Stripe error on webhook: %s Event data: %s' % (str(err), str(event_json)))
-        return HttpResponse('StripeError', status=500)
-
-    if charge['refunds']['total_count'] > 0 and order.status == Order.STATUS_PAID:
+    if order.status == Order.STATUS_PAID and (charge['refunded']['total_count'] > 0 or charge['dispute']):
         mark_order_refunded(order)
 
     return HttpResponse(status=200)
