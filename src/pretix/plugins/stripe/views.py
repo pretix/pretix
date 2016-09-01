@@ -9,12 +9,14 @@ from django.views.decorators.http import require_POST
 from pretix.base.models import Event, Order
 from pretix.base.services.orders import mark_order_refunded
 from pretix.plugins.stripe.payment import Stripe
+from pretix.presale.utils import event_view
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
 
 @csrf_exempt
 @require_POST
+@event_view
 def webhook(request, *args, **kwargs):
     event_json = json.loads(request.body.decode('utf-8'))
 
@@ -28,7 +30,7 @@ def webhook(request, *args, **kwargs):
     elif event_json['data']['object']['object'] == "dispute":
         charge_id = event_json['data']['object']['charge']
     else:
-        return HttpResponse("unhandled", status=200)
+        return HttpResponse("Not interested in this data type", status=200)
 
     prov = Stripe(request.event)
     prov._init_api()
@@ -40,21 +42,19 @@ def webhook(request, *args, **kwargs):
 
     metadata = charge['metadata']
     if 'event' not in metadata:
-        return HttpResponse('Event not given', status=200)
+        return HttpResponse('Event not given in charge metadata', status=200)
+
+    if int(metadata['event']) != request.event.pk:
+        return HttpResponse('Not interested in this event', status=200)
 
     try:
-        event = Event.objects.get(id=metadata['event'])
-    except Event.DoesNotExist:
-        return HttpResponse('Event not found', status=200)
-
-    try:
-        order = event.orders.objects.get(id=metadata['order'])
+        order = request.event.orders.get(id=metadata['order'])
     except Order.DoesNotExist:
         return HttpResponse('Order not found', status=200)
 
     order.log_action('pretix.plugins.stripe.event', data=event_json)
 
-    if order.status == Order.STATUS_PAID and (charge['refunded']['total_count'] > 0 or charge['dispute']):
+    if order.status == Order.STATUS_PAID and (len(charge['refunds']) > 0 or charge['dispute']):
         mark_order_refunded(order)
 
     return HttpResponse(status=200)
