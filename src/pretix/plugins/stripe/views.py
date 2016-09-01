@@ -30,6 +30,8 @@ def webhook(request, *args, **kwargs):
     else:
         return HttpResponse("unhandled", status=200)
 
+    prov = Stripe(request.event)
+    prov._init_api()
     try:
         charge = stripe.Charge.retrieve(charge_id)
     except stripe.error.StripeError:
@@ -46,12 +48,9 @@ def webhook(request, *args, **kwargs):
         return HttpResponse('Event not found', status=200)
 
     try:
-        order = Order.objects.get(id=metadata['order'])
+        order = event.orders.objects.get(id=metadata['order'])
     except Order.DoesNotExist:
         return HttpResponse('Order not found', status=200)
-
-    prov = Stripe(event)
-    prov._init_api()
 
     order.log_action('pretix.plugins.stripe.event', data=event_json)
 
