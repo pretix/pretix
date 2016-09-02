@@ -355,7 +355,9 @@ def perform_order(event: str, payment_provider: str, positions: List[str],
 @receiver(signal=periodic_task)
 def expire_orders(sender, **kwargs):
     eventcache = {}
-    for o in Order.objects.filter(expires__lt=now(), status=Order.STATUS_PENDING).select_related('event'):
+    today = now().date()
+
+    for o in Order.objects.filter(expires__lt=today, status=Order.STATUS_PENDING).select_related('event'):
         expire = eventcache.get(o.event.pk, None)
         if expire is None:
             expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)

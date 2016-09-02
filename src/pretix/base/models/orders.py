@@ -250,7 +250,7 @@ class Order(LoggedModel):
     @property
     def is_expired_by_time(self):
         return (
-            self.status == Order.STATUS_PENDING and self.expires < now()
+            self.status == Order.STATUS_PENDING and self.expires.date() < now().date()
             and not self.event.settings.get('payment_term_expire_automatically')
         )
 
