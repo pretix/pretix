@@ -160,6 +160,9 @@ class Order(LoggedModel):
         help_text=_("The text entered in this field will not be visible to the user and is available for your "
                     "convenience.")
     )
+    expiry_reminder_sent = models.BooleanField(
+        default=False
+    )
 
     class Meta:
         verbose_name = _("Order")

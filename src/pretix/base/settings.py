@@ -230,6 +230,24 @@ You can change your order details and view the status of your order at
 Best regards,
 Your {event} team"""))
     },
+    'mail_days_order_expire_warning': {
+        'type': int,
+        'default': '3'
+    },
+    'mail_text_order_expire_warning': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+we did not yet receive a payment for your order for {event}.
+Please keep in mind that if we only guarantee your order if we receive
+your payment before {expire_date}.
+
+You can view the payment information and the status of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
     'smtp_use_custom': {
         'default': 'False',
         'type': bool

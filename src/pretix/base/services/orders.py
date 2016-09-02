@@ -1,3 +1,4 @@
+import logging
 from collections import Counter, namedtuple
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -6,6 +7,7 @@ from typing import List, Optional
 from django.conf import settings
 from django.db import transaction
 from django.dispatch import receiver
+from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
@@ -21,7 +23,7 @@ from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
 )
-from pretix.base.services.mail import mail
+from pretix.base.services.mail import SendMailException, mail
 from pretix.base.signals import (
     order_paid, order_placed, periodic_task, register_payment_providers,
 )
@@ -47,6 +49,8 @@ error_messages = {
     'voucher_invalid_item': _('This voucher is not valid for this item.'),
     'voucher_required': _('You need a valid voucher code to order one of the products in your cart.'),
 }
+
+logger = logging.getLogger(__name__)
 
 
 def mark_order_paid(order: Order, provider: str=None, info: str=None, date: datetime=None, manual: bool=None,
@@ -366,6 +370,41 @@ def expire_orders(sender, **kwargs):
             o.status = Order.STATUS_EXPIRED
             o.log_action('pretix.event.order.expired')
             o.save()
+
+
+@receiver(signal=periodic_task)
+def send_expiry_warnings(sender, **kwargs):
+    eventcache = {}
+    today = now().date()
+
+    for o in Order.objects.filter(expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING).select_related('event'):
+        settings = eventcache.get(o.event.pk, None)
+        if settings is None:
+            settings = o.event.settings
+            eventcache[o.event.pk] = settings
+
+        days = settings.get('mail_days_order_expire_warning', as_type=int)
+        if days and (o.expires.date() - today).days <= days:
+            o.expiry_reminder_sent = True
+            o.save()
+            try:
+                mail(
+                    o.email, _('Your is about to expire: %(code)s') % {'code': o.code},
+                    settings.mail_text_order_expire_warning,
+                    {
+                        'event': o.event.name,
+                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                            'order': o.code,
+                            'secret': o.secret
+                        }),
+                        'expire_date': date_format(o.expires, 'SHORT_DATE_FORMAT')
+                    },
+                    o.event, locale=o.locale
+                )
+            except SendMailException:
+                logger.exception('Reminder email could not be sent')
+            else:
+                o.log_action('pretix.event.order.expire_warning_sent')
 
 
 class OrderChangeManager:

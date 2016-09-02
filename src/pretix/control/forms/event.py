@@ -312,34 +312,53 @@ class MailSettingsForm(SettingsForm):
         help_text=_("Sender address for outgoing emails")
     )
     mail_text_order_placed = I18nFormField(
-        label=_("Placed order"),
+        label=_("Text"),
         required=False,
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {total}, {currency}, {date}, {paymentinfo}, {url}")
     )
     mail_text_order_paid = I18nFormField(
-        label=_("Paid order"),
+        label=_("Text"),
         required=False,
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {url}")
     )
     mail_text_order_free = I18nFormField(
-        label=_("Free order"),
+        label=_("Text"),
         required=False,
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {url}")
     )
     mail_text_order_changed = I18nFormField(
-        label=_("Changed order"),
+        label=_("Text"),
         required=False,
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {url}")
     )
     mail_text_resend_link = I18nFormField(
-        label=_("Resend link"),
+        label=_("Text (sent by admin)"),
         required=False,
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {url}")
+    )
+    mail_text_resend_all_links = I18nFormField(
+        label=_("Text (requested by user)"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {orders}")
+    )
+    mail_days_order_expire_warning = forms.IntegerField(
+        label=_("Number of days"),
+        required=False,
+        min_value=0,
+        help_text=_("This email will be sent out this many days before the order expires. If the "
+                    "value is 0, the mail will never be sent.")
+    )
+    mail_text_order_expire_warning = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {url}, {expire_date}")
     )
     smtp_use_custom = forms.BooleanField(
         label=_("Use custom SMTP server"),

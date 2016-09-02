@@ -61,6 +61,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.comment': _('The order\'s internal comment has been updated.'),
         'pretix.event.order.contact.changed': _('The email address has been changed.'),
         'pretix.event.order.payment.changed': _('The payment method has been changed.'),
+        'pretix.event.order.expire_warning_sent': _('An email has been sent with a warning that the order is about to expire.'),
     }
     if logentry.action_type in plains:
         return plains[logentry.action_type]
