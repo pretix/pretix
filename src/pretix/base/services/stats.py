@@ -36,7 +36,8 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
     num_total = {
         (p['item'], p['variation']): (p['cnt'], p['price'])
         for p in (OrderPosition.objects
-                  .filter(order__event=event)
+                  .filter(order__event=event,
+                          order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED, Order.STATUS_PAID])
                   .values('item', 'variation')
                   .annotate(cnt=Count('id'), price=Sum('price')).order_by())
     }

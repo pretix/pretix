@@ -149,7 +149,7 @@ class OverviewReport(Report):
         ]
         tdata = [
             [
-                _('Product'), _('Total orders'), '', _('Pending'), '', _('Cancelled'), '', _('Refunded'), '',
+                _('Product'), _('Total (pending or paid)'), '', _('Pending'), '', _('Cancelled'), '', _('Refunded'), '',
                 _('Paid'), ''
             ],
             [
