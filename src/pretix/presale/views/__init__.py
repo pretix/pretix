@@ -65,8 +65,8 @@ class CartMixin:
 
         total = sum(p.total for p in positions)
 
-        payment_fee = payment_fee or self.get_payment_fee(total)
-        payment_fee_tax_rate = payment_fee_tax_rate or self.request.event.settings.tax_rate_default
+        payment_fee = payment_fee if payment_fee is not None else self.get_payment_fee(total)
+        payment_fee_tax_rate = payment_fee_tax_rate if payment_fee_tax_rate is not None else self.request.event.settings.tax_rate_default
 
         try:
             minutes_left = max(min(p.expires for p in positions) - now(), timedelta()).seconds // 60 if positions else 0
