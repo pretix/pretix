@@ -4,7 +4,7 @@ from itertools import groupby
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.http import Http404, HttpResponseNotAllowed
+from django.http import FileResponse, Http404, HttpResponseNotAllowed
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -381,7 +381,9 @@ class InvoiceDownload(EventPermissionRequiredMixin, View):
                                         'now. Please try again in a few seconds.'))
             return redirect(self.get_order_url())
 
-        return redirect(self.invoice.file.url)
+        resp = FileResponse(self.invoice.file.file, content_type='application/pdf')
+        resp['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(self.invoice.number)
+        return resp
 
 
 class OrderDownload(OrderView):

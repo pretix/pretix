@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Sum
-from django.http import Http404
+from django.http import FileResponse, Http404
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -507,4 +507,6 @@ class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
                                         'now. Please try again in a few seconds.'))
             return redirect(self.get_order_url())
 
-        return redirect(invoice.file.url)
+        resp = FileResponse(invoice.file.file, content_type='application/pdf')
+        resp['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(invoice.number)
+        return resp
