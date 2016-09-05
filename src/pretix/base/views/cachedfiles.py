@@ -1,4 +1,6 @@
-from django.http import HttpRequest, HttpResponse
+import os
+
+from django.http import FileResponse, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
@@ -17,6 +19,9 @@ class DownloadView(TemplateView):
         if 'ajax' in request.GET:
             return HttpResponse('1' if self.object.file else '0')
         elif self.object.file:
-            return redirect(self.object.file.url)
+            resp = FileResponse(self.object.file.file, content_type=self.object.type)
+            _, ext = os.path.splitext(self.object.filename)
+            resp['Content-Disposition'] = 'attachment; filename="{}.{}"'.format(self.object.id, ext)
+            return resp
         else:
             return super().get(request, *args, **kwargs)

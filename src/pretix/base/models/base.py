@@ -5,12 +5,14 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.utils.crypto import get_random_string
 
 from pretix.base.i18n import I18nJSONEncoder
 
 
 def cachedfile_name(instance, filename: str) -> str:
-    return 'cachedfiles/%012d.%s' % (instance.id, filename.split('.')[-1])
+    secret = get_random_string(length=12)
+    return 'cachedfiles/%s.%s.%s' % (instance.id, secret, filename.split('.')[-1])
 
 
 class CachedFile(models.Model):
