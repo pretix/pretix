@@ -19,20 +19,9 @@ from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.settings import SettingsSandbox
 from pretix.control.permissions import EventPermissionRequiredMixin
-from pretix.plugins.banktransfer import csvimport, hbci, mt940import
+from pretix.plugins.banktransfer import csvimport, mt940import
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
-
-
-class HbciForm(forms.Form):
-    hbci_blz = forms.CharField(label=_("Bank code"))
-    hbci_userid = forms.CharField(label=_("User ID"))
-    hbci_customerid = forms.CharField(label=_("Customer ID"), required=False)
-    hbci_tokentype = forms.CharField(label=_("Token type"), initial='pintan')
-    hbci_tokenname = forms.CharField(label=_("Token name"), required=False)
-    hbci_server = forms.URLField(label=_("Server URL"))
-    hbci_version = forms.IntegerField(label=_("HBCI version"), required=False, initial=220)
-    pin = forms.CharField(label=_("PIN"), widget=forms.PasswordInput)
 
 
 class ImportView(EventPermissionRequiredMixin, TemplateView):
@@ -40,9 +29,6 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        # if 'hbci_server' in self.request.POST:
-        #     return self.process_hbci()
-
         if ('file' in self.request.FILES and 'csv' in self.request.FILES.get('file').name.lower()) \
                 or 'amount' in self.request.POST:
             # Process CSV
@@ -88,22 +74,6 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
     def settings(self):
         return SettingsSandbox('payment', 'banktransfer', self.request.event)
 
-    def process_hbci(self):
-        form = HbciForm(data=self.request.POST if self.request.method == "POST" else None,
-                        initial=self.settings)
-        if form.is_valid():
-            for key, value in form.cleaned_data.items():
-                if key.startswith('hbci_'):
-                    self.settings.set(key, value)
-            data, log = hbci.hbci_transactions(self.request.event, form.cleaned_data)
-            if data:
-                return self.confirm_view(data)
-            return render(self.request, 'pretixplugins/banktransfer/hbci_log.html', {
-                'log': log
-            })
-        else:
-            return self.get(*self.args, **self.kwargs)
-
     def process_mt940(self):
         try:
             return self.confirm_view(mt940import.parse(self.request.FILES.get('file')))
@@ -111,18 +81,6 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             logger.exception('Failed to import MT940 file')
             messages.error(self.request, _('We were unable to process your input.'))
             return self.redirect_back()
-
-    @cached_property
-    def hbci_form(self):
-        return HbciForm(data=self.request.POST if self.request.method == "POST" else None,
-                        initial=self.settings)
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['hbci_available'] = shutil.which('aqbanking-cli') and shutil.which('aqhbci-tool4')
-        if ctx['hbci_available']:
-            ctx['hbci_form'] = self.hbci_form
-        return ctx
 
     def process_csv_file(self):
         try:
