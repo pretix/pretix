@@ -268,7 +268,7 @@ def _invoice_generate_german(invoice, f):
         textobject.textLine(_('Order code').upper())
         textobject.moveCursor(0, 5)
         textobject.setFont('OpenSans', 10)
-        textobject.textLine(invoice.order.code)
+        textobject.textLine(invoice.order.full_code)
         textobject.moveCursor(0, 5)
         textobject.setFont('OpenSansBd', 8)
         textobject.textLine(_('Order date').upper())
