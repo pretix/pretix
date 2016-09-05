@@ -1,18 +1,16 @@
 import csv
 import json
 import logging
-import re
-import shutil
-from decimal import Decimal
+from locale import format as lformat
 
-from django import forms
-from django.conf import settings
 from django.contrib import messages
-from django.shortcuts import redirect, render
+from django.core.urlresolvers import reverse
+from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.functional import cached_property
-from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
-from django.views.generic import TemplateView
+from django.utils.translation import ugettext as _
+from django.views.generic import DetailView, ListView, TemplateView, View
 
 from pretix.base.models import Order, Quota
 from pretix.base.services.mail import SendMailException
@@ -20,15 +18,204 @@ from pretix.base.services.orders import mark_order_paid
 from pretix.base.settings import SettingsSandbox
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.plugins.banktransfer import csvimport, mt940import
+from pretix.plugins.banktransfer.models import BankImportJob, BankTransaction
+from pretix.plugins.banktransfer.tasks import process_banktransfers
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
 
 
-class ImportView(EventPermissionRequiredMixin, TemplateView):
-    template_name = 'pretixplugins/banktransfer/import_form.html'
+class ActionView(EventPermissionRequiredMixin, View):
     permission = 'can_change_orders'
 
+    def _discard(self, trans):
+        trans.state = BankTransaction.STATE_DISCARDED
+        trans.shred_private_data()
+        trans.save()
+        return JsonResponse({
+            'status': 'ok'
+        })
+
+    def _retry(self, trans):
+        if trans.amount != trans.order.total:
+            return JsonResponse({
+                'status': 'error',
+                'message': _('The transaction amount is incorrect.')
+            })
+        return self._accept_ignore_amount(trans)
+
+    def _accept_ignore_amount(self, trans):
+        if trans.order.status == Order.STATUS_PAID:
+            return JsonResponse({
+                'status': 'error',
+                'message': _('The order is already marked as paid.')
+            })
+        elif trans.order.status == Order.STATUS_REFUNDED:
+            return JsonResponse({
+                'status': 'error',
+                'message': _('The order has already been refunded.')
+            })
+        elif trans.order.status == Order.STATUS_CANCELLED:
+            return JsonResponse({
+                'status': 'error',
+                'message': _('The order has already been cancelled.')
+            })
+
+        try:
+            mark_order_paid(trans.order, provider='banktransfer', info=json.dumps({
+                'reference': trans.reference,
+                'date': trans.date.isoformat(),
+                'payer': trans.payer,
+                'trans_id': trans.pk
+            }))
+            trans.state = BankTransaction.STATE_VALID
+            trans.save()
+        except Quota.QuotaExceededException as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            })
+        except SendMailException:
+            return JsonResponse({
+                'status': 'error',
+                'message': _('Problem sending email.')
+            })
+        else:
+            trans.state = BankTransaction.STATE_VALID
+            trans.save()
+            return JsonResponse({
+                'status': 'ok'
+            })
+
+    def _assign(self, trans, code):
+        try:
+            trans.order = self.request.event.orders.get(code=code)
+        except Order.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': _('Unknown order code.')
+            })
+        else:
+            return self._retry(trans)
+
+    def post(self, request, *args, **kwargs):
+        for k, v in request.POST.items():
+            if not k.startswith('action_'):
+                continue
+            trans = get_object_or_404(BankTransaction, id=k.split('_')[1], event=self.request.event)
+
+            if v == 'discard' and trans.state in (BankTransaction.STATE_INVALID, BankTransaction.STATE_ERROR,
+                                                  BankTransaction.STATE_NOMATCH):
+                return self._discard(trans)
+
+            elif v == 'accept' and trans.state == BankTransaction.STATE_INVALID:
+                # Accept anyway even with wrong amount
+                return self._accept_ignore_amount(trans)
+
+            elif v.startswith('assign:') and trans.state == BankTransaction.STATE_NOMATCH:
+                return self._assign(trans, v[7:])
+
+            elif v == 'retry' and trans.state == BankTransaction.STATE_ERROR:
+                return self._retry(trans)
+
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Unknown action'
+            })
+
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get('query', '')
+        if len(query) < 2:
+            return JsonResponse({'results': []})
+
+        qs = self.request.event.orders.filter(Q(code__icontains=query) | Q(code__icontains=Order.normalize_code(query)))
+        return JsonResponse({
+            'results': [
+                {
+                    'code': o.code,
+                    'status': o.get_status_display(),
+                    'total': lformat("%.2f", o.total) + ' ' + self.request.event.currency
+                } for o in qs
+            ]
+        })
+
+
+class JobDetailView(EventPermissionRequiredMixin, DetailView):
+    template_name = 'pretixplugins/banktransfer/job_detail.html'
+    permission = 'can_change_orders'
+    context_objectname = 'job'
+
+    def redirect_form(self):
+        return redirect(reverse('plugins:banktransfer:import', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+        }))
+
+    def redirect_back(self):
+        return redirect(reverse('plugins:banktransfer:import.job', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'job': self.kwargs['job']
+        }))
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(BankImportJob, id=self.kwargs['job'], event=self.request.event)
+
+    def get(self, request, *args, **kwargs):
+        if 'ajax' in request.GET:
+            self.object = self.get_object()
+            return JsonResponse({
+                'state': self.object.state
+            })
+
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+
+        qs = self.object.transactions.select_related('order')
+
+        ctx['transactions_valid'] = qs.filter(state=BankTransaction.STATE_VALID).count()
+        ctx['transactions_invalid'] = qs.filter(state__in=[
+            BankTransaction.STATE_INVALID, BankTransaction.STATE_ERROR
+        ]).count()
+        ctx['transactions_ignored'] = qs.filter(state__in=[
+            BankTransaction.STATE_DUPLICATE, BankTransaction.STATE_NOMATCH
+        ]).count()
+        ctx['job'] = self.object
+
+        return ctx
+
+
+class ImportView(EventPermissionRequiredMixin, ListView):
+    template_name = 'pretixplugins/banktransfer/import_form.html'
+    permission = 'can_change_orders'
+    context_object_name = 'transactions_unhandled'
+    paginate_by = 30
+
+    def get_queryset(self):
+        qs = BankTransaction.objects.filter(
+            event=self.request.event
+        ).select_related('order').filter(state__in=[
+            BankTransaction.STATE_INVALID, BankTransaction.STATE_ERROR,
+            BankTransaction.STATE_DUPLICATE, BankTransaction.STATE_NOMATCH
+        ])
+        if 'search' in self.request.GET:
+            q = self.request.GET.get('search')
+            qs = qs.filter(
+                Q(payer__icontains=q) | Q(reference__icontains=q)
+            )
+
+        return qs
+
+    def discard_all(self):
+        self.get_queryset().update(payer='', reference='', state=BankTransaction.STATE_DISCARDED)
+        messages.success(self.request, _('All unresolved transactions have been discarded.'))
+
     def post(self, *args, **kwargs):
+        if self.request.POST.get('discard', '') == 'all':
+            self.discard_all()
+            return self.redirect_back()
+
         if ('file' in self.request.FILES and 'csv' in self.request.FILES.get('file').name.lower()) \
                 or 'amount' in self.request.POST:
             # Process CSV
@@ -36,35 +223,6 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
 
         if 'file' in self.request.FILES and 'txt' in self.request.FILES.get('file').name.lower():
             return self.process_mt940()
-
-        if 'confirm' in self.request.POST:
-            orders = Order.objects.filter(event=self.request.event,
-                                          code__in=self.request.POST.getlist('mark_paid'))
-            some_failed = False
-            mail_failures = False
-            for order in orders:
-                try:
-                    mark_order_paid(order, provider='banktransfer', info=json.dumps({
-                        'reference': self.request.POST.get('reference_%s' % order.code),
-                        'date': self.request.POST.get('date_%s' % order.code),
-                        'payer': self.request.POST.get('payer_%s' % order.code),
-                        'import': now().isoformat(),
-                    }))
-                except Quota.QuotaExceededException:
-                    some_failed = True
-                except SendMailException:
-                    mail_failures = True
-
-            if some_failed:
-                messages.warning(self.request, _('Not all of the selected orders could be marked as '
-                                                 'paid as some of them have expired and the selected '
-                                                 'items are sold out.'))
-            else:
-                messages.success(self.request, _('The selected orders have been marked as paid.'))
-                # TODO: Display a list of them!
-            if mail_failures:
-                messages.warning(self.request, _('Some confirmation mails could not be sent.'))
-            return self.redirect_back()
 
         messages.error(self.request, _('We were unable to detect the file type of this import. Please '
                                        'contact support for help.'))
@@ -76,7 +234,7 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
 
     def process_mt940(self):
         try:
-            return self.confirm_view(mt940import.parse(self.request.FILES.get('file')))
+            return self.start_processing(mt940import.parse(self.request.FILES.get('file')))
         except:
             logger.exception('Failed to import MT940 file')
             messages.error(self.request, _('We were unable to process your input.'))
@@ -102,7 +260,7 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             except csvimport.HintMismatchError:  # TODO: narrow down
                 logger.exception('Import using stored hint failed')
             else:
-                return self.confirm_view(parsed)
+                return self.start_processing(parsed)
 
         return self.assign_view(data)
 
@@ -113,7 +271,7 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
                 [
                     self.request.POST.get('col[%d][%d]' % (i, j))
                     for j in range(int(self.request.POST.get('cols')))
-                ]
+                    ]
             )
         if 'reference' not in self.request.POST:
             messages.error(self.request, _('You need to select the column containing the payment reference.'))
@@ -131,7 +289,7 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             pass
         else:
             parsed = csvimport.parse(data, hint)
-            return self.confirm_view(parsed)
+            return self.start_processing(parsed)
 
     def process_csv(self):
         if 'file' in self.request.FILES:
@@ -140,81 +298,22 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             return self.process_csv_hint()
         return super().get(self.request)
 
-    def confirm_view(self, parsed):
-        parsed = self.annotate_data(parsed)
-        return render(self.request, 'pretixplugins/banktransfer/import_confirm.html', {
-            'rows': parsed
-        })
-
     def assign_view(self, parsed):
         return render(self.request, 'pretixplugins/banktransfer/import_assign.html', {
             'rows': parsed
         })
 
     def redirect_back(self):
-        return redirect('plugins:banktransfer:import',
-                        event=self.request.event.slug,
-                        organizer=self.request.event.organizer.slug)
+        return redirect(reverse('plugins:banktransfer:import', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+        }))
 
-    def annotate_data(self, data):
-        code_len = settings.ENTROPY['order_code']
-        pattern = re.compile(self.request.event.slug.upper() + "[ -_]*([A-Z0-9]{%s})" % code_len)
-        amount_pattern = re.compile("[^0-9.-]")
-        order_codes = []
-        for row in data:
-            row['ok'] = False
-            try:
-                amount = Decimal(amount_pattern.sub("", row['amount'].replace(",", ".")))
-                row['amount'] = str(amount)
-            except:
-                logger.exception('Could not parse amount of transaction')
-                amount = 0
-            match = pattern.search(row['reference'].upper())
-            if not match:
-                row['class'] = 'warning' if amount > 0 else ''
-                row['message'] = _('No order code detected')
-                continue
-
-            code = match.group(1)
-            row['code'] = code
-            order_codes.append(code)
-            normalized_code = Order.normalize_code(code)
-            if normalized_code != code:
-                order_codes.append(normalized_code)
-
-        orders = {}
-        # Perform query in bulks because of SQLite's default of SQLITE_MAX_VARIABLE_NUMBER = 999
-        for i in range(0, len(order_codes), 500):
-            orders.update({
-                o.code: o for o in self.request.event.orders.filter(code__in=order_codes[i:500])
-            })
-
-        for row in data:
-            if 'code' not in row:
-                continue
-            normalized_code = Order.normalize_code(row['code'])
-            if row['code'] in orders or normalized_code in orders:
-                order = orders[row['code']] if row['code'] in orders else orders[normalized_code]
-                row['order'] = order
-                if order.status == Order.STATUS_PENDING:
-                    amount = Decimal(row['amount'])
-                    if amount != order.total:
-                        row['class'] = 'danger'
-                        row['message'] = _('Found wrong amount. Expected: %s' % str(order.total))
-                    else:
-                        row['class'] = 'success'
-                        row['message'] = _('Valid payment')
-                        row['ok'] = True
-                elif order.status == Order.STATUS_CANCELLED:
-                    row['class'] = 'danger'
-                    row['message'] = _('Order has been cancelled')
-                elif order.status == Order.STATUS_PAID:
-                    row['class'] = ''
-                    row['message'] = _('Order already has been paid')
-                elif order.status == Order.STATUS_REFUNDED:
-                    row['class'] = 'warning'
-                    row['message'] = _('Order has been refunded')
-            else:
-                row['class'] = 'danger'
-                row['message'] = _('Unknown order code detected')
-        return data
+    def start_processing(self, parsed):
+        job = BankImportJob.objects.create(event=self.request.event)
+        process_banktransfers(event=self.request.event.pk, job=job.pk, data=parsed)
+        return redirect(reverse('plugins:banktransfer:import.job', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'job': job.pk
+        }))

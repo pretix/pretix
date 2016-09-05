@@ -1,4 +1,4 @@
-/*global $*/
+/*global $,gettext*/
 
 function question_page_toggle_view() {
     var show = $("#id_type").val() == "C" || $("#id_type").val() == "M";
@@ -7,6 +7,42 @@ function question_page_toggle_view() {
     show = $("#id_type").val() == "B" && $("#id_required").prop("checked");
     $(".alert-required-boolean").toggle(show);
 }
+
+var waitingDialog = {
+    show: function (message) {
+        "use strict";
+        $("#loadingmodal").find("h1").html(message);
+        $("body").addClass("loading");
+    },
+    hide: function () {
+        "use strict";
+        $("body").removeClass("loading");
+    }
+};
+
+var ajaxErrDialog = {
+    show: function (c) {
+        "use strict";
+        $("#ajaxerr").html(c);
+        $("#ajaxerr .links").html("<a class='btn btn-default ajaxerr-close'>"
+                                  + gettext("Close message") + "</a>");
+        $("body").addClass("ajaxerr");
+    },
+    hide: function () {
+        "use strict";
+        $("body").removeClass("ajaxerr");
+    }
+};
+
+$(document).ajaxError(function (event, jqXHR, settings, thrownError) {
+    waitingDialog.hide();
+    var c = $(jqXHR.responseText).filter('.container');
+    if (c.length > 0) {
+        ajaxErrDialog.show(c.first().html());
+    } else {
+        alert(gettext('Unknown error.'));
+    }
+});
 
 $(function () {
     "use strict";
@@ -45,6 +81,8 @@ $(function () {
     });
 
     $('.collapsible').collapse();
+    
+    $('[data-toggle="tooltip"]').tooltip()
 
     // Question editor
     if ($("#answer-options").length) {
@@ -63,4 +101,6 @@ $(function () {
             $("#id_codes").text(data.codes.join("\n"));
         });
     });
+
+    $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
 });

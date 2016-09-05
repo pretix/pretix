@@ -8,6 +8,8 @@ from django.utils.timezone import now
 from pretix.base.models import (
     Event, EventPermission, Item, Order, OrderPosition, Organizer, Quota, User,
 )
+from pretix.plugins.banktransfer.models import BankImportJob
+from pretix.plugins.banktransfer.tasks import process_banktransfers
 
 
 @pytest.fixture
@@ -20,7 +22,7 @@ def env():
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     EventPermission.objects.create(user=user, event=event)
     o1 = Order.objects.create(
-        code='1234S', event=event,
+        code='1Z3AS', event=event,
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=23, payment_provider='banktransfer'
@@ -77,47 +79,57 @@ Buchungstag;Valuta;Buchungstext;Auftraggeber / Empfänger;Verwendungszweck;Betra
     for inp in doc.select("input[type=hidden]"):
         data[inp.attrs['name']] = inp.attrs['value']
     r = client.post('/control/event/dummy/dummy/banktransfer/import/', data)
-    doc = BeautifulSoup(r.content)
-    assert r.status_code == 200
-    assert len(doc.select("form table tbody tr")) == 6
-    trs = doc.select("form table tbody tr")
-    assert trs[0].select("td")[0].text == "09.04.2015"
-    assert trs[0].select("td")[1].text == "Bestellung 2015ABCDE"
-    assert trs[0].select("td")[2].text == "23.00"
-    assert trs[0].select("td")[3].text == "Karl Kunde"
-    assert trs[0].select("td")[5].text == "No order code detected"
-    assert trs[1].select("td")[0].text == "09.04.2015"
-    assert trs[1].select("td")[1].text == "Bestellung DUMMYFGHIJ"
-    assert trs[1].select("td")[2].text == "42.00"
-    assert trs[1].select("td")[3].text == "Karla Kundin"
-    assert trs[1].select("td")[5].text == "Unknown order code detected"
-    assert trs[2].select("td")[0].text == "09.04.2015"
-    assert trs[2].select("td")[1].text == "Bestellung DUMMY1234S"
-    assert trs[2].select("td")[2].text == "42.00"
-    assert trs[2].select("td")[3].text == "Karla Kundin"
-    assert trs[2].select("td")[5].text == "Found wrong amount. Expected: 23.00"
-    assert trs[3].select("td")[0].text == "09.04.2015"
-    assert trs[3].select("td")[1].text == "Bestellung DUMMY1234S"
-    assert trs[3].select("td")[2].text == "23.00"
-    assert trs[3].select("td")[3].text == "Karla Kundin"
-    assert trs[3].select("td")[5].text == "Valid payment"
-    assert trs[4].select("td")[0].text == "09.04.2015"
-    assert trs[4].select("td")[1].text == "Bestellung DUMMY6789Z"
-    assert trs[4].select("td")[2].text == "23.00"
-    assert trs[4].select("td")[3].text == "Karla Kundin"
-    assert trs[4].select("td")[5].text == "Order has been cancelled"
-    assert trs[5].select("td")[0].text == "09.04.2015"
-    # Test "autocorrection"
-    assert trs[5].select("td")[1].text == "Bestellung DUMMY65892"
-    assert trs[5].select("td")[2].text == "23.00"
-    assert trs[5].select("td")[3].text == "Karla Kundin"
-    assert "GS89Z" in trs[5].select("td")[4].text
-    assert trs[5].select("td")[5].text == "Order has been cancelled"
+    assert '/job/' in r['Location']
 
-    data = {}
-    for inp in doc.select("form input"):
-        data[inp.attrs['name']] = inp.attrs['value']
-    client.post('/control/event/dummy/dummy/banktransfer/import/', data)
 
-    assert Order.objects.get(id=env[2].id).status == Order.STATUS_PAID
-    assert Order.objects.get(id=env[3].id).status == Order.STATUS_CANCELLED
+@pytest.fixture
+def job(env):
+    return BankImportJob.objects.create(event=env[0]).pk
+
+
+@pytest.mark.django_db
+def test_mark_paid(env, job):
+    process_banktransfers(env[0].pk, job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY1234S',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_check_amount(env, job):
+    process_banktransfers(env[0].pk, job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY1Z3AS',
+        'date': '2016-01-26',
+        'amount': '23.50'
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_ignore_cancelled(env, job):
+    process_banktransfers(env[0].pk, job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY6789Z',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    env[3].refresh_from_db()
+    assert env[3].status == Order.STATUS_CANCELLED
+
+
+@pytest.mark.django_db
+def test_autocorrection(env, job):
+    process_banktransfers(env[0].pk, job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY12345',
+        'amount': '23.00',
+        'date': '2016-01-26',
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID

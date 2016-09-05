@@ -1,9 +1,0 @@
-{% extends "pretixplugins/banktransfer/import_base.html" %}
-{% load i18n %}
-{% load bootstrap3 %}
-{% block inner %}
-    <div class="alert alert-danger">
-        {% trans "An error occured during the HBCI transaction." %}
-    </div>
-    <pre>{{ log }}</pre>
-{% endblock %}

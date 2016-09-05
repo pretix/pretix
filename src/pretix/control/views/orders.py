@@ -42,8 +42,8 @@ from pretix.multidomain.urlreverse import build_absolute_uri
 class OrderList(EventPermissionRequiredMixin, ListView):
     model = Order
     context_object_name = 'orders'
-    template_name = 'pretixcontrol/orders/index.html'
     paginate_by = 30
+    template_name = 'pretixcontrol/orders/index.html'
     permission = 'can_view_orders'
 
     def get_queryset(self):
