@@ -54,7 +54,11 @@ def get_test_charge(order: Order):
         "receipt_email": None,
         "receipt_number": None,
         "refunded": False,
-        "refunds": [],
+        "refunds": {
+            "object": "list",
+            "data": [],
+            "total_count": 0
+        },
         "shipping": None,
         "source": {
             "id": "card_18TY5wGGWE2Ias8Td38PjyPy",
@@ -88,6 +92,36 @@ def get_test_charge(order: Order):
 
 
 @pytest.mark.django_db
+def test_webhook_all_good(env, client, monkeypatch):
+    charge = get_test_charge(env[1])
+    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args: charge)
+
+    client.post('/dummy/dummy/stripe/webhook/', json.dumps(
+        {
+            "id": "evt_18otImGGWE2Ias8TUyVRDB1G",
+            "object": "event",
+            "api_version": "2016-03-07",
+            "created": 1472729052,
+            "data": {
+                "object": {
+                    "id": "ch_18TY6GGGWE2Ias8TZHanef25",
+                    "object": "charge",
+                    # Rest of object is ignored anway
+                }
+            },
+            "livemode": True,
+            "pending_webhooks": 1,
+            "request": "req_977XOWC8zk51Z9",
+            "type": "charge.refunded"
+        }
+    ), content_type='application_json')
+
+    order = env[1]
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
 def test_webhook_partial_refund(env, client, monkeypatch):
     charge = get_test_charge(env[1])
     charge['refunds'] = {
@@ -106,7 +140,8 @@ def test_webhook_partial_refund(env, client, monkeypatch):
                 "receipt_number": None,
                 "status": "succeeded"
             }
-        ]
+        ],
+        "total_count": 1
     }
     monkeypatch.setattr("stripe.Charge.retrieve", lambda *args: charge)
 
