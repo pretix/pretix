@@ -52,6 +52,8 @@ def test_order_list(client, env):
     response = client.get('/control/event/dummy/dummy/orders/')
     assert 'FOO' in response.rendered_content
     response = client.get('/control/event/dummy/dummy/orders/?user=peter')
+    assert 'FOO' in response.rendered_content
+    response = client.get('/control/event/dummy/dummy/orders/?user=hans')
     assert 'FOO' not in response.rendered_content
     response = client.get('/control/event/dummy/dummy/orders/?user=dummy')
     assert 'FOO' in response.rendered_content
