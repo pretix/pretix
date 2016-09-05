@@ -24,7 +24,7 @@ base_patterns = [
     url(r'^download/(?P<id>[^/]+)/$', cachedfiles.DownloadView.as_view(),
         name='cachedfile.download'),
     url(r'^healthcheck/$', health.healthcheck,
-        name='cachedfile.download'),
+        name='healthcheck'),
     url(r'^jsi18n/$',
         etag(lambda *s, **k: import_date)(cache_page(3600, key_prefix='js18n-%s' % import_date)(javascript_catalog)),
         js_info_dict, name='javascript-catalog'),
