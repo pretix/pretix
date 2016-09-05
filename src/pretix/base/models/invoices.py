@@ -2,7 +2,7 @@ import string
 from datetime import date
 from decimal import Decimal
 
-from django.db import DatabaseError, models
+from django.db import DatabaseError, models, transaction
 from django.db.models import Max
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -88,7 +88,8 @@ class Invoice(models.Model):
                 else:
                     self.invoice_no = self._get_invoice_number_from_order()
                 try:
-                    return super().save(*args, **kwargs)
+                    with transaction.atomic():
+                        return super().save(*args, **kwargs)
                 except DatabaseError:
                     # Suppress duplicate key errors and try again
                     if i == 9:
