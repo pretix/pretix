@@ -33,6 +33,7 @@ def generate_cancellation(invoice: Invoice):
     cancellation.date = date.today()
     cancellation.refers = invoice
     cancellation.invoice_no = None
+    cancellation.payment_provider_text = ''
     cancellation.save()
     for line in invoice.lines.all():
         line.pk = None
@@ -48,15 +49,24 @@ def generate_cancellation(invoice: Invoice):
 @transaction.atomic
 def regenerate_invoice(invoice: Invoice):
     with language(invoice.locale):
+        responses = register_payment_providers.send(invoice.event)
+        for receiver, response in responses:
+            provider = response(invoice.event)
+            if provider.identifier == invoice.order.payment_provider:
+                payment_provider = provider
+                break
+
         invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
 
         introductory = invoice.event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
         additional = invoice.event.settings.get('invoice_additional_text', as_type=LazyI18nString)
         footer = invoice.event.settings.get('invoice_footer_text', as_type=LazyI18nString)
+        payment = payment_provider.render_invoice_text(invoice.order)
 
         invoice.introductory_text = str(introductory).replace('\n', '<br />')
-        invoice.additional_text = str(additional).replace('\n', '<br /')
+        invoice.additional_text = str(additional).replace('\n', '<br />')
         invoice.footer_text = str(footer)
+        invoice.payment_provider_text = str(payment).replace('\n', '<br />')
 
         try:
             addr_template = pgettext("invoice", """{i.company}
@@ -72,13 +82,6 @@ def regenerate_invoice(invoice: Invoice):
 
         invoice.file = None
         invoice.save()
-
-        responses = register_payment_providers.send(invoice.event)
-        for receiver, response in responses:
-            provider = response(invoice.event)
-            if provider.identifier == invoice.order.payment_provider:
-                payment_provider = provider
-                break
 
         invoice.lines.all().delete()
         for p in invoice.order.positions.all():
@@ -110,16 +113,25 @@ def generate_invoice(order: Order):
             locale = order.locale
 
     with language(locale):
+        responses = register_payment_providers.send(order.event)
+        for receiver, response in responses:
+            provider = response(order.event)
+            if provider.identifier == order.payment_provider:
+                payment_provider = provider
+                break
+
         i = Invoice(order=order, event=order.event)
         i.invoice_from = order.event.settings.get('invoice_address_from')
 
         introductory = i.event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
         additional = i.event.settings.get('invoice_additional_text', as_type=LazyI18nString)
         footer = i.event.settings.get('invoice_footer_text', as_type=LazyI18nString)
+        payment = payment_provider.render_invoice_text(i.order)
 
         i.introductory_text = str(introductory).replace('\n', '<br />')
-        i.additional_text = str(additional).replace('\n', '<br /')
+        i.additional_text = str(additional).replace('\n', '<br />')
         i.footer_text = str(footer)
+        i.payment_provider_text = str(payment).replace('\n', '<br />')
 
         try:
             addr_template = pgettext("invoice", """{i.company}
@@ -136,13 +148,6 @@ def generate_invoice(order: Order):
         i.date = date.today()
         i.locale = locale
         i.save()
-
-        responses = register_payment_providers.send(order.event)
-        for receiver, response in responses:
-            provider = response(order.event)
-            if provider.identifier == order.payment_provider:
-                payment_provider = provider
-                break
 
         for p in order.positions.all():
             desc = str(p.item.name)
@@ -361,6 +366,9 @@ def _invoice_generate_german(invoice, f):
     story.append(table)
 
     story.append(Spacer(1, 15 * mm))
+
+    if invoice.payment_provider_text:
+        story.append(Paragraph(invoice.payment_provider_text, styles['Normal']))
 
     if invoice.additional_text:
         story.append(Paragraph(invoice.additional_text, styles['Normal']))
