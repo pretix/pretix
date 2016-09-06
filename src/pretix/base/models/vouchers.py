@@ -163,16 +163,6 @@ class Voucher(LoggedModel):
         super().delete(using, keep_parents)
         self.event.get_cache().delete('vouchers_exist')
 
-    def is_ordered(self) -> int:
-        """
-        Returns whether a non-canceled order position exists that uses this voucher.
-        """
-        return OrderPosition.objects.filter(
-            voucher=self
-        ).exclude(
-            order__status=Order.STATUS_CANCELLED
-        ).exists()
-
     def is_in_cart(self) -> int:
         """
         Returns whether a cart position exists that uses this voucher.
