@@ -57,7 +57,7 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
         context['sform'] = self.sform
         return context
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         self.sform.save()
         if self.sform.has_changed():
@@ -187,7 +187,7 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
         context['providers'] = self.provider_forms
         return self.render_to_response(context)
 
-    @transaction.atomic()
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         success = self.sform.is_valid()
@@ -234,7 +234,7 @@ class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
         kwargs['obj'] = self.request.event
         return kwargs
 
-    @transaction.atomic()
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
@@ -279,7 +279,7 @@ class DisplaySettings(EventSettingsFormView):
             'event': self.request.event.slug
         })
 
-    @transaction.atomic()
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
@@ -314,7 +314,7 @@ class MailSettings(EventSettingsFormView):
             'event': self.request.event.slug
         })
 
-    @transaction.atomic()
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
@@ -374,7 +374,7 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
         form.prepare_fields()
         return form
 
-    @transaction.atomic()
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         success = True
         for provider in self.provider_forms:
@@ -470,7 +470,7 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
         ctx['add_form'] = self.add_form
         return ctx
 
-    @transaction.atomic()
+    @transaction.atomic
     def post(self, *args, **kwargs):
         if self.formset.is_valid() and self.add_form.is_valid():
             if self.add_form.has_changed():

@@ -126,7 +126,7 @@ class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
             return HttpResponseRedirect(self.get_success_url())
         return super().get(request, *args, **kwargs)
 
-    @transaction.atomic()
+    @transaction.atomic
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
@@ -168,7 +168,7 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
         except Voucher.DoesNotExist:
             raise Http404(_("The requested voucher does not exist."))
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
         if form.has_changed():
@@ -210,7 +210,7 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
         kwargs['instance'] = Voucher(event=self.request.event)
         return kwargs
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         form.instance.event = self.request.event
         messages.success(self.request, _('The new voucher has been created.'))
@@ -241,7 +241,7 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
         kwargs['instance'] = Voucher(event=self.request.event)
         return kwargs
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         for o in form.save(self.request.event):
             o.log_action('pretix.voucher.added', data=form.cleaned_data, user=self.request.user)

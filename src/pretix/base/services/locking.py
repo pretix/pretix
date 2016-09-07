@@ -80,7 +80,7 @@ def lock_event_db(event):
     raise EventLock.LockTimeoutException()
 
 
-@transaction.atomic()
+@transaction.atomic
 def release_event_db(event):
     if not hasattr(event, '_lock') or not event._lock:
         raise EventLock.LockReleaseException('Lock is not owned by this thread')
