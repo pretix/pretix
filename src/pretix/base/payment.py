@@ -156,9 +156,9 @@ class BasePaymentProvider:
         """
         This is called when an invoice for an order with this payment provider is generated.
         The default implementation returns the content of the _invoice_text configuration
-        variable (an I18nString).
+        variable (an I18nString), or an empty string if unconfigured.
         """
-        return self.settings.get('_invoice_text', as_type=LazyI18nString)
+        return self.settings.get('_invoice_text', as_type=LazyI18nString, default='')
 
     @property
     def payment_form_fields(self) -> dict:

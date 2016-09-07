@@ -26,29 +26,9 @@ from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
 from pretix.base.signals import register_payment_providers
 
 
-def generate_cancellation(invoice: Invoice):
-    cancellation = copy.copy(invoice)
-    cancellation.pk = None
-    cancellation.is_cancellation = True
-    cancellation.date = date.today()
-    cancellation.refers = invoice
-    cancellation.invoice_no = None
-    cancellation.payment_provider_text = ''
-    cancellation.save()
-    for line in invoice.lines.all():
-        line.pk = None
-        line.invoice = cancellation
-        line.gross_value *= -1
-        line.tax_value *= -1
-        line.save()
-
-    invoice_pdf(cancellation.pk)
-    return cancellation
-
-
 @transaction.atomic
-def build_invoice(invoice, locale):
-    with language(locale):
+def build_invoice(invoice: Invoice) -> Invoice:
+    with language(invoice.locale):
         responses = register_payment_providers.send(invoice.event)
         for receiver, response in responses:
             provider = response(invoice.event)
@@ -81,8 +61,6 @@ def build_invoice(invoice, locale):
             invoice.invoice_to = ""
 
         invoice.file = None
-        invoice.date = date.today()
-        invoice.locale = locale
         invoice.save()
         invoice.lines.all().delete()
 
@@ -106,8 +84,38 @@ def build_invoice(invoice, locale):
         return invoice
 
 
+def build_cancellation(invoice: Invoice):
+    invoice.lines.all().delete()
+
+    for line in invoice.refers.lines.all():
+        line.pk = None
+        line.invoice = invoice
+        line.gross_value *= -1
+        line.tax_value *= -1
+        line.save()
+    return invoice
+
+
+def generate_cancellation(invoice: Invoice):
+    cancellation = copy.copy(invoice)
+    cancellation.pk = None
+    cancellation.invoice_no = None
+    cancellation.refers = invoice
+    cancellation.is_cancellation = True
+    cancellation.date = date.today()
+    cancellation.payment_provider_text = ''
+    cancellation.save()
+
+    cancellation = build_cancellation(cancellation)
+    invoice_pdf(cancellation.pk)
+    return cancellation
+
+
 def regenerate_invoice(invoice: Invoice):
-    invoice = build_invoice(invoice, invoice.locale)
+    if invoice.is_cancellation:
+        invoice = build_cancellation(invoice)
+    else:
+        invoice = build_invoice(invoice)
     invoice_pdf(invoice.pk)
     return invoice
 
@@ -118,7 +126,13 @@ def generate_invoice(order: Order):
         if locale == '__user__':
             locale = order.locale
 
-    invoice = build_invoice(Invoice(order=order, event=order.event), locale=locale)
+    invoice = Invoice(
+        order=order,
+        event=order.event,
+        date=date.today(),
+        locale=locale
+    )
+    invoice = build_invoice(invoice)
     invoice_pdf(invoice.pk)
     return invoice
 
