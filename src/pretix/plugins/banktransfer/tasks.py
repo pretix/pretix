@@ -98,7 +98,7 @@ def process_banktransfers(event: int, job: int, data: list) -> None:
             transactions = _get_unknown_transactions(event, job, data)
 
             code_len = settings.ENTROPY['order_code']
-            pattern = re.compile(event.slug.upper() + "[ -_]*([A-Z0-9]{%s})" % code_len)
+            pattern = re.compile(event.slug.upper() + "[ \-_]*([A-Z0-9]{%s})" % code_len)
 
             for trans in transactions:
                 match = pattern.search(trans.reference.upper())
