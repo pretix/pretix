@@ -29,7 +29,7 @@ Logging form actions
 A very common use case is to log the changes to a model that have been done in a ``ModelForm``. In this case,
 we generally use a custom ``form_valid`` method on our ``FormView`` that looks like this::
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
             self.request.event.log_action('pretix.event.changed', user=self.request.user, data={
@@ -40,7 +40,7 @@ we generally use a custom ``form_valid`` method on our ``FormView`` that looks l
 
 It gets a little bit more complicated if your form allows file uploads::
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
             self.request.event.log_action(

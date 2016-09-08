@@ -12,6 +12,7 @@ from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.decimal import round_decimal
+from pretix.base.i18n import I18nFormField, I18nTextarea, LazyI18nString
 from pretix.base.models import CartPosition, Event, Order, Quota
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
@@ -134,6 +135,13 @@ class BasePaymentProvider:
                              'above!'),
                  required=False
              )),
+            ('_invoice_text',
+             I18nFormField(
+                 label=_('Text on invoices'),
+                 help_text=_('Will be printed just below the payment figures and above the closing text on invoices.'),
+                 required=False,
+                 widget=I18nTextarea,
+             )),
         ])
 
     def settings_content_render(self, request: HttpRequest) -> str:
@@ -143,6 +151,14 @@ class BasePaymentProvider:
         that is displayed below the form fields configured in ``settings_form_fields``.
         """
         pass
+
+    def render_invoice_text(self, order: Order) -> str:
+        """
+        This is called when an invoice for an order with this payment provider is generated.
+        The default implementation returns the content of the _invoice_text configuration
+        variable (an I18nString), or an empty string if unconfigured.
+        """
+        return self.settings.get('_invoice_text', as_type=LazyI18nString, default='')
 
     @property
     def payment_form_fields(self) -> dict:

@@ -43,6 +43,8 @@ class Invoice(models.Model):
     :type introductory_text: str
     :param additional_text: Additional text for the invoice
     :type additional_text: str
+    :param payment_provider_text: A payment provider specific text
+    :type payment_provider_text: str
     :param footer_text: A footer text, displayed smaller and centered on every page
     :type footer_text: str
     :param file: The filename of the rendered invoice
@@ -59,6 +61,7 @@ class Invoice(models.Model):
     locale = models.CharField(max_length=50, default='en')
     introductory_text = models.TextField(blank=True)
     additional_text = models.TextField(blank=True)
+    payment_provider_text = models.TextField(blank=True)
     footer_text = models.TextField(blank=True)
     file = models.FileField(null=True, blank=True, upload_to=invoice_filename)
 

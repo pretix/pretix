@@ -62,6 +62,8 @@ The provider class
 
    .. automethod:: settings_content_render
 
+   .. automethod:: render_invoice_text
+
    .. automethod:: payment_form_render
 
    .. automethod:: payment_form

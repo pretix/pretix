@@ -258,7 +258,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         raise OrderError(err)
 
 
-@transaction.atomic()
+@transaction.atomic
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None):
     total = sum([c.price for c in positions])

@@ -99,7 +99,7 @@ class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
         except ItemCategory.DoesNotExist:
             raise Http404(_("The requested product category does not exist."))
 
-    @transaction.atomic()
+    @transaction.atomic
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         for item in self.object.items.all():
@@ -134,7 +134,7 @@ class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
         except ItemCategory.DoesNotExist:
             raise Http404(_("The requested product category does not exist."))
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
         if form.has_changed():
@@ -165,7 +165,7 @@ class CategoryCreate(EventPermissionRequiredMixin, CreateView):
             'event': self.request.event.slug,
         })
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         form.instance.event = self.request.event
         messages.success(self.request, _('The new category has been created.'))
@@ -299,7 +299,7 @@ class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
         context['dependent'] = list(self.get_object().items.all())
         return context
 
-    @transaction.atomic()
+    @transaction.atomic
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
@@ -390,7 +390,7 @@ class QuestionUpdate(EventPermissionRequiredMixin, QuestionMixin, UpdateView):
         except Question.DoesNotExist:
             raise Http404(_("The requested question does not exist."))
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         if form.cleaned_data.get('type') in ('M', 'C'):
             if not self.save_formset(self.get_object()):
@@ -433,7 +433,7 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
     def get_object(self, **kwargs):
         return None
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         if form.cleaned_data.get('type') in ('M', 'C'):
             if not self.formset.is_valid():
@@ -480,7 +480,7 @@ class QuotaEditorMixin:
             item.field = self.get_form(QuotaForm)['item_%s' % item.id]
         return context
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         res = super().form_valid(form)
         items = self.object.items.all()
@@ -516,7 +516,7 @@ class QuotaCreate(EventPermissionRequiredMixin, QuotaEditorMixin, CreateView):
             'event': self.request.event.slug,
         })
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         form.instance.event = self.request.event
         messages.success(self.request, _('The new quota has been created.'))
@@ -540,7 +540,7 @@ class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
         except Quota.DoesNotExist:
             raise Http404(_("The requested quota does not exist."))
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
         if form.has_changed():
@@ -577,7 +577,7 @@ class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
         context['dependent'] = list(self.get_object().items.all())
         return context
 
-    @transaction.atomic()
+    @transaction.atomic
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
@@ -621,7 +621,7 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
             'item': self.object.id,
         })
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
         ret = super().form_valid(form)
@@ -655,7 +655,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
             'item': self.get_object().id,
         })
 
-    @transaction.atomic()
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
         if form.has_changed():

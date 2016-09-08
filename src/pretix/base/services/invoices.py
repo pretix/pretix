@@ -26,37 +26,27 @@ from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
 from pretix.base.signals import register_payment_providers
 
 
-def generate_cancellation(invoice: Invoice):
-    cancellation = copy.copy(invoice)
-    cancellation.pk = None
-    cancellation.is_cancellation = True
-    cancellation.date = date.today()
-    cancellation.refers = invoice
-    cancellation.invoice_no = None
-    cancellation.save()
-    for line in invoice.lines.all():
-        line.pk = None
-        line.invoice = cancellation
-        line.gross_value *= -1
-        line.tax_value *= -1
-        line.save()
-
-    invoice_pdf(cancellation.pk)
-    return cancellation
-
-
 @transaction.atomic
-def regenerate_invoice(invoice: Invoice):
+def build_invoice(invoice: Invoice) -> Invoice:
     with language(invoice.locale):
+        responses = register_payment_providers.send(invoice.event)
+        for receiver, response in responses:
+            provider = response(invoice.event)
+            if provider.identifier == invoice.order.payment_provider:
+                payment_provider = provider
+                break
+
         invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
 
         introductory = invoice.event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
         additional = invoice.event.settings.get('invoice_additional_text', as_type=LazyI18nString)
         footer = invoice.event.settings.get('invoice_footer_text', as_type=LazyI18nString)
+        payment = payment_provider.render_invoice_text(invoice.order)
 
         invoice.introductory_text = str(introductory).replace('\n', '<br />')
-        invoice.additional_text = str(additional).replace('\n', '<br /')
+        invoice.additional_text = str(additional).replace('\n', '<br />')
         invoice.footer_text = str(footer)
+        invoice.payment_provider_text = str(payment).replace('\n', '<br />')
 
         try:
             addr_template = pgettext("invoice", """{i.company}
@@ -72,15 +62,8 @@ def regenerate_invoice(invoice: Invoice):
 
         invoice.file = None
         invoice.save()
-
-        responses = register_payment_providers.send(invoice.event)
-        for receiver, response in responses:
-            provider = response(invoice.event)
-            if provider.identifier == invoice.order.payment_provider:
-                payment_provider = provider
-                break
-
         invoice.lines.all().delete()
+
         for p in invoice.order.positions.all():
             desc = str(p.item.name)
             if p.variation:
@@ -98,71 +81,60 @@ def regenerate_invoice(invoice: Invoice):
                 tax_rate=invoice.order.payment_fee_tax_rate
             )
 
-        invoice_pdf(invoice.pk)
+        return invoice
+
+
+def build_cancellation(invoice: Invoice):
+    invoice.lines.all().delete()
+
+    for line in invoice.refers.lines.all():
+        line.pk = None
+        line.invoice = invoice
+        line.gross_value *= -1
+        line.tax_value *= -1
+        line.save()
     return invoice
 
 
-@transaction.atomic
+def generate_cancellation(invoice: Invoice):
+    cancellation = copy.copy(invoice)
+    cancellation.pk = None
+    cancellation.invoice_no = None
+    cancellation.refers = invoice
+    cancellation.is_cancellation = True
+    cancellation.date = date.today()
+    cancellation.payment_provider_text = ''
+    cancellation.save()
+
+    cancellation = build_cancellation(cancellation)
+    invoice_pdf(cancellation.pk)
+    return cancellation
+
+
+def regenerate_invoice(invoice: Invoice):
+    if invoice.is_cancellation:
+        invoice = build_cancellation(invoice)
+    else:
+        invoice = build_invoice(invoice)
+    invoice_pdf(invoice.pk)
+    return invoice
+
+
 def generate_invoice(order: Order):
     locale = order.event.settings.get('invoice_language')
     if locale:
         if locale == '__user__':
             locale = order.locale
 
-    with language(locale):
-        i = Invoice(order=order, event=order.event)
-        i.invoice_from = order.event.settings.get('invoice_address_from')
-
-        introductory = i.event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
-        additional = i.event.settings.get('invoice_additional_text', as_type=LazyI18nString)
-        footer = i.event.settings.get('invoice_footer_text', as_type=LazyI18nString)
-
-        i.introductory_text = str(introductory).replace('\n', '<br />')
-        i.additional_text = str(additional).replace('\n', '<br /')
-        i.footer_text = str(footer)
-
-        try:
-            addr_template = pgettext("invoice", """{i.company}
-{i.name}
-{i.street}
-{i.zipcode} {i.city}
-{i.country}""")
-            i.invoice_to = addr_template.format(i=order.invoice_address).strip()
-            if order.invoice_address.vat_id:
-                i.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % order.invoice_address.vat_id
-        except InvoiceAddress.DoesNotExist:
-            i.invoice_to = ""
-
-        i.date = date.today()
-        i.locale = locale
-        i.save()
-
-        responses = register_payment_providers.send(order.event)
-        for receiver, response in responses:
-            provider = response(order.event)
-            if provider.identifier == order.payment_provider:
-                payment_provider = provider
-                break
-
-        for p in order.positions.all():
-            desc = str(p.item.name)
-            if p.variation:
-                desc += " - " + str(p.variation.value)
-            InvoiceLine.objects.create(
-                invoice=i, description=desc,
-                gross_value=p.price, tax_value=p.tax_value,
-                tax_rate=p.tax_rate
-            )
-
-        if order.payment_fee:
-            InvoiceLine.objects.create(
-                invoice=i, description=_('Payment via {method}').format(method=str(payment_provider.verbose_name)),
-                gross_value=order.payment_fee, tax_value=order.payment_fee_tax_value,
-                tax_rate=order.payment_fee_tax_rate
-            )
-
-        invoice_pdf(i.pk)
-    return i
+    invoice = Invoice(
+        order=order,
+        event=order.event,
+        date=date.today(),
+        locale=locale
+    )
+    invoice = build_invoice(invoice)
+    invoice_pdf(invoice.pk)
+    return invoice
 
 
 def _invoice_get_stylesheet():
@@ -361,6 +333,9 @@ def _invoice_generate_german(invoice, f):
     story.append(table)
 
     story.append(Spacer(1, 15 * mm))
+
+    if invoice.payment_provider_text:
+        story.append(Paragraph(invoice.payment_provider_text, styles['Normal']))
 
     if invoice.additional_text:
         story.append(Paragraph(invoice.additional_text, styles['Normal']))
