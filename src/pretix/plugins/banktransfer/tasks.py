@@ -3,7 +3,6 @@ import logging
 import re
 from decimal import Decimal
 
-import dateutil.parser
 from django.conf import settings
 from django.db import transaction
 from django.utils.translation import ugettext_noop
@@ -73,12 +72,11 @@ def _get_unknown_transactions(event: Event, job: BankImportJob, data: list):
             logger.exception('Could not parse amount of transaction: {}'.format(amount))
             amount = Decimal("0.00")
 
-        date = dateutil.parser.parse(row['date'])
         trans = BankTransaction(event=event, import_job=job,
                                 payer=row['payer'],
                                 reference=row['reference'],
                                 amount=amount,
-                                date=date)
+                                date=row['date'])
         trans.checksum = trans.calculate_checksum()
         if trans.checksum not in known_checksums:
             trans.state = BankTransaction.STATE_UNCHECKED

@@ -48,7 +48,7 @@ class BankTransaction(models.Model):
     payer = models.TextField(blank=True)
     reference = models.TextField(blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField()
+    date = models.CharField(max_length=50)
     order = models.ForeignKey('pretixbase.Order', null=True, blank=True)
 
     def calculate_checksum(self):
@@ -57,7 +57,7 @@ class BankTransaction(models.Model):
         hasher.update(clean.sub('', self.payer.lower()).encode('utf-8'))
         hasher.update(clean.sub('', self.reference.lower()).encode('utf-8'))
         hasher.update(clean.sub('', str(self.amount).lower()).encode('utf-8'))
-        hasher.update(clean.sub('', str(self.date).lower()).encode('utf-8'))
+        hasher.update(clean.sub('', self.date.lower()).encode('utf-8'))
         return str(hasher.hexdigest())
 
     def shred_private_data(self):

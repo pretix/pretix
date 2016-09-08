@@ -1,10 +1,3 @@
 table.transaction-list td.actions {
-    max-width: 100px;
-}
-table.transaction-list td.actions .input-group {
-    display: inline-block;
-    width: 110px;
-}
-table.transaction-list td.actions .input-group button {
-    line-height: 1.43;
+    width: 100px;
 }

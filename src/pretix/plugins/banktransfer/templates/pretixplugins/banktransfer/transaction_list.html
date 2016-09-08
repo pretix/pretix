@@ -53,7 +53,7 @@
                         </div>
                     {% endif %}
                 </td>
-                <td>{{ trans.date|date:"SHORT_DATE_FORMAT" }}</td>
+                <td>{{ trans.date }}</td>
                 <td>{{ trans.payer }}<br/>{{ trans.reference }}</td>
                 <td>{{ trans.amount|floatformat:2 }}</td>
                 <td>
