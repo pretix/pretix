@@ -359,7 +359,7 @@ def perform_order(event: str, payment_provider: str, positions: List[str],
 @receiver(signal=periodic_task)
 def expire_orders(sender, **kwargs):
     eventcache = {}
-    today = now().date()
+    today = now().replace(hour=0, minute=0, second=0)
 
     for o in Order.objects.filter(expires__lt=today, status=Order.STATUS_PENDING).select_related('event'):
         expire = eventcache.get(o.event.pk, None)
@@ -375,7 +375,7 @@ def expire_orders(sender, **kwargs):
 @receiver(signal=periodic_task)
 def send_expiry_warnings(sender, **kwargs):
     eventcache = {}
-    today = now().date()
+    today = now().replace(hour=0, minute=0, second=0)
 
     for o in Order.objects.filter(expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING).select_related('event'):
         settings = eventcache.get(o.event.pk, None)
