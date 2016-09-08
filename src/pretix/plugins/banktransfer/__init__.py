@@ -20,6 +20,7 @@ class BankTransferApp(AppConfig):
 
     def ready(self):
         from . import signals  # NOQA
+        from . import tasks  # NOQA
 
     @cached_property
     def compatibility_warnings(self):
@@ -28,10 +29,6 @@ class BankTransferApp(AppConfig):
             import chardet  # NOQA
         except ImportError:
             errs.append(_("Install the python package 'chardet' for better CSV import capabilities."))
-        try:
-            import defusedxml  # NOQA
-        except ImportError:
-            errs.append(_("Please install the python package 'defusedxml' for security reasons."))
         return errs
 
 

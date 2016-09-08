@@ -2,6 +2,7 @@
 @import "../../bootstrap/scss/_bootstrap.scss";
 $fa-font-path: static("fontawesome/fonts");
 @import "../../fontawesome/scss/font-awesome.scss";
+@import "../../typeahead/typeahead.css";
 @import "../css/metisMenu.min.css";
 @import "_sb-admin-2.scss";
 @import "_forms.scss";
@@ -128,4 +129,50 @@ h1 .btn-sm {
 }
 .form-order-change .form-group {
     margin: 0;
+}
+
+#loadingmodal, #ajaxerr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, .7);
+    opacity: 0;
+    text-align: center;
+    z-index: 900000;
+    visibility: hidden;
+
+    .big-icon {
+        margin-top: 50px;
+        font-size: 200px;
+        color: $brand-primary;
+    }
+
+    .big-rotating-icon {
+        -webkit-animation: fa-spin 8s infinite linear;
+        animation: fa-spin 8s infinite linear;
+        margin-top: 50px;
+        font-size: 200px;
+        color: $brand-primary;
+    }
+}
+#ajaxerr {
+    background: rgba(236, 236, 236, .9);
+}
+
+.loading #loadingmodal, .ajaxerr #ajaxerr {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .5s ease-in-out;
+    -moz-transition: opacity .5s ease-in-out;
+    -webkit-transition: opacity .5s ease-in-out;
+}
+
+.big-rotating-icon {
+    margin-top: 50px;
+    -webkit-animation: fa-spin 8s infinite linear;
+    animation: fa-spin 8s infinite linear;
+    font-size: 200px;
+    color: $brand-primary;
 }

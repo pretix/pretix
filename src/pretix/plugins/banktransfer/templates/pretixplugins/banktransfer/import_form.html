@@ -16,7 +16,7 @@
             <form action="" method="post" enctype="multipart/form-data" class="form-inline">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="file">{% trans "Import file" %}: </label> <input id="file" type="file" name="file" />
+                    <label for="file">{% trans "Import file" %}: </label> <input id="file" type="file" name="file"/>
                 </div>
                 <div class="clearfix"></div>
                 <button class="btn btn-primary pull-right" type="submit">
@@ -25,38 +25,32 @@
             </form>
         </div>
     </div>
-    <!--
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">{% trans "HBCI import" %}</h3>
-        </div>
-        <div class="panel-body">
-            {% if hbci_available %}
-            <form action="" method="post" class="form-horizontal">
-                {% csrf_token %}
-                {% bootstrap_form hbci_form layout='horizontal' %}
-                <div class="clearfix"></div>
+    {% if transactions_unhandled|length > 0 %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans "Unresolved transactions" %}</h3>
+            </div>
+            <div class="panel-body">
                 <p>
-                    {% trans "Please note that this step might take a few minutes." %}
+                    <form class="form-inline helper-display-inline" action="" method="get">
+                        <input type="text" name="search" class="form-control" placeholder="{% trans "Search" %}" value="{{ request.GET.search }}">
+                    </form>
+                    <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+                    {% if not request.GET.search %}
+                        <form action="" method="post" class="helper-display-inline pull-right">
+                            {% csrf_token %}
+                            <button class="btn btn-danger" type="submit" name="discard" value="all">
+                                <span class="fa fa-trash"></span>
+                                {% trans "Discard all" %}
+                            </button>
+                        </form>
+                    {% endif %}
                 </p>
-                <div class="alert alert-warning">
-                    {% blocktrans trimmed %}
-                        Your HBCI PIN code is only stored on the server for a very short time and
-                        immediately deleted after the communication with the bank is over. However,
-                        we <strong>strongly advise</strong> you to ask your bank for HBCI credentials
-                        that have <strong>read-only</strong> access to your bank account.
-                    {% endblocktrans %}
-                </div>
-                <button class="btn btn-primary pull-right" type="submit">
-                    <span class="icon icon-upload"></span> {% trans "Import" %}
-                </button>
-            </form>
-            {% else %}
-                <div class="alert alert-error">
-                    {% trans "HBCI is only available with aqbanking-cli and aqhbci-tool4 installed." %}
-                </div>
-            {% endif %}
+
+                {% include "pretixcontrol/pagination.html" %}
+                {% include "pretixplugins/banktransfer/transaction_list.html" with list=transactions_unhandled %}
+                {% include "pretixcontrol/pagination.html" %}
+            </div>
         </div>
-    </div>
-    -->
+    {% endif %}
 {% endblock %}

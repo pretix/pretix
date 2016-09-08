@@ -1,0 +1,47 @@
+{% extends "pretixplugins/banktransfer/import_base.html" %}
+{% load i18n %}
+{% block inner %}
+    <h2>{% trans "Import result" %}</h2>
+    {% if job.state == "running" or job.state == "pending" %}
+        <div class="empty-collection" data-job-waiting>
+            <p>
+                <span class="fa big-grey-icon fa-cog fa big-rotating-icon"></span>
+            </p>
+            <p>
+                {% trans "The result of your import is in progress. Please be patient while we process the data..." %}
+            </p>
+        </div>
+    {% else %}
+        {% if job.state == "error" %}
+            <div class="alert alert-danger">
+                {% trans "An internal error occured during processing your data." %}
+            </div>
+        {% elif transactions_ignored == 0 and transactions_invalid == 0 and transactions_valid == 0 %}
+            <div class="alert alert-info">
+                {% trans "Your import did not contain any transactions that you did not import before." %}
+            </div>
+        {% endif %}
+
+        <table class="table table-condensed">
+            <tr class="success">
+                <td>{{ transactions_valid }}</td>
+                <td>{% trans "Orders marked as paid" %}</td>
+            </tr>
+            <tr class="warning">
+                <td>{{ transactions_invalid }}</td>
+                <td>{% trans "Invalid payments" %}</td>
+            </tr>
+            <tr class="info">
+                <td>{{ transactions_ignored }}</td>
+                <td>{% trans "Ignored payments" %}</td>
+            </tr>
+        </table>
+        {% if transactions_ignored or transactions_invalid %}
+            <a href="{% url "plugins:banktransfer:import" event=request.event.slug organizer=request.organizer.slug %}"
+                class="btn btn-primary">
+                {% trans "Review invalid and ignored payments" %} &raquo;
+            </a>
+        {% endif %}
+
+    {% endif %}
+{% endblock %}

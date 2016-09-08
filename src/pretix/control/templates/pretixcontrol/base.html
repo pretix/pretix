@@ -13,6 +13,7 @@
 		{% compress js %}
             <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
             <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
+            <script type="text/javascript" src="{% static "typeahead/typeahead.bundle.js" %}"></script>
             <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/metisMenu.min.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/sb-admin-2.js" %}"></script>
@@ -131,6 +132,15 @@
                     </footer>
                 </div>
             </div>
+        </div>
+        <div id="ajaxerr">
+        </div>
+        <div id="loadingmodal">
+            <i class="fa fa-cog big-rotating-icon"></i>
+            <h1>{% trans "We are processing your request…" %}</h1>
+            <p>
+                {% trans "If this takes longer than a few minutes, please contact us." %}
+            </p>
         </div>
 	</body>
 </html>
