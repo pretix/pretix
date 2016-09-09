@@ -9,7 +9,7 @@
         {% endblocktrans %}
     </h2>
 
-    <form method="post" class="form-horizontal" href="">
+    <form method="post" class="form-horizontal" href="" data-total="{{ order.total|floatformat:2 }}">
         {% csrf_token %}
         <div class="form-horizontal payment-redo-form">
             {{ form }}

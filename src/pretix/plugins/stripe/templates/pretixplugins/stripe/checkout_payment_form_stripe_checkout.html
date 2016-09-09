@@ -17,13 +17,17 @@
             Stripe and never touches our servers.
         {% endblocktrans %}</em>
     </p>
-    <input type="hidden" name="stripe_token" value="" id="stripe_token" />
-    <input type="hidden" name="stripe_card_last4" value="" id="stripe_card_last4" />
-    <input type="hidden" name="stripe_card_brand" value="" id="stripe_card_brand" />
-    <input type="hidden" id="organizer_name" value="{{ event.organizer.name }}" />
-    <input type="hidden" id="event_name" value="{{ event.name }}" />
-    <input type="hidden" id="stripe_currency" value="{{ event.currency }}" />
-    <input type="hidden" id="event_name" value="{{ event.name }}" />
-    <input type="hidden" id="stripe_email" value="{{ request.session.email }}" />
+    <input type="hidden" name="stripe_token" value="" id="stripe_token"/>
+    <input type="hidden" name="stripe_card_last4" value="" id="stripe_card_last4"/>
+    <input type="hidden" name="stripe_card_brand" value="" id="stripe_card_brand"/>
+    <input type="hidden" id="organizer_name" value="{{ event.organizer.name }}"/>
+    <input type="hidden" id="event_name" value="{{ event.name }}"/>
+    <input type="hidden" id="stripe_currency" value="{{ event.currency }}"/>
+    <input type="hidden" id="event_name" value="{{ event.name }}"/>
+    {% if order %}
+        <input type="hidden" id="stripe_email" value="{{ order.email }}"/>
+    {% else %}
+        <input type="hidden" id="stripe_email" value="{{ request.session.email }}"/>
+    {% endif %}
 </div>
 

@@ -273,6 +273,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 'fee': fee,
                 'fee_diff': fee - self.order.payment_fee,
                 'fee_diff_abs': abs(fee - self.order.payment_fee),
+                'total': abs(self._total_order_value + fee),
                 'form': provider.payment_form_render(self.request)
             })
         return providers
