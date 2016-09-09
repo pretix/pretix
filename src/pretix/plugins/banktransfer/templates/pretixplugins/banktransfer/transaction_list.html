@@ -40,7 +40,7 @@
                                 <span class="fa fa-trash"></span>
                             </button>
                         </div>
-                    {% elif trans.state == 'error' %}
+                    {% elif trans.state == 'error' or trans.state == 'duplicate' %}
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="retry"
                                 data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
