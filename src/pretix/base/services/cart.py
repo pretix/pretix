@@ -109,7 +109,7 @@ def _add_new_items(event: Event, items: List[dict],
         voucher = None
         if i.get('voucher'):
             try:
-                voucher = Voucher.objects.get(code=i.get('voucher'), event=event)
+                voucher = Voucher.objects.get(code=i.get('voucher').strip(), event=event)
                 if voucher.redeemed:
                     return error_messages['voucher_redeemed']
                 if voucher.valid_until is not None and voucher.valid_until < now_dt:

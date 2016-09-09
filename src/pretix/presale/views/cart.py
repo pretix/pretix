@@ -226,7 +226,7 @@ class RedeemView(EventViewMixin, TemplateView):
         from pretix.base.services.cart import error_messages
 
         err = None
-        v = request.GET.get('voucher')
+        v = request.GET.get('voucher').strip()
 
         if v:
             try:
