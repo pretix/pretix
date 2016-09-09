@@ -5261,7 +5261,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 msgid "Your order has been processed successfully! See below for details."
-msgstr "Deine Bestellung war erfolgreich! Du finest weiter unten alle Details."
+msgstr "Deine Bestellung war erfolgreich! Du findest weiter unten alle Details."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:18
 msgid "We successfully received your payment. See below for details."
