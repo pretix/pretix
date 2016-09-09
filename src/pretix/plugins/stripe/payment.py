@@ -32,6 +32,14 @@ class Stripe(BasePaymentProvider):
                 ('publishable_key',
                  forms.CharField(
                      label=_('Publishable key'),
+                 )),
+                ('ui',
+                 forms.ChoiceField(
+                     label=_('User interface'),
+                     choices=(
+                         ('pretix', _('Simple (pretix design)')),
+                         ('checkout', _('Stripe Checkout')),
+                     )
                  ))
             ]
         )
@@ -60,7 +68,11 @@ class Stripe(BasePaymentProvider):
         return True
 
     def payment_form_render(self, request) -> str:
-        template = get_template('pretixplugins/stripe/checkout_payment_form.html')
+        ui = self.settings.get('ui', default='pretix')
+        if ui == 'checkout':
+            template = get_template('pretixplugins/stripe/checkout_payment_form_stripe_checkout.html')
+        else:
+            template = get_template('pretixplugins/stripe/checkout_payment_form.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings}
         return template.render(ctx)
 

@@ -1,0 +1,29 @@
+{% load i18n %}
+
+<div class="form-horizontal" id="stripe-checkout">
+    <noscript>
+        <div class="alert alert-warning">
+            {% trans "For a credit card payment, please turn on JavaScript." %}
+        </div>
+    </noscript>
+    <p>
+        {% blocktrans trimmed %}
+            Please continue below to start the credit card payment.
+        {% endblocktrans %}
+    </p>
+    <p>
+        <em>{% blocktrans trimmed %}
+            Your payment will be processed by Stripe, Inc. Your credit card data will be transmitted directly to
+            Stripe and never touches our servers.
+        {% endblocktrans %}</em>
+    </p>
+    <input type="hidden" name="stripe_token" value="" id="stripe_token" />
+    <input type="hidden" name="stripe_card_last4" value="" id="stripe_card_last4" />
+    <input type="hidden" name="stripe_card_brand" value="" id="stripe_card_brand" />
+    <input type="hidden" id="organizer_name" value="{{ event.organizer.name }}" />
+    <input type="hidden" id="event_name" value="{{ event.name }}" />
+    <input type="hidden" id="stripe_currency" value="{{ event.currency }}" />
+    <input type="hidden" id="event_name" value="{{ event.name }}" />
+    <input type="hidden" id="stripe_email" value="{{ request.session.email }}" />
+</div>
+

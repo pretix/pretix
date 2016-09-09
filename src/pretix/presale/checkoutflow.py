@@ -234,6 +234,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             providers.append({
                 'provider': provider,
                 'fee': fee,
+                'total': self._total_order_value + fee,
                 'form': provider.payment_form_render(self.request)
             })
         return providers

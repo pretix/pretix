@@ -2,8 +2,14 @@
 {% load compress %}
 {% load i18n %}
 
-{% compress js %}
-    <script type="text/javascript" src="{% static "pretixplugins/stripe/pretix-stripe.js" %}"></script>
-{% endcompress %}
+{% if settings.ui == "checkout" %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "pretixplugins/stripe/pretix-stripe-checkout.js" %}"></script>
+    {% endcompress %}
+{% else %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "pretixplugins/stripe/pretix-stripe.js" %}"></script>
+    {% endcompress %}
+{% endif %}
 <script type="text/plain" id="stripe_pubkey">{{ settings.publishable_key }}</script>
 

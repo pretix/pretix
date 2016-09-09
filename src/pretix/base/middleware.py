@@ -155,10 +155,11 @@ class SecurityMiddleware:
         resp['X-XSS-Protection'] = '1'
         h = {
             'default-src': "{static}",
-            'script-src': '{static} https://js.stripe.com',
+            'script-src': '{static} https://checkout.stripe.com https://js.stripe.com',
             'object-src': "'none'",
-            'frame-src': '{static} https://js.stripe.com',
+            'frame-src': '{static} https://checkout.stripe.com https://js.stripe.com',
             'style-src': "{static}",
+            'connect-src': "{dynamic} https://checkout.stripe.com",
             'img-src': "{static} data: https://*.stripe.com",
             # form-action is not only used to match on form actions, but also on URLs
             # form-ations redirect to. In the context of e.g. payment providers or
