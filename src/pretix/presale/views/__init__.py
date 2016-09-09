@@ -69,8 +69,10 @@ class CartMixin:
         payment_fee_tax_rate = payment_fee_tax_rate if payment_fee_tax_rate is not None else self.request.event.settings.tax_rate_default
 
         try:
-            minutes_left = max(min(p.expires for p in positions) - now(), timedelta()).seconds // 60 if positions else 0
+            first_expiry = min(p.expires for p in positions) if positions else now()
+            minutes_left = max(first_expiry - now(), timedelta()).seconds // 60
         except AttributeError:
+            first_expiry = None
             minutes_left = None
 
         return {
@@ -81,6 +83,7 @@ class CartMixin:
             'payment_fee_tax_rate': payment_fee_tax_rate,
             'answers': answers,
             'minutes_left': minutes_left,
+            'first_expiry': first_expiry
         }
 
     def get_payment_fee(self, total):

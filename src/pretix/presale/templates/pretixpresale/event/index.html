@@ -17,13 +17,15 @@
                 {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=True %}
                 <div class="row-fluid">
                     <div class="col-md-6 col-xs-12">
-                        {% if cart.minutes_left > 0 %}
-                            <em>{% blocktrans trimmed with minutes=cart.minutes_left %}
-                                The items in your cart are reserved for you for {{ minutes }} minutes.
-                            {% endblocktrans %}</em>
-                        {% else %}
-                            <em>{% trans "The items in your cart are no longer reserved for you." %}</em>
-                        {% endif %}
+                        <em id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
+                            {% if cart.minutes_left > 0 %}
+                                {% blocktrans trimmed with minutes=cart.minutes_left %}
+                                    The items in your cart are reserved for you for {{ minutes }} minutes.
+                                {% endblocktrans %}
+                            {% else %}
+                                {% trans "The items in your cart are no longer reserved for you." %}
+                            {% endif %}
+                        </em>
                     </div>
                     <div class="col-md-4 col-md-offset-2 col-xs-12">
                         <a class="btn btn-block btn-primary btn-lg"
