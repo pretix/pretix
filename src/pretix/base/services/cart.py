@@ -29,7 +29,9 @@ error_messages = {
     'not_started': _('The presale period for this event has not yet started.'),
     'ended': _('The presale period has ended.'),
     'voucher_invalid': _('This voucher code is not known in our database.'),
-    'voucher_redeemed': _('This voucher code has already been used an can only be used once.'),
+    'voucher_redeemed': _('This voucher code has already been used and can only be used once.'),
+    'voucher_double': _('You already used this voucher code. Remove the associated line from your '
+                        'cart if you want to use it for a different product.'),
     'voucher_expired': _('This voucher is expired.'),
     'voucher_invalid_item': _('This voucher is not valid for this product.'),
     'voucher_required': _('You need a valid voucher code to order this product.'),
@@ -120,7 +122,7 @@ def _add_new_items(event: Event, items: List[dict],
                 if 'cp' in i:
                     doubleuse = doubleuse.exclude(pk=i['cp'].pk)
                 if doubleuse.exists():
-                    return error_messages['voucher_redeemed']
+                    return error_messages['voucher_double']
             except Voucher.DoesNotExist:
                 return error_messages['voucher_invalid']
 
