@@ -85,6 +85,7 @@ body.loading .container {
     text-align: center;
     z-index: 900000;
     visibility: hidden;
+    padding: 10px;
 
     .big-icon {
         margin-top: 50px;
@@ -134,5 +135,8 @@ body.loading .container {
     }
     h2 {
         margin-top: 0;
+    }
+    .checkout-button-row > div {
+        margin-bottom: 15px;
     }
 }

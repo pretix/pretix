@@ -99,7 +99,7 @@
     padding-top: 15px;
 }
 section.front-page {
-    margin-top: 15px;
+    margin-top: 30px;
 }
 .offline-banner {
     background: $brand-danger;
@@ -114,10 +114,10 @@ section.front-page {
     }
 }
 @media (max-width: $screen-sm-max) {
-    .checkout-button-row div {
-        margin-bottom: 10px;
-    }
     .page-header h1 small {
         display: block;
+    }
+    .row-voucher > div:first-child {
+        margin-bottom: 15px;
     }
 }
