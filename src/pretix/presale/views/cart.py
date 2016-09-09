@@ -246,7 +246,7 @@ class RedeemView(EventViewMixin, TemplateView):
             err = error_messages['ended']
 
         if err:
-            messages.error(request, err)
+            messages.error(request, _(err))
             return redirect(eventreverse(request.event, 'presale:event.index'))
 
         return super().dispatch(request, *args, **kwargs)
