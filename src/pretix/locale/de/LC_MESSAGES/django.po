@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-09 13:32+0000\n"
+"POT-Creation-Date: 2016-09-09 17:59+0000\n"
 "PO-Revision-Date: 2016-09-09 15:36+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
@@ -1605,7 +1605,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/templates/400.html:3 pretix/base/templates/400.html.py:6
+#: pretix/base/templates/400.html:3 pretix/base/templates/400.html:6
 msgid "Bad Request"
 msgstr "Bad Request"
 
@@ -1613,18 +1613,18 @@ msgstr "Bad Request"
 msgid "We were unable to parse your request."
 msgstr "Wir konnten die Eingabe nicht verarbeiten."
 
-#: pretix/base/templates/400.html:10 pretix/base/templates/403.html.py:10
-#: pretix/base/templates/404.html:10 pretix/base/templates/500.html.py:11
+#: pretix/base/templates/400.html:10 pretix/base/templates/403.html:10
+#: pretix/base/templates/404.html:10 pretix/base/templates/500.html:11
 #: pretix/base/templates/csrffail.html:22
 msgid "Take a step back"
 msgstr "Einen Schritt zurück"
 
-#: pretix/base/templates/400.html:11 pretix/base/templates/403.html.py:11
+#: pretix/base/templates/400.html:11 pretix/base/templates/403.html:11
 #: pretix/base/templates/500.html:12
 msgid "Try again"
 msgstr "Erneut versuchen"
 
-#: pretix/base/templates/403.html:3 pretix/base/templates/403.html.py:6
+#: pretix/base/templates/403.html:3 pretix/base/templates/403.html:6
 msgid "Permission denied"
 msgstr "Keine Berechtigung"
 
@@ -1632,7 +1632,7 @@ msgstr "Keine Berechtigung"
 msgid "You do not have access to this page."
 msgstr "Sie haben keine Berechtigung, diese Inhalte aufzurufen."
 
-#: pretix/base/templates/404.html:3 pretix/base/templates/404.html.py:6
+#: pretix/base/templates/404.html:3 pretix/base/templates/404.html:6
 msgid "Not found"
 msgstr "Nicht gefunden"
 
@@ -1640,7 +1640,7 @@ msgstr "Nicht gefunden"
 msgid "I'm afraid we could not find the the resource you requested."
 msgstr "Wir konnten die angeforderte Seite leider nicht finden."
 
-#: pretix/base/templates/500.html:3 pretix/base/templates/500.html.py:6
+#: pretix/base/templates/500.html:3 pretix/base/templates/500.html:6
 msgid "Internal Server Error"
 msgstr "Interner Serverfehler"
 
@@ -4302,7 +4302,7 @@ msgstr "Hochladen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:31
 msgid "Unresolved transactions"
-msgstr "Unzugeordnete Überweuszbgeb"
+msgstr "Unzugeordnete Überweisungen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:36
 msgid "Search"
@@ -4319,8 +4319,8 @@ msgstr "Import-Ergebnis"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:11
 msgid ""
 "The result of your import is in progress. Please be patient while we process "
-"the data..."
-msgstr "Der Import wird verarbeitet, bitte einen Moment Geduld…"
+"the data…"
+msgstr "Der Import wird verarbeitet, bitte einen Moment Geduld …"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:17
 msgid "An internal error occured during processing your data."
@@ -4329,7 +4329,7 @@ msgstr "Beim Verarbeiten der Daten ist ein interner Fehler aufgetreten."
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:21
 msgid ""
 "Your import did not contain any transactions that you did not import before."
-msgstr "Ihr Import hat keine neuen Überweisungen enthalten."
+msgstr "Ihr Import enthielt keine neuen Überweisungen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:28
 msgid "Orders marked as paid"
@@ -4410,8 +4410,8 @@ msgid "The order is already marked as paid."
 msgstr "Die Bestellung ist bereits als bezahlt markiert."
 
 #: pretix/plugins/banktransfer/views.py:95
-msgid "Unknown order code."
-msgstr "Unbekannte Bestellnummer."
+msgid "Unknown order code"
+msgstr "Unbekannte Bestellnummer"
 
 #: pretix/plugins/banktransfer/views.py:212
 msgid "All unresolved transactions have been discarded."
@@ -4901,7 +4901,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:10
 msgid "Please continue below to start the credit card payment."
-msgstr "Bitte fahren Sie unten fort um die Kreditkartenzahlung zu starten."
+msgstr "Bitte fahren Sie unten fort, um die Kreditkartenzahlung zu starten."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:5
 msgid "This order has been paid via Stripe."
@@ -5281,7 +5281,7 @@ msgstr ""
 "Wenn Sie den Status und die Details Ihrer Bestellung einsehen oder ändern "
 "wollen, klicken Sie auf den Link in einer der E-Mails, die wir Ihnen im "
 "Bestellvorgang geschickt haben. Wenn Sie den Link nicht finden können, "
-"klicken Sie auf den folgenden Button um ein erneutes Zusenden des Links "
+"klicken Sie auf den folgenden Button, um ein erneutes Zusenden des Links "
 "anzufordern."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:256

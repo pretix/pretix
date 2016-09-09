@@ -92,7 +92,7 @@ class ActionView(EventPermissionRequiredMixin, View):
         except Order.DoesNotExist:
             return JsonResponse({
                 'status': 'error',
-                'message': _('Unknown order code.')
+                'message': _('Unknown order code')
             })
         else:
             return self._retry(trans)
