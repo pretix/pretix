@@ -226,9 +226,10 @@ class RedeemView(EventViewMixin, TemplateView):
         from pretix.base.services.cart import error_messages
 
         err = None
-        v = request.GET.get('voucher').strip()
+        v = request.GET.get('voucher')
 
         if v:
+            v = v.strip()
             try:
                 self.voucher = Voucher.objects.get(code=v, event=request.event)
                 if self.voucher.redeemed:
