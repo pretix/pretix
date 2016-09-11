@@ -384,7 +384,7 @@ def send_expiry_warnings(sender, **kwargs):
             eventcache[o.event.pk] = settings
 
         days = settings.get('mail_days_order_expire_warning', as_type=int)
-        if days and (o.expires.date() - today).days <= days:
+        if days and (o.expires - today).days <= days:
             o.expiry_reminder_sent = True
             o.save()
             try:
