@@ -123,7 +123,7 @@ class OrderPay(EventViewMixin, OrderDetailMixin, TemplateView):
                 or not self.payment_provider.order_can_retry(self.order)
                 or not self.payment_provider.is_enabled):
             messages.error(request, _('The payment for this order cannot be continued.'))
-            return redirect(self.get_order_url() + '?paid=yes')
+            return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -226,7 +226,10 @@ class OrderPayComplete(EventViewMixin, OrderDetailMixin, View):
 
     def get(self, request, *args, **kwargs):
         resp = self.payment_provider.payment_perform(request, self.order)
-        return redirect(resp or self.get_order_url() + '?paid=yes')
+        if self.order.status == Order.STATUS_PAID:
+            return redirect(resp or self.get_order_url() + '?paid=yes')
+        else:
+            return redirect(resp or self.get_order_url() + '?thanks=yes')
 
     def get_payment_url(self):
         return eventreverse(self.request.event, 'presale:event.order.pay', kwargs={
@@ -244,7 +247,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
             messages.error(request, _('The payment method for this order cannot be changed.'))
-            return redirect(self.get_order_url() + '?paid=yes')
+            return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
 
     def get_payment_url(self):
