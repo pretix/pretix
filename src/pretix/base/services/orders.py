@@ -260,7 +260,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
 @transaction.atomic
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
-                  payment_provider: BasePaymentProvider, locale: str=None):
+                  payment_provider: BasePaymentProvider, locale: str=None, address: int=None):
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
     total += payment_fee
@@ -279,6 +279,19 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         payment_provider=payment_provider.identifier
     )
     OrderPosition.transform_cart_positions(positions, order)
+
+    if address is not None:
+        try:
+            addr = InvoiceAddress.objects.get(
+                pk=address
+            )
+            if addr.order is not None:
+                addr.pk = None
+            addr.order = order
+            addr.save()
+        except InvoiceAddress.DoesNotExist:
+            pass
+
     order.log_action('pretix.event.order.placed')
     order_placed.send(event, order=order)
     return order
@@ -304,22 +317,11 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             raise OrderError(error_messages['internal'])
         _check_positions(event, now_dt, positions)
         order = _create_order(event, email, positions, now_dt, pprov,
-                              locale=locale)
-
-    if address is not None:
-        try:
-            addr = InvoiceAddress.objects.get(
-                pk=address
-            )
-            if addr.order is not None:
-                addr.pk = None
-            addr.order = order
-            addr.save()
-        except InvoiceAddress.DoesNotExist:
-            pass
+                              locale=locale, address=address)
 
     if event.settings.get('invoice_generate') == 'True' and invoice_qualified(order):
-        generate_invoice(order)
+        if not order.invoices.exists():
+            generate_invoice(order)
 
     with language(order.locale):
         if order.total == Decimal('0.00'):
