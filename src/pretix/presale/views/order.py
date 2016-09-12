@@ -34,10 +34,17 @@ class OrderDetailMixin:
     @cached_property
     def order(self):
         try:
-            return Order.objects.get(secret=self.kwargs['secret'],
-                                     event=self.request.event, code=self.kwargs['order'])
+            order = Order.objects.get(event=self.request.event, code=self.kwargs['order'])
+            if order.secret.lower() == self.kwargs['secret'].lower():
+                return order
+            else:
+                return None
         except Order.DoesNotExist:
-            return None
+            # Do a comparison as well to harden timing attacks
+            if 'abcdefghijklmnopq'.lower() == self.kwargs['secret'].lower():
+                return None
+            else:
+                return None
 
     @cached_property
     def payment_provider(self):
