@@ -592,7 +592,7 @@ class CartTest(CartTestMixin, TestCase):
             'item_%d_voucher' % self.ticket.id: v.code,
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content)
-        self.assertIn('already been used', doc.select('.alert-danger')[0].text)
+        self.assertIn('already used', doc.select('.alert-danger')[0].text)
         self.assertEqual(1, CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count())
 
     def test_require_voucher(self):
