@@ -307,6 +307,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                         })
                         self.order.payment_provider = p['provider'].identifier
                         self.order.payment_fee = new_fee
+                        self.order.total = self._total_order_value + new_fee
                         self.order._calculate_tax()
                         self.order.save()
 
