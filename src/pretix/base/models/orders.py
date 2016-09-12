@@ -17,7 +17,7 @@ from .items import Item, ItemVariation, Question, QuestionOption, Quota
 
 
 def generate_secret():
-    return get_random_string(length=16, allowed_chars=string.ascii_letters + string.digits)
+    return get_random_string(length=16, allowed_chars=string.ascii_lowercase + string.digits)
 
 
 def generate_position_secret():
