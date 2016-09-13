@@ -63,7 +63,7 @@ class ActionView(EventPermissionRequiredMixin, View):
         try:
             mark_order_paid(trans.order, provider='banktransfer', info=json.dumps({
                 'reference': trans.reference,
-                'date': trans.date.isoformat(),
+                'date': trans.date,
                 'payer': trans.payer,
                 'trans_id': trans.pk
             }))
