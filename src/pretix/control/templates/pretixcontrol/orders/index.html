@@ -54,6 +54,15 @@
                     </option>
                 {% endfor %}
             </select>
+            <select name="provider" class="form-control">
+                <option value="">{% trans "All payment providers" %}</option>
+                {% for p in providers %}
+                    <option value="{{ p.name }}"
+                            {% if request.GET.provider|add:"0" == p.name %}selected="selected"{% endif %}>
+                        {{ p.verbose_name }}
+                    </option>
+                {% endfor %}
+            </select>
             <input type="text" name="user" class="form-control" placeholder="{% trans "Search user" %}" value="{{ request.GET.user }}">
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
         </form>

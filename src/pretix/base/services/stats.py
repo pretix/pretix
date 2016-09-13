@@ -165,6 +165,7 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
     for pprov, total in num_total.items():
         ppobj = DummyObject()
         ppobj.name = provider_names.get(pprov, pprov)
+        ppobj.provider = provider
         ppobj.has_variations = False
         ppobj.num_total = total
         ppobj.num_cancelled = num_cancelled.get(pprov, (0, 0))
