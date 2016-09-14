@@ -31,6 +31,7 @@ $(function () {
         ykeys: ['ordered', 'paid'],
         labels: [gettext('Placed orders'), gettext('Paid orders')],
         barColors: ['#000099', '#009900'],
-        resize: true
+        resize: true,
+        xLabelAngle: 60
     });
 });
