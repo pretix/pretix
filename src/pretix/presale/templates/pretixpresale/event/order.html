@@ -78,7 +78,7 @@
                     {% endfor %}
                 {% else %}
                     {% blocktrans trimmed with date=event.settings.ticket_download_date|date:"SHORT_DATE_FORMAT" %}
-                        You will be able to download your tickets here on {{ date }}.
+                        You will be able to download your tickets here starting on {{ date }}.
                     {% endblocktrans %}
                 {% endif %}
             </div>

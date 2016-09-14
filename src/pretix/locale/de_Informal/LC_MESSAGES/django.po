@@ -5333,7 +5333,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:80
 #, python-format
-msgid "You will be able to download your tickets here on %(date)s."
+msgid "You will be able to download your tickets here starting on %(date)s."
 msgstr "Du kannst deine Tickets hier ab %(date)s herunterladen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:93
