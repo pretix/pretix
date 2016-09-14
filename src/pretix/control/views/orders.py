@@ -77,7 +77,7 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         for receiver, response in responses:
             provider = response(self.request.event)
             providers.append({
-                'name': provider,
+                'name': provider.identifier,
                 'verbose_name': provider.verbose_name
             })
         return providers

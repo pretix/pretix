@@ -49,7 +49,7 @@
                 <option value="">{% trans "All products" %}</option>
                 {% for item in items %}
                     <option value="{{ item.id }}"
-                            {% if request.GET.item|add:"0" == item.id %}selected="selected"{% endif %}>
+                            {% if request.GET.item|add:0 == item.id %}selected="selected"{% endif %}>
                         {{ item.name }}
                     </option>
                 {% endfor %}
@@ -58,7 +58,7 @@
                 <option value="">{% trans "All payment providers" %}</option>
                 {% for p in providers %}
                     <option value="{{ p.name }}"
-                            {% if request.GET.provider|add:"0" == p.name %}selected="selected"{% endif %}>
+                            {% if request.GET.provider == p.name %}selected="selected"{% endif %}>
                         {{ p.verbose_name }}
                     </option>
                 {% endfor %}
