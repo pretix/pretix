@@ -76,8 +76,6 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         responses = register_payment_providers.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
-            if not provider.is_enabled or not provider.is_allowed(self.request):
-                continue
             providers.append({
                 'name': provider,
                 'verbose_name': provider.verbose_name
