@@ -66,12 +66,27 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         if self.request.GET.get("item", "") != "":
             i = self.request.GET.get("item", "")
             qs = qs.filter(positions__item_id__in=(i,))
+        if self.request.GET.get("provider", "") != "":
+            p = self.request.GET.get("provider", "")
+            qs = qs.filter(payment_provider=p)
         return qs.distinct()
+
+    def get_payment_providers(self):
+        providers = []
+        responses = register_payment_providers.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            providers.append({
+                'name': provider,
+                'verbose_name': provider.verbose_name
+            })
+        return providers
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['items'] = Item.objects.filter(event=self.request.event)
-        ctx['filtered'] = ("status" in self.request.GET or "item" in self.request.GET or "user" in self.request.GET)
+        ctx['filtered'] = ("status" in self.request.GET or "item" in self.request.GET or "user" in self.request.GET or "provider" in self.request.GET)
+        ctx['providers'] = self.get_payment_providers()
         return ctx
 
 

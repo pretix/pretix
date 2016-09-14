@@ -40,27 +40,27 @@
                         <tr class="item {% if tup.0 %}categorized{% endif %}">
                             <td>{{ item.name }}</td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.id }}">
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;provider={{ item.provider }}">
                                     {{ item.num_total|togglesum }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=ne">
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=ne&amp;provider={{ item.provider }}">
                                     {{ item.num_pending|togglesum }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=c">
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=c&amp;provider={{ item.provider }}">
                                     {{ item.num_cancelled|togglesum }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=r">
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=r&amp;provider={{ item.provider }}">
                                     {{ item.num_refunded|togglesum }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=p">
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=p&amp;provider={{ item.provider }}">
                                     {{ item.num_paid|togglesum }}
                                 </a>
                             </td>
