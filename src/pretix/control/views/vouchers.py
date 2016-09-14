@@ -95,7 +95,7 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        tags = self.request.event.vouchers.order_by().filter(tag__isnull=False).values('tag').annotate(
+        tags = self.request.event.vouchers.order_by('tag').filter(tag__isnull=False).values('tag').annotate(
             total=Count('id'),
             redeemed=Sum('redeemed')
         )
