@@ -37,7 +37,7 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
             qs = qs.filter(Q(code__icontains=s) | Q(tag__icontains=s) | Q(comment__icontains=s))
         if self.request.GET.get("tag", "") != "":
             s = self.request.GET.get("tag", "")
-            qs = qs.filter(tag=s)
+            qs = qs.filter(tag__icontains=s)
         if self.request.GET.get("status", "") != "":
             s = self.request.GET.get("status", "")
             if s == 'v':
