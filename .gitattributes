@@ -1,0 +1,4 @@
+src/static/fontawesome/* linguist-vendored
+src/static/lightbox/* linguist-vendored
+src/static/typeahead/* linguist-vendored
+src/static/moment/* linguist-vendored
