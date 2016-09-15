@@ -98,7 +98,7 @@ $(function () {
             num = $("#voucher-bulk-codes-num").val();
         $("#id_codes").html("Generating...");
         $.getJSON(url + '?num=' + num, function (data) {
-            $("#id_codes").text(data.codes.join("\n"));
+            $("#id_codes").val(data.codes.join("\n"));
         });
     });
 
