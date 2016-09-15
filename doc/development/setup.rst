@@ -92,11 +92,14 @@ Before you check in your code into git, always run the static checkers and unit 
     python manage.py check
     py.test
 
-If you have multiple CPU cores and want to speed up the test suite, you can install the python
-package ``pytest-xdist`` using ``pip install pytest-xdist`` and then run ``py.test -n NUM`` with
-``NUM`` being the number of threads you want to use.
+.. note:: If you have multiple CPU cores and want to speed up the test suite, you can install the python
+          package ``pytest-xdist`` using ``pip install pytest-xdist`` and then run ``py.test -n NUM`` with
+          ``NUM`` being the number of threads you want to use.
 
-It is therefore a good idea to put this command into your git hook ``.git/hooks/pre-commit``,
+.. note:: We currently have some flaky tests that we haven't yet been able to debug. If you just run
+          ``py.test --rerun 5`` they'll be rerun and only reported as failures if they fail repeatedly.
+
+It is a good idea to put this command into your git hook ``.git/hooks/pre-commit``,
 for example::
 
     #!/bin/sh

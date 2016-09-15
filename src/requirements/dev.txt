@@ -11,3 +11,4 @@ pytest==2.9.*
 pytest-django
 isort
 pytest-mock
+pytest-rerunfailures
