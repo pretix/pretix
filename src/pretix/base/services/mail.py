@@ -74,7 +74,7 @@ def mail(email: str, subject: str, template: str,
             if prefix:
                 subject = "[%s] %s" % (prefix, subject)
 
-            body += "\r\n\r\n----\r\n"
+            body += "\r\n\r\n-- \r\n"
             body += _(
                 "You are receiving this email because you placed an order for {event}."
             ).format(event=event.name)
