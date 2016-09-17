@@ -27,6 +27,12 @@ class EventCreateForm(I18nModelForm):
             'presale_start',
             'presale_end'
         ]
+        widgets = {
+            'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+        }
 
     def __init__(self, *args, **kwargs):
         self.organizer = kwargs.pop('organizer')
