@@ -15,6 +15,8 @@
             <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
             <script type="text/javascript" src="{% static "typeahead/typeahead.bundle.js" %}"></script>
             <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.js" %}"></script>
+            <script type="text/javascript" src="{% static "moment/moment-with-locales.js" %}"></script>
+            <script type="text/javascript" src="{% static "datetimepicker/bootstrap-datetimepicker.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/metisMenu.min.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/sb-admin-2.js" %}"></script>
 		    <script type="text/javascript" src="{% static "pretixcontrol/js/ui/main.js" %}"></script>
@@ -23,7 +25,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
 	</head>
-	<body>
+	<body data-datetimeformat="{{ js_datetime_format }}" data-datetimelocale={{ js_locale }}>
         <div id="#wrapper">
             <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
                 <div class="navbar-header">

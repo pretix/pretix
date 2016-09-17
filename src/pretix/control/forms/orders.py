@@ -11,6 +11,9 @@ class ExtendForm(I18nModelForm):
     class Meta:
         model = Order
         fields = ['expires']
+        widgets = {
+            'expires': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+        }
 
 
 class ExporterForm(forms.Form):

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.urlresolvers import Resolver404, get_script_prefix, resolve
 
 from .signals import html_head, nav_event
+from .utils.i18n import get_javascript_format, get_moment_locale
 
 
 def contextprocessor(request):
@@ -30,4 +31,8 @@ def contextprocessor(request):
         for receiver, response in nav_event.send(request.event, request=request):
             _nav_event += response
     ctx['nav_event'] = _nav_event
+
+    ctx['js_datetime_format'] = get_javascript_format('DATETIME_INPUT_FORMATS')
+    ctx['js_locale'] = get_moment_locale()
+
     return ctx

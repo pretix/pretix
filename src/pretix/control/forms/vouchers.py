@@ -25,6 +25,9 @@ class VoucherForm(I18nModelForm):
             'code', 'valid_until', 'block_quota', 'allow_ignore_quota', 'price', 'tag',
             'comment'
         ]
+        widgets = {
+            'valid_until': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+        }
 
     def __init__(self, *args, **kwargs):
         instance = kwargs.get('instance')
@@ -177,6 +180,9 @@ class VoucherBulkForm(VoucherForm):
         fields = [
             'valid_until', 'block_quota', 'allow_ignore_quota', 'price', 'tag', 'comment'
         ]
+        widgets = {
+            'valid_until': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+        }
 
     def clean(self):
         data = super().clean()

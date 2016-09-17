@@ -86,6 +86,12 @@ class EventUpdateForm(I18nModelForm):
             'presale_start',
             'presale_end',
         ]
+        widgets = {
+            'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+        }
 
 
 class EventSettingsForm(SettingsForm):
@@ -113,7 +119,8 @@ class EventSettingsForm(SettingsForm):
         label=_('Last date of modifications'),
         help_text=_("The last date users can modify details of their orders, such as attendee names or "
                     "answers to questions."),
-        required=False
+        required=False,
+        widget=forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
     )
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
@@ -188,7 +195,8 @@ class PaymentSettingsForm(SettingsForm):
         label=_('Last date of payments'),
         help_text=_("The last date any payments are accepted. This has precedence over the number of "
                     "days configured above."),
-        required=False
+        required=False,
+        widget=forms.DateTimeInput(attrs={'class': 'datetimepicker'})
     )
     payment_term_expire_automatically = forms.BooleanField(
         label=_('Automatically expire unpaid orders'),
@@ -439,7 +447,8 @@ class TicketSettingsForm(SettingsForm):
     ticket_download_date = forms.DateTimeField(
         label=_("Download date"),
         help_text=_("Ticket download will be offered after this date."),
-        required=True
+        required=True,
+        widget=forms.DateTimeInput(attrs={'class': 'datetimepicker'})
     )
 
     def prepare_fields(self):

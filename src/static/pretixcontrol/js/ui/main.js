@@ -103,4 +103,24 @@ $(function () {
     });
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
+    
+    $(".datetimepicker").each(function() {
+        $(this).datetimepicker({
+            format: $("body").attr("data-datetimeformat"),
+            locale: $("body").attr("data-datetimelocale"),
+            useCurrent: false,
+            showClear: !$(this).prop("required"),
+            icons: {
+                time: 'fa fa-clock-o',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        });
+    });
 });
