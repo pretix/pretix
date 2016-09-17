@@ -139,8 +139,8 @@ class SecurityMiddleware:
     def _parse_csp(self, header):
         h = {}
         for part in header.split(';'):
-            k, v = part.split(' ', 1)
-            h[k] = v
+            k, v = part.strip().split(' ', 1)
+            h[k.strip()] = v
         return h
 
     def _render_csp(self, h):
