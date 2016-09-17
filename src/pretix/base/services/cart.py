@@ -61,7 +61,7 @@ def _re_add_expired_positions(items: List[dict], event: Event, cart_id: str, now
             'count': 1,
             'price': cp.price,
             'cp': cp,
-            'voucher': cp.voucher
+            'voucher': cp.voucher.code
         })
         positions.add(cp)
     return positions

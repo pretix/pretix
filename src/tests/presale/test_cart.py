@@ -450,6 +450,18 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 23)
 
+    def test_voucher_expired_readd(self):
+        v = Voucher.objects.create(item=self.ticket, event=self.event, block_quota=True)
+        cp1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10), voucher=v
+        )
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1'
+        }, follow=True)
+        obj = CartPosition.objects.get(id=cp1.id)
+        self.assertGreater(obj.expires, now())
+
     def test_voucher_variation(self):
         v = Voucher.objects.create(item=self.shirt, variation=self.shirt_red, event=self.event)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
