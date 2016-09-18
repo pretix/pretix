@@ -9,18 +9,13 @@ from django.views.generic import TemplateView
 
 from pretix.base.models import Item, Order, OrderPosition
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views import ChartContainingView
 from pretix.plugins.statistics.signals import clear_cache
 
 
-class IndexView(EventPermissionRequiredMixin, TemplateView):
+class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView):
     template_name = 'pretixplugins/statistics/index.html'
     permission = 'can_view_orders'
-
-    def get(self, request, *args, **kwargs):
-        resp = super().get(request, *args, **kwargs)
-        # required by raphael.js
-        resp['Content-Security-Policy'] = "script-src {static} 'unsafe-eval'; style-src {static} 'unsafe-inline'"
-        return resp
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

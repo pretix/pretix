@@ -3,3 +3,4 @@ src/static/lightbox/* linguist-vendored
 src/static/typeahead/* linguist-vendored
 src/static/moment/* linguist-vendored
 src/static/datetimepicker/* linguist-vendored
+src/static/charts/* linguist-vendored

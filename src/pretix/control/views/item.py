@@ -1,3 +1,5 @@
+import json
+
 from django.contrib import messages
 from django.core.files import File
 from django.core.urlresolvers import resolve, reverse
@@ -6,7 +8,7 @@ from django.forms.models import ModelMultipleChoiceField, inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
@@ -24,7 +26,7 @@ from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
 )
 
-from . import CreateView, UpdateView
+from . import ChartContainingView, CreateView, UpdateView
 
 
 class ItemList(ListView):
@@ -525,12 +527,38 @@ class QuotaCreate(EventPermissionRequiredMixin, QuotaEditorMixin, CreateView):
         return ret
 
 
-class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
+class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, ChartContainingView, UpdateView):
     model = Quota
     form_class = QuotaForm
     template_name = 'pretixcontrol/items/quota.html'
     permission = 'can_change_items'
     context_object_name = 'quota'
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data()
+        ctx['quota_chart_data'] = json.dumps([
+            {
+                'label': ugettext('Paid orders'),
+                'value': self.object.count_paid_orders()
+            },
+            {
+                'label': ugettext('Pending orders'),
+                'value': self.object.count_pending_orders()
+            },
+            {
+                'label': ugettext('Vouchers'),
+                'value': self.object.count_blocking_vouchers()
+            },
+            {
+                'label': ugettext('Current user\'s carts'),
+                'value': self.object.count_in_cart()
+            },
+            {
+                'label': ugettext('Current availability'),
+                'value': self.object.availability()[1]
+            }
+        ])
+        return ctx
 
     def get_object(self, queryset=None) -> Quota:
         try:

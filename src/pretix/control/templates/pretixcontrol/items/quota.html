@@ -46,9 +46,13 @@
                 </fieldset>
             </div>
             {% if quota.pk and quota.size != None %}
-                <div class="col-xs-12 col-lg-3">
+                <div class="col-xs-12 col-lg-3" id="quota-stats">
                     <fieldset>
                         <legend>{% trans "Availability calculation" %}</legend>
+                        <div class="chart" id="quota_chart">
+
+                        </div>
+
                         <div class="row">
                             <div class="col-xs-9">{% trans "Total quota" %}</div>
                             <div class="col-xs-3 text-right">{{ quota.size }}</div>
@@ -75,6 +79,7 @@
                         </div>
                     </fieldset>
                 </div>
+                <script type="application/json" id="quota-chart-data">{{ quota_chart_data|safe }}</script>
             {% endif %}
         </div>
         <div class="form-group submit-group">
