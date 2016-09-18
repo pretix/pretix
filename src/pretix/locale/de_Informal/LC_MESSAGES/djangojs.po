@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-13 20:12+0000\n"
-"PO-Revision-Date: 2016-09-09 15:33+0200\n"
+"POT-Creation-Date: 2016-09-18 18:43+0000\n"
+"PO-Revision-Date: 2016-09-18 20:48+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.8.8\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:53
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:59
@@ -50,6 +50,14 @@ msgstr "Schließen"
 #: static/pretixpresale/js/ui/asynctask.js:49
 msgid "Unknown error."
 msgstr "Unbekannter Fehler."
+
+#: static/pretixcontrol/js/ui/question.js:41
+msgid "Others"
+msgstr "Sonstige"
+
+#: static/pretixcontrol/js/ui/question.js:70
+msgid "Count"
+msgstr "Anzahl"
 
 #: static/pretixpresale/js/ui/asynctask.js:61
 msgid "We are processing your request…"
