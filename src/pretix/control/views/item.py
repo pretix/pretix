@@ -4,19 +4,22 @@ from django.contrib import messages
 from django.core.files import File
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
+from django.db.models import Count
 from django.forms.models import ModelMultipleChoiceField, inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
-from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.edit import DeleteView
 
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
+    Item, ItemCategory, ItemVariation, Order, Question, QuestionAnswer,
+    QuestionOption, Quota,
 )
 from pretix.control.forms.item import (
     CategoryForm, ItemCreateForm, ItemUpdateForm, ItemVariationForm,
@@ -377,10 +380,71 @@ class QuestionMixin:
         return ctx
 
 
+class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingView, DetailView):
+    model = Question
+    template_name = 'pretixcontrol/items/question.html'
+    permission = 'can_change_items'
+    template_name_field = 'question'
+
+    def get_answer_statistics(self):
+        qs = QuestionAnswer.objects.filter(
+            question=self.object, orderposition__isnull=False,
+            orderposition__order__event=self.request.event
+        )
+        if self.request.GET.get("status", "") != "":
+            s = self.request.GET.get("status", "")
+            if s == 'o':
+                qs = qs.filter(orderposition__order__status=Order.STATUS_PENDING, expires__lt=now().date())
+            elif s == 'ne':
+                qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
+            else:
+                qs = qs.filter(orderposition__order__status=s)
+        if self.request.GET.get("item", "") != "":
+            i = self.request.GET.get("item", "")
+            qs = qs.filter(orderposition__item_id__in=(i,))
+
+        if self.object.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+            qs = qs.order_by('options').values('options', 'options__answer')\
+                   .annotate(count=Count('id')).order_by('-count')
+            for a in qs:
+                a['answer'] = str(a['options__answer'])
+                del a['options__answer']
+        else:
+            qs = qs.order_by('answer').values('answer').annotate(count=Count('id')).order_by('-count')
+
+            if self.object.type == Question.TYPE_BOOLEAN:
+                for a in qs:
+                    a['answer'] = ugettext('Yes') if a['answer'] == 'True' else ugettext('No')
+                    a['answer_bool'] = a['answer'] == 'True'
+
+        return list(qs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['items'] = self.object.items.all()
+        ctx['stats'] = self.get_answer_statistics()
+        ctx['stats_json'] = json.dumps(self.get_answer_statistics())
+        return ctx
+
+    def get_object(self, queryset=None) -> Question:
+        try:
+            return self.request.event.questions.get(
+                id=self.kwargs['question']
+            )
+        except Question.DoesNotExist:
+            raise Http404(_("The requested question does not exist."))
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.items.questions', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+
 class QuestionUpdate(EventPermissionRequiredMixin, QuestionMixin, UpdateView):
     model = Question
     form_class = QuestionForm
-    template_name = 'pretixcontrol/items/question.html'
+    template_name = 'pretixcontrol/items/question_edit.html'
     permission = 'can_change_items'
     context_object_name = 'question'
 
@@ -417,7 +481,7 @@ class QuestionUpdate(EventPermissionRequiredMixin, QuestionMixin, UpdateView):
 class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
     model = Question
     form_class = QuestionForm
-    template_name = 'pretixcontrol/items/question.html'
+    template_name = 'pretixcontrol/items/question_edit.html'
     permission = 'can_change_items'
     context_object_name = 'question'
 
