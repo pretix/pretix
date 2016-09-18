@@ -32,6 +32,6 @@ $(function () {
         labels: [gettext('Placed orders'), gettext('Paid orders')],
         barColors: ['#000099', '#009900'],
         resize: true,
-        xLabelAngle: 60
+        xLabelAngle: 30
     });
 });
