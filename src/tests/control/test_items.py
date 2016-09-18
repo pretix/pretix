@@ -87,10 +87,11 @@ class QuestionsTest(ItemFormTest):
 
     def test_update(self):
         c = Question.objects.create(event=self.event1, question="What is your shoe size?", type="N", required=True)
-        doc = self.get_doc('/control/event/%s/%s/questions/%s/' % (self.orga1.slug, self.event1.slug, c.id))
+        doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, c.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         form_data['question_0'] = 'How old are you?'
-        doc = self.post_doc('/control/event/%s/%s/questions/%s/' % (self.orga1.slug, self.event1.slug, c.id), form_data)
+        doc = self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, c.id),
+                            form_data)
         self.assertIn("How old", doc.select("#page-wrapper table")[0].text)
         self.assertNotIn("shoe size", doc.select("#page-wrapper table")[0].text)
         c = Question.objects.get(id=c.id)
