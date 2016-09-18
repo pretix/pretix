@@ -306,7 +306,7 @@ COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
 
-COMPRESS_ENABLED = COMPRESS_OFFLINE = not debug_fallback
+COMPRESS_ENABLED = COMPRESS_OFFLINE = True
 
 COMPRESS_CSS_FILTERS = (
     'compressor.filters.css_default.CssAbsoluteFilter',
