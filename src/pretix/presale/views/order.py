@@ -113,6 +113,16 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
                 and self.payment_provider.is_enabled
                 and self.order._can_be_paid()
             )
+
+            ctx['can_change_method'] = False
+            responses = register_payment_providers.send(self.request.event)
+            for receiver, response in responses:
+                provider = response(self.request.event)
+                if (provider.identifier != self.order.payment_provider and provider.is_enabled
+                        and provider.order_change_allowed(self.order)):
+                    ctx['can_change_method'] = True
+                    break
+
         elif self.order.status == Order.STATUS_PAID:
             ctx['payment'] = self.payment_provider.order_paid_render(self.request, self.order)
             ctx['can_retry'] = False
