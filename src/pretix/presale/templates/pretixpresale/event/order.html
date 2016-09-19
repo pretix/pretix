@@ -11,7 +11,12 @@
 
             <h2>{% trans "Thank you!" %}</h2>
             {% if order.status != 'p' %}
-                <p>{% trans "Your order has been placed successfully. See below for details." %}</p>
+                <p>
+                    {% trans "Your order has been placed successfully. See below for details." %}<br>
+                    <strong>
+                        {% trans "Please note that we still await your payment to complete the process." %}
+                    </strong>
+                </p>
             {% elif order.total == 0 %}
                 <p>{% trans "Your order has been processed successfully! See below for details." %}</p>
             {% else %}
