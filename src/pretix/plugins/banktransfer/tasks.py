@@ -102,6 +102,9 @@ def process_banktransfers(event: int, job: int, data: list) -> None:
         job.save()
 
         try:
+            # Delete left-over transactions from a failed run before so they can reimported
+            BankTransaction.objects.filter(event=event, state=BankTransaction.STATE_UNCHECKED).delete()
+
             transactions = _get_unknown_transactions(event, job, data)
 
             code_len = settings.ENTROPY['order_code']
