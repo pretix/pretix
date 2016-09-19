@@ -65,7 +65,14 @@ def _get_unknown_transactions(event: Event, job: BankImportJob, data: list):
 
     transactions = []
     for row in data:
-        amount = amount_pattern.sub("", row['amount'].replace(",", "."))
+        amount = row['amount']
+        if ',' in amount and '.' in amount:
+            # Handle thousand-seperator , or .
+            if amount.find(',') < amount.find('.'):
+                amount = amount.replace(',', '')
+            else:
+                amount = amount.replace('.', '')
+        amount = amount_pattern.sub("", amount.replace(',', '.'))
         try:
             amount = Decimal(amount)
         except:

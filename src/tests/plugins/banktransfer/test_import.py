@@ -1,4 +1,5 @@
 from datetime import timedelta
+from decimal import Decimal
 
 import pytest
 from bs4 import BeautifulSoup
@@ -129,6 +130,20 @@ def test_autocorrection(env, job):
         'payer': 'Karla Kundin',
         'reference': 'Bestellung DUMMY12345',
         'amount': '23.00',
+        'date': '2016-01-26',
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_huge_amount(env, job):
+    env[2].total = Decimal('23000.00')
+    env[2].save()
+    process_banktransfers(env[0].pk, job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY12345',
+        'amount': '23.000,00',
         'date': '2016-01-26',
     }])
     env[2].refresh_from_db()
