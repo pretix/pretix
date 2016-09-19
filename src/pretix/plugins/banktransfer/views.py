@@ -104,7 +104,7 @@ class ActionView(EventPermissionRequiredMixin, View):
             trans = get_object_or_404(BankTransaction, id=k.split('_')[1], event=self.request.event)
 
             if v == 'discard' and trans.state in (BankTransaction.STATE_INVALID, BankTransaction.STATE_ERROR,
-                                                  BankTransaction.STATE_NOMATCH):
+                                                  BankTransaction.STATE_NOMATCH, BankTransaction.STATE_DUPLICATE):
                 return self._discard(trans)
 
             elif v == 'accept' and trans.state == BankTransaction.STATE_INVALID:
@@ -114,7 +114,7 @@ class ActionView(EventPermissionRequiredMixin, View):
             elif v.startswith('assign:') and trans.state == BankTransaction.STATE_NOMATCH:
                 return self._assign(trans, v[7:])
 
-            elif v == 'retry' and trans.state == BankTransaction.STATE_ERROR:
+            elif v == 'retry' and trans.state in (BankTransaction.STATE_ERROR, BankTransaction.STATE_DUPLICATE):
                 return self._retry(trans)
 
             return JsonResponse({
