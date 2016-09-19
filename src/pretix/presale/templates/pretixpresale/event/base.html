@@ -3,6 +3,7 @@
 {% load staticfiles %}
 {% load thumbnail %}
 {% load eventurl %}
+{% load safelink %}
 {% block thetitle %}
     {% block title %}{% endblock %}{% if url_name != "event.index" %} :: {% endif %}{{ event.name }}
 {% endblock %}
@@ -60,7 +61,7 @@
         <a href="mailto:{{ request.event.settings.contact_mail }}">{% trans "Contact event organizer" %}</a> &middot;
     {% endif %}
     {% if request.event.settings.imprint_url %}
-        <a href="{{ request.event.settings.imprint_url }}" target="_blank">{% trans "Imprint" %}</a>
+        <a href="{% safelink request.event.settings.imprint_url %}" target="_blank">{% trans "Imprint" %}</a>
         &middot;
     {% endif %}
     {% for f in footer %}
