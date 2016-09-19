@@ -17,6 +17,7 @@ class EventsTest(SoupTest):
         self.event1 = Event.objects.create(
             organizer=self.orga1, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+            plugins='pretix.plugins.banktransfer'
         )
         self.event2 = Event.objects.create(
             organizer=self.orga1, name='31C3', slug='31c3',
@@ -63,3 +64,41 @@ class EventsTest(SoupTest):
         doc = self.post_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug),
                             {'plugin:pretix.plugins.banktransfer': 'disable'})
         self.assertIn("Enable", doc.select("[name=plugin:pretix.plugins.banktransfer]")[0].text)
+
+    def test_live_disable(self):
+        self.event1.live = False
+        self.event1.save()
+        self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
+                      {'live': 'false'})
+        self.event1.refresh_from_db()
+        assert not self.event1.live
+
+    def test_live_ok(self):
+        self.event1.items.create(name='Test', default_price=5)
+        self.event1.settings.set('payment_banktransfer__enabled', True)
+        self.event1.quotas.create(name='Test quota')
+        doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
+        assert len(doc.select(".btn-primary"))
+        self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
+                      {'live': 'true'})
+        self.event1.refresh_from_db()
+        assert self.event1.live
+
+    def test_live_dont_require_payment_method_free(self):
+        self.event1.items.create(name='Test', default_price=0)
+        self.event1.settings.set('payment_banktransfer__enabled', False)
+        self.event1.quotas.create(name='Test quota')
+        doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
+        assert len(doc.select(".btn-primary"))
+
+    def test_live_require_payment_method(self):
+        self.event1.items.create(name='Test', default_price=5)
+        self.event1.settings.set('payment_banktransfer__enabled', False)
+        self.event1.quotas.create(name='Test quota')
+        doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
+        assert len(doc.select(".btn-primary")) == 0
+
+    def test_live_require_a_quota(self):
+        self.event1.settings.set('payment_banktransfer__enabled', True)
+        doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
+        assert len(doc.select(".btn-primary")) == 0
