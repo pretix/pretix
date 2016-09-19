@@ -16,6 +16,13 @@
         <div class="row-fluid">
             <div class="panel panel-primary">
                 <div class="panel-heading">
+                    <div class="pull-right">
+                        <strong>
+                            {% blocktrans trimmed with total=order.total|floatformat:2 currency=request.event.currency %}
+                                Total: {{ total }} {{ currency }}
+                            {% endblocktrans %}
+                        </strong>
+                    </div>
                     <h3 class="panel-title">
                         {{ payment_provider.verbose_name }}
                     </h3>
