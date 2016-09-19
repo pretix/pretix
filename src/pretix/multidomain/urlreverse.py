@@ -57,6 +57,13 @@ def eventreverse(obj, name, kwargs=None):
     """
     from pretix.multidomain import subdomain_urlconf, maindomain_urlconf
 
+    c = None
+    if not kwargs:
+        c = obj.get_cache()
+        url = c.get('urlrev_{}'.format(name))
+        if url:
+            return url
+
     kwargs = kwargs or {}
     if isinstance(obj, Event):
         kwargs['event'] = obj.slug
@@ -77,7 +84,10 @@ def eventreverse(obj, name, kwargs=None):
         return urljoin('%s://%s' % (siteurlsplit.scheme, domain), path)
 
     kwargs['organizer'] = organizer.slug
-    return reverse(name, kwargs=kwargs, urlconf=maindomain_urlconf)
+    url = reverse(name, kwargs=kwargs, urlconf=maindomain_urlconf)
+    if not kwargs and c:
+        c.set('urlrev_{}'.format(url), url)
+    return url
 
 
 def build_absolute_uri(obj, urlname, kwargs=None):
