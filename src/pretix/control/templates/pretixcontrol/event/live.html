@@ -22,14 +22,16 @@
             {% trans "Your ticket shop is currently not live. It is thus only visible to you and your team, not to any visitors." %}
         </p>
         {% if issues|length > 0 %}
-            <p>
-                {% trans "To publish your ticket shop, you first need to resolve the following issues:" %}
-            </p>
-            <ul>
-                {% for issue in issues %}
-                    <li>{{ issue }}</li>
-                {% endfor %}
-            </ul>
+            <div class="alert alert-warning">
+                <p>
+                    {% trans "To publish your ticket shop, you first need to resolve the following issues:" %}
+                </p>
+                <ul>
+                    {% for issue in issues %}
+                        <li>{{ issue }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
         {% else %}
             <p>
                 {% trans "If you want to, you can publish your ticket shop now." %}
