@@ -551,6 +551,9 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
         if has_paid_things and not has_payment_provider:
             issues.append(_('You have configured at least one paid product but have not enabled any payment methods.'))
 
+        if not self.request.event.quotas.exists():
+            issues.append(_('You need to configure at least one quota to sell anything.'))
+
         return issues
 
     def post(self, request, *args, **kwargs):
