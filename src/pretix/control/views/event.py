@@ -544,7 +544,7 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
         responses = register_payment_providers.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
-            if provider.is_enabled:
+            if provider.is_enabled and provider.identifier != 'free':
                 has_payment_provider = True
                 break
 
