@@ -1,5 +1,6 @@
 import datetime
 import time
+from decimal import Decimal
 
 from django.core import mail
 from django.test import TestCase
@@ -164,6 +165,172 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertIn("14.00", doc.select("section:nth-of-type(1) div.variation")[0].text)
         self.assertIn("Black", doc.select("section:nth-of-type(1) div.variation")[1].text)
         self.assertIn("12.00", doc.select("section:nth-of-type(1) div.variation")[1].text)
+
+
+class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
+    def setUp(self):
+        super().setUp()
+        self.q = Quota.objects.create(event=self.event, name='Quota', size=2)
+        self.v = self.event.vouchers.create(quota=self.q)
+        self.item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=Decimal('12.00'),
+                                        active=True)
+        self.q.items.add(self.item)
+
+    def test_not_active(self):
+        self.item.active = False
+        self.item.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "Early-bird" not in html.rendered_content
+
+    def test_not_in_quota(self):
+        q2 = Quota.objects.create(event=self.event, name='Quota', size=2)
+        self.v.quota = q2
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "Early-bird" not in html.rendered_content
+
+    def test_in_quota(self):
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "Early-bird" in html.rendered_content
+        assert "12.00" in html.rendered_content
+
+    def test_specific_item(self):
+        self.v.item = self.item
+        self.v.quota = None
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "Early-bird" in html.rendered_content
+
+    def test_hide_wo_voucher_quota(self):
+        self.item.hide_without_voucher = True
+        self.item.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "Early-bird" not in html.rendered_content
+
+    def test_hide_without_voucher_item(self):
+        self.item.hide_without_voucher = True
+        self.item.save()
+        self.v.item = self.item
+        self.v.quota = None
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "Early-bird" in html.rendered_content
+
+    def test_variations_all(self):
+        var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
+        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+        self.q.variations.add(var1)
+        self.q.variations.add(var2)
+        self.v.item = self.item
+        self.v.quota = None
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "Red" in html.rendered_content
+        assert "Black" in html.rendered_content
+
+    def test_variations_specific(self):
+        var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
+        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+        self.q.variations.add(var1)
+        self.q.variations.add(var2)
+        self.v.item = self.item
+        self.v.variation = var1
+        self.v.quota = None
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "Red" in html.rendered_content
+        assert "Black" not in html.rendered_content
+
+    def test_sold_out(self):
+        self.q.size = 0
+        self.q.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "_voucher_item" not in html.rendered_content
+
+    def test_sold_out_blocking(self):
+        self.q.size = 0
+        self.q.save()
+        self.v.block_quota = True
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "_voucher_item" in html.rendered_content
+
+    def test_sold_out_ignore(self):
+        self.q.size = 0
+        self.q.save()
+        self.v.allow_ignore_quota = True
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "_voucher_item" in html.rendered_content
+
+    def test_variations_sold_out(self):
+        var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
+        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+        self.q.variations.add(var1)
+        self.q.variations.add(var2)
+        self.q.size = 0
+        self.q.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "_voucher_item" not in html.rendered_content
+
+    def test_variations_sold_out_blocking(self):
+        var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
+        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+        self.q.variations.add(var1)
+        self.q.variations.add(var2)
+        self.q.size = 0
+        self.q.save()
+        self.v.block_quota = True
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "_voucher_item" in html.rendered_content
+
+    def test_special_price(self):
+        self.v.price = Decimal("10.00")
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "Early-bird" in html.rendered_content
+        assert "10.00" in html.rendered_content
+
+    def test_special_price_variations(self):
+        var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
+        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+        self.q.variations.add(var1)
+        self.q.variations.add(var2)
+        self.v.price = Decimal("10.00")
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "Early-bird" in html.rendered_content
+        assert "10.00" in html.rendered_content
+        assert "14.00" not in html.rendered_content
+
+    def test_fail_redeemed(self):
+        self.v.redeemed = True
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code), follow=True)
+        assert "alert-danger" in html.rendered_content
+
+    def test_fail_expired(self):
+        self.v.valid_until = now() - datetime.timedelta(days=1)
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code), follow=True)
+        assert "alert-danger" in html.rendered_content
+
+    def test_fail_unknown(self):
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, 'ABC'), follow=True)
+        assert "alert-danger" in html.rendered_content
+
+    def test_not_yet_started(self):
+        self.event.presale_start = now() + datetime.timedelta(days=1)
+        self.event.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, 'ABC'), follow=True)
+        assert "alert-danger" in html.rendered_content
+
+    def test_over(self):
+        self.event.presale_end = now() - datetime.timedelta(days=1)
+        self.event.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, 'ABC'), follow=True)
+        assert "alert-danger" in html.rendered_content
 
 
 class DeadlineTest(EventTestMixin, TestCase):
