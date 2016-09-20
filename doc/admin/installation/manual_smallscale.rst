@@ -21,7 +21,6 @@ Requirements
 Please set up the following systems beforehand, we'll not explain them here in detail (but see these links for external
 installation guides):
 
-* `Docker`_
 * A SMTP server to send out mails, e.g. `Postfix`_ on your machine or some third-party server you have credentials for
 * A HTTP reverse proxy, e.g. `nginx`_ or Apache to allow HTTPS connections
 * A `MySQL`_ or `PostgreSQL`_ database server
@@ -94,8 +93,6 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     [mail]
     ; See config file documentation for more options
     from=tickets@yourdomain.com
-    ; This is the default IP address of your docker host in docker's virtual
-    ; network. Make sure postfix listens on this address.
     host=127.0.0.1
 
     [redis]
@@ -267,7 +264,6 @@ To upgrade to a new pretix release, pull the latest code changes and run the fol
     (venv)$ python manage.py updatestyles
     # systemctl restart pretix-web pretix-worker
 
-.. _Docker: https://docs.docker.com/engine/installation/linux/debian/
 .. _Postfix: https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-16-04
 .. _nginx: https://botleg.com/stories/https-with-lets-encrypt-and-nginx/
 .. _Let's Encrypt: https://letsencrypt.org/
