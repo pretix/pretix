@@ -1,4 +1,5 @@
 import datetime
+import json
 
 from django.utils.timezone import now
 from tests.base import SoupTest, extract_form_fields
@@ -70,6 +71,67 @@ class VoucherFormTest(SoupTest):
             assert doc.select(".alert-danger")
         else:
             assert doc.select(".alert-success")
+
+    def test_list(self):
+        self.event.vouchers.create(item=self.ticket, code='ABCDEFG')
+        doc = self.client.get('/control/event/%s/%s/vouchers/' % (self.orga.slug, self.event.slug))
+        assert 'ABCDEFG' in doc.rendered_content
+
+    def test_csv(self):
+        self.event.vouchers.create(item=self.ticket, code='ABCDEFG')
+        doc = self.client.get('/control/event/%s/%s/vouchers/?download=yes' % (self.orga.slug, self.event.slug))
+        assert doc.content.strip() == '"Voucher code","Valid until","Product","Reserve quota","Bypass quota","Price",' \
+                                      '"Tag","Redeemed"\r\n"ABCDEFG","","Early-bird ticket","No","No","","",' \
+                                      '"No"'.encode('utf-8')
+
+    def test_filter_status_valid(self):
+        v = self.event.vouchers.create(item=self.ticket)
+        doc = self.client.get('/control/event/%s/%s/vouchers/?status=v' % (self.orga.slug, self.event.slug))
+        assert v.code in doc.rendered_content
+        v.redeemed = True
+        v.save()
+        doc = self.client.get('/control/event/%s/%s/vouchers/?status=v' % (self.orga.slug, self.event.slug))
+        assert v.code not in doc.rendered_content
+
+    def test_filter_status_redeemed(self):
+        v = self.event.vouchers.create(item=self.ticket, redeemed=True)
+        doc = self.client.get('/control/event/%s/%s/vouchers/?status=r' % (self.orga.slug, self.event.slug))
+        assert v.code in doc.rendered_content
+        v.redeemed = False
+        v.save()
+        doc = self.client.get('/control/event/%s/%s/vouchers/?status=r' % (self.orga.slug, self.event.slug))
+        assert v.code not in doc.rendered_content
+
+    def test_filter_status_expired(self):
+        v = self.event.vouchers.create(item=self.ticket, valid_until=now() + datetime.timedelta(days=1))
+        doc = self.client.get('/control/event/%s/%s/vouchers/?status=e' % (self.orga.slug, self.event.slug))
+        assert v.code not in doc.rendered_content
+        v.valid_until = now() - datetime.timedelta(days=1)
+        v.save()
+        doc = self.client.get('/control/event/%s/%s/vouchers/?status=e' % (self.orga.slug, self.event.slug))
+        assert v.code in doc.rendered_content
+
+    def test_filter_tag(self):
+        self.event.vouchers.create(item=self.ticket, code='ABCDEFG', comment='Foo', tag='bar')
+        doc = self.client.get('/control/event/%s/%s/vouchers/?tag=bar' % (self.orga.slug, self.event.slug))
+        assert 'ABCDEFG' in doc.rendered_content
+        doc = self.client.get('/control/event/%s/%s/vouchers/?tag=baz' % (self.orga.slug, self.event.slug))
+        assert 'ABCDEFG' not in doc.rendered_content
+
+    def test_search_code(self):
+        self.event.vouchers.create(item=self.ticket, code='ABCDEFG', comment='Foo')
+        doc = self.client.get('/control/event/%s/%s/vouchers/?search=ABCDEFG' % (self.orga.slug, self.event.slug))
+        assert 'ABCDEFG' in doc.rendered_content
+        doc = self.client.get('/control/event/%s/%s/vouchers/?search=Foo' % (self.orga.slug, self.event.slug))
+        assert 'ABCDEFG' in doc.rendered_content
+        doc = self.client.get('/control/event/%s/%s/vouchers/?search=12345' % (self.orga.slug, self.event.slug))
+        assert 'ABCDEFG' not in doc.rendered_content
+
+    def test_bulk_rng(self):
+        rng = self.client.get('/control/event/%s/%s/vouchers/rng?num=7' % (self.orga.slug, self.event.slug))
+        codes = json.loads(rng.content.decode('utf-8'))['codes']
+        assert len(codes) == 7
+        assert all([len(r) == 16 for r in codes])
 
     def test_create_non_blocking_item_voucher(self):
         self._create_voucher({
@@ -331,3 +393,24 @@ class VoucherFormTest(SoupTest):
             'codes': 'ABCDE\n%s' % v.code,
             'itemvar': '%d' % self.shirt.pk,
         }, expected_failure=True)
+
+    def test_delete_voucher(self):
+        v = self.event.vouchers.create(quota=self.quota_tickets)
+        doc = self.get_doc('/control/event/%s/%s/vouchers/%s/delete' % (self.orga.slug, self.event.slug, v.pk),
+                           follow=True)
+        assert not doc.select(".alert-danger")
+
+        doc = self.post_doc('/control/event/%s/%s/vouchers/%s/delete' % (self.orga.slug, self.event.slug, v.pk),
+                            {}, follow=True)
+        assert doc.select(".alert-success")
+        assert not self.event.vouchers.filter(pk=v.id).exists()
+
+    def test_delete_voucher_redeemed(self):
+        v = self.event.vouchers.create(quota=self.quota_tickets, redeemed=True)
+        doc = self.get_doc('/control/event/%s/%s/vouchers/%s/delete' % (self.orga.slug, self.event.slug, v.pk),
+                           follow=True)
+        assert doc.select(".alert-danger")
+
+        doc = self.post_doc('/control/event/%s/%s/vouchers/%s/delete' % (self.orga.slug, self.event.slug, v.pk),
+                            {}, follow=True)
+        assert doc.select(".alert-danger")

@@ -9,6 +9,7 @@ from pretix.base.models import (
     Event, Item, ItemCategory, ItemVariation, Order, OrderPosition, Organizer,
     Question, Quota,
 )
+from pretix.base.services.invoices import generate_invoice
 
 
 class OrdersTest(TestCase):
@@ -49,7 +50,8 @@ class OrdersTest(TestCase):
             datetime=now() - datetime.timedelta(days=3),
             expires=now() + datetime.timedelta(days=11),
             total=Decimal("23"),
-            payment_provider='banktransfer'
+            payment_provider='banktransfer',
+            locale='en'
         )
         self.ticket_pos = OrderPosition.objects.create(
             order=self.order,
@@ -106,6 +108,14 @@ class OrdersTest(TestCase):
         assert response.status_code == 404
         response = self.client.get(
             '/%s/%s/order/%s/123/cancel' % (self.orga.slug, self.event.slug, self.not_my_order.code)
+        )
+        assert response.status_code == 404
+        response = self.client.post(
+            '/%s/%s/order/ABCDE/123/cancel/do' % (self.orga.slug, self.event.slug)
+        )
+        assert response.status_code == 404
+        response = self.client.post(
+            '/%s/%s/order/%s/123/cancel/do' % (self.orga.slug, self.event.slug, self.not_my_order.code)
         )
         assert response.status_code == 404
 
@@ -229,6 +239,10 @@ class OrdersTest(TestCase):
     def test_orders_cancel_invalid(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
+        r = self.client.post(
+            '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+            }, follow=True)
+        assert 'btn-danger' not in r.rendered_content
         self.client.post(
             '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
             }, follow=True)
@@ -257,6 +271,37 @@ class OrdersTest(TestCase):
             }, follow=True)
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PENDING
+
+    def test_invoice_create_notallowed(self):
+        self.event.settings.set('invoice_generate', 'no')
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {}, follow=True)
+        assert 'alert-danger' in response.rendered_content
+
+    def test_invoice_create_duplicate(self):
+        self.event.settings.set('invoice_generate', 'user')
+        generate_invoice(self.order)
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {}, follow=True)
+        assert 'alert-danger' in response.rendered_content
+
+    def test_invoice_create_wrong_secret(self):
+        self.event.settings.set('invoice_generate', 'user')
+        generate_invoice(self.order)
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, '1234'),
+            {})
+        assert 404 == response.status_code
+
+    def test_invoice_create_ok(self):
+        self.event.settings.set('invoice_generate', 'user')
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {}, follow=True)
+        assert 'alert-success' in response.rendered_content
+        assert self.order.invoices.exists()
 
     def test_orders_download(self):
         self.event.settings.set('ticket_download', True)

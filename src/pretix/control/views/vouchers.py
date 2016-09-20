@@ -267,14 +267,13 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
 
 
 class VoucherRNG(EventPermissionRequiredMixin, View):
-    template_name = 'pretixcontrol/vouchers/bulk.html'
     permission = 'can_change_vouchers'
 
     def get(self, request, *args, **kwargs):
         codes = set()
         try:
             num = int(request.GET.get('num', '5'))
-        except ValueError:
+        except ValueError:  # NOQA
             return HttpResponseBadRequest()
 
         while len(codes) < num:

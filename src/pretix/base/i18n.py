@@ -85,7 +85,7 @@ class LazyI18nString:
         else:
             return str(self.data)
 
-    def __repr__(self) -> str:
+    def __repr__(self) -> str:  # NOQA
         return '<LazyI18nString: %s>' % repr(self.data)
 
     def __lt__(self, other) -> bool:  # NOQA

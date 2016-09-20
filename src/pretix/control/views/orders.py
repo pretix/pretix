@@ -296,7 +296,7 @@ class OrderInvoiceRegenerate(OrderView):
     def post(self, *args, **kwargs):
         try:
             inv = self.order.invoices.get(pk=kwargs.get('id'))
-        except Order.DoesNotExist:
+        except Invoice.DoesNotExist:
             messages.error(self.request, _('Unknown invoice.'))
         else:
             if inv.canceled:
@@ -309,7 +309,7 @@ class OrderInvoiceRegenerate(OrderView):
                 messages.success(self.request, _('The invoice has been regenerated.'))
         return redirect(self.get_order_url())
 
-    def get(self, *args, **kwargs):
+    def get(self, *args, **kwargs):  # NOQA
         return HttpResponseNotAllowed(['POST'])
 
 
@@ -319,7 +319,7 @@ class OrderInvoiceReissue(OrderView):
     def post(self, *args, **kwargs):
         try:
             inv = self.order.invoices.get(pk=kwargs.get('id'))
-        except Order.DoesNotExist:
+        except Invoice.DoesNotExist:
             messages.error(self.request, _('Unknown invoice.'))
         else:
             if inv.canceled:
@@ -333,7 +333,7 @@ class OrderInvoiceReissue(OrderView):
                 messages.success(self.request, _('The invoice has been reissued.'))
         return redirect(self.get_order_url())
 
-    def get(self, *args, **kwargs):
+    def get(self, *args, **kwargs):  # NOQA
         return HttpResponseNotAllowed(['POST'])
 
 
@@ -515,7 +515,6 @@ class OrderChange(OrderView):
         form_valid = True
         for p in self.positions:
             if not p.form.is_valid():
-                print(p.pk, 'Form invalid')
                 form_valid = False
                 break
 
