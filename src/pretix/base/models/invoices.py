@@ -29,7 +29,7 @@ class Invoice(models.Model):
     :type invoice_no: int
     :param is_cancellation: Whether or not this is a cancellation instead of an invoice
     :type is_cancellation: bool
-    :param refers: A link to another invoice this invoice refers to, e.g. the cancelled invoice in a cancellation
+    :param refers: A link to another invoice this invoice refers to, e.g. the canceled invoice in a cancellation
     :type refers: Invoice
     :param invoice_from: The sender address
     :type invoice_from: str

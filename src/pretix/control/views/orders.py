@@ -236,7 +236,7 @@ class OrderTransition(OrderView):
                 messages.success(self.request, _('The order has been marked as paid.'))
         elif self.order.status == Order.STATUS_PENDING and to == 'c':
             cancel_order(self.order, user=self.request.user)
-            messages.success(self.request, _('The order has been cancelled.'))
+            messages.success(self.request, _('The order has been canceled.'))
         elif self.order.status == Order.STATUS_PAID and to == 'n':
             self.order.status = Order.STATUS_PENDING
             self.order.payment_manual = True

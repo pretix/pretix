@@ -30,7 +30,7 @@ class Order(LoggedModel):
     An order is created when a user clicks 'buy' on his cart. It holds
     several OrderPositions and is connected to a user. It has an
     expiration date: If items run out of capacity, orders which are over
-    their expiration date might be cancelled.
+    their expiration date might be canceled.
 
     An order -- like all objects -- has an ID, which is globally unique,
     but also a code, which is shorter and easier to memorize, but only
@@ -45,7 +45,7 @@ class Order(LoggedModel):
         * ``STATUS_PENDING``
         * ``STATUS_PAID``
         * ``STATUS_EXPIRED``
-        * ``STATUS_CANCELLED``
+        * ``STATUS_CANCELED``
         * ``STATUS_REFUNDED``
 
     :param event: The event this order belongs to
@@ -81,13 +81,13 @@ class Order(LoggedModel):
     STATUS_PENDING = "n"
     STATUS_PAID = "p"
     STATUS_EXPIRED = "e"
-    STATUS_CANCELLED = "c"
+    STATUS_CANCELED = "c"
     STATUS_REFUNDED = "r"
     STATUS_CHOICE = (
         (STATUS_PENDING, _("pending")),
         (STATUS_PAID, _("paid")),
         (STATUS_EXPIRED, _("expired")),
-        (STATUS_CANCELLED, _("cancelled")),
+        (STATUS_CANCELED, _("canceled")),
         (STATUS_REFUNDED, _("refunded"))
     )
 

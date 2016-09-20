@@ -53,7 +53,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.expired': _('The order has been marked as expired.'),
         'pretix.event.order.paid': _('The order has been marked as paid.'),
         'pretix.event.order.refunded': _('The order has been refunded.'),
-        'pretix.event.order.cancelled': _('The order has been cancelled.'),
+        'pretix.event.order.canceled': _('The order has been canceled.'),
         'pretix.event.order.placed': _('The order has been created.'),
         'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
         'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),

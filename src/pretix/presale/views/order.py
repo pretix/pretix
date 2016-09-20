@@ -453,7 +453,7 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
         return ctx
 
     def get_success_message(self, value):
-        return _('The order has been cancelled.')
+        return _('The order has been canceled.')
 
     def get_error_message(self, exception):
         if isinstance(exception, dict) and exception['exc_type'] == 'OrderError':

@@ -19,7 +19,7 @@
                     <th>{% trans "Product" %}</th>
                     <th>{% trans "Total (pending or paid)" %}</th>
                     <th>{% trans "Payment pending" %}</th>
-                    <th>{% trans "Cancelled" %}</th>
+                    <th>{% trans "Canceled" %}</th>
                     <th>{% trans "Refunded" %}</th>
                     <th>{% trans "Paid" %}</th>
                 </tr>
@@ -31,7 +31,7 @@
                             <th>{{ tup.0.name }}</th>
                             <th>{{ tup.0.num_total|togglesum }}</th>
                             <th>{{ tup.0.num_pending|togglesum }}</th>
-                            <th>{{ tup.0.num_cancelled|togglesum }}</th>
+                            <th>{{ tup.0.num_canceled|togglesum }}</th>
                             <th>{{ tup.0.num_refunded|togglesum }}</th>
                             <th>{{ tup.0.num_paid|togglesum }}</th>
                         </tr>
@@ -51,7 +51,7 @@
                             </td>
                             <td>
                                 <a href="{{ listurl }}?item={{ item.id }}&amp;status=c&amp;provider={{ item.provider }}">
-                                    {{ item.num_cancelled|togglesum }}
+                                    {{ item.num_canceled|togglesum }}
                                 </a>
                             </td>
                             <td>
@@ -71,7 +71,7 @@
                                     <td>{{ var }}</td>
                                     <td>{{ var.num_total|togglesum }}</td>
                                     <td>{{ var.num_pending|togglesum }}</td>
-                                    <td>{{ var.num_cancelled|togglesum }}</td>
+                                    <td>{{ var.num_canceled|togglesum }}</td>
                                     <td>{{ var.num_refunded|togglesum }}</td>
                                     <td>{{ var.num_paid|togglesum }}</td>
                                 </tr>
@@ -85,7 +85,7 @@
                     <th>{% trans "Total" %}</th>
                     <th>{{ total.num_total|togglesum }}</th>
                     <th>{{ total.num_pending|togglesum }}</th>
-                    <th>{{ total.num_cancelled|togglesum }}</th>
+                    <th>{{ total.num_canceled|togglesum }}</th>
                     <th>{{ total.num_refunded|togglesum }}</th>
                     <th>{{ total.num_paid|togglesum }}</th>
                 </tr>
