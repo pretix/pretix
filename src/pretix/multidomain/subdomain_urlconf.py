@@ -25,7 +25,7 @@ for app in apps.get_app_configs():
                 raw_plugin_patterns.append(
                     url(r'^(?P<event>[^/]+)/', include(urlmod.event_patterns, namespace=app.label))
                 )
-        elif importlib.util.find_spec(app.name + '.subdomain_urls'):
+        elif importlib.util.find_spec(app.name + '.subdomain_urls'):  # noqa
             warnings.warn('Please put your config in an \'urls\' module using the event_patterns '
                           'attribute. Support for subdomain_urls in plugins will be dropped in the future.',
                           DeprecationWarning)

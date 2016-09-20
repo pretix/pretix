@@ -32,7 +32,7 @@ for app in apps.get_app_configs():
             raw_plugin_patterns.append(
                 url(r'', include(single_plugin_patterns, namespace=app.label))
             )
-        elif importlib.util.find_spec(app.name + '.maindomain_urls'):
+        elif importlib.util.find_spec(app.name + '.maindomain_urls'):  # noqa
             warnings.warn('Please put your config in an \'urls\' module using the urlpatterns and event_patterns '
                           'attribute. Support for maindomain_urls in plugins will be dropped in the future.',
                           DeprecationWarning)
