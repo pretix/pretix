@@ -107,7 +107,7 @@ class Item(LoggedModel):
     :type require_voucher: bool
     :param hide_without_voucher: If set to ``True``, this item is only visible and available when a voucher is used.
     :type hide_without_voucher: bool
-    :param allow_cancel: If set to ``False``, an order with this product can not be cancelled by the user.
+    :param allow_cancel: If set to ``False``, an order with this product can not be canceled by the user.
     :type allow_cancel: bool
     """
 
@@ -192,10 +192,10 @@ class Item(LoggedModel):
                     'code that is specifically tied to this product (and not via a quota).')
     )
     allow_cancel = models.BooleanField(
-        verbose_name=_('Allow product to be cancelled'),
+        verbose_name=_('Allow product to be canceled'),
         default=True,
-        help_text=_('If you deactivate this, an order including this product might not be cancelled by the user. '
-                    'It may still be cancelled by you.')
+        help_text=_('If you deactivate this, an order including this product might not be canceled by the user. '
+                    'It may still be canceled by you.')
     )
 
     class Meta:

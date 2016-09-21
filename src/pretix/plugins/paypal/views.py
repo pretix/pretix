@@ -36,7 +36,7 @@ def success(request, organizer=None, event=None):
 
 
 def abort(request, organizer=None, event=None):
-    messages.error(request, _('It looks like you cancelled the PayPal payment'))
+    messages.error(request, _('It looks like you canceled the PayPal payment'))
     try:
         event = Event.objects.get(id=request.session['payment_paypal_event'])
         return redirect(eventreverse(event, 'presale:event.checkout', kwargs={'step': 'payment'}))

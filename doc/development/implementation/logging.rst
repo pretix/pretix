@@ -16,7 +16,7 @@ We recommend all relevant models to inherit from ``LoggedModel`` as it simplifie
 
 To actually log an action, you can just call the ``log_action`` method on your object::
 
-   order.log_action('pretix.event.order.cancelled', user=user, data={})
+   order.log_action('pretix.event.order.canceled', user=user, data={})
 
 The positional ``action`` argument should represent the type of action and should be globally unique, we
 recomment do prefix it with your packagename, e.g. ``paypal.payment.rejected``. The ``user`` argument is
@@ -75,7 +75,7 @@ implementation could look like::
         plains = {
             'pretix.event.order.paid': _('The order has been marked as paid.'),
             'pretix.event.order.refunded': _('The order has been refunded.'),
-            'pretix.event.order.cancelled': _('The order has been cancelled.'),
+            'pretix.event.order.canceled': _('The order has been canceled.'),
             ...
         }
         if logentry.action_type in plains:

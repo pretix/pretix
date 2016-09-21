@@ -30,13 +30,13 @@ def env():
     )
     o2 = Order.objects.create(
         code='6789Z', event=event,
-        status=Order.STATUS_CANCELLED,
+        status=Order.STATUS_CANCELED,
         datetime=now(), expires=now() + timedelta(days=10),
         total=23, payment_provider='banktransfer'
     )
     Order.objects.create(
         code='GS89Z', event=event,
-        status=Order.STATUS_CANCELLED,
+        status=Order.STATUS_CANCELED,
         datetime=now(), expires=now() + timedelta(days=10),
         total=23, payment_provider='banktransfer'
     )
@@ -113,7 +113,7 @@ def test_check_amount(env, job):
 
 
 @pytest.mark.django_db
-def test_ignore_cancelled(env, job):
+def test_ignore_canceled(env, job):
     process_banktransfers(env[0].pk, job, [{
         'payer': 'Karla Kundin',
         'reference': 'Bestellung DUMMY6789Z',
@@ -121,7 +121,7 @@ def test_ignore_cancelled(env, job):
         'amount': '23.00'
     }])
     env[3].refresh_from_db()
-    assert env[3].status == Order.STATUS_CANCELLED
+    assert env[3].status == Order.STATUS_CANCELED
 
 
 @pytest.mark.django_db

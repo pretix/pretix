@@ -54,10 +54,10 @@ class ActionView(EventPermissionRequiredMixin, View):
                 'status': 'error',
                 'message': _('The order has already been refunded.')
             })
-        elif trans.order.status == Order.STATUS_CANCELLED:
+        elif trans.order.status == Order.STATUS_CANCELED:
             return JsonResponse({
                 'status': 'error',
-                'message': _('The order has already been cancelled.')
+                'message': _('The order has already been canceled.')
             })
 
         try:

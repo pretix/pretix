@@ -35,9 +35,9 @@ def _handle_transaction(event: Event, trans: BankTransaction, code: str):
     elif trans.order.status == Order.STATUS_REFUNDED:
         trans.state = BankTransaction.STATE_ERROR
         trans.message = ugettext_noop('The order has already been refunded.')
-    elif trans.order.status == Order.STATUS_CANCELLED:
+    elif trans.order.status == Order.STATUS_CANCELED:
         trans.state = BankTransaction.STATE_ERROR
-        trans.message = ugettext_noop('The order has already been cancelled.')
+        trans.message = ugettext_noop('The order has already been canceled.')
     elif trans.amount != trans.order.total:
         trans.state = BankTransaction.STATE_INVALID
         trans.message = ugettext_noop('The transaction amount is incorrect.')

@@ -159,22 +159,22 @@ def test_order_transition_to_paid_expired_quota_left(client, env):
 @pytest.mark.django_db
 @pytest.mark.parametrize("process", [
     # (Old status, new status, success expected)
-    (Order.STATUS_CANCELLED, Order.STATUS_PAID, False),
-    (Order.STATUS_CANCELLED, Order.STATUS_PENDING, False),
-    (Order.STATUS_CANCELLED, Order.STATUS_REFUNDED, False),
-    (Order.STATUS_CANCELLED, Order.STATUS_EXPIRED, False),
+    (Order.STATUS_CANCELED, Order.STATUS_PAID, False),
+    (Order.STATUS_CANCELED, Order.STATUS_PENDING, False),
+    (Order.STATUS_CANCELED, Order.STATUS_REFUNDED, False),
+    (Order.STATUS_CANCELED, Order.STATUS_EXPIRED, False),
 
     (Order.STATUS_PAID, Order.STATUS_PENDING, True),
-    (Order.STATUS_PAID, Order.STATUS_CANCELLED, False),
+    (Order.STATUS_PAID, Order.STATUS_CANCELED, False),
     (Order.STATUS_PAID, Order.STATUS_REFUNDED, True),
     (Order.STATUS_PAID, Order.STATUS_EXPIRED, False),
 
-    (Order.STATUS_PENDING, Order.STATUS_CANCELLED, True),
+    (Order.STATUS_PENDING, Order.STATUS_CANCELED, True),
     (Order.STATUS_PENDING, Order.STATUS_PAID, True),
     (Order.STATUS_PENDING, Order.STATUS_REFUNDED, False),
     (Order.STATUS_PENDING, Order.STATUS_EXPIRED, True),
 
-    (Order.STATUS_REFUNDED, Order.STATUS_CANCELLED, False),
+    (Order.STATUS_REFUNDED, Order.STATUS_CANCELED, False),
     (Order.STATUS_REFUNDED, Order.STATUS_PAID, False),
     (Order.STATUS_REFUNDED, Order.STATUS_PENDING, False),
     (Order.STATUS_REFUNDED, Order.STATUS_EXPIRED, False),

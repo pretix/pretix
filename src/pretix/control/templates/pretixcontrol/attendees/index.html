@@ -31,7 +31,7 @@
                 <option value="p" {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "Paid" %}</option>
                 <option value="n" {% if request.GET.status == "n" %}selected="selected"{% endif %}>{% trans "Pending" %}</option>
                 <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Pending (expired)" %}</option>
-                <option value="c" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Cancelled" %}</option>
+                <option value="c" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Canceled" %}</option>
                 <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Refunded" %}</option>
             </select>
             <select name="item" class="form-control">

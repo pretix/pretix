@@ -505,13 +505,13 @@ msgstr ""
 "Kontingent."
 
 #: pretix/base/models/items.py:195
-msgid "Allow product to be cancelled"
+msgid "Allow product to be canceled"
 msgstr "Erlaube Stornierungen"
 
 #: pretix/base/models/items.py:197
 msgid ""
 "If you deactivate this, an order including this product might not be "
-"cancelled by the user. It may still be cancelled by you."
+"canceled by the user. It may still be canceled by you."
 msgstr ""
 "Wenn Sie dies deaktivieren, kann eine Bestellung die dieses Produkt enthält "
 "nicht vom Kunden storniert werden. Sie kann immer noch von Ihnen storniert "
@@ -657,7 +657,7 @@ msgid "expired"
 msgstr "abgelaufen"
 
 #: pretix/base/models/orders.py:90
-msgid "cancelled"
+msgid "canceled"
 msgstr "storniert"
 
 #: pretix/base/models/orders.py:91
@@ -2349,7 +2349,7 @@ msgstr "Die Bestellung wurde zurückerstattet."
 
 #: pretix/control/logdisplay.py:56 pretix/control/views/orders.py:239
 #: pretix/presale/views/order.py:456
-msgid "The order has been cancelled."
+msgid "The order has been canceled."
 msgstr "Die Bestellung wurde storniert."
 
 #: pretix/control/logdisplay.py:57
@@ -2463,7 +2463,7 @@ msgstr "ausstehend (abgelaufen)"
 #: pretix/control/templates/pretixcontrol/orders/overview.html:22
 #: pretix/plugins/reports/exporters.py:152
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:10
-msgid "Cancelled"
+msgid "Canceled"
 msgstr "storniert"
 
 #: pretix/control/templates/pretixcontrol/attendees/index.html:35
@@ -4222,7 +4222,7 @@ msgstr "Die Bestellung wurde bereits zurückerstattet."
 
 #: pretix/plugins/banktransfer/tasks.py:39
 #: pretix/plugins/banktransfer/views.py:60
-msgid "The order has already been cancelled."
+msgid "The order has already been canceled."
 msgstr "Die Rechnung wurde bereits storniert."
 
 #: pretix/plugins/banktransfer/tasks.py:42
@@ -4668,7 +4668,7 @@ msgstr ""
 "kontaktieren Sie uns, falls dies mehr als ein paar Stunden dauert."
 
 #: pretix/plugins/paypal/views.py:39
-msgid "It looks like you cancelled the PayPal payment"
+msgid "It looks like you canceled the PayPal payment"
 msgstr "Die PayPal-Zahlung wurde abgebrochen"
 
 #: pretix/plugins/pretixdroid/__init__.py:10
@@ -5761,7 +5761,7 @@ msgstr "Deutsch (Du)"
 #~ msgid "Found wrong amount. Expected: %s"
 #~ msgstr "Falscher Betrag. Erwartet: %s"
 
-#~ msgid "Order has been cancelled"
+#~ msgid "Order has been canceled"
 #~ msgstr "Bestellung wurde storniert"
 
 #~ msgid "Order has been refunded"

@@ -27,7 +27,7 @@ def env():
     )
     o2 = Order.objects.create(
         code='6789Z', event=event,
-        status=Order.STATUS_CANCELLED,
+        status=Order.STATUS_CANCELED,
         datetime=now(), expires=now() + timedelta(days=10),
         total=23, payment_provider='banktransfer'
     )
@@ -151,7 +151,7 @@ def test_retry_canceled(env, client):
     trans.refresh_from_db()
     assert trans.state == BankTransaction.STATE_ERROR
     env[3].refresh_from_db()
-    assert env[3].status == Order.STATUS_CANCELLED
+    assert env[3].status == Order.STATUS_CANCELED
 
 
 @pytest.mark.django_db

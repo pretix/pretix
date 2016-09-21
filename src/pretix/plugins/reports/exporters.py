@@ -149,7 +149,7 @@ class OverviewReport(Report):
         ]
         tdata = [
             [
-                _('Product'), _('Total (pending or paid)'), '', _('Pending'), '', _('Cancelled'), '', _('Refunded'), '',
+                _('Product'), _('Total (pending or paid)'), '', _('Pending'), '', _('Canceled'), '', _('Refunded'), '',
                 _('Paid'), ''
             ],
             [
@@ -171,7 +171,7 @@ class OverviewReport(Report):
                     tup[0].name,
                     str(tup[0].num_total[0]), str(tup[0].num_total[1]),
                     str(tup[0].num_pending[0]), str(tup[0].num_pending[1]),
-                    str(tup[0].num_cancelled[0]), str(tup[0].num_cancelled[1]),
+                    str(tup[0].num_canceled[0]), str(tup[0].num_canceled[1]),
                     str(tup[0].num_refunded[0]), str(tup[0].num_refunded[1]),
                     str(tup[0].num_paid[0]), str(tup[0].num_paid[1])
                 ])
@@ -180,7 +180,7 @@ class OverviewReport(Report):
                     "     " + str(item.name),
                     str(item.num_total[0]), str(item.num_total[1]),
                     str(item.num_pending[0]), str(item.num_pending[1]),
-                    str(item.num_cancelled[0]), str(item.num_cancelled[1]),
+                    str(item.num_canceled[0]), str(item.num_canceled[1]),
                     str(item.num_refunded[0]), str(item.num_refunded[1]),
                     str(item.num_paid[0]), str(item.num_paid[1])
                 ])
@@ -190,7 +190,7 @@ class OverviewReport(Report):
                             "          " + str(var),
                             str(var.num_total[0]), str(var.num_total[1]),
                             str(var.num_pending[0]), str(var.num_pending[1]),
-                            str(var.num_cancelled[0]), str(var.num_cancelled[1]),
+                            str(var.num_canceled[0]), str(var.num_canceled[1]),
                             str(var.num_refunded[0]), str(var.num_refunded[1]),
                             str(var.num_paid[0]), str(var.num_paid[1])
                         ])
@@ -199,7 +199,7 @@ class OverviewReport(Report):
             _("Total"),
             str(total['num_total'][0]), str(total['num_total'][1]),
             str(total['num_pending'][0]), str(total['num_pending'][1]),
-            str(total['num_cancelled'][0]), str(total['num_cancelled'][1]),
+            str(total['num_canceled'][0]), str(total['num_canceled'][1]),
             str(total['num_refunded'][0]), str(total['num_refunded'][1]),
             str(total['num_paid'][0]), str(total['num_paid'][1])
         ])

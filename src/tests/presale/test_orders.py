@@ -262,7 +262,7 @@ class OrdersTest(TestCase):
                                                       self.order.secret),
                              target_status_code=200)
         self.order.refresh_from_db()
-        assert self.order.status == Order.STATUS_CANCELLED
+        assert self.order.status == Order.STATUS_CANCELED
 
     def test_orders_cancel_forbidden(self):
         self.event.settings.set('cancel_allow_user', False)

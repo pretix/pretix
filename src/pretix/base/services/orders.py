@@ -152,10 +152,10 @@ def _cancel_order(order, user=None):
     with order.event.lock():
         if order.status != Order.STATUS_PENDING:
             raise OrderError(_('You cannot cancel this order.'))
-        order.status = Order.STATUS_CANCELLED
+        order.status = Order.STATUS_CANCELED
         order.save()
 
-    order.log_action('pretix.event.order.cancelled', user=user)
+    order.log_action('pretix.event.order.canceled', user=user)
     i = order.invoices.filter(is_cancellation=False).last()
     if i:
         generate_cancellation(i)
