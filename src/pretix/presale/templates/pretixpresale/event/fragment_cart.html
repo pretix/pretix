@@ -8,7 +8,7 @@
                 – {{ line.variation }}
             {% endif %}
             {% if line.voucher %}
-                <br /><span class="fa fa-ticket"></span> {% trans "Voucher code used:" %} {{ line.voucher.code }}
+                <br /><span class="fa fa-tags"></span> {% trans "Voucher code used:" %} {{ line.voucher.code }}
             {% endif %}
         {% if line.has_questions %}
             <dl>
