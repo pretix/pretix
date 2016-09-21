@@ -172,7 +172,7 @@
                                     – {{ line.variation }}
                                 {% endif %}
                                 {% if line.voucher %}
-                                    <br/><span class="fa fa-ticket"></span> {% trans "Voucher code used:" %}
+                                    <br/><span class="fa fa-tags"></span> {% trans "Voucher code used:" %}
                                     <a href="{% url "control:event.voucher" event=request.event.slug organizer=request.event.organizer.slug voucher=line.voucher.pk %}">
                                         {{ line.voucher.code }}
                                     </a>
