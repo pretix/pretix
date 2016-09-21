@@ -122,7 +122,7 @@ PostgreSQL)::
     (venv)$ git clone https://github.com/pretix/pretix.git /var/pretix/source
     (venv)$ cd /var/pretix/source/src
     (venv)$ pip3 install -r requirements.txt -r requirements/mysql.txt \
-                         -r requirements/celery.txt -r requirements/redis.txt \
+                         -r requirements/redis.txt \
                          -r requirements/py34.txt gunicorn
 
 We also need to create a data directory::
@@ -257,7 +257,7 @@ To upgrade to a new pretix release, pull the latest code changes and run the fol
     (venv)$ cd /var/pretix/source/src
     (venv)$ git pull origin master
     (venv)$ pip3 install -r requirements.txt -r requirements/mysql.txt \
-                         -r requirements/celery.txt -r requirements/redis.txt \
+                         -r requirements/redis.txt \
                          -r requirements/py34.txt gunicorn
     (venv)$ python manage.py migrate
     (venv)$ make production
