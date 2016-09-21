@@ -273,9 +273,3 @@ class EventLock(models.Model):
     event = models.CharField(max_length=36, primary_key=True)
     date = models.DateTimeField(auto_now=True)
     token = models.UUIDField(default=uuid.uuid4)
-
-    class LockTimeoutException(Exception):
-        pass
-
-    class LockReleaseException(Exception):
-        pass

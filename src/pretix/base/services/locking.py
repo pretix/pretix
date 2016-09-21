@@ -27,13 +27,21 @@ class LockManager:
             return False
 
 
+class LockTimeoutException(Exception):
+    pass
+
+
+class LockReleaseException(Exception):
+    pass
+
+
 def lock_event(event):
     """
     Issue a lock on this event so nobody can book tickets for this event until
     you release the lock. Will retry 5 times on failure.
 
-    :raises EventLock.LockTimeoutException: if the event is locked every time we try
-                                            to obtain the lock
+    :raises LockTimeoutException: if the event is locked every time we try
+                                  to obtain the lock
     """
     if hasattr(event, '_lock') and event._lock:
         return True
@@ -50,10 +58,10 @@ def release_event(event):
     the lock will only be released if it was issued in _this_ python
     representation of the database object.
 
-    :raises EventLock.LockReleaseException: if we do not own the lock
+    :raises LockReleaseException: if we do not own the lock
     """
     if not hasattr(event, '_lock') or not event._lock:
-        raise EventLock.LockReleaseException('Lock is not owned by this thread')
+        raise LockReleaseException('Lock is not owned by this thread')
     if settings.HAS_REDIS:
         return release_event_redis(event)
     else:
@@ -70,26 +78,26 @@ def lock_event_db(event):
                 event._lock = l
                 return True
             elif l.date < now() - timedelta(seconds=LOCK_TIMEOUT):
-                newtoken = uuid.uuid4()
+                newtoken = str(uuid.uuid4())
                 updated = EventLock.objects.filter(event=event.id, token=l.token).update(date=dt, token=newtoken)
                 if updated:
                     l.token = newtoken
                     event._lock = l
                     return True
         time.sleep(2 ** i / 100)
-    raise EventLock.LockTimeoutException()
+    raise LockTimeoutException()
 
 
 @transaction.atomic
 def release_event_db(event):
     if not hasattr(event, '_lock') or not event._lock:
-        raise EventLock.LockReleaseException('Lock is not owned by this thread')
+        raise LockReleaseException('Lock is not owned by this thread')
     try:
         lock = EventLock.objects.get(event=event.id, token=event._lock.token)
         lock.delete()
         event._lock = None
     except EventLock.DoesNotExist:
-        raise EventLock.LockReleaseException('Lock is no longer owned by this thread')
+        raise LockReleaseException('Lock is no longer owned by this thread')
 
 
 def redis_lock_from_event(event):
@@ -113,9 +121,9 @@ def lock_event_redis(event):
                 return True
         except RedisError:
             logger.exception('Error locking an event')
-            raise EventLock.LockTimeoutException()
+            raise LockTimeoutException()
         time.sleep(2 ** i / 100)
-    raise EventLock.LockTimeoutException()
+    raise LockTimeoutException()
 
 
 def release_event_redis(event):
@@ -126,5 +134,5 @@ def release_event_redis(event):
         lock.release()
     except RedisError:
         logger.exception('Error releasing an event lock')
-        raise EventLock.LockTimeoutException()
+        raise LockTimeoutException()
     event._lock = None

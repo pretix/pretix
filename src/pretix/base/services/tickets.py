@@ -1,13 +1,14 @@
 from datetime import timedelta
 
-from django.conf import settings
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
 
 from pretix.base.models import CachedFile, CachedTicket, Order, cachedfile_name
 from pretix.base.signals import register_ticket_outputs
+from pretix.celery import app
 
 
+@app.task
 def generate(order: str, provider: str):
     order = Order.objects.select_related('event').get(id=order)
     ct = CachedTicket.objects.get_or_create(order=order, provider=provider)[0]
@@ -26,12 +27,3 @@ def generate(order: str, provider: str):
             ct.cachedfile.filename, ct.cachedfile.type, data = prov.generate(order)
             ct.cachedfile.file.save(cachedfile_name(ct.cachedfile, ct.cachedfile.filename), ContentFile(data))
             ct.cachedfile.save()
-
-
-if settings.HAS_CELERY:
-    from pretix.celery import app
-
-    generate_task = app.task(generate)
-
-    def generate(*args, **kwargs):
-        generate_task.apply_async(args=args, kwargs=kwargs)

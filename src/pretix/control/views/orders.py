@@ -22,6 +22,7 @@ from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
     regenerate_invoice,
 )
+from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException, mail
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, cancel_order, mark_order_paid,
@@ -433,7 +434,7 @@ class OrderDownload(OrderView):
             ct.cachedfile = cf
         ct.save()
         if not ct.cachedfile.file.name:
-            tickets.generate(self.order.id, self.output.identifier)
+            tickets.generate.apply_async(args=(self.order.id, self.output.identifier))
         return redirect(reverse('cachedfile.download', kwargs={'id': ct.cachedfile.id}))
 
 
@@ -465,7 +466,7 @@ class OrderExtend(OrderView):
                             messages.success(self.request, _('The payment term has been changed.'))
                         else:
                             messages.error(self.request, is_available)
-                except EventLock.LockTimeoutException:
+                except LockTimeoutException:
                     messages.error(self.request, _('We were not able to process the request completely as the '
                                                    'server was too busy.'))
             return self._redirect_back()
@@ -660,5 +661,6 @@ class ExportView(EventPermissionRequiredMixin, TemplateView):
         cf.date = now()
         cf.expires = now() + timedelta(days=3)
         cf.save()
-        export(self.request.event.id, str(cf.id), self.exporter.identifier, self.exporter.form.cleaned_data)
+        export.apply_async(args=(self.request.event.id, str(cf.id), self.exporter.identifier,
+                                 self.exporter.form.cleaned_data))
         return redirect(reverse('cachedfile.download', kwargs={'id': str(cf.id)}))

@@ -500,7 +500,7 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             cf.save()
             ct.cachedfile = cf
         ct.save()
-        generate(self.order.id, self.output.identifier)
+        generate.apply_async(args=(self.order.id, self.output.identifier))
         return redirect(reverse('cachedfile.download', kwargs={'id': ct.cachedfile.id}))
 
 

@@ -8,6 +8,7 @@ from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import Event, Order
+from pretix.celery import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 logger = logging.getLogger('pretix.base.mail')
@@ -90,7 +91,8 @@ def mail(email: str, subject: str, template: str,
         return mail_send([email], subject, body, sender, event.id if event else None, headers)
 
 
-def mail_send(to: str, subject: str, body: str, sender: str, event: int=None, headers: dict=None) -> bool:
+@app.task
+def mail_send_task(to: str, subject: str, body: str, sender: str, event: int=None, headers: dict=None) -> bool:
     email = EmailMessage(subject, body, sender, to=to, headers=headers)
     if event:
         event = Event.objects.get(id=event)
@@ -105,10 +107,5 @@ def mail_send(to: str, subject: str, body: str, sender: str, event: int=None, he
         raise SendMailException('Failed to send an email to {}.'.format(to))
 
 
-if settings.HAS_CELERY and settings.EMAIL_BACKEND != 'django.core.mail.outbox':
-    from pretix.celery import app
-
-    mail_send_task = app.task(mail_send)
-
-    def mail_send(*args, **kwargs):
-        mail_send_task.apply_async(args=args, kwargs=kwargs)
+def mail_send(*args, **kwargs):
+    mail_send_task.apply_async(args=args, kwargs=kwargs)

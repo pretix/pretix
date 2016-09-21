@@ -298,7 +298,7 @@ def test_order_download_disabled_provider(client, env):
 @pytest.mark.django_db
 def test_order_download_success(client, env, mocker):
     from pretix.base.services import tickets
-    mocker.patch('pretix.base.services.tickets.generate')
+    mocker.patch('pretix.base.services.tickets.generate.apply_async')
     o = Order.objects.get(id=env[2].id)
     o.status = Order.STATUS_PAID
     o.save()
@@ -308,16 +308,16 @@ def test_order_download_success(client, env, mocker):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/orders/FOO/download/testdummy')
     assert response.status_code == 302
-    tickets.generate.assert_any_call(o.id, 'testdummy')
+    tickets.generate.apply_async.assert_any_call(args=(o.id, 'testdummy'))
     assert 'download' in response['Location']
     dl = response['Location']
     assert CachedTicket.objects.filter(order=o, provider='testdummy').exists()
 
     # test caching
-    tickets.generate.reset_mock()
+    tickets.generate.apply_async.reset_mock()
     response = client.get('/control/event/dummy/dummy/orders/FOO/download/testdummy')
     assert response.status_code == 302
-    assert tickets.generate.assert_not_called()
+    assert tickets.generate.apply_async.assert_not_called()
     assert dl == response['Location']
 
 

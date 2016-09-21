@@ -5,8 +5,10 @@ from django.core.files.base import ContentFile
 
 from pretix.base.models import CachedFile, Event, cachedfile_name
 from pretix.base.signals import register_data_exporters
+from pretix.celery import app
 
 
+@app.task()
 def export(event: str, fileid: str, provider: str, form_data: Dict[str, Any]) -> None:
     event = Event.objects.get(id=event)
     file = CachedFile.objects.get(id=fileid)
@@ -17,12 +19,3 @@ def export(event: str, fileid: str, provider: str, form_data: Dict[str, Any]) ->
             file.filename, file.type, data = ex.render(form_data)
             file.file.save(cachedfile_name(file, file.filename), ContentFile(data))
             file.save()
-
-
-if settings.HAS_CELERY:
-    from pretix.celery import app
-
-    export_task = app.task(export)
-
-    def export(*args, **kwargs):
-        export_task.apply_async(args=args, kwargs=kwargs)
