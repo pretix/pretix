@@ -112,14 +112,14 @@ var bankimport_transactionlist = {
         }
 
         if ($("[data-job-waiting]").length) {
-            window.setInterval(bankimport_transactionlist.check_state, 750);
+            window.setTimeout(bankimport_transactionlist.check_state, 750);
         }
     },
 
     check_state: function () {
-        $.getJSON(location.pathname + '?ajax=1', function (data) {
+        $.getJSON($("[data-job-waiting-url]").attr("data-job-waiting-url"), function (data) {
             if (data.state == 'running' || data.state == 'pending') {
-                window.setInterval(check_state, 750);
+                window.setTimeout(bankimport_transactionlist.check_state, 750);
             } else {
                 location.reload();
             }

@@ -1,6 +1,7 @@
 import csv
 import json
 import logging
+from datetime import timedelta
 from locale import format as lformat
 
 from django.contrib import messages
@@ -9,6 +10,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, ListView, TemplateView, View
 
@@ -303,6 +305,13 @@ class ImportView(EventPermissionRequiredMixin, ListView):
             'rows': parsed
         })
 
+    @cached_property
+    def job_running(self):
+        return BankImportJob.objects.filter(
+            event=self.request.event, state=BankImportJob.STATE_RUNNING,
+            created__lte=now() - timedelta(minutes=30)  # safety timeout
+        ).first()
+
     def redirect_back(self):
         return redirect(reverse('plugins:banktransfer:import', kwargs={
             'event': self.request.event.slug,
@@ -310,6 +319,9 @@ class ImportView(EventPermissionRequiredMixin, ListView):
         }))
 
     def start_processing(self, parsed):
+        if self.job_running:
+            messages.error(self.request, _('An import is currently being processed, please try again in a few minutes.'))
+            return self.redirect_back()
         job = BankImportJob.objects.create(event=self.request.event)
         process_banktransfers.apply_async(kwargs={
             'event': self.request.event.pk,
@@ -321,3 +333,8 @@ class ImportView(EventPermissionRequiredMixin, ListView):
             'organizer': self.request.event.organizer.slug,
             'job': job.pk
         }))
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['job_running'] = self.job_running
+        return ctx

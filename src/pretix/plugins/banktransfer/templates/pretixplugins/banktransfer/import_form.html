@@ -13,16 +13,23 @@
             <p>{% blocktrans trimmed %}
                 Currently, this feature supports <code>.csv</code> files and files in the MT940 format.
             {% endblocktrans %}</p>
-            <form action="" method="post" enctype="multipart/form-data" class="form-inline">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="file">{% trans "Import file" %}: </label> <input id="file" type="file" name="file"/>
+            {% if job_running %}
+                <div class="alert alert-info" data-job-waiting data-job-waiting-url="{% url "plugins:banktransfer:import.job" event=request.event.slug organizer=request.event.organizer.slug job=job_running.pk %}?ajax=1">
+                    <span class="fa fa-cog fa-spin"></span>
+                    {% trans "An import is currently being processed, please try again in a few minutes." %}
                 </div>
-                <div class="clearfix"></div>
-                <button class="btn btn-primary pull-right" type="submit">
-                    <span class="icon icon-upload"></span> {% trans "Start upload" %}
-                </button>
-            </form>
+            {% else %}
+                <form action="" method="post" enctype="multipart/form-data" class="form-inline">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="file">{% trans "Import file" %}: </label> <input id="file" type="file" name="file"/>
+                    </div>
+                    <div class="clearfix"></div>
+                    <button class="btn btn-primary pull-right" type="submit">
+                        <span class="icon icon-upload"></span> {% trans "Start upload" %}
+                    </button>
+                </form>
+            {% endif %}
         </div>
     </div>
     {% if transactions_unhandled|length > 0 %}
@@ -32,19 +39,20 @@
             </div>
             <div class="panel-body">
                 <p>
-                    <form class="form-inline helper-display-inline" action="" method="get">
-                        <input type="text" name="search" class="form-control" placeholder="{% trans "Search" %}" value="{{ request.GET.search }}">
+                <form class="form-inline helper-display-inline" action="" method="get">
+                    <input type="text" name="search" class="form-control" placeholder="{% trans "Search" %}"
+                           value="{{ request.GET.search }}">
+                </form>
+                <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+                {% if not request.GET.search %}
+                    <form action="" method="post" class="helper-display-inline pull-right">
+                        {% csrf_token %}
+                        <button class="btn btn-danger" type="submit" name="discard" value="all">
+                            <span class="fa fa-trash"></span>
+                            {% trans "Discard all" %}
+                        </button>
                     </form>
-                    <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
-                    {% if not request.GET.search %}
-                        <form action="" method="post" class="helper-display-inline pull-right">
-                            {% csrf_token %}
-                            <button class="btn btn-danger" type="submit" name="discard" value="all">
-                                <span class="fa fa-trash"></span>
-                                {% trans "Discard all" %}
-                            </button>
-                        </form>
-                    {% endif %}
+                {% endif %}
                 </p>
 
                 {% include "pretixcontrol/pagination.html" %}
