@@ -118,11 +118,13 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
                     if value == "enable":
                         self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                                       data={'plugin': module})
-                        plugins_active.append(module)
+                        if module not in plugins_active:
+                            plugins_active.append(module)
                     else:
                         self.request.event.log_action('pretix.event.plugins.disabled', user=self.request.user,
                                                       data={'plugin': module})
-                        plugins_active.remove(module)
+                        if module in plugins_active:
+                            plugins_active.remove(module)
             self.object.plugins = ",".join(plugins_active)
             self.object.save()
         messages.success(self.request, _('Your changes have been saved.'))
