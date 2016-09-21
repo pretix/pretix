@@ -22,7 +22,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         {% if plugin.app.compatibility_errors %}
-                                            <button class="btn disabled btn-block btn-default">{% trans "Incompatible" %}</button>
+                                            <button class="btn disabled btn-block btn-default" disabled="disabled">{% trans "Incompatible" %}</button>
                                         {% elif plugin.module in plugins_active %}
                                             <button class="btn btn-default btn-block" name="plugin:{{ plugin.module }}" value="disable">{% trans "Disable" %}</button>
                                         {% else %}

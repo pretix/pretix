@@ -99,7 +99,7 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
 
         context = super().get_context_data(*args, **kwargs)
         context['plugins'] = [p for p in get_all_plugins() if not p.name.startswith('.')
-                              if getattr(p, 'visible', True)]
+                              and getattr(p, 'visible', True)]
         context['plugins_active'] = self.object.get_plugins()
         return context
 
@@ -109,13 +109,21 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
+        from pretix.base.plugins import get_all_plugins
+
         self.object = self.get_object()
+
         plugins_active = self.object.get_plugins()
+        plugins_available = {
+            p.module: p for p in get_all_plugins()
+            if not p.name.startswith('.') and getattr(p, 'visible', True)
+        }
+
         with transaction.atomic():
             for key, value in request.POST.items():
                 if key.startswith("plugin:"):
                     module = key.split(":")[1]
-                    if value == "enable":
+                    if value == "enable" and module in plugins_available:
                         self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                                       data={'plugin': module})
                         if module not in plugins_active:
