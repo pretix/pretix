@@ -10,13 +10,15 @@ Reinventing ticket presales, one bit at a time.
 
 Project status
 --------------
-The basic features are present and sufficiently stable. pretix has been in use for one event and
-sold a few hundred tickets so far. There is still a bunch of features to come and there is probably
-still a lot of bugs in there, but we consider it stable enough that we use it in production ourselves.
+Most features are present and sufficiently stable. pretix has been in use for multiple event and
+sold a few thousand tickets so far. There is still a bunch of features to come and there surely is
+still a bunch of bugs in there, but we consider it stable enough that we use it in production ourselves.
 
-Therefore, we will provide an upgrade path for future changes. If you want to use pretix in production, 
-I invite you to send me an email so that I can notify you of changes and bugs that require your 
-attention.
+If you deploy and use pretix, there will be a safe upgrade path for all changes to come. We're planning
+on an 1.0 release in late 2016 or early 2017. Until then, we take the liberty of changing the code as we
+like, but we try to keep the changes to documented APIs as small as possible. If you want to use pretix
+in production or develop a plugin now, I invite you to send me an email so that I can notify you of changes
+and bugs that require your attention.
 
 Since very recently we now have an [installation guide](https://docs.pretix.eu/en/latest/admin/installation/index.html)
 in our documentation.
