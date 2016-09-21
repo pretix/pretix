@@ -30,6 +30,12 @@
                     </div>
                 </div>
             {% endfor %}
+            {% if not providers %}
+                <p><em>{% trans "There are no payment providers enabled." %}</em></p>
+                {% if not event.live %}
+                    <p>{% trans "Please go to the payment settings and activate one or more payment providers." %}</p>
+                {% endif %}
+            {% endif %}
         </div>
         <div class="row checkout-button-row">
             <div class="col-md-4">
