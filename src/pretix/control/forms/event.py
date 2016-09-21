@@ -241,16 +241,18 @@ class ProviderForm(SettingsForm):
             v.required = False
             v.widget.is_required = False
             if isinstance(v, I18nFormField):
+                v._required = v.one_required
+                v.one_required = False
                 v.widget.enabled_langcodes = self.obj.settings.get('locales')
 
     def clean(self):
         cleaned_data = super().clean()
-        enabled = cleaned_data.get(self.settingspref + '_enabled') == 'True'
+        enabled = cleaned_data.get(self.settingspref + '_enabled')
         if not enabled:
             return
         for k, v in self.fields.items():
             val = cleaned_data.get(k)
-            if v._required and (val is None or val == ""):
+            if v._required and not val:
                 self.add_error(k, _('This field is required.'))
 
 

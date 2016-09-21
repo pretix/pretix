@@ -212,6 +212,7 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
             messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.get(request)
 
     def get_success_url(self) -> str:
