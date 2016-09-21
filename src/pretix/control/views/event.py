@@ -296,7 +296,7 @@ class DisplaySettings(EventSettingsFormView):
                         for k in form.changed_data
                     }
                 )
-            regenerate_css(self.request.event.pk)
+            regenerate_css.apply_async(args=(self.request.event.pk,))
             messages.success(self.request, _('Your changes have been saved. Please note that it can '
                                              'take a short period of time until your changes become '
                                              'active.'))

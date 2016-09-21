@@ -10,4 +10,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for es in EventSetting.objects.filter(key="presale_css_file"):
-            regenerate_css(es.object_id)
+            regenerate_css.apply_async(args=(es.object_id,))
