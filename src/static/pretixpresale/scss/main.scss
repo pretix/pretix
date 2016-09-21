@@ -54,6 +54,7 @@ a:hover .panel-primary > .panel-heading {
 
 .thank-you {
     margin-bottom: 25px;
+
     .fa {
         font-size: 150px;
         line-height: 170px;
@@ -115,7 +116,7 @@ body.loading .container {
 
 @media (min-width: $screen-md-min) {
     .thank-you {
-        height: 170px;
+        min-height: 170px;
         width: 70%;
         margin: auto;
 
@@ -126,6 +127,10 @@ body.loading .container {
 
         h2 {
             padding-top: 35px;
+        }
+
+        p {
+            margin-left: 158px;
         }
     }
 }
