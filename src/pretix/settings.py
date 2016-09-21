@@ -132,6 +132,8 @@ if HAS_CELERY:
     BROKER_URL = config.get('celery', 'broker')
     CELERY_RESULT_BACKEND = config.get('celery', 'backend')
     CELERY_SEND_TASK_ERROR_EMAILS = bool(ADMINS)
+else:
+    CELERY_ALWAYS_EAGER = True
 
 SESSION_COOKIE_DOMAIN = config.get('pretix', 'cookie_domain', fallback=None)
 

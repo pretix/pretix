@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import List, Optional
 
-from django.conf import settings
+from celery.exceptions import MaxRetriesExceededError
 from django.db.models import Q
 from django.utils.translation import ugettext as _
 
@@ -10,6 +10,8 @@ from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import (
     CartPosition, Event, EventLock, Item, ItemVariation, Quota, Voucher,
 )
+from pretix.base.services.locking import LockTimeoutException
+from pretix.celery import app
 
 
 class CartError(LazyLocaleException):
@@ -205,7 +207,8 @@ def _add_items_to_cart(event: Event, items: List[dict], cart_id: str=None) -> No
                 raise CartError(err)
 
 
-def add_items_to_cart(event: int, items: List[dict], cart_id: str=None) -> None:
+@app.task(bind=True, max_retries=5, default_retry_delay=1)
+def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None) -> None:
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
@@ -216,8 +219,11 @@ def add_items_to_cart(event: int, items: List[dict], cart_id: str=None) -> None:
     """
     event = Event.objects.get(id=event)
     try:
-        _add_items_to_cart(event, items, cart_id)
-    except EventLock.LockTimeoutException:
+        try:
+            _add_items_to_cart(event, items, cart_id)
+        except LockTimeoutException:
+            self.retry()
+    except (MaxRetriesExceededError, LockTimeoutException):
         raise CartError(error_messages['busy'])
 
 
@@ -242,7 +248,8 @@ def _remove_items_from_cart(event: Event, items: List[dict], cart_id: str) -> No
                     cp.delete()
 
 
-def remove_items_from_cart(event: int, items: List[dict], cart_id: str=None) -> None:
+@app.task(bind=True, max_retries=5, default_retry_delay=1)
+def remove_items_from_cart(self, event: int, items: List[dict], cart_id: str=None) -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
@@ -251,35 +258,9 @@ def remove_items_from_cart(event: int, items: List[dict], cart_id: str=None) -> 
     """
     event = Event.objects.get(id=event)
     try:
-        _remove_items_from_cart(event, items, cart_id)
-    except EventLock.LockTimeoutException:
+        try:
+            _remove_items_from_cart(event, items, cart_id)
+        except LockTimeoutException:
+            self.retry()
+    except (MaxRetriesExceededError, LockTimeoutException):
         raise CartError(error_messages['busy'])
-
-
-if settings.HAS_CELERY:
-    from pretix.celery import app
-
-    @app.task(bind=True, max_retries=5, default_retry_delay=1)
-    def add_items_to_cart_task(self, event: int, items: List[dict], cart_id: str):
-        event = Event.objects.get(id=event)
-        try:
-            try:
-                _add_items_to_cart(event, items, cart_id)
-            except EventLock.LockTimeoutException:
-                self.retry(exc=CartError(error_messages['busy']))
-        except CartError as e:
-            return e
-
-    @app.task(bind=True, max_retries=5, default_retry_delay=1)
-    def remove_items_from_cart_task(self, event: int, items: List[dict], cart_id: str):
-        event = Event.objects.get(id=event)
-        try:
-            try:
-                _remove_items_from_cart(event, items, cart_id)
-            except EventLock.LockTimeoutException:
-                self.retry(exc=CartError(error_messages['busy']))
-        except CartError as e:
-            return e
-
-    add_items_to_cart.task = add_items_to_cart_task
-    remove_items_from_cart.task = remove_items_from_cart_task

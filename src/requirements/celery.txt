@@ -1,5 +1,0 @@
-# celery>=3.1,<3.2
-# until the following issue is fixed, we need our own celery version
-# https://github.com/celery/celery/pull/3199
-git+https://github.com/pretix/celery.git@pretix#egg=celery
-

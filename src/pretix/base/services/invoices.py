@@ -24,6 +24,7 @@ from reportlab.platypus import (
 from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
 from pretix.base.signals import register_payment_providers
+from pretix.celery import app
 
 
 @transaction.atomic
@@ -374,7 +375,8 @@ def _invoice_generate_german(invoice, f):
     return doc
 
 
-def invoice_pdf(invoice: int):
+@app.task
+def invoice_pdf_task(invoice: int):
     i = Invoice.objects.get(pk=invoice)
     with language(i.locale):
         with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
@@ -391,13 +393,8 @@ def invoice_qualified(order: Order):
     return True
 
 
-if settings.HAS_CELERY:
-    from pretix.celery import app
-
-    invoice_pdf_task = app.task(invoice_pdf)
-
-    def invoice_pdf(*args, **kwargs):
-        # We introduce a 2 second delay, because otherwise we run into conditions where
-        # the task worker tries to generate the PDF even before our database transaction
-        # was committed and therefore fails to find the invoice object.
-        invoice_pdf_task.apply_async(args=args, kwargs=kwargs, countdown=2)
+def invoice_pdf(*args, **kwargs):
+    # We introduce a 2 second delay, because otherwise we run into conditions where
+    # the task worker tries to generate the PDF even before our database transaction
+    # was committed and therefore fails to find the invoice object.
+    invoice_pdf_task.apply_async(args=args, kwargs=kwargs, countdown=2)

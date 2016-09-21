@@ -5,6 +5,9 @@ from django.utils.timezone import now
 
 from pretix.base.models import Event, EventLock, Organizer
 from pretix.base.services import locking
+from pretix.base.services.locking import (
+    LockReleaseException, LockTimeoutException,
+)
 
 
 @pytest.fixture
@@ -20,7 +23,7 @@ def event():
 @pytest.mark.django_db
 def test_locking_exclusive(event):
     with event.lock():
-        with pytest.raises(EventLock.LockTimeoutException):
+        with pytest.raises(LockTimeoutException):
             ev = Event.objects.get(id=event.id)
             with ev.lock():
                 pass
@@ -41,10 +44,10 @@ def test_locking_different_events(event):
 def test_lock_timeout_steal(event):
     locking.LOCK_TIMEOUT = 1
     locking.lock_event(event)
-    with pytest.raises(EventLock.LockTimeoutException):
+    with pytest.raises(LockTimeoutException):
         ev = Event.objects.get(id=event.id)
         locking.lock_event(ev)
     time.sleep(1.5)
     locking.lock_event(ev)
-    with pytest.raises(EventLock.LockReleaseException):
+    with pytest.raises(LockReleaseException):
         locking.release_event(event)

@@ -5,33 +5,27 @@ pretix provides the ability to run all longer-running tasks like generating tick
 in a background thread instead of the web server process. We use the well-established `Celery`_ project to
 implement this. However, as celery requires running a task queue like RabbitMQ and a result storage such as
 Redis to work efficiently, we don't like to *depend* on celery being available to make small-scale installations
-of pretix more straightforward. For this reason, the "background" in "background task" is always optional.
-
-The Django settings variable ``settings.HAS_CELERY`` provides information on whether celery is configured
-in the current installation.
+of pretix more straightforward. For this reason, the "background" in "background task" is always optional. If
+no celery broker is configured, celery will be configured to run tasks synchronously.
 
 Implementing a task
 -------------------
 
-A common pattern for implementing "optionally-asynchronous" tasks can be seen a lot in ``pretix.base.services``
+A common pattern for implementing asynchronous tasks can be seen a lot in ``pretix.base.services``
 and looks like this::
 
+    from pretix.celery import app
+
+    @app.task
     def my_task(argument1, argument2):
         # Important: All arguments and return values need to be serializable into JSON.
         # Do not use model instances, use their primary keys instead!
         pass  # do your work here
 
 
-    if settings.HAS_CELERY:
-        # Transform this into a background task
-        from pretix.celery import app  # Important: Do not import this unconditionally!
+    # Call the task like this:
+    # my_task.apply_async(args=(…,), kwargs={…})
 
-        my_task_async = app.task(export)
-
-        def my_task(*args, **kwargs):
-            my_task_async.apply_async(args=args, kwargs=kwargs)
-
-This explicit declaration method also allows you to place some custom retry logic etc. in the asynchronous version.
 
 Tasks in the request-response flow
 ----------------------------------
@@ -44,7 +38,7 @@ A usage example taken directly from the code is::
 
     class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
         """
-        A view that executes a task asynchronously. A POST request will kick of the
+        A view that executes a task asynchronously. A POST request will kick off the
         task into the background or run it in the foreground if celery is not installed.
         In the former case, subsequent GET calls can be used to determinine the current
         status of the task.

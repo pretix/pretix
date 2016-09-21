@@ -11,6 +11,7 @@ from pretix.base.i18n import language
 from pretix.base.models import Event, Order, Quota
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid
+from pretix.celery import app
 
 from .models import BankImportJob, BankTransaction
 
@@ -94,6 +95,7 @@ def _get_unknown_transactions(event: Event, job: BankImportJob, data: list):
     return transactions
 
 
+@app.task
 def process_banktransfers(event: int, job: int, data: list) -> None:
     with language("en"):  # We'll translate error messages at display time
         event = Event.objects.get(pk=event)
@@ -127,12 +129,3 @@ def process_banktransfers(event: int, job: int, data: list) -> None:
         else:
             job.state = BankImportJob.STATE_COMPLETED
             job.save()
-
-
-if settings.HAS_CELERY:
-    from pretix.celery import app
-
-    process_task = app.task(process_banktransfers)
-
-    def process_banktransfers(*args, **kwargs):
-        process_task.apply_async(args=args, kwargs=kwargs)

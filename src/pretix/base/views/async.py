@@ -1,10 +1,14 @@
 import logging
 
+import celery.exceptions
+from celery.result import AsyncResult
 from django.conf import settings
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext as _
+
+from pretix.celery import app
 
 logger = logging.getLogger('pretix.base.async')
 
@@ -15,15 +19,22 @@ class AsyncAction:
     error_url = None
 
     def do(self, *args):
-        if settings.HAS_CELERY:
-            from pretix.celery import app
+        if not isinstance(self.task, app.Task):
+            raise TypeError('Method has no task attached')
 
-            if hasattr(self.task, 'task') and isinstance(self.task.task, app.Task):
-                return self._do_celery(args)
-            else:
-                raise TypeError('Method has no task attached')
+        res = self.task.apply_async(args=args)
+
+        if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
+            data = self._return_ajax_result(res)
+            data['check_url'] = self.get_check_url(res.id, True)
+            return JsonResponse(data)
         else:
-            return self._do_sync(args)
+            if res.ready():
+                if res.successful():
+                    return self.success(res.info)
+                else:
+                    return self.error(res.info)
+            return redirect(self.get_check_url(res.id, False))
 
     def get_success_url(self, value):
         return self.success_url
@@ -39,14 +50,13 @@ class AsyncAction:
             return self.get_result(request)
         return self.http_method_not_allowed(request)
 
-    def _return_celery_result(self, res, timeout=.5):
-        import celery.exceptions
-
+    def _return_ajax_result(self, res, timeout=.5):
         if not res.ready():
             try:
                 res.get(timeout=timeout)
             except celery.exceptions.TimeoutError:
                 pass
+
         ready = res.ready()
         data = {
             'async_id': res.id,
@@ -57,7 +67,7 @@ class AsyncAction:
                 smes = self.get_success_message(res.info)
                 if smes:
                     messages.success(self.request, smes)
-                # TODO: Do not store message if the ajax client stats that it will not redirect
+                # TODO: Do not store message if the ajax client states that it will not redirect
                 # but handle the mssage itself
                 data.update({
                     'redirect': self.get_success_url(res.info),
@@ -65,7 +75,7 @@ class AsyncAction:
                 })
             else:
                 messages.error(self.request, self.get_error_message(res.info))
-                # TODO: Do not store message if the ajax client stats that it will not redirect
+                # TODO: Do not store message if the ajax client states that it will not redirect
                 # but handle the mssage itself
                 data.update({
                     'redirect': self.get_error_url(),
@@ -74,11 +84,9 @@ class AsyncAction:
         return data
 
     def get_result(self, request):
-        from celery.result import AsyncResult
-
         res = AsyncResult(request.GET.get('async_id'))
         if 'ajax' in self.request.GET:
-            return JsonResponse(self._return_celery_result(res, timeout=0.25))
+            return JsonResponse(self._return_ajax_result(res, timeout=0.25))
         else:
             if res.ready():
                 if res.successful():
@@ -86,23 +94,6 @@ class AsyncAction:
                 else:
                     return self.error(res.info)
             return render(request, 'pretixpresale/waiting.html')
-
-    def _do_celery(self, args):
-        res = self.task.task.apply_async(args=args)
-        if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
-            data = self._return_celery_result(res)
-            data['check_url'] = self.get_check_url(res.id, True)
-            return JsonResponse(data)
-        else:
-            return redirect(self.get_check_url(res.id, False))
-
-    def _do_sync(self, args):
-        try:
-            rs = getattr(self.__class__, 'task')(*args)
-            return self.success(rs)
-        except Exception as e:
-            logger.exception('Error while executing task synchronously')
-            return self.error(e)
 
     def success(self, value):
         smes = self.get_success_message(value)

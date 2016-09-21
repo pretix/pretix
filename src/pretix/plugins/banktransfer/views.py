@@ -311,7 +311,11 @@ class ImportView(EventPermissionRequiredMixin, ListView):
 
     def start_processing(self, parsed):
         job = BankImportJob.objects.create(event=self.request.event)
-        process_banktransfers(event=self.request.event.pk, job=job.pk, data=parsed)
+        process_banktransfers.apply_async(kwargs={
+            'event': self.request.event.pk,
+            'job': job.pk,
+            'data': parsed
+        })
         return redirect(reverse('plugins:banktransfer:import.job', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,

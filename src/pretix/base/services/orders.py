@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import List, Optional
 
-from django.conf import settings
+from celery.exceptions import MaxRetriesExceededError
 from django.db import transaction
 from django.dispatch import receiver
 from django.utils.formats import date_format
@@ -23,10 +23,12 @@ from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
 )
+from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException, mail
 from pretix.base.signals import (
     order_paid, order_placed, periodic_task, register_payment_providers,
 )
+from pretix.celery import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 error_messages = {
@@ -137,7 +139,7 @@ def mark_order_refunded(order, user=None):
 
 
 @transaction.atomic
-def cancel_order(order, user=None):
+def _cancel_order(order, user=None):
     """
     Mark this order as canceled
     :param order: The order to change
@@ -346,16 +348,6 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
         )
 
     return order.id
-
-
-def perform_order(event: str, payment_provider: str, positions: List[str],
-                  email: str=None, locale: str=None, address: int=None):
-    try:
-        return _perform_order(event, payment_provider, positions, email, locale, address)
-    except EventLock.LockTimeoutException:
-        # Is raised when there are too many threads asking for event locks and we were
-        # unable to get one
-        raise OrderError(error_messages['busy'])
 
 
 @receiver(signal=periodic_task)
@@ -571,29 +563,24 @@ class OrderChangeManager:
             raise OrderError(error_messages['internal'])
 
 
-if settings.HAS_CELERY:
-    from pretix.celery import app
-
-    @app.task(bind=True, max_retries=5, default_retry_delay=1)
-    def perform_order_task(self, event: str, payment_provider: str, positions: List[str],
-                           email: str=None, locale: str=None, address: int=None):
+@app.task(bind=True, max_retries=5, default_retry_delay=1)
+def perform_order(self, event: str, payment_provider: str, positions: List[str],
+                  email: str=None, locale: str=None, address: int=None):
+    try:
         try:
-            try:
-                return _perform_order(event, payment_provider, positions, email, locale, address)
-            except EventLock.LockTimeoutException:
-                self.retry(exc=OrderError(error_messages['busy']))
-        except OrderError as e:
-            return e
+            return _perform_order(event, payment_provider, positions, email, locale, address)
+        except LockTimeoutException:
+            self.retry()
+    except (MaxRetriesExceededError, LockTimeoutException):
+        return OrderError(error_messages['busy'])
 
-    @app.task(bind=True, max_retries=5, default_retry_delay=1)
-    def cancel_order_task(self, order: int, user: int=None):
+
+@app.task(bind=True, max_retries=5, default_retry_delay=1)
+def cancel_order(self, order: int, user: int=None):
+    try:
         try:
-            try:
-                return cancel_order(order, user)
-            except EventLock.LockTimeoutException:
-                self.retry(exc=OrderError(error_messages['busy']))
-        except OrderError as e:
-            return e
-
-    perform_order.task = perform_order_task
-    cancel_order.task = cancel_order_task
+            return _cancel_order(order, user)
+        except LockTimeoutException:
+            self.retry(exc=OrderError(error_messages['busy']))
+    except (MaxRetriesExceededError, LockTimeoutException):
+        return OrderError(error_messages['busy'])
