@@ -1370,7 +1370,7 @@ msgstr "Deine Bestellung: %(code)s"
 
 #: pretix/base/services/orders.py:394
 #, python-format
-msgid "Your is about to expire: %(code)s"
+msgid "Your order is about to expire: %(code)s"
 msgstr "Deine Bestellung läuft bald ab: %(code)s"
 
 #: pretix/base/services/orders.py:414
