@@ -383,7 +383,7 @@ def send_expiry_warnings(sender, **kwargs):
             o.save()
             try:
                 mail(
-                    o.email, _('Your is about to expire: %(code)s') % {'code': o.code},
+                    o.email, _('Your order is about to expire: %(code)s') % {'code': o.code},
                     settings.mail_text_order_expire_warning,
                     {
                         'event': o.event.name,
