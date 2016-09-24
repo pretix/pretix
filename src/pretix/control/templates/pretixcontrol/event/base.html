@@ -87,7 +87,7 @@
             </a>
         </li>
     {% endif %}
-    {% if request.eventperm.can_change_vouchers %}
+    {% if request.eventperm.can_view_vouchers %}
         <li>
             <a href="{% url 'control:event.vouchers' organizer=request.event.organizer.slug event=request.event.slug %}"
                     {% if url_name == "event.vouchers" %}class="active"{% endif %}>

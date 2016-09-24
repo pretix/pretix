@@ -28,7 +28,7 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
     context_object_name = 'vouchers'
     paginate_by = 30
     template_name = 'pretixcontrol/vouchers/index.html'
-    permission = 'can_change_vouchers'
+    permission = 'can_view_vouchers'
 
     def get_queryset(self):
         qs = self.request.event.vouchers.all().select_related('item', 'variation')
@@ -90,7 +90,7 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
 
 class VoucherTags(EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/vouchers/tags.html'
-    permission = 'can_change_vouchers'
+    permission = 'can_view_vouchers'
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

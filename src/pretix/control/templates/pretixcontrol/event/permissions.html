@@ -18,6 +18,7 @@
                             <th>{% trans "View orders" %}</th>
                             <th>{% trans "Change orders" %}</th>
                             <th>{% trans "Change permissions" %}</th>
+                            <th>{% trans "View vouchers" %}</th>
                             <th>{% trans "Change vouchers" %}</th>
                             <th>{% trans "Delete" %}</th>
                         </tr>
@@ -31,6 +32,7 @@
                                 <td>{{ form.can_view_orders }}</td>
                                 <td>{{ form.can_change_orders }}</td>
                                 <td>{{ form.can_change_permissions }}</td>
+                                <td>{{ form.can_view_vouchers }}</td>
                                 <td>{{ form.can_change_vouchers }}</td>
                                 <td>{{ form.DELETE }}</td>
                             </tr>
@@ -49,6 +51,7 @@
                             <td>{{ add_form.can_change_orders }}</td>
                             <td>{{ add_form.can_change_permissions }}</td>
                             <td>{{ add_form.can_change_vouchers }}</td>
+                            <td>{{ add_form.can_view_vouchers }}</td>
                         </tr>
                     </tbody>
                 </table>

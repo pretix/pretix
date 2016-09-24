@@ -445,7 +445,7 @@ class EventPermissionForm(I18nModelForm):
         model = EventPermission
         fields = (
             'can_change_settings', 'can_change_items', 'can_change_permissions', 'can_view_orders',
-            'can_change_orders', 'can_change_vouchers'
+            'can_change_orders', 'can_view_vouchers', 'can_change_vouchers'
         )
 
 
