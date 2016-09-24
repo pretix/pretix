@@ -17,7 +17,9 @@ var pretixstripe = {
                             $("#stripe_token").val(token.id);
                             $("#stripe_card_brand").val(token.card.brand);
                             $("#stripe_card_last4").val(token.card.last4);
-                            $form.get(0).submit();
+                            $("#stripe_card_brand_display").text(token.card.brand);
+                            $("#stripe_card_last4_display").text(token.card.last4);
+                            $($form.get(0)).submit();
                         },
                         shippingAddress: false,
                         allowRememberMe: false,
@@ -26,6 +28,21 @@ var pretixstripe = {
                 }
             }
         );
+    },
+
+    start: function () {
+        var amount = Math.round(
+            parseFloat(
+                $("#stripe-checkout").parents("[data-total]").attr("data-total").replace(",", ".")
+            ) * 100
+        );
+        pretixstripe.handler.open({
+            name: $("#organizer_name").val(),
+            description: $("#event_name").val(),
+            currency: $("#stripe_currency").val(),
+            email: $("#stripe_email").val(),
+            amount: amount
+        });
     },
 
     handler: null
@@ -49,21 +66,18 @@ $(function () {
         function (e) {
             if (($("input[name=payment][value=stripe]").prop('checked') || $("input[name=payment]").length === 0)
                 && $("#stripe_token").val() == "") {
-                var amount = Math.round(
-                    parseFloat(
-                        $("#stripe-checkout").parents("[data-total]").attr("data-total").replace(",", ".")
-                    ) * 100
-                );
-                pretixstripe.handler.open({
-                    name: $("#organizer_name").val(),
-                    description: $("#event_name").val(),
-                    currency: $("#stripe_currency").val(),
-                    email: $("#stripe_email").val(),
-                    amount: amount,
-                });
+                pretixstripe.start();
                 e.preventDefault();
                 return false;
             }
+        }
+    );
+
+    $("#stripe_other_card").click(
+        function (e) {
+            pretixstripe.start();
+            e.preventDefault();
+            return false;
         }
     );
 
