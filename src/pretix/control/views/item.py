@@ -572,7 +572,7 @@ class QuotaEditorMixin:
 class QuotaCreate(EventPermissionRequiredMixin, QuotaEditorMixin, CreateView):
     model = Quota
     form_class = QuotaForm
-    template_name = 'pretixcontrol/items/quota.html'
+    template_name = 'pretixcontrol/items/quota_edit.html'
     permission = 'can_change_items'
     context_object_name = 'quota'
 
@@ -591,16 +591,14 @@ class QuotaCreate(EventPermissionRequiredMixin, QuotaEditorMixin, CreateView):
         return ret
 
 
-class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, ChartContainingView, UpdateView):
+class QuotaView(ChartContainingView, DetailView):
     model = Quota
-    form_class = QuotaForm
     template_name = 'pretixcontrol/items/quota.html'
-    permission = 'can_change_items'
     context_object_name = 'quota'
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data()
-        ctx['quota_chart_data'] = json.dumps([
+        data = [
             {
                 'label': ugettext('Paid orders'),
                 'value': self.object.count_paid_orders()
@@ -616,12 +614,34 @@ class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, ChartContainin
             {
                 'label': ugettext('Current user\'s carts'),
                 'value': self.object.count_in_cart()
-            },
-            {
+            }
+        ]
+        if self.object.size is not None:
+            data.append({
                 'label': ugettext('Current availability'),
                 'value': self.object.availability()[1]
-            }
-        ])
+            })
+        ctx['quota_chart_data'] = json.dumps(data)
+        return ctx
+
+    def get_object(self, queryset=None) -> Quota:
+        try:
+            return self.request.event.quotas.get(
+                id=self.kwargs['quota']
+            )
+        except Quota.DoesNotExist:
+            raise Http404(_("The requested quota does not exist."))
+
+
+class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
+    model = Quota
+    form_class = QuotaForm
+    template_name = 'pretixcontrol/items/quota_edit.html'
+    permission = 'can_change_items'
+    context_object_name = 'quota'
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data()
         return ctx
 
     def get_object(self, queryset=None) -> Quota:

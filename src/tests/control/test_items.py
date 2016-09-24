@@ -231,11 +231,12 @@ class QuotaTest(ItemFormTest):
         item2 = Item.objects.create(event=self.event1, name="Business", default_price=0)
         ItemVariation.objects.create(item=item2, value="Silver")
         ItemVariation.objects.create(item=item2, value="Gold")
-        doc = self.get_doc('/control/event/%s/%s/quotas/%s/' % (self.orga1.slug, self.event1.slug, c.id))
+        doc = self.get_doc('/control/event/%s/%s/quotas/%s/change' % (self.orga1.slug, self.event1.slug, c.id))
         doc.select('[name=item_%s]' % item1.id)[0]['checked'] = 'checked'
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         form_data['size'] = '350'
-        doc = self.post_doc('/control/event/%s/%s/quotas/%s/' % (self.orga1.slug, self.event1.slug, c.id), form_data)
+        doc = self.post_doc('/control/event/%s/%s/quotas/%s/change' % (self.orga1.slug, self.event1.slug, c.id),
+                            form_data)
         self.assertIn("350", doc.select("#page-wrapper table")[0].text)
         self.assertNotIn("500", doc.select("#page-wrapper table")[0].text)
         assert Quota.objects.get(id=c.id).size == 350
