@@ -53,6 +53,10 @@ DEFAULTS = {
         'default': None,
         'type': datetime,
     },
+    'payment_term_weekdays': {
+        'default': 'True',
+        'type': bool
+    },
     'payment_term_expire_automatically': {
         'default': 'True',
         'type': bool

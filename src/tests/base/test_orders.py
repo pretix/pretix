@@ -1,17 +1,13 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from decimal import Decimal
 
 import pytest
-from django.db import transaction
 from django.test import TestCase
-from django.utils.timezone import now
+from django.utils.timezone import make_aware, now
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models import (
-    Event, Item, Order, OrderPosition, Organizer, Quota,
-)
+from pretix.base.models import Event, Item, Order, OrderPosition, Organizer
 from pretix.base.payment import FreeOrderProvider
-from pretix.base.services import invoices
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, expire_orders,
 )
@@ -31,6 +27,7 @@ def event():
 def test_expiry_days(event):
     today = now()
     event.settings.set('payment_term_days', 5)
+    event.settings.set('payment_term_weekdays', False)
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today, payment_provider=FreeOrderProvider(event),
                           locale='de')
@@ -38,9 +35,29 @@ def test_expiry_days(event):
 
 
 @pytest.mark.django_db
+def test_expiry_weekdays(event):
+    today = make_aware(datetime(2016, 9, 20, 15, 0, 0, 0))
+    event.settings.set('payment_term_days', 5)
+    event.settings.set('payment_term_weekdays', True)
+    order = _create_order(event, email='dummy@example.org', positions=[],
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
+                          locale='de')
+    assert (order.expires - today).days == 6
+    assert order.expires.weekday() == 0
+
+    today = make_aware(datetime(2016, 9, 19, 15, 0, 0, 0))
+    order = _create_order(event, email='dummy@example.org', positions=[],
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
+                          locale='de')
+    assert (order.expires - today).days == 7
+    assert order.expires.weekday() == 0
+
+
+@pytest.mark.django_db
 def test_expiry_last(event):
     today = now()
     event.settings.set('payment_term_days', 5)
+    event.settings.set('payment_term_weekdays', False)
     event.settings.set('payment_term_last', now() + timedelta(days=3))
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today, payment_provider=FreeOrderProvider(event),

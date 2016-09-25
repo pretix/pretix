@@ -266,7 +266,15 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
     total += payment_fee
-    expires = [now_dt + timedelta(days=event.settings.get('payment_term_days', as_type=int))]
+
+    exp_by_date = now_dt + timedelta(days=event.settings.get('payment_term_days', as_type=int))
+    if event.settings.get('payment_term_weekdays'):
+        if exp_by_date.weekday() == 5:
+            exp_by_date += timedelta(days=2)
+        elif exp_by_date.weekday() == 6:
+            exp_by_date += timedelta(days=1)
+
+    expires = [exp_by_date]
     if event.settings.get('payment_term_last'):
         expires.append(event.settings.get('payment_term_last', as_type=datetime))
     order = Order.objects.create(
