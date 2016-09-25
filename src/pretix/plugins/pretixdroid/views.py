@@ -3,6 +3,7 @@ import logging
 import string
 
 from django.db import transaction
+from django.db.models import Q
 from django.http import (
     HttpResponseForbidden, HttpResponseNotFound, JsonResponse,
 )
@@ -99,5 +100,37 @@ class ApiRedeemView(ApiView):
         except OrderPosition.DoesNotExist:
             response['status'] = 'error'
             response['reason'] = 'unknown_ticket'
+
+        return JsonResponse(response)
+
+
+class ApiSearchView(ApiView):
+    def get(self, request, **kwargs):
+        query = request.GET.get('query', '!INVALID!')
+        response = {
+            'version': API_VERSION
+        }
+
+        if len(query) >= 4:
+            ops = OrderPosition.objects.select_related('item', 'variation', 'order').filter(
+                Q(order__event=self.event)
+                & Q(
+                    Q(secret__istartswith=query) | Q(attendee_name__icontains=query) | Q(order__code__istartswith=query)
+                )
+            ).prefetch_related('pretixdroid_checkins')[:25]
+
+            response['results'] = [
+                {
+                    'secret': op.secret,
+                    'order': op.order.code,
+                    'item': str(op.item),
+                    'variation': str(op.variation) if op.variation else None,
+                    'attendee_name': op.attendee_name,
+                    'redeemed': bool(op.pretixdroid_checkins.all()),
+                    'paid': op.order.status == Order.STATUS_PAID,
+                } for op in ops
+            ]
+        else:
+            response['results'] = []
 
         return JsonResponse(response)

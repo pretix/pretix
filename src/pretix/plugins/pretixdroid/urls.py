@@ -7,4 +7,6 @@ urlpatterns = [
         name='config'),
     url(r'^pretixdroid/api/(?P<organizer>[^/]+)/(?P<event>[^/]+)/redeem/', views.ApiRedeemView.as_view(),
         name='api.redeem'),
+    url(r'^pretixdroid/api/(?P<organizer>[^/]+)/(?P<event>[^/]+)/search/', views.ApiSearchView.as_view(),
+        name='api.search'),
 ]

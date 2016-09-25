@@ -34,7 +34,7 @@ def env():
     )
     op2 = OrderPosition.objects.create(
         order=o1, item=ticket,
-        price=23, attendee_name="Peter", secret='5678'
+        price=23, attendee_name="Peter", secret='5678910'
     )
     return event, user, o1, op1, op2
 
@@ -104,3 +104,14 @@ def test_unknown_event(client, env):
     resp = client.post('/pretixdroid/api/a/b/redeem/?key=c',
                        data={'secret': '4321'})
     assert resp.status_code == 404
+
+
+@pytest.mark.django_db
+def test_search(client, env):
+    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    resp = client.get('/pretixdroid/api/%s/%s/search/?key=%s&query=%s' % (
+        env[0].organizer.slug, env[0].slug, 'abcdefg', '567891'))
+    print(resp.content)
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert len(jdata['results']) == 1
+    assert jdata['results'][0]['secret'] == '5678910'
