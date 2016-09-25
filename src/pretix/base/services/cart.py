@@ -140,7 +140,7 @@ def _add_new_items(event: Event, items: List[dict],
         if item.hide_without_voucher and (voucher is None or voucher.item is None or voucher.item.pk != item.pk):
             return error_messages['voucher_required']
 
-        if len(quotas) == 0 or not item.is_available():
+        if len(quotas) == 0 or not item.is_available() or (variation and not variation.active):
             err = err or error_messages['unavailable']
             continue
 

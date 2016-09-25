@@ -185,7 +185,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
     voucherids = set()
     for i, cp in enumerate(positions):
-        if not cp.item.active:
+        if not cp.item.active or (cp.variation and not cp.variation.active):
             err = err or error_messages['unavailable']
             cp.delete()
             continue
