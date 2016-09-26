@@ -8,6 +8,7 @@ from .utils import _detect_event
 class EventMiddleware:
     def process_request(self, request):
         url = resolve(request.path_info)
+        request._namespace = url.namespace
         if url.namespace != 'presale':
             return
 
@@ -22,8 +23,7 @@ class EventMiddleware:
             request.session['_'] = '_'
 
     def process_response(self, request, response):
-        url = resolve(request.path_info)
-        if url.namespace == 'presale' and hasattr(request, 'event'):
+        if hasattr(request, '_namespace') and request._namespace == 'presale' and hasattr(request, 'event'):
             for receiver, r in process_response.send(request.event, request=request, response=response):
                 response = r
         return response
