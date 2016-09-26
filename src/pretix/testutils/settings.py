@@ -2,9 +2,11 @@ import atexit
 import os
 import tempfile
 
+tmpdir = tempfile.TemporaryDirectory()
+os.environ.setdefault('DATA_DIR', tmpdir.name)
+
 from pretix.settings import *  # NOQA
 
-tmpdir = tempfile.TemporaryDirectory()
 DATA_DIR = tmpdir.name
 LOG_DIR = os.path.join(DATA_DIR, 'logs')
 MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
