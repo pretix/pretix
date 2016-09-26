@@ -1,6 +1,5 @@
 import pytest
 from django.conf import settings
-from django.http import Http404
 from django.test.utils import override_settings
 from django.utils.timezone import now
 
@@ -65,8 +64,8 @@ def test_event_on_custom_domain_only_with_wrong_organizer(env, client):
         date_from=now(), live=True
     )
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
-    with pytest.raises(Http404):
-        client.get('/dummy/1234/', HTTP_HOST='foobar')
+    r = client.get('/dummy/1234/', HTTP_HOST='foobar')
+    assert r.status_code == 404
 
 
 @pytest.mark.django_db
