@@ -188,6 +188,14 @@ class OrderChangeManagerTests(TestCase):
     def test_empty(self):
         self.ocm.commit()
 
+    def test_quota_unlimited(self):
+        q = self.event.quotas.create(name='Test', size=None)
+        q.items.add(self.shirt)
+        self.ocm.change_item(self.op1, self.shirt, None)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        assert self.op1.item == self.shirt
+
     def test_quota_full(self):
         q = self.event.quotas.create(name='Test', size=0)
         q.items.add(self.shirt)

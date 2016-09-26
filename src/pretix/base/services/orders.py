@@ -457,7 +457,7 @@ class OrderChangeManager:
             if diff <= 0:
                 continue
             avail = quota.availability()
-            if avail[0] != Quota.AVAILABILITY_OK or avail[1] < diff:
+            if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < diff):
                 raise OrderError(self.error_messages['quota'].format(name=quota.name))
 
     def _check_free_to_paid(self):
