@@ -2,6 +2,7 @@ from datetime import date, datetime, time
 from decimal import Decimal
 
 from django.core.files import File
+from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
@@ -161,6 +162,7 @@ class SettingsTestCase(TestCase):
 
     def test_serialize_file(self):
         val = SimpleUploadedFile("sample_invalid_image.jpg", b"file_content", content_type="image/jpeg")
+        default_storage.save(val.name, val)
         self.event.settings.set('test', val)
         self.event.settings._flush()
         self.assertIsInstance(self.event.settings.get('test', as_type=File), File)
@@ -168,6 +170,7 @@ class SettingsTestCase(TestCase):
 
     def test_detect_file_value(self):
         val = SimpleUploadedFile("sample_invalid_image.jpg", b"file_content", content_type="image/jpeg")
+        default_storage.save(val.name, val)
         self.event.settings.set('test', val)
         self.event.settings._flush()
         self.assertIsInstance(self.event.settings.get('test'), File)
