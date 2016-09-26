@@ -1,7 +1,9 @@
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseNotFound
 from django.middleware.csrf import REASON_NO_CSRF_COOKIE, REASON_NO_REFERER
 from django.template.loader import get_template
+from django.utils.functional import Promise
 from django.utils.translation import ugettext as _
+from django.views.decorators.csrf import requires_csrf_token
 
 
 def csrf_failure(request, reason=""):
@@ -30,3 +32,24 @@ def csrf_failure(request, reason=""):
             "requests."),
     }
     return HttpResponseForbidden(t.render(c), content_type='text/html')
+
+
+@requires_csrf_token
+def page_not_found(request, exception):
+    exception_repr = exception.__class__.__name__
+    # Try to get an "interesting" exception message, if any (and not the ugly
+    # Resolver404 dictionary)
+    try:
+        message = exception.args[0]
+    except (AttributeError, IndexError):
+        pass
+    else:
+        if isinstance(message, str) or isinstance(message, Promise):
+            exception_repr = str(message)
+    context = {
+        'request_path': request.path,
+        'exception': exception_repr,
+    }
+    template = get_template('404.html')
+    body = template.render(context, request)
+    return HttpResponseNotFound(body)

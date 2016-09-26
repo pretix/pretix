@@ -47,3 +47,5 @@ plugin_patterns = [
 
 # The presale namespace comes last, because it contains a wildcard catch
 urlpatterns = common_patterns + plugin_patterns + presale_patterns_main
+
+handler404 = 'pretix.base.views.errors.page_not_found'
