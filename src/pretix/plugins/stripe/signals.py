@@ -2,7 +2,6 @@ import json
 
 from django.core.urlresolvers import resolve
 from django.dispatch import receiver
-from django.template import Context
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
@@ -25,7 +24,7 @@ def html_head_presale(sender, request=None, **kwargs):
     url = resolve(request.path_info)
     if provider.is_enabled and ("checkout" in url.url_name or "order.pay" in url.url_name):
         template = get_template('pretixplugins/stripe/presale_head.html')
-        ctx = Context({'event': sender, 'settings': provider.settings})
+        ctx = {'event': sender, 'settings': provider.settings}
         return template.render(ctx)
     else:
         return ""

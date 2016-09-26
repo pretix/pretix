@@ -1,6 +1,5 @@
 from django.core.urlresolvers import resolve, reverse
 from django.dispatch import receiver
-from django.template import Context
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
@@ -30,7 +29,6 @@ def html_head_presale(sender, request=None, **kwargs):
     url = resolve(request.path_info)
     if url.namespace == 'plugins:pretixdroid':
         template = get_template('pretixplugins/pretixdroid/control_head.html')
-        ctx = Context({})
-        return template.render(ctx)
+        return template.render({})
     else:
         return ""

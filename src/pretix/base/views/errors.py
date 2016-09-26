@@ -1,13 +1,12 @@
 from django.http import HttpResponseForbidden
 from django.middleware.csrf import REASON_NO_CSRF_COOKIE, REASON_NO_REFERER
-from django.template import Context
 from django.template.loader import get_template
 from django.utils.translation import ugettext as _
 
 
 def csrf_failure(request, reason=""):
     t = get_template('csrffail.html')
-    c = Context({
+    c = {
         'reason': reason,
         'no_referer': reason == REASON_NO_REFERER,
         'no_referer1': _(
@@ -29,5 +28,5 @@ def csrf_failure(request, reason=""):
             "If you have configured your browser to disable cookies, please "
             "re-enable them, at least for this site, or for 'same-origin' "
             "requests."),
-    })
+    }
     return HttpResponseForbidden(t.render(c), content_type='text/html')
