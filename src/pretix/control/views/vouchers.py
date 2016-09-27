@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.db.models import Count, Q, Sum
+from django.db.models import Case, Count, IntegerField, Q, Sum, When
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
     JsonResponse,
@@ -97,7 +97,14 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
 
         tags = self.request.event.vouchers.order_by('tag').filter(tag__isnull=False).values('tag').annotate(
             total=Count('id'),
-            redeemed=Sum('redeemed')
+            # This is a fix for this MySQL issue: https://code.djangoproject.com/ticket/24662
+            redeemed=Sum(
+                Case(
+                    When(redeemed=True, then=1),
+                    When(redeemed=False, then=0),
+                    output_field=IntegerField()
+                )
+            )
         )
         for t in tags:
             t['percentage'] = int((t['redeemed'] / t['total']) * 100)
