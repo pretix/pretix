@@ -6,12 +6,12 @@ class SoupTest(TestCase):
 
     def get_doc(self, *args, **kwargs):
         response = self.client.get(*args, **kwargs)
-        return BeautifulSoup(response.rendered_content)
+        return BeautifulSoup(response.rendered_content, "lxml")
 
     def post_doc(self, *args, **kwargs):
         kwargs['follow'] = True
         response = self.client.post(*args, **kwargs)
-        return BeautifulSoup(response.rendered_content)
+        return BeautifulSoup(response.rendered_content, "lxml")
 
 
 def extract_form_fields(soup):
