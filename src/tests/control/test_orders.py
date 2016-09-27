@@ -3,6 +3,7 @@ from decimal import Decimal
 
 import pytest
 from django.core import mail
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils.timezone import now
 from tests.base import SoupTest
 
@@ -311,13 +312,16 @@ def test_order_download_success(client, env, mocker):
     tickets.generate.apply_async.assert_any_call(args=(o.id, 'testdummy'))
     assert 'download' in response['Location']
     dl = response['Location']
-    assert CachedTicket.objects.filter(order=o, provider='testdummy').exists()
 
     # test caching
-    tickets.generate.apply_async.reset_mock()
+    mocker.resetall()
+    ct = CachedTicket.objects.get(order=o, provider='testdummy')
+    ct.cachedfile.file.save('foo.jpg', SimpleUploadedFile("sample_invalid_image.jpg", b"file_content",
+                                                          content_type="image/jpeg"))
+    ct.cachedfile.save()
     response = client.get('/control/event/dummy/dummy/orders/FOO/download/testdummy')
     assert response.status_code == 302
-    assert tickets.generate.apply_async.assert_not_called()
+    tickets.generate.apply_async.assert_not_called()
     assert dl == response['Location']
 
 
