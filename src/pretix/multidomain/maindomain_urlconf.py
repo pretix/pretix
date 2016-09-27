@@ -11,11 +11,11 @@ from pretix.presale.urls import (
 from pretix.urls import common_patterns
 
 presale_patterns_main = [
-    url(r'', include(locale_patterns + [
+    url(r'', include((locale_patterns + [
         url(r'^(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include(event_patterns)),
         url(r'^(?P<organizer>[^/]+)/', include(organizer_patterns)),
         url(r'^$', TemplateView.as_view(template_name='pretixpresale/index.html'))
-    ], namespace='presale'))
+    ], 'presale')))
 ]
 
 raw_plugin_patterns = []
@@ -30,7 +30,7 @@ for app in apps.get_app_configs():
                 single_plugin_patterns.append(url(r'^(?P<organizer>[^/]+)/(?P<event>[^/]+)/',
                                                   include(urlmod.event_patterns)))
             raw_plugin_patterns.append(
-                url(r'', include(single_plugin_patterns, namespace=app.label))
+                url(r'', include((single_plugin_patterns, app.label)))
             )
         elif importlib.util.find_spec(app.name + '.maindomain_urls'):  # noqa
             warnings.warn('Please put your config in an \'urls\' module using the urlpatterns and event_patterns '
@@ -38,11 +38,11 @@ for app in apps.get_app_configs():
                           DeprecationWarning)
             urlmod = importlib.import_module(app.name + '.maindomain_urls')
             raw_plugin_patterns.append(
-                url(r'', include(urlmod, namespace=app.label))
+                url(r'', include((urlmod, app.label)))
             )
 
 plugin_patterns = [
-    url(r'', include(raw_plugin_patterns, namespace='plugins'))
+    url(r'', include((raw_plugin_patterns, 'plugins')))
 ]
 
 # The presale namespace comes last, because it contains a wildcard catch

@@ -16,7 +16,7 @@ base_patterns = [
 ]
 
 control_patterns = [
-    url(r'^control/', include(pretix.control.urls, namespace='control')),
+    url(r'^control/', include((pretix.control.urls, 'control'))),
 ]
 
 debug_patterns = []
