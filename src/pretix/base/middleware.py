@@ -43,7 +43,7 @@ class LocaleMiddleware(MiddlewareMixin):
         request.LANGUAGE_CODE = translation.get_language()
 
         tzname = None
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             tzname = request.user.timezone
         if hasattr(request, 'event'):
             tzname = request.event.settings.timezone
@@ -65,7 +65,7 @@ class LocaleMiddleware(MiddlewareMixin):
 
 
 def get_language_from_user_settings(request: HttpRequest) -> str:
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         lang_code = request.user.locale
         if lang_code in _supported and lang_code is not None and check_for_language(lang_code):
             return lang_code

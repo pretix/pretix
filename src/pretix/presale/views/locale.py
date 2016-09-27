@@ -15,7 +15,7 @@ class LocaleSet(View):
 
         locale = request.GET.get('locale')
         if locale in [lc for lc, ll in settings.LANGUAGES]:
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 request.user.locale = locale
                 request.user.save()
 

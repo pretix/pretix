@@ -37,7 +37,7 @@ class PermissionMiddleware(MiddlewareMixin):
             return redirect(urljoin(settings.SITE_URL, request.get_full_path()))
         if url_name in self.EXCEPTIONS:
             return
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             # Taken from django/contrib/auth/decorators.py
             path = request.build_absolute_uri()
             # urlparse chokes on lazy objects in Python 3, force to str

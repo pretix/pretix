@@ -60,7 +60,7 @@ def _detect_event(request):
             LocaleMiddleware().process_request(request)
 
             if not request.event.live:
-                if not request.user.is_authenticated() or not EventPermission.objects.filter(
+                if not request.user.is_authenticated or not EventPermission.objects.filter(
                         event=request.event, user=request.user).exists():
                     raise PermissionDenied(_('The selected ticket shop is currently not available.'))
 
