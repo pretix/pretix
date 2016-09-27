@@ -5,13 +5,14 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.urlresolvers import get_script_prefix, resolve
 from django.http import Http404
 from django.shortcuts import redirect, resolve_url
+from django.utils.deprecation import MiddlewareMixin
 from django.utils.encoding import force_str
 from django.utils.translation import ugettext as _
 
 from pretix.base.models import Event, EventPermission, Organizer
 
 
-class PermissionMiddleware:
+class PermissionMiddleware(MiddlewareMixin):
     """
     This middleware enforces all requests to the control app to require login.
     Additionally, it enforces all requests to "control:event." URLs

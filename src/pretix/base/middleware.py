@@ -6,6 +6,7 @@ from django.core.urlresolvers import get_script_prefix
 from django.http import HttpRequest, HttpResponse
 from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
+from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.utils.translation.trans_real import (
     check_for_language, get_supported_language_variant, language_code_re,
@@ -15,7 +16,7 @@ from django.utils.translation.trans_real import (
 _supported = None
 
 
-class LocaleMiddleware:
+class LocaleMiddleware(MiddlewareMixin):
 
     """
     This middleware sets the correct locale and timezone
@@ -134,7 +135,7 @@ def get_language_from_request(request: HttpRequest) -> str:
     )
 
 
-class SecurityMiddleware:
+class SecurityMiddleware(MiddlewareMixin):
 
     def _parse_csp(self, header):
         h = {}
