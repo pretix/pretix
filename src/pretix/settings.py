@@ -232,6 +232,10 @@ LOCALE_PATHS = (
     os.path.join(os.path.dirname(__file__), 'locale'),
 )
 
+FORMAT_MODULE_PATH = [
+    'pretix.helpers.formats',
+]
+
 LANGUAGES = [
     ('en', _('English')),
     ('de', _('German')),
