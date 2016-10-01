@@ -20,9 +20,12 @@
     {% endif %}
     {% if request.eventperm.can_change_items %}
         <li>
-            <a href="#">
+            <a href="{% url 'control:event.items' organizer=request.event.organizer.slug event=request.event.slug %}"
+                class="has-children">
                 <i class="fa fa-ticket fa-fw"></i>
                 {% trans "Products" %}
+            </a>
+            <a href="#" class="arrow">
                 <span class="fa arrow"></span>
             </a>
             <ul class="nav nav-second-level">
@@ -54,9 +57,12 @@
     {% endif %}
     {% if request.eventperm.can_view_orders %}
         <li>
-            <a href="#">
+            <a href="{% url 'control:event.orders' organizer=request.event.organizer.slug event=request.event.slug %}"
+                class="has-children">
                 <i class="fa fa-shopping-cart fa-fw"></i>
                 {% trans "Orders" %}
+            </a>
+            <a href="#" class="arrow">
                 <span class="fa arrow"></span>
             </a>
             <ul class="nav nav-second-level">

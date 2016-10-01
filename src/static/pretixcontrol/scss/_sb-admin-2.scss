@@ -1,4 +1,9 @@
-
+/*
+Based on https://github.com/BlackrockDigital/startbootstrap-sb-admin-2
+Copyright 2013-2016 Blackrock Digital LLC
+MIT License
+Modified by Raphael Michel
+*/
 // Global Styles
 
 body {
@@ -103,15 +108,27 @@ body {
 
 .sidebar ul li {
     border-bottom: 1px solid darken($gray-lightest, 6.5%);
+    position: relative;
     a {
         &.active {
             background-color: $gray-lighter;
         }
     }
+    a.arrow {
+        position: absolute;
+        right: 0;
+        top: 0;
+        display: block;
+    }
+    a.has-children {
+        margin-right: 40px;
+    }
 }
 
-.sidebar .arrow {
-    float: right;
+.sidebar .fa.arrow {
+    line-height: 19px !important;
+    width: 10px;
+    text-align: center;
 }
 
 .sidebar .fa.arrow:before {

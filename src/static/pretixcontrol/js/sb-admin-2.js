@@ -1,4 +1,10 @@
 /*global $ */
+/*
+ Based on https://github.com/BlackrockDigital/startbootstrap-sb-admin-2
+ Copyright 2013-2016 Blackrock Digital LLC
+ MIT License
+ Modified by Raphael Michel
+ */
 //Loads the correct sidebar on window load,
 //collapses the sidebar on window resize.
 // Sets the min-height of #page-wrapper to window size
@@ -23,5 +29,7 @@ $(function () {
     });
 
     $('ul.nav ul.nav-second-level a.active').parent().parent().addClass('in').parent().addClass('active');
-    $('#side-menu').metisMenu({'toggle': false});
+    $('#side-menu').metisMenu({
+        'toggle': false,
+    });
 });
