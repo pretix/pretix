@@ -129,7 +129,11 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         return ctx
 
 
-class OrderPay(EventViewMixin, OrderDetailMixin, TemplateView):
+class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
+    """
+    This is used if a payment is retried or the payment method is changed. It shows the payment
+    provider's form that asks for payment details (e.g. CC number).
+    """
     template_name = "pretixpresale/event/order_pay.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -171,29 +175,12 @@ class OrderPay(EventViewMixin, OrderDetailMixin, TemplateView):
         })
 
 
-class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
-
-    def dispatch(self, request, *args, **kwargs):
-        self.request = request
-        if not self.order:
-            raise Http404(_('Unknown order code or not authorized to access this order.'))
-        return super().dispatch(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        if self.request.event.settings.get('invoice_generate') != 'user' or not invoice_qualified(self.order):
-            messages.error(self.request, _('You cannot generate an invoice for this order.'))
-        elif self.order.invoices.exists():
-            messages.error(self.request, _('An invoice for this order already exists.'))
-        else:
-            i = generate_invoice(self.order)
-            self.order.log_action('pretix.event.order.invoice.generated', data={
-                'invoice': i.pk
-            })
-            messages.success(self.request, _('The invoice has been generated.'))
-        return redirect(self.get_order_url())
-
-
-class OrderPayDo(EventViewMixin, OrderDetailMixin, TemplateView):
+class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
+    """
+    This is used if a payment is retried or the payment method is changed. It is shown after the
+    payment details have been entered and allows the user to confirm and review the details. On
+    submitting this view, the payment is performed.
+    """
     template_name = "pretixpresale/event/order_pay_confirm.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -230,7 +217,12 @@ class OrderPayDo(EventViewMixin, OrderDetailMixin, TemplateView):
         })
 
 
-class OrderPayComplete(EventViewMixin, OrderDetailMixin, View):
+class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
+    """
+    This is used for the first try of a payment. This means the user just entered payment
+    details and confirmed them during the order process and we don't need to show them again,
+    we just need to perform the payment.
+    """
     def dispatch(self, request, *args, **kwargs):
         self.request = request
         if not self.order:
@@ -345,6 +337,28 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
             'order': self.order.code,
             'secret': self.order.secret
         })
+
+
+class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if self.request.event.settings.get('invoice_generate') != 'user' or not invoice_qualified(self.order):
+            messages.error(self.request, _('You cannot generate an invoice for this order.'))
+        elif self.order.invoices.exists():
+            messages.error(self.request, _('An invoice for this order already exists.'))
+        else:
+            i = generate_invoice(self.order)
+            self.order.log_action('pretix.event.order.invoice.generated', data={
+                'invoice': i.pk
+            })
+            messages.success(self.request, _('The invoice has been generated.'))
+        return redirect(self.get_order_url())
 
 
 class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, TemplateView):
