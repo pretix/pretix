@@ -1672,7 +1672,7 @@ msgstr ""
 "erneut. Wenn das Problem fortbesteht, wende dich bitte an uns."
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:21
-msgid "We are preparing your file for download…"
+msgid "We are preparing your file for download …"
 msgstr "Wir bereiten deine Datei zum Download vor …"
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:23
@@ -2569,7 +2569,7 @@ msgstr "Übersicht"
 #: pretix/control/templates/pretixcontrol/base.html:146
 #: pretix/presale/templates/pretixpresale/base.html:49
 #: pretix/presale/templates/pretixpresale/waiting.html:22
-msgid "We are processing your request…"
+msgid "We are processing your request …"
 msgstr "Wir verarbeiten deine Anfrage …"
 
 #: pretix/control/templates/pretixcontrol/base.html:148
@@ -4353,7 +4353,7 @@ msgstr "Import-Ergebnis"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:11
 msgid ""
 "The result of your import is in progress. Please be patient while we process "
-"the data…"
+"the data …"
 msgstr "Der Import wird verarbeitet, bitte einen Moment Geduld …"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:17
