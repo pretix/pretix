@@ -93,7 +93,7 @@ class Stripe(BasePaymentProvider):
         try:
             charge = stripe.Charge.create(
                 amount=int(order.total * 100),
-                currency=request.event.currency.lower(),
+                currency=self.event.currency.lower(),
                 source=request.session['payment_stripe_token'],
                 metadata={
                     'order': str(order.id),
@@ -104,7 +104,12 @@ class Stripe(BasePaymentProvider):
                 idempotency_key=str(self.event.id) + order.code + request.session['payment_stripe_token']
             )
         except stripe.error.CardError as e:
-            err = e.json_body['error']
+            if e.json_body:
+                err = e.json_body['error']
+                logger.exception('Stripe error: %s' % str(err))
+            else:
+                err = {'message': str(e)}
+                logger.exception('Stripe error: %s' % str(e))
             messages.error(request, _('Stripe reported an error with your card: %s' % err['message']))
             logger.info('Stripe card error: %s' % str(err))
             order.payment_info = json.dumps({
@@ -112,12 +117,15 @@ class Stripe(BasePaymentProvider):
                 'message': err['message'],
             })
             order.save()
-        except (stripe.error.InvalidRequestError, stripe.error.AuthenticationError, stripe.error.APIConnectionError,
-                stripe.error.StripeError) as e:
-            err = e.json_body['error']
+        except stripe.error.StripeError as e:
+            if e.json_body:
+                err = e.json_body['error']
+                logger.exception('Stripe error: %s' % str(err))
+            else:
+                err = {'message': str(e)}
+                logger.exception('Stripe error: %s' % str(e))
             messages.error(request, _('We had trouble communicating with Stripe. Please try again and get in touch '
                                       'with us if this problem persists.'))
-            logger.error('Stripe error: %s' % str(err))
             order.payment_info = json.dumps({
                 'error': True,
                 'message': err['message'],
@@ -184,7 +192,12 @@ class Stripe(BasePaymentProvider):
             ch.refresh()
         except (stripe.error.InvalidRequestError, stripe.error.AuthenticationError, stripe.error.APIConnectionError) \
                 as e:
-            err = e.json_body['error']
+            if e.json_body:
+                err = e.json_body['error']
+                logger.exception('Stripe error: %s' % str(err))
+            else:
+                err = {'message': str(e)}
+                logger.exception('Stripe error: %s' % str(e))
             messages.error(request, _('We had trouble communicating with Stripe. Please try again and contact '
                                       'support if the problem persists.'))
             logger.error('Stripe error: %s' % str(err))
