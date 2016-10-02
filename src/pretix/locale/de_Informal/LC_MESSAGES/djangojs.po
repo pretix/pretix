@@ -39,8 +39,8 @@ msgid "Total revenue"
 msgstr "Gesamtumsatz"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:47
-msgid "Contacting Stripe…"
-msgstr "Kontaktiere Stripe…"
+msgid "Contacting Stripe …"
+msgstr "Kontaktiere Stripe …"
 
 #: static/pretixcontrol/js/ui/main.js:28 static/pretixpresale/js/ui/main.js:44
 msgid "Close message"
@@ -60,8 +60,8 @@ msgid "Count"
 msgstr "Anzahl"
 
 #: static/pretixpresale/js/ui/asynctask.js:61
-msgid "We are processing your request…"
-msgstr "Wir verarbeiten deine Anfrage…"
+msgid "We are processing your request …"
+msgstr "Wir verarbeiten deine Anfrage …"
 
 #: static/pretixpresale/js/ui/cart.js:10
 msgid "The items in your cart are no longer reserved for you."

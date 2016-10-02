@@ -58,7 +58,7 @@ $(function () {
             return;
         }
         $(this).data('ajaxing', true);
-        waitingDialog.show(gettext('We are processing your request…'));
+        waitingDialog.show(gettext('We are processing your request …'));
 
         $.ajax(
             {

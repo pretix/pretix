@@ -44,7 +44,7 @@ var pretixstripe = {
         }
     },
     'request': function () {
-        waitingDialog.show(gettext("Contacting Stripe…"));
+        waitingDialog.show(gettext("Contacting Stripe …"));
         $(".stripe-errors").hide();
         Stripe.card.createToken(
             {
