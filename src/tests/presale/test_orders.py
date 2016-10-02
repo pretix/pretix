@@ -57,7 +57,7 @@ class OrdersTest(TestCase):
             order=self.order,
             item=self.ticket,
             variation=None,
-            price=Decimal("14"),
+            price=Decimal("23"),
             attendee_name="Peter"
         )
         self.not_my_order = Order.objects.create(
@@ -364,3 +364,39 @@ class OrdersTest(TestCase):
         self.assertRedirects(response, '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                                 self.order.secret),
                              target_status_code=200)
+
+    def test_change_paymentmethod_wrong_secret(self):
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, '123'))
+        assert response.status_code == 404
+
+    def test_change_paymentmethod_wrong_state(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            follow=True
+        )
+        assert 'alert-danger' in response.rendered_content
+
+    def test_change_paymentmethod_available(self):
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.set('payment_testdummy__enabled', True)
+        self.event.settings.set('payment_testdummy__fee_abs', '12.00')
+        generate_invoice(self.order)
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            )
+        assert 'Test dummy' in response.rendered_content
+        assert '+ 12.00' in response.rendered_content
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'testdummy'
+            }
+        )
+        self.order.refresh_from_db()
+        assert self.order.payment_provider == 'testdummy'
+        assert self.order.payment_fee == Decimal('12.00')
+        assert self.order.total == Decimal('23.00') + self.order.payment_fee
+        assert self.order.invoices.count() == 3
