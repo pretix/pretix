@@ -262,6 +262,7 @@ class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
             messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.get(request)
 
 
@@ -310,6 +311,7 @@ class DisplaySettings(EventSettingsFormView):
                                              'active.'))
             return redirect(self.get_success_url())
         else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.get(request)
 
 
@@ -355,6 +357,7 @@ class MailSettings(EventSettingsFormView):
                 messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.get(request)
 
 
