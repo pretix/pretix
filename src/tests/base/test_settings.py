@@ -163,18 +163,24 @@ class SettingsTestCase(TestCase):
     def test_serialize_file(self):
         val = SimpleUploadedFile("sample_invalid_image.jpg", b"file_content", content_type="image/jpeg")
         default_storage.save(val.name, val)
+        val.close()
         self.event.settings.set('test', val)
         self.event.settings._flush()
-        self.assertIsInstance(self.event.settings.get('test', as_type=File), File)
-        self.assertTrue(self.event.settings.get('test', as_type=File).name.endswith(val.name))
+        f = self.event.settings.get('test', as_type=File)
+        self.assertIsInstance(f, File)
+        self.assertTrue(f.name.endswith(val.name))
+        f.close()
 
     def test_detect_file_value(self):
         val = SimpleUploadedFile("sample_invalid_image.jpg", b"file_content", content_type="image/jpeg")
         default_storage.save(val.name, val)
+        val.close()
         self.event.settings.set('test', val)
         self.event.settings._flush()
-        self.assertIsInstance(self.event.settings.get('test'), File)
-        self.assertTrue(self.event.settings.get('test').name.endswith(val.name))
+        f = self.event.settings.get('test', as_type=File)
+        self.assertIsInstance(f, File)
+        self.assertTrue(f.name.endswith(val.name))
+        f.close()
 
     def _test_serialization(self, val, as_type):
         self.event.settings.set('test', val)
