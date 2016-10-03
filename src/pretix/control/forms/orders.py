@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
@@ -14,6 +15,12 @@ class ExtendForm(I18nModelForm):
         widgets = {
             'expires': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
         }
+
+    def clean(self):
+        data = super().clean()
+        if data['expires'] < now():
+            raise ValidationError(_('The new expiry date needs to be in the future.'))
+        return data
 
 
 class ExporterForm(forms.Form):

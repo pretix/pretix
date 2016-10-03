@@ -11,6 +11,7 @@ Pending --> Paid: successful payment
 Pending --> Expired: automatically\nor manually\non admin action
 Expired --> Paid: if payment is received\nonly if quota left
 Expired --> Canceled
+Expired --> Pending: manually\non admin action
 Paid --> Refunded: manually on\nadmin action\nor if an external\npayment provider\nnotifies about a\npayment refund
 Pending --> Canceled: on admin or\ncustomer action
 Paid -> Pending: manually on admin action

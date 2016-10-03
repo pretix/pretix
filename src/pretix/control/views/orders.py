@@ -442,16 +442,12 @@ class OrderExtend(OrderView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        if self.order.status != Order.STATUS_PENDING:
-            messages.error(self.request, _('This action is only allowed for pending orders.'))
-            return self._redirect_back()
-        oldvalue = self.order.expires
-
         if self.form.is_valid():
-            if oldvalue > now():
+            if self.order.status == Order.STATUS_PENDING:
                 messages.success(self.request, _('The payment term has been changed.'))
                 self.order.log_action('pretix.event.order.expirychanged', user=self.request.user, data={
-                    'expires': self.order.expires
+                    'expires': self.order.expires,
+                    'state_change': False
                 })
                 self.form.save()
             else:
@@ -460,8 +456,11 @@ class OrderExtend(OrderView):
                         is_available = self.order._is_still_available(now_dt)
                         if is_available is True:
                             self.form.save()
+                            self.order.status = Order.STATUS_PENDING
+                            self.order.save()
                             self.order.log_action('pretix.event.order.expirychanged', user=self.request.user, data={
-                                'expires': self.order.expires
+                                'expires': self.order.expires,
+                                'state_change': True
                             })
                             messages.success(self.request, _('The payment term has been changed.'))
                         else:
@@ -473,10 +472,13 @@ class OrderExtend(OrderView):
         else:
             return self.get(*args, **kwargs)
 
-    def get(self, *args, **kwargs):
-        if self.order.status != Order.STATUS_PENDING:
+    def dispatch(self, request, *args, **kwargs):
+        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
             messages.error(self.request, _('This action is only allowed for pending orders.'))
             return self._redirect_back()
+        return super().dispatch(request, *kwargs, **kwargs)
+
+    def get(self, *args, **kwargs):
         return render(self.request, 'pretixcontrol/order/extend.html', {
             'order': self.order,
             'form': self.form,

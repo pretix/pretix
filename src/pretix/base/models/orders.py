@@ -286,8 +286,6 @@ class Order(LoggedModel):
                     raise Quota.QuotaExceededException(error_messages['unavailable'])
 
                 for quota in quotas:
-                    # Lock the quota, so no other thread is allowed to perform sales covered by this
-                    # quota while we're doing so.
                     if quota.id not in quota_cache:
                         quota_cache[quota.id] = quota
                         quota.cached_availability = quota.availability(now_dt)[1]
