@@ -1,4 +1,4 @@
-django-debug-toolbar==1.4
+django-debug-toolbar==1.5
 sqlparse==0.1.19  # not yet supported by django-debug-toolbar 1.4
 # Testing requirements
 pep8==1.5.7  # exact requirement by flake8 2.4.0
@@ -12,3 +12,4 @@ pytest-django
 isort
 pytest-mock
 pytest-rerunfailures
+pytest-warnings

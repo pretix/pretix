@@ -394,7 +394,8 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
         if self.request.GET.get("status", "") != "":
             s = self.request.GET.get("status", "")
             if s == 'o':
-                qs = qs.filter(orderposition__order__status=Order.STATUS_PENDING, expires__lt=now().date())
+                qs = qs.filter(orderposition__order__status=Order.STATUS_PENDING,
+                               expires__lt=now().replace(hour=0, minute=0, second=0))
             elif s == 'ne':
                 qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
             else:

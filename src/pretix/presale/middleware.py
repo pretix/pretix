@@ -1,11 +1,12 @@
 from django.core.urlresolvers import resolve
+from django.utils.deprecation import MiddlewareMixin
 
 from pretix.presale.signals import process_response
 
 from .utils import _detect_event
 
 
-class EventMiddleware:
+class EventMiddleware(MiddlewareMixin):
     def process_request(self, request):
         url = resolve(request.path_info)
         request._namespace = url.namespace

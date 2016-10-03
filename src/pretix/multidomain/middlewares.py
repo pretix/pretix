@@ -9,6 +9,7 @@ from django.core.urlresolvers import set_urlconf
 from django.http.request import split_domain_port
 from django.middleware.csrf import CsrfViewMiddleware as BaseCsrfMiddleware
 from django.utils.cache import patch_vary_headers
+from django.utils.deprecation import MiddlewareMixin
 from django.utils.http import cookie_date
 
 from pretix.multidomain.models import KnownDomain
@@ -16,7 +17,7 @@ from pretix.multidomain.models import KnownDomain
 LOCAL_HOST_NAMES = ('testserver', 'localhost')
 
 
-class MultiDomainMiddleware:
+class MultiDomainMiddleware(MiddlewareMixin):
     def process_request(self, request):
         # We try three options, in order of decreasing preference.
         if settings.USE_X_FORWARDED_HOST and ('HTTP_X_FORWARDED_HOST' in request.META):

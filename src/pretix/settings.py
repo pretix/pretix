@@ -193,7 +193,7 @@ CORE_MODULES = {
     ("pretix", "control")
 }
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'pretix.multidomain.middlewares.MultiDomainMiddleware',
     'pretix.multidomain.middlewares.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -212,7 +212,7 @@ try:
     import debug_toolbar  # noqa
     if DEBUG:
         INSTALLED_APPS.append('debug_toolbar.apps.DebugToolbarConfig')
-        MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+        MIDDLEWARE.append('pretix.helpers.debug.DebugMiddlewareCompatibilityShim')
 except ImportError:
     pass
 

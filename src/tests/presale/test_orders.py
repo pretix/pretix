@@ -124,7 +124,7 @@ class OrdersTest(TestCase):
             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
         assert response.status_code == 200
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         assert len(doc.select(".cart-row")) > 0
         assert "pending" in doc.select(".label-warning")[0].text.lower()
 
@@ -143,7 +143,7 @@ class OrdersTest(TestCase):
 
         response = self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % self.ticket_pos.id)), 1)
 
         # Not all fields filled out, expect success
@@ -164,7 +164,7 @@ class OrdersTest(TestCase):
 
         response = self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % self.ticket_pos.id)), 1)
 
         # Not all required fields filled out, expect failure
@@ -172,7 +172,7 @@ class OrdersTest(TestCase):
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 '%s-attendee_name' % self.ticket_pos.id: '',
             }, follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
 
         response = self.client.post(
@@ -191,7 +191,7 @@ class OrdersTest(TestCase):
 
         response = self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (
             self.ticket_pos.id, self.question.id))), 1)
 
@@ -214,7 +214,7 @@ class OrdersTest(TestCase):
 
         response = self.client.get('/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code,
                                                                   self.order.secret))
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (
             self.ticket_pos.id, self.question.id))), 1)
 
@@ -223,7 +223,7 @@ class OrdersTest(TestCase):
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 '%s-question_%s' % (self.ticket_pos.id, self.question.id): '',
             }, follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
 
         response = self.client.post(

@@ -11,7 +11,7 @@ def event_permission_required(permission):
     """
     def decorator(function):
         def wrapper(request, *args, **kw):
-            if not request.user.is_authenticated():  # NOQA
+            if not request.user.is_authenticated:  # NOQA
                 # just a double check, should not ever happen
                 raise PermissionDenied()
             try:
@@ -55,7 +55,7 @@ def organizer_permission_required(permission):
     """
     def decorator(function):
         def wrapper(request, *args, **kw):
-            if not request.user.is_authenticated():  # NOQA
+            if not request.user.is_authenticated:  # NOQA
                 # just a double check, should not ever happen
                 raise PermissionDenied()
             try:

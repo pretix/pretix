@@ -60,7 +60,7 @@ class CheckoutTestCase(TestCase):
             price=20, expires=now() + timedelta(minutes=10)
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
 
         self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr1.id, q1.id))), 1)
         self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr2.id, q1.id))), 1)
@@ -75,7 +75,7 @@ class CheckoutTestCase(TestCase):
             '%s-question_%s' % (cr2.id, q2.id): '',
             'email': 'admin@localhost'
         }, follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
 
         # Corrected request
@@ -104,7 +104,7 @@ class CheckoutTestCase(TestCase):
             price=23, expires=now() + timedelta(minutes=10)
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % cr1.id)), 1)
 
         # Not all required fields filled out, expect failure
@@ -112,7 +112,7 @@ class CheckoutTestCase(TestCase):
             '%s-attendee_name' % cr1.id: '',
             'email': 'admin@localhost'
         }, follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
 
         # Corrected request
@@ -134,7 +134,7 @@ class CheckoutTestCase(TestCase):
             price=23, expires=now() + timedelta(minutes=10)
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % cr1.id)), 1)
 
         # Not all fields filled out, expect success
@@ -157,7 +157,7 @@ class CheckoutTestCase(TestCase):
             price=23, expires=now() + timedelta(minutes=10)
         )
         response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select('input[name=payment]')), 2)
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'banktransfer'
@@ -227,7 +227,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
         self.assertEqual(Order.objects.count(), 1)
@@ -242,7 +242,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
         self.assertEqual(Order.objects.count(), 1)
@@ -256,7 +256,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
         self.assertEqual(Order.objects.count(), 1)
@@ -272,7 +272,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".alert-danger")), 1)
         cr1 = CartPosition.objects.get(id=cr1.id)
         self.assertEqual(cr1.price, 24)
@@ -288,7 +288,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".alert-danger")), 1)
         cr1 = CartPosition.objects.get(id=cr1.id)
         self.assertEqual(cr1.price, 24)
@@ -303,7 +303,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
         self.assertEqual(Order.objects.count(), 1)
@@ -323,7 +323,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertTrue(Voucher.objects.get(pk=v.pk).redeemed)
 
@@ -337,7 +337,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".alert-danger")), 1)
         cr1 = CartPosition.objects.get(id=cr1.id)
         self.assertEqual(cr1.price, Decimal('12.00'))
@@ -351,7 +351,7 @@ class CheckoutTestCase(TestCase):
         )
         self._set_session('payment', 'banktransfer')
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn("expired", doc.select(".alert-danger")[0].text)
 
     def test_voucher_redeemed(self):
@@ -363,7 +363,7 @@ class CheckoutTestCase(TestCase):
         )
         self._set_session('payment', 'banktransfer')
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn("has already been", doc.select(".alert-danger")[0].text)
 
     def test_voucher_ignore_quota(self):
@@ -378,7 +378,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
         self.assertEqual(Order.objects.count(), 1)
@@ -396,14 +396,14 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".alert-danger")), 1)
         self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key).count(), 1)
 
         cr1.voucher = v
         cr1.save()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
         self.assertEqual(Order.objects.count(), 1)
@@ -423,7 +423,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".alert-danger")), 1)
         self.assertFalse(Order.objects.exists())
 
@@ -443,13 +443,13 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, voucher=v).count(), 1)
         self.assertEqual(len(doc.select(".alert-danger")), 1)
         self.assertFalse(Order.objects.exists())
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, voucher=v).exists())
         self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertEqual(Order.objects.count(), 1)
@@ -469,7 +469,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".alert-danger")), 1)
         self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key).count(), 1)
 
@@ -483,7 +483,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
 
     def test_confirm_require_voucher(self):
@@ -496,7 +496,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
 
@@ -510,7 +510,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
 
@@ -524,7 +524,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
 
@@ -538,7 +538,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
 
@@ -551,7 +551,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
 
@@ -566,7 +566,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
 
     def test_confirm_expired_with_non_blocking_voucher_unavailable(self):
@@ -580,7 +580,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
 
@@ -595,7 +595,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
 
     def test_confirm_not_expired_with_non_blocking_voucher_unavailable(self):
@@ -609,5 +609,5 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)

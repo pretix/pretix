@@ -67,7 +67,7 @@ Buchungstag;Valuta;Buchungstext;Auftraggeber / Empfänger;Verwendungszweck;Betra
     r = client.post('/control/event/dummy/dummy/banktransfer/import/', {
         'file': file
     })
-    doc = BeautifulSoup(r.content)
+    doc = BeautifulSoup(r.content, "lxml")
     assert r.status_code == 200
     assert len(doc.select("input[name=date]")) > 0
     data = {

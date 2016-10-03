@@ -24,7 +24,7 @@ def login(request):
     parameter "next" for redirection after successful login
     """
     ctx = {}
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect(request.GET.get("next", 'control:index'))
     if request.method == 'POST':
         form = LoginForm(data=request.POST)
@@ -56,7 +56,7 @@ def register(request):
     if not settings.PRETIX_REGISTRATION:
         raise PermissionDenied('Registration is disabled')
     ctx = {}
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect(request.GET.get("next", 'control:index'))
     if request.method == 'POST':
         form = RegistrationForm(data=request.POST)
@@ -85,7 +85,7 @@ class Forgot(TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return redirect(request.GET.get("next", 'control:index'))
         return super().get(request, *args, **kwargs)
 
@@ -149,7 +149,7 @@ class Recover(TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return redirect(request.GET.get("next", 'control:index'))
         try:
             user = User.objects.get(id=self.request.GET.get('id'))
