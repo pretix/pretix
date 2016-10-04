@@ -7,7 +7,7 @@
     <p>{% trans "You do not have access to this page." %}</p>
     <p>{{ exception }}</p>
     <p class="links">
-        <a href="javascript:history.back()">{% trans "Take a step back" %}</a>
-        &middot; <a href="javascript:location.reload()">{% trans "Try again" %}</a>
+        <a id='goback' href='#'>{% trans "Take a step back" %}</a>
+        &middot; <a id='reload' href='#'>{% trans "Try again" %}</a>
     </p>
 {% endblock %}
