@@ -7,6 +7,6 @@
     <p>{% trans "I'm afraid we could not find the the resource you requested." %}</p>
     <p>{{ exception }}</p>
     <p class="links">
-        <a href="javascript:history.back()">{% trans "Take a step back" %}</a>
+        <a id='goback' href='#'>{% trans "Take a step back" %}</a>
     </p>
 {% endblock %}
