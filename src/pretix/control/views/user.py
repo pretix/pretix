@@ -13,13 +13,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView, UpdateView
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
-from django_otp_u2f_stub.models import U2FDevice
-from django_otp_u2f_stub.utils import get_origin
 from u2flib_server.jsapi import DeviceRegistration
 from u2flib_server.u2f import complete_register, start_register
 
 from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
-from pretix.base.models import User
+from pretix.base.models import U2FDevice, User
+from pretix.control.views.auth import get_u2f_appid
 
 REAL_DEVICE_TYPES = (TOTPDevice, U2FDevice)
 logger = logging.getLogger(__name__)
@@ -128,7 +127,7 @@ class User2FADeviceConfirmU2FView(TemplateView):
 
     @property
     def app_id(self):
-        return get_origin(self.request)
+        return get_u2f_appid(self.request)
 
     @cached_property
     def device(self):
@@ -139,7 +138,7 @@ class User2FADeviceConfirmU2FView(TemplateView):
         ctx['device'] = self.device
 
         devices = [DeviceRegistration.wrap(device.json_data)
-                   for device in U2FDevice.objects.filter(confirmed=True)]
+                   for device in U2FDevice.objects.filter(confirmed=True, user=self.request.user)]
         enroll = start_register(self.app_id, devices)
         self.request.session['_u2f_enroll'] = enroll.json
         ctx['jsondata'] = enroll.json
@@ -156,7 +155,7 @@ class User2FADeviceConfirmU2FView(TemplateView):
             self.device.save()
             messages.success(request, _('The device has been verified and can now be used.'))
             return redirect(reverse('control:user.settings.2fa'))
-        except ValueError:
+        except Exception:
             messages.error(request, _('The registration could not be completed. Please try again.'))
             logger.exception('U2F registration failed')
             return redirect(reverse('control:user.settings.2fa.confirm.2fa', kwargs={
