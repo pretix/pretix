@@ -21,6 +21,7 @@ class PermissionMiddleware(MiddlewareMixin):
 
     EXCEPTIONS = (
         "auth.login",
+        "auth.login.2fa",
         "auth.register",
         "auth.forgot",
         "auth.forgot.recover"

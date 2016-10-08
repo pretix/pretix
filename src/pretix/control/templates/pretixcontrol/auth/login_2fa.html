@@ -1,0 +1,22 @@
+{% extends "pretixcontrol/auth/base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+{% load staticfiles %}
+{% block content %}
+    <form class="form-signin" action="" method="post">
+        {% csrf_token %}
+        <h3>{% trans "Welcome back!" %}</h3>
+        <p>
+            {% trans "You configured your account two require authentification with a second medium, e.g. your phone. Please enter your verification code here:" %}
+        </p>
+        <div class="form-group">
+            <input class="form-control" name="token" placeholder="{% trans "Token" %}"
+                    type="number" required="required" autofocus="autofocus">
+        </div>
+        <div class="form-group buttons">
+            <button type="submit" class="btn btn-primary">
+                {% trans "Continue" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

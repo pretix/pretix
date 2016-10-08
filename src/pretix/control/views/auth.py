@@ -1,3 +1,6 @@
+import time
+from urllib.parse import quote
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import (
@@ -6,9 +9,12 @@ from django.contrib.auth import (
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.http import is_safe_url
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
+from django_otp import match_token
 
 from pretix.base.forms.auth import (
     LoginForm, PasswordForgotForm, PasswordRecoverForm, RegistrationForm,
@@ -29,10 +35,18 @@ def login(request):
     if request.method == 'POST':
         form = LoginForm(data=request.POST)
         if form.is_valid() and form.user_cache:
-            auth_login(request, form.user_cache)
-            if "next" in request.GET:
-                return redirect(request.GET.get("next", 'control:index'))
-            return redirect('control:index')
+            if form.user_cache.require_2fa:
+                request.session['pretix_auth_2fa_user'] = form.user_cache.pk
+                request.session['pretix_auth_2fa_time'] = str(int(time.time()))
+                twofa_url = reverse('control:auth.login.2fa')
+                if 'next' in request.GET:
+                    twofa_url += '?next=' + quote(request.GET.get('next'))
+                return redirect(twofa_url)
+            else:
+                auth_login(request, form.user_cache)
+                if "next" in request.GET and is_safe_url(request.GET.get("next")):
+                    return redirect(request.GET.get("next"))
+                return redirect(reverse('control:index'))
     else:
         form = LoginForm()
     ctx['form'] = form
@@ -188,3 +202,36 @@ class Recover(TemplateView):
         context = super().get_context_data(**kwargs)
         context['form'] = self.form
         return context
+
+
+class Login2FAView(TemplateView):
+    template_name = 'pretixcontrol/auth/login_2fa.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        fail = False
+        if 'pretix_auth_2fa_user' not in request.session:
+            fail = True
+        else:
+            try:
+                self.user = User.objects.get(pk=request.session['pretix_auth_2fa_user'], is_active=True)
+            except User.DoesNotExist:
+                fail = True
+        logintime = int(request.session.get('pretix_auth_2fa_time', '1'))
+        if time.time() - logintime > 300:
+            fail = True
+        if fail:
+            messages.error(request, _('Please try again.'))
+            return redirect('control:auth.login')
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if match_token(self.user, request.POST.get('token', '')):
+            auth_login(request, self.user)
+            del request.session['pretix_auth_2fa_user']
+            del request.session['pretix_auth_2fa_time']
+            if "next" in request.GET and is_safe_url(request.GET.get("next")):
+                return redirect(request.GET.get("next"))
+            return redirect(reverse('control:index'))
+        else:
+            messages.error(request, _('Invalid code, please try again.'))
+            return redirect('control:auth.login.2fa')

@@ -25,7 +25,7 @@
                 {% if user.require_2fa %}
                     <span class="label label-success">{% trans "Enabled" %}</span>
                     <a href="{% url "control:user.settings.2fa" %}">
-                        {% trans "Change settings" %}
+                        {% trans "Change two-factor settings" %}
                     </a>
                 {% else %}
                     <span class="label label-default">{% trans "Disabled" %}</span>
