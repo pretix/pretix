@@ -1,0 +1,66 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Two-factor authentication" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Two-factor authentication" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            Two-factor authentication is a way to add additional security to your account. If you enable it, you will
+            not only need your password to log in, but also an additional token that is generated e.g. by an app on your
+            smartphone or a hardware token generator and that changes on a regular basis.
+        {% endblocktrans %}
+    </p>
+    {% if user.require_2fa %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans "Two-factor status" %}</h3>
+            </div>
+            <div class="panel-body">
+                <a href="" class="btn btn-primary pull-right">Disable</a>
+                <p>
+                    <strong>{% trans "Two-factor authentication is currently enabled." %}</strong>
+                </p>
+            </div>
+        </div>
+    {% else %}
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans "Two-factor status" %}</h3>
+            </div>
+            <div class="panel-body">
+                {% if devices|length %}
+                    <a href="" class="btn btn-primary pull-right">Enable</a>
+                {% endif %}
+                <p>
+                    <strong>{% trans "Two-factor authentication is currently disabled." %}</strong>
+                </p>
+                {% if not devices|length %}
+                    <p>{% trans "To enable it, you need to configure at least one device below." %}</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "Enabled devices" %}</h3>
+        </div>
+        <ul class="list-group">
+            {% for d in devices %}
+                <li class="list-group-item">
+                {% if d.devicetype == "totp" %}
+                        <span class="fa fa-mobile"></span>
+                    {% endif %}
+                    {{ d.name }}
+                </li>
+            {% endfor %}
+
+            <li class="list-group-item">
+                <a href="{% url "control:user.settings.2fa.add" %}" class="btn btn-primary">
+                    <span class="fa fa-plus"></span>
+                    {% trans "Add a new device" %}
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

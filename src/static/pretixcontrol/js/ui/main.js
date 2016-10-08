@@ -123,4 +123,12 @@ $(function () {
             }
         });
     });
+
+    $(".qrcode-canvas").each(function() {
+        $(this).qrcode(
+            {
+                text: $.trim($($(this).attr("data-qrdata")).html())
+            }
+        );
+    });
 });

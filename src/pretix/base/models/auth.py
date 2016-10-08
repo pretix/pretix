@@ -76,6 +76,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     timezone = models.CharField(max_length=100,
                                 default=settings.TIME_ZONE,
                                 verbose_name=_('Timezone'))
+    require_2fa = models.BooleanField(default=False)
 
     objects = UserManager()
 

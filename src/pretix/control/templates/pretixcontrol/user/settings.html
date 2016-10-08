@@ -19,6 +19,22 @@
         {% bootstrap_field form.email layout='horizontal' %}
         {% bootstrap_field form.new_pw layout='horizontal' %}
         {% bootstrap_field form.new_pw_repeat layout='horizontal' %}
+        <div class="form-group">
+            <label class="col-md-3 control-label" for="id_new_pw_repeat">{% trans "Two-factor authentication" %}</label>
+            <div class="col-md-9 static-form-row">
+                {% if user.require_2fa %}
+                    <span class="label label-success">{% trans "Enabled" %}</span>
+                    <a href="{% url "control:user.settings.2fa" %}">
+                        {% trans "Change settings" %}
+                    </a>
+                {% else %}
+                    <span class="label label-default">{% trans "Disabled" %}</span>
+                    <a href="{% url "control:user.settings.2fa" %}">
+                        {% trans "Enable" %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
     </fieldset>
     <div class="form-group submit-group">
         <button type="submit" class="btn btn-primary btn-save">
