@@ -48,7 +48,11 @@
         <ul class="list-group">
             {% for d in devices %}
                 <li class="list-group-item">
-                {% if d.devicetype == "totp" %}
+                    <a class="btn btn-danger btn-xs pull-right"
+                            href="{% url "control:user.settings.2fa.delete" devicetype=d.devicetype device=d.pk %}">
+                        Delete
+                    </a>
+                    {% if d.devicetype == "totp" %}
                         <span class="fa fa-mobile"></span>
                     {% endif %}
                     {{ d.name }}
