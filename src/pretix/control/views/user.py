@@ -1,4 +1,5 @@
 import base64
+import logging
 from urllib.parse import quote
 
 from django.conf import settings
@@ -12,12 +13,16 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView, UpdateView
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
+from django_otp_u2f_stub.models import U2FDevice
+from django_otp_u2f_stub.utils import get_origin
+from u2flib_server.jsapi import DeviceRegistration
+from u2flib_server.u2f import complete_register, start_register
 
 from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
 from pretix.base.models import User
 
-
-REAL_DEVICE_TYPES = (TOTPDevice,)
+REAL_DEVICE_TYPES = (TOTPDevice, U2FDevice)
+logger = logging.getLogger(__name__)
 
 
 class UserSettings(UpdateView):
@@ -67,6 +72,8 @@ class User2FAMainView(TemplateView):
             for obj in objs:
                 if dt == TOTPDevice:
                     obj.devicetype = 'totp'
+                elif dt == U2FDevice:
+                    obj.devicetype = 'u2f'
             ctx['devices'] += objs
 
         return ctx
@@ -79,6 +86,11 @@ class User2FADeviceAddView(FormView):
     def form_valid(self, form):
         if form.cleaned_data['devicetype'] == 'totp':
             dev = TOTPDevice.objects.create(user=self.request.user, confirmed=False, name=form.cleaned_data['name'])
+        elif form.cleaned_data['devicetype'] == 'u2f':
+            if not self.request.is_secure():
+                messages.error(self.request, _('U2F devices are only available if pretix is served via HTTPS.'))
+                return self.get(self.request, self.args, self.kwargs)
+            dev = U2FDevice.objects.create(user=self.request.user, confirmed=False, name=form.cleaned_data['name'])
         else:
             messages.error(self.request, _('Unknown device type'))
             return self.get(self.request, self.args, self.kwargs)
@@ -94,6 +106,8 @@ class User2FADeviceDeleteView(TemplateView):
     def device(self):
         if self.kwargs['devicetype'] == 'totp':
             return get_object_or_404(TOTPDevice, user=self.request.user, pk=self.kwargs['device'], confirmed=True)
+        elif self.kwargs['devicetype'] == 'u2f':
+            return get_object_or_404(U2FDevice, user=self.request.user, pk=self.kwargs['device'], confirmed=True)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
@@ -107,6 +121,47 @@ class User2FADeviceDeleteView(TemplateView):
             self.request.user.save()
         messages.success(request, _('The device has been removed.'))
         return redirect(reverse('control:user.settings.2fa'))
+
+
+class User2FADeviceConfirmU2FView(TemplateView):
+    template_name = 'pretixcontrol/user/2fa_confirm_u2f.html'
+
+    @property
+    def app_id(self):
+        return get_origin(self.request)
+
+    @cached_property
+    def device(self):
+        return get_object_or_404(U2FDevice, user=self.request.user, pk=self.kwargs['device'], confirmed=False)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['device'] = self.device
+
+        devices = [DeviceRegistration.wrap(device.json_data)
+                   for device in U2FDevice.objects.filter(confirmed=True)]
+        enroll = start_register(self.app_id, devices)
+        self.request.session['_u2f_enroll'] = enroll.json
+        ctx['jsondata'] = enroll.json
+
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        try:
+            binding, cert = complete_register(self.request.session.pop('_u2f_enroll'),
+                                              request.POST.get('token'),
+                                              [self.app_id])
+            self.device.json_data = binding.json
+            self.device.confirmed = True
+            self.device.save()
+            messages.success(request, _('The device has been verified and can now be used.'))
+            return redirect(reverse('control:user.settings.2fa'))
+        except ValueError:
+            messages.error(request, _('The registration could not be completed. Please try again.'))
+            logger.exception('U2F registration failed')
+            return redirect(reverse('control:user.settings.2fa.confirm.2fa', kwargs={
+                'device': self.device.pk
+            }))
 
 
 class User2FADeviceConfirmTOTPView(TemplateView):
