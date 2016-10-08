@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load eventsignal %}
 {% block title %}{% blocktrans with name=quota.name %}Quota: {{ name }}{% endblocktrans %}{% endblock %}
 {% block inside %}
     <h1>
@@ -54,4 +55,5 @@
             </div>
         </div>
     </div>
+    {% eventsignal request.event "pretix.control.signals.quota_detail_html" quota=quota %}
 {% endblock %}

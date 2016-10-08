@@ -94,3 +94,13 @@ You will receive the default form class (or the class set by a previous plugin) 
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
+
+quota_detail_html = EventPluginSignal(
+    providing_args=['quota']
+)
+"""
+This signal allows you to append HTML to a Quota's detail view. You receive the
+quota as argument in the ``quota`` keyword argument.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
