@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^settings/2fa/add$', user.User2FADeviceAddView.as_view(), name='user.settings.2fa.add'),
     url(r'^settings/2fa/enable', user.User2FAEnableView.as_view(), name='user.settings.2fa.enable'),
     url(r'^settings/2fa/disable', user.User2FADisableView.as_view(), name='user.settings.2fa.disable'),
+    url(r'^settings/2fa/regenemergency', user.User2FARegenerateEmergencyView.as_view(),
+        name='user.settings.2fa.regenemergency'),
     url(r'^settings/2fa/totp/(?P<device>[0-9]+)/confirm', user.User2FADeviceConfirmTOTPView.as_view(),
         name='user.settings.2fa.confirm.totp'),
     url(r'^settings/2fa/(?P<devicetype>[^/]+)/(?P<device>[0-9]+)/delete', user.User2FADeviceDeleteView.as_view(),

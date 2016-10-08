@@ -71,4 +71,24 @@
             </li>
         </ul>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "Emergency tokens" %}</h3>
+        </div>
+        <div class="panel-body">
+            <p>
+                {% trans "If you lose access to your devices, you can use one of the following keys to log in. We recommend to store them in a safe place, e.g. printed out or in a password manager. Every token can be used at most once." %}
+            </p>
+            <p>{% trans "Unused tokens:" %}</p>
+            <ul>
+                {% for t in static_tokens %}
+                    <li><code>{{ t.token }}</code></li>
+                {% endfor %}
+            </ul>
+            <a href="{% url "control:user.settings.2fa.regenemergency" %}" class="btn btn-default">
+                <span class="fa fa-refresh"></span>
+                {% trans "Generate new emergency tokens" %}
+            </a>
+        </div>
+    </div>
 {% endblock %}

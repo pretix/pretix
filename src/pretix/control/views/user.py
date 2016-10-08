@@ -6,9 +6,11 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect
+from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView, UpdateView
+from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
 from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
@@ -50,6 +52,14 @@ class User2FAMainView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
+
+        try:
+            ctx['static_tokens'] = StaticDevice.objects.get(user=self.request.user, name='emergency').token_set.all()
+        except StaticDevice.DoesNotExist:
+            d = StaticDevice.objects.create(user=self.request.user, name='emergency')
+            for i in range(10):
+                d.token_set.create(token=get_random_string(length=12, allowed_chars='1234567890'))
+            ctx['static_tokens'] = d.token_set.all()
 
         ctx['devices'] = []
         for dt in REAL_DEVICE_TYPES:
@@ -157,4 +167,17 @@ class User2FADisableView(TemplateView):
         self.request.user.require_2fa = False
         self.request.user.save()
         messages.success(request, _('Two-factor authentication is now disabled for your account.'))
+        return redirect(reverse('control:user.settings.2fa'))
+
+
+class User2FARegenerateEmergencyView(TemplateView):
+    template_name = 'pretixcontrol/user/2fa_regenermergency.html'
+
+    def post(self, request, *args, **kwargs):
+        d = StaticDevice.objects.get(user=self.request.user, name='emergency')
+        d.token_set.all().delete()
+        for i in range(10):
+            d.token_set.create(token=get_random_string(length=12, allowed_chars='1234567890'))
+        messages.success(request, _('Your emergency codes have been newly generated. Remember to store them in a safe '
+                                    'place in case you lose access to your devices.'))
         return redirect(reverse('control:user.settings.2fa'))
