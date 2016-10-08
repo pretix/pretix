@@ -1,0 +1,25 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Delete a two-factor authentication device" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Delete a two-factor authentication device" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <p>{% blocktrans trimmed with device=device.name %}
+            Are you sure you want to delete the authentication device "{{ device }}"?
+        {% endblocktrans %}</p>
+        <p>{% trans "You will no longer be able to use this device to log in to pretix." %}</p>
+        <p>
+            {% trans "If this is the only device connected to your account, we will disable two-factor authentication." %}
+        </p>
+        <div class="form-group submit-group">
+            <a href="{% url "control:user.settings.2fa" %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-danger btn-save">
+                {% trans "Delete" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

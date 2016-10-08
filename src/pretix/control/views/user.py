@@ -15,6 +15,9 @@ from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
 from pretix.base.models import User
 
 
+REAL_DEVICE_TYPES = (TOTPDevice,)
+
+
 class UserSettings(UpdateView):
     model = User
     form_class = UserSettingsForm
@@ -49,7 +52,7 @@ class User2FAMainView(TemplateView):
         ctx = super().get_context_data()
 
         ctx['devices'] = []
-        for dt in (TOTPDevice,):
+        for dt in REAL_DEVICE_TYPES:
             objs = list(dt.objects.filter(user=self.request.user, confirmed=True))
             for obj in objs:
                 if dt == TOTPDevice:
@@ -72,6 +75,28 @@ class User2FADeviceAddView(FormView):
         return redirect(reverse('control:user.settings.2fa.confirm.' + form.cleaned_data['devicetype'], kwargs={
             'device': dev.pk
         }))
+
+
+class User2FADeviceDeleteView(TemplateView):
+    template_name = 'pretixcontrol/user/2fa_delete.html'
+
+    @cached_property
+    def device(self):
+        if self.kwargs['devicetype'] == 'totp':
+            return get_object_or_404(TOTPDevice, user=self.request.user, pk=self.kwargs['device'], confirmed=True)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['device'] = self.device
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        self.device.delete()
+        if not any(dt.objects.filter(user=self.request.user, confirmed=True) for dt in REAL_DEVICE_TYPES):
+            self.request.user.require_2fa = False
+            self.request.user.save()
+        messages.success(request, _('The device has been removed.'))
+        return redirect(reverse('control:user.settings.2fa'))
 
 
 class User2FADeviceConfirmTOTPView(TemplateView):
