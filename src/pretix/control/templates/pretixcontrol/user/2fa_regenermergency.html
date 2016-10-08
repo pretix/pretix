@@ -1,24 +1,23 @@
 {% extends "pretixcontrol/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block title %}{% trans "Enable two-factor authentication" %}{% endblock %}
+{% block title %}{% trans "Regenerate emergency codes" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Enable two-factor authentication" %}</h1>
+    <h1>{% trans "Regenerate emergency codes" %}</h1>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
         <p>
-            {% trans "Do you really want to enable two-factor authentication?" %}
+            {% trans "Do you really want to regenerate your emergency codes?" %}
         </p>
         <p>
-            {% trans "You will no longer be able to log in to pretix without one of your configured devices." %}
-            {% trans "Please make sure to print out or copy the emergency tokens and store them in a safe place." %}
+            {% trans "The old codes will no longer work." %}
         </p>
         <div class="form-group submit-group">
             <a href="{% url "control:user.settings.2fa" %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>
             <button type="submit" class="btn btn-danger btn-save">
-                {% trans "Enable" %}
+                {% trans "Regenerate" %}
             </button>
         </div>
     </form>

@@ -225,7 +225,8 @@ class Login2FAView(TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        if match_token(self.user, request.POST.get('token', '')):
+        token = request.POST.get('token', '').strip().replace(' ', '')
+        if match_token(self.user, token):
             auth_login(request, self.user)
             del request.session['pretix_auth_2fa_user']
             del request.session['pretix_auth_2fa_time']
