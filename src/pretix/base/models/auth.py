@@ -4,6 +4,7 @@ from django.contrib.auth.models import (
 )
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django_otp.models import Device
 
 from .base import LoggingMixin
 
@@ -126,3 +127,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             }
         else:
             return self.email
+
+
+class U2FDevice(Device):
+    json_data = models.TextField()

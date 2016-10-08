@@ -1,3 +1,4 @@
+import logging
 import time
 from urllib.parse import quote
 
@@ -15,13 +16,18 @@ from django.utils.http import is_safe_url
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 from django_otp import match_token
+from u2flib_server.jsapi import DeviceRegistration
+from u2flib_server.u2f import start_authenticate, verify_authenticate
+from u2flib_server.utils import rand_bytes
 
 from pretix.base.forms.auth import (
     LoginForm, PasswordForgotForm, PasswordRecoverForm, RegistrationForm,
 )
-from pretix.base.models import User
+from pretix.base.models import U2FDevice, User
 from pretix.base.services.mail import SendMailException, mail
 from pretix.helpers.urls import build_absolute_uri
+
+logger = logging.getLogger(__name__)
 
 
 def login(request):
@@ -204,8 +210,16 @@ class Recover(TemplateView):
         return context
 
 
+def get_u2f_appid(request):
+    return '%s://%s' % ('https' if request.is_secure() else 'http', request.get_host())
+
+
 class Login2FAView(TemplateView):
     template_name = 'pretixcontrol/auth/login_2fa.html'
+
+    @property
+    def app_id(self):
+        return get_u2f_appid(self.request)
 
     def dispatch(self, request, *args, **kwargs):
         fail = False
@@ -226,7 +240,21 @@ class Login2FAView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         token = request.POST.get('token', '').strip().replace(' ', '')
-        if match_token(self.user, token):
+
+        valid = False
+        if '_u2f_challenge' in self.request.session and token.startswith('{'):
+            devices = [DeviceRegistration.wrap(device.json_data)
+                       for device in U2FDevice.objects.filter(confirmed=True, user=self.user)]
+            challenge = self.request.session.pop('_u2f_challenge')
+            try:
+                verify_authenticate(devices, challenge, token, [self.app_id])
+                valid = True
+            except Exception:
+                logger.exception('U2F login failed')
+        else:
+            valid = match_token(self.user, token)
+
+        if valid:
             auth_login(request, self.user)
             del request.session['pretix_auth_2fa_user']
             del request.session['pretix_auth_2fa_time']
@@ -236,3 +264,21 @@ class Login2FAView(TemplateView):
         else:
             messages.error(request, _('Invalid code, please try again.'))
             return redirect('control:auth.login.2fa')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+
+        devices = [DeviceRegistration.wrap(device.json_data)
+                   for device in U2FDevice.objects.filter(confirmed=True, user=self.user)]
+        if devices:
+            challenge = start_authenticate(devices, challenge=rand_bytes(32))
+            self.request.session['_u2f_challenge'] = challenge.json
+            ctx['jsondata'] = challenge.json
+        else:
+            del self.request.session['_u2f_challenge']
+            ctx['jsondata'] = None
+
+        return ctx
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
