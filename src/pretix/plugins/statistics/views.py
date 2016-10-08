@@ -22,7 +22,7 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
         tz = timezone.get_current_timezone()
 
         if 'latest' in self.request.GET:
-            clear_cache()
+            clear_cache(self.request.event)
 
         cache = self.request.event.get_cache()
 
