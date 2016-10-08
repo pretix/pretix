@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 16:42+0000\n"
-"PO-Revision-Date: 2016-09-18 20:48+0200\n"
+"POT-Creation-Date: 2016-10-08 20:09+0000\n"
+"PO-Revision-Date: 2016-10-08 22:13+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,13 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:53
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:59
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:65
 msgid "Marked as paid"
 msgstr "Als bezahlt markiert"
+
+#: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:72
+msgid "Comment:"
+msgstr "Kommentar:"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:9
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:32
