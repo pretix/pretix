@@ -133,6 +133,12 @@ h1 .btn-sm {
     margin: 0;
 }
 
+.multi-step-tutorial {
+    &> li {
+        margin-bottom: 15px;
+    }
+}
+
 #loadingmodal, #ajaxerr {
     position: fixed;
     top: 0;

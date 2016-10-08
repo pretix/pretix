@@ -176,6 +176,9 @@ INSTALLED_APPS = [
     'pretix.plugins.pretixdroid',
     'easy_thumbnails',
     'django_markup',
+    'django_otp',
+    'django_otp.plugins.otp_totp',
+    'django_otp.plugins.otp_static',
 ]
 
 try:

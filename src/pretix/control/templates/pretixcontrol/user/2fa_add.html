@@ -1,0 +1,18 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Add a two-factor authentication device" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Add a two-factor authentication device" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        {% bootstrap_field form.name layout='horizontal' %}
+        {% bootstrap_field form.devicetype layout='horizontal' %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Continue" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
