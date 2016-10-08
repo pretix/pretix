@@ -16,8 +16,8 @@ from django.utils.http import is_safe_url
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 from django_otp import match_token
+from u2flib_server import u2f
 from u2flib_server.jsapi import DeviceRegistration
-from u2flib_server.u2f import start_authenticate, verify_authenticate
 from u2flib_server.utils import rand_bytes
 
 from pretix.base.forms.auth import (
@@ -247,7 +247,7 @@ class Login2FAView(TemplateView):
                        for device in U2FDevice.objects.filter(confirmed=True, user=self.user)]
             challenge = self.request.session.pop('_u2f_challenge')
             try:
-                verify_authenticate(devices, challenge, token, [self.app_id])
+                u2f.verify_authenticate(devices, challenge, token, [self.app_id])
                 valid = True
             except Exception:
                 logger.exception('U2F login failed')
@@ -271,11 +271,12 @@ class Login2FAView(TemplateView):
         devices = [DeviceRegistration.wrap(device.json_data)
                    for device in U2FDevice.objects.filter(confirmed=True, user=self.user)]
         if devices:
-            challenge = start_authenticate(devices, challenge=rand_bytes(32))
+            challenge = u2f.start_authenticate(devices, challenge=rand_bytes(32))
             self.request.session['_u2f_challenge'] = challenge.json
             ctx['jsondata'] = challenge.json
         else:
-            del self.request.session['_u2f_challenge']
+            if '_u2f_challenge' in self.request.session:
+                del self.request.session['_u2f_challenge']
             ctx['jsondata'] = None
 
         return ctx

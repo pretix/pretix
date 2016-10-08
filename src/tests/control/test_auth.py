@@ -1,13 +1,18 @@
+import time
 from datetime import date, timedelta
 
+from _pytest import monkeypatch
 from django.conf import settings
 from django.contrib.auth.tokens import (
     PasswordResetTokenGenerator, default_token_generator,
 )
 from django.core import mail as djmail
 from django.test import TestCase
+from django_otp.oath import TOTP
+from django_otp.plugins.otp_totp.models import TOTPDevice
+from u2flib_server.jsapi import JSONDict
 
-from pretix.base.models import User
+from pretix.base.models import U2FDevice, User
 
 
 class LoginFormTest(TestCase):
@@ -46,6 +51,18 @@ class LoginFormTest(TestCase):
         })
         self.assertEqual(response.status_code, 302)
         self.assertIn('/control/events/', response['Location'])
+
+    def test_redirect_to_2fa(self):
+        self.user.require_2fa = True
+        self.user.save()
+        response = self.client.post('/control/login?next=/control/events/', {
+            'email': 'dummy@dummy.dummy',
+            'password': 'dummy',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/control/login/2fa?next=/control/events/', response['Location'])
+        assert self.client.session['pretix_auth_2fa_user'] == self.user.pk
+        assert 'pretix_auth_2fa_time' in self.client.session
 
     def test_logged_in(self):
         response = self.client.post('/control/login?next=/control/events/', {
@@ -170,6 +187,95 @@ class RegistrationFormTest(TestCase):
             'password_repeat': 'foobarbar'
         })
         self.assertEqual(response.status_code, 302)
+
+
+class Login2FAFormTest(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy', require_2fa=True)
+        session = self.client.session
+        session['pretix_auth_2fa_user'] = self.user.pk
+        session['pretix_auth_2fa_time'] = str(int(time.time()))
+        session.save()
+
+    def test_invalid_session(self):
+        session = self.client.session
+        session['pretix_auth_2fa_user'] = self.user.pk + 12
+        session['pretix_auth_2fa_time'] = str(int(time.time()))
+        session.save()
+        response = self.client.get('/control/login/2fa')
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/control/login', response['Location'])
+
+    def test_expired_session(self):
+        session = self.client.session
+        session['pretix_auth_2fa_user'] = self.user.pk + 12
+        session['pretix_auth_2fa_time'] = str(int(time.time()) - 3600)
+        session.save()
+        response = self.client.get('/control/login/2fa')
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/control/login', response['Location'])
+
+    def test_totp_invalid(self):
+        response = self.client.get('/control/login/2fa')
+        assert 'token' in response.rendered_content
+        d = TOTPDevice.objects.create(user=self.user, name='test')
+        totp = TOTP(d.bin_key, d.step, d.t0, d.digits, d.drift)
+        totp.time = time.time()
+        response = self.client.post('/control/login/2fa'.format(d.pk), {
+            'token': str(totp.token() + 2)
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/control/login/2fa', response['Location'])
+
+    def test_totp_valid(self):
+        response = self.client.get('/control/login/2fa')
+        assert 'token' in response.rendered_content
+        d = TOTPDevice.objects.create(user=self.user, name='test')
+        totp = TOTP(d.bin_key, d.step, d.t0, d.digits, d.drift)
+        totp.time = time.time()
+        response = self.client.post('/control/login/2fa?next=/control/events/'.format(d.pk), {
+            'token': str(totp.token())
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/control/events/', response['Location'])
+
+    def test_u2f_invalid(self):
+        def fail(*args, **kwargs):
+            raise Exception("Failed")
+
+        m = monkeypatch.monkeypatch()
+        m.setattr("u2flib_server.u2f.verify_authenticate", fail)
+        m.setattr("u2flib_server.u2f.start_authenticate",
+                  lambda *args, **kwargs: JSONDict({'authenticateRequests': []}))
+        d = U2FDevice.objects.create(user=self.user, name='test', json_data="{}")
+
+        response = self.client.get('/control/login/2fa')
+        assert 'token' in response.rendered_content
+        response = self.client.post('/control/login/2fa'.format(d.pk), {
+            'token': '{"response": "true"}'
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/control/login/2fa', response['Location'])
+
+        m.undo()
+
+    def test_u2f_valid(self):
+        m = monkeypatch.monkeypatch()
+        m.setattr("u2flib_server.u2f.verify_authenticate", lambda *args, **kwargs: True)
+        m.setattr("u2flib_server.u2f.start_authenticate",
+                  lambda *args, **kwargs: JSONDict({'authenticateRequests': []}))
+        d = U2FDevice.objects.create(user=self.user, name='test', json_data="{}")
+
+        response = self.client.get('/control/login/2fa')
+        assert 'token' in response.rendered_content
+        response = self.client.post('/control/login/2fa'.format(d.pk), {
+            'token': '{"response": "true"}'
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/control/', response['Location'])
+
+        m.undo()
 
 
 class PasswordRecoveryFormTest(TestCase):
