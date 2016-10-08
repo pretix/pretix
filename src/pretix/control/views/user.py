@@ -131,3 +131,30 @@ class User2FADeviceConfirmTOTPView(TemplateView):
             return redirect(reverse('control:user.settings.2fa.confirm.totp', kwargs={
                 'device': self.device.pk
             }))
+
+
+class User2FAEnableView(TemplateView):
+    template_name = 'pretixcontrol/user/2fa_enable.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not any(dt.objects.filter(user=self.request.user, confirmed=True) for dt in REAL_DEVICE_TYPES):
+            messages.error(request, _('Please configure at least one device before enabling two-factor '
+                                      'authentication.'))
+            return redirect(reverse('control:user.settings.2fa'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.request.user.require_2fa = True
+        self.request.user.save()
+        messages.success(request, _('Two-factor authentication is now enabled for your account.'))
+        return redirect(reverse('control:user.settings.2fa'))
+
+
+class User2FADisableView(TemplateView):
+    template_name = 'pretixcontrol/user/2fa_disable.html'
+
+    def post(self, request, *args, **kwargs):
+        self.request.user.require_2fa = False
+        self.request.user.save()
+        messages.success(request, _('Two-factor authentication is now disabled for your account.'))
+        return redirect(reverse('control:user.settings.2fa'))

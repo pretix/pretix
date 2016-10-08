@@ -12,12 +12,14 @@
         {% endblocktrans %}
     </p>
     {% if user.require_2fa %}
-        <div class="panel panel-default">
+        <div class="panel panel-success">
             <div class="panel-heading">
                 <h3 class="panel-title">{% trans "Two-factor status" %}</h3>
             </div>
             <div class="panel-body">
-                <a href="" class="btn btn-primary pull-right">Disable</a>
+                <a href="{% url "control:user.settings.2fa.disable" %}" class="btn btn-primary pull-right">
+                    {% trans "Disable" %}
+                </a>
                 <p>
                     <strong>{% trans "Two-factor authentication is currently enabled." %}</strong>
                 </p>
@@ -30,7 +32,9 @@
             </div>
             <div class="panel-body">
                 {% if devices|length %}
-                    <a href="" class="btn btn-primary pull-right">Enable</a>
+                    <a href="{% url "control:user.settings.2fa.enable" %}" class="btn btn-primary pull-right">
+                        {% trans "Enable" %}
+                    </a>
                 {% endif %}
                 <p>
                     <strong>{% trans "Two-factor authentication is currently disabled." %}</strong>
