@@ -49,11 +49,18 @@ class PdfTicketOutput(BaseTicketOutput):
                 event_y = self.settings.get('event_y', default=235, as_type=float)
                 p.drawString(event_x * units.mm, event_y * units.mm, str(self.event.name))
 
+            order_s = self.settings.get('order_s', default=17, as_type=float)
+            if order_s:
+                p.setFont("Helvetica", order_s)
+                order_x = self.settings.get('order_x', default=15, as_type=float)
+                order_y = self.settings.get('order_y', default=220, as_type=float)
+                p.drawString(order_x * units.mm, order_y * units.mm, _('Order code: {code}').format(code=order.code))
+
             name_s = self.settings.get('name_s', default=17, as_type=float)
             if name_s:
                 p.setFont("Helvetica", name_s)
                 name_x = self.settings.get('name_x', default=15, as_type=float)
-                name_y = self.settings.get('name_y', default=220, as_type=float)
+                name_y = self.settings.get('name_y', default=210, as_type=float)
                 item = str(op.item.name)
                 if op.variation:
                     item += " – " + str(op.variation)
@@ -63,7 +70,7 @@ class PdfTicketOutput(BaseTicketOutput):
             if price_s:
                 p.setFont("Helvetica", price_s)
                 price_x = self.settings.get('price_x', default=15, as_type=float)
-                price_y = self.settings.get('price_y', default=210, as_type=float)
+                price_y = self.settings.get('price_y', default=200, as_type=float)
                 p.drawString(price_x * units.mm, price_y * units.mm, "%s %s" % (str(op.price), self.event.currency))
 
             qr_s = self.settings.get('qr_s', default=80, as_type=float)
@@ -76,21 +83,21 @@ class PdfTicketOutput(BaseTicketOutput):
                 d = Drawing(reqs, reqs, transform=[reqs / w, 0, 0, reqs / h, 0, 0])
                 d.add(qrw)
                 qr_x = self.settings.get('qr_x', default=10, as_type=float)
-                qr_y = self.settings.get('qr_y', default=130, as_type=float)
+                qr_y = self.settings.get('qr_y', default=120, as_type=float)
                 renderPDF.draw(d, p, qr_x * units.mm, qr_y * units.mm)
 
             code_s = self.settings.get('code_s', default=11, as_type=float)
             if code_s:
                 p.setFont("Helvetica", code_s)
                 code_x = self.settings.get('code_x', default=15, as_type=float)
-                code_y = self.settings.get('code_y', default=130, as_type=float)
+                code_y = self.settings.get('code_y', default=120, as_type=float)
                 p.drawString(code_x * units.mm, code_y * units.mm, op.secret)
 
             attendee_s = self.settings.get('attendee_s', default=0, as_type=float)
             if code_s and op.attendee_name:
                 p.setFont("Helvetica", attendee_s)
                 attendee_x = self.settings.get('attendee_x', default=15, as_type=float)
-                attendee_y = self.settings.get('attendee_y', default=100, as_type=float)
+                attendee_y = self.settings.get('attendee_y', default=90, as_type=float)
                 p.drawString(attendee_x * units.mm, attendee_y * units.mm, op.attendee_name)
 
             p.showPage()
@@ -155,6 +162,10 @@ class PdfTicketOutput(BaseTicketOutput):
                 ('code_y', forms.FloatField(label=_('Ticket code y position (mm)'), required=False)),
                 ('code_s', forms.FloatField(label=_('Ticket code size (mm)'), required=False,
                                             help_text=_('Visible by default, set this to 0 to hide the element.'))),
+                ('order_x', forms.FloatField(label=_('Order x position (mm)'), required=False)),
+                ('order_y', forms.FloatField(label=_('Order y position (mm)'), required=False)),
+                ('order_s', forms.FloatField(label=_('Order size (mm)'), required=False,
+                                             help_text=_('Visible by default, set this to 0 to hide the element.'))),
                 ('name_x', forms.FloatField(label=_('Product name x position (mm)'), required=False)),
                 ('name_y', forms.FloatField(label=_('Product name y position (mm)'), required=False)),
                 ('name_s', forms.FloatField(label=_('Product name size (mm)'), required=False,
