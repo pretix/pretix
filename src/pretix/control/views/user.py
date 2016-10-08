@@ -13,8 +13,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView, UpdateView
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
+from u2flib_server import u2f
 from u2flib_server.jsapi import DeviceRegistration
-from u2flib_server.u2f import complete_register, start_register
 
 from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
 from pretix.base.models import U2FDevice, User
@@ -90,9 +90,6 @@ class User2FADeviceAddView(FormView):
                 messages.error(self.request, _('U2F devices are only available if pretix is served via HTTPS.'))
                 return self.get(self.request, self.args, self.kwargs)
             dev = U2FDevice.objects.create(user=self.request.user, confirmed=False, name=form.cleaned_data['name'])
-        else:
-            messages.error(self.request, _('Unknown device type'))
-            return self.get(self.request, self.args, self.kwargs)
         return redirect(reverse('control:user.settings.2fa.confirm.' + form.cleaned_data['devicetype'], kwargs={
             'device': dev.pk
         }))
@@ -139,7 +136,7 @@ class User2FADeviceConfirmU2FView(TemplateView):
 
         devices = [DeviceRegistration.wrap(device.json_data)
                    for device in U2FDevice.objects.filter(confirmed=True, user=self.request.user)]
-        enroll = start_register(self.app_id, devices)
+        enroll = u2f.start_register(self.app_id, devices)
         self.request.session['_u2f_enroll'] = enroll.json
         ctx['jsondata'] = enroll.json
 
@@ -147,9 +144,9 @@ class User2FADeviceConfirmU2FView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         try:
-            binding, cert = complete_register(self.request.session.pop('_u2f_enroll'),
-                                              request.POST.get('token'),
-                                              [self.app_id])
+            binding, cert = u2f.complete_register(self.request.session.pop('_u2f_enroll'),
+                                                  request.POST.get('token'),
+                                                  [self.app_id])
             self.device.json_data = binding.json
             self.device.confirmed = True
             self.device.save()
@@ -158,7 +155,7 @@ class User2FADeviceConfirmU2FView(TemplateView):
         except Exception:
             messages.error(request, _('The registration could not be completed. Please try again.'))
             logger.exception('U2F registration failed')
-            return redirect(reverse('control:user.settings.2fa.confirm.2fa', kwargs={
+            return redirect(reverse('control:user.settings.2fa.confirm.u2f', kwargs={
                 'device': self.device.pk
             }))
 
@@ -225,7 +222,7 @@ class User2FADisableView(TemplateView):
 
 
 class User2FARegenerateEmergencyView(TemplateView):
-    template_name = 'pretixcontrol/user/2fa_regenermergency.html'
+    template_name = 'pretixcontrol/user/2fa_regenemergency.html'
 
     def post(self, request, *args, **kwargs):
         d = StaticDevice.objects.get(user=self.request.user, name='emergency')
