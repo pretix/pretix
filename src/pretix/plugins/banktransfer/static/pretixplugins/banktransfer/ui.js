@@ -66,6 +66,49 @@ var bankimport_transactionlist = {
         });
     },
 
+    comment_reset_to_text: function (id, text) {
+        var $box = $("tr[data-id=" + id + "] .comment-box");
+        $box.html("")
+            .append($("<strong>").text(gettext("Comment:")))
+            .append(" ")
+            .append($("<span>").addClass("comment").text(text))
+            .append(" ")
+            .append($("<a>").addClass("comment-modify btn btn-default btn-xs")
+                        .append("<span class='fa fa-edit'></span>"));
+    },
+
+    comment_start_edit: function (e) {
+        var $box = $(e.target).closest("div");
+        var id = $box.closest("tr").attr("data-id");
+        var $inp = $("<textarea>").addClass("form-control");
+        var orig_text = $box.find(".comment").text();
+        $inp.val(orig_text);
+
+        var $btngrp = $("<div>");
+        $btngrp.addClass("btn-group");
+        var $btn1 = $("<button>");
+        $btn1.attr("type", "button").addClass("btn btn-default");
+        $btn1.append("<span class='fa fa-check'></span>");
+        $btngrp.append($btn1);
+        var $btn2 = $("<button>");
+        $btn2.attr("type", "button").addClass("btn btn-default");
+        $btn2.append("<span class='fa fa-close'></span>");
+        $btngrp.append($btn2);
+        $box.html("").append($inp).append($btngrp);
+        $btn1.click(function () {
+            var text = $box.find("textarea").val();
+            $box.find("input, textarea, button").prop("disabled", true);
+            bankimport_transactionlist._action(id, "comment:" + text, function () {
+                bankimport_transactionlist.comment_reset_to_text(id, text);
+            });
+        });
+        $btn2.click(function () {
+            bankimport_transactionlist.comment_reset_to_text(id, orig_text);
+        });
+
+        e.preventDefault();
+    },
+
     typeahead_source: function () {
         return new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
@@ -92,6 +135,9 @@ var bankimport_transactionlist = {
     init: function () {
         if ($(".transaction-list").length) {
             $(".transaction-list button").click(bankimport_transactionlist._btn_click);
+
+            $(".transaction-list").on("click", ".comment-modify", bankimport_transactionlist.comment_start_edit);
+
             $(".transaction-list .form-control").typeahead(null, {
                 minLength: 2,
                 name: 'order-dataset',

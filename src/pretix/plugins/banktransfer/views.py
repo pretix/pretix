@@ -99,6 +99,13 @@ class ActionView(EventPermissionRequiredMixin, View):
         else:
             return self._retry(trans)
 
+    def _comment(self, trans, comment):
+        trans.comment = comment
+        trans.save()
+        return JsonResponse({
+            'status': 'ok'
+        })
+
     def post(self, request, *args, **kwargs):
         for k, v in request.POST.items():
             if not k.startswith('action_'):
@@ -112,6 +119,9 @@ class ActionView(EventPermissionRequiredMixin, View):
             elif v == 'accept' and trans.state == BankTransaction.STATE_INVALID:
                 # Accept anyway even with wrong amount
                 return self._accept_ignore_amount(trans)
+
+            elif v.startswith('comment:'):
+                return self._comment(trans, v[8:])
 
             elif v.startswith('assign:') and trans.state == BankTransaction.STATE_NOMATCH:
                 return self._assign(trans, v[7:])

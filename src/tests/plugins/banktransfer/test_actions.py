@@ -119,6 +119,22 @@ def test_assign_order_amount_incorrect(env, client):
 
 
 @pytest.mark.django_db
+def test_comment(env, client):
+    job = BankImportJob.objects.create(event=env[0])
+    trans = BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
+                                           state=BankTransaction.STATE_NOMATCH,
+                                           amount=12, date='unknown')
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = json.loads(client.post('/control/event/{}/{}/banktransfer/action/'.format(env[0].organizer.slug, env[0].slug), {
+        'action_{}'.format(trans.pk): 'comment:This is my comment'.format(env[2].code)
+    }).content.decode('utf-8'))
+    assert r['status'] == 'ok'
+    trans.refresh_from_db()
+    assert trans.comment == 'This is my comment'
+    assert trans.state == BankTransaction.STATE_NOMATCH
+
+
+@pytest.mark.django_db
 def test_retry_success(env, client):
     job = BankImportJob.objects.create(event=env[0])
     trans = BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',

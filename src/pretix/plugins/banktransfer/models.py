@@ -50,6 +50,7 @@ class BankTransaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.CharField(max_length=50)
     order = models.ForeignKey('pretixbase.Order', null=True, blank=True)
+    comment = models.TextField(blank=True)
 
     def calculate_checksum(self):
         clean = re.compile('[^a-zA-Z0-9.-]')

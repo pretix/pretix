@@ -54,7 +54,17 @@
                     {% endif %}
                 </td>
                 <td>{{ trans.date }}</td>
-                <td>{{ trans.payer }}<br/>{{ trans.reference }}</td>
+                <td>
+                    {{ trans.payer }}<br/>
+                    {{ trans.reference }}
+                    <div class="comment-box">
+                        <strong>{% trans "Comment:" %}</strong>
+                        <span class="comment">{{ trans.comment }}</span>
+                        <a href="#" class="comment-modify btn btn-default btn-xs">
+                            <span class="fa fa-edit"></span>
+                        </a>
+                    </div>
+                </td>
                 <td>{{ trans.amount|floatformat:2 }}</td>
                 <td>
                     {% if trans.message %}
