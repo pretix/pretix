@@ -5,6 +5,8 @@ from django.contrib.auth.models import (
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django_otp.models import Device
+from pretix.base.i18n import language
+from pretix.helpers.urls import build_absolute_uri
 
 from .base import LoggingMixin
 
@@ -127,6 +129,28 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             }
         else:
             return self.email
+
+    def send_security_notice(self, messages, email=None):
+        from pretix.base.services.mail import mail, SendMailException
+
+        try:
+            with language(self.locale):
+                msg = '- ' + '\n- '.join(str(m) for m in messages)
+
+            mail(
+                email or self.email,
+                _('Account information changed'),
+                'pretixcontrol/email/security_notice.txt',
+                {
+                    'user': self,
+                    'messages': msg,
+                    'url': build_absolute_uri('control:user.settings')
+                },
+                event=None,
+                locale=self.locale
+            )
+        except SendMailException:
+            pass  # Already logged
 
 
 class U2FDevice(Device):

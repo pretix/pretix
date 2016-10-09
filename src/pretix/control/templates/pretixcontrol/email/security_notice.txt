@@ -1,0 +1,16 @@
+{% load i18n %}{% blocktrans with url=url|safe %}Hello,
+
+this is to inform you that the account information of your pretix account has been
+changed. In particular, the following changes have been performed:
+
+{{ messages }}
+
+If this change was not performed by you, please contact us immediately.
+
+You can review and change your account settings here:
+
+{{ url }}
+
+Best regards,
+Your pretix team
+{% endblocktrans %}
