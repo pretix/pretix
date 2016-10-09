@@ -62,9 +62,34 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.contact.changed': _('The email address has been changed.'),
         'pretix.event.order.payment.changed': _('The payment method has been changed.'),
         'pretix.event.order.expire_warning_sent': _('An email has been sent with a warning that the order is about to expire.'),
+        'pretix.user.settings.2fa.enabled': _('Two-factor authentication has been enabled.'),
+        'pretix.user.settings.2fa.disabled': _('Two-factor authentication has been disabled.'),
+        'pretix.user.settings.2fa.regenemergency': _('Your two-factor emergency codes have been regenerated.'),
+        'pretix.control.auth.user.forgot_password.mail_sent': _('Password reset mail sent.'),
+        'pretix.control.auth.user.forgot_password.recovered': _('The password has been reset.')
+
     }
     if logentry.action_type in plains:
         return plains[logentry.action_type]
 
     if logentry.action_type.startswith('pretix.event.order.changed'):
         return _display_order_changed(sender, logentry)
+
+    if logentry.action_type == 'pretix.user.settings.2fa.device.added':
+        data = json.loads(logentry.data)
+        return _('A new two-factor authentication device "{name}" has been added to your account.').format(
+            name=data['name']
+        )
+    if logentry.action_type == 'pretix.user.settings.2fa.device.deleted':
+        data = json.loads(logentry.data)
+        return _('The two-factor authentication device "{name}" has been removed from your account.').format(
+            name=data['name']
+        )
+    if logentry.action_type == 'pretix.user.settings.changed':
+        data = json.loads(logentry.data)
+        text = str(_('Your account settings have been changed.'))
+        if 'email' in data:
+            text = text + ' ' + str(_('Your email address has been changed to {email}.').format(email=data['email']))
+        if 'new_pw' in data:
+            text = text + ' ' + str(_('Your password has been changed.'))
+        return text

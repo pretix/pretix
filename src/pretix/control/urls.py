@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^$', dashboards.user_index, name='index'),
     url(r'^settings$', user.UserSettings.as_view(), name='user.settings'),
     url(r'^settings/2fa/$', user.User2FAMainView.as_view(), name='user.settings.2fa'),
+    url(r'^settings/history/$', user.UserHistoryView.as_view(), name='user.settings.history'),
     url(r'^settings/2fa/add$', user.User2FADeviceAddView.as_view(), name='user.settings.2fa.add'),
     url(r'^settings/2fa/enable', user.User2FAEnableView.as_view(), name='user.settings.2fa.enable'),
     url(r'^settings/2fa/disable', user.User2FADisableView.as_view(), name='user.settings.2fa.disable'),
