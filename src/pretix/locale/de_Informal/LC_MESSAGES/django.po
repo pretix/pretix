@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-08 20:13+0000\n"
-"PO-Revision-Date: 2016-10-08 22:27+0200\n"
+"POT-Creation-Date: 2016-10-09 11:17+0000\n"
+"PO-Revision-Date: 2016-10-09 13:26+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -129,13 +129,14 @@ msgid "enabled"
 msgstr "aktiviert"
 
 #: pretix/base/forms/auth.py:16 pretix/base/forms/auth.py:163
-#: pretix/base/models/auth.py:62 pretix/base/models/orders.py:112
+#: pretix/base/models/auth.py:66 pretix/base/models/orders.py:112
 #: pretix/presale/forms/checkout.py:12 pretix/presale/forms/user.py:6
 msgid "E-mail"
 msgstr "E-Mail"
 
 #: pretix/base/forms/auth.py:17 pretix/base/forms/auth.py:80
 #: pretix/base/forms/auth.py:126 pretix/control/forms/event.py:404
+#: pretix/control/templates/pretixcontrol/user/reauth.html:14
 msgid "Password"
 msgstr "Passwort"
 
@@ -221,35 +222,35 @@ msgstr "Smartphone mit Authenticator-App"
 msgid "U2F-compatible hardware token (e.g. Yubikey)"
 msgstr "U2F-kompatibler Hardwaretoken (z.B. Yubikey)"
 
-#: pretix/base/models/auth.py:64
+#: pretix/base/models/auth.py:68
 msgid "Given name"
 msgstr "Vorname"
 
-#: pretix/base/models/auth.py:66
+#: pretix/base/models/auth.py:70
 msgid "Family name"
 msgstr "Nachname"
 
-#: pretix/base/models/auth.py:68
+#: pretix/base/models/auth.py:72
 msgid "Is active"
 msgstr "Ist aktiviert"
 
-#: pretix/base/models/auth.py:70
+#: pretix/base/models/auth.py:74
 msgid "Is site admin"
 msgstr "Ist Systemadministrator"
 
-#: pretix/base/models/auth.py:72
+#: pretix/base/models/auth.py:76
 msgid "Date joined"
 msgstr "Registrierungsdatum"
 
-#: pretix/base/models/auth.py:76
+#: pretix/base/models/auth.py:80
 msgid "Language"
 msgstr "Sprache"
 
-#: pretix/base/models/auth.py:79
+#: pretix/base/models/auth.py:83
 msgid "Timezone"
 msgstr "Zeitzone"
 
-#: pretix/base/models/auth.py:85
+#: pretix/base/models/auth.py:89
 #: pretix/control/templates/pretixcontrol/event/permissions.html:15
 #: pretix/control/templates/pretixcontrol/order/index.html:91
 #: pretix/control/templates/pretixcontrol/orders/index.html:76
@@ -257,14 +258,18 @@ msgstr "Zeitzone"
 msgid "User"
 msgstr "Benutzer"
 
-#: pretix/base/models/auth.py:86
+#: pretix/base/models/auth.py:90
 msgid "Users"
 msgstr "Benutzer"
 
-#: pretix/base/models/auth.py:124
+#: pretix/base/models/auth.py:128
 #, python-format
 msgid "%(family)s, %(given)s"
 msgstr "%(family)s, %(given)s"
+
+#: pretix/base/models/auth.py:144
+msgid "Account information changed"
+msgstr "Account-Informationen geändert"
 
 #: pretix/base/models/event.py:59 pretix/base/models/organizer.py:29
 msgid ""
@@ -2422,6 +2427,56 @@ msgstr ""
 "Eine E-Mail wurde mit einer Warnung für das Ablaufdatum der Bestellung "
 "verschickt."
 
+#: pretix/control/logdisplay.py:65 pretix/control/views/user.py:304
+msgid "Two-factor authentication has been enabled."
+msgstr "Zwei-Faktor-Authentifizierung wurde aktiviert."
+
+#: pretix/control/logdisplay.py:66 pretix/control/views/user.py:188
+#: pretix/control/views/user.py:318
+msgid "Two-factor authentication has been disabled."
+msgstr "Zwei-Faktor-Authentifizierung wurde deaktiviert."
+
+#: pretix/control/logdisplay.py:67 pretix/control/views/user.py:333
+msgid "Your two-factor emergency codes have been regenerated."
+msgstr "Deine Zwei-Faktor-Notfall-Tokens wurden neu generiert."
+
+#: pretix/control/logdisplay.py:68
+msgid "Password reset mail sent."
+msgstr "E-Mail zur Passwort-Wiederherstellung verschickt."
+
+#: pretix/control/logdisplay.py:69
+msgid "The password has been reset."
+msgstr "Das Passwort wurde zurückgesetzt."
+
+#: pretix/control/logdisplay.py:80
+#, python-brace-format
+msgid ""
+"A new two-factor authentication device \"{name}\" has been added to your "
+"account."
+msgstr ""
+"Ein neues Gerät \"{name}\" zur Zwei-Faktor-Authentifizierung wurde "
+"hinzugefügt."
+
+#: pretix/control/logdisplay.py:85
+#, python-brace-format
+msgid ""
+"The two-factor authentication device \"{name}\" has been removed from your "
+"account."
+msgstr "Das Gerät \"{name}\" zur Zwei-Faktor-Authentifizierung wurde enternt."
+
+#: pretix/control/logdisplay.py:90
+msgid "Your account settings have been changed."
+msgstr "Die Account-Einstellungen wurden geändert."
+
+#: pretix/control/logdisplay.py:92 pretix/control/views/user.py:89
+#, python-brace-format
+msgid "Your email address has been changed to {email}."
+msgstr "Die E-Mail-Adresse wurde zu {email} geändert."
+
+#: pretix/control/logdisplay.py:94 pretix/control/views/user.py:86
+msgid "Your password has been changed."
+msgstr "Das Passwort wurde geändert."
+
 #: pretix/control/middleware.py:74
 msgid ""
 "The selected event was not found or you have no permission to administrate "
@@ -2528,7 +2583,7 @@ msgid "powered by <a %(a_attr)s>pretix</a>"
 msgstr "powered by <a %(a_attr)s>pretix</a>"
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:7
-#: pretix/control/views/auth.py:128
+#: pretix/control/views/auth.py:131
 msgid "Password recovery"
 msgstr "Passwortwiederherstellung"
 
@@ -2586,6 +2641,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:27
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:14
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:48
+#: pretix/control/templates/pretixcontrol/user/reauth.html:19
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:11
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:49
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:74
@@ -2616,7 +2672,7 @@ msgstr "Neues Passwort setzen"
 #: pretix/control/templates/pretixcontrol/order/extend.html:22
 #: pretix/control/templates/pretixcontrol/organizers/create.html:17
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:17
-#: pretix/control/templates/pretixcontrol/user/settings.html:41
+#: pretix/control/templates/pretixcontrol/user/settings.html:50
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:56
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:50
 msgid "Save"
@@ -2685,6 +2741,44 @@ msgstr ""
 "\n"
 "Viele Grüße,\n"
 "Dein pretix Team\n"
+
+#: pretix/control/templates/pretixcontrol/email/security_notice.txt:1
+#, python-format
+msgid ""
+"Hello,\n"
+"\n"
+"this is to inform you that the account information of your pretix account "
+"has been\n"
+"changed. In particular, the following changes have been performed:\n"
+"\n"
+"%(messages)s\n"
+"\n"
+"If this change was not performed by you, please contact us immediately.\n"
+"\n"
+"You can review and change your account settings here:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Best regards,\n"
+"Your pretix team\n"
+msgstr ""
+"Hallo,\n"
+"\n"
+"die Einstellungen deines pretix-Kontos wurden verändert. Es wurden die "
+"folgenden Änderungen\n"
+"vorgenommen:\n"
+"\n"
+"%(messages)s\n"
+"\n"
+"Wenn diese Änderung nicht von dir vorgenommen wurden, kontaktiere uns bitte "
+"unverzüglich.\n"
+"\n"
+"Du kannst deine Kontoeinstellungen hier einsehen und verändern:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Viele Grüße\n"
+"Dein pretix-Team\n"
 
 #: pretix/control/templates/pretixcontrol/event/base.html:17
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:6
@@ -2876,7 +2970,7 @@ msgstr "Installierte Erweiterungen"
 #: pretix/control/views/item.py:472 pretix/control/views/item.py:658
 #: pretix/control/views/item.py:739 pretix/control/views/item.py:773
 #: pretix/control/views/item.py:837 pretix/control/views/organizer.py:38
-#: pretix/control/views/user.py:45 pretix/control/views/vouchers.py:180
+#: pretix/control/views/user.py:73 pretix/control/views/vouchers.py:180
 msgid "Your changes have been saved."
 msgstr "Die Änderungen wurden gespeichert."
 
@@ -3941,6 +4035,25 @@ msgstr "Möchtest du wirklich neue Notfall-Tokens generierien?"
 msgid "The old codes will no longer work."
 msgstr "Die alten Tokens werden nicht mehr funktionieren."
 
+#: pretix/control/templates/pretixcontrol/user/history.html:4
+#: pretix/control/templates/pretixcontrol/user/history.html:6
+#: pretix/control/templates/pretixcontrol/user/history.html:10
+#: pretix/control/templates/pretixcontrol/user/settings.html:39
+msgid "Account history"
+msgstr "Konto-Änderungen"
+
+#: pretix/control/templates/pretixcontrol/user/reauth.html:9
+msgid "Confirm password"
+msgstr "Passwort bestätigen"
+
+#: pretix/control/templates/pretixcontrol/user/reauth.html:11
+msgid ""
+"Please confirm your password to continue with this operation. We'll remember "
+"your password for an hour or until you log out."
+msgstr ""
+"Bitte bestätige dein Ihr Passwort, um fortzufahren. Wir werden uns das "
+"Passwort für eine Stunde oder bis zum nächsten Logout merken."
+
 #: pretix/control/templates/pretixcontrol/user/settings.html:4
 #: pretix/control/templates/pretixcontrol/user/settings.html:6
 msgid "Account settings"
@@ -3965,6 +4078,10 @@ msgstr "Zwei-Faktor-Einstellungen ändern"
 #: pretix/control/templates/pretixcontrol/user/settings.html:31
 msgid "Disabled"
 msgstr "Deaktiviert"
+
+#: pretix/control/templates/pretixcontrol/user/settings.html:43
+msgid "Show account history"
+msgstr "Account-Protokoll anzeigen"
 
 #: pretix/control/templates/pretixcontrol/vouchers/base.html:10
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:18
@@ -4098,20 +4215,20 @@ msgstr "Du hast noch keine Tags zu Gutscheinen hinzugefügt."
 msgid "Redeemed vouchers"
 msgstr "Eingelöste Gutscheine"
 
-#: pretix/control/views/auth.py:121 pretix/presale/views/user.py:34
+#: pretix/control/views/auth.py:124 pretix/presale/views/user.py:34
 msgid "We already sent you an email in the last 24 hours."
 msgstr "Wir haben dir in den letzten 24 Stunden bereits eine E-Mail geschickt."
 
-#: pretix/control/views/auth.py:137 pretix/control/views/orders.py:360
+#: pretix/control/views/auth.py:140 pretix/control/views/orders.py:360
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
 "Es gab ein Fehler beim Senden der E-Mail. Bitte probiere es später erneut."
 
-#: pretix/control/views/auth.py:141
+#: pretix/control/views/auth.py:144
 msgid "We sent you an e-mail containing further instructions."
 msgstr "Wir haben dir eine E-Mail mit weiteren Instruktionen geschickt."
 
-#: pretix/control/views/auth.py:160
+#: pretix/control/views/auth.py:163
 msgid ""
 "You clicked on an invalid link. Please check that you copied the full web "
 "address into your address bar. Please note that the link is only valid for "
@@ -4121,21 +4238,21 @@ msgstr ""
 "Adresse in deine Adresszeile kopiert hast. Bitte beachte, dass der Link nur "
 "drei Tage gültig ist und nur einmal benutzt werden kann."
 
-#: pretix/control/views/auth.py:163
+#: pretix/control/views/auth.py:166
 msgid "We were unable to find the user you requested a new password for."
 msgstr ""
 "Wir konnten den Benutzer, für den ein neues Passwort angefordert wurde, "
 "nicht finden."
 
-#: pretix/control/views/auth.py:196
+#: pretix/control/views/auth.py:199
 msgid "You can now login using your new password."
 msgstr "Du kannst dich nun mit deinem neuen Passwort anmelden."
 
-#: pretix/control/views/auth.py:237
+#: pretix/control/views/auth.py:240
 msgid "Please try again."
 msgstr "Bitte erneut versuchen."
 
-#: pretix/control/views/auth.py:265
+#: pretix/control/views/auth.py:269
 msgid "Invalid code, please try again."
 msgstr "Ungültiger Token, bitte erneut versuchen."
 
@@ -4474,30 +4591,43 @@ msgstr "Die Eingabe konnte nicht verarbeitet werden."
 msgid "The new organizer has been created."
 msgstr "Ein neuer Veranstalter wurde erstellt."
 
-#: pretix/control/views/user.py:41
+#: pretix/control/views/user.py:50
+msgid "The password you entered was invalid, please try again."
+msgstr ""
+"Das eingegebene aktuelle Passwort war nicht korrekt, bitte erneut versuchen."
+
+#: pretix/control/views/user.py:69
 msgid "Your changes could not be saved. See below for details."
 msgstr "Die Änderungen konnten nicht gespeichert werden."
 
-#: pretix/control/views/user.py:90
+#: pretix/control/views/user.py:151
 msgid "U2F devices are only available if pretix is served via HTTPS."
 msgstr ""
 "U2F-Unterstützung ist nur verfügbar, wenn pretix über HTTPS ausgeliefert "
 "wird."
 
-#: pretix/control/views/user.py:118
+#: pretix/control/views/user.py:182
+msgid "A two-factor authentication device has been removed from your account."
+msgstr "Ein Gerät zur Zwei-Faktor-Authentifizierung wurde entfernt."
+
+#: pretix/control/views/user.py:191
 msgid "The device has been removed."
 msgstr "Das Gerät wurde entfernt."
 
-#: pretix/control/views/user.py:153 pretix/control/views/user.py:187
+#: pretix/control/views/user.py:232 pretix/control/views/user.py:275
+msgid "A new two-factor authentication device has been added to your account."
+msgstr "Ein Gerät zur Zwei-Faktor-Authentifizierung wurde hinzugefügt."
+
+#: pretix/control/views/user.py:235 pretix/control/views/user.py:278
 msgid "The device has been verified and can now be used."
 msgstr "Das Gerät wurde bestätigt und kann nun verwendet werden."
 
-#: pretix/control/views/user.py:156
+#: pretix/control/views/user.py:238
 msgid "The registration could not be completed. Please try again."
 msgstr ""
 "Die Registrierung konnte nicht bestätigt werden. Bitte versuche es erneut."
 
-#: pretix/control/views/user.py:190
+#: pretix/control/views/user.py:281
 msgid ""
 "The code you entered was not valid. If this problem persists, please check "
 "that the date and time of your phone are configured correctly."
@@ -4505,7 +4635,7 @@ msgstr ""
 "Der eingegebene Token ist nicht gültig. Wenn das Problem fortbesteht, prüfe "
 "bitte ob Datum und Uhrzeit deines Telefons korrekt eingestellt sind."
 
-#: pretix/control/views/user.py:202
+#: pretix/control/views/user.py:293
 msgid ""
 "Please configure at least one device before enabling two-factor "
 "authentication."
@@ -4513,15 +4643,15 @@ msgstr ""
 "Bitte konfiguriere mindestens ein Gerät, bevor du Zwei-Faktor-"
 "Authentifizierung aktivierst."
 
-#: pretix/control/views/user.py:210
+#: pretix/control/views/user.py:302
 msgid "Two-factor authentication is now enabled for your account."
 msgstr "Zwei-Faktor-Authentifizierung ist nun aktiviert."
 
-#: pretix/control/views/user.py:220
+#: pretix/control/views/user.py:316
 msgid "Two-factor authentication is now disabled for your account."
 msgstr "Zwei-Faktor-Authentifizierung ist nun deaktiviert."
 
-#: pretix/control/views/user.py:232
+#: pretix/control/views/user.py:335
 msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices."
