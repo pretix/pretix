@@ -22,7 +22,8 @@ class EventPluginSignal(django.dispatch.Signal):
 
         sender is required to be an instance of ``pretix.base.models.Event``.
         """
-        assert isinstance(sender, Event)
+        if sender and not isinstance(sender, Event):
+            raise ValueError("Sender needs to be an event.")
 
         responses = []
         if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
@@ -44,7 +45,7 @@ class EventPluginSignal(django.dispatch.Signal):
                 searchpath, mod = searchpath.rsplit(".", 1)
 
             # Only fire receivers from active plugins and core modules
-            if (searchpath, mod) in settings.CORE_MODULES or (app and app.name in sender.get_plugins()):
+            if (searchpath, mod) in settings.CORE_MODULES or (sender and app and app.name in sender.get_plugins()):
                 if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
                     response = receiver(signal=self, sender=sender, **named)
                     responses.append((receiver, response))
