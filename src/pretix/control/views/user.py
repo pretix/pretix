@@ -31,6 +31,7 @@ class UserSettings(UpdateView):
     template_name = 'pretixcontrol/user/settings.html'
 
     def get_object(self, queryset=None):
+        self._old_email = self.request.user.email
         return self.request.user
 
     def get_form_kwargs(self):
@@ -44,7 +45,6 @@ class UserSettings(UpdateView):
 
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
-        sup = super().form_valid(form)
 
         data = {}
         for k in form.changed_data:
@@ -53,6 +53,21 @@ class UserSettings(UpdateView):
                     data['new_pw'] = True
                 else:
                     data[k] = form.cleaned_data[k]
+
+        msgs = []
+
+        if 'new_pw' in form.changed_data:
+            msgs.append(_('Your password has been changed.'))
+
+        if 'email' in form.changed_data:
+            msgs.append(_('Your email address has been changed to {email}.').format(email=form.cleaned_data['email']))
+
+        if msgs:
+            self.request.user.send_security_notice(msgs, email=form.cleaned_data['email'])
+            if self._old_email != form.cleaned_data['email']:
+                self.request.user.send_security_notice(msgs, email=self._old_email)
+
+        sup = super().form_valid(form)
         self.request.user.log_action('pretix.user.settings.changed', user=self.request.user, data=data)
 
         update_session_auth_hash(self.request, self.request.user)
@@ -126,11 +141,16 @@ class User2FADeviceDeleteView(TemplateView):
             'id': self.device.pk
         })
         self.device.delete()
+        msgs = [
+            _('A two-factor authentication device has been removed from your account.')
+        ]
         if not any(dt.objects.filter(user=self.request.user, confirmed=True) for dt in REAL_DEVICE_TYPES):
             self.request.user.require_2fa = False
             self.request.user.save()
             self.request.user.log_action('pretix.user.settings.2fa.disabled', user=self.request.user)
+            msgs.append(_('Two-factor authentication has been disabled.'))
 
+        self.request.user.send_security_notice(msgs)
         messages.success(request, _('The device has been removed.'))
         return redirect(reverse('control:user.settings.2fa'))
 
@@ -170,6 +190,9 @@ class User2FADeviceConfirmU2FView(TemplateView):
                 'id': self.device.pk,
                 'devicetype': 'u2f'
             })
+            self.request.user.send_security_notice([
+                _('A new two-factor authentication device has been added to your account.')
+            ])
 
             messages.success(request, _('The device has been verified and can now be used.'))
             return redirect(reverse('control:user.settings.2fa'))
@@ -209,6 +232,9 @@ class User2FADeviceConfirmTOTPView(TemplateView):
                 'id': self.device.pk,
                 'devicetype': 'totp'
             })
+            self.request.user.send_security_notice([
+                _('A new two-factor authentication device has been added to your account.')
+            ])
 
             messages.success(request, _('The device has been verified and can now be used.'))
             return redirect(reverse('control:user.settings.2fa'))
@@ -235,6 +261,9 @@ class User2FAEnableView(TemplateView):
         self.request.user.save()
         self.request.user.log_action('pretix.user.settings.2fa.enabled', user=self.request.user)
         messages.success(request, _('Two-factor authentication is now enabled for your account.'))
+        self.request.user.send_security_notice([
+            _('Two-factor authentication has been enabled.')
+        ])
         return redirect(reverse('control:user.settings.2fa'))
 
 
@@ -246,6 +275,9 @@ class User2FADisableView(TemplateView):
         self.request.user.save()
         self.request.user.log_action('pretix.user.settings.2fa.disabled', user=self.request.user)
         messages.success(request, _('Two-factor authentication is now disabled for your account.'))
+        self.request.user.send_security_notice([
+            _('Two-factor authentication has been disabled.')
+        ])
         return redirect(reverse('control:user.settings.2fa'))
 
 
@@ -258,6 +290,9 @@ class User2FARegenerateEmergencyView(TemplateView):
         for i in range(10):
             d.token_set.create(token=get_random_string(length=12, allowed_chars='1234567890'))
         self.request.user.log_action('pretix.user.settings.2fa.regenemergency', user=self.request.user)
+        self.request.user.send_security_notice([
+            _('Your two-factor emergency codes have been regenerated.')
+        ])
         messages.success(request, _('Your emergency codes have been newly generated. Remember to store them in a safe '
                                     'place in case you lose access to your devices.'))
         return redirect(reverse('control:user.settings.2fa'))
