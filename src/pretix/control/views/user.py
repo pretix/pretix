@@ -1,4 +1,5 @@
 import base64
+import copy
 import logging
 from urllib.parse import quote
 
@@ -44,6 +45,16 @@ class UserSettings(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
         sup = super().form_valid(form)
+
+        data = {}
+        for k in form.changed_data:
+            if k not in ('old_pw', 'new_pw_repeat'):
+                if 'new_pw' == k:
+                    data['new_pw'] = True
+                else:
+                    data[k] = form.cleaned_data[k]
+        self.request.user.log_action('pretix.user.settings.changed', user=self.request.user, data=data)
+
         update_session_auth_hash(self.request, self.request.user)
         return sup
 
@@ -111,10 +122,15 @@ class User2FADeviceDeleteView(TemplateView):
         return ctx
 
     def post(self, request, *args, **kwargs):
+        self.request.user.log_action('pretix.user.settings.2fa.device.deleted', user=self.request.user, data={
+            'id': self.device.pk
+        })
         self.device.delete()
         if not any(dt.objects.filter(user=self.request.user, confirmed=True) for dt in REAL_DEVICE_TYPES):
             self.request.user.require_2fa = False
             self.request.user.save()
+            self.request.user.log_action('pretix.user.settings.2fa.disabled', user=self.request.user)
+
         messages.success(request, _('The device has been removed.'))
         return redirect(reverse('control:user.settings.2fa'))
 
@@ -150,6 +166,11 @@ class User2FADeviceConfirmU2FView(TemplateView):
             self.device.json_data = binding.json
             self.device.confirmed = True
             self.device.save()
+            self.request.user.log_action('pretix.user.settings.2fa.device.added', user=self.request.user, data={
+                'id': self.device.pk,
+                'devicetype': 'u2f'
+            })
+
             messages.success(request, _('The device has been verified and can now be used.'))
             return redirect(reverse('control:user.settings.2fa'))
         except Exception:
@@ -184,6 +205,11 @@ class User2FADeviceConfirmTOTPView(TemplateView):
         if self.device.verify_token(token):
             self.device.confirmed = True
             self.device.save()
+            self.request.user.log_action('pretix.user.settings.2fa.device.added', user=self.request.user, data={
+                'id': self.device.pk,
+                'devicetype': 'totp'
+            })
+
             messages.success(request, _('The device has been verified and can now be used.'))
             return redirect(reverse('control:user.settings.2fa'))
         else:
@@ -207,6 +233,7 @@ class User2FAEnableView(TemplateView):
     def post(self, request, *args, **kwargs):
         self.request.user.require_2fa = True
         self.request.user.save()
+        self.request.user.log_action('pretix.user.settings.2fa.enabled', user=self.request.user)
         messages.success(request, _('Two-factor authentication is now enabled for your account.'))
         return redirect(reverse('control:user.settings.2fa'))
 
@@ -217,6 +244,7 @@ class User2FADisableView(TemplateView):
     def post(self, request, *args, **kwargs):
         self.request.user.require_2fa = False
         self.request.user.save()
+        self.request.user.log_action('pretix.user.settings.2fa.disabled', user=self.request.user)
         messages.success(request, _('Two-factor authentication is now disabled for your account.'))
         return redirect(reverse('control:user.settings.2fa'))
 
@@ -229,6 +257,7 @@ class User2FARegenerateEmergencyView(TemplateView):
         d.token_set.all().delete()
         for i in range(10):
             d.token_set.create(token=get_random_string(length=12, allowed_chars='1234567890'))
+        self.request.user.log_action('pretix.user.settings.2fa.regenemergency', user=self.request.user)
         messages.success(request, _('Your emergency codes have been newly generated. Remember to store them in a safe '
                                     'place in case you lose access to your devices.'))
         return redirect(reverse('control:user.settings.2fa'))
