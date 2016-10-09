@@ -50,6 +50,7 @@ def login(request):
                 return redirect(twofa_url)
             else:
                 auth_login(request, form.user_cache)
+                request.session['pretix_auth_login_time'] = int(time.time())
                 if "next" in request.GET and is_safe_url(request.GET.get("next")):
                     return redirect(request.GET.get("next"))
                 return redirect(reverse('control:index'))
@@ -66,6 +67,7 @@ def logout(request):
     Log the user out of the current session, then redirect to login page.
     """
     auth_logout(request)
+    request.session['pretix_auth_login_time'] = 0
     return redirect('control:auth.login')
 
 
@@ -89,6 +91,7 @@ def register(request):
             user = authenticate(email=user.email, password=form.cleaned_data['password'])
             user.log_action('pretix.control.auth.user.created', user=user)
             auth_login(request, user)
+            request.session['pretix_auth_login_time'] = int(time.time())
             return redirect('control:index')
     else:
         form = RegistrationForm()
@@ -256,6 +259,7 @@ class Login2FAView(TemplateView):
 
         if valid:
             auth_login(request, self.user)
+            request.session['pretix_auth_login_time'] = int(time.time())
             del request.session['pretix_auth_2fa_user']
             del request.session['pretix_auth_2fa_time']
             if "next" in request.GET and is_safe_url(request.GET.get("next")):

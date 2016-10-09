@@ -1,16 +1,16 @@
 import base64
-import copy
 import logging
+import time
 from urllib.parse import quote
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
+from django.utils.http import is_safe_url
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView, UpdateView
 from django_otp.plugins.otp_static.models import StaticDevice
@@ -19,11 +19,36 @@ from u2flib_server import u2f
 from u2flib_server.jsapi import DeviceRegistration
 
 from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
-from pretix.base.models import LogEntry, U2FDevice, User
+from pretix.base.models import U2FDevice, User
 from pretix.control.views.auth import get_u2f_appid
 
 REAL_DEVICE_TYPES = (TOTPDevice, U2FDevice)
 logger = logging.getLogger(__name__)
+
+
+class RecentAuthenticationRequiredMixin:
+    max_time = 3600
+
+    def dispatch(self, request, *args, **kwargs):
+        tdelta = time.time() - request.session.get('pretix_auth_login_time', 0)
+        if tdelta > self.max_time:
+            return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
+        return super().dispatch(request, *args, **kwargs)
+
+
+class ReauthView(TemplateView):
+    template_name = 'pretixcontrol/user/reauth.html'
+
+    def post(self, request, *args, **kwargs):
+        password = request.POST.get("password", "")
+        if request.user.check_password(password):
+            request.session['pretix_auth_login_time'] = int(time.time())
+            if "next" in request.GET and is_safe_url(request.GET.get("next")):
+                return redirect(request.GET.get("next"))
+            return redirect(reverse('control:index'))
+        else:
+            messages.error(request, _('The password you entered was invalid, please try again.'))
+            return self.get(request, *args, **kwargs)
 
 
 class UserSettings(UpdateView):
@@ -87,7 +112,7 @@ class UserHistoryView(TemplateView):
         return ctx
 
 
-class User2FAMainView(TemplateView):
+class User2FAMainView(RecentAuthenticationRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/user/2fa_main.html'
 
     def get_context_data(self, **kwargs):
@@ -114,7 +139,7 @@ class User2FAMainView(TemplateView):
         return ctx
 
 
-class User2FADeviceAddView(FormView):
+class User2FADeviceAddView(RecentAuthenticationRequiredMixin, FormView):
     form_class = User2FADeviceAddForm
     template_name = 'pretixcontrol/user/2fa_add.html'
 
@@ -131,7 +156,7 @@ class User2FADeviceAddView(FormView):
         }))
 
 
-class User2FADeviceDeleteView(TemplateView):
+class User2FADeviceDeleteView(RecentAuthenticationRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/user/2fa_delete.html'
 
     @cached_property
@@ -167,7 +192,7 @@ class User2FADeviceDeleteView(TemplateView):
         return redirect(reverse('control:user.settings.2fa'))
 
 
-class User2FADeviceConfirmU2FView(TemplateView):
+class User2FADeviceConfirmU2FView(RecentAuthenticationRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/user/2fa_confirm_u2f.html'
 
     @property
@@ -217,7 +242,7 @@ class User2FADeviceConfirmU2FView(TemplateView):
             }))
 
 
-class User2FADeviceConfirmTOTPView(TemplateView):
+class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/user/2fa_confirm_totp.html'
 
     @cached_property
@@ -260,7 +285,7 @@ class User2FADeviceConfirmTOTPView(TemplateView):
             }))
 
 
-class User2FAEnableView(TemplateView):
+class User2FAEnableView(RecentAuthenticationRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/user/2fa_enable.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -281,7 +306,7 @@ class User2FAEnableView(TemplateView):
         return redirect(reverse('control:user.settings.2fa'))
 
 
-class User2FADisableView(TemplateView):
+class User2FADisableView(RecentAuthenticationRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/user/2fa_disable.html'
 
     def post(self, request, *args, **kwargs):
@@ -295,7 +320,7 @@ class User2FADisableView(TemplateView):
         return redirect(reverse('control:user.settings.2fa'))
 
 
-class User2FARegenerateEmergencyView(TemplateView):
+class User2FARegenerateEmergencyView(RecentAuthenticationRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/user/2fa_regenemergency.html'
 
     def post(self, request, *args, **kwargs):

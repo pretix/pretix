@@ -1,0 +1,26 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12 col-md-4 col-md-offset-4">
+            <form action="" method="post">
+                {% csrf_token %}
+                <h2><span class="fa fa-shield"></span> {% trans "Confirm password" %}</h2>
+                <p>
+                    {% trans "Please confirm your password to continue with this operation. We'll remember your password for an hour or until you log out." %}
+                </p>
+                <div class="form-group">
+                    <input class="form-control" id="id_password" name="password" placeholder="{% trans "Password" %}"
+                            title="" type="password" required="">
+                </div>
+                <div class="form-group text-right">
+                    <button type="submit" class="btn btn-primary">
+                        {% trans "Continue" %}
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -120,6 +120,24 @@ class UserSettings2FATest(SoupTest):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         self.client.login(email='dummy@dummy.dummy', password='dummy')
+        session = self.client.session
+        session['pretix_auth_login_time'] = int(time.time())
+        session.save()
+
+    def test_require_reauth(self):
+        session = self.client.session
+        session['pretix_auth_login_time'] = int(time.time()) - 3600 * 2
+        session.save()
+
+        response = self.client.get('/control/settings/2fa/')
+        self.assertIn('/control/reauth', response['Location'])
+        self.assertEqual(response.status_code, 302)
+
+        response = self.client.post('/control/reauth/?next=/control/settings/2fa/', {
+            'password': 'dummy'
+        })
+        self.assertIn('/control/settings/2fa/', response['Location'])
+        self.assertEqual(response.status_code, 302)
 
     def test_enable_require_device(self):
         r = self.client.post('/control/settings/2fa/enable', follow=True)
