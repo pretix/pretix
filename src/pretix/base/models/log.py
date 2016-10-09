@@ -37,7 +37,8 @@ class LogEntry(models.Model):
     def display(self):
         from ..signals import logentry_display
 
-        for receiver, response in logentry_display.send(self.event, logentry=self):
-            if response:
-                return response
+        if self.event:
+            for receiver, response in logentry_display.send(self.event, logentry=self):
+                if response:
+                    return response
         return self.action_type
