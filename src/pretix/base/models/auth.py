@@ -2,9 +2,11 @@ from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin,
 )
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django_otp.models import Device
+
 from pretix.base.i18n import language
 from pretix.helpers.urls import build_absolute_uri
 
@@ -151,6 +153,13 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             )
         except SendMailException:
             pass  # Already logged
+
+    @property
+    def all_logentries(self):
+        from pretix.base.models import LogEntry
+
+        return LogEntry.objects.filter(content_type=ContentType.objects.get_for_model(User),
+                                       object_id=self.pk)
 
 
 class U2FDevice(Device):

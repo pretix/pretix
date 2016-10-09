@@ -6,6 +6,7 @@ from urllib.parse import quote
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.crypto import get_random_string
@@ -18,7 +19,7 @@ from u2flib_server import u2f
 from u2flib_server.jsapi import DeviceRegistration
 
 from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
-from pretix.base.models import U2FDevice, User
+from pretix.base.models import LogEntry, U2FDevice, User
 from pretix.control.views.auth import get_u2f_appid
 
 REAL_DEVICE_TYPES = (TOTPDevice, U2FDevice)
@@ -75,6 +76,15 @@ class UserSettings(UpdateView):
 
     def get_success_url(self):
         return reverse('control:user.settings')
+
+
+class UserHistoryView(TemplateView):
+    template_name = 'pretixcontrol/user/history.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['user'] = self.request.user
+        return ctx
 
 
 class User2FAMainView(TemplateView):
@@ -138,7 +148,9 @@ class User2FADeviceDeleteView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         self.request.user.log_action('pretix.user.settings.2fa.device.deleted', user=self.request.user, data={
-            'id': self.device.pk
+            'id': self.device.pk,
+            'name': self.device.name,
+            'devicetype': self.kwargs['devicetype']
         })
         self.device.delete()
         msgs = [
@@ -188,7 +200,8 @@ class User2FADeviceConfirmU2FView(TemplateView):
             self.device.save()
             self.request.user.log_action('pretix.user.settings.2fa.device.added', user=self.request.user, data={
                 'id': self.device.pk,
-                'devicetype': 'u2f'
+                'devicetype': 'u2f',
+                'name': self.device.name,
             })
             self.request.user.send_security_notice([
                 _('A new two-factor authentication device has been added to your account.')
@@ -230,6 +243,7 @@ class User2FADeviceConfirmTOTPView(TemplateView):
             self.device.save()
             self.request.user.log_action('pretix.user.settings.2fa.device.added', user=self.request.user, data={
                 'id': self.device.pk,
+                'name': self.device.name,
                 'devicetype': 'totp'
             })
             self.request.user.send_security_notice([
