@@ -337,7 +337,7 @@ class ImportView(EventPermissionRequiredMixin, ListView):
             'event': self.request.event.pk,
             'job': job.pk,
             'data': parsed
-        }, countdown=1)
+        })
         return redirect(reverse('plugins:banktransfer:import.job', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,

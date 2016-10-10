@@ -23,6 +23,7 @@ from reportlab.platypus import (
 
 from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
+from pretix.base.services.async import TransactionAwareTask
 from pretix.base.signals import register_payment_providers
 from pretix.celery import app
 
@@ -375,7 +376,7 @@ def _invoice_generate_german(invoice, f):
     return doc
 
 
-@app.task
+@app.task(base=TransactionAwareTask)
 def invoice_pdf_task(invoice: int):
     i = Invoice.objects.get(pk=invoice)
     with language(i.locale):
@@ -394,7 +395,8 @@ def invoice_qualified(order: Order):
 
 
 def invoice_pdf(*args, **kwargs):
-    # We introduce a 2 second delay, because otherwise we run into conditions where
+    # We call this task asynchroneously, because otherwise we run into conditions where
     # the task worker tries to generate the PDF even before our database transaction
-    # was committed and therefore fails to find the invoice object.
-    invoice_pdf_task.apply_async(args=args, kwargs=kwargs, countdown=2)
+    # was committed and therefore fails to find the invoice object. The invoice_pdf_task
+    # will prevent this kind of race condition.
+    invoice_pdf_task.apply_async(args=args, kwargs=kwargs)
