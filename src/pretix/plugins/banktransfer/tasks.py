@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_noop
 
 from pretix.base.i18n import language
 from pretix.base.models import Event, Order, Quota
+from pretix.base.services.async import TransactionAwareTask
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid
 from pretix.celery import app
@@ -95,7 +96,7 @@ def _get_unknown_transactions(event: Event, job: BankImportJob, data: list):
     return transactions
 
 
-@app.task
+@app.task(base=TransactionAwareTask)
 def process_banktransfers(event: int, job: int, data: list) -> None:
     with language("en"):  # We'll translate error messages at display time
         event = Event.objects.get(pk=event)
