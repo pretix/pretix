@@ -20,14 +20,11 @@ class Metric(object):
         self.help = helpstring
         self.labelnames = labelnames
 
-
     def __repr__(self):
         return self.name + "{" + ",".join(self.labelnames) + "}"
 
-
     def __str__(self):
         return self.__repr__()
-
 
     def _check_label_consistency(self, labelset):
         """
@@ -43,7 +40,6 @@ class Metric(object):
         if len(labelset) != len(self.labelnames):
             raise MetricsError("Unknown label used.")
 
-
     def _construct_metric_identifier(self, metricname, labelset=None):
         """
         Constructs the scrapable metricname usable in the output format.
@@ -57,14 +53,12 @@ class Metric(object):
 
             return metricname[:-1] + "}"
 
-
     def _inc_in_redis(self, key, amount):
         """
         Increments given key in Redis.
         """
         rkey = ns_prefix + key  # effective key for redis
         r.incrby(rkey, amount)
-
 
     def _set_in_redis(self, key, value):
         """
@@ -109,7 +103,6 @@ class Gauge(Metric):
         fullmetric = self._construct_metric_identifier(self.name, kwargs)
         self._set_in_redis(fullmetric, value)
 
-
     def inc(self, amount=1, **kwargs):
         """
         Increments Gauge by given amount for the labelset specified in kwargs.
@@ -122,7 +115,6 @@ class Gauge(Metric):
         fullmetric = self._construct_metric_identifier(self.name, kwargs)
         self._inc_in_redis(fullmetric, amount)
 
-
     def dec(self, amount=1, **kwargs):
         """
         Decrements Gauge by given amount for the labelset specified in kwargs.
@@ -132,9 +124,8 @@ class Gauge(Metric):
 
         self._check_label_consistency(self.labelnames, kwargs)
 
-        fullmetric = self._construct_metric_identifier(name, kwargs)
-        self._inc_in_redis(fullmetric, -1*amount)
-
+        fullmetric = self._construct_metric_identifier(self.name, kwargs)
+        self._inc_in_redis(fullmetric, amount * -1)
 
 
 def metrics_scrapable_textformat():
@@ -151,8 +142,6 @@ def metrics_scrapable_textformat():
         output.append(output_key + " " + str(value))
 
     return "\n".join(output)
-
-
 
 """
 Provided metrics
