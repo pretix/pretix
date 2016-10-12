@@ -5,7 +5,7 @@ if settings.HAS_REDIS:
 
 REDIS_KEY_PREFIX = "pretix_metrics_"
 
-r = django_redis.get_redis_connection("redis")
+redis = django_redis.get_redis_connection("redis")
 
 
 class MetricsError(Exception):
@@ -60,14 +60,14 @@ class Metric(object):
         Increments given key in Redis.
         """
         rkey = REDIS_KEY_PREFIX + key
-        r.incrbyfloat(rkey, amount)
+        redis.incrbyfloat(rkey, amount)
 
     def _set_in_redis(self, key, value):
         """
         Sets given key in Redis.
         """
         rkey = REDIS_KEY_PREFIX + key
-        r.set(rkey, value)
+        redis.set(rkey, value)
 
 
 class Counter(Metric):
