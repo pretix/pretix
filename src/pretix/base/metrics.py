@@ -1,13 +1,15 @@
-import redis
+from django.conf import settings
 
-ns_prefix = "pretix_metrics_"
+if settings.HAS_REDIS:
+    import django_redis
 
-r = redis.Redis(host=redishost, port=redisport)
+REDIS_KEY_PREFIX = "pretix_metrics_"
+
+r = django_redis.get_redis_connection("redis")
 
 
 class MetricsError(Exception):
-    def __init__(self, msg):
-        self.msg = msg
+    pass
 
 
 class Metric(object):
@@ -15,16 +17,13 @@ class Metric(object):
     Base Metrics Object
     """
 
-    def __init__(self, name, helpstring, labelnames=[]):
+    def __init__(self, name, helpstring, labelnames=None):
         self.name = name
-        self.help = helpstring
-        self.labelnames = labelnames
+        self.helpstring = helpstring
+        self.labelnames = labelnames or []
 
     def __repr__(self):
         return self.name + "{" + ",".join(self.labelnames) + "}"
-
-    def __str__(self):
-        return self.__repr__()
 
     def _check_label_consistency(self, labelset):
         """
@@ -38,7 +37,10 @@ class Metric(object):
 
         # now test if no further labels are required
         if len(labelset) != len(self.labelnames):
-            raise MetricsError("Unknown label used.")
+            s1 = set(labelset)
+            s2 = set(labelnames)
+            diff = s1.difference(s2)
+            raise MetricsError("Unknown labels used: {}".format(", ".join(diff)))
 
     def _construct_metric_identifier(self, metricname, labelset=None):
         """
@@ -47,24 +49,24 @@ class Metric(object):
         if not labelset:
             return metricname
         else:
-            metricname += "{"
+            labels = []
             for labelname in self.labelnames:
-                metricname += '{0}="{1}",'.format(labelname, labelset[labelname])
+                labels.append('{}="{}",'.format(labelname, labelset[labelname]))
 
-            return metricname[:-1] + "}"
+            return metricname + "{" + ",".join(labels) + "}"
 
     def _inc_in_redis(self, key, amount):
         """
         Increments given key in Redis.
         """
-        rkey = ns_prefix + key  # effective key for redis
-        r.incrby(rkey, amount)
+        rkey = REDIS_KEY_PREFIX + key
+        r.incrbyfloat(rkey, amount)
 
     def _set_in_redis(self, key, value):
         """
         Sets given key in Redis.
         """
-        rkey = ns_prefix + key  # effective key for redis
+        rkey = REDIS_KEY_PREFIX + key
         r.set(rkey, value)
 
 
@@ -80,7 +82,7 @@ class Counter(Metric):
         Increments Counter by given amount for the labelset specified in kwargs.
         """
         if amount < 0:
-            raise MetricsError("Counter cannot be decreased.")
+            raise MetricsError("Counter cannot be increased by negative values.")
 
         self._check_label_consistency(kwargs)
 
@@ -128,13 +130,13 @@ class Gauge(Metric):
         self._inc_in_redis(fullmetric, amount * -1)
 
 
-def metrics_scrapable_textformat():
+def metrics_textformat():
     """
     Produces the scrapable textformat to be presented to the monitoring system
     """
     output = []
 
-    for key in r.scan_iter(match=ns_prefix + "*"):
+    for key in r.scan_iter(match=REDIS_KEY_PREFIX + "*"):
         dkey = key.decode("utf-8")
         _, _, output_key = dkey.split("_", 2)
         value = float(r.get(dkey).decode("utf-8"))
@@ -142,6 +144,17 @@ def metrics_scrapable_textformat():
         output.append(output_key + " " + str(value))
 
     return "\n".join(output)
+
+
+if not settings.HAS_REDIS:
+    # noop everything
+    class Counter(object):
+        def inc(): pass
+    class Gauge(object):
+        def inc(): pass
+        def dec(): pass
+    def metrics_textformat(): pass
+
 
 """
 Provided metrics
