@@ -70,7 +70,6 @@ event_urls = [
     "orders/ABC/download/pdf",
     "orders/ABC/",
     "orders/",
-    "attendees/",
     "invoice/1",
 ]
 
@@ -144,7 +143,6 @@ event_permission_urls = [
     ("can_change_items", "quotas/add", 200),
     ("can_view_orders", "orders/overview/", 200),
     ("can_view_orders", "orders/", 200),
-    ("can_view_orders", "attendees/", 200),
     ("can_view_orders", "orders/FOO/", 200),
     ("can_change_orders", "orders/FOO/extend", 200),
     ("can_change_orders", "orders/FOO/contact", 200),

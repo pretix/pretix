@@ -86,12 +86,6 @@
                 </li>
             </ul>
         </li>
-        <li>
-            <a href="{% url 'control:event.attendees' organizer=request.event.organizer.slug event=request.event.slug %}">
-                <i class="fa fa-user fa-fw"></i>
-                {% trans "Attendees" %}
-            </a>
-        </li>
     {% endif %}
     {% if request.eventperm.can_view_vouchers %}
         <li>
