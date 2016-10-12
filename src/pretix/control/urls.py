@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 
 from pretix.control.views import (
-    attendees, auth, dashboards, event, help, item, main, orders, organizer,
+    auth, dashboards, event, help, item, main, orders, organizer,
     user, vouchers,
 )
 
@@ -114,7 +114,6 @@ urlpatterns = [
         url(r'^orders/export/$', orders.ExportView.as_view(), name='event.orders.export'),
         url(r'^orders/go$', orders.OrderGo.as_view(), name='event.orders.go'),
         url(r'^orders/$', orders.OrderList.as_view(), name='event.orders'),
-        url(r'^attendees/$', attendees.AttendeeList.as_view(), name='event.attendees'),
     ])),
     url(r'^help/(?P<topic>[a-zA-Z0-9_/]+)$', help.HelpView.as_view(), name='help'),
 ]
