@@ -10,6 +10,7 @@ from django.views.generic import FormView
 from pretix.base.models import Order
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 from . import forms
 
@@ -40,7 +41,17 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         for o in orders:
             try:
                 mail(o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
-                     None, self.request.event, locale=o.locale, order=o)
+                     {
+                        'event': o.event,
+                        'order': o.code,
+                        'order_date': o.datetime,
+                        'due_date': o.expires,
+                        'payment_date': o.payment_date,
+                        'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                            'order': o.code,
+                            'secret': o.secret
+                        })
+                     }, self.request.event, locale=o.locale, order=o)
             except SendMailException:
                 failures.append(o.email)
 
