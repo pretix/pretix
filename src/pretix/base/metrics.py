@@ -124,23 +124,23 @@ class Gauge(Metric):
         self._inc_in_redis(fullmetric, amount * -1)
 
 
-def metrics_textformat():
+def metric_values():
     """
     Produces the scrapable textformat to be presented to the monitoring system
     """
     if not settings.HAS_REDIS:
         return ""
 
-    output = []
+    metrics = {}
 
     for key in redis.scan_iter(match=REDIS_KEY_PREFIX + "*"):
         dkey = key.decode("utf-8")
         _, _, output_key = dkey.split("_", 2)
         value = float(redis.get(dkey).decode("utf-8"))
 
-        output.append(output_key + " " + str(value))
+        metrics[output_key] = value
 
-    return "\n".join(output)
+    return metrics
 
 
 """
