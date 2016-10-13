@@ -10,6 +10,7 @@ import django
 django.setup()
 
 from pretix.base.models import *  # NOQA
+from django.utils.timezone import now
 
 if Organizer.objects.exists():
     print("There already is data in your DB!")
@@ -20,16 +21,17 @@ user = User.objects.get_or_create(
 user.set_password('admin')
 user.save()
 organizer = Organizer.objects.create(
-    name='MRMCD e.V', slug='mrmcd'
+    name='BigEvents LLC', slug='bigevents'
 )
 OrganizerPermission.objects.get_or_create(
     organizer=organizer, user=user
 )
+year = now().year + 1
 event = Event.objects.create(
-    organizer=organizer, name='MRMCD 2015',
-    slug='2015', currency='EUR',
-    date_from=datetime(2015, 9, 4, 17, 0, 0),
-    date_to=datetime(2015, 9, 6, 17, 0, 0),
+    organizer=organizer, name='Demo Conference {}'.format(year),
+    slug=year, currency='EUR', live=True,
+    date_from=datetime(year, 9, 4, 17, 0, 0),
+    date_to=datetime(year, 9, 6, 17, 0, 0),
 )
 EventPermission.objects.get_or_create(
     event=event, user=user
