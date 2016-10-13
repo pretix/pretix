@@ -6,7 +6,6 @@ from tests.base import SoupTest, extract_form_fields
 from pretix.base.models import (
     Event, EventPermission, Organizer, OrganizerPermission, User,
 )
-from pretix.presale.style import regenerate_css
 from pretix.testutils.mock import mocker_context
 
 

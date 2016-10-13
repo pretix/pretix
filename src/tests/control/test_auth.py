@@ -286,7 +286,7 @@ class PasswordRecoveryFormTest(TestCase):
     def test_unknown(self):
         response = self.client.post('/control/forgot', {
             'email': 'dummy@dummy.dummy',
-            })
+        })
         self.assertEqual(response.status_code, 200)
 
     def test_email_sent(self):
@@ -294,7 +294,7 @@ class PasswordRecoveryFormTest(TestCase):
 
         response = self.client.post('/control/forgot', {
             'email': 'demo@demo.dummy',
-            })
+        })
         self.assertEqual(response.status_code, 302)
 
         assert len(djmail.outbox) == 1

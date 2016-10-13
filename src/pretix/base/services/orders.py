@@ -15,7 +15,7 @@ from pretix.base.i18n import (
     LazyDate, LazyLocaleException, LazyNumber, language,
 )
 from pretix.base.models import (
-    CartPosition, Event, EventLock, Item, ItemVariation, Order, OrderPosition,
+    CartPosition, Event, Item, ItemVariation, Order, OrderPosition,
     Quota, User,
 )
 from pretix.base.models.orders import InvoiceAddress

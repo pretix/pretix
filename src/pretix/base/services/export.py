@@ -1,6 +1,5 @@
 from typing import Any, Dict
 
-from django.conf import settings
 from django.core.files.base import ContentFile
 
 from pretix.base.models import CachedFile, Event, cachedfile_name

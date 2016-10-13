@@ -3,7 +3,6 @@ from datetime import date
 from decimal import Decimal
 
 from django.db import DatabaseError, models, transaction
-from django.db.models import Max
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 

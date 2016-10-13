@@ -336,7 +336,7 @@ class MailSettings(EventSettingsFormView):
                 self.request.event.log_action(
                     'pretix.event.settings', user=self.request.user, data={
                         k: form.cleaned_data.get(k) for k in form.changed_data
-                        }
+                    }
                 )
 
             if request.POST.get('test', '0').strip() == '1':

@@ -6,7 +6,6 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext as _
 
 from ..exporter import BaseExporter
-from ..models import Invoice
 from ..signals import register_data_exporters
 
 

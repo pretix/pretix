@@ -12,7 +12,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
-from django.views.generic import DetailView, ListView, TemplateView, View
+from django.views.generic import DetailView, ListView, View
 
 from pretix.base.models import Order, Quota
 from pretix.base.services.mail import SendMailException
@@ -283,7 +283,7 @@ class ImportView(EventPermissionRequiredMixin, ListView):
                 [
                     self.request.POST.get('col[%d][%d]' % (i, j))
                     for j in range(int(self.request.POST.get('cols')))
-                    ]
+                ]
             )
         if 'reference' not in self.request.POST:
             messages.error(self.request, _('You need to select the column containing the payment reference.'))

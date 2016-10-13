@@ -6,7 +6,7 @@ from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import (
     Event, EventPermission, Item, ItemCategory, ItemVariation, Order,
-    OrderPosition, Organizer, OrganizerPermission, Question, QuestionAnswer,
+    OrderPosition, Organizer, OrganizerPermission, Question,
     Quota, User,
 )
 

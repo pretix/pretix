@@ -13,7 +13,7 @@ from django.views.generic import DetailView, ListView, TemplateView, View
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, CachedTicket, EventLock, Invoice, Item, ItemVariation, Order,
+    CachedFile, CachedTicket, Invoice, Item, ItemVariation, Order,
     Quota,
 )
 from pretix.base.services import tickets

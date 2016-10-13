@@ -182,7 +182,7 @@ INSTALLED_APPS = [
 ]
 
 try:
-    import django_extensions
+    import django_extensions  # noqa
     INSTALLED_APPS.append('django_extensions')
 except ImportError:
     pass

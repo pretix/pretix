@@ -1,5 +1,4 @@
 import datetime
-import time
 from decimal import Decimal
 
 from django.core import mail

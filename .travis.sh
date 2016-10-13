@@ -7,7 +7,7 @@ echo "Executing job $1"
 if [ "$1" == "style" ]; then
 	XDG_CACHE_HOME=/cache pip3 install -Ur src/requirements.txt -r src/requirements/dev.txt -r src/requirements/py34.txt
 	cd src
-    flake8 --ignore=E123,F403,F401,N802,C901,W503,E402 .
+    flake8 .
     isort -c -rc .
 fi
 if [ "$1" == "doctests" ]; then
