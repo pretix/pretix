@@ -16,6 +16,7 @@ External Dependencies
 * ``pip`` for Python 3 (Debian package: ``python3-pip``)
 * ``pyvenv`` for Python 3 (Debian package: ``python3-venv``)
 * ``libffi`` (Debian package: ``libffi-dev``)
+* ``libssl`` (Debian package: ``libssl-dev``)
 * ``git``
 
 Your local python environment
@@ -31,7 +32,11 @@ environment and activate it for your current session::
 
 You should now see a ``(env)`` prepended to your shell prompt. You have to do this
 in every shell you use to work with pretix (or configure your shell to do so
-automatically).
+automatically). If you are working on Ubuntu or Debian, we strongly recommend upgrading
+your pip and setuptools installation inside the virtual environment, otherwise some of
+the dependencies might fail::
+
+    pip install -U pip setuptools
 
 Working with the code
 ---------------------
@@ -46,7 +51,7 @@ If you are working with Python 3.4, you will also need (you can skip this for Py
 
 Next, you need to copy the SCSS files from the source folder to the STATIC_ROOT directory::
 
-    python manage.py collectstatic
+    python manage.py collectstatic --noinput
 
 Then, create the local database::
 
@@ -57,15 +62,8 @@ created. If you want to generate more test data, run::
 
     python make_testdata.py
 
-Create the translation files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-If you're working with the translation, you can use the following command to scan the
-source code for strings to be translated and update the ``*.po`` files accordingly::
-
-    make localegen
-
-To actually see pretix in your language, you have to compile the ``*.po`` files to their
-optimized binary ``*.mo`` counterparts::
+If you want to see pretix in a different language than English, you have to compile our language
+files::
 
     make localecompile
 
@@ -87,7 +85,7 @@ Code checks and unit tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 Before you check in your code into git, always run the static checkers and unit tests::
 
-    flake8 --ignore=E123,E128,F403,F401,N802,W503 .
+    flake8 .
     isort -c -rc .
     python manage.py check
     py.test
@@ -117,6 +115,19 @@ Add this to your ``src/pretix.cfg``::
     port = 1025
 
 Then execute ``python -m smtpd -n -c DebuggingServer localhost:1025``.
+
+Working with translations
+^^^^^^^^^^^^^^^^^^^^^^^^^
+If you want to translate new strings that are not yet known to the translation system, 
+you can use the following command to scan the source code for strings to be translated 
+and update the ``*.po`` files accordingly::
+
+    make localegen
+
+To actually see pretix in your language, you have to compile the ``*.po`` files to their
+optimized binary ``*.mo`` counterparts::
+
+    make localecompile
 
 
 Working with the documentation
