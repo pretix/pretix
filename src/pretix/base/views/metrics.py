@@ -6,9 +6,10 @@ unauthedResponse = HttpResponse("<html><title>Forbidden</title><body>You are not
 unauthedResponse["WWW-Authenticate"] = 'Basic realm="metrics"'
 unauthedResponse.status_code = 401
 
+
 def serve_metrics(request):
     # first check if the user is properly authorized:
-    if not request.META.has_key("HTTP_AUTHORIZATION"):
+    if "HTTP_AUTHORIZATION" not in request.META:
         return unauthedResponse
 
     method, credentials = request.META["HTTP_AUTHORIZATION"].split(" ", 1)
