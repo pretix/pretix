@@ -20,32 +20,32 @@ class Metric(object):
     def __repr__(self):
         return self.name + "{" + ",".join(self.labelnames) + "}"
 
-    def _check_label_consistency(self, labelset):
+    def _check_label_consistency(self, labels):
         """
-        Checks if the given labelset provides exactly the labels that are required.
+        Checks if the given labels provides exactly the labels that are required.
         """
 
         # test if every required label is provided
         for labelname in self.labelnames:
-            if labelname not in labelset:
+            if labelname not in labels:
                 raise ValueError("Label {0} not specified.".format(labelname))
 
         # now test if no further labels are required
-        if len(labelset) != len(self.labelnames):
-            raise ValueError("Unknown labels used: {}".format(", ".join(set(labelset) - set(self.labelnames))))
+        if len(labels) != len(self.labelnames):
+            raise ValueError("Unknown labels used: {}".format(", ".join(set(labels) - set(self.labelnames))))
 
-    def _construct_metric_identifier(self, metricname, labelset=None):
+    def _construct_metric_identifier(self, metricname, labels=None):
         """
         Constructs the scrapable metricname usable in the output format.
         """
-        if not labelset:
+        if not labels:
             return metricname
         else:
-            labels = []
+            named_labels = []
             for labelname in self.labelnames:
-                labels.append('{}="{}",'.format(labelname, labelset[labelname]))
+                named_labels.append('{}="{}",'.format(labelname, labels[labelname]))
 
-            return metricname + "{" + ",".join(labels) + "}"
+            return metricname + "{" + ",".join(named_labels) + "}"
 
     def _inc_in_redis(self, key, amount):
         """
@@ -73,7 +73,7 @@ class Counter(Metric):
 
     def inc(self, amount=1, **kwargs):
         """
-        Increments Counter by given amount for the labelset specified in kwargs.
+        Increments Counter by given amount for the labels specified in kwargs.
         """
         if amount < 0:
             raise ValueError("Counter cannot be increased by negative values.")
@@ -92,7 +92,7 @@ class Gauge(Metric):
 
     def set(self, value=1, **kwargs):
         """
-        Sets Gauge to a specific value for the labelset specified in kwargs.
+        Sets Gauge to a specific value for the labels specified in kwargs.
         """
         self._check_label_consistency(kwargs)
 
@@ -101,7 +101,7 @@ class Gauge(Metric):
 
     def inc(self, amount=1, **kwargs):
         """
-        Increments Gauge by given amount for the labelset specified in kwargs.
+        Increments Gauge by given amount for the labels specified in kwargs.
         """
         if amount < 0:
             raise ValueError("Amount must be greater than zero. Otherwise use dec().")
@@ -113,7 +113,7 @@ class Gauge(Metric):
 
     def dec(self, amount=1, **kwargs):
         """
-        Decrements Gauge by given amount for the labelset specified in kwargs.
+        Decrements Gauge by given amount for the labels specified in kwargs.
         """
         if amount < 0:
             raise ValueError("Amount must be greater than zero. Otherwise use inc().")
