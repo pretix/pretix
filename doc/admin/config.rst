@@ -201,25 +201,6 @@ You can use an existing memcached server as pretix's caching backend::
 
 If no memcached is configured, pretix will use Django's built-in local-memory caching method.
 
-Redis
------
-
-If a redis server is configured, pretix can use it for locking, caching and session storage
-to speed up various operations::
-
-    [redis]
-    location=redis://127.0.0.1:6379/1
-    sessions=false
-
-``location``
-    The location of redis, as a URL of the form ``redis://[:password]@localhost:6379/0``
-    or ``unix://[:password]@/path/to/socket.sock?db=0``
-
-``session``
-    When this is set to ``True``, redis will be used as the session storage.
-
-If redis is not configured, pretix will store sessions and locks in the database. If memcached
-is configured, memcached will be used for caching instead of redis.
 
 Redis
 -----
