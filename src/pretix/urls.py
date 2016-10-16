@@ -4,7 +4,7 @@ from django.conf.urls import include, url
 import pretix.control.urls
 import pretix.presale.urls
 
-from .base.views import cachedfiles, health, js_catalog, redirect, metrics
+from .base.views import cachedfiles, health, js_catalog, metrics, redirect
 
 base_patterns = [
     url(r'^download/(?P<id>[^/]+)/$', cachedfiles.DownloadView.as_view(),
