@@ -8,6 +8,7 @@ def unauthed_response():
     response = HttpResponse(content, mimetype="text/html")
     response["WWW-Authenticate"] = 'Basic realm="metrics"'
     response.status_code = 401
+    return response
 
 
 def serve_metrics(request):
