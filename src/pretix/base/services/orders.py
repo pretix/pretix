@@ -41,8 +41,6 @@ error_messages = {
     'internal': _("An internal error occured, please try again."),
     'busy': _('We were not able to process your request completely as the '
               'server was too busy. Please try again.'),
-    'voucher_redeemed': _('A voucher you tried to use already has been used.'),
-    'voucher_expired': _('A voucher you tried to use has expired.'),
     'not_started': _('The presale period for this event has not yet started.'),
     'ended': _('The presale period has ended.'),
     'voucher_invalid': _('This voucher code is not known in our database.'),
