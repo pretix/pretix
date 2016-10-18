@@ -338,7 +338,7 @@ class CheckoutTestCase(TestCase):
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        assert doc.select(".alert-danger")
 
     def test_voucher_price_changed(self):
         v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
