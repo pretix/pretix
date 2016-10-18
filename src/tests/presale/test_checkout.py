@@ -327,6 +327,19 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertTrue(Voucher.objects.get(pk=v.pk).redeemed)
 
+    def test_voucher_required_but_missing(self):
+        self.ticket.require_voucher = True
+        self.ticket.save()
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() + timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".alert-danger")), 1)
+
     def test_voucher_price_changed(self):
         v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
                                    valid_until=now() + timedelta(days=2))
