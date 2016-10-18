@@ -35,6 +35,6 @@ def regenerate_css(event_id: int):
     )
 
     if event.settings.get('presale_css_checksum', '') != checksum:
-        newname = default_storage.save(fname, ContentFile(css))
+        newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         event.settings.set('presale_css_file', newname)
         event.settings.set('presale_css_checksum', checksum)
