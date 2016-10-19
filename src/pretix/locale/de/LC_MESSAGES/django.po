@@ -2067,7 +2067,7 @@ msgstr "Einleitender Text"
 
 #: pretix/control/forms/event.py:305
 msgid "Will be printed on every invoice above the invoice rows."
-msgstr "Wird auf jeder Rechnung unterhalb des Gesamtbetrages gedruckt."
+msgstr "Wird auf jeder Rechnung oberhalb der Rechnungspositionen gedruckt."
 
 #: pretix/control/forms/event.py:310
 msgid "Additional text"
