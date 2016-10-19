@@ -123,7 +123,7 @@
                                                                 placeholder="0"
                                                                 min="{{ var.price|stringformat:"0.2f" }}"
                                                                 name="price_{{ item.id }}_{{ var.id }}"
-                                                                step="0.01" value="{{ var.price|stringformat:"0.2f" }}">
+                                                                step="any" value="{{ var.price|stringformat:"0.2f" }}">
                                                     </div>
                                                 {% else %}
                                                     {{ event.currency }} {{ var.price|floatformat:2 }}
@@ -173,7 +173,7 @@
                                             <input type="number" class="form-control input-item-price" placeholder="0"
                                                     min="{{ item.price|stringformat:"0.2f" }}"
                                                     name="price_{{ item.id }}"
-                                                    step="0.01" value="{{ item.price|stringformat:"0.2f" }}">
+                                                    step="any" value="{{ item.price|stringformat:"0.2f" }}">
                                         </div>
                                     {% else %}
                                         {{ event.currency }} {{ item.price|floatformat:2 }}
