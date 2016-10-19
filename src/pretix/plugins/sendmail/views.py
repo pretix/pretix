@@ -3,6 +3,7 @@ import logging
 from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import redirect
+from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
@@ -42,16 +43,17 @@ class SenderView(EventPermissionRequiredMixin, FormView):
             try:
                 mail(o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
                      {
-                        'event': o.event,
-                        'order': o.code,
-                        'order_date': o.datetime,
-                        'due_date': o.expires,
-                        'payment_date': o.payment_date,
-                        'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                            'order': o.code,
-                            'secret': o.secret
-                        })
-                     }, self.request.event, locale=o.locale, order=o)
+                         'event': o.event,
+                         'order': o.code,
+                         'order_date': date_format(o.datetime, 'SHORT_DATETIME_FORMAT'),
+                         'due_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
+                         # 'payment_date': date_format(o.payment_date, 'SHORT_DATE_FORMAT'), --> this breaks for unpaid orders
+                         'payment_date': o.payment_date,
+                         'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                             'order': o.code,
+                             'secret': o.secret
+                         })
+                }, self.request.event, locale=o.locale, order=o)
             except SendMailException:
                 failures.append(o.email)
 
