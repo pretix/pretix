@@ -264,28 +264,37 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 @transaction.atomic
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None, address: int=None):
+    from datetime import date, time
+
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
     total += payment_fee
 
-    exp_by_date = now_dt + timedelta(days=event.settings.get('payment_term_days', as_type=int))
+    tz = pytz.timezone(event.settings.timezone)
+    exp_by_date = now_dt.astimezone(tz) + timedelta(days=event.settings.get('payment_term_days', as_type=int))
+    exp_by_date = exp_by_date.replace(hour=23, minute=59, second=59, microsecond=0)
     if event.settings.get('payment_term_weekdays'):
         if exp_by_date.weekday() == 5:
             exp_by_date += timedelta(days=2)
         elif exp_by_date.weekday() == 6:
             exp_by_date += timedelta(days=1)
 
-    expires = [exp_by_date]
+    expires = exp_by_date
+
     if event.settings.get('payment_term_last'):
-        last_date = event.settings.get('payment_term_last', as_type=datetime)
-        expires.append(make_aware(last_date, pytz.timezone(event.settings.timezone)))
+        last_date = make_aware(datetime.combine(
+            event.settings.get('payment_term_last', as_type=date),
+            time(hour=23, minute=59, second=59)
+        ), tz)
+        if last_date < expires:
+            expires = last_date
 
     order = Order.objects.create(
         status=Order.STATUS_PENDING,
         event=event,
         email=email,
         datetime=now_dt,
-        expires=min(expires).replace(hour=23, minute=59, second=59),
+        expires=expires,
         locale=locale,
         total=total,
         payment_fee=payment_fee,
