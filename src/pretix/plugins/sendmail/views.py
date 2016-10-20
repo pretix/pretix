@@ -1,4 +1,5 @@
 import logging
+import pytz
 
 from django.contrib import messages
 from django.db.models import Q
@@ -38,6 +39,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         self.request.event.log_action('pretix.plugins.sendmail.sent', user=self.request.user, data=dict(
             form.cleaned_data))
 
+        tz = pytz.timezone(self.request.event.settings.timezone)
+
         failures = []
         for o in orders:
             try:
@@ -45,13 +48,13 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                      {
                          'event': o.event,
                          'order': o.code,
-                         'order_date': date_format(o.datetime, 'SHORT_DATETIME_FORMAT'),
+                         'order_date': date_format(o.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
                          'due_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
                          'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
                              'order': o.code,
                              'secret': o.secret
                          })
-                }, self.request.event, locale=o.locale, order=o)
+                     }, self.request.event, locale=o.locale, order=o)
             except SendMailException:
                 failures.append(o.email)
 
