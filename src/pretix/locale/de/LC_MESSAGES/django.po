@@ -2920,7 +2920,7 @@ msgid ""
 "There are no payment providers available. Please go to the plugin settings "
 "and activate one or more payment plugins."
 msgstr ""
-"Es sind keine Zahlungsmethoden verfügbar. Bitte gehen Sie in die Plugin-"
+"Es sind keine Zahlungsmethoden verfügbar. Bitte gehen Sie in die Erweiterungs-"
 "Einstellungen und aktivieren Sie eins oder mehrere Zahlungsplugins."
 
 #: pretix/control/templates/pretixcontrol/event/permissions.html:8
@@ -3065,8 +3065,8 @@ msgid ""
 "There are no ticket outputs available. Please go to the plugin settings and "
 "activate one or more ticket output plugins."
 msgstr ""
-"Es sind keine Ausgabemethoden verfügbar. Bitte gehen Sie in die Plugin-"
-"Einstellungen und aktivieren Sie eins oder mehrere Ticketausgabe-Plugins."
+"Es sind keine Ausgabemethoden verfügbar. Bitte gehen Sie in die Erweiterungs-"
+"Einstellungen und aktivieren Sie eins oder mehrere Ticketausgabe-Erweiterungen."
 
 #: pretix/control/templates/pretixcontrol/events/create.html:4
 #: pretix/control/templates/pretixcontrol/events/create.html:6
