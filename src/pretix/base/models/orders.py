@@ -304,7 +304,7 @@ class Order(LoggedModel):
 
 class CachedTicket(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    cachedfile = models.ForeignKey(CachedFile, on_delete=models.CASCADE)
+    cachedfile = models.ForeignKey(CachedFile, on_delete=models.CASCADE, null=True)
     provider = models.CharField(max_length=255)
 
 

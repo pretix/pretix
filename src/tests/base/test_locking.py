@@ -3,7 +3,7 @@ import time
 import pytest
 from django.utils.timezone import now
 
-from pretix.base.models import Event, EventLock, Organizer
+from pretix.base.models import Event, Organizer
 from pretix.base.services import locking
 from pretix.base.services.locking import (
     LockReleaseException, LockTimeoutException,

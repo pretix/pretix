@@ -13,8 +13,7 @@ from django.views.generic import DetailView, ListView, TemplateView, View
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, CachedTicket, EventLock, Invoice, Item, ItemVariation, Order,
-    Quota,
+    CachedFile, CachedTicket, Invoice, Item, ItemVariation, Order, Quota,
 )
 from pretix.base.services import tickets
 from pretix.base.services.export import export
@@ -420,19 +419,14 @@ class OrderDownload(OrderView):
             messages.error(request, _('Order is not paid.'))
             return redirect(self.get_order_url())
 
-        try:
-            ct = CachedTicket.objects.get(order=self.order, provider=self.output.identifier)
-        except CachedTicket.DoesNotExist:
-            ct = CachedTicket(order=self.order, provider=self.output.identifier)
-        try:
-            ct.cachedfile
-        except CachedFile.DoesNotExist:
+        ct = CachedTicket.objects.get_or_create(order=self.order, provider=self.output.identifier)[0]
+        if not ct.cachedfile:
             cf = CachedFile()
             cf.date = now()
             cf.expires = self.request.event.date_from + timedelta(days=30)
             cf.save()
             ct.cachedfile = cf
-        ct.save()
+            ct.save()
         if not ct.cachedfile.file.name:
             tickets.generate.apply_async(args=(self.order.id, self.output.identifier))
         return redirect(reverse('cachedfile.download', kwargs={'id': ct.cachedfile.id}))

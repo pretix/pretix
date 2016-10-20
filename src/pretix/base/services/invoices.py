@@ -5,7 +5,6 @@ from datetime import date
 from decimal import Decimal
 from locale import format as lformat
 
-from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.files.base import ContentFile
 from django.db import transaction

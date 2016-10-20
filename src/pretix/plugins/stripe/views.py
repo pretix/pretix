@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from pretix.base.models import Event, Order
+from pretix.base.models import Order
 from pretix.base.services.orders import mark_order_refunded
 from pretix.plugins.stripe.payment import Stripe
 from pretix.presale.utils import event_view

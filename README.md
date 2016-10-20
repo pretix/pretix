@@ -25,7 +25,7 @@ in our documentation.
 
 Contributing
 ------------
-If you want to contribute to pretix, please read the [contribution guide](https://docs.pretix.eu/en/latest/development/contribution/index.html)
+If you want to contribute to pretix, please read the [developer documentation](https://docs.pretix.eu/en/latest/development/index.html)
 in our documentation. If you have any further questions, please do not hesitate to ask!
 
 License

@@ -33,6 +33,7 @@ def contextprocessor(request):
     ctx['nav_event'] = _nav_event
 
     ctx['js_datetime_format'] = get_javascript_format('DATETIME_INPUT_FORMATS')
+    ctx['js_date_format'] = get_javascript_format('DATE_INPUT_FORMATS')
     ctx['js_locale'] = get_moment_locale()
 
     return ctx

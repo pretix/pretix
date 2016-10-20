@@ -25,7 +25,7 @@ class JSONExporter(BaseExporter):
                         'id': category.id,
                         'name': str(category.name)
                     } for category in self.event.categories.all()
-                    ],
+                ],
                 'items': [
                     {
                         'id': item.id,
@@ -43,16 +43,16 @@ class JSONExporter(BaseExporter):
                                 item.default_price,
                                 'name': str(variation)
                             } for variation in item.variations.all()
-                            ]
+                        ]
                     } for item in self.event.items.all().prefetch_related('variations')
-                    ],
+                ],
                 'questions': [
                     {
                         'id': question.id,
                         'question': str(question.question),
                         'type': question.type
                     } for question in self.event.questions.all()
-                    ],
+                ],
                 'orders': [
                     {
                         'code': order.code,
@@ -74,12 +74,12 @@ class JSONExporter(BaseExporter):
                                         'question': answer.question_id,
                                         'answer': answer.answer
                                     } for answer in position.answers.all()
-                                    ]
+                                ]
                             } for position in order.positions.all()
-                            ]
+                        ]
                     } for order in
                     self.event.orders.all().prefetch_related('positions', 'positions__answers')
-                    ],
+                ],
                 'quotas': [
                     {
                         'id': quota.id,
@@ -87,7 +87,7 @@ class JSONExporter(BaseExporter):
                         'items': [item.id for item in quota.items.all()],
                         'variations': [variation.id for variation in quota.variations.all()],
                     } for quota in self.event.quotas.all().prefetch_related('items', 'variations')
-                    ]
+                ]
             }
         }
 

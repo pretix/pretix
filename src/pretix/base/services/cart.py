@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import (
-    CartPosition, Event, EventLock, Item, ItemVariation, Quota, Voucher,
+    CartPosition, Event, Item, ItemVariation, Quota, Voucher,
 )
 from pretix.base.services.locking import LockTimeoutException
 from pretix.celery import app

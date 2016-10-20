@@ -13,13 +13,14 @@ class ExtendForm(I18nModelForm):
         model = Order
         fields = ['expires']
         widgets = {
-            'expires': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'expires': forms.DateInput(attrs={'class': 'datepickerfield'}),
         }
 
     def clean(self):
         data = super().clean()
         if data['expires'] < now():
             raise ValidationError(_('The new expiry date needs to be in the future.'))
+        data['expires'] = data['expires'].replace(hour=23, minute=59, second=59)
         return data
 
 

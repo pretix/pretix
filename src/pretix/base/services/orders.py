@@ -4,19 +4,20 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import List, Optional
 
+import pytz
 from celery.exceptions import MaxRetriesExceededError
 from django.db import transaction
 from django.dispatch import receiver
 from django.utils.formats import date_format
-from django.utils.timezone import now
+from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import (
     LazyDate, LazyLocaleException, LazyNumber, language,
 )
 from pretix.base.models import (
-    CartPosition, Event, EventLock, Item, ItemVariation, Order, OrderPosition,
-    Quota, User,
+    CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Quota,
+    User,
 )
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.payment import BasePaymentProvider
@@ -41,8 +42,6 @@ error_messages = {
     'internal': _("An internal error occured, please try again."),
     'busy': _('We were not able to process your request completely as the '
               'server was too busy. Please try again.'),
-    'voucher_redeemed': _('A voucher you tried to use already has been used.'),
-    'voucher_expired': _('A voucher you tried to use has expired.'),
     'not_started': _('The presale period for this event has not yet started.'),
     'ended': _('The presale period has ended.'),
     'voucher_invalid': _('This voucher code is not known in our database.'),
@@ -200,12 +199,14 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
         if cp.item.require_voucher and cp.voucher is None:
             cp.delete()
-            return error_messages['voucher_required']
+            err = error_messages['voucher_required']
+            break
 
         if cp.item.hide_without_voucher and (cp.voucher is None or cp.voucher.item is None
                                              or cp.voucher.item.pk != cp.item.pk):
             cp.delete()
-            return error_messages['voucher_required']
+            err = error_messages['voucher_required']
+            break
 
         if cp.expires >= now_dt and not cp.voucher:
             # Other checks are not necessary
@@ -263,26 +264,37 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 @transaction.atomic
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None, address: int=None):
+    from datetime import date, time
+
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
     total += payment_fee
 
-    exp_by_date = now_dt + timedelta(days=event.settings.get('payment_term_days', as_type=int))
+    tz = pytz.timezone(event.settings.timezone)
+    exp_by_date = now_dt.astimezone(tz) + timedelta(days=event.settings.get('payment_term_days', as_type=int))
+    exp_by_date = exp_by_date.replace(hour=23, minute=59, second=59, microsecond=0)
     if event.settings.get('payment_term_weekdays'):
         if exp_by_date.weekday() == 5:
             exp_by_date += timedelta(days=2)
         elif exp_by_date.weekday() == 6:
             exp_by_date += timedelta(days=1)
 
-    expires = [exp_by_date]
+    expires = exp_by_date
+
     if event.settings.get('payment_term_last'):
-        expires.append(event.settings.get('payment_term_last', as_type=datetime))
+        last_date = make_aware(datetime.combine(
+            event.settings.get('payment_term_last', as_type=date),
+            time(hour=23, minute=59, second=59)
+        ), tz)
+        if last_date < expires:
+            expires = last_date
+
     order = Order.objects.create(
         status=Order.STATUS_PENDING,
         event=event,
         email=email,
         datetime=now_dt,
-        expires=min(expires),
+        expires=expires,
         locale=locale,
         total=total,
         payment_fee=payment_fee,
@@ -361,9 +373,8 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
 @receiver(signal=periodic_task)
 def expire_orders(sender, **kwargs):
     eventcache = {}
-    today = now().replace(hour=0, minute=0, second=0)
 
-    for o in Order.objects.filter(expires__lt=today, status=Order.STATUS_PENDING).select_related('event'):
+    for o in Order.objects.filter(expires__lt=now(), status=Order.STATUS_PENDING).select_related('event'):
         expire = eventcache.get(o.event.pk, None)
         if expire is None:
             expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)
