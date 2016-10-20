@@ -4,19 +4,20 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import List, Optional
 
+import pytz
 from celery.exceptions import MaxRetriesExceededError
 from django.db import transaction
 from django.dispatch import receiver
 from django.utils.formats import date_format
-from django.utils.timezone import now
+from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import (
     LazyDate, LazyLocaleException, LazyNumber, language,
 )
 from pretix.base.models import (
-    CartPosition, Event, Item, ItemVariation, Order, OrderPosition,
-    Quota, User,
+    CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Quota,
+    User,
 )
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.payment import BasePaymentProvider
@@ -276,13 +277,15 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 
     expires = [exp_by_date]
     if event.settings.get('payment_term_last'):
-        expires.append(event.settings.get('payment_term_last', as_type=datetime))
+        last_date = event.settings.get('payment_term_last', as_type=datetime)
+        expires.append(make_aware(last_date, pytz.timezone(event.settings.timezone)))
+
     order = Order.objects.create(
         status=Order.STATUS_PENDING,
         event=event,
         email=email,
         datetime=now_dt,
-        expires=min(expires),
+        expires=min(expires).replace(hour=23, minute=59, second=59),
         locale=locale,
         total=total,
         payment_fee=payment_fee,
@@ -361,9 +364,8 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
 @receiver(signal=periodic_task)
 def expire_orders(sender, **kwargs):
     eventcache = {}
-    today = now().replace(hour=0, minute=0, second=0)
 
-    for o in Order.objects.filter(expires__lt=today, status=Order.STATUS_PENDING).select_related('event'):
+    for o in Order.objects.filter(expires__lt=now(), status=Order.STATUS_PENDING).select_related('event'):
         expire = eventcache.get(o.event.pk, None)
         if expire is None:
             expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)

@@ -197,12 +197,12 @@ class PaymentSettingsForm(SettingsForm):
         label=_('Payment term in days'),
         help_text=_("The number of days after placing an order the user has to pay to preserve his reservation."),
     )
-    payment_term_last = forms.DateTimeField(
+    payment_term_last = forms.DateField(
         label=_('Last date of payments'),
         help_text=_("The last date any payments are accepted. This has precedence over the number of "
                     "days configured above."),
         required=False,
-        widget=forms.DateTimeInput(attrs={'class': 'datetimepicker'})
+        widget=forms.DateInput(attrs={'class': 'datepickerfield'})
     )
     payment_term_weekdays = forms.BooleanField(
         label=_('Only end payment terms on weekdays'),
