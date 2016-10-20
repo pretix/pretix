@@ -443,7 +443,7 @@ def test_order_extend_not_expired(client, env):
     }, follow=True)
     assert 'alert-success' in response.rendered_content
     o = Order.objects.get(id=env[2].id)
-    assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate
+    assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
 
 
 @pytest.mark.django_db
@@ -460,7 +460,7 @@ def test_order_extend_overdue_quota_empty(client, env):
     }, follow=True)
     assert 'alert-success' in response.rendered_content
     o = Order.objects.get(id=env[2].id)
-    assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate
+    assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
 
 
 @pytest.mark.django_db
@@ -478,7 +478,7 @@ def test_order_extend_expired_quota_left(client, env):
     }, follow=True)
     assert 'alert-success' in response.rendered_content
     o = Order.objects.get(id=env[2].id)
-    assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate
+    assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
     assert o.status == Order.STATUS_PENDING
 
 
