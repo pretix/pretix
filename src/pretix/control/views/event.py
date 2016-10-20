@@ -6,17 +6,19 @@ from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.forms import modelformset_factory
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import (
     Event, EventPermission, Item, ItemVariation, User,
 )
+from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
@@ -273,10 +275,25 @@ class InvoiceSettings(EventSettingsFormView):
     permission = 'can_change_settings'
 
     def get_success_url(self) -> str:
+        if 'preview' in self.request.POST:
+            return reverse('control:event.settings.invoice.preview', kwargs={
+                'organizer': self.request.event.organizer.slug,
+                'event': self.request.event.slug
+            })
         return reverse('control:event.settings.invoice', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug
         })
+
+
+class InvoicePreview(EventPermissionRequiredMixin, View):
+    permission = 'can_change_settings'
+
+    def get(self, request, *args, **kwargs):
+        pdf = build_preview_invoice_pdf(request.event)
+        resp = HttpResponse(pdf, content_type='application/pdf')
+        resp['Content-Disposition'] = 'attachment; filename="invoice-preview.pdf"'
+        return resp
 
 
 class DisplaySettings(EventSettingsFormView):
