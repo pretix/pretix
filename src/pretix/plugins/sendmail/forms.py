@@ -15,13 +15,12 @@ class MailForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['subject'] = I18nFormField(
             widget=I18nTextInput, required=True,
-            langcodes=event.settings.get('locales'),
-            help_text=_("Available placeholders: {event}, {order}, {due_date}, {order_date}, {payment_date}, {order_url}")
+            langcodes=event.settings.get('locales')
         )
         self.fields['message'] = I18nFormField(
             widget=I18nTextarea, required=True,
             langcodes=event.settings.get('locales'),
-            help_text=_("Available placeholders: {event}, {order}, {due_date}, {order_date}, {payment_date}, {order_url}")
+            help_text=_("Available placeholders: {due_date}, {event}, {order}, {order_date}, {order_url}")
         )
         choices = list(Order.STATUS_CHOICE)
         if not event.settings.get('payment_term_expire_automatically', as_type=bool):

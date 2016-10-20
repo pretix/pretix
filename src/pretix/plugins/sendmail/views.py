@@ -47,8 +47,6 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                          'order': o.code,
                          'order_date': date_format(o.datetime, 'SHORT_DATETIME_FORMAT'),
                          'due_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
-                         # 'payment_date': date_format(o.payment_date, 'SHORT_DATE_FORMAT'), --> this breaks for unpaid orders
-                         'payment_date': o.payment_date,
                          'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
                              'order': o.code,
                              'secret': o.secret
