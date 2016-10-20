@@ -70,6 +70,12 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         if self.request.GET.get("provider", "") != "":
             p = self.request.GET.get("provider", "")
             qs = qs.filter(payment_provider=p)
+        if self.request.GET.get("ordering", "") != "":
+            p = self.request.GET.get("ordering", "")
+            p_admissable = ('-code', 'code', '-email', 'email', '-total', 'total', '-datetime', 'datetime', '-status', 'status')
+            if p in p_admissable:
+                qs = qs.order_by(p)
+
         return qs.distinct()
 
     def get_payment_providers(self):

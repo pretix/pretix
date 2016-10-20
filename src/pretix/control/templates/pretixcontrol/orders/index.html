@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load eventurl %}
+{% load urlreplace %}
 {% block title %}{% trans "Orders" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Orders" %}</h1>
@@ -72,11 +73,16 @@
             <table class="table table-condensed table-hover">
                 <thead>
                 <tr>
-                    <th>{% trans "Order code" %}</th>
-                    <th>{% trans "User" %}</th>
-                    <th>{% trans "Order total" %}</th>
-                    <th>{% trans "Order date" %}</th>
-                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Order code" %} <a href="?{% url_replace request 'ordering' '-code'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'code'%}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "User" %} <a href="?{% url_replace request 'ordering' '-email'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'email'%}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Order total" %} <a href="?{% url_replace request 'ordering' '-total'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'total'%}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Order date" %} <a href="?{% url_replace request 'ordering' '-datetime'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'datetime'%}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Status" %} <a href="?{% url_replace request 'ordering' '-status'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'status'%}"><i class="fa fa-caret-up"></i></a></th>
                 </tr>
                 </thead>
                 <tbody>
