@@ -10,7 +10,22 @@
             {% bootstrap_field form.sendto layout='horizontal' %}
             {% bootstrap_field form.subject layout='horizontal' %}
             {% bootstrap_field form.message layout='horizontal' %}
+            {% if request.method == "POST" %}
+            <fieldset>
+            <legend>{% trans "E-mail preview" %}</legend>
+
+                        <div class="panel-body">
+                            <p>
+                                BLah blha email
+                            </p>
+                            {{ prev }}
+                        </div>
+            </fieldset>
+            {% endif %}
             <div class="form-group submit-group">
+                <button type="submit" class="btn btn-default btn-save pull-left" name="action" value="preview">
+                {% trans "Preview email" %}
+                </button>
                 <button type="submit" class="btn btn-primary btn-save">
                     {% trans "Send" %}
                 </button>
@@ -18,4 +33,3 @@
         </form>
     {% endblock %}
 {% endblock %}
-

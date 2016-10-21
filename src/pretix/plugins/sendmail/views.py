@@ -43,25 +43,32 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
         failures = []
         for o in orders:
-            try:
-                mail(o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
-                     {
-                         'event': o.event,
-                         'order': o.code,
-                         'order_date': date_format(o.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
-                         'due_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
-                         'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+            if self.request.POST.get("action") == "preview":
+                preview = self.request.POST
+                print(preview.get('action'))
+                print('subject: ', preview.get('subject_0'))
+                print('content: ', preview.get('message_0'))
+                return self.get(self.request)
+            else:
+                try:
+                    mail(o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
+                         {
+                             'event': o.event,
                              'order': o.code,
-                             'secret': o.secret
-                         })
-                     }, self.request.event, locale=o.locale, order=o)
-            except SendMailException:
-                failures.append(o.email)
+                             'order_date': date_format(o.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+                             'due_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
+                             'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                                 'order': o.code,
+                                 'secret': o.secret
+                             })
+                         }, self.request.event, locale=o.locale, order=o)
+                except SendMailException:
+                    failures.append(o.email)
 
-        if failures:
-            messages.error(self.request, _('Failed to send mails to the following users: {}'.format(' '.join(failures))))
-        else:
-            messages.success(self.request, _('Your message has been queued to be sent to the selected users.'))
+                if failures:
+                    messages.error(self.request, _('Failed to send mails to the following users: {}'.format(' '.join(failures))))
+                else:
+                    messages.success(self.request, _('Your message has been queued to be sent to the selected users.'))
 
         return redirect(
             'plugins:sendmail:send',
