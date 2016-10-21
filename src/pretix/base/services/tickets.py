@@ -11,6 +11,7 @@ from pretix.base.models import (
 )
 from pretix.base.signals import register_ticket_outputs
 from pretix.celery import app
+from pretix.helpers.database import rolledback_transaction
 
 
 @app.task
@@ -41,24 +42,17 @@ class DummyRollbackException(Exception):
 
 def preview(event: int, provider: str):
     event = Event.objects.get(id=event)
-    res = None
 
-    try:
-        with transaction.atomic(), language(event.settings.locale):
-            item = event.items.create(name=_("Sample product"), default_price=42.23)
+    with rolledback_transaction(), language(event.settings.locale):
+        item = event.items.create(name=_("Sample product"), default_price=42.23)
 
-            order = event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
-                                        expires=now(), code="PREVIEW1234", total=119)
+        order = event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
+                                    expires=now(), code="PREVIEW1234", total=119)
 
-            order.positions.create(item=item, attendee_name=_("John Doe"), price=item.default_price)
+        order.positions.create(item=item, attendee_name=_("John Doe"), price=item.default_price)
 
-            responses = register_ticket_outputs.send(event)
-            for receiver, response in responses:
-                prov = response(event)
-                if prov.identifier == provider:
-                    res = prov.generate(order)
-            raise DummyRollbackException()
-    except DummyRollbackException:
-        return res
-    else:
-        raise Exception('Invalid state, should have rolled back.')
+        responses = register_ticket_outputs.send(event)
+        for receiver, response in responses:
+            prov = response(event)
+            if prov.identifier == provider:
+                return prov.generate(order)
