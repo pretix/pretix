@@ -66,7 +66,7 @@ class EventCreateSettingsForm(SettingsForm):
         data = super().clean()
         if data['locale'] not in data['locales']:
             raise ValidationError({
-                'locale': _('Your default locale must also be enebled for your event (see box above).')
+                'locale': _('Your default locale must also be enabled for your event (see box above).')
             })
         return data
 
@@ -183,7 +183,7 @@ class EventSettingsForm(SettingsForm):
         data = super().clean()
         if data['locale'] not in data['locales']:
             raise ValidationError({
-                'locale': _('Your default locale must also be enebled for your event (see box above).')
+                'locale': _('Your default locale must also be enabled for your event (see box above).')
             })
         if data['attendee_names_required'] and not data['attendee_names_asked']:
             raise ValidationError({

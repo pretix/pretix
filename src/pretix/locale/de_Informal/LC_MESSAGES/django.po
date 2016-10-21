@@ -1787,7 +1787,7 @@ msgstr "Standardsprache"
 
 #: pretix/control/forms/event.py:69 pretix/control/forms/event.py:186
 msgid ""
-"Your default locale must also be enebled for your event (see box above)."
+"Your default locale must also be enabled for your event (see box above)."
 msgstr ""
 "Die Standardsprache muss eine der aktivierten Sprachen sein (siehe weiter "
 "oben)."
