@@ -26,6 +26,7 @@ from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
 from pretix.base.services.async import TransactionAwareTask
 from pretix.base.signals import register_payment_providers
 from pretix.celery import app
+from pretix.helpers.database import rolledback_transaction
 
 
 @transaction.atomic
@@ -408,45 +409,38 @@ class DummyRollbackException(Exception):
 
 def build_preview_invoice_pdf(event):
     locale = event.settings.invoice_language
-    pdf = None
     if not locale or locale == '__user__':
         locale = event.settings.locale
 
-    try:
-        with transaction.atomic(), language(locale):
-            order = event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
-                                        expires=now(), code="PREVIEW", total=119)
-            invoice = Invoice(
-                order=order, event=event, invoice_no="PREVIEW",
-                date=date.today(), locale=locale
-            )
-            invoice.invoice_from = event.settings.get('invoice_address_from')
+    with rolledback_transaction(), language(locale):
+        order = event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
+                                    expires=now(), code="PREVIEW", total=119)
+        invoice = Invoice(
+            order=order, event=event, invoice_no="PREVIEW",
+            date=date.today(), locale=locale
+        )
+        invoice.invoice_from = event.settings.get('invoice_address_from')
 
-            introductory = event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
-            additional = event.settings.get('invoice_additional_text', as_type=LazyI18nString)
-            footer = event.settings.get('invoice_footer_text', as_type=LazyI18nString)
-            payment = _("A payment provider specific text might appear here.")
+        introductory = event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
+        additional = event.settings.get('invoice_additional_text', as_type=LazyI18nString)
+        footer = event.settings.get('invoice_footer_text', as_type=LazyI18nString)
+        payment = _("A payment provider specific text might appear here.")
 
-            invoice.introductory_text = str(introductory).replace('\n', '<br />')
-            invoice.additional_text = str(additional).replace('\n', '<br />')
-            invoice.footer_text = str(footer)
-            invoice.payment_provider_text = str(payment).replace('\n', '<br />')
-            invoice.invoice_to = _("John Doe\n214th Example Street\n012345 Somecity")
-            invoice.file = None
-            invoice.save()
-            invoice.lines.all().delete()
+        invoice.introductory_text = str(introductory).replace('\n', '<br />')
+        invoice.additional_text = str(additional).replace('\n', '<br />')
+        invoice.footer_text = str(footer)
+        invoice.payment_provider_text = str(payment).replace('\n', '<br />')
+        invoice.invoice_to = _("John Doe\n214th Example Street\n012345 Somecity")
+        invoice.file = None
+        invoice.save()
+        invoice.lines.all().delete()
 
-            InvoiceLine.objects.create(
-                invoice=invoice, description=_("Sample product A"),
-                gross_value=119, tax_value=19,
-                tax_rate=19
-            )
-            with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
-                _invoice_generate_german(invoice, f)
-                f.seek(0)
-                pdf = f.read()
-            raise DummyRollbackException()
-    except DummyRollbackException:
-        return pdf
-    else:
-        raise Exception('Invalid state, should have rolled back.')
+        InvoiceLine.objects.create(
+            invoice=invoice, description=_("Sample product A"),
+            gross_value=119, tax_value=19,
+            tax_rate=19
+        )
+        with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
+            _invoice_generate_german(invoice, f)
+            f.seek(0)
+            return f.read()
