@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 from django.core.files.base import ContentFile
-from django.db import transaction
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
