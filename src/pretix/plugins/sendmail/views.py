@@ -44,10 +44,6 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         failures = []
         for o in orders:
             if self.request.POST.get("action") == "preview":
-                preview = self.request.POST
-                print(preview.get('action'))
-                print('subject: ', preview.get('subject_0'))
-                print('content: ', preview.get('message_0'))
                 return self.get(self.request)
             else:
                 try:

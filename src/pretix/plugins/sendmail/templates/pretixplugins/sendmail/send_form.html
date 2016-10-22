@@ -15,10 +15,8 @@
             <legend>{% trans "E-mail preview" %}</legend>
 
                         <div class="panel-body">
-                            <p>
-                                BLah blha email
-                            </p>
-                            {{ prev }}
+                            {{ request.POST.subject_0 }}
+                            {{ request.POST.message_0 }}
                         </div>
             </fieldset>
             {% endif %}
