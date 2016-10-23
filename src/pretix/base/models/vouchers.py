@@ -150,6 +150,8 @@ class Voucher(LoggedModel):
             if self.variation and (not self.item or not self.item.has_variations):
                 raise ValidationError(_('You cannot select a variation without having selected a product that provides '
                                         'variations.'))
+            if self.variation and not self.item.variations.filter(pk=self.variation.pk).exists():
+                raise ValidationError(_('This variation does not belong to this product.'))
             if self.item.has_variations and not self.variation and self.block_quota:
                 raise ValidationError(_('You can only block quota if you specify a specific product variation. '
                                         'Otherwise it might be unclear which quotas to block.'))
