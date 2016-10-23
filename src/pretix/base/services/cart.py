@@ -30,6 +30,7 @@ error_messages = {
     'max_items': _("You cannot select more than %s items per order."),
     'not_started': _('The presale period for this event has not yet started.'),
     'ended': _('The presale period has ended.'),
+    'price_too_high': _('The entered price is to high.'),
     'voucher_invalid': _('This voucher code is not known in our database.'),
     'voucher_redeemed': _('This voucher code has already been used and can only be used once.'),
     'voucher_double': _('You already used this voucher code. Remove the associated line from your '
@@ -168,6 +169,8 @@ def _add_new_items(event: Event, items: List[dict],
             custom_price = i['price']
             if not isinstance(custom_price, Decimal):
                 custom_price = Decimal(custom_price.replace(",", "."))
+            if custom_price > 100000000:
+                return error_messages['price_too_high']
             price = max(custom_price, price)
 
         # Create a CartPosition for as much items as we can
