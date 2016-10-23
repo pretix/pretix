@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.crypto import get_random_string
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from .base import LoggedModel
@@ -189,3 +190,14 @@ class Voucher(LoggedModel):
         if self.item and not self.variation:
             return self.item == item
         return (self.item == item) and (self.variation == variation)
+
+    def is_active(self):
+        """
+        Returns True if a voucher has not yet been redeemed, but is still
+        within its validity (if valid_until is set).
+        """
+        if self.redeemed:
+            return False
+        if self.valid_until and self.valid_until < now():
+            return False
+        return True
