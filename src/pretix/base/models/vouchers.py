@@ -7,7 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 from .base import LoggedModel
 from .event import Event
 from .items import Item, ItemVariation, Quota
-from .orders import CartPosition
 
 
 def _generate_random_code():
@@ -166,10 +165,14 @@ class Voucher(LoggedModel):
         super().delete(using, keep_parents)
         self.event.get_cache().delete('vouchers_exist')
 
-    def is_in_cart(self) -> int:
+    def is_in_cart(self) -> bool:
         """
         Returns whether a cart position exists that uses this voucher.
         """
-        return CartPosition.objects.filter(
-            voucher=self
-        ).count()
+        return self.cartposition_set.exists()
+
+    def is_ordered(self) -> bool:
+        """
+        Returns whether an order position exists that uses this voucher.
+        """
+        return self.orderposition_set.exists()
