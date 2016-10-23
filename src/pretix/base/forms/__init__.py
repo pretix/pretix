@@ -8,6 +8,7 @@ from django.forms.models import (
     BaseInlineFormSet, BaseModelForm, BaseModelFormSet, ModelFormMetaclass,
 )
 from django.utils import six
+from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.i18n import I18nFormField
@@ -110,12 +111,22 @@ class SettingsForm(forms.Form):
         for name, field in self.fields.items():
             value = self.cleaned_data[name]
             if isinstance(value, UploadedFile):
+                # Delete old file
+                fname = self.obj.settings.get(name, as_type=File)
+                if fname:
+                    try:
+                        default_storage.delete(fname.name)
+                    except OSError:
+                        logger.error('Deleting file %s failed.' % fname.name)
+
+                # Create new file
+                nonce = get_random_string(length=8)
                 if isinstance(self.obj, Event):
-                    fname = '%s/%s/%s.%s' % (
-                        self.obj.organizer.slug, self.obj.slug, name, value.name.split('.')[-1]
+                    fname = '%s/%s/%s.%s.%s' % (
+                        self.obj.organizer.slug, self.obj.slug, name, nonce, value.name.split('.')[-1]
                     )
                 else:
-                    fname = '%s/%s.%s' % (self.obj.slug, name, value.name.split('.')[-1])
+                    fname = '%s/%s.%s.%s' % (self.obj.slug, name, nonce, value.name.split('.')[-1])
                 newname = default_storage.save(fname, value)
                 value._name = newname
                 self.obj.settings.set(name, value)
