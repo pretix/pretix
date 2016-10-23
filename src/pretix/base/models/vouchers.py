@@ -178,3 +178,14 @@ class Voucher(LoggedModel):
         Returns whether an order position exists that uses this voucher.
         """
         return self.orderposition_set.exists()
+
+    def applies_to(self, item: Item, variation: ItemVariation=None) -> bool:
+        """
+        Returns whether this voucher applies to a given item (and optionally
+        a variation).
+        """
+        if self.quota:
+            return item.quotas.filter(pk=self.quota.pk).exists()
+        if self.item and not self.variation:
+            return self.item == item
+        return (self.item == item) and (self.variation == variation)

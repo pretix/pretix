@@ -117,9 +117,7 @@ def _add_new_items(event: Event, items: List[dict],
                     return error_messages['voucher_redeemed']
                 if voucher.valid_until is not None and voucher.valid_until < now_dt:
                     return error_messages['voucher_expired']
-                if voucher.item and voucher.item.pk != item.pk:
-                    return error_messages['voucher_invalid_item']
-                if voucher.variation and (not variation or variation.pk != voucher.variation.pk):
+                if not voucher.applies_to(item, variation):
                     return error_messages['voucher_invalid_item']
                 doubleuse = CartPosition.objects.filter(voucher=voucher, cart_id=cart_id, event=event)
                 if 'cp' in i:
