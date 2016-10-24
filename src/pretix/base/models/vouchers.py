@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.crypto import get_random_string
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from .base import LoggedModel
@@ -150,6 +151,8 @@ class Voucher(LoggedModel):
             if self.variation and (not self.item or not self.item.has_variations):
                 raise ValidationError(_('You cannot select a variation without having selected a product that provides '
                                         'variations.'))
+            if self.variation and not self.item.variations.filter(pk=self.variation.pk).exists():
+                raise ValidationError(_('This variation does not belong to this product.'))
             if self.item.has_variations and not self.variation and self.block_quota:
                 raise ValidationError(_('You can only block quota if you specify a specific product variation. '
                                         'Otherwise it might be unclear which quotas to block.'))
@@ -176,3 +179,25 @@ class Voucher(LoggedModel):
         Returns whether an order position exists that uses this voucher.
         """
         return self.orderposition_set.exists()
+
+    def applies_to(self, item: Item, variation: ItemVariation=None) -> bool:
+        """
+        Returns whether this voucher applies to a given item (and optionally
+        a variation).
+        """
+        if self.quota:
+            return item.quotas.filter(pk=self.quota.pk).exists()
+        if self.item and not self.variation:
+            return self.item == item
+        return (self.item == item) and (self.variation == variation)
+
+    def is_active(self):
+        """
+        Returns True if a voucher has not yet been redeemed, but is still
+        within its validity (if valid_until is set).
+        """
+        if self.redeemed:
+            return False
+        if self.valid_until and self.valid_until < now():
+            return False
+        return True
