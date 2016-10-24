@@ -44,6 +44,9 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         failures = []
         for o in orders:
             if self.request.POST.get("action") == "preview":
+                message = self.request.POST.get('message_0')
+                text = (message.format(order='ORDER#', event='Mordor!', order_date='Oct 25', due_date='super soon', order_url='www@'))
+                print(text)
                 return self.get(self.request)
             else:
                 try:

@@ -14,10 +14,15 @@
             <fieldset>
             <legend>{% trans "E-mail preview" %}</legend>
 
-                        <div class="panel-body">
-                            {{ request.POST.subject_0 }}
-                            {{ request.POST.message_0 }}
-                        </div>
+                <div class="panel-body">
+                    <p>
+                        {{ request.POST.subject_0 }}
+                    </p>
+                    <p>
+                        {{ request.POST.message_0 }}
+
+                    </p>
+                </div>
             </fieldset>
             {% endif %}
             <div class="form-group submit-group">
