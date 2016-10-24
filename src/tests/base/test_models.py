@@ -1,6 +1,7 @@
 import sys
 from datetime import timedelta
 
+from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
@@ -53,8 +54,10 @@ class BaseQuotaTestCase(TestCase):
         self.item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
                                          admission=True)
         self.item2 = Item.objects.create(event=self.event, name="T-Shirt", default_price=23)
+        self.item3 = Item.objects.create(event=self.event, name="Goodie", default_price=23)
         self.var1 = ItemVariation.objects.create(item=self.item2, value='S')
         self.var2 = ItemVariation.objects.create(item=self.item2, value='M')
+        self.var3 = ItemVariation.objects.create(item=self.item2, value='Fancy')
 
 
 class QuotaTestCase(BaseQuotaTestCase):
@@ -323,6 +326,31 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.assertFalse(v.applies_to(self.var1.item))
         self.assertTrue(v.applies_to(self.var1.item, self.var1))
         self.assertFalse(v.applies_to(self.var1.item, self.var2))
+
+    def test_voucher_no_item_with_quota(self):
+        with self.assertRaises(ValidationError):
+            v = Voucher(quota=self.quota, item=self.item1, event=self.event)
+            v.clean()
+
+    def test_voucher_item_with_no_variation(self):
+        with self.assertRaises(ValidationError):
+            v = Voucher(item=self.item1, variation=self.var1, event=self.event)
+            v.clean()
+
+    def test_voucher_item_does_not_match_variation(self):
+        with self.assertRaises(ValidationError):
+            v = Voucher(item=self.item2, variation=self.var3, event=self.event)
+            v.clean()
+
+    def test_voucher_specify_variation_for_block_quota(self):
+        with self.assertRaises(ValidationError):
+            v = Voucher(item=self.item2, block_quota=True, event=self.event)
+            v.clean()
+
+    def test_voucher_no_item_but_variation(self):
+        with self.assertRaises(ValidationError):
+            v = Voucher(variation=self.var1, event=self.event)
+            v.clean()
 
 
 class OrderTestCase(BaseQuotaTestCase):
