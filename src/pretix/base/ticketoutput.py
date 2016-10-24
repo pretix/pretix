@@ -39,9 +39,8 @@ class BaseTicketOutput:
     @property
     def verbose_name(self) -> str:
         """
-        A human-readable name for this ticket output. This should
-        be short but self-explaining. Good examples include 'PDF tickets'
-        and 'Passbook'.
+        A human-readable name for this ticket output. This should be short but
+        self-explanatory. Good examples include 'PDF tickets' and 'Passbook'.
         """
         raise NotImplementedError()  # NOQA
 
@@ -50,7 +49,7 @@ class BaseTicketOutput:
         """
         A short and unique identifier for this ticket output.
         This should only contain lowercase letters and in most
-        cases will be the same as your packagename.
+        cases will be the same as your package name.
         """
         raise NotImplementedError()  # NOQA
 
@@ -111,6 +110,7 @@ class BaseTicketOutput:
     @property
     def download_button_icon(self) -> str:
         """
-        The name of the icon on the download button in the frontend
+        The name of the FontAwesome icon on the download button in the frontend
+        (without the fa- prefix).
         """
         return None
