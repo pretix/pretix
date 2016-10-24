@@ -57,7 +57,7 @@ class BaseQuotaTestCase(TestCase):
         self.item3 = Item.objects.create(event=self.event, name="Goodie", default_price=23)
         self.var1 = ItemVariation.objects.create(item=self.item2, value='S')
         self.var2 = ItemVariation.objects.create(item=self.item2, value='M')
-        self.var3 = ItemVariation.objects.create(item=self.item2, value='Fancy')
+        self.var3 = ItemVariation.objects.create(item=self.item3, value='Fancy')
 
 
 class QuotaTestCase(BaseQuotaTestCase):
@@ -256,6 +256,7 @@ class QuotaTestCase(BaseQuotaTestCase):
                                    block_quota=True)
         CartPosition.objects.create(event=self.event, item=self.item1, price=2,
                                     expires=now() + timedelta(days=3), voucher=v)
+        self.assertTrue(v.is_in_cart())
         self.assertEqual(self.quota.count_blocking_vouchers(), 1)
         self.assertEqual(self.quota.count_in_cart(), 0)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
@@ -291,11 +292,22 @@ class QuotaTestCase(BaseQuotaTestCase):
     def test_voucher_reuse(self):
         self.quota.items.add(self.item1)
         v = Voucher.objects.create(quota=self.quota, event=self.event, valid_until=now() + timedelta(days=5))
+        self.assertTrue(v.is_active())
+        self.assertFalse(v.is_in_cart())
+        self.assertFalse(v.is_ordered())
 
         # use a voucher normally
         cart = CartPosition.objects.create(event=self.event, item=self.item1, price=self.item1.default_price,
                                            expires=now() + timedelta(days=3), voucher=v)
+        self.assertTrue(v.is_active())
+        self.assertTrue(v.is_in_cart())
+        self.assertFalse(v.is_ordered())
+
         order = perform_order(event=self.event.id, payment_provider='free', positions=[cart.id])
+        v.refresh_from_db()
+        self.assertFalse(v.is_active())
+        self.assertFalse(v.is_in_cart())
+        self.assertTrue(v.is_ordered())
 
         # assert that the voucher cannot be reused
         cart = CartPosition.objects.create(event=self.event, item=self.item1, price=self.item1.default_price,
@@ -304,6 +316,11 @@ class QuotaTestCase(BaseQuotaTestCase):
 
         # assert that the voucher can be re-used after cancelling the successful order
         cancel_order(order)
+        v.refresh_from_db()
+        self.assertTrue(v.is_active())
+        self.assertFalse(v.is_in_cart())
+        self.assertTrue(v.is_ordered())
+
         cart = CartPosition.objects.create(event=self.event, item=self.item1, price=self.item1.default_price,
                                            expires=now() + timedelta(days=3), voucher=v)
         perform_order(event=self.event.id, payment_provider='free', positions=[cart.id])
