@@ -54,6 +54,7 @@ class BaseQuotaTestCase(TestCase):
                                          admission=True)
         self.item2 = Item.objects.create(event=self.event, name="T-Shirt", default_price=23)
         self.var1 = ItemVariation.objects.create(item=self.item2, value='S')
+        self.var2 = ItemVariation.objects.create(item=self.item2, value='M')
 
 
 class QuotaTestCase(BaseQuotaTestCase):
@@ -197,6 +198,7 @@ class QuotaTestCase(BaseQuotaTestCase):
 
         v = Voucher.objects.create(item=self.item1, event=self.event)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+        self.assertTrue(v.is_active())
 
         v.block_quota = True
         v.save()
@@ -209,6 +211,7 @@ class QuotaTestCase(BaseQuotaTestCase):
 
         v = Voucher.objects.create(item=self.item2, variation=self.var1, event=self.event)
         self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+        self.assertTrue(v.is_active())
 
         v.block_quota = True
         v.save()
@@ -221,6 +224,7 @@ class QuotaTestCase(BaseQuotaTestCase):
 
         v = Voucher.objects.create(quota=self.quota, event=self.event)
         self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+        self.assertTrue(v.is_active())
 
         v.block_quota = True
         v.save()
@@ -238,9 +242,10 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.quota.variations.add(self.var1)
         self.quota.size = 1
         self.quota.save()
-        Voucher.objects.create(quota=self.quota, event=self.event, valid_until=now() - timedelta(days=5),
-                               block_quota=True)
+        v = Voucher.objects.create(quota=self.quota, event=self.event, valid_until=now() - timedelta(days=5),
+                                   block_quota=True)
         self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+        self.assertFalse(v.is_active())
 
     def test_blocking_voucher_in_cart(self):
         self.quota.items.add(self.item1)
@@ -299,6 +304,25 @@ class QuotaTestCase(BaseQuotaTestCase):
         cart = CartPosition.objects.create(event=self.event, item=self.item1, price=self.item1.default_price,
                                            expires=now() + timedelta(days=3), voucher=v)
         perform_order(event=self.event.id, payment_provider='free', positions=[cart.id])
+
+    def test_voucher_applicability_quota(self):
+        self.quota.items.add(self.item1)
+        v = Voucher.objects.create(quota=self.quota, event=self.event)
+        self.assertTrue(v.applies_to(self.item1))
+        self.assertFalse(v.applies_to(self.item2))
+
+    def test_voucher_applicability_item(self):
+        v = Voucher.objects.create(item=self.var1.item, event=self.event)
+        self.assertFalse(v.applies_to(self.item1))
+        self.assertTrue(v.applies_to(self.var1.item))
+        self.assertTrue(v.applies_to(self.var1.item, self.var1))
+
+    def test_voucher_applicability_variation(self):
+        v = Voucher.objects.create(item=self.var1.item, variation=self.var1, event=self.event)
+        self.assertFalse(v.applies_to(self.item1))
+        self.assertFalse(v.applies_to(self.var1.item))
+        self.assertTrue(v.applies_to(self.var1.item, self.var1))
+        self.assertFalse(v.applies_to(self.var1.item, self.var2))
 
 
 class OrderTestCase(BaseQuotaTestCase):
