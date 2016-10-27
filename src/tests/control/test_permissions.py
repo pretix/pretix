@@ -89,6 +89,7 @@ def perf_patch(monkeypatch):
 @pytest.mark.parametrize("url", [
     "",
     "settings",
+    "admin/",
     "organizers/",
     "organizers/add",
     "events/",

@@ -92,7 +92,7 @@ class OrganizerPermissionRequiredMixin:
         return organizer_permission_required(cls.permission)(view)
 
 
-def administrator_permission_required(permission):
+def administrator_permission_required():
     """
     This view decorator rejects all requests with a 403 response which are not from
     users with the is_superuser flag.
@@ -114,9 +114,7 @@ class AdministratorPermissionRequiredMixin:
     This mixin is equivalent to the administrator_permission_required view decorator but
     is in a form suitable for class-based views.
     """
-    permission = ''
-
     @classmethod
     def as_view(cls, **initkwargs):
         view = super(AdministratorPermissionRequiredMixin, cls).as_view(**initkwargs)
-        return administrator_permission_required(cls.permission)(view)
+        return administrator_permission_required()(view)

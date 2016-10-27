@@ -11,6 +11,7 @@ from pretix.base import settings
 from pretix.base.i18n import LazyI18nString
 from pretix.base.models import Event, Organizer, User
 from pretix.base.settings import SettingsSandbox
+from pretix.control.forms.global_settings import GlobalSettingsObject
 
 
 class SettingsTestCase(TestCase):
@@ -19,11 +20,20 @@ class SettingsTestCase(TestCase):
             'default': 'def',
             'type': str
         }
+        self.global_settings = GlobalSettingsObject()
         self.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
         self.event = Event.objects.create(
             organizer=self.organizer, name='Dummy', slug='dummy',
             date_from=now(),
         )
+
+    def test_global_set_explicit(self):
+        self.global_settings.settings.test = 'foo'
+        self.assertEqual(self.global_settings.settings.test, 'foo')
+
+        # Reload object
+        self.global_settings = GlobalSettingsObject()
+        self.assertEqual(self.global_settings.settings.test, 'foo')
 
     def test_organizer_set_explicit(self):
         self.organizer.settings.test = 'foo'
@@ -50,6 +60,26 @@ class SettingsTestCase(TestCase):
         self.event = Event.objects.get(id=self.event.id)
         self.assertEqual(self.event.settings.test, 'foo')
 
+    def test_organizer_set_on_global(self):
+        self.global_settings.settings.test = 'foo'
+        self.assertEqual(self.global_settings.settings.test, 'foo')
+        self.assertEqual(self.organizer.settings.test, 'foo')
+
+        # Reload object
+        self.global_settings = GlobalSettingsObject()
+        self.assertEqual(self.global_settings.settings.test, 'foo')
+        self.assertEqual(self.organizer.settings.test, 'foo')
+
+    def test_event_set_on_global(self):
+        self.global_settings.settings.test = 'foo'
+        self.assertEqual(self.global_settings.settings.test, 'foo')
+        self.assertEqual(self.event.settings.test, 'foo')
+
+        # Reload object
+        self.global_settings = GlobalSettingsObject()
+        self.assertEqual(self.global_settings.settings.test, 'foo')
+        self.assertEqual(self.event.settings.test, 'foo')
+
     def test_event_set_on_organizer(self):
         self.organizer.settings.test = 'foo'
         self.assertEqual(self.organizer.settings.test, 'foo')
@@ -57,8 +87,10 @@ class SettingsTestCase(TestCase):
 
         # Reload object
         self.organizer = Organizer.objects.get(id=self.organizer.id)
+        self.assertEqual(self.organizer.settings.test, 'foo')
+        self.assertEqual(self.event.settings.test, 'foo')
 
-    def test_override_organizer(self):
+    def test_event_override_organizer(self):
         self.organizer.settings.test = 'foo'
         self.event.settings.test = 'bar'
         self.assertEqual(self.organizer.settings.test, 'foo')
@@ -70,7 +102,20 @@ class SettingsTestCase(TestCase):
         self.assertEqual(self.organizer.settings.test, 'foo')
         self.assertEqual(self.event.settings.test, 'bar')
 
+    def test_event_override_global(self):
+        self.global_settings.settings.test = 'foo'
+        self.event.settings.test = 'bar'
+        self.assertEqual(self.global_settings.settings.test, 'foo')
+        self.assertEqual(self.event.settings.test, 'bar')
+
+        # Reload object
+        self.global_settings = GlobalSettingsObject()
+        self.event = Event.objects.get(id=self.event.id)
+        self.assertEqual(self.global_settings.settings.test, 'foo')
+        self.assertEqual(self.event.settings.test, 'bar')
+
     def test_default(self):
+        self.assertEqual(self.global_settings.settings.test_default, 'def')
         self.assertEqual(self.organizer.settings.test_default, 'def')
         self.assertEqual(self.event.settings.test_default, 'def')
         self.assertEqual(self.event.settings.get('nonexistant', default='abc'), 'abc')
