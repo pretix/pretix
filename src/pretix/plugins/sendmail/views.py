@@ -45,9 +45,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         for o in orders:
             if self.request.POST.get("action") == "preview":
                 message = self.request.POST.get('message_0')
-                text = (message.format(order='ORDER#', event='Mordor!', order_date='Oct 25', due_date='super soon', order_url='www@'))
-                print(text)
-                return self.get(self.request)
+                self.preview_text = (message.format(order='ORDER#', event='Your event name', order_date='2016-10-15', due_date='2016-10-31', order_url='link_to_order_url'))
+                return self.get(self.request, *self.args, **self.kwargs)
             else:
                 try:
                     mail(o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
@@ -64,13 +63,18 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                 except SendMailException:
                     failures.append(o.email)
 
-                if failures:
-                    messages.error(self.request, _('Failed to send mails to the following users: {}'.format(' '.join(failures))))
-                else:
-                    messages.success(self.request, _('Your message has been queued to be sent to the selected users.'))
+        if failures:
+            messages.error(self.request, _('Failed to send mails to the following users: {}'.format(' '.join(failures))))
+        else:
+            messages.success(self.request, _('Your message has been queued to be sent to the selected users.'))
 
         return redirect(
             'plugins:sendmail:send',
             event=self.request.event.slug,
             organizer=self.request.event.organizer.slug
         )
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx['preview_text'] = getattr(self, 'preview_text', 'None')
+        return ctx
