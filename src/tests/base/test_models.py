@@ -576,6 +576,32 @@ class ItemTest(TestCase):
         assert not i.is_available()
 
 
+class EventTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+
+    def test_event_end_before_start(self):
+        event = Event(
+            organizer=self.organizer, name='Dummy', slug='dummy',
+            date_from=now(), date_to=now() - timedelta(hours=1)
+        )
+        with self.assertRaises(ValidationError) as context:
+            event.clean()
+
+        self.assertIn('date_to', str(context.exception))
+
+    def test_presale_end_before_start(self):
+        event = Event(
+            organizer=self.organizer, name='Dummy', slug='dummy',
+            presale_start=now(), presale_end=now() - timedelta(hours=1)
+        )
+        with self.assertRaises(ValidationError) as context:
+            event.clean()
+
+        self.assertIn('presale_end', str(context.exception))
+
+
 class CachedFileTestCase(TestCase):
     def test_file_handling(self):
         cf = CachedFile()
