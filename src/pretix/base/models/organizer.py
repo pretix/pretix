@@ -7,6 +7,7 @@ from pretix.base.models.base import LoggedModel
 from pretix.base.settings import SettingsProxy
 
 from .auth import User
+from .settings import OrganizerSetting
 
 
 class Organizer(LoggedModel):
@@ -101,13 +102,3 @@ class OrganizerPermission(models.Model):
             'name': str(self.user),
             'object': str(self.organizer),
         }
-
-
-class OrganizerSetting(models.Model):
-    """
-    An event option is a key-value setting which can be set for an
-    organizer. It will be inherited by the events of this organizer
-    """
-    object = models.ForeignKey(Organizer, related_name='setting_objects', on_delete=models.CASCADE)
-    key = models.CharField(max_length=255)
-    value = models.TextField()
