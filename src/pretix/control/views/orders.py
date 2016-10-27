@@ -203,6 +203,9 @@ class OrderComment(OrderView):
             messages.error(self.request, _('Could not update the comment.'))
         return redirect(self.get_order_url())
 
+    def get(self, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])
+
 
 class OrderTransition(OrderView):
     permission = 'can_change_orders'
