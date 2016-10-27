@@ -42,10 +42,16 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         tz = pytz.timezone(self.request.event.settings.timezone)
 
         failures = []
+        self.output = {}
         for o in orders:
             if self.request.POST.get("action") == "preview":
-                message = self.request.POST.get('message_0')
-                self.preview_text = (message.format(order='ORDER#', event='Your event name', order_date='2016-10-15', due_date='2016-10-31', order_url='link_to_order_url'))
+                self.locales_list = self.request.event.settings.locales
+                for l in self.locales_list:
+                    self.output[l] = []
+                    self.output[l].append(form.cleaned_data['subject'].localize(l))
+                    message = form.cleaned_data['message'].localize(l)
+                    preview_text = (message.format(order='ORDER#', event='Your event name', order_date='2016-10-15', due_date='2016-10-31', order_url='link_to_order_url'))
+                    self.output[l].append(preview_text)
                 return self.get(self.request, *self.args, **self.kwargs)
             else:
                 try:
@@ -76,5 +82,5 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        ctx['preview_text'] = getattr(self, 'preview_text', 'None')
+        ctx['output'] = getattr(self, 'output', 'None')
         return ctx

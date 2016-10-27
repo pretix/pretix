@@ -15,13 +15,16 @@
             <legend>{% trans "E-mail preview" %}</legend>
 
                 <div class="panel-body">
+                    {% for k,v in output.items %}
                     <p>
-                        {{ request.POST.subject_0 }}
+                        <strong>For locale: </strong>{{ k }}
                     </p>
-                    <p>
-                        {{ preview_text|linebreaksbr }}
-
-                    </p>
+                        {% for value in v %}
+                        <p>
+                            {{ value|linebreaksbr }}
+                        </p>
+                        {% endfor %}
+                    {% endfor %}
                 </div>
             </fieldset>
             {% endif %}
