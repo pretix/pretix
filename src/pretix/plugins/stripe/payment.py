@@ -202,10 +202,10 @@ class Stripe(BasePaymentProvider):
                                       'support if the problem persists.'))
             logger.error('Stripe error: %s' % str(err))
         except stripe.error.StripeError:
-            mark_order_refunded(order)
+            mark_order_refunded(order, user=request.user)
             messages.warning(request, _('We were unable to transfer the money back automatically. '
                                         'Please get in touch with the customer and transfer it back manually.'))
         else:
-            order = mark_order_refunded(order)
+            order = mark_order_refunded(order, user=request.user)
             order.payment_info = str(ch)
             order.save()

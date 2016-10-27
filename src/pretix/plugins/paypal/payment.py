@@ -221,7 +221,7 @@ class Paypal(BasePaymentProvider):
             payment_info = None
 
         if not payment_info:
-            mark_order_refunded(order)
+            mark_order_refunded(order, user=request.user)
             messages.warning(request, _('We were unable to transfer the money back automatically. '
                                         'Please get in touch with the customer and transfer it back manually.'))
             return
@@ -239,7 +239,7 @@ class Paypal(BasePaymentProvider):
                                         'Please get in touch with the customer and transfer it back manually.'))
         else:
             sale = paypalrestsdk.Payment.find(payment_info['id'])
-            order = mark_order_refunded(order)
+            order = mark_order_refunded(order, user=request.user)
             order.payment_info = json.dumps(sale.to_dict())
             order.save()
 

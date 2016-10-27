@@ -55,6 +55,6 @@ def webhook(request, *args, **kwargs):
     order.log_action('pretix.plugins.stripe.event', data=event_json)
 
     if order.status == Order.STATUS_PAID and (charge['refunds']['total_count'] or charge['dispute']):
-        mark_order_refunded(order)
+        mark_order_refunded(order, user=None)
 
     return HttpResponse(status=200)
