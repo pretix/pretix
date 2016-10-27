@@ -58,7 +58,8 @@ class Organizer(LoggedModel):
         """
         Returns an object representing this organizer's settings
         """
-        return SettingsProxy(self, type=OrganizerSetting)
+        from pretix.base.settings import GlobalSettingsObject
+        return SettingsProxy(self, type=OrganizerSetting, parent=GlobalSettingsObject())
 
     def get_cache(self) -> "pretix.base.cache.ObjectRelatedCache":
         """

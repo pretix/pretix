@@ -4,16 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms import SettingsForm
 from pretix.base.i18n import I18nFormField, I18nTextInput
-from pretix.base.models.settings import GlobalSetting
-from pretix.base.settings import SettingsProxy
+from pretix.base.settings import GlobalSettingsObject
 from pretix.base.signals import register_global_settings
-
-
-class GlobalSettingsObject:
-    def __init__(self):
-        self.settings = SettingsProxy(self, type=GlobalSetting)
-        self.setting_objects = GlobalSetting.objects
-        self.slug = 'GLOBALSETTINGS'
 
 
 class GlobalSettingsForm(SettingsForm):

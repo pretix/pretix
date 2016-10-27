@@ -11,6 +11,7 @@ from django.db.models import Model
 from django.utils.translation import ugettext_noop
 
 from pretix.base.i18n import LazyI18nString
+from pretix.base.models.settings import GlobalSetting
 
 DEFAULTS = {
     'max_items_per_order': {
@@ -511,3 +512,10 @@ class SettingsSandbox:
 
     def set(self, key: str, value: Any):
         self._event.settings.set(self._convert_key(key), value)
+
+
+class GlobalSettingsObject:
+    def __init__(self):
+        self.settings = SettingsProxy(self, type=GlobalSetting)
+        self.setting_objects = GlobalSetting.objects
+        self.slug = 'GLOBALSETTINGS'

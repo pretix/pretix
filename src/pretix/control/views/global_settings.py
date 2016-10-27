@@ -1,3 +1,4 @@
+from django.shortcuts import reverse
 from django.views.generic import FormView
 
 from pretix.control.forms.global_settings import GlobalSettingsForm
@@ -13,5 +14,4 @@ class GlobalSettingsView(AdministratorPermissionRequiredMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        from django.shortcuts import reverse
         return reverse('control:global-settings')
