@@ -17,6 +17,7 @@ from pretix.base.settings import SettingsProxy
 
 from .auth import User
 from .organizer import Organizer
+from .settings import EventSetting
 
 
 class Event(LoggedModel):
@@ -261,16 +262,6 @@ class EventPermission(models.Model):
             'name': str(self.user),
             'object': str(self.event),
         }
-
-
-class EventSetting(models.Model):
-    """
-    An event settings is a key-value setting which can be set for a
-    specific event
-    """
-    object = models.ForeignKey(Event, related_name='setting_objects', on_delete=models.CASCADE)
-    key = models.CharField(max_length=255)
-    value = models.TextField()
 
 
 class EventLock(models.Model):
