@@ -1,8 +1,8 @@
 from django.conf.urls import include, url
 
 from pretix.control.views import (
-    auth, dashboards, event, help, item, main, orders, organizer, user,
-    vouchers,
+    auth, dashboards, event, global_settings, help, item, main, orders,
+    organizer, user, vouchers,
 )
 
 urlpatterns = [
@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^forgot$', auth.Forgot.as_view(), name='auth.forgot'),
     url(r'^forgot/recover$', auth.Recover.as_view(), name='auth.forgot.recover'),
     url(r'^$', dashboards.user_index, name='index'),
+    url(r'^settings/$', global_settings.GlobalSettingsView.as_view(), name='global-settings'),
     url(r'^reauth/$', user.ReauthView.as_view(), name='user.reauth'),
     url(r'^settings$', user.UserSettings.as_view(), name='user.settings'),
     url(r'^settings/2fa/$', user.User2FAMainView.as_view(), name='user.settings.2fa'),

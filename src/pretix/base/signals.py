@@ -122,3 +122,9 @@ be everything between a minute and a day. The actions you perform should be
 idempotent, i.e. it should not make a difference if this is sent out more often
 than expected.
 """
+
+register_global_settings = django.dispatch.Signal()
+"""
+All plugins that are installed may send fields for the global settings form, as
+an OrderedDict of (setting name, form field).
+"""
