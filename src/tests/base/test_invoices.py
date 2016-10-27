@@ -5,9 +5,13 @@ import pytest
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Event, InvoiceAddress, Item, Order, OrderPosition, Organizer,
+    Event, Invoice, InvoiceAddress, Item, ItemVariation, Order, OrderPosition,
+    Organizer,
 )
-from pretix.base.services.invoices import generate_invoice
+from pretix.base.services.invoices import (
+    build_preview_invoice_pdf, generate_cancellation, generate_invoice,
+    invoice_pdf_task, regenerate_invoice,
+)
 
 
 @pytest.fixture
@@ -28,11 +32,21 @@ def env():
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
                                  category=None, default_price=23,
                                  admission=True)
+    t_shirt = Item.objects.create(event=event, name='T-Shirt',
+                                  category=None, default_price=42,
+                                  admission=True)
+    variation = ItemVariation.objects.create(value='M', item=t_shirt)
     OrderPosition.objects.create(
         order=o,
         item=ticket,
         variation=None,
         price=Decimal("23.00"),
+    )
+    OrderPosition.objects.create(
+        order=o,
+        item=t_shirt,
+        variation=variation,
+        price=Decimal("42.00"),
     )
     return event, o
 
@@ -80,10 +94,15 @@ def test_address_vat_id(env):
 def test_positions(env):
     event, order = env
     inv = generate_invoice(order)
-    assert inv.lines.count() == 2
+    assert inv.lines.count() == 3
     first = inv.lines.first()
     assert 'Early-bird' in first.description
     assert first.gross_value == Decimal('23.00')
+
+    second = inv.lines.all()[1]
+    assert 'T-Shirt' in second.description
+    assert 'M' in second.description
+    assert second.gross_value == Decimal('42.00')
 
     last = inv.lines.last()
     assert 'Payment' in last.description
@@ -91,6 +110,60 @@ def test_positions(env):
     assert last.tax_rate == order.payment_fee_tax_rate
     assert last.tax_value == order.payment_fee_tax_value
     assert inv.invoice_to == ""
+
+
+@pytest.mark.django_db
+def test_rebuilding(env):
+    event, order = env
+    inv = generate_invoice(order)
+    inv2 = regenerate_invoice(inv)
+    assert inv.order == inv2.order
+
+    inv3 = generate_cancellation(inv)
+    inv4 = regenerate_invoice(inv3)
+    assert inv3.order == inv4.order
+
+
+@pytest.mark.django_db
+def test_cannot_delete_invoice(env):
+    event, order = env
+    inv = generate_invoice(order)
+    with pytest.raises(Exception):
+        inv.delete()
+
+
+@pytest.mark.django_db
+def test_cannot_write_invoice_without_order(env):
+    event, _ = env
+    with pytest.raises(Exception):
+        i = Invoice(order=None, event=event)
+        i.save()
+
+
+@pytest.mark.django_db
+def test_pdf_generation(env):
+    event, order = env
+    inv = generate_invoice(order)
+    cancellation = generate_cancellation(inv)
+    assert invoice_pdf_task(inv.pk)
+    assert invoice_pdf_task(cancellation.pk)
+
+
+@pytest.mark.django_db
+def test_pdf_generation_custom_text(env):
+    event, order = env
+    event.settings.set('invoice_introductory_text', 'introductory invoice text')
+    # set a really long additional text, to make the invoice span two pages
+    event.settings.set('invoice_additional_text', 'additional invoice text\n' * 100)
+    event.settings.set('show_date_to', False)
+    inv = generate_invoice(order)
+    assert invoice_pdf_task(inv.pk)
+
+
+@pytest.mark.django_db
+def test_pdf_preview_generation(env):
+    event, order = env
+    assert build_preview_invoice_pdf(event)
 
 
 @pytest.mark.django_db
