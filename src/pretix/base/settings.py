@@ -305,7 +305,7 @@ Your {event} team"""))
 
 class SettingsProxy:
     """
-    This objects allows convenient access to settings stored in the
+    This object allows convenient access to settings stored in the
     EventSettings/OrganizerSettings database model. It exposes all settings as
     properties and it will do all the nasty inheritance and defaults stuff for
     you.
@@ -442,7 +442,7 @@ class SettingsProxy:
 
     def set(self, key: str, value: Any) -> None:
         """
-        Stores a setting to the database of this object.
+        Stores a setting to the database of its object.
         """
         if key in self._cache():
             s = self._cache()[key]

@@ -101,6 +101,14 @@
                                         {% trans "Dashboard" %}
                                     </a>
                                 </li>
+                                {% if request.user.is_superuser %}
+                                    <li>
+                                        <a href="{% url 'control:global-settings' %}" {% if "global-settings" in url_name %}class="active"{% endif %}>
+                                            <i class="fa fa-wrench fa-fw"></i>
+                                            {% trans "Global settings" %}
+                                        </a>
+                                    </li>
+                                {% endif %}
                                 <li>
                                     <a href="{% url 'control:events' %}" {% if "events" in url_name %}class="active"{% endif %}>
                                         <i class="fa fa-calendar fa-fw"></i>
