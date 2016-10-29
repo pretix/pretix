@@ -36,7 +36,7 @@ automatically). If you are working on Ubuntu or Debian, we strongly recommend up
 your pip and setuptools installation inside the virtual environment, otherwise some of
 the dependencies might fail::
 
-    pip install -U pip setuptools
+    pip install -U pip setuptools==28.6.1
 
 Working with the code
 ---------------------

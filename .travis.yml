@@ -3,7 +3,7 @@ sudo: false
 python:
     - "3.4"
 install:
-    - pip install -U pip wheel setuptools
+    - pip install -U pip wheel setuptools==28.6.1
 script:
     - bash .travis.sh $JOB
 cache:
