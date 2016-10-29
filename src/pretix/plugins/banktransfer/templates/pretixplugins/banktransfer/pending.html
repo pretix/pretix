@@ -7,6 +7,6 @@
 
 <address>
     {{ details|linebreaksbr }}<br />
-    {% trans "Amount:" %} {{ order.total|localize }} {{ request.event.currency }}<br />
+    {% trans "Amount:" %} {{ order.total|localize }} {{ event.currency }}<br />
     <strong>{% trans "Reference code (important):" %} {{ order.full_code }}</strong>
 </address>
