@@ -15,11 +15,11 @@
             <legend>{% trans "E-mail preview" %}</legend>
 
                 <div class="panel-body">
-                    {% for k,v in output.items %}
+                    {% for locale, segments in output.items %}
                     <p>
-                        <strong>For locale: </strong>{{ k }}
+                        <strong>{% blocktrans %}For locale: {{ locale }}{% endblocktrans %}</strong>
                     </p>
-                        {% for value in v %}
+                        {% for value in segments %}
                         <p>
                             {{ value|linebreaksbr }}
                         </p>
