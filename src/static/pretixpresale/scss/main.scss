@@ -1,3 +1,4 @@
+@import "../../pretixcontrol/scss/_variables.scss";
 @import "../../pretixbase/scss/colors.scss";
 @import "../../bootstrap/scss/_bootstrap.scss";
 $fa-font-path: static("fontawesome/fonts");
@@ -6,6 +7,7 @@ $fa-font-path: static("fontawesome/fonts");
 @import "_event.scss";
 @import "_cart.scss";
 @import "_forms.scss";
+@import "../../pretixbase/scss/webfont.scss";
 
 footer {
     text-align: center;

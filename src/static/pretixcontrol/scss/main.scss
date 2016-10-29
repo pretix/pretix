@@ -11,6 +11,7 @@ $fa-font-path: static("fontawesome/fonts");
 @import "_flags.scss";
 @import "_orders.scss";
 @import "_dashboard.scss";
+@import "../../pretixbase/scss/webfont.scss";
 
 footer {
     text-align: center;
