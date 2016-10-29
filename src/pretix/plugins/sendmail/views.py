@@ -1,4 +1,5 @@
 import logging
+from datetime import timedelta
 import pytz
 
 from django.contrib import messages
@@ -9,6 +10,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 
+from pretix.base.i18n import language
 from pretix.base.models import Order
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -45,13 +47,19 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         self.output = {}
         for o in orders:
             if self.request.POST.get("action") == "preview":
-                self.locales_list = self.request.event.settings.locales
-                for l in self.locales_list:
-                    self.output[l] = []
-                    self.output[l].append(form.cleaned_data['subject'].localize(l))
-                    message = form.cleaned_data['message'].localize(l)
-                    preview_text = (message.format(order='ORDER#', event='Your event name', order_date='2016-10-15', due_date='2016-10-31', order_url='link_to_order_url'))
-                    self.output[l].append(preview_text)
+                for l in self.request.event.settings.locales:
+                    with language(l):
+                        self.output[l] = []
+                        self.output[l].append(
+                            form.cleaned_data['subject'].localize(l))
+                        message = form.cleaned_data['message'].localize(l)
+                        preview_text = message.format(
+                            order='ORDER1234',
+                            event=self.request.event.name,
+                            order_date=date_format(now(), 'SHORT_DATE_FORMAT'),
+                            due_date=date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
+                            order_url='link_to_order_url')
+                        self.output[l].append(preview_text)
                 return self.get(self.request, *self.args, **self.kwargs)
             else:
                 try:
@@ -64,8 +72,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                              'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
                                  'order': o.code,
                                  'secret': o.secret
-                             })
-                         }, self.request.event, locale=o.locale, order=o)
+                             })},
+                         self.request.event, locale=o.locale, order=o)
                 except SendMailException:
                     failures.append(o.email)
 
@@ -82,5 +90,5 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        ctx['output'] = getattr(self, 'output', 'None')
+        ctx['output'] = getattr(self, 'output', None)
         return ctx
