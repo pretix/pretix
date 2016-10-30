@@ -393,6 +393,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
     def test_paid_expired_available(self):
+        self.event.settings.payment_term_last = (now() + timedelta(days=2)).strftime('%Y-%m-%d')
         self.order.status = Order.STATUS_EXPIRED
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
@@ -400,19 +401,25 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
-    def test_paid_expired_partial(self):
+    def test_paid_expired_after_last_date(self):
+        self.event.settings.payment_term_last = (now() - timedelta(days=2)).strftime('%Y-%m-%d')
         self.order.status = Order.STATUS_EXPIRED
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
-        self.quota.size = 1
-        self.quota.save()
-        try:
+        with self.assertRaises(Quota.QuotaExceededException):
             mark_order_paid(self.order)
-            self.assertFalse(True, 'This should have raised an exception.')
-        except Quota.QuotaExceededException:
-            pass
         self.order = Order.objects.get(id=self.order.id)
-        self.assertIn(self.order.status, (Order.STATUS_PENDING, Order.STATUS_EXPIRED))
+        self.assertEqual(self.order.status, Order.STATUS_EXPIRED)
+
+    def test_paid_expired_late_not_allowed(self):
+        self.event.settings.payment_term_accept_late = False
+        self.order.status = Order.STATUS_EXPIRED
+        self.order.expires = now() - timedelta(days=2)
+        self.order.save()
+        with self.assertRaises(Quota.QuotaExceededException):
+            mark_order_paid(self.order)
+        self.order = Order.objects.get(id=self.order.id)
+        self.assertEqual(self.order.status, Order.STATUS_EXPIRED)
 
     def test_paid_expired_unavailable(self):
         self.order.expires = now() - timedelta(days=2)
@@ -420,11 +427,8 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order.save()
         self.quota.size = 0
         self.quota.save()
-        try:
+        with self.assertRaises(Quota.QuotaExceededException):
             mark_order_paid(self.order)
-            self.assertFalse(True, 'This should have raised an exception.')
-        except Quota.QuotaExceededException:
-            pass
         self.order = Order.objects.get(id=self.order.id)
         self.assertIn(self.order.status, (Order.STATUS_PENDING, Order.STATUS_EXPIRED))
 
