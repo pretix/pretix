@@ -1,13 +1,14 @@
 import copy
 import string
-from datetime import datetime
+from datetime import date, datetime, time
 from decimal import Decimal
 from typing import List, Union
 
+import pytz
 from django.conf import settings
 from django.db import models
 from django.utils.crypto import get_random_string
-from django.utils.timezone import now
+from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
 
 from ..decimal import round_decimal
@@ -253,7 +254,7 @@ class Order(LoggedModel):
     @property
     def is_expired_by_time(self):
         return (
-            self.status == Order.STATUS_PENDING and self.expires.date() < now().date()
+            self.status == Order.STATUS_PENDING and self.expires < now()
             and not self.event.settings.get('payment_term_expire_automatically')
         )
 
@@ -262,9 +263,15 @@ class Order(LoggedModel):
             'late': _("The payment is too late to be accepted."),
         }
 
-        if self.event.settings.get('payment_term_last') \
-                and now() > self.event.settings.get('payment_term_last'):
-            return error_messages['late']
+        if self.event.settings.get('payment_term_last'):
+            tz = pytz.timezone(self.event.settings.timezone)
+            last_date = make_aware(datetime.combine(
+                self.event.settings.get('payment_term_last', as_type=date),
+                time(hour=23, minute=59, second=59)
+            ), tz)
+
+            if now() > last_date:
+                return error_messages['late']
         if self.status == self.STATUS_PENDING:
             return True
         if not self.event.settings.get('payment_term_accept_late'):
