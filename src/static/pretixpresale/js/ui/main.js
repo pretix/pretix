@@ -22,7 +22,66 @@ $(function () {
     });
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
+
+    display_copy();
+    // Copy answers
+    $("#copy_answers").change(function() {
+        if ($("#copy_answers:checked").length > 0) {
+            bind_groups();
+        } else {
+            unbind_groups();
+        }
+    })
 });
+
+function display_copy() {
+    var elements = $("input").filter(function(){
+        return this.id.match(/^id_(\d+)/);
+    });    
+    var shouldElementBeVisible = (elements.length > 2);    
+    $("#cp_copy").toggle(!!shouldElementBeVisible);   
+}
+
+function bind_groups() {
+    
+    var elements = $("input").filter(function(){
+        return this.id.match(/^id_(\d+)/);
+    });
+
+    // first copy values
+    for (var i=2; i<elements.length; i+=2) {
+        if(elements[i])
+            elements.eq(i).val(elements.eq(0).val());
+        
+        if(elements[i+1])
+            elements.eq(i+1).val(parseInt(elements.eq(1).val(), 10));
+    }
+
+    // then bind fields
+    elements.eq(0).keyup(function(){
+        for (var i=2; i<elements.length; i+=2) {            
+            elements.eq(i).val($(this).val());
+        }        
+    });
+
+    elements.eq(1).keyup(function(){
+        for (var i=2; i<elements.length; i+=2) {            
+            elements.eq(i+1).val($(this).val());
+        }
+    });
+    
+    
+}
+
+function unbind_groups() {   
+    var elements = $("input").filter(function(){
+        return this.id.match(/^id_(\d+)/);
+    });
+
+    for(var i=0; i<elements.length; i++){
+        elements.eq(i).unbind("keyup");
+    }
+}
 
 var waitingDialog = {
     show: function (message) {
