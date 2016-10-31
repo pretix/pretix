@@ -69,7 +69,7 @@
         &middot;
     {% endif %}
     {% for f in footer %}
-        <a href="{{ f.url }}" target="_blank">{{ f.label }}</a>
+        <a href="{% safelink f.url %}" target="_blank">{{ f.label }}</a>
         &middot;
     {% endfor %}
 {% endblock %}
