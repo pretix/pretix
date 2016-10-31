@@ -64,6 +64,10 @@
         <a href="{% safelink request.event.settings.imprint_url %}" target="_blank">{% trans "Imprint" %}</a>
         &middot;
     {% endif %}
+    {% if footer_text %}
+        {{ footer_text }}
+        &middot;
+    {% endif %}
     {% for f in footer %}
         <a href="{{ f.url }}" target="_blank">{{ f.label }}</a>
         &middot;
