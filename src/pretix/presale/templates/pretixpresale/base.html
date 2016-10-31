@@ -1,6 +1,7 @@
 {% load compress %}
 {% load staticfiles %}
 {% load i18n %}
+{% load safelink %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,6 +41,14 @@
 <footer>
     {% block footer %}
     {% endblock %}
+    {% if footer_text %}
+        {{ footer_text }}
+        &middot;
+    {% endif %}
+    {% for f in footer %}
+        <a href="{% safelink f.url %}" target="_blank">{{ f.label }}</a>
+        &middot;
+    {% endfor %}
     {% include "pretixpresale/base_footer.html" %}
 </footer>
 <div id="ajaxerr">
