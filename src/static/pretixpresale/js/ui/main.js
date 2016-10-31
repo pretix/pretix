@@ -23,13 +23,14 @@ $(function () {
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
 
-    display_copy();
+    
     // Copy answers
-    $("#copy_answers").change(function() {
-        if ($("#copy_answers:checked").length > 0) {
-            bind_groups();
+    $(".js-copy-answers").change(function() {
+        var idx = $(this).data('id');
+        if ($(".js-copy-answers:checked").length > 0) {
+            bind_groups(idx);
         } else {
-            unbind_groups();
+            unbind_groups(idx);
         }
     })
 });
@@ -42,45 +43,67 @@ function display_copy() {
     $("#cp_copy").toggle(!!shouldElementBeVisible);   
 }
 
-function bind_groups() {
-    
-    var elements = $("input").filter(function(){
-        return this.id.match(/^id_(\d+)/);
+function bind_groups(idx) {    
+    var elements = $('*[data-idx="'+idx+'"] input, *[data-idx="'+idx+'"] select, *[data-idx="'+idx+'"] textarea');
+    var firstAnswers = $('*[data-idx="0"] input, *[data-idx="0"] select, *[data-idx="0"] textarea');
+    elements.each(function(index){
+        var input = $(this);
+        switch (input.prev().prop('tagName')) {
+            case "textarea":            
+                input.val(firstAnswers.eq(index).val());
+                break;
+            case "select":
+                input.val(firstAnswers.eq(index).find(":selected").val()).change();
+                break;
+            case "input":
+                switch (input.attr('type')) {
+                    case "text":
+                    case "number":
+                        input.val(firstAnswers.eq(index).val());
+                        break;
+                    case "checkbox":
+                    case "radio":
+                        input.prop("checked", firstAnswers.eq(index).prop("checked"));
+                        break;
+                    default:
+                        input.val(firstAnswers.eq(index).val());
+                } 
+                break;
+            default:
+                input.val(firstAnswers.eq(index).val());
+        } 
     });
-
-    // first copy values
-    for (var i=2; i<elements.length; i+=2) {
-        if(elements[i])
-            elements.eq(i).val(elements.eq(0).val());
-        
-        if(elements[i+1])
-            elements.eq(i+1).val(parseInt(elements.eq(1).val(), 10));
-    }
-
-    // then bind fields
-    elements.eq(0).keyup(function(){
-        for (var i=2; i<elements.length; i+=2) {            
-            elements.eq(i).val($(this).val());
-        }        
-    });
-
-    elements.eq(1).keyup(function(){
-        for (var i=2; i<elements.length; i+=2) {            
-            elements.eq(i+1).val($(this).val());
-        }
-    });
-    
-    
 }
 
-function unbind_groups() {   
-    var elements = $("input").filter(function(){
-        return this.id.match(/^id_(\d+)/);
+function unbind_groups(idx) {   
+    var elements = $('*[data-idx="'+idx+'"] input, *[data-idx="'+idx+'"] select, *[data-idx="'+idx+'"] textarea');    
+    elements.each(function(index){
+        var input = $(this);
+        switch (input.prev().prop('tagName')) {
+            case "textarea":
+                input.val("");
+                break;
+            case "select":
+                input.val("").change();
+                break;
+            case "input":
+                switch (input.attr('type')) {
+                    case "text":
+                    case "number":
+                        input.val("");
+                        break;
+                    case "checkbox":
+                    case "radio":
+                        input.prop("checked", false);
+                        break;
+                    default:
+                        input.val("");
+                }
+                break;
+            default:
+                input.val("");
+        }        
     });
-
-    for(var i=0; i<elements.length; i++){
-        elements.eq(i).unbind("keyup");
-    }
 }
 
 var waitingDialog = {

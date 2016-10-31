@@ -41,11 +41,7 @@
                     </div>
                 </div>
             {% endif %}
-            <div id="cp_copy" class="panel panel-default">
-                <div class="panel-body">
-                    <input type="checkbox" name="copy" id="copy_answers">  Copy Answers
-                </div>                
-            </div>
+            
             {% for form in forms %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -56,11 +52,16 @@
                                     – {{ form.pos.variation }}
                                 {% endif %}
                             </a>
+                            {% if forloop.counter > 1 %}
+                                <span class="text-right pull-right">
+                                     <input type="checkbox" data-id="{{ forloop.counter0 }}" name="copy" class="js-copy-answers" id="copy_answers_{{ form.pos.id }}"> {% trans "Copy answers from above" %}
+                                </span>
+                            {% endif %}                           
                         </h4>
                     </div>
                     <div id="cp{{ form.pos.id }}"
                             class="panel-collapse collapsed in">
-                        <div class="panel-body">
+                        <div class="panel-body" data-idx="{{ forloop.counter0 }}">
                             {% bootstrap_form form layout="horizontal" %}
                         </div>
                     </div>
