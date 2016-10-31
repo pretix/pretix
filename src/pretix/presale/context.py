@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.core.files.storage import default_storage
 
+from pretix.base.i18n import LazyI18nString, language
+from pretix.base.settings import GlobalSettingsObject
 from .signals import footer_link, html_head
 
 
@@ -16,6 +18,23 @@ def contextprocessor(request):
     }
     _html_head = []
     _footer = []
+
+    if hasattr(request, 'event'):
+        pretix_settings = request.event.settings
+    elif hasattr(request, 'organizer'):
+        pretix_settings = request.organizer.settings
+    else:
+        pretix_settings = GlobalSettingsObject().settings
+
+    text = str(pretix_settings.get('footer_text', as_type=LazyI18nString))
+    link = str(pretix_settings.get('footer_link', as_type=LazyI18nString))
+
+    if text:
+        if link:
+            _footer.append({'url': link, 'label': text})
+        else:
+            ctx['footer_text'] = text
+
     if hasattr(request, 'event'):
         for receiver, response in html_head.send(request.event, request=request):
             _html_head.append(response)
