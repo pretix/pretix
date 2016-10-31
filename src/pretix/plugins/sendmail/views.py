@@ -50,8 +50,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                 for l in self.request.event.settings.locales:
                     with language(l):
                         self.output[l] = []
-                        self.output[l].append(
-                            form.cleaned_data['subject'].localize(l))
+                        self.output[l].append(_('Subject: {subject}').format(subject=form.cleaned_data['subject'].localize(l)))
                         message = form.cleaned_data['message'].localize(l)
                         preview_text = message.format(
                             order='ORDER1234',
@@ -63,17 +62,18 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                 return self.get(self.request, *self.args, **self.kwargs)
             else:
                 try:
-                    mail(o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
-                         {
-                             'event': o.event,
-                             'order': o.code,
-                             'order_date': date_format(o.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
-                             'due_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
-                             'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                    with language(o.locale):
+                        mail(o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
+                             {
+                                 'event': o.event,
                                  'order': o.code,
-                                 'secret': o.secret
-                             })},
-                         self.request.event, locale=o.locale, order=o)
+                                 'order_date': date_format(o.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+                                 'due_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
+                                 'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                                     'order': 'ORDER1234',
+                                     'secret': 'longrandomsecretabcdef123456'
+                                 })},
+                             self.request.event, locale=o.locale, order=o)
                 except SendMailException:
                     failures.append(o.email)
 
