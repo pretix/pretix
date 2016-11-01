@@ -38,14 +38,6 @@
                             </a>
                         {% endif %}
 
-                        {% if can_download %}
-                            {% for b in download_buttons %}
-                                <a href="{% url "control:event.order.download" organizer=request.event.organizer.slug event=request.event.slug code=order.code output=b.identifier %}"
-                                        class="btn btn-default">
-                                    <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                                </a>
-                            {% endfor %}
-                        {% endif %}
                         <a href="{% eventurl request.event "presale:event.order" order=order.code secret=order.secret %}"
                                 class="btn btn-default" target="_blank">
                             {% trans "View order as user" %}

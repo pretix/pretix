@@ -67,29 +67,16 @@
         </div>
     {% endif %}
     {% if order.status == 'p' and event.settings.ticket_download %}
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Ticket download" %}</h3>
-            </div>
-            <div class="panel-body">
-                {% if can_download %}
-                    <p>
-                        {% blocktrans trimmed %}
-                            Please obtain your ticket below. Please have your ticket ready when entering the event.
-                        {% endblocktrans %}
-                    </p>
-                    {% for b in download_buttons %}
-                        <a href="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier %}"
-                                class="btn btn-primary">
-                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                        </a>
-                    {% endfor %}
-                {% else %}
-                    {% blocktrans trimmed with date=event.settings.ticket_download_date|date:"SHORT_DATE_FORMAT" %}
-                        You will be able to download your tickets here starting on {{ date }}.
-                    {% endblocktrans %}
-                {% endif %}
-            </div>
+        <div class="alert alert-info">
+            {% if can_download %}
+                {% blocktrans trimmed %}
+                    You can download your tickets using the buttons below. Please have your ticket ready when entering the event.
+                {% endblocktrans %}
+            {% else %}
+                {% blocktrans trimmed with date=event.settings.ticket_download_date|date:"SHORT_DATE_FORMAT" %}
+                    You will be able to download your tickets here starting on {{ date }}.
+                {% endblocktrans %}
+            {% endif %}
         </div>
     {% endif %}
     <div class="panel panel-primary cart">
@@ -107,7 +94,7 @@
             </h3>
         </div>
         <div class="panel-body">
-            {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=False %}
+            {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event download=can_download editable=False %}
         </div>
     </div>
     {% eventsignal event "pretix.presale.signals.order_info" order=order %}

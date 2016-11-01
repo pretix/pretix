@@ -110,8 +110,6 @@ urlpatterns = [
         url(r'^orders/(?P<code>[0-9A-Z]+)/change$', orders.OrderChange.as_view(),
             name='event.order.change'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/$', orders.OrderDetail.as_view(), name='event.order'),
-        url(r'^orders/(?P<code>[0-9A-Z]+)/download/(?P<output>[^/]+)$', orders.OrderDownload.as_view(),
-            name='event.order.download'),
         url(r'^invoice/(?P<invoice>[^/]+)$', orders.InvoiceDownload.as_view(),
             name='event.invoice.download'),
         url(r'^orders/overview/$', orders.OverView.as_view(), name='event.orders.overview'),

@@ -15,7 +15,7 @@
             </div>
             <div class="panel-body">
                 {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=True %}
-                <div class="row-fluid">
+                <div class="cart-row row">
                     <div class="col-md-6 col-xs-12">
                         <em id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
                             {% if cart.minutes_left > 0 %}
