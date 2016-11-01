@@ -417,7 +417,7 @@ class SettingsProxy:
         else:
             value = None
             if self._parent:
-                value = self._parent.settings.get(key)
+                value = self._parent.settings.get(key, as_type=str)
             if value is None and key in DEFAULTS:
                 value = DEFAULTS[key]['default']
             if value is None and default is not None:

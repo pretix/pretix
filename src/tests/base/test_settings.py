@@ -216,13 +216,35 @@ class SettingsTestCase(TestCase):
         self.assertTrue(f.name.endswith(val.name))
         f.close()
 
-    def test_detect_file_value(self):
+    def test_unserialize_file_value(self):
         val = SimpleUploadedFile("sample_invalid_image.jpg", b"file_content", content_type="image/jpeg")
         default_storage.save(val.name, val)
         val.close()
         self.event.settings.set('test', val)
         self.event.settings._flush()
         f = self.event.settings.get('test', as_type=File)
+        self.assertIsInstance(f, File)
+        self.assertTrue(f.name.endswith(val.name))
+        f.close()
+
+    def test_autodetect_file_value(self):
+        val = SimpleUploadedFile("sample_invalid_image.jpg", b"file_content", content_type="image/jpeg")
+        default_storage.save(val.name, val)
+        val.close()
+        self.event.settings.set('test', val)
+        self.event.settings._flush()
+        f = self.event.settings.get('test')
+        self.assertIsInstance(f, File)
+        self.assertTrue(f.name.endswith(val.name))
+        f.close()
+
+    def test_autodetect_file_value_of_parent(self):
+        val = SimpleUploadedFile("sample_invalid_image.jpg", b"file_content", content_type="image/jpeg")
+        default_storage.save(val.name, val)
+        val.close()
+        self.organizer.settings.set('test', val)
+        self.organizer.settings._flush()
+        f = self.event.settings.get('test')
         self.assertIsInstance(f, File)
         self.assertTrue(f.name.endswith(val.name))
         f.close()
