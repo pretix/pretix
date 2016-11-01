@@ -46,6 +46,7 @@ def preview(event: int, provider: str):
         item = event.items.create(name=_("Sample product"), default_price=42.23)
 
         order = event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
+                                    email='sample@pretix.eu',
                                     expires=now(), code="PREVIEW1234", total=119)
 
         order.positions.create(item=item, attendee_name=_("John Doe"), price=item.default_price)
