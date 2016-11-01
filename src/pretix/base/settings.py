@@ -518,4 +518,4 @@ class GlobalSettingsObject:
     def __init__(self):
         self.settings = SettingsProxy(self, type=GlobalSetting)
         self.setting_objects = GlobalSetting.objects
-        self.slug = 'GLOBALSETTINGS'
+        self.slug = '_global'
