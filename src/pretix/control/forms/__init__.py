@@ -1,6 +1,7 @@
 import os
 
 from django import forms
+from django.utils.html import conditional_escape
 from django.utils.translation import ugettext_lazy as _
 
 from ...base.forms import I18nModelForm
@@ -57,7 +58,22 @@ def selector(values, prop):
     ]
 
 
+class ClearableBasenameFileInput(forms.ClearableFileInput):
+
+    def get_template_substitution_values(self, value):
+        """
+        Return value-related substitutions.
+        """
+        bname = os.path.basename(value.name)
+        return {
+            'initial': conditional_escape(bname),
+            'initial_url': conditional_escape(value.url),
+        }
+
+
 class ExtFileField(forms.FileField):
+    widget = ClearableBasenameFileInput
+
     def __init__(self, *args, **kwargs):
         ext_whitelist = kwargs.pop("ext_whitelist")
         self.ext_whitelist = [i.lower() for i in ext_whitelist]

@@ -3,6 +3,7 @@ from django.core.files.storage import default_storage
 
 from pretix.base.i18n import LazyI18nString
 from pretix.base.settings import GlobalSettingsObject
+
 from .signals import footer_link, html_head
 
 
