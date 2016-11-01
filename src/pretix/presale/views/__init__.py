@@ -25,7 +25,7 @@ class CartMixin:
             'item__questions', 'answers'
         ))
 
-    def get_cart(self, answers=False, queryset=None, payment_fee=None, payment_fee_tax_rate=None):
+    def get_cart(self, answers=False, queryset=None, payment_fee=None, payment_fee_tax_rate=None, downloads=False):
         queryset = queryset or CartPosition.objects.filter(
             cart_id=self.request.session.session_key, event=self.request.event
         )
@@ -47,6 +47,8 @@ class CartMixin:
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
         def keyfunc(pos):
+            if downloads:
+                return pos.id, 0, 0, 0, 0
             if answers and ((pos.item.admission and self.request.event.settings.attendee_names_asked)
                             or pos.item.questions.all()):
                 return pos.id, 0, 0, 0, 0

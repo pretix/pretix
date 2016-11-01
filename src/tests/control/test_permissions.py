@@ -67,7 +67,6 @@ event_urls = [
     "orders/ABC/extend",
     "orders/ABC/change",
     "orders/ABC/contact",
-    "orders/ABC/download/pdf",
     "orders/ABC/",
     "orders/",
     "invoice/1",

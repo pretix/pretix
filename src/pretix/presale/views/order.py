@@ -79,8 +79,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
             if not provider.is_enabled:
                 continue
             buttons.append({
-                'icon': provider.download_button_icon or 'fa-download',
-                'text': provider.download_button_text or 'fa-download',
+                'text': provider.download_button_text or 'Download',
                 'identifier': provider.identifier,
             })
         return buttons
@@ -97,7 +96,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         )
         ctx['download_buttons'] = self.download_buttons
         ctx['cart'] = self.get_cart(
-            answers=True,
+            answers=True, downloads=ctx['can_download'],
             queryset=OrderPosition.objects.filter(order=self.order),
             payment_fee=self.order.payment_fee, payment_fee_tax_rate=self.order.payment_fee_tax_rate
         )
@@ -478,6 +477,7 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
 
 
 class OrderDownload(EventViewMixin, OrderDetailMixin, View):
+
     @cached_property
     def output(self):
         responses = register_ticket_outputs.send(self.request.event)
@@ -486,11 +486,18 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             if provider.identifier == self.kwargs.get('output'):
                 return provider
 
+    @cached_property
+    def order_position(self):
+        try:
+            return self.order.positions.get(pk=self.kwargs.get('position'))
+        except OrderPosition.DoesNotExist:
+            return None
+
     def get(self, request, *args, **kwargs):
         if not self.output or not self.output.is_enabled:
             messages.error(request, _('You requested an invalid ticket output type.'))
             return redirect(self.get_order_url())
-        if not self.order:
+        if not self.order or not self.order_position:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         if self.order.status != Order.STATUS_PAID:
             messages.error(request, _('Order is not paid.'))
@@ -501,7 +508,9 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             messages.error(request, _('Ticket download is not (yet) enabled.'))
             return redirect(self.get_order_url())
 
-        ct = CachedTicket.objects.get_or_create(order=self.order, provider=self.output.identifier)[0]
+        ct = CachedTicket.objects.get_or_create(
+            order_position=self.order_position, provider=self.output.identifier
+        )[0]
         if not ct.cachedfile:
             cf = CachedFile()
             cf.date = now()
@@ -509,7 +518,7 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             cf.save()
             ct.cachedfile = cf
             ct.save()
-        generate.apply_async(args=(self.order.id, self.output.identifier))
+        generate.apply_async(args=(self.order_position.id, self.output.identifier))
         return redirect(reverse('cachedfile.download', kwargs={'id': ct.cachedfile.id}))
 
 

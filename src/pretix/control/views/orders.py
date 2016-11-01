@@ -13,9 +13,8 @@ from django.views.generic import DetailView, ListView, TemplateView, View
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, CachedTicket, Invoice, Item, ItemVariation, Order, Quota,
+    CachedFile, Invoice, Item, ItemVariation, Order, Quota,
 )
-from pretix.base.services import tickets
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
@@ -29,7 +28,6 @@ from pretix.base.services.orders import (
 from pretix.base.services.stats import order_overview
 from pretix.base.signals import (
     register_data_exporters, register_payment_providers,
-    register_ticket_outputs,
 )
 from pretix.control.forms.orders import (
     CommentForm, ExporterForm, ExtendForm, OrderContactForm,
@@ -144,30 +142,10 @@ class OrderDetail(OrderView):
     template_name = 'pretixcontrol/order/index.html'
     permission = 'can_view_orders'
 
-    @cached_property
-    def download_buttons(self):
-        buttons = []
-        responses = register_ticket_outputs.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
-            if not provider.is_enabled:
-                continue
-            buttons.append({
-                'icon': provider.download_button_icon or 'fa-download',
-                'text': provider.download_button_text or 'fa-download',
-                'identifier': provider.identifier,
-            })
-        return buttons
-
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['items'] = self.get_items()
         ctx['event'] = self.request.event
-        ctx['download_buttons'] = self.download_buttons
-        ctx['can_download'] = (
-            self.request.event.settings.ticket_download
-            and self.order.status == Order.STATUS_PAID
-        )
         ctx['payment'] = self.payment_provider.order_control_render(self.request, self.object)
         ctx['invoices'] = list(self.order.invoices.all().select_related('event'))
         ctx['comment_form'] = CommentForm(initial={'comment': self.order.comment})
@@ -405,37 +383,6 @@ class InvoiceDownload(EventPermissionRequiredMixin, View):
         resp = FileResponse(self.invoice.file.file, content_type='application/pdf')
         resp['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(self.invoice.number)
         return resp
-
-
-class OrderDownload(OrderView):
-
-    @cached_property
-    def output(self):
-        responses = register_ticket_outputs.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
-            if provider.identifier == self.kwargs.get('output'):
-                return provider
-
-    def get(self, request, *args, **kwargs):
-        if not self.output or not self.output.is_enabled:
-            messages.error(request, _('You requested an invalid ticket output type.'))
-            return redirect(self.get_order_url())
-        if self.order.status != Order.STATUS_PAID:
-            messages.error(request, _('Order is not paid.'))
-            return redirect(self.get_order_url())
-
-        ct = CachedTicket.objects.get_or_create(order=self.order, provider=self.output.identifier)[0]
-        if not ct.cachedfile:
-            cf = CachedFile()
-            cf.date = now()
-            cf.expires = self.request.event.date_from + timedelta(days=30)
-            cf.save()
-            ct.cachedfile = cf
-            ct.save()
-        if not ct.cachedfile.file.name:
-            tickets.generate.apply_async(args=(self.order.id, self.output.identifier))
-        return redirect(reverse('cachedfile.download', kwargs={'id': ct.cachedfile.id}))
 
 
 class OrderExtend(OrderView):

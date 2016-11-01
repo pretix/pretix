@@ -18,16 +18,17 @@ logger = logging.getLogger('pretix.plugins.ticketoutputpdf')
 class PdfTicketOutput(BaseTicketOutput):
     identifier = 'pdf'
     verbose_name = _('PDF output')
-    download_button_text = _('Download PDF')
-    download_button_icon = 'fa-print'
+    download_button_text = _('PDF')
 
-    def generate(self, order):
+    def generate(self, op):
         from reportlab.graphics.shapes import Drawing
         from reportlab.pdfgen import canvas
         from reportlab.lib import pagesizes, units
         from reportlab.graphics.barcode.qr import QrCodeWidget
         from reportlab.graphics import renderPDF
         from PyPDF2 import PdfFileWriter, PdfFileReader
+
+        order = op.order
 
         pagesize = self.settings.get('pagesize', default='A4')
         if hasattr(pagesizes, pagesize):
@@ -41,66 +42,65 @@ class PdfTicketOutput(BaseTicketOutput):
         buffer = BytesIO()
         p = canvas.Canvas(buffer, pagesize=pagesize)
 
-        for op in order.positions.all().select_related('item', 'variation'):
-            event_s = self.settings.get('event_s', default=22, as_type=float)
-            if event_s:
-                p.setFont("Helvetica", event_s)
-                event_x = self.settings.get('event_x', default=15, as_type=float)
-                event_y = self.settings.get('event_y', default=235, as_type=float)
-                p.drawString(event_x * units.mm, event_y * units.mm, str(self.event.name))
+        event_s = self.settings.get('event_s', default=22, as_type=float)
+        if event_s:
+            p.setFont("Helvetica", event_s)
+            event_x = self.settings.get('event_x', default=15, as_type=float)
+            event_y = self.settings.get('event_y', default=235, as_type=float)
+            p.drawString(event_x * units.mm, event_y * units.mm, str(self.event.name))
 
-            order_s = self.settings.get('order_s', default=17, as_type=float)
-            if order_s:
-                p.setFont("Helvetica", order_s)
-                order_x = self.settings.get('order_x', default=15, as_type=float)
-                order_y = self.settings.get('order_y', default=220, as_type=float)
-                p.drawString(order_x * units.mm, order_y * units.mm, _('Order code: {code}').format(code=order.code))
+        order_s = self.settings.get('order_s', default=17, as_type=float)
+        if order_s:
+            p.setFont("Helvetica", order_s)
+            order_x = self.settings.get('order_x', default=15, as_type=float)
+            order_y = self.settings.get('order_y', default=220, as_type=float)
+            p.drawString(order_x * units.mm, order_y * units.mm, _('Order code: {code}').format(code=order.code))
 
-            name_s = self.settings.get('name_s', default=17, as_type=float)
-            if name_s:
-                p.setFont("Helvetica", name_s)
-                name_x = self.settings.get('name_x', default=15, as_type=float)
-                name_y = self.settings.get('name_y', default=210, as_type=float)
-                item = str(op.item.name)
-                if op.variation:
-                    item += " – " + str(op.variation)
-                p.drawString(name_x * units.mm, name_y * units.mm, item)
+        name_s = self.settings.get('name_s', default=17, as_type=float)
+        if name_s:
+            p.setFont("Helvetica", name_s)
+            name_x = self.settings.get('name_x', default=15, as_type=float)
+            name_y = self.settings.get('name_y', default=210, as_type=float)
+            item = str(op.item.name)
+            if op.variation:
+                item += " – " + str(op.variation)
+            p.drawString(name_x * units.mm, name_y * units.mm, item)
 
-            price_s = self.settings.get('price_s', default=17, as_type=float)
-            if price_s:
-                p.setFont("Helvetica", price_s)
-                price_x = self.settings.get('price_x', default=15, as_type=float)
-                price_y = self.settings.get('price_y', default=200, as_type=float)
-                p.drawString(price_x * units.mm, price_y * units.mm, "%s %s" % (str(op.price), self.event.currency))
+        price_s = self.settings.get('price_s', default=17, as_type=float)
+        if price_s:
+            p.setFont("Helvetica", price_s)
+            price_x = self.settings.get('price_x', default=15, as_type=float)
+            price_y = self.settings.get('price_y', default=200, as_type=float)
+            p.drawString(price_x * units.mm, price_y * units.mm, "%s %s" % (str(op.price), self.event.currency))
 
-            qr_s = self.settings.get('qr_s', default=80, as_type=float)
-            if qr_s:
-                reqs = qr_s * units.mm
-                qrw = QrCodeWidget(op.secret, barLevel='H')
-                b = qrw.getBounds()
-                w = b[2] - b[0]
-                h = b[3] - b[1]
-                d = Drawing(reqs, reqs, transform=[reqs / w, 0, 0, reqs / h, 0, 0])
-                d.add(qrw)
-                qr_x = self.settings.get('qr_x', default=10, as_type=float)
-                qr_y = self.settings.get('qr_y', default=120, as_type=float)
-                renderPDF.draw(d, p, qr_x * units.mm, qr_y * units.mm)
+        qr_s = self.settings.get('qr_s', default=80, as_type=float)
+        if qr_s:
+            reqs = qr_s * units.mm
+            qrw = QrCodeWidget(op.secret, barLevel='H')
+            b = qrw.getBounds()
+            w = b[2] - b[0]
+            h = b[3] - b[1]
+            d = Drawing(reqs, reqs, transform=[reqs / w, 0, 0, reqs / h, 0, 0])
+            d.add(qrw)
+            qr_x = self.settings.get('qr_x', default=10, as_type=float)
+            qr_y = self.settings.get('qr_y', default=120, as_type=float)
+            renderPDF.draw(d, p, qr_x * units.mm, qr_y * units.mm)
 
-            code_s = self.settings.get('code_s', default=11, as_type=float)
-            if code_s:
-                p.setFont("Helvetica", code_s)
-                code_x = self.settings.get('code_x', default=15, as_type=float)
-                code_y = self.settings.get('code_y', default=120, as_type=float)
-                p.drawString(code_x * units.mm, code_y * units.mm, op.secret)
+        code_s = self.settings.get('code_s', default=11, as_type=float)
+        if code_s:
+            p.setFont("Helvetica", code_s)
+            code_x = self.settings.get('code_x', default=15, as_type=float)
+            code_y = self.settings.get('code_y', default=120, as_type=float)
+            p.drawString(code_x * units.mm, code_y * units.mm, op.secret)
 
-            attendee_s = self.settings.get('attendee_s', default=0, as_type=float)
-            if code_s and op.attendee_name:
-                p.setFont("Helvetica", attendee_s)
-                attendee_x = self.settings.get('attendee_x', default=15, as_type=float)
-                attendee_y = self.settings.get('attendee_y', default=90, as_type=float)
-                p.drawString(attendee_x * units.mm, attendee_y * units.mm, op.attendee_name)
+        attendee_s = self.settings.get('attendee_s', default=0, as_type=float)
+        if code_s and op.attendee_name:
+            p.setFont("Helvetica", attendee_s)
+            attendee_x = self.settings.get('attendee_x', default=15, as_type=float)
+            attendee_y = self.settings.get('attendee_y', default=90, as_type=float)
+            p.drawString(attendee_x * units.mm, attendee_y * units.mm, op.attendee_name)
 
-            p.showPage()
+        p.showPage()
 
         p.save()
 

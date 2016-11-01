@@ -5,7 +5,7 @@ from django import forms
 from django.http import HttpRequest
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Event, Order
+from pretix.base.models import Event, OrderPosition
 from pretix.base.settings import SettingsSandbox
 
 
@@ -29,7 +29,7 @@ class BaseTicketOutput:
         """
         return self.settings.get('_enabled', as_type=bool)
 
-    def generate(self, order: Order) -> Tuple[str, str, str]:
+    def generate(self, order: OrderPosition) -> Tuple[str, str, str]:
         """
         This method should generate the download file and return a tuple consisting of a
         filename, a file type and file content.
@@ -106,11 +106,3 @@ class BaseTicketOutput:
         The text on the download button in the frontend.
         """
         return _('Download ticket')
-
-    @property
-    def download_button_icon(self) -> str:
-        """
-        The name of the FontAwesome icon on the download button in the frontend
-        (without the fa- prefix).
-        """
-        return None
