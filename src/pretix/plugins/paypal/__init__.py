@@ -7,7 +7,7 @@ from pretix import __version__ as version
 
 class PaypalApp(AppConfig):
     name = 'pretix.plugins.paypal'
-    verbose_name = _("Stripe")
+    verbose_name = _("PayPal")
 
     class PretixPluginMeta:
         name = _("PayPal")
