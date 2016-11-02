@@ -1,7 +1,6 @@
 @import "_variables.scss";
 @import "../../bootstrap/scss/_bootstrap.scss";
 $fa-font-path: static("fontawesome/fonts");
-$font-path: static("fonts");
 @import "../../fontawesome/scss/font-awesome.scss";
 @import "../../typeahead/typeahead.css";
 @import "../css/metisMenu.min.css";
@@ -12,6 +11,7 @@ $font-path: static("fonts");
 @import "_flags.scss";
 @import "_orders.scss";
 @import "_dashboard.scss";
+@import "../../pretixbase/scss/webfont.scss";
 
 footer {
     text-align: center;
