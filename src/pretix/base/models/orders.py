@@ -309,12 +309,6 @@ class Order(LoggedModel):
         return True
 
 
-class CachedTicket(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    cachedfile = models.ForeignKey(CachedFile, on_delete=models.CASCADE, null=True)
-    provider = models.CharField(max_length=255)
-
-
 class QuestionAnswer(models.Model):
     """
     The answer to a Question, connected to an OrderPosition or CartPosition.
@@ -554,3 +548,9 @@ class InvoiceAddress(models.Model):
     city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)
     country = models.CharField(max_length=255, verbose_name=_('Country'), blank=False)
     vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'))
+
+
+class CachedTicket(models.Model):
+    order_position = models.ForeignKey(OrderPosition, on_delete=models.CASCADE)
+    cachedfile = models.ForeignKey(CachedFile, on_delete=models.CASCADE, null=True)
+    provider = models.CharField(max_length=255)

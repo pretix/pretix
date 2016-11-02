@@ -10,63 +10,77 @@
             {% if line.voucher %}
                 <br /><span class="fa fa-tags"></span> {% trans "Voucher code used:" %} {{ line.voucher.code }}
             {% endif %}
-        {% if line.has_questions %}
-            <dl>
-                {% if line.item.admission and event.settings.attendee_names_asked%}
-                    <dt>{% trans "Attendee name" %}</dt>
-                    <dd>{% if line.attendee_name %}{{ line.attendee_name }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
-                {% endif %}
-                {% for q in line.questions %}
-                    <dt>{{ q.question }}</dt>
-                    <dd>{% if q.answer %}{{ q.answer|linebreaksbr }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
-                {% endfor %}
-            </dl>
-        {% endif %}
-        </div>
-        <div class="col-md-2 col-xs-6 count">
-            {% if editable %}
-            <form action="{% eventurl event "presale:event.cart.remove" %}"
-                    method="post" data-asynctask>
-                {% csrf_token %}
 
-                {% if line.variation %}
-                    <input type="hidden" name="variation_{{ line.item.id }}_{{ line.variation.id }}"
-                            value="1" />
-                    <input type="hidden" name="price_{{ line.item.id }}_{{ line.variation.id }}"
-                            value="{{ line.price }}" />
-                {% else %}
-                    <input type="hidden" name="item_{{ line.item.id }}"
-                            value="1" />
-                    <input type="hidden" name="price_{{ line.item.id }}"
-                            value="{{ line.price }}" />
-                {% endif %}
-                <button class="btn btn-mini btn-link"><i class="fa fa-minus"></i></button>
-            </form>
-            {% endif %}
-            {{ line.count }}
-            {% if editable %}
-            <form action="{% eventurl event "presale:event.cart.add" %}"
-                method="post" data-asynctask>
-                {% csrf_token %}
-                {% if line.variation %}
-                    <input type="hidden" name="variation_{{ line.item.id }}_{{ line.variation.id }}"
-                        value="1" />
-                    <input type="hidden" name="price_{{ line.item.id }}_{{ line.variation.id }}"
-                            value="{{ line.price }}" />
-                {% else %}
-                    <input type="hidden" name="item_{{ line.item.id }}"
-                            value="1" />
-                    <input type="hidden" name="price_{{ line.item.id }}"
-                            value="{{ line.price }}" />
-                {% endif %}
-                <button class="btn btn-mini btn-link"><i class="fa fa-plus"></i></button>
-            </form>
+
+            {% if line.has_questions %}
+                <dl>
+                    {% if line.item.admission and event.settings.attendee_names_asked%}
+                        <dt>{% trans "Attendee name" %}</dt>
+                        <dd>{% if line.attendee_name %}{{ line.attendee_name }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
+                    {% endif %}
+                    {% for q in line.questions %}
+                        <dt>{{ q.question }}</dt>
+                        <dd>{% if q.answer %}{{ q.answer|linebreaksbr }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
+                    {% endfor %}
+                </dl>
             {% endif %}
         </div>
-        <div class="col-md-3 col-xs-6 price">
-            {{ event.currency }} {{ line.price|floatformat:2 }}
-        </div>
-        <div class="col-md-3 col-xs-6 price">
+
+        {% if download %}
+            <div class="col-md-5 col-xs-6 download">
+                {% for b in download_buttons %}
+                    <a href="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
+                            class="btn btn-default btn-sm">
+                        <span class="fa fa-download"></span> {{ b.text }}
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="col-md-2 col-xs-6 count">
+                {% if editable %}
+                <form action="{% eventurl event "presale:event.cart.remove" %}"
+                        method="post" data-asynctask>
+                    {% csrf_token %}
+
+                    {% if line.variation %}
+                        <input type="hidden" name="variation_{{ line.item.id }}_{{ line.variation.id }}"
+                                value="1" />
+                        <input type="hidden" name="price_{{ line.item.id }}_{{ line.variation.id }}"
+                                value="{{ line.price }}" />
+                    {% else %}
+                        <input type="hidden" name="item_{{ line.item.id }}"
+                                value="1" />
+                        <input type="hidden" name="price_{{ line.item.id }}"
+                                value="{{ line.price }}" />
+                    {% endif %}
+                    <button class="btn btn-mini btn-link"><i class="fa fa-minus"></i></button>
+                </form>
+                {% endif %}
+                {{ line.count }}
+                {% if editable %}
+                <form action="{% eventurl event "presale:event.cart.add" %}"
+                    method="post" data-asynctask>
+                    {% csrf_token %}
+                    {% if line.variation %}
+                        <input type="hidden" name="variation_{{ line.item.id }}_{{ line.variation.id }}"
+                            value="1" />
+                        <input type="hidden" name="price_{{ line.item.id }}_{{ line.variation.id }}"
+                                value="{{ line.price }}" />
+                    {% else %}
+                        <input type="hidden" name="item_{{ line.item.id }}"
+                                value="1" />
+                        <input type="hidden" name="price_{{ line.item.id }}"
+                                value="{{ line.price }}" />
+                    {% endif %}
+                    <button class="btn btn-mini btn-link"><i class="fa fa-plus"></i></button>
+                </form>
+                {% endif %}
+            </div>
+            <div class="col-md-3 col-xs-6 price">
+                {{ event.currency }} {{ line.price|floatformat:2 }}
+            </div>
+        {% endif %}
+        <div class="col-md-3 col-xs-6 price {% if download %}col-xs-offset-6{% endif %} col-md-offset-0">
             <strong>{{ event.currency }} {{ line.total|floatformat:2 }}</strong>
             {% if line.tax_rate %}
                 <br /><small>{% blocktrans trimmed with rate=line.tax_rate %}

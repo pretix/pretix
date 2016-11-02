@@ -46,8 +46,8 @@ def test_generate_pdf(env, mocker):
     event.settings.set('ticketoutput_pdf_code_y', 50)
     event.settings.set('ticketoutput_pdf_code_s', 2)
     o = PdfTicketOutput(event)
-    fname, ftype, buf = o.generate(order)
+    fname, ftype, buf = o.generate(order.positions.first())
     assert ftype == 'application/pdf'
     pdf = PdfFileReader(BytesIO(buf))
-    assert pdf.numPages == 2
+    assert pdf.numPages == 1
     assert mocked.called

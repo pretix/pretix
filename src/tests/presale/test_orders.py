@@ -307,7 +307,8 @@ class OrdersTest(TestCase):
         self.event.settings.set('ticket_download', True)
         del self.event.settings['ticket_download_date']
         response = self.client.get(
-            '/%s/%s/order/%s/%s/download/pdf' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            '/%s/%s/order/%s/%s/download/%d/pdf' % (self.orga.slug, self.event.slug, self.order.code,
+                                                    self.order.secret, self.ticket_pos.pk),
             follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
@@ -315,13 +316,14 @@ class OrdersTest(TestCase):
                              target_status_code=200)
 
         response = self.client.get(
-            '/%s/%s/order/ABC/123/download/testdummy' % (self.orga.slug, self.event.slug)
+            '/%s/%s/order/ABC/123/download/%d/testdummy' % (self.orga.slug, self.event.slug,
+                                                            self.ticket_pos.pk)
         )
         assert response.status_code == 404
 
         response = self.client.get(
-            '/%s/%s/order/%s/%s/download/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
-                                                       self.order.secret),
+            '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.order.secret, self.ticket_pos.pk),
             follow=True
         )
         self.assertRedirects(response,
@@ -332,15 +334,15 @@ class OrdersTest(TestCase):
         self.order.status = Order.STATUS_PAID
         self.order.save()
         response = self.client.get(
-            '/%s/%s/order/%s/%s/download/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
-                                                       self.order.secret),
+            '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.order.secret, self.ticket_pos.pk),
         )
         assert response.status_code == 302
 
         self.event.settings.set('ticket_download_date', now() + datetime.timedelta(days=1))
         response = self.client.get(
-            '/%s/%s/order/%s/%s/download/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
-                                                       self.order.secret),
+            '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.order.secret, self.ticket_pos.pk),
             follow=True
         )
         self.assertRedirects(response,
@@ -350,15 +352,15 @@ class OrdersTest(TestCase):
 
         del self.event.settings['ticket_download_date']
         response = self.client.get(
-            '/%s/%s/order/%s/%s/download/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
-                                                       self.order.secret),
+            '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.order.secret, self.ticket_pos.pk),
         )
         assert response.status_code == 302
 
         self.event.settings.set('ticket_download', False)
         response = self.client.get(
-            '/%s/%s/order/%s/%s/download/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
-                                                       self.order.secret),
+            '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.order.secret, self.ticket_pos.pk),
             follow=True
         )
         self.assertRedirects(response, '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,

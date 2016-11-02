@@ -9,7 +9,6 @@ class DummyTicketOutput(BaseTicketOutput):
     identifier = 'testdummy'
     verbose_name = 'Test dummy'
     download_button_text = 'Download test file'
-    download_button_icon = 'fa-print'
 
-    def generate(self, order):
-        return 'test.txt', 'text/plain', str(order.id)
+    def generate(self, op):
+        return 'test.txt', 'text/plain', str(op.order.id)

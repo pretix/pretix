@@ -3,13 +3,12 @@ from decimal import Decimal
 
 import pytest
 from django.core import mail
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils.timezone import now
 from tests.base import SoupTest
 
 from pretix.base.models import (
-    CachedTicket, Event, EventPermission, InvoiceAddress, Item, Order,
-    OrderPosition, Organizer, Quota, User,
+    Event, EventPermission, InvoiceAddress, Item, Order, OrderPosition,
+    Organizer, Quota, User,
 )
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice,
@@ -194,135 +193,6 @@ def test_order_transition(client, env, process):
         assert o.status == process[1]
     else:
         assert o.status == process[0]
-
-
-@pytest.mark.django_db
-def test_order_detail_download_buttons_hidden_if_not_paid(client, env):
-    o = Order.objects.get(id=env[2].id)
-    o.status = Order.STATUS_PENDING
-    o.save()
-    env[0].settings.set('ticket_download', True)
-    del env[0].settings['ticket_download_date']
-    env[0].settings.set('ticketoutput_testdummy__enabled', True)
-    client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/')
-    assert '/control/event/dummy/dummy/orders/FOO/download/testdummy' not in response.rendered_content
-
-
-@pytest.mark.django_db
-def test_order_detail_download_buttons_visible(client, env):
-    o = Order.objects.get(id=env[2].id)
-    o.status = Order.STATUS_PAID
-    o.save()
-    env[0].settings.set('ticket_download', True)
-    del env[0].settings['ticket_download_date']
-    env[0].settings.set('ticketoutput_testdummy__enabled', True)
-    client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/')
-    assert '/control/event/dummy/dummy/orders/FOO/download/testdummy' in response.rendered_content
-
-
-@pytest.mark.django_db
-def test_order_detail_download_buttons_hidden_of(client, env):
-    o = Order.objects.get(id=env[2].id)
-    o.status = Order.STATUS_PAID
-    o.save()
-    env[0].settings.set('ticket_download', False)
-    del env[0].settings['ticket_download_date']
-    env[0].settings.set('ticketoutput_testdummy__enabled', True)
-    client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/')
-    assert '/control/event/dummy/dummy/orders/FOO/download/testdummy' not in response.rendered_content
-
-
-@pytest.mark.django_db
-def test_order_detail_download_buttons_visible_before_date(client, env):
-    o = Order.objects.get(id=env[2].id)
-    o.status = Order.STATUS_PAID
-    o.save()
-    env[0].settings.set('ticket_download', True)
-    env[0].settings.set('ticketoutput_testdummy__enabled', True)
-    env[0].settings['ticket_download_date'] = now() + timedelta(days=30)
-    client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/')
-    assert '/control/event/dummy/dummy/orders/FOO/download/testdummy' in response.rendered_content
-
-
-@pytest.mark.django_db
-def test_order_detail_download_buttons_hidden_if_provider_disabled(client, env):
-    o = Order.objects.get(id=env[2].id)
-    o.status = Order.STATUS_PAID
-    o.save()
-    env[0].settings.set('ticket_download', True)
-    del env[0].settings['ticket_download_date']
-    env[0].settings.set('ticketoutput_testdummy__enabled', False)
-    client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/')
-    assert '/control/event/dummy/dummy/orders/FOO/download/testdummy' not in response.rendered_content
-
-
-@pytest.mark.django_db
-def test_order_download_unpaid(client, env):
-    env[0].settings.set('ticket_download', True)
-    del env[0].settings['ticket_download_date']
-    env[0].settings.set('ticketoutput_testdummy__enabled', True)
-    client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/download/testdummy', follow=True)
-    assert 'alert-danger' in response.rendered_content
-
-
-@pytest.mark.django_db
-def test_order_download_unknown_provider(client, env):
-    o = Order.objects.get(id=env[2].id)
-    o.status = Order.STATUS_PAID
-    o.save()
-    env[0].settings.set('ticket_download', True)
-    del env[0].settings['ticket_download_date']
-    client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/download/foobar', follow=True)
-    assert 'alert-danger' in response.rendered_content
-
-
-@pytest.mark.django_db
-def test_order_download_disabled_provider(client, env):
-    o = Order.objects.get(id=env[2].id)
-    o.status = Order.STATUS_PAID
-    o.save()
-    env[0].settings.set('ticket_download', True)
-    del env[0].settings['ticket_download_date']
-    env[0].settings.set('ticketoutput_testdummy__enabled', False)
-    client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/download/testdummy', follow=True)
-    assert 'alert-danger' in response.rendered_content
-
-
-@pytest.mark.django_db
-def test_order_download_success(client, env, mocker):
-    from pretix.base.services import tickets
-    mocker.patch('pretix.base.services.tickets.generate.apply_async')
-    o = Order.objects.get(id=env[2].id)
-    o.status = Order.STATUS_PAID
-    o.save()
-    env[0].settings.set('ticket_download', True)
-    del env[0].settings['ticket_download_date']
-    env[0].settings.set('ticketoutput_testdummy__enabled', True)
-    client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/download/testdummy')
-    assert response.status_code == 302
-    tickets.generate.apply_async.assert_any_call(args=(o.id, 'testdummy'))
-    assert 'download' in response['Location']
-    dl = response['Location']
-
-    # test caching
-    mocker.resetall()
-    ct = CachedTicket.objects.get(order=o, provider='testdummy')
-    ct.cachedfile.file.save('foo.jpg', SimpleUploadedFile("sample_invalid_image.jpg", b"file_content",
-                                                          content_type="image/jpeg"))
-    ct.cachedfile.save()
-    response = client.get('/control/event/dummy/dummy/orders/FOO/download/testdummy')
-    assert response.status_code == 302
-    tickets.generate.apply_async.assert_not_called()
-    assert dl == response['Location']
 
 
 @pytest.mark.django_db
