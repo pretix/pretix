@@ -3,7 +3,6 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from pretix import __version__ as version
-from pretix.base.plugins import PluginType
 
 
 class BankTransferApp(AppConfig):
@@ -11,7 +10,6 @@ class BankTransferApp(AppConfig):
     verbose_name = _("Bank transfer")
 
     class PretixPluginMeta:
-        type = PluginType.PAYMENT
         name = _("Bank transfer")
         author = _("the pretix team")
         version = version

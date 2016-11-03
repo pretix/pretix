@@ -3,7 +3,6 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from pretix import __version__ as version
-from pretix.base.plugins import PluginType
 
 
 class CheckinlistsApp(AppConfig):
@@ -11,7 +10,6 @@ class CheckinlistsApp(AppConfig):
     verbose_name = _("Check-in lists")
 
     class PretixPluginMeta:
-        type = PluginType.PAYMENT
         name = _("Check-in list exporter")
         author = _("the pretix team")
         version = version

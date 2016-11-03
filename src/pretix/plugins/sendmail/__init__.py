@@ -2,7 +2,6 @@ from django.apps import AppConfig
 from django.utils.translation import ugettext_lazy as _
 
 from pretix import __version__ as version
-from pretix.base.plugins import PluginType
 
 
 class SendMailApp(AppConfig):
@@ -10,7 +9,6 @@ class SendMailApp(AppConfig):
     verbose_name = _("Send out emails")
 
     class PretixPluginMeta:
-        type = PluginType.ADMINFEATURE
         name = _("Send out emails")
         author = _("the pretix team")
         version = version

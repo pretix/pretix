@@ -30,10 +30,6 @@ Plugin metadata
 The plugin metadata lives inside a ``PretixPluginMeta`` class inside your app's
 configuration class. The metadata class must define the following attributes:
 
-``type`` (``pretix.base.plugins.PluginType``):
-    The type of plugin. Currently available: ``RESTRICTION``, ``PAYMENT``,
-    ``ADMINFEATURE``
-
 ``name`` (``str``):
     The human-readable name of your plugin
 
@@ -51,24 +47,20 @@ A working example would be::
     # file: pretix/plugins/timerestriction/__init__.py
     from django.apps import AppConfig
     from django.utils.translation import ugettext_lazy as _
-    from pretix.base.plugins import PluginType
 
 
-    class TimeRestrictionApp(AppConfig):
-        name = 'pretix.plugins.timerestriction'
-        verbose_name = _("Time restriction")
+    class PaypalApp(AppConfig):
+        name = 'pretix.plugins.paypal'
+        verbose_name = _("Stripe")
 
         class PretixPluginMeta:
-            type = PluginType.RESTRICTION
-            name = _("Restriciton by time")
+            name = _("PayPal")
             author = _("the pretix team")
             version = '1.0.0'
-            description = _("This plugin adds the possibility to restrict the sale " +
-                            "of a given item or variation to a certain timeframe " +
-                            "or change its price during a certain period.")
+            description = _("This plugin allows you to receive payments via PayPal")
 
 
-    default_app_config = 'pretix.plugins.timerestriction.TimeRestrictionApp'
+    default_app_config = 'pretix.plugins.paypal.PaypalApp'
 
 
 The ``AppConfig`` class may implement a property ``compatiblity_errors``, that checks

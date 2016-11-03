@@ -5,6 +5,11 @@ from django.apps import apps
 
 
 class PluginType(Enum):
+    """
+    Plugin type classification. THIS IS DEPRECATED, DO NOT USE ANY MORE.
+    This is only not removed yet as external plugins might have references
+    to this enum.
+    """
     RESTRICTION = 1
     PAYMENT = 2
     ADMINFEATURE = 3
