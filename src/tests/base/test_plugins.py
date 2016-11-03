@@ -15,7 +15,6 @@ plugins = get_all_plugins()
 def test_metadata(plugin):
     assert hasattr(plugin, 'name')
     assert hasattr(plugin, 'version')
-    assert hasattr(plugin, 'type')
 
 
 @pytest.mark.django_db
