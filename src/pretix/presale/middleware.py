@@ -18,11 +18,6 @@ class EventMiddleware(MiddlewareMixin):
             if redirect:
                 return redirect
 
-        if '_' not in request.session:
-            # We need to create session even if we do not yet store something there, because we need the session
-            # key for e.g. saving the user's cart
-            request.session['_'] = '_'
-
     def process_response(self, request, response):
         if hasattr(request, '_namespace') and request._namespace == 'presale' and hasattr(request, 'event'):
             for receiver, r in process_response.send(request.event, request=request, response=response):
