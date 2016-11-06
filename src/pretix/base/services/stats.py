@@ -28,48 +28,51 @@ def tuplesum(tuples: Iterable[Tuple]) -> Tuple:
     return tuple(map(mysum, zip(*list(tuples))))
 
 
+def dictsum(*dicts) -> dict:
+    res = {}
+    keys = set()
+    for d in dicts:
+        keys |= set(d.keys())
+    for k in keys:
+        res[k] = (sum(d[k][0] for d in dicts if k in d), sum(d[k][1] for d in dicts if k in d))
+    return res
+
+
 def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]], Dict[str, Tuple[Decimal, Decimal]]]:
     items = event.items.all().select_related(
         'category',  # for re-grouping
+    ).prefetch_related(
+        'variations'
     ).order_by('category__position', 'category_id', 'name')
 
-    num_total = {
-        (p['item'], p['variation']): (p['cnt'], p['price'])
-        for p in (OrderPosition.objects
-                  .filter(order__event=event,
-                          order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED, Order.STATUS_PAID])
-                  .values('item', 'variation')
-                  .annotate(cnt=Count('id'), price=Sum('price')).order_by())
-    }
+    counters = OrderPosition.objects.filter(
+        order__event=event
+    ).values(
+        'item', 'variation', 'order__status'
+    ).annotate(cnt=Count('id'), price=Sum('price')).order_by()
+
     num_canceled = {
         (p['item'], p['variation']): (p['cnt'], p['price'])
-        for p in (OrderPosition.objects
-                  .filter(order__event=event, order__status=Order.STATUS_CANCELED)
-                  .values('item', 'variation')
-                  .annotate(cnt=Count('id'), price=Sum('price')).order_by())
+        for p in counters if p['order__status'] == Order.STATUS_CANCELED
     }
     num_refunded = {
         (p['item'], p['variation']): (p['cnt'], p['price'])
-        for p in (OrderPosition.objects
-                  .filter(order__event=event, order__status=Order.STATUS_REFUNDED)
-                  .values('item', 'variation')
-                  .annotate(cnt=Count('id'), price=Sum('price')).order_by())
-    }
-    num_pending = {
-        (p['item'], p['variation']): (p['cnt'], p['price'])
-        for p in (OrderPosition.objects
-                  .filter(order__event=event,
-                          order__status__in=(Order.STATUS_PENDING, Order.STATUS_EXPIRED))
-                  .values('item', 'variation')
-                  .annotate(cnt=Count('id'), price=Sum('price')).order_by())
+        for p in counters if p['order__status'] == Order.STATUS_REFUNDED
     }
     num_paid = {
         (p['item'], p['variation']): (p['cnt'], p['price'])
-        for p in (OrderPosition.objects
-                  .filter(order__event=event, order__status=Order.STATUS_PAID)
-                  .values('item', 'variation')
-                  .annotate(cnt=Count('id'), price=Sum('price')).order_by())
+        for p in counters if p['order__status'] == Order.STATUS_PAID
     }
+    num_s_pending = {
+        (p['item'], p['variation']): (p['cnt'], p['price'])
+        for p in counters if p['order__status'] == Order.STATUS_PENDING
+    }
+    num_expired = {
+        (p['item'], p['variation']): (p['cnt'], p['price'])
+        for p in counters if p['order__status'] == Order.STATUS_EXPIRED
+    }
+    num_pending = dictsum(num_s_pending, num_expired)
+    num_total = dictsum(num_pending, num_paid)
 
     for item in items:
         item.all_variations = list(item.variations.all())
@@ -120,41 +123,33 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
     payment_cat_obj = DummyObject()
     payment_cat_obj.name = _('Payment method fees')
     payment_items = []
-    num_total = {
-        o['payment_provider']: (o['cnt'], o['payment_fee'])
-        for o in (Order.objects
-                  .filter(event=event)
-                  .values('payment_provider')
-                  .annotate(cnt=Count('id'), payment_fee=Sum('payment_fee')).order_by())
-    }
+
+    counters = event.orders.values('payment_provider', 'status').annotate(
+        cnt=Count('id'), payment_fee=Sum('payment_fee')
+    ).order_by()
+
     num_canceled = {
         o['payment_provider']: (o['cnt'], o['payment_fee'])
-        for o in (Order.objects
-                  .filter(event=event, status=Order.STATUS_CANCELED)
-                  .values('payment_provider')
-                  .annotate(cnt=Count('id'), payment_fee=Sum('payment_fee')).order_by())
+        for o in counters if o['status'] == Order.STATUS_CANCELED
     }
     num_refunded = {
         o['payment_provider']: (o['cnt'], o['payment_fee'])
-        for o in (Order.objects
-                  .filter(event=event, status=Order.STATUS_REFUNDED)
-                  .values('payment_provider')
-                  .annotate(cnt=Count('id'), payment_fee=Sum('payment_fee')).order_by())
+        for o in counters if o['status'] == Order.STATUS_REFUNDED
     }
-    num_pending = {
+    num_s_pending = {
         o['payment_provider']: (o['cnt'], o['payment_fee'])
-        for o in (Order.objects
-                  .filter(event=event, status__in=(Order.STATUS_PENDING, Order.STATUS_EXPIRED))
-                  .values('payment_provider')
-                  .annotate(cnt=Count('id'), payment_fee=Sum('payment_fee')).order_by())
+        for o in counters if o['status'] == Order.STATUS_PENDING
+    }
+    num_expired = {
+        o['payment_provider']: (o['cnt'], o['payment_fee'])
+        for o in counters if o['status'] == Order.STATUS_EXPIRED
     }
     num_paid = {
         o['payment_provider']: (o['cnt'], o['payment_fee'])
-        for o in (Order.objects
-                  .filter(event=event, status=Order.STATUS_PAID)
-                  .values('payment_provider')
-                  .annotate(cnt=Count('id'), payment_fee=Sum('payment_fee')).order_by())
+        for o in counters if o['status'] == Order.STATUS_PAID
     }
+    num_pending = dictsum(num_s_pending, num_expired)
+    num_total = dictsum(num_pending, num_paid)
 
     provider_names = {}
     responses = register_payment_providers.send(event)

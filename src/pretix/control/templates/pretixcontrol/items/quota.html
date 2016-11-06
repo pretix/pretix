@@ -31,26 +31,16 @@
                     {% if quota.size == None %}{% trans "Infinite" %}{% else %}{{ quota.size }}{% endif %}
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-9">{% trans "Paid orders" %}</div>
-                <div class="col-xs-3 text-right"> – {{ quota.count_paid_orders }}</div>
-            </div>
-            <div class="row">
-                <div class="col-xs-9">{% trans "Pending orders" %}</div>
-                <div class="col-xs-3 text-right"> – {{ quota.count_pending_orders }}</div>
-            </div>
-            <div class="row">
-                <div class="col-xs-9">{% trans "Vouchers" %}</div>
-                <div class="col-xs-3 text-right"> – {{ quota.count_blocking_vouchers }}</div>
-            </div>
-            <div class="row">
-                <div class="col-xs-9">{% trans "Current user's carts" %}</div>
-                <div class="col-xs-3 text-right"> – {{ quota.count_in_cart }}</div>
-            </div>
+            {% for row in quota_table_rows %}
+                <div class="row">
+                    <div class="col-xs-9">{{ row.label }}</div>
+                    <div class="col-xs-3 text-right"> – {{ row.value }}</div>
+                </div>
+            {% endfor %}
             <div class="row">
                 <div class="col-xs-9"><strong>{% trans "Current availability" %}</strong></div>
                 <div class="col-xs-3 text-right">
-                    {% if quota.size == None %}{% trans "Infinite" %}{% else %}{{ quota.availability.1 }}{% endif %}
+                    {% if quota.size == None %}{% trans "Infinite" %}{% else %}{{ avail.1 }}{% endif %}
                 </div>
             </div>
         </div>

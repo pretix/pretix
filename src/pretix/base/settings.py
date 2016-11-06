@@ -514,8 +514,15 @@ class SettingsSandbox:
         self._event.settings.set(self._convert_key(key), value)
 
 
-class GlobalSettingsObject:
+class GlobalSettingsObject():
+    data_dict = None
+
     def __init__(self):
-        self.settings = SettingsProxy(self, type=GlobalSetting)
-        self.setting_objects = GlobalSetting.objects
-        self.slug = '_global'
+        # This is a singleton-like object. Multiple objects can exist, but they share their state
+        if GlobalSettingsObject.data_dict:
+            self.__dict__ = GlobalSettingsObject.data_dict
+        else:
+            self.settings = SettingsProxy(self, type=GlobalSetting)
+            self.setting_objects = GlobalSetting.objects
+            self.slug = '_global'
+            GlobalSettingsObject.data_dict = self.__dict__

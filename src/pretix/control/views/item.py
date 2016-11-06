@@ -330,8 +330,8 @@ class QuestionMixin:
             can_order=False, can_delete=True, extra=0
         )
         return formsetclass(self.request.POST if self.request.method == "POST" else None,
-                            queryset=(QuestionOption.objects.filter(question=self.get_object())
-                                      if self.get_object() else QuestionOption.objects.none()),
+                            queryset=(QuestionOption.objects.filter(question=self.object)
+                                      if self.object else QuestionOption.objects.none()),
                             event=self.request.event)
 
     def save_formset(self, obj):
@@ -423,8 +423,9 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['items'] = self.object.items.all()
-        ctx['stats'] = self.get_answer_statistics()
-        ctx['stats_json'] = json.dumps(self.get_answer_statistics())
+        stats = self.get_answer_statistics()
+        ctx['stats'] = stats
+        ctx['stats_json'] = json.dumps(stats)
         return ctx
 
     def get_object(self, queryset=None) -> Question:
@@ -599,6 +600,10 @@ class QuotaView(ChartContainingView, DetailView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data()
+
+        avail = self.object.availability()
+        ctx['avail'] = avail
+
         data = [
             {
                 'label': ugettext('Paid orders'),
@@ -617,10 +622,12 @@ class QuotaView(ChartContainingView, DetailView):
                 'value': self.object.count_in_cart()
             }
         ]
+        ctx['quota_table_rows'] = list(data)
+
         if self.object.size is not None:
             data.append({
                 'label': ugettext('Current availability'),
-                'value': self.object.availability()[1]
+                'value': avail[1]
             })
         ctx['quota_chart_data'] = json.dumps(data)
         return ctx

@@ -15,33 +15,24 @@ class CartMixin:
         """
         A list of this users cart position
         """
-        return list(CartPosition.objects.filter(
-            cart_id=self.request.session.session_key, event=self.request.event
-        ).order_by(
-            'item', 'variation'
-        ).select_related(
-            'item', 'variation'
-        ).prefetch_related(
-            'item__questions', 'answers'
-        ))
+        return list(get_cart(self.request))
 
     def get_cart(self, answers=False, queryset=None, payment_fee=None, payment_fee_tax_rate=None, downloads=False):
-        queryset = queryset or CartPosition.objects.filter(
-            cart_id=self.request.session.session_key, event=self.request.event
-        )
+        if queryset:
+            prefetch = []
+            if answers:
+                prefetch.append('item__questions')
+                prefetch.append('answers')
 
-        prefetch = []
-        if answers:
-            prefetch.append('item__questions')
-            prefetch.append('answers')
-
-        cartpos = queryset.order_by(
-            'item', 'variation'
-        ).select_related(
-            'item', 'variation'
-        ).prefetch_related(
-            *prefetch
-        )
+            cartpos = queryset.order_by(
+                'item', 'variation'
+            ).select_related(
+                'item', 'variation'
+            ).prefetch_related(
+                *prefetch
+            )
+        else:
+            cartpos = self.positions
 
         # Group items of the same variation
         # We do this by list manipulations instead of a GROUP BY query, as
@@ -99,6 +90,20 @@ class CartMixin:
                 if provider.identifier == self.request.session['payment']:
                     payment_fee = provider.calculate_fee(total)
         return payment_fee
+
+
+def get_cart(request):
+    if not hasattr(request, '_cart_cache'):
+        request._cart_cache = CartPosition.objects.filter(
+            cart_id=request.session.session_key, event=request.event
+        ).order_by(
+            'item', 'variation'
+        ).select_related(
+            'item', 'variation'
+        ).prefetch_related(
+            'item__questions', 'answers'
+        )
+    return request._cart_cache
 
 
 class EventViewMixin:

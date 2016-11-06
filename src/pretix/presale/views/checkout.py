@@ -4,15 +4,17 @@ from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View
 
+from pretix.base.models import CartPosition
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.checkoutflow import get_checkout_flow
-from pretix.presale.views import CartMixin
 
 
-class CheckoutView(CartMixin, View):
+class CheckoutView(View):
     def dispatch(self, request, *args, **kwargs):
         self.request = request
-        if not self.positions and "async_id" not in request.GET:
+        has_cart = CartPosition.objects.filter(
+            cart_id=self.request.session.session_key, event=self.request.event).exists()
+        if not has_cart and "async_id" not in request.GET:
             messages.error(request, _("Your cart is empty"))
             return redirect(eventreverse(self.request.event, 'presale:event.index'))
 

@@ -20,8 +20,8 @@ class EventList(ListView):
     def get_queryset(self):
         return Event.objects.filter(
             permitted__id__exact=self.request.user.pk
-        ).prefetch_related(
-            "organizer",
+        ).select_related("organizer").prefetch_related(
+            "setting_objects", "organizer__setting_objects"
         )
 
 

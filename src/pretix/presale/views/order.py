@@ -34,7 +34,7 @@ class OrderDetailMixin:
     @cached_property
     def order(self):
         try:
-            order = Order.objects.get(event=self.request.event, code=self.kwargs['order'])
+            order = self.request.event.orders.get(code=self.kwargs['order'])
             if order.secret.lower() == self.kwargs['secret'].lower():
                 return order
             else:
