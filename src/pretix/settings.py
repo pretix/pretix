@@ -187,7 +187,9 @@ try:
 except ImportError:
     pass
 
+PLUGINS = []
 for entry_point in iter_entry_points(group='pretix.plugin', name=None):
+    PLUGINS.append(entry_point.module_name)
     INSTALLED_APPS.append(entry_point.module_name)
 
 CORE_MODULES = {
