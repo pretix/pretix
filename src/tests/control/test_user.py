@@ -1,6 +1,6 @@
 import time
 
-from _pytest import monkeypatch
+import pytest
 from django_otp.oath import TOTP
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
@@ -115,6 +115,12 @@ class UserSettingsTest(SoupTest):
         assert self.user.password == pw
 
 
+@pytest.fixture
+def class_monkeypatch(request, monkeypatch):
+    request.cls.monkeypatch = monkeypatch
+
+
+@pytest.mark.usefixtures("class_monkeypatch")
 class UserSettings2FATest(SoupTest):
     def setUp(self):
         super().setUp()
@@ -261,7 +267,7 @@ class UserSettings2FATest(SoupTest):
                 'name': 'Foo'
             }, follow=True)
 
-        m = monkeypatch.monkeypatch()
+        m = self.monkeypatch
         m.setattr("u2flib_server.u2f.complete_register", lambda *args, **kwargs: (JSONDict({}), None))
 
         d = U2FDevice.objects.first()
