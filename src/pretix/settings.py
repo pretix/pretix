@@ -122,10 +122,11 @@ if HAS_REDIS:
         SESSION_ENGINE = "django.contrib.sessions.backends.cache"
         SESSION_CACHE_ALIAS = "redis"
 
-if not SESSION_ENGINE and REAL_CACHE_USED:
-    SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
-else:
-    SESSION_ENGINE = "django.contrib.sessions.backends.db"
+if not SESSION_ENGINE:
+    if REAL_CACHE_USED:
+        SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+    else:
+        SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 HAS_CELERY = config.has_option('celery', 'broker')
 if HAS_CELERY:
