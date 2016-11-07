@@ -515,14 +515,8 @@ class SettingsSandbox:
 
 
 class GlobalSettingsObject():
-    data_dict = None
 
     def __init__(self):
-        # This is a singleton-like object. Multiple objects can exist, but they share their state
-        if GlobalSettingsObject.data_dict:
-            self.__dict__ = GlobalSettingsObject.data_dict
-        else:
-            self.settings = SettingsProxy(self, type=GlobalSetting)
-            self.setting_objects = GlobalSetting.objects
-            self.slug = '_global'
-            GlobalSettingsObject.data_dict = self.__dict__
+        self.settings = SettingsProxy(self, type=GlobalSetting)
+        self.setting_objects = GlobalSetting.objects
+        self.slug = '_global'
