@@ -22,6 +22,7 @@ class Organizer(LoggedModel):
     :type slug: str
     """
 
+    settings_namespace = 'organizer'
     name = models.CharField(max_length=200,
                             verbose_name=_("Name"))
     slug = models.SlugField(

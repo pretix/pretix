@@ -1,6 +1,8 @@
 import decimal
 import json
 from datetime import date, datetime, time
+
+from django.core.cache import cache
 from typing import Any, Dict, Optional
 
 import dateutil.parser
@@ -316,17 +318,32 @@ class SettingsProxy:
         self._obj = obj
         self._parent = parent
         self._cached_obj = None
+        self._write_cached_obj = None
         self._type = type
 
     def _cache(self) -> Dict[str, Any]:
         if self._cached_obj is None:
-            self._cached_obj = {}
-            for setting in self._obj.setting_objects.all():
-                self._cached_obj[setting.key] = setting
+            self._cached_obj = cache.get_or_set(
+                'settings_{}_{}'.format(self._obj.settings_namespace, self._obj.pk),
+                lambda: {s.key: s.value for s in self._obj.setting_objects.all()},
+                timeout=1800
+            )
         return self._cached_obj
+
+    def _write_cache(self) -> Dict[str, Any]:
+        if self._write_cached_obj is None:
+            self._write_cached_obj = {
+                s.key: s for s in self._obj.setting_objects.all()
+            }
+        return self._write_cached_obj
 
     def _flush(self) -> None:
         self._cached_obj = None
+        self._write_cached_obj = None
+        self._flush_external_cache()
+
+    def _flush_external_cache(self):
+        cache.delete('settings_{}_{}'.format(self._obj.settings_namespace, self._obj.pk))
 
     def freeze(self) -> dict:
         """
@@ -338,7 +355,7 @@ class SettingsProxy:
             settings[key] = self._unserialize(v['default'], v['type'])
         if self._parent:
             settings.update(self._parent.settings.freeze())
-        for key, value in self._cache().items():
+        for key in self._cache():
             settings[key] = self.get(key)
         return settings
 
@@ -413,7 +430,7 @@ class SettingsProxy:
             as_type = DEFAULTS[key]['type']
 
         if key in self._cache():
-            value = self._cache()[key].value
+            value = self._cache()[key]
         else:
             value = None
             if self._parent:
@@ -445,13 +462,16 @@ class SettingsProxy:
         """
         Stores a setting to the database of its object.
         """
-        if key in self._cache():
-            s = self._cache()[key]
+        wc = self._write_cache()
+        if key in wc:
+            s = wc[key]
         else:
             s = self._type(object=self._obj, key=key)
         s.value = self._serialize(value)
         s.save()
-        self._cache()[key] = s
+        self._cache()[key] = s.value
+        wc[key] = s
+        self._flush_external_cache()
 
     def __delattr__(self, key: str) -> None:
         if key.startswith('_'):
@@ -465,9 +485,14 @@ class SettingsProxy:
         """
         Deletes a setting from this object's storage.
         """
+        if key in self._write_cache():
+            self._write_cache()[key].delete()
+            del self._write_cache()[key]
+
         if key in self._cache():
-            self._cache()[key].delete()
             del self._cache()[key]
+
+        self._flush_external_cache()
 
 
 class SettingsSandbox:
@@ -515,8 +540,10 @@ class SettingsSandbox:
 
 
 class GlobalSettingsObject():
+    settings_namespace = 'global'
 
     def __init__(self):
         self.settings = SettingsProxy(self, type=GlobalSetting)
         self.setting_objects = GlobalSetting.objects
         self.slug = '_global'
+        self.pk = '_global'

@@ -49,6 +49,7 @@ class Event(LoggedModel):
     :type plugins: str
     """
 
+    settings_namespace = 'event'
     organizer = models.ForeignKey(Organizer, related_name="events", on_delete=models.PROTECT)
     name = I18nCharField(
         max_length=200,

@@ -21,11 +21,14 @@ class SettingsTestCase(TestCase):
             'type': str
         }
         self.global_settings = GlobalSettingsObject()
+        self.global_settings.settings._flush()
         self.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.organizer.settings._flush()
         self.event = Event.objects.create(
             organizer=self.organizer, name='Dummy', slug='dummy',
             date_from=now(),
         )
+        self.event.settings._flush()
 
     def test_global_set_explicit(self):
         self.global_settings.settings.test = 'foo'
@@ -287,8 +290,11 @@ class SettingsTestCase(TestCase):
         self.event.organizer.settings.set('bar', 'baz')
         self.event.organizer.settings.set('foo', 'baz')
         self.event.settings.set('foo', 'bar')
+        frozen = self.event.settings.freeze()
+        self.event.settings.set('foo', 'notfrozen')
+
         try:
-            self.assertEqual(self.event.settings.freeze(), {
+            self.assertEqual(frozen, {
                 'test_default': 'def',
                 'bar': 'baz',
                 'foo': 'bar'
