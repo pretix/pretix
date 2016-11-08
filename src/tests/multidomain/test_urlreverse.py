@@ -1,5 +1,6 @@
 import pytest
 from django.conf import settings
+from django.test import override_settings
 from django.utils.timezone import now
 from tests import assert_num_queries
 
@@ -59,6 +60,12 @@ def test_event_custom_domain_keep_scheme(env):
 
 
 @pytest.mark.django_db
+@override_settings(CACHES={
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+})
 def test_event_main_domain_cache(env):
     env[0].get_cache().clear()
     with assert_num_queries(1):
@@ -68,6 +75,12 @@ def test_event_main_domain_cache(env):
 
 
 @pytest.mark.django_db
+@override_settings(CACHES={
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+})
 def test_event_custom_domain_cache(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     env[0].get_cache().clear()
@@ -78,6 +91,12 @@ def test_event_custom_domain_cache(env):
 
 
 @pytest.mark.django_db
+@override_settings(CACHES={
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+})
 def test_event_custom_domain_cache_clear(env):
     kd = KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     env[0].get_cache().clear()

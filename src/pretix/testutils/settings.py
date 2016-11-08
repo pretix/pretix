@@ -28,7 +28,6 @@ SESSION_ENGINE = "django.contrib.sessions.backends.db"
 HAS_REDIS = False
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
