@@ -25,14 +25,11 @@ $(function () {
 
     
     // Copy answers
-    $(".js-copy-answers").change(function() {
+    $(".js-copy-answers").click(function (e) {
+        e.preventDefault();
         var idx = $(this).data('id');
-        if ($(".js-copy-answers:checked").length > 0) {
-            bind_groups(idx);
-        } else {
-            unbind_groups(idx);
-        }
-    })
+        bind_groups(idx);
+    });
 });
 
 function display_copy() {
@@ -47,8 +44,11 @@ function bind_groups(idx) {
     var elements = $('*[data-idx="'+idx+'"] input, *[data-idx="'+idx+'"] select, *[data-idx="'+idx+'"] textarea');
     var firstAnswers = $('*[data-idx="0"] input, *[data-idx="0"] select, *[data-idx="0"] textarea');
     elements.each(function(index){
-        var input = $(this);
-        switch (input.prev().prop('tagName')) {
+        var input = $(this),
+            tagName = input.prop('tagName').toLowerCase(),
+            attributeType = input.attr('type');
+
+        switch (tagName) {
             case "textarea":            
                 input.val(firstAnswers.eq(index).val());
                 break;
@@ -56,7 +56,7 @@ function bind_groups(idx) {
                 input.val(firstAnswers.eq(index).find(":selected").val()).change();
                 break;
             case "input":
-                switch (input.attr('type')) {
+                switch (attributeType) {
                     case "text":
                     case "number":
                         input.val(firstAnswers.eq(index).val());
@@ -72,37 +72,6 @@ function bind_groups(idx) {
             default:
                 input.val(firstAnswers.eq(index).val());
         } 
-    });
-}
-
-function unbind_groups(idx) {   
-    var elements = $('*[data-idx="'+idx+'"] input, *[data-idx="'+idx+'"] select, *[data-idx="'+idx+'"] textarea');    
-    elements.each(function(index){
-        var input = $(this);
-        switch (input.prev().prop('tagName')) {
-            case "textarea":
-                input.val("");
-                break;
-            case "select":
-                input.val("").change();
-                break;
-            case "input":
-                switch (input.attr('type')) {
-                    case "text":
-                    case "number":
-                        input.val("");
-                        break;
-                    case "checkbox":
-                    case "radio":
-                        input.prop("checked", false);
-                        break;
-                    default:
-                        input.val("");
-                }
-                break;
-            default:
-                input.val("");
-        }        
     });
 }
 

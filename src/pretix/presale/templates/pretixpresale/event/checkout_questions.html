@@ -54,7 +54,7 @@
                             </a>
                             {% if forloop.counter > 1 %}
                                 <span class="text-right pull-right">
-                                     <input type="checkbox" data-id="{{ forloop.counter0 }}" name="copy" class="js-copy-answers" id="copy_answers_{{ form.pos.id }}"> {% trans "Copy answers from above" %}
+                                     <input type="button" data-id="{{ forloop.counter0 }}" name="copy" class="js-copy-answers btn btn-block" id="copy_answers_{{ form.pos.id }}" value='{% trans "Copy answers from above" %}'> 
                                 </span>
                             {% endif %}                           
                         </h4>
