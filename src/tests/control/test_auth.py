@@ -1,7 +1,7 @@
 import time
 from datetime import date, timedelta
 
-from _pytest import monkeypatch
+import pytest
 from django.conf import settings
 from django.contrib.auth.tokens import (
     PasswordResetTokenGenerator, default_token_generator,
@@ -189,6 +189,12 @@ class RegistrationFormTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
 
+@pytest.fixture
+def class_monkeypatch(request, monkeypatch):
+    request.cls.monkeypatch = monkeypatch
+
+
+@pytest.mark.usefixtures("class_monkeypatch")
 class Login2FAFormTest(TestCase):
 
     def setUp(self):
@@ -244,7 +250,7 @@ class Login2FAFormTest(TestCase):
         def fail(*args, **kwargs):
             raise Exception("Failed")
 
-        m = monkeypatch.monkeypatch()
+        m = self.monkeypatch
         m.setattr("u2flib_server.u2f.verify_authenticate", fail)
         m.setattr("u2flib_server.u2f.start_authenticate",
                   lambda *args, **kwargs: JSONDict({'authenticateRequests': []}))
@@ -261,7 +267,7 @@ class Login2FAFormTest(TestCase):
         m.undo()
 
     def test_u2f_valid(self):
-        m = monkeypatch.monkeypatch()
+        m = self.monkeypatch
         m.setattr("u2flib_server.u2f.verify_authenticate", lambda *args, **kwargs: True)
         m.setattr("u2flib_server.u2f.start_authenticate",
                   lambda *args, **kwargs: JSONDict({'authenticateRequests': []}))
