@@ -515,7 +515,8 @@ class CartPosition(AbstractPosition):
         auto_now_add=True
     )
     expires = models.DateTimeField(
-        verbose_name=_("Expiration date")
+        verbose_name=_("Expiration date"),
+        db_index=True
     )
 
     class Meta:

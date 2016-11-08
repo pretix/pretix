@@ -582,7 +582,7 @@ class Quota(LoggedModel):
             Q(redeemed=False) &
             Q(Q(valid_until__isnull=True) | Q(valid_until__gte=now_dt)) &
             Q(Q(self._position_lookup) | Q(quota=self))
-        ).distinct().count()
+        ).values('id').distinct().count()
 
     def count_in_cart(self, now_dt: datetime=None) -> int:
         from pretix.base.models import CartPosition
@@ -595,21 +595,22 @@ class Quota(LoggedModel):
                 & Q(Q(voucher__valid_until__isnull=True) | Q(voucher__valid_until__gte=now_dt))
             ) &
             self._position_lookup
-        ).distinct().count()
+        ).values('id').distinct().count()
 
     def count_pending_orders(self) -> dict:
         from pretix.base.models import Order, OrderPosition
 
+        # This query has beeen benchmarked against a Count('id', distinct=True) aggregate and won by a small margin.
         return OrderPosition.objects.filter(
             self._position_lookup, order__status=Order.STATUS_PENDING,
-        ).distinct().count()
+        ).values('id').distinct().count()
 
     def count_paid_orders(self):
         from pretix.base.models import Order, OrderPosition
 
         return OrderPosition.objects.filter(
             self._position_lookup, order__status=Order.STATUS_PAID
-        ).distinct().count()
+        ).values('id').distinct().count()
 
     @cached_property
     def _position_lookup(self) -> Q:

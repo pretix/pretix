@@ -2,6 +2,7 @@ from datetime import timedelta
 from decimal import Decimal
 from itertools import groupby
 
+from django.db.models import Sum
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
@@ -104,6 +105,17 @@ def get_cart(request):
             'item__questions', 'answers'
         )
     return request._cart_cache
+
+
+def get_cart_total(request):
+    if not hasattr(request, '_cart_total_cache'):
+        if hasattr(request, '_cart_cache'):
+            request._cart_total_cache = sum(i.price for i in request._cart_cache)
+        else:
+            request._cart_total_cache = CartPosition.objects.filter(
+                cart_id=request.session.session_key, event=request.event
+            ).aggregate(sum=Sum('price'))['sum']
+    return request._cart_total_cache
 
 
 class EventViewMixin:

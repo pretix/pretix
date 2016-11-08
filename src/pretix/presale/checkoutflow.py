@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
-from django.db.models import Q, Sum
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import redirect
 from django.utils import translation
@@ -10,7 +9,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import TemplateResponseMixin
 
-from pretix.base.models import CartPosition, Order
+from pretix.base.models import Order
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import OrderError, perform_order
@@ -18,7 +17,7 @@ from pretix.base.signals import register_payment_providers
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import ContactForm, InvoiceAddressForm
 from pretix.presale.signals import checkout_flow_steps
-from pretix.presale.views import CartMixin
+from pretix.presale.views import CartMixin, get_cart_total
 from pretix.presale.views.async import AsyncAction
 from pretix.presale.views.questions import QuestionsViewMixin
 
@@ -143,11 +142,12 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     @cached_property
     def invoice_address(self):
+        iapk = self.request.session.get('invoice_address')
+        if not iapk:
+            return InvoiceAddress()
+
         try:
-            return InvoiceAddress.objects.get(
-                pk=self.request.session.get('invoice_address'),
-                order__isnull=True
-            )
+            return InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
         except InvoiceAddress.DoesNotExist:
             return InvoiceAddress()
 
@@ -218,9 +218,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     @cached_property
     def _total_order_value(self):
-        return CartPosition.objects.filter(
-            Q(cart_id=self.request.session.session_key) & Q(event=self.request.event)
-        ).aggregate(sum=Sum('price'))['sum']
+        return get_cart_total(self.request)
 
     @cached_property
     def provider_forms(self):

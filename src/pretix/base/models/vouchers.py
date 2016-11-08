@@ -70,10 +70,11 @@ class Voucher(LoggedModel):
     )
     redeemed = models.BooleanField(
         verbose_name=_("Redeemed"),
-        default=False
+        default=False,
+        db_index=True
     )
     valid_until = models.DateTimeField(
-        blank=True, null=True,
+        blank=True, null=True, db_index=True,
         verbose_name=_("Valid until")
     )
     block_quota = models.BooleanField(

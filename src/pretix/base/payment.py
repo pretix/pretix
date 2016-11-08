@@ -4,7 +4,6 @@ from typing import Any, Dict
 
 from django import forms
 from django.contrib import messages
-from django.db.models import Sum
 from django.dispatch import receiver
 from django.forms import Form
 from django.http import HttpRequest
@@ -13,9 +12,10 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import I18nFormField, I18nTextarea, LazyI18nString
-from pretix.base.models import CartPosition, Event, Order, Quota
+from pretix.base.models import Event, Order, Quota
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
+from pretix.presale.views import get_cart_total
 
 
 class BasePaymentProvider:
@@ -503,9 +503,7 @@ class FreeOrderProvider(BasePaymentProvider):
         messages.success(request, _('The order has been marked as refunded.'))
 
     def is_allowed(self, request: HttpRequest) -> bool:
-        return CartPosition.objects.filter(
-            cart_id=request.session.session_key, event=request.event
-        ).aggregate(sum=Sum('price'))['sum'] == 0
+        return get_cart_total(request) == 0
 
     def order_change_allowed(self, order: Order) -> bool:
         return False

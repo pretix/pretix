@@ -3,6 +3,7 @@ from django.utils.functional import cached_property
 
 from pretix.base.models import CartPosition, OrderPosition, QuestionAnswer
 from pretix.presale.forms.checkout import QuestionsForm
+from pretix.presale.views import get_cart
 
 
 class QuestionsViewMixin:
@@ -14,7 +15,7 @@ class QuestionsViewMixin:
         submitted at once.
         """
         formlist = []
-        for cr in self.positions:
+        for cr in get_cart(self.request):
             cartpos = cr if isinstance(cr, CartPosition) else None
             orderpos = cr if isinstance(cr, OrderPosition) else None
             form = QuestionsForm(event=self.request.event,
