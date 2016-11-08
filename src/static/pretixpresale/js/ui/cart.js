@@ -1,4 +1,4 @@
-/*global $,failsafe_gettext,failsafe_ngettext */
+/*global $,gettext,ngettext */
 
 var cart = {
     _deadline: null,
@@ -7,10 +7,10 @@ var cart = {
     draw_deadline: function () {
         var diff = Math.floor(cart._deadline.diff(moment()) / 1000 / 60);
         if (diff < 0) {
-            $("#cart-deadline").text(failsafe_gettext("The items in your cart are no longer reserved for you."));
+            $("#cart-deadline").text(gettext("The items in your cart are no longer reserved for you."));
             window.clearInterval(cart._deadline_interval);
         } else {
-            $("#cart-deadline").text(failsafe_ngettext(
+            $("#cart-deadline").text(ngettext(
                 "The items in your cart are reserved for you for one minute.",
                 "The items in your cart are reserved for you for {num} minutes.",
                 diff

@@ -1,12 +1,12 @@
 /*global $ */
 
-function failsafe_gettext(msgid) {
+function gettext(msgid) {
     if (typeof django !== 'undefined' && typeof django.gettext !== 'undefined') {
         return django.gettext(msgid);
     }
     return msgid;
 }
-function failsafe_ngettext(singular, plural, count) {
+function ngettext(singular, plural, count) {
     if (typeof django !== 'undefined' && typeof django.ngettext !== 'undefined') {
         return django.ngettext(singular, plural, count);
     }
@@ -54,7 +54,7 @@ var ajaxErrDialog = {
         "use strict";
         $("#ajaxerr").html(c);
         $("#ajaxerr .links").html("<a class='btn btn-default ajaxerr-close'>"
-                                  + failsafe_gettext("Close message") + "</a>");
+                                  + gettext("Close message") + "</a>");
         $("body").addClass("ajaxerr");
     },
     hide: function () {
