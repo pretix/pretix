@@ -1,4 +1,4 @@
-/*global $, waitingDialog, gettext */
+/*global $, waitingDialog, failsafe_gettext */
 var async_task_id = null;
 var async_task_timeout = null;
 var async_task_check_url = null;
@@ -46,7 +46,7 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
     if (c.length > 0) {
         ajaxErrDialog.show(c.first().html());
     } else {
-        alert(gettext('Unknown error.'));
+        alert(failsafe_gettext('Unknown error.'));
     }
 }
 
@@ -58,7 +58,7 @@ $(function () {
             return;
         }
         $(this).data('ajaxing', true);
-        waitingDialog.show(gettext('We are processing your request …'));
+        waitingDialog.show(failsafe_gettext('We are processing your request …'));
 
         $.ajax(
             {
