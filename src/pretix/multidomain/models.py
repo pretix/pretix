@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -19,8 +20,10 @@ class KnownDomain(models.Model):
         super().save(*args, **kwargs)
         if self.organizer:
             self.organizer.get_cache().clear()
+        cache.delete('pretix_multidomain_organizer_{}'.format(self.domainname))
 
     def delete(self, *args, **kwargs):
         if self.organizer:
             self.organizer.get_cache().clear()
+        cache.delete('pretix_multidomain_organizer_{}'.format(self.domainname))
         super().delete(*args, **kwargs)

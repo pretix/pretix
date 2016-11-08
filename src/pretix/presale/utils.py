@@ -23,13 +23,12 @@ def _detect_event(request):
                 path = "/" + request.get_full_path().split("/", 2)[-1]
                 return redirect(path)
 
-            request.event = Event.objects\
-                .select_related('organizer')\
+            request.event = request.organizer.events\
                 .get(
                     slug=url.kwargs['event'],
                     organizer=request.organizer,
                 )
-            request.organizer = request.event.organizer
+            request.organizer = request.organizer
         else:
             # We are on our main domain
             if 'event' in url.kwargs and 'organizer' in url.kwargs:
