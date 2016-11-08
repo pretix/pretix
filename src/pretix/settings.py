@@ -218,7 +218,7 @@ try:
     import debug_toolbar  # noqa
     if DEBUG:
         INSTALLED_APPS.append('debug_toolbar.apps.DebugToolbarConfig')
-        MIDDLEWARE.append('pretix.helpers.debug.DebugMiddlewareCompatibilityShim')
+        MIDDLEWARE.insert(0, 'pretix.helpers.debug.DebugMiddlewareCompatibilityShim')
 except ImportError:
     pass
 
@@ -329,14 +329,8 @@ COMPRESS_CSS_FILTERS = (
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 
-def show_toolbar(request):
-    from debug_toolbar.middleware import show_toolbar
-    return show_toolbar(request) or request.user.is_superuser
-
-
 DEBUG_TOOLBAR_CONFIG = {
     'JQUERY_URL': '',
-    "SHOW_TOOLBAR_CALLBACK": show_toolbar,
 }
 
 INTERNAL_IPS = ('127.0.0.1', '::1')
