@@ -32,7 +32,9 @@ def get_grouped_items(event):
     ).select_related(
         'category',  # for re-grouping
     ).prefetch_related(
-        'quotas', 'variations__quotas', 'quotas__event',  # for .availability()
+        'variations__quotas',  # for .availability()
+        Prefetch('quotas',
+                 queryset=event.quotas.all()),
         Prefetch('variations', to_attr='available_variations',
                  queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).distinct()),
     ).annotate(
