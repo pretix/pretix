@@ -363,6 +363,9 @@ class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
 class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, TemplateView):
     template_name = "pretixpresale/event/order_modify.html"
 
+    def _positions_for_questions(self):
+        return self.positions
+
     @cached_property
     def positions(self):
         return list(self.order.positions.order_by(

@@ -7,6 +7,10 @@ from pretix.presale.views import get_cart
 
 
 class QuestionsViewMixin:
+
+    def _positions_for_questions(self):
+        return get_cart(self.request)
+
     @cached_property
     def forms(self):
         """
@@ -15,7 +19,7 @@ class QuestionsViewMixin:
         submitted at once.
         """
         formlist = []
-        for cr in get_cart(self.request):
+        for cr in self._positions_for_questions():
             cartpos = cr if isinstance(cr, CartPosition) else None
             orderpos = cr if isinstance(cr, OrderPosition) else None
             form = QuestionsForm(event=self.request.event,
