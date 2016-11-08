@@ -230,7 +230,7 @@ class Item(LoggedModel):
             return False
         return True
 
-    def check_quotas(self, ignored_quotas=None):
+    def check_quotas(self, ignored_quotas=None, _cache=None):
         """
         This method is used to determine whether this Item is currently available
         for sale.
@@ -252,7 +252,7 @@ class Item(LoggedModel):
         if self.variations.count() > 0:  # NOQA
             raise ValueError('Do not call this directly on items which have variations '
                              'but call this on their ItemVariation objects')
-        return min([q.availability() for q in check_quotas],
+        return min([q.availability(_cache=_cache) for q in check_quotas],
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
     @cached_property
@@ -314,7 +314,7 @@ class ItemVariation(models.Model):
         if self.item:
             self.item.event.get_cache().clear()
 
-    def check_quotas(self, ignored_quotas=None) -> Tuple[int, int]:
+    def check_quotas(self, ignored_quotas=None, _cache=None) -> Tuple[int, int]:
         """
         This method is used to determine whether this ItemVariation is currently
         available for sale in terms of quotas.
@@ -330,7 +330,7 @@ class ItemVariation(models.Model):
             check_quotas -= set(ignored_quotas)
         if not check_quotas:
             return Quota.AVAILABILITY_OK, sys.maxsize
-        return min([q.availability() for q in check_quotas],
+        return min([q.availability(_cache=_cache) for q in check_quotas],
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
     def __lt__(self, other):
@@ -533,7 +533,7 @@ class Quota(LoggedModel):
         if self.event:
             self.event.get_cache().clear()
 
-    def availability(self, now_dt: datetime=None) -> Tuple[int, int]:
+    def availability(self, now_dt: datetime=None, _cache=None) -> Tuple[int, int]:
         """
         This method is used to determine whether Items or ItemVariations belonging
         to this quota should currently be available for sale.
@@ -541,6 +541,14 @@ class Quota(LoggedModel):
         :returns: a tuple where the first entry is one of the ``Quota.AVAILABILITY_`` constants
                   and the second is the number of available tickets.
         """
+        if _cache is not None and self.pk in _cache:
+            return _cache[self.pk]
+        res = self._availability(now_dt)
+        if _cache is not None:
+            _cache[self.pk] = res
+        return res
+
+    def _availability(self, now_dt: datetime=None):
         now_dt = now_dt or now()
         size_left = self.size
         if size_left is None:

@@ -44,9 +44,10 @@ def get_grouped_items(event):
         quotac__gt=0
     ).order_by('category__position', 'category_id', 'position', 'name')
     display_add_to_cart = False
+    quota_cache = {}
     for item in items:
         if not item.has_variations:
-            item.cached_availability = list(item.check_quotas())
+            item.cached_availability = list(item.check_quotas(_cache=quota_cache))
             item.order_max = min(item.cached_availability[1]
                                  if item.cached_availability[1] is not None else sys.maxsize,
                                  int(event.settings.max_items_per_order))
@@ -54,7 +55,7 @@ def get_grouped_items(event):
             display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
             for var in item.available_variations:
-                var.cached_availability = list(var.check_quotas())
+                var.cached_availability = list(var.check_quotas(_cache=quota_cache))
                 var.order_max = min(var.cached_availability[1]
                                     if var.cached_availability[1] is not None else sys.maxsize,
                                     int(event.settings.max_items_per_order))
