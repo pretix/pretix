@@ -304,7 +304,7 @@ class OrderTaxListReport(Report):
             ] + sum(([str(t) + ' %', ''] for t in tax_rates), []),
             [
                 '', '', '', '', ''
-            ] + sum(([_('Gross'), 'Tax'] for t in tax_rates), []),
+            ] + sum(([_('Gross'), _('Tax')] for t in tax_rates), []),
         ]
 
         qs = OrderPosition.objects.filter(
