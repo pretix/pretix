@@ -1,5 +1,5 @@
-all: localecompile staticfiles jsi18n
-production: localecompile staticfiles compress jsi18n
+all: localecompile staticfiles
+production: localecompile staticfiles compress
 
 localecompile:
 	./manage.py compilemessages
@@ -8,7 +8,7 @@ localegen:
 	./manage.py makemessages --all --ignore "pretix/helpers/*"
 	./manage.py makemessages --all -d djangojs --ignore "pretix/helpers/*"
 
-staticfiles:
+staticfiles: jsi18n
 	./manage.py collectstatic --noinput
 
 compress:
