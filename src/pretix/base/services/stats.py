@@ -113,7 +113,6 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
 
     for c in items_by_category:
         c[0].num_total = tuplesum(item.num_total for item in c[1])
-        print(c[1], c[0].num_total, [item.num_total for item in c[1]])
         c[0].num_pending = tuplesum(item.num_pending for item in c[1])
         c[0].num_canceled = tuplesum(item.num_canceled for item in c[1])
         c[0].num_refunded = tuplesum(item.num_refunded for item in c[1])
