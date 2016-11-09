@@ -143,7 +143,7 @@ class Event(LoggedModel):
         if ``show_date_to`` is ``False``.
         """
         tz = tz or pytz.timezone(self.settings.timezone)
-        if not self.settings.show_date_to:
+        if not self.settings.show_date_to or not self.date_to:
             return ""
         return _date(
             self.date_to.astimezone(tz),
