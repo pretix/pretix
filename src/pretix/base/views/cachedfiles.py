@@ -21,7 +21,7 @@ class DownloadView(TemplateView):
         elif self.object.file:
             resp = FileResponse(self.object.file.file, content_type=self.object.type)
             _, ext = os.path.splitext(self.object.filename)
-            resp['Content-Disposition'] = 'attachment; filename="{}.{}"'.format(self.object.id, ext)
+            resp['Content-Disposition'] = 'attachment; filename="{}{}"'.format(self.object.id, ext)
             return resp
         else:
             return super().get(request, *args, **kwargs)
