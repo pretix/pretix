@@ -578,7 +578,8 @@ class ExportView(EventPermissionRequiredMixin, TemplateView):
         for receiver, response in responses:
             ex = response(self.request.event)
             ex.form = ExporterForm(
-                data=(self.request.POST if self.request.method == 'POST' else None)
+                data=(self.request.POST if self.request.method == 'POST' else None),
+                prefix=ex.identifier
             )
             ex.form.fields = ex.export_form_fields
             exporters.append(ex)

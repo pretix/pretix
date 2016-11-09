@@ -1,11 +1,17 @@
 import tempfile
+from collections import OrderedDict, defaultdict
+from decimal import Decimal
 
+from django import forms
 from django.conf import settings
 from django.contrib.staticfiles import finders
+from django.db.models import Sum
+from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
 from pretix.base.exporter import BaseExporter
+from pretix.base.models import Order, OrderPosition
 from pretix.base.services.stats import order_overview
 
 
@@ -28,6 +34,7 @@ class Report(BaseExporter):
         return pagesizes.portrait(pagesizes.A4)
 
     def render(self, form_data):
+        self.form_data = form_data
         return 'report-%s.pdf' % self.event.slug, 'application/pdf', self.create()
 
     def get_filename(self):
@@ -203,6 +210,147 @@ class OverviewReport(Report):
             str(total['num_refunded'][0]), str(total['num_refunded'][1]),
             str(total['num_paid'][0]), str(total['num_paid'][1])
         ])
+
+        table = Table(tdata, colWidths=colwidths, repeatRows=2)
+        table.setStyle(TableStyle(tstyledata))
+        story.append(table)
+        return story
+
+
+class OrderTaxListReport(Report):
+    name = "ordertaxlist"
+    identifier = 'ordertaxes'
+    verbose_name = _('List of orders with taxes (PDF)')
+
+    @property
+    def export_form_fields(self):
+        return OrderedDict(
+            [
+                ('status',
+                 forms.MultipleChoiceField(
+                     label=_('Filter by status'),
+                     initial=[Order.STATUS_PAID],
+                     choices=Order.STATUS_CHOICE,
+                     widget=forms.CheckboxSelectMultiple,
+                     required=False
+                 )),
+                ('sort',
+                 forms.ChoiceField(
+                     label=_('Sort by'),
+                     initial='datetime',
+                     choices=(
+                         ('datetime', _('Order date')),
+                         ('payment_date', _('Payment date')),
+                     ),
+                     widget=forms.RadioSelect,
+                     required=False
+                 )),
+            ]
+        )
+
+    @property
+    def pagesize(self):
+        from reportlab.lib import pagesizes
+
+        return pagesizes.landscape(pagesizes.A4)
+
+    def get_story(self, doc):
+        from reportlab.platypus import Paragraph, Spacer, TableStyle, Table
+        from reportlab.lib.units import mm
+
+        headlinestyle = self.get_style()
+        headlinestyle.fontSize = 15
+        headlinestyle.fontName = 'OpenSansBd'
+
+        tax_rates = set(
+            self.event.orders.exclude(payment_fee=0).values_list('payment_fee_tax_rate', flat=True)
+                .filter(status__in=self.form_data['status'])
+                .distinct().order_by()
+        )
+        tax_rates |= set(
+            a for a
+            in OrderPosition.objects.filter(order__event=self.event)
+                                    .filter(order__status__in=self.form_data['status'])
+                                    .values_list('tax_rate', flat=True).distinct().order_by()
+        )
+        tax_rates = sorted(tax_rates)
+
+        # Cols: Order ID | Order date | Status | Payment Date | Total | {gross tax} for t in taxes
+        colwidths = [a * doc.width for a in [0.12, 0.1, 0.10, 0.12, 0.08]]
+        if tax_rates:
+            colwidths += [0.48 / (len(tax_rates) * 2) * doc.width] * (len(tax_rates) * 2)
+
+        tstyledata = [
+            # Alignment
+            ('ALIGN', (0, 0), (3, 0), 'LEFT'),  # Headlines
+            ('ALIGN', (4, 0), (-1, 0), 'CENTER'),  # Headlines
+            ('ALIGN', (4, 1), (-1, -1), 'RIGHT'),  # Money
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+
+            # Fonts
+            ('FONTNAME', (0, 0), (-1, 0), 'OpenSansBd'),  # Headlines
+            ('FONTNAME', (0, -1), (-1, -1), 'OpenSansBd'),  # Sums
+        ]
+        for i, rate in enumerate(tax_rates):
+            tstyledata.append(('SPAN', (5 + 2 * i, 0), (6 + 2 * i, 0)))
+
+        story = [
+            Paragraph(_('Orders by tax rate ({currency})').format(currency=self.event.currency), headlinestyle),
+            Spacer(1, 5 * mm)
+        ]
+        tdata = [
+            [
+                _('Order code'), _('Order date'), _('Status'), _('Payment date'), _('Order total'),
+            ] + sum(([str(t) + ' %', ''] for t in tax_rates), []),
+            [
+                '', '', '', '', ''
+            ] + sum(([_('Gross'), 'Tax'] for t in tax_rates), []),
+        ]
+
+        qs = OrderPosition.objects.filter(
+            order__status__in=self.form_data['status'],
+            order__event=self.event,
+        ).values(
+            'order__code', 'order__datetime', 'order__payment_date', 'order__total', 'order__payment_fee',
+            'order__payment_fee_tax_rate', 'order__payment_fee_tax_value', 'tax_rate', 'order__status'
+        ).annotate(prices=Sum('price'), tax_values=Sum('tax_value')).order_by(
+            'order__datetime' if self.form_data['sort'] == 'datetime' else 'order__payment_date',
+            'order__datetime',
+            'order__code'
+        )
+        last_order_code = None
+        tax_sums = defaultdict(Decimal)
+        price_sums = defaultdict(Decimal)
+        status_labels = dict(Order.STATUS_CHOICE)
+        for op in qs:
+            if op['order__code'] != last_order_code:
+                tdata.append(
+                    [
+                        op['order__code'],
+                        date_format(op['order__datetime'], "SHORT_DATE_FORMAT"),
+                        status_labels[op['order__status']],
+                        date_format(op['order__payment_date'], "SHORT_DATE_FORMAT") if op['order__payment_date'] else '',
+                        str(op['order__total'])
+                    ] + sum((['', ''] for t in tax_rates), []),
+                )
+                last_order_code = op['order__code']
+                if op['order__payment_fee_tax_value']:
+                    tdata[-1][5 + 2 * tax_rates.index(op['order__payment_fee_tax_rate'])] = str(op['order__payment_fee'])
+                    tdata[-1][6 + 2 * tax_rates.index(op['order__payment_fee_tax_rate'])] = str(op['order__payment_fee_tax_value'])
+                    tax_sums[op['order__payment_fee_tax_rate']] += op['order__payment_fee_tax_value']
+                    price_sums[op['order__payment_fee_tax_rate']] += op['order__payment_fee']
+
+                i = tax_rates.index(op['tax_rate'])
+                tdata[-1][5 + 2 * i] = str(Decimal(tdata[-1][5 + 2 * i] or '0') + op['prices'])
+                tdata[-1][6 + 2 * i] = str(Decimal(tdata[-1][6 + 2 * i] or '0') + op['tax_values'])
+                tax_sums[op['tax_rate']] += op['tax_values']
+                price_sums[op['tax_rate']] += op['prices']
+
+        tdata.append(
+            [
+                _('Total'), '', '', '', ''
+            ] + sum(([str(price_sums.get(t)), str(tax_sums.get(t))] for t in tax_rates), []),
+        )
 
         table = Table(tdata, colWidths=colwidths, repeatRows=2)
         table.setStyle(TableStyle(tstyledata))
