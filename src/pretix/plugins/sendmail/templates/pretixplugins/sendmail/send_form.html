@@ -10,7 +10,28 @@
             {% bootstrap_field form.sendto layout='horizontal' %}
             {% bootstrap_field form.subject layout='horizontal' %}
             {% bootstrap_field form.message layout='horizontal' %}
+            {% if request.method == "POST" %}
+            <fieldset>
+            <legend>{% trans "E-mail preview" %}</legend>
+
+                <div class="panel-body">
+                    {% for locale, segments in output.items %}
+                    <p>
+                        <strong>{% blocktrans %}For locale: {{ locale }}{% endblocktrans %}</strong>
+                    </p>
+                        {% for value in segments %}
+                        <p>
+                            {{ value|linebreaksbr }}
+                        </p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </fieldset>
+            {% endif %}
             <div class="form-group submit-group">
+                <button type="submit" class="btn btn-default btn-save pull-left" name="action" value="preview">
+                {% trans "Preview email" %}
+                </button>
                 <button type="submit" class="btn btn-primary btn-save">
                     {% trans "Send" %}
                 </button>
@@ -18,4 +39,3 @@
         </form>
     {% endblock %}
 {% endblock %}
-

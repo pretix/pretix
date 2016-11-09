@@ -19,7 +19,8 @@ class MailForm(forms.Form):
         )
         self.fields['message'] = I18nFormField(
             widget=I18nTextarea, required=True,
-            langcodes=event.settings.get('locales')
+            langcodes=event.settings.get('locales'),
+            help_text=_("Available placeholders: {due_date}, {event}, {order}, {order_date}, {order_url}")
         )
         choices = list(Order.STATUS_CHOICE)
         if not event.settings.get('payment_term_expire_automatically', as_type=bool):
