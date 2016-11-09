@@ -1,5 +1,5 @@
-all: localecompile staticfiles
-production: localecompile staticfiles compress
+all: localecompile staticfiles jsi18n
+production: localecompile staticfiles compress jsi18n
 
 localecompile:
 	./manage.py compilemessages
@@ -13,6 +13,9 @@ staticfiles:
 
 compress:
 	./manage.py compress
+
+jsi18n: localecompile
+	./manage.py compilejsi18n
 
 test:
 	py.test tests

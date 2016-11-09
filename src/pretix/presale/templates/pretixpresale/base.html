@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% load i18n %}
 {% load safelink %}
+{% load statici18n %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,7 +51,12 @@
         {% trans "If this takes longer than a few minutes, please contact us." %}
     </p>
 </div>
-<script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}" async></script>
+{% if DEBUG %}
+    <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}" async></script>
+{% else %}
+    <script src="{% statici18n LANGUAGE_CODE %}" async></script>
+{% endif %}
+
 {% compress js %}
     <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}" async></script>
     <script type="text/javascript" src="{% static "moment/moment-with-locales.js" %}" async></script>

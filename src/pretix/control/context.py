@@ -19,6 +19,7 @@ def contextprocessor(request):
     ctx = {
         'url_name': url.url_name,
         'settings': settings,
+        'DEBUG': settings.DEBUG,
     }
     _html_head = []
     if hasattr(request, 'event'):

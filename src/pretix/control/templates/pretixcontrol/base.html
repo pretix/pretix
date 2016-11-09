@@ -1,6 +1,7 @@
 {% load compress %}
 {% load staticfiles %}
 {% load i18n %}
+{% load statici18n %}
 <!DOCTYPE html>
 <html>
 	<head>
@@ -9,7 +10,11 @@
 		{% compress css %}
     		<link rel="stylesheet" type="text/x-scss" href="{% static "pretixcontrol/scss/main.scss" %}" />
 		{% endcompress %}
-        <script type="text/javascript" src="{% url "javascript-catalog" lang=request.LANGUAGE_CODE %}"></script>
+        {% if DEBUG %}
+            <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}" async></script>
+        {% else %}
+            <script src="{% statici18n LANGUAGE_CODE %}" async></script>
+        {% endif %}
 		{% compress js %}
             <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
             <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>

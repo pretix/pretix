@@ -15,7 +15,8 @@ def contextprocessor(request):
         return {}
 
     ctx = {
-        'css_file': None
+        'css_file': None,
+        'DEBUG': settings.DEBUG,
     }
     _html_head = []
     _footer = []
