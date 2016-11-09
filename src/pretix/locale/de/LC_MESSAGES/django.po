@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-09 11:06+0000\n"
-"PO-Revision-Date: 2016-11-09 12:06+0100\n"
+"POT-Creation-Date: 2016-11-09 16:38+0000\n"
+"PO-Revision-Date: 2016-11-09 17:39+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -30,16 +30,16 @@ msgstr "E-Mail-Adressen (Textdatei)"
 msgid "Filter by status"
 msgstr "Nach Status filtern"
 
-#: pretix/base/exporters/orderlist.py:17
+#: pretix/base/exporters/orderlist.py:20
 msgid "List of orders (CSV)"
 msgstr "Liste der Bestellungen (CSV)"
 
-#: pretix/base/exporters/orderlist.py:25
+#: pretix/base/exporters/orderlist.py:28
 #: pretix/plugins/checkinlists/exporters.py:39
 msgid "Only paid orders"
 msgstr "Nur bezahlte Bestellungen"
 
-#: pretix/base/exporters/orderlist.py:38 pretix/base/models/orders.py:97
+#: pretix/base/exporters/orderlist.py:59 pretix/base/models/orders.py:97
 #: pretix/base/services/invoices.py:243
 #: pretix/control/templates/pretixcontrol/order/index.html:72
 #: pretix/control/templates/pretixcontrol/orders/index.html:32
@@ -51,25 +51,25 @@ msgstr "Nur bezahlte Bestellungen"
 msgid "Order code"
 msgstr "Bestellnummer"
 
-#: pretix/base/exporters/orderlist.py:38
+#: pretix/base/exporters/orderlist.py:59
 #: pretix/control/templates/pretixcontrol/orders/index.html:80
 #: pretix/plugins/reports/exporters.py:303
 msgid "Order total"
 msgstr "Gesamtbetrag"
 
-#: pretix/base/exporters/orderlist.py:38 pretix/base/models/orders.py:103
+#: pretix/base/exporters/orderlist.py:59 pretix/base/models/orders.py:103
 #: pretix/control/templates/pretixcontrol/orders/index.html:84
 #: pretix/plugins/reports/exporters.py:303
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:31
 msgid "Status"
 msgstr "Status"
 
-#: pretix/base/exporters/orderlist.py:38
+#: pretix/base/exporters/orderlist.py:59
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:36
 msgid "Email"
 msgstr "E-Mail"
 
-#: pretix/base/exporters/orderlist.py:38 pretix/base/services/invoices.py:249
+#: pretix/base/exporters/orderlist.py:59 pretix/base/services/invoices.py:249
 #: pretix/control/templates/pretixcontrol/order/index.html:74
 #: pretix/control/templates/pretixcontrol/orders/index.html:82
 #: pretix/plugins/reports/exporters.py:242
@@ -77,14 +77,14 @@ msgstr "E-Mail"
 msgid "Order date"
 msgstr "Bestelldatum"
 
-#: pretix/base/exporters/orderlist.py:39
+#: pretix/base/exporters/orderlist.py:60
 #: pretix/control/templates/pretixcontrol/order/index.html:266
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:77
 #: pretix/presale/templates/pretixpresale/event/order.html:161
 msgid "Company"
 msgstr "Firma"
 
-#: pretix/base/exporters/orderlist.py:39 pretix/base/models/event.py:56
+#: pretix/base/exporters/orderlist.py:60 pretix/base/models/event.py:57
 #: pretix/base/models/items.py:499 pretix/base/models/organizer.py:27
 #: pretix/control/templates/pretixcontrol/order/index.html:268
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:79
@@ -93,34 +93,67 @@ msgstr "Firma"
 msgid "Name"
 msgstr "Name"
 
-#: pretix/base/exporters/orderlist.py:39 pretix/base/models/orders.py:547
+#: pretix/base/exporters/orderlist.py:60 pretix/base/models/orders.py:547
 #: pretix/control/templates/pretixcontrol/order/index.html:270
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:81
 #: pretix/presale/templates/pretixpresale/event/order.html:165
 msgid "Address"
 msgstr "Adresse"
 
-#: pretix/base/exporters/orderlist.py:39 pretix/base/models/orders.py:548
+#: pretix/base/exporters/orderlist.py:60 pretix/base/models/orders.py:548
 msgid "ZIP code"
 msgstr "Postleitzahl"
 
-#: pretix/base/exporters/orderlist.py:39 pretix/base/models/orders.py:549
+#: pretix/base/exporters/orderlist.py:60 pretix/base/models/orders.py:549
 msgid "City"
 msgstr "Ort"
 
-#: pretix/base/exporters/orderlist.py:39 pretix/base/models/orders.py:550
+#: pretix/base/exporters/orderlist.py:60 pretix/base/models/orders.py:550
 #: pretix/control/templates/pretixcontrol/order/index.html:274
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:85
 #: pretix/presale/templates/pretixpresale/event/order.html:169
 msgid "Country"
 msgstr "Land"
 
-#: pretix/base/exporters/orderlist.py:39 pretix/base/models/orders.py:551
+#: pretix/base/exporters/orderlist.py:60 pretix/base/models/orders.py:551
 #: pretix/control/templates/pretixcontrol/order/index.html:277
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:88
 #: pretix/presale/templates/pretixpresale/event/order.html:172
 msgid "VAT ID"
 msgstr "USt-ID"
+
+#: pretix/base/exporters/orderlist.py:61 pretix/base/models/orders.py:127
+#: pretix/control/templates/pretixcontrol/order/index.html:77
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:11
+#: pretix/plugins/reports/exporters.py:243
+#: pretix/plugins/reports/exporters.py:303
+msgid "Payment date"
+msgstr "Zahlungsdatum"
+
+#: pretix/base/exporters/orderlist.py:61
+msgid "Payment type"
+msgstr "Zahlungsart"
+
+#: pretix/base/exporters/orderlist.py:61 pretix/base/models/orders.py:137
+#: pretix/control/templates/pretixcontrol/order/index.html:208
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:108
+msgid "Payment method fee"
+msgstr "Gebühr für gewählte Zahlungsmethode"
+
+#: pretix/base/exporters/orderlist.py:66
+#, python-brace-format
+msgid "Gross at {rate} % tax"
+msgstr "Brutto {rate} %"
+
+#: pretix/base/exporters/orderlist.py:67
+#, python-brace-format
+msgid "Net at {rate} % tax"
+msgstr "Netto {rate} %"
+
+#: pretix/base/exporters/orderlist.py:68
+#, python-brace-format
+msgid "Tax value at {rate} % tax"
+msgstr "Steuer {rate} %"
 
 #: pretix/base/forms/__init__.py:95
 msgid "disabled"
@@ -273,7 +306,7 @@ msgstr "%(family)s, %(given)s"
 msgid "Account information changed"
 msgstr "Account-Informationen geändert"
 
-#: pretix/base/models/event.py:61 pretix/base/models/organizer.py:31
+#: pretix/base/models/event.py:62 pretix/base/models/organizer.py:31
 msgid ""
 "Should be short, only contain lowercase letters and numbers, and must be "
 "unique among your events. This is being used in addresses and bank transfer "
@@ -283,36 +316,36 @@ msgstr ""
 "unter Ihren Veranstaltungen einmalig sein. Wird in URLs und "
 "Verwendungszwecken für Banküberweisungen benutzt."
 
-#: pretix/base/models/event.py:66 pretix/base/models/organizer.py:36
+#: pretix/base/models/event.py:67 pretix/base/models/organizer.py:36
 msgid "The slug may only contain letters, numbers, dots and dashes."
 msgstr ""
 "Die Kurzform darf nur Buchstaben, Zahlen, Punkte und Bindestriche enthalten."
 
-#: pretix/base/models/event.py:69 pretix/base/models/organizer.py:39
+#: pretix/base/models/event.py:70 pretix/base/models/organizer.py:39
 msgid "Slug"
 msgstr "Kurzform"
 
-#: pretix/base/models/event.py:71
+#: pretix/base/models/event.py:72
 msgid "Shop is live"
 msgstr "Shop ist live"
 
-#: pretix/base/models/event.py:75
+#: pretix/base/models/event.py:76
 msgid "Default currency"
 msgstr "Standardwährung"
 
-#: pretix/base/models/event.py:77
+#: pretix/base/models/event.py:78
 msgid "Event start time"
 msgstr "Veranstaltungsbeginn"
 
-#: pretix/base/models/event.py:79
+#: pretix/base/models/event.py:80
 msgid "Event end time"
 msgstr "Veranstaltungsende"
 
-#: pretix/base/models/event.py:81
+#: pretix/base/models/event.py:82
 msgid "Visible in public lists"
 msgstr "Öffentlich sichtbar"
 
-#: pretix/base/models/event.py:82
+#: pretix/base/models/event.py:83
 msgid ""
 "If selected, this event may show up on the ticket system's start page or an "
 "organization profile."
@@ -321,86 +354,86 @@ msgstr ""
 "dieses Vorverkaufssystem oder auf der Profilseite eines Veranstalters "
 "angezeigt werden."
 
-#: pretix/base/models/event.py:86
+#: pretix/base/models/event.py:87
 msgid "End of presale"
 msgstr "Ende des Vorverkaufs"
 
-#: pretix/base/models/event.py:87
+#: pretix/base/models/event.py:88
 msgid "No products will be sold after this date."
 msgstr "Es werden nach diesem Termin keine Produkte mehr verkauft."
 
-#: pretix/base/models/event.py:91
+#: pretix/base/models/event.py:92
 msgid "Start of presale"
 msgstr "Beginn des Vorverkaufs"
 
-#: pretix/base/models/event.py:92
+#: pretix/base/models/event.py:93
 msgid "No products will be sold before this date."
 msgstr "Es werden vor diesem Termin keine Produkte verkauft."
 
-#: pretix/base/models/event.py:96
+#: pretix/base/models/event.py:97
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:21
 msgid "Plugins"
 msgstr "Erweiterungen"
 
-#: pretix/base/models/event.py:100 pretix/base/models/items.py:118
+#: pretix/base/models/event.py:101 pretix/base/models/items.py:118
 #: pretix/base/models/items.py:495 pretix/base/models/orders.py:108
 #: pretix/base/models/orders.py:507 pretix/base/models/vouchers.py:64
 #: pretix/base/services/invoices.py:257
 msgid "Event"
 msgstr "Veranstaltung"
 
-#: pretix/base/models/event.py:101
+#: pretix/base/models/event.py:102
 #: pretix/control/templates/pretixcontrol/base.html:115
 #: pretix/control/templates/pretixcontrol/events/index.html:3
 #: pretix/control/templates/pretixcontrol/events/index.html:5
 msgid "Events"
 msgstr "Veranstaltungen"
 
-#: pretix/base/models/event.py:114
+#: pretix/base/models/event.py:115
 msgid "The end of the presale period has to be later than its start."
 msgstr "Das Ende des Vorverkaufs muss nach seinem Beginn liegen."
 
-#: pretix/base/models/event.py:116
+#: pretix/base/models/event.py:117
 msgid "The end of the event has to be later than its start."
 msgstr "Das Ende der Veranstaltung muss nach ihrem Beginn liegen."
 
-#: pretix/base/models/event.py:230
+#: pretix/base/models/event.py:233
 msgid "Can change event settings"
 msgstr "Kann Veranstaltungseinstellungen ändern"
 
-#: pretix/base/models/event.py:234
+#: pretix/base/models/event.py:237
 msgid "Can change product settings"
 msgstr "Kann Produkte ändern"
 
-#: pretix/base/models/event.py:238
+#: pretix/base/models/event.py:241
 msgid "Can view orders"
 msgstr "Kann Bestellungen einsehen"
 
-#: pretix/base/models/event.py:242
+#: pretix/base/models/event.py:245
 msgid "Can change permissions"
 msgstr "Kann Berechtigungen verändern"
 
-#: pretix/base/models/event.py:246
+#: pretix/base/models/event.py:249
 msgid "Can change orders"
 msgstr "Kann Bestellungen verändern"
 
-#: pretix/base/models/event.py:250
+#: pretix/base/models/event.py:253
 msgid "Can view vouchers"
 msgstr "Kann Gutscheine einsehen"
 
-#: pretix/base/models/event.py:254
+#: pretix/base/models/event.py:257
 msgid "Can change vouchers"
 msgstr "Kann Gutscheine verändern"
 
-#: pretix/base/models/event.py:258
+#: pretix/base/models/event.py:261
 msgid "Event permission"
 msgstr "Veranstaltungs-Berechtigung"
 
-#: pretix/base/models/event.py:259
+#: pretix/base/models/event.py:262
 msgid "Event permissions"
 msgstr "Veranstaltungs-Berechtigungen"
 
-#: pretix/base/models/event.py:262 pretix/base/models/organizer.py:103
+#: pretix/base/models/event.py:265 pretix/base/models/organizer.py:103
 #, python-format
 msgid "%(name)s on %(object)s"
 msgstr "%(name)s für %(object)s"
@@ -706,23 +739,9 @@ msgstr "Datum"
 msgid "Expiration date"
 msgstr "Ablaufdatum"
 
-#: pretix/base/models/orders.py:127
-#: pretix/control/templates/pretixcontrol/order/index.html:77
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:11
-#: pretix/plugins/reports/exporters.py:243
-#: pretix/plugins/reports/exporters.py:303
-msgid "Payment date"
-msgstr "Zahlungsdatum"
-
 #: pretix/base/models/orders.py:133
 msgid "Payment provider"
 msgstr "Zahlungsmethode"
-
-#: pretix/base/models/orders.py:137
-#: pretix/control/templates/pretixcontrol/order/index.html:208
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:108
-msgid "Payment method fee"
-msgstr "Gebühr für gewählte Zahlungsmethode"
 
 #: pretix/base/models/orders.py:141
 msgid "Payment method fee tax rate"
