@@ -1,5 +1,6 @@
 import uuid
 
+import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.mail import get_connection
@@ -124,26 +125,28 @@ class Event(LoggedModel):
             return []
         return self.plugins.split(",")
 
-    def get_date_from_display(self) -> str:
+    def get_date_from_display(self, tz=None) -> str:
         """
         Returns a formatted string containing the start date of the event with respect
         to the current locale and to the ``show_times`` setting.
         """
+        tz = tz or pytz.timezone(self.settings.timezone)
         return _date(
-            self.date_from,
+            self.date_from.astimezone(tz),
             "DATETIME_FORMAT" if self.settings.show_times else "DATE_FORMAT"
         )
 
-    def get_date_to_display(self) -> str:
+    def get_date_to_display(self, tz=None) -> str:
         """
         Returns a formatted string containing the start date of the event with respect
         to the current locale and to the ``show_times`` setting. Returns an empty string
         if ``show_date_to`` is ``False``.
         """
+        tz = tz or pytz.timezone(self.settings.timezone)
         if not self.settings.show_date_to:
             return ""
         return _date(
-            self.date_to,
+            self.date_to.astimezone(tz),
             "DATETIME_FORMAT" if self.settings.show_times else "DATE_FORMAT"
         )
 
