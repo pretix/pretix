@@ -22,7 +22,6 @@ $(function () {
     });
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
-
     
     // Copy answers
     $(".js-copy-answers").click(function (e) {
@@ -31,14 +30,6 @@ $(function () {
         bind_groups(idx);
     });
 });
-
-function display_copy() {
-    var elements = $("input").filter(function(){
-        return this.id.match(/^id_(\d+)/);
-    });    
-    var shouldElementBeVisible = (elements.length > 2);    
-    $("#cp_copy").toggle(!!shouldElementBeVisible);   
-}
 
 function bind_groups(idx) {    
     var elements = $('*[data-idx="'+idx+'"] input, *[data-idx="'+idx+'"] select, *[data-idx="'+idx+'"] textarea');
