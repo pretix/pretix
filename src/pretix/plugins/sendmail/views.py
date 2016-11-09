@@ -57,7 +57,10 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                             event=self.request.event.name,
                             order_date=date_format(now(), 'SHORT_DATE_FORMAT'),
                             due_date=date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
-                            order_url='link_to_order_url')
+                            order_url=build_absolute_uri(self.request.event, 'presale:event.order', kwargs={
+                                'order': 'ORDER1234',
+                                'secret': 'longrandomsecretabcdef123456'
+                            }))
                         self.output[l].append(preview_text)
                 return self.get(self.request, *self.args, **self.kwargs)
             else:
