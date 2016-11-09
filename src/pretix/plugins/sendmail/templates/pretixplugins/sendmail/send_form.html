@@ -13,19 +13,22 @@
             {% if request.method == "POST" %}
             <fieldset>
             <legend>{% trans "E-mail preview" %}</legend>
-
-                <div class="panel-body">
-                    {% for locale, segments in output.items %}
-                    <p>
-                        <strong>{% blocktrans %}For locale: {{ locale }}{% endblocktrans %}</strong>
-                    </p>
-                        {% for value in segments %}
-                        <p>
-                            {{ value|linebreaksbr }}
-                        </p>
-                        {% endfor %}
-                    {% endfor %}
-                </div>
+                {% for locale, segments in output.items %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <strong>{% blocktrans %}For locale: {{ locale }}{% endblocktrans %}</strong>
+                            </h4>
+                        </div>
+                        <div class="panel-body">
+                            {% for value in segments %}
+                                <p>
+                                    {{ value|linebreaksbr }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
             </fieldset>
             {% endif %}
             <div class="form-group submit-group">
