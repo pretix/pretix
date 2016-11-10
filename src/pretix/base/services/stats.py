@@ -21,10 +21,24 @@ class Dontsum:
 
 
 def tuplesum(tuples: Iterable[Tuple]) -> Tuple:
+    """
+    Takes a list of tuples of size n. In our case, those are e.g. tuples of size 2 containing
+    a number of sales and a sum of their toal amount.
+
+    Returned is again a tuple of size n. The first component of the returned tuple is the
+    sum of the first components of all input tuples.
+    """
     def mysum(it):
+        # This method is identical to sum(list), except that it ignores entries of the type
+        # Dontsum. We need this because we list the payment method fees seperately but we don't
+        # want a order to contribute twice to the total count of orders (once for a product
+        # and once for the payment method fee).
         sit = [i for i in it if not isinstance(i, Dontsum)]
         return sum(sit)
 
+    # zip(*list(tuples)) basically transposes our input, e.g. [(1,2), (3,4), (5,6)]
+    # becomes [(1, 3, 5), (2, 4, 6)]. We then call map on that, such that mysum((1, 3, 5))
+    # and mysum((2, 4, 6)) will be called. The results will then be combined in a tuple again.
     return tuple(map(mysum, zip(*list(tuples))))
 
 
