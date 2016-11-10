@@ -17,6 +17,6 @@ def cut(value, autoescape=True):
         esc = conditional_escape
     else:
         esc = noop
-    return mark_safe('<span class="count">{0}</span><span class="sum">{1}</span>'.format(
-        esc(value[0]), esc(formats.localize(value[1]))
+    return mark_safe('<span class="count">{0}</span><span class="sum-gross">{1}</span><span class="sum-net">{2}</span>'.format(
+        esc(value[0]), esc(formats.localize(value[1])), esc(formats.localize(value[2]))
     ))

@@ -74,10 +74,12 @@ $(function () {
     }
 
     $("#sumtoggle").find("button").click(function () {
-        $(".table-product-overview .sum").toggle($(this).attr("data-target") === ".sum");
+        $(".table-product-overview .sum-gross").toggle($(this).attr("data-target") === ".sum-gross");
+        $(".table-product-overview .sum-net").toggle($(this).attr("data-target") === ".sum-net");
+        $(".table-product-overview .count").toggle($(this).attr("data-target") === ".count");
+
         $("#sumtoggle").find("button").not($(this)).removeClass("active");
         $(this).addClass("active");
-        $(".table-product-overview .count").toggle($(this).attr("data-target") === ".count");
     });
 
     $('.collapsible').collapse();

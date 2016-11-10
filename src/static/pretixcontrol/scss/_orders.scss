@@ -12,7 +12,7 @@
     th:not(:first-child) {
         text-align: right;
     }
-    span.sum {
+    span.sum-net, span.sum-gross {
         display: none;
     }
 }

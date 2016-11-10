@@ -1,14 +1,14 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load order_overview %}
-{% block title %}{% trans "Order overview" %}{% endblock %}
+{% block title %}{% trans "Sales overview" %}{% endblock %}
 {% block content %}
     {% url "control:event.orders" organizer=request.event.organizer.slug event=request.event.slug as listurl %}
     <div class="pull-right">
         <div class="btn-group" role="group" id="sumtoggle">
-            <button type="button" data-target=".count" class="btn btn-default active">{% trans "Show number" %}</button>
-            <button type="button" data-target=".sum" class="btn btn-default">
-                {% blocktrans with currency=request.event.currency %}Show {{ currency }}{% endblocktrans %}</button>
+            <button type="button" data-target=".count" class="btn btn-default active">{% trans "Sales" %}</button>
+            <button type="button" data-target=".sum-gross" class="btn btn-default">{% trans "Revenue (gross)" %}</button>
+            <button type="button" data-target=".sum-net" class="btn btn-default">{% trans "Revenue (net)" %}</button>
         </div>
     </div>
 	<h1>{% trans "Order overview" %}</h1>
