@@ -40,11 +40,11 @@ $(function () {
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();
         var idx = $(this).data('id');
-        bind_groups(idx);
+        copy_answers(idx);
     });
 });
 
-function bind_groups(idx) {    
+function copy_answers(idx) {    
     var elements = $('*[data-idx="'+idx+'"] input, *[data-idx="'+idx+'"] select, *[data-idx="'+idx+'"] textarea');
     var firstAnswers = $('*[data-idx="0"] input, *[data-idx="0"] select, *[data-idx="0"] textarea');
     elements.each(function(index){

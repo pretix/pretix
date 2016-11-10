@@ -104,6 +104,9 @@ section.front-page {
         color: white;
     }
 }
+#questions_group .panel-title a {
+    line-height: 22px;
+}
 @media (max-width: $screen-sm-max) {
     .page-header h1 small {
         display: block;
