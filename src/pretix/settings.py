@@ -16,6 +16,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DATA_DIR = config.get('pretix', 'datadir', fallback=os.environ.get('DATA_DIR', 'data'))
 LOG_DIR = os.path.join(DATA_DIR, 'logs')
 MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
+PROFILE_DIR = os.path.join(DATA_DIR, 'profiles')
 
 if not os.path.exists(DATA_DIR):
     os.mkdir(DATA_DIR)
@@ -222,6 +223,14 @@ try:
         MIDDLEWARE.insert(0, 'pretix.helpers.debug.DebugMiddlewareCompatibilityShim')
 except ImportError:
     pass
+
+
+PROFILING_RATE = config.getfloat('django', 'profile', fallback=0)  # Percentage of requests to profile
+if PROFILING_RATE > 0:
+    if not os.path.exists(PROFILE_DIR):
+        os.mkdir(PROFILE_DIR)
+    MIDDLEWARE.insert(0, 'pretix.helpers.profile.middleware.CProfileMiddleware')
+
 
 # Security settings
 X_FRAME_OPTIONS = 'DENY'
