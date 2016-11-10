@@ -17,6 +17,17 @@
             <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}"/>
         {% endcompress %}
     {% endif %}
+
+    {% compress js %}
+        <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "moment/moment-with-locales.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
+        <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixpresale/js/ui/main.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixpresale/js/ui/asynctask.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixpresale/js/ui/cart.js" %}"></script>
+        <script type="text/javascript" src="{% static "lightbox/js/lightbox.min.js" %}"></script>
+    {% endcompress %}
     {{ html_head|safe }}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="referrer" content="origin">
@@ -56,16 +67,5 @@
 {% else %}
     <script src="{% statici18n LANGUAGE_CODE %}" async></script>
 {% endif %}
-
-{% compress js %}
-    <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}" async></script>
-    <script type="text/javascript" src="{% static "moment/moment-with-locales.js" %}" async></script>
-    <script type="text/javascript" src="{% static "js/jquery.formset.js" %}" async></script>
-    <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.js" %}" async></script>
-    <script type="text/javascript" src="{% static "pretixpresale/js/ui/main.js" %}" async></script>
-    <script type="text/javascript" src="{% static "pretixpresale/js/ui/asynctask.js" %}" async></script>
-    <script type="text/javascript" src="{% static "pretixpresale/js/ui/cart.js" %}" async></script>
-    <script type="text/javascript" src="{% static "lightbox/js/lightbox.min.js" %}" async></script>
-{% endcompress %}
 </body>
 </html>
