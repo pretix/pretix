@@ -27,6 +27,11 @@ def tuplesum(tuples: Iterable[Tuple]) -> Tuple:
 
     Returned is again a tuple of size n. The first component of the returned tuple is the
     sum of the first components of all input tuples.
+
+    Sample:
+
+    >>> tuplesum([(1, 2), (3, 4), (5, 6)])
+    (9, 12)
     """
     def mysum(it):
         # This method is identical to sum(list), except that it ignores entries of the type
@@ -43,12 +48,23 @@ def tuplesum(tuples: Iterable[Tuple]) -> Tuple:
 
 
 def dictsum(*dicts) -> dict:
+    """
+    Takes multiple dictionaries as arguments and builds a new dict. The input dict is expected
+    to be a mapping of keys to tuples. The output dict will contain all keys that are
+    present in any of the input dicts and will contain the tuplesum of all values associated
+    with this key (see tuplesum function).
+
+    Sample:
+
+    >>> dictsum({'a': (1, 2), 'b': (3, 4)}, {'a': (5, 6), 'c': (7, 8)})
+    {'a': (6, 8), 'b': (3, 4), 'c': (7, 8)}
+    """
     res = {}
     keys = set()
     for d in dicts:
         keys |= set(d.keys())
     for k in keys:
-        res[k] = (sum(d[k][0] for d in dicts if k in d), sum(d[k][1] for d in dicts if k in d))
+        res[k] = tuplesum(d[k] for d in dicts if k in d)
     return res
 
 
