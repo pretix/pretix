@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from django.conf import settings
 from django.core import mail as djmail
@@ -60,6 +62,10 @@ def test_send_mail_with_default_sender(env):
 
 
 @pytest.mark.django_db
+@pytest.mark.skipif(
+    not os.path.exists(os.path.join(settings.LOCALE_PATHS[0], 'de', 'LC_MESSAGES', 'django.mo')),
+    reason="requires locale files to be compiled"
+)
 def test_send_mail_with_user_locale(env):
     djmail.outbox = []
     event, user, organizer = env
