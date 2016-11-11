@@ -1,7 +1,7 @@
 import logging
 from datetime import timedelta
-import pytz
 
+import pytz
 from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import redirect

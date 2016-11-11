@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext as _
 
 from ..exporter import BaseExporter
+from ..services.invoices import invoice_pdf_task
 from ..signals import register_data_exporters
 
 
@@ -17,6 +18,9 @@ class InvoiceExporter(BaseExporter):
         with tempfile.TemporaryDirectory() as d:
             with ZipFile(os.path.join(d, 'tmp.zip'), 'w') as zipf:
                 for i in self.event.invoices.all():
+                    if not i.file:
+                        invoice_pdf_task.apply_async(args=(i.pk))
+                        i.refresh_from_db()
                     i.file.open('r')
                     zipf.writestr('{}.pdf'.format(i.number), i.file.read())
                     i.file.close()
