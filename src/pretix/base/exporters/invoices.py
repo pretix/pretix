@@ -19,7 +19,7 @@ class InvoiceExporter(BaseExporter):
             with ZipFile(os.path.join(d, 'tmp.zip'), 'w') as zipf:
                 for i in self.event.invoices.all():
                     if not i.file:
-                        invoice_pdf_task.apply_async(args=(i.pk))
+                        invoice_pdf_task.apply(args=(i.pk,))
                         i.refresh_from_db()
                     i.file.open('r')
                     zipf.writestr('{}.pdf'.format(i.number), i.file.read())
