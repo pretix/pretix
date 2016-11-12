@@ -116,12 +116,20 @@ if HAS_REDIS:
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
+    CACHES['redis_sessions'] = {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": config.get('redis', 'location'),
+        "TIMEOUT": 3600 * 24 * 30,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
     if not HAS_MEMCACHED:
         CACHES['default'] = CACHES['redis']
         REAL_CACHE_USED = True
     if config.getboolean('redis', 'sessions', fallback=False):
         SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-        SESSION_CACHE_ALIAS = "redis"
+        SESSION_CACHE_ALIAS = "redis_sessions"
 
 if not SESSION_ENGINE:
     if REAL_CACHE_USED:
