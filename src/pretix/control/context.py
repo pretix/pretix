@@ -26,10 +26,14 @@ def contextprocessor(request):
             _html_head.append(response)
     ctx['html_head'] = "".join(_html_head)
 
+    _js_datetime_weekdays = '[]'
     _nav_event = []
     if hasattr(request, 'event'):
         for receiver, response in nav_event.send(request.event, request=request):
             _nav_event += response
+        if request.event.settings.get('payment_term_weekdays'):
+            _js_datetime_weekdays = '[0,6]'
+    ctx['js_datetime_weekdays'] = _js_datetime_weekdays
     ctx['nav_event'] = _nav_event
 
     ctx['js_datetime_format'] = get_javascript_format('DATETIME_INPUT_FORMATS')
