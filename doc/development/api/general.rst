@@ -29,7 +29,7 @@ Frontend
 
 
 .. automodule:: pretix.presale.signals
-   :members: order_info
+   :members: order_info, order_meta_from_request
 
 Request flow
 """"""""""""

@@ -77,6 +77,8 @@ class Order(LoggedModel):
     :type total: decimal.Decimal
     :param comment: An internal comment that will only be visible to staff, and never displayed to the user
     :type comment: str
+    :param meta_info: Additional meta information on the order, JSON-encoded.
+    :type meta_info: str
     """
 
     STATUS_PENDING = "n"
