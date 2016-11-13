@@ -37,6 +37,17 @@ This signal is sent out to display additional information on the "redeem a vouch
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+order_meta_from_request = EventPluginSignal(
+    providing_args=["request"]
+)
+"""
+This signal is sent before an order is created through the pretixpresale frontend. It allows you
+to return a dictionary that will be merged in the meta_info attribute of the order.
+You will recieve the request triggering the order creation as the ``request`` keyword argument.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 order_info = EventPluginSignal(
     providing_args=["order"]
 )

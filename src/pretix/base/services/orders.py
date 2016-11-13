@@ -1,3 +1,4 @@
+import json
 import logging
 from collections import Counter, namedtuple
 from datetime import datetime, timedelta
@@ -263,7 +264,8 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
 @transaction.atomic
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
-                  payment_provider: BasePaymentProvider, locale: str=None, address: int=None):
+                  payment_provider: BasePaymentProvider, locale: str=None, address: int=None,
+                  meta_info: dict=None):
     from datetime import date, time
 
     total = sum([c.price for c in positions])
@@ -298,7 +300,8 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         locale=locale,
         total=total,
         payment_fee=payment_fee,
-        payment_provider=payment_provider.identifier
+        payment_provider=payment_provider.identifier,
+        meta_info=json.dumps(meta_info or {}),
     )
     OrderPosition.transform_cart_positions(positions, order)
 
@@ -320,7 +323,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 
 
 def _perform_order(event: str, payment_provider: str, position_ids: List[str],
-                   email: str, locale: str, address: int):
+                   email: str, locale: str, address: int, meta_info: dict=None):
 
     event = Event.objects.get(id=event)
     responses = register_payment_providers.send(event)
@@ -339,7 +342,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             raise OrderError(error_messages['internal'])
         _check_positions(event, now_dt, positions)
         order = _create_order(event, email, positions, now_dt, pprov,
-                              locale=locale, address=address)
+                              locale=locale, address=address, meta_info=meta_info)
 
     if event.settings.get('invoice_generate') == 'True' and invoice_qualified(order):
         if not order.invoices.exists():
@@ -584,10 +587,10 @@ class OrderChangeManager:
 
 @app.task(bind=True, max_retries=5, default_retry_delay=1)
 def perform_order(self, event: str, payment_provider: str, positions: List[str],
-                  email: str=None, locale: str=None, address: int=None):
+                  email: str=None, locale: str=None, address: int=None, meta_info: dict=None):
     try:
         try:
-            return _perform_order(event, payment_provider, positions, email, locale, address)
+            return _perform_order(event, payment_provider, positions, email, locale, address, meta_info)
         except LockTimeoutException:
             self.retry()
     except (MaxRetriesExceededError, LockTimeoutException):

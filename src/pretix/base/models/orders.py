@@ -164,6 +164,10 @@ class Order(LoggedModel):
     expiry_reminder_sent = models.BooleanField(
         default=False
     )
+    meta_info = models.TextField(
+        verbose_name=_("Meta information"),
+        null=True, blank=True
+    )
 
     class Meta:
         verbose_name = _("Order")

@@ -16,7 +16,7 @@ from pretix.base.services.orders import OrderError, perform_order
 from pretix.base.signals import register_payment_providers
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import ContactForm, InvoiceAddressForm
-from pretix.presale.signals import checkout_flow_steps
+from pretix.presale.signals import checkout_flow_steps, order_meta_from_request
 from pretix.presale.views import CartMixin, get_cart_total
 from pretix.presale.views.async import AsyncAction
 from pretix.presale.views.questions import QuestionsViewMixin
@@ -335,9 +335,12 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
     def post(self, request):
         self.request = request
+        meta_info = {}
+        for receiver, response in order_meta_from_request.send(sender=request.event, request=request):
+            meta_info.update(response)
         return self.do(self.request.event.id, self.payment_provider.identifier,
                        [p.id for p in self.positions], request.session.get('email'),
-                       translation.get_language(), self.invoice_address.pk)
+                       translation.get_language(), self.invoice_address.pk, meta_info)
 
     def get_success_message(self, value):
         return None
