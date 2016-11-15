@@ -14,7 +14,7 @@ class ExtendForm(I18nModelForm):
         fields = ['expires']
         widgets = {
             'expires': forms.DateInput(attrs={
-                'class': 'datepickerfield'
+                'class': 'datepickerfield',
                 'data-payment-weekdays-disabled': '[]'
             }),
         }
