@@ -13,7 +13,10 @@ class ExtendForm(I18nModelForm):
         model = Order
         fields = ['expires']
         widgets = {
-            'expires': forms.DateInput(attrs={'class': 'datepickerfield'}),
+            'expires': forms.DateInput(attrs={
+                'class': 'datepickerfield'
+                'data-payment-weekdays-disabled': '[]'
+            }),
         }
 
     def clean(self):
