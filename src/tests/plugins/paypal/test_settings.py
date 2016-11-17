@@ -27,3 +27,4 @@ def test_settings(env):
     client, event = env
     response = client.get('/control/event/%s/%s/settings/payment' % (event.organizer.slug, event.slug), follow=True)
     assert response.status_code == 200
+    assert 'paypal__enabled' in response.rendered_content

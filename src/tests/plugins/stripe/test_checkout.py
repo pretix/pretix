@@ -47,6 +47,7 @@ def test_payment(env, monkeypatch):
         c = MockedCharge()
         c.status = 'succeeded'
         c.paid = True
+        charge_create.called = True
         return c
     monkeypatch.setattr("stripe.Charge.create", charge_create)
 
@@ -54,13 +55,23 @@ def test_payment(env, monkeypatch):
     session_key = client.cookies.get(settings.SESSION_COOKIE_NAME).value
     CartPosition.objects.create(
         event=ticket.event, cart_id=session_key, item=ticket,
-        price=23, expires=now() + datetime.timedelta(minutes=10)
+        price=13.37, expires=now() + datetime.timedelta(minutes=10)
     )
     client.get('/%s/%s/checkout/payment/' % (ticket.event.organizer.slug, ticket.event.slug), follow=True)
     client.post('/%s/%s/checkout/questions/' % (ticket.event.organizer.slug, ticket.event.slug), {
         'email': 'admin@localhost'
     }, follow=True)
+    charge_create.called = False
     response = client.post('/%s/%s/checkout/payment/' % (ticket.event.organizer.slug, ticket.event.slug), {
-        'payment': 'stripe'
+        'payment': 'stripe',
+        'stripe_token': 'tok_189fTT2eZvKYlo2CvJKzEzeu',
+        'stripe_card_brand': 'visa',
+        'stripe_card_last4': '1234'
     }, follow=True)
+    assert not charge_create.called
+    assert response.status_code == 200
+    assert 'alert-danger' not in response.rendered_content
+    response = client.post('/%s/%s/checkout/confirm/' % (ticket.event.organizer.slug, ticket.event.slug), {
+    }, follow=True)
+    assert charge_create.called
     assert response.status_code == 200
