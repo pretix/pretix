@@ -34,7 +34,15 @@ def env(client):
 
 
 @pytest.mark.django_db
-def test_payment(env):
+def test_payment(env, monkeypatch):
+    def create_payment(self, request, payment):
+        assert payment['intent'] == 'sale'
+        assert payment['transactions'][0]['amount']['currency'] == 'EUR'
+        assert payment['transactions'][0]['amount']['total'] == '26.00'
+        create_payment.called = True
+        return 'https://approve.url'
+    monkeypatch.setattr("pretix.plugins.paypal.payment.Paypal._create_payment", create_payment)
+
     client, ticket = env
     session_key = client.cookies.get(settings.SESSION_COOKIE_NAME).value
     CartPosition.objects.create(
@@ -47,5 +55,5 @@ def test_payment(env):
     }, follow=True)
     response = client.post('/%s/%s/checkout/payment/' % (ticket.event.organizer.slug, ticket.event.slug), {
         'payment': 'paypal'
-    }, follow=True)
-    assert response.status_code == 200
+    })
+    assert response['Location'] == 'https://approve.url'

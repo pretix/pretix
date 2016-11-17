@@ -11,7 +11,7 @@ def env(client):
     event = Event.objects.create(
         organizer=orga, name='30C3', slug='30c3',
         date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
-        plugins='pretix.plugins.strip',
+        plugins='pretix.plugins.stripe',
         live=True
     )
     event.settings.set('attendee_names_asked', False)
@@ -27,3 +27,4 @@ def test_settings(env):
     client, event = env
     response = client.get('/control/event/%s/%s/settings/payment' % (event.organizer.slug, event.slug), follow=True)
     assert response.status_code == 200
+    assert 'stripe__enabled' in response.rendered_content
