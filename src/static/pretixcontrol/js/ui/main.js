@@ -144,7 +144,7 @@ $(function () {
                 close: 'fa fa-remove'
             }
         };
-        if ($(this).data().hasOwnProperty("paymentWeekdaysDisabled"))
+        if ($(this).is('[data-is-payment-date]'))
             opts["daysOfWeekDisabled"] = JSON.parse($("body").attr("data-payment-weekdays-disabled"));
         $(this).datetimepicker(opts);
     });
