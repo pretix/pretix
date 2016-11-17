@@ -127,7 +127,7 @@ $(function () {
     });
 
     $(".datepickerfield").each(function() {
-        $(this).datetimepicker({
+        var opts = {
             format: $("body").attr("data-dateformat"),
             locale: $("body").attr("data-datetimelocale"),
             useCurrent: false,
@@ -143,7 +143,10 @@ $(function () {
                 clear: 'fa fa-trash',
                 close: 'fa fa-remove'
             }
-        });
+        };
+        if ($(this).is('[data-is-payment-date]'))
+            opts["daysOfWeekDisabled"] = JSON.parse($("body").attr("data-payment-weekdays-disabled"));
+        $(this).datetimepicker(opts);
     });
 
     $(".qrcode-canvas").each(function() {
