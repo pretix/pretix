@@ -51,6 +51,7 @@ class EventPluginSignal(django.dispatch.Signal):
                     responses.append((receiver, response))
         return responses
 
+
 register_payment_providers = EventPluginSignal(
     providing_args=[]
 )
