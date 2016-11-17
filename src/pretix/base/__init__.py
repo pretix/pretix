@@ -16,4 +16,5 @@ class PretixBaseConfig(AppConfig):
         except ImportError:
             pass
 
+
 default_app_config = 'pretix.base.PretixBaseConfig'

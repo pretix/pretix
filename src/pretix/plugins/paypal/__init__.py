@@ -27,4 +27,5 @@ class PaypalApp(AppConfig):
             errs.append("Python package 'paypalrestsdk' is not installed.")
         return errs
 
+
 default_app_config = 'pretix.plugins.paypal.PaypalApp'

@@ -27,4 +27,5 @@ class CheckinlistsApp(AppConfig):
             errs.append("Python package 'reportlab' is not installed.")
         return errs
 
+
 default_app_config = 'pretix.plugins.checkinlists.CheckinlistsApp'
