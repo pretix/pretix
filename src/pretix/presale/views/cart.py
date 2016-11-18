@@ -126,6 +126,32 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
                 return redirect(self.get_error_url())
 
 
+class CartRemoveAll(EventViewMixin, CartActionMixin, AsyncAction, View):
+    task = remove_items_from_cart
+
+    def get_success_message(self, value):
+        return _('Your cart is empty.')
+
+    def get_error_message(self, exception):
+        if isinstance(exception, dict) and exception['exc_type'] == 'CartError':
+            return exception['exc_message']
+        elif isinstance(exception, CartError):
+            return str(exception)
+        return super().get_error_message(exception)
+
+    def post(self, request, *args, **kwargs):
+        items = self._items_from_post_data()
+        if items:
+            return self.do(self.request.event.id, items, self.request.session.session_key)
+        else:
+            if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
+                return JsonResponse({
+                    'redirect': self.get_error_url()
+                })
+            else:
+                return redirect(self.get_error_url())
+
+
 class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = add_items_to_cart
 

@@ -15,19 +15,32 @@
             </div>
             <div class="panel-body">
                 {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=True %}
-                <div class="cart-row row">
-                    <div class="col-md-6 col-xs-12">
-                        <em id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
-                            {% if cart.minutes_left > 0 %}
-                                {% blocktrans trimmed with minutes=cart.minutes_left %}
-                                    The items in your cart are reserved for you for {{ minutes }} minutes.
-                                {% endblocktrans %}
-                            {% else %}
-                                {% trans "The items in your cart are no longer reserved for you." %}
-                            {% endif %}
-                        </em>
+                <em id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
+                    {% if cart.minutes_left > 0 %}
+                        {% blocktrans trimmed with minutes=cart.minutes_left %}
+                            The items in your cart are reserved for you for {{ minutes }} minutes.
+                        {% endblocktrans %}
+                    {% else %}
+                        {% trans "The items in your cart are no longer reserved for you." %}
+                    {% endif %}
+                </em>
+                <div class="row checkout-button-row">
+                    <div class="col-md-4 col-xs-12">
+                        <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.remove.all" %}" >
+                            {% csrf_token %}
+                            {% for line in cart.positions %}
+                                {% if line.variation %}
+                                    <input type="hidden" name="variation_{{ line.item.id }}_{{ line.variation.id }}" value="{{ line.count }}" />
+                                    <input type="hidden" name="price_{{ line.item.id }}_{{ line.variation.id }}" value="{{ line.price }}" />
+                                {% else %}
+                                    <input type="hidden" name="item_{{ line.item.id }}" value="{{ line.count }}" />
+                                    <input type="hidden" name="price_{{ line.item.id }}" value="{{ line.price }}" />
+                                {% endif %}
+                            {% endfor %}
+                            <button class="btn btn-block btn-default btn-lg" type="submit"><i class="fa fa-close"></i> {% trans "Empty cart" %}</button>
+                        </form>
                     </div>
-                    <div class="col-md-4 col-md-offset-2 col-xs-12">
+                    <div class="col-md-4 col-md-offset-4 col-xs-12">
                         <a class="btn btn-block btn-primary btn-lg"
                                 href="{% eventurl request.event "presale:event.checkout.start" %}">
                             <i class="fa fa-shopping-cart"></i> {% trans "Proceed with checkout" %}
