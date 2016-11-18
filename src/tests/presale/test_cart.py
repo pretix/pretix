@@ -456,6 +456,27 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIn('updated', doc.select('.alert-success')[0].text)
         self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
 
+    def test_remove_all(self):
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_red,
+            price=14, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.post('/%s/%s/cart/removeall' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '2',
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('empty', doc.select('.alert-success')[0].text)
+        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
+
     def test_remove_most_expensive(self):
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
