@@ -17,6 +17,8 @@ EMAIL_BACKEND = 'django.core.mail.outbox'
 
 COMPRESS_ENABLED = COMPRESS_OFFLINE = False
 
+DEBUG = True
+
 PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher']
 
 # Disable celery
