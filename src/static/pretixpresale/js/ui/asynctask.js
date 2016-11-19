@@ -64,8 +64,8 @@ function async_task_callback(data, jqXHR, status) {
 function async_task_error(jqXHR, textStatus, errorThrown) {
     "use strict";
     $("body").data('ajaxing', false);
-    var c = $(jqXHR.responseText).filter('.container');
-    if (c.length > 0) {
+    if (jqXHR.responseText.indexOf('container') > 0) {
+        var c = $(jqXHR.responseText).filter('.container');
         waitingDialog.hide();
         ajaxErrDialog.show(c.first().html());
     } else {
