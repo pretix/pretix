@@ -30,7 +30,7 @@ class AsyncAction:
             return JsonResponse(data)
         else:
             if res.ready():
-                if res.successful():
+                if res.successful() and not isinstance(res.info, Exception):
                     return self.success(res.info)
                 else:
                     return self.error(res.info)
@@ -89,7 +89,7 @@ class AsyncAction:
             return JsonResponse(self._return_ajax_result(res, timeout=0.25))
         else:
             if res.ready():
-                if res.successful():
+                if res.successful() and not isinstance(res.info, Exception):
                     return self.success(res.info)
                 else:
                     return self.error(res.info)
