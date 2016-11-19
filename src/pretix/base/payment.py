@@ -415,7 +415,6 @@ class BasePaymentProvider:
 
         :param order: The order object
         """
-        order.log_action('pretix.base.order.refunded')
         return '<div class="alert alert-warning">%s</div>' % _('The money can not be automatically refunded, '
                                                                'please transfer the money back manually.')
 
