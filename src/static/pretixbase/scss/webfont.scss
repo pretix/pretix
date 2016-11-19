@@ -1,10 +1,12 @@
+$font-path: static("fonts");
+
 @font-face {
     font-family: 'Open Sans';
-    src: url('../../fonts/opensans_bold_macroman/OpenSans-Bold-webfont.eot');
-    src: url('../../fonts/opensans_bold_macroman/OpenSans-Bold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../fonts/opensans_bold_macroman/OpenSans-Bold-webfont.woff') format('woff'),
-         url('../../fonts/opensans_bold_macroman/OpenSans-Bold-webfont.ttf') format('truetype'),
-         url('../../fonts/opensans_bold_macroman/OpenSans-Bold-webfont.svg#open_sansbold') format('svg');
+    src: url('#{$font-path}/opensans_bold_macroman/OpenSans-Bold-webfont.eot');
+    src: url('#{$font-path}/opensans_bold_macroman/OpenSans-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$font-path}/opensans_bold_macroman/OpenSans-Bold-webfont.woff') format('woff'),
+         url('#{$font-path}/opensans_bold_macroman/OpenSans-Bold-webfont.ttf') format('truetype'),
+         url('#{$font-path}/opensans_bold_macroman/OpenSans-Bold-webfont.svg#open_sansbold') format('svg');
     font-weight: 700;
     font-style: normal;
 
@@ -12,11 +14,11 @@
 
 @font-face {
     font-family: 'Open Sans';
-    src: url('../../fonts/opensans_bolditalic_macroman/OpenSans-BoldItalic-webfont.eot');
-    src: url('../../fonts/opensans_bolditalic_macroman/OpenSans-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../fonts/opensans_bolditalic_macroman/OpenSans-BoldItalic-webfont.woff') format('woff'),
-         url('../../fonts/opensans_bolditalic_macroman/OpenSans-BoldItalic-webfont.ttf') format('truetype'),
-         url('../../fonts/opensans_bolditalic_macroman/OpenSans-BoldItalic-webfont.svg#open_sansbold_italic') format('svg');
+    src: url('#{$font-path}/opensans_bolditalic_macroman/OpenSans-BoldItalic-webfont.eot');
+    src: url('#{$font-path}/opensans_bolditalic_macroman/OpenSans-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$font-path}/opensans_bolditalic_macroman/OpenSans-BoldItalic-webfont.woff') format('woff'),
+         url('#{$font-path}/opensans_bolditalic_macroman/OpenSans-BoldItalic-webfont.ttf') format('truetype'),
+         url('#{$font-path}/opensans_bolditalic_macroman/OpenSans-BoldItalic-webfont.svg#open_sansbold_italic') format('svg');
     font-weight: 700;
     font-style: italic;
 
@@ -24,11 +26,11 @@
 
 @font-face {
     font-family: 'Open Sans';
-    src: url('../../fonts/opensans_italic_macroman/OpenSans-Italic-webfont.eot');
-    src: url('../../fonts/opensans_italic_macroman/OpenSans-Italic-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../fonts/opensans_italic_macroman/OpenSans-Italic-webfont.woff') format('woff'),
-         url('../../fonts/opensans_italic_macroman/OpenSans-Italic-webfont.ttf') format('truetype'),
-         url('../../fonts/opensans_italic_macroman/OpenSans-Italic-webfont.svg#open_sansitalic') format('svg');
+    src: url('#{$font-path}/opensans_italic_macroman/OpenSans-Italic-webfont.eot');
+    src: url('#{$font-path}/opensans_italic_macroman/OpenSans-Italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$font-path}/opensans_italic_macroman/OpenSans-Italic-webfont.woff') format('woff'),
+         url('#{$font-path}/opensans_italic_macroman/OpenSans-Italic-webfont.ttf') format('truetype'),
+         url('#{$font-path}/opensans_italic_macroman/OpenSans-Italic-webfont.svg#open_sansitalic') format('svg');
     font-weight: normal;
     font-style: italic;
 
@@ -36,11 +38,11 @@
 
 @font-face {
     font-family: 'Open Sans';
-    src: url('../../fonts/opensans_regular_macroman/OpenSans-Regular-webfont.eot');
-    src: url('../../fonts/opensans_regular_macroman/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../fonts/opensans_regular_macroman/OpenSans-Regular-webfont.woff') format('woff'),
-         url('../../fonts/opensans_regular_macroman/OpenSans-Regular-webfont.ttf') format('truetype'),
-         url('../../fonts/opensans_regular_macroman/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
+    src: url('#{$font-path}/opensans_regular_macroman/OpenSans-Regular-webfont.eot');
+    src: url('#{$font-path}/opensans_regular_macroman/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$font-path}/opensans_regular_macroman/OpenSans-Regular-webfont.woff') format('woff'),
+         url('#{$font-path}/opensans_regular_macroman/OpenSans-Regular-webfont.ttf') format('truetype'),
+         url('#{$font-path}/opensans_regular_macroman/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
     font-weight: 400;
     font-style: normal;
 
