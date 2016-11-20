@@ -9,12 +9,13 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
 from pretix.base.models import Event
+from pretix.base.services.async import ProfiledTask
 from pretix.celery import app
 
 logger = logging.getLogger('pretix.presale.style')
 
 
-@app.task
+@app.task(base=ProfiledTask)
 def regenerate_css(event_id: int):
     event = Event.objects.select_related('organizer').get(pk=event_id)
     sassdir = os.path.join(settings.STATIC_ROOT, 'pretixpresale/scss')

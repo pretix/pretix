@@ -8,12 +8,13 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, CachedTicket, Event, Order, OrderPosition, cachedfile_name,
 )
+from pretix.base.services.async import ProfiledTask
 from pretix.base.signals import register_ticket_outputs
 from pretix.celery import app
 from pretix.helpers.database import rolledback_transaction
 
 
-@app.task
+@app.task(base=ProfiledTask)
 def generate(order_position: str, provider: str):
     order_position = OrderPosition.objects.select_related('order', 'order__event').get(id=order_position)
     ct = CachedTicket.objects.get_or_create(order_position=order_position, provider=provider)[0]

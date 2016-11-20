@@ -10,6 +10,7 @@ from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import (
     CartPosition, Event, Item, ItemVariation, Quota, Voucher,
 )
+from pretix.base.services.async import ProfiledTask
 from pretix.base.services.locking import LockTimeoutException
 from pretix.celery import app
 
@@ -208,7 +209,7 @@ def _add_items_to_cart(event: Event, items: List[dict], cart_id: str=None) -> No
                 raise CartError(err)
 
 
-@app.task(bind=True, max_retries=5, default_retry_delay=1)
+@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1)
 def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None) -> None:
     """
     Adds a list of items to a user's cart.
@@ -249,7 +250,7 @@ def _remove_items_from_cart(event: Event, items: List[dict], cart_id: str) -> No
                     cp.delete()
 
 
-@app.task(bind=True, max_retries=5, default_retry_delay=1)
+@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1)
 def remove_items_from_cart(self, event: int, items: List[dict], cart_id: str=None) -> None:
     """
     Removes a list of items from a user's cart.

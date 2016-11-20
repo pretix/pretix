@@ -22,6 +22,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.payment import BasePaymentProvider
+from pretix.base.services.async import ProfiledTask
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
 )
@@ -585,7 +586,7 @@ class OrderChangeManager:
             raise OrderError(error_messages['internal'])
 
 
-@app.task(bind=True, max_retries=5, default_retry_delay=1)
+@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1)
 def perform_order(self, event: str, payment_provider: str, positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None):
     try:
@@ -597,7 +598,7 @@ def perform_order(self, event: str, payment_provider: str, positions: List[str],
         return OrderError(error_messages['busy'])
 
 
-@app.task(bind=True, max_retries=5, default_retry_delay=1)
+@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1)
 def cancel_order(self, order: int, user: int=None):
     try:
         try:
