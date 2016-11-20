@@ -1,5 +1,7 @@
 # pytest
 
+import base64
+
 from django.test import override_settings
 
 from pretix.base import metrics
@@ -47,7 +49,7 @@ def test_counter(monkeypatch):
 
 
 @override_settings(HAS_REDIS=True,METRICS_USER="foo",METRICS_PASSPHRASE="bar")
-def test_metrics_view(monkeypatch):
+def test_metrics_view(monkeypatch, client):
 
     fake_redis = FakeRedis()
     monkeypatch.setattr(metricsview.metrics, "redis", fake_redis, raising=False)
@@ -56,4 +58,11 @@ def test_metrics_view(monkeypatch):
     fullname = metrics.http_requests_total._construct_metric_identifier('http_requests_total', {"code": "200", "handler": "/foo", "method": "GET"})
     metricsview.metrics.http_requests_total.inc(counter_value, code="200", handler="/foo", method="GET")
 
+    # test unauthorized-page
     assert "You are not authorized" in metricsview.serve_metrics(None).content.decode('utf-8')
+    assert "You are not authorized" in client.get('/metrics').content.decode('utf-8')
+    assert "{} {}".format(fullname, counter_value) not in client.get('/metrics')
+
+    # test metrics-view
+    basic_auth = {"HTTP_AUTHORIZATION": base64.b64encode(bytes("foo:bar", "utf-8"))}
+    assert "{} {}".format(fullname, counter_value) not in client.get("/metrics", headers=basic_auth)
