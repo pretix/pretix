@@ -48,6 +48,46 @@ def test_counter(monkeypatch):
     assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_POST] == 7
 
 
+@override_settings(HAS_REDIS=True)
+def test_gauge(monkeypatch):
+
+    fake_redis = FakeRedis()
+
+    monkeypatch.setattr(metrics, "redis", fake_redis, raising=False)
+
+    test_gauge = metrics.Gauge("my_gauge", "this is a helpstring", ["dimension"])
+
+    # now test
+    fullname_one = test_gauge._construct_metric_identifier('my_gauge', {"dimension": "one"})
+    fullname_two = test_gauge._construct_metric_identifier('my_gauge', {"dimension": "two"})
+    fullname_three = test_gauge._construct_metric_identifier('my_gauge', {"dimension": "three"})
+
+    test_gauge.inc(dimension="one")
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_one] == 1
+    test_gauge.inc(7, dimension="one")
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_one] == 8
+    test_gauge.dec(2, dimension="one")
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_one] == 6
+    test_gauge.set(3, dimension="two")
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_one] == 6
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_two] == 3
+    test_gauge.set(4, dimension="two")
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_one] == 6
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_two] == 4
+    test_gauge.dec(7, dimension="three")
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_one] == 6
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_two] == 4
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_three] == -7
+    test_gauge.inc(14, dimension="three")
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_one] == 6
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_two] == 4
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_three] == 7
+    test_gauge.set(17, dimension="three")
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_one] == 6
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_two] == 4
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_three] == 17
+
+
 @override_settings(HAS_REDIS=True, METRICS_USER="foo", METRICS_PASSPHRASE="bar")
 def test_metrics_view(monkeypatch, client):
 

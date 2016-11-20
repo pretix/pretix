@@ -118,7 +118,7 @@ class Gauge(Metric):
         if amount < 0:
             raise ValueError("Amount must be greater than zero. Otherwise use inc().")
 
-        self._check_label_consistency(self.labelnames, kwargs)
+        self._check_label_consistency(kwargs)
 
         fullmetric = self._construct_metric_identifier(self.name, kwargs)
         self._inc_in_redis(fullmetric, amount * -1)
