@@ -82,7 +82,14 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     :param user: The user that performed the change
     :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
     """
-    with order.event.lock() as now_dt:
+    lock_func = order.event.lock
+    if order.status == order.STATUS_PENDING and order.expires > now() + timedelta(minutes=10):
+        # No lock necessary in this case. The 10 minute offset is just to be safe and prevent
+        # collisions with the cronjob.
+        def lock_func():
+            return now()
+
+    with lock_func() as now_dt:
         can_be_paid = order._can_be_paid()
         if not force and can_be_paid is not True:
             raise Quota.QuotaExceededException(can_be_paid)
