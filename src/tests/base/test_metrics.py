@@ -2,6 +2,7 @@
 
 import base64
 
+import pytest
 from django.test import override_settings
 
 from pretix.base import metrics
@@ -47,6 +48,18 @@ def test_counter(monkeypatch):
     assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 9
     assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_POST] == 7
 
+    with pytest.raises(ValueError):
+        metrics.http_requests_total.inc(-4, code="200", handler="/foo", method="POST")
+
+    with pytest.raises(ValueError):
+        metrics.http_requests_total.inc(-4, code="200", handler="/foo", method="POST", too="much")
+
+    # test dimensionless counters
+    dimless_counter = metrics.Counter("dimless_counter", "this is a helpstring")
+    fullname_dimless = dimless_counter._construct_metric_identifier('dimless_counter')
+    dimless_counter.inc(20)
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_dimless] == 20
+
 
 @override_settings(HAS_REDIS=True)
 def test_gauge(monkeypatch):
@@ -86,6 +99,24 @@ def test_gauge(monkeypatch):
     assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_one] == 6
     assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_two] == 4
     assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_three] == 17
+
+    with pytest.raises(ValueError):
+        test_gauge.inc(-17, dimension="three")
+
+    with pytest.raises(ValueError):
+        test_gauge.dec(-17, dimension="three")
+
+    with pytest.raises(ValueError):
+        test_gauge.set(7, unknown_label="foo")
+
+    with pytest.raises(ValueError):
+        test_gauge.set(7, dimension="one", too="much")
+
+    # test dimensionless gauges
+    dimless_gauge = metrics.Gauge("dimless_gauge", "this is a helpstring")
+    fullname_dimless = dimless_gauge._construct_metric_identifier('dimless_gauge')
+    dimless_gauge.set(20)
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_dimless] == 20
 
 
 @override_settings(HAS_REDIS=True, METRICS_USER="foo", METRICS_PASSPHRASE="bar")
