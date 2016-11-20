@@ -174,6 +174,20 @@ Example::
     .. WARNING:: Never set this to ``True`` in production!
 
 
+Metrics
+-------
+
+If you want to fetch internally collected prometheus-style metrics you need to configure the credentials for the
+metrics endpoint and enable it::
+
+    [metrics]
+    enabled=true
+    user=your_user
+    passphrase=mysupersecretpassphrase
+
+Currently, metrics-collection requires a redis server to be available.
+
+
 Memcached
 ---------
 

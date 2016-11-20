@@ -90,6 +90,10 @@ EMAIL_SUBJECT_PREFIX = '[pretix] '
 
 ADMINS = [('Admin', n) for n in config.get('mail', 'admins', fallback='').split(",") if n]
 
+METRICS_ENABLED = config.get('metrics', 'enabled', fallback=False)
+METRICS_USER = config.get('metrics', 'user', fallback="metrics")
+METRICS_PASSPHRASE = config.get('metrics', 'passphrase', fallback="")
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
