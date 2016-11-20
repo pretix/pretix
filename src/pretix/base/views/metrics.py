@@ -6,7 +6,7 @@ from .. import metrics
 
 def unauthed_response():
     content = "<html><title>Forbidden</title><body>You are not authorized to view this page.</body></html>"
-    response = HttpResponse(content, mimetype="text/html")
+    response = HttpResponse(content, content_type="text/html")
     response["WWW-Authenticate"] = 'Basic realm="metrics"'
     response.status_code = 401
     return response
