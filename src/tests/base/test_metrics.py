@@ -44,3 +44,16 @@ def test_counter(monkeypatch):
     metrics.http_requests_total.inc(7, code="200", handler="/foo", method="POST")
     assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 9
     assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_POST] == 7
+
+
+@override_settings(HAS_REDIS=True,METRICS_USER="foo",METRICS_PASSPHRASE="bar")
+def test_metrics_view(monkeypatch):
+
+    fake_redis = FakeRedis()
+    monkeypatch.setattr(metricsview.metrics, "redis", fake_redis, raising=False)
+
+    counter_value = 3
+    fullname = metrics.http_requests_total._construct_metric_identifier('http_requests_total', {"code": "200", "handler": "/foo", "method": "GET"})
+    metricsview.metrics.http_requests_total.inc(counter_value, code="200", handler="/foo", method="GET")
+
+    assert "You are not authorized" in metricsview.serve_metrics(None).content.decode('utf-8')
