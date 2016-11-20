@@ -119,6 +119,7 @@ def test_gauge(monkeypatch):
     assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_dimless] == 20
 
 
+@pytest.mark.django_db
 @override_settings(HAS_REDIS=True, METRICS_USER="foo", METRICS_PASSPHRASE="bar")
 def test_metrics_view(monkeypatch, client):
 
