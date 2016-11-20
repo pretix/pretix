@@ -2,6 +2,7 @@ import datetime
 from decimal import Decimal
 
 from django.core import mail
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils.timezone import now
 from tests.base import SoupTest
@@ -469,3 +470,19 @@ class TestResendLink(EventTestMixin, SoupTest):
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn('DUMMY1', mail.outbox[0].body)
         self.assertIn('DUMMY2', mail.outbox[0].body)
+
+
+class EventSlugBlacklistValidatorTest(EventTestMixin, SoupTest):
+    def test_slug_validation(self):
+        event = Event(
+            organizer=self.orga,
+            name='download',
+            slug='download',
+            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+            live=True
+        )
+        with self.assertRaises(ValidationError):
+            if event.full_clean():
+                event.save()
+
+        self.assertEqual(Event.objects.filter(name='download').count(), 0)

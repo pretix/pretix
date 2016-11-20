@@ -601,6 +601,16 @@ class EventTest(TestCase):
 
         self.assertIn('presale_end', str(context.exception))
 
+    def test_slug_validation(self):
+        event = Event(
+            organizer=self.organizer, name='Download', slug='download',
+            date_from=datsetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc)
+        )
+        with self.assertRaises(ValidationError) as context:
+            event.clean()
+
+        self.assertIn('slug', str(context.exception))
+
 
 class CachedFileTestCase(TestCase):
     def test_file_handling(self):
