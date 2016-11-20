@@ -9,8 +9,11 @@ class BlacklistValidator:
     def __call__(self, value):
         # Validation logic
         if value in self.blacklist:
-            message = _("This slug has an invalid value.")
-            raise ValidationError(message)
+            raise ValidationError(
+                _('This slug has an invalid value: %(value)s.'),
+                code='invalid',
+                params={'value': '42'},
+            )
 
 
 class EventSlugBlacklistValidator(BlacklistValidator):

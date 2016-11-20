@@ -1,3 +1,4 @@
+import datetime
 import sys
 from datetime import timedelta
 
@@ -604,7 +605,7 @@ class EventTest(TestCase):
     def test_slug_validation(self):
         event = Event(
             organizer=self.organizer, name='Download', slug='download',
-            date_from=datsetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc)
+            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc)
         )
         with self.assertRaises(ValidationError) as context:
             event.clean()
