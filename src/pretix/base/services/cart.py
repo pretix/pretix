@@ -4,6 +4,7 @@ from typing import List, Optional
 
 from celery.exceptions import MaxRetriesExceededError
 from django.db.models import Q
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import LazyLocaleException
@@ -201,18 +202,21 @@ def _add_new_items(event: Event, items: List[dict],
 
 
 def _add_items_to_cart(event: Event, items: List[dict], cart_id: str=None) -> None:
-    with event.lock() as now_dt:
-        _check_date(event, now_dt)
-        existing = CartPosition.objects.filter(Q(cart_id=cart_id) & Q(event=event)).count()
-        if sum(i['count'] for i in items) + existing > int(event.settings.max_items_per_order):
-            # TODO: i18n plurals
-            raise CartError(error_messages['max_items'], (event.settings.max_items_per_order,))
+    now_dt = now()
+    _check_date(event, now_dt)
 
-        expiry = now_dt + timedelta(minutes=event.settings.get('reservation_time', as_type=int))
-        _extend_existing(event, cart_id, expiry, now_dt)
+    existing = CartPosition.objects.filter(Q(cart_id=cart_id) & Q(event=event)).count()
+    if sum(i['count'] for i in items) + existing > int(event.settings.max_items_per_order):
+        # TODO: i18n plurals
+        raise CartError(error_messages['max_items'], (event.settings.max_items_per_order,))
 
-        expired = _re_add_expired_positions(items, event, cart_id, now_dt)
-        if items:
+    expiry = now_dt + timedelta(minutes=event.settings.get('reservation_time', as_type=int))
+    _extend_existing(event, cart_id, expiry, now_dt)
+
+    expired = _re_add_expired_positions(items, event, cart_id, now_dt)
+
+    if items:
+        with event.lock():
             err = _add_new_items(event, items, cart_id, expiry, now_dt)
             _delete_expired(expired, now_dt)
             if err:
