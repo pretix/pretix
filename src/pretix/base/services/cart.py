@@ -1,6 +1,7 @@
+from collections import Counter
 from datetime import datetime, timedelta
 from decimal import Decimal
-from typing import List, Optional
+from typing import List
 
 from celery.exceptions import MaxRetriesExceededError
 from django.db.models import Q
@@ -66,7 +67,7 @@ def _re_add_expired_positions(items: List[dict], event: Event, cart_id: str, now
             'variation': cp.variation_id,
             'count': 1,
             'price': cp.price,
-            'cp': cp,
+            '_cp': cp,
             'voucher': cp.voucher.code if cp.voucher else None
         })
         positions.add(cp)
@@ -75,7 +76,7 @@ def _re_add_expired_positions(items: List[dict], event: Event, cart_id: str, now
 
 def _delete_expired(expired: List[CartPosition], now_dt: datetime) -> None:
     for cp in expired:
-        if cp.expires <= now_dt:
+        if cp.expires <= now_dt:  # Has not been extended
             cp.delete()
 
 
@@ -86,8 +87,17 @@ def _check_date(event: Event, now_dt: datetime) -> None:
         raise CartError(error_messages['ended'])
 
 
-def _add_new_items(event: Event, items: List[dict],
-                   cart_id: str, expiry: datetime, now_dt: datetime) -> Optional[str]:
+def _parse_items_and_check_constraints(event: Event, items: List[dict], cart_id: str,
+                                       now_dt: datetime) -> Counter:
+    """
+    This method does three things:
+
+    * Extend the item list with the database objects for the item, variation, etc.
+
+    * Check all constraints that are placed on the items, vouchers etc. to be valid and calculates the correct prices
+
+    * Return a counter object that contains the quota changes that are required to perform the operation
+    """
     err = None
 
     # Fetch items from the database
@@ -99,6 +109,8 @@ def _add_new_items(event: Event, items: List[dict],
         id__in=[i['variation'] for i in items if i['variation'] is not None]
     ).select_related("item", "item__event").prefetch_related("quotas")
     variations_cache = {v.id: v for v in variations_query}
+
+    quotadiff = Counter()
 
     for i in items:
         # Check whether the specified items are part of what we just fetched from the database
@@ -119,7 +131,7 @@ def _add_new_items(event: Event, items: List[dict],
                 if voucher.redeemed >= voucher.max_usages:
                     return error_messages['voucher_redeemed']
                 if voucher.valid_until is not None and voucher.valid_until < now_dt:
-                    return error_messages['voucher_expired']
+                    raise CartError(error_messages['voucher_expired'])
                 if not voucher.applies_to(item, variation):
                     return error_messages['voucher_invalid_item']
 
@@ -135,39 +147,24 @@ def _add_new_items(event: Event, items: List[dict],
                     return error_messages['voucher_redeemed']
                 if i['count'] > v_avail:
                     return error_messages['voucher_redeemed_partial'] % v_avail
-
             except Voucher.DoesNotExist:
-                return error_messages['voucher_invalid']
+                raise CartError(error_messages['voucher_invalid'])
 
         # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
         quotas = list(item.quotas.all()) if variation is None else list(variation.quotas.all())
 
         if voucher and voucher.quota and voucher.quota.pk not in [q.pk for q in quotas]:
-            return error_messages['voucher_invalid_item']
+            raise CartError(error_messages['voucher_invalid_item'])
 
         if item.require_voucher and voucher is None:
-            return error_messages['voucher_required']
+            raise CartError(error_messages['voucher_required'])
 
         if item.hide_without_voucher and (voucher is None or voucher.item is None or voucher.item.pk != item.pk):
-            return error_messages['voucher_required']
+            raise CartError(error_messages['voucher_required'])
 
         if len(quotas) == 0 or not item.is_available() or (variation and not variation.active):
             err = err or error_messages['unavailable']
             continue
-
-        # Check that all quotas allow us to buy i['count'] instances of the object
-        quota_ok = i['count']
-        if not voucher or (not voucher.allow_ignore_quota and not voucher.block_quota):
-            for quota in quotas:
-                avail = quota.availability()
-                if avail[1] is not None and avail[1] < i['count']:
-                    # This quota is not available or less than i['count'] items are left, so we have to
-                    # reduce the number of bought items
-                    if avail[0] != Quota.AVAILABILITY_OK:
-                        err = err or error_messages['unavailable']
-                    else:
-                        err = err or error_messages['in_part']
-                    quota_ok = min(quota_ok, avail[1])
 
         if voucher and voucher.price is not None:
             price = voucher.price
@@ -180,25 +177,86 @@ def _add_new_items(event: Event, items: List[dict],
             if not isinstance(custom_price, Decimal):
                 custom_price = Decimal(custom_price.replace(",", "."))
             if custom_price > 100000000:
-                return error_messages['price_too_high']
+                raise CartError(error_messages['price_too_high'])
             price = max(custom_price, price)
 
-        # Create a CartPosition for as much items as we can
-        for k in range(quota_ok):
-            if 'cp' in i and i['count'] == 1:
-                # Recreating
-                cp = i['cp']
-                cp.expires = expiry
-                cp.price = price
-                cp.save()
+        # Check that all quotas allow us to buy i['count'] instances of the object
+        if not voucher or (not voucher.allow_ignore_quota and not voucher.block_quota):
+            for quota in quotas:
+                quotadiff[quota] += i['count']
+            i['_quotas'] = quotas
+        else:
+            i['_quotas'] = []
+
+        i['_price'] = price
+        i['_item'] = item
+        i['_variation'] = variation
+        i['_voucher'] = voucher
+
+    if err:
+        raise CartError(err)
+
+    return quotadiff
+
+
+def _check_quota_and_create_positions(event: Event, items: List[dict], cart_id: str,
+                                      expiry: datetime, quotadiff: Counter):
+    """
+    This method takes the modified items and the quotadiff from _parse_items_and_check_constraints
+    and then
+
+    * checks that the given quotas are available
+
+    * creates as many cart positions as possible
+    """
+    err = None
+    quotas_ok = {}
+    cartpositions = []
+
+    with event.lock():
+
+        for quota, count in quotadiff.items():
+            avail = quota.availability()
+            if avail[1] is not None and avail[1] < count:
+                # This quota is not available or less than i['count'] items are left, so we have to
+                # reduce the number of bought items
+                if avail[0] != Quota.AVAILABILITY_OK:
+                    err = err or error_messages['unavailable']
+                else:
+                    err = err or error_messages['in_part']
+                quotas_ok[quota] = min(count, avail[1])
             else:
-                CartPosition.objects.create(
-                    event=event, item=item, variation=variation,
-                    price=price,
-                    expires=expiry,
-                    cart_id=cart_id, voucher=voucher
-                )
-    return err
+                quotas_ok[quota] = count
+
+        for i in items:
+            # Create a CartPosition for as much items as we can
+            requested_count = i['count']
+            available_count = requested_count
+            if i['_quotas']:
+                available_count = min(requested_count, min(quotas_ok[q] for q in i['_quotas']))
+
+            for q in i['_quotas']:
+                quotas_ok[q] -= available_count
+
+            for k in range(available_count):
+                if '_cp' in i and i['count'] == 1:
+                    # Recreating an existing position
+                    cp = i['_cp']
+                    cp.expires = expiry
+                    cp.price = i['_price']
+                    cp.save()
+                else:
+                    cartpositions.append(CartPosition(
+                        event=event, item=i['_item'], variation=i['_variation'],
+                        price=i['_price'],
+                        expires=expiry,
+                        cart_id=cart_id, voucher=i['_voucher']
+                    ))
+
+        CartPosition.objects.bulk_create(cartpositions)
+
+    if err:
+        raise CartError(err)
 
 
 def _add_items_to_cart(event: Event, items: List[dict], cart_id: str=None) -> None:
@@ -215,12 +273,15 @@ def _add_items_to_cart(event: Event, items: List[dict], cart_id: str=None) -> No
 
     expired = _re_add_expired_positions(items, event, cart_id, now_dt)
 
-    if items:
-        with event.lock():
-            err = _add_new_items(event, items, cart_id, expiry, now_dt)
-            _delete_expired(expired, now_dt)
-            if err:
-                raise CartError(err)
+    try:
+        if items:
+            quotadiff = _parse_items_and_check_constraints(event, items, cart_id, now_dt)
+            _check_quota_and_create_positions(event, items, cart_id, expiry, quotadiff)
+    except CartError as e:
+        _delete_expired(expired, now_dt)
+        raise e
+    else:
+        _delete_expired(expired, now_dt)
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1)
