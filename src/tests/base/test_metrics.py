@@ -6,7 +6,7 @@ from pretix.base import metrics
 from pretix.base.views import metrics as metricsview
 
 
-class fakeRedis(object):
+class FakeRedis(object):
 
     def __init__(self):
         self.storage = {}
@@ -28,7 +28,7 @@ class fakeRedis(object):
 @override_settings(HAS_REDIS=True)
 def test_counter(monkeypatch):
 
-    fake_redis = fakeRedis()
+    fake_redis = FakeRedis()
 
     monkeypatch.setattr(metrics, "redis", fake_redis, raising=False)
 
@@ -36,11 +36,11 @@ def test_counter(monkeypatch):
     fullname_GET  = metrics.http_requests_total._construct_metric_identifier('http_requests_total', {"code": "200", "handler": "/foo", "method": "GET"})
     fullname_POST = metrics.http_requests_total._construct_metric_identifier('http_requests_total', {"code": "200", "handler": "/foo", "method": "POST"})
     metrics.http_requests_total.inc(code="200", handler="/foo", method="GET")
-    assert local_fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 1
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 1
     metrics.http_requests_total.inc(code="200", handler="/foo", method="GET")
-    assert local_fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 2
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 2
     metrics.http_requests_total.inc(7, code="200", handler="/foo", method="GET")
-    assert local_fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 9
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 9
     metrics.http_requests_total.inc(7, code="200", handler="/foo", method="POST")
-    assert local_fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 9
-    assert local_fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_POST] == 7
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 9
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_POST] == 7
