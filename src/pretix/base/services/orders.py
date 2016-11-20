@@ -577,12 +577,12 @@ class OrderChangeManager:
             # Do nothing
             return
         with transaction.atomic():
+            self._check_free_to_paid()
+            self._check_complete_cancel()
             with self.order.event.lock():
                 if self.order.status != Order.STATUS_PENDING:
                     raise OrderError(self.error_messages['not_pending'])
-                self._check_free_to_paid()
                 self._check_quotas()
-                self._check_complete_cancel()
                 self._perform_operations()
             self._recalculate_total_and_payment_fee()
             self._reissue_invoice()
