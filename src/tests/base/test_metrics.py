@@ -35,7 +35,7 @@ def test_counter(monkeypatch):
     monkeypatch.setattr(metrics, "redis", fake_redis, raising=False)
 
     # now test
-    fullname_GET  = metrics.http_requests_total._construct_metric_identifier('http_requests_total', {"code": "200", "handler": "/foo", "method": "GET"})
+    fullname_GET = metrics.http_requests_total._construct_metric_identifier('http_requests_total', {"code": "200", "handler": "/foo", "method": "GET"})
     fullname_POST = metrics.http_requests_total._construct_metric_identifier('http_requests_total', {"code": "200", "handler": "/foo", "method": "POST"})
     metrics.http_requests_total.inc(code="200", handler="/foo", method="GET")
     assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 1
@@ -48,7 +48,7 @@ def test_counter(monkeypatch):
     assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_POST] == 7
 
 
-@override_settings(HAS_REDIS=True,METRICS_USER="foo",METRICS_PASSPHRASE="bar")
+@override_settings(HAS_REDIS=True, METRICS_USER="foo", METRICS_PASSPHRASE="bar")
 def test_metrics_view(monkeypatch, client):
 
     fake_redis = FakeRedis()
