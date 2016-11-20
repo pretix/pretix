@@ -199,8 +199,8 @@ def _parse_items_and_check_constraints(event: Event, items: List[dict], cart_id:
     return quotadiff
 
 
-def _check_quota_and_create_positions(event: Event, items: List[dict], cart_id: str,
-                                      expiry: datetime, quotadiff: Counter):
+def _check_quota_and_create_positions(event: Event, items: List[dict], cart_id: str, now_dt: datetime,
+                                      expiry: datetime, quotadiff: Counter,):
     """
     This method takes the modified items and the quotadiff from _parse_items_and_check_constraints
     and then
@@ -214,9 +214,8 @@ def _check_quota_and_create_positions(event: Event, items: List[dict], cart_id: 
     cartpositions = []
 
     with event.lock():
-
         for quota, count in quotadiff.items():
-            avail = quota.availability()
+            avail = quota.availability(now_dt)
             if avail[1] is not None and avail[1] < count:
                 # This quota is not available or less than i['count'] items are left, so we have to
                 # reduce the number of bought items
@@ -276,7 +275,7 @@ def _add_items_to_cart(event: Event, items: List[dict], cart_id: str=None) -> No
     try:
         if items:
             quotadiff = _parse_items_and_check_constraints(event, items, cart_id, now_dt)
-            _check_quota_and_create_positions(event, items, cart_id, expiry, quotadiff)
+            _check_quota_and_create_positions(event, items, cart_id, now_dt, expiry, quotadiff)
     except CartError as e:
         _delete_expired(expired, now_dt)
         raise e
