@@ -1,3 +1,4 @@
+import contextlib
 import json
 import logging
 from collections import Counter, namedtuple
@@ -86,8 +87,9 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     if order.status == order.STATUS_PENDING and order.expires > now() + timedelta(minutes=10):
         # No lock necessary in this case. The 10 minute offset is just to be safe and prevent
         # collisions with the cronjob.
+        @contextlib.contextmanager
         def lock_func():
-            return now()
+            yield now()
 
     with lock_func() as now_dt:
         can_be_paid = order._can_be_paid()
