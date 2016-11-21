@@ -36,17 +36,21 @@ def test_counter(monkeypatch):
     monkeypatch.setattr(metrics, "redis", fake_redis, raising=False)
 
     # now test
-    fullname_GET = metrics.http_requests_total._construct_metric_identifier('http_requests_total', {"code": "200", "handler": "/foo", "method": "GET"})
-    fullname_POST = metrics.http_requests_total._construct_metric_identifier('http_requests_total', {"code": "200", "handler": "/foo", "method": "POST"})
+    fullname_get = metrics.http_requests_total._construct_metric_identifier(
+        'http_requests_total', {"code": "200", "handler": "/foo", "method": "GET"}
+    )
+    fullname_post = metrics.http_requests_total._construct_metric_identifier(
+        'http_requests_total', {"code": "200", "handler": "/foo", "method": "POST"}
+    )
     metrics.http_requests_total.inc(code="200", handler="/foo", method="GET")
-    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 1
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_get] == 1
     metrics.http_requests_total.inc(code="200", handler="/foo", method="GET")
-    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 2
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_get] == 2
     metrics.http_requests_total.inc(7, code="200", handler="/foo", method="GET")
-    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 9
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_get] == 9
     metrics.http_requests_total.inc(7, code="200", handler="/foo", method="POST")
-    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_GET] == 9
-    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_POST] == 7
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_get] == 9
+    assert fake_redis.storage[metrics.REDIS_KEY_PREFIX + fullname_post] == 7
 
     with pytest.raises(ValueError):
         metrics.http_requests_total.inc(-4, code="200", handler="/foo", method="POST")
