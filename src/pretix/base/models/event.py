@@ -15,6 +15,7 @@ from pretix.base.email import CustomSMTPBackend
 from pretix.base.i18n import I18nCharField
 from pretix.base.models.base import LoggedModel
 from pretix.base.settings import SettingsProxy
+from pretix.base.validators import EventSlugBlacklistValidator
 
 from .auth import User
 from .organizer import Organizer
@@ -65,7 +66,8 @@ class Event(LoggedModel):
             RegexValidator(
                 regex="^[a-zA-Z0-9.-]+$",
                 message=_("The slug may only contain letters, numbers, dots and dashes."),
-            )
+            ),
+            EventSlugBlacklistValidator()
         ],
         verbose_name=_("Slug"),
     )

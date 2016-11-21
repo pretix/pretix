@@ -1,3 +1,4 @@
+import datetime
 import sys
 from datetime import timedelta
 
@@ -600,6 +601,16 @@ class EventTest(TestCase):
             event.clean()
 
         self.assertIn('presale_end', str(context.exception))
+
+    def test_slug_validation(self):
+        event = Event(
+            organizer=self.organizer, name='Download', slug='download',
+            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc)
+        )
+        with self.assertRaises(ValidationError) as context:
+            event.full_clean()
+
+        self.assertIn('slug', str(context.exception))
 
 
 class CachedFileTestCase(TestCase):

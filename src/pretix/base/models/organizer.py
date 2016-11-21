@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models.base import LoggedModel
 from pretix.base.settings import SettingsProxy
+from pretix.base.validators import OrganizerSlugBlacklistValidator
 
 from .auth import User
 from .settings import OrganizerSetting
@@ -34,7 +35,8 @@ class Organizer(LoggedModel):
             RegexValidator(
                 regex="^[a-zA-Z0-9.-]+$",
                 message=_("The slug may only contain letters, numbers, dots and dashes.")
-            )
+            ),
+            OrganizerSlugBlacklistValidator()
         ],
         verbose_name=_("Slug"),
     )
