@@ -14,7 +14,6 @@ import pretix.presale.views.user
 event_patterns = [
     url(r'^cart/add$', pretix.presale.views.cart.CartAdd.as_view(), name='event.cart.add'),
     url(r'^cart/remove$', pretix.presale.views.cart.CartRemove.as_view(), name='event.cart.remove'),
-    url(r'^cart/removeall$', pretix.presale.views.cart.CartRemoveAll.as_view(), name='event.cart.remove.all'),
     url(r'^checkout/start$', pretix.presale.views.checkout.CheckoutView.as_view(), name='event.checkout.start'),
     url(r'^redeem$', pretix.presale.views.cart.RedeemView.as_view(),
         name='event.redeem'),
