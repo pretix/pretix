@@ -12,7 +12,7 @@ class BlacklistValidator:
             raise ValidationError(
                 _('This slug has an invalid value: %(value)s.'),
                 code='invalid',
-                params={'value': '42'},
+                params={'value': value},
             )
 
 

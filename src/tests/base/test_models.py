@@ -608,7 +608,7 @@ class EventTest(TestCase):
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc)
         )
         with self.assertRaises(ValidationError) as context:
-            event.clean()
+            event.full_clean()
 
         self.assertIn('slug', str(context.exception))
 
