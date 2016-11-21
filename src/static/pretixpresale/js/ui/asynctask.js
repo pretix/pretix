@@ -25,7 +25,8 @@ function async_task_check_callback(data, jqXHR, status) {
     }
     async_task_timeout = window.setTimeout(async_task_check, 250);
     $("#loadingmodal p").text(gettext('Your request has been queued on the server and will now be ' +
-                                      'processed.'));
+                                      'processed. If this takes longer than two minutes, please contact us or go ' +
+                                      'back in your browser and try again.'));
 }
 
 function async_task_check_error(jqXHR, textStatus, errorThrown) {
@@ -58,13 +59,21 @@ function async_task_callback(data, jqXHR, status) {
     async_task_check_url = data.check_url;
     async_task_timeout = window.setTimeout(async_task_check, 100);
 
-    history.pushState({}, "Waiting", async_task_check_url.replace(/ajax=1/, ''));
+    $("#loadingmodal p").text(gettext('Your request has been queued on the server and will now be ' +
+                                      'processed. If this takes longer than two minutes, please contact us or go ' +
+                                      'back in your browser and try again.'));
+    if (location.href.indexOf("async_id") === -1) {
+        history.pushState({}, "Waiting", async_task_check_url.replace(/ajax=1/, ''));
+    }
 }
 
 function async_task_error(jqXHR, textStatus, errorThrown) {
     "use strict";
     $("body").data('ajaxing', false);
-    if (jqXHR.responseText.indexOf('container') > 0) {
+    if (textStatus === "timeout") {
+        alert(gettext("The request took to long. Please try again."));
+        waitingDialog.hide();
+    } else if (jqXHR.responseText.indexOf('container') > 0) {
         var c = $(jqXHR.responseText).filter('.container');
         waitingDialog.hide();
         ajaxErrDialog.show(c.first().html());
@@ -90,6 +99,9 @@ $(function () {
         async_task_id = null;
         $("body").data('ajaxing', true);
         waitingDialog.show(gettext('We are processing your request …'));
+        $("#loadingmodal p").text(gettext('We are currently sending your request to the server. If this takes longer ' +
+                                          'than one minute, please check your internet connection and then reload ' +
+                                          'this page and try again.'));
 
         $.ajax(
             {
@@ -99,7 +111,8 @@ $(function () {
                 'success': async_task_callback,
                 'error': async_task_error,
                 'context': this,
-                'dataType': 'json'
+                'dataType': 'json',
+                'timeout': 60000,
             }
         );
     });
