@@ -26,7 +26,7 @@
                 </em>
                 <div class="row checkout-button-row">
                     <div class="col-md-4 col-xs-12">
-                        <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.remove.all" %}" >
+                        <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.remove" %}" >
                             {% csrf_token %}
                             {% for line in cart.positions %}
                                 {% if line.variation %}

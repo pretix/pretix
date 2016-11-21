@@ -6,7 +6,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView, View
 
-from pretix.base.models import Quota, Voucher
+from pretix.base.models import CartPosition, Quota, Voucher
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, remove_items_from_cart,
 )
@@ -104,33 +104,10 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = remove_items_from_cart
 
     def get_success_message(self, value):
-        return _('Your cart has been updated.')
-
-    def get_error_message(self, exception):
-        if isinstance(exception, dict) and exception['exc_type'] == 'CartError':
-            return exception['exc_message']
-        elif isinstance(exception, CartError):
-            return str(exception)
-        return super().get_error_message(exception)
-
-    def post(self, request, *args, **kwargs):
-        items = self._items_from_post_data()
-        if items:
-            return self.do(self.request.event.id, items, self.request.session.session_key)
+        if CartPosition.objects.filter(cart_id=self.request.session.session_key).exists():
+            return _('Your cart has been updated.')
         else:
-            if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
-                return JsonResponse({
-                    'redirect': self.get_error_url()
-                })
-            else:
-                return redirect(self.get_error_url())
-
-
-class CartRemoveAll(EventViewMixin, CartActionMixin, AsyncAction, View):
-    task = remove_items_from_cart
-
-    def get_success_message(self, value):
-        return _('Your cart is empty.')
+            return _('Your cart is empty.')
 
     def get_error_message(self, exception):
         if isinstance(exception, dict) and exception['exc_type'] == 'CartError':
