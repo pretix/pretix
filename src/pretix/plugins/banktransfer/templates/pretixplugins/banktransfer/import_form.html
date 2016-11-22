@@ -32,7 +32,7 @@
             {% endif %}
         </div>
     </div>
-    {% if transactions_unhandled|length > 0 %}
+    {% if transactions_unhandled|length > 0 or request.GET.search %}
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">{% trans "Unresolved transactions" %}</h3>
@@ -55,9 +55,13 @@
                 {% endif %}
                 </p>
 
-                {% include "pretixcontrol/pagination.html" %}
-                {% include "pretixplugins/banktransfer/transaction_list.html" with list=transactions_unhandled %}
-                {% include "pretixcontrol/pagination.html" %}
+                {% if transactions_unhandled|length > 0 %}
+                    {% include "pretixcontrol/pagination.html" %}
+                    {% include "pretixplugins/banktransfer/transaction_list.html" with list=transactions_unhandled %}
+                    {% include "pretixcontrol/pagination.html" %}
+                {% else %}
+                    <div>{% trans "Your search matched no transactions." %}</div>
+                {% endif %}
             </div>
         </div>
     {% endif %}
