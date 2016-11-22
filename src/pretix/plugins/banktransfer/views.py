@@ -214,7 +214,7 @@ class ImportView(EventPermissionRequiredMixin, ListView):
         if 'search' in self.request.GET:
             q = self.request.GET.get('search')
             qs = qs.filter(
-                Q(payer__icontains=q) | Q(reference__icontains=q)
+                Q(payer__icontains=q) | Q(reference__icontains=q) | Q(comment__icontains=q)
             )
 
         return qs
