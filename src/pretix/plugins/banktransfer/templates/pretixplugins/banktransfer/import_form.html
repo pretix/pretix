@@ -32,7 +32,7 @@
             {% endif %}
         </div>
     </div>
-    {% if transactions_unhandled|length > 0 %}
+    {% if transactions_unhandled|length > 0 or request.GET.search %}
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">{% trans "Unresolved transactions" %}</h3>
@@ -42,8 +42,8 @@
                 <form class="form-inline helper-display-inline" action="" method="get">
                     <input type="text" name="search" class="form-control" placeholder="{% trans "Search" %}"
                            value="{{ request.GET.search }}">
+                    <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
                 </form>
-                <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
                 {% if not request.GET.search %}
                     <form action="" method="post" class="helper-display-inline pull-right">
                         {% csrf_token %}
@@ -55,9 +55,13 @@
                 {% endif %}
                 </p>
 
-                {% include "pretixcontrol/pagination.html" %}
-                {% include "pretixplugins/banktransfer/transaction_list.html" with list=transactions_unhandled %}
-                {% include "pretixcontrol/pagination.html" %}
+                {% if transactions_unhandled|length > 0 %}
+                    {% include "pretixcontrol/pagination.html" %}
+                    {% include "pretixplugins/banktransfer/transaction_list.html" with list=transactions_unhandled %}
+                    {% include "pretixcontrol/pagination.html" %}
+                {% else %}
+                    <div>{% trans "Your search matched no transactions." %}</div>
+                {% endif %}
             </div>
         </div>
     {% endif %}
