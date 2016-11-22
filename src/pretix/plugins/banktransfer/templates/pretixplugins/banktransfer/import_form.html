@@ -42,8 +42,8 @@
                 <form class="form-inline helper-display-inline" action="" method="get">
                     <input type="text" name="search" class="form-control" placeholder="{% trans "Search" %}"
                            value="{{ request.GET.search }}">
+                    <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
                 </form>
-                <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
                 {% if not request.GET.search %}
                     <form action="" method="post" class="helper-display-inline pull-right">
                         {% csrf_token %}
