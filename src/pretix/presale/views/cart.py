@@ -30,6 +30,52 @@ class CartActionMixin:
     def get_error_url(self):
         return self.get_next_url()
 
+    def _item_from_post_value(self, key, value):
+        if value.strip() == '' or '_' not in key:
+            return
+
+        parts = key.split("_")
+        if parts[-1] == "voucher":
+            voucher = value
+            value = 1
+            parts = parts[:-1]
+        else:
+            voucher = None
+
+        if not key.startswith('item_') and not key.startswith('variation_'):
+            return
+
+        try:
+            amount = int(value)
+        except ValueError:
+            raise CartError(_('Please enter numbers only.'))
+        if amount <= 0:
+            raise CartError(_('Please enter positive numbers only.'))
+
+        price = self.request.POST.get('price_' + "_".join(parts[1:]), "")
+        if key.startswith('item_'):
+            try:
+                return {
+                    'item': int(parts[1]),
+                    'variation': None,
+                    'count': amount,
+                    'price': price,
+                    'voucher': voucher
+                }
+            except ValueError:
+                raise CartError(_('Please enter numbers only.'))
+        elif key.startswith('variation_'):
+            try:
+                return {
+                    'item': int(parts[1]),
+                    'variation': int(parts[2]),
+                    'count': amount,
+                    'price': price,
+                    'voucher': voucher
+                }
+            except ValueError:
+                raise CartError(_('Please enter numbers only.'))
+
     def _items_from_post_data(self):
         """
         Parses the POST data and returns a list of tuples in the
@@ -37,63 +83,24 @@ class CartActionMixin:
         """
 
         # Compatibility patch that makes the frontend code a lot easier
-        req_items = list(self.request.POST.items())
+        req_items = list(self.request.POST.lists())
         if '_voucher_item' in self.request.POST and '_voucher_code' in self.request.POST:
             req_items.append((
-                '%s_voucher' % self.request.POST['_voucher_item'], self.request.POST['_voucher_code']
+                '%s_voucher' % self.request.POST['_voucher_item'], (self.request.POST['_voucher_code'],)
             ))
             pass
 
         items = []
-        for key, value in req_items:
-            if value.strip() == '' or '_' not in key:
-                continue
-
-            parts = key.split("_")
-            if parts[-1] == "voucher":
-                voucher = value
-                value = 1
-                parts = parts[:-1]
-            else:
-                voucher = None
-
-            if not key.startswith('item_') and not key.startswith('variation_'):
-                continue
-
-            try:
-                amount = int(value)
-            except ValueError:
-                messages.error(self.request, _('Please enter numbers only.'))
-                return []
-            if amount <= 0:
-                messages.error(self.request, _('Please enter positive numbers only.'))
-                return []
-
-            price = self.request.POST.get('price_' + "_".join(parts[1:]), "")
-            if key.startswith('item_'):
+        for key, values in req_items:
+            for value in values:
                 try:
-                    items.append({
-                        'item': int(parts[1]),
-                        'variation': None,
-                        'count': amount,
-                        'price': price,
-                        'voucher': voucher
-                    })
-                except ValueError:
-                    messages.error(self.request, _('Please enter numbers only.'))
-                    return []
-            elif key.startswith('variation_'):
-                try:
-                    items.append({
-                        'item': int(parts[1]),
-                        'variation': int(parts[2]),
-                        'count': amount,
-                        'price': price,
-                        'voucher': voucher
-                    })
-                except ValueError:
-                    messages.error(self.request, _('Please enter numbers only.'))
-                    return []
+                    item = self._item_from_post_value(key, value)
+                except CartError as e:
+                    messages.error(self.request, str(e))
+                    return
+                if item:
+                    items.append(item)
+
         if len(items) == 0:
             messages.warning(self.request, _('You did not select any products.'))
             return []

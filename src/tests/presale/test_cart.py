@@ -2,8 +2,6 @@ import datetime
 from datetime import timedelta
 from decimal import Decimal
 
-import pytest
-
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.test import TestCase
@@ -479,7 +477,6 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIn('empty', doc.select('.alert-success')[0].text)
         self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
 
-    @pytest.mark.xfail
     def test_remove_all_same_variation_different_price(self):
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_red,
