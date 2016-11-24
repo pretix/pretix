@@ -300,9 +300,7 @@ class BasePaymentProvider:
         The default implementation just returns ``None`` and therefore leaves the
         order unpaid. The user will be redirected to the order's detail page by default.
 
-        On errors, you should use Django's message framework to display an error message
-        to the user.
-
+        On errors, you should raise a ``PaymentFailedException``.
         :param order: The order object
         """
         return None
@@ -440,6 +438,9 @@ class BasePaymentProvider:
         mark_order_refunded(order, user=request.user)
         messages.success(request, _('The order has been marked as refunded. Please transfer the money '
                                     'back to the buyer manually.'))
+    class PaymentFailedException(Exception):
+        pass
+
 
 
 class FreeOrderProvider(BasePaymentProvider):

@@ -197,7 +197,10 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        resp = self.payment_provider.payment_perform(request, self.order)
+        try:
+            resp = self.payment_provider.payment_perform(request, self.order)
+        except PaymentFailed as e:
+            return redirect(resp or self.get_order_url() + '?thanks=no')
         if 'payment_change_{}'.format(self.order.pk) in request.session:
             del request.session['payment_change_{}'.format(self.order.pk)]
         return redirect(resp or self.get_order_url())
@@ -233,7 +236,11 @@ class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        resp = self.payment_provider.payment_perform(request, self.order)
+        try:
+            resp = self.payment_provider.payment_perform(request, self.order)
+        except PaymentFailed as e:
+            return redirect(resp or self.get_order_url() + '?thanks=no')
+
         if self.order.status == Order.STATUS_PAID:
             return redirect(resp or self.get_order_url() + '?paid=yes')
         else:

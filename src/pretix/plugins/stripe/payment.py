@@ -110,13 +110,13 @@ class Stripe(BasePaymentProvider):
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
-            messages.error(request, _('Stripe reported an error with your card: %s' % err['message']))
             logger.info('Stripe card error: %s' % str(err))
             order.payment_info = json.dumps({
                 'error': True,
                 'message': err['message'],
             })
             order.save()
+            raise PaymentFailed(_('Stripe reported an error with your card: %s' % err['message']))
         except stripe.error.StripeError as e:
             if e.json_body:
                 err = e.json_body['error']
@@ -124,27 +124,26 @@ class Stripe(BasePaymentProvider):
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
-            messages.error(request, _('We had trouble communicating with Stripe. Please try again and get in touch '
-                                      'with us if this problem persists.'))
             order.payment_info = json.dumps({
                 'error': True,
                 'message': err['message'],
             })
             order.save()
+            raise PaymentFailed('We had trouble communicating with Stripe. Please try again and get in touch '
+                                      'with us if this problem persists.')
         else:
             if charge.status == 'succeeded' and charge.paid:
                 try:
                     mark_order_paid(order, 'stripe', str(charge))
                 except Quota.QuotaExceededException as e:
-                    messages.error(request, str(e))
+                    raise PaymentFailed(e)
                 except SendMailException:
-                    messages.warning(request, _('There was an error sending the confirmation mail.'))
-
+                    raise PaymentFailed('There was an error sending the confirmation mail.')
             else:
-                messages.warning(request, _('Stripe reported an error: %s' % charge.failure_message))
                 logger.info('Charge failed: %s' % str(charge))
                 order.payment_info = str(charge)
                 order.save()
+                raise PaymentFailed('Stripe reported an error: %s' % charge.failure_message)
         del request.session['payment_stripe_token']
 
     def order_pending_render(self, request, order) -> str:
