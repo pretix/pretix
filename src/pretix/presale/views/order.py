@@ -15,6 +15,7 @@ from pretix.base.models import (
     CachedFile, CachedTicket, Invoice, Order, OrderPosition,
 )
 from pretix.base.models.orders import InvoiceAddress
+from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
 )
@@ -199,7 +200,7 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         try:
             resp = self.payment_provider.payment_perform(request, self.order)
-        except PaymentFailed as e:
+        except PaymentException as e:
             return redirect(resp or self.get_order_url() + '?thanks=no')
         if 'payment_change_{}'.format(self.order.pk) in request.session:
             del request.session['payment_change_{}'.format(self.order.pk)]
@@ -238,7 +239,7 @@ class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
     def get(self, request, *args, **kwargs):
         try:
             resp = self.payment_provider.payment_perform(request, self.order)
-        except PaymentFailed as e:
+        except PaymentException as e:
             return redirect(resp or self.get_order_url() + '?thanks=no')
 
         if self.order.status == Order.STATUS_PAID:
