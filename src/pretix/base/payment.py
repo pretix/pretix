@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from datetime import datetime
 from decimal import Decimal
 from typing import Any, Dict
 
@@ -126,6 +127,13 @@ class BasePaymentProvider:
                  help_text=_('Percentage'),
                  required=False
              )),
+            ('_availability_date',
+             forms.DateField(
+                 label=_('Available until'),
+                 help_text=_('Users will not be able to choose this payment provider after the given date.'),
+                 required=False,
+                 widget=forms.DateInput(attrs={'class': 'datepickerfield'})
+             )),
             ('_fee_reverse_calc',
              forms.BooleanField(
                  label=_('Calculate the fee from the total value including the fee.'),
@@ -190,6 +198,13 @@ class BasePaymentProvider:
         form.fields = self.payment_form_fields
         return form
 
+    def _is_still_available(self):
+        availability_date = self.settings.get('_availability_date', as_type=datetime)
+        if availability_date is not None and datetime.now() > availability_date:
+            return False
+        else:
+            return True
+
     def is_allowed(self, request: HttpRequest) -> bool:
         """
         You can use this method to disable this payment provider for certain groups
@@ -199,7 +214,7 @@ class BasePaymentProvider:
 
         The default implementation always returns ``True``.
         """
-        return True
+        return self._is_still_available()
 
     def payment_form_render(self, request: HttpRequest) -> str:
         """
@@ -339,7 +354,7 @@ class BasePaymentProvider:
 
         :param order: The order object
         """
-        return True
+        return self._is_still_available()
 
     def order_can_retry(self, order: Order) -> bool:
         """
