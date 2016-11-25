@@ -349,6 +349,20 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 23)
 
+    def test_quota_partly_multiple_products(self):
+        self.quota_tickets.size = 1
+        self.quota_tickets.save()
+        self.quota_tickets.items.add(self.shirt)
+        self.quota_tickets.variations.add(self.shirt_red)
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+
     def test_renew_in_time(self):
         cp = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
