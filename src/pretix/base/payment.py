@@ -200,10 +200,9 @@ class BasePaymentProvider:
 
     def _is_still_available(self):
         availability_date = self.settings.get('_availability_date', as_type=datetime)
-        if availability_date is not None and datetime.now() > availability_date:
-            return False
-        else:
-            return True
+        if availability_date:
+            return availability_date >= datetime.now()
+        return True
 
     def is_allowed(self, request: HttpRequest) -> bool:
         """
@@ -211,8 +210,6 @@ class BasePaymentProvider:
         of users, products or other criteria. If this method returns ``False``, the
         user will not be able to select this payment method. This will only be called
         during checkout, not on retrying.
-
-        The default implementation always returns ``True``.
         """
         return self._is_still_available()
 
@@ -349,8 +346,6 @@ class BasePaymentProvider:
         """
         Will be called to check whether it is allowed to change the payment method of
         an order to this one.
-
-        The default implementation always returns ``True``.
 
         :param order: The order object
         """

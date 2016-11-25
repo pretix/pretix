@@ -1,7 +1,7 @@
-from decimal import Decimal
-
 import datetime
+from decimal import Decimal
 import pytest
+
 from django.utils.timezone import now
 from tests.testdummy.payment import DummyPaymentProvider
 
