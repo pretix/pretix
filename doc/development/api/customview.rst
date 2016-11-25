@@ -84,13 +84,14 @@ view if you want pretix's default behavior::
     from pretix.presale.utils import event_view
 
     @event_view
-    def event_view(request, *args, **kwargs):
+    def some_event_view(request, *args, **kwargs):
         ...
 
 This decorator will check the URL arguments for their ``event`` and ``organizer`` parameters and
 correctly ensure that:
 
-* The requested event exists and is activated
+* The requested event exists
+* The requested event is activated (can be overridden by decorating with ``@event_view(require_live=False)``)
 * The event is accessed via the domain it should be accessed
 * The ``request.event`` attribute contains the correct ``Event`` object
 * The ``request.organizer`` attribute contains the correct ``Organizer`` object

@@ -12,7 +12,7 @@ from pretix.multidomain.urlreverse import get_domain
 from pretix.presale.signals import process_request, process_response
 
 
-def _detect_event(request):
+def _detect_event(request, require_live=True):
     url = resolve(request.path_info)
     try:
         if hasattr(request, 'organizer'):
@@ -58,7 +58,7 @@ def _detect_event(request):
             # Restrict locales to the ones available for this event
             LocaleMiddleware().process_request(request)
 
-            if not request.event.live:
+            if require_live and not request.event.live:
                 if not request.user.is_authenticated or not EventPermission.objects.filter(
                         event=request.event, user=request.user).exists():
                     raise PermissionDenied(_('The selected ticket shop is currently not available.'))
@@ -73,14 +73,19 @@ def _detect_event(request):
         raise Http404(_('The selected organizer was not found.'))
 
 
-def event_view(func):
-    def wrap(request, *args, **kwargs):
-        ret = _detect_event(request)
-        if ret:
-            return ret
-        else:
-            response = func(request=request, *args, **kwargs)
-            for receiver, r in process_response.send(request.event, request=request, response=response):
-                response = r
-            return response
-    return wrap
+def event_view(function=None, require_live=True):
+    def event_view_wrapper(func, require_live=require_live):
+        def wrap(request, *args, **kwargs):
+            ret = _detect_event(request, require_live=require_live)
+            if ret:
+                return ret
+            else:
+                response = func(request=request, *args, **kwargs)
+                for receiver, r in process_response.send(request.event, request=request, response=response):
+                    response = r
+                return response
+        return wrap
+
+    if function:
+        return event_view_wrapper(function, require_live=require_live)
+    return event_view_wrapper
