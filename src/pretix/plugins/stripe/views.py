@@ -16,7 +16,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 
 @csrf_exempt
 @require_POST
-@event_view
+@event_view(require_live=False)
 def webhook(request, *args, **kwargs):
     event_json = json.loads(request.body.decode('utf-8'))
 
