@@ -19,9 +19,11 @@
                     <th>{% trans "Product" %}</th>
                     <th>{% trans "Canceled" %}</th>
                     <th>{% trans "Refunded" %}</th>
+                    <th>{% trans "Expired" %}</th>
                     <th colspan="3">{% trans "Purchased" %}</th>
                 </tr>
                 <tr>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -37,6 +39,7 @@
                             <th>{{ tup.0.name }}</th>
                             <th>{{ tup.0.num_canceled|togglesum }}</th>
                             <th>{{ tup.0.num_refunded|togglesum }}</th>
+                            <th>{{ tup.0.num_expired|togglesum }}</th>
                             <th>{{ tup.0.num_pending|togglesum }}</th>
                             <th>{{ tup.0.num_paid|togglesum }}</th>
                             <th>{{ tup.0.num_total|togglesum }}</th>
@@ -56,7 +59,12 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=ne&amp;provider={{ item.provider }}">
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=e&amp;provider={{ item.provider }}">
+                                    {{ item.num_expired|togglesum }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=n&amp;provider={{ item.provider }}">
                                     {{ item.num_pending|togglesum }}
                                 </a>
                             </td>
@@ -66,9 +74,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ listurl }}?item={{ item.id }}&amp;provider={{ item.provider }}">
-                                    {{ item.num_total|togglesum }}
-                                </a>
+                                {{ item.num_total|togglesum }}
                             </td>
                         </tr>
                         {% if item.has_variations %}
@@ -77,6 +83,7 @@
                                     <td>{{ var }}</td>
                                     <td>{{ var.num_canceled|togglesum }}</td>
                                     <td>{{ var.num_refunded|togglesum }}</td>
+                                    <td>{{ var.num_expired|togglesum }}</td>
                                     <td>{{ var.num_pending|togglesum }}</td>
                                     <td>{{ var.num_paid|togglesum }}</td>
                                     <td>{{ var.num_total|togglesum }}</td>
@@ -91,6 +98,7 @@
                     <th>{% trans "Total" %}</th>
                     <th>{{ total.num_canceled|togglesum }}</th>
                     <th>{{ total.num_refunded|togglesum }}</th>
+                    <th>{{ total.num_expired|togglesum }}</th>
                     <th>{{ total.num_paid|togglesum }}</th>
                     <th>{{ total.num_pending|togglesum }}</th>
                     <th>{{ total.num_total|togglesum }}</th>
