@@ -23,6 +23,7 @@
         <fieldset>
             <legend>{% trans "Voucher details" %}</legend>
             {% bootstrap_field form.code layout="horizontal" %}
+            {% bootstrap_field form.max_usages layout="horizontal" %}
             {% bootstrap_field form.valid_until layout="horizontal" %}
             {% bootstrap_field form.block_quota layout="horizontal" %}
             {% bootstrap_field form.allow_ignore_quota layout="horizontal" %}

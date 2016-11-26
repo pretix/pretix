@@ -23,7 +23,7 @@ class VoucherForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'code', 'valid_until', 'block_quota', 'allow_ignore_quota', 'price', 'tag',
-            'comment'
+            'comment', 'max_usages'
         ]
         widgets = {
             'valid_until': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
@@ -81,11 +81,20 @@ class VoucherForm(I18nModelForm):
             self.instance.item = None
             self.instance.variation = None
 
+        if data['max_usages'] < self.instance.redeemed:
+            raise ValidationError(
+                _('This voucher has already been redeemed %(redeemed)s times. You cannot reduce the maximum number of '
+                  'usages below this number.'),
+                params={
+                    'redeemed': self.instance.redeemed
+                }
+            )
+
         if 'codes' in data:
             data['codes'] = [a.strip() for a in data.get('codes', '').strip().split("\n") if a]
-            cnt = len(data['codes'])
+            cnt = len(data['codes']) * data['max_usages']
         else:
-            cnt = 1
+            cnt = data['max_usages']
 
         if self._clean_quota_needs_checking(data):
             self._clean_quota_check(data, cnt)
@@ -178,10 +187,17 @@ class VoucherBulkForm(VoucherForm):
         model = Voucher
         localized_fields = '__all__'
         fields = [
-            'valid_until', 'block_quota', 'allow_ignore_quota', 'price', 'tag', 'comment'
+            'valid_until', 'block_quota', 'allow_ignore_quota', 'price', 'tag', 'comment',
+            'max_usages'
         ]
         widgets = {
             'valid_until': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+        }
+        labels = {
+            'max_usages': _('Maximum usages per voucher')
+        }
+        help_texts = {
+            'max_usages': _('Number of times times EACH of these vouchers can be redeemed.')
         }
 
     def clean(self):

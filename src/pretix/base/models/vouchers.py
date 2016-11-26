@@ -30,7 +30,9 @@ class Voucher(LoggedModel):
     :type event: Event
     :param code: The secret voucher code
     :type code: str
-    :param redeemed: Whether or not this voucher has already been redeemed
+    :param max_usages: The number of times this voucher can be redeemed
+    :type max_usages: int
+    :param redeemed: The number of times this voucher already has been redeemed
     :type redeemed: bool
     :param valid_until: The expiration date of this voucher (optional)
     :type valid_until: datetime
@@ -68,10 +70,14 @@ class Voucher(LoggedModel):
         max_length=255, default=generate_code,
         db_index=True,
     )
-    redeemed = models.BooleanField(
+    max_usages = models.PositiveIntegerField(
+        verbose_name=_("Maximum usages"),
+        help_text=_("Number of times this voucher can be redeemed."),
+        default=1
+    )
+    redeemed = models.PositiveIntegerField(
         verbose_name=_("Redeemed"),
-        default=False,
-        db_index=True
+        default=0
     )
     valid_until = models.DateTimeField(
         blank=True, null=True, db_index=True,
@@ -197,7 +203,7 @@ class Voucher(LoggedModel):
         Returns True if a voucher has not yet been redeemed, but is still
         within its validity (if valid_until is set).
         """
-        if self.redeemed:
+        if self.redeemed >= self.max_usages:
             return False
         if self.valid_until and self.valid_until < now():
             return False
