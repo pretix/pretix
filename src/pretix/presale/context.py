@@ -28,14 +28,14 @@ def contextprocessor(request):
     else:
         pretix_settings = GlobalSettingsObject().settings
 
-    text = str(pretix_settings.get('footer_text', as_type=LazyI18nString))
-    link = str(pretix_settings.get('footer_link', as_type=LazyI18nString))
+    text = pretix_settings.get('footer_text', as_type=LazyI18nString)
+    link = pretix_settings.get('footer_link', as_type=LazyI18nString)
 
     if text:
         if link:
-            _footer.append({'url': link, 'label': text})
+            _footer.append({'url': str(link), 'label': str(text)})
         else:
-            ctx['footer_text'] = text
+            ctx['footer_text'] = str(text)
 
     if hasattr(request, 'event'):
         for receiver, response in html_head.send(request.event, request=request):
