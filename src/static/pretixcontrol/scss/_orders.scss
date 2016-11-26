@@ -15,6 +15,9 @@
     span.sum-net, span.sum-gross {
         display: none;
     }
+    tfoot {
+        border-top: 2px solid #ddd;
+    }
 }
 
 #sumtoggle {
