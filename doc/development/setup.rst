@@ -36,18 +36,18 @@ automatically). If you are working on Ubuntu or Debian, we strongly recommend up
 your pip and setuptools installation inside the virtual environment, otherwise some of
 the dependencies might fail::
 
-    pip install -U pip setuptools==28.6.1
+    pip3 install -U pip setuptools==28.6.1
 
 Working with the code
 ---------------------
 The first thing you need are all the main application's dependencies::
 
     cd src/
-    pip install -r requirements.txt -r requirements/dev.txt
+    pip3 install -r requirements.txt -r requirements/dev.txt
 
 If you are working with Python 3.4, you will also need (you can skip this for Python 3.5)::
 
-    pip install -r requirements/py34.txt
+    pip3 install -r requirements/py34.txt
 
 Next, you need to copy the SCSS files from the source folder to the STATIC_ROOT directory::
 
@@ -91,7 +91,7 @@ Before you check in your code into git, always run the static checkers and unit 
     py.test
 
 .. note:: If you have multiple CPU cores and want to speed up the test suite, you can install the python
-          package ``pytest-xdist`` using ``pip install pytest-xdist`` and then run ``py.test -n NUM`` with
+          package ``pytest-xdist`` using ``pip3 install pytest-xdist`` and then run ``py.test -n NUM`` with
           ``NUM`` being the number of threads you want to use.
 
 It is a good idea to put this command into your git hook ``.git/hooks/pre-commit``,
@@ -137,7 +137,7 @@ Make sure you have your virtual python environment activated (see above). Then, 
 packages by executing::
 
     cd doc/
-    pip install -r requirements.txt
+    pip3 install -r requirements.txt
 
 To build the documentation, run the following command from the ``doc/`` directory::
 

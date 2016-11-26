@@ -114,7 +114,7 @@ python installation::
 
     $ virtualenv -p python3 /var/pretix/venv
     $ source /var/pretix/venv/bin/activate
-    (venv)$ pip install -U pip setuptools wheel
+    (venv)$ pip3 install -U pip setuptools wheel
 
 We now clone pretix and install its Python dependencies (replace ``mysql`` with ``postgres`` if you're running
 PostgreSQL)::
