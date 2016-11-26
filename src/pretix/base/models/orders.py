@@ -7,6 +7,7 @@ from typing import List, Union
 import pytz
 from django.conf import settings
 from django.db import models
+from django.db.models import F
 from django.utils.crypto import get_random_string
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
@@ -459,6 +460,8 @@ class OrderPosition(AbstractPosition):
 
     @classmethod
     def transform_cart_positions(cls, cp: List, order) -> list:
+        from . import Voucher
+
         ops = []
         for cartpos in cp:
             op = OrderPosition(order=order)
@@ -471,8 +474,7 @@ class OrderPosition(AbstractPosition):
                 answ.cartposition = None
                 answ.save()
             if cartpos.voucher:
-                cartpos.voucher.redeemed = True
-                cartpos.voucher.save()
+                Voucher.objects.filter(pk=cartpos.voucher.pk).update(redeemed=F('redeemed') + 1)
             cartpos.delete()
         return ops
 

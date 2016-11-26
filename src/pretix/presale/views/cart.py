@@ -30,21 +30,14 @@ class CartActionMixin:
     def get_error_url(self):
         return self.get_next_url()
 
-    def _item_from_post_value(self, key, value):
+    def _item_from_post_value(self, key, value, voucher=None):
         if value.strip() == '' or '_' not in key:
             return
-
-        parts = key.split("_")
-        if parts[-1] == "voucher":
-            voucher = value
-            value = 1
-            parts = parts[:-1]
-        else:
-            voucher = None
 
         if not key.startswith('item_') and not key.startswith('variation_'):
             return
 
+        parts = key.split("_")
         try:
             amount = int(value)
         except ValueError:
@@ -86,7 +79,7 @@ class CartActionMixin:
         req_items = list(self.request.POST.lists())
         if '_voucher_item' in self.request.POST and '_voucher_code' in self.request.POST:
             req_items.append((
-                '%s_voucher' % self.request.POST['_voucher_item'], (self.request.POST['_voucher_code'],)
+                '%s' % self.request.POST['_voucher_item'], ('1',)
             ))
             pass
 
@@ -94,7 +87,7 @@ class CartActionMixin:
         for key, values in req_items:
             for value in values:
                 try:
-                    item = self._item_from_post_value(key, value)
+                    item = self._item_from_post_value(key, value, self.request.POST.get('_voucher_code'))
                 except CartError as e:
                     messages.error(self.request, str(e))
                     return
@@ -169,6 +162,7 @@ class RedeemView(EventViewMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         context['voucher'] = self.voucher
+        context['max_times'] = self.voucher.max_usages - self.voucher.redeemed
 
         # Fetch all items
         items = self.request.event.items.all().filter(
@@ -242,10 +236,18 @@ class RedeemView(EventViewMixin, TemplateView):
             v = v.strip()
             try:
                 self.voucher = Voucher.objects.get(code=v, event=request.event)
-                if self.voucher.redeemed:
+                if self.voucher.redeemed >= self.voucher.max_usages:
                     err = error_messages['voucher_redeemed']
                 if self.voucher.valid_until is not None and self.voucher.valid_until < now():
                     err = error_messages['voucher_expired']
+
+                redeemed_in_carts = CartPosition.objects.filter(
+                    Q(voucher=self.voucher) & Q(event=request.event) &
+                    (Q(expires__gte=now()) | Q(cart_id=request.session.session_key))
+                )
+                v_avail = self.voucher.max_usages - self.voucher.redeemed - redeemed_in_carts.count()
+                if v_avail < 1:
+                    err = error_messages['voucher_redeemed']
             except Voucher.DoesNotExist:
                 err = error_messages['voucher_invalid']
         else:

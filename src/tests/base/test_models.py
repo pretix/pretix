@@ -234,6 +234,37 @@ class QuotaTestCase(BaseQuotaTestCase):
         v.save()
         self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
 
+    def test_voucher_quota_multiuse(self):
+        self.quota.size = 5
+        self.quota.variations.add(self.var1)
+        self.quota.save()
+        Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, max_usages=5, redeemed=2)
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 2))
+        Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, max_usages=2)
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
+
+    def test_voucher_multiuse_count_overredeemed(self):
+        Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, max_usages=2, redeemed=4)
+        self.assertEqual(self.quota.count_blocking_vouchers(), 0)
+
+    def test_voucher_quota_multiuse_multiproduct(self):
+        q2 = Quota.objects.create(event=self.event, name="foo", size=10)
+        q2.items.add(self.item1)
+        self.quota.size = 5
+        self.quota.items.add(self.item1)
+        self.quota.items.add(self.item2)
+        self.quota.items.add(self.item3)
+        self.quota.variations.add(self.var1)
+        self.quota.variations.add(self.var2)
+        self.quota.variations.add(self.var3)
+        self.quota.save()
+        Voucher.objects.create(item=self.item1, event=self.event, block_quota=True, max_usages=5, redeemed=2)
+        Voucher.objects.create(item=self.item2, variation=self.var2, event=self.event, block_quota=True, max_usages=5,
+                               redeemed=2)
+        Voucher.objects.create(item=self.item2, variation=self.var2, event=self.event, block_quota=True, max_usages=5,
+                               redeemed=2)
+        self.assertEqual(self.quota.count_blocking_vouchers(), 9)
+
     def test_voucher_quota_expiring_soon(self):
         self.quota.variations.add(self.var1)
         self.quota.size = 1

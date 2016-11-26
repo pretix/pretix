@@ -8,6 +8,7 @@ from typing import List, Optional
 import pytz
 from celery.exceptions import MaxRetriesExceededError
 from django.db import transaction
+from django.db.models import F, Q
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.timezone import make_aware, now
@@ -18,7 +19,7 @@ from pretix.base.i18n import (
 )
 from pretix.base.models import (
     CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Quota,
-    User,
+    User, Voucher,
 )
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.payment import BasePaymentProvider
@@ -46,11 +47,15 @@ error_messages = {
               'server was too busy. Please try again.'),
     'not_started': _('The presale period for this event has not yet started.'),
     'ended': _('The presale period has ended.'),
-    'voucher_invalid': _('This voucher code is not known in our database.'),
-    'voucher_redeemed': _('This voucher code has already been used an can only be used once.'),
-    'voucher_expired': _('This voucher is expired.'),
-    'voucher_invalid_item': _('This voucher is not valid for this item.'),
-    'voucher_required': _('You need a valid voucher code to order one of the products in your cart.'),
+    'voucher_invalid': _('The voucher code used for one of the items in your cart is not known in our database.'),
+    'voucher_redeemed': _('The voucher code used for one of the items in your cart has already been used the maximum '
+                          'number of times allowed. We removed this item from your cart.'),
+    'voucher_expired': _('The voucher code used for one of the items in your cart is expired. We removed this item '
+                         'from your cart.'),
+    'voucher_invalid_item': _('The voucher code used for one of the items in your cart is not valid for this item. We '
+                              'removed this item from your cart.'),
+    'voucher_required': _('You need a valid voucher code to order one of the products in your cart. We removed this '
+                          'item from your cart.'),
 }
 
 logger = logging.getLogger(__name__)
@@ -163,8 +168,7 @@ def _cancel_order(order, user=None):
 
     for position in order.positions.all():
         if position.voucher:
-            position.voucher.redeemed = False
-            position.voucher.save()
+            Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=F('redeemed') - 1)
 
     return order
 
@@ -184,7 +188,6 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
     err = None
     _check_date(event, now_dt)
 
-    voucherids = set()
     for i, cp in enumerate(positions):
         if not cp.item.active or (cp.variation and not cp.variation.active):
             err = err or error_messages['unavailable']
@@ -193,11 +196,14 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
 
         if cp.voucher:
-            if cp.voucher.redeemed or cp.voucher_id in voucherids:
+            redeemed_in_carts = CartPosition.objects.filter(
+                Q(voucher=cp.voucher) & Q(event=event) & Q(expires__gte=now_dt)
+            ).exclude(pk=cp.pk)
+            v_avail = cp.voucher.max_usages - cp.voucher.redeemed - redeemed_in_carts.count()
+            if v_avail < 1:
                 err = err or error_messages['voucher_redeemed']
-                cp.delete()  # Sorry! But you should have never gotten into this state at all.
+                cp.delete()  # Sorry!
                 continue
-            voucherids.add(cp.voucher_id)
 
         if cp.item.require_voucher and cp.voucher is None:
             cp.delete()
@@ -225,6 +231,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         if cp.voucher:
             if cp.voucher.valid_until and cp.voucher.valid_until < now_dt:
                 err = err or error_messages['voucher_expired']
+                cp.delete()
                 continue
             if cp.voucher.price is not None:
                 price = cp.voucher.price

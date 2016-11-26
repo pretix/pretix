@@ -305,7 +305,7 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         assert "14.00" not in html.rendered_content
 
     def test_fail_redeemed(self):
-        self.v.redeemed = True
+        self.v.redeemed = 1
         self.v.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code), follow=True)
         assert "alert-danger" in html.rendered_content

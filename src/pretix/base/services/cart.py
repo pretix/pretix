@@ -33,7 +33,8 @@ error_messages = {
     'ended': _('The presale period has ended.'),
     'price_too_high': _('The entered price is to high.'),
     'voucher_invalid': _('This voucher code is not known in our database.'),
-    'voucher_redeemed': _('This voucher code has already been used and can only be used once.'),
+    'voucher_redeemed': _('This voucher code has already been used the maximum number of times allowed.'),
+    'voucher_redeemed_partial': _('This voucher code can only be redeemed %d more times.'),
     'voucher_double': _('You already used this voucher code. Remove the associated line from your '
                         'cart if you want to use it for a different product.'),
     'voucher_expired': _('This voucher is expired.'),
@@ -114,17 +115,26 @@ def _add_new_items(event: Event, items: List[dict],
         if i.get('voucher'):
             try:
                 voucher = Voucher.objects.get(code=i.get('voucher').strip(), event=event)
-                if voucher.redeemed:
+                if voucher.redeemed >= voucher.max_usages:
                     return error_messages['voucher_redeemed']
                 if voucher.valid_until is not None and voucher.valid_until < now_dt:
                     return error_messages['voucher_expired']
                 if not voucher.applies_to(item, variation):
                     return error_messages['voucher_invalid_item']
-                doubleuse = CartPosition.objects.filter(voucher=voucher, cart_id=cart_id, event=event)
+
+                redeemed_in_carts = CartPosition.objects.filter(
+                    Q(voucher=voucher) & Q(event=event) &
+                    (Q(expires__gte=now_dt) | Q(cart_id=cart_id))
+                )
                 if 'cp' in i:
-                    doubleuse = doubleuse.exclude(pk=i['cp'].pk)
-                if doubleuse.exists():
-                    return error_messages['voucher_double']
+                    redeemed_in_carts = redeemed_in_carts.exclude(pk=i['cp'].pk)
+                v_avail = voucher.max_usages - voucher.redeemed - redeemed_in_carts.count()
+
+                if v_avail < 1:
+                    return error_messages['voucher_redeemed']
+                if i['count'] > v_avail:
+                    return error_messages['voucher_redeemed_partial'] % v_avail
+
             except Voucher.DoesNotExist:
                 return error_messages['voucher_invalid']
 

@@ -4,8 +4,9 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Tuple
 
+from django.conf import settings
 from django.db import models
-from django.db.models import Q
+from django.db.models import F, Func, Q, Sum
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -577,12 +578,18 @@ class Quota(LoggedModel):
         from pretix.base.models import Voucher
 
         now_dt = now_dt or now()
+        if 'sqlite3' in settings.DATABASES['default']['ENGINE']:
+            func = 'MAX'
+        else:
+            func = 'GREATEST'
+
         return Voucher.objects.filter(
             Q(block_quota=True) &
-            Q(redeemed=False) &
             Q(Q(valid_until__isnull=True) | Q(valid_until__gte=now_dt)) &
             Q(Q(self._position_lookup) | Q(quota=self))
-        ).values('id').distinct().count()
+        ).values('id').aggregate(
+            free=Sum(Func(F('max_usages') - F('redeemed'), 0, function=func))
+        )['free'] or 0
 
     def count_in_cart(self, now_dt: datetime=None) -> int:
         from pretix.base.models import CartPosition
@@ -617,9 +624,9 @@ class Quota(LoggedModel):
         return (
             (  # Orders for items which do not have any variations
                Q(variation__isnull=True) &
-               Q(item__quotas__in=[self])
+               Q(item__quotas=self)
             ) | (  # Orders for items which do have any variations
-                   Q(variation__quotas__in=[self])
+                   Q(variation__quotas=self)
             )
         )
 
