@@ -70,7 +70,7 @@ We now create a config directory and config file for pretix::
 
     # mkdir /etc/pretix
     # touch /etc/pretix/pretix.cfg
-    # chown -R pretix:pretix/etc/pretix/
+    # chown -R pretix:pretix /etc/pretix/
     # chmod 0600 /etc/pretix/pretix.cfg
 
 Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following content (adjusted to your environment)::
