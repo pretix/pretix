@@ -1,14 +1,16 @@
 from collections import OrderedDict
-from datetime import datetime
+from datetime import date
 from decimal import Decimal
 from typing import Any, Dict
 
+import pytz
 from django import forms
 from django.contrib import messages
 from django.dispatch import receiver
 from django.forms import Form
 from django.http import HttpRequest
 from django.template.loader import get_template
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.decimal import round_decimal
@@ -198,10 +200,12 @@ class BasePaymentProvider:
         form.fields = self.payment_form_fields
         return form
 
-    def _is_still_available(self):
-        availability_date = self.settings.get('_availability_date', as_type=datetime)
+    def _is_still_available(self, now_dt=None):
+        now_dt = now_dt or now()
+        tz = pytz.timezone(self.event.settings.timezone)
+        availability_date = self.settings.get('_availability_date', as_type=date)
         if availability_date:
-            return availability_date >= datetime.now()
+            return availability_date >= now_dt.astimezone(tz).date()
         return True
 
     def is_allowed(self, request: HttpRequest) -> bool:
