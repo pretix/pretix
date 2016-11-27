@@ -553,10 +553,10 @@ class CartTest(CartTestMixin, TestCase):
         )
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
-            '_voucher_code': v.code,
         }, follow=True)
         obj = CartPosition.objects.get(id=cp1.id)
         self.assertGreater(obj.expires, now())
+        self.assertEqual(obj.voucher, v)
 
     def test_voucher_variation(self):
         v = Voucher.objects.create(item=self.shirt, variation=self.shirt_red, event=self.event)
@@ -815,10 +815,9 @@ class CartTest(CartTestMixin, TestCase):
             '_voucher_code': v.code,
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertIn('already been used', doc.select('.alert-danger')[0].text)
+        self.assertIn('only be redeemed 1 more time', doc.select('.alert-danger')[0].text)
         positions = CartPosition.objects.filter(cart_id=self.session_key, event=self.event)
-        assert positions.count() == 1
-        assert all(cp.voucher == v for cp in positions)
+        assert positions.count() == 0
 
     def test_voucher_multiuse_redeemed(self):
         v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
@@ -857,9 +856,9 @@ class CartTest(CartTestMixin, TestCase):
             '_voucher_code': v.code,
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertIn('already been used', doc.select('.alert-danger')[0].text)
+        self.assertIn('only be redeemed 1 more time', doc.select('.alert-danger')[0].text)
         positions = CartPosition.objects.filter(cart_id=self.session_key, event=self.event)
-        assert positions.count() == 1
+        assert positions.count() == 0
 
     def test_voucher_multiuse_redeemed_in_other_cart(self):
         v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,

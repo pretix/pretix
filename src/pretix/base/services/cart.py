@@ -37,8 +37,6 @@ error_messages = {
     'voucher_invalid': _('This voucher code is not known in our database.'),
     'voucher_redeemed': _('This voucher code has already been used the maximum number of times allowed.'),
     'voucher_redeemed_partial': _('This voucher code can only be redeemed %d more times.'),
-    'voucher_double': _('You already used this voucher code. Remove the associated line from your '
-                        'cart if you want to use it for a different product.'),
     'voucher_expired': _('This voucher is expired.'),
     'voucher_invalid_item': _('This voucher is not valid for this product.'),
     'voucher_required': _('You need a valid voucher code to order this product.'),
@@ -111,6 +109,7 @@ def _parse_items_and_check_constraints(event: Event, items: List[dict], cart_id:
     variations_cache = {v.id: v for v in variations_query}
 
     quotadiff = Counter()
+    vouchers = Counter()
 
     for i in items:
         # Check whether the specified items are part of what we just fetched from the database
@@ -129,24 +128,25 @@ def _parse_items_and_check_constraints(event: Event, items: List[dict], cart_id:
             try:
                 voucher = Voucher.objects.get(code=i.get('voucher').strip(), event=event)
                 if voucher.redeemed >= voucher.max_usages:
-                    return error_messages['voucher_redeemed']
+                    raise CartError(error_messages['voucher_redeemed'])
                 if voucher.valid_until is not None and voucher.valid_until < now_dt:
                     raise CartError(error_messages['voucher_expired'])
                 if not voucher.applies_to(item, variation):
-                    return error_messages['voucher_invalid_item']
+                    raise CartError(error_messages['voucher_invalid_item'])
 
                 redeemed_in_carts = CartPosition.objects.filter(
-                    Q(voucher=voucher) & Q(event=event) &
-                    (Q(expires__gte=now_dt) | Q(cart_id=cart_id))
+                    Q(voucher=voucher) & Q(event=event) & Q(expires__gte=now_dt)
                 )
                 if 'cp' in i:
-                    redeemed_in_carts = redeemed_in_carts.exclude(pk=i['cp'].pk)
+                    redeemed_in_carts = redeemed_in_carts.exclude(pk=i['_cp'].pk)
                 v_avail = voucher.max_usages - voucher.redeemed - redeemed_in_carts.count()
 
                 if v_avail < 1:
-                    return error_messages['voucher_redeemed']
-                if i['count'] > v_avail:
-                    return error_messages['voucher_redeemed_partial'] % v_avail
+                    raise CartError(error_messages['voucher_redeemed'])
+                if i['count'] > v_avail - vouchers[voucher]:
+                    raise CartError(error_messages['voucher_redeemed_partial'] % v_avail)
+
+                vouchers[voucher] += i['count']
             except Voucher.DoesNotExist:
                 raise CartError(error_messages['voucher_invalid'])
 
@@ -200,7 +200,7 @@ def _parse_items_and_check_constraints(event: Event, items: List[dict], cart_id:
 
 
 def _check_quota_and_create_positions(event: Event, items: List[dict], cart_id: str, now_dt: datetime,
-                                      expiry: datetime, quotadiff: Counter,):
+                                      expiry: datetime, quotadiff: Counter):
     """
     This method takes the modified items and the quotadiff from _parse_items_and_check_constraints
     and then

@@ -51,6 +51,8 @@ error_messages = {
     'voucher_invalid': _('The voucher code used for one of the items in your cart is not known in our database.'),
     'voucher_redeemed': _('The voucher code used for one of the items in your cart has already been used the maximum '
                           'number of times allowed. We removed this item from your cart.'),
+    'voucher_redeemed_partial': _('The voucher code used for one of the items in your cart can only be redeemed %d '
+                                  'more times. We removed this item from your cart.'),
     'voucher_expired': _('The voucher code used for one of the items in your cart is expired. We removed this item '
                          'from your cart.'),
     'voucher_invalid_item': _('The voucher code used for one of the items in your cart is not valid for this item. We '
@@ -207,16 +209,6 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             continue
         cp._quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
 
-        if cp.voucher:
-            redeemed_in_carts = CartPosition.objects.filter(
-                Q(voucher=cp.voucher) & Q(event=event) & Q(expires__gte=now_dt)
-            ).exclude(pk=cp.pk)
-            v_avail = cp.voucher.max_usages - cp.voucher.redeemed - redeemed_in_carts.count()
-            if v_avail < 1:
-                err = err or error_messages['voucher_redeemed']
-                cp.delete()  # Sorry!
-                continue
-
         if cp.item.require_voucher and cp.voucher is None:
             cp.delete()
             err = error_messages['voucher_required']
@@ -301,7 +293,11 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 def _check_quota_on_expired_positions(event: Event, positions: List[CartPosition], now_dt: datetime):
     err = None
     quotadiff = Counter()
+    vouchers = Counter()
     for cp in positions:
+        if not cp.id:
+            continue
+
         ignore_all_quotas = cp.expires >= now_dt or (
             cp.voucher and (cp.voucher.allow_ignore_quota or (cp.voucher.block_quota and cp.voucher.quota is None)))
 
@@ -328,6 +324,24 @@ def _check_quota_on_expired_positions(event: Event, positions: List[CartPosition
             quotas_ok[quota] = count
 
     for cp in positions:
+        if not cp.id:
+            continue
+
+        if cp.voucher:
+            redeemed_in_carts = CartPosition.objects.filter(
+                Q(voucher=cp.voucher) & Q(event=event) & Q(expires__gte=now_dt)
+            ).exclude(pk__in=[cp2.pk for cp2 in positions])
+            v_avail = cp.voucher.max_usages - cp.voucher.redeemed - redeemed_in_carts.count()
+            if v_avail < 1:
+                err = err or error_messages['voucher_redeemed']
+                cp.delete()  # Sorry!
+                continue
+            if v_avail - vouchers[cp.voucher] < 1:
+                err = err or (error_messages['voucher_redeemed_partial'] % v_avail)
+                cp.delete()  # Sorry!
+                continue
+            vouchers[cp.voucher] += 1
+
         if cp._quotas:
             if min(quotas_ok[q] for q in cp._quotas) > 0:
                 cp.expires = now_dt + timedelta(minutes=event.settings.get('reservation_time', as_type=int))
