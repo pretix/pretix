@@ -1,13 +1,16 @@
 from collections import OrderedDict
+from datetime import date
 from decimal import Decimal
 from typing import Any, Dict
 
+import pytz
 from django import forms
 from django.contrib import messages
 from django.dispatch import receiver
 from django.forms import Form
 from django.http import HttpRequest
 from django.template.loader import get_template
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.decimal import round_decimal
@@ -86,7 +89,7 @@ class BasePaymentProvider:
         settings keys and the values should be corresponding Django form fields.
 
         The default implementation returns the appropriate fields for the ``_enabled``,
-        ``_fee_abs`` and ``_fee_percent`` settings mentioned above.
+        ``_fee_abs``, ``_fee_percent`` and ``_availability_date`` settings mentioned above.
 
         We suggest that you return an ``OrderedDict`` object instead of a dictionary
         and make use of the default implementation. Your implementation could look
@@ -125,6 +128,13 @@ class BasePaymentProvider:
                  label=_('Additional fee'),
                  help_text=_('Percentage'),
                  required=False
+             )),
+            ('_availability_date',
+             forms.DateField(
+                 label=_('Available until'),
+                 help_text=_('Users will not be able to choose this payment provider after the given date.'),
+                 required=False,
+                 widget=forms.DateInput(attrs={'class': 'datepickerfield'})
              )),
             ('_fee_reverse_calc',
              forms.BooleanField(
@@ -190,6 +200,14 @@ class BasePaymentProvider:
         form.fields = self.payment_form_fields
         return form
 
+    def _is_still_available(self, now_dt=None):
+        now_dt = now_dt or now()
+        tz = pytz.timezone(self.event.settings.timezone)
+        availability_date = self.settings.get('_availability_date', as_type=date)
+        if availability_date:
+            return availability_date >= now_dt.astimezone(tz).date()
+        return True
+
     def is_allowed(self, request: HttpRequest) -> bool:
         """
         You can use this method to disable this payment provider for certain groups
@@ -197,9 +215,9 @@ class BasePaymentProvider:
         user will not be able to select this payment method. This will only be called
         during checkout, not on retrying.
 
-        The default implementation always returns ``True``.
+        The default implementation checks for the _availability_date setting to be either unset or in the future.
         """
-        return True
+        return self._is_still_available()
 
     def payment_form_render(self, request: HttpRequest) -> str:
         """
@@ -335,11 +353,11 @@ class BasePaymentProvider:
         Will be called to check whether it is allowed to change the payment method of
         an order to this one.
 
-        The default implementation always returns ``True``.
+        The default implementation checks for the _availability_date setting to be either unset or in the future.
 
         :param order: The order object
         """
-        return True
+        return self._is_still_available()
 
     def order_can_retry(self, order: Order) -> bool:
         """
