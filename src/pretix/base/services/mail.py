@@ -82,11 +82,15 @@ def mail(email: str, subject: str, template: str,
             if order:
                 body += "\r\n"
                 body += _(
-                    "You can view your order details at the following URL:\r\n{orderurl}."
-                ).format(event=event.name, orderurl=build_absolute_uri(order.event, 'presale:event.order', kwargs={
-                    'order': order.code,
-                    'secret': order.secret
-                }))
+                    "You can view your order details at the following URL:\n{orderurl}."
+                ).replace("\n", "\r\n").format(
+                    event=event.name, orderurl=build_absolute_uri(
+                        order.event, 'presale:event.order', kwargs={
+                            'order': order.code,
+                            'secret': order.secret
+                        }
+                    )
+                )
             body += "\r\n"
         return mail_send([email], subject, body, sender, event.id if event else None, headers)
 

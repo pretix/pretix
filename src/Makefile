@@ -6,7 +6,7 @@ localecompile:
 
 localegen:
 	./manage.py makemessages --all --ignore "pretix/helpers/*"
-	./manage.py makemessages --all -d djangojs --ignore "pretix/helpers/*"
+	./manage.py makemessages --all -d djangojs --ignore "pretix/helpers/*" --ignore "static/jsi18n/*"
 
 staticfiles: jsi18n
 	./manage.py collectstatic --noinput
