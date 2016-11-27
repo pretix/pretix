@@ -87,7 +87,7 @@ Example::
     port=3306
 
 ``backend``
-    One of ``mysql``, ``sqlite3``, ``oracle`` and ``postgresql_psycopg2``.
+    One of ``mysql``, ``sqlite3``, ``oracle`` and ``postgresql``.
     Default: ``sqlite3``.
 
     If you use MySQL, be sure to create your database using
