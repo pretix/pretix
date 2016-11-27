@@ -136,18 +136,23 @@ class OverviewReport(Report):
         headlinestyle = self.get_style()
         headlinestyle.fontSize = 15
         headlinestyle.fontName = 'OpenSansBd'
-        colwidths = [a * doc.width for a in (.30, .06, .08, .06, .08, .06, .08, .06, .08, .06, .08)]
+        colwidths = [
+            a * doc.width for a in (.25, 0.05, .075, 0.05, .075, 0.05, .075, 0.05, .075, 0.05, .075, 0.05, .075)
+        ]
         tstyledata = [
             ('SPAN', (1, 0), (2, 0)),
             ('SPAN', (3, 0), (4, 0)),
             ('SPAN', (5, 0), (6, 0)),
-            ('SPAN', (7, 0), (8, 0)),
-            ('SPAN', (9, 0), (10, 0)),
-            ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
-            ('ALIGN', (1, 1), (-1, -1), 'RIGHT'),
+            ('SPAN', (7, 0), (-1, 0)),
+            ('SPAN', (7, 1), (8, 1)),
+            ('SPAN', (9, 1), (10, 1)),
+            ('SPAN', (11, 1), (12, 1)),
+            ('ALIGN', (0, 0), (-1, 1), 'CENTER'),
+            ('ALIGN', (1, 2), (-1, -1), 'RIGHT'),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('FONTNAME', (0, 0), (-1, 0), 'OpenSansBd'),
+            ('FONTNAME', (0, 0), (-1, 1), 'OpenSansBd'),
             ('FONTNAME', (0, -1), (-1, -1), 'OpenSansBd'),
+            ('FONTSIZE', (0, 0), (-1, -1), 9)
         ]
 
         story = [
@@ -156,16 +161,20 @@ class OverviewReport(Report):
         ]
         tdata = [
             [
-                _('Product'), _('Total (pending or paid)'), '', _('Pending'), '', _('Canceled'), '', _('Refunded'), '',
-                _('Paid'), ''
+                _('Product'), _('Canceled'), '', _('Refunded'), '', _('Expired'), '', _('Purchased'),
+                '', '', '', '', ''
+            ],
+            [
+                '', '', '', '', '', '', '', _('Pending'), '', _('Paid'), '', _('Total'), ''
             ],
             [
                 '',
-                _('Number'), self.event.currency,
-                _('Number'), self.event.currency,
-                _('Number'), self.event.currency,
-                _('Number'), self.event.currency,
-                _('Number'), self.event.currency
+                _('#'), self.event.currency,
+                _('#'), self.event.currency,
+                _('#'), self.event.currency,
+                _('#'), self.event.currency,
+                _('#'), self.event.currency,
+                _('#'), self.event.currency,
             ],
         ]
 
@@ -176,42 +185,46 @@ class OverviewReport(Report):
                 tstyledata.append(('FONTNAME', (0, len(tdata)), (-1, len(tdata)), 'OpenSansBd'))
                 tdata.append([
                     tup[0].name,
-                    str(tup[0].num_total[0]), str(tup[0].num_total[1]),
-                    str(tup[0].num_pending[0]), str(tup[0].num_pending[1]),
                     str(tup[0].num_canceled[0]), str(tup[0].num_canceled[1]),
                     str(tup[0].num_refunded[0]), str(tup[0].num_refunded[1]),
-                    str(tup[0].num_paid[0]), str(tup[0].num_paid[1])
+                    str(tup[0].num_expired[0]), str(tup[0].num_expired[1]),
+                    str(tup[0].num_pending[0]), str(tup[0].num_pending[1]),
+                    str(tup[0].num_paid[0]), str(tup[0].num_paid[1]),
+                    str(tup[0].num_total[0]), str(tup[0].num_total[1]),
                 ])
             for item in tup[1]:
                 tdata.append([
                     "     " + str(item.name),
-                    str(item.num_total[0]), str(item.num_total[1]),
-                    str(item.num_pending[0]), str(item.num_pending[1]),
                     str(item.num_canceled[0]), str(item.num_canceled[1]),
                     str(item.num_refunded[0]), str(item.num_refunded[1]),
-                    str(item.num_paid[0]), str(item.num_paid[1])
+                    str(item.num_expired[0]), str(item.num_expired[1]),
+                    str(item.num_pending[0]), str(item.num_pending[1]),
+                    str(item.num_paid[0]), str(item.num_paid[1]),
+                    str(item.num_total[0]), str(item.num_total[1]),
                 ])
                 if item.has_variations:
                     for var in item.all_variations:
                         tdata.append([
                             "          " + str(var),
-                            str(var.num_total[0]), str(var.num_total[1]),
-                            str(var.num_pending[0]), str(var.num_pending[1]),
                             str(var.num_canceled[0]), str(var.num_canceled[1]),
                             str(var.num_refunded[0]), str(var.num_refunded[1]),
-                            str(var.num_paid[0]), str(var.num_paid[1])
+                            str(var.num_expired[0]), str(var.num_expired[1]),
+                            str(var.num_pending[0]), str(var.num_pending[1]),
+                            str(var.num_paid[0]), str(var.num_paid[1]),
+                            str(var.num_total[0]), str(var.num_total[1]),
                         ])
 
         tdata.append([
             _("Total"),
-            str(total['num_total'][0]), str(total['num_total'][1]),
-            str(total['num_pending'][0]), str(total['num_pending'][1]),
             str(total['num_canceled'][0]), str(total['num_canceled'][1]),
             str(total['num_refunded'][0]), str(total['num_refunded'][1]),
-            str(total['num_paid'][0]), str(total['num_paid'][1])
+            str(total['num_expired'][0]), str(total['num_expired'][1]),
+            str(total['num_paid'][0]), str(total['num_paid'][1]),
+            str(total['num_pending'][0]), str(total['num_pending'][1]),
+            str(total['num_total'][0]), str(total['num_total'][1]),
         ])
 
-        table = Table(tdata, colWidths=colwidths, repeatRows=2)
+        table = Table(tdata, colWidths=colwidths, repeatRows=3)
         table.setStyle(TableStyle(tstyledata))
         story.append(table)
         return story
