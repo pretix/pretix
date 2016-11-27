@@ -89,7 +89,7 @@ class BasePaymentProvider:
         settings keys and the values should be corresponding Django form fields.
 
         The default implementation returns the appropriate fields for the ``_enabled``,
-        ``_fee_abs`` and ``_fee_percent`` settings mentioned above.
+        ``_fee_abs``, ``_fee_percent`` and ``_availability_date`` settings mentioned above.
 
         We suggest that you return an ``OrderedDict`` object instead of a dictionary
         and make use of the default implementation. Your implementation could look
@@ -214,6 +214,8 @@ class BasePaymentProvider:
         of users, products or other criteria. If this method returns ``False``, the
         user will not be able to select this payment method. This will only be called
         during checkout, not on retrying.
+
+        The default implementation checks for the _availability_date setting to be either unset or in the future.
         """
         return self._is_still_available()
 
@@ -350,6 +352,8 @@ class BasePaymentProvider:
         """
         Will be called to check whether it is allowed to change the payment method of
         an order to this one.
+
+        The default implementation checks for the _availability_date setting to be either unset or in the future.
 
         :param order: The order object
         """
