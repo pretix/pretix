@@ -105,6 +105,12 @@ class OrderPositionChangeForm(forms.Form):
 
 
 class OrderContactForm(forms.ModelForm):
+    regenerate_secrets = forms.BooleanField(required=False, label=_('Invalidate secrets'),
+                                            help_text=_('Regenerates the order and ticket secrets. You will '
+                                                        'need to re-send the link to the order page to the user and '
+                                                        'the user will need to download his tickets again. The old '
+                                                        'versions will be invalid.'))
+
     class Meta:
         model = Order
         fields = ['email']

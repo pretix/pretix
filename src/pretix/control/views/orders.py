@@ -13,7 +13,8 @@ from django.views.generic import DetailView, ListView, TemplateView, View
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, Invoice, Item, ItemVariation, Order, Quota,
+    CachedFile, CachedTicket, Invoice, Item, ItemVariation, Order, Quota,
+    generate_position_secret, generate_secret,
 )
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
@@ -528,8 +529,16 @@ class OrderContactChange(OrderView):
         if self.form.is_valid():
             self.order.log_action('pretix.event.order.contact.changed', {
                 'old_email': self.order.email,
-                'new_email': self.form.cleaned_data['email']
+                'new_email': self.form.cleaned_data['email'],
+                'regenerate_secrets': self.form.cleaned_data['regenerate_secrets']
             })
+            if self.form.cleaned_data['regenerate_secrets']:
+                self.order.secret = generate_secret()
+                for op in self.order.positions.all():
+                    op.secret = generate_position_secret()
+                    op.save()
+                CachedTicket.objects.filter(order_position__order=self.order).delete()
+
             self.form.save()
             messages.success(self.request, _('The order has been changed.'))
             return redirect(self.get_order_url())
