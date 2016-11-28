@@ -219,8 +219,8 @@ class OverviewReport(Report):
             str(total['num_canceled'][0]), str(total['num_canceled'][1]),
             str(total['num_refunded'][0]), str(total['num_refunded'][1]),
             str(total['num_expired'][0]), str(total['num_expired'][1]),
-            str(total['num_paid'][0]), str(total['num_paid'][1]),
             str(total['num_pending'][0]), str(total['num_pending'][1]),
+            str(total['num_paid'][0]), str(total['num_paid'][1]),
             str(total['num_total'][0]), str(total['num_total'][1]),
         ])
 
