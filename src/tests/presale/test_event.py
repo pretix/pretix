@@ -285,19 +285,27 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
         assert "_voucher_item" in html.rendered_content
 
-    def test_special_price(self):
-        self.v.price = Decimal("10.00")
+    def test_voucher_price(self):
+        self.v.value = Decimal("10.00")
         self.v.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
         assert "Early-bird" in html.rendered_content
         assert "10.00" in html.rendered_content
 
-    def test_special_price_variations(self):
+    def test_voucher_price_percentage(self):
+        self.v.value = Decimal("10.00")
+        self.v.price_mode = 'percent'
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "Early-bird" in html.rendered_content
+        assert "10.80" in html.rendered_content
+
+    def test_voucher_price_variations(self):
         var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
         var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
         self.q.variations.add(var1)
         self.q.variations.add(var2)
-        self.v.price = Decimal("10.00")
+        self.v.value = Decimal("10.00")
         self.v.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
         assert "Early-bird" in html.rendered_content

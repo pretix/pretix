@@ -198,20 +198,16 @@ class RedeemView(EventViewMixin, TemplateView):
                     item.cached_availability = (Quota.AVAILABILITY_OK, 1)
                 else:
                     item.cached_availability = item.check_quotas()
-                if self.voucher.price is not None:
-                    item.price = self.voucher.price
-                else:
-                    item.price = item.default_price
+                item.price = self.voucher.calculate_price(item.default_price)
             else:
                 for var in item.available_variations:
                     if self.voucher.allow_ignore_quota or self.voucher.block_quota:
                         var.cached_availability = (Quota.AVAILABILITY_OK, 1)
                     else:
                         var.cached_availability = list(var.check_quotas())
-                    if self.voucher.price is not None:
-                        var.price = self.voucher.price
-                    else:
-                        var.price = var.default_price if var.default_price is not None else item.default_price
+                    var.price = self.voucher.calculate_price(
+                        var.default_price if var.default_price is not None else item.default_price
+                    )
 
                 if len(item.available_variations) > 0:
                     item.min_price = min([v.price for v in item.available_variations])

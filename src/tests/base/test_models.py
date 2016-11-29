@@ -1,6 +1,7 @@
 import datetime
 import sys
 from datetime import timedelta
+from decimal import Decimal
 
 import pytest
 from django.conf import settings
@@ -404,6 +405,29 @@ class QuotaTestCase(BaseQuotaTestCase):
         with self.assertRaises(ValidationError):
             v = Voucher(variation=self.var1, event=self.event)
             v.clean()
+
+
+class VoucherTestCase(BaseQuotaTestCase):
+
+    def test_calculate_price_none(self):
+        v = Voucher.objects.create(event=self.event, price_mode='none', value=Decimal('10.00'))
+        v.calculate_price(Decimal('23.42')) == Decimal('23.42')
+
+    def test_calculate_price_set_empty(self):
+        v = Voucher.objects.create(event=self.event, price_mode='set')
+        v.calculate_price(Decimal('23.42')) == Decimal('23.42')
+
+    def test_calculate_price_set(self):
+        v = Voucher.objects.create(event=self.event, price_mode='set', value=Decimal('10.00'))
+        v.calculate_price(Decimal('23.42')) == Decimal('10.00')
+
+    def test_calculate_price_subtract(self):
+        v = Voucher.objects.create(event=self.event, price_mode='subtract', value=Decimal('10.00'))
+        v.calculate_price(Decimal('23.42')) == Decimal('13.42')
+
+    def test_calculate_price_percent(self):
+        v = Voucher.objects.create(event=self.event, price_mode='percent', value=Decimal('23.00'))
+        v.calculate_price(Decimal('100.00')) == Decimal('77.00')
 
 
 class OrderTestCase(BaseQuotaTestCase):

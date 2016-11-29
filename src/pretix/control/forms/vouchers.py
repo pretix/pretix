@@ -22,8 +22,8 @@ class VoucherForm(I18nModelForm):
         model = Voucher
         localized_fields = '__all__'
         fields = [
-            'code', 'valid_until', 'block_quota', 'allow_ignore_quota', 'price', 'tag',
-            'comment', 'max_usages'
+            'code', 'valid_until', 'block_quota', 'allow_ignore_quota', 'value', 'tag',
+            'comment', 'max_usages', 'price_mode'
         ]
         widgets = {
             'valid_until': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
@@ -187,8 +187,8 @@ class VoucherBulkForm(VoucherForm):
         model = Voucher
         localized_fields = '__all__'
         fields = [
-            'valid_until', 'block_quota', 'allow_ignore_quota', 'price', 'tag', 'comment',
-            'max_usages'
+            'valid_until', 'block_quota', 'allow_ignore_quota', 'value', 'tag', 'comment',
+            'max_usages', 'price_mode'
         ]
         widgets = {
             'valid_until': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),

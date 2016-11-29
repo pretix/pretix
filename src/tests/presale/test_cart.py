@@ -488,7 +488,7 @@ class CartTest(CartTestMixin, TestCase):
             event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_red,
             price=14, expires=now() + timedelta(minutes=10)
         )
-        v = Voucher.objects.create(item=self.shirt, variation=self.shirt_red, price=Decimal('10.00'), event=self.event)
+        v = Voucher.objects.create(item=self.shirt, variation=self.shirt_red, value=Decimal('10.00'), event=self.event)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d_voucher' % (self.shirt.id, self.shirt_red.id): v.code,
         }, follow=True)
@@ -594,7 +594,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(len(objs), 0)
 
     def test_voucher_price(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event)
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
             '_voucher_code': v.code,
@@ -605,8 +605,76 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, Decimal('12.00'))
 
+    def test_voucher_price_percent(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('10.00'), price_mode='percent', event=self.event)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, Decimal('20.70'))
+
+    def test_voucher_price_subtract(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('10.00'), price_mode='subtract', event=self.event)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, Decimal('13.00'))
+
+    def test_voucher_free_price(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('10.00'), price_mode='percent', event=self.event)
+        self.ticket.free_price = True
+        self.ticket.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'price_%d' % self.ticket.id: '21.00',
+            '_voucher_code': v.code,
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
+        self.assertIn('1', doc.select('.cart .cart-row')[0].select('.count')[0].text)
+        self.assertIn('21', doc.select('.cart .cart-row')[0].select('.price')[0].text)
+        self.assertIn('21', doc.select('.cart .cart-row')[0].select('.price')[1].text)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, Decimal('21.00'))
+
+    def test_voucher_free_price_lower_bound(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('10.00'), price_mode='percent', event=self.event)
+        self.ticket.free_price = False
+        self.ticket.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'price_%d' % self.ticket.id: '20.00',
+            '_voucher_code': v.code,
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
+        self.assertIn('1', doc.select('.cart .cart-row')[0].select('.count')[0].text)
+        self.assertIn('20.70', doc.select('.cart .cart-row')[0].select('.price')[0].text)
+        self.assertIn('20.70', doc.select('.cart .cart-row')[0].select('.price')[1].text)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, Decimal('20.70'))
+
     def test_voucher_redemed(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event, redeemed=1)
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, redeemed=1)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
             '_voucher_code': v.code,
@@ -616,7 +684,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
 
     def test_voucher_expired(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
                                    valid_until=now() - timedelta(days=2))
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
@@ -638,7 +706,7 @@ class CartTest(CartTestMixin, TestCase):
     def test_voucher_quota_empty(self):
         self.quota_tickets.size = 0
         self.quota_tickets.save()
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event)
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
             '_voucher_code': v.code,
@@ -650,7 +718,7 @@ class CartTest(CartTestMixin, TestCase):
     def test_voucher_quota_ignore(self):
         self.quota_tickets.size = 0
         self.quota_tickets.save()
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
                                    allow_ignore_quota=True)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
@@ -665,7 +733,7 @@ class CartTest(CartTestMixin, TestCase):
     def test_voucher_quota_block(self):
         self.quota_tickets.size = 1
         self.quota_tickets.save()
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
                                    block_quota=True)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
@@ -684,7 +752,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].price, Decimal('12.00'))
 
     def test_voucher_doubled(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event)
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
             '_voucher_code': v.code,
@@ -758,7 +826,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(len(objs), 0)
 
     def test_voucher_multiuse_ok(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
                                    max_usages=2, redeemed=0)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '2',
@@ -769,7 +837,7 @@ class CartTest(CartTestMixin, TestCase):
         assert all(cp.voucher == v for cp in positions)
 
     def test_voucher_multiuse_multiprod_ok(self):
-        v = Voucher.objects.create(quota=self.quota_all, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(quota=self.quota_all, value=Decimal('12.00'), event=self.event,
                                    max_usages=2, redeemed=0)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
@@ -781,7 +849,7 @@ class CartTest(CartTestMixin, TestCase):
         assert all(cp.voucher == v for cp in positions)
 
     def test_voucher_multiuse_partially(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
                                    max_usages=2, redeemed=1)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '2',
@@ -793,7 +861,7 @@ class CartTest(CartTestMixin, TestCase):
         assert not positions.exists()
 
     def test_voucher_multiuse_multiprod_partially(self):
-        v = Voucher.objects.create(quota=self.quota_all, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(quota=self.quota_all, value=Decimal('12.00'), event=self.event,
                                    max_usages=2, redeemed=1)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
@@ -807,7 +875,7 @@ class CartTest(CartTestMixin, TestCase):
         assert all(cp.voucher == v for cp in positions)
 
     def test_voucher_multiuse_redeemed(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
                                    max_usages=2, redeemed=2)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '2',
@@ -819,7 +887,7 @@ class CartTest(CartTestMixin, TestCase):
         assert not positions.exists()
 
     def test_voucher_multiuse_multiprod_redeemed(self):
-        v = Voucher.objects.create(quota=self.quota_all, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(quota=self.quota_all, value=Decimal('12.00'), event=self.event,
                                    max_usages=2, redeemed=2)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
@@ -832,7 +900,7 @@ class CartTest(CartTestMixin, TestCase):
         assert not positions.exists()
 
     def test_voucher_multiuse_redeemed_in_my_cart(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
                                    max_usages=2, redeemed=1)
         CartPosition.objects.create(
             expires=now() - timedelta(minutes=10), item=self.ticket, voucher=v, price=Decimal('12.00'),
@@ -848,7 +916,7 @@ class CartTest(CartTestMixin, TestCase):
         assert positions.count() == 1
 
     def test_voucher_multiuse_redeemed_in_other_cart(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
                                    max_usages=2, redeemed=1)
         CartPosition.objects.create(
             expires=now() + timedelta(minutes=10), item=self.ticket, voucher=v, price=Decimal('12.00'),
@@ -864,7 +932,7 @@ class CartTest(CartTestMixin, TestCase):
         assert not positions.exists()
 
     def test_voucher_multiuse_redeemed_in_other_expired_cart(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
                                    max_usages=2, redeemed=1)
         CartPosition.objects.create(
             expires=now() - timedelta(minutes=10), item=self.ticket, voucher=v, price=Decimal('12.00'),

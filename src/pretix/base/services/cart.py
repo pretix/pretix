@@ -168,11 +168,10 @@ def _add_new_items(event: Event, items: List[dict],
                         err = err or error_messages['in_part']
                     quota_ok = min(quota_ok, avail[1])
 
-        if voucher and voucher.price is not None:
-            price = voucher.price
-        else:
-            price = item.default_price if variation is None else (
-                variation.default_price if variation.default_price is not None else item.default_price)
+        price = item.default_price if variation is None else (
+            variation.default_price if variation.default_price is not None else item.default_price)
+        if voucher:
+            price = voucher.calculate_price(price)
 
         if item.free_price and 'price' in i and i['price'] is not None and i['price'] != "":
             custom_price = i['price']
