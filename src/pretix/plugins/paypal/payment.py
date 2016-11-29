@@ -7,7 +7,6 @@ from django import forms
 from django.contrib import messages
 from django.template.loader import get_template
 from django.utils.translation import ugettext as __, ugettext_lazy as _
-
 from pretix.base.models import Quota
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.mail import SendMailException
@@ -64,23 +63,6 @@ class Paypal(BasePaymentProvider):
 
     def checkout_prepare(self, request, cart):
         self.init_api()
-        items = []
-        for cp in cart['positions']:
-            items.append({
-                "name": str(cp.item.name),
-                "description": str(cp.variation) if cp.variation else "",
-                "quantity": cp.count,
-                "price": str(cp.price),
-                "currency": request.event.currency
-            })
-        if cart['payment_fee']:
-            items.append({
-                "name": __('Payment method fee'),
-                "description": "",
-                "quantity": 1,
-                "currency": request.event.currency,
-                "price": str(cart['payment_fee'])
-            })
         payment = paypalrestsdk.Payment({
             'intent': 'sale',
             'payer': {
@@ -93,13 +75,20 @@ class Paypal(BasePaymentProvider):
             "transactions": [
                 {
                     "item_list": {
-                        "items": items
+                        "items": [
+                            {
+                                "name": __('Order for %s') % str(request.event),
+                                "quantity": 1,
+                                "price": str(cart['total']),
+                                "currency": request.event.currency
+                            }
+                        ]
                     },
                     "amount": {
                         "currency": request.event.currency,
                         "total": str(cart['total'])
                     },
-                    "description": __('Event tickets for %s') % request.event.name
+                    "description": __('Event tickets for {event}').format(event=request.event.name)
                 }
             ]
         })
@@ -163,6 +152,30 @@ class Paypal(BasePaymentProvider):
         return self._execute_payment(payment, request, order)
 
     def _execute_payment(self, payment, request, order):
+        payment.replace([
+            {
+                "op": "replace",
+                "path": "/transactions/0/item_list",
+                "value": {
+                    "items": [
+                        {
+                            "name": 'Order %s' % order.code,
+                            "quantity": 1,
+                            "price": str(order.total),
+                            "currency": order.event.currency
+                        }
+                    ]
+                }
+            },
+            {
+                "op": "replace",
+                "path": "/transactions/0/description",
+                "value": __('Order {order} for {event}').format(
+                    event=request.event.name,
+                    order=order.code
+                )
+            }
+        ])
         payment.execute({"payer_id": request.session.get('payment_paypal_payer')})
 
         if payment.state == 'pending':
@@ -272,7 +285,10 @@ class Paypal(BasePaymentProvider):
                         "currency": request.event.currency,
                         "total": str(order.total)
                     },
-                    "description": __('Event tickets for %s') % request.event.name
+                    "description": __('Order {order} for {event}').format(
+                        event=request.event.name,
+                        order=order.code
+                    )
                 }
             ]
         })
