@@ -135,7 +135,6 @@ def test_metrics_view(monkeypatch, client):
     metricsview.metrics.http_requests_total.inc(counter_value, code="200", handler="/foo", method="GET")
 
     # test unauthorized-page
-    assert "You are not authorized" in metricsview.serve_metrics(None).content.decode('utf-8')
     assert "You are not authorized" in client.get('/metrics').content.decode('utf-8')
     assert "{} {}".format(fullname, counter_value) not in client.get('/metrics')
 
