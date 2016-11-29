@@ -59,7 +59,7 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
 
         headers = [
             _('Voucher code'), _('Valid until'), _('Product'), _('Reserve quota'), _('Bypass quota'),
-            _('Price'), _('Tag'), _('Redeemed'), _('Maximum usages')
+            _('Price effect'), _('Value'), _('Tag'), _('Redeemed'), _('Maximum usages')
         ]
         writer.writerow(headers)
 
@@ -77,7 +77,8 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
                 prod,
                 _("Yes") if v.block_quota else _("No"),
                 _("Yes") if v.allow_ignore_quota else _("No"),
-                str(v.price) if v.price else "",
+                v.get_price_mode_display(),
+                str(v.value) if v.value else "",
                 v.tag,
                 str(v.redeemed),
                 str(v.max_usages)

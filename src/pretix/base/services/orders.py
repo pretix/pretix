@@ -233,8 +233,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 err = err or error_messages['voucher_expired']
                 cp.delete()
                 continue
-            if cp.voucher.price is not None:
-                price = cp.voucher.price
+            price = cp.voucher.calculate_price(price)
 
         if price != cp.price and not (cp.item.free_price and cp.price > price):
             positions[i] = cp

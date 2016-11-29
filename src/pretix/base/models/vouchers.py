@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -5,6 +7,7 @@ from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
+from ..decimal import round_decimal
 from .base import LoggedModel
 from .event import Event
 from .items import Item, ItemVariation, Quota
@@ -59,6 +62,13 @@ class Voucher(LoggedModel):
     * You need to either select a quota or an item
     * If you select an item that has variations but do not select a variation, you cannot set block_quota
     """
+    PRICE_MODES = (
+        ('none', _('No effect')),
+        ('set', _('Set product price to')),
+        ('subtract', _('Subtract from product price')),
+        ('percent', _('Reduce product price by (%)')),
+    )
+
     event = models.ForeignKey(
         Event,
         on_delete=models.CASCADE,
@@ -98,10 +108,15 @@ class Voucher(LoggedModel):
             "If activated, a holder of this voucher code can buy tickets, even if there are none left."
         )
     )
-    price = models.DecimalField(
-        verbose_name=_("Set product price to"),
+    price_mode = models.CharField(
+        verbose_name=_("Price mode"),
+        max_length=100,
+        choices=PRICE_MODES,
+        default='set'
+    )
+    value = models.DecimalField(
+        verbose_name=_("Voucher value"),
         decimal_places=2, max_digits=10, null=True, blank=True,
-        help_text=_('If empty, the product will cost its normal price.')
     )
     item = models.ForeignKey(
         Item, related_name='vouchers',
@@ -208,3 +223,19 @@ class Voucher(LoggedModel):
         if self.valid_until and self.valid_until < now():
             return False
         return True
+
+    def calculate_price(self, original_price: Decimal) -> Decimal:
+        """
+        Returns how the price given in original_price would be modified if this
+        voucher is applied, i.e. replaced by a different price or reduced by a
+        certain percentage. If the voucher does not modify the price, the
+        original price will be returned.
+        """
+        if self.value:
+            if self.price_mode == 'set':
+                return self.value
+            elif self.price_mode == 'subtract':
+                return original_price - self.value
+            elif self.price_mode == 'percent':
+                return round_decimal(original_price * (Decimal('100.00') - self.value) / Decimal('100.00'))
+        return original_price
