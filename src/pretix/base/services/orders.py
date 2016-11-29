@@ -281,7 +281,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 
     tz = pytz.timezone(event.settings.timezone)
     exp_by_date = now_dt.astimezone(tz) + timedelta(days=event.settings.get('payment_term_days', as_type=int))
-    exp_by_date = exp_by_date.replace(hour=23, minute=59, second=59, microsecond=0)
+    exp_by_date = exp_by_date.astimezone(tz).replace(hour=23, minute=59, second=59, microsecond=0)
     if event.settings.get('payment_term_weekdays'):
         if exp_by_date.weekday() == 5:
             exp_by_date += timedelta(days=2)
