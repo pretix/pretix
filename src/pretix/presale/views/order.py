@@ -401,6 +401,8 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
             success_message = ('Your invoice address has been updated. Please contact us if you need us '
                                'to regenerate your invoice.')
             messages.success(self.request, _(success_message))
+
+        CachedTicket.objects.filter(order_position__order=self.order).delete()
         return redirect(self.get_order_url())
 
     def get(self, request, *args, **kwargs):

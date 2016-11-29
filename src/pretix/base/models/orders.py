@@ -8,6 +8,8 @@ import pytz
 from django.conf import settings
 from django.db import models
 from django.db.models import F
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.utils.crypto import get_random_string
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
@@ -563,3 +565,9 @@ class CachedTicket(models.Model):
     order_position = models.ForeignKey(OrderPosition, on_delete=models.CASCADE)
     cachedfile = models.ForeignKey(CachedFile, on_delete=models.CASCADE, null=True)
     provider = models.CharField(max_length=255)
+
+
+@receiver(post_delete, sender=CachedTicket)
+def cached_file_delete(sender, instance, **kwargs):
+    if instance.cachedfile:
+        instance.cachedfile.delete()

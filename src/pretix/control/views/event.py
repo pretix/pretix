@@ -16,7 +16,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import (
-    Event, EventPermission, Item, ItemVariation, User,
+    CachedTicket, Event, EventPermission, Item, ItemVariation, User,
 )
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
@@ -450,6 +450,9 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
                             for k in provider.form.changed_data
                         }
                     )
+                    CachedTicket.objects.filter(
+                        order_position__order__event=self.request.event, provider=provider.identifier
+                    ).delete()
             else:
                 success = False
         form = self.get_form(self.get_form_class())

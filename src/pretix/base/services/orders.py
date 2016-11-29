@@ -21,7 +21,7 @@ from pretix.base.models import (
     CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Quota,
     User, Voucher,
 )
-from pretix.base.models.orders import InvoiceAddress
+from pretix.base.models.orders import CachedTicket, InvoiceAddress
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.async import ProfiledTask
 from pretix.base.services.invoices import (
@@ -579,8 +579,12 @@ class OrderChangeManager:
                 self._perform_operations()
             self._recalculate_total_and_payment_fee()
             self._reissue_invoice()
+            self._clear_tickets_cache()
         self._check_paid_to_free()
         self._notify_user()
+
+    def _clear_tickets_cache(self):
+        CachedTicket.objects.filter(order_position__order=self.order).delete()
 
     def _get_payment_provider(self):
         responses = register_payment_providers.send(self.order.event)

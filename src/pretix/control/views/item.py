@@ -18,8 +18,8 @@ from django.views.generic.edit import DeleteView
 
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    Item, ItemCategory, ItemVariation, Order, Question, QuestionAnswer,
-    QuestionOption, Quota,
+    CachedTicket, Item, ItemCategory, ItemVariation, Order, Question,
+    QuestionAnswer, QuestionOption, Quota,
 )
 from pretix.control.forms.item import (
     CategoryForm, ItemCreateForm, ItemUpdateForm, ItemVariationForm,
@@ -787,6 +787,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
                     for k in form.changed_data
                 }
             )
+            CachedTicket.objects.filter(order_position__item=self.item).delete()
         return super().form_valid(form)
 
 
