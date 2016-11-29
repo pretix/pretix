@@ -7,6 +7,7 @@ from django import forms
 from django.contrib import messages
 from django.template.loader import get_template
 from django.utils.translation import ugettext as __, ugettext_lazy as _
+
 from pretix.base.models import Quota
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.mail import SendMailException
@@ -159,7 +160,7 @@ class Paypal(BasePaymentProvider):
                 "value": {
                     "items": [
                         {
-                            "name": 'Order %s' % order.code,
+                            "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(), code=order.code),
                             "quantity": 1,
                             "price": str(order.total),
                             "currency": order.event.currency
@@ -274,7 +275,7 @@ class Paypal(BasePaymentProvider):
                     "item_list": {
                         "items": [
                             {
-                                "name": 'Order %s' % order.code,
+                                "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(), code=order.code),
                                 "quantity": 1,
                                 "price": str(order.total),
                                 "currency": order.event.currency
