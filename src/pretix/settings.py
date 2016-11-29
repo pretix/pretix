@@ -96,8 +96,7 @@ METRICS_PASSPHRASE = config.get('metrics', 'passphrase', fallback="")
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
 REAL_CACHE_USED = False
