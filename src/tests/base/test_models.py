@@ -2,6 +2,8 @@ import datetime
 import sys
 from datetime import timedelta
 
+import pytest
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -244,6 +246,8 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
 
     def test_voucher_multiuse_count_overredeemed(self):
+        if 'sqlite' not in settings.DATABASES['default']['ENGINE']:
+            pytest.xfail('This should raise a type error on most databases')
         Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, max_usages=2, redeemed=4)
         self.assertEqual(self.quota.count_blocking_vouchers(), 0)
 
