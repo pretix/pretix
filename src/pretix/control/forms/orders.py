@@ -187,7 +187,8 @@ class OrderPositionChangeForm(forms.Form):
             ('product', 'Change product'),
             ('price', 'Change price'),
             ('subevent', 'Change event date'),
-            ('cancel', 'Remove product')
+            ('cancel', 'Remove product'),
+            ('split', 'Split into new order'),
         )
     )
 

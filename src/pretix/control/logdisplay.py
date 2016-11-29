@@ -85,6 +85,20 @@ def _display_order_changed(event: Event, logentry: LogEntry):
                 price=formats.localize(Decimal(data['price'])),
                 currency=event.currency
             )
+    elif logentry.action_type == 'pretix.event.order.changed.split':
+        old_item = str(event.items.get(pk=data['old_item']))
+        if data['old_variation']:
+            old_item += ' - ' + str(ItemVariation.objects.get(pk=data['old_variation']))
+        return text + ' ' + _('{old_item} ({old_price} {currency}) split into new order: {order}').format(
+            old_item=old_item,
+            order=data['new_order'],
+            old_price=formats.localize(Decimal(data['old_price'])),
+            currency=event.currency
+        )
+    elif logentry.action_type == 'pretix.event.order.changed.split_from':
+        return _('This order has been created by splitting the order {order}').format(
+            order=data['original_order'],
+        )
 
 
 @receiver(signal=logentry_display, dispatch_uid="pretixcontrol_logentry_display")
