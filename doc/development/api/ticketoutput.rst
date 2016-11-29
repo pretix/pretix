@@ -65,5 +65,3 @@ The output class
    .. automethod:: generate
 
    .. autoattribute:: download_button_text
-
-   .. autoattribute:: download_button_icon

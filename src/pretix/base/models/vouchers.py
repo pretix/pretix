@@ -43,8 +43,11 @@ class Voucher(LoggedModel):
     :type block_quota: bool
     :param allow_ignore_quota: If set to true, this voucher can be redeemed even if the event is sold out
     :type allow_ignore_quota: bool
-    :param price: If set, the voucher will allow the sale of associated items for this price
-    :type price: decimal.Decimal
+    :param price_mode: Sets how this voucher affects a product's price. Can be ``none``, ``set``, ``subtract``
+                       or ``percent``.
+    :type price_mode: str
+    :param value: The value by which the price should be modified in the way specified by ``price_mode``.
+    :type value: decimal.Decimal
     :param item: If set, the item to sell
     :type item: Item
     :param variation: If set, the variation to sell
