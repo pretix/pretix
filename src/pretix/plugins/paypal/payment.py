@@ -114,7 +114,6 @@ class Paypal(BasePaymentProvider):
                     logger.error('Invalid payment state: ' + str(payment))
                     return
                 request.session['payment_paypal_id'] = payment.id
-                request.session['payment_paypal_event'] = self.event.id
                 for link in payment.links:
                     if link.method == "REDIRECT" and link.rel == "approval_url":
                         return str(link.href)
