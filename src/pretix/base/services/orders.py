@@ -1,3 +1,4 @@
+import contextlib
 import json
 import logging
 from collections import Counter, namedtuple
@@ -50,6 +51,8 @@ error_messages = {
     'voucher_invalid': _('The voucher code used for one of the items in your cart is not known in our database.'),
     'voucher_redeemed': _('The voucher code used for one of the items in your cart has already been used the maximum '
                           'number of times allowed. We removed this item from your cart.'),
+    'voucher_redeemed_partial': _('The voucher code used for one of the items in your cart can only be redeemed %d '
+                                  'more times. We removed this item from your cart.'),
     'voucher_expired': _('The voucher code used for one of the items in your cart is expired. We removed this item '
                          'from your cart.'),
     'voucher_invalid_item': _('The voucher code used for one of the items in your cart is not valid for this item. We '
@@ -82,7 +85,15 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     :param user: The user that performed the change
     :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
     """
-    with order.event.lock() as now_dt:
+    lock_func = order.event.lock
+    if order.status == order.STATUS_PENDING and order.expires > now() + timedelta(minutes=10):
+        # No lock necessary in this case. The 10 minute offset is just to be safe and prevent
+        # collisions with the cronjob.
+        @contextlib.contextmanager
+        def lock_func():
+            yield now()
+
+    with lock_func() as now_dt:
         can_be_paid = order._can_be_paid()
         if not force and can_be_paid is not True:
             raise Quota.QuotaExceededException(can_be_paid)
@@ -185,6 +196,9 @@ def _check_date(event: Event, now_dt: datetime):
 
 
 def _check_positions(event: Event, now_dt: datetime, positions: List[CartPosition]):
+    """
+    Checks constraints on all positions except quota
+    """
     err = None
     _check_date(event, now_dt)
 
@@ -193,17 +207,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             err = err or error_messages['unavailable']
             cp.delete()
             continue
-        quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
-
-        if cp.voucher:
-            redeemed_in_carts = CartPosition.objects.filter(
-                Q(voucher=cp.voucher) & Q(event=event) & Q(expires__gte=now_dt)
-            ).exclude(pk=cp.pk)
-            v_avail = cp.voucher.max_usages - cp.voucher.redeemed - redeemed_in_carts.count()
-            if v_avail < 1:
-                err = err or error_messages['voucher_redeemed']
-                cp.delete()  # Sorry!
-                continue
+        cp._quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
 
         if cp.item.require_voucher and cp.voucher is None:
             cp.delete()
@@ -223,7 +227,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         price = cp.item.default_price if cp.variation is None else (
             cp.variation.default_price if cp.variation.default_price is not None else cp.item.default_price)
 
-        if price is False or len(quotas) == 0:
+        if price is False or len(cp._quotas) == 0:
             err = err or error_messages['unavailable']
             cp.delete()
             continue
@@ -242,62 +246,18 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             cp.save()
             err = err or error_messages['price_changed']
             continue
-
-        quota_ok = True
-
-        ignore_all_quotas = cp.expires >= now_dt or (
-            cp.voucher and (cp.voucher.allow_ignore_quota or (cp.voucher.block_quota and cp.voucher.quota is None)))
-
-        if not ignore_all_quotas:
-            for quota in quotas:
-                if cp.voucher and cp.voucher.block_quota and cp.voucher.quota_id == quota.pk:
-                    continue
-                avail = quota.availability(now_dt)
-                if avail[0] != Quota.AVAILABILITY_OK:
-                    # This quota is sold out/currently unavailable, so do not sell this at all
-                    err = err or error_messages['unavailable']
-                    quota_ok = False
-                    break
-
-        if quota_ok:
-            positions[i] = cp
-            cp.expires = now_dt + timedelta(
-                minutes=event.settings.get('reservation_time', as_type=int))
-            cp.save()
-        else:
-            cp.delete()  # Sorry!
     if err:
         raise OrderError(err)
 
 
 @transaction.atomic
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
-                  payment_provider: BasePaymentProvider, locale: str=None, address: int=None,
+                  payment_provider: BasePaymentProvider, expires: datetime, locale: str=None, address: int=None,
                   meta_info: dict=None):
-    from datetime import date, time
 
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
     total += payment_fee
-
-    tz = pytz.timezone(event.settings.timezone)
-    exp_by_date = now_dt.astimezone(tz) + timedelta(days=event.settings.get('payment_term_days', as_type=int))
-    exp_by_date = exp_by_date.replace(hour=23, minute=59, second=59, microsecond=0)
-    if event.settings.get('payment_term_weekdays'):
-        if exp_by_date.weekday() == 5:
-            exp_by_date += timedelta(days=2)
-        elif exp_by_date.weekday() == 6:
-            exp_by_date += timedelta(days=1)
-
-    expires = exp_by_date
-
-    if event.settings.get('payment_term_last'):
-        last_date = make_aware(datetime.combine(
-            event.settings.get('payment_term_last', as_type=date),
-            time(hour=23, minute=59, second=59)
-        ), tz)
-        if last_date < expires:
-            expires = last_date
 
     order = Order.objects.create(
         status=Order.STATUS_PENDING,
@@ -330,6 +290,94 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
     return order
 
 
+def _check_quota_on_expired_positions(event: Event, positions: List[CartPosition], now_dt: datetime):
+    err = None
+    quotadiff = Counter()
+    vouchers = Counter()
+    for cp in positions:
+        if not cp.id:
+            continue
+
+        ignore_all_quotas = cp.expires >= now_dt or (
+            cp.voucher and (cp.voucher.allow_ignore_quota or (cp.voucher.block_quota and cp.voucher.quota is None)))
+
+        if ignore_all_quotas:
+            cp._quotas = []
+        elif cp.voucher and cp.voucher.block_quota and cp.voucher.quota_id:
+            cp._quotas = [q for q in cp._quotas if cp.voucher.quota_id != q.pk]
+
+        for quota in cp._quotas:
+            quotadiff[quota] += 1
+
+    quotas_ok = {}
+    for quota, count in quotadiff.items():
+        avail = quota.availability(now_dt)
+        if avail[1] is not None and avail[1] < count:
+            # This quota is not available or less than items are than requested left, so we have to
+            # reduce the number of bought items
+            if avail[0] != Quota.AVAILABILITY_OK:
+                err = err or error_messages['unavailable']
+            else:
+                err = err or error_messages['in_part']
+            quotas_ok[quota] = min(count, avail[1])
+        else:
+            quotas_ok[quota] = count
+
+    for cp in positions:
+        if not cp.id:
+            continue
+
+        if cp.voucher:
+            redeemed_in_carts = CartPosition.objects.filter(
+                Q(voucher=cp.voucher) & Q(event=event) & Q(expires__gte=now_dt)
+            ).exclude(pk__in=[cp2.pk for cp2 in positions])
+            v_avail = cp.voucher.max_usages - cp.voucher.redeemed - redeemed_in_carts.count()
+            if v_avail < 1:
+                err = err or error_messages['voucher_redeemed']
+                cp.delete()  # Sorry!
+                continue
+            if v_avail - vouchers[cp.voucher] < 1:
+                err = err or (error_messages['voucher_redeemed_partial'] % v_avail)
+                cp.delete()  # Sorry!
+                continue
+            vouchers[cp.voucher] += 1
+
+        if cp._quotas:
+            if min(quotas_ok[q] for q in cp._quotas) > 0:
+                cp.expires = now_dt + timedelta(minutes=event.settings.get('reservation_time', as_type=int))
+                cp.save()
+                for q in cp._quotas:
+                    quotas_ok[q] -= 1
+            else:
+                cp.delete()
+
+    if err:
+        raise OrderError(err)
+
+
+def _calculate_expiry(event: Event, now_dt: datetime):
+    from datetime import date, time
+
+    tz = pytz.timezone(event.settings.timezone)
+    expires = now_dt.astimezone(tz) + timedelta(days=event.settings.get('payment_term_days', as_type=int))
+    expires = expires.replace(hour=23, minute=59, second=59, microsecond=0)
+    if event.settings.get('payment_term_weekdays'):
+        if expires.weekday() == 5:
+            expires += timedelta(days=2)
+        elif expires.weekday() == 6:
+            expires += timedelta(days=1)
+
+    if event.settings.get('payment_term_last'):
+        last_date = make_aware(datetime.combine(
+            event.settings.get('payment_term_last', as_type=date),
+            time(hour=23, minute=59, second=59)
+        ), tz)
+        if last_date < expires:
+            expires = last_date
+
+    return expires
+
+
 def _perform_order(event: str, payment_provider: str, position_ids: List[str],
                    email: str, locale: str, address: int, meta_info: dict=None):
 
@@ -343,13 +391,18 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
     if not pprov:
         raise OrderError(error_messages['internal'])
 
+    now_dt = now()
+
+    positions = list(CartPosition.objects.filter(id__in=position_ids).select_related('item', 'variation'))
+    if set(str(p) for p in position_ids) != set(str(p.id) for p in positions):
+        raise OrderError(error_messages['internal'])
+
+    _check_positions(event, now_dt, positions)
+    expires = _calculate_expiry(event, now_dt)
+
     with event.lock() as now_dt:
-        positions = list(CartPosition.objects.filter(
-            id__in=position_ids).select_related('item', 'variation'))
-        if len(position_ids) != len(positions):
-            raise OrderError(error_messages['internal'])
-        _check_positions(event, now_dt, positions)
-        order = _create_order(event, email, positions, now_dt, pprov,
+        _check_quota_on_expired_positions(event, positions, now_dt)
+        order = _create_order(event, email, positions, now_dt, pprov, expires,
                               locale=locale, address=address, meta_info=meta_info)
 
     if event.settings.get('invoice_generate') == 'True' and invoice_qualified(order):
@@ -570,12 +623,12 @@ class OrderChangeManager:
             # Do nothing
             return
         with transaction.atomic():
+            self._check_free_to_paid()
+            self._check_complete_cancel()
             with self.order.event.lock():
                 if self.order.status != Order.STATUS_PENDING:
                     raise OrderError(self.error_messages['not_pending'])
-                self._check_free_to_paid()
                 self._check_quotas()
-                self._check_complete_cancel()
                 self._perform_operations()
             self._recalculate_total_and_payment_fee()
             self._reissue_invoice()

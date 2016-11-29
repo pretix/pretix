@@ -10,3 +10,7 @@ INSTALLED_APPS.append('tests.testdummy')  # NOQA
 
 for a in PLUGINS:
     INSTALLED_APPS.remove(a)
+
+DATABASES['default'] = {
+    'ENGINE': 'django.db.backends.sqlite3',
+}

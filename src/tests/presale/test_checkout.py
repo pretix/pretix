@@ -405,10 +405,31 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertIn("has already been", doc.select(".alert-danger")[0].text)
+        self.assertIn("only be redeemed 1 more time", doc.select(".alert-danger")[0].text)
         assert CartPosition.objects.filter(cart_id=self.session_key).count() == 1
 
     def test_voucher_multiuse_ok(self):
+        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+                                   valid_until=now() + timedelta(days=2), max_usages=3, redeemed=1)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() + timedelta(minutes=10), voucher=v
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() + timedelta(minutes=10), voucher=v
+        )
+        self._set_session('payment', 'banktransfer')
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key).exists())
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.count(), 2)
+        v.refresh_from_db()
+        assert v.redeemed == 3
+
+    def test_voucher_multiuse_ok_expired(self):
         v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
                                    valid_until=now() + timedelta(days=2), max_usages=3, redeemed=1)
         CartPosition.objects.create(
@@ -472,7 +493,7 @@ class CheckoutTestCase(TestCase):
         self._set_session('payment', 'banktransfer')
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertIn("has already been", doc.select(".alert-danger")[0].text)
+        self.assertIn("only be redeemed 1 more time", doc.select(".alert-danger")[0].text)
         assert CartPosition.objects.filter(cart_id=self.session_key).count() == 1
 
     def test_voucher_ignore_quota(self):

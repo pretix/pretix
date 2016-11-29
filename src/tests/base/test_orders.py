@@ -7,9 +7,8 @@ from django.utils.timezone import make_aware, now
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, Item, Order, OrderPosition, Organizer
-from pretix.base.payment import FreeOrderProvider
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, _create_order, expire_orders,
+    OrderChangeManager, OrderError, _calculate_expiry, expire_orders,
 )
 
 
@@ -28,10 +27,7 @@ def test_expiry_days(event):
     today = now()
     event.settings.set('payment_term_days', 5)
     event.settings.set('payment_term_weekdays', False)
-    order = _create_order(event, email='dummy@example.org', positions=[],
-                          now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de')
-    assert (order.expires - today).days == 5
+    assert (_calculate_expiry(event, today) - today).days == 5
 
 
 @pytest.mark.django_db
@@ -39,18 +35,12 @@ def test_expiry_weekdays(event):
     today = make_aware(datetime(2016, 9, 20, 15, 0, 0, 0))
     event.settings.set('payment_term_days', 5)
     event.settings.set('payment_term_weekdays', True)
-    order = _create_order(event, email='dummy@example.org', positions=[],
-                          now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de')
-    assert (order.expires - today).days == 6
-    assert order.expires.weekday() == 0
+    assert (_calculate_expiry(event, today) - today).days == 6
+    assert _calculate_expiry(event, today).weekday() == 0
 
     today = make_aware(datetime(2016, 9, 19, 15, 0, 0, 0))
-    order = _create_order(event, email='dummy@example.org', positions=[],
-                          now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de')
-    assert (order.expires - today).days == 7
-    assert order.expires.weekday() == 0
+    assert (_calculate_expiry(event, today) - today).days == 7
+    assert _calculate_expiry(event, today).weekday() == 0
 
 
 @pytest.mark.django_db
@@ -59,15 +49,9 @@ def test_expiry_last(event):
     event.settings.set('payment_term_days', 5)
     event.settings.set('payment_term_weekdays', False)
     event.settings.set('payment_term_last', now() + timedelta(days=3))
-    order = _create_order(event, email='dummy@example.org', positions=[],
-                          now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de')
-    assert (order.expires - today).days == 3
+    assert (_calculate_expiry(event, today) - today).days == 3
     event.settings.set('payment_term_last', now() + timedelta(days=7))
-    order = _create_order(event, email='dummy@example.org', positions=[],
-                          now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de')
-    assert (order.expires - today).days == 5
+    assert (_calculate_expiry(event, today) - today).days == 5
 
 
 @pytest.mark.django_db
