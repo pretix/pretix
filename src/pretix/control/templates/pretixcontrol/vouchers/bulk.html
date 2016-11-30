@@ -2,68 +2,144 @@
 {% load i18n %}
 {% load eventsignal %}
 {% load bootstrap3 %}
+{% load capture_tags %}
 {% block title %}{% trans "Voucher" %}{% endblock %}
 {% block inside %}
-    <h1>{% trans "Create multiple voucher" %}</h1>
-    <form action="" method="post" class="form-horizontal">
+    <h1>{% trans "Create new vouchers" %}</h1>
+    <form action="" method="post" class="form-inline" id="voucher-create">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
-        <fieldset>
-            <legend>{% trans "Voucher codes" %}</legend>
-            <div class="form-group">
-                <div class="col-md-6 col-md-offset-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-xs"
-                               id="voucher-bulk-codes-num"
-                               placeholder="{% trans "Number" %}">
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" type="button" id="voucher-bulk-codes-generate"
-                                    data-rng-url="{% url 'control:event.vouchers.rng' organizer=request.event.organizer.slug event=request.event.slug %}">
-                                {% trans "Generate random codes" %}
-                            </button>
-                        </div>
-                    </div>
+        {% capture as number_field silent %}&nbsp;{% bootstrap_field form.number layout="inline" %}&nbsp;{% endcapture %}
+        {% capture as max_usages_field silent %}&nbsp;{% bootstrap_field form.max_usages layout="inline" %}&nbsp;{% endcapture %}
+        {% capture as valid_until_field silent %}&nbsp;{% bootstrap_field form.valid_until layout="inline" %}&nbsp;{% endcapture %}
+        {% capture as value_field_percent silent %}&nbsp;
+            <input class="form-control price" name="price[percent]" type="text">&nbsp;{% endcapture %}
+        {% capture as value_field_subtract silent %}&nbsp;
+            <input class="form-control price" name="price[subtract]" type="text">&nbsp;{% endcapture %}
+        {% capture as value_field_set silent %}&nbsp;
+            <input class="form-control price" name="price[set]" type="text">&nbsp;{% endcapture %}
+
+        {% bootstrap_form_errors form type="all" %}
+
+        <div class="wizard-step" id="step-number">
+            <div class="wizard-step-inner">
+                <h4>{% trans "How many vouchers do you want to create?" %}</h4>
+                <div class="form-line">
+                    {% blocktrans trimmed %}
+                        Create {{ number_field }} voucher codes. Each of them can be redeemed {{ max_usages_field }}
+                        times.
+                    {% endblocktrans %}
                 </div>
             </div>
-            {% bootstrap_field form.codes layout="horizontal" %}
-            {% bootstrap_field form.max_usages layout="horizontal" %}
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "Voucher details" %}</legend>
-            {% bootstrap_field form.valid_until layout="horizontal" %}
-            {% bootstrap_field form.block_quota layout="horizontal" %}
-            {% bootstrap_field form.allow_ignore_quota layout="horizontal" %}
-            <div class="form-group">
-                <label class="col-md-3 control-label" for="id_tag">{% trans "Price effect" %}</label>
-                <div class="col-md-5">
-                    {% bootstrap_field form.price_mode show_label=False form_group_class="" %}
-                </div>
-                <div class="col-md-4">
-                    {% bootstrap_field form.value show_label=False form_group_class="" %}
-                </div>
-            </div>
-            {% bootstrap_field form.itemvar layout="horizontal" %}
-            <div class="form-group">
-                <div class="col-md-9 col-md-offset-3">
-                    <div class="controls">
-                        <div class="alert alert-info">
-                            {% blocktrans trimmed %}
-                                If you choose "any product" for a specific quota and choose to reserve quota for this
-                                voucher above, the product can still be unavailable to the voucher holder if another quota
-                                associated with the product is sold out!
-                            {% endblocktrans %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% bootstrap_field form.tag layout="horizontal" %}
-            {% bootstrap_field form.comment layout="horizontal" %}
-        </fieldset>
-        {% eventsignal request.event "pretix.control.signals.voucher_form_html" form=form %}
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
         </div>
+
+        <div class="wizard-step" id="step-valid">
+            <div class="wizard-step-inner">
+                <h4>{% trans "How long should the vouchers be valid?" %}</h4>
+                <div class="radio radio-alt">
+                    <label>
+                        <input type="radio" name="has_valid_until" value="no">
+                        {% trans "The whole presale period" %}
+                    </label>
+                </div>
+                <div class="radio radio-alt">
+                    <label>
+                        <input type="radio" name="has_valid_until" value="yes">
+                        {% blocktrans trimmed %}
+                            Only valid until {{ valid_until_field }}
+                        {% endblocktrans %}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="wizard-step" id="step-products">
+            <div class="wizard-step-inner">
+                <h4>{% trans "For which products should the vouchers be applicable?" %}</h4>
+                {% bootstrap_field form.itemvar layout="inline" %}
+            </div>
+        </div>
+
+        <div class="wizard-step" id="step-price">
+            <div class="wizard-step-inner">
+                <h4>{% trans "Should the vouchers modify the product's price?" %}</h4>
+                <div class="radio radio-alt">
+                    <label>
+                        <input type="radio" name="price_mode" value="none">
+                        {% trans "No, just allow to buy this product" %}
+                        <span class="help-block">
+                            {% trans "This is useful if you have products that can only be bought using vouchers. It also allows you to just block quota for someone (see next step)." %}
+                        </span>
+                    </label>
+                </div>
+                <div class="radio radio-alt">
+                    <label>
+                        <input type="radio" name="price_mode" value="percent">
+                        {% blocktrans trimmed %}
+                            Reduce price by {{ value_field_percent }} %
+                        {% endblocktrans %}
+                    </label>
+                </div>
+                <div class="radio radio-alt">
+                    <label>
+                        <input type="radio" name="price_mode" value="subtract">
+                        {% blocktrans trimmed with currency=request.event.currency %}
+                            Reduce price by {{ value_field_subtract }} {{ currency }}
+                        {% endblocktrans %}
+                    </label>
+                </div>
+                <div class="radio radio-alt">
+                    <label>
+                        <input type="radio" name="price_mode" value="set">
+                        {% blocktrans trimmed with currency=request.event.currency %}
+                            Change price to {{ value_field_set }} {{ currency }}
+                        {% endblocktrans %}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="wizard-step" id="step-block">
+            <div class="wizard-step-inner">
+                <h4>{% trans "Should the vouchers block quota?" %}</h4>
+                <div class="radio radio-alt">
+                    <label>
+                        <input type="radio" name="block_quota" value="no">
+                        {% trans "No" %}
+                    </label>
+                </div>
+                <div class="radio radio-alt">
+                    <label>
+                        <input type="radio" name="block_quota" value="yes">
+                        {% trans "Yes" %}
+                        <span class="help-block">
+                            {% trans "If you select this option, these vouchers will be guaranteed, i.e. the applicable quotas will be reduced in a way that these vouchers can be redeemed as long as they are valid, even if your event sells out otherwise." %}
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="wizard-step" id="step-advanced">
+            <div class="wizard-step-inner">
+                <a href="#" id="wizard-advanced-show">Show advanced options</a>
+                <div class="wizard-advanced">
+                    <h4>{% trans "Advanced options" %}</h4>
+                    {% bootstrap_field form.allow_ignore_quota %}
+                    <p><strong>{% trans "Comment" %}</strong></p>
+                    {% bootstrap_field form.comment layout="inline" form_group_class="comment" %}
+                    <div class="help-block">
+                        {% trans "The text entered in this field will not be visible to the user and is available for your convenience." %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% eventsignal request.event "pretix.control.signals.voucher_form_html" form=form %}
     </form>
+    <div class="form-group submit-group">
+        <button type="submit" class="btn btn-primary btn-save">
+            {% trans "Create" %}
+        </button>
+    </div>
 {% endblock %}

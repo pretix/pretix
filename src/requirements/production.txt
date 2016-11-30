@@ -17,6 +17,7 @@ python-u2flib-server==4.*
 # https://github.com/celery/celery/pull/3199
 git+https://github.com/pretix/celery.git@pretix#egg=celery
 django-statici18n==1.2.*
+django-capture-tag==1.0
 
 # Deployment / static file compilation requirements
 BeautifulSoup4

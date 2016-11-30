@@ -190,44 +190,6 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
 
 class VoucherCreate(EventPermissionRequiredMixin, CreateView):
     model = Voucher
-    template_name = 'pretixcontrol/vouchers/detail.html'
-    permission = 'can_change_vouchers'
-    context_object_name = 'voucher'
-
-    def get_form_class(self):
-        form_class = VoucherForm
-        for receiver, response in voucher_form_class.send(self.request.event, cls=form_class):
-            if response:
-                form_class = response
-        return form_class
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.vouchers', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug,
-        })
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['instance'] = Voucher(event=self.request.event)
-        return kwargs
-
-    @transaction.atomic
-    def form_valid(self, form):
-        form.instance.event = self.request.event
-        messages.success(self.request, _('The new voucher has been created.'))
-        ret = super().form_valid(form)
-        form.instance.log_action('pretix.voucher.added', data=dict(form.cleaned_data), user=self.request.user)
-        return ret
-
-    def post(self, request, *args, **kwargs):
-        # TODO: Transform this into an asynchronous call?
-        with request.event.lock():
-            return super().post(request, *args, **kwargs)
-
-
-class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
-    model = Voucher
     template_name = 'pretixcontrol/vouchers/bulk.html'
     permission = 'can_change_vouchers'
     context_object_name = 'voucher'
@@ -241,6 +203,11 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['instance'] = Voucher(event=self.request.event)
+        initial = {
+        }
+        if 'initial' in kwargs:
+            initial.update(kwargs['initial'])
+        kwargs['initial'] = initial
         return kwargs
 
     @transaction.atomic

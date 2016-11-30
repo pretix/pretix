@@ -174,13 +174,13 @@ class VoucherForm(I18nModelForm):
 
 
 class VoucherBulkForm(VoucherForm):
-    codes = forms.CharField(
-        widget=forms.Textarea,
-        label=_("Codes"),
-        help_text=_(
-            "Add one voucher code per line. We suggest that you copy this list and save it into a file."
-        ),
+    number = forms.IntegerField(
+        label=_("Number"),
         required=True
+    )
+    itemvar = forms.ChoiceField(
+        label=_("Product"),
+        widget=forms.RadioSelect
     )
 
     class Meta:

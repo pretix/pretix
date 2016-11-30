@@ -1,0 +1,35 @@
+#voucher-create {
+  .wizard-step {
+  }
+  .wizard-step-inner {
+    padding: 20px 0;
+  }
+  #id_number, #id_max_usages {
+    width: 75px;
+  }
+  .price {
+    width: 100px;
+  }
+  .form-options {
+    list-style: none;
+    padding: 10px;
+  }
+  .radio {
+    display: block;
+    line-height: 24px;
+  }
+  .radio-alt {
+    line-height: 40px;
+  }
+  .radio .help-block {
+    margin: 0;
+    padding-left: 17px;
+    line-height: 1.5;
+  }
+  .comment {
+    display: block;
+    textarea {
+      width: 100%;
+    }
+  }
+}

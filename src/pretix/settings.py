@@ -193,6 +193,7 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_totp',
     'django_otp.plugins.otp_static',
     'statici18n',
+    'capture_tag',
 ]
 
 try:
