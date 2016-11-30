@@ -122,6 +122,39 @@ def test_webhook_all_good(env, client, monkeypatch):
 
 
 @pytest.mark.django_db
+def test_webhook_mark_paid(env, client, monkeypatch):
+    order = env[1]
+    order.status = Order.STATUS_PENDING
+    order.save()
+
+    charge = get_test_charge(env[1])
+    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args: charge)
+
+    client.post('/dummy/dummy/stripe/webhook/', json.dumps(
+        {
+            "id": "evt_18otImGGWE2Ias8TUyVRDB1G",
+            "object": "event",
+            "api_version": "2016-03-07",
+            "created": 1472729052,
+            "data": {
+                "object": {
+                    "id": "ch_18TY6GGGWE2Ias8TZHanef25",
+                    "object": "charge",
+                    # Rest of object is ignored anway
+                }
+            },
+            "livemode": True,
+            "pending_webhooks": 1,
+            "request": "req_977XOWC8zk51Z9",
+            "type": "charge.succeeded"
+        }
+    ), content_type='application_json')
+
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
 def test_webhook_partial_refund(env, client, monkeypatch):
     charge = get_test_charge(env[1])
     charge['refunds'] = {
