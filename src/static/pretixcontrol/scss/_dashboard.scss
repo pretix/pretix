@@ -6,20 +6,18 @@
 .dashboard .widget-container {
   flex:1 0 auto;
   align-self: stretch;
-  min-height: 1px;
-  padding: 5px;
+  padding: 15px 5px;
   border: 5px solid white;
-  padding-bottom: 30px;
   min-height: 160px;
   background: #F8F8F8;
 }
-.dashboard .widget-container.full {
+.dashboard .widget-container.widget-full {
   width: 100%;
 }
-.dashboard .widget-container.big {
+.dashboard .widget-container.widget-big {
   width: 50%;
 }
-.dashboard .widget-container.small {
+.dashboard .widget-container.widget-small {
   width: 25%;
 }
 .dashboard-panels .panel-heading .fa {
@@ -34,7 +32,7 @@
 .dashboard .numwidget {
   .num {
     display: block;
-    padding: 28px 0 10px;
+    padding: 10px 0 10px;
     text-align: center;
     font-size: 40px;
   }
@@ -46,7 +44,7 @@
 }
 .dashboard .shopstate {
   text-align: center;
-  padding: 36px 0;
+  padding: 18px 0;
 
   span.live, span.off {
     display: block;
@@ -62,7 +60,7 @@
 }
 .dashboard .event {
   text-align: center;
-  padding: 30px;
+  padding: 15px 30px;
   font-size: 20px;
 
   span.from, span.to {
@@ -82,7 +80,7 @@
   }
 }
 .dashboard .welcome-wizard {
-  padding: 30px;
+  padding: 5px 15px;
   h3 {
     margin: 0 0 10px 0;
   }
@@ -92,5 +90,16 @@
   }
   p:last-child {
     margin-bottom: 0;
+  }
+}
+@media (max-width: $screen-sm-max) {
+  .dashboard .widget-container.widget-small {
+    width: 50%;
+  }
+}
+@media (max-width: $screen-xs-max) {
+  .dashboard .widget-container.widget-small,
+  .dashboard .widget-container.widget-big {
+    width: 100%;
   }
 }
