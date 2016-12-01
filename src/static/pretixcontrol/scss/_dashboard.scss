@@ -1,17 +1,34 @@
+.dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.dashboard .widget-container {
+  flex:1 0 auto;
+  align-self: stretch;
+  min-height: 1px;
+  padding: 5px;
+  border: 5px solid white;
+  padding-bottom: 30px;
+  min-height: 160px;
+  background: #F8F8F8;
+}
+.dashboard .widget-container.full {
+  width: 100%;
+}
+.dashboard .widget-container.big {
+  width: 50%;
+}
+.dashboard .widget-container.small {
+  width: 25%;
+}
 .dashboard-panels .panel-heading .fa {
   opacity: 0.5;
 }
-.dashboard > div {
-  padding: 5px;
-}
-.dashboard .widget {
-  min-height: 160px;
-  background: #F8F8F8;
-  display: block;
-  position: relative;
+.dashboard .widget-container:hover,.dashboard .widget-container:focus {
+  background: #EEEEEE;
 }
 .dashboard .widget:hover,.dashboard .widget:focus {
-  background: #EEEEEE;
   text-decoration: none;
 }
 .dashboard .numwidget {

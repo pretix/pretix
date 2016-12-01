@@ -41,7 +41,7 @@ def base_widgets(sender, **kwargs):
     return [
         {
             'content': NUM_WIDGET.format(num=tickc, text=_('Attendees (ordered)')),
-            'width': 3,
+            'display_size': 'small',
             'priority': 100,
             'url': reverse('control:event.orders', kwargs={
                 'event': sender.slug,
@@ -50,7 +50,7 @@ def base_widgets(sender, **kwargs):
         },
         {
             'content': NUM_WIDGET.format(num=paidc, text=_('Attendees (paid)')),
-            'width': 3,
+            'display_size': 'small',
             'priority': 100,
             'url': reverse('control:event.orders.overview', kwargs={
                 'event': sender.slug,
@@ -60,7 +60,7 @@ def base_widgets(sender, **kwargs):
         {
             'content': NUM_WIDGET.format(
                 num=formats.localize(rev), text=_('Total revenue ({currency})').format(currency=sender.currency)),
-            'width': 3,
+            'display_size': 'small',
             'priority': 100,
             'url': reverse('control:event.orders.overview', kwargs={
                 'event': sender.slug,
@@ -69,7 +69,7 @@ def base_widgets(sender, **kwargs):
         },
         {
             'content': NUM_WIDGET.format(num=prodc, text=_('Active products')),
-            'width': 3,
+            'display_size': 'small',
             'priority': 100,
             'url': reverse('control:event.items', kwargs={
                 'event': sender.slug,
@@ -87,7 +87,7 @@ def quota_widgets(sender, **kwargs):
         widgets.append({
             'content': NUM_WIDGET.format(num='{}/{}'.format(left, q.size) if q.size is not None else '\u221e',
                                          text=_('{quota} left').format(quota=q.name)),
-            'width': 3,
+            'display_size': 'small',
             'priority': 50,
             'url': reverse('control:event.items.quotas.show', kwargs={
                 'event': sender.slug,
@@ -101,7 +101,7 @@ def quota_widgets(sender, **kwargs):
 @receiver(signal=event_dashboard_widgets)
 def shop_state_widget(sender, **kwargs):
     return [{
-        'width': 3,
+        'display_size': 'small',
         'priority': 1000,
         'content': '<div class="shopstate">{t1}<br><span class="{cls}"><span class="fa {icon}"></span> {state}</span>{t2}</div>'.format(
             t1=_('Your ticket shop is'), t2=_('Click here to change'),
@@ -144,7 +144,7 @@ def welcome_wizard_widget(sender, **kwargs):
     else:
         return []
     return [{
-        'width': 12,
+        'display_size': 'full',
         'priority': 2000,
         'content': template.render(ctx)
     }]
@@ -171,7 +171,7 @@ def user_event_widgets(**kwargs):
                 event=event.name, df=date_format(event.date_from, 'SHORT_DATE_FORMAT') if event.date_from else '',
                 dt=date_format(event.date_to, 'SHORT_DATE_FORMAT') if event.date_to else ''
             ),
-            'width': 3,
+            'display_size': 'small',
             'priority': 100,
             'url': reverse('control:event.index', kwargs={
                 'event': event.slug,
@@ -188,7 +188,7 @@ def new_event_widgets(**kwargs):
             'content': '<div class="newevent"><span class="fa fa-plus-circle"></span>{t}</div>'.format(
                 t=_('Create a new event')
             ),
-            'width': 3,
+            'display_size': 'small',
             'priority': 50,
             'url': reverse('control:events.add')
         }
@@ -207,22 +207,18 @@ def user_index(request):
 
 def rearrange(widgets: list):
     """
-    Small and stupid algorithm to arrange widget boxes without too many gaps while respecting
-    priority. Doing this siginificantly better might be *really* hard.
+    Sort widget boxes according to priority.
     """
-    oldlist = sorted(widgets, key=lambda w: -1 * w.get('priority', 1))
-    newlist = []
-    cpos = 0
-    while len(oldlist) > 0:
-        max_prio = max([w.get('priority', 1) for w in oldlist])
-        try:
-            best = max([w for w in oldlist if w.get('priority', 1) == max_prio and cpos + w.get('width', 3) <= 12],
-                       key=lambda w: w.get('width', 3))
-            cpos = (cpos + best.get('width', 3)) % 12
-        except ValueError:  # max() arg is an empty sequence
-            best = [w for w in oldlist if w.get('priority', 1) == max_prio][0]
-            cpos = best.get('width', 3)
-        oldlist.remove(best)
-        newlist.append(best)
+    mapping = {
+        'small': 1,
+        'big': 2,
+        'full': 3,
+    }
 
-    return newlist
+    def sort_key(element):
+        return (
+            element.get('priority', 1),
+            mapping.get(element.get('display_size', 'small'), 1),
+        )
+
+    return sorted(widgets, key=sort_key, reverse=True)
