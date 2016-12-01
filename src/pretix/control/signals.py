@@ -50,8 +50,8 @@ This signal is sent out to include widgets in the event dashboard. Receivers
 should return a list of dictionaries, where each dictionary can have the keys:
 
 * content (str, containing HTML)
-* minimal width (int, widget width in 1/12ths of the page, default ist 3, can be
-  ignored on small displays)
+* display_size (str, one of "full" (whole row), "big" (half a row) or "small"
+  (quarter of a row). May be ignored on small displays, default is "small")
 * priority (int, used for ordering, higher comes first, default is 1)
 * link (str, optional, if the full widget should be a link)
 
@@ -66,8 +66,8 @@ This signal is sent out to include widgets in the personal user dashboard. Recei
 should return a list of dictionaries, where each dictionary can have the keys:
 
 * content (str, containing HTML)
-* minimal width (int, widget width in 1/12ths of the page, default ist 3, can be
-  ignored on small displays)
+* display_size (str, one of "full" (whole row), "big" (half a row) or "small"
+  (quarter of a row). May be ignored on small displays, default is "small")
 * priority (int, used for ordering, higher comes first, default is 1)
 * link (str, optional, if the full widget should be a link)
 
