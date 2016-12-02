@@ -5,6 +5,7 @@ $(function () {
     }
 
     function show_step(state_el) {
+        var was_visible = state_el.is(':visible');
         state_el.animate({
             'height': 'show',
             'opacity': 'show',
@@ -15,13 +16,15 @@ $(function () {
         }, 400);
         var offset = state_el.offset();
         var body = $("html, body");
-        if (offset.top > $("body").scrollTop() + $(window).height() - 160) {
+        if (!was_visible && offset.top > $("body").scrollTop() + $(window).height() - 160) {
             body.animate({scrollTop: offset.top + 200}, '400', 'swing');
         }
     }
 
-    $(".wizard-step, .wizard-advanced").hide();
-    $(".wizard-step").first().show();
+    if ($(".alert-danger").length === 0) {
+        $(".wizard-step, .wizard-advanced, #step-save").hide();
+        $(".wizard-step").first().show();
+    }
 
     $("#id_number, #id_max_usages").on("change keydown keyup", function () {
         if ($("#id_number").val() && $("#id_max_usages").val()) {
@@ -35,12 +38,14 @@ $(function () {
     }).on("change dp.change", function () {
         if ($("input[name=has_valid_until][value=no]").prop("checked") || $("#id_valid_until").val()) {
             show_step($("#step-products"));
-        }
+        } 
     });
 
     $("input[name=has_valid_until]").on("change", function () {
-        if ($("input[name=has_valid_until][value=no]").prop("checked") || $("#id_valid_until").val()) {
+        if ($("input[name=has_valid_until]").not("[value=on]").prop("checked") || $("#id_valid_until").val()) {
             show_step($("#step-products"));
+        } else {
+            $("#id_valid_until").focus();
         }
     });
 
@@ -50,14 +55,11 @@ $(function () {
 
     $("#step-price input").on("change keydown keyup", function () {
         var mode = $("input[name=price_mode]:checked").val();
-        var show_next = (
-            mode === 'none'
-            || (mode === 'percent' && $("input[name='price[percent]']").val())
-            || (mode === 'subtract' && $("input[name='price[subtract]']").val())
-            || (mode === 'set' && $("input[name='price[set]']").val())
-        );
+        var show_next = (mode === 'none' || $("input[name='value_" + mode + "']").val());
         if (show_next) {
             show_step($("#step-block"));
+        } else {
+            $("input[name='value_" + mode + "']").focus();
         }
     });
     $("#step-price input[type=text]").on("focus change keyup keydown", function () {
@@ -67,6 +69,7 @@ $(function () {
 
     $("input[name=block_quota]").on("change", function () {
         show_step($("#step-advanced"));
+        show_step($("#step-save"));
     });
 
     $("#wizard-advanced-show").on("click", function (e) {

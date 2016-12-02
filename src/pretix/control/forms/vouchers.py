@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import Item, ItemVariation, Quota, Voucher
+from pretix.base.models.vouchers import _generate_random_code
 
 
 class VoucherForm(I18nModelForm):
@@ -90,9 +91,8 @@ class VoucherForm(I18nModelForm):
                 }
             )
 
-        if 'codes' in data:
-            data['codes'] = [a.strip() for a in data.get('codes', '').strip().split("\n") if a]
-            cnt = len(data['codes']) * data['max_usages']
+        if 'number' in data:
+            cnt = data['number'] * data['max_usages']
         else:
             cnt = data['max_usages']
 
@@ -182,6 +182,22 @@ class VoucherBulkForm(VoucherForm):
         label=_("Product"),
         widget=forms.RadioSelect
     )
+    price_mode = forms.ChoiceField(
+        choices=Voucher.PRICE_MODES,
+    )
+    has_valid_until = forms.BooleanField()
+    value_percent = forms.DecimalField(
+        required=False,
+        max_digits=10, decimal_places=2
+    )
+    value_subtract = forms.DecimalField(
+        required=False,
+        max_digits=10, decimal_places=2
+    )
+    value_set = forms.DecimalField(
+        required=False,
+        max_digits=10, decimal_places=2
+    )
 
     class Meta:
         model = Voucher
@@ -203,21 +219,35 @@ class VoucherBulkForm(VoucherForm):
     def clean(self):
         data = super().clean()
 
-        if Voucher.objects.filter(code__in=data['codes'], event=self.instance.event).exists():
-            raise ValidationError(_('A voucher with one of this codes already exists.'))
+        if data.get('has_valid_until', False) and not data.get('valid_until'):
+            raise ValidationError(_('You did not specify an expiration date for the vouchers.'))
+
+        if data.get('price_mode', 'none') != 'none':
+            if data.get('value_%s' % data['price_mode']) is None:
+                raise ValidationError(_('You specified that the vouchers should modify the products price '
+                                        'but did not specify a value.'))
 
         return data
 
     def save(self, event, *args, **kwargs):
         objs = []
-        for code in self.cleaned_data['codes']:
+
+        codes = set()
+        while len(codes) < self.cleaned_data['number']:
+            new_codes = set()
+            for i in range(min(self.cleaned_data['number'] - len(codes), 500)):
+                # Work around SQLite's SQLITE_MAX_VARIABLE_NUMBER
+                new_codes.add(_generate_random_code())
+            new_codes -= set([v['code'] for v in Voucher.objects.filter(code__in=new_codes).values('code')])
+            codes |= new_codes
+
+        for code in codes:
             obj = copy.copy(self.instance)
             obj.event = event
             obj.code = code
             data = dict(self.cleaned_data)
             data['code'] = code
             data['bulk'] = True
-            del data['codes']
             obj.save()
             objs.append(obj)
         return objs

@@ -8,18 +8,14 @@
     <h1>{% trans "Create new vouchers" %}</h1>
     <form action="" method="post" class="form-inline" id="voucher-create">
         {% csrf_token %}
-        {% bootstrap_form_errors form %}
         {% capture as number_field silent %}&nbsp;{% bootstrap_field form.number layout="inline" %}&nbsp;{% endcapture %}
         {% capture as max_usages_field silent %}&nbsp;{% bootstrap_field form.max_usages layout="inline" %}&nbsp;{% endcapture %}
         {% capture as valid_until_field silent %}&nbsp;{% bootstrap_field form.valid_until layout="inline" %}&nbsp;{% endcapture %}
-        {% capture as value_field_percent silent %}&nbsp;
-            <input class="form-control price" name="price[percent]" type="text">&nbsp;{% endcapture %}
-        {% capture as value_field_subtract silent %}&nbsp;
-            <input class="form-control price" name="price[subtract]" type="text">&nbsp;{% endcapture %}
-        {% capture as value_field_set silent %}&nbsp;
-            <input class="form-control price" name="price[set]" type="text">&nbsp;{% endcapture %}
+        {% capture as value_field_percent silent %}&nbsp;{% bootstrap_field form.value_percent layout="inline" %}&nbsp;{% endcapture %}
+        {% capture as value_field_subtract silent %}&nbsp;{% bootstrap_field form.value_subtract layout="inline" %}&nbsp;{% endcapture %}
+        {% capture as value_field_set silent %}&nbsp;{% bootstrap_field form.value_set layout="inline" %}&nbsp;{% endcapture %}
 
-        {% bootstrap_form_errors form type="all" %}
+        {% bootstrap_form_errors form %}
 
         <div class="wizard-step" id="step-number">
             <div class="wizard-step-inner">
@@ -38,13 +34,13 @@
                 <h4>{% trans "How long should the vouchers be valid?" %}</h4>
                 <div class="radio radio-alt">
                     <label>
-                        <input type="radio" name="has_valid_until" value="no">
+                        <input type="radio" name="has_valid_until" value="" {% if request.POST and not "has_valid_until" in request.POST %}checked="checked"{% endif %}>
                         {% trans "The whole presale period" %}
                     </label>
                 </div>
                 <div class="radio radio-alt">
                     <label>
-                        <input type="radio" name="has_valid_until" value="yes">
+                        <input type="radio" name="has_valid_until" value="on" {% if "on" == request.POST.has_valid_until %}checked="checked"{% endif %}>
                         {% blocktrans trimmed %}
                             Only valid until {{ valid_until_field }}
                         {% endblocktrans %}
@@ -65,7 +61,7 @@
                 <h4>{% trans "Should the vouchers modify the product's price?" %}</h4>
                 <div class="radio radio-alt">
                     <label>
-                        <input type="radio" name="price_mode" value="none">
+                        <input type="radio" name="price_mode" value="none" {% if "none" == request.POST.price_mode %}checked="checked"{% endif %}>
                         {% trans "No, just allow to buy this product" %}
                         <span class="help-block">
                             {% trans "This is useful if you have products that can only be bought using vouchers. It also allows you to just block quota for someone (see next step)." %}
@@ -74,7 +70,7 @@
                 </div>
                 <div class="radio radio-alt">
                     <label>
-                        <input type="radio" name="price_mode" value="percent">
+                        <input type="radio" name="price_mode" value="percent" {% if "percent" == request.POST.price_mode %}checked="checked"{% endif %}>
                         {% blocktrans trimmed %}
                             Reduce price by {{ value_field_percent }} %
                         {% endblocktrans %}
@@ -82,7 +78,7 @@
                 </div>
                 <div class="radio radio-alt">
                     <label>
-                        <input type="radio" name="price_mode" value="subtract">
+                        <input type="radio" name="price_mode" value="subtract" {% if "subtract" == request.POST.price_mode %}checked="checked"{% endif %}>
                         {% blocktrans trimmed with currency=request.event.currency %}
                             Reduce price by {{ value_field_subtract }} {{ currency }}
                         {% endblocktrans %}
@@ -90,7 +86,7 @@
                 </div>
                 <div class="radio radio-alt">
                     <label>
-                        <input type="radio" name="price_mode" value="set">
+                        <input type="radio" name="price_mode" value="set" {% if "set" == request.POST.price_mode %}checked="checked"{% endif %}>
                         {% blocktrans trimmed with currency=request.event.currency %}
                             Change price to {{ value_field_set }} {{ currency }}
                         {% endblocktrans %}
@@ -104,13 +100,13 @@
                 <h4>{% trans "Should the vouchers block quota?" %}</h4>
                 <div class="radio radio-alt">
                     <label>
-                        <input type="radio" name="block_quota" value="no">
+                        <input type="radio" name="block_quota" value="" {% if request.POST and not "block_quota" in request.POST %}checked="checked"{% endif %}>
                         {% trans "No" %}
                     </label>
                 </div>
                 <div class="radio radio-alt">
                     <label>
-                        <input type="radio" name="block_quota" value="yes">
+                        <input type="radio" name="block_quota" value="on" {% if "on" == request.POST.block_quota %}checked="checked"{% endif %}>
                         {% trans "Yes" %}
                         <span class="help-block">
                             {% trans "If you select this option, these vouchers will be guaranteed, i.e. the applicable quotas will be reduced in a way that these vouchers can be redeemed as long as they are valid, even if your event sells out otherwise." %}
@@ -136,10 +132,10 @@
         </div>
 
         {% eventsignal request.event "pretix.control.signals.voucher_form_html" form=form %}
+        <div class="submit-group" id="step-save">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Create" %}
+            </button>
+        </div>
     </form>
-    <div class="form-group submit-group">
-        <button type="submit" class="btn btn-primary btn-save">
-            {% trans "Create" %}
-        </button>
-    </div>
 {% endblock %}
