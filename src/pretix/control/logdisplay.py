@@ -59,7 +59,6 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),
         'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
         'pretix.event.order.comment': _('The order\'s internal comment has been updated.'),
-        'pretix.event.order.contact.changed': _('The email address has been changed.'),
         'pretix.event.order.payment.changed': _('The payment method has been changed.'),
         'pretix.event.order.expire_warning_sent': _('An email has been sent with a warning that the order is about to expire.'),
         'pretix.user.settings.2fa.enabled': _('Two-factor authentication has been enabled.'),
@@ -74,6 +73,13 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if logentry.action_type.startswith('pretix.event.order.changed'):
         return _display_order_changed(sender, logentry)
+
+    if logentry.action_type.startswith('pretix.event.order.contact.changed'):
+        data = json.loads(logentry.data)
+        return _('The email address has been changed from "{old}" to "{new}".').format(
+            old=data['old_email'],
+            new=data['new_email'],
+        )
 
     if logentry.action_type == 'pretix.user.settings.2fa.device.added':
         data = json.loads(logentry.data)
