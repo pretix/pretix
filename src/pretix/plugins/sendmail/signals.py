@@ -2,6 +2,7 @@ from django.core.urlresolvers import resolve, reverse
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.signals import logentry_display
 from pretix.control.signals import nav_event
 
 
@@ -19,5 +20,32 @@ def control_nav_import(sender, request=None, **kwargs):
             }),
             'active': (url.namespace == 'plugins:sendmail' and url.url_name == 'send'),
             'icon': 'envelope',
-        }
+            'children': [
+                {
+                    'label': _('Send email'),
+                    'url': reverse('plugins:sendmail:send', kwargs={
+                        'event': request.event.slug,
+                        'organizer': request.event.organizer.slug,
+                    }),
+                    'active': (url.namespace == 'plugins:sendmail' and url.url_name == 'send'),
+                },
+                {
+                    'label': _('Email history'),
+                    'url': reverse('plugins:sendmail:history', kwargs={
+                        'event': request.event.slug,
+                        'organizer': request.event.organizer.slug,
+                    }),
+                    'active': (url.namespace == 'plugins:sendmail' and url.url_name == 'history'),
+                },
+            ]
+        },
     ]
+
+
+@receiver(signal=logentry_display)
+def pretixcontrol_logentry_display(sender, logentry, **kwargs):
+    plains = {
+        'pretix.plugins.sendmail.sent': _('Email was sent'),
+    }
+    if logentry.action_type in plains:
+        return plains[logentry.action_type]

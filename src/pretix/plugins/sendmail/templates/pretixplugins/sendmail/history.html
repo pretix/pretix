@@ -1,0 +1,51 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Send out emails" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Email history" %}</h1>
+    <div>
+        <ul class="list-group">
+            {% for log in logs %}
+                <li class="list-group-item logentry">
+                    <p class="meta">
+                        <span class="fa fa-clock-o"></span> {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                        {% if log.user %}
+                            <br/><span class="fa fa-user"></span> {{ log.user.get_full_name }}
+                        {% endif %}
+                        {% if log.display %}
+                            <br/><span class="fa fa-comment-o"></span> {{ log.display }}
+                        {% endif %}
+                    </p>
+                    <p>
+                        <strong>Email address:</strong> {{ log.parsed_data.recipients }}
+                    </p>
+                    <p>
+                        <strong>Subject:</strong>
+                    </p>
+                    <p>
+                        {% for key,value in log.parsed_data.subject.items %}
+                            <p>
+                                {{ key }}: {{ value }}
+                            </p>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        <strong>Email content:</strong>
+                    </p>
+                    <p>
+                        {% for key,value in log.parsed_data.message.items %}
+                            <p>
+                                {{ key }}:
+                            </p>
+                            <p>
+                                {{ value|linebreaksbr }}
+                            </p>
+                        {% endfor %}
+                    </p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}
