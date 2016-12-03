@@ -8,10 +8,10 @@ from django.shortcuts import redirect
 from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import FormView
+from django.views.generic import FormView, ListView
 
 from pretix.base.i18n import language
-from pretix.base.models import Order
+from pretix.base.models import LogEntry, Order
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -37,9 +37,6 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         if 'overdue' in form.cleaned_data['sendto']:
             statusq |= Q(status=Order.STATUS_PENDING, expires__lt=now())
         orders = qs.filter(statusq)
-
-        self.request.event.log_action('pretix.plugins.sendmail.sent', user=self.request.user, data=dict(
-            form.cleaned_data))
 
         tz = pytz.timezone(self.request.event.settings.timezone)
 
@@ -77,9 +74,20 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                                      'secret': o.secret
                                  })},
                              self.request.event, locale=o.locale, order=o)
+                        o.log_action(
+                            'pretix.plugins.sendmail.order.email.sent',
+                            user=self.request.user,
+                            data={
+                                'subject': form.cleaned_data['subject'],
+                                'content': form.cleaned_data['message'],
+                                'recipients': o.email
+                            }
+                        )
                 except SendMailException:
                     failures.append(o.email)
-
+        self.request.event.log_action('pretix.plugins.sendmail.sent',
+                                      user=self.request.user,
+                                      data=dict(form.cleaned_data))
         if failures:
             messages.error(self.request, _('Failed to send mails to the following users: {}'.format(' '.join(failures))))
         else:
@@ -95,3 +103,18 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         ctx = super().get_context_data(*args, **kwargs)
         ctx['output'] = getattr(self, 'output', None)
         return ctx
+
+
+class EmailHistoryView(EventPermissionRequiredMixin, ListView):
+    template_name = 'pretixplugins/sendmail/history.html'
+    permission = 'can_change_orders'
+    model = LogEntry
+    context_object_name = 'logs'
+    paginate_by = 15
+
+    def get_queryset(self):
+        qs = LogEntry.objects.filter(
+            event=self.request.event,
+            action_type='pretix.plugins.sendmail.sent'
+        )
+        return qs

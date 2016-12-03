@@ -98,12 +98,28 @@
     {% endif %}
     {% for nav in nav_event %}
         <li>
-            <a href="{{ nav.url }}" {% if nav.active %}class="active"{% endif %}>
+            <a href="{{ nav.url }}" {% if nav.active %}class="active"{% endif %}
+            {% if nav.children %}class="has-children"{% endif %}>
                 {% if nav.icon %}
                     <i class="fa fa-{{ nav.icon }} fa-fw"></i>
                 {% endif %}
                 {{ nav.label }}
             </a>
+            {% if nav.children %}
+                <a href="#" class="arrow">
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                {% for item in nav.children %}
+                    <li>
+                        <a href="{{ item.url }}"
+                        {% if item.active %}class="active"{% endif %}>
+                            {{ item.label }}
+                        </a>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endif %}
         </li>
     {% endfor %}
 {% endblock %}

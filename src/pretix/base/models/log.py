@@ -1,3 +1,4 @@
+import json
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -124,3 +125,7 @@ class LogEntry(models.Model):
             return a_text
         else:
             return ''
+
+    @cached_property
+    def parsed_data(self):
+        return json.loads(self.data)
