@@ -6,7 +6,7 @@ django-bootstrap3>=7.1,<7.2
 git+https://github.com/pretix/django-formset-js.git@master#egg=django-formset-js
 django-compressor==2.1
 reportlab>=3.2,<3.3
-git+https://github.com/pretix/PyPDF2.git@pretix#egg=PyPDF2
+PyPDF2==1.26.*
 easy-thumbnails>=2.2,<3
 django-libsass
 libsass
