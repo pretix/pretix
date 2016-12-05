@@ -2,6 +2,7 @@ import tempfile
 from collections import OrderedDict, defaultdict
 from decimal import Decimal
 
+import pytz
 from django import forms
 from django.conf import settings
 from django.contrib.staticfiles import finders
@@ -38,7 +39,8 @@ class Report(BaseExporter):
         return 'report-%s.pdf' % self.event.slug, 'application/pdf', self.create()
 
     def get_filename(self):
-        return "%s-%s.pdf" % (self.name, now().strftime("%Y-%m-%d-%H-%M-%S"))
+        tz = pytz.timezone(self.event.settings.timezone)
+        return "%s-%s.pdf" % (self.name, now().astimezone(tz).strftime("%Y-%m-%d-%H-%M-%S"))
 
     @staticmethod
     def register_fonts():
@@ -274,6 +276,7 @@ class OrderTaxListReport(Report):
         headlinestyle = self.get_style()
         headlinestyle.fontSize = 15
         headlinestyle.fontName = 'OpenSansBd'
+        tz = pytz.timezone(self.event.settings.timezone)
 
         tax_rates = set(
             self.event.orders.exclude(payment_fee=0).values_list('payment_fee_tax_rate', flat=True)
@@ -340,7 +343,7 @@ class OrderTaxListReport(Report):
                 tdata.append(
                     [
                         op['order__code'],
-                        date_format(op['order__datetime'], "SHORT_DATE_FORMAT"),
+                        date_format(op['order__datetime'].astimezone(tz), "SHORT_DATE_FORMAT"),
                         status_labels[op['order__status']],
                         date_format(op['order__payment_date'], "SHORT_DATE_FORMAT") if op['order__payment_date'] else '',
                         str(op['order__total'])
