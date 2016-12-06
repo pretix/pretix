@@ -526,9 +526,10 @@ class OrderContactChange(OrderView):
         )
 
     def post(self, *args, **kwargs):
+        old_email = self.order.email
         if self.form.is_valid():
             self.order.log_action('pretix.event.order.contact.changed', {
-                'old_email': self.order.email,
+                'old_email': old_email,
                 'new_email': self.form.cleaned_data['email'],
                 'regenerate_secrets': self.form.cleaned_data['regenerate_secrets']
             })
