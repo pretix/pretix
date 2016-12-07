@@ -73,8 +73,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                                  'order_date': date_format(o.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
                                  'due_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
                                  'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                                     'order': 'ORDER1234',
-                                     'secret': 'longrandomsecretabcdef123456'
+                                     'order': o.code,
+                                     'secret': o.secret
                                  })},
                              self.request.event, locale=o.locale, order=o)
                 except SendMailException:
