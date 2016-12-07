@@ -421,6 +421,10 @@ class VoucherTestCase(BaseQuotaTestCase):
         v = Voucher.objects.create(event=self.event, price_mode='set', value=Decimal('10.00'))
         v.calculate_price(Decimal('23.42')) == Decimal('10.00')
 
+    def test_calculate_price_set_zero(self):
+        v = Voucher.objects.create(event=self.event, price_mode='set', value=Decimal('0.00'))
+        v.calculate_price(Decimal('23.42')) == Decimal('0.00')
+
     def test_calculate_price_subtract(self):
         v = Voucher.objects.create(event=self.event, price_mode='subtract', value=Decimal('10.00'))
         v.calculate_price(Decimal('23.42')) == Decimal('13.42')

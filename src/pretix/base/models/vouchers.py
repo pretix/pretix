@@ -234,7 +234,7 @@ class Voucher(LoggedModel):
         certain percentage. If the voucher does not modify the price, the
         original price will be returned.
         """
-        if self.value:
+        if self.value is not None:
             if self.price_mode == 'set':
                 return self.value
             elif self.price_mode == 'subtract':
