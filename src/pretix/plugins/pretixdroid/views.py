@@ -3,7 +3,7 @@ import logging
 import string
 
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.http import (
     HttpResponseForbidden, HttpResponseNotFound, JsonResponse,
 )
@@ -131,5 +131,68 @@ class ApiSearchView(ApiView):
             ]
         else:
             response['results'] = []
+
+        return JsonResponse(response)
+
+
+class ApiStatusView(ApiView):
+    def get(self, request, **kwargs):
+        response = {
+            'version': API_VERSION,
+            'checkins': Checkin.objects.filter(
+                position__order__event=self.event
+            ).count(),
+            'total': OrderPosition.objects.filter(
+                order__event=self.event, order__status=Order.STATUS_PAID
+            ).count()
+        }
+
+        op_by_item = {
+            p['item']: p['cnt']
+            for p in OrderPosition.objects.filter(
+                order__event=self.event,
+                order__status=Order.STATUS_PAID
+            ).order_by().values('item').annotate(cnt=Count('id'))
+        }
+        op_by_variation = {
+            p['variation']: p['cnt']
+            for p in OrderPosition.objects.filter(
+                order__event=self.event,
+                order__status=Order.STATUS_PAID
+            ).order_by().values('variation').annotate(cnt=Count('id'))
+        }
+        c_by_item = {
+            p['position__item']: p['cnt']
+            for p in Checkin.objects.filter(
+                position__order__event=self.event,
+                position__order__status=Order.STATUS_PAID
+            ).order_by().values('position__item').annotate(cnt=Count('id'))
+        }
+        c_by_variation = {
+            p['position__variation']: p['cnt']
+            for p in Checkin.objects.filter(
+                position__order__event=self.event,
+                position__order__status=Order.STATUS_PAID
+            ).order_by().values('position__variation').annotate(cnt=Count('id'))
+        }
+
+        response['items'] = []
+        for item in self.event.items.prefetch_related('variations'):
+            i = {
+                'id': item.pk,
+                'name': str(item),
+                'admission': item.admission,
+                'checkins': c_by_item.get(item.pk, 0),
+                'total': op_by_item.get(item.pk, 0),
+                'variations': []
+            }
+            for var in item.variations.all():
+                i['variations'].append({
+                    'id': var.pk,
+                    'name': str(var),
+                    'checkins': c_by_variation.get(var.pk, 0),
+                    'total': op_by_variation.get(var.pk, 0),
+                })
+            response['items'].append(i)
 
         return JsonResponse(response)
