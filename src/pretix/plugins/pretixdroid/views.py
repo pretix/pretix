@@ -12,10 +12,9 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
 
-from pretix.base.models import Event, Order, OrderPosition
+from pretix.base.models import Checkin, Event, Order, OrderPosition
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.urls import build_absolute_uri
-from pretix.plugins.pretixdroid.models import Checkin
 
 logger = logging.getLogger('pretix.plugins.pretixdroid')
 API_VERSION = 2
