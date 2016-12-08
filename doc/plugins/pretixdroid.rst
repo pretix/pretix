@@ -92,6 +92,68 @@ uses to communicate with the pretix server.
       }
 
    :query query: Search query
+         :query key: Secret API key
+         :statuscode 200: Valid request
+         :statuscode 404: Unknown organizer or event
+         :statuscode 403: Invalid authorization key
+
+.. http:get:: /pretixdroid/api/(organizer)/(event)/status/
+
+   Returns status information, such as the total number of tickets and the
+   number of performed checkins.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /pretixdroid/api/demoorga/democon/status/?key=ABCDEF HTTP/1.1
+      Host: demo.pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: text/json
+
+      {
+        'checkins': 17,
+        'total': 42,
+        'version': 2,
+        'items': [
+          {
+            'name': 'T-Shirt',
+            'id': 1,
+            'checkins': 1,
+            'admission': False,
+            'total': 1,
+            'variations': [
+              {
+                'name': 'Red',
+                'id': 1,
+                'checkins': 1,
+                'total': 12
+              },
+              {
+               'name': 'Blue',
+                'id': 2,
+                'checkins': 4,
+                'total': 8
+              }
+            ]
+          },
+          {
+            'name': 'Ticket',
+            'id': 2,
+            'checkins': 15,
+            'admission': True,
+            'total': 22,
+            'variations': []
+          }
+        ]
+      }
+
    :query key: Secret API key
    :statuscode 200: Valid request
    :statuscode 404: Unknown organizer or event
