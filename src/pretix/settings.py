@@ -142,11 +142,10 @@ if not SESSION_ENGINE:
 
 HAS_CELERY = config.has_option('celery', 'broker')
 if HAS_CELERY:
-    BROKER_URL = config.get('celery', 'broker')
+    CELERY_BROKER_URL = config.get('celery', 'broker')
     CELERY_RESULT_BACKEND = config.get('celery', 'backend')
-    CELERY_SEND_TASK_ERROR_EMAILS = bool(ADMINS)
 else:
-    CELERY_ALWAYS_EAGER = True
+    CELERY_TASK_ALWAYS_EAGER = True
 
 SESSION_COOKIE_DOMAIN = config.get('pretix', 'cookie_domain', fallback=None)
 
@@ -431,9 +430,7 @@ LOGGING = {
 }
 
 CELERY_TASK_SERIALIZER = 'json'
-# We need to use pickle for now, because kombu/celery are unable to serialize
-# exceptions (that we also use as return values) into any other format.
-CELERY_RESULT_SERIALIZER = 'pickle'
+CELERY_RESULT_SERIALIZER = 'json'
 
 BOOTSTRAP3 = {
     'success_css_class': ''

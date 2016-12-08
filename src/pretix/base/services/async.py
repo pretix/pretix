@@ -19,7 +19,6 @@ from pretix.celery import app
 
 
 class ProfiledTask(app.Task):
-    abstract = True
 
     def __call__(self, *args, **kwargs):
 
@@ -43,7 +42,6 @@ class TransactionAwareTask(ProfiledTask):
     Task class which is aware of django db transactions and only executes tasks
     after transaction has been committed
     """
-    abstract = True
 
     def apply_async(self, *args, **kwargs):
         """

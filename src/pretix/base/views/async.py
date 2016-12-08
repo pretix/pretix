@@ -17,6 +17,7 @@ class AsyncAction:
     task = None
     success_url = None
     error_url = None
+    known_errortypes = []
 
     def do(self, *args):
         if not isinstance(self.task, app.Task):
@@ -53,7 +54,7 @@ class AsyncAction:
     def _return_ajax_result(self, res, timeout=.5):
         if not res.ready():
             try:
-                res.get(timeout=timeout)
+                res.get(timeout=timeout, propagate=False)
             except celery.exceptions.TimeoutError:
                 pass
 
@@ -118,8 +119,13 @@ class AsyncAction:
         return redirect(self.get_error_url())
 
     def get_error_message(self, exception):
-        logger.error('Unexpected exception: %r' % exception)
-        return _('An unexpected error has occured.')
+        if isinstance(exception, dict) and exception['exc_type'] in self.known_errortypes:
+            return exception['exc_message']
+        elif exception.__class__.__name__ in self.known_errortypes:
+            return str(exception)
+        else:
+            logger.error('Unexpected exception: %r' % exception)
+            return _('An unexpected error has occured.')
 
     def get_success_message(self, value):
         return _('The task has been completed.')

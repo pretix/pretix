@@ -5,7 +5,7 @@ from django.http import FileResponse, Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import gettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
@@ -13,7 +13,7 @@ from pretix.base.models.orders import InvoiceAddress
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
 )
-from pretix.base.services.orders import OrderError, cancel_order
+from pretix.base.services.orders import cancel_order
 from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
@@ -462,6 +462,7 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
 
 class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
     task = cancel_order
+    known_errortypes = ['OrderError']
 
     def get_success_url(self, value):
         return self.get_order_url()
@@ -484,13 +485,6 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
 
     def get_success_message(self, value):
         return _('The order has been canceled.')
-
-    def get_error_message(self, exception):
-        if isinstance(exception, dict) and exception['exc_type'] == 'OrderError':
-            return gettext(exception['exc_message'])
-        elif isinstance(exception, OrderError):
-            return str(exception)
-        return super().get_error_message(exception)
 
 
 class OrderDownload(EventViewMixin, OrderDetailMixin, View):

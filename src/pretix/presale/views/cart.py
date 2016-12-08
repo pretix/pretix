@@ -102,19 +102,13 @@ class CartActionMixin:
 
 class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = remove_items_from_cart
+    known_errortypes = ['CartError']
 
     def get_success_message(self, value):
         if CartPosition.objects.filter(cart_id=self.request.session.session_key).exists():
             return _('Your cart has been updated.')
         else:
             return _('Your cart is empty.')
-
-    def get_error_message(self, exception):
-        if isinstance(exception, dict) and exception['exc_type'] == 'CartError':
-            return exception['exc_message']
-        elif isinstance(exception, CartError):
-            return str(exception)
-        return super().get_error_message(exception)
 
     def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
@@ -131,16 +125,10 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
 
 class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = add_items_to_cart
+    known_errortypes = ['CartError']
 
     def get_success_message(self, value):
         return _('The products have been successfully added to your cart.')
-
-    def get_error_message(self, exception):
-        if isinstance(exception, dict) and exception['exc_type'] == 'CartError':
-            return exception['exc_message']
-        elif isinstance(exception, CartError):
-            return str(exception)
-        return super().get_error_message(exception)
 
     def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
