@@ -74,7 +74,7 @@ redis instance to be running on the same host. To avoid the hassle with network 
 recommend connecting to redis via a unix socket. To enable redis on unix sockets, add the following to your
 ``/etc/redis/redis.conf``::
 
-    unixsocket /tmp/redis.sock
+    unixsocket /var/run/redis/redis.sock
     unixsocketperm 777
 
 Now restart redis-server::
@@ -127,14 +127,14 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     host=172.17.0.1
 
     [redis]
-    location=unix:///tmp/redis.sock?db=0
+    location=unix:///var/run/redis/redis.sock?db=0
     ; Remove the following line if you are unsure about your redis' security
     ; to reduce impact if redis gets compromised.
     sessions=true
 
     [celery]
-    backend=redis+socket:///tmp/redis.sock?virtual_host=1
-    broker=redis+socket:///tmp/redis.sock?virtual_host=2
+    backend=redis+socket:///var/run/redis/redis.sock?virtual_host=1
+    broker=redis+socket:///var/run/redis/redis.sock?virtual_host=2
 
 See :ref:`email configuration <mail-settings>` to learn more about configuring mail features.
 
@@ -160,7 +160,7 @@ named ``/etc/systemd/system/pretix.service`` with the following content::
     ExecStart=/usr/bin/docker run --name %n -p 8345:80 \
         -v /var/pretix-data:/data \
         -v /etc/pretix:/etc/pretix \
-        -v /tmp/redis.sock:/tmp/redis.sock \
+        -v /var/run/redis:/var/run/redis \
         -v /var/run/mysqld:/var/run/mysqld \
         pretix/standalone all
     ExecStop=/usr/bin/docker stop %n
