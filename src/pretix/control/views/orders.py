@@ -100,10 +100,13 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
     model = Order
 
     def get_object(self, queryset=None):
-        return Order.objects.get(
-            event=self.request.event,
-            code=self.kwargs['code'].upper()
-        )
+        try:
+            return Order.objects.get(
+                event=self.request.event,
+                code=self.kwargs['code'].upper()
+            )
+        except Order.DoesNotExist:
+            raise Http404()
 
     def _redirect_back(self):
         return redirect('control:event.order',
