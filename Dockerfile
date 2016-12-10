@@ -35,6 +35,7 @@ WORKDIR /pretix/src
 ADD deployment/docker/production_settings.py /pretix/src/production_settings.py
 ENV DJANGO_SETTINGS_MODULE production_settings
 
+RUN pip3 install -U pip wheel setuptools
 RUN pip3 install -r requirements.txt -r requirements/mysql.txt -r requirements/postgres.txt \
 	-r requirements/memcached.txt -r requirements/redis.txt \
 	-r requirements/py34.txt gunicorn
