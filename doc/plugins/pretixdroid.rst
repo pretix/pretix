@@ -27,8 +27,8 @@ uses to communicate with the pretix server.
       Content-Type: text/json
 
       {
-        'status': 'ok'
-        'version': 2
+        "status": "ok"
+        "version": 2
       }
 
    **Example error response**:
@@ -39,9 +39,9 @@ uses to communicate with the pretix server.
       Content-Type: text/json
 
       {
-        'status': 'error',
-        'reason': 'already_redeemed',
-        'version': 2
+        "status": "error",
+        "reason": "already_redeemed",
+        "version": 2
       }
 
    Possible error reasons:
@@ -76,19 +76,19 @@ uses to communicate with the pretix server.
       Content-Type: text/json
 
       {
-        'results': [
+        "results": [
           {
-            'secret': 'az9u4mymhqktrbupmwkvv6xmgds5dk3',
-            'order': 'ABCE6',
-            'item': 'Standard ticket',
-            'variation': null,
-            'attendee_name': 'Peter Higgs',
-            'redeemed': false,
-            'paid': true
+            "secret": "az9u4mymhqktrbupmwkvv6xmgds5dk3",
+            "order": "ABCE6",
+            "item": "Standard ticket",
+            "variation": null,
+            "attendee_name": "Peter Higgs",
+            "redeemed": false,
+            "paid": true
           },
           ...
         ],
-        'version': 2
+        "version": 2
       }
 
    :query query: Search query
@@ -118,38 +118,50 @@ uses to communicate with the pretix server.
       Content-Type: text/json
 
       {
-        'checkins': 17,
-        'total': 42,
-        'version': 2,
-        'items': [
+        "checkins": 17,
+        "total": 42,
+        "version": 2,
+        "event": {
+          "name": "Demo Converence",
+          "slug": "democon",
+          "date_from": "2016-12-27T17:00:00Z",
+          "date_to": "2016-12-30T18:00:00Z",
+          "timezone": "UTC",
+          "url": "https://demo.pretix.eu/demoorga/democon/",
+          "organizer": {
+            "name": "Demo Organizer",
+            "slug": "demoorga"
+          },
+        },
+        "items": [
           {
-            'name': 'T-Shirt',
-            'id': 1,
-            'checkins': 1,
-            'admission': False,
-            'total': 1,
-            'variations': [
+            "name": "T-Shirt",
+            "id": 1,
+            "checkins": 1,
+            "admission": False,
+            "total": 1,
+            "variations": [
               {
-                'name': 'Red',
-                'id': 1,
-                'checkins': 1,
-                'total': 12
+                "name": "Red",
+                "id": 1,
+                "checkins": 1,
+                "total": 12
               },
               {
-               'name': 'Blue',
-                'id': 2,
-                'checkins': 4,
-                'total': 8
+               "name": "Blue",
+                "id": 2,
+                "checkins": 4,
+                "total": 8
               }
             ]
           },
           {
-            'name': 'Ticket',
-            'id': 2,
-            'checkins': 15,
-            'admission': True,
-            'total': 22,
-            'variations': []
+            "name": "Ticket",
+            "id": 2,
+            "checkins": 15,
+            "admission": True,
+            "total": 22,
+            "variations": []
           }
         ]
       }

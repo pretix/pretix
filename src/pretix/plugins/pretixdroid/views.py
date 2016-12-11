@@ -15,6 +15,8 @@ from django.views.generic import TemplateView, View
 from pretix.base.models import Checkin, Event, Order, OrderPosition
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.urls import build_absolute_uri
+from pretix.multidomain.urlreverse import \
+    build_absolute_uri as event_absolute_uri
 
 logger = logging.getLogger('pretix.plugins.pretixdroid')
 API_VERSION = 2
@@ -139,6 +141,18 @@ class ApiStatusView(ApiView):
     def get(self, request, **kwargs):
         response = {
             'version': API_VERSION,
+            'event': {
+                'name': str(self.event),
+                'slug': self.event.slug,
+                'organizer': {
+                    'name': str(self.event.organizer),
+                    'slug': self.event.organizer.slug
+                },
+                'date_from': self.event.date_from,
+                'date_to': self.event.date_to,
+                'timezone': self.event.settings.timezone,
+                'url': event_absolute_uri(self.event, 'presale:event.index')
+            },
             'checkins': Checkin.objects.filter(
                 position__order__event=self.event
             ).count(),
