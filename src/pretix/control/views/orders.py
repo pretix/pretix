@@ -531,17 +531,21 @@ class OrderContactChange(OrderView):
     def post(self, *args, **kwargs):
         old_email = self.order.email
         if self.form.is_valid():
-            self.order.log_action('pretix.event.order.contact.changed', {
-                'old_email': old_email,
-                'new_email': self.form.cleaned_data['email'],
-                'regenerate_secrets': self.form.cleaned_data['regenerate_secrets']
-            })
+            self.order.log_action(
+                'pretix.event.order.contact.changed',
+                data={
+                    'old_email': old_email,
+                    'new_email': self.form.cleaned_data['email'],
+                },
+                user=self.request.user,
+            )
             if self.form.cleaned_data['regenerate_secrets']:
                 self.order.secret = generate_secret()
                 for op in self.order.positions.all():
                     op.secret = generate_position_secret()
                     op.save()
                 CachedTicket.objects.filter(order_position__order=self.order).delete()
+                self.order.log_action('pretix.event.order.secret.changed', user=self.request.user)
 
             self.form.save()
             messages.success(self.request, _('The order has been changed.'))
