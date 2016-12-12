@@ -11,7 +11,7 @@
         <fieldset>
             <legend>{% trans "Voucher codes" %}</legend>
             <div class="form-group">
-                <div class="col-md-6 col-md-offset-3">
+                <div class="col-md-7 col-sm-12 col-md-offset-3">
                     <div class="input-group">
                         <input type="text" class="form-control input-xs"
                                id="voucher-bulk-codes-num"
@@ -21,11 +21,16 @@
                                     data-rng-url="{% url 'control:event.vouchers.rng' organizer=request.event.organizer.slug event=request.event.slug %}">
                                 {% trans "Generate random codes" %}
                             </button>
+                            <button type="button" class="btn btn-default btn-clipboard" data-clipboard-target="#id_codes">
+                                <i class="fa fa-clipboard" aria-hidden="true"></i>
+                                {% trans "Copy codes" %}
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
             {% bootstrap_field form.codes layout="horizontal" %}
+
             {% bootstrap_field form.max_usages layout="horizontal" %}
         </fieldset>
         <fieldset>
