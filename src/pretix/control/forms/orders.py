@@ -21,9 +21,9 @@ class ExtendForm(I18nModelForm):
 
     def clean(self):
         data = super().clean()
+        data['expires'] = data['expires'].replace(hour=23, minute=59, second=59)
         if data['expires'] < now():
             raise ValidationError(_('The new expiry date needs to be in the future.'))
-        data['expires'] = data['expires'].replace(hour=23, minute=59, second=59)
         return data
 
 
