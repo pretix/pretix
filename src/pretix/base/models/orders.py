@@ -570,6 +570,7 @@ class CachedTicket(models.Model):
 @receiver(post_delete, sender=CachedTicket)
 def cached_file_delete(sender, instance, **kwargs):
     try:
-        instance.cachedfile.delete()
+        if instance.cachedfile:
+            instance.cachedfile.delete()
     except CachedFile.DoesNotExist:
         pass
