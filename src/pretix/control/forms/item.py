@@ -1,10 +1,12 @@
 import copy
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import BooleanField, ModelMultipleChoiceField
+from django.forms.formsets import DELETION_FIELD_NAME
 from django.utils.translation import ugettext as __, ugettext_lazy as _
 
-from pretix.base.forms import I18nModelForm
+from pretix.base.forms import I18nFormSet, I18nModelForm
 from pretix.base.i18n import I18nFormField, I18nTextarea
 from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
@@ -151,6 +153,27 @@ class ItemUpdateForm(I18nModelForm):
             'available_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
             'available_until': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
         }
+
+
+class ItemVariationsFormSet(I18nFormSet):
+
+    def clean(self):
+        super().clean()
+        for f in self.forms:
+            if hasattr(f, '_delete_fail'):
+                f.fields['DELETE'].initial = False
+                f.fields['DELETE'].disabled = True
+                raise ValidationError(
+                    message=_('The variation "%s" cannot be deleted because it has already been ordered by a user or '
+                              'currently is in a users\'s cart. Please set the variation as "inactive" instead.'),
+                    params=(str(f.instance),)
+                )
+
+    def _should_delete_form(self, form):
+        if form.instance.orderposition_set.exists() or form.instance.cartposition_set.exists():
+            form._delete_fail = True
+            return False
+        return form.cleaned_data.get(DELETION_FIELD_NAME, False)
 
 
 class ItemVariationForm(I18nModelForm):

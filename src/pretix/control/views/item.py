@@ -23,7 +23,7 @@ from pretix.base.models import (
 )
 from pretix.control.forms.item import (
     CategoryForm, ItemCreateForm, ItemUpdateForm, ItemVariationForm,
-    QuestionForm, QuestionOptionForm, QuotaForm,
+    ItemVariationsFormSet, QuestionForm, QuestionOptionForm, QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -803,7 +803,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
     def formset(self):
         formsetclass = inlineformset_factory(
             Item, ItemVariation,
-            form=ItemVariationForm, formset=I18nFormSet,
+            form=ItemVariationForm, formset=ItemVariationsFormSet,
             can_order=True, can_delete=True, extra=0
         )
         return formsetclass(self.request.POST if self.request.method == "POST" else None,
