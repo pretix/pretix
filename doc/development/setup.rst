@@ -118,8 +118,8 @@ Then execute ``python -m smtpd -n -c DebuggingServer localhost:1025``.
 
 Working with translations
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-If you want to translate new strings that are not yet known to the translation system, 
-you can use the following command to scan the source code for strings to be translated 
+If you want to translate new strings that are not yet known to the translation system,
+you can use the following command to scan the source code for strings to be translated
 and update the ``*.po`` files accordingly::
 
     make localegen
