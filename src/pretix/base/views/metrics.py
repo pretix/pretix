@@ -1,3 +1,5 @@
+import hmac
+
 from django.conf import settings
 from django.http import HttpResponse
 
@@ -26,9 +28,9 @@ def serve_metrics(request):
 
     user, passphrase = credentials.strip().decode("base64").split(":", 1)
 
-    if user != settings.METRICS_USER:
+    if not hmac.compare_digest(user, settings.METRICS_USER):
         return unauthed_response()
-    if passphrase != settings.METRICS_PASSPHRASE:
+    if not hmac.compare_digest(passphrase, settings.METRICS_PASSPHRASE):
         return unauthed_response()
 
     # ok, the request passed the authentication-barrier, let's hand out the metrics:
