@@ -228,17 +228,22 @@ class ImportView(EventPermissionRequiredMixin, ListView):
             self.discard_all()
             return self.redirect_back()
 
-        if ('file' in self.request.FILES and 'csv' in self.request.FILES.get('file').name.lower()) \
+        elif self.request.FILES.get('file') is None:
+            messages.error(self.request, _('You must choose a file to import.'))
+            return self.redirect_back()
+
+        elif ('file' in self.request.FILES and 'csv' in self.request.FILES.get('file').name.lower()) \
                 or 'amount' in self.request.POST:
             # Process CSV
             return self.process_csv()
 
-        if 'file' in self.request.FILES and 'txt' in self.request.FILES.get('file').name.lower():
+        elif 'file' in self.request.FILES and 'txt' in self.request.FILES.get('file').name.lower():
             return self.process_mt940()
 
-        messages.error(self.request, _('We were unable to detect the file type of this import. Please '
-                                       'contact support for help.'))
-        return self.redirect_back()
+        else:
+            messages.error(self.request, _('We were unable to detect the file type of this import. Please '
+                           'contact support for help.'))
+            return self.redirect_back()
 
     @cached_property
     def settings(self):
