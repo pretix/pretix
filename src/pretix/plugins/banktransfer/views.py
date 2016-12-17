@@ -215,6 +215,8 @@ class ImportView(EventPermissionRequiredMixin, ListView):
             q = self.request.GET.get('search')
             qs = qs.filter(
                 Q(payer__icontains=q) | Q(reference__icontains=q) | Q(comment__icontains=q)
+            ).order_by(
+                '-import_job__created'
             )
 
         return qs
