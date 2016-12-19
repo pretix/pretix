@@ -495,6 +495,9 @@ class OrderPosition(AbstractPosition):
     def save(self, *args, **kwargs):
         if self.tax_rate is None:
             self._calculate_tax()
+        if self.pk is None:
+            while OrderPosition.objects.filter(secret=self.secret).exists():
+                self.secret = generate_position_secret()
         return super().save(*args, **kwargs)
 
 
