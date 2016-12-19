@@ -17,6 +17,9 @@ External Dependencies
 * ``pyvenv`` for Python 3 (Debian package: ``python3-venv``)
 * ``libffi`` (Debian package: ``libffi-dev``)
 * ``libssl`` (Debian package: ``libssl-dev``)
+* ``libxml2`` (Debian package ``libxml2-dev``)
+* ``libxslt`` (Debian package ``libxslt1-dev``)
+* ``msgfmt`` (Debian package ``gettext``)
 * ``git``
 
 Your local python environment
@@ -77,7 +80,7 @@ and head to http://localhost:8000/
 
 As we did not implement an overall front page yet, you need to go directly to
 http://localhost:8000/control/ for the admin view or, if you imported the test
-data as suggested above, to the event page at http://localhost:8000/mrmcd/2015/
+data as suggested above, to the event page at http://localhost:8000/bigevents/2017/
 
 .. _`checksandtests`:
 
