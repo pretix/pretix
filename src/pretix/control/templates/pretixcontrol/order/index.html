@@ -164,6 +164,9 @@
                                 {% if line.variation %}
                                     – {{ line.variation }}
                                 {% endif %}
+                                {% if line.checkins.all %}
+                                    <span class="fa fa-check" data-toggle="tooltip" title="{% blocktrans trimmed with date=line.checkins.all.0.datetime|date:'d.m.Y H:i' %}First scanned: {{ date }}{% endblocktrans %}"></span>
+                                {% endif %}
                                 {% if line.voucher %}
                                     <br/><span class="fa fa-tags"></span> {% trans "Voucher code used:" %}
                                     <a href="{% url "control:event.voucher" event=request.event.slug organizer=request.event.organizer.slug voucher=line.voucher.pk %}">

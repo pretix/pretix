@@ -162,7 +162,7 @@ class OrderDetail(OrderView):
         ).select_related(
             'item', 'variation'
         ).prefetch_related(
-            'item__questions', 'answers', 'answers__question'
+            'item__questions', 'answers', 'answers__question', 'checkins'
         ).order_by('positionid')
 
         positions = []
