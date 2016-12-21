@@ -158,8 +158,8 @@
                 <div class="panel-body">
                     {% for line in items.positions %}
                         <div class="row-fluid product-row">
-                            <div class="col-md-4 col-xs-6">
-                                {{ line.positionid }}
+                            <div class="col-md-9 col-xs-6">
+                                #{{ line.positionid }} –
                                 <strong>{{ line.item.name }}</strong>
                                 {% if line.variation %}
                                     – {{ line.variation }}
@@ -185,14 +185,8 @@
                                     </dl>
                                 {% endif %}
                             </div>
-                            <div class="col-md-2 col-xs-6 count">
-                                {{ line.count }}
-                            </div>
                             <div class="col-md-3 col-xs-6 price">
-                                {{ event.currency }} {{ line.price|floatformat:2 }}
-                            </div>
-                            <div class="col-md-3 col-xs-6 price">
-                                <strong>{{ event.currency }} {{ line.total|floatformat:2 }}</strong>
+                                <strong>{{ event.currency }} {{ line.price|floatformat:2 }}</strong>
                                 {% if line.tax_rate %}
                                     <br/>
                                     <small>{% blocktrans trimmed with rate=line.tax_rate %}

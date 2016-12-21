@@ -1,5 +1,4 @@
 from datetime import timedelta
-from itertools import groupby
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -166,24 +165,14 @@ class OrderDetail(OrderView):
             'item__questions', 'answers', 'answers__question'
         )
 
-        # Group items of the same variation
-        # We do this by list manipulations instead of a GROUP BY query, as
-        # Django is unable to join related models in a .values() query
-        def keyfunc(pos):
-            if (pos.item.admission and self.request.event.settings.attendee_names_asked) \
-                    or pos.item.questions.all():
-                return pos.id, 0, 0, 0, 0, 0
-            return 0, pos.item_id, pos.variation_id, pos.price, pos.tax_rate, (pos.voucher_id or 0)
-
         positions = []
-        for k, g in groupby(sorted(list(cartpos), key=keyfunc), key=keyfunc):
-            g = list(g)
-            group = g[0]
-            group.count = len(g)
-            group.total = group.count * group.price
-            group.has_questions = k[0] != ""
-            group.cache_answers()
-            positions.append(group)
+        for p in cartpos:
+            p.has_questions = (
+                (p.item.admission and self.request.event.settings.attendee_names_asked) or
+                p.item.questions.all()
+            )
+            p.cache_answers()
+            positions.append(p)
 
         return {
             'positions': positions,
