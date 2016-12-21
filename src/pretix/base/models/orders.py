@@ -15,7 +15,7 @@ from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
 
 from ..decimal import round_decimal
-from .base import CachedFile, LoggedModel
+from .base import LoggedModel
 from .event import Event
 from .items import Item, ItemVariation, Question, QuestionOption, Quota
 
@@ -565,16 +565,28 @@ class InvoiceAddress(models.Model):
     vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'))
 
 
+def cachedticket_name(instance, filename: str) -> str:
+    secret = get_random_string(length=16, allowed_chars=string.ascii_letters + string.digits)
+    return 'tickets/{org}/{ev}/{code}-{no}-{prov}-{secret}.pdf'.format(
+        org=instance.order_position.order.event.organizer.slug,
+        ev=instance.order_position.order.event.slug,
+        prov=instance.provider,
+        no=instance.order_position.positionid,
+        code=instance.order_position.order.code,
+        secret=secret
+    )
+
+
 class CachedTicket(models.Model):
     order_position = models.ForeignKey(OrderPosition, on_delete=models.CASCADE)
-    cachedfile = models.ForeignKey(CachedFile, on_delete=models.CASCADE, null=True)
     provider = models.CharField(max_length=255)
+    type = models.CharField(max_length=255)
+    extension = models.CharField(max_length=255)
+    file = models.FileField(null=True, blank=True, upload_to=cachedticket_name)
 
 
 @receiver(post_delete, sender=CachedTicket)
-def cached_file_delete(sender, instance, **kwargs):
-    try:
-        if instance.cachedfile:
-            instance.cachedfile.delete()
-    except CachedFile.DoesNotExist:
-        pass
+def cachedticket_delete(sender, instance, **kwargs):
+    if instance.file:
+        # Pass false so FileField doesn't save the model.
+        instance.file.delete(False)

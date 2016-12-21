@@ -32,7 +32,8 @@ class BaseTicketOutput:
     def generate(self, order: OrderPosition) -> Tuple[str, str, str]:
         """
         This method should generate the download file and return a tuple consisting of a
-        filename, a file type and file content.
+        filename, a file type and file content. The extension will be taken from the filename
+        which is otherwise ignored.
         """
         raise NotImplementedError()
 

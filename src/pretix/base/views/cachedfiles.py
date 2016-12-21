@@ -1,5 +1,3 @@
-import os
-
 from django.http import FileResponse, Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
@@ -23,8 +21,7 @@ class DownloadView(TemplateView):
             return HttpResponse('1' if self.object.file else '0')
         elif self.object.file:
             resp = FileResponse(self.object.file.file, content_type=self.object.type)
-            _, ext = os.path.splitext(self.object.filename)
-            resp['Content-Disposition'] = 'attachment; filename="{}{}"'.format(self.object.id, ext)
+            resp['Content-Disposition'] = 'attachment; filename="{}"'.format(self.object.filename)
             return resp
         else:
             return super().get(request, *args, **kwargs)

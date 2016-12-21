@@ -1,19 +1,14 @@
-from datetime import timedelta
-
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Sum
-from django.http import FileResponse, Http404
-from django.shortcuts import redirect
+from django.http import FileResponse, Http404, HttpResponse
+from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, ugettext_lazy as _
 from django.views.generic import TemplateView, View
 
-from pretix.base.models import (
-    CachedFile, CachedTicket, Invoice, Order, OrderPosition,
-)
+from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
@@ -513,18 +508,25 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             messages.error(request, _('Ticket download is not (yet) enabled.'))
             return redirect(self.get_order_url())
 
-        ct = CachedTicket.objects.get_or_create(
-            order_position=self.order_position, provider=self.output.identifier
-        )[0]
-        if not ct.cachedfile:
-            cf = CachedFile()
-            cf.date = now()
-            cf.expires = self.request.event.date_from + timedelta(days=30)
-            cf.save()
-            ct.cachedfile = cf
-            ct.save()
-        generate.apply_async(args=(self.order_position.id, self.output.identifier))
-        return redirect(reverse('cachedfile.download', kwargs={'id': ct.cachedfile.id}))
+        try:
+            ct = CachedTicket.objects.get(
+                order_position=self.order_position, provider=self.output.identifier
+            )
+        except CachedTicket.DoesNotExist:
+            ct = None
+
+        if 'ajax' in request.GET:
+            return HttpResponse('1' if ct and ct.file else '0')
+        elif not ct or not ct.file:
+            generate.apply_async(args=(self.order_position.id, self.output.identifier))
+            return render(request, "pretixbase/cachedfiles/pending.html", {})
+        else:
+            resp = FileResponse(ct.file.file, content_type='application/pdf')
+            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
+                self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
+                self.output.identifier, ct.extension
+            )
+            return resp
 
 
 class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
