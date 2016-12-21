@@ -71,4 +71,4 @@ class LoggedModel(models.Model, LoggingMixin):
 
         :return: A QuerySet of LogEntry objects
         """
-        return self.logentries.all().select_related('user')
+        return self.logentries.all().select_related('user', 'event')
