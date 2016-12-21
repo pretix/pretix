@@ -127,25 +127,25 @@ def test_status(client, env):
     assert jdata['total'] == 2
     assert jdata['items'] == [
         {'name': 'T-Shirt',
-         'id': 1,
+         'id': env[3].item.pk,
          'checkins': 1,
          'admission': False,
          'total': 1,
          'variations': [
              {'name': 'Red',
-              'id': 1,
+              'id': env[3].variation.pk,
               'checkins': 1,
               'total': 1
               },
              {'name': 'Blue',
-              'id': 2,
+              'id': env[3].item.variations.get(value='Blue').pk,
               'checkins': 0,
               'total': 0
               }
          ]
          },
         {'name': 'Ticket',
-         'id': 2,
+         'id': env[4].item.pk,
          'checkins': 0,
          'admission': False,
          'total': 1,
