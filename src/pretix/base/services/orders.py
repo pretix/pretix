@@ -500,6 +500,7 @@ class OrderChangeManager:
             if isinstance(op, self.ItemOperation):
                 self.order.log_action('pretix.event.order.changed.item', user=self.user, data={
                     'position': op.position.pk,
+                    'positionid': op.position.positionid,
                     'old_item': op.position.item.pk,
                     'old_variation': op.position.variation.pk if op.position.variation else None,
                     'new_item': op.item.pk,
@@ -515,6 +516,7 @@ class OrderChangeManager:
             elif isinstance(op, self.PriceOperation):
                 self.order.log_action('pretix.event.order.changed.price', user=self.user, data={
                     'position': op.position.pk,
+                    'positionid': op.position.positionid,
                     'old_price': op.position.price,
                     'new_price': op.price
                 })
@@ -524,6 +526,7 @@ class OrderChangeManager:
             elif isinstance(op, self.CancelOperation):
                 self.order.log_action('pretix.event.order.changed.cancel', user=self.user, data={
                     'position': op.position.pk,
+                    'positionid': op.position.positionid,
                     'old_item': op.position.item.pk,
                     'old_variation': op.position.variation.pk if op.position.variation else None,
                     'old_price': op.position.price,

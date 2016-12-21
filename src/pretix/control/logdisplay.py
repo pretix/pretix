@@ -20,14 +20,18 @@ def _display_order_changed(event: Event, logentry: LogEntry):
         new_item = str(event.items.get(pk=data['new_item']))
         if data['new_variation']:
             new_item += ' - ' + str(event.itemvariations.get(pk=data['new_variation']))
-        return text + ' ' + _('{old_item} ({old_price} {currency}) changed to {new_item} ({new_price} {currency}).').format(
+        return text + ' ' + _('Position #{posid}: {old_item} ({old_price} {currency}) changed '
+                              'to {new_item} ({new_price} {currency}).').format(
+            posid=data.get('positionid', '?'),
             old_item=old_item, new_item=new_item,
             old_price=formats.localize(Decimal(data['old_price'])),
             new_price=formats.localize(Decimal(data['new_price'])),
             currency=event.currency
         )
     elif logentry.action_type == 'pretix.event.order.changed.price':
-        return text + ' ' + _('Price of a position changed from {old_price} {currency} to {new_price} {currency}.').format(
+        return text + ' ' + _('Price of position #{posid} changed from {old_price} {currency} '
+                              'to {new_price} {currency}.').format(
+            posid=data.get('positionid', '?'),
             old_price=formats.localize(Decimal(data['old_price'])),
             new_price=formats.localize(Decimal(data['new_price'])),
             currency=event.currency
@@ -36,7 +40,8 @@ def _display_order_changed(event: Event, logentry: LogEntry):
         old_item = str(event.items.get(pk=data['old_item']))
         if data['old_variation']:
             old_item += ' - ' + str(ItemVariation.objects.get(pk=data['old_variation']))
-        return text + ' ' + _('{old_item} ({old_price} {currency}) removed.').format(
+        return text + ' ' + _('Position #{posid} ({old_item}, {old_price} {currency}) removed.').format(
+            posid=data.get('positionid', '?'),
             old_item=old_item,
             old_price=formats.localize(Decimal(data['old_price'])),
             currency=event.currency
