@@ -163,7 +163,7 @@ class OrderDetail(OrderView):
             'item', 'variation'
         ).prefetch_related(
             'item__questions', 'answers', 'answers__question'
-        )
+        ).order_by('positionid')
 
         positions = []
         for p in cartpos:
