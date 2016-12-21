@@ -86,9 +86,19 @@ class ApiRedeemView(ApiView):
             if 'status' not in response:
                 if created:
                     response['status'] = 'ok'
+                    op.order.log_action('pretix.plugins.pretixdroid.scan', data={
+                        'position': op.id,
+                        'positionid': op.positionid,
+                        'first': True,
+                    })
                 else:
                     response['status'] = 'error'
                     response['reason'] = 'already_redeemed'
+                    op.order.log_action('pretix.plugins.pretixdroid.scan', data={
+                        'position': op.id,
+                        'positionid': op.positionid,
+                        'first': False,
+                    })
 
             response['data'] = {
                 'secret': op.secret,
