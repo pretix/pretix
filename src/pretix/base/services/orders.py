@@ -43,6 +43,7 @@ error_messages = {
     'price_changed': _('The price of some of the items in your cart has changed in the '
                        'meantime. Please see below for details.'),
     'internal': _("An internal error occured, please try again."),
+    'empty': _("Your cart is empty."),
     'busy': _('We were not able to process your request completely as the '
               'server was too busy. Please try again.'),
     'not_started': _('The presale period for this event has not yet started.'),
@@ -345,6 +346,8 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
     with event.lock() as now_dt:
         positions = list(CartPosition.objects.filter(
             id__in=position_ids).select_related('item', 'variation'))
+        if len(positions) == 0:
+            raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
         _check_positions(event, now_dt, positions)
