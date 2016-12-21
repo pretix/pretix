@@ -67,17 +67,19 @@
         </div>
     {% endif %}
     {% if order.status == 'p' and event.settings.ticket_download %}
-        <div class="alert alert-info">
-            {% if can_download %}
+        {% if can_download and download_buttons %}
+            <div class="alert alert-info">
                 {% blocktrans trimmed %}
                     You can download your tickets using the buttons below. Please have your ticket ready when entering the event.
                 {% endblocktrans %}
-            {% else %}
+            </div>
+        {% elif not download_buttons %}
+            <div class="alert alert-info">
                 {% blocktrans trimmed with date=event.settings.ticket_download_date|date:"SHORT_DATE_FORMAT" %}
                     You will be able to download your tickets here starting on {{ date }}.
                 {% endblocktrans %}
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
     {% endif %}
     <div class="panel panel-primary cart">
         <div class="panel-heading">
