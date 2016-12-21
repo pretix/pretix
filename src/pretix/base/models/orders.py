@@ -440,6 +440,7 @@ class OrderPosition(AbstractPosition):
     :param order: The order this position is a part of
     :type order: Order
     """
+    positionid = models.PositiveIntegerField(default=1)
     order = models.ForeignKey(
         Order,
         verbose_name=_("Order"),
