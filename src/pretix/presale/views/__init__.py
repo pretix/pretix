@@ -6,7 +6,7 @@ from django.db.models import Sum
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
-from pretix.base.models import CartPosition
+from pretix.base.models import CartPosition, OrderPosition
 from pretix.base.signals import register_payment_providers
 
 
@@ -39,11 +39,15 @@ class CartMixin:
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
         def keyfunc(pos):
+            if isinstance(pos, OrderPosition):
+                i = pos.positionid
+            else:
+                i = pos.pk
             if downloads:
-                return pos.positionid, 0, 0, 0, 0
+                return i, 0, 0, 0, 0
             if answers and ((pos.item.admission and self.request.event.settings.attendee_names_asked)
                             or pos.item.questions.all()):
-                return pos.positionid, 0, 0, 0, 0
+                return i, 0, 0, 0, 0
             return 0, pos.item_id, pos.variation_id, pos.price, (pos.voucher_id or 0)
 
         positions = []

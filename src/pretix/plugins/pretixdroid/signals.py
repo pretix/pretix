@@ -3,8 +3,8 @@ import json
 from django.core.urlresolvers import resolve, reverse
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-from pretix.base.signals import logentry_display
 
+from pretix.base.signals import logentry_display
 from pretix.control.signals import nav_event
 
 
