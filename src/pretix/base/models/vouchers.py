@@ -115,7 +115,7 @@ class Voucher(LoggedModel):
         verbose_name=_("Price mode"),
         max_length=100,
         choices=PRICE_MODES,
-        default='set'
+        default='none'
     )
     value = models.DecimalField(
         verbose_name=_("Voucher value"),

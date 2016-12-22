@@ -78,7 +78,7 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
                 _("Yes") if v.block_quota else _("No"),
                 _("Yes") if v.allow_ignore_quota else _("No"),
                 v.get_price_mode_display(),
-                str(v.value) if v.value else "",
+                str(v.value) if v.value is not None else "",
                 v.tag,
                 str(v.redeemed),
                 str(v.max_usages)
