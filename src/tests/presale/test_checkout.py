@@ -294,7 +294,7 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(cr1.price, 24)
 
     def test_voucher(self):
-        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
                                    valid_until=now() + timedelta(days=2))
         cr1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -312,7 +312,7 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(Voucher.objects.get(pk=v.pk).redeemed, 1)
 
     def test_voucher_required(self):
-        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
                                    valid_until=now() + timedelta(days=2))
         self.ticket.require_voucher = True
         self.ticket.save()
@@ -341,7 +341,7 @@ class CheckoutTestCase(TestCase):
         assert doc.select(".alert-danger")
 
     def test_voucher_price_changed(self):
-        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
                                    valid_until=now() + timedelta(days=2))
         cr1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -380,7 +380,7 @@ class CheckoutTestCase(TestCase):
         self.assertIn("has already been", doc.select(".alert-danger")[0].text)
 
     def test_voucher_multiuse_partially(self):
-        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
                                    valid_until=now() + timedelta(days=2), max_usages=3, redeemed=2)
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -397,7 +397,7 @@ class CheckoutTestCase(TestCase):
         assert CartPosition.objects.filter(cart_id=self.session_key).count() == 1
 
     def test_voucher_multiuse_ok(self):
-        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
                                    valid_until=now() + timedelta(days=2), max_usages=3, redeemed=1)
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -419,6 +419,7 @@ class CheckoutTestCase(TestCase):
 
     def test_voucher_multiuse_in_other_cart_expired(self):
         v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
+                                   price_mode='set',
                                    valid_until=now() + timedelta(days=2), max_usages=3, redeemed=1)
         CartPosition.objects.create(
             event=self.event, cart_id='other', item=self.ticket,
@@ -443,7 +444,7 @@ class CheckoutTestCase(TestCase):
         assert v.redeemed == 3
 
     def test_voucher_multiuse_in_other_cart(self):
-        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
                                    valid_until=now() + timedelta(days=2), max_usages=3, redeemed=1)
         CartPosition.objects.create(
             event=self.event, cart_id='other', item=self.ticket,
@@ -466,7 +467,7 @@ class CheckoutTestCase(TestCase):
     def test_voucher_ignore_quota(self):
         self.quota_tickets.size = 0
         self.quota_tickets.save()
-        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
                                    valid_until=now() + timedelta(days=2), allow_ignore_quota=True)
         cr1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -484,7 +485,7 @@ class CheckoutTestCase(TestCase):
     def test_voucher_block_quota(self):
         self.quota_tickets.size = 1
         self.quota_tickets.save()
-        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
                                    valid_until=now() + timedelta(days=2), block_quota=True)
         cr1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,

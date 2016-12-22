@@ -82,7 +82,7 @@ class VoucherFormTest(SoupTest):
         doc = self.client.get('/control/event/%s/%s/vouchers/?download=yes' % (self.orga.slug, self.event.slug))
         assert doc.content.strip() == '"Voucher code","Valid until","Product","Reserve quota","Bypass quota",' \
                                       '"Price effect","Value","Tag","Redeemed","Maximum usages"\r\n"ABCDEFG","",' \
-                                      '"Early-bird ticket","No","No","Set product price to","","","0","1"'.encode('utf-8')
+                                      '"Early-bird ticket","No","No","No effect","","","0","1"'.encode('utf-8')
 
     def test_filter_status_valid(self):
         v = self.event.vouchers.create(item=self.ticket)

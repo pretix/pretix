@@ -287,6 +287,7 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
 
     def test_voucher_price(self):
         self.v.value = Decimal("10.00")
+        self.v.price_mode = 'set'
         self.v.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
         assert "Early-bird" in html.rendered_content
@@ -306,6 +307,7 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         self.q.variations.add(var1)
         self.q.variations.add(var2)
         self.v.value = Decimal("10.00")
+        self.v.price_mode = 'set'
         self.v.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
         assert "Early-bird" in html.rendered_content

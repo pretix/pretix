@@ -594,7 +594,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(len(objs), 0)
 
     def test_voucher_price(self):
-        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event)
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set')
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
             '_voucher_code': v.code,
@@ -719,7 +719,7 @@ class CartTest(CartTestMixin, TestCase):
         self.quota_tickets.size = 0
         self.quota_tickets.save()
         v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
-                                   allow_ignore_quota=True)
+                                   allow_ignore_quota=True, price_mode='set')
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
             '_voucher_code': v.code,
@@ -734,7 +734,7 @@ class CartTest(CartTestMixin, TestCase):
         self.quota_tickets.size = 1
         self.quota_tickets.save()
         v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
-                                   block_quota=True)
+                                   block_quota=True, price_mode='set')
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
         }, follow=True)
@@ -752,7 +752,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].price, Decimal('12.00'))
 
     def test_voucher_doubled(self):
-        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event)
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set')
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
             '_voucher_code': v.code,
