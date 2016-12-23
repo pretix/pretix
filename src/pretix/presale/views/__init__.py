@@ -44,11 +44,11 @@ class CartMixin:
             else:
                 i = pos.pk
             if downloads:
-                return i, 0, 0, 0, 0
+                return i, pos.pk, 0, 0, 0, 0
             if answers and ((pos.item.admission and self.request.event.settings.attendee_names_asked)
                             or pos.item.questions.all()):
-                return i, 0, 0, 0, 0
-            return 0, pos.item_id, pos.variation_id, pos.price, (pos.voucher_id or 0)
+                return i, pos.pk, 0, 0, 0, 0
+            return 0, 0, pos.item_id, pos.variation_id, pos.price, (pos.voucher_id or 0)
 
         positions = []
         for k, g in groupby(sorted(list(cartpos), key=keyfunc), key=keyfunc):
