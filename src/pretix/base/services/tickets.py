@@ -17,6 +17,9 @@ def generate(order_position: str, provider: str):
     order_position = OrderPosition.objects.select_related('order', 'order__event').get(id=order_position)
     try:
         ct = CachedTicket.objects.get(order_position=order_position, provider=provider)
+    except CachedTicket.MultipleObjectsReturned:
+        CachedTicket.objects.filter(order_position=order_position, provider=provider).delete()
+        ct = CachedTicket(order_position=order_position, provider=provider)
     except CachedTicket.DoesNotExist:
         ct = CachedTicket(order_position=order_position, provider=provider)
 
