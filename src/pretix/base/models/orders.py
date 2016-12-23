@@ -466,11 +466,12 @@ class OrderPosition(AbstractPosition):
         from . import Voucher
 
         ops = []
-        for cartpos in cp:
+        for i, cartpos in enumerate(cp):
             op = OrderPosition(order=order)
             for f in AbstractPosition._meta.fields:
                 setattr(op, f.name, getattr(cartpos, f.name))
             op._calculate_tax()
+            op.positionid = i + 1
             op.save()
             for answ in cartpos.answers.all():
                 answ.orderposition = op
