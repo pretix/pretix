@@ -1,4 +1,5 @@
 import uuid
+from datetime import date, datetime, time
 
 import pytz
 from django.conf import settings
@@ -8,7 +9,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.template.defaultfilters import date as _date
 from django.utils.functional import cached_property
-from django.utils.timezone import now
+from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.email import CustomSMTPBackend
@@ -207,6 +208,14 @@ class Event(LoggedModel):
                                      fail_silently=False)
         else:
             return get_connection(fail_silently=False)
+
+    @property
+    def payment_term_last(self):
+        tz = pytz.timezone(self.settings.timezone)
+        return make_aware(datetime.combine(
+            self.settings.get('payment_term_last', as_type=date),
+            time(hour=23, minute=59, second=59)
+        ), tz)
 
 
 class EventPermission(models.Model):

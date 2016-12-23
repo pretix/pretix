@@ -1,17 +1,16 @@
 import copy
 import string
-from datetime import date, datetime, time
+from datetime import datetime
 from decimal import Decimal
 from typing import List, Union
 
-import pytz
 from django.conf import settings
 from django.db import models
 from django.db.models import F
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
-from django.utils.timezone import make_aware, now
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from ..decimal import round_decimal
@@ -273,13 +272,7 @@ class Order(LoggedModel):
         }
 
         if self.event.settings.get('payment_term_last'):
-            tz = pytz.timezone(self.event.settings.timezone)
-            last_date = make_aware(datetime.combine(
-                self.event.settings.get('payment_term_last', as_type=date),
-                time(hour=23, minute=59, second=59)
-            ), tz)
-
-            if now() > last_date:
+            if now() > self.event.payment_term_last:
                 return error_messages['late']
         if self.status == self.STATUS_PENDING:
             return True

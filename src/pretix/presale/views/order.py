@@ -139,6 +139,11 @@ class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
                 or not self.payment_provider.is_enabled):
             messages.error(request, _('The payment for this order cannot be continued.'))
             return redirect(self.get_order_url())
+
+        if self.request.event.settings.get('payment_term_last'):
+            if now() > self.request.event.payment_term_last:
+                messages.error(request, _('The payment is too late to be accepted.'))
+                return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -225,6 +230,12 @@ class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
                 not self.payment_provider.is_enabled):
             messages.error(request, _('The payment information you entered was incomplete.'))
             return redirect(self.get_payment_url())
+
+        if self.request.event.settings.get('payment_term_last'):
+            if now() > self.request.event.payment_term_last:
+                messages.error(request, _('The payment is too late to be accepted.'))
+                return redirect(self.get_order_url())
+
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
@@ -251,6 +262,12 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
         if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
             messages.error(request, _('The payment method for this order cannot be changed.'))
             return redirect(self.get_order_url())
+
+        if self.request.event.settings.get('payment_term_last'):
+            if now() > self.request.event.payment_term_last:
+                messages.error(request, _('The payment is too late to be accepted.'))
+                return redirect(self.get_order_url())
+
         return super().dispatch(request, *args, **kwargs)
 
     def get_payment_url(self):

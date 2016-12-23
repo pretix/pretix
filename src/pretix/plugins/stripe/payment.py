@@ -86,7 +86,7 @@ class Stripe(BasePaymentProvider):
         return template.render(ctx)
 
     def order_can_retry(self, order):
-        return True
+        return self._is_still_available()
 
     def payment_perform(self, request, order) -> str:
         self._init_api()

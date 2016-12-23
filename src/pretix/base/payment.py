@@ -365,8 +365,12 @@ class BasePaymentProvider:
         whether the user should be presented with an option to retry the payment. The default
         implementation always returns False.
 
+        If you want to enable retrials for your payment method, the best is to just return
+        ``self._is_still_available()`` from this method to disable it as soon as the method
+        gets disabled or the methods end date is reached.
+
         The retry workflow is also used if a user switches to this payment method for an existing
-        order! Therefore, they can only switch to your p
+        order!
 
         :param order: The order object
         """
