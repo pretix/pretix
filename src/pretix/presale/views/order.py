@@ -509,9 +509,9 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             return redirect(self.get_order_url())
 
         try:
-            ct = CachedTicket.objects.get(
+            ct = CachedTicket.objects.filter(
                 order_position=self.order_position, provider=self.output.identifier
-            )
+            ).last()
         except CachedTicket.DoesNotExist:
             ct = None
 
