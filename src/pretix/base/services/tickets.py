@@ -19,9 +19,11 @@ def generate(order_position: str, provider: str):
         ct = CachedTicket.objects.get(order_position=order_position, provider=provider)
     except CachedTicket.MultipleObjectsReturned:
         CachedTicket.objects.filter(order_position=order_position, provider=provider).delete()
-        ct = CachedTicket(order_position=order_position, provider=provider)
+        ct = CachedTicket.objects.create(order_position=order_position, provider=provider, extension='',
+                                         type='', file=None)
     except CachedTicket.DoesNotExist:
-        ct = CachedTicket(order_position=order_position, provider=provider)
+        ct = CachedTicket.objects.create(order_position=order_position, provider=provider, extension='',
+                                         type='', file=None)
 
     with language(order_position.order.locale):
         responses = register_ticket_outputs.send(order_position.order.event)

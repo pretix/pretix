@@ -534,11 +534,13 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
 
         if 'ajax' in request.GET:
             return HttpResponse('1' if ct and ct.file else '0')
-        elif not ct or not ct.file:
+        elif not ct:
             generate.apply_async(args=(self.order_position.id, self.output.identifier))
             return render(request, "pretixbase/cachedfiles/pending.html", {})
+        elif not ct.file:
+            return render(request, "pretixbase/cachedfiles/pending.html", {})
         else:
-            resp = FileResponse(ct.file.file, content_type='application/pdf')
+            resp = FileResponse(ct.file.file, content_type=ct.type)
             resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
                 self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
                 self.output.identifier, ct.extension
