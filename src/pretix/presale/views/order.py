@@ -532,11 +532,14 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
         except CachedTicket.DoesNotExist:
             ct = None
 
+        if not ct:
+            ct = CachedTicket.objects.create(
+                order_position=self.order_position, provider=self.output.identifier,
+                extension='', type='', file=None)
+            generate.apply_async(args=(self.order_position.id, self.output.identifier))
+
         if 'ajax' in request.GET:
             return HttpResponse('1' if ct and ct.file else '0')
-        elif not ct:
-            generate.apply_async(args=(self.order_position.id, self.output.identifier))
-            return render(request, "pretixbase/cachedfiles/pending.html", {})
         elif not ct.file:
             return render(request, "pretixbase/cachedfiles/pending.html", {})
         else:

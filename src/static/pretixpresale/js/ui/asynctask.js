@@ -33,10 +33,12 @@ function async_task_check_error(jqXHR, textStatus, errorThrown) {
     "use strict";
     var c = $(jqXHR.responseText).filter('.container');
     if (c.length > 0) {
+        $("body").data('ajaxing', false);
         waitingDialog.hide();
         ajaxErrDialog.show(c.first().html());
     } else {
         if (jqXHR.status >= 400 && jqXHR.status < 500) {
+            $("body").data('ajaxing', false);
             waitingDialog.hide();
             alert(gettext('An error of type {code} occured.').replace(/\{code\}/, jqXHR.status));
         } else {
