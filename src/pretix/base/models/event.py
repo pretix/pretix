@@ -17,6 +17,7 @@ from pretix.base.i18n import I18nCharField
 from pretix.base.models.base import LoggedModel
 from pretix.base.settings import SettingsProxy
 from pretix.base.validators import EventSlugBlacklistValidator
+from pretix.helpers.daterange import daterange
 
 from .auth import User
 from .organizer import Organizer
@@ -152,6 +153,12 @@ class Event(LoggedModel):
             self.date_to.astimezone(tz),
             "DATETIME_FORMAT" if self.settings.show_times else "DATE_FORMAT"
         )
+
+    def get_date_range_display(self, tz=None) -> str:
+        tz = tz or pytz.timezone(self.settings.timezone)
+        if not self.settings.show_date_to or not self.date_to:
+            return _date(self.date_from.astimezone(tz), "DATE_FORMAT")
+        return daterange(self.date_from.astimezone(tz), self.date_to.astimezone(tz))
 
     def get_cache(self) -> "pretix.base.cache.ObjectRelatedCache":
         """
