@@ -33,7 +33,7 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
     def get_queryset(self):
         qs = self.request.event.vouchers.all().select_related('item', 'variation')
         if self.request.GET.get("search", "") != "":
-            s = self.request.GET.get("search", "")
+            s = self.request.GET.get("search", "").strip()
             qs = qs.filter(Q(code__icontains=s) | Q(tag__icontains=s) | Q(comment__icontains=s))
         if self.request.GET.get("tag", "") != "":
             s = self.request.GET.get("tag", "")
