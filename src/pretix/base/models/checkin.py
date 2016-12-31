@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 
 
 class Checkin(models.Model):
@@ -6,4 +7,4 @@ class Checkin(models.Model):
     A checkin object is created when a person enters the event.
     """
     position = models.ForeignKey('pretixbase.OrderPosition', related_name='checkins')
-    datetime = models.DateTimeField(auto_now_add=True)
+    datetime = models.DateTimeField(default=now)
