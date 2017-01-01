@@ -3,9 +3,7 @@ from datetime import timedelta
 import pytest
 from django.utils.timezone import now
 
-from pretix.base.models import (
-    Event, EventPermission, Order, Organizer, OrganizerPermission, User,
-)
+from pretix.base.models import Event, EventPermission, Order, Organizer, User
 
 
 @pytest.fixture
@@ -74,7 +72,6 @@ event_urls = [
 
 organizer_urls = [
     'organizer/abc/edit',
-    'event/abc/add'
 ]
 
 
@@ -211,8 +208,9 @@ def test_wrong_organizer(perf_patch, client, env, url):
     assert response.status_code == 404
 
 
+""" Disabled as tehre are currtnly no fitting URLs
 organizer_permission_urls = [
-    ("can_create_events", "event/dummy/add", 200),
+    ("can_create_events", "organizer/dummy/edit", 200),
 ]
 
 
@@ -242,3 +240,4 @@ def test_correct_organizer_permission(perf_patch, client, env, perm, url, code):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/' + url)
     assert response.status_code == code
+"""

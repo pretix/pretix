@@ -2,19 +2,59 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import ugettext_lazy as _
 from pytz import common_timezones
 
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.i18n import I18nFormField, I18nTextarea
-from pretix.base.models import Event
+from pretix.base.models import Event, Organizer
 from pretix.control.forms import ExtFileField
 
 
-class EventCreateForm(I18nModelForm):
+class EventWizardFoundationForm(forms.Form):
+    locales = forms.MultipleChoiceField(
+        choices=settings.LANGUAGES,
+        label=_("Use languages"),
+        widget=forms.CheckboxSelectMultiple,
+        help_text=_('Choose all languages that your event should be available in.')
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+        self.fields['organizer'] = forms.ModelChoiceField(
+            label=_("Organizer"),
+            queryset=Organizer.objects.filter(
+                id__in=self.user.organizer_perms.filter(can_create_events=True).values_list('id', flat=True)
+            ),
+            widget=forms.RadioSelect,
+            empty_label=None,
+            required=True
+        )
+
+    def clean_slug(self):
+        slug = self.cleaned_data['slug']
+        if Event.objects.filter(slug=slug, organizer=self.organizer).exists():
+            raise forms.ValidationError(
+                self.error_messages['duplicate_slug'],
+                code='duplicate_slug'
+            )
+        return slug
+
+
+class EventWizardBasicsForm(I18nModelForm):
     error_messages = {
         'duplicate_slug': _("You already used this slug for a different event. Please choose a new one."),
     }
+    timezone = forms.ChoiceField(
+        choices=((a, a) for a in common_timezones),
+        label=_("Default timezone"),
+    )
+    locale = forms.ChoiceField(
+        choices=settings.LANGUAGES,
+        label=_("Default language"),
+    )
 
     class Meta:
         model = Event
@@ -36,7 +76,19 @@ class EventCreateForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
         self.organizer = kwargs.pop('organizer')
+        self.locales = kwargs.get('locales')
+        kwargs.pop('user')
         super().__init__(*args, **kwargs)
+        self.initial['timezone'] = get_current_timezone_name()
+        self.fields['locale'].choices = [(a, b) for a, b in settings.LANGUAGES if a in self.locales]
+
+    def clean(self):
+        data = super().clean()
+        if data['locale'] not in self.locales:
+            raise ValidationError({
+                'locale': _('Your default locale must also be enabled for your event (see box above).')
+            })
+        return data
 
     def clean_slug(self):
         slug = self.cleaned_data['slug']
@@ -46,29 +98,6 @@ class EventCreateForm(I18nModelForm):
                 code='duplicate_slug'
             )
         return slug
-
-
-class EventCreateSettingsForm(SettingsForm):
-    timezone = forms.ChoiceField(
-        choices=((a, a) for a in common_timezones),
-        label=_("Default timezone"),
-    )
-    locales = forms.MultipleChoiceField(
-        choices=settings.LANGUAGES,
-        label=_("Available langauges"),
-    )
-    locale = forms.ChoiceField(
-        choices=settings.LANGUAGES,
-        label=_("Default language"),
-    )
-
-    def clean(self):
-        data = super().clean()
-        if data['locale'] not in data['locales']:
-            raise ValidationError({
-                'locale': _('Your default locale must also be enabled for your event (see box above).')
-            })
-        return data
 
 
 class EventUpdateForm(I18nModelForm):

@@ -63,7 +63,7 @@ class Event(LoggedModel):
         max_length=50, db_index=True,
         help_text=_(
             "Should be short, only contain lowercase letters and numbers, and must be unique among your events. "
-            "This is being used in addresses and bank transfer references."),
+            "This will be used in order codes, invoice numbers, links and bank transfer references."),
         validators=[
             RegexValidator(
                 regex="^[a-zA-Z0-9.-]+$",
@@ -71,7 +71,7 @@ class Event(LoggedModel):
             ),
             EventSlugBlacklistValidator()
         ],
-        verbose_name=_("Slug"),
+        verbose_name=_("Short form"),
     )
     live = models.BooleanField(default=False, verbose_name=_("Shop is live"))
     permitted = models.ManyToManyField(User, through='EventPermission',

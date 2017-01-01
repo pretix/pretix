@@ -23,11 +23,12 @@ class BaseI18nModelForm(BaseModelForm):
     """
     def __init__(self, *args, **kwargs):
         event = kwargs.pop('event', None)
+        locales = kwargs.pop('locales', None)
         super().__init__(*args, **kwargs)
-        if event:
+        if event or locales:
             for k, field in self.fields.items():
                 if isinstance(field, I18nFormField):
-                    field.widget.enabled_langcodes = event.settings.get('locales')
+                    field.widget.enabled_langcodes = event.settings.get('locales') if event else locales
 
 
 class I18nModelForm(six.with_metaclass(ModelFormMetaclass, BaseI18nModelForm)):
@@ -97,12 +98,14 @@ class SettingsForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        self.obj = kwargs.pop('obj')
+        self.obj = kwargs.pop('obj', None)
+        self.locales = kwargs.pop('locales', None)
         kwargs['initial'] = self.obj.settings.freeze()
         super().__init__(*args, **kwargs)
-        for k, field in self.fields.items():
-            if isinstance(field, I18nFormField):
-                field.widget.enabled_langcodes = self.obj.settings.get('locales')
+        if self.obj or self.locales:
+            for k, field in self.fields.items():
+                if isinstance(field, I18nFormField):
+                    field.widget.enabled_langcodes = self.obj.settings.get('locales') if self.obj else self.locales
 
     def save(self):
         """
