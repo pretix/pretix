@@ -26,21 +26,12 @@ class EventWizardFoundationForm(forms.Form):
         self.fields['organizer'] = forms.ModelChoiceField(
             label=_("Organizer"),
             queryset=Organizer.objects.filter(
-                id__in=self.user.organizer_perms.filter(can_create_events=True).values_list('id', flat=True)
+                id__in=self.user.organizer_perms.filter(can_create_events=True).values_list('organizer', flat=True)
             ),
             widget=forms.RadioSelect,
             empty_label=None,
             required=True
         )
-
-    def clean_slug(self):
-        slug = self.cleaned_data['slug']
-        if Event.objects.filter(slug=slug, organizer=self.organizer).exists():
-            raise forms.ValidationError(
-                self.error_messages['duplicate_slug'],
-                code='duplicate_slug'
-            )
-        return slug
 
 
 class EventWizardBasicsForm(I18nModelForm):
@@ -98,6 +89,26 @@ class EventWizardBasicsForm(I18nModelForm):
                 code='duplicate_slug'
             )
         return slug
+
+
+class EventWizardCopyForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('organizer')
+        kwargs.pop('locales')
+        self.user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+        self.fields['copy_from_event'] = forms.ModelChoiceField(
+            label=_("Copy configuration from"),
+            queryset=Event.objects.filter(
+                id__in=self.user.event_perms.filter(
+                    can_change_items=True, can_change_settings=True
+                ).values_list('event', flat=True)
+            ),
+            widget=forms.RadioSelect,
+            empty_label=_('Do not copy'),
+            required=True
+        )
 
 
 class EventUpdateForm(I18nModelForm):

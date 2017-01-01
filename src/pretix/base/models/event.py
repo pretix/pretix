@@ -4,10 +4,12 @@ from datetime import date, datetime, time
 import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.files.storage import default_storage
 from django.core.mail import get_connection
 from django.core.validators import RegexValidator
 from django.db import models
 from django.template.defaultfilters import date as _date
+from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
@@ -223,6 +225,73 @@ class Event(LoggedModel):
             self.settings.get('payment_term_last', as_type=date),
             time(hour=23, minute=59, second=59)
         ), tz)
+
+    def copy_data_from(self, other):
+        from . import ItemCategory, Item, Question, Quota
+        self.plugins = other.plugins
+        self.save()
+
+        category_map = {}
+        for c in ItemCategory.objects.filter(event=other):
+            category_map[c.pk] = c
+            c.pk = None
+            c.event = self
+            c.save()
+
+        item_map = {}
+        variation_map = {}
+        for i in Item.objects.filter(event=other).prefetch_related('variations'):
+            vars = list(i.variations.all())
+            item_map[i.pk] = i
+            i.pk = None
+            i.event = self
+            if i.picture:
+                i.picture.save(i.picture.name, i.picture)
+            if i.category_id:
+                i.category = category_map[i.category_id]
+            i.save()
+            for v in vars:
+                variation_map[v.pk] = v
+                v.pk = None
+                v.item = i
+                v.save()
+
+        for q in Quota.objects.filter(event=other).prefetch_related('items', 'variations'):
+            items = list(q.items.all())
+            vars = list(q.variations.all())
+            q.pk = None
+            q.event = self
+            q.save()
+            for i in items:
+                q.items.add(item_map[i.pk])
+            for v in vars:
+                q.variations.add(variation_map[v.pk])
+
+        for q in Question.objects.filter(event=other).prefetch_related('items', 'options'):
+            items = list(q.items.all())
+            opts = list(q.options.all())
+            q.pk = None
+            q.event = self
+            q.save()
+            for i in items:
+                q.items.add(item_map[i.pk])
+            for o in opts:
+                o.pk = None
+                o.question = q
+                o.save()
+
+        for s in EventSetting.objects.filter(object=other):
+            s.object = self
+            s.pk = None
+            if s.value.startswith('file://'):
+                fi = default_storage.open(s.value[7:], 'rb')
+                nonce = get_random_string(length=8)
+                fname = '%s/%s/%s.%s.%s' % (
+                    self.organizer.slug, self.slug, s.key, nonce, s.value.split('.')[-1]
+                )
+                newname = default_storage.save(fname, fi)
+                s.value = 'file://' + newname
+            s.save()
 
 
 class EventPermission(models.Model):
