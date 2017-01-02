@@ -170,7 +170,8 @@ class ItemVariationsFormSet(I18nFormSet):
                 )
 
     def _should_delete_form(self, form):
-        if form.instance.orderposition_set.exists() or form.instance.cartposition_set.exists():
+        should_delete = super()._should_delete_form(form)
+        if should_delete and (form.instance.orderposition_set.exists() or form.instance.cartposition_set.exists()):
             form._delete_fail = True
             return False
         return form.cleaned_data.get(DELETION_FIELD_NAME, False)
