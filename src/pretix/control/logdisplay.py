@@ -9,6 +9,10 @@ from pretix.base.i18n import LazyI18nString
 from pretix.base.models import Event, ItemVariation, LogEntry
 from pretix.base.signals import logentry_display
 
+OVERVIEW_BLACKLIST = [
+    'pretix.plugins.sendmail.order.email.sent'
+]
+
 
 def _display_order_changed(event: Event, logentry: LogEntry):
     data = json.loads(logentry.data)
@@ -100,6 +104,10 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.question.deleted': _('The question has been deleted.'),
         'pretix.event.question.changed': _('The question has been modified.'),
         'pretix.event.settings': _('The event settings have been changed.'),
+        'pretix.event.tickets.settings': _('The ticket download settings have been changed.'),
+        'pretix.plugins.sendmail.sent': _('A mass mail has been sent.'),
+        'pretix.event.plugins.enabled': _('A plugin has been enabled.'),
+        'pretix.event.plugins.disabled': _('A plugin has been disabled.'),
     }
 
     data = json.loads(logentry.data)
@@ -122,7 +130,10 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         return _display_order_changed(sender, logentry)
 
     if logentry.action_type.startswith('pretix.event.payment.provider.'):
-        return _('The payment provider settings have been changed.')
+        return _('The settings of a payment provider have been changed.')
+
+    if logentry.action_type.startswith('pretix.event.tickets.provider.'):
+        return _('The settings of a ticket output provider have been changed.')
 
     if logentry.action_type == 'pretix.user.settings.changed':
         text = str(_('Your account settings have been changed.'))

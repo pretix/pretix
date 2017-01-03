@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db.models import Sum
 from django.dispatch import receiver
@@ -9,10 +10,12 @@ from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Event, Item, Order, OrderPosition
+from pretix.base.models import Event, Item, Order, OrderPosition, Voucher
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,
 )
+
+from ..logdisplay import OVERVIEW_BLACKLIST
 
 NUM_WIDGET = '<div class="numwidget"><span class="num">{num}</span><span class="text">{text}</span></div>'
 
@@ -154,9 +157,19 @@ def event_index(request, organizer, event):
     widgets = []
     for r, result in event_dashboard_widgets.send(sender=request.event):
         widgets.extend(result)
+
+    qs = request.event.logentry_set.all().select_related('user', 'content_type').order_by('-datetime')
+    qs = qs.exclude(action_type__in=OVERVIEW_BLACKLIST)
+    if not request.eventperm.can_view_orders:
+        qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
+    if not request.eventperm.can_view_vouchers:
+        qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
+
     ctx = {
         'widgets': rearrange(widgets),
+        'logs': qs[:5]
     }
+
     return render(request, 'pretixcontrol/event/index.html', ctx)
 
 

@@ -34,6 +34,7 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.presale.style import regenerate_css
 
 from . import UpdateView
+from ..logdisplay import OVERVIEW_BLACKLIST
 
 
 class EventUpdate(EventPermissionRequiredMixin, UpdateView):
@@ -654,7 +655,8 @@ class EventLog(EventPermissionRequiredMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        qs = self.request.event.logentry_set.all().select_related('user', 'content_type')
+        qs = self.request.event.logentry_set.all().select_related('user', 'content_type').order_by('-datetime')
+        qs = qs.exclude(action_type__in=OVERVIEW_BLACKLIST)
         if not self.request.eventperm.can_view_orders:
             qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
         if not self.request.eventperm.can_view_vouchers:

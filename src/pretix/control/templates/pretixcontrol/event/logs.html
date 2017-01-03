@@ -1,8 +1,8 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
-{% block title %}{% trans "Logs" %}{% endblock %}
+{% block title %}{% trans "Event logs" %}{% endblock %}
 {% block inside %}
-    <h1>{% trans "Logs" %}</h1>
+    <h1>{% trans "Event logs" %}</h1>
     <ul class="list-group">
         {% for log in logs %}
             <li class="list-group-item logentry">
