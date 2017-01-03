@@ -661,4 +661,17 @@ class EventLog(EventPermissionRequiredMixin, ListView):
             qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
         if not self.request.eventperm.can_view_vouchers:
             qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
+
+        if self.request.GET.get('user') == 'yes':
+            qs = qs.filter(user__isnull=False)
+        elif self.request.GET.get('user') == 'no':
+            qs = qs.filter(user__isnull=True)
+        elif self.request.GET.get('user'):
+            qs = qs.filter(user_id=self.request.GET.get('user'))
+
         return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['userlist'] = self.request.event.user_perms.select_related('user')
+        return ctx

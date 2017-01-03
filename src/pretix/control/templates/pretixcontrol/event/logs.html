@@ -3,6 +3,25 @@
 {% block title %}{% trans "Event logs" %}{% endblock %}
 {% block inside %}
     <h1>{% trans "Event logs" %}</h1>
+    <form class="form-inline helper-display-inline" action="" method="get">
+        <p>
+            <select name="user" class="form-control">
+                <option value="">{% trans "All actions" %}</option>
+                <option value="yes" {% if request.GET.user == "yes" %}selected="selected"{% endif %}>
+                    {% trans "Team actions" %}
+                </option>
+                <option value="no" {% if request.GET.user == "no" %}selected="selected"{% endif %}>
+                    {% trans "Customer actions" %}
+                </option>
+                {% for up in userlist %}
+                    <option value="{{ up.user_id }}" {% if request.GET.user == up.user_id %}selected="selected"{% endif %}>
+                        {{ up.user }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+        </p>
+    </form>
     <ul class="list-group">
         {% for log in logs %}
             <li class="list-group-item logentry">
@@ -25,6 +44,10 @@
                     </div>
                 </div>
             </li>
+        {% empty %}
+            <div class="list-group-item">
+                <em>{% trans "No results" %}</em>
+            </div>
         {% endfor %}
     </ul>
     {% include "pretixcontrol/pagination.html" %}
