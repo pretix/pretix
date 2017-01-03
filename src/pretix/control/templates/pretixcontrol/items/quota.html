@@ -15,14 +15,14 @@
         {% endif %}
     </h1>
     <div class="row" id="quota-stats">
-        <div class="col-md-6 col-xs-12">
+        <div class="col-md-5 col-xs-12">
             <legend>{% trans "Usage overview" %}</legend>
             <div class="chart" id="quota_chart">
 
             </div>
             <script type="application/json" id="quota-chart-data">{{ quota_chart_data|safe }}</script>
         </div>
-        <div class="col-md-6 col-xs-12">
+        <div class="col-md-5 col-xs-12">
             <legend>{% trans "Availability calculation" %}</legend>
 
             <div class="row">
@@ -58,6 +58,16 @@
                     {% endblocktrans %}
                 </div>
             {% endif %}
+        </div>
+        <div class="col-md-2 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Quota history" %}
+                    </h3>
+                </div>
+                {% include "pretixcontrol/includes/logs.html" with obj=quota %}
+            </div>
         </div>
     </div>
     {% eventsignal request.event "pretix.control.signals.quota_detail_html" quota=quota %}

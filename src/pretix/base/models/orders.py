@@ -472,6 +472,10 @@ class OrderPosition(AbstractPosition):
                 answ.save()
             if cartpos.voucher:
                 Voucher.objects.filter(pk=cartpos.voucher.pk).update(redeemed=F('redeemed') + 1)
+                cartpos.voucher.log_action('pretix.voucher.redeemed', {
+                    'order_code': order.code
+                })
+
             cartpos.delete()
         return ops
 

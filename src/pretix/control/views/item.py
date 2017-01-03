@@ -831,6 +831,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
                         continue
                     self.get_object().log_action(
                         'pretix.event.item.variation.deleted', user=self.request.user, data={
+                            'value': form.instance.value,
                             'id': form.instance.pk
                         }
                     )
@@ -848,6 +849,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
                     form.save()
                     if form.has_changed():
                         change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
+                        change_data['value'] = form.instance.value
                         change_data['id'] = form.instance.pk
                         self.get_object().log_action(
                             'pretix.event.item.variation.changed' if not created else
