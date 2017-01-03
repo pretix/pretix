@@ -99,6 +99,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.question.added': _('The question has been added.'),
         'pretix.event.question.deleted': _('The question has been deleted.'),
         'pretix.event.question.changed': _('The question has been modified.'),
+        'pretix.event.settings': _('The event settings have been changed.'),
     }
 
     data = json.loads(logentry.data)
@@ -119,6 +120,9 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if logentry.action_type.startswith('pretix.event.order.changed'):
         return _display_order_changed(sender, logentry)
+
+    if logentry.action_type.startswith('pretix.event.payment.provider.'):
+        return _('The payment provider settings have been changed.')
 
     if logentry.action_type == 'pretix.user.settings.changed':
         text = str(_('Your account settings have been changed.'))

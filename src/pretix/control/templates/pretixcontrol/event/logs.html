@@ -1,0 +1,31 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Logs" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Logs" %}</h1>
+    <ul class="list-group">
+        {% for log in logs %}
+            <li class="list-group-item logentry">
+                <div class="row">
+                    <div class="col-lg-2 col-sm-6 col-xs-12">
+                        <span class="fa fa-clock-o"></span> {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                    </div>
+                    <div class="col-lg-2 col-sm-6 col-xs-12">
+                        {% if log.user %}
+                            <span class="fa fa-user"></span> {{ log.user.get_full_name }}
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-2 col-sm-12 col-xs-12">
+                        {% if log.display_object %}
+                            <span class="fa fa-flag"></span> {{ log.display_object|safe }}
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-xs-12">
+                        {{ log.display }}
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

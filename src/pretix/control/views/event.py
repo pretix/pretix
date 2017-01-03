@@ -2,6 +2,7 @@ from collections import OrderedDict
 
 from django import forms
 from django.contrib import messages
+from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
@@ -10,13 +11,14 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import FormView
+from django.views.generic import FormView, ListView
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import (
-    CachedTicket, Event, EventPermission, Item, ItemVariation, User,
+    CachedTicket, Event, EventPermission, Item, ItemVariation, LogEntry, Order,
+    User, Voucher,
 )
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
@@ -643,3 +645,18 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug
         })
+
+
+class EventLog(EventPermissionRequiredMixin, ListView):
+    template_name = 'pretixcontrol/event/logs.html'
+    model = LogEntry
+    context_object_name = 'logs'
+    paginate_by = 20
+
+    def get_queryset(self):
+        qs = self.request.event.logentry_set.all().select_related('user', 'content_type')
+        if not self.request.eventperm.can_view_orders:
+            qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
+        if not self.request.eventperm.can_view_vouchers:
+            qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
+        return qs

@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
         url(r'^$', dashboards.event_index, name='event.index'),
         url(r'^live/$', event.EventLive.as_view(), name='event.live'),
+        url(r'^logs/$', event.EventLog.as_view(), name='event.log'),
         url(r'^settings/$', event.EventUpdate.as_view(), name='event.settings'),
         url(r'^settings/plugins$', event.EventPlugins.as_view(), name='event.settings.plugins'),
         url(r'^settings/permissions$', event.EventPermissions.as_view(), name='event.settings.permissions'),
