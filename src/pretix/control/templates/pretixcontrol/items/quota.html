@@ -43,6 +43,21 @@
                     {% if quota.size == None %}{% trans "Infinite" %}{% else %}{{ avail.1 }}{% endif %}
                 </div>
             </div>
+            {% if quota_overbooked > 0 %}
+                <div class="alert alert-warning">
+                    {% blocktrans trimmed with num=quota_overbooked %}
+                        This quota is currently overbooked by {{ num }} tickets.
+                    {% endblocktrans %}
+                </div>
+            {% endif %}
+            {% if has_ignore_vouchers %}
+                <div class="alert alert-warning">
+                    {% blocktrans trimmed %}
+                        Your event contains vouchers that affect products covered by this quota and that
+                        allow a user to buy products even if this quota is sold out.
+                    {% endblocktrans %}
+                </div>
+            {% endif %}
         </div>
     </div>
     {% eventsignal request.event "pretix.control.signals.quota_detail_html" quota=quota %}

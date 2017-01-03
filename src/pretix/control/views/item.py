@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.files import File
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.db.models import Count
+from django.db.models import Count, F, Q
 from django.forms.models import ModelMultipleChoiceField, inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -19,7 +19,7 @@ from django.views.generic.edit import DeleteView
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
     CachedTicket, Item, ItemCategory, ItemVariation, Order, Question,
-    QuestionAnswer, QuestionOption, Quota,
+    QuestionAnswer, QuestionOption, Quota, Voucher,
 )
 from pretix.control.forms.item import (
     CategoryForm, ItemCreateForm, ItemUpdateForm, ItemVariationForm,
@@ -624,12 +624,24 @@ class QuotaView(ChartContainingView, DetailView):
         ]
         ctx['quota_table_rows'] = list(data)
 
+        sum_values = sum([d['value'] for d in data])
+
         if self.object.size is not None:
             data.append({
                 'label': ugettext('Current availability'),
                 'value': avail[1]
             })
+
         ctx['quota_chart_data'] = json.dumps(data)
+        ctx['quota_overbooked'] = sum_values - self.object.size if self.object.size is not None else 0
+
+        ctx['has_ignore_vouchers'] = Voucher.objects.filter(
+            Q(allow_ignore_quota=True) &
+            Q(Q(valid_until__isnull=True) | Q(valid_until__gte=now())) &
+            Q(Q(self.object._position_lookup) | Q(quota=self.object)) &
+            Q(redeemed__lt=F('max_usages'))
+        ).exists()
+
         return ctx
 
     def get_object(self, queryset=None) -> Quota:
@@ -672,9 +684,10 @@ class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
-        return reverse('control:event.items.quotas', kwargs={
+        return reverse('control:event.items.quotas.show', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
+            'quota': self.object.pk
         })
 
 
