@@ -79,8 +79,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                             user=self.request.user,
                             data={
                                 'subject': form.cleaned_data['subject'],
-                                'content': form.cleaned_data['message'],
-                                'recipients': o.email
+                                'message': form.cleaned_data['message'],
+                                'recipient': o.email
                             }
                         )
                 except SendMailException:
@@ -110,7 +110,7 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
     permission = 'can_change_orders'
     model = LogEntry
     context_object_name = 'logs'
-    paginate_by = 15
+    paginate_by = 5
 
     def get_queryset(self):
         qs = LogEntry.objects.filter(
@@ -118,3 +118,21 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
             action_type='pretix.plugins.sendmail.sent'
         )
         return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+
+        status = dict(Order.STATUS_CHOICE)
+        for log in ctx['logs']:
+            log.pdata = log.parsed_data
+            log.pdata['locales'] = {}
+            for locale, msg in log.pdata['message'].items():
+                log.pdata['locales'][locale] = {
+                    'message': msg,
+                    'subject': log.pdata['subject'][locale]
+                }
+            log.pdata['sendto'] = [
+                status[s] for s in log.pdata['sendto']
+            ]
+
+        return ctx

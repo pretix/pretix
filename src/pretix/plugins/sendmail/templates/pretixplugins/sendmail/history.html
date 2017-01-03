@@ -16,31 +16,17 @@
                         {% if log.display %}
                             <br/><span class="fa fa-comment-o"></span> {{ log.display }}
                         {% endif %}
-                    </p>
-                    <p>
-                        <strong>Email address:</strong> {{ log.parsed_data.recipients }}
-                    </p>
-                    <p>
-                        <strong>Subject:</strong>
-                    </p>
-                    <p>
-                        {% for key,value in log.parsed_data.subject.items %}
-                            <p>
-                                {{ key }}: {{ value }}
-                            </p>
+                        <br/><span class="fa fa-shopping-cart"></span> {% trans "Sent to orders:" %}
+                        {% for status in log.parsed_data.sendto %}
+                            {{ status }}{% if forloop.revcounter > 1 %},{% endif %}
                         {% endfor %}
                     </p>
                     <p>
-                        <strong>Email content:</strong>
-                    </p>
-                    <p>
-                        {% for key,value in log.parsed_data.message.items %}
+                        {% for locale, value in log.pdata.locales.items %}
                             <p>
-                                {{ key }}:
+                                <strong>[{{ locale }}] {% trans "Subject:" %} {{ value.subject }}</strong>
                             </p>
-                            <p>
-                                {{ value|linebreaksbr }}
-                            </p>
+                            <pre>{{ value.message|linebreaksbr }}</pre>
                         {% endfor %}
                     </p>
                 </li>
