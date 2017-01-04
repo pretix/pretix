@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from pretix.base.models import Order, RequiredAction
+from pretix.base.models import Order, Quota, RequiredAction
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
@@ -103,8 +103,18 @@ def webhook(request, *args, **kwargs):
                 'sale': sale['id']
             })
         )
-    elif order.status == Order.STATUS_PENDING and sale['state'] == 'completed':
-        mark_order_paid(order, user=None)
+    elif order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and sale['state'] == 'completed':
+        try:
+            mark_order_paid(order, user=None)
+        except Quota.QuotaExceededException:
+            if not RequiredAction.objects.filter(event=request.event, action_type='pretix.plugins.paypal.overpaid',
+                                                 data__icontains=order.code).exists():
+                RequiredAction.objects.create(
+                    event=request.event, action_type='pretix.plugins.paypal.overpaid', data=json.dumps({
+                        'order': order.code,
+                        'payment': sale['parent_payment']
+                    })
+                )
 
     return HttpResponse(status=200)
 

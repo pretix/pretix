@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from pretix.base.models import Order, RequiredAction
+from pretix.base.models import Order, Quota, RequiredAction
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.control.permissions import event_permission_required
 from pretix.plugins.stripe.payment import Stripe
@@ -68,8 +68,18 @@ def webhook(request, *args, **kwargs):
                 'charge': charge_id
             })
         )
-    elif order.status == Order.STATUS_PENDING and charge['status'] == 'succeeded' and not is_refund:
-        mark_order_paid(order, user=None)
+    elif order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and charge['status'] == 'succeeded' and not is_refund:
+        try:
+            mark_order_paid(order, user=None)
+        except Quota.QuotaExceededException:
+            if not RequiredAction.objects.filter(event=request.event, action_type='pretix.plugins.stripe.overpaid',
+                                                 data__icontains=order.code).exists():
+                RequiredAction.objects.create(
+                    event=request.event, action_type='pretix.plugins.stripe.overpaid', data=json.dumps({
+                        'order': order.code,
+                        'charge': charge.id
+                    })
+                )
 
     return HttpResponse(status=200)
 

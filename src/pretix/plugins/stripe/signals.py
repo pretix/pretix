@@ -63,10 +63,15 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
 
 @receiver(signal=requiredaction_display, dispatch_uid="stripe_requiredaction_display")
 def pretixcontrol_action_display(sender, action, request, **kwargs):
-    if action.action_type != 'pretix.plugins.stripe.refund':
+    if not action.action_type.startswith('pretix.plugins.stripe'):
         return
 
     data = json.loads(action.data)
-    template = get_template('pretixplugins/stripe/action_refund.html')
+
+    if action.action_type == 'pretix.plugins.stripe.refund':
+        template = get_template('pretixplugins/stripe/action_refund.html')
+    elif action.action_type == 'pretix.plugins.stripe.overpaid':
+        template = get_template('pretixplugins/stripe/action_overpaid.html')
+
     ctx = {'data': data, 'event': sender, 'action': action}
     return template.render(ctx, request)
