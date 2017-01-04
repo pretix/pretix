@@ -235,6 +235,26 @@ Updates are fairly simple, but require at least a short downtime::
 
 Restarting the service can take a few seconds, especially if the update requires changes to the database.
 
+Install a plugin
+----------------
+
+To install a plugin, you need to build your own docker image. To do so, create a new directory and place a file
+named ``Dockerfile`` in it. The Dockerfile could look like this (replace ``pretix-passbook`` with the plugins of your
+choice)::
+
+    FROM pretix/standalone
+    USER root
+    RUN pip3 install pretix-passbook
+    USER pretixuser
+    RUN make production
+
+Then, go to that directory and build the image::
+
+    $ docker build -t mypretix
+
+You can now use that image ``mypretix`` instead of ``pretix/standalone`` in your service file (see above). Be sure
+to re-build your custom image after you pulled ``pretix/standalone`` if you want to perform an update.
+
 .. _Docker: https://docs.docker.com/engine/installation/linux/debian/
 .. _Postfix: https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-16-04
 .. _nginx: https://botleg.com/stories/https-with-lets-encrypt-and-nginx/

@@ -105,8 +105,8 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
 
 See :ref:`email configuration <mail-settings>` to learn more about configuring mail features.
 
-Install pretix from source
---------------------------
+Install pretix from PyPI
+------------------------
 
 Now we will install pretix itself. The following steps are to be executed as the ``pretix`` user. Before we
 actually install pretix, we will create a virtual environment to isolate the python packages from your global
@@ -116,14 +116,10 @@ python installation::
     $ source /var/pretix/venv/bin/activate
     (venv)$ pip3 install -U pip setuptools wheel
 
-We now clone pretix and install its Python dependencies (replace ``mysql`` with ``postgres`` if you're running
-PostgreSQL)::
+We now install pretix, its direct dependencies and gunicorn. Replace ``mysql`` with ``postgres`` in the following
+command if you're running PostgreSQL::
 
-    (venv)$ git clone https://github.com/pretix/pretix.git /var/pretix/source
-    (venv)$ cd /var/pretix/source/src
-    (venv)$ pip3 install -r requirements.txt -r requirements/mysql.txt \
-                         -r requirements/redis.txt \
-                         -r requirements/py34.txt gunicorn
+    (venv)$ pip install "pretix[mysql]" gunicorn
 
 We also need to create a data directory::
 
@@ -131,8 +127,8 @@ We also need to create a data directory::
 
 Finally, we compile static files and translation data and create the database structure::
 
-    (venv)$ make production
-    (venv)$ python manage.py migrate
+    (venv)$ python -m pretix rebuild
+    (venv)$ python -m pretix migrate
 
 
 Start pretix as a service
@@ -171,7 +167,7 @@ For background tasks we need a second service ``/etc/systemd/system/pretix-worke
     Group=pretix
     Environment="VIRTUAL_ENV=/var/pretix/venv"
     Environment="PATH=/var/pretix/venv/bin:/usr/local/bin:/usr/bin:/bin"
-    ExecStart=/var/pretix/venv/bin/celery -A pretix worker -l info
+    ExecStart=/var/pretix/venv/bin/celery -A pretix.celery_app worker -l info
     WorkingDirectory=/var/pretix/source/src
     Restart=on-failure
 
@@ -191,7 +187,7 @@ Cronjob
 You need to set up a cronjob that runs the management command ``runperiodic``. The exact interval is not important
 but should be something between every minute and every hour. You could for example configure cron like this::
 
-    15,45 * * * * export PATH=/var/pretix/venv/bin:$PATH && cd /var/pretix/source/src && ./manage.py runperiodic
+    15,45 * * * * export PATH=/var/pretix/venv/bin:$PATH && cd /var/pretix/source/src && python -m pretix runperiodic
 
 The cronjob should run as the ``pretix`` user (``crontab -e -u pretix``).
 
@@ -254,15 +250,26 @@ To upgrade to a new pretix release, pull the latest code changes and run the fol
 ``mysql`` with ``postgres`` if necessary)::
 
     $ source /var/pretix/venv/bin/activate
-    (venv)$ cd /var/pretix/source/src
-    (venv)$ git pull origin master
-    (venv)$ pip3 install -r requirements.txt -r requirements/mysql.txt \
-                         -r requirements/redis.txt \
-                         -r requirements/py34.txt gunicorn
-    (venv)$ python manage.py migrate
-    (venv)$ make production
-    (venv)$ python manage.py updatestyles
+    (venv)$ pip3 install -U pretix[mysql] gunicorn
+    (venv)$ python -m pretix migrate
+    (venv)$ python -m pretix rebuild
+    (venv)$ python -m pretix updatestyles
     # systemctl restart pretix-web pretix-worker
+
+
+Install a plugin
+----------------
+
+To install a plugin, just use ``pip``! Depending on the plugin, you should probably apply database migrations and
+rebuild the static files afterwards. Replace ``pretix-passbook`` with the plugin of your choice in the following
+example::
+
+    $ source /var/pretix/venv/bin/activate
+    (venv)$ pip3 install pretix-passbook
+    (venv)$ python -m pretix migrate
+    (venv)$ python -m pretix rebuild
+    # systemctl restart pretix-web pretix-worker
+
 
 .. _Postfix: https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-16-04
 .. _nginx: https://botleg.com/stories/https-with-lets-encrypt-and-nginx/

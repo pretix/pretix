@@ -33,7 +33,7 @@ fi
 
 if [ "$1" == "taskworker" ]; then
     export C_FORCE_ROOT=True
-    exec celery -A pretix worker -l info
+    exec celery -A pretix.celery_app worker -l info
 fi
 
 if [ "$1" == "shell" ]; then
