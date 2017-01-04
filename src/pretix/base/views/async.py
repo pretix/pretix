@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext as _
 
-from pretix.celery import app
+from pretix.celery_app import app
 
 logger = logging.getLogger('pretix.base.async')
 

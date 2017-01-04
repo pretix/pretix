@@ -32,7 +32,7 @@ from pretix.base.services.mail import SendMailException, mail
 from pretix.base.signals import (
     order_paid, order_placed, periodic_task, register_payment_providers,
 )
-from pretix.celery import app
+from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 error_messages = {

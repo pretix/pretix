@@ -15,7 +15,7 @@ import time
 from django.conf import settings
 from django.db import transaction
 
-from pretix.celery import app
+from pretix.celery_app import app
 
 
 class ProfiledTask(app.Task):

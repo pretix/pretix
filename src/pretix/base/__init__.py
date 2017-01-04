@@ -12,7 +12,7 @@ class PretixBaseConfig(AppConfig):
         from .services import export, mail, tickets, cart, orders, cleanup  # NOQA
 
         try:
-            from .celery import app as celery_app  # NOQA
+            from .celery_app import app as celery_app  # NOQA
         except ImportError:
             pass
 

@@ -8,7 +8,7 @@ from pretix.base.i18n import language
 from pretix.base.models import CachedTicket, Event, Order, OrderPosition
 from pretix.base.services.async import ProfiledTask
 from pretix.base.signals import register_ticket_outputs
-from pretix.celery import app
+from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
 
 

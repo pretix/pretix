@@ -12,7 +12,7 @@ from pretix.base.models import (
 )
 from pretix.base.services.async import ProfiledTask
 from pretix.base.services.locking import LockTimeoutException
-from pretix.celery import app
+from pretix.celery_app import app
 
 
 class CartError(LazyLocaleException):

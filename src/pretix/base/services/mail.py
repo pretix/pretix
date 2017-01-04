@@ -12,7 +12,7 @@ from inlinestyler.utils import inline_css
 
 from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import Event, Order
-from pretix.celery import app
+from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 logger = logging.getLogger('pretix.base.mail')

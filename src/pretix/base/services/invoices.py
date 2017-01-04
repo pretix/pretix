@@ -25,7 +25,7 @@ from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
 from pretix.base.services.async import TransactionAwareTask
 from pretix.base.signals import register_payment_providers
-from pretix.celery import app
+from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
 
 
