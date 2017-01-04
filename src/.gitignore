@@ -7,4 +7,4 @@ build/
 dist/
 *.egg-info/
 *.bak
-static/jsi18n/
+pretix/static/jsi18n/

@@ -11,7 +11,7 @@ here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the relevant file
 try:
-    with open(path.join(here, '../README.md'), encoding='utf-8') as f:
+    with open(path.join(here, '../README.rst'), encoding='utf-8') as f:
         long_description = f.read()
 except:
     long_description = ''
@@ -122,5 +122,5 @@ setup(
 
     packages=find_packages(exclude=['tests', 'tests.*']),
     include_package_data=True,
-    cmdclass=cmdclass
+    cmdclass=cmdclass,
 )

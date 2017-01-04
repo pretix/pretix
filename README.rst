@@ -1,9 +1,14 @@
 pretix
 ======
 
-[![Docs](https://readthedocs.org/projects/pretix/badge/?version=latest)](http://docs.pretix.eu/en/latest/)
-[![Build Status](https://travis-ci.org/pretix/pretix.svg?branch=master)](https://travis-ci.org/pretix/pretix)
-[![Coverage Status](https://img.shields.io/coveralls/pretix/pretix.svg)](https://coveralls.io/r/pretix/pretix)
+.. image:: https://readthedocs.org/projects/pretix/badge/?version=latest
+   :target: https://docs.pretix.eu/en/latest/
+
+.. image:: https://travis-ci.org/pretix/pretix.svg?branch=master
+   :target: https://travis-ci.org/pretix/pretix
+
+.. image:: https://coveralls.io/repos/github/pretix/pretix/badge.svg?branch=master
+   :target: https://coveralls.io/r/pretix/pretix
 
 
 Reinventing ticket presales, one bit at a time.
@@ -20,12 +25,11 @@ like, but we try to keep the changes to documented APIs as small as possible. If
 in production or develop a plugin now, I invite you to send me an email so that I can notify you of changes
 and bugs that require your attention.
 
-Since very recently we now have an [installation guide](https://docs.pretix.eu/en/latest/admin/installation/index.html)
-in our documentation.
+Since very recently we now have an `installation guide`_ in our documentation.
 
 Contributing
 ------------
-If you want to contribute to pretix, please read the [developer documentation](https://docs.pretix.eu/en/latest/development/index.html)
+If you want to contribute to pretix, please read the `developer documentation`_
 in our documentation. If you have any further questions, please do not hesitate to ask!
 
 License
@@ -38,4 +42,8 @@ AUTHORS file for a list of all the awesome folks who contributed to this project
 
 This project is 100 percent free and open source software. If you are interested in
 commercial support, hosting services or supporting this project financially, please 
-go to [pretix.eu](https://pretix.eu) or contact Raphael directly.
+go to `pretix.eu`_ or contact Raphael directly.
+
+.. _installation guide: https://docs.pretix.eu/en/latest/admin/installation/index.html
+.. _developer documentation: https://docs.pretix.eu/en/latest/development/index.html
+.. _pretix.eu: https://pretix.eu
