@@ -107,6 +107,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.tickets.settings': _('The ticket download settings have been changed.'),
         'pretix.event.plugins.enabled': _('A plugin has been enabled.'),
         'pretix.event.plugins.disabled': _('A plugin has been disabled.'),
+        'pretix.event.live.activated': _('The shop has been taken live.'),
+        'pretix.event.live.deactivated': _('The shop has been taken offline.'),
     }
 
     data = json.loads(logentry.data)

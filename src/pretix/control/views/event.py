@@ -634,10 +634,16 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
         if request.POST.get("live") == "true" and not self.issues:
             request.event.live = True
             request.event.save()
+            self.request.event.log_action(
+                'pretix.event.live.activated', user=self.request.user, data={}
+            )
             messages.success(self.request, _('Your shop is live now!'))
         elif request.POST.get("live") == "false":
             request.event.live = False
             request.event.save()
+            self.request.event.log_action(
+                'pretix.event.live.deactivated', user=self.request.user, data={}
+            )
             messages.success(self.request, _('We\'ve taken your shop down. You can re-enable it whenever you want!'))
         return redirect(self.get_success_url())
 
