@@ -1,6 +1,9 @@
 pretix
 ======
 
+.. image:: https://img.shields.io/pypi/v/pretix.svg
+   :target: https://pypi.python.org/pypi/pretix
+
 .. image:: https://readthedocs.org/projects/pretix/badge/?version=latest
    :target: https://docs.pretix.eu/en/latest/
 
