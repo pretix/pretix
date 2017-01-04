@@ -68,7 +68,7 @@ setup(
         'django-formset-js-improved==0.5.0.1',
         'django-compressor==2.1',
         'reportlab==3.2.*',
-        'easy-thumbnails==2.*'
+        'easy-thumbnails==2.*',
         'PyPDF2==1.26.*',
         'django-libsass',
         'libsass',
