@@ -47,6 +47,13 @@ class Paypal(BasePaymentProvider):
             ]
         )
 
+    def settings_content_render(self, request):
+        return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
+            _('Please configure a PayPal Webhook to the following endpoint in order to automatically cancel orders '
+              'when payments are refunded externally.'),
+            build_absolute_uri(self.event, 'plugins:paypal:webhook')
+        )
+
     def init_api(self):
         paypalrestsdk.set_config(
             mode="sandbox" if "sandbox" in self.settings.get('endpoint') else 'live',

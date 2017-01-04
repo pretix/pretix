@@ -23,7 +23,7 @@ def env():
         code='FOOBAR', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PAID,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=Decimal('13.37'), payment_provider='banktransfer'
+        total=Decimal('13.37'), payment_provider='stripe'
     )
     return event, o1
 

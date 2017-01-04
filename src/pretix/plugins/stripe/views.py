@@ -54,7 +54,7 @@ def webhook(request, *args, **kwargs):
         return HttpResponse('Not interested in this event', status=200)
 
     try:
-        order = request.event.orders.get(id=metadata['order'])
+        order = request.event.orders.get(id=metadata['order'], payment_provider='stripe')
     except Order.DoesNotExist:
         return HttpResponse('Order not found', status=200)
 

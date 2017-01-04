@@ -1,4 +1,4 @@
-{% load i18n %}
+        url(r'^webhook/$', webhook, name='webhook'),{% load i18n %}
 
 {% if payment_info %}
     {% if order.status == "p" %}
