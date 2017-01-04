@@ -7,6 +7,7 @@ from django.contrib.messages import constants as messages  # NOQA
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from pkg_resources import iter_entry_points
+from . import __version__
 
 config = configparser.RawConfigParser()
 config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
@@ -204,6 +205,19 @@ PLUGINS = []
 for entry_point in iter_entry_points(group='pretix.plugin', name=None):
     PLUGINS.append(entry_point.module_name)
     INSTALLED_APPS.append(entry_point.module_name)
+
+if config.has_option('sentry', 'dsn'):
+    INSTALLED_APPS += [
+        'raven.contrib.django.raven_compat',
+    ]
+    DISABLE_SENTRY_INSTRUMENTATION = True  # see celery.py for more, we use this differently
+    RAVEN_CONFIG = {
+        'dsn': config.get('sentry', 'dsn'),
+        'transport': 'raven.transport.threaded_requests.ThreadedRequestsHTTPTransport',
+        'release': __version__,
+        'environment': SITE_URL,
+    }
+
 
 CORE_MODULES = {
     ("pretix", "base"),

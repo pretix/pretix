@@ -16,7 +16,9 @@ the files found before.
 
 The file is expected to be in the INI format as specified in the `Python documentation`_.
 
-The config file may contain the following sections (all settings are optional and have default values).
+The config file may contain the following sections (all settings are optional and have
+default values). We suggest that you start from the examples given in one of the
+installation tutorials.
 
 pretix settings
 ---------------
@@ -205,7 +207,6 @@ If no memcached is configured, pretix will use Django's built-in local-memory ca
           shared memcached instance, not multiple ones, because cache invalidations would not be
           propagated otherwise.
 
-
 Redis
 -----
 
@@ -241,6 +242,19 @@ an AMQP server (e.g. RabbitMQ) as a broker and redis or your database as a resul
 RabbitMQ might be the better choice if you have a complex, multi-server, high-performance setup,
 but as you already should have a redis instance ready for session and lock storage, we recommend
 redis for convenience. See the `Celery documentation`_ for more details.
+
+Sentry
+------
+
+pretix has native support for sentry, a tool that you can use to track errors in the
+application. If you want to use sentry, you need to set a DSN in the configuration file.
+
+    [sentry]
+    dsn=https://<key>:<secret>@sentry.io/<project>
+
+``dsn``
+    You will be given this value by your sentry installation.
+
 
 Secret length
 -------------

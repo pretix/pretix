@@ -218,7 +218,7 @@ def _add_items_to_cart(event: Event, items: List[dict], cart_id: str=None) -> No
                 raise CartError(err)
 
 
-@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1)
+@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None) -> None:
     """
     Adds a list of items to a user's cart.
@@ -259,7 +259,7 @@ def _remove_items_from_cart(event: Event, items: List[dict], cart_id: str) -> No
                     cp.delete()
 
 
-@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1)
+@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def remove_items_from_cart(self, event: int, items: List[dict], cart_id: str=None) -> None:
     """
     Removes a list of items from a user's cart.

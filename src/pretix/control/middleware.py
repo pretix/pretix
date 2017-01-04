@@ -30,9 +30,11 @@ class PermissionMiddleware(MiddlewareMixin):
     def process_request(self, request):
         url = resolve(request.path_info)
         url_name = url.url_name
+
         if not request.path.startswith(get_script_prefix() + 'control'):
             # This middleware should only touch the /control subpath
             return
+
         if hasattr(request, 'organizer'):
             # If the user is on a organizer's subdomain, he should be redirected to pretix
             return redirect(urljoin(settings.SITE_URL, request.get_full_path()))

@@ -602,7 +602,7 @@ class OrderChangeManager:
             raise OrderError(error_messages['internal'])
 
 
-@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1)
+@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def perform_order(self, event: str, payment_provider: str, positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None):
     try:
@@ -614,7 +614,7 @@ def perform_order(self, event: str, payment_provider: str, positions: List[str],
         return OrderError(error_messages['busy'])
 
 
-@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1)
+@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def cancel_order(self, order: int, user: int=None):
     try:
         try:
