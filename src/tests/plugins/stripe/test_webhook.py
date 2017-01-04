@@ -5,16 +5,20 @@ from decimal import Decimal
 import pytest
 from django.utils.timezone import now
 
-from pretix.base.models import Event, Order, Organizer
+from pretix.base.models import (
+    Event, EventPermission, Order, Organizer, RequiredAction, User,
+)
 
 
 @pytest.fixture
 def env():
+    user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), live=True
     )
+    EventPermission.objects.create(event=event, user=user)
     o1 = Order.objects.create(
         code='FOOBAR', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PAID,
@@ -197,6 +201,14 @@ def test_webhook_partial_refund(env, client, monkeypatch):
             "type": "charge.refunded"
         }
     ), content_type='application_json')
+
+    order = env[1]
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+
+    ra = RequiredAction.objects.get(action_type="pretix.plugins.stripe.refund")
+    client.login(username='dummy@dummy.dummy', password='dummy')
+    client.post('/control/event/dummy/dummy/stripe/refund/{}/'.format(ra.pk))
 
     order = env[1]
     order.refresh_from_db()

@@ -9,6 +9,36 @@
             {% trans "Go to shop" %}
         </a>
     </h1>
+
+    {% if actions|length > 0 %}
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    {% trans "Your attention is required to resolve the following issues" %}
+                </h3>
+            </div>
+            <ul class="list-group">
+                {% for action in actions %}
+                    <li class="list-group-item logentry">
+                        <p>
+                            <a href="{% url "control:event.requiredaction.discard" event=request.event.slug organizer=request.event.organizer.slug id=action.id %}"
+                                    class="btn btn-default btn-xs pull-right">
+                                {% trans "Hide message" %}
+                            </a>
+                            <small><span class="fa fa-clock-o"></span> {{ action.datetime|date:"SHORT_DATETIME_FORMAT" }}</small>
+                        </p>
+                        {{ action.display|safe }}
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="panel-footer">
+                <a href="{% url "control:event.requiredactions" event=request.event.slug organizer=request.event.organizer.slug %}">
+                    {% trans "Show more" %}
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="row dashboard">
         {% for w in widgets %}
             <div class="widget-container widget-{{ w.display_size|default:"small" }}">

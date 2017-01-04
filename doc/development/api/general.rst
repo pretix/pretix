@@ -51,7 +51,7 @@ Backend
 
 
 .. automodule:: pretix.base.signals
-   :members: logentry_display
+   :members: logentry_display, requiredaction_display
 
 Vouchers
 """"""""

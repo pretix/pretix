@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.forms import modelformset_factory
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, ListView
@@ -18,7 +18,7 @@ from django.views.generic.detail import SingleObjectMixin
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import (
     CachedTicket, Event, EventPermission, Item, ItemVariation, LogEntry, Order,
-    User, Voucher,
+    RequiredAction, User, Voucher,
 )
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
@@ -681,3 +681,39 @@ class EventLog(EventPermissionRequiredMixin, ListView):
         ctx = super().get_context_data()
         ctx['userlist'] = self.request.event.user_perms.select_related('user')
         return ctx
+
+
+class EventActions(EventPermissionRequiredMixin, ListView):
+    template_name = 'pretixcontrol/event/actions.html'
+    model = RequiredAction
+    context_object_name = 'actions'
+    paginate_by = 20
+    permission = 'can_change_orders'
+
+    def get_queryset(self):
+        qs = self.request.event.requiredaction_set.filter(done=False)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        for a in ctx['actions']:
+            a.display = a.display(self.request)
+        return ctx
+
+
+class EventActionDiscard(EventPermissionRequiredMixin, View):
+    permission = 'can_change_orders'
+
+    def get(self, request, **kwargs):
+        action = get_object_or_404(RequiredAction, event=request.event, pk=kwargs.get('id'))
+        action.done = True
+        action.user = request.user
+        action.save()
+        messages.success(self.request, _('The issue has been marked as resolved!'))
+        return redirect(self.get_success_url())
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.index', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })

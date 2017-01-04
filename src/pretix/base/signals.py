@@ -110,7 +110,21 @@ To display an instance of the ``LogEntry`` model to a human user,
 ``pretix.base.signals.logentry_display`` will be sent out with a ``logentry`` argument.
 
 The first received response that is not ``None`` will be used to display the log entry
-to the user.
+to the user. The receivers are expected to return plain text.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+requiredaction_display = EventPluginSignal(
+    providing_args=["action", "request"]
+)
+"""
+To display an instance of the ``RequiredAction`` model to a human user,
+``pretix.base.signals.requiredaction_display`` will be sent out with a ``action`` argument.
+You will also get the current ``request`` in a different argument.
+
+The first received response that is not ``None`` will be used to display the log entry
+to the user. The receivers are expected to return HTML code.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """

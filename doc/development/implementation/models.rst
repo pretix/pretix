@@ -29,6 +29,9 @@ Organizers and events
 .. autoclass:: pretix.base.models.EventPermission
    :members:
 
+.. autoclass:: pretix.base.models.RequiredAction
+   :members:
+
 
 Items
 -----

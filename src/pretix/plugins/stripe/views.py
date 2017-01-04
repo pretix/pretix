@@ -2,12 +2,18 @@ import json
 import logging
 
 import stripe
+from django.contrib import messages
+from django.db import transaction
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from pretix.base.models import Order
+from pretix.base.models import Order, RequiredAction
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
+from pretix.control.permissions import event_permission_required
 from pretix.plugins.stripe.payment import Stripe
 from pretix.presale.utils import event_view
 
@@ -56,8 +62,39 @@ def webhook(request, *args, **kwargs):
 
     is_refund = charge['refunds']['total_count'] or charge['dispute']
     if order.status == Order.STATUS_PAID and is_refund:
-        mark_order_refunded(order, user=None)
+        RequiredAction.objects.create(
+            event=request.event, action_type='pretix.plugins.stripe.refund', data=json.dumps({
+                'order': order.code,
+                'charge': charge_id
+            })
+        )
     elif order.status == Order.STATUS_PENDING and charge['status'] == 'succeeded' and not is_refund:
         mark_order_paid(order, user=None)
 
     return HttpResponse(status=200)
+
+
+@event_permission_required('can_view_orders')
+@require_POST
+def refund(request, **kwargs):
+    with transaction.atomic():
+        action = get_object_or_404(RequiredAction, event=request.event, pk=kwargs.get('id'),
+                                   action_type='pretix.plugins.stripe.refund', done=False)
+        data = json.loads(action.data)
+        action.done = True
+        action.user = request.user
+        action.save()
+        order = get_object_or_404(Order, event=request.event, code=data['order'])
+        if order.status != Order.STATUS_PAID:
+            messages.error(request, _('The order cannot be marked as refunded as it is not marked as paid!'))
+        else:
+            mark_order_refunded(order, user=request.user)
+            messages.success(
+                request, _('The order has been marked as refunded and the issue has been marked as resolved!')
+            )
+
+    return redirect(reverse('control:event.order', kwargs={
+        'organizer': request.event.organizer.slug,
+        'event': request.event.slug,
+        'code': data['order']
+    }))

@@ -165,10 +165,15 @@ def event_index(request, organizer, event):
     if not request.eventperm.can_view_vouchers:
         qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
 
+    a_qs = request.event.requiredaction_set.filter(done=False)
+
     ctx = {
         'widgets': rearrange(widgets),
-        'logs': qs[:5]
+        'logs': qs[:5],
+        'actions': a_qs[:5] if request.eventperm.can_change_orders else []
     }
+    for a in ctx['actions']:
+        a.display = a.display(request)
 
     return render(request, 'pretixcontrol/event/index.html', ctx)
 
