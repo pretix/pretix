@@ -1,13 +1,13 @@
 # Functional requirements
-Django>=1.10,<1.11
+Django==1.0.*
 python-dateutil
 pytz
-django-bootstrap3>=7.1,<7.2
+django-bootstrap3==7.1.*
 django-formset-js-improved==0.5.0.1
 django-compressor==2.1
-reportlab>=3.2,<3.3
+reportlab==3.2.*
 PyPDF2==1.26.*
-easy-thumbnails>=2.2,<3
+easy-thumbnails==2.*
 django-libsass
 libsass
 django-otp==0.3.*
@@ -17,8 +17,6 @@ celery==4.0.2
 kombu==4.0.2
 django-statici18n==1.2.*
 inlinestyler==0.2.*
-
-# Deployment / static file compilation requirements
 BeautifulSoup4
 html5lib<0.99999999,>=0.999  # version requirement by bleach
 slimit
@@ -30,3 +28,11 @@ django-markup
 markdown
 bleach
 raven
+# Stripe
+stripe==1.22.*
+# PayPal
+paypalrestsdk==1.12.*
+pycparser==2.13  # https://github.com/eliben/pycparser/issues/147
+# Banktransfer
+chardet>=2.3,<3
+mt-940==3.2

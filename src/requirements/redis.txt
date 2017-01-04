@@ -1,2 +1,2 @@
-django-redis>=4.1,<4.2
+django-redis==4.1.*
 redis==2.10.5
