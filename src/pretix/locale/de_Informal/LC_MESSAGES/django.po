@@ -6008,7 +6008,7 @@ msgstr "Anfechtungsverfahren beendet. Grund. {}"
 
 #: pretix/plugins/stripe/signals.py:59
 msgid "Stripe reported an event: {}"
-msgstr "Stripe meldete ein Ereignis: %s"
+msgstr "Stripe meldete ein Ereignis: {}"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:3
 msgid "The total amount will be withdrawn from your credit card."
