@@ -105,7 +105,6 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.question.changed': _('The question has been modified.'),
         'pretix.event.settings': _('The event settings have been changed.'),
         'pretix.event.tickets.settings': _('The ticket download settings have been changed.'),
-        'pretix.plugins.sendmail.sent': _('A mass mail has been sent.'),
         'pretix.event.plugins.enabled': _('A plugin has been enabled.'),
         'pretix.event.plugins.disabled': _('A plugin has been disabled.'),
     }

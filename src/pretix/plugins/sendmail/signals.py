@@ -46,6 +46,7 @@ def control_nav_import(sender, request=None, **kwargs):
 def pretixcontrol_logentry_display(sender, logentry, **kwargs):
     plains = {
         'pretix.plugins.sendmail.sent': _('Email was sent'),
+        'pretix.plugins.sendmail.order.email.sent': _('The order received a mass email.')
     }
     if logentry.action_type in plains:
         return plains[logentry.action_type]
