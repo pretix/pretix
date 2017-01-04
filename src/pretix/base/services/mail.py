@@ -1,10 +1,14 @@
 import logging
 from typing import Any, Dict
 
+import bleach
+import cssutils
+import markdown
 from django.conf import settings
-from django.core.mail import EmailMessage, get_connection
+from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import get_template
 from django.utils.translation import ugettext as _
+from inlinestyler.utils import inline_css
 
 from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import Event, Order
@@ -13,6 +17,7 @@ from pretix.multidomain.urlreverse import build_absolute_uri
 
 logger = logging.getLogger('pretix.base.mail')
 INVALID_ADDRESS = 'invalid-pretix-mail-address'
+cssutils.log.setLevel(logging.CRITICAL)
 
 
 class TolerantDict(dict):
@@ -63,25 +68,42 @@ def mail(email: str, subject: str, template: str,
             body = str(template)
             if context:
                 body = body.format_map(TolerantDict(context))
+            body_md = bleach.linkify(bleach.clean(markdown.markdown(body), tags=bleach.ALLOWED_TAGS + [
+                'p',
+            ]))
         else:
             tpl = get_template(template)
             body = tpl.render(context)
+            body_md = bleach.linkify(markdown.markdown(body))
 
         sender = event.settings.get('mail_from') if event else settings.MAIL_FROM
 
         subject = str(subject)
+        body_plain = body
+
+        htmlctx = {
+            'site': settings.PRETIX_INSTANCE_NAME,
+            'site_url': settings.SITE_URL,
+            'body': body_md,
+            'color': '#8E44B3'
+        }
+
         if event:
+            htmlctx['event'] = event
+            htmlctx['color'] = event.settings.primary_color
+
             prefix = event.settings.get('mail_prefix')
             if prefix:
                 subject = "[%s] %s" % (prefix, subject)
 
-            body += "\r\n\r\n-- \r\n"
-            body += _(
+            body_plain += "\r\n\r\n-- \r\n"
+            body_plain += _(
                 "You are receiving this email because you placed an order for {event}."
             ).format(event=event.name)
             if order:
-                body += "\r\n"
-                body += _(
+                htmlctx['order'] = order
+                body_plain += "\r\n"
+                body_plain += _(
                     "You can view your order details at the following URL:\n{orderurl}."
                 ).replace("\n", "\r\n").format(
                     event=event.name, orderurl=build_absolute_uri(
@@ -91,13 +113,18 @@ def mail(email: str, subject: str, template: str,
                         }
                     )
                 )
-            body += "\r\n"
-        return mail_send([email], subject, body, sender, event.id if event else None, headers)
+            body_plain += "\r\n"
+
+        tpl = get_template('pretixbase/email/plainwrapper.html')
+        body_html = tpl.render(htmlctx)
+        return mail_send([email], subject, body_plain, body_html, sender, event.id if event else None, headers)
 
 
 @app.task
-def mail_send_task(to: str, subject: str, body: str, sender: str, event: int=None, headers: dict=None) -> bool:
-    email = EmailMessage(subject, body, sender, to=to, headers=headers)
+def mail_send_task(to: str, subject: str, body: str, html: str, sender: str,
+                   event: int=None, headers: dict=None) -> bool:
+    email = EmailMultiAlternatives(subject, body, sender, to=to, headers=headers)
+    email.attach_alternative(inline_css(html), "text/html")
     if event:
         event = Event.objects.get(id=event)
         backend = event.get_mail_backend()
