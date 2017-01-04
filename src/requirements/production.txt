@@ -22,7 +22,7 @@ inlinestyler==0.2.*
 
 # Deployment / static file compilation requirements
 BeautifulSoup4
-html5lib
+html5lib<0.99999999,>=0.999  # version requirement by bleach
 slimit
 lxml
 static3==0.6.1
