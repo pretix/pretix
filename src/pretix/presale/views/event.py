@@ -118,10 +118,15 @@ class EventAuth(View):
             raise PermissionDenied(_('Please go back and try again.'))
 
         parent = data.get('pretix_event_access_{}'.format(request.event.pk))
-        sparent = SessionStore(parent)
 
-        if not sparent.exists(parent):
+        sparent = SessionStore(parent)
+        try:
+            parentdata = sparent.load()
+        except:
             raise PermissionDenied(_('Please go back and try again.'))
+        else:
+            if 'event_access' not in parentdata:
+                raise PermissionDenied(_('Please go back and try again.'))
 
         request.session['pretix_event_access_{}'.format(request.event.pk)] = parent
         return redirect(eventreverse(request.event, 'presale:event.index'))

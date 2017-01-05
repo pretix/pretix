@@ -73,7 +73,12 @@ def _detect_event(request, require_live=True):
                 )
                 if not can_access and 'pretix_event_access_{}'.format(request.event.pk) in request.session:
                     sparent = SessionStore(request.session.get('pretix_event_access_{}'.format(request.event.pk)))
-                    can_access = sparent.exists(request.session.get('pretix_event_access_{}'.format(request.event.pk)))
+                    try:
+                        parentdata = sparent.load()
+                    except:
+                        pass
+                    else:
+                        can_access = 'event_access' in parentdata
 
                 if not can_access:
                     raise PermissionDenied(_('The selected ticket shop is currently not available.'))

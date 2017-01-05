@@ -184,6 +184,7 @@ def event_index(request, organizer, event):
         s['pretix_event_access_{}'.format(request.event.pk)] = request.session.session_key
         s.create()
         ctx['new_session'] = s.session_key
+        request.session['event_access'] = True
 
     for a in ctx['actions']:
         a.display = a.display(request)
