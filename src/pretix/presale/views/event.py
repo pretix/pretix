@@ -1,12 +1,23 @@
 import sys
+from importlib import import_module
 
+from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Prefetch, Q
+from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
 from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from pretix.base.models import ItemVariation
+from pretix.multidomain.urlreverse import eventreverse
 
 from . import CartMixin, EventViewMixin
+
+SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 
 def item_group_by_category(items):
@@ -90,3 +101,27 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         context['cart'] = self.get_cart()
         context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
         return context
+
+
+class EventAuth(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        s = SessionStore(request.POST.get('session'))
+
+        try:
+            data = s.load()
+        except:
+            raise PermissionDenied(_('Please go back and try again.'))
+
+        parent = data.get('pretix_event_access_{}'.format(request.event.pk))
+        sparent = SessionStore(parent)
+
+        if not sparent.exists(parent):
+            raise PermissionDenied(_('Please go back and try again.'))
+
+        request.session['pretix_event_access_{}'.format(request.event.pk)] = parent
+        return redirect(eventreverse(request.event, 'presale:event.index'))

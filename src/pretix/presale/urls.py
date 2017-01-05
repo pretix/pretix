@@ -51,6 +51,7 @@ event_patterns = [
     url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/invoice/(?P<invoice>[0-9]+)$',
         pretix.presale.views.order.InvoiceDownload.as_view(),
         name='event.invoice.download'),
+    url(r'^auth/$', pretix.presale.views.event.EventAuth.as_view(), name='event.auth'),
     url(r'^$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
 ]
 

@@ -1,5 +1,7 @@
+from importlib import import_module
 from urllib.parse import urljoin
 
+from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import resolve
 from django.http import Http404
@@ -10,6 +12,8 @@ from pretix.base.middleware import LocaleMiddleware
 from pretix.base.models import Event, EventPermission, Organizer
 from pretix.multidomain.urlreverse import get_domain
 from pretix.presale.signals import process_request, process_response
+
+SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 
 def _detect_event(request, require_live=True):
@@ -59,8 +63,19 @@ def _detect_event(request, require_live=True):
             LocaleMiddleware().process_request(request)
 
             if require_live and not request.event.live:
-                if not request.user.is_authenticated or not EventPermission.objects.filter(
-                        event=request.event, user=request.user).exists():
+                can_access = (
+                    url.url_name == 'event.auth'
+                    or (
+                        request.user.is_authenticated
+                        and EventPermission.objects.filter(event=request.event, user=request.user).exists()
+                    )
+
+                )
+                if not can_access and 'pretix_event_access_{}'.format(request.event.pk) in request.session:
+                    sparent = SessionStore(request.session.get('pretix_event_access_{}'.format(request.event.pk)))
+                    can_access = sparent.exists(request.session.get('pretix_event_access_{}'.format(request.event.pk)))
+
+                if not can_access:
                     raise PermissionDenied(_('The selected ticket shop is currently not available.'))
 
             for receiver, response in process_request.send(request.event, request=request):
