@@ -101,7 +101,7 @@ class LogEntry(models.Model):
         elif isinstance(co, ItemCategory):
             a_text = _('Category {val}')
             a_map = {
-                'href': reverse('control:event.items.categories.show', kwargs={
+                'href': reverse('control:event.items.categories.edit', kwargs={
                     'event': self.event.slug,
                     'organizer': self.event.organizer.slug,
                     'category': co.id
