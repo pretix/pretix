@@ -23,22 +23,12 @@ from pretix.base.services.orders import (
 class UserTestCase(TestCase):
     def test_name(self):
         u = User.objects.create_user('test@foo.bar', 'test')
-        u.givenname = "Christopher"
-        u.familyname = "Nolan"
+        u.fullname = "Christopher Nolan"
         u.set_password("test")
         u.save()
-        self.assertEqual(u.get_full_name(), 'Nolan, Christopher')
-        self.assertEqual(u.get_short_name(), 'Christopher')
-        u.givenname = None
-        u.save()
-        self.assertEqual(u.get_full_name(), 'Nolan')
-        self.assertEqual(u.get_short_name(), 'Nolan')
-        u.givenname = "Christopher"
-        u.familyname = None
-        u.save()
-        self.assertEqual(u.get_full_name(), 'Christopher')
-        self.assertEqual(u.get_short_name(), 'Christopher')
-        u.givenname = None
+        self.assertEqual(u.get_full_name(), 'Christopher Nolan')
+        self.assertEqual(u.get_short_name(), 'Christopher Nolan')
+        u.fullname = None
         u.save()
         self.assertEqual(u.get_full_name(), 'test@foo.bar')
         self.assertEqual(u.get_short_name(), 'test@foo.bar')

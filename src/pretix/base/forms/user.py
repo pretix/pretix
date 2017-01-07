@@ -39,8 +39,7 @@ class UserSettingsForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
-            'givenname',
-            'familyname',
+            'fullname',
             'locale',
             # 'timezone',
             'email'
