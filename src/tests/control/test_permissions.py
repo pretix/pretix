@@ -72,6 +72,7 @@ event_urls = [
 
 organizer_urls = [
     'organizer/abc/edit',
+    'organizer/abc/',
 ]
 
 
