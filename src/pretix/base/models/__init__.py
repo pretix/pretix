@@ -3,6 +3,7 @@ from .base import CachedFile, LoggedModel, cachedfile_name
 from .checkin import Checkin
 from .event import (
     Event, EventLock, EventPermission, EventSetting, RequiredAction,
+    generate_invite_token,
 )
 from .invoices import Invoice, InvoiceLine, invoice_filename
 from .items import (

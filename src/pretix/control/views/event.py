@@ -22,6 +22,7 @@ from pretix.base.models import (
 )
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
+from pretix.base.services.mail import SendMailException, mail
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
@@ -31,6 +32,7 @@ from pretix.control.forms.event import (
     TicketSettingsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.helpers.urls import build_absolute_uri
 from pretix.presale.style import regenerate_css
 
 from . import UpdateView
@@ -544,27 +546,57 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
         ctx['add_form'] = self.add_form
         return ctx
 
+    def _send_invite(self, instance):
+        try:
+            mail(
+                instance.invite_email,
+                _('Account information changed'),
+                'pretixcontrol/email/invitation.txt',
+                {
+                    'user': self,
+                    'event': self.request.event.name,
+                    'url': build_absolute_uri('control:auth.invite', kwargs={
+                        'token': instance.invite_token
+                    })
+                },
+                event=None,
+                locale=self.request.LANGUAGE_CODE
+            )
+        except SendMailException:
+            pass  # Already logged
+
     @transaction.atomic
     def post(self, *args, **kwargs):
         if self.formset.is_valid() and self.add_form.is_valid():
             if self.add_form.has_changed():
+                logdata = {
+                    k: v for k, v in self.add_form.cleaned_data.items()
+                }
+
                 try:
-                    self.add_form.instance.user = User.objects.get(email=self.add_form.cleaned_data['user'])
-                    self.add_form.instance.user_id = self.add_form.instance.user.id
                     self.add_form.instance.event = self.request.event
                     self.add_form.instance.event_id = self.request.event.id
+                    self.add_form.instance.user = User.objects.get(email=self.add_form.cleaned_data['user'])
+                    self.add_form.instance.user_id = self.add_form.instance.user.id
                 except User.DoesNotExist:
-                    messages.error(self.request, _('There is no user with the email address you entered.'))
-                    return self.get(*args, **kwargs)
+                    self.add_form.instance.invite_email = self.add_form.cleaned_data['user']
+                    if EventPermission.objects.filter(invite_email=self.add_form.instance.invite_email,
+                                                      event=self.request.event).exists():
+                        messages.error(self.request, _('This user already has been invited for this event.'))
+                        return self.get(*args, **kwargs)
+
+                    self.add_form.save()
+                    self._send_invite(self.add_form.instance)
+
+                    self.request.event.log_action(
+                        'pretix.event.permissions.invited', user=self.request.user, data=logdata
+                    )
                 else:
                     if EventPermission.objects.filter(user=self.add_form.instance.user,
                                                       event=self.request.event).exists():
                         messages.error(self.request, _('This user already has permissions for this event.'))
                         return self.get(*args, **kwargs)
                     self.add_form.save()
-                    logdata = {
-                        k: v for k, v in self.add_form.cleaned_data.items()
-                    }
                     logdata['user'] = self.add_form.instance.user_id
                     self.request.event.log_action(
                         'pretix.event.permissions.added', user=self.request.user, data=logdata
@@ -582,6 +614,14 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
                     if not form.cleaned_data['can_change_permissions'] or form in self.formset.deleted_forms:
                         messages.error(self.request, _('You cannot remove your own permission to view this page.'))
                         return self.get(*args, **kwargs)
+
+            for form in self.formset.deleted_forms:
+                logdata = {
+                    k: v for k, v in form.cleaned_data.items()
+                }
+                self.request.event.log_action(
+                    'pretix.event.permissions.deleted', user=self.request.user, data=logdata
+                )
 
             self.formset.save()
             messages.success(self.request, _('Your changes have been saved.'))

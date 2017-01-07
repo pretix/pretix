@@ -23,7 +23,7 @@ from u2flib_server.utils import rand_bytes
 from pretix.base.forms.auth import (
     LoginForm, PasswordForgotForm, PasswordRecoverForm, RegistrationForm,
 )
-from pretix.base.models import U2FDevice, User
+from pretix.base.models import EventPermission, U2FDevice, User
 from pretix.base.services.mail import SendMailException, mail
 from pretix.helpers.urls import build_absolute_uri
 
@@ -97,6 +97,60 @@ def register(request):
         form = RegistrationForm()
     ctx['form'] = form
     return render(request, 'pretixcontrol/auth/register.html', ctx)
+
+
+def invite(request, token):
+    """
+    Registration form in case of an invite
+    """
+    ctx = {}
+
+    try:
+        perm = EventPermission.objects.get(invite_token=token)
+    except EventPermission.DoesNotExist:
+        messages.error(request, _('You used an invalid link. Please copy the link from your email to the address bar '
+                                  'and make sure it is correct and that the link has not been used before.'))
+        return redirect('control:auth.login')
+
+    if request.user.is_authenticated:
+        try:
+            EventPermission.objects.get(event=perm.event, user=request.user)
+            messages.error(request, _('You cannot accept the invitation for "{}" as you already are part of '
+                                      'that event\'s team.').format(perm.event.name))
+            return redirect('control:index')
+        except EventPermission.DoesNotExist:
+            pass
+
+        perm.invite_token = None
+        perm.invite_email = None
+        perm.user = request.user
+        perm.save()
+        messages.success(request, _('You have now access to "{}".').format(perm.event.name))
+        return redirect('control:index')
+
+    if request.method == 'POST':
+        form = RegistrationForm(data=request.POST)
+        if form.is_valid():
+            user = User.objects.create_user(
+                form.cleaned_data['email'], form.cleaned_data['password'],
+                locale=request.LANGUAGE_CODE,
+                timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
+            )
+            user = authenticate(email=user.email, password=form.cleaned_data['password'])
+            user.log_action('pretix.control.auth.user.created', user=user)
+            auth_login(request, user)
+            request.session['pretix_auth_login_time'] = int(time.time())
+
+            perm.invite_token = None
+            perm.invite_email = None
+            perm.user = user
+            perm.save()
+            messages.success(request, _('Welcome to pretix! You have now access to "{}".').format(perm.event.name))
+            return redirect('control:index')
+    else:
+        form = RegistrationForm(initial={'email': perm.invite_email})
+    ctx['form'] = form
+    return render(request, 'pretixcontrol/auth/invite.html', ctx)
 
 
 class Forgot(TemplateView):

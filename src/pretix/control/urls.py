@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^login$', auth.login, name='auth.login'),
     url(r'^login/2fa$', auth.Login2FAView.as_view(), name='auth.login.2fa'),
     url(r'^register$', auth.register, name='auth.register'),
+    url(r'^invite/(?P<token>[a-zA-Z0-9]+)$', auth.invite, name='auth.invite'),
     url(r'^forgot$', auth.Forgot.as_view(), name='auth.forgot'),
     url(r'^forgot/recover$', auth.Recover.as_view(), name='auth.forgot.recover'),
     url(r'^$', dashboards.user_index, name='index'),

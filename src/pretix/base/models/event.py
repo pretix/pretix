@@ -1,3 +1,4 @@
+import string
 import uuid
 from datetime import date, datetime, time
 
@@ -294,6 +295,10 @@ class Event(LoggedModel):
             s.save()
 
 
+def generate_invite_token():
+    return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)
+
+
 class EventPermission(models.Model):
     """
     The relation between an Event and a User who has permissions to
@@ -314,7 +319,9 @@ class EventPermission(models.Model):
     """
 
     event = models.ForeignKey(Event, related_name="user_perms", on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name="event_perms", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="event_perms", on_delete=models.CASCADE, null=True, blank=True)
+    invite_email = models.EmailField(null=True, blank=True)
+    invite_token = models.CharField(default=generate_invite_token, max_length=64, null=True, blank=True)
     can_change_settings = models.BooleanField(
         default=True,
         verbose_name=_("Can change event settings")

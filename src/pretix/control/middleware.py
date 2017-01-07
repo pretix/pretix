@@ -24,7 +24,8 @@ class PermissionMiddleware(MiddlewareMixin):
         "auth.login.2fa",
         "auth.register",
         "auth.forgot",
-        "auth.forgot.recover"
+        "auth.forgot.recover",
+        "auth.invite",
     )
 
     def process_request(self, request):
