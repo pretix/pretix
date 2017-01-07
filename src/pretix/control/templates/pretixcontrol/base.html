@@ -74,6 +74,35 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-top-links navbar-right">
+                    {% for nav in nav_topbar %}
+                        <li {% if nav.children %}class="dropdown"{% endif %}>
+                            <a href="{{ nav.url }}" {% if nav.active %}class="active"{% endif %}
+                                    {% if nav.children %}class="dropdown-toggle" data-toggle="dropdown"{% endif %}>
+                                {% if nav.icon %}
+                                    <span class="fa fa-{{ nav.icon }}"></span>
+                                    <span class="visible-xs-inline">{{ nav.label }}</span>
+                                {% else %}
+                                    {{ nav.label }}
+                                {% endif %}
+                            </a>
+                            {% if nav.children %}
+                                <ul class="dropdown-menu" role="menu">
+                                    {% for item in nav.children %}
+                                        <li>
+                                            <a href="{{ item.url }}"
+                                                    {% if item.active %}class="active"{% endif %}>
+                                                {% if item.icon %}
+                                                    <span class="fa fa-{{ item.icon }}"></span>
+                                                {% endif %}
+                                                {{ item.label|safe }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+
                     <li>
                         <a href="{% url 'control:user.settings' %}">
                             <i class="fa fa-user"></i> {{ request.user.get_full_name }}

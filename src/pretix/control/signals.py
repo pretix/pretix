@@ -28,7 +28,7 @@ nav_event = EventPluginSignal(
 )
 """
 This signal allows you to add additional views to the admin panel
-navigation. You will get the request as a keyword argument ``return``.
+navigation. You will get the request as a keyword argument ``request``.
 Receivers are expected to return a list of dictionaries. The dictionaries
 should contain at least the keys ``label`` and ``url``. You can also return
 a fontawesome icon name with the key ``icon``, it will  be respected depending
@@ -40,6 +40,24 @@ If you use this, you should read the documentation on :ref:`how to deal with URL
 in pretix.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+nav_topbar = Signal(
+    providing_args=["request"]
+)
+"""
+This signal allows you to add additional views to the top navigation bar.
+You will get the request as a keyword argument ``return``.
+Receivers are expected to return a list of dictionaries. The dictionaries
+should contain at least the keys ``label`` and ``url``. You can also return
+a fontawesome icon name with the key ``icon``, it will be respected depending
+on the type of navigation. If set, on desktops only the ``icon`` will be shown.
+
+If you use this, you should read the documentation on :ref:`how to deal with URLs <urlconf>`
+in pretix.
+
+This is no ``EventPluginSignal``, so you do not get the event in the ``sender`` argument
+and you may get the signal regardless of whether your plugin is active.
 """
 
 event_dashboard_widgets = EventPluginSignal(
