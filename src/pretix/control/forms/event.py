@@ -107,7 +107,7 @@ class EventWizardCopyForm(forms.Form):
             ),
             widget=forms.RadioSelect,
             empty_label=_('Do not copy'),
-            required=True
+            required=False
         )
 
 
