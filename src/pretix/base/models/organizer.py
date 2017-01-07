@@ -41,7 +41,7 @@ class Organizer(LoggedModel):
             ),
             OrganizerSlugBlacklistValidator()
         ],
-        verbose_name=_("Slug"),
+        verbose_name=_("Short form"),
     )
     permitted = models.ManyToManyField(User, through='OrganizerPermission',
                                        related_name="organizers")
