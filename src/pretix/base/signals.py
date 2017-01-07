@@ -52,6 +52,18 @@ class EventPluginSignal(django.dispatch.Signal):
         return responses
 
 
+event_live_issues = EventPluginSignal(
+    providing_args=[]
+)
+"""
+This signal is sent out to determine whether an event can be taken live. If you want to
+prevent the event from going live, return a string that will be displayed to the user
+as the error message. If you don't, your receiver should return ``None``.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+
 register_payment_providers = EventPluginSignal(
     providing_args=[]
 )

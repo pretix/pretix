@@ -24,7 +24,7 @@ from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.services.mail import SendMailException, mail
 from pretix.base.signals import (
-    register_payment_providers, register_ticket_outputs,
+    event_live_issues, register_payment_providers, register_ticket_outputs,
 )
 from pretix.control.forms.event import (
     DisplaySettingsForm, EventSettingsForm, EventUpdateForm,
@@ -667,6 +667,11 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
 
         if not self.request.event.quotas.exists():
             issues.append(_('You need to configure at least one quota to sell anything.'))
+
+        responses = event_live_issues.send(self.request.event)
+        for receiver, response in responses:
+            if response:
+                issues.append(response)
 
         return issues
 

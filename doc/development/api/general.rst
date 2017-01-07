@@ -11,7 +11,7 @@ Core
 ----
 
 .. automodule:: pretix.base.signals
-   :members: periodic_task
+   :members: periodic_task, event_live_issues
 
 Order events
 """"""""""""
