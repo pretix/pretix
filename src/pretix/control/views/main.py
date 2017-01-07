@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView
 from formtools.wizard.views import SessionWizardView
 
-from pretix.base.models import Event, EventPermission
+from pretix.base.models import Event, EventPermission, OrganizerPermission
 from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
 )
@@ -47,6 +47,12 @@ class EventWizard(SessionWizardView):
     condition_dict = {
         'copy': condition_copy
     }
+
+    def get_context_data(self, form, **kwargs):
+        ctx = super().get_context_data(form, **kwargs)
+        ctx['has_organizer'] = OrganizerPermission.objects.filter(user=self.request.user,
+                                                                  can_create_events=True).exists()
+        return ctx
 
     def get_form_kwargs(self, step=None):
         kwargs = {
