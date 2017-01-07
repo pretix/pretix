@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-03 23:46+0000\n"
+"POT-Creation-Date: 2017-01-05 12:08+0000\n"
 "PO-Revision-Date: 2017-01-01 20:41+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
@@ -46,33 +46,34 @@ msgstr "Gesamtumsatz"
 msgid "Contacting Stripe …"
 msgstr "Kontaktiere Stripe …"
 
-#: static/pretixcontrol/js/clipboard.js:23
+#: pretix/static/pretixcontrol/js/clipboard.js:23
 msgid "Copied!"
 msgstr "Kopiert!"
 
-#: static/pretixcontrol/js/clipboard.js:29
+#: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "Drücke Strg+C zum kopieren!"
 
-#: static/pretixcontrol/js/ui/main.js:28 static/pretixpresale/js/ui/main.js:99
+#: pretix/static/pretixcontrol/js/ui/main.js:28
+#: pretix/static/pretixpresale/js/ui/main.js:99
 msgid "Close message"
 msgstr "Schließen"
 
-#: static/pretixcontrol/js/ui/main.js:43
+#: pretix/static/pretixcontrol/js/ui/main.js:43
 msgid "Unknown error."
 msgstr "Unbekannter Fehler."
 
-#: static/pretixcontrol/js/ui/question.js:41
+#: pretix/static/pretixcontrol/js/ui/question.js:41
 msgid "Others"
 msgstr "Sonstige"
 
-#: static/pretixcontrol/js/ui/question.js:70
+#: pretix/static/pretixcontrol/js/ui/question.js:70
 msgid "Count"
 msgstr "Anzahl"
 
-#: static/pretixpresale/js/ui/asyncdownload.js:27
-#: static/pretixpresale/js/ui/asynctask.js:27
-#: static/pretixpresale/js/ui/asynctask.js:64
+#: pretix/static/pretixpresale/js/ui/asyncdownload.js:27
+#: pretix/static/pretixpresale/js/ui/asynctask.js:27
+#: pretix/static/pretixpresale/js/ui/asynctask.js:64
 msgid ""
 "Your request has been queued on the server and will now be processed. If "
 "this takes longer than two minutes, please contact us or go back in your "
@@ -82,19 +83,19 @@ msgstr ""
 "dies länger als zwei Minuten dauert, kontaktiere uns bitte oder gehe in "
 "deinem Browser einen Schritt zurück und versuche es erneut."
 
-#: static/pretixpresale/js/ui/asyncdownload.js:40
-#: static/pretixpresale/js/ui/asynctask.js:43
-#: static/pretixpresale/js/ui/asynctask.js:85
+#: pretix/static/pretixpresale/js/ui/asyncdownload.js:40
+#: pretix/static/pretixpresale/js/ui/asynctask.js:43
+#: pretix/static/pretixpresale/js/ui/asynctask.js:85
 msgid "An error of type {code} occured."
 msgstr "Ein Fehler ist aufgetreten. Fehlercode: {code}"
 
-#: static/pretixpresale/js/ui/asyncdownload.js:53
-#: static/pretixpresale/js/ui/asynctask.js:103
+#: pretix/static/pretixpresale/js/ui/asyncdownload.js:53
+#: pretix/static/pretixpresale/js/ui/asynctask.js:103
 msgid "We are processing your request …"
 msgstr "Wir verarbeiten deine Anfrage …"
 
-#: static/pretixpresale/js/ui/asyncdownload.js:54
-#: static/pretixpresale/js/ui/asynctask.js:104
+#: pretix/static/pretixpresale/js/ui/asyncdownload.js:54
+#: pretix/static/pretixpresale/js/ui/asynctask.js:104
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -104,7 +105,7 @@ msgstr ""
 "dauert, prüfe bitte deine Internetverbindung. Danach kannst du diese Seite "
 "neu laden und es erneut versuchen."
 
-#: static/pretixpresale/js/ui/asynctask.js:46
+#: pretix/static/pretixpresale/js/ui/asynctask.js:46
 msgid ""
 "We currenctly cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -112,22 +113,22 @@ msgstr ""
 "Wir können den Server aktuell nicht erreichen, versuchen es aber weiter. "
 "Letzter Fehlercode: {code}"
 
-#: static/pretixpresale/js/ui/asynctask.js:76
+#: pretix/static/pretixpresale/js/ui/asynctask.js:76
 msgid "The request took to long. Please try again."
 msgstr "Diese Anfrage hat zu lange gedauert. Bitte erneut versuchen."
 
-#: static/pretixpresale/js/ui/asynctask.js:88
+#: pretix/static/pretixpresale/js/ui/asynctask.js:88
 msgid ""
 "We currenctly cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "Wir können den Server aktuell nicht erreichen. Bitte versuche es noch "
 "einmal. Fehlercode: {code}"
 
-#: static/pretixpresale/js/ui/cart.js:10
+#: pretix/static/pretixpresale/js/ui/cart.js:10
 msgid "The items in your cart are no longer reserved for you."
 msgstr "Die Produkte in deinem Warenkorb sind nicht mehr für dich reserviert."
 
-#: static/pretixpresale/js/ui/cart.js:14
+#: pretix/static/pretixpresale/js/ui/cart.js:14
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
