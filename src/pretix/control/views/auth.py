@@ -23,7 +23,9 @@ from u2flib_server.utils import rand_bytes
 from pretix.base.forms.auth import (
     LoginForm, PasswordForgotForm, PasswordRecoverForm, RegistrationForm,
 )
-from pretix.base.models import EventPermission, U2FDevice, User
+from pretix.base.models import (
+    EventPermission, OrganizerPermission, U2FDevice, User,
+)
 from pretix.base.services.mail import SendMailException, mail
 from pretix.helpers.urls import build_absolute_uri
 
@@ -107,25 +109,33 @@ def invite(request, token):
 
     try:
         perm = EventPermission.objects.get(invite_token=token)
+        desc = perm.event.name
     except EventPermission.DoesNotExist:
-        messages.error(request, _('You used an invalid link. Please copy the link from your email to the address bar '
-                                  'and make sure it is correct and that the link has not been used before.'))
-        return redirect('control:auth.login')
+        try:
+            perm = OrganizerPermission.objects.get(invite_token=token)
+            desc = perm.organizer.name
+        except OrganizerPermission.DoesNotExist:
+            messages.error(request, _('You used an invalid link. Please copy the link from your email to the address bar '
+                                      'and make sure it is correct and that the link has not been used before.'))
+            return redirect('control:auth.login')
 
     if request.user.is_authenticated:
         try:
-            EventPermission.objects.get(event=perm.event, user=request.user)
+            if isinstance(perm, EventPermission):
+                EventPermission.objects.get(event=perm.event, user=request.user)
+            else:
+                OrganizerPermission.objects.get(organizer=perm.organizer, user=request.user)
             messages.error(request, _('You cannot accept the invitation for "{}" as you already are part of '
-                                      'that event\'s team.').format(perm.event.name))
+                                      'this team.').format(desc))
             return redirect('control:index')
-        except EventPermission.DoesNotExist:
+        except (EventPermission.DoesNotExist, OrganizerPermission.DoesNotExist):
             pass
 
         perm.invite_token = None
         perm.invite_email = None
         perm.user = request.user
         perm.save()
-        messages.success(request, _('You have now access to "{}".').format(perm.event.name))
+        messages.success(request, _('You have now access to "{}".').format(desc))
         return redirect('control:index')
 
     if request.method == 'POST':
@@ -145,7 +155,7 @@ def invite(request, token):
             perm.invite_email = None
             perm.user = user
             perm.save()
-            messages.success(request, _('Welcome to pretix! You have now access to "{}".').format(perm.event.name))
+            messages.success(request, _('Welcome to pretix! You have now access to "{}".').format(desc))
             return redirect('control:index')
     else:
         form = RegistrationForm(initial={'email': perm.invite_email})

@@ -32,6 +32,7 @@ urlpatterns = [
         name='user.settings.2fa.delete'),
     url(r'^organizers/$', organizer.OrganizerList.as_view(), name='organizers'),
     url(r'^organizers/add$', organizer.OrganizerCreate.as_view(), name='organizers.add'),
+    url(r'^organizer/(?P<organizer>[^/]+)/$', organizer.OrganizerDetail.as_view(), name='organizer'),
     url(r'^organizer/(?P<organizer>[^/]+)/edit$', organizer.OrganizerUpdate.as_view(), name='organizer.edit'),
     url(r'^events/$', main.EventList.as_view(), name='events'),
     url(r'^events/add$', main.EventWizard.as_view(), name='events.add'),

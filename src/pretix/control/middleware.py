@@ -9,7 +9,9 @@ from django.utils.deprecation import MiddlewareMixin
 from django.utils.encoding import force_str
 from django.utils.translation import ugettext as _
 
-from pretix.base.models import Event, EventPermission, Organizer
+from pretix.base.models import (
+    Event, EventPermission, Organizer, OrganizerPermission,
+)
 
 
 class PermissionMiddleware(MiddlewareMixin):
@@ -82,6 +84,10 @@ class PermissionMiddleware(MiddlewareMixin):
                     slug=url.kwargs['organizer'],
                     permitted__id__exact=request.user.id,
                 )[0]
+                request.orgaperm = OrganizerPermission.objects.get(
+                    organizer=request.organizer,
+                    user=request.user
+                )
             except IndexError:
                 raise Http404(_("The selected organizer was not found or you "
                                 "have no permission to administrate it."))

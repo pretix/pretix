@@ -1,5 +1,8 @@
+import string
+
 from django.core.validators import RegexValidator
 from django.db import models
+from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
@@ -76,6 +79,10 @@ class Organizer(LoggedModel):
         return ObjectRelatedCache(self)
 
 
+def generate_invite_token():
+    return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)
+
+
 class OrganizerPermission(models.Model):
     """
     The relation between an Organizer and a User who has permissions to
@@ -91,10 +98,16 @@ class OrganizerPermission(models.Model):
     """
 
     organizer = models.ForeignKey(Organizer, related_name="user_perms", on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name="organizer_perms")
+    user = models.ForeignKey(User, related_name="organizer_perms", on_delete=models.CASCADE, null=True, blank=True)
+    invite_email = models.EmailField(null=True, blank=True)
+    invite_token = models.CharField(default=generate_invite_token, max_length=64, null=True, blank=True)
     can_create_events = models.BooleanField(
         default=True,
         verbose_name=_("Can create events"),
+    )
+    can_change_permissions = models.BooleanField(
+        default=True,
+        verbose_name=_("Can change permissions"),
     )
 
     class Meta:
