@@ -247,7 +247,7 @@ Sentry
 ------
 
 pretix has native support for sentry, a tool that you can use to track errors in the
-application. If you want to use sentry, you need to set a DSN in the configuration file.
+application. If you want to use sentry, you need to set a DSN in the configuration file::
 
     [sentry]
     dsn=https://<key>:<secret>@sentry.io/<project>
