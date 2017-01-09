@@ -171,7 +171,7 @@ def _cancel_order(order, user=None):
         if position.voucher:
             Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=F('redeemed') - 1)
 
-    return order
+    return order.pk
 
 
 class OrderError(LazyLocaleException):
