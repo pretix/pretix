@@ -41,7 +41,10 @@ def contextprocessor(request):
         for receiver, response in html_head.send(request.event, request=request):
             _html_head.append(response)
         for receiver, response in footer_link.send(request.event, request=request):
-            _footer.append(response)
+            if isinstance(response, list):
+                _footer += response
+            else:
+                _footer.append(response)
 
         if request.event.settings.presale_css_file:
             ctx['css_file'] = default_storage.url(request.event.settings.presale_css_file)
