@@ -12,8 +12,10 @@ from .items import (
 )
 from .log import LogEntry
 from .orders import (
-    AbstractPosition, CachedTicket, CartPosition, InvoiceAddress, Order,
-    OrderPosition, QuestionAnswer, generate_position_secret, generate_secret,
+    AbstractPosition, CachedCombinedTicket, CachedTicket, CartPosition,
+    InvoiceAddress, Order, OrderPosition, QuestionAnswer,
+    cachedcombinedticket_name, cachedticket_name, generate_position_secret,
+    generate_secret,
 )
 from .organizer import Organizer, OrganizerPermission, OrganizerSetting
 from .vouchers import Voucher

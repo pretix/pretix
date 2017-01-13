@@ -64,4 +64,6 @@ The output class
 
    .. automethod:: generate
 
+   .. automethod:: generate_order
+
    .. autoattribute:: download_button_text

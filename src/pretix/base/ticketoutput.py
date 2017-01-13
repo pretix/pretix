@@ -1,11 +1,14 @@
+import os
+import tempfile
 from collections import OrderedDict
 from typing import Tuple
+from zipfile import ZipFile
 
 from django import forms
 from django.http import HttpRequest
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Event, OrderPosition
+from pretix.base.models import Event, Order, OrderPosition
 from pretix.base.settings import SettingsSandbox
 
 
@@ -29,13 +32,36 @@ class BaseTicketOutput:
         """
         return self.settings.get('_enabled', as_type=bool)
 
-    def generate(self, order: OrderPosition) -> Tuple[str, str, str]:
+    def generate(self, position: OrderPosition) -> Tuple[str, str, str]:
         """
         This method should generate the download file and return a tuple consisting of a
         filename, a file type and file content. The extension will be taken from the filename
         which is otherwise ignored.
         """
         raise NotImplementedError()
+
+    def generate_order(self, order: Order) -> Tuple[str, str, str]:
+        """
+        This method is the same as order() but should not generate one file per order position
+        but instead one file for the full order.
+
+        This method is optional to implement. If you don't implement it, the default
+        implementation will offer a zip file of the generate() results for the order positions.
+
+        This method should generate a download file and return a tuple consisting of a
+        filename, a file type and file content. The extension will be taken from the filename
+        which is otherwise ignored.
+        """
+        with tempfile.TemporaryDirectory() as d:
+            with ZipFile(os.path.join(d, 'tmp.zip'), 'w') as zipf:
+                for pos in order.positions.all():
+                    fname, __, content = self.generate(pos)
+                    zipf.writestr('{}-{}{}'.format(
+                        order.code, pos.positionid, os.path.splitext(fname)[1]
+                    ), content)
+
+            with open(os.path.join(d, 'tmp.zip'), 'rb') as zipf:
+                return '{}-{}.zip'.format(order.code, self.identifier), 'application/zip', zipf.read()
 
     @property
     def verbose_name(self) -> str:

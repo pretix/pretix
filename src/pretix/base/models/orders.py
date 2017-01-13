@@ -575,12 +575,33 @@ def cachedticket_name(instance, filename: str) -> str:
     )
 
 
+def cachedcombinedticket_name(instance, filename: str) -> str:
+    secret = get_random_string(length=16, allowed_chars=string.ascii_letters + string.digits)
+    return 'tickets/{org}/{ev}/{code}-{prov}-{secret}.pdf'.format(
+        org=instance.order.event.organizer.slug,
+        ev=instance.order.event.slug,
+        prov=instance.provider,
+        code=instance.order.code,
+        secret=secret
+    )
+
+
 class CachedTicket(models.Model):
     order_position = models.ForeignKey(OrderPosition, on_delete=models.CASCADE)
     provider = models.CharField(max_length=255)
     type = models.CharField(max_length=255)
     extension = models.CharField(max_length=255)
     file = models.FileField(null=True, blank=True, upload_to=cachedticket_name)
+    created = models.DateTimeField(auto_now_add=True)
+
+
+class CachedCombinedTicket(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    provider = models.CharField(max_length=255)
+    type = models.CharField(max_length=255)
+    extension = models.CharField(max_length=255)
+    file = models.FileField(null=True, blank=True, upload_to=cachedcombinedticket_name)
+    created = models.DateTimeField(auto_now_add=True)
 
 
 @receiver(post_delete, sender=CachedTicket)

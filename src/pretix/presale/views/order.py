@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import Sum
@@ -9,12 +11,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
-from pretix.base.models.orders import InvoiceAddress
+from pretix.base.models.orders import CachedCombinedTicket, InvoiceAddress
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
 )
 from pretix.base.services.orders import cancel_order
-from pretix.base.services.tickets import generate
+from pretix.base.services.tickets import generate, generate_order
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
@@ -508,7 +510,7 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
         if not self.output or not self.output.is_enabled:
             messages.error(request, _('You requested an invalid ticket output type.'))
             return redirect(self.get_order_url())
-        if not self.order or not self.order_position:
+        if not self.order or ('position' in kwargs and not self.order_position):
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         if self.order.status != Order.STATUS_PAID:
             messages.error(request, _('Order is not paid.'))
@@ -519,6 +521,39 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             messages.error(request, _('Ticket download is not (yet) enabled.'))
             return redirect(self.get_order_url())
 
+        if 'position' in kwargs:
+            return self._download_position()
+        else:
+            return self._download_order()
+
+    def _download_order(self):
+        try:
+            ct = CachedCombinedTicket.objects.filter(
+                order=self.order, provider=self.output.identifier
+            ).last()
+        except CachedCombinedTicket.DoesNotExist:
+            ct = None
+
+        if not ct:
+            ct = CachedCombinedTicket.objects.create(
+                order=self.order, provider=self.output.identifier,
+                extension='', type='', file=None)
+            generate_order.apply_async(args=(self.order.id, self.output.identifier))
+
+        if 'ajax' in self.request.GET:
+            return HttpResponse('1' if ct and ct.file else '0')
+        elif not ct.file:
+            if now() - ct.created > timedelta(minutes=110):
+                generate_order.apply_async(args=(self.order.id, self.output.identifier))
+            return render(self.request, "pretixbase/cachedfiles/pending.html", {})
+        else:
+            resp = FileResponse(ct.file.file, content_type=ct.type)
+            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
+                self.request.event.slug.upper(), self.order.code, self.output.identifier, ct.extension
+            )
+            return resp
+
+    def _download_position(self):
         try:
             ct = CachedTicket.objects.filter(
                 order_position=self.order_position, provider=self.output.identifier
@@ -532,10 +567,12 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
                 extension='', type='', file=None)
             generate.apply_async(args=(self.order_position.id, self.output.identifier))
 
-        if 'ajax' in request.GET:
+        if 'ajax' in self.request.GET:
             return HttpResponse('1' if ct and ct.file else '0')
         elif not ct.file:
-            return render(request, "pretixbase/cachedfiles/pending.html", {})
+            if now() - ct.created > timedelta(minutes=110):
+                generate.apply_async(args=(self.order_position.id, self.output.identifier))
+            return render(self.request, "pretixbase/cachedfiles/pending.html", {})
         else:
             resp = FileResponse(ct.file.file, content_type=ct.type)
             resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(

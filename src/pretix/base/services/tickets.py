@@ -5,7 +5,9 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import language
-from pretix.base.models import CachedTicket, Event, Order, OrderPosition
+from pretix.base.models import (
+    CachedCombinedTicket, CachedTicket, Event, Order, OrderPosition,
+)
 from pretix.base.services.async import ProfiledTask
 from pretix.base.signals import register_ticket_outputs
 from pretix.celery_app import app
@@ -31,6 +33,31 @@ def generate(order_position: str, provider: str):
             prov = response(order_position.order.event)
             if prov.identifier == provider:
                 filename, ct.type, data = prov.generate(order_position)
+                path, ext = os.path.splitext(filename)
+                ct.extension = ext
+                ct.save()
+                ct.file.save(filename, ContentFile(data))
+
+
+@app.task(base=ProfiledTask)
+def generate_order(order: int, provider: str):
+    order = Order.objects.select_related('event').get(id=order)
+    try:
+        ct = CachedCombinedTicket.objects.get(order=order, provider=provider)
+    except CachedCombinedTicket.MultipleObjectsReturned:
+        CachedCombinedTicket.objects.filter(order=order, provider=provider).delete()
+        ct = CachedCombinedTicket.objects.create(order=order, provider=provider, extension='',
+                                                 type='', file=None)
+    except CachedCombinedTicket.DoesNotExist:
+        ct = CachedCombinedTicket.objects.create(order=order, provider=provider, extension='',
+                                                 type='', file=None)
+
+    with language(order.locale):
+        responses = register_ticket_outputs.send(order.event)
+        for receiver, response in responses:
+            prov = response(order.event)
+            if prov.identifier == provider:
+                filename, ct.type, data = prov.generate_order(order)
                 path, ext = os.path.splitext(filename)
                 ct.extension = ext
                 ct.save()
