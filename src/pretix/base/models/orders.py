@@ -1,4 +1,5 @@
 import copy
+import os
 import string
 from datetime import datetime
 from decimal import Decimal
@@ -565,19 +566,20 @@ class InvoiceAddress(models.Model):
 
 def cachedticket_name(instance, filename: str) -> str:
     secret = get_random_string(length=16, allowed_chars=string.ascii_letters + string.digits)
-    return 'tickets/{org}/{ev}/{code}-{no}-{prov}-{secret}.pdf'.format(
+    return 'tickets/{org}/{ev}/{code}-{no}-{prov}-{secret}.dat'.format(
         org=instance.order_position.order.event.organizer.slug,
         ev=instance.order_position.order.event.slug,
         prov=instance.provider,
         no=instance.order_position.positionid,
         code=instance.order_position.order.code,
-        secret=secret
+        secret=secret,
+        ext=os.path.splitext(filename)[1]
     )
 
 
 def cachedcombinedticket_name(instance, filename: str) -> str:
     secret = get_random_string(length=16, allowed_chars=string.ascii_letters + string.digits)
-    return 'tickets/{org}/{ev}/{code}-{prov}-{secret}.pdf'.format(
+    return 'tickets/{org}/{ev}/{code}-{prov}-{secret}.dat'.format(
         org=instance.order.event.organizer.slug,
         ev=instance.order.event.slug,
         prov=instance.provider,
