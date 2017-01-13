@@ -104,8 +104,11 @@ $(function () {
                 $("#id_codes").val(data.codes.join("\n"));
             });
         } else {
-            alert("Please enter a number!");
+            $(".form-group:has(#voucher-bulk-codes-num)").addClass("has-error");
             $("#voucher-bulk-codes-num").focus();
+            setTimeout(function() {
+                $(".form-group:has(#voucher-bulk-codes-num)").removeClass("has-error");
+            }, 3000);
         }
     });
 
