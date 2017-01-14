@@ -354,4 +354,8 @@ class ImportView(EventPermissionRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['job_running'] = self.job_running
+        ctx['no_more_payments'] = False
+        if self.request.event.settings.get('payment_term_last'):
+            if now() > self.request.event.payment_term_last:
+                ctx['no_more_payments'] = True
         return ctx
