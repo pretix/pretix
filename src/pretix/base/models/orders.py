@@ -269,12 +269,15 @@ class Order(LoggedModel):
 
     def _can_be_paid(self) -> Union[bool, str]:
         error_messages = {
-            'late': _("The payment is too late to be accepted."),
+            'late_lastdate': _("The payment can not be accepted as the last date of payments configured in the "
+                               "payment settings is over."),
+            'late': _("The payment can not be accepted as it the order is expired and you configured that no late "
+                      "payments should be accepted in the payment settings."),
         }
 
         if self.event.settings.get('payment_term_last'):
             if now() > self.event.payment_term_last:
-                return error_messages['late']
+                return error_messages['late_lastdate']
         if self.status == self.STATUS_PENDING:
             return True
         if not self.event.settings.get('payment_term_accept_late'):
