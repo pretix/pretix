@@ -100,8 +100,8 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     sessions=true
 
     [celery]
-    backend=redis://127.0.0.1?virtual_host=1
-    broker=redis://127.0.0.1?virtual_host=2
+    backend=redis://127.0.0.1/1
+    broker=redis://127.0.0.1/2
 
 See :ref:`email configuration <mail-settings>` to learn more about configuring mail features.
 
@@ -119,7 +119,10 @@ python installation::
 We now install pretix, its direct dependencies and gunicorn. Replace ``mysql`` with ``postgres`` in the following
 command if you're running PostgreSQL::
 
-    (venv)$ pip install "pretix[mysql]" gunicorn
+    (venv)$ pip3 install "pretix[mysql]" gunicorn
+
+If you are running Python 3.4, you also need to ``pip3 install typing``. This is not required on 3.5 or newer.
+You can find out your Python version using ``python -V``.
 
 We also need to create a data directory::
 
@@ -127,8 +130,8 @@ We also need to create a data directory::
 
 Finally, we compile static files and translation data and create the database structure::
 
-    (venv)$ python -m pretix rebuild
     (venv)$ python -m pretix migrate
+    (venv)$ python -m pretix rebuild
 
 
 Start pretix as a service
