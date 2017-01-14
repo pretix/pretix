@@ -17,6 +17,7 @@ ways that pretix itself is:
 The following plugins are not shipped with pretix but are maintained by the
 same team:
 
+* `Pages`_
 * `Passbook/Wallet ticket output`_
 * `Cartshare`_
 
@@ -27,4 +28,5 @@ no statements about their stability:
 
 .. _Passbook/Wallet ticket output: https://github.com/pretix/pretix-passbook
 .. _Cartshare: https://github.com/pretix/pretix-cartshare
+.. _Pages: https://github.com/pretix/pretix-pages
 .. _esPass ticket output: https://github.com/esPass/pretix-espass
