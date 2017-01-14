@@ -98,6 +98,7 @@ $(function () {
     $("#voucher-bulk-codes-generate").click(function () {
         var num = $("#voucher-bulk-codes-num").val();
         if (num != "") {
+            $(".form-group:has(#voucher-bulk-codes-num)").addClass("has-error");
             var url = $(this).attr("data-rng-url");
             $("#id_codes").html("Generating...");
             $.getJSON(url + '?num=' + num, function (data) {
