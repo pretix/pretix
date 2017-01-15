@@ -5921,7 +5921,7 @@ msgstr ""
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_refund.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_refund.html:17
 msgid "Yes, mark order as refunded"
-msgstr "Die Bestellung wurde zurückerstattet."
+msgstr "Die Bestellung als zurückerstattet markieren"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_refund.html:19
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_refund.html:19
