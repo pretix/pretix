@@ -71,11 +71,14 @@ def webhook(request, *args, **kwargs):
     prov.init_api()
 
     # We do not check the signature, we just use it as a trigger to look the charge up.
-    if event_json['resource_type'] != 'sale':
+    if event_json['resource_type'] not in ('sale', 'refund'):
         return HttpResponse("Not interested in this resource type", status=200)
 
     try:
-        sale = paypalrestsdk.Sale.find(event_json['resource']['id'])
+        if event_json['resource_type'] == 'sale':
+            sale = paypalrestsdk.Sale.find(event_json['resource']['id'])
+        else:
+            sale = paypalrestsdk.Sale.find(event_json['resource']['sale_id'])
     except:
         logger.exception('PayPal error on webhook. Event data: %s' % str(event_json))
         return HttpResponse('Sale not found', status=500)

@@ -223,7 +223,7 @@ def test_webhook_mark_paid(env, client, monkeypatch):
 
 
 @pytest.mark.django_db
-def test_webhook_partial_refund(env, client, monkeypatch):
+def test_webhook_refund1(env, client, monkeypatch):
     charge = get_test_charge(env[1])
     charge['state'] = 'refunded'
 
@@ -232,6 +232,60 @@ def test_webhook_partial_refund(env, client, monkeypatch):
 
     client.post('/dummy/dummy/paypal/webhook/', json.dumps(
         {
+            # Sample obtained in a sandbox webhook
+            "id": "WH-9K829080KA1622327-31011919VC6498738",
+            "create_time": "2017-01-15T20:15:36Z",
+            "resource_type": "refund",
+            "event_type": "PAYMENT.SALE.REFUNDED",
+            "summary": "A EUR 255.41 EUR sale payment was refunded",
+            "resource": {
+                "amount": {
+                    "total": "255.41",
+                    "currency": "EUR"
+                },
+                "id": "75S46770PP192124D",
+                "parent_payment": "PAY-5YK922393D847794YKER7MUI",
+                "update_time": "2017-01-15T20:15:06Z",
+                "create_time": "2017-01-15T20:14:29Z",
+                "state": "completed",
+                "links": [],
+                "refund_to_payer": {
+                    "value": "255.41",
+                    "currency": "EUR"
+                },
+                "invoice_number": "",
+                "refund_reason_code": "REFUND",
+                "sale_id": "9T0916710M1105906"
+            },
+            "links": [],
+            "event_version": "1.0"
+        }
+    ), content_type='application_json')
+
+    order = env[1]
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+
+    ra = RequiredAction.objects.get(action_type="pretix.plugins.paypal.refund")
+    client.login(username='dummy@dummy.dummy', password='dummy')
+    client.post('/control/event/dummy/dummy/paypal/refund/{}/'.format(ra.pk))
+
+    order = env[1]
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_REFUNDED
+
+
+@pytest.mark.django_db
+def test_webhook_refund2(env, client, monkeypatch):
+    charge = get_test_charge(env[1])
+    charge['state'] = 'refunded'
+
+    monkeypatch.setattr("paypalrestsdk.Sale.find", lambda *args: charge)
+    monkeypatch.setattr("pretix.plugins.paypal.payment.Paypal.init_api", lambda *args: None)
+
+    client.post('/dummy/dummy/paypal/webhook/', json.dumps(
+        {
+            # Sample obtained in the webhook simulator
             "id": "WH-2N242548W9943490U-1JU23391CS4765624",
             "create_time": "2014-10-31T15:42:24Z",
             "resource_type": "sale",
