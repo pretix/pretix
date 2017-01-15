@@ -96,12 +96,21 @@ $(function () {
 
     // Vouchers
     $("#voucher-bulk-codes-generate").click(function () {
-        var url = $(this).attr("data-rng-url"),
-            num = $("#voucher-bulk-codes-num").val();
-        $("#id_codes").html("Generating...");
-        $.getJSON(url + '?num=' + num, function (data) {
-            $("#id_codes").val(data.codes.join("\n"));
-        });
+        var num = $("#voucher-bulk-codes-num").val();
+        if (num != "") {
+            $(".form-group:has(#voucher-bulk-codes-num)").addClass("has-error");
+            var url = $(this).attr("data-rng-url");
+            $("#id_codes").html("Generating...");
+            $.getJSON(url + '?num=' + num, function (data) {
+                $("#id_codes").val(data.codes.join("\n"));
+            });
+        } else {
+            $(".form-group:has(#voucher-bulk-codes-num)").addClass("has-error");
+            $("#voucher-bulk-codes-num").focus();
+            setTimeout(function() {
+                $(".form-group:has(#voucher-bulk-codes-num)").removeClass("has-error");
+            }, 3000);
+        }
     });
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
