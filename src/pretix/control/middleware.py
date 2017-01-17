@@ -61,33 +61,53 @@ class PermissionMiddleware(MiddlewareMixin):
             return redirect_to_login(
                 path, resolved_login_url, REDIRECT_FIELD_NAME)
 
-        request.user.events_cache = request.user.events.order_by(
+        events = Event.objects.all() if request.user.is_superuser else request.user.events
+        request.user.events_cache = events.order_by(
             "organizer", "date_from").prefetch_related("organizer")
         if 'event' in url.kwargs and 'organizer' in url.kwargs:
             try:
-                request.event = Event.objects.filter(
-                    slug=url.kwargs['event'],
-                    permitted__id__exact=request.user.id,
-                    organizer__slug=url.kwargs['organizer'],
-                ).select_related('organizer')[0]
-                request.eventperm = EventPermission.objects.get(
-                    event=request.event,
-                    user=request.user
-                )
+                if request.user.is_superuser:
+                    request.event = Event.objects.filter(
+                        slug=url.kwargs['event'],
+                        organizer__slug=url.kwargs['organizer'],
+                    ).select_related('organizer')[0]
+                    request.eventperm = EventPermission(
+                        event=request.event,
+                        user=request.user
+                    )
+                else:
+                    request.event = Event.objects.filter(
+                        slug=url.kwargs['event'],
+                        permitted__id__exact=request.user.id,
+                        organizer__slug=url.kwargs['organizer'],
+                    ).select_related('organizer')[0]
+                    request.eventperm = EventPermission.objects.get(
+                        event=request.event,
+                        user=request.user
+                    )
                 request.organizer = request.event.organizer
             except IndexError:
                 raise Http404(_("The selected event was not found or you "
                                 "have no permission to administrate it."))
         elif 'organizer' in url.kwargs:
             try:
-                request.organizer = Organizer.objects.filter(
-                    slug=url.kwargs['organizer'],
-                    permitted__id__exact=request.user.id,
-                )[0]
-                request.orgaperm = OrganizerPermission.objects.get(
-                    organizer=request.organizer,
-                    user=request.user
-                )
+                if request.user.is_superuser:
+                    request.organizer = Organizer.objects.filter(
+                        slug=url.kwargs['organizer'],
+                    )[0]
+                    request.orgaperm = OrganizerPermission(
+                        organizer=request.organizer,
+                        user=request.user
+                    )
+                else:
+                    request.organizer = Organizer.objects.filter(
+                        slug=url.kwargs['organizer'],
+                        permitted__id__exact=request.user.id,
+                    )[0]
+                    request.orgaperm = OrganizerPermission.objects.get(
+                        organizer=request.organizer,
+                        user=request.user
+                    )
             except IndexError:
                 raise Http404(_("The selected organizer was not found or you "
                                 "have no permission to administrate it."))
