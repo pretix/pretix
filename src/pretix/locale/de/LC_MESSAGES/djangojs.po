@@ -92,7 +92,7 @@ msgstr "Ein Fehler ist aufgetreten. Fehlercode: {code}"
 #: pretix/static/pretixpresale/js/ui/asyncdownload.js:53
 #: pretix/static/pretixpresale/js/ui/asynctask.js:103
 msgid "We are processing your request …"
-msgstr "Wir verarbeiten deine Anfrage …"
+msgstr "Wir verarbeiten Ihre Anfrage …"
 
 #: pretix/static/pretixpresale/js/ui/asyncdownload.js:54
 #: pretix/static/pretixpresale/js/ui/asynctask.js:104

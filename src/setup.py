@@ -30,6 +30,7 @@ class CustomBuild(build):
 
         management.call_command('compilemessages', verbosity=1, interactive=False)
         management.call_command('compilejsi18n', verbosity=1, interactive=False)
+        management.call_command('compilejsi18n', locale='de-informal', verbosity=1, interactive=False)
         management.call_command('collectstatic', verbosity=1, interactive=False)
         management.call_command('compress', verbosity=1, interactive=False)
         build.run(self)

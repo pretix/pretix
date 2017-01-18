@@ -11,5 +11,6 @@ class Command(BaseCommand):
         periodic_task.send(self)
         call_command('compilemessages', verbosity=1, interactive=False)
         call_command('compilejsi18n', verbosity=1, interactive=False)
+        call_command('compilejsi18n', locale='de-informal', verbosity=1, interactive=False)
         call_command('collectstatic', verbosity=1, interactive=False)
         call_command('compress', verbosity=1, interactive=False)
