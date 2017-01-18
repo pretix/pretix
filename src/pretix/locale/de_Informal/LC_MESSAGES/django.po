@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-18 08:37+0000\n"
-"PO-Revision-Date: 2017-01-18 09:41+0100\n"
+"POT-Creation-Date: 2017-01-18 20:43+0000\n"
+"PO-Revision-Date: 2017-01-18 21:44+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -2913,14 +2913,14 @@ msgstr "Die E-Mail-Adresse wurde zu {email} geändert."
 msgid "Your password has been changed."
 msgstr "Das Passwort wurde geändert."
 
-#: pretix/control/middleware.py:79
+#: pretix/control/middleware.py:90
 msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
 msgstr ""
 "Du hast keine Berechtigung, die ausgewählte Veranstaltung zu administrieren."
 
-#: pretix/control/middleware.py:92
+#: pretix/control/middleware.py:112
 msgid ""
 "The selected organizer was not found or you have no permission to "
 "administrate it."
@@ -7108,9 +7108,17 @@ msgstr "Dieser Vorverkauf läuft mit <a %(a_attr)s>pretix</a>."
 msgid "There is nothing to see here yet."
 msgstr "Hier gibt es zur Zeit nichts zu sehen."
 
+#: pretix/presale/templates/pretixpresale/organizers/index.html:4
+msgid "Event list"
+msgstr "Veranstaltungs-Liste"
+
 #: pretix/presale/templates/pretixpresale/organizers/index.html:9
 msgid "Show upcoming"
 msgstr "Zukünftige Veranstaltungen zeigen"
+
+#: pretix/presale/templates/pretixpresale/organizers/index.html:12
+msgid "Upcoming events"
+msgstr "Nächste Veranstaltungen"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:14
 msgid "Show past events"
