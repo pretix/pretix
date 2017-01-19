@@ -10,7 +10,7 @@ class OrganizerIndex(OrganizerViewMixin, ListView):
     model = Event
     context_object_name = 'events'
     template_name = 'pretixpresale/organizers/index.html'
-    paginate_by = 1
+    paginate_by = 10
 
     def get_queryset(self):
         query = Q(is_public=True)
