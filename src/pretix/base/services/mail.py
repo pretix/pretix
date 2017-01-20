@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 from inlinestyler.utils import inline_css
 
 from pretix.base.i18n import LazyI18nString, language
-from pretix.base.models import Event, Order
+from pretix.base.models import Event, InvoiceAddress, Order
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -43,7 +43,7 @@ def mail(email: str, subject: str, template: str,
 
     :param template: The filename of a template to be used. It will be rendered with the locale given in the locale
         argument and the context given in the next argument. Alternatively, you can pass a LazyI18nString and
-        ``context`` will be used as the argument to a  Python ``.format()`` call on the template.
+        ``context`` will be used as the argument to a  Python ``.format_map()`` call on the template.
 
     :param context: The context for rendering the template (see ``template`` parameter)
 
@@ -64,6 +64,17 @@ def mail(email: str, subject: str, template: str,
         return
 
     with language(locale):
+        if isinstance(context, dict) and order:
+            try:
+                context.update({
+                    'invoice_name': order.invoice_address.name,
+                    'invoice_company': order.invoice_address.company
+                })
+            except InvoiceAddress.DoesNotExist:
+                context.update({
+                    'invoice_name': '',
+                    'invoice_company': ''
+                })
         if isinstance(template, LazyI18nString):
             body = str(template)
             if context:

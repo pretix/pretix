@@ -378,31 +378,32 @@ class MailSettingsForm(SettingsForm):
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {total}, {currency}, {date}, {paymentinfo}, {url}")
+        help_text=_("Available placeholders: {event}, {total}, {currency}, {date}, {paymentinfo}, {url}, "
+                    "{invoice_name}, {invoice_company}")
     )
     mail_text_order_paid = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}")
+        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}")
     )
     mail_text_order_free = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}")
+        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}")
     )
     mail_text_order_changed = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}")
+        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}")
     )
     mail_text_resend_link = I18nFormField(
         label=_("Text (sent by admin)"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}")
+        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}")
     )
     mail_text_resend_all_links = I18nFormField(
         label=_("Text (requested by user)"),
@@ -421,7 +422,7 @@ class MailSettingsForm(SettingsForm):
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {expire_date}")
+        help_text=_("Available placeholders: {event}, {url}, {expire_date}, {invoice_name}, {invoice_company}")
     )
     smtp_use_custom = forms.BooleanField(
         label=_("Use custom SMTP server"),

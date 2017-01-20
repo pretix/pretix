@@ -106,6 +106,12 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
 
     if send_mail:
         with language(order.locale):
+            try:
+                invoice_name = order.invoice_address.name
+                invoice_company = order.invoice_address.company
+            except InvoiceAddress.DoesNotExist:
+                invoice_name = ""
+                invoice_company = ""
             mail(
                 order.email, _('Payment received for your order: %(code)s') % {'code': order.code},
                 order.event.settings.mail_text_order_paid,
@@ -115,7 +121,9 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
                         'order': order.code,
                         'secret': order.secret
                     }),
-                    'downloads': order.event.settings.get('ticket_download', as_type=bool)
+                    'downloads': order.event.settings.get('ticket_download', as_type=bool),
+                    'invoice_name': invoice_name,
+                    'invoice_company': invoice_company,
                 },
                 order.event, locale=order.locale
             )
@@ -363,6 +371,14 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             mailtext = event.settings.mail_text_order_free
         else:
             mailtext = event.settings.mail_text_order_placed
+
+        try:
+            invoice_name = order.invoice_address.name
+            invoice_company = order.invoice_address.company
+        except InvoiceAddress.DoesNotExist:
+            invoice_name = ""
+            invoice_company = ""
+
         mail(
             order.email, _('Your order: %(code)s') % {'code': order.code},
             mailtext,
@@ -375,7 +391,9 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
                     'order': order.code,
                     'secret': order.secret
                 }),
-                'paymentinfo': str(pprov.order_pending_mail_render(order))
+                'paymentinfo': str(pprov.order_pending_mail_render(order)),
+                'invoice_name': invoice_name,
+                'invoice_company': invoice_company,
             },
             event, locale=order.locale
         )
@@ -414,6 +432,12 @@ def send_expiry_warnings(sender, **kwargs):
             o.expiry_reminder_sent = True
             o.save()
             try:
+                invoice_name = o.invoice_address.name
+                invoice_company = o.invoice_address.company
+            except InvoiceAddress.DoesNotExist:
+                invoice_name = ""
+                invoice_company = ""
+            try:
                 mail(
                     o.email, _('Your order is about to expire: %(code)s') % {'code': o.code},
                     settings.mail_text_order_expire_warning,
@@ -423,7 +447,9 @@ def send_expiry_warnings(sender, **kwargs):
                             'order': o.code,
                             'secret': o.secret
                         }),
-                        'expire_date': date_format(o.expires, 'SHORT_DATE_FORMAT')
+                        'expire_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
+                        'invoice_name': invoice_name,
+                        'invoice_company': invoice_company,
                     },
                     o.event, locale=o.locale
                 )
@@ -557,6 +583,12 @@ class OrderChangeManager:
 
     def _notify_user(self):
         with language(self.order.locale):
+            try:
+                invoice_name = self.order.invoice_address.name
+                invoice_company = self.order.invoice_address.company
+            except InvoiceAddress.DoesNotExist:
+                invoice_name = ""
+                invoice_company = ""
             mail(
                 self.order.email, _('Your order has been changed: %(code)s') % {'code': self.order.code},
                 self.order.event.settings.mail_text_order_changed,
@@ -566,6 +598,8 @@ class OrderChangeManager:
                         'order': self.order.code,
                         'secret': self.order.secret
                     }),
+                    'invoice_name': invoice_name,
+                    'invoice_company': invoice_company,
                 },
                 self.order.event, locale=self.order.locale
             )

@@ -12,8 +12,8 @@ from django.views.generic import DetailView, ListView, TemplateView, View
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, CachedTicket, Invoice, Item, ItemVariation, Order, Quota,
-    generate_position_secret, generate_secret,
+    CachedFile, CachedTicket, Invoice, InvoiceAddress, Item, ItemVariation,
+    Order, Quota, generate_position_secret, generate_secret,
 )
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
@@ -323,6 +323,12 @@ class OrderResendLink(OrderView):
     def post(self, *args, **kwargs):
         with language(self.order.locale):
             try:
+                try:
+                    invoice_name = self.order.invoice_address.name
+                    invoice_company = self.order.invoice_address.company
+                except InvoiceAddress.DoesNotExist:
+                    invoice_name = ""
+                    invoice_company = ""
                 mail(
                     self.order.email, _('Your order: %(code)s') % {'code': self.order.code},
                     self.order.event.settings.mail_text_resend_link,
@@ -332,6 +338,8 @@ class OrderResendLink(OrderView):
                             'order': self.order.code,
                             'secret': self.order.secret
                         }),
+                        'invoice_name': invoice_name,
+                        'invoice_company': invoice_company,
                     },
                     self.order.event, locale=self.order.locale
                 )
