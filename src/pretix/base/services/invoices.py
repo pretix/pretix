@@ -14,6 +14,7 @@ from django.utils.translation import pgettext, ugettext as _
 from reportlab.lib import pagesizes
 from reportlab.lib.styles import ParagraphStyle, StyleSheet1
 from reportlab.lib.units import mm
+from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
@@ -251,6 +252,13 @@ def _invoice_generate_german(invoice, f):
         textobject.setFont('OpenSans', 10)
         textobject.textLine(date_format(invoice.order.datetime, "DATE_FORMAT"))
         canvas.drawText(textobject)
+
+        if invoice.event.settings.invoice_logo_image:
+            logo_file = invoice.event.settings.get('invoice_logo_image', binary_file=True)
+            canvas.drawImage(ImageReader(logo_file),
+                             95 * mm, (297 - 38) * mm,
+                             width=25 * mm, height=25 * mm,
+                             preserveAspectRatio=True, anchor='n')
 
         textobject = canvas.beginText(125 * mm, (297 - 15) * mm)
         textobject.setFont('OpenSansBd', 8)

@@ -301,6 +301,10 @@ Your {event} team"""))
         'default': None,
         'type': File
     },
+    'invoice_logo_image': {
+        'default': None,
+        'type': File
+    },
     'frontpage_text': {
         'default': '',
         'type': LazyI18nString
@@ -361,7 +365,7 @@ class SettingsProxy:
             settings[key] = self.get(key)
         return settings
 
-    def _unserialize(self, value: str, as_type: type) -> Any:
+    def _unserialize(self, value: str, as_type: type, binary_file=False) -> Any:
         if as_type is None and value is not None and value.startswith('file://'):
             as_type = File
 
@@ -377,7 +381,7 @@ class SettingsProxy:
             return value == 'True'
         elif as_type == File:
             try:
-                fi = default_storage.open(value[7:], 'r')
+                fi = default_storage.open(value[7:], 'rb' if binary_file else 'r')
                 fi.url = default_storage.url(value[7:])
                 return fi
             except OSError:
@@ -416,7 +420,7 @@ class SettingsProxy:
 
         raise TypeError('Unable to serialize %s into a setting.' % str(type(value)))
 
-    def get(self, key: str, default=None, as_type: type=None):
+    def get(self, key: str, default=None, as_type: type=None, binary_file=False):
         """
         Get a setting specified by key ``key``. Normally, settings are strings, but
         if you put non-strings into the settings object, you can request unserialization
@@ -442,7 +446,7 @@ class SettingsProxy:
             if value is None and default is not None:
                 value = default
 
-        return self._unserialize(value, as_type)
+        return self._unserialize(value, as_type, binary_file=binary_file)
 
     def __getitem__(self, key: str) -> Any:
         return self.get(key)

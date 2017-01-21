@@ -361,6 +361,13 @@ class InvoiceSettingsForm(SettingsForm):
         label=_("Invoice language"),
         choices=[('__user__', _('The user\'s language'))] + settings.LANGUAGES,
     )
+    invoice_logo_image = ExtFileField(
+        label=_('Logo image'),
+        ext_whitelist=(".png", ".jpg", ".svg", ".gif", ".jpeg"),
+        required=False,
+        help_text=_('If you provide a logo image, we will not show your events name and date on the invoice'
+                    'the page header. We will show your logo with a maximal height and width of 2.5 cm.')
+    )
 
 
 class MailSettingsForm(SettingsForm):
