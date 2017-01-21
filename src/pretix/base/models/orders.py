@@ -229,7 +229,7 @@ class Order(LoggedModel):
         charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
         while True:
             code = get_random_string(length=settings.ENTROPY['order_code'], allowed_chars=charset)
-            if not Order.objects.filter(event=self.event, code=code).exists():
+            if not Order.objects.filter(event__organizer=self.event.organizer, code=code).exists():
                 self.code = code
                 return
 
