@@ -63,7 +63,7 @@ logger = logging.getLogger(__name__)
 
 
 def mark_order_paid(order: Order, provider: str=None, info: str=None, date: datetime=None, manual: bool=None,
-                    force: bool=False, send_mail: bool=True, user: User=None) -> Order:
+                    force: bool=False, send_mail: bool=True, user: User=None, mail_text='') -> Order:
     """
     Marks an order as paid. This sets the payment provider, info and date and returns
     the order object.
@@ -81,6 +81,8 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     :param send_mail: Whether an email should be sent to the user about this event (default: ``True``).
     :type send_mail: boolean
     :param user: The user that performed the change
+    :param mail_text: Additional text to be included in the email
+    :type mail_text: str
     :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
     """
     with order.event.lock() as now_dt:
@@ -124,6 +126,7 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
                     'downloads': order.event.settings.get('ticket_download', as_type=bool),
                     'invoice_name': invoice_name,
                     'invoice_company': invoice_company,
+                    'payment_info': mail_text
                 },
                 order.event, locale=order.locale
             )

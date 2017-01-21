@@ -385,7 +385,7 @@ class MailSettingsForm(SettingsForm):
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}")
+        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}, {payment_info}")
     )
     mail_text_order_free = I18nFormField(
         label=_("Text"),

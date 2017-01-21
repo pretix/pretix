@@ -231,6 +231,8 @@ Your {event} team"""))
 
 we successfully received your payment for {event}. Thank you!
 
+{payment_info}
+
 You can change your order details and view the status of your order at
 {url}
 
