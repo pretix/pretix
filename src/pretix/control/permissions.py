@@ -14,6 +14,8 @@ def event_permission_required(permission):
             if not request.user.is_authenticated:  # NOQA
                 # just a double check, should not ever happen
                 raise PermissionDenied()
+            if request.user.is_superuser:
+                return function(request, *args, **kw)
             try:
                 perm = EventPermission.objects.get(
                     event=request.event,
@@ -28,7 +30,7 @@ def event_permission_required(permission):
                         allowed = getattr(perm, permission)
                 except AttributeError:
                     pass
-                if allowed:
+                if allowed or request.user.is_superuser:
                     return function(request, *args, **kw)
             raise PermissionDenied(_('You do not have permission to view this content.'))
         return wrapper
@@ -58,6 +60,8 @@ def organizer_permission_required(permission):
             if not request.user.is_authenticated:  # NOQA
                 # just a double check, should not ever happen
                 raise PermissionDenied()
+            if request.user.is_superuser:
+                return function(request, *args, **kw)
             try:
                 perm = OrganizerPermission.objects.get(
                     organizer=request.organizer,
