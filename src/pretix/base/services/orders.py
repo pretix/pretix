@@ -85,6 +85,9 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     :type mail_text: str
     :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
     """
+    if order.status == Order.STATUS_PAID:
+        return order
+
     with order.event.lock() as now_dt:
         can_be_paid = order._can_be_paid()
         if not force and can_be_paid is not True:

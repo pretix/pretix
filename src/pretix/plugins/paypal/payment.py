@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.template.loader import get_template
 from django.utils.translation import ugettext as __, ugettext_lazy as _
 
-from pretix.base.models import Quota, RequiredAction
+from pretix.base.models import Order, Quota, RequiredAction
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
@@ -197,6 +197,10 @@ class Paypal(BasePaymentProvider):
             messages.error(request, _('We were unable to process your payment. See below for details on how to '
                                       'proceed.'))
             logger.error('Invalid state: %s' % str(payment))
+            return
+
+        if order.status == Order.STATUS_PAID:
+            logger.warning('PayPal success event even though order is already marked as paid')
             return
 
         try:

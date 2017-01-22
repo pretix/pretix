@@ -42,8 +42,10 @@ class CartActionMixin:
             amount = int(value)
         except ValueError:
             raise CartError(_('Please enter numbers only.'))
-        if amount <= 0:
+        if amount < 0:
             raise CartError(_('Please enter positive numbers only.'))
+        elif amount == 0:
+            return
 
         price = self.request.POST.get('price_' + "_".join(parts[1:]), "")
         if key.startswith('item_'):
