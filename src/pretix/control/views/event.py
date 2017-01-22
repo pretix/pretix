@@ -132,6 +132,9 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
                 if key.startswith("plugin:"):
                     module = key.split(":")[1]
                     if value == "enable" and module in plugins_available:
+                        if getattr(plugins_available[module], 'restricted', False):
+                            if not request.user.is_superuser:
+                                continue
                         self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                                       data={'plugin': module})
                         if module not in plugins_active:

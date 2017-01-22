@@ -42,6 +42,13 @@ configuration class. The metadata class must define the following attributes:
 ``description`` (``str``):
     A more verbose description of what your plugin does.
 
+``visible`` (``bool``):
+   ``True`` by default, can hide a plugin so it cannot be normally activated.
+
+``restricted`` (``bool``):
+   ``False`` by default, restricts a plugin such that it can only be enabled for an event
+   by system administrators / superusers.
+
 A working example would be::
 
     # file: pretix/plugins/timerestriction/__init__.py
@@ -57,6 +64,8 @@ A working example would be::
             name = _("PayPal")
             author = _("the pretix team")
             version = '1.0.0'
+            visible = True
+            restricted = False
             description = _("This plugin allows you to receive payments via PayPal")
 
 
