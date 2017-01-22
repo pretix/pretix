@@ -113,13 +113,15 @@
                                         {% endif %}
                                     </div>
                                     <div class="col-md-2 col-xs-6 availability-box">
-                                        <a href="#" data-toggle="variations" class="js-only">
-                                            {% trans "Show variants" %}
-                                        </a>
+                                        {% if not event.settings.show_variations_expanded %}
+                                            <a href="#" data-toggle="variations" class="js-only">
+                                                {% trans "Show variants" %}
+                                            </a>
+                                        {% endif %}
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="variations">
+                                <div class="variations {% if not event.settings.show_variations_expanded %}variations-collapsed{% endif %}">
                                     {% for var in item.available_variations %}
                                         <div class="row-fluid product-row variation">
                                             <div class="col-md-8 col-xs-12">

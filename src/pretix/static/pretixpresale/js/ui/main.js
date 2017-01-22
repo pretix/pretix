@@ -20,7 +20,7 @@ $(function () {
         $($(this).attr("data-target")).collapse('show');
     });
     $(".js-only").removeClass("js-only");
-    $(".variations").hide();
+    $(".variations-collapsed").hide();
     $("a[data-toggle=variations]").click(function (e) {
         $(this).parent().parent().parent().find(".variations").slideToggle();
         e.preventDefault();

@@ -499,6 +499,10 @@ class DisplaySettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea
     )
+    show_variations_expanded = forms.BooleanField(
+        label=_("Show variations of a product expanded by default"),
+        required=False
+    )
 
 
 class TicketSettingsForm(SettingsForm):

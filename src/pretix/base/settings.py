@@ -128,6 +128,10 @@ DEFAULTS = {
         'default': 'False',
         'type': bool
     },
+    'show_variations_expanded': {
+        'default': 'False',
+        'type': bool
+    },
     'ticket_download': {
         'default': 'False',
         'type': bool
