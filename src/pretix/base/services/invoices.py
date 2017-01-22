@@ -314,6 +314,7 @@ def _invoice_generate_german(invoice, f):
 
     tstyledata = [
         ('ALIGN', (1, 0), (-1, -1), 'RIGHT'),
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('FONTNAME', (0, 0), (-1, 0), 'OpenSansBd'),
         ('FONTNAME', (0, -1), (-1, -1), 'OpenSansBd'),
         ('LEFTPADDING', (0, 0), (0, -1), 0),
@@ -328,7 +329,7 @@ def _invoice_generate_german(invoice, f):
     total = Decimal('0.00')
     for line in invoice.lines.all():
         tdata.append((
-            line.description,
+            Paragraph(line.description, styles['Normal']),
             lformat("%.2f", line.tax_rate) + " %",
             lformat("%.2f", line.net_value) + " " + invoice.event.currency,
             lformat("%.2f", line.gross_value) + " " + invoice.event.currency,

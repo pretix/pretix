@@ -19,6 +19,6 @@ class PretixBaseConfig(AppConfig):
 
 default_app_config = 'pretix.base.PretixBaseConfig'
 try:
-    import pretix.celery_app as celery # NOQA
+    import pretix.celery_app as celery  # NOQA
 except ImportError:
     pass
