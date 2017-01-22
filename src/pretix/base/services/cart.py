@@ -12,7 +12,6 @@ from pretix.base.models import (
 )
 from pretix.base.services.async import ProfiledTask
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.signals import validate_cart
 from pretix.celery_app import app
 
 
@@ -208,11 +207,6 @@ def _add_items_to_cart(event: Event, items: List[dict], cart_id: str=None) -> No
             # TODO: i18n plurals
             raise CartError(error_messages['max_items'], (event.settings.max_items_per_order,))
 
-        validate_cart.send(
-            sender=event, positions=CartPosition.objects.filter(Q(cart_id=cart_id) & Q(event=event)),
-            requested_add=items, requested_delete=[]
-        )
-
         expiry = now_dt + timedelta(minutes=event.settings.get('reservation_time', as_type=int))
         _extend_existing(event, cart_id, expiry, now_dt)
 
@@ -246,11 +240,6 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None) ->
 
 def _remove_items_from_cart(event: Event, items: List[dict], cart_id: str) -> None:
     with event.lock():
-        validate_cart.send(
-            sender=event, positions=CartPosition.objects.filter(Q(cart_id=cart_id) & Q(event=event)),
-            requested_add=[], requested_delete=items
-        )
-
         for i in items:
             cw = Q(cart_id=cart_id) & Q(item_id=i['item']) & Q(event=event)
             if i['variation']:

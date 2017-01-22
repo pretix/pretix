@@ -95,14 +95,13 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 """
 
 validate_cart = EventPluginSignal(
-    providing_args=["positions", "requested_add", "requested_delete"]
+    providing_args=["positions"]
 )
 """
-This signal is sent out every time a cart is about to be changed. It includes an iterable
-with the current CartPosition objects as well as lists of dictionaries of the cart items
-that the user wants to add. Those dictionaries can contain the keys ``item``, ``variation``,
-``count``, ``price`` and ``voucher``. The response of receivers will be ignored, but you can
-raise an OrderError with an appropriate exception message.
+This signal is sent out before the user starts checkout. It includes an iterable
+with the current CartPosition objects.
+The response of receivers will be ignored, but you can raise a CartError with an
+appropriate exception message.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
