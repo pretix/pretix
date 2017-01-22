@@ -30,7 +30,6 @@ class CustomBuild(build):
 
         management.call_command('compilemessages', verbosity=1, interactive=False)
         management.call_command('compilejsi18n', verbosity=1, interactive=False)
-        management.call_command('compilejsi18n', locale='de-informal', verbosity=1, interactive=False)
         management.call_command('collectstatic', verbosity=1, interactive=False)
         management.call_command('compress', verbosity=1, interactive=False)
         build.run(self)
@@ -78,7 +77,7 @@ setup(
         'django-formtools==1.0',
         'celery==4.0.2',
         'kombu==4.0.2',
-        'django-statici18n==1.2.*',
+        'django-statici18n==1.3.*',
         'inlinestyler==0.2.*',
         'BeautifulSoup4',
         'html5lib<0.99999999,>=0.999',

@@ -16,7 +16,6 @@ compress:
 
 jsi18n: localecompile
 	./manage.py compilejsi18n
-	./manage.py compilejsi18n -l de-informal
 
 test:
 	py.test tests
