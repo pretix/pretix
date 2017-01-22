@@ -19,7 +19,7 @@ Order events
 There are multiple signals that will be sent out in the ordering cycle:
 
 .. automodule:: pretix.base.signals
-   :members: order_paid, order_placed
+   :members: validate_cart, order_paid, order_placed
 
 Frontend
 --------
