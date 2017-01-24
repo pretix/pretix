@@ -63,6 +63,8 @@ def mail(email: str, subject: str, template: str,
     if email == INVALID_ADDRESS:
         return
 
+    headers = headers or {}
+
     with language(locale):
         if isinstance(context, dict) and order:
             try:
@@ -102,6 +104,9 @@ def mail(email: str, subject: str, template: str,
         if event:
             htmlctx['event'] = event
             htmlctx['color'] = event.settings.primary_color
+
+            if event.settings.mail_from == settings.DEFAULT_FROM_EMAIL and event.settings.contact_mail:
+                headers['Reply-To'] = event.settings.contact_mail
 
             prefix = event.settings.get('mail_prefix')
             if prefix:
