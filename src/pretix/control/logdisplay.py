@@ -21,10 +21,10 @@ def _display_order_changed(event: Event, logentry: LogEntry):
     if logentry.action_type == 'pretix.event.order.changed.item':
         old_item = str(event.items.get(pk=data['old_item']))
         if data['old_variation']:
-            old_item += ' - ' + str(event.itemvariations.get(pk=data['old_variation']))
+            old_item += ' - ' + str(ItemVariation.objects.get(item__event=event, pk=data['old_variation']))
         new_item = str(event.items.get(pk=data['new_item']))
         if data['new_variation']:
-            new_item += ' - ' + str(event.itemvariations.get(pk=data['new_variation']))
+            new_item += ' - ' + str(ItemVariation.objects.get(item__event=event, pk=data['new_variation']))
         return text + ' ' + _('Position #{posid}: {old_item} ({old_price} {currency}) changed '
                               'to {new_item} ({new_price} {currency}).').format(
             posid=data.get('positionid', '?'),
