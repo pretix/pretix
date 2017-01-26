@@ -82,7 +82,7 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     datadir=/var/pretix/data
 
     [database]
-    ; Replace mysql with psycopg2 for PostgreSQL
+    ; Replace mysql with postgresql_psycopg2 for PostgreSQL
     backend=mysql
     name=pretix
     user=pretix
