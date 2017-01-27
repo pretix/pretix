@@ -22,7 +22,7 @@
         {% endif %}
         {% for title, content in tabs %}
             <li>
-                <a href="#tab-{{ forloop.index }}" data-toggle="tab">
+                <a href="#tab-{{ forloop.counter }}" data-toggle="tab">
                     {{ title }}
                 </a>
             </li>
@@ -149,7 +149,7 @@
             </div>
         {% endif %}
         {% for title, content in tabs %}
-            <div class="tab-pane" id="tab-{{ forloop.index }}">
+            <div class="tab-pane" id="tab-{{ forloop.counter }}">
                 <div class="tab-inner">
                     {{ content }}
                 </div>

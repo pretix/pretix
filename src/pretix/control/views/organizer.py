@@ -61,14 +61,26 @@ class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
             form=OrganizerPermissionForm,
             can_delete=True, can_order=False, extra=0
         )
-        return fs(data=self.request.POST if self.request.method == "POST" else None,
-                  prefix="formset",
-                  queryset=OrganizerPermission.objects.filter(organizer=self.request.organizer))
+        return fs(
+            data=(
+                self.request.POST
+                if self.request.method == "POST" and 'id_formset-TOTAL_FORMS' in self.request.POST
+                else None
+            ),
+            prefix="formset",
+            queryset=OrganizerPermission.objects.filter(organizer=self.request.organizer)
+        )
 
     @cached_property
     def add_form(self):
-        return OrganizerPermissionCreateForm(data=self.request.POST if self.request.method == "POST" else None,
-                                             prefix="add")
+        return OrganizerPermissionCreateForm(
+            data=(
+                self.request.POST
+                if self.request.method == "POST" and 'id_formset-TOTAL_FORMS' in self.request.POST
+                else None
+            ),
+            prefix="add"
+        )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -106,6 +118,9 @@ class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
     def post(self, *args, **kwargs):
         if not self.request.orgaperm.can_change_permissions:
             raise PermissionDenied(_("You have no permission to do this."))
+
+        if 'id_formset-TOTAL_FORMS' not in self.request.POST:
+            return self.get(*args, **kwargs)
 
         if self.formset.is_valid() and self.add_form.is_valid():
             if self.add_form.has_changed():
