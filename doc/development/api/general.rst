@@ -47,7 +47,7 @@ Backend
 -------
 
 .. automodule:: pretix.control.signals
-   :members: nav_event, html_head, quota_detail_html, nav_topbar
+   :members: nav_event, html_head, quota_detail_html, nav_topbar, organizer_edit_tabs
 
 
 .. automodule:: pretix.base.signals
