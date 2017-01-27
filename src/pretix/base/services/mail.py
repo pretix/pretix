@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, Union
 
 import bleach
 import cssutils
@@ -30,7 +30,7 @@ class SendMailException(Exception):
     pass
 
 
-def mail(email: str, subject: str, template: str,
+def mail(email: str, subject: str, template: Union[str, LazyI18nString],
          context: Dict[str, Any]=None, event: Event=None, locale: str=None,
          order: Order=None, headers: dict=None):
     """
