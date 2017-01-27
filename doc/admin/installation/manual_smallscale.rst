@@ -170,7 +170,7 @@ For background tasks we need a second service ``/etc/systemd/system/pretix-worke
     Group=pretix
     Environment="VIRTUAL_ENV=/var/pretix/venv"
     Environment="PATH=/var/pretix/venv/bin:/usr/local/bin:/usr/bin:/bin"
-    ExecStart=/var/pretix/venv/bin/celery -A pretix.celery_app worker -l info
+    ExecStart=/var/pretix/venv/bin/celery -A pretix.celery worker -l info
     WorkingDirectory=/var/pretix/source/src
     Restart=on-failure
 
