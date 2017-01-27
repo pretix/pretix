@@ -14,6 +14,7 @@ from pretix.base.models import Organizer, OrganizerPermission, User
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.organizer import OrganizerForm, OrganizerUpdateForm
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
+from pretix.control.signals import organizer_edit_tabs
 from pretix.helpers.urls import build_absolute_uri
 
 
@@ -74,6 +75,12 @@ class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
         ctx['formset'] = self.formset
         ctx['add_form'] = self.add_form
         ctx['events'] = self.request.organizer.events.all()
+        ctx['tabs'] = []
+
+        for recv, retv in organizer_edit_tabs.send(sender=self.request.organizer, request=self.request,
+                                                   organizer=self.request.organizer):
+            ctx['tabs'].append(retv)
+
         return ctx
 
     def _send_invite(self, instance):

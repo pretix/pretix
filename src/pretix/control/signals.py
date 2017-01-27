@@ -124,12 +124,13 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 """
 
 organizer_edit_tabs = Signal(
-    providing_args=['organizer']
+    providing_args=['organizer', 'request']
 )
 """
 This signal is sent out to include tabs on the detail page of an organizer. Receivers
 should return a tuple with the first item being the tab title and the second item
-being the content as HTML. The receivers get the ``organizer`` as a keyword argument.
+being the content as HTML. The receivers get the ``organizer`` and the ``request`` as
+keyword arguments.
 
 This is a regular django signal (no pretix event signal).
 """
