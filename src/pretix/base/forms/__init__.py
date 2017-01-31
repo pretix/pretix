@@ -22,13 +22,13 @@ class BaseI18nModelForm(BaseModelForm):
     This is a helperclass to construct an I18nModelForm.
     """
     def __init__(self, *args, **kwargs):
-        event = kwargs.pop('event', None)
+        self.event = kwargs.pop('event', None)
         locales = kwargs.pop('locales', None)
         super().__init__(*args, **kwargs)
-        if event or locales:
+        if self.event or locales:
             for k, field in self.fields.items():
                 if isinstance(field, I18nFormField):
-                    field.widget.enabled_langcodes = event.settings.get('locales') if event else locales
+                    field.widget.enabled_langcodes = self.event.settings.get('locales') if self.event else locales
 
 
 class I18nModelForm(six.with_metaclass(ModelFormMetaclass, BaseI18nModelForm)):
