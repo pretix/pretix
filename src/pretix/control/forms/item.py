@@ -104,10 +104,10 @@ class ItemCreateForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['has_variations'] = forms.BooleanField(label=_('The product should exist in multiple variations'),
-                                                 help_text=_(
-                                                     'Select this option e.g. for t-shirts that come in multiple sizes. '
-                                                     'You can select the variations in the next step.'),
-                                                 required=False)
+                                                           help_text=_('Select this option e.g. for t-shirts that come '
+                                                                       'in multiple sizes. You can select the variations'
+                                                                       ' in the next step.'),
+                                                           required=False)
         self.fields['copy_from'] = forms.ModelChoiceField(
             label=_("Copy product information"),
             queryset=self.event.items.all(),
