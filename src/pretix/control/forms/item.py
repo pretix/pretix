@@ -105,12 +105,28 @@ class ItemCreateForm(I18nModelForm):
                                                     'You can select the variations in the next step.'),
                                         required=False)
 
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs['event']
+        super().__init__(*args, **kwargs)
+        self.fields['copy_from'] = forms.ModelChoiceField(
+            label=_("Copy product information"),
+            queryset=self.event.items.all(),
+            widget=forms.Select,
+            empty_label=_('Do not copy'),
+            required=False
+        )
+
     def save(self, *args, **kwargs):
         instance = super().save(*args, **kwargs)
         if self.cleaned_data.get('has_variations'):
-            ItemVariation.objects.create(
-                item=instance, value=__('Standard')
-            )
+            if self.cleaned_data.get('copy_from') and self.cleaned_data.get('copy_from').has_variations:
+                for variation in self.cleaned_data['copy_from'].variations.all():
+                    ItemVariation.objects.create(item=instance, value=variation.value, active=variation.active,
+                                                 position=variation.position, default_price=variation.default_price)
+            else:
+                ItemVariation.objects.create(
+                    item=instance, value=__('Standard')
+                )
         return instance
 
     class Meta:
