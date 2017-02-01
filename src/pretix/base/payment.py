@@ -21,6 +21,15 @@ from pretix.base.signals import register_payment_providers
 from pretix.presale.views import get_cart_total
 
 
+class PaymentProviderForm(Form):
+    def clean(self):
+        cleaned_data = super().clean()
+        for k, v in self.fields.items():
+            val = cleaned_data.get(k)
+            if v._required and not val:
+                self.add_error(k, _('This field is required.'))
+
+
 class BasePaymentProvider:
     """
     This is the base class for all payment providers.
@@ -187,8 +196,12 @@ class BasePaymentProvider:
         process. The default implementation constructs the form using
         :py:attr:`checkout_form_fields` and sets appropriate prefixes for the form
         and all fields and fills the form with data form the user's session.
+
+        If you overwrite this, we strongly suggest that you inherit from
+        ``PaymentProviderForm`` (from this module) that handles some nasty issues about
+        required fields for you.
         """
-        form = Form(
+        form = PaymentProviderForm(
             data=(request.POST if request.method == 'POST' else None),
             prefix='payment_%s' % self.identifier,
             initial={
@@ -198,6 +211,12 @@ class BasePaymentProvider:
             }
         )
         form.fields = self.payment_form_fields
+
+        for k, v in form.fields.items():
+            v._required = v.required
+            v.required = False
+            v.widget.is_required = False
+
         return form
 
     def _is_still_available(self, now_dt=None):
