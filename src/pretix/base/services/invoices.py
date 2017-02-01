@@ -3,12 +3,11 @@ import tempfile
 from collections import defaultdict
 from datetime import date
 from decimal import Decimal
-from locale import format as lformat
 
 from django.contrib.staticfiles import finders
 from django.core.files.base import ContentFile
 from django.db import transaction
-from django.utils.formats import date_format
+from django.utils.formats import date_format, localize
 from django.utils.timezone import now
 from django.utils.translation import pgettext, ugettext as _
 from reportlab.lib import pagesizes
@@ -330,15 +329,15 @@ def _invoice_generate_german(invoice, f):
     for line in invoice.lines.all():
         tdata.append((
             Paragraph(line.description, styles['Normal']),
-            lformat("%.2f", line.tax_rate) + " %",
-            lformat("%.2f", line.net_value) + " " + invoice.event.currency,
-            lformat("%.2f", line.gross_value) + " " + invoice.event.currency,
+            localize(line.tax_rate) + " %",
+            localize(line.net_value) + " " + invoice.event.currency,
+            localize(line.gross_value) + " " + invoice.event.currency,
         ))
         taxvalue_map[line.tax_rate] += line.tax_value
         grossvalue_map[line.tax_rate] += line.gross_value
         total += line.gross_value
 
-    tdata.append([pgettext('invoice', 'Invoice total'), '', '', lformat("%.2f", total) + " " + invoice.event.currency])
+    tdata.append([pgettext('invoice', 'Invoice total'), '', '', localize(total) + " " + invoice.event.currency])
     colwidths = [a * doc.width for a in (.55, .15, .15, .15)]
     table = Table(tdata, colWidths=colwidths, repeatRows=1)
     table.setStyle(TableStyle(tstyledata))
@@ -370,10 +369,10 @@ def _invoice_generate_german(invoice, f):
         tax = taxvalue_map[rate]
         tdata.append((
             '',
-            lformat("%.2f", rate) + " %",
-            lformat("%.2f", (gross - tax)) + " " + invoice.event.currency,
-            lformat("%.2f", gross) + " " + invoice.event.currency,
-            lformat("%.2f", tax) + " " + invoice.event.currency,
+            localize(rate) + " %",
+            localize((gross - tax)) + " " + invoice.event.currency,
+            localize(gross) + " " + invoice.event.currency,
+            localize(tax) + " " + invoice.event.currency,
         ))
 
     if len(tdata) > 2:
