@@ -160,31 +160,32 @@ class Paypal(BasePaymentProvider):
         return self._execute_payment(payment, request, order)
 
     def _execute_payment(self, payment, request, order):
-        payment.replace([
-            {
-                "op": "replace",
-                "path": "/transactions/0/item_list",
-                "value": {
-                    "items": [
-                        {
-                            "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(), code=order.code),
-                            "quantity": 1,
-                            "price": str(order.total),
-                            "currency": order.event.currency
-                        }
-                    ]
+        if payment.state == 'created':
+            payment.replace([
+                {
+                    "op": "replace",
+                    "path": "/transactions/0/item_list",
+                    "value": {
+                        "items": [
+                            {
+                                "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(), code=order.code),
+                                "quantity": 1,
+                                "price": str(order.total),
+                                "currency": order.event.currency
+                            }
+                        ]
+                    }
+                },
+                {
+                    "op": "replace",
+                    "path": "/transactions/0/description",
+                    "value": __('Order {order} for {event}').format(
+                        event=request.event.name,
+                        order=order.code
+                    )
                 }
-            },
-            {
-                "op": "replace",
-                "path": "/transactions/0/description",
-                "value": __('Order {order} for {event}').format(
-                    event=request.event.name,
-                    order=order.code
-                )
-            }
-        ])
-        payment.execute({"payer_id": request.session.get('payment_paypal_payer')})
+            ])
+            payment.execute({"payer_id": request.session.get('payment_paypal_payer')})
 
         if payment.state == 'pending':
             messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as soon as the '

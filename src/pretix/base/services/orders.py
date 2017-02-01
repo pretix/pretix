@@ -103,7 +103,7 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     order.log_action('pretix.event.order.paid', {
         'provider': provider,
         'info': info,
-        'date': date,
+        'date': date or now_dt,
         'manual': manual,
         'force': force
     }, user=user)
