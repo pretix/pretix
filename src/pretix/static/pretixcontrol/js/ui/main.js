@@ -84,7 +84,15 @@ $(function () {
 
     $('.collapsible').collapse();
     
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip();
+
+    var url = document.location.toString();
+    if (url.match('#')) {
+        $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+    }
+    $('a[data-toggle="tab"]').on('click', function (e) {
+        window.location.hash = e.target.hash;
+    });
 
     // Question editor
     if ($("#answer-options").length) {

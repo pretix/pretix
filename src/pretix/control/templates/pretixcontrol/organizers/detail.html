@@ -6,15 +6,32 @@
     <h1>
         {% blocktrans with name=organizer.name %}Organizer: {{ name }}{% endblocktrans %}
         <a href="{% url "control:organizer.edit" organizer=organizer.slug %}"
-                class="btn btn-default">
+           class="btn btn-default">
             <span class="fa fa-edit"></span>
             {% trans "Edit" %}
         </a>
     </h1>
-    <div class="row">
-        <div class="{% if request.orgaperm.can_change_permissions %}col-lg-6{% endif %} col-xs-12">
-            <fieldset>
-                <legend>{% trans "Events" %}</legend>
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#tab-events" data-toggle="tab">{% trans "Events" %}</a>
+        </li>
+        {% if request.orgaperm.can_change_permissions %}
+            <li>
+                <a href="#tab-permissions" data-toggle="tab">{% trans "Team" %}</a>
+            </li>
+        {% endif %}
+        {% for title, content in tabs %}
+            <li>
+                <a href="#tab-{{ forloop.counter }}" data-toggle="tab">
+                    {{ title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="tab-content organizer-tabs">
+        <div class="tab-pane active" id="tab-events">
+            <div class="tab-inner">
                 {% if events|length == 0 %}
                     <p>
                         <em>{% trans "You currently do not have access to any events." %}</em>
@@ -31,7 +48,8 @@
                         {% for e in events %}
                             <tr>
                                 <td>
-                                    <strong><a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong>
+                                    <strong><a
+                                            href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong>
                                 </td>
                                 <td>{{ e.get_date_from_display }}</td>
                             </tr>
@@ -43,23 +61,24 @@
                     <span class="fa fa-plus"></span>
                     {% trans "Create a new event" %}
                 </a>
-            </fieldset>
+            </div>
         </div>
-
         {% if request.orgaperm.can_change_permissions %}
-            <div class="col-lg-6 col-xs-12">
-                <form action="" method="post" class="form-horizontal form-permissions">
-                    {% csrf_token %}
-                    <fieldset>
-                        <legend>{% trans "Team" %}</legend>
+            <div class="tab-pane" id="tab-permissions">
+                <div class="tab-inner">
+                    <form action="" method="post" class="form-horizontal form-permissions">
+                        {% csrf_token %}
                         <p>
                             {% blocktrans trimmed %}
-                                You can use the following list to control who can create new events in the name of this
-                                organizer and who can add more people to this list. This does <strong>not</strong>
+                                You can use the following list to control who can create new events in the name of
+                                this organizer and who can add more people to this list. This does <strong>not</strong>
                                 control who has access to a particular event. You can control the access to an
-                                event in the "Permissions" section of the event's settings. A user does not need to be
-                                on the list here to get access to an event.
+                                event in the "Permissions" section of the event's settings. A user does not need to
+                                be on the list here to get access to an event.
                             {% endblocktrans %}
+                        </p>
+                        <p>
+                            {% trans "Everyone on this list can control the organizer settings on this page." %}
                         </p>
 
                         {% bootstrap_formset_errors formset %}
@@ -84,7 +103,7 @@
                                             {% else %}
                                                 {{ form.instance.invite_email }}
                                                 <span class="fa fa-envelope-o" data-toggle="tooltip"
-                                                        title="{% trans "invited, pending response" %}"></span>
+                                                      title="{% trans "invited, pending response" %}"></span>
                                             {% endif %}
                                         </td>
                                         <td>{{ form.can_create_events }}</td>
@@ -98,9 +117,9 @@
                                     <td colspan="9">
                                         <strong>{% trans "Adding a new user" %}</strong><br>
                                         {% blocktrans trimmed %}
-                                            To add a new user, you can enter their email address here. If they already have a
-                                            pretix account, they will immediately be added to the team. Otherwise, they will
-                                            be sent an email with an invitation.
+                                            To add a new user, you can enter their email address here. If they
+                                            already have a pretix account, they will immediately be added to the team.
+                                            Otherwise, they will be sent an email with an invitation.
                                         {% endblocktrans %}
                                     </td>
 
@@ -125,9 +144,16 @@
                             </button>
                         </div>
 
-                    </fieldset>
-                </form>
+                    </form>
+                </div>
             </div>
         {% endif %}
+        {% for title, content in tabs %}
+            <div class="tab-pane" id="tab-{{ forloop.counter }}">
+                <div class="tab-inner">
+                    {{ content }}
+                </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

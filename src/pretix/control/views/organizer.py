@@ -14,6 +14,7 @@ from pretix.base.models import Organizer, OrganizerPermission, User
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.organizer import OrganizerForm, OrganizerUpdateForm
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
+from pretix.control.signals import organizer_edit_tabs
 from pretix.helpers.urls import build_absolute_uri
 
 
@@ -60,20 +61,38 @@ class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
             form=OrganizerPermissionForm,
             can_delete=True, can_order=False, extra=0
         )
-        return fs(data=self.request.POST if self.request.method == "POST" else None,
-                  prefix="formset",
-                  queryset=OrganizerPermission.objects.filter(organizer=self.request.organizer))
+        return fs(
+            data=(
+                self.request.POST
+                if self.request.method == "POST" and 'id_formset-TOTAL_FORMS' in self.request.POST
+                else None
+            ),
+            prefix="formset",
+            queryset=OrganizerPermission.objects.filter(organizer=self.request.organizer)
+        )
 
     @cached_property
     def add_form(self):
-        return OrganizerPermissionCreateForm(data=self.request.POST if self.request.method == "POST" else None,
-                                             prefix="add")
+        return OrganizerPermissionCreateForm(
+            data=(
+                self.request.POST
+                if self.request.method == "POST" and 'id_formset-TOTAL_FORMS' in self.request.POST
+                else None
+            ),
+            prefix="add"
+        )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['formset'] = self.formset
         ctx['add_form'] = self.add_form
         ctx['events'] = self.request.organizer.events.all()
+        ctx['tabs'] = []
+
+        for recv, retv in organizer_edit_tabs.send(sender=self.request.organizer, request=self.request,
+                                                   organizer=self.request.organizer):
+            ctx['tabs'].append(retv)
+
         return ctx
 
     def _send_invite(self, instance):
@@ -99,6 +118,9 @@ class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
     def post(self, *args, **kwargs):
         if not self.request.orgaperm.can_change_permissions:
             raise PermissionDenied(_("You have no permission to do this."))
+
+        if 'id_formset-TOTAL_FORMS' not in self.request.POST:
+            return self.get(*args, **kwargs)
 
         if self.formset.is_valid() and self.add_form.is_valid():
             if self.add_form.has_changed():
