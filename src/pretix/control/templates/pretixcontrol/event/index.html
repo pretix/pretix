@@ -51,8 +51,12 @@
     <div class="row dashboard">
         {% for w in widgets %}
             <div class="widget-container widget-{{ w.display_size|default:"small" }}">
-                {% if w.url %}
+                {% if w.url %}{# backwards compatibility #}
                     <a href="{{ w.url }}" class="widget">
+                        {{ w.content|safe }}
+                    </a>
+                {% elif w.link %}
+                    <a href="{{ w.link }}" class="widget">
                         {{ w.content|safe }}
                     </a>
                 {% else %}

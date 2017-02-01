@@ -28,7 +28,7 @@
                 </p>
                 <ul>
                     {% for issue in issues %}
-                        <li>{{ issue }}</li>
+                        <li>{{ issue|safe }}</li>
                     {% endfor %}
                 </ul>
             </div>
