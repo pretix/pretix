@@ -51,6 +51,8 @@ class Event(LoggedModel):
     :type presale_start: datetime
     :param presale_end: No tickets will be sold after this date.
     :type presale_end: datetime
+    :param location: venue
+    :type location: str
     :param plugins: A comma-separated list of plugin names that are active for this
                     event.
     :type plugins: str
@@ -98,6 +100,11 @@ class Event(LoggedModel):
         null=True, blank=True,
         verbose_name=_("Start of presale"),
         help_text=_("No products will be sold before this date."),
+    )
+    location = I18nCharField(
+        null=True, blank=True,
+        max_length=200,
+        verbose_name=_("Location"),
     )
     plugins = models.TextField(
         null=True, blank=True,

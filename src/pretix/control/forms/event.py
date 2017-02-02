@@ -56,7 +56,8 @@ class EventWizardBasicsForm(I18nModelForm):
             'date_from',
             'date_to',
             'presale_start',
-            'presale_end'
+            'presale_end',
+            'location',
         ]
         widgets = {
             'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
@@ -131,6 +132,7 @@ class EventUpdateForm(I18nModelForm):
             'is_public',
             'presale_start',
             'presale_end',
+            'location',
         ]
         widgets = {
             'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
