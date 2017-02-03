@@ -368,8 +368,7 @@ class InvoiceSettingsForm(SettingsForm):
         label=_('Logo image'),
         ext_whitelist=(".png", ".jpg", ".svg", ".gif", ".jpeg"),
         required=False,
-        help_text=_('If you provide a logo image, we will not show your events name and date on the invoice'
-                    'the page header. We will show your logo with a maximal height and width of 2.5 cm.')
+        help_text=_('We will show your logo with a maximal height and width of 2.5 cm.')
     )
 
 
