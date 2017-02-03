@@ -7,6 +7,7 @@ import pytz
 from django import forms
 from django.db.models import Sum
 from django.dispatch import receiver
+from django.utils.formats import localize
 from django.utils.translation import ugettext as _
 
 from pretix.base.models import InvoiceAddress, Order, OrderPosition
@@ -50,7 +51,7 @@ class OrderListExporter(BaseExporter):
         tz = pytz.timezone(self.event.settings.timezone)
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
 
-        qs = self.event.orders.all().select_related('invoice_address')
+        qs = self.event.orders.all().select_related('invoice_address').prefetch_related('invoices')
         if form_data['paid_only']:
             qs = qs.filter(status=Order.STATUS_PAID)
         tax_rates = self._get_all_tax_rates(qs)
@@ -58,7 +59,7 @@ class OrderListExporter(BaseExporter):
         headers = [
             _('Order code'), _('Order total'), _('Status'), _('Email'), _('Order date'),
             _('Company'), _('Name'), _('Address'), _('ZIP code'), _('City'), _('Country'), _('VAT ID'),
-            _('Payment date'), _('Payment type'), _('Payment method fee')
+            _('Payment date'), _('Payment type'), _('Payment method fee'), _('Invoice numbers')
         ]
 
         for tr in tax_rates:
@@ -86,7 +87,7 @@ class OrderListExporter(BaseExporter):
         for order in qs.order_by('datetime'):
             row = [
                 order.code,
-                str(order.total),
+                localize(order.total),
                 order.get_status_display(),
                 order.email,
                 order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
@@ -107,7 +108,7 @@ class OrderListExporter(BaseExporter):
             row += [
                 order.payment_date.astimezone(tz).strftime('%Y-%m-%d') if order.payment_date else '',
                 provider_names.get(order.payment_provider, order.payment_provider),
-                str(order.payment_fee)
+                localize(order.payment_fee)
             ]
 
             for tr in tax_rates:
@@ -117,11 +118,12 @@ class OrderListExporter(BaseExporter):
                     taxrate_values['taxsum'] += order.payment_fee_tax_value
 
                 row += [
-                    str(taxrate_values['grosssum']),
-                    str(taxrate_values['grosssum'] - taxrate_values['taxsum']),
-                    str(taxrate_values['taxsum']),
+                    localize(taxrate_values['grosssum']),
+                    localize(taxrate_values['grosssum'] - taxrate_values['taxsum']),
+                    localize(taxrate_values['taxsum']),
                 ]
 
+            row.append(', '.join([i.number for i in order.invoices.all()]))
             writer.writerow(row)
 
         return 'orders.csv', 'text/csv', output.getvalue().encode("utf-8")
