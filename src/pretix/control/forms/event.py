@@ -331,7 +331,8 @@ class InvoiceSettingsForm(SettingsForm):
             ('False', _('No')),
             ('admin', _('Manually in admin panel')),
             ('user', _('Automatically on user request')),
-            ('True', _('Automatically for all created orders'))
+            ('True', _('Automatically for all created orders')),
+            ('paid', _('Automatically on payment')),
         )
     )
     invoice_address_from = forms.CharField(

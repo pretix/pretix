@@ -109,6 +109,10 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     }, user=user)
     order_paid.send(order.event, order=order)
 
+    if order.event.settings.get('invoice_generate') in ('True', 'paid') and invoice_qualified(order):
+        if not order.invoices.exists():
+            generate_invoice(order)
+
     if send_mail:
         with language(order.locale):
             try:
