@@ -7,6 +7,7 @@ from typing import List, Optional
 
 import pytz
 from celery.exceptions import MaxRetriesExceededError
+from django.conf import settings
 from django.db import transaction
 from django.db.models import F, Q
 from django.dispatch import receiver
@@ -433,12 +434,13 @@ def send_expiry_warnings(sender, **kwargs):
     today = now().replace(hour=0, minute=0, second=0)
 
     for o in Order.objects.filter(expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING).select_related('event'):
-        settings = eventcache.get(o.event.pk, None)
-        if settings is None:
-            settings = o.event.settings
-            eventcache[o.event.pk] = settings
+        eventsettings = eventcache.get(o.event.pk, None)
+        if eventsettings is None:
+            eventsettings = o.event.settings
+            eventcache[o.event.pk] = eventsettings
 
-        days = settings.get('mail_days_order_expire_warning', as_type=int)
+        days = eventsettings.get('mail_days_order_expire_warning', as_type=int)
+        tz = pytz.timezone(eventsettings.get('timezone', settings.TIME_ZONE))
         if days and (o.expires - today).days <= days:
             o.expiry_reminder_sent = True
             o.save()
@@ -449,21 +451,22 @@ def send_expiry_warnings(sender, **kwargs):
                 invoice_name = ""
                 invoice_company = ""
             try:
-                mail(
-                    o.email, _('Your order is about to expire: %(code)s') % {'code': o.code},
-                    settings.mail_text_order_expire_warning,
-                    {
-                        'event': o.event.name,
-                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                            'order': o.code,
-                            'secret': o.secret
-                        }),
-                        'expire_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
-                        'invoice_name': invoice_name,
-                        'invoice_company': invoice_company,
-                    },
-                    o.event, locale=o.locale
-                )
+                with language(o.locale):
+                    mail(
+                        o.email, _('Your order is about to expire: %(code)s') % {'code': o.code},
+                        eventsettings.mail_text_order_expire_warning,
+                        {
+                            'event': o.event.name,
+                            'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                                'order': o.code,
+                                'secret': o.secret
+                            }),
+                            'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
+                            'invoice_name': invoice_name,
+                            'invoice_company': invoice_company,
+                        },
+                        o.event, locale=o.locale
+                    )
             except SendMailException:
                 logger.exception('Reminder email could not be sent')
             else:
