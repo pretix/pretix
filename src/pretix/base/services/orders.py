@@ -288,7 +288,6 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         raise OrderError(err)
 
 
-@transaction.atomic
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None, address: int=None,
                   meta_info: dict=None):
@@ -317,33 +316,35 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         if last_date < expires:
             expires = last_date
 
-    order = Order.objects.create(
-        status=Order.STATUS_PENDING,
-        event=event,
-        email=email,
-        datetime=now_dt,
-        expires=expires,
-        locale=locale,
-        total=total,
-        payment_fee=payment_fee,
-        payment_provider=payment_provider.identifier,
-        meta_info=json.dumps(meta_info or {}),
-    )
-    OrderPosition.transform_cart_positions(positions, order)
+    with transaction.atomic():
+        order = Order.objects.create(
+            status=Order.STATUS_PENDING,
+            event=event,
+            email=email,
+            datetime=now_dt,
+            expires=expires,
+            locale=locale,
+            total=total,
+            payment_fee=payment_fee,
+            payment_provider=payment_provider.identifier,
+            meta_info=json.dumps(meta_info or {}),
+        )
+        OrderPosition.transform_cart_positions(positions, order)
 
-    if address is not None:
-        try:
-            addr = InvoiceAddress.objects.get(
-                pk=address
-            )
-            if addr.order is not None:
-                addr.pk = None
-            addr.order = order
-            addr.save()
-        except InvoiceAddress.DoesNotExist:
-            pass
+        if address is not None:
+            try:
+                addr = InvoiceAddress.objects.get(
+                    pk=address
+                )
+                if addr.order is not None:
+                    addr.pk = None
+                addr.order = order
+                addr.save()
+            except InvoiceAddress.DoesNotExist:
+                pass
 
-    order.log_action('pretix.event.order.placed')
+        order.log_action('pretix.event.order.placed')
+
     order_placed.send(event, order=order)
     return order
 
