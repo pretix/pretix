@@ -153,7 +153,7 @@ named ``/etc/systemd/system/pretix-web.service`` with the following content::
                           --name pretix --workers 5 \
                           --max-requests 1200  --max-requests-jitter 50 \
                           --log-level=info --bind=127.0.0.1:8345
-    WorkingDirectory=/var/pretix/source/src
+    WorkingDirectory=/var/pretix
     Restart=on-failure
 
     [Install]
@@ -171,7 +171,7 @@ For background tasks we need a second service ``/etc/systemd/system/pretix-worke
     Environment="VIRTUAL_ENV=/var/pretix/venv"
     Environment="PATH=/var/pretix/venv/bin:/usr/local/bin:/usr/bin:/bin"
     ExecStart=/var/pretix/venv/bin/celery -A pretix.celery_app worker -l info
-    WorkingDirectory=/var/pretix/source/src
+    WorkingDirectory=/var/pretix
     Restart=on-failure
 
     [Install]
@@ -224,6 +224,15 @@ The following snippet is an example on how to configure a nginx proxy for pretix
             alias /var/pretix/data/media/;
             expires 7d;
             access_log off;
+        }
+
+        location ^~ /media/cachedfiles {
+            deny all;
+            return 404;
+        }
+        location ^~ /media/invoices {
+            deny all;
+            return 404;
         }
 
         location /static/ {
