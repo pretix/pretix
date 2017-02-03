@@ -187,6 +187,7 @@ class Paypal(BasePaymentProvider):
             ])
             payment.execute({"payer_id": request.session.get('payment_paypal_payer')})
 
+        order.refresh_from_db()
         if payment.state == 'pending':
             messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as soon as the '
                                         'payment completed.'))
