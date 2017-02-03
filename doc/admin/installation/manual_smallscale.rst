@@ -38,10 +38,10 @@ Unix user
 
 As we do not want to run pretix as root, we first create a new unprivileged user::
 
-    # sudo adduser pretix --disabled-password --home /var/pretix
+    # adduser pretix --disabled-password --home /var/pretix
 
 In this guide, all code lines prepended with a ``#`` symbol are commands that you need to execute on your server as
-``root`` user; all lines prepended with a ``$`` symbol should be run by the unprivileged user.
+``root`` user (e.g. using ``sudo``); all lines prepended with a ``$`` symbol should be run by the unprivileged user.
 
 Database
 --------
