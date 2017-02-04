@@ -190,7 +190,7 @@ Cronjob
 You need to set up a cronjob that runs the management command ``runperiodic``. The exact interval is not important
 but should be something between every minute and every hour. You could for example configure cron like this::
 
-    15,45 * * * * export PATH=/var/pretix/venv/bin:$PATH && cd /var/pretix/source/src && python -m pretix runperiodic
+    15,45 * * * * export PATH=/var/pretix/venv/bin:$PATH && cd /var/pretix && python -m pretix runperiodic
 
 The cronjob should run as the ``pretix`` user (``crontab -e -u pretix``).
 
