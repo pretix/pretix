@@ -15,7 +15,7 @@ pretix
 
 
 
-Reinventing ticket presales, one bit at a time.
+Reinventing ticket presales, one ticket at a time.
 
 Project status & release cycle
 ------------------------------

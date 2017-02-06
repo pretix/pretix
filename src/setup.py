@@ -43,7 +43,7 @@ cmdclass = {
 setup(
     name='pretix',
     version=__version__,
-    description='Reinventing ticket presales',
+    description='Reinventing presales, one ticket at a time',
     long_description=long_description,
     url='https://pretix.eu',
     author='Raphael Michel',
