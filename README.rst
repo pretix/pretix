@@ -10,8 +10,9 @@ pretix
 .. image:: https://travis-ci.org/pretix/pretix.svg?branch=master
    :target: https://travis-ci.org/pretix/pretix
 
-.. image:: https://coveralls.io/repos/github/pretix/pretix/badge.svg?branch=master
-   :target: https://coveralls.io/r/pretix/pretix
+.. image:: https://codecov.io/gh/pretix/pretix/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/pretix/pretix
+
 
 
 Reinventing ticket presales, one bit at a time.

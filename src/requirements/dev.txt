@@ -5,7 +5,7 @@ pep8==1.5.7  # exact requirement by flake8 2.4.0
 pyflakes==1.1.0  # later version causes problems currently
 pep8-naming
 flake8
-coveralls
+codecov
 coverage
 pytest==2.9.*
 pytest-django
