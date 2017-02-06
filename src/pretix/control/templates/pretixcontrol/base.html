@@ -32,13 +32,15 @@
 		    <script type="text/javascript" src="{% static "pretixcontrol/js/ui/main.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/quota.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/question.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixbase/js/asynctask.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixbase/js/asyncdownload.js" %}"></script>
 		{% endcompress %}
         {{ html_head|safe }}
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
 	</head>
 	<body data-datetimeformat="{{ js_datetime_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}" data-payment-weekdays-disabled="{{ js_payment_weekdays_disabled }}">
-        <div id="#wrapper">
+        <div id="wrapper">
             <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle"

@@ -78,29 +78,3 @@ function copy_answers(idx) {
         } 
     });
 }
-
-var waitingDialog = {
-    show: function (message) {
-        "use strict";
-        $("#loadingmodal").find("h1").html(message);
-        $("body").addClass("loading");
-    },
-    hide: function () {
-        "use strict";
-        $("body").removeClass("loading");
-    }
-};
-
-var ajaxErrDialog = {
-    show: function (c) {
-        "use strict";
-        $("#ajaxerr").html(c);
-        $("#ajaxerr .links").html("<a class='btn btn-default ajaxerr-close'>"
-                                  + gettext("Close message") + "</a>");
-        $("body").addClass("ajaxerr");
-    },
-    hide: function () {
-        "use strict";
-        $("body").removeClass("ajaxerr");
-    }
-};
