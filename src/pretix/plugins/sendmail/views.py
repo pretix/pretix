@@ -123,6 +123,7 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
         ctx = super().get_context_data()
 
         status = dict(Order.STATUS_CHOICE)
+        status['overdue'] = _('pending with payment overdue')
         for log in ctx['logs']:
             log.pdata = log.parsed_data
             log.pdata['locales'] = {}
