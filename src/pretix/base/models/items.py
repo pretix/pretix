@@ -231,7 +231,7 @@ class Item(LoggedModel):
             return False
         return True
 
-    def check_quotas(self, ignored_quotas=None, _cache=None):
+    def check_quotas(self, ignored_quotas=None, count_waitinglist=True, _cache=None):
         """
         This method is used to determine whether this Item is currently available
         for sale.
@@ -253,7 +253,7 @@ class Item(LoggedModel):
         if self.variations.count() > 0:  # NOQA
             raise ValueError('Do not call this directly on items which have variations '
                              'but call this on their ItemVariation objects')
-        return min([q.availability(_cache=_cache) for q in check_quotas],
+        return min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
     @cached_property
@@ -315,7 +315,7 @@ class ItemVariation(models.Model):
         if self.item:
             self.item.event.get_cache().clear()
 
-    def check_quotas(self, ignored_quotas=None, _cache=None) -> Tuple[int, int]:
+    def check_quotas(self, ignored_quotas=None, count_waitinglist=True, _cache=None) -> Tuple[int, int]:
         """
         This method is used to determine whether this ItemVariation is currently
         available for sale in terms of quotas.
@@ -324,6 +324,7 @@ class ItemVariation(models.Model):
                                quotas will be ignored in the calculation. If this leads
                                to no quotas being checked at all, this method will return
                                unlimited availability.
+        :param count_waitinglist: If ``False``, waiting list entries will be ignored for quota calculation.
         :returns: any of the return codes of :py:meth:`Quota.availability()`.
         """
         check_quotas = set(self.quotas.all())
@@ -331,7 +332,7 @@ class ItemVariation(models.Model):
             check_quotas -= set(ignored_quotas)
         if not check_quotas:
             return Quota.AVAILABILITY_OK, sys.maxsize
-        return min([q.availability(_cache=_cache) for q in check_quotas],
+        return min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
     def __lt__(self, other):
@@ -534,7 +535,7 @@ class Quota(LoggedModel):
         if self.event:
             self.event.get_cache().clear()
 
-    def availability(self, now_dt: datetime=None, _cache=None) -> Tuple[int, int]:
+    def availability(self, now_dt: datetime=None, count_waitinglist=True, _cache=None) -> Tuple[int, int]:
         """
         This method is used to determine whether Items or ItemVariations belonging
         to this quota should currently be available for sale.
@@ -542,14 +543,18 @@ class Quota(LoggedModel):
         :returns: a tuple where the first entry is one of the ``Quota.AVAILABILITY_`` constants
                   and the second is the number of available tickets.
         """
+        if _cache and count_waitinglist is not _cache.get('_count_waitinglist', True):
+            _cache.clear()
+
         if _cache is not None and self.pk in _cache:
             return _cache[self.pk]
-        res = self._availability(now_dt)
+        res = self._availability(now_dt, count_waitinglist)
         if _cache is not None:
             _cache[self.pk] = res
+            _cache['_count_waitinglist'] = count_waitinglist
         return res
 
-    def _availability(self, now_dt: datetime=None):
+    def _availability(self, now_dt: datetime=None, count_waitinglist=True):
         now_dt = now_dt or now()
         size_left = self.size
         if size_left is None:
@@ -572,6 +577,11 @@ class Quota(LoggedModel):
         if size_left <= 0:
             return Quota.AVAILABILITY_RESERVED, 0
 
+        if count_waitinglist:
+            size_left -= self.count_waiting_list_pending()
+            if size_left <= 0:
+                return Quota.AVAILABILITY_RESERVED, 0
+
         return Quota.AVAILABILITY_OK, size_left
 
     def count_blocking_vouchers(self, now_dt: datetime=None) -> int:
@@ -590,6 +600,13 @@ class Quota(LoggedModel):
         ).values('id').aggregate(
             free=Sum(Func(F('max_usages') - F('redeemed'), 0, function=func))
         )['free'] or 0
+
+    def count_waiting_list_pending(self) -> int:
+        from pretix.base.models import WaitingListEntry
+        return WaitingListEntry.objects.filter(
+            Q(voucher__isnull=True) &
+            self._position_lookup
+        ).distinct().count()
 
     def count_in_cart(self, now_dt: datetime=None) -> int:
         from pretix.base.models import CartPosition

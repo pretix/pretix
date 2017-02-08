@@ -119,7 +119,7 @@ class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
         if not self.request.orgaperm.can_change_permissions:
             raise PermissionDenied(_("You have no permission to do this."))
 
-        if 'id_formset-TOTAL_FORMS' not in self.request.POST:
+        if 'formset-TOTAL_FORMS' not in self.request.POST:
             return self.get(*args, **kwargs)
 
         if self.formset.is_valid() and self.add_form.is_valid():

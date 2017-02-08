@@ -38,10 +38,10 @@ Unix user
 
 As we do not want to run pretix as root, we first create a new unprivileged user::
 
-    # sudo adduser pretix --disabled-password --home /var/pretix
+    # adduser pretix --disabled-password --home /var/pretix
 
 In this guide, all code lines prepended with a ``#`` symbol are commands that you need to execute on your server as
-``root`` user; all lines prepended with a ``$`` symbol should be run by the unprivileged user.
+``root`` user (e.g. using ``sudo``); all lines prepended with a ``$`` symbol should be run by the unprivileged user.
 
 Database
 --------
@@ -153,7 +153,7 @@ named ``/etc/systemd/system/pretix-web.service`` with the following content::
                           --name pretix --workers 5 \
                           --max-requests 1200  --max-requests-jitter 50 \
                           --log-level=info --bind=127.0.0.1:8345
-    WorkingDirectory=/var/pretix/source/src
+    WorkingDirectory=/var/pretix
     Restart=on-failure
 
     [Install]
@@ -171,7 +171,7 @@ For background tasks we need a second service ``/etc/systemd/system/pretix-worke
     Environment="VIRTUAL_ENV=/var/pretix/venv"
     Environment="PATH=/var/pretix/venv/bin:/usr/local/bin:/usr/bin:/bin"
     ExecStart=/var/pretix/venv/bin/celery -A pretix.celery_app worker -l info
-    WorkingDirectory=/var/pretix/source/src
+    WorkingDirectory=/var/pretix
     Restart=on-failure
 
     [Install]
@@ -190,7 +190,7 @@ Cronjob
 You need to set up a cronjob that runs the management command ``runperiodic``. The exact interval is not important
 but should be something between every minute and every hour. You could for example configure cron like this::
 
-    15,45 * * * * export PATH=/var/pretix/venv/bin:$PATH && cd /var/pretix/source/src && python -m pretix runperiodic
+    15,45 * * * * export PATH=/var/pretix/venv/bin:$PATH && cd /var/pretix && python -m pretix runperiodic
 
 The cronjob should run as the ``pretix`` user (``crontab -e -u pretix``).
 
@@ -226,14 +226,25 @@ The following snippet is an example on how to configure a nginx proxy for pretix
             access_log off;
         }
 
+        location ^~ /media/cachedfiles {
+            deny all;
+            return 404;
+        }
+        location ^~ /media/invoices {
+            deny all;
+            return 404;
+        }
+
         location /static/ {
-            alias /var/pretix/source/src/pretix/static.dist/;
+            alias /var/pretix/venv/lib/python3.5/site-packages/pretix/static.dist/;
             access_log off;
             expires 365d;
             add_header Cache-Control "public";
         }
     }
 
+.. note:: Remember to replace the ``python3.5`` in the ``/static/`` path in the config 
+          above with your python version.
 
 We recommend reading about setting `strong encryption settings`_ for your web server.
 

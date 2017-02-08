@@ -5,7 +5,7 @@ General remarks
 
 Requirements
 ------------
-To use pretix, you wull need the following things:
+To use pretix, you will need the following things:
 
 * **pretix** and the python packages it depends on
 

@@ -85,6 +85,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.control.auth.user.forgot_password.mail_sent': _('Password reset mail sent.'),
         'pretix.control.auth.user.forgot_password.recovered': _('The password has been reset.'),
         'pretix.voucher.added': _('The voucher has been created.'),
+        'pretix.voucher.added.waitinglist': _('The voucher has been created and sent to a person on the waiting list.'),
         'pretix.voucher.changed': _('The voucher has been modified.'),
         'pretix.voucher.deleted': _('The voucher has been deleted.'),
         'pretix.voucher.redeemed': _('The voucher has been redeemed in order {order_code}.'),
@@ -117,6 +118,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.permissions.invited': _('A user has been invited to the event team.'),
         'pretix.event.permissions.changed': _('A user\'s permissions have been changed.'),
         'pretix.event.permissions.deleted': _('A user has been removed from the event team.'),
+        'pretix.waitinglist.voucher': _('A voucher has been sent to a person on the waiting list.')
     }
 
     data = json.loads(logentry.data)

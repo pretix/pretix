@@ -10,25 +10,30 @@ pretix
 .. image:: https://travis-ci.org/pretix/pretix.svg?branch=master
    :target: https://travis-ci.org/pretix/pretix
 
-.. image:: https://coveralls.io/repos/github/pretix/pretix/badge.svg?branch=master
-   :target: https://coveralls.io/r/pretix/pretix
+.. image:: https://codecov.io/gh/pretix/pretix/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/pretix/pretix
 
 
-Reinventing ticket presales, one bit at a time.
 
-Project status
---------------
-Most features are present and sufficiently stable. pretix has been in use for multiple event and
-sold a few thousand tickets so far. There is still a bunch of features to come and there surely is
-still a bunch of bugs in there, but we consider it stable enough that we use it in production ourselves.
+Reinventing ticket presales, one ticket at a time.
 
-If you deploy and use pretix, there will be a safe upgrade path for all changes to come. We're planning
-on an 1.0 release in late 2016 or early 2017. Until then, we take the liberty of changing the code as we
-like, but we try to keep the changes to documented APIs as small as possible. If you want to use pretix
-in production or develop a plugin now, I invite you to send me an email so that I can notify you of changes
-and bugs that require your attention.
+Project status & release cycle
+------------------------------
 
-Since very recently we now have an `installation guide`_ in our documentation.
+While there is always a lot to do and improve on, pretix by now has been in use for more than a dozen
+conferences that sold over ten thousand tickets combined without major problems. We therefore think of
+pretix as being stable and ready to use.
+
+If you want to use or extend pretix, we strongly recommend to follow our `blog`_. We will announce all
+releases there. You can always find the latest stable version on PyPI or in the ``release/X.Y`` branch of
+this repository. The ``master`` branch contains a development version that we also try to keep stable in
+the sense that it does not break your data,  but its APIs might change without prior notice.
+
+To get started using pretix on your own server, look at the `installation guide`_ in our documentation.
+
+This project is 100 percent free and open source software. If you are interested in commercial support,
+hosting services or supporting this project financially, please go to `pretix.eu`_ or contact us at
+support@pretix.eu.
 
 Contributing
 ------------
@@ -43,10 +48,7 @@ See the LICENSE file for the complete license text.
 This project is maintained by Raphael Michel <mail@raphaelmichel.de>. See the
 AUTHORS file for a list of all the awesome folks who contributed to this project.
 
-This project is 100 percent free and open source software. If you are interested in
-commercial support, hosting services or supporting this project financially, please 
-go to `pretix.eu`_ or contact Raphael directly.
-
 .. _installation guide: https://docs.pretix.eu/en/latest/admin/installation/index.html
 .. _developer documentation: https://docs.pretix.eu/en/latest/development/index.html
 .. _pretix.eu: https://pretix.eu
+.. _blog: https://pretix.eu/about/en/blog/

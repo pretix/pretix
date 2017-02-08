@@ -67,6 +67,8 @@ event_urls = [
     "orders/ABC/contact",
     "orders/ABC/",
     "orders/",
+    "waitinglist/",
+    "waitinglist/auto_assign",
     "invoice/1",
 ]
 
@@ -154,6 +156,8 @@ event_permission_urls = [
     ("can_view_vouchers", "vouchers/tags/", 200),
     ("can_change_vouchers", "vouchers/1234/", 404),
     ("can_change_vouchers", "vouchers/1234/delete", 404),
+    ("can_view_orders", "waitinglist/", 200),
+    ("can_change_orders", "waitinglist/auto_assign", 405),
 ]
 
 

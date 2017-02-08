@@ -7,6 +7,7 @@ from typing import List, Optional
 
 import pytz
 from celery.exceptions import MaxRetriesExceededError
+from django.conf import settings
 from django.db import transaction
 from django.db.models import F, Q
 from django.dispatch import receiver
@@ -103,11 +104,15 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     order.log_action('pretix.event.order.paid', {
         'provider': provider,
         'info': info,
-        'date': date,
+        'date': date or now_dt,
         'manual': manual,
         'force': force
     }, user=user)
     order_paid.send(order.event, order=order)
+
+    if order.event.settings.get('invoice_generate') in ('True', 'paid') and invoice_qualified(order):
+        if not order.invoices.exists():
+            generate_invoice(order)
 
     if send_mail:
         with language(order.locale):
@@ -284,7 +289,6 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         raise OrderError(err)
 
 
-@transaction.atomic
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None, address: int=None,
                   meta_info: dict=None):
@@ -313,33 +317,35 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         if last_date < expires:
             expires = last_date
 
-    order = Order.objects.create(
-        status=Order.STATUS_PENDING,
-        event=event,
-        email=email,
-        datetime=now_dt,
-        expires=expires,
-        locale=locale,
-        total=total,
-        payment_fee=payment_fee,
-        payment_provider=payment_provider.identifier,
-        meta_info=json.dumps(meta_info or {}),
-    )
-    OrderPosition.transform_cart_positions(positions, order)
+    with transaction.atomic():
+        order = Order.objects.create(
+            status=Order.STATUS_PENDING,
+            event=event,
+            email=email,
+            datetime=now_dt,
+            expires=expires,
+            locale=locale,
+            total=total,
+            payment_fee=payment_fee,
+            payment_provider=payment_provider.identifier,
+            meta_info=json.dumps(meta_info or {}),
+        )
+        OrderPosition.transform_cart_positions(positions, order)
 
-    if address is not None:
-        try:
-            addr = InvoiceAddress.objects.get(
-                pk=address
-            )
-            if addr.order is not None:
-                addr.pk = None
-            addr.order = order
-            addr.save()
-        except InvoiceAddress.DoesNotExist:
-            pass
+        if address is not None:
+            try:
+                addr = InvoiceAddress.objects.get(
+                    pk=address
+                )
+                if addr.order is not None:
+                    addr.pk = None
+                addr.order = order
+                addr.save()
+            except InvoiceAddress.DoesNotExist:
+                pass
 
-    order.log_action('pretix.event.order.placed')
+        order.log_action('pretix.event.order.placed')
+
     order_placed.send(event, order=order)
     return order
 
@@ -428,12 +434,13 @@ def send_expiry_warnings(sender, **kwargs):
     today = now().replace(hour=0, minute=0, second=0)
 
     for o in Order.objects.filter(expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING).select_related('event'):
-        settings = eventcache.get(o.event.pk, None)
-        if settings is None:
-            settings = o.event.settings
-            eventcache[o.event.pk] = settings
+        eventsettings = eventcache.get(o.event.pk, None)
+        if eventsettings is None:
+            eventsettings = o.event.settings
+            eventcache[o.event.pk] = eventsettings
 
-        days = settings.get('mail_days_order_expire_warning', as_type=int)
+        days = eventsettings.get('mail_days_order_expire_warning', as_type=int)
+        tz = pytz.timezone(eventsettings.get('timezone', settings.TIME_ZONE))
         if days and (o.expires - today).days <= days:
             o.expiry_reminder_sent = True
             o.save()
@@ -444,21 +451,22 @@ def send_expiry_warnings(sender, **kwargs):
                 invoice_name = ""
                 invoice_company = ""
             try:
-                mail(
-                    o.email, _('Your order is about to expire: %(code)s') % {'code': o.code},
-                    settings.mail_text_order_expire_warning,
-                    {
-                        'event': o.event.name,
-                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                            'order': o.code,
-                            'secret': o.secret
-                        }),
-                        'expire_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
-                        'invoice_name': invoice_name,
-                        'invoice_company': invoice_company,
-                    },
-                    o.event, locale=o.locale
-                )
+                with language(o.locale):
+                    mail(
+                        o.email, _('Your order is about to expire: %(code)s') % {'code': o.code},
+                        eventsettings.mail_text_order_expire_warning,
+                        {
+                            'event': o.event.name,
+                            'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                                'order': o.code,
+                                'secret': o.secret
+                            }),
+                            'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
+                            'invoice_name': invoice_name,
+                            'invoice_company': invoice_company,
+                        },
+                        o.event, locale=o.locale
+                    )
             except SendMailException:
                 logger.exception('Reminder email could not be sent')
             else:

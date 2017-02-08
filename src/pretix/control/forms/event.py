@@ -56,7 +56,8 @@ class EventWizardBasicsForm(I18nModelForm):
             'date_from',
             'date_to',
             'presale_start',
-            'presale_end'
+            'presale_end',
+            'location',
         ]
         widgets = {
             'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
@@ -131,6 +132,7 @@ class EventUpdateForm(I18nModelForm):
             'is_public',
             'presale_start',
             'presale_end',
+            'location',
         ]
         widgets = {
             'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
@@ -183,6 +185,27 @@ class EventSettingsForm(SettingsForm):
     show_quota_left = forms.BooleanField(
         label=_("Show number of tickets left"),
         help_text=_("Publicly show how many tickets of a certain type are still available."),
+        required=False
+    )
+    waiting_list_enabled = forms.BooleanField(
+        label=_("Enable waiting list"),
+        help_text=_("Once a ticket is sold out, people can add themselves to a waiting list. As soon as a ticket "
+                    "becomes available again, it will be reserved for the first person on the waiting list and this "
+                    "person will receive an email notification with a voucher that can be used to buy a ticket."),
+        required=False
+    )
+    waiting_list_hours = forms.IntegerField(
+        label=_("Waiting list response time"),
+        min_value=6,
+        help_text=_("If a ticket voucher is sent to a person on the waiting list, it has to be redeemed within this "
+                    "number of hours until it expires and can be re-assigned to the next person on the list."),
+        required=False
+    )
+    waiting_list_auto = forms.BooleanField(
+        label=_("Automatic waiting list assignments"),
+        help_text=_("If ticket capacity becomes free, automatically create a voucher and send it to the first person "
+                    "on the waiting list for that product. If this is not active, mails will not be send automatically "
+                    "but you can send them manually via the control panel."),
         required=False
     )
     attendee_names_asked = forms.BooleanField(
@@ -329,7 +352,8 @@ class InvoiceSettingsForm(SettingsForm):
             ('False', _('No')),
             ('admin', _('Manually in admin panel')),
             ('user', _('Automatically on user request')),
-            ('True', _('Automatically for all created orders'))
+            ('True', _('Automatically for all created orders')),
+            ('paid', _('Automatically on payment')),
         )
     )
     invoice_address_from = forms.CharField(
@@ -365,8 +389,7 @@ class InvoiceSettingsForm(SettingsForm):
         label=_('Logo image'),
         ext_whitelist=(".png", ".jpg", ".svg", ".gif", ".jpeg"),
         required=False,
-        help_text=_('If you provide a logo image, we will not show your events name and date on the invoice'
-                    'the page header. We will show your logo with a maximal height and width of 2.5 cm.')
+        help_text=_('We will show your logo with a maximal height and width of 2.5 cm.')
     )
 
 
@@ -430,6 +453,12 @@ class MailSettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {url}, {expire_date}, {invoice_name}, {invoice_company}")
+    )
+    mail_text_waiting_list = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {url}, {product}, {hours}, {code}")
     )
     smtp_use_custom = forms.BooleanField(
         label=_("Use custom SMTP server"),

@@ -2,7 +2,6 @@ import csv
 import json
 import logging
 from datetime import timedelta
-from locale import format as lformat
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -135,6 +134,8 @@ class ActionView(EventPermissionRequiredMixin, View):
             })
 
     def get(self, request, *args, **kwargs):
+        from django.utils.formats import localize
+
         query = request.GET.get('query', '')
         if len(query) < 2:
             return JsonResponse({'results': []})
@@ -145,7 +146,7 @@ class ActionView(EventPermissionRequiredMixin, View):
                 {
                     'code': o.code,
                     'status': o.get_status_display(),
-                    'total': lformat("%.2f", o.total) + ' ' + self.request.event.currency
+                    'total': localize(o.total) + ' ' + self.request.event.currency
                 } for o in qs
             ]
         })

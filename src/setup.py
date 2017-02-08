@@ -43,7 +43,7 @@ cmdclass = {
 setup(
     name='pretix',
     version=__version__,
-    description='Reinventing ticket presales',
+    description='Reinventing presales, one ticket at a time',
     long_description=long_description,
     url='https://pretix.eu',
     author='Raphael Michel',
@@ -54,8 +54,9 @@ setup(
         'Intended Audience :: Developers',
         'Intended Audience :: Other Audience',
         'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Framework :: Django :: 1.10'
     ],
 
