@@ -127,6 +127,9 @@ class ItemCreateForm(I18nModelForm):
                 ItemVariation.objects.create(
                     item=instance, value=__('Standard')
                 )
+        for question in Question.objects.filter(items=self.cleaned_data.get('copy_from')):
+            question.items.add(instance)
+
         return instance
 
     class Meta:
