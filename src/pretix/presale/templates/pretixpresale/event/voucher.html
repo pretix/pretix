@@ -4,7 +4,7 @@
 {% load eventurl %}
 {% load eventsignal %}
 {% load thumbnail %}
-{% load markup_tags %}
+{% load rich_text %}
 {% block title %}{% trans "Voucher redemption" %}{% endblock %}
 
 {% block content %}
@@ -36,7 +36,7 @@
                                             </a>
                                         {% endif %}
                                         <strong>{{ item.name }}</strong>
-                                        {% if item.description %}<p>{{ item.description|localize|apply_markup:"markdown" }}</p>{% endif %}
+                                        {% if item.description %}<p>{{ item.description|localize|rich_text }}</p>{% endif %}
                                     </div>
                                     <div class="col-md-2 col-xs-6 price">
                                         {% if item.min_price != item.max_price or item.free_price %}
@@ -110,7 +110,7 @@
                                     {% endif %}
                                     <strong>{{ item.name }}</strong>
                                     {% if item.description %}
-                                        <p class="description">{{ item.description|localize|apply_markup:"markdown" }}</p>{% endif %}
+                                        <p class="description">{{ item.description|localize|rich_text }}</p>{% endif %}
                                 </div>
                                 <div class="col-md-2 col-xs-6 price">
                                     {% if item.free_price %}

@@ -4,7 +4,7 @@
 {% load eventurl %}
 {% load thumbnail %}
 {% load eventsignal %}
-{% load markup_tags %}
+{% load rich_text %}
 {% block title %}{% trans "Presale" %}{% endblock %}
 
 {% block content %}
@@ -69,7 +69,7 @@
         </div>
     {% endif %}
     {% if frontpage_text %}
-        {{ frontpage_text|apply_markup:"markdown"|linebreaks }}
+        {{ frontpage_text|rich_text }}
     {% endif %}
     {% eventsignal event "pretix.presale.signals.front_page_top" %}
     {% if event.presale_is_running or event.settings.show_items_outside_presale_period %}
@@ -81,7 +81,7 @@
                     {% if tup.0 %}
                         <h3>{{ tup.0.name }}</h3>
                         {% if tup.0.description %}
-                            <p>{{ tup.0.description|localize|apply_markup:"markdown" }}</p>
+                            <p>{{ tup.0.description|localize|rich_text }}</p>
                         {% endif %}
                     {% endif %}
                     {% for item in tup.1 %}
@@ -100,7 +100,7 @@
                                         <a href="#" data-toggle="variations">
                                             <strong>{{ item.name }}</strong>
                                         </a>
-                                        {% if item.description %}<p>{{ item.description|localize|apply_markup:"markdown" }}</p>
+                                        {% if item.description %}<p>{{ item.description|localize|rich_text }}</p>
                                         {% endif %}
                                     </div>
                                     <div class="col-md-2 col-xs-6 price">
@@ -176,7 +176,7 @@
                                     {% endif %}
                                     <strong>{{ item.name }}</strong>
                                     {% if item.description %}
-                                        <p class="description">{{ item.description|localize|apply_markup:"markdown" }}</p>{% endif %}
+                                        <p class="description">{{ item.description|localize|rich_text }}</p>{% endif %}
                                     {% if event.settings.show_quota_left %}
                                         {% include "pretixpresale/event/fragment_quota_left.html" with avail=item.cached_availability %}
                                     {% endif %}
