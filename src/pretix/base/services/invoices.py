@@ -182,18 +182,22 @@ def _invoice_generate_german(invoice, f):
         textobject = canvas.beginText(25 * mm, (297 - 15) * mm)
         textobject.setFont('OpenSansBd', 8)
         textobject.textLine(pgettext('invoice', 'Invoice from').upper())
-        textobject.moveCursor(0, 5)
-        textobject.setFont('OpenSans', 10)
-        textobject.textLines(invoice.invoice_from.strip())
         canvas.drawText(textobject)
+
+        p = Paragraph(invoice.invoice_from.strip().replace('\n', '<br />\n'), style=styles['Normal'])
+        p.wrapOn(canvas, 70 * mm, 50 * mm)
+        p_size = p.wrap(70 * mm, 50 * mm)
+        p.drawOn(canvas, 25 * mm, (297 - 17) * mm - p_size[1])
 
         textobject = canvas.beginText(25 * mm, (297 - 50) * mm)
         textobject.setFont('OpenSansBd', 8)
         textobject.textLine(pgettext('invoice', 'Invoice to').upper())
-        textobject.moveCursor(0, 5)
-        textobject.setFont('OpenSans', 10)
-        textobject.textLines(invoice.invoice_to.strip())
         canvas.drawText(textobject)
+
+        p = Paragraph(invoice.invoice_to.strip().replace('\n', '<br />\n'), style=styles['Normal'])
+        p.wrapOn(canvas, 85 * mm, 50 * mm)
+        p_size = p.wrap(85 * mm, 50 * mm)
+        p.drawOn(canvas, 25 * mm, (297 - 52) * mm - p_size[1])
 
         textobject = canvas.beginText(125 * mm, (297 - 50) * mm)
         textobject.setFont('OpenSansBd', 8)
@@ -259,18 +263,25 @@ def _invoice_generate_german(invoice, f):
                              width=25 * mm, height=25 * mm,
                              preserveAspectRatio=True, anchor='n')
 
+        if invoice.event.settings.show_date_to:
+            p_str = (
+                str(invoice.event.name) + '\n' + _('{from_date}\nuntil {to_date}').format(
+                    from_date=invoice.event.get_date_from_display(),
+                    to_date=invoice.event.get_date_to_display())
+            )
+        else:
+            p_str = (
+                str(invoice.event.name) + '\n' + invoice.event.get_date_from_display()
+            )
+
+        p = Paragraph(p_str.strip().replace('\n', '<br />\n'), style=styles['Normal'])
+        p.wrapOn(canvas, 65 * mm, 50 * mm)
+        p_size = p.wrap(65 * mm, 50 * mm)
+        p.drawOn(canvas, 125 * mm, (297 - 17) * mm - p_size[1])
+
         textobject = canvas.beginText(125 * mm, (297 - 15) * mm)
         textobject.setFont('OpenSansBd', 8)
         textobject.textLine(_('Event').upper())
-        textobject.moveCursor(0, 5)
-        textobject.setFont('OpenSans', 10)
-        textobject.textLine(str(invoice.event.name))
-        if invoice.event.settings.show_date_to:
-            textobject.textLines(
-                _('{from_date}\nuntil {to_date}').format(from_date=invoice.event.get_date_from_display(),
-                                                         to_date=invoice.event.get_date_to_display()))
-        else:
-            textobject.textLine(invoice.event.get_date_from_display())
         canvas.drawText(textobject)
 
         canvas.restoreState()
