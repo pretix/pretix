@@ -6664,7 +6664,7 @@ msgstr "Ticket-Code-Größe (mm)"
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:194
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:198
 msgid "Visible by default, set this to 0 to hide the element."
-msgstr "Standardmäßig sichtbar, ein Wert von 0 verstekct das Element."
+msgstr "Standardmäßig sichtbar, ein Wert von 0 versteckt das Element."
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:183
 msgid "Order x position (mm)"
