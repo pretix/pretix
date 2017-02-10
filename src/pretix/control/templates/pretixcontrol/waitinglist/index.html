@@ -54,7 +54,7 @@
                     {% trans "Sales estimate" %}
                 </div>
                 <div class="panel-body">
-                    {% blocktrans trimmed with amount=estimate|floatformat:2 currency=request.event.currency %}
+                    {% blocktrans trimmed with amount=estimate|default:0|floatformat:2 currency=request.event.currency %}
                         If you can make enough room at your event to fit all the persons on the waiting list in, you
                         could sell tickets worth an additional <strong>{{ amount }} {{ currency }}</strong>.
                     {% endblocktrans %}

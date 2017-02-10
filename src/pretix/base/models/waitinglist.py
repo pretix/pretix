@@ -75,7 +75,7 @@ class WaitingListEntry(LoggedModel):
         if not self.variation and self.item.has_variations:
             raise ValidationError(_('Please select a specific variation of this product.'))
 
-    def send_voucher(self, quota_cache=None):
+    def send_voucher(self, quota_cache=None, user=None):
         availability = (
             self.variation.check_quotas(count_waitinglist=False, _cache=quota_cache)
             if self.variation
@@ -108,8 +108,8 @@ class WaitingListEntry(LoggedModel):
                 'max_usages': 1,
                 'email': self.email,
                 'waitinglistentry': self.pk
-            })
-            self.log_action('pretix.waitinglist.voucher')
+            }, user=user)
+            self.log_action('pretix.waitinglist.voucher', user=user)
             self.voucher = v
             self.save()
 

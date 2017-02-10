@@ -1,6 +1,6 @@
 from django.dispatch import receiver
 
-from pretix.base.models import Event, WaitingListEntry
+from pretix.base.models import Event, User, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.async import ProfiledTask
 from pretix.base.signals import periodic_task
@@ -8,8 +8,12 @@ from pretix.celery_app import app
 
 
 @app.task(base=ProfiledTask)
-def assign_automatically(event_id: int):
+def assign_automatically(event_id: int, user_id: int = None):
     event = Event.objects.get(id=event_id)
+    if user_id:
+        user = User.objects.get(id=user_id)
+    else:
+        user = None
 
     quota_cache = {}
     gone = set()
@@ -31,7 +35,7 @@ def assign_automatically(event_id: int):
         )
         if availability[1] > 0:
             try:
-                wle.send_voucher(quota_cache)
+                wle.send_voucher(quota_cache, user=user)
                 sent += 1
             except WaitingListException:  # noqa
                 continue

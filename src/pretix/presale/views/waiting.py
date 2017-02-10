@@ -63,7 +63,7 @@ class WaitingView(FormView):
             else self.item_and_variation[0].check_quotas(count_waitinglist=False)
         )
         if availability[0] == 100:
-            messages.error(self.request, _("You cannot add yourself to the waiting list as this product ist currently "
+            messages.error(self.request, _("You cannot add yourself to the waiting list as this product is currently "
                                            "available."))
             return redirect(eventreverse(self.request.event, 'presale:event.index'))
 

@@ -32,7 +32,7 @@ class AutoAssign(EventPermissionRequiredMixin, AsyncAction, View):
         })
 
     def post(self, request, *args, **kwargs):
-        return self.do(self.request.event.id)
+        return self.do(self.request.event.id, self.request.user.id)
 
 
 class WaitingListView(EventPermissionRequiredMixin, ListView):
@@ -55,7 +55,7 @@ class WaitingListView(EventPermissionRequiredMixin, ListView):
                     pk=request.POST.get('assign'), event=self.request.event,
                 )
                 try:
-                    wle.send_voucher()
+                    wle.send_voucher(user=request.user)
                 except WaitingListException as e:
                     messages.error(request, str(e))
                 else:
