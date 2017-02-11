@@ -42,6 +42,9 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
         failures = []
         self.output = {}
+        if not orders:
+            messages.error(self.request, _('There are no orders matching this selection.'))
+            return self.get(self.request, *self.args, **self.kwargs)
         for o in orders:
             if self.request.POST.get("action") == "preview":
                 for l in self.request.event.settings.locales:
