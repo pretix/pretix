@@ -1,9 +1,12 @@
 import sys
+from datetime import datetime
 from importlib import import_module
 
+import pytz
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Prefetch, Q
+from django.http import Http404, HttpResponse
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
@@ -11,6 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
+from icalendar import Calendar, Event
 
 from pretix.base.models import ItemVariation
 from pretix.multidomain.urlreverse import eventreverse
@@ -103,6 +107,29 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
 
         context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
         return context
+
+
+class EventIcalDownload(EventViewMixin, View):
+    def get(self, request, *args, **kwargs):
+        if not self.request.event:
+            raise Http404(_('Unknown event code or not authorized to access this event.'))
+
+        cal = Calendar()
+        cal.add('version', '2.0')
+        cal.add('prodid', '-//{}//{}//'.format(self.request.event.organizer.name, self.request.event.name))
+
+        event = Event()
+        event.add('summary', self.request.event.name)
+        event.add('dtstart', self.request.event.date_from)
+        event.add('dtend', self.request.event.date_to)
+        event.add('dtstamp', datetime.now(pytz.utc))
+        event.add('location', self.request.event.location)
+        event.add('organizer', self.request.event.organizer.name)
+        cal.add_component(event)
+
+        resp = HttpResponse(cal.to_ical(), content_type='text/calendar')
+        resp['Content-Disposition'] = 'attachment; filename="{}"'.format('pretixevent.ics')
+        return resp
 
 
 class EventAuth(View):
