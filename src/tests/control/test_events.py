@@ -132,6 +132,21 @@ class EventsTest(SoupTest):
         })
         assert doc.select('.alert-danger')
 
+    def test_payment_settings_last_date_payment_after_presale_end(self):
+        self.event1.presale_end = datetime.datetime.now()
+        self.event1.save(update_fields=['presale_end'])
+        doc = self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
+            'payment_banktransfer__enabled': 'true',
+            'payment_banktransfer__fee_abs': '12.23',
+            'payment_banktransfer_bank_details_0': 'Test',
+            'settings-payment_term_days': '2',
+            'settings-payment_term_last': (self.event1.presale_end - datetime.timedelta(1)).strftime('%Y-%m-%d'),
+            'settings-tax_rate_default': '19.00',
+        })
+        assert doc.select('.alert-danger')
+        self.event1.presale_end = None
+        self.event1.save(update_fields=['presale_end'])
+
     def test_invoice_settings(self):
         doc = self.get_doc('/control/event/%s/%s/settings/invoice' % (self.orga1.slug, self.event1.slug))
         data = extract_form_fields(doc.select("form")[0])
