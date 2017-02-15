@@ -294,6 +294,17 @@ class PaymentSettingsForm(SettingsForm):
                     "(in percent)."),
     )
 
+    def clean(self):
+        cleaned_data = super().clean()
+        payment_term_last = cleaned_data.get('payment_term_last')
+        if payment_term_last and self.obj.presale_end:
+            if payment_term_last < self.obj.presale_end.date():
+                self.add_error(
+                    'payment_term_last',
+                    _('The last payment date cannot be before the end of presale.'),
+                )
+        return cleaned_data
+
 
 class ProviderForm(SettingsForm):
     """
