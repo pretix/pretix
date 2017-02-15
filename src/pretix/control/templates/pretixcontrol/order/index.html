@@ -144,7 +144,7 @@
             <div class="panel panel-default items">
                 <div class="panel-heading">
                     <div class="pull-right">
-                        {% if order.status == "n" and request.eventperm.can_change_orders %}
+                        {% if order.changable and request.eventperm.can_change_orders %}
                             <a href="{% url "control:event.order.change" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                 <span class="fa fa-edit"></span>
                                 {% trans "Change products" %}

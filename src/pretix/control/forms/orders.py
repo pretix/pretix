@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.formats import localize
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -94,9 +95,12 @@ class OrderPositionChangeForm(forms.Form):
             variations = list(i.variations.all())
             if variations:
                 for v in variations:
-                    choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (pname, v.value)))
+                    choices.append(('%d-%d' % (i.pk, v.pk),
+                                    '%s – %s (%s %s)' % (pname, v.value, localize(v.price),
+                                                         instance.order.event.currency)))
             else:
-                choices.append((str(i.pk), pname))
+                choices.append((str(i.pk), '%s (%s %s)' % (pname, localize(i.default_price),
+                                                           instance.order.event.currency)))
         self.fields['itemvar'].choices = choices
 
     def clean(self):

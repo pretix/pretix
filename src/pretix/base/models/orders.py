@@ -190,6 +190,10 @@ class Order(LoggedModel):
         """
         return '{event}-{code}'.format(event=self.event.slug.upper(), code=self.code)
 
+    @property
+    def changable(self):
+        return self.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
+
     def save(self, *args, **kwargs):
         if not self.code:
             self.assign_code()

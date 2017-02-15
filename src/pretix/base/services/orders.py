@@ -480,9 +480,11 @@ class OrderChangeManager:
         'quota': _('The quota {name} does not have enough capacity left to perform the operation.'),
         'product_invalid': _('The selected product is not active or has no price set.'),
         'complete_cancel': _('This operation would leave the order empty. Please cancel the order itself instead.'),
-        'not_pending': _('Only pending orders can be changed.'),
+        'not_pending_or_paid': _('Only pending or paid orders can be changed.'),
         'paid_to_free_exceeded': _('This operation would make the order free and therefore immediately paid, however '
                                    'no quota is available.'),
+        'paid_price_change': _('Currently, paid orders can only be changed in a way that does not change the total '
+                               'price of the order as partial payments or refunds are not yet supported.')
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation', 'price'))
     PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
@@ -498,8 +500,7 @@ class OrderChangeManager:
     def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation]):
         if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
             raise OrderError(self.error_messages['product_without_variation'])
-        price = item.default_price if variation is None else (
-            variation.default_price if variation.default_price is not None else item.default_price)
+        price = item.default_price if variation is None else variation.price
         if not price:
             raise OrderError(self.error_messages['product_invalid'])
         self._totaldiff = price - position.price
@@ -527,6 +528,10 @@ class OrderChangeManager:
     def _check_free_to_paid(self):
         if self.order.total == Decimal('0.00') and self._totaldiff > 0:
             raise OrderError(self.error_messages['free_to_paid'])
+
+    def _check_paid_price_change(self):
+        if self.order.status == Order.STATUS_PAID and self._totaldiff != 0:
+            raise OrderError(self.error_messages['paid_price_change'])
 
     def _check_paid_to_free(self):
         if self.order.total == 0:
@@ -624,9 +629,10 @@ class OrderChangeManager:
             return
         with transaction.atomic():
             with self.order.event.lock():
-                if self.order.status != Order.STATUS_PENDING:
-                    raise OrderError(self.error_messages['not_pending'])
+                if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID):
+                    raise OrderError(self.error_messages['not_pending_or_paid'])
                 self._check_free_to_paid()
+                self._check_paid_price_change()
                 self._check_quotas()
                 self._check_complete_cancel()
                 self._perform_operations()

@@ -446,8 +446,8 @@ class OrderChange(OrderView):
     template_name = 'pretixcontrol/order/change.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if self.order.status != Order.STATUS_PENDING:
-            messages.error(self.request, _('This action is only allowed for pending orders.'))
+        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID):
+            messages.error(self.request, _('This action is only allowed for pending or paid orders.'))
             return self._redirect_back()
         return super().dispatch(request, *args, **kwargs)
 

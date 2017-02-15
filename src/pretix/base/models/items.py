@@ -309,6 +309,10 @@ class ItemVariation(models.Model):
     def __str__(self):
         return str(self.value)
 
+    @property
+    def price(self):
+        return self.default_price if self.default_price is not None else self.item.default_price
+
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.item:
