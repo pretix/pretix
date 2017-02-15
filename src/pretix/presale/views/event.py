@@ -14,7 +14,6 @@ from django.views.generic import TemplateView
 
 from pretix.base.models import ItemVariation
 from pretix.multidomain.urlreverse import eventreverse
-
 from . import CartMixin, EventViewMixin
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
@@ -71,7 +70,6 @@ def get_grouped_items(event):
                                     if var.cached_availability[1] is not None else sys.maxsize,
                                     int(event.settings.max_items_per_order))
                 display_add_to_cart = display_add_to_cart or var.order_max > 0
-                var.price = var.default_price if var.default_price is not None else item.default_price
             if len(item.available_variations) > 0:
                 item.min_price = min([v.price for v in item.available_variations])
                 item.max_price = max([v.price for v in item.available_variations])
@@ -105,7 +103,6 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
 
 
 class EventAuth(View):
-
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
