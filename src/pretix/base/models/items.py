@@ -140,6 +140,9 @@ class Item(LoggedModel):
     )
     default_price = models.DecimalField(
         verbose_name=_("Default price"),
+        help_text=_("If this product has multiple variations, you can set different prices for each of the "
+                    "variations. If a variation does not have a special price or if you do not have variations, "
+                    "this price will be used."),
         max_digits=7, decimal_places=2, null=True
     )
     free_price = models.BooleanField(
@@ -195,8 +198,9 @@ class Item(LoggedModel):
     allow_cancel = models.BooleanField(
         verbose_name=_('Allow product to be canceled'),
         default=True,
-        help_text=_('If you deactivate this, an order including this product might not be canceled by the user. '
-                    'It may still be canceled by you.')
+        help_text=_('If this is active and the general event settings allo wit, orders containing this product can be '
+                    'canceled by the user until the order is paid for. Users cannot cancel paid orders on their own '
+                    'and you can cancel orders at all times, regardless of this setting')
     )
 
     class Meta:
