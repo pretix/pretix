@@ -115,8 +115,9 @@ def _add_new_items(event: Event, items: List[dict],
         if i.get('voucher'):
             try:
                 voucher = Voucher.objects.get(code=i.get('voucher').strip(), event=event)
-                if voucher.redeemed >= voucher.max_usages:
-                    return error_messages['voucher_redeemed']
+            except Voucher.DoesNotExist:
+                return error_messages['voucher_invalid']
+            else:
                 if voucher.valid_until is not None and voucher.valid_until < now_dt:
                     return error_messages['voucher_expired']
                 if not voucher.applies_to(item, variation):
@@ -135,14 +136,8 @@ def _add_new_items(event: Event, items: List[dict],
                 if i['count'] > v_avail:
                     return error_messages['voucher_redeemed_partial'] % v_avail
 
-            except Voucher.DoesNotExist:
-                return error_messages['voucher_invalid']
-
         # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
         quotas = list(item.quotas.all()) if variation is None else list(variation.quotas.all())
-
-        if voucher and voucher.quota and voucher.quota.pk not in [q.pk for q in quotas]:
-            return error_messages['voucher_invalid_item']
 
         if item.require_voucher and voucher is None:
             return error_messages['voucher_required']

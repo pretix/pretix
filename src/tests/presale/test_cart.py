@@ -46,6 +46,29 @@ class CartTestMixin:
 
 
 class CartTest(CartTestMixin, TestCase):
+
+    def test_after_presale(self):
+        self.event.presale_end = now() - timedelta(days=1)
+        self.event.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'alert-danger' in response.rendered_content
+        assert not CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists()
+
+    def test_before_presale(self):
+        self.event.presale_start = now() + timedelta(days=1)
+        self.event.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'alert-danger' in response.rendered_content
+        assert not CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists()
+
     def test_simple(self):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1'
@@ -355,9 +378,10 @@ class CartTest(CartTestMixin, TestCase):
             price=23, expires=now() + timedelta(minutes=10)
         )
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1'
         }, follow=True)
-        cp = CartPosition.objects.get(id=cp.id)
-        self.assertGreater(cp.expires, now())
+        cp.refresh_from_db()
+        self.assertGreater(cp.expires, now() + timedelta(minutes=10))
 
     def test_renew_expired_successfully(self):
         cp1 = CartPosition.objects.create(
