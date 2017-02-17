@@ -84,4 +84,4 @@ def test_dashboard(client, env):
     quota.items.add(env[3])
     w = waitinglist_widgets(env[0])
     assert '3' in w[0]['content']
-    assert '7' in w[1]['content']
+    assert '6' in w[1]['content']
