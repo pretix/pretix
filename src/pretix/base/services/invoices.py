@@ -261,7 +261,8 @@ def _invoice_generate_german(invoice, f):
             canvas.drawImage(ImageReader(logo_file),
                              95 * mm, (297 - 38) * mm,
                              width=25 * mm, height=25 * mm,
-                             preserveAspectRatio=True, anchor='n')
+                             preserveAspectRatio=True, anchor='n',
+                             mask='auto')
 
         if invoice.event.settings.show_date_to:
             p_str = (
