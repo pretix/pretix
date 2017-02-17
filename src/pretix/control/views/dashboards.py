@@ -91,7 +91,7 @@ def base_widgets(sender, **kwargs):
 def waitinglist_widgets(sender, **kwargs):
     widgets = []
 
-    wles = WaitingListEntry.objects.filter(event=sender)
+    wles = WaitingListEntry.objects.filter(event=sender, voucher__isnull=True)
     if wles.count():
         quota_cache = {}
         itemvar_cache = {}
