@@ -115,6 +115,25 @@
                 </div>
             </div>
         </div>
+        {% if confirm_messages %}
+            <div class="panel panel-primary panel-contact">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Confirmations" %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    {% for key, desc in confirm_messages.items %}
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" class="checkbox" value="yes" name="confirm_{{ key }}" required>
+                                {{ desc|safe }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
         <div class="row checkout-button-row clearfix">
             <div class="col-md-4">
                 <a class="btn btn-block btn-default btn-lg"

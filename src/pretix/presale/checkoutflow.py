@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
-from django.http import HttpResponseNotAllowed
+from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.utils import translation
 from django.utils.functional import cached_property
@@ -15,7 +15,9 @@ from pretix.base.services.orders import perform_order
 from pretix.base.signals import register_payment_providers
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import ContactForm, InvoiceAddressForm
-from pretix.presale.signals import checkout_flow_steps, order_meta_from_request
+from pretix.presale.signals import (
+    checkout_confirm_messages, checkout_flow_steps, order_meta_from_request,
+)
 from pretix.presale.views import CartMixin, get_cart_total
 from pretix.presale.views.async import AsyncAction
 from pretix.presale.views.questions import QuestionsViewMixin
@@ -307,7 +309,16 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['payment'] = self.payment_provider.checkout_confirm_render(self.request)
         ctx['payment_provider'] = self.payment_provider
         ctx['addr'] = self.invoice_address
+        ctx['confirm_messages'] = self.confirm_messages
         return ctx
+
+    @cached_property
+    def confirm_messages(self):
+        msgs = {}
+        responses = checkout_confirm_messages.send(self.request.event)
+        for receiver, response in responses:
+            msgs.update(response)
+        return msgs
 
     @cached_property
     def payment_provider(self):
@@ -335,6 +346,20 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
     def post(self, request):
         self.request = request
+
+        if self.confirm_messages:
+            for key, msg in self.confirm_messages.items():
+                if request.POST.get('confirm_{}'.format(key)) != 'yes':
+                    msg = str(_('You need to check all checkboxes on the bottom of the page.'))
+                    messages.error(self.request, msg)
+                    if "ajax" in self.request.POST or "ajax" in self.request.GET:
+                        return JsonResponse({
+                            'ready': True,
+                            'redirect': self.get_error_url(),
+                            'message': msg
+                        })
+                    return redirect(self.get_error_url())
+
         meta_info = {}
         for receiver, response in order_meta_from_request.send(sender=request.event, request=request):
             meta_info.update(response)

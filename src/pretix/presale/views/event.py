@@ -14,6 +14,7 @@ from django.views.generic import TemplateView
 
 from pretix.base.models import ItemVariation
 from pretix.multidomain.urlreverse import eventreverse
+
 from . import CartMixin, EventViewMixin
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
