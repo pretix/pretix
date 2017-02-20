@@ -8,7 +8,7 @@ from pretix.celery_app import app
 
 
 @app.task(base=ProfiledTask)
-def assign_automatically(event_id: int, user_id: int = None):
+def assign_automatically(event_id: int, user_id: int=None):
     event = Event.objects.get(id=event_id)
     if user_id:
         user = User.objects.get(id=user_id)
