@@ -64,7 +64,7 @@ class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
         return fs(
             data=(
                 self.request.POST
-                if self.request.method == "POST" and 'id_formset-TOTAL_FORMS' in self.request.POST
+                if self.request.method == "POST" and 'formset-TOTAL_FORMS' in self.request.POST
                 else None
             ),
             prefix="formset",
@@ -76,7 +76,7 @@ class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
         return OrganizerPermissionCreateForm(
             data=(
                 self.request.POST
-                if self.request.method == "POST" and 'id_formset-TOTAL_FORMS' in self.request.POST
+                if self.request.method == "POST" and 'formset-TOTAL_FORMS' in self.request.POST
                 else None
             ),
             prefix="add"
