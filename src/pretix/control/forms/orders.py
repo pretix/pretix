@@ -89,7 +89,7 @@ class OrderPositionChangeForm(forms.Form):
         super().__init__(*args, **kwargs)
         choices = []
         for i in instance.order.event.items.prefetch_related('variations').all():
-            pname = i.name
+            pname = str(i.name)
             if not i.is_available():
                 pname += ' ({})'.format(_('inactive'))
             variations = list(i.variations.all())
