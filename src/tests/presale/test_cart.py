@@ -563,10 +563,10 @@ class CartTest(CartTestMixin, TestCase):
         )
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
-            '_voucher_code': v.code,
         }, follow=True)
-        obj = CartPosition.objects.get(id=cp1.id)
-        self.assertGreater(obj.expires, now())
+        cp1.refresh_from_db()
+        self.assertGreater(cp1.expires, now())
+        assert cp1.voucher == v
 
     def test_voucher_variation(self):
         v = Voucher.objects.create(item=self.shirt, variation=self.shirt_red, event=self.event)
@@ -882,7 +882,7 @@ class CartTest(CartTestMixin, TestCase):
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('only be redeemed 1 more time', doc.select('.alert-danger')[0].text)
         positions = CartPosition.objects.filter(cart_id=self.session_key, event=self.event)
-        assert not positions.exists()
+        assert positions.count() == 1
 
     def test_voucher_multiuse_multiprod_partially(self):
         v = Voucher.objects.create(quota=self.quota_all, value=Decimal('12.00'), event=self.event,

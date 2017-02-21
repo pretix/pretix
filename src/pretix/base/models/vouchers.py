@@ -210,11 +210,11 @@ class Voucher(LoggedModel):
         Returns whether this voucher applies to a given item (and optionally
         a variation).
         """
-        if self.quota:
-            return item.quotas.filter(pk=self.quota.pk).exists()
-        if self.item and not self.variation:
-            return self.item == item
-        return (self.item == item) and (self.variation == variation)
+        if self.quota_id:
+            return item.quotas.filter(pk=self.quota_id).exists()
+        if self.item_id and not self.variation_id:
+            return self.item_id == item.pk
+        return (self.item_id == item.pk) and (variation and self.variation_id == variation.pk)
 
     def is_active(self):
         """

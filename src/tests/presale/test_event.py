@@ -413,7 +413,7 @@ class DeadlineTest(EventTestMixin, TestCase):
     def setUp(self):
         super().setUp()
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        self.item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=False)
+        self.item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
         q.items.add(self.item)
 
     def test_not_yet_started(self):
@@ -463,7 +463,7 @@ class DeadlineTest(EventTestMixin, TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertNotIn('alert-info', response.rendered_content)
-        self.assertNotIn('btn-add-to-cart', response.rendered_content)
+        self.assertIn('btn-add-to-cart', response.rendered_content)
         response = self.client.post(
             '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
             {
@@ -481,7 +481,7 @@ class DeadlineTest(EventTestMixin, TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertNotIn('alert-info', response.rendered_content)
-        self.assertNotIn('btn-add-to-cart', response.rendered_content)
+        self.assertIn('btn-add-to-cart', response.rendered_content)
         response = self.client.post(
             '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
             {

@@ -282,11 +282,12 @@ class Order(LoggedModel):
         if self.event.settings.get('payment_term_last'):
             if now() > self.event.payment_term_last:
                 return error_messages['late_lastdate']
-        if not self.event.settings.get('payment_term_accept_late'):
-            return error_messages['late']
 
         if self.status == self.STATUS_PENDING:
             return True
+        if not self.event.settings.get('payment_term_accept_late'):
+            return error_messages['late']
+
         return self._is_still_available()
 
     def _is_still_available(self, now_dt: datetime=None) -> Union[bool, str]:
