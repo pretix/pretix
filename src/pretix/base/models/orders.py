@@ -432,6 +432,10 @@ class AbstractPosition(models.Model):
             else:
                 q.answer = ""
 
+    @property
+    def net_price(self):
+        return self.price - self.tax_value
+
 
 class OrderPosition(AbstractPosition):
     """

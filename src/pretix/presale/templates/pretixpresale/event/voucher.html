@@ -72,7 +72,11 @@
                                                 {% else %}
                                                     {{ event.currency }} {{ var.display_price|floatformat:2 }}
                                                 {% endif %}
-                                                {% if item.tax_rate %}
+                                                {% if item.tax_rate and event.settings.display_net_prices %}
+                                                    <small>{% blocktrans trimmed with rate=item.tax_rate %}
+                                                        <strong>plus</strong> {{ rate }}% taxes
+                                                    {% endblocktrans %}</small>
+                                                {% elif item.tax_rate %}
                                                     <small>{% blocktrans trimmed with rate=item.tax_rate %}
                                                         incl. {{ rate }}% taxes
                                                     {% endblocktrans %}</small>
@@ -126,7 +130,11 @@
                                     {% else %}
                                         {{ event.currency }} {{ item.price|floatformat:2 }}
                                     {% endif %}
-                                    {% if item.tax_rate %}
+                                    {% if item.tax_rate and event.settings.display_net_prices %}
+                                        <small>{% blocktrans trimmed with rate=item.tax_rate %}
+                                            <strong>plus</strong> {{ rate }}% taxes
+                                        {% endblocktrans %}</small>
+                                    {% elif item.tax_rate %}
                                         <small>{% blocktrans trimmed with rate=item.tax_rate %}
                                             incl. {{ rate }}% taxes
                                         {% endblocktrans %}</small>

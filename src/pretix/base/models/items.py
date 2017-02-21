@@ -11,6 +11,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.decimal import round_decimal
 from pretix.base.i18n import I18nCharField, I18nTextField
 from pretix.base.models.base import LoggedModel
 
@@ -221,6 +222,11 @@ class Item(LoggedModel):
         if self.event:
             self.event.get_cache().clear()
 
+    @property
+    def default_price_net(self):
+        tax_value = round_decimal(self.default_price * (1 - 100 / (100 + self.tax_rate)))
+        return self.default_price - tax_value
+
     def is_available(self, now_dt: datetime=None) -> bool:
         """
         Returns whether this item is available according to its ``active`` flag
@@ -312,6 +318,11 @@ class ItemVariation(models.Model):
     @property
     def price(self):
         return self.default_price if self.default_price is not None else self.item.default_price
+
+    @property
+    def net_price(self):
+        tax_value = round_decimal(self.price * (1 - 100 / (100 + self.item.tax_rate)))
+        return self.price - tax_value
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)

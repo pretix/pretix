@@ -20,6 +20,10 @@ DEFAULTS = {
         'default': '10',
         'type': int
     },
+    'display_net_prices': {
+        'default': 'False',
+        'type': bool
+    },
     'attendee_names_asked': {
         'default': 'True',
         'type': bool

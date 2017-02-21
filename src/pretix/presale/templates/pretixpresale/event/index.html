@@ -136,14 +136,18 @@
                                                         <span class="input-group-addon">{{ event.currency }}</span>
                                                         <input type="number" class="form-control input-item-price"
                                                                 placeholder="0"
-                                                                min="{{ var.price|stringformat:"0.2f" }}"
+                                                                min="{{ var.display_price|stringformat:"0.2f" }}"
                                                                 name="price_{{ item.id }}_{{ var.id }}"
-                                                                step="any" value="{{ var.price|stringformat:"0.2f" }}">
+                                                                step="any" value="{{ var.display_price|stringformat:"0.2f" }}">
                                                     </div>
                                                 {% else %}
-                                                    {{ event.currency }} {{ var.price|floatformat:2 }}
+                                                    {{ event.currency }} {{ var.display_price|floatformat:2 }}
                                                 {% endif %}
-                                                {% if item.tax_rate %}
+                                                {% if item.tax_rate and event.settings.display_net_prices %}
+                                                    <small>{% blocktrans trimmed with rate=item.tax_rate %}
+                                                        <strong>plus</strong> {{ rate }}% taxes
+                                                    {% endblocktrans %}</small>
+                                                {% elif item.tax_rate %}
                                                     <small>{% blocktrans trimmed with rate=item.tax_rate %}
                                                         incl. {{ rate }}% taxes
                                                     {% endblocktrans %}</small>
@@ -186,14 +190,18 @@
                                         <div class="input-group input-group-price">
                                             <span class="input-group-addon">{{ event.currency }}</span>
                                             <input type="number" class="form-control input-item-price" placeholder="0"
-                                                    min="{{ item.price|stringformat:"0.2f" }}"
+                                                    min="{{ item.display_price|stringformat:"0.2f" }}"
                                                     name="price_{{ item.id }}"
-                                                    step="any" value="{{ item.price|stringformat:"0.2f" }}">
+                                                    step="any" value="{{ item.display_price|stringformat:"0.2f" }}">
                                         </div>
                                     {% else %}
-                                        {{ event.currency }} {{ item.price|floatformat:2 }}
+                                        {{ event.currency }} {{ item.display_price|floatformat:2 }}
                                     {% endif %}
-                                    {% if item.tax_rate %}
+                                    {% if item.tax_rate and event.settings.display_net_prices %}
+                                        <small>{% blocktrans trimmed with rate=item.tax_rate %}
+                                            <strong>plus</strong> {{ rate }}% taxes
+                                        {% endblocktrans %}</small>
+                                    {% elif item.tax_rate %}
                                         <small>{% blocktrans trimmed with rate=item.tax_rate %}
                                             incl. {{ rate }}% taxes
                                         {% endblocktrans %}</small>
