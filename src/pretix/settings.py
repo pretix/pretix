@@ -58,6 +58,7 @@ DATABASES = {
         'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120
     }
 }
+DATABASE_IS_GALERA = config.getboolean('database', 'galera', fallback=False)
 
 STATIC_URL = config.get('urls', 'static', fallback='/static/')
 
