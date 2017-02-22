@@ -179,6 +179,8 @@ class OrderDetail(OrderView):
             'raw': cartpos,
             'total': self.object.total,
             'payment_fee': self.object.payment_fee,
+            'net_total': self.object.net_total,
+            'tax_total': self.object.tax_total,
         }
 
 
