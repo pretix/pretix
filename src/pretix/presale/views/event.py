@@ -63,6 +63,7 @@ def get_grouped_items(event):
                                  if item.cached_availability[1] is not None else sys.maxsize,
                                  int(event.settings.max_items_per_order))
             item.price = item.default_price
+            item.display_price = item.default_price_net if event.settings.display_net_prices else item.price
             display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
             for var in item.available_variations:
@@ -70,10 +71,11 @@ def get_grouped_items(event):
                 var.order_max = min(var.cached_availability[1]
                                     if var.cached_availability[1] is not None else sys.maxsize,
                                     int(event.settings.max_items_per_order))
+                var.display_price = var.net_price if event.settings.display_net_prices else var.price
                 display_add_to_cart = display_add_to_cart or var.order_max > 0
             if len(item.available_variations) > 0:
-                item.min_price = min([v.price for v in item.available_variations])
-                item.max_price = max([v.price for v in item.available_variations])
+                item.min_price = min([v.display_price for v in item.available_variations])
+                item.max_price = max([v.display_price for v in item.available_variations])
 
     items = [item for item in items if len(item.available_variations) > 0 or not item.has_variations]
     return items, display_add_to_cart

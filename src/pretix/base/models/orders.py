@@ -7,10 +7,11 @@ from typing import List, Union
 
 from django.conf import settings
 from django.db import models
-from django.db.models import F
+from django.db.models import F, Sum
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -214,6 +215,18 @@ class Order(LoggedModel):
                 self.payment_fee * (1 - 100 / (100 + self.payment_fee_tax_rate)))
         else:
             self.payment_fee_tax_value = Decimal('0.00')
+
+    @property
+    def payment_fee_net(self):
+        return self.payment_fee - self.payment_fee_tax_value
+
+    @cached_property
+    def tax_total(self):
+        return (self.positions.aggregate(s=Sum('tax_value'))['s'] or 0) + self.payment_fee_tax_value
+
+    @property
+    def net_total(self):
+        return self.total - self.tax_total
 
     @staticmethod
     def normalize_code(code):
@@ -431,6 +444,10 @@ class AbstractPosition(models.Model):
                 q.answer = self.answ[q.id]
             else:
                 q.answer = ""
+
+    @property
+    def net_price(self):
+        return self.price - self.tax_value
 
 
 class OrderPosition(AbstractPosition):

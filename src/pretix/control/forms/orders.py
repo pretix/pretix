@@ -59,7 +59,7 @@ class OrderPositionChangeForm(forms.Form):
     price = forms.DecimalField(
         required=False,
         max_digits=10, decimal_places=2,
-        label=_('New price')
+        label=_('New price (gross)')
     )
     operation = forms.ChoiceField(
         required=False,

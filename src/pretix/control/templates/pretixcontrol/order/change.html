@@ -79,6 +79,9 @@
                                         {% if position.form.operation.value == "price" %}checked="checked"{% endif %}>
                                 {% trans "Change price to" %}
                                 {% bootstrap_field position.form.price layout='inline' %}
+                                {% if request.event.settings.display_net_prices %}
+                                    <em>{% trans "Enter a gross price including taxes." %}</em>
+                                {% endif %}
                             </label>
                         </div>
                         <div class="radio">

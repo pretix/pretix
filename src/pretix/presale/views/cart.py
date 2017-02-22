@@ -6,6 +6,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView, View
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import CartPosition, Quota, Voucher
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, remove_items_from_cart,
@@ -189,6 +190,8 @@ class RedeemView(EventViewMixin, TemplateView):
                 else:
                     item.cached_availability = item.check_quotas()
                 item.price = self.voucher.calculate_price(item.default_price)
+                if self.request.event.settings.display_net_prices:
+                    item.price -= round_decimal(item.price * (1 - 100 / (100 + item.tax_rate)))
             else:
                 for var in item.available_variations:
                     if self.voucher.allow_ignore_quota or self.voucher.block_quota:
@@ -196,10 +199,12 @@ class RedeemView(EventViewMixin, TemplateView):
                     else:
                         var.cached_availability = list(var.check_quotas())
                     var.display_price = self.voucher.calculate_price(var.price)
+                    if self.request.event.settings.display_net_prices:
+                        var.display_price -= round_decimal(var.display_price * (1 - 100 / (100 + item.tax_rate)))
 
                 if len(item.available_variations) > 0:
-                    item.min_price = min([v.price for v in item.available_variations])
-                    item.max_price = max([v.price for v in item.available_variations])
+                    item.min_price = min([v.display_price for v in item.available_variations])
+                    item.max_price = max([v.display_price for v in item.available_variations])
 
         items = [item for item in items if len(item.available_variations) > 0 or not item.has_variations]
         context['options'] = sum([(len(item.available_variations) if item.has_variations else 1)

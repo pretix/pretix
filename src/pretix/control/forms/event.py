@@ -158,6 +158,12 @@ class EventSettingsForm(SettingsForm):
         help_text=_("Show item details before presale has started and after presale has ended"),
         required=False
     )
+    display_net_prices = forms.BooleanField(
+        label=_("Show net prices instead of gross prices in the product list (not recommended!)"),
+        help_text=_("Independent of your choice, the cart will show gross prices as this the price that needs to be "
+                    "paid"),
+        required=False
+    )
     presale_start_show_date = forms.BooleanField(
         label=_("Show start date"),
         help_text=_("Show the presale start date before presale has started."),
