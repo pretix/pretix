@@ -144,7 +144,7 @@ def test_perform_failed(env, factory, monkeypatch):
     prov.checkout_prepare(req, {})
     assert 'payment_stripe_token' in req.session
     with pytest.raises(PaymentException):
-       prov.payment_perform(req, order)
+        prov.payment_perform(req, order)
     order.refresh_from_db()
     assert order.status == Order.STATUS_PENDING
 

@@ -9,7 +9,7 @@ from django.template.loader import get_template
 from django.utils.translation import ugettext as __, ugettext_lazy as _
 
 from pretix.base.models import Quota
-from pretix.base.payment import BasePaymentProvider
+from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.multidomain.urlreverse import build_absolute_uri
