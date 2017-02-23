@@ -27,5 +27,5 @@ if [ "$1" == "tests-cov" ]; then
 	cd src
 	python manage.py check
 	make all compress
-	coverage run -m py.test --rerun 5 tests && coveralls
+	coverage run -m py.test --rerun 5 tests && codecov
 fi

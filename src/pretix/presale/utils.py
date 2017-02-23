@@ -1,5 +1,7 @@
+from importlib import import_module
 from urllib.parse import urljoin
 
+from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import resolve
 from django.http import Http404
@@ -11,8 +13,10 @@ from pretix.base.models import Event, EventPermission, Organizer
 from pretix.multidomain.urlreverse import get_domain
 from pretix.presale.signals import process_request, process_response
 
+SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
-def _detect_event(request):
+
+def _detect_event(request, require_live=True):
     url = resolve(request.path_info)
     try:
         if hasattr(request, 'organizer'):
@@ -58,9 +62,28 @@ def _detect_event(request):
             # Restrict locales to the ones available for this event
             LocaleMiddleware().process_request(request)
 
-            if not request.event.live:
-                if not request.user.is_authenticated or not EventPermission.objects.filter(
-                        event=request.event, user=request.user).exists():
+            if require_live and not request.event.live:
+                can_access = (
+                    url.url_name == 'event.auth'
+                    or (
+                        request.user.is_authenticated
+                        and (
+                            request.user.is_superuser
+                            or EventPermission.objects.filter(event=request.event, user=request.user).exists()
+                        )
+                    )
+
+                )
+                if not can_access and 'pretix_event_access_{}'.format(request.event.pk) in request.session:
+                    sparent = SessionStore(request.session.get('pretix_event_access_{}'.format(request.event.pk)))
+                    try:
+                        parentdata = sparent.load()
+                    except:
+                        pass
+                    else:
+                        can_access = 'event_access' in parentdata
+
+                if not can_access:
                     raise PermissionDenied(_('The selected ticket shop is currently not available.'))
 
             for receiver, response in process_request.send(request.event, request=request):
@@ -73,14 +96,19 @@ def _detect_event(request):
         raise Http404(_('The selected organizer was not found.'))
 
 
-def event_view(func):
-    def wrap(request, *args, **kwargs):
-        ret = _detect_event(request)
-        if ret:
-            return ret
-        else:
-            response = func(request=request, *args, **kwargs)
-            for receiver, r in process_response.send(request.event, request=request, response=response):
-                response = r
-            return response
-    return wrap
+def event_view(function=None, require_live=True):
+    def event_view_wrapper(func, require_live=require_live):
+        def wrap(request, *args, **kwargs):
+            ret = _detect_event(request, require_live=require_live)
+            if ret:
+                return ret
+            else:
+                response = func(request=request, *args, **kwargs)
+                for receiver, r in process_response.send(request.event, request=request, response=response):
+                    response = r
+                return response
+        return wrap
+
+    if function:
+        return event_view_wrapper(function, require_live=require_live)
+    return event_view_wrapper

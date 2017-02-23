@@ -1,2 +1,0 @@
-paypalrestsdk>=1.9,<1.10,<2.0
-pycparser==2.13  # https://github.com/eliben/pycparser/issues/147

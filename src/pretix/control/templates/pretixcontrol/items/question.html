@@ -36,31 +36,31 @@
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
         </p>
     </form>
-    {% if not stats %}
-        <div class="empty-collection">
-            <p>
-                {% blocktrans trimmed %}
-                    No matching answers found.
-                {% endblocktrans %}
-            </p>
-            {% if not items %}
+    <div class="row" id="question-stats">
+        {% if not stats %}
+            <div class="empty-collection col-md-10 col-xs-12">
                 <p>
-                    {% trans "You need to assign the question to a product to collect answers." %}
+                    {% blocktrans trimmed %}
+                        No matching answers found.
+                    {% endblocktrans %}
                 </p>
+                {% if not items %}
+                    <p>
+                        {% trans "You need to assign the question to a product to collect answers." %}
+                    </p>
 
-                <a href="{% url "control:event.items.questions.edit" event=request.event.slug organizer=request.event.organizer.slug question=question.pk %}"
-                        class="btn btn-primary btn-lg"><i class="fa fa-edit"></i> {% trans "Edit question" %}</a>
-            {% endif %}
-        </div>
-    {% else %}
-        <div class="row" id="question-stats">
-            <div class="col-md-6 col-xs-12">
+                    <a href="{% url "control:event.items.questions.edit" event=request.event.slug organizer=request.event.organizer.slug question=question.pk %}"
+                            class="btn btn-primary btn-lg"><i class="fa fa-edit"></i> {% trans "Edit question" %}</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="col-md-5 col-xs-12">
                 <div class="chart" id="question_chart" data-type="{{ question.type }}">
 
                 </div>
                 <script type="application/json" id="question-chart-data">{{ stats_json|safe }}</script>
             </div>
-            <div class="col-md-6 col-xs-12">
+            <div class="col-md-5 col-xs-12">
                 <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
@@ -80,6 +80,16 @@
                     </tbody>
                 </table>
             </div>
+        {% endif %}
+        <div class="col-xs-12 col-lg-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Question history" %}
+                    </h3>
+                </div>
+                {% include "pretixcontrol/includes/logs.html" with obj=question %}
+            </div>
         </div>
-    {% endif %}
+    </div>
 {% endblock %}

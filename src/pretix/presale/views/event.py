@@ -1,12 +1,23 @@
 import sys
+from importlib import import_module
 
+from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Prefetch, Q
+from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
 from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from pretix.base.models import ItemVariation
+from pretix.multidomain.urlreverse import eventreverse
 
 from . import CartMixin, EventViewMixin
+
+SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 
 def item_group_by_category(items):
@@ -52,6 +63,7 @@ def get_grouped_items(event):
                                  if item.cached_availability[1] is not None else sys.maxsize,
                                  int(event.settings.max_items_per_order))
             item.price = item.default_price
+            item.display_price = item.default_price_net if event.settings.display_net_prices else item.price
             display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
             for var in item.available_variations:
@@ -59,11 +71,11 @@ def get_grouped_items(event):
                 var.order_max = min(var.cached_availability[1]
                                     if var.cached_availability[1] is not None else sys.maxsize,
                                     int(event.settings.max_items_per_order))
+                var.display_price = var.net_price if event.settings.display_net_prices else var.price
                 display_add_to_cart = display_add_to_cart or var.order_max > 0
-                var.price = var.default_price if var.default_price is not None else item.default_price
             if len(item.available_variations) > 0:
-                item.min_price = min([v.price for v in item.available_variations])
-                item.max_price = max([v.price for v in item.available_variations])
+                item.min_price = min([v.display_price for v in item.available_variations])
+                item.max_price = max([v.display_price for v in item.available_variations])
 
     items = [item for item in items if len(item.available_variations) > 0 or not item.has_variations]
     return items, display_add_to_cart
@@ -88,5 +100,34 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         context['vouchers_exist'] = vouchers_exist
 
         context['cart'] = self.get_cart()
+
         context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
         return context
+
+
+class EventAuth(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        s = SessionStore(request.POST.get('session'))
+
+        try:
+            data = s.load()
+        except:
+            raise PermissionDenied(_('Please go back and try again.'))
+
+        parent = data.get('pretix_event_access_{}'.format(request.event.pk))
+
+        sparent = SessionStore(parent)
+        try:
+            parentdata = sparent.load()
+        except:
+            raise PermissionDenied(_('Please go back and try again.'))
+        else:
+            if 'event_access' not in parentdata:
+                raise PermissionDenied(_('Please go back and try again.'))
+
+        request.session['pretix_event_access_{}'.format(request.event.pk)] = parent
+        return redirect(eventreverse(request.event, 'presale:event.index'))

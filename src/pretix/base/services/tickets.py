@@ -1,4 +1,4 @@
-from datetime import timedelta
+import os
 
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
@@ -6,34 +6,62 @@ from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, CachedTicket, Event, Order, OrderPosition, cachedfile_name,
+    CachedCombinedTicket, CachedTicket, Event, Order, OrderPosition,
 )
 from pretix.base.services.async import ProfiledTask
 from pretix.base.signals import register_ticket_outputs
-from pretix.celery import app
+from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
 
 
 @app.task(base=ProfiledTask)
 def generate(order_position: str, provider: str):
     order_position = OrderPosition.objects.select_related('order', 'order__event').get(id=order_position)
-    ct = CachedTicket.objects.get_or_create(order_position=order_position, provider=provider)[0]
-    if not ct.cachedfile:
-        cf = CachedFile()
-        cf.date = now()
-        cf.expires = order_position.order.event.date_from + timedelta(days=30)
-        cf.save()
-        ct.cachedfile = cf
-        ct.save()
+    try:
+        ct = CachedTicket.objects.get(order_position=order_position, provider=provider)
+    except CachedTicket.MultipleObjectsReturned:
+        CachedTicket.objects.filter(order_position=order_position, provider=provider).delete()
+        ct = CachedTicket.objects.create(order_position=order_position, provider=provider, extension='',
+                                         type='', file=None)
+    except CachedTicket.DoesNotExist:
+        ct = CachedTicket.objects.create(order_position=order_position, provider=provider, extension='',
+                                         type='', file=None)
 
     with language(order_position.order.locale):
         responses = register_ticket_outputs.send(order_position.order.event)
         for receiver, response in responses:
             prov = response(order_position.order.event)
             if prov.identifier == provider:
-                ct.cachedfile.filename, ct.cachedfile.type, data = prov.generate(order_position)
-                ct.cachedfile.file.save(cachedfile_name(ct.cachedfile, ct.cachedfile.filename), ContentFile(data))
-                ct.cachedfile.save()
+                filename, ct.type, data = prov.generate(order_position)
+                path, ext = os.path.splitext(filename)
+                ct.extension = ext
+                ct.save()
+                ct.file.save(filename, ContentFile(data))
+
+
+@app.task(base=ProfiledTask)
+def generate_order(order: int, provider: str):
+    order = Order.objects.select_related('event').get(id=order)
+    try:
+        ct = CachedCombinedTicket.objects.get(order=order, provider=provider)
+    except CachedCombinedTicket.MultipleObjectsReturned:
+        CachedCombinedTicket.objects.filter(order=order, provider=provider).delete()
+        ct = CachedCombinedTicket.objects.create(order=order, provider=provider, extension='',
+                                                 type='', file=None)
+    except CachedCombinedTicket.DoesNotExist:
+        ct = CachedCombinedTicket.objects.create(order=order, provider=provider, extension='',
+                                                 type='', file=None)
+
+    with language(order.locale):
+        responses = register_ticket_outputs.send(order.event)
+        for receiver, response in responses:
+            prov = response(order.event)
+            if prov.identifier == provider:
+                filename, ct.type, data = prov.generate_order(order)
+                path, ext = os.path.splitext(filename)
+                ct.extension = ext
+                ct.save()
+                ct.file.save(filename, ContentFile(data))
 
 
 class DummyRollbackException(Exception):

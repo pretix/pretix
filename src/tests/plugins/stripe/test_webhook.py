@@ -5,21 +5,25 @@ from decimal import Decimal
 import pytest
 from django.utils.timezone import now
 
-from pretix.base.models import Event, Order, Organizer
+from pretix.base.models import (
+    Event, EventPermission, Order, Organizer, RequiredAction, User,
+)
 
 
 @pytest.fixture
 def env():
+    user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), live=True
     )
+    EventPermission.objects.create(event=event, user=user)
     o1 = Order.objects.create(
         code='FOOBAR', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PAID,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=Decimal('13.37'), payment_provider='banktransfer'
+        total=Decimal('13.37'), payment_provider='stripe'
     )
     return event, o1
 
@@ -122,6 +126,39 @@ def test_webhook_all_good(env, client, monkeypatch):
 
 
 @pytest.mark.django_db
+def test_webhook_mark_paid(env, client, monkeypatch):
+    order = env[1]
+    order.status = Order.STATUS_PENDING
+    order.save()
+
+    charge = get_test_charge(env[1])
+    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args: charge)
+
+    client.post('/dummy/dummy/stripe/webhook/', json.dumps(
+        {
+            "id": "evt_18otImGGWE2Ias8TUyVRDB1G",
+            "object": "event",
+            "api_version": "2016-03-07",
+            "created": 1472729052,
+            "data": {
+                "object": {
+                    "id": "ch_18TY6GGGWE2Ias8TZHanef25",
+                    "object": "charge",
+                    # Rest of object is ignored anway
+                }
+            },
+            "livemode": True,
+            "pending_webhooks": 1,
+            "request": "req_977XOWC8zk51Z9",
+            "type": "charge.succeeded"
+        }
+    ), content_type='application_json')
+
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
 def test_webhook_partial_refund(env, client, monkeypatch):
     charge = get_test_charge(env[1])
     charge['refunds'] = {
@@ -164,6 +201,14 @@ def test_webhook_partial_refund(env, client, monkeypatch):
             "type": "charge.refunded"
         }
     ), content_type='application_json')
+
+    order = env[1]
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+
+    ra = RequiredAction.objects.get(action_type="pretix.plugins.stripe.refund")
+    client.login(username='dummy@dummy.dummy', password='dummy')
+    client.post('/control/event/dummy/dummy/stripe/refund/{}/'.format(ra.pk))
 
     order = env[1]
     order.refresh_from_db()

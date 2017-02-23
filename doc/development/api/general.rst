@@ -11,7 +11,7 @@ Core
 ----
 
 .. automodule:: pretix.base.signals
-   :members: periodic_task
+   :members: periodic_task, event_live_issues
 
 Order events
 """"""""""""
@@ -19,13 +19,13 @@ Order events
 There are multiple signals that will be sent out in the ordering cycle:
 
 .. automodule:: pretix.base.signals
-   :members: order_paid, order_placed
+   :members: validate_cart, order_paid, order_placed
 
 Frontend
 --------
 
 .. automodule:: pretix.presale.signals
-   :members: html_head, footer_links, front_page_top, front_page_bottom
+   :members: html_head, footer_links, front_page_top, front_page_bottom, checkout_confirm_messages
 
 
 .. automodule:: pretix.presale.signals
@@ -47,11 +47,11 @@ Backend
 -------
 
 .. automodule:: pretix.control.signals
-   :members: nav_event, html_head, quota_detail_html
+   :members: nav_event, html_head, quota_detail_html, nav_topbar, organizer_edit_tabs
 
 
 .. automodule:: pretix.base.signals
-   :members: logentry_display
+   :members: logentry_display, requiredaction_display
 
 Vouchers
 """"""""

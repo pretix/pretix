@@ -7,7 +7,9 @@ from typing import List, Optional
 
 import pytz
 from celery.exceptions import MaxRetriesExceededError
+from django.conf import settings
 from django.db import transaction
+from django.db.models import F, Q
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.timezone import make_aware, now
@@ -18,9 +20,9 @@ from pretix.base.i18n import (
 )
 from pretix.base.models import (
     CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Quota,
-    User,
+    User, Voucher,
 )
-from pretix.base.models.orders import InvoiceAddress
+from pretix.base.models.orders import CachedTicket, InvoiceAddress
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.async import ProfiledTask
 from pretix.base.services.invoices import (
@@ -31,7 +33,7 @@ from pretix.base.services.mail import SendMailException, mail
 from pretix.base.signals import (
     order_paid, order_placed, periodic_task, register_payment_providers,
 )
-from pretix.celery import app
+from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 error_messages = {
@@ -42,22 +44,27 @@ error_messages = {
     'price_changed': _('The price of some of the items in your cart has changed in the '
                        'meantime. Please see below for details.'),
     'internal': _("An internal error occured, please try again."),
+    'empty': _("Your cart is empty."),
     'busy': _('We were not able to process your request completely as the '
               'server was too busy. Please try again.'),
     'not_started': _('The presale period for this event has not yet started.'),
     'ended': _('The presale period has ended.'),
-    'voucher_invalid': _('This voucher code is not known in our database.'),
-    'voucher_redeemed': _('This voucher code has already been used an can only be used once.'),
-    'voucher_expired': _('This voucher is expired.'),
-    'voucher_invalid_item': _('This voucher is not valid for this item.'),
-    'voucher_required': _('You need a valid voucher code to order one of the products in your cart.'),
+    'voucher_invalid': _('The voucher code used for one of the items in your cart is not known in our database.'),
+    'voucher_redeemed': _('The voucher code used for one of the items in your cart has already been used the maximum '
+                          'number of times allowed. We removed this item from your cart.'),
+    'voucher_expired': _('The voucher code used for one of the items in your cart is expired. We removed this item '
+                         'from your cart.'),
+    'voucher_invalid_item': _('The voucher code used for one of the items in your cart is not valid for this item. We '
+                              'removed this item from your cart.'),
+    'voucher_required': _('You need a valid voucher code to order one of the products in your cart. We removed this '
+                          'item from your cart.'),
 }
 
 logger = logging.getLogger(__name__)
 
 
 def mark_order_paid(order: Order, provider: str=None, info: str=None, date: datetime=None, manual: bool=None,
-                    force: bool=False, send_mail: bool=True, user: User=None) -> Order:
+                    force: bool=False, send_mail: bool=True, user: User=None, mail_text='') -> Order:
     """
     Marks an order as paid. This sets the payment provider, info and date and returns
     the order object.
@@ -75,8 +82,13 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     :param send_mail: Whether an email should be sent to the user about this event (default: ``True``).
     :type send_mail: boolean
     :param user: The user that performed the change
+    :param mail_text: Additional text to be included in the email
+    :type mail_text: str
     :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
     """
+    if order.status == Order.STATUS_PAID:
+        return order
+
     with order.event.lock() as now_dt:
         can_be_paid = order._can_be_paid()
         if not force and can_be_paid is not True:
@@ -92,14 +104,24 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     order.log_action('pretix.event.order.paid', {
         'provider': provider,
         'info': info,
-        'date': date,
+        'date': date or now_dt,
         'manual': manual,
         'force': force
     }, user=user)
     order_paid.send(order.event, order=order)
 
+    if order.event.settings.get('invoice_generate') in ('True', 'paid') and invoice_qualified(order):
+        if not order.invoices.exists():
+            generate_invoice(order)
+
     if send_mail:
         with language(order.locale):
+            try:
+                invoice_name = order.invoice_address.name
+                invoice_company = order.invoice_address.company
+            except InvoiceAddress.DoesNotExist:
+                invoice_name = ""
+                invoice_company = ""
             mail(
                 order.email, _('Payment received for your order: %(code)s') % {'code': order.code},
                 order.event.settings.mail_text_order_paid,
@@ -109,7 +131,10 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
                         'order': order.code,
                         'secret': order.secret
                     }),
-                    'downloads': order.event.settings.get('ticket_download', as_type=bool)
+                    'downloads': order.event.settings.get('ticket_download', as_type=bool),
+                    'invoice_name': invoice_name,
+                    'invoice_company': invoice_company,
+                    'payment_info': mail_text
                 },
                 order.event, locale=order.locale
             )
@@ -163,10 +188,9 @@ def _cancel_order(order, user=None):
 
     for position in order.positions.all():
         if position.voucher:
-            position.voucher.redeemed = False
-            position.voucher.save()
+            Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=F('redeemed') - 1)
 
-    return order
+    return order.pk
 
 
 class OrderError(LazyLocaleException):
@@ -184,7 +208,6 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
     err = None
     _check_date(event, now_dt)
 
-    voucherids = set()
     for i, cp in enumerate(positions):
         if not cp.item.active or (cp.variation and not cp.variation.active):
             err = err or error_messages['unavailable']
@@ -193,11 +216,14 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
 
         if cp.voucher:
-            if cp.voucher.redeemed or cp.voucher_id in voucherids:
+            redeemed_in_carts = CartPosition.objects.filter(
+                Q(voucher=cp.voucher) & Q(event=event) & Q(expires__gte=now_dt)
+            ).exclude(pk=cp.pk)
+            v_avail = cp.voucher.max_usages - cp.voucher.redeemed - redeemed_in_carts.count()
+            if v_avail < 1:
                 err = err or error_messages['voucher_redeemed']
-                cp.delete()  # Sorry! But you should have never gotten into this state at all.
+                cp.delete()  # Sorry!
                 continue
-            voucherids.add(cp.voucher_id)
 
         if cp.item.require_voucher and cp.voucher is None:
             cp.delete()
@@ -225,9 +251,9 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         if cp.voucher:
             if cp.voucher.valid_until and cp.voucher.valid_until < now_dt:
                 err = err or error_messages['voucher_expired']
+                cp.delete()
                 continue
-            if cp.voucher.price is not None:
-                price = cp.voucher.price
+            price = cp.voucher.calculate_price(price)
 
         if price != cp.price and not (cp.item.free_price and cp.price > price):
             positions[i] = cp
@@ -263,7 +289,6 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         raise OrderError(err)
 
 
-@transaction.atomic
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None, address: int=None,
                   meta_info: dict=None):
@@ -275,7 +300,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 
     tz = pytz.timezone(event.settings.timezone)
     exp_by_date = now_dt.astimezone(tz) + timedelta(days=event.settings.get('payment_term_days', as_type=int))
-    exp_by_date = exp_by_date.replace(hour=23, minute=59, second=59, microsecond=0)
+    exp_by_date = exp_by_date.astimezone(tz).replace(hour=23, minute=59, second=59, microsecond=0)
     if event.settings.get('payment_term_weekdays'):
         if exp_by_date.weekday() == 5:
             exp_by_date += timedelta(days=2)
@@ -292,33 +317,35 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         if last_date < expires:
             expires = last_date
 
-    order = Order.objects.create(
-        status=Order.STATUS_PENDING,
-        event=event,
-        email=email,
-        datetime=now_dt,
-        expires=expires,
-        locale=locale,
-        total=total,
-        payment_fee=payment_fee,
-        payment_provider=payment_provider.identifier,
-        meta_info=json.dumps(meta_info or {}),
-    )
-    OrderPosition.transform_cart_positions(positions, order)
+    with transaction.atomic():
+        order = Order.objects.create(
+            status=Order.STATUS_PENDING,
+            event=event,
+            email=email,
+            datetime=now_dt,
+            expires=expires,
+            locale=locale,
+            total=total,
+            payment_fee=payment_fee,
+            payment_provider=payment_provider.identifier,
+            meta_info=json.dumps(meta_info or {}),
+        )
+        OrderPosition.transform_cart_positions(positions, order)
 
-    if address is not None:
-        try:
-            addr = InvoiceAddress.objects.get(
-                pk=address
-            )
-            if addr.order is not None:
-                addr.pk = None
-            addr.order = order
-            addr.save()
-        except InvoiceAddress.DoesNotExist:
-            pass
+        if address is not None:
+            try:
+                addr = InvoiceAddress.objects.get(
+                    pk=address
+                )
+                if addr.order is not None:
+                    addr.pk = None
+                addr.order = order
+                addr.save()
+            except InvoiceAddress.DoesNotExist:
+                pass
 
-    order.log_action('pretix.event.order.placed')
+        order.log_action('pretix.event.order.placed')
+
     order_placed.send(event, order=order)
     return order
 
@@ -339,6 +366,8 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
     with event.lock() as now_dt:
         positions = list(CartPosition.objects.filter(
             id__in=position_ids).select_related('item', 'variation'))
+        if len(positions) == 0:
+            raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
         _check_positions(event, now_dt, positions)
@@ -354,6 +383,14 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             mailtext = event.settings.mail_text_order_free
         else:
             mailtext = event.settings.mail_text_order_placed
+
+        try:
+            invoice_name = order.invoice_address.name
+            invoice_company = order.invoice_address.company
+        except InvoiceAddress.DoesNotExist:
+            invoice_name = ""
+            invoice_company = ""
+
         mail(
             order.email, _('Your order: %(code)s') % {'code': order.code},
             mailtext,
@@ -366,7 +403,9 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
                     'order': order.code,
                     'secret': order.secret
                 }),
-                'paymentinfo': str(pprov.order_pending_mail_render(order))
+                'paymentinfo': str(pprov.order_pending_mail_render(order)),
+                'invoice_name': invoice_name,
+                'invoice_company': invoice_company,
             },
             event, locale=order.locale
         )
@@ -395,29 +434,39 @@ def send_expiry_warnings(sender, **kwargs):
     today = now().replace(hour=0, minute=0, second=0)
 
     for o in Order.objects.filter(expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING).select_related('event'):
-        settings = eventcache.get(o.event.pk, None)
-        if settings is None:
-            settings = o.event.settings
-            eventcache[o.event.pk] = settings
+        eventsettings = eventcache.get(o.event.pk, None)
+        if eventsettings is None:
+            eventsettings = o.event.settings
+            eventcache[o.event.pk] = eventsettings
 
-        days = settings.get('mail_days_order_expire_warning', as_type=int)
+        days = eventsettings.get('mail_days_order_expire_warning', as_type=int)
+        tz = pytz.timezone(eventsettings.get('timezone', settings.TIME_ZONE))
         if days and (o.expires - today).days <= days:
             o.expiry_reminder_sent = True
             o.save()
             try:
-                mail(
-                    o.email, _('Your order is about to expire: %(code)s') % {'code': o.code},
-                    settings.mail_text_order_expire_warning,
-                    {
-                        'event': o.event.name,
-                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                            'order': o.code,
-                            'secret': o.secret
-                        }),
-                        'expire_date': date_format(o.expires, 'SHORT_DATE_FORMAT')
-                    },
-                    o.event, locale=o.locale
-                )
+                invoice_name = o.invoice_address.name
+                invoice_company = o.invoice_address.company
+            except InvoiceAddress.DoesNotExist:
+                invoice_name = ""
+                invoice_company = ""
+            try:
+                with language(o.locale):
+                    mail(
+                        o.email, _('Your order is about to expire: %(code)s') % {'code': o.code},
+                        eventsettings.mail_text_order_expire_warning,
+                        {
+                            'event': o.event.name,
+                            'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                                'order': o.code,
+                                'secret': o.secret
+                            }),
+                            'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
+                            'invoice_name': invoice_name,
+                            'invoice_company': invoice_company,
+                        },
+                        o.event, locale=o.locale
+                    )
             except SendMailException:
                 logger.exception('Reminder email could not be sent')
             else:
@@ -431,9 +480,11 @@ class OrderChangeManager:
         'quota': _('The quota {name} does not have enough capacity left to perform the operation.'),
         'product_invalid': _('The selected product is not active or has no price set.'),
         'complete_cancel': _('This operation would leave the order empty. Please cancel the order itself instead.'),
-        'not_pending': _('Only pending orders can be changed.'),
+        'not_pending_or_paid': _('Only pending or paid orders can be changed.'),
         'paid_to_free_exceeded': _('This operation would make the order free and therefore immediately paid, however '
                                    'no quota is available.'),
+        'paid_price_change': _('Currently, paid orders can only be changed in a way that does not change the total '
+                               'price of the order as partial payments or refunds are not yet supported.')
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation', 'price'))
     PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
@@ -449,8 +500,7 @@ class OrderChangeManager:
     def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation]):
         if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
             raise OrderError(self.error_messages['product_without_variation'])
-        price = item.default_price if variation is None else (
-            variation.default_price if variation.default_price is not None else item.default_price)
+        price = item.default_price if variation is None else variation.price
         if not price:
             raise OrderError(self.error_messages['product_invalid'])
         self._totaldiff = price - position.price
@@ -479,6 +529,10 @@ class OrderChangeManager:
         if self.order.total == Decimal('0.00') and self._totaldiff > 0:
             raise OrderError(self.error_messages['free_to_paid'])
 
+    def _check_paid_price_change(self):
+        if self.order.status == Order.STATUS_PAID and self._totaldiff != 0:
+            raise OrderError(self.error_messages['paid_price_change'])
+
     def _check_paid_to_free(self):
         if self.order.total == 0:
             try:
@@ -491,6 +545,7 @@ class OrderChangeManager:
             if isinstance(op, self.ItemOperation):
                 self.order.log_action('pretix.event.order.changed.item', user=self.user, data={
                     'position': op.position.pk,
+                    'positionid': op.position.positionid,
                     'old_item': op.position.item.pk,
                     'old_variation': op.position.variation.pk if op.position.variation else None,
                     'new_item': op.item.pk,
@@ -506,6 +561,7 @@ class OrderChangeManager:
             elif isinstance(op, self.PriceOperation):
                 self.order.log_action('pretix.event.order.changed.price', user=self.user, data={
                     'position': op.position.pk,
+                    'positionid': op.position.positionid,
                     'old_price': op.position.price,
                     'new_price': op.price
                 })
@@ -515,6 +571,7 @@ class OrderChangeManager:
             elif isinstance(op, self.CancelOperation):
                 self.order.log_action('pretix.event.order.changed.cancel', user=self.user, data={
                     'position': op.position.pk,
+                    'positionid': op.position.positionid,
                     'old_item': op.position.item.pk,
                     'old_variation': op.position.variation.pk if op.position.variation else None,
                     'old_price': op.position.price,
@@ -545,6 +602,12 @@ class OrderChangeManager:
 
     def _notify_user(self):
         with language(self.order.locale):
+            try:
+                invoice_name = self.order.invoice_address.name
+                invoice_company = self.order.invoice_address.company
+            except InvoiceAddress.DoesNotExist:
+                invoice_name = ""
+                invoice_company = ""
             mail(
                 self.order.email, _('Your order has been changed: %(code)s') % {'code': self.order.code},
                 self.order.event.settings.mail_text_order_changed,
@@ -554,6 +617,8 @@ class OrderChangeManager:
                         'order': self.order.code,
                         'secret': self.order.secret
                     }),
+                    'invoice_name': invoice_name,
+                    'invoice_company': invoice_company,
                 },
                 self.order.event, locale=self.order.locale
             )
@@ -564,16 +629,21 @@ class OrderChangeManager:
             return
         with transaction.atomic():
             with self.order.event.lock():
-                if self.order.status != Order.STATUS_PENDING:
-                    raise OrderError(self.error_messages['not_pending'])
+                if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID):
+                    raise OrderError(self.error_messages['not_pending_or_paid'])
                 self._check_free_to_paid()
+                self._check_paid_price_change()
                 self._check_quotas()
                 self._check_complete_cancel()
                 self._perform_operations()
             self._recalculate_total_and_payment_fee()
             self._reissue_invoice()
+            self._clear_tickets_cache()
         self._check_paid_to_free()
         self._notify_user()
+
+    def _clear_tickets_cache(self):
+        CachedTicket.objects.filter(order_position__order=self.order).delete()
 
     def _get_payment_provider(self):
         responses = register_payment_providers.send(self.order.event)
@@ -586,7 +656,7 @@ class OrderChangeManager:
             raise OrderError(error_messages['internal'])
 
 
-@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1)
+@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def perform_order(self, event: str, payment_provider: str, positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None):
     try:
@@ -598,7 +668,7 @@ def perform_order(self, event: str, payment_provider: str, positions: List[str],
         return OrderError(error_messages['busy'])
 
 
-@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1)
+@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def cancel_order(self, order: int, user: int=None):
     try:
         try:

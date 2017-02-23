@@ -1,3 +1,5 @@
+{% load staticfiles %}
+{% load i18n %}
 <ul class="list-group">
     {% for log in obj.all_logentries %}
         <li class="list-group-item logentry">
@@ -5,6 +7,11 @@
                 <span class="fa fa-clock-o"></span> {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
                 {% if log.user %}
                     <br/><span class="fa fa-user"></span> {{ log.user.get_full_name }}
+                    {% if log.user.is_superuser %}
+                        <img src="{% static "pretixbase/img/pretix-icon-colored.svg" %}"
+                             data-toggle="tooltip" class="user-admin-icon"
+                             title="{% trans "This change was performed by a pretix administrator." %}">
+                    {% endif %}
                 {% endif %}
             </p>
 

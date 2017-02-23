@@ -1,13 +1,16 @@
 from collections import OrderedDict
+from datetime import date
 from decimal import Decimal
 from typing import Any, Dict
 
+import pytz
 from django import forms
 from django.contrib import messages
 from django.dispatch import receiver
 from django.forms import Form
 from django.http import HttpRequest
 from django.template.loader import get_template
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.decimal import round_decimal
@@ -16,6 +19,15 @@ from pretix.base.models import Event, Order, Quota
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
 from pretix.presale.views import get_cart_total
+
+
+class PaymentProviderForm(Form):
+    def clean(self):
+        cleaned_data = super().clean()
+        for k, v in self.fields.items():
+            val = cleaned_data.get(k)
+            if v._required and not val:
+                self.add_error(k, _('This field is required.'))
 
 
 class BasePaymentProvider:
@@ -86,7 +98,7 @@ class BasePaymentProvider:
         settings keys and the values should be corresponding Django form fields.
 
         The default implementation returns the appropriate fields for the ``_enabled``,
-        ``_fee_abs`` and ``_fee_percent`` settings mentioned above.
+        ``_fee_abs``, ``_fee_percent`` and ``_availability_date`` settings mentioned above.
 
         We suggest that you return an ``OrderedDict`` object instead of a dictionary
         and make use of the default implementation. Your implementation could look
@@ -125,6 +137,13 @@ class BasePaymentProvider:
                  label=_('Additional fee'),
                  help_text=_('Percentage'),
                  required=False
+             )),
+            ('_availability_date',
+             forms.DateField(
+                 label=_('Available until'),
+                 help_text=_('Users will not be able to choose this payment provider after the given date.'),
+                 required=False,
+                 widget=forms.DateInput(attrs={'class': 'datepickerfield'})
              )),
             ('_fee_reverse_calc',
              forms.BooleanField(
@@ -177,8 +196,12 @@ class BasePaymentProvider:
         process. The default implementation constructs the form using
         :py:attr:`checkout_form_fields` and sets appropriate prefixes for the form
         and all fields and fills the form with data form the user's session.
+
+        If you overwrite this, we strongly suggest that you inherit from
+        ``PaymentProviderForm`` (from this module) that handles some nasty issues about
+        required fields for you.
         """
-        form = Form(
+        form = PaymentProviderForm(
             data=(request.POST if request.method == 'POST' else None),
             prefix='payment_%s' % self.identifier,
             initial={
@@ -188,7 +211,21 @@ class BasePaymentProvider:
             }
         )
         form.fields = self.payment_form_fields
+
+        for k, v in form.fields.items():
+            v._required = v.required
+            v.required = False
+            v.widget.is_required = False
+
         return form
+
+    def _is_still_available(self, now_dt=None):
+        now_dt = now_dt or now()
+        tz = pytz.timezone(self.event.settings.timezone)
+        availability_date = self.settings.get('_availability_date', as_type=date)
+        if availability_date:
+            return availability_date >= now_dt.astimezone(tz).date()
+        return True
 
     def is_allowed(self, request: HttpRequest) -> bool:
         """
@@ -197,9 +234,9 @@ class BasePaymentProvider:
         user will not be able to select this payment method. This will only be called
         during checkout, not on retrying.
 
-        The default implementation always returns ``True``.
+        The default implementation checks for the _availability_date setting to be either unset or in the future.
         """
-        return True
+        return self._is_still_available()
 
     def payment_form_render(self, request: HttpRequest) -> str:
         """
@@ -333,11 +370,11 @@ class BasePaymentProvider:
         Will be called to check whether it is allowed to change the payment method of
         an order to this one.
 
-        The default implementation always returns ``True``.
+        The default implementation checks for the _availability_date setting to be either unset or in the future.
 
         :param order: The order object
         """
-        return True
+        return self._is_still_available()
 
     def order_can_retry(self, order: Order) -> bool:
         """
@@ -345,8 +382,12 @@ class BasePaymentProvider:
         whether the user should be presented with an option to retry the payment. The default
         implementation always returns False.
 
+        If you want to enable retrials for your payment method, the best is to just return
+        ``self._is_still_available()`` from this method to disable it as soon as the method
+        gets disabled or the methods end date is reached.
+
         The retry workflow is also used if a user switches to this payment method for an existing
-        order! Therefore, they can only switch to your p
+        order!
 
         :param order: The order object
         """

@@ -1,7 +1,7 @@
 {% extends "pretixpresale/organizers/base.html" %}
 {% load i18n %}
 {% load eventurl %}
-{% block title %}Event list{% endblock %}
+{% block title %}{% trans "Event list" %}{% endblock %}
 {% block content %}
     {% if "old" in request.GET %}
         <h3>Past events</h3>
@@ -9,7 +9,7 @@
             <small><a href="?">{% trans "Show upcoming" %}</a></small>
         </p>
     {% else %}
-        <h3>Upcoming events </h3>
+        <h3>{% trans "Upcoming events" %}</h3>
         <p>
             <small><a href="?old=1">{% trans "Show past events" %}</a></small>
         </p>

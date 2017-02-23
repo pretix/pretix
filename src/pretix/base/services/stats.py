@@ -93,7 +93,7 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
         (p['item'], p['variation']): (p['cnt'], p['price'], p['price'] - p['tax_value'])
         for p in counters if p['order__status'] == Order.STATUS_PAID
     }
-    num_s_pending = {
+    num_pending = {
         (p['item'], p['variation']): (p['cnt'], p['price'], p['price'] - p['tax_value'])
         for p in counters if p['order__status'] == Order.STATUS_PENDING
     }
@@ -101,7 +101,6 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
         (p['item'], p['variation']): (p['cnt'], p['price'], p['price'] - p['tax_value'])
         for p in counters if p['order__status'] == Order.STATUS_EXPIRED
     }
-    num_pending = dictsum(num_s_pending, num_expired)
     num_total = dictsum(num_pending, num_paid)
 
     for item in items:
@@ -112,17 +111,20 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
                 variid = var.id
                 var.num_total = num_total.get((item.id, variid), (0, 0, 0))
                 var.num_pending = num_pending.get((item.id, variid), (0, 0, 0))
+                var.num_expired = num_expired.get((item.id, variid), (0, 0, 0))
                 var.num_canceled = num_canceled.get((item.id, variid), (0, 0, 0))
                 var.num_refunded = num_refunded.get((item.id, variid), (0, 0, 0))
                 var.num_paid = num_paid.get((item.id, variid), (0, 0, 0))
             item.num_total = tuplesum(var.num_total for var in item.all_variations)
             item.num_pending = tuplesum(var.num_pending for var in item.all_variations)
+            item.num_expired = tuplesum(var.num_expired for var in item.all_variations)
             item.num_canceled = tuplesum(var.num_canceled for var in item.all_variations)
             item.num_refunded = tuplesum(var.num_refunded for var in item.all_variations)
             item.num_paid = tuplesum(var.num_paid for var in item.all_variations)
         else:
             item.num_total = num_total.get((item.id, None), (0, 0, 0))
             item.num_pending = num_pending.get((item.id, None), (0, 0, 0))
+            item.num_expired = num_expired.get((item.id, None), (0, 0, 0))
             item.num_canceled = num_canceled.get((item.id, None), (0, 0, 0))
             item.num_refunded = num_refunded.get((item.id, None), (0, 0, 0))
             item.num_paid = num_paid.get((item.id, None), (0, 0, 0))
@@ -144,6 +146,7 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
     for c in items_by_category:
         c[0].num_total = tuplesum(item.num_total for item in c[1])
         c[0].num_pending = tuplesum(item.num_pending for item in c[1])
+        c[0].num_expired = tuplesum(item.num_expired for item in c[1])
         c[0].num_canceled = tuplesum(item.num_canceled for item in c[1])
         c[0].num_refunded = tuplesum(item.num_refunded for item in c[1])
         c[0].num_paid = tuplesum(item.num_paid for item in c[1])
@@ -165,7 +168,7 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
         o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
         for o in counters if o['status'] == Order.STATUS_REFUNDED
     }
-    num_s_pending = {
+    num_pending = {
         o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
         for o in counters if o['status'] == Order.STATUS_PENDING
     }
@@ -177,7 +180,6 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
         o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
         for o in counters if o['status'] == Order.STATUS_PAID
     }
-    num_pending = dictsum(num_s_pending, num_expired)
     num_total = dictsum(num_pending, num_paid)
 
     provider_names = {}
@@ -194,6 +196,7 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
         ppobj.num_total = total
         ppobj.num_canceled = num_canceled.get(pprov, (0, 0, 0))
         ppobj.num_refunded = num_refunded.get(pprov, (0, 0, 0))
+        ppobj.num_expired = num_expired.get(pprov, (0, 0, 0))
         ppobj.num_pending = num_pending.get(pprov, (0, 0, 0))
         ppobj.num_paid = num_paid.get(pprov, (0, 0, 0))
         payment_items.append(ppobj)
@@ -206,6 +209,9 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
     )
     payment_cat_obj.num_refunded = (
         Dontsum(''), sum(i.num_refunded[1] for i in payment_items), sum(i.num_refunded[2] for i in payment_items)
+    )
+    payment_cat_obj.num_expired = (
+        Dontsum(''), sum(i.num_expired[1] for i in payment_items), sum(i.num_expired[2] for i in payment_items)
     )
     payment_cat_obj.num_pending = (
         Dontsum(''), sum(i.num_pending[1] for i in payment_items), sum(i.num_pending[2] for i in payment_items)
@@ -220,6 +226,7 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
     total = {
         'num_total': tuplesum(c.num_total for c, i in items_by_category),
         'num_pending': tuplesum(c.num_pending for c, i in items_by_category),
+        'num_expired': tuplesum(c.num_expired for c, i in items_by_category),
         'num_canceled': tuplesum(c.num_canceled for c, i in items_by_category),
         'num_refunded': tuplesum(c.num_refunded for c, i in items_by_category),
         'num_paid': tuplesum(c.num_paid for c, i in items_by_category)

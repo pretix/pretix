@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Quota
+from pretix.base.models import Quota, RequiredAction
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
@@ -86,7 +86,7 @@ class Stripe(BasePaymentProvider):
         return template.render(ctx)
 
     def order_can_retry(self, order):
-        return True
+        return self._is_still_available()
 
     def payment_perform(self, request, order) -> str:
         self._init_api()
@@ -137,7 +137,14 @@ class Stripe(BasePaymentProvider):
                 try:
                     mark_order_paid(order, 'stripe', str(charge))
                 except Quota.QuotaExceededException as e:
+                    RequiredAction.objects.create(
+                        event=request.event, action_type='pretix.plugins.stripe.overpaid', data=json.dumps({
+                            'order': order.code,
+                            'charge': charge.id
+                        })
+                    )
                     raise PaymentException(str(e))
+
                 except SendMailException:
                     raise PaymentException(_('There was an error sending the confirmation mail.'))
             else:

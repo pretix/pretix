@@ -1,0 +1,31 @@
+{% extends "pretixcontrol/auth/base.html" %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% load i18n %}
+{% block content %}
+	<form class="form-signin" action="" method="post">
+        <h3>{% trans "Accept an invitation" %}</h3>
+        <p>
+            {% url "control:auth.login" as loginurl %}
+            {% blocktrans trimmed with login_href='href="'|add:loginurl|add:'"'|safe %}
+                If you already have an account on this site with a different email address, you can
+                <a {{ login_href }}>log in</a> first and then click this link again to accept the
+                invitation with your existing account.
+            {% endblocktrans %}
+        </p>
+		{% bootstrap_form_errors form type='all' layout='inline' %}
+		{% csrf_token %}
+		{% bootstrap_field form.email %}
+		{% bootstrap_field form.password %}
+        {% bootstrap_field form.password_repeat %}
+		<div class="form-group buttons">
+            <a href="{% url "control:auth.login" %}" class="btn btn-link">
+                &laquo; {% trans "Login" %}
+            </a>
+
+			<button type="submit" class="btn btn-primary">
+				{% trans "Register" %}
+			</button>
+		</div>
+	</form>
+{% endblock %}

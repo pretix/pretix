@@ -41,7 +41,7 @@
                     </div>
                 </div>
             {% endif %}
-            
+
             {% for form in forms %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -56,7 +56,7 @@
                                 <span class="text-right pull-right">
                                      <input type="button" data-id="{{ forloop.counter0 }}" name="copy" class="js-copy-answers btn btn-default btn-xs" value='{% trans "Copy answers from above" %}'>
                                 </span>
-                            {% endif %}                           
+                            {% endif %}
                         </h4>
                     </div>
                     <div id="cp{{ form.pos.id }}"

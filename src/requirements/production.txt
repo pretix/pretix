@@ -1,26 +1,24 @@
 # Functional requirements
-Django>=1.10,<1.11
+Django==1.10.*
 python-dateutil
 pytz
-django-bootstrap3>=7.1,<7.2
-git+https://github.com/pretix/django-formset-js.git@master#egg=django-formset-js
+django-bootstrap3==8.0.*
+django-formset-js-improved==0.5.0.1
 django-compressor==2.1
-reportlab>=3.2,<3.3
-git+https://github.com/pretix/PyPDF2.git@pretix#egg=PyPDF2
-easy-thumbnails>=2.2,<3
+reportlab==3.2.*
+PyPDF2==1.26.*
+easy-thumbnails==2.*
 django-libsass
 libsass
 django-otp==0.3.*
 python-u2flib-server==4.*
-# celery>=3.1,<3.2
-# until the following issue is fixed, we need our own celery version
-# https://github.com/celery/celery/pull/3199
-git+https://github.com/pretix/celery.git@pretix#egg=celery
-django-statici18n==1.2.*
-
-# Deployment / static file compilation requirements
+django-formtools==1.0
+celery==4.0.2
+kombu==4.0.2
+django-statici18n==1.3.*
+inlinestyler==0.2.*
 BeautifulSoup4
-html5lib
+html5lib<0.99999999,>=0.999  # version requirement by bleach
 slimit
 lxml
 static3==0.6.1
@@ -28,3 +26,13 @@ dj-static
 csscompressor
 django-markup
 markdown
+bleach
+raven
+# Stripe
+stripe==1.22.*
+# PayPal
+paypalrestsdk==1.12.*
+pycparser==2.13  # https://github.com/eliben/pycparser/issues/147
+# Banktransfer
+chardet>=2.3,<3
+mt-940==3.2

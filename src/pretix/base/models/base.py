@@ -1,7 +1,7 @@
 import json
 import uuid
 
-from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
@@ -60,7 +60,6 @@ class LoggingMixin:
 
 
 class LoggedModel(models.Model, LoggingMixin):
-    logentries = GenericRelation('pretixbase.LogEntry')
 
     class Meta:
         abstract = True
@@ -71,4 +70,8 @@ class LoggedModel(models.Model, LoggingMixin):
 
         :return: A QuerySet of LogEntry objects
         """
-        return self.logentries.all().select_related('user')
+        from .log import LogEntry
+
+        return LogEntry.objects.filter(
+            content_type=ContentType.objects.get_for_model(type(self)), object_id=self.pk
+        ).select_related('user', 'event')

@@ -24,19 +24,23 @@
             <script type="text/javascript" src="{% static "datetimepicker/bootstrap-datetimepicker.js" %}"></script>
             <script type="text/javascript" src="{% static "charts/raphael-min.js" %}"></script>
             <script type="text/javascript" src="{% static "charts/morris.js" %}"></script>
+            <script type="text/javascript" src="{% static "clipboard/clipboard.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/jquery.qrcode.min.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/clipboard.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/menu.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/sb-admin-2.js" %}"></script>
 		    <script type="text/javascript" src="{% static "pretixcontrol/js/ui/main.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/quota.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/question.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixbase/js/asynctask.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixbase/js/asyncdownload.js" %}"></script>
 		{% endcompress %}
         {{ html_head|safe }}
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
 	</head>
 	<body data-datetimeformat="{{ js_datetime_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}" data-payment-weekdays-disabled="{{ js_payment_weekdays_disabled }}">
-        <div id="#wrapper">
+        <div id="wrapper">
             <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle"
@@ -72,6 +76,35 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-top-links navbar-right">
+                    {% for nav in nav_topbar %}
+                        <li {% if nav.children %}class="dropdown"{% endif %}>
+                            <a href="{{ nav.url }}" {% if nav.active %}class="active"{% endif %}
+                                    {% if nav.children %}class="dropdown-toggle" data-toggle="dropdown"{% endif %}>
+                                {% if nav.icon %}
+                                    <span class="fa fa-{{ nav.icon }}"></span>
+                                    <span class="visible-xs-inline">{{ nav.label }}</span>
+                                {% else %}
+                                    {{ nav.label }}
+                                {% endif %}
+                            </a>
+                            {% if nav.children %}
+                                <ul class="dropdown-menu" role="menu">
+                                    {% for item in nav.children %}
+                                        <li>
+                                            <a href="{{ item.url }}"
+                                                    {% if item.active %}class="active"{% endif %}>
+                                                {% if item.icon %}
+                                                    <span class="fa fa-{{ item.icon }}"></span>
+                                                {% endif %}
+                                                {{ item.label|safe }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+
                     <li>
                         <a href="{% url 'control:user.settings' %}">
                             <i class="fa fa-user"></i> {{ request.user.get_full_name }}

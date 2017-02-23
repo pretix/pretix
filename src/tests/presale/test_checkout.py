@@ -294,7 +294,7 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(cr1.price, 24)
 
     def test_voucher(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
                                    valid_until=now() + timedelta(days=2))
         cr1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -309,10 +309,10 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.first().voucher, v)
-        self.assertTrue(Voucher.objects.get(pk=v.pk).redeemed)
+        self.assertEqual(Voucher.objects.get(pk=v.pk).redeemed, 1)
 
     def test_voucher_required(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
                                    valid_until=now() + timedelta(days=2))
         self.ticket.require_voucher = True
         self.ticket.save()
@@ -325,7 +325,7 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
-        self.assertTrue(Voucher.objects.get(pk=v.pk).redeemed)
+        self.assertEqual(Voucher.objects.get(pk=v.pk).redeemed, 1)
 
     def test_voucher_required_but_missing(self):
         self.ticket.require_voucher = True
@@ -341,7 +341,7 @@ class CheckoutTestCase(TestCase):
         assert doc.select(".alert-danger")
 
     def test_voucher_price_changed(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
                                    valid_until=now() + timedelta(days=2))
         cr1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -355,21 +355,9 @@ class CheckoutTestCase(TestCase):
         cr1 = CartPosition.objects.get(id=cr1.id)
         self.assertEqual(cr1.price, Decimal('12.00'))
 
-    def test_voucher_expired(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
-                                   valid_until=now() - timedelta(days=2))
-        CartPosition.objects.create(
-            event=self.event, cart_id=self.session_key, item=self.ticket,
-            price=12, expires=now() - timedelta(minutes=10), voucher=v
-        )
-        self._set_session('payment', 'banktransfer')
-        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertIn("expired", doc.select(".alert-danger")[0].text)
-
     def test_voucher_redeemed(self):
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
-                                   valid_until=now() + timedelta(days=2), redeemed=True)
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
+                                   valid_until=now() + timedelta(days=2), redeemed=1)
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
             price=12, expires=now() - timedelta(minutes=10), voucher=v
@@ -379,10 +367,107 @@ class CheckoutTestCase(TestCase):
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn("has already been", doc.select(".alert-danger")[0].text)
 
+    def test_voucher_multiuse_redeemed(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
+                                   valid_until=now() + timedelta(days=2), max_usages=3, redeemed=3)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() - timedelta(minutes=10), voucher=v
+        )
+        self._set_session('payment', 'banktransfer')
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn("has already been", doc.select(".alert-danger")[0].text)
+
+    def test_voucher_multiuse_partially(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
+                                   valid_until=now() + timedelta(days=2), max_usages=3, redeemed=2)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() - timedelta(minutes=10), voucher=v
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() - timedelta(minutes=10), voucher=v
+        )
+        self._set_session('payment', 'banktransfer')
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn("has already been", doc.select(".alert-danger")[0].text)
+        assert CartPosition.objects.filter(cart_id=self.session_key).count() == 1
+
+    def test_voucher_multiuse_ok(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
+                                   valid_until=now() + timedelta(days=2), max_usages=3, redeemed=1)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() - timedelta(minutes=10), voucher=v
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() - timedelta(minutes=10), voucher=v
+        )
+        self._set_session('payment', 'banktransfer')
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key).exists())
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.count(), 2)
+        v.refresh_from_db()
+        assert v.redeemed == 3
+
+    def test_voucher_multiuse_in_other_cart_expired(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
+                                   price_mode='set',
+                                   valid_until=now() + timedelta(days=2), max_usages=3, redeemed=1)
+        CartPosition.objects.create(
+            event=self.event, cart_id='other', item=self.ticket,
+            price=12, expires=now() - timedelta(minutes=10), voucher=v
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() - timedelta(minutes=10), voucher=v
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() - timedelta(minutes=10), voucher=v
+        )
+        self._set_session('payment', 'banktransfer')
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key).exists())
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.count(), 2)
+        v.refresh_from_db()
+        assert v.redeemed == 3
+
+    def test_voucher_multiuse_in_other_cart(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
+                                   valid_until=now() + timedelta(days=2), max_usages=3, redeemed=1)
+        CartPosition.objects.create(
+            event=self.event, cart_id='other', item=self.ticket,
+            price=12, expires=now() + timedelta(minutes=10), voucher=v
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() - timedelta(minutes=10), voucher=v
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=12, expires=now() - timedelta(minutes=10), voucher=v
+        )
+        self._set_session('payment', 'banktransfer')
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn("has already been", doc.select(".alert-danger")[0].text)
+        assert CartPosition.objects.filter(cart_id=self.session_key).count() == 1
+
     def test_voucher_ignore_quota(self):
         self.quota_tickets.size = 0
         self.quota_tickets.save()
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
                                    valid_until=now() + timedelta(days=2), allow_ignore_quota=True)
         cr1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -400,7 +485,7 @@ class CheckoutTestCase(TestCase):
     def test_voucher_block_quota(self):
         self.quota_tickets.size = 1
         self.quota_tickets.save()
-        v = Voucher.objects.create(item=self.ticket, price=Decimal('12.00'), event=self.event,
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set',
                                    valid_until=now() + timedelta(days=2), block_quota=True)
         cr1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -427,17 +512,17 @@ class CheckoutTestCase(TestCase):
         self.quota_tickets.save()
         q2 = self.event.quotas.create(name='Testquota', size=0)
         q2.items.add(self.ticket)
-        v = Voucher.objects.create(quota=self.quota_tickets, price=Decimal('12.00'), event=self.event,
-                                   valid_until=now() - timedelta(days=2), block_quota=True)
+        v = Voucher.objects.create(quota=self.quota_tickets, value=Decimal('12.00'), event=self.event,
+                                   valid_until=now() + timedelta(days=2), block_quota=True)
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
-            price=12, expires=now() + timedelta(minutes=10), voucher=v
+            price=12, expires=now() - timedelta(minutes=10), voucher=v
         )
         self._set_session('payment', 'banktransfer')
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        self.assertTrue(doc.select(".alert-danger"))
         self.assertFalse(Order.objects.exists())
 
     def test_voucher_double(self):

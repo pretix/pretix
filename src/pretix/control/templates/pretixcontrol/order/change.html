@@ -43,6 +43,7 @@
             <div class="panel panel-default items">
                 <div class="panel-heading">
                     <h3 class="panel-title">
+                        #{{ position.positionid }} –
                         <strong>{{ position.item.name }}</strong>
                         {% if position.variation %}
                             – {{ position.variation }}
@@ -78,6 +79,9 @@
                                         {% if position.form.operation.value == "price" %}checked="checked"{% endif %}>
                                 {% trans "Change price to" %}
                                 {% bootstrap_field position.form.price layout='inline' %}
+                                {% if request.event.settings.display_net_prices %}
+                                    <em>{% trans "Enter a gross price including taxes." %}</em>
+                                {% endif %}
                             </label>
                         </div>
                         <div class="radio">

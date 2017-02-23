@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-08 19:21+0000\n"
-"PO-Revision-Date: 2016-11-08 20:23+0100\n"
+"POT-Creation-Date: 2017-02-22 16:28+0000\n"
+"PO-Revision-Date: 2017-01-01 20:40+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:53
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:59
@@ -46,34 +46,41 @@ msgstr "Gesamtumsatz"
 msgid "Contacting Stripe …"
 msgstr "Kontaktiere Stripe …"
 
-#: static/pretixcontrol/js/ui/main.js:28 static/pretixpresale/js/ui/main.js:57
-msgid "Close message"
-msgstr "Schließen"
-
-#: static/pretixcontrol/js/ui/main.js:43
-msgid "Unknown error."
-msgstr "Unbekannter Fehler."
-
-#: static/pretixcontrol/js/ui/question.js:41
-msgid "Others"
-msgstr "Sonstige"
-
-#: static/pretixcontrol/js/ui/question.js:70
-msgid "Count"
-msgstr "Anzahl"
-
-#: static/pretixpresale/js/ui/asynctask.js:27
-msgid "Your request has been queued on the server and will now be processed."
+#: pretix/static/pretixbase/js/asyncdownload.js:27
+#: pretix/static/pretixbase/js/asynctask.js:27
+#: pretix/static/pretixbase/js/asynctask.js:64
+msgid ""
+"Your request has been queued on the server and will now be processed. If "
+"this takes longer than two minutes, please contact us or go back in your "
+"browser and try again."
 msgstr ""
-"Ihre Anfrage befindet sich beim Server in der Warteschlange und wird nun "
-"verarbeitet."
+"Ihre Anfrage ist auf dem Server angekommen und wird nun verarbeitet. Wenn "
+"dies länger als zwei Minuten dauert, kontaktieren Sie uns bitte oder gehen "
+"Sie in Ihrem Browser einen Schritt zurück und versuchen es erneut."
 
-#: static/pretixpresale/js/ui/asynctask.js:40
-#: static/pretixpresale/js/ui/asynctask.js:74
+#: pretix/static/pretixbase/js/asyncdownload.js:40
+#: pretix/static/pretixbase/js/asynctask.js:43
+#: pretix/static/pretixbase/js/asynctask.js:85
 msgid "An error of type {code} occured."
 msgstr "Ein Fehler ist aufgetreten. Fehlercode: {code}"
 
-#: static/pretixpresale/js/ui/asynctask.js:43
+#: pretix/static/pretixbase/js/asyncdownload.js:53
+#: pretix/static/pretixbase/js/asynctask.js:103
+msgid "We are processing your request …"
+msgstr "Wir verarbeiten Ihre Anfrage …"
+
+#: pretix/static/pretixbase/js/asyncdownload.js:54
+#: pretix/static/pretixbase/js/asynctask.js:104
+msgid ""
+"We are currently sending your request to the server. If this takes longer "
+"than one minute, please check your internet connection and then reload this "
+"page and try again."
+msgstr ""
+"Ihre Anfrage wird an den Server gesendet. Wenn dies länger als eine Minute "
+"dauert, prüfen Sie bitte Ihre Internetverbindung. Danach können Sie diese "
+"Seite neu laden und es erneut versuchen."
+
+#: pretix/static/pretixbase/js/asynctask.js:46
 msgid ""
 "We currenctly cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -81,25 +88,56 @@ msgstr ""
 "Wir können den Server aktuell nicht erreichen, versuchen es aber weiter. "
 "Letzter Fehlercode: {code}"
 
-#: static/pretixpresale/js/ui/asynctask.js:77
+#: pretix/static/pretixbase/js/asynctask.js:76
+msgid "The request took to long. Please try again."
+msgstr "Diese Anfrage hat zu lange gedauert. Bitte erneut versuchen."
+
+#: pretix/static/pretixbase/js/asynctask.js:88
 msgid ""
 "We currenctly cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "Wir können den Server aktuell nicht erreichen. Bitte versuchen Sie es noch "
 "einmal. Fehlercode: {code}"
 
-#: static/pretixpresale/js/ui/asynctask.js:92
-msgid "We are processing your request …"
-msgstr "Wir verarbeiten deine Anfrage …"
+#: pretix/static/pretixbase/js/asynctask.js:140
+#: pretix/static/pretixcontrol/js/ui/main.js:28
+msgid "Close message"
+msgstr "Schließen"
 
-#: static/pretixpresale/js/ui/cart.js:10
+#: pretix/static/pretixcontrol/js/clipboard.js:23
+msgid "Copied!"
+msgstr "Kopiert!"
+
+#: pretix/static/pretixcontrol/js/clipboard.js:29
+msgid "Press Ctrl-C to copy!"
+msgstr "Drücken Sie Strg+C zum Kopieren!"
+
+#: pretix/static/pretixcontrol/js/ui/main.js:43
+msgid "Unknown error."
+msgstr "Unbekannter Fehler."
+
+#: pretix/static/pretixcontrol/js/ui/question.js:41
+msgid "Others"
+msgstr "Sonstige"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:70
+msgid "Count"
+msgstr "Anzahl"
+
+#: pretix/static/pretixpresale/js/ui/cart.js:10
 msgid "The items in your cart are no longer reserved for you."
 msgstr "Die Produkte in Ihrem Warenkorb sind nicht mehr für Sie reserviert."
 
-#: static/pretixpresale/js/ui/cart.js:14
+#: pretix/static/pretixpresale/js/ui/cart.js:14
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
 "Die Produkte in Ihrem Warenkorb sind noch eine Minute für Sie reserviert."
 msgstr[1] ""
 "Die Produkte in Ihrem Warenkorb sind noch {num} Minuten für Sie reserviert."
+
+#~ msgid ""
+#~ "Your request has been queued on the server and will now be processed."
+#~ msgstr ""
+#~ "Ihre Anfrage befindet sich beim Server in der Warteschlange und wird nun "
+#~ "verarbeitet."

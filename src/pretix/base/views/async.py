@@ -8,7 +8,8 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext as _
 
-from pretix.celery import app
+from pretix.celery_app import app
+from pretix.helpers.database import casual_reads
 
 logger = logging.getLogger('pretix.base.async')
 
@@ -17,6 +18,7 @@ class AsyncAction:
     task = None
     success_url = None
     error_url = None
+    known_errortypes = []
 
     def do(self, *args):
         if not isinstance(self.task, app.Task):
@@ -30,10 +32,11 @@ class AsyncAction:
             return JsonResponse(data)
         else:
             if res.ready():
-                if res.successful() and not isinstance(res.info, Exception):
-                    return self.success(res.info)
-                else:
-                    return self.error(res.info)
+                with casual_reads():
+                    if res.successful() and not isinstance(res.info, Exception):
+                        return self.success(res.info)
+                    else:
+                        return self.error(res.info)
             return redirect(self.get_check_url(res.id, False))
 
     def get_success_url(self, value):
@@ -53,7 +56,7 @@ class AsyncAction:
     def _return_ajax_result(self, res, timeout=.5):
         if not res.ready():
             try:
-                res.get(timeout=timeout)
+                res.get(timeout=timeout, propagate=False)
             except celery.exceptions.TimeoutError:
                 pass
 
@@ -63,24 +66,25 @@ class AsyncAction:
             'ready': ready
         }
         if ready:
-            if res.successful() and not isinstance(res.info, Exception):
-                smes = self.get_success_message(res.info)
-                if smes:
-                    messages.success(self.request, smes)
-                # TODO: Do not store message if the ajax client states that it will not redirect
-                # but handle the mssage itself
-                data.update({
-                    'redirect': self.get_success_url(res.info),
-                    'message': str(self.get_success_message(res.info))
-                })
-            else:
-                messages.error(self.request, self.get_error_message(res.info))
-                # TODO: Do not store message if the ajax client states that it will not redirect
-                # but handle the mssage itself
-                data.update({
-                    'redirect': self.get_error_url(),
-                    'message': str(self.get_error_message(res.info))
-                })
+            with casual_reads():
+                if res.successful() and not isinstance(res.info, Exception):
+                    smes = self.get_success_message(res.info)
+                    if smes:
+                        messages.success(self.request, smes)
+                    # TODO: Do not store message if the ajax client states that it will not redirect
+                    # but handle the mssage itself
+                    data.update({
+                        'redirect': self.get_success_url(res.info),
+                        'message': str(self.get_success_message(res.info))
+                    })
+                else:
+                    messages.error(self.request, self.get_error_message(res.info))
+                    # TODO: Do not store message if the ajax client states that it will not redirect
+                    # but handle the mssage itself
+                    data.update({
+                        'redirect': self.get_error_url(),
+                        'message': str(self.get_error_message(res.info))
+                    })
         return data
 
     def get_result(self, request):
@@ -89,10 +93,11 @@ class AsyncAction:
             return JsonResponse(self._return_ajax_result(res, timeout=0.25))
         else:
             if res.ready():
-                if res.successful() and not isinstance(res.info, Exception):
-                    return self.success(res.info)
-                else:
-                    return self.error(res.info)
+                with casual_reads():
+                    if res.successful() and not isinstance(res.info, Exception):
+                        return self.success(res.info)
+                    else:
+                        return self.error(res.info)
             return render(request, 'pretixpresale/waiting.html')
 
     def success(self, value):
@@ -118,8 +123,13 @@ class AsyncAction:
         return redirect(self.get_error_url())
 
     def get_error_message(self, exception):
-        logger.error('Unexpected exception: %r' % exception)
-        return _('An unexpected error has occured.')
+        if isinstance(exception, dict) and exception['exc_type'] in self.known_errortypes:
+            return exception['exc_message']
+        elif exception.__class__.__name__ in self.known_errortypes:
+            return str(exception)
+        else:
+            logger.error('Unexpected exception: %r' % exception)
+            return _('An unexpected error has occured.')
 
     def get_success_message(self, value):
         return _('The task has been completed.')

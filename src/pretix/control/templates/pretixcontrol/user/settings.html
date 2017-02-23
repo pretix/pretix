@@ -9,8 +9,7 @@
     {% bootstrap_form_errors form %}
     <fieldset>
         <legend>{% trans "General settings" %}</legend>
-        {% bootstrap_field form.givenname layout='horizontal' %}
-        {% bootstrap_field form.familyname layout='horizontal' %}
+        {% bootstrap_field form.fullname layout='horizontal' %}
         {% bootstrap_field form.locale layout='horizontal' %}
     </fieldset>
     <fieldset>

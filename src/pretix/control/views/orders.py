@@ -1,5 +1,4 @@
 from datetime import timedelta
-from itertools import groupby
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -13,7 +12,8 @@ from django.views.generic import DetailView, ListView, TemplateView, View
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, Invoice, Item, ItemVariation, Order, Quota,
+    CachedFile, CachedTicket, Invoice, InvoiceAddress, Item, ItemVariation,
+    Order, Quota, generate_position_secret, generate_secret,
 )
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
@@ -99,10 +99,13 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
     model = Order
 
     def get_object(self, queryset=None):
-        return Order.objects.get(
-            event=self.request.event,
-            code=self.kwargs['code'].upper()
-        )
+        try:
+            return Order.objects.get(
+                event=self.request.event,
+                code=self.kwargs['code'].upper()
+            )
+        except Order.DoesNotExist:
+            raise Http404()
 
     def _redirect_back(self):
         return redirect('control:event.order',
@@ -159,33 +162,25 @@ class OrderDetail(OrderView):
         ).select_related(
             'item', 'variation'
         ).prefetch_related(
-            'item__questions', 'answers', 'answers__question'
-        )
-
-        # Group items of the same variation
-        # We do this by list manipulations instead of a GROUP BY query, as
-        # Django is unable to join related models in a .values() query
-        def keyfunc(pos):
-            if (pos.item.admission and self.request.event.settings.attendee_names_asked) \
-                    or pos.item.questions.all():
-                return pos.id, 0, 0, 0, 0, 0
-            return 0, pos.item_id, pos.variation_id, pos.price, pos.tax_rate, (pos.voucher_id or 0)
+            'item__questions', 'answers', 'answers__question', 'checkins'
+        ).order_by('positionid')
 
         positions = []
-        for k, g in groupby(sorted(list(cartpos), key=keyfunc), key=keyfunc):
-            g = list(g)
-            group = g[0]
-            group.count = len(g)
-            group.total = group.count * group.price
-            group.has_questions = k[0] != ""
-            group.cache_answers()
-            positions.append(group)
+        for p in cartpos:
+            p.has_questions = (
+                (p.item.admission and self.request.event.settings.attendee_names_asked) or
+                p.item.questions.all()
+            )
+            p.cache_answers()
+            positions.append(p)
 
         return {
             'positions': positions,
             'raw': cartpos,
             'total': self.object.total,
             'payment_fee': self.object.payment_fee,
+            'net_total': self.object.net_total,
+            'tax_total': self.object.tax_total,
         }
 
 
@@ -330,6 +325,12 @@ class OrderResendLink(OrderView):
     def post(self, *args, **kwargs):
         with language(self.order.locale):
             try:
+                try:
+                    invoice_name = self.order.invoice_address.name
+                    invoice_company = self.order.invoice_address.company
+                except InvoiceAddress.DoesNotExist:
+                    invoice_name = ""
+                    invoice_company = ""
                 mail(
                     self.order.email, _('Your order: %(code)s') % {'code': self.order.code},
                     self.order.event.settings.mail_text_resend_link,
@@ -339,6 +340,8 @@ class OrderResendLink(OrderView):
                             'order': self.order.code,
                             'secret': self.order.secret
                         }),
+                        'invoice_name': invoice_name,
+                        'invoice_company': invoice_company,
                     },
                     self.order.event, locale=self.order.locale
                 )
@@ -445,8 +448,8 @@ class OrderChange(OrderView):
     template_name = 'pretixcontrol/order/change.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if self.order.status != Order.STATUS_PENDING:
-            messages.error(self.request, _('This action is only allowed for pending orders.'))
+        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID):
+            messages.error(self.request, _('This action is only allowed for pending or paid orders.'))
             return self._redirect_back()
         return super().dispatch(request, *args, **kwargs)
 
@@ -525,11 +528,24 @@ class OrderContactChange(OrderView):
         )
 
     def post(self, *args, **kwargs):
+        old_email = self.order.email
         if self.form.is_valid():
-            self.order.log_action('pretix.event.order.contact.changed', {
-                'old_email': self.order.email,
-                'new_email': self.form.cleaned_data['email']
-            })
+            self.order.log_action(
+                'pretix.event.order.contact.changed',
+                data={
+                    'old_email': old_email,
+                    'new_email': self.form.cleaned_data['email'],
+                },
+                user=self.request.user,
+            )
+            if self.form.cleaned_data['regenerate_secrets']:
+                self.order.secret = generate_secret()
+                for op in self.order.positions.all():
+                    op.secret = generate_position_secret()
+                    op.save()
+                CachedTicket.objects.filter(order_position__order=self.order).delete()
+                self.order.log_action('pretix.event.order.secret.changed', user=self.request.user)
+
             self.form.save()
             messages.success(self.request, _('The order has been changed.'))
             return redirect(self.get_order_url())

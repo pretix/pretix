@@ -28,20 +28,23 @@ def contextprocessor(request):
     else:
         pretix_settings = GlobalSettingsObject().settings
 
-    text = str(pretix_settings.get('footer_text', as_type=LazyI18nString))
-    link = str(pretix_settings.get('footer_link', as_type=LazyI18nString))
+    text = pretix_settings.get('footer_text', as_type=LazyI18nString)
+    link = pretix_settings.get('footer_link', as_type=LazyI18nString)
 
     if text:
         if link:
-            _footer.append({'url': link, 'label': text})
+            _footer.append({'url': str(link), 'label': str(text)})
         else:
-            ctx['footer_text'] = text
+            ctx['footer_text'] = str(text)
 
     if hasattr(request, 'event'):
         for receiver, response in html_head.send(request.event, request=request):
             _html_head.append(response)
         for receiver, response in footer_link.send(request.event, request=request):
-            _footer.append(response)
+            if isinstance(response, list):
+                _footer += response
+            else:
+                _footer.append(response)
 
         if request.event.settings.presale_css_file:
             ctx['css_file'] = default_storage.url(request.event.settings.presale_css_file)

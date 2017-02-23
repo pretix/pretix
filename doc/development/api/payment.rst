@@ -70,8 +70,6 @@ The provider class
 
    .. automethod:: is_allowed
 
-   .. automethod:: is_allowed_for_order
-
    .. autoattribute:: payment_form_fields
 
    .. automethod:: checkout_prepare

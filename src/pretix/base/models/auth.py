@@ -43,10 +43,8 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
     :param email: The user's email address, used for identification.
     :type email: str
-    :param givenname: The user's given name. May be empty or null.
-    :type givenname: str
-    :param familyname: The user's given name. May be empty or null.
-    :type familyname: str
+    :param fullname: The user's full name. May be empty or null.
+    :type fullname: str
     :param is_active: Whether this user account is activated.
     :type is_active: bool
     :param is_staff: ``True`` for system operators.
@@ -64,10 +62,8 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
     email = models.EmailField(unique=True, db_index=True, null=True, blank=True,
                               verbose_name=_('E-mail'))
-    givenname = models.CharField(max_length=255, blank=True, null=True,
-                                 verbose_name=_('Given name'))
-    familyname = models.CharField(max_length=255, blank=True, null=True,
-                                  verbose_name=_('Family name'))
+    fullname = models.CharField(max_length=255, blank=True, null=True,
+                                verbose_name=_('Full name'))
     is_active = models.BooleanField(default=True,
                                     verbose_name=_('Is active'))
     is_staff = models.BooleanField(default=False,
@@ -100,14 +96,13 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         """
         Returns the first of the following user properties that is found to exist:
 
-        * Given name
-        * Family name
+        * Full name
         * Email address
+
+        Only present for backwards compatibility
         """
-        if self.givenname:
-            return self.givenname
-        elif self.familyname:
-            return self.familyname
+        if self.fullname:
+            return self.fullname
         else:
             return self.email
 
@@ -115,20 +110,11 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         """
         Returns the first of the following user properties that is found to exist:
 
-        * A combination of given name and family name, depending on the locale
-        * Given name
-        * Family name
-        * User name
+        * Full name
+        * Email address
         """
-        if self.givenname and not self.familyname:
-            return self.givenname
-        elif not self.givenname and self.familyname:
-            return self.familyname
-        elif self.familyname and self.givenname:
-            return _('%(family)s, %(given)s') % {
-                'family': self.familyname,
-                'given': self.givenname
-            }
+        if self.fullname:
+            return self.fullname
         else:
             return self.email
 

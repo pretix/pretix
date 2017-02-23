@@ -69,14 +69,16 @@ class LazyI18nString:
 
         if isinstance(self.data, dict):
             firstpart = lng.split('-')[0]
-            similar = [l for l in self.data.keys() if l.startswith(firstpart + "-") or firstpart == l]
-            if lng in self.data and self.data[lng]:
+            similar = [l for l in self.data.keys() if (l.startswith(firstpart + "-") or firstpart == l) and l != lng]
+            if self.data.get(lng):
                 return self.data[lng]
-            elif firstpart in self.data:
+            elif self.data.get(firstpart):
                 return self.data[firstpart]
-            elif similar:
-                return self.data[similar[0]]
-            elif settings.LANGUAGE_CODE in self.data and self.data[settings.LANGUAGE_CODE]:
+            elif similar and any([self.data.get(s) for s in similar]):
+                for s in similar:
+                    if self.data.get(s):
+                        return self.data.get(s)
+            elif self.data.get(settings.LANGUAGE_CODE):
                 return self.data[settings.LANGUAGE_CODE]
             elif len(self.data):
                 return list(self.data.items())[0][1]
@@ -145,6 +147,7 @@ class I18nWidget(forms.MultiWidget):
         data = []
         first_enabled = None
         any_filled = False
+        any_enabled_filled = False
         if not isinstance(value, LazyI18nString):
             value = LazyI18nString(value)
         for i, lng in enumerate(self.langcodes):
@@ -158,9 +161,13 @@ class I18nWidget(forms.MultiWidget):
             any_filled = any_filled or (lng in self.enabled_langcodes and dataline)
             if not first_enabled and lng in self.enabled_langcodes:
                 first_enabled = i
+                if dataline:
+                    any_enabled_filled = True
             data.append(dataline)
         if value and not isinstance(value.data, dict):
             data[first_enabled] = value.data
+        elif value and not any_enabled_filled:
+            data[first_enabled] = value.localize(self.enabled_langcodes[0])
         return data
 
     def render(self, name, value, attrs=None):

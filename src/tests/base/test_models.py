@@ -1,7 +1,10 @@
 import datetime
 import sys
 from datetime import timedelta
+from decimal import Decimal
 
+import pytest
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -10,7 +13,7 @@ from django.utils.timezone import now
 
 from pretix.base.models import (
     CachedFile, CartPosition, Event, Item, ItemCategory, ItemVariation, Order,
-    OrderPosition, Organizer, Question, Quota, User, Voucher,
+    OrderPosition, Organizer, Question, Quota, User, Voucher, WaitingListEntry,
 )
 from pretix.base.services.orders import (
     OrderError, cancel_order, mark_order_paid, perform_order,
@@ -20,22 +23,12 @@ from pretix.base.services.orders import (
 class UserTestCase(TestCase):
     def test_name(self):
         u = User.objects.create_user('test@foo.bar', 'test')
-        u.givenname = "Christopher"
-        u.familyname = "Nolan"
+        u.fullname = "Christopher Nolan"
         u.set_password("test")
         u.save()
-        self.assertEqual(u.get_full_name(), 'Nolan, Christopher')
-        self.assertEqual(u.get_short_name(), 'Christopher')
-        u.givenname = None
-        u.save()
-        self.assertEqual(u.get_full_name(), 'Nolan')
-        self.assertEqual(u.get_short_name(), 'Nolan')
-        u.givenname = "Christopher"
-        u.familyname = None
-        u.save()
-        self.assertEqual(u.get_full_name(), 'Christopher')
-        self.assertEqual(u.get_short_name(), 'Christopher')
-        u.givenname = None
+        self.assertEqual(u.get_full_name(), 'Christopher Nolan')
+        self.assertEqual(u.get_short_name(), 'Christopher Nolan')
+        u.fullname = None
         u.save()
         self.assertEqual(u.get_full_name(), 'test@foo.bar')
         self.assertEqual(u.get_short_name(), 'test@foo.bar')
@@ -234,6 +227,39 @@ class QuotaTestCase(BaseQuotaTestCase):
         v.save()
         self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
 
+    def test_voucher_quota_multiuse(self):
+        self.quota.size = 5
+        self.quota.variations.add(self.var1)
+        self.quota.save()
+        Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, max_usages=5, redeemed=2)
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 2))
+        Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, max_usages=2)
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
+
+    def test_voucher_multiuse_count_overredeemed(self):
+        if 'sqlite' not in settings.DATABASES['default']['ENGINE']:
+            pytest.xfail('This should raise a type error on most databases')
+        Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, max_usages=2, redeemed=4)
+        self.assertEqual(self.quota.count_blocking_vouchers(), 0)
+
+    def test_voucher_quota_multiuse_multiproduct(self):
+        q2 = Quota.objects.create(event=self.event, name="foo", size=10)
+        q2.items.add(self.item1)
+        self.quota.size = 5
+        self.quota.items.add(self.item1)
+        self.quota.items.add(self.item2)
+        self.quota.items.add(self.item3)
+        self.quota.variations.add(self.var1)
+        self.quota.variations.add(self.var2)
+        self.quota.variations.add(self.var3)
+        self.quota.save()
+        Voucher.objects.create(item=self.item1, event=self.event, block_quota=True, max_usages=5, redeemed=2)
+        Voucher.objects.create(item=self.item2, variation=self.var2, event=self.event, block_quota=True, max_usages=5,
+                               redeemed=2)
+        Voucher.objects.create(item=self.item2, variation=self.var2, event=self.event, block_quota=True, max_usages=5,
+                               redeemed=2)
+        self.assertEqual(self.quota.count_blocking_vouchers(), 9)
+
     def test_voucher_quota_expiring_soon(self):
         self.quota.variations.add(self.var1)
         self.quota.size = 1
@@ -289,6 +315,104 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.assertEqual(self.quota.count_blocking_vouchers(), 0)
         self.assertEqual(self.quota.count_in_cart(), 1)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+
+    def test_waitinglist_item_active(self):
+        self.quota.items.add(self.item1)
+        self.quota.size = 1
+        self.quota.save()
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='foo@bar.com'
+        )
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_RESERVED, 0))
+        self.assertEqual(self.item1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+    def test_waitinglist_variation_active(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = 1
+        self.quota.save()
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com'
+        )
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_RESERVED, 0))
+        self.assertEqual(self.var1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+    def test_waitinglist_variation_fulfilled(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = 1
+        self.quota.save()
+        v = Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, redeemed=1)
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com', voucher=v
+        )
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+        self.assertEqual(self.var1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+    def test_waitinglist_variation_other(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = 1
+        self.quota.save()
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var2, email='foo@bar.com'
+        )
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+        self.assertEqual(self.var1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+    def test_quota_cache(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = 1
+        self.quota.save()
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com'
+        )
+
+        cache = {}
+
+        self.assertEqual(self.var1.check_quotas(_cache=cache), (Quota.AVAILABILITY_RESERVED, 0))
+
+        with self.assertNumQueries(1):
+            self.assertEqual(self.var1.check_quotas(_cache=cache), (Quota.AVAILABILITY_RESERVED, 0))
+
+        # Do not reuse cache for count_waitinglist=False
+        self.assertEqual(self.var1.check_quotas(_cache=cache, count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+        with self.assertNumQueries(1):
+            self.assertEqual(self.var1.check_quotas(_cache=cache, count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+
+class WaitingListTestCase(BaseQuotaTestCase):
+
+    def test_duplicate(self):
+        w1 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com'
+        )
+        w1.clean()
+        w2 = WaitingListEntry(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com'
+        )
+        with self.assertRaises(ValidationError):
+            w2.clean()
+
+    def test_duplicate_of_successful(self):
+        v = Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, redeemed=1)
+        w1 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com',
+            voucher=v
+        )
+        w1.clean()
+        w2 = WaitingListEntry(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com'
+        )
+        w2.clean()
+
+    def test_missing_variation(self):
+        w2 = WaitingListEntry(
+            event=self.event, item=self.item2, email='foo@bar.com'
+        )
+        with self.assertRaises(ValidationError):
+            w2.clean()
+
+
+class VoucherTestCase(BaseQuotaTestCase):
 
     def test_voucher_reuse(self):
         self.quota.items.add(self.item1)
@@ -369,6 +493,30 @@ class QuotaTestCase(BaseQuotaTestCase):
         with self.assertRaises(ValidationError):
             v = Voucher(variation=self.var1, event=self.event)
             v.clean()
+
+    def test_calculate_price_none(self):
+        v = Voucher.objects.create(event=self.event, price_mode='none', value=Decimal('10.00'))
+        v.calculate_price(Decimal('23.42')) == Decimal('23.42')
+
+    def test_calculate_price_set_empty(self):
+        v = Voucher.objects.create(event=self.event, price_mode='set')
+        v.calculate_price(Decimal('23.42')) == Decimal('23.42')
+
+    def test_calculate_price_set(self):
+        v = Voucher.objects.create(event=self.event, price_mode='set', value=Decimal('10.00'))
+        v.calculate_price(Decimal('23.42')) == Decimal('10.00')
+
+    def test_calculate_price_set_zero(self):
+        v = Voucher.objects.create(event=self.event, price_mode='set', value=Decimal('0.00'))
+        v.calculate_price(Decimal('23.42')) == Decimal('0.00')
+
+    def test_calculate_price_subtract(self):
+        v = Voucher.objects.create(event=self.event, price_mode='subtract', value=Decimal('10.00'))
+        v.calculate_price(Decimal('23.42')) == Decimal('13.42')
+
+    def test_calculate_price_percent(self):
+        v = Voucher.objects.create(event=self.event, price_mode='percent', value=Decimal('23.00'))
+        v.calculate_price(Decimal('100.00')) == Decimal('77.00')
 
 
 class OrderTestCase(BaseQuotaTestCase):
@@ -512,6 +660,16 @@ class OrderTestCase(BaseQuotaTestCase):
                                      variation=None, price=23)
         OrderPosition.objects.create(order=self.order, item=item2,
                                      variation=None, price=23)
+        assert self.order.can_user_cancel is False
+
+    def test_no_duplicate_position_secret(self):
+        item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
+                                    admission=True, allow_cancel=False)
+        p1 = OrderPosition.objects.create(order=self.order, item=item1, secret='ABC',
+                                          variation=None, price=23)
+        p2 = OrderPosition.objects.create(order=self.order, item=item1, secret='ABC',
+                                          variation=None, price=23)
+        assert p1.secret != p2.secret
         assert self.order.can_user_cancel is False
 
 

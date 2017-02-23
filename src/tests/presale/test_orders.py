@@ -337,7 +337,7 @@ class OrdersTest(TestCase):
             '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
                                                           self.order.secret, self.ticket_pos.pk),
         )
-        assert response.status_code == 302
+        assert response.status_code == 200
 
         self.event.settings.set('ticket_download_date', now() + datetime.timedelta(days=1))
         response = self.client.get(
@@ -355,7 +355,7 @@ class OrdersTest(TestCase):
             '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
                                                           self.order.secret, self.ticket_pos.pk),
         )
-        assert response.status_code == 302
+        assert response.status_code == 200
 
         self.event.settings.set('ticket_download', False)
         response = self.client.get(

@@ -14,7 +14,7 @@ from pretix.base.services.async import TransactionAwareTask
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid
-from pretix.celery import app
+from pretix.celery_app import app
 
 from .models import BankImportJob, BankTransaction
 

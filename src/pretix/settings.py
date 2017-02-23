@@ -7,6 +7,7 @@ from django.contrib.messages import constants as messages  # NOQA
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from pkg_resources import iter_entry_points
+from . import __version__
 
 config = configparser.RawConfigParser()
 config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
@@ -57,6 +58,7 @@ DATABASES = {
         'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120
     }
 }
+DATABASE_IS_GALERA = config.getboolean('database', 'galera', fallback=False)
 
 STATIC_URL = config.get('urls', 'static', fallback='/static/')
 
@@ -96,8 +98,7 @@ METRICS_PASSPHRASE = config.get('metrics', 'passphrase', fallback="")
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
 REAL_CACHE_USED = False
@@ -143,11 +144,10 @@ if not SESSION_ENGINE:
 
 HAS_CELERY = config.has_option('celery', 'broker')
 if HAS_CELERY:
-    BROKER_URL = config.get('celery', 'broker')
+    CELERY_BROKER_URL = config.get('celery', 'broker')
     CELERY_RESULT_BACKEND = config.get('celery', 'backend')
-    CELERY_SEND_TASK_ERROR_EMAILS = bool(ADMINS)
 else:
-    CELERY_ALWAYS_EAGER = True
+    CELERY_TASK_ALWAYS_EAGER = True
 
 SESSION_COOKIE_DOMAIN = config.get('pretix', 'cookie_domain', fallback=None)
 
@@ -206,6 +206,19 @@ PLUGINS = []
 for entry_point in iter_entry_points(group='pretix.plugin', name=None):
     PLUGINS.append(entry_point.module_name)
     INSTALLED_APPS.append(entry_point.module_name)
+
+if config.has_option('sentry', 'dsn'):
+    INSTALLED_APPS += [
+        'raven.contrib.django.raven_compat',
+    ]
+    DISABLE_SENTRY_INSTRUMENTATION = True  # see celery.py for more, we use this differently
+    RAVEN_CONFIG = {
+        'dsn': config.get('sentry', 'dsn'),
+        'transport': 'raven.transport.threaded_requests.ThreadedRequestsHTTPTransport',
+        'release': __version__,
+        'environment': SITE_URL,
+    }
+
 
 CORE_MODULES = {
     ("pretix", "base"),
@@ -328,10 +341,10 @@ STATICFILES_FINDERS = (
 )
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-] if os.path.exists(os.path.join(BASE_DIR, 'static')) else []
+    os.path.join(BASE_DIR, 'pretix/static')
+] if os.path.exists(os.path.join(BASE_DIR, 'pretix/static')) else []
 
-STATICI18N_ROOT = os.path.join(BASE_DIR, "static")
+STATICI18N_ROOT = os.path.join(BASE_DIR, "pretix/static")
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
@@ -432,9 +445,7 @@ LOGGING = {
 }
 
 CELERY_TASK_SERIALIZER = 'json'
-# We need to use pickle for now, because kombu/celery are unable to serialize
-# exceptions (that we also use as return values) into any other format.
-CELERY_RESULT_SERIALIZER = 'pickle'
+CELERY_RESULT_SERIALIZER = 'json'
 
 BOOTSTRAP3 = {
     'success_css_class': ''

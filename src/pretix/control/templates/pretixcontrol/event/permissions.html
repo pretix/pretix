@@ -26,7 +26,16 @@
                     <tbody>
                         {% for form in formset %}
                             <tr>
-                                <td>{{ form.id }}{{ form.instance.user }}</td>
+                                <td>
+                                    {{ form.id }}
+                                    {% if form.instance.user %}
+                                        {{ form.instance.user }}
+                                    {% else %}
+                                        {{ form.instance.invite_email }}
+                                        <span class="fa fa-envelope-o" data-toggle="tooltip"
+                                            title="{% trans "invited, pending response" %}"></span>
+                                    {% endif %}
+                                </td>
                                 <td>{{ form.can_change_settings }}</td>
                                 <td>{{ form.can_change_items }}</td>
                                 <td>{{ form.can_view_orders }}</td>
@@ -37,6 +46,19 @@
                                 <td>{{ form.DELETE }}</td>
                             </tr>
                         {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9">
+                                <strong>{% trans "Adding a new user" %}</strong><br>
+                                {% blocktrans trimmed %}
+                                    To add a new user, you can enter their email address here. If they already have a
+                                    pretix account, they will immediately be added to the event. Otherwise, they will
+                                    be sent an email with an invitation.
+                                {% endblocktrans %}
+                            </td>
+
+                        </tr>
                         <tr>
                             <td>
                                 <div class="row-fluid">
@@ -53,7 +75,7 @@
                             <td>{{ add_form.can_change_vouchers }}</td>
                             <td>{{ add_form.can_view_vouchers }}</td>
                         </tr>
-                    </tbody>
+                    </tfoot>
                 </table>
             </div>
 		</fieldset>

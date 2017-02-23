@@ -6,7 +6,7 @@ from pretix.base.i18n import language
 from pretix.base.models import CachedFile, Event, cachedfile_name
 from pretix.base.services.async import ProfiledTask
 from pretix.base.signals import register_data_exporters
-from pretix.celery import app
+from pretix.celery_app import app
 
 
 @app.task(base=ProfiledTask)

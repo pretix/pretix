@@ -5,11 +5,16 @@ from os import path
 
 from setuptools import find_packages, setup
 
+from pretix import __version__
+
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the relevant file
-with open(path.join(here, '../README.md'), encoding='utf-8') as f:
-    long_description = f.read()
+try:
+    with open(path.join(here, '../README.rst'), encoding='utf-8') as f:
+        long_description = f.read()
+except:
+    long_description = ''
 
 
 class CustomBuild(build):
@@ -37,10 +42,10 @@ cmdclass = {
 
 setup(
     name='pretix',
-    version='0.0.0',
-    description='Reinventing ticket presales',
+    version=__version__,
+    description='Reinventing presales, one ticket at a time',
     long_description=long_description,
-    url='http://pretix.eu',
+    url='https://pretix.eu',
     author='Raphael Michel',
     author_email='mail@raphaelmichel.de',
     license='Apache License 2.0',
@@ -49,34 +54,74 @@ setup(
         'Intended Audience :: Developers',
         'Intended Audience :: Other Audience',
         'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
-        'Framework :: Django :: 1.8'
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Framework :: Django :: 1.10'
     ],
 
     keywords='tickets web shop ecommerce',
     install_requires=[
-        'Django>=1.9,<1.10', 'python-dateutil>=2.4,<2.5',
-        'pytz', 'django-bootstrap3>=6.2,<6.3', 'django-formset-js',
-        'django-compressor==2.0', 'reportlab>=3.2,<3.3',
-        'easy-thumbnails>=2.2,<3'
-        'PyPDF2', 'BeautifulSoup4', 'html5lib',
-        'slimit', 'lxml', 'static3==0.6.1', 'dj-static', 'chardet',
-        'csscompressor', 'mt-940', 'django-markup', 'markdown'
+        'Django==1.10.*',
+        'python-dateutil==2.4.*',
+        'pytz',
+        'django-bootstrap3==7.1.*',
+        'django-formset-js-improved==0.5.0.1',
+        'django-compressor==2.1',
+        'reportlab==3.2.*',
+        'easy-thumbnails==2.*',
+        'PyPDF2==1.26.*',
+        'django-libsass',
+        'libsass',
+        'django-otp==0.3.*',
+        'python-u2flib-server==4.*',
+        'django-formtools==1.0',
+        'celery==4.0.2',
+        'kombu==4.0.2',
+        'django-statici18n==1.3.*',
+        'inlinestyler==0.2.*',
+        'BeautifulSoup4',
+        'html5lib<0.99999999,>=0.999',
+        'slimit',
+        'lxml',
+        'static3==0.6.1',
+        'dj-static',
+        'csscompressor',
+        'django-markup',
+        'markdown',
+        'bleach',
+        'raven',
+        'paypalrestsdk==1.12.*',
+        'pycparser==2.13',
+        'django-redis==4.1.*',
+        'redis==2.10.5',
+        'stripe==1.22.*',
+        'chardet>=2.3,<3',
+        'mt-940==3.2'
     ],
     extras_require={
-        'dev': ['django-debug-toolbar>=1.3.0,<2.0'],
-        'test': ['pep8==1.5.7', 'pyflakes', 'pep8-naming', 'flake8', 'coverage',
-                 'pytest', 'pytest-django'],
+        'dev': [
+            'django-debug-toolbar==1.5',
+            'sqlparse==0.2.1',
+            'pep8==1.5.7',
+            'pyflakes==1.1.0',
+            'flake8',
+            'pep8-naming',
+            'coveralls',
+            'coverage',
+            'pytest==2.9.*',
+            'pytest-django',
+            'isort',
+            'pytest-mock',
+            'pytest-rerunfailures',
+            'pytest-warnings'
+        ],
         'memcached': ['pylibmc'],
         'mysql': ['mysqlclient'],
-        'paypal': ['paypalrestsdk>=1.9,<1.10,<2.0'],
         'postgres': ['psycopg2'],
-        'redis': ['django-redis>=4.1,<4.2', 'redis>=2.10,<2.11'],
-        'stripe': ['stripe>=1.22,<1.23']
     },
 
     packages=find_packages(exclude=['tests', 'tests.*']),
     include_package_data=True,
-    cmdclass=cmdclass
+    cmdclass=cmdclass,
 )

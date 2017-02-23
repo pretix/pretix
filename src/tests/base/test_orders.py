@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 
 import pytest
+import pytz
 from django.test import TestCase
 from django.utils.timezone import make_aware, now
 
@@ -71,6 +72,19 @@ def test_expiry_last(event):
 
 
 @pytest.mark.django_db
+def test_expiry_dst(event):
+    event.settings.set('timezone', 'Europe/Berlin')
+    tz = pytz.timezone('Europe/Berlin')
+    utc = pytz.timezone('UTC')
+    today = tz.localize(datetime(2016, 10, 29, 12, 0, 0)).astimezone(utc)
+    order = _create_order(event, email='dummy@example.org', positions=[],
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
+                          locale='de')
+    localex = order.expires.astimezone(tz)
+    assert (localex.hour, localex.minute) == (23, 59)
+
+
+@pytest.mark.django_db
 def test_expiring(event):
     o1 = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
@@ -126,6 +140,8 @@ class OrderChangeManagerTests(TestCase):
         )
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket', tax_rate=Decimal('7.00'),
                                           default_price=Decimal('23.00'), admission=True)
+        self.ticket2 = Item.objects.create(event=self.event, name='Other ticket', tax_rate=Decimal('7.00'),
+                                           default_price=Decimal('23.00'), admission=True)
         self.shirt = Item.objects.create(event=self.event, name='T-Shirt', tax_rate=Decimal('19.00'),
                                          default_price=Decimal('12.00'))
         self.op1 = OrderPosition.objects.create(
@@ -289,3 +305,22 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.total == 0
         assert self.order.status == Order.STATUS_PAID
         assert self.order.payment_provider == 'free'
+
+    def test_change_paid_same_price(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.ocm.change_item(self.op1, self.ticket2, None)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.total == 46
+        assert self.order.status == Order.STATUS_PAID
+
+    def test_change_paid_different_price(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.ocm.change_price(self.op1, Decimal('5.00'))
+        with self.assertRaises(OrderError):
+            self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.total == 46
+        assert self.order.status == Order.STATUS_PAID

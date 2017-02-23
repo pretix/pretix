@@ -74,7 +74,7 @@ redis instance to be running on the same host. To avoid the hassle with network 
 recommend connecting to redis via a unix socket. To enable redis on unix sockets, add the following to your
 ``/etc/redis/redis.conf``::
 
-    unixsocket /tmp/redis.sock
+    unixsocket /var/run/redis/redis.sock
     unixsocketperm 777
 
 Now restart redis-server::
@@ -111,7 +111,7 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     datadir=/data
 
     [database]
-    ; Replace mysql with psycopg2 for PostgreSQL
+    ; Replace mysql with postgresql_psycopg2 for PostgreSQL
     backend=mysql
     name=pretix
     user=pretix
@@ -127,14 +127,14 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     host=172.17.0.1
 
     [redis]
-    location=unix:///tmp/redis.sock?db=0
+    location=unix:///var/run/redis/redis.sock?db=0
     ; Remove the following line if you are unsure about your redis' security
     ; to reduce impact if redis gets compromised.
     sessions=true
 
     [celery]
-    backend=redis+socket:///tmp/redis.sock?virtual_host=1
-    broker=redis+socket:///tmp/redis.sock?virtual_host=2
+    backend=redis+socket:///var/run/redis/redis.sock?virtual_host=1
+    broker=redis+socket:///var/run/redis/redis.sock?virtual_host=2
 
 See :ref:`email configuration <mail-settings>` to learn more about configuring mail features.
 
@@ -160,7 +160,7 @@ named ``/etc/systemd/system/pretix.service`` with the following content::
     ExecStart=/usr/bin/docker run --name %n -p 8345:80 \
         -v /var/pretix-data:/data \
         -v /etc/pretix:/etc/pretix \
-        -v /tmp/redis.sock:/tmp/redis.sock \
+        -v /var/run/redis:/var/run/redis \
         -v /var/run/mysqld:/var/run/mysqld \
         pretix/standalone all
     ExecStop=/usr/bin/docker stop %n
@@ -168,7 +168,7 @@ named ``/etc/systemd/system/pretix.service`` with the following content::
     [Install]
     WantedBy=multi-user.target
 
-You can leave the MySQL socket volume out if you're using PostgreSQL. You can now run the following comamnds
+You can leave the MySQL socket volume out if you're using PostgreSQL. You can now run the following commands
 to enable and start the service::
 
     # systemctl daemon-reload
@@ -234,6 +234,26 @@ Updates are fairly simple, but require at least a short downtime::
     # docker exec -it pretix.service pretix upgrade
 
 Restarting the service can take a few seconds, especially if the update requires changes to the database.
+
+Install a plugin
+----------------
+
+To install a plugin, you need to build your own docker image. To do so, create a new directory and place a file
+named ``Dockerfile`` in it. The Dockerfile could look like this (replace ``pretix-passbook`` with the plugins of your
+choice)::
+
+    FROM pretix/standalone
+    USER root
+    RUN pip3 install pretix-passbook
+    USER pretixuser
+    RUN make production
+
+Then, go to that directory and build the image::
+
+    $ docker build -t mypretix
+
+You can now use that image ``mypretix`` instead of ``pretix/standalone`` in your service file (see above). Be sure
+to re-build your custom image after you pulled ``pretix/standalone`` if you want to perform an update.
 
 .. _Docker: https://docs.docker.com/engine/installation/linux/debian/
 .. _Postfix: https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-16-04
