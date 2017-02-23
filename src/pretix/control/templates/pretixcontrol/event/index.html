@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load eventurl %}
+{% load staticfiles %}
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
     <form action="{% eventurl request.event "presale:event.auth" %}" method="post" target="_blank">
@@ -85,6 +86,11 @@
                         <div class="col-lg-2 col-sm-6 col-xs-12">
                             {% if log.user %}
                                 <span class="fa fa-user"></span> {{ log.user.get_full_name }}
+                                {% if log.user.is_superuser %}
+                                    <img src="{% static "pretixbase/img/pretix-icon-colored.svg" %}"
+                                         data-toggle="tooltip" class="user-admin-icon"
+                                         title="{% trans "This change was performed by a pretix administrator." %}">
+                                {% endif %}
                             {% endif %}
                         </div>
                         <div class="col-lg-2 col-sm-12 col-xs-12">

@@ -196,3 +196,15 @@ body.loading #wrapper {
     font-size: 200px;
     color: $brand-primary;
 }
+
+.user-admin-icon {
+    width: 16px;
+    height: 16px;
+    margin-top: -2px;
+}
+
+.meta .user-admin-icon {
+    width: 12px;
+    height: 12px;
+    margin-top: -2px;
+}
