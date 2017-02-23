@@ -444,7 +444,6 @@ class PaymentException(Exception):
     pass
 
 
-
 class FreeOrderProvider(BasePaymentProvider):
 
     @property
@@ -473,7 +472,7 @@ class FreeOrderProvider(BasePaymentProvider):
         try:
             mark_order_paid(order, 'free', send_mail=False)
         except Quota.QuotaExceededException as e:
-            messages.error(request, str(e))
+            raise PaymentException(str(e))
 
     @property
     def settings_form_fields(self) -> dict:

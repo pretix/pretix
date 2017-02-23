@@ -201,7 +201,8 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
         try:
             resp = self.payment_provider.payment_perform(request, self.order)
         except PaymentException as e:
-            return redirect(resp or self.get_order_url() + '?thanks=no')
+            messages.error(request, str(e))
+            return redirect(resp or self.get_order_url())
         if 'payment_change_{}'.format(self.order.pk) in request.session:
             del request.session['payment_change_{}'.format(self.order.pk)]
         return redirect(resp or self.get_order_url())
@@ -240,7 +241,8 @@ class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
         try:
             resp = self.payment_provider.payment_perform(request, self.order)
         except PaymentException as e:
-            return redirect(resp or self.get_order_url() + '?thanks=no')
+            messages.error(request, str(e))
+            return redirect(resp or self.get_order_url())
 
         if self.order.status == Order.STATUS_PAID:
             return redirect(resp or self.get_order_url() + '?paid=yes')

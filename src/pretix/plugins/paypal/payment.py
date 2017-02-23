@@ -149,17 +149,16 @@ class Paypal(BasePaymentProvider):
         """
         if (request.session.get('payment_paypal_id', '') == ''
                 or request.session.get('payment_paypal_payer', '') == ''):
-            messages.error(request, _('We were unable to process your payment. See below for details on how to '
-                                      'proceed.'))
+            raise PaymentException(_('We were unable to process your payment. See below for details on how to '
+                                     'proceed.'))
 
         self.init_api()
         payment = paypalrestsdk.Payment.find(request.session.get('payment_paypal_id'))
         if str(payment.transactions[0].amount.total) != str(order.total) or payment.transactions[0].amount.currency != \
                 self.event.currency:
-            messages.error(request, _('We were unable to process your payment. See below for details on how to '
-                                      'proceed.'))
             logger.error('Value mismatch: Order %s vs payment %s' % (order.id, str(payment)))
-            return
+            raise PaymentException(_('We were unable to process your payment. See below for details on how to '
+                                     'proceed.'))
 
         return self._execute_payment(payment, request, order)
 
@@ -174,15 +173,15 @@ class Paypal(BasePaymentProvider):
             return
 
         if payment.state != 'approved':
-            messages.error(request, _('We were unable to process your payment. See below for details on how to '
-                                      'proceed.'))
             logger.error('Invalid state: %s' % str(payment))
+            raise PaymentException(_('We were unable to process your payment. See below for details on how to '
+                                     'proceed.'))
             return
 
         try:
             mark_order_paid(order, 'paypal', json.dumps(payment.to_dict()))
         except Quota.QuotaExceededException as e:
-            messages.error(request, str(e))
+            raise PaymentException(str(e))
         except SendMailException:
             messages.warning(request, _('There was an error sending the confirmation mail.'))
         return None
