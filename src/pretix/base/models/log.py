@@ -130,3 +130,6 @@ class LogEntry(models.Model):
     @cached_property
     def parsed_data(self):
         return json.loads(self.data)
+
+    def delete(self, using=None, keep_parents=False):
+        raise TypeError("Logs cannot be deleted.")
