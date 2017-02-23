@@ -1,26 +1,23 @@
 from datetime import timedelta
 
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Sum
-from django.http import FileResponse, Http404
-from django.shortcuts import redirect
+from django.http import FileResponse, Http404, HttpResponse
+from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import gettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, View
 
-from pretix.base.models import (
-    CachedFile, CachedTicket, Invoice, Order, OrderPosition,
-)
-from pretix.base.models.orders import InvoiceAddress
+from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
+from pretix.base.models.orders import CachedCombinedTicket, InvoiceAddress
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
 )
-from pretix.base.services.orders import OrderError, cancel_order
-from pretix.base.services.tickets import generate
+from pretix.base.services.orders import cancel_order
+from pretix.base.services.tickets import generate, generate_order
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
@@ -145,6 +142,11 @@ class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
                 or not self.payment_provider.is_enabled):
             messages.error(request, _('The payment for this order cannot be continued.'))
             return redirect(self.get_order_url())
+
+        if self.request.event.settings.get('payment_term_last'):
+            if now() > self.request.event.payment_term_last:
+                messages.error(request, _('The payment is too late to be accepted.'))
+                return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -235,6 +237,12 @@ class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
                 not self.payment_provider.is_enabled):
             messages.error(request, _('The payment information you entered was incomplete.'))
             return redirect(self.get_payment_url())
+
+        if self.request.event.settings.get('payment_term_last'):
+            if now() > self.request.event.payment_term_last:
+                messages.error(request, _('The payment is too late to be accepted.'))
+                return redirect(self.get_order_url())
+
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
@@ -266,6 +274,12 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
         if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
             messages.error(request, _('The payment method for this order cannot be changed.'))
             return redirect(self.get_order_url())
+
+        if self.request.event.settings.get('payment_term_last'):
+            if now() > self.request.event.payment_term_last:
+                messages.error(request, _('The payment is too late to be accepted.'))
+                return redirect(self.get_order_url())
+
         return super().dispatch(request, *args, **kwargs)
 
     def get_payment_url(self):
@@ -411,6 +425,8 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
             success_message = ('Your invoice address has been updated. Please contact us if you need us '
                                'to regenerate your invoice.')
             messages.success(self.request, _(success_message))
+
+        CachedTicket.objects.filter(order_position__order=self.order).delete()
         return redirect(self.get_order_url())
 
     def get(self, request, *args, **kwargs):
@@ -458,6 +474,7 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
 
 class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
     task = cancel_order
+    known_errortypes = ['OrderError']
 
     def get_success_url(self, value):
         return self.get_order_url()
@@ -481,13 +498,6 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
     def get_success_message(self, value):
         return _('The order has been canceled.')
 
-    def get_error_message(self, exception):
-        if isinstance(exception, dict) and exception['exc_type'] == 'OrderError':
-            return gettext(exception['exc_message'])
-        elif isinstance(exception, OrderError):
-            return str(exception)
-        return super().get_error_message(exception)
-
 
 class OrderDownload(EventViewMixin, OrderDetailMixin, View):
 
@@ -510,7 +520,7 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
         if not self.output or not self.output.is_enabled:
             messages.error(request, _('You requested an invalid ticket output type.'))
             return redirect(self.get_order_url())
-        if not self.order or not self.order_position:
+        if not self.order or ('position' in kwargs and not self.order_position):
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         if self.order.status != Order.STATUS_PAID:
             messages.error(request, _('Order is not paid.'))
@@ -521,18 +531,65 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             messages.error(request, _('Ticket download is not (yet) enabled.'))
             return redirect(self.get_order_url())
 
-        ct = CachedTicket.objects.get_or_create(
-            order_position=self.order_position, provider=self.output.identifier
-        )[0]
-        if not ct.cachedfile:
-            cf = CachedFile()
-            cf.date = now()
-            cf.expires = self.request.event.date_from + timedelta(days=30)
-            cf.save()
-            ct.cachedfile = cf
-            ct.save()
-        generate.apply_async(args=(self.order_position.id, self.output.identifier))
-        return redirect(reverse('cachedfile.download', kwargs={'id': ct.cachedfile.id}))
+        if 'position' in kwargs:
+            return self._download_position()
+        else:
+            return self._download_order()
+
+    def _download_order(self):
+        try:
+            ct = CachedCombinedTicket.objects.filter(
+                order=self.order, provider=self.output.identifier
+            ).last()
+        except CachedCombinedTicket.DoesNotExist:
+            ct = None
+
+        if not ct:
+            ct = CachedCombinedTicket.objects.create(
+                order=self.order, provider=self.output.identifier,
+                extension='', type='', file=None)
+            generate_order.apply_async(args=(self.order.id, self.output.identifier))
+
+        if 'ajax' in self.request.GET:
+            return HttpResponse('1' if ct and ct.file else '0')
+        elif not ct.file:
+            if now() - ct.created > timedelta(minutes=110):
+                generate_order.apply_async(args=(self.order.id, self.output.identifier))
+            return render(self.request, "pretixbase/cachedfiles/pending.html", {})
+        else:
+            resp = FileResponse(ct.file.file, content_type=ct.type)
+            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
+                self.request.event.slug.upper(), self.order.code, self.output.identifier, ct.extension
+            )
+            return resp
+
+    def _download_position(self):
+        try:
+            ct = CachedTicket.objects.filter(
+                order_position=self.order_position, provider=self.output.identifier
+            ).last()
+        except CachedTicket.DoesNotExist:
+            ct = None
+
+        if not ct:
+            ct = CachedTicket.objects.create(
+                order_position=self.order_position, provider=self.output.identifier,
+                extension='', type='', file=None)
+            generate.apply_async(args=(self.order_position.id, self.output.identifier))
+
+        if 'ajax' in self.request.GET:
+            return HttpResponse('1' if ct and ct.file else '0')
+        elif not ct.file:
+            if now() - ct.created > timedelta(minutes=110):
+                generate.apply_async(args=(self.order_position.id, self.output.identifier))
+            return render(self.request, "pretixbase/cachedfiles/pending.html", {})
+        else:
+            resp = FileResponse(ct.file.file, content_type=ct.type)
+            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
+                self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
+                self.output.identifier, ct.extension
+            )
+            return resp
 
 
 class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):

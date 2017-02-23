@@ -3,17 +3,17 @@ import tempfile
 from collections import defaultdict
 from datetime import date
 from decimal import Decimal
-from locale import format as lformat
 
 from django.contrib.staticfiles import finders
 from django.core.files.base import ContentFile
 from django.db import transaction
-from django.utils.formats import date_format
+from django.utils.formats import date_format, localize
 from django.utils.timezone import now
 from django.utils.translation import pgettext, ugettext as _
 from reportlab.lib import pagesizes
 from reportlab.lib.styles import ParagraphStyle, StyleSheet1
 from reportlab.lib.units import mm
+from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
@@ -25,7 +25,7 @@ from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
 from pretix.base.services.async import TransactionAwareTask
 from pretix.base.signals import register_payment_providers
-from pretix.celery import app
+from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
 
 
@@ -182,18 +182,22 @@ def _invoice_generate_german(invoice, f):
         textobject = canvas.beginText(25 * mm, (297 - 15) * mm)
         textobject.setFont('OpenSansBd', 8)
         textobject.textLine(pgettext('invoice', 'Invoice from').upper())
-        textobject.moveCursor(0, 5)
-        textobject.setFont('OpenSans', 10)
-        textobject.textLines(invoice.invoice_from.strip())
         canvas.drawText(textobject)
+
+        p = Paragraph(invoice.invoice_from.strip().replace('\n', '<br />\n'), style=styles['Normal'])
+        p.wrapOn(canvas, 70 * mm, 50 * mm)
+        p_size = p.wrap(70 * mm, 50 * mm)
+        p.drawOn(canvas, 25 * mm, (297 - 17) * mm - p_size[1])
 
         textobject = canvas.beginText(25 * mm, (297 - 50) * mm)
         textobject.setFont('OpenSansBd', 8)
         textobject.textLine(pgettext('invoice', 'Invoice to').upper())
-        textobject.moveCursor(0, 5)
-        textobject.setFont('OpenSans', 10)
-        textobject.textLines(invoice.invoice_to.strip())
         canvas.drawText(textobject)
+
+        p = Paragraph(invoice.invoice_to.strip().replace('\n', '<br />\n'), style=styles['Normal'])
+        p.wrapOn(canvas, 85 * mm, 50 * mm)
+        p_size = p.wrap(85 * mm, 50 * mm)
+        p.drawOn(canvas, 25 * mm, (297 - 52) * mm - p_size[1])
 
         textobject = canvas.beginText(125 * mm, (297 - 50) * mm)
         textobject.setFont('OpenSansBd', 8)
@@ -252,18 +256,33 @@ def _invoice_generate_german(invoice, f):
         textobject.textLine(date_format(invoice.order.datetime, "DATE_FORMAT"))
         canvas.drawText(textobject)
 
+        if invoice.event.settings.invoice_logo_image:
+            logo_file = invoice.event.settings.get('invoice_logo_image', binary_file=True)
+            canvas.drawImage(ImageReader(logo_file),
+                             95 * mm, (297 - 38) * mm,
+                             width=25 * mm, height=25 * mm,
+                             preserveAspectRatio=True, anchor='n',
+                             mask='auto')
+
+        if invoice.event.settings.show_date_to:
+            p_str = (
+                str(invoice.event.name) + '\n' + _('{from_date}\nuntil {to_date}').format(
+                    from_date=invoice.event.get_date_from_display(),
+                    to_date=invoice.event.get_date_to_display())
+            )
+        else:
+            p_str = (
+                str(invoice.event.name) + '\n' + invoice.event.get_date_from_display()
+            )
+
+        p = Paragraph(p_str.strip().replace('\n', '<br />\n'), style=styles['Normal'])
+        p.wrapOn(canvas, 65 * mm, 50 * mm)
+        p_size = p.wrap(65 * mm, 50 * mm)
+        p.drawOn(canvas, 125 * mm, (297 - 17) * mm - p_size[1])
+
         textobject = canvas.beginText(125 * mm, (297 - 15) * mm)
         textobject.setFont('OpenSansBd', 8)
         textobject.textLine(_('Event').upper())
-        textobject.moveCursor(0, 5)
-        textobject.setFont('OpenSans', 10)
-        textobject.textLine(str(invoice.event.name))
-        if invoice.event.settings.show_date_to:
-            textobject.textLines(
-                _('{from_date}\nuntil {to_date}').format(from_date=invoice.event.get_date_from_display(),
-                                                         to_date=invoice.event.get_date_to_display()))
-        else:
-            textobject.textLine(invoice.event.get_date_from_display())
         canvas.drawText(textobject)
 
         canvas.restoreState()
@@ -306,6 +325,7 @@ def _invoice_generate_german(invoice, f):
 
     tstyledata = [
         ('ALIGN', (1, 0), (-1, -1), 'RIGHT'),
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('FONTNAME', (0, 0), (-1, 0), 'OpenSansBd'),
         ('FONTNAME', (0, -1), (-1, -1), 'OpenSansBd'),
         ('LEFTPADDING', (0, 0), (0, -1), 0),
@@ -320,16 +340,16 @@ def _invoice_generate_german(invoice, f):
     total = Decimal('0.00')
     for line in invoice.lines.all():
         tdata.append((
-            line.description,
-            lformat("%.2f", line.tax_rate) + " %",
-            lformat("%.2f", line.net_value) + " " + invoice.event.currency,
-            lformat("%.2f", line.gross_value) + " " + invoice.event.currency,
+            Paragraph(line.description, styles['Normal']),
+            localize(line.tax_rate) + " %",
+            localize(line.net_value) + " " + invoice.event.currency,
+            localize(line.gross_value) + " " + invoice.event.currency,
         ))
         taxvalue_map[line.tax_rate] += line.tax_value
         grossvalue_map[line.tax_rate] += line.gross_value
         total += line.gross_value
 
-    tdata.append([pgettext('invoice', 'Invoice total'), '', '', lformat("%.2f", total) + " " + invoice.event.currency])
+    tdata.append([pgettext('invoice', 'Invoice total'), '', '', localize(total) + " " + invoice.event.currency])
     colwidths = [a * doc.width for a in (.55, .15, .15, .15)]
     table = Table(tdata, colWidths=colwidths, repeatRows=1)
     table.setStyle(TableStyle(tstyledata))
@@ -361,10 +381,10 @@ def _invoice_generate_german(invoice, f):
         tax = taxvalue_map[rate]
         tdata.append((
             '',
-            lformat("%.2f", rate) + " %",
-            lformat("%.2f", (gross - tax)) + " " + invoice.event.currency,
-            lformat("%.2f", gross) + " " + invoice.event.currency,
-            lformat("%.2f", tax) + " " + invoice.event.currency,
+            localize(rate) + " %",
+            localize((gross - tax)) + " " + invoice.event.currency,
+            localize(gross) + " " + invoice.event.currency,
+            localize(tax) + " " + invoice.event.currency,
         ))
 
     if len(tdata) > 2:

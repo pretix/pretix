@@ -5,7 +5,9 @@ from django.dispatch import receiver
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.signals import logentry_display, register_payment_providers
+from pretix.base.signals import (
+    logentry_display, register_payment_providers, requiredaction_display,
+)
 from pretix.presale.signals import html_head
 
 
@@ -57,3 +59,19 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
 
     if text:
         return _('Stripe reported an event: {}').format(text)
+
+
+@receiver(signal=requiredaction_display, dispatch_uid="stripe_requiredaction_display")
+def pretixcontrol_action_display(sender, action, request, **kwargs):
+    if not action.action_type.startswith('pretix.plugins.stripe'):
+        return
+
+    data = json.loads(action.data)
+
+    if action.action_type == 'pretix.plugins.stripe.refund':
+        template = get_template('pretixplugins/stripe/action_refund.html')
+    elif action.action_type == 'pretix.plugins.stripe.overpaid':
+        template = get_template('pretixplugins/stripe/action_overpaid.html')
+
+    ctx = {'data': data, 'event': sender, 'action': action}
+    return template.render(ctx, request)

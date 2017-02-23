@@ -5,7 +5,7 @@
 	<h1>{% trans "Dashboard" %}</h1>
     <div class="row dashboard">
         {% for w in widgets %}
-            <div class="col-xs-12 col-sm-{% if w.width > 6 %}12{% else %}6{% endif %} col-md-{{ w.width }}">
+            <div class="widget-container widget-{{ w.display_size|default:"small" }}">
                 {% if w.url %}
                     <a href="{{ w.url }}" class="widget">
                         {{ w.content|safe }}

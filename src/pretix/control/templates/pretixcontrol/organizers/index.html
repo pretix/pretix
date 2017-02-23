@@ -20,7 +20,7 @@
 			{% for o in organizers %}
 			<tr>
 				<td><strong>
-                    <a href="{% url "control:organizer.edit" organizer=o.slug %}">{{ o.name }}</a>
+                    <a href="{% url "control:organizer" organizer=o.slug %}">{{ o.name }}</a>
                 </strong></td>
 			</tr>
 			{% endfor %}

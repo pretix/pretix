@@ -9,6 +9,7 @@ from django.core.files import File
 from django.core.files.storage import default_storage
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.models import Order
 from pretix.base.ticketoutput import BaseTicketOutput
 from pretix.control.forms import ExtFileField
 
@@ -20,27 +21,11 @@ class PdfTicketOutput(BaseTicketOutput):
     verbose_name = _('PDF output')
     download_button_text = _('PDF')
 
-    def generate(self, op):
+    def _draw_page(self, p, op, order):
         from reportlab.graphics.shapes import Drawing
-        from reportlab.pdfgen import canvas
-        from reportlab.lib import pagesizes, units
+        from reportlab.lib import units
         from reportlab.graphics.barcode.qr import QrCodeWidget
         from reportlab.graphics import renderPDF
-        from PyPDF2 import PdfFileWriter, PdfFileReader
-
-        order = op.order
-
-        pagesize = self.settings.get('pagesize', default='A4')
-        if hasattr(pagesizes, pagesize):
-            pagesize = getattr(pagesizes, pagesize)
-        else:
-            pagesize = pagesizes.A4
-        orientation = self.settings.get('orientation', default='portrait')
-        if hasattr(pagesizes, orientation):
-            pagesize = getattr(pagesizes, orientation)(pagesize)
-
-        buffer = BytesIO()
-        p = canvas.Canvas(buffer, pagesize=pagesize)
 
         event_s = self.settings.get('event_s', default=22, as_type=float)
         if event_s:
@@ -102,8 +87,41 @@ class PdfTicketOutput(BaseTicketOutput):
 
         p.showPage()
 
+    def generate_order(self, order: Order):
+        buffer = BytesIO()
+        p = self._create_canvas(buffer)
+        for op in order.positions.all():
+            self._draw_page(p, op, order)
         p.save()
+        outbuffer = self._render_with_background(buffer)
+        return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()
 
+    def generate(self, op):
+        buffer = BytesIO()
+        p = self._create_canvas(buffer)
+        order = op.order
+        self._draw_page(p, op, order)
+        p.save()
+        outbuffer = self._render_with_background(buffer)
+        return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()
+
+    def _create_canvas(self, buffer):
+        from reportlab.pdfgen import canvas
+        from reportlab.lib import pagesizes
+
+        pagesize = self.settings.get('pagesize', default='A4')
+        if hasattr(pagesizes, pagesize):
+            pagesize = getattr(pagesizes, pagesize)
+        else:
+            pagesize = pagesizes.A4
+        orientation = self.settings.get('orientation', default='portrait')
+        if hasattr(pagesizes, orientation):
+            pagesize = getattr(pagesizes, orientation)(pagesize)
+
+        return canvas.Canvas(buffer, pagesize=pagesize)
+
+    def _render_with_background(self, buffer):
+        from PyPDF2 import PdfFileWriter, PdfFileReader
         buffer.seek(0)
         new_pdf = PdfFileReader(buffer)
         output = PdfFileWriter()
@@ -121,7 +139,7 @@ class PdfTicketOutput(BaseTicketOutput):
         outbuffer = BytesIO()
         output.write(outbuffer)
         outbuffer.seek(0)
-        return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()
+        return outbuffer
 
     @property
     def settings_form_fields(self) -> dict:

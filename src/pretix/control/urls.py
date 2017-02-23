@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 
 from pretix.control.views import (
     auth, dashboards, event, global_settings, help, item, main, orders,
-    organizer, user, vouchers,
+    organizer, user, vouchers, waitinglist,
 )
 
 urlpatterns = [
@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^login$', auth.login, name='auth.login'),
     url(r'^login/2fa$', auth.Login2FAView.as_view(), name='auth.login.2fa'),
     url(r'^register$', auth.register, name='auth.register'),
+    url(r'^invite/(?P<token>[a-zA-Z0-9]+)$', auth.invite, name='auth.invite'),
     url(r'^forgot$', auth.Forgot.as_view(), name='auth.forgot'),
     url(r'^forgot/recover$', auth.Recover.as_view(), name='auth.forgot.recover'),
     url(r'^$', dashboards.user_index, name='index'),
@@ -31,13 +32,17 @@ urlpatterns = [
         name='user.settings.2fa.delete'),
     url(r'^organizers/$', organizer.OrganizerList.as_view(), name='organizers'),
     url(r'^organizers/add$', organizer.OrganizerCreate.as_view(), name='organizers.add'),
+    url(r'^organizer/(?P<organizer>[^/]+)/$', organizer.OrganizerDetail.as_view(), name='organizer'),
     url(r'^organizer/(?P<organizer>[^/]+)/edit$', organizer.OrganizerUpdate.as_view(), name='organizer.edit'),
     url(r'^events/$', main.EventList.as_view(), name='events'),
-    url(r'^events/add$', main.EventCreateStart.as_view(), name='events.add'),
-    url(r'^event/(?P<organizer>[^/]+)/add', main.EventCreate.as_view(), name='events.create'),
+    url(r'^events/add$', main.EventWizard.as_view(), name='events.add'),
     url(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
         url(r'^$', dashboards.event_index, name='event.index'),
         url(r'^live/$', event.EventLive.as_view(), name='event.live'),
+        url(r'^logs/$', event.EventLog.as_view(), name='event.log'),
+        url(r'^requiredactions/$', event.EventActions.as_view(), name='event.requiredactions'),
+        url(r'^requiredactions/(?P<id>\d+)/discard$', event.EventActionDiscard.as_view(),
+            name='event.requiredaction.discard'),
         url(r'^settings/$', event.EventUpdate.as_view(), name='event.settings'),
         url(r'^settings/plugins$', event.EventPlugins.as_view(), name='event.settings.plugins'),
         url(r'^settings/permissions$', event.EventPermissions.as_view(), name='event.settings.permissions'),
@@ -116,6 +121,8 @@ urlpatterns = [
         url(r'^orders/export/$', orders.ExportView.as_view(), name='event.orders.export'),
         url(r'^orders/go$', orders.OrderGo.as_view(), name='event.orders.go'),
         url(r'^orders/$', orders.OrderList.as_view(), name='event.orders'),
+        url(r'^waitinglist/$', waitinglist.WaitingListView.as_view(), name='event.orders.waitinglist'),
+        url(r'^waitinglist/auto_assign$', waitinglist.AutoAssign.as_view(), name='event.orders.waitinglist.auto'),
     ])),
     url(r'^help/(?P<topic>[a-zA-Z0-9_/]+)$', help.HelpView.as_view(), name='help'),
 ]

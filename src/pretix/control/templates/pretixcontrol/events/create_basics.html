@@ -1,0 +1,24 @@
+{% extends "pretixcontrol/events/create_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block form %}
+    <fieldset>
+        <legend>{% trans "General information" %}</legend>
+        {% bootstrap_field form.name layout="horizontal" %}
+        {% bootstrap_field form.slug layout="horizontal" %}
+        {% bootstrap_field form.date_from layout="horizontal" %}
+        {% bootstrap_field form.date_to layout="horizontal" %}
+        {% bootstrap_field form.location layout="horizontal" %}
+        {% bootstrap_field form.currency layout="horizontal" %}
+    </fieldset>
+    <fieldset>
+        <legend>{% trans "Display settings" %}</legend>
+        {% bootstrap_field form.locale layout="horizontal" %}
+        {% bootstrap_field form.timezone layout="horizontal" %}
+    </fieldset>
+    <fieldset>
+        <legend>{% trans "Timeline" %}</legend>
+        {% bootstrap_field form.presale_start layout="horizontal" %}
+        {% bootstrap_field form.presale_end layout="horizontal" %}
+    </fieldset>
+{% endblock %}

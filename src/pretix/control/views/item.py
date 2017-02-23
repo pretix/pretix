@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.files import File
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.db.models import Count
+from django.db.models import Count, F, Q
 from django.forms.models import ModelMultipleChoiceField, inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -18,12 +18,12 @@ from django.views.generic.edit import DeleteView
 
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    Item, ItemCategory, ItemVariation, Order, Question, QuestionAnswer,
-    QuestionOption, Quota,
+    CachedTicket, Item, ItemCategory, ItemVariation, Order, Question,
+    QuestionAnswer, QuestionOption, Quota, Voucher,
 )
 from pretix.control.forms.item import (
     CategoryForm, ItemCreateForm, ItemUpdateForm, ItemVariationForm,
-    QuestionForm, QuestionOptionForm, QuotaForm,
+    ItemVariationsFormSet, QuestionForm, QuestionOptionForm, QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -607,29 +607,50 @@ class QuotaView(ChartContainingView, DetailView):
         data = [
             {
                 'label': ugettext('Paid orders'),
-                'value': self.object.count_paid_orders()
+                'value': self.object.count_paid_orders(),
+                'sum': True,
             },
             {
                 'label': ugettext('Pending orders'),
-                'value': self.object.count_pending_orders()
+                'value': self.object.count_pending_orders(),
+                'sum': True,
             },
             {
                 'label': ugettext('Vouchers'),
-                'value': self.object.count_blocking_vouchers()
+                'value': self.object.count_blocking_vouchers(),
+                'sum': True,
             },
             {
                 'label': ugettext('Current user\'s carts'),
-                'value': self.object.count_in_cart()
-            }
+                'value': self.object.count_in_cart(),
+                'sum': True,
+            },
+            {
+                'label': ugettext('Waiting list'),
+                'value': self.object.count_waiting_list_pending(),
+                'sum': False,
+            },
         ]
         ctx['quota_table_rows'] = list(data)
+
+        sum_values = sum([d['value'] for d in data if d['sum']])
 
         if self.object.size is not None:
             data.append({
                 'label': ugettext('Current availability'),
                 'value': avail[1]
             })
+
         ctx['quota_chart_data'] = json.dumps(data)
+        ctx['quota_overbooked'] = sum_values - self.object.size if self.object.size is not None else 0
+
+        ctx['has_ignore_vouchers'] = Voucher.objects.filter(
+            Q(allow_ignore_quota=True) &
+            Q(Q(valid_until__isnull=True) | Q(valid_until__gte=now())) &
+            Q(Q(self.object._position_lookup) | Q(quota=self.object)) &
+            Q(redeemed__lt=F('max_usages'))
+        ).exists()
+
         return ctx
 
     def get_object(self, queryset=None) -> Quota:
@@ -672,9 +693,10 @@ class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
-        return reverse('control:event.items.quotas', kwargs={
+        return reverse('control:event.items.quotas.show', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
+            'quota': self.object.pk
         })
 
 
@@ -744,6 +766,16 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
     @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
+        if form.cleaned_data['copy_from']:
+            form.instance.category = form.cleaned_data['copy_from'].category
+            form.instance.description = form.cleaned_data['copy_from'].description
+            form.instance.active = form.cleaned_data['copy_from'].active
+            form.instance.available_from = form.cleaned_data['copy_from'].available_from
+            form.instance.available_until = form.cleaned_data['copy_from'].available_until
+            form.instance.require_voucher = form.cleaned_data['copy_from'].require_voucher
+            form.instance.hide_without_voucher = form.cleaned_data['copy_from'].hide_without_voucher
+            form.instance.allow_cancel = form.cleaned_data['copy_from'].allow_cancel
+
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.item.added', user=self.request.user, data={
             k: (form.cleaned_data.get(k).name
@@ -787,6 +819,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
                     for k in form.changed_data
                 }
             )
+            CachedTicket.objects.filter(order_position__item=self.item).delete()
         return super().form_valid(form)
 
 
@@ -802,7 +835,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
     def formset(self):
         formsetclass = inlineformset_factory(
             Item, ItemVariation,
-            form=ItemVariationForm, formset=I18nFormSet,
+            form=ItemVariationForm, formset=ItemVariationsFormSet,
             can_order=True, can_delete=True, extra=0
         )
         return formsetclass(self.request.POST if self.request.method == "POST" else None,
@@ -817,6 +850,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
                         continue
                     self.get_object().log_action(
                         'pretix.event.item.variation.deleted', user=self.request.user, data={
+                            'value': form.instance.value,
                             'id': form.instance.pk
                         }
                     )
@@ -834,6 +868,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
                     form.save()
                     if form.has_changed():
                         change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
+                        change_data['value'] = form.instance.value
                         change_data['id'] = form.instance.pk
                         self.get_object().log_action(
                             'pretix.event.item.variation.changed' if not created else

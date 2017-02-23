@@ -1,18 +1,22 @@
 import copy
+import os
 import string
-from datetime import date, datetime, time
+from datetime import datetime
 from decimal import Decimal
 from typing import List, Union
 
-import pytz
 from django.conf import settings
 from django.db import models
+from django.db.models import F, Sum
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.utils.crypto import get_random_string
-from django.utils.timezone import make_aware, now
+from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from ..decimal import round_decimal
-from .base import CachedFile, LoggedModel
+from .base import LoggedModel
 from .event import Event
 from .items import Item, ItemVariation, Question, QuestionOption, Quota
 
@@ -187,6 +191,10 @@ class Order(LoggedModel):
         """
         return '{event}-{code}'.format(event=self.event.slug.upper(), code=self.code)
 
+    @property
+    def changable(self):
+        return self.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
+
     def save(self, *args, **kwargs):
         if not self.code:
             self.assign_code()
@@ -208,6 +216,18 @@ class Order(LoggedModel):
         else:
             self.payment_fee_tax_value = Decimal('0.00')
 
+    @property
+    def payment_fee_net(self):
+        return self.payment_fee - self.payment_fee_tax_value
+
+    @cached_property
+    def tax_total(self):
+        return (self.positions.aggregate(s=Sum('tax_value'))['s'] or 0) + self.payment_fee_tax_value
+
+    @property
+    def net_total(self):
+        return self.total - self.tax_total
+
     @staticmethod
     def normalize_code(code):
         tr = str.maketrans({
@@ -226,7 +246,7 @@ class Order(LoggedModel):
         charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
         while True:
             code = get_random_string(length=settings.ENTROPY['order_code'], allowed_chars=charset)
-            if not Order.objects.filter(event=self.event, code=code).exists():
+            if not Order.objects.filter(event__organizer=self.event.organizer, code=code).exists():
                 self.code = code
                 return
 
@@ -266,18 +286,16 @@ class Order(LoggedModel):
 
     def _can_be_paid(self) -> Union[bool, str]:
         error_messages = {
-            'late': _("The payment is too late to be accepted."),
+            'late_lastdate': _("The payment can not be accepted as the last date of payments configured in the "
+                               "payment settings is over."),
+            'late': _("The payment can not be accepted as it the order is expired and you configured that no late "
+                      "payments should be accepted in the payment settings."),
         }
 
         if self.event.settings.get('payment_term_last'):
-            tz = pytz.timezone(self.event.settings.timezone)
-            last_date = make_aware(datetime.combine(
-                self.event.settings.get('payment_term_last', as_type=date),
-                time(hour=23, minute=59, second=59)
-            ), tz)
+            if now() > self.event.payment_term_last:
+                return error_messages['late_lastdate']
 
-            if now() > last_date:
-                return error_messages['late']
         if self.status == self.STATUS_PENDING:
             return True
         if not self.event.settings.get('payment_term_accept_late'):
@@ -427,6 +445,10 @@ class AbstractPosition(models.Model):
             else:
                 q.answer = ""
 
+    @property
+    def net_price(self):
+        return self.price - self.tax_value
+
 
 class OrderPosition(AbstractPosition):
     """
@@ -437,6 +459,7 @@ class OrderPosition(AbstractPosition):
     :param order: The order this position is a part of
     :type order: Order
     """
+    positionid = models.PositiveIntegerField(default=1)
     order = models.ForeignKey(
         Order,
         verbose_name=_("Order"),
@@ -459,20 +482,26 @@ class OrderPosition(AbstractPosition):
 
     @classmethod
     def transform_cart_positions(cls, cp: List, order) -> list:
+        from . import Voucher
+
         ops = []
-        for cartpos in cp:
+        for i, cartpos in enumerate(cp):
             op = OrderPosition(order=order)
             for f in AbstractPosition._meta.fields:
                 setattr(op, f.name, getattr(cartpos, f.name))
             op._calculate_tax()
+            op.positionid = i + 1
             op.save()
             for answ in cartpos.answers.all():
                 answ.orderposition = op
                 answ.cartposition = None
                 answ.save()
             if cartpos.voucher:
-                cartpos.voucher.redeemed = True
-                cartpos.voucher.save()
+                Voucher.objects.filter(pk=cartpos.voucher.pk).update(redeemed=F('redeemed') + 1)
+                cartpos.voucher.log_action('pretix.voucher.redeemed', {
+                    'order_code': order.code
+                })
+
             cartpos.delete()
         return ops
 
@@ -491,6 +520,9 @@ class OrderPosition(AbstractPosition):
     def save(self, *args, **kwargs):
         if self.tax_rate is None:
             self._calculate_tax()
+        if self.pk is None:
+            while OrderPosition.objects.filter(secret=self.secret).exists():
+                self.secret = generate_position_secret()
         return super().save(*args, **kwargs)
 
 
@@ -557,7 +589,50 @@ class InvoiceAddress(models.Model):
     vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'))
 
 
+def cachedticket_name(instance, filename: str) -> str:
+    secret = get_random_string(length=16, allowed_chars=string.ascii_letters + string.digits)
+    return 'tickets/{org}/{ev}/{code}-{no}-{prov}-{secret}.dat'.format(
+        org=instance.order_position.order.event.organizer.slug,
+        ev=instance.order_position.order.event.slug,
+        prov=instance.provider,
+        no=instance.order_position.positionid,
+        code=instance.order_position.order.code,
+        secret=secret,
+        ext=os.path.splitext(filename)[1]
+    )
+
+
+def cachedcombinedticket_name(instance, filename: str) -> str:
+    secret = get_random_string(length=16, allowed_chars=string.ascii_letters + string.digits)
+    return 'tickets/{org}/{ev}/{code}-{prov}-{secret}.dat'.format(
+        org=instance.order.event.organizer.slug,
+        ev=instance.order.event.slug,
+        prov=instance.provider,
+        code=instance.order.code,
+        secret=secret
+    )
+
+
 class CachedTicket(models.Model):
     order_position = models.ForeignKey(OrderPosition, on_delete=models.CASCADE)
-    cachedfile = models.ForeignKey(CachedFile, on_delete=models.CASCADE, null=True)
     provider = models.CharField(max_length=255)
+    type = models.CharField(max_length=255)
+    extension = models.CharField(max_length=255)
+    file = models.FileField(null=True, blank=True, upload_to=cachedticket_name)
+    created = models.DateTimeField(auto_now_add=True)
+
+
+class CachedCombinedTicket(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    provider = models.CharField(max_length=255)
+    type = models.CharField(max_length=255)
+    extension = models.CharField(max_length=255)
+    file = models.FileField(null=True, blank=True, upload_to=cachedcombinedticket_name)
+    created = models.DateTimeField(auto_now_add=True)
+
+
+@receiver(post_delete, sender=CachedTicket)
+def cachedticket_delete(sender, instance, **kwargs):
+    if instance.file:
+        # Pass false so FileField doesn't save the model.
+        instance.file.delete(False)

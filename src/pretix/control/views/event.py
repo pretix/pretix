@@ -2,26 +2,29 @@ from collections import OrderedDict
 
 from django import forms
 from django.contrib import messages
+from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.forms import modelformset_factory
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import FormView
+from django.views.generic import FormView, ListView
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import (
-    Event, EventPermission, Item, ItemVariation, User,
+    CachedTicket, Event, EventPermission, Item, ItemVariation, LogEntry, Order,
+    RequiredAction, User, Voucher,
 )
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
+from pretix.base.services.mail import SendMailException, mail
 from pretix.base.signals import (
-    register_payment_providers, register_ticket_outputs,
+    event_live_issues, register_payment_providers, register_ticket_outputs,
 )
 from pretix.control.forms.event import (
     DisplaySettingsForm, EventSettingsForm, EventUpdateForm,
@@ -29,9 +32,11 @@ from pretix.control.forms.event import (
     TicketSettingsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.helpers.urls import build_absolute_uri
 from pretix.presale.style import regenerate_css
 
 from . import UpdateView
+from ..logdisplay import OVERVIEW_BLACKLIST
 
 
 class EventUpdate(EventPermissionRequiredMixin, UpdateView):
@@ -127,6 +132,9 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
                 if key.startswith("plugin:"):
                     module = key.split(":")[1]
                     if value == "enable" and module in plugins_available:
+                        if getattr(plugins_available[module], 'restricted', False):
+                            if not request.user.is_superuser:
+                                continue
                         self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                                       data={'plugin': module})
                         if module not in plugins_active:
@@ -450,6 +458,9 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
                             for k in provider.form.changed_data
                         }
                     )
+                    CachedTicket.objects.filter(
+                        order_position__order__event=self.request.event, provider=provider.identifier
+                    ).delete()
             else:
                 success = False
         form = self.get_form(self.get_form_class())
@@ -486,6 +497,13 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
             )
             provider.settings_content = provider.settings_content_render(self.request)
             provider.form.prepare_fields()
+
+            provider.preview_allowed = True
+            for k, v in provider.settings_form_fields.items():
+                if v.required and not self.request.event.settings.get('ticketoutput_%s_%s' % (provider.identifier, k)):
+                    provider.preview_allowed = False
+                    break
+
             providers.append(provider)
         return providers
 
@@ -531,27 +549,57 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
         ctx['add_form'] = self.add_form
         return ctx
 
+    def _send_invite(self, instance):
+        try:
+            mail(
+                instance.invite_email,
+                _('Account information changed'),
+                'pretixcontrol/email/invitation.txt',
+                {
+                    'user': self,
+                    'event': self.request.event.name,
+                    'url': build_absolute_uri('control:auth.invite', kwargs={
+                        'token': instance.invite_token
+                    })
+                },
+                event=None,
+                locale=self.request.LANGUAGE_CODE
+            )
+        except SendMailException:
+            pass  # Already logged
+
     @transaction.atomic
     def post(self, *args, **kwargs):
         if self.formset.is_valid() and self.add_form.is_valid():
             if self.add_form.has_changed():
+                logdata = {
+                    k: v for k, v in self.add_form.cleaned_data.items()
+                }
+
                 try:
-                    self.add_form.instance.user = User.objects.get(email=self.add_form.cleaned_data['user'])
-                    self.add_form.instance.user_id = self.add_form.instance.user.id
                     self.add_form.instance.event = self.request.event
                     self.add_form.instance.event_id = self.request.event.id
+                    self.add_form.instance.user = User.objects.get(email=self.add_form.cleaned_data['user'])
+                    self.add_form.instance.user_id = self.add_form.instance.user.id
                 except User.DoesNotExist:
-                    messages.error(self.request, _('There is no user with the email address you entered.'))
-                    return self.get(*args, **kwargs)
+                    self.add_form.instance.invite_email = self.add_form.cleaned_data['user']
+                    if EventPermission.objects.filter(invite_email=self.add_form.instance.invite_email,
+                                                      event=self.request.event).exists():
+                        messages.error(self.request, _('This user already has been invited for this event.'))
+                        return self.get(*args, **kwargs)
+
+                    self.add_form.save()
+                    self._send_invite(self.add_form.instance)
+
+                    self.request.event.log_action(
+                        'pretix.event.permissions.invited', user=self.request.user, data=logdata
+                    )
                 else:
                     if EventPermission.objects.filter(user=self.add_form.instance.user,
                                                       event=self.request.event).exists():
                         messages.error(self.request, _('This user already has permissions for this event.'))
                         return self.get(*args, **kwargs)
                     self.add_form.save()
-                    logdata = {
-                        k: v for k, v in self.add_form.cleaned_data.items()
-                    }
                     logdata['user'] = self.add_form.instance.user_id
                     self.request.event.log_action(
                         'pretix.event.permissions.added', user=self.request.user, data=logdata
@@ -569,6 +617,14 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
                     if not form.cleaned_data['can_change_permissions'] or form in self.formset.deleted_forms:
                         messages.error(self.request, _('You cannot remove your own permission to view this page.'))
                         return self.get(*args, **kwargs)
+
+            for form in self.formset.deleted_forms:
+                logdata = {
+                    k: v for k, v in form.cleaned_data.items()
+                }
+                self.request.event.log_action(
+                    'pretix.event.permissions.deleted', user=self.request.user, data=logdata
+                )
 
             self.formset.save()
             messages.success(self.request, _('Your changes have been saved.'))
@@ -615,21 +671,97 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
         if not self.request.event.quotas.exists():
             issues.append(_('You need to configure at least one quota to sell anything.'))
 
+        responses = event_live_issues.send(self.request.event)
+        for receiver, response in responses:
+            if response:
+                issues.append(response)
+
         return issues
 
     def post(self, request, *args, **kwargs):
         if request.POST.get("live") == "true" and not self.issues:
             request.event.live = True
             request.event.save()
+            self.request.event.log_action(
+                'pretix.event.live.activated', user=self.request.user, data={}
+            )
             messages.success(self.request, _('Your shop is live now!'))
         elif request.POST.get("live") == "false":
             request.event.live = False
             request.event.save()
+            self.request.event.log_action(
+                'pretix.event.live.deactivated', user=self.request.user, data={}
+            )
             messages.success(self.request, _('We\'ve taken your shop down. You can re-enable it whenever you want!'))
         return redirect(self.get_success_url())
 
     def get_success_url(self) -> str:
         return reverse('control:event.live', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })
+
+
+class EventLog(EventPermissionRequiredMixin, ListView):
+    template_name = 'pretixcontrol/event/logs.html'
+    model = LogEntry
+    context_object_name = 'logs'
+    paginate_by = 20
+
+    def get_queryset(self):
+        qs = self.request.event.logentry_set.all().select_related('user', 'content_type').order_by('-datetime')
+        qs = qs.exclude(action_type__in=OVERVIEW_BLACKLIST)
+        if not self.request.eventperm.can_view_orders:
+            qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
+        if not self.request.eventperm.can_view_vouchers:
+            qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
+
+        if self.request.GET.get('user') == 'yes':
+            qs = qs.filter(user__isnull=False)
+        elif self.request.GET.get('user') == 'no':
+            qs = qs.filter(user__isnull=True)
+        elif self.request.GET.get('user'):
+            qs = qs.filter(user_id=self.request.GET.get('user'))
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['userlist'] = self.request.event.user_perms.select_related('user')
+        return ctx
+
+
+class EventActions(EventPermissionRequiredMixin, ListView):
+    template_name = 'pretixcontrol/event/actions.html'
+    model = RequiredAction
+    context_object_name = 'actions'
+    paginate_by = 20
+    permission = 'can_change_orders'
+
+    def get_queryset(self):
+        qs = self.request.event.requiredaction_set.filter(done=False)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        for a in ctx['actions']:
+            a.display = a.display(self.request)
+        return ctx
+
+
+class EventActionDiscard(EventPermissionRequiredMixin, View):
+    permission = 'can_change_orders'
+
+    def get(self, request, **kwargs):
+        action = get_object_or_404(RequiredAction, event=request.event, pk=kwargs.get('id'))
+        action.done = True
+        action.user = request.user
+        action.save()
+        messages.success(self.request, _('The issue has been marked as resolved!'))
+        return redirect(self.get_success_url())
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.index', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug
         })

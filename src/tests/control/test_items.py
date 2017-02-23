@@ -236,6 +236,7 @@ class QuotaTest(ItemFormTest):
         form_data['size'] = '350'
         doc = self.post_doc('/control/event/%s/%s/quotas/%s/change' % (self.orga1.slug, self.event1.slug, c.id),
                             form_data)
+        doc = self.get_doc('/control/event/%s/%s/quotas/' % (self.orga1.slug, self.event1.slug))
         self.assertIn("350", doc.select("#page-wrapper table")[0].text)
         self.assertNotIn("500", doc.select("#page-wrapper table")[0].text)
         assert Quota.objects.get(id=c.id).size == 350
@@ -257,7 +258,10 @@ class ItemsTest(ItemFormTest):
     def setUp(self):
         super().setUp()
         self.item1 = Item.objects.create(event=self.event1, name="Standard", default_price=0, position=1)
-        self.item2 = Item.objects.create(event=self.event1, name="Business", default_price=0, position=2)
+        self.item2 = Item.objects.create(event=self.event1, name="Business", default_price=0, position=2,
+                                         description="If your ticket is paid by your employer",
+                                         active=True, available_until=now() + datetime.timedelta(days=4),
+                                         require_voucher=True, allow_cancel=False)
         self.var1 = ItemVariation.objects.create(item=self.item2, value="Silver")
         self.var2 = ItemVariation.objects.create(item=self.item2, value="Gold")
 
@@ -360,3 +364,27 @@ class ItemsTest(ItemFormTest):
         assert self.event1.items.filter(pk=self.item1.pk).exists()
         self.item1.refresh_from_db()
         assert not self.item1.active
+
+    def test_create_copy(self):
+        q = Question.objects.create(event=self.event1, question="Size", type="N")
+        q.items.add(self.item2)
+
+        self.client.post('/control/event/%s/%s/items/add' % (self.orga1.slug, self.event1.slug), {
+            'name_0': 'Intermediate',
+            'default_price': '23.00',
+            'tax_rate': '19.00',
+            'copy_from': str(self.item2.pk),
+            'has_variations': '1'
+        })
+        i_old = Item.objects.get(name__icontains='Business')
+        i_new = Item.objects.get(name__icontains='Intermediate')
+        assert i_new.category == i_old.category
+        assert i_new.description == i_old.description
+        assert i_new.active == i_old.active
+        assert i_new.available_from == i_old.available_from
+        assert i_new.available_until == i_old.available_until
+        assert i_new.require_voucher == i_old.require_voucher
+        assert i_new.hide_without_voucher == i_old.hide_without_voucher
+        assert i_new.allow_cancel == i_old.allow_cancel
+        assert set(i_new.questions.all()) == set(i_old.questions.all())
+        assert set([str(v.value) for v in i_new.variations.all()]) == set([str(v.value) for v in i_old.variations.all()])

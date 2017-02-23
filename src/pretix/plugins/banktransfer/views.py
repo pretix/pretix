@@ -2,7 +2,6 @@ import csv
 import json
 import logging
 from datetime import timedelta
-from locale import format as lformat
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -135,6 +134,8 @@ class ActionView(EventPermissionRequiredMixin, View):
             })
 
     def get(self, request, *args, **kwargs):
+        from django.utils.formats import localize
+
         query = request.GET.get('query', '')
         if len(query) < 2:
             return JsonResponse({'results': []})
@@ -145,7 +146,7 @@ class ActionView(EventPermissionRequiredMixin, View):
                 {
                     'code': o.code,
                     'status': o.get_status_display(),
-                    'total': lformat("%.2f", o.total) + ' ' + self.request.event.currency
+                    'total': localize(o.total) + ' ' + self.request.event.currency
                 } for o in qs
             ]
         })
@@ -215,6 +216,8 @@ class ImportView(EventPermissionRequiredMixin, ListView):
             q = self.request.GET.get('search')
             qs = qs.filter(
                 Q(payer__icontains=q) | Q(reference__icontains=q) | Q(comment__icontains=q)
+            ).order_by(
+                '-import_job__created'
             )
 
         return qs
@@ -228,17 +231,22 @@ class ImportView(EventPermissionRequiredMixin, ListView):
             self.discard_all()
             return self.redirect_back()
 
-        if ('file' in self.request.FILES and 'csv' in self.request.FILES.get('file').name.lower()) \
+        elif ('file' in self.request.FILES and 'csv' in self.request.FILES.get('file').name.lower()) \
                 or 'amount' in self.request.POST:
             # Process CSV
             return self.process_csv()
 
-        if 'file' in self.request.FILES and 'txt' in self.request.FILES.get('file').name.lower():
+        elif 'file' in self.request.FILES and 'txt' in self.request.FILES.get('file').name.lower():
             return self.process_mt940()
 
-        messages.error(self.request, _('We were unable to detect the file type of this import. Please '
-                                       'contact support for help.'))
-        return self.redirect_back()
+        elif self.request.FILES.get('file') is None:
+            messages.error(self.request, _('You must choose a file to import.'))
+            return self.redirect_back()
+
+        else:
+            messages.error(self.request, _('We were unable to detect the file type of this import. Please '
+                           'contact support for help.'))
+            return self.redirect_back()
 
     @cached_property
     def settings(self):
@@ -347,4 +355,8 @@ class ImportView(EventPermissionRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['job_running'] = self.job_running
+        ctx['no_more_payments'] = False
+        if self.request.event.settings.get('payment_term_last'):
+            if now() > self.request.event.payment_term_last:
+                ctx['no_more_payments'] = True
         return ctx

@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.formats import localize
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -21,9 +22,9 @@ class ExtendForm(I18nModelForm):
 
     def clean(self):
         data = super().clean()
+        data['expires'] = data['expires'].replace(hour=23, minute=59, second=59)
         if data['expires'] < now():
             raise ValidationError(_('The new expiry date needs to be in the future.'))
-        data['expires'] = data['expires'].replace(hour=23, minute=59, second=59)
         return data
 
 
@@ -58,7 +59,7 @@ class OrderPositionChangeForm(forms.Form):
     price = forms.DecimalField(
         required=False,
         max_digits=10, decimal_places=2,
-        label=_('New price')
+        label=_('New price (gross)')
     )
     operation = forms.ChoiceField(
         required=False,
@@ -88,15 +89,18 @@ class OrderPositionChangeForm(forms.Form):
         super().__init__(*args, **kwargs)
         choices = []
         for i in instance.order.event.items.prefetch_related('variations').all():
-            pname = i.name
+            pname = str(i.name)
             if not i.is_available():
                 pname += ' ({})'.format(_('inactive'))
             variations = list(i.variations.all())
             if variations:
                 for v in variations:
-                    choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (pname, v.value)))
+                    choices.append(('%d-%d' % (i.pk, v.pk),
+                                    '%s – %s (%s %s)' % (pname, v.value, localize(v.price),
+                                                         instance.order.event.currency)))
             else:
-                choices.append((str(i.pk), pname))
+                choices.append((str(i.pk), '%s (%s %s)' % (pname, localize(i.default_price),
+                                                           instance.order.event.currency)))
         self.fields['itemvar'].choices = choices
 
     def clean(self):
@@ -105,6 +109,12 @@ class OrderPositionChangeForm(forms.Form):
 
 
 class OrderContactForm(forms.ModelForm):
+    regenerate_secrets = forms.BooleanField(required=False, label=_('Invalidate secrets'),
+                                            help_text=_('Regenerates the order and ticket secrets. You will '
+                                                        'need to re-send the link to the order page to the user and '
+                                                        'the user will need to download his tickets again. The old '
+                                                        'versions will be invalid.'))
+
     class Meta:
         model = Order
         fields = ['email']

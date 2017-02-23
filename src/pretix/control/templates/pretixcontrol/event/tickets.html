@@ -13,7 +13,8 @@
                 <div class="panel panel-default ticketoutput-panel">
                     <div class="panel-heading">
                         <a href="{% url "control:event.settings.tickets.preview" event=request.event.slug organizer=request.organizer.slug output=provider.identifier %}"
-                            class="btn btn-default btn-sm pull-right" target="_blank">
+                                class="btn btn-default btn-sm pull-right {% if not provider.preview_allowed %}disabled{% endif %}"
+                                target="_blank">
                             {% trans "Preview" %}
                         </a>
                         <h3 class="panel-title">{{ provider.verbose_name }}</h3>

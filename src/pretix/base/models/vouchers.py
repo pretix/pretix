@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -5,6 +7,7 @@ from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
+from ..decimal import round_decimal
 from .base import LoggedModel
 from .event import Event
 from .items import Item, ItemVariation, Quota
@@ -30,7 +33,9 @@ class Voucher(LoggedModel):
     :type event: Event
     :param code: The secret voucher code
     :type code: str
-    :param redeemed: Whether or not this voucher has already been redeemed
+    :param max_usages: The number of times this voucher can be redeemed
+    :type max_usages: int
+    :param redeemed: The number of times this voucher already has been redeemed
     :type redeemed: bool
     :param valid_until: The expiration date of this voucher (optional)
     :type valid_until: datetime
@@ -38,8 +43,11 @@ class Voucher(LoggedModel):
     :type block_quota: bool
     :param allow_ignore_quota: If set to true, this voucher can be redeemed even if the event is sold out
     :type allow_ignore_quota: bool
-    :param price: If set, the voucher will allow the sale of associated items for this price
-    :type price: decimal.Decimal
+    :param price_mode: Sets how this voucher affects a product's price. Can be ``none``, ``set``, ``subtract``
+                       or ``percent``.
+    :type price_mode: str
+    :param value: The value by which the price should be modified in the way specified by ``price_mode``.
+    :type value: decimal.Decimal
     :param item: If set, the item to sell
     :type item: Item
     :param variation: If set, the variation to sell
@@ -57,6 +65,13 @@ class Voucher(LoggedModel):
     * You need to either select a quota or an item
     * If you select an item that has variations but do not select a variation, you cannot set block_quota
     """
+    PRICE_MODES = (
+        ('none', _('No effect')),
+        ('set', _('Set product price to')),
+        ('subtract', _('Subtract from product price')),
+        ('percent', _('Reduce product price by (%)')),
+    )
+
     event = models.ForeignKey(
         Event,
         on_delete=models.CASCADE,
@@ -68,10 +83,14 @@ class Voucher(LoggedModel):
         max_length=255, default=generate_code,
         db_index=True,
     )
-    redeemed = models.BooleanField(
+    max_usages = models.PositiveIntegerField(
+        verbose_name=_("Maximum usages"),
+        help_text=_("Number of times this voucher can be redeemed."),
+        default=1
+    )
+    redeemed = models.PositiveIntegerField(
         verbose_name=_("Redeemed"),
-        default=False,
-        db_index=True
+        default=0
     )
     valid_until = models.DateTimeField(
         blank=True, null=True, db_index=True,
@@ -92,10 +111,15 @@ class Voucher(LoggedModel):
             "If activated, a holder of this voucher code can buy tickets, even if there are none left."
         )
     )
-    price = models.DecimalField(
-        verbose_name=_("Set product price to"),
+    price_mode = models.CharField(
+        verbose_name=_("Price mode"),
+        max_length=100,
+        choices=PRICE_MODES,
+        default='none'
+    )
+    value = models.DecimalField(
+        verbose_name=_("Voucher value"),
         decimal_places=2, max_digits=10, null=True, blank=True,
-        help_text=_('If empty, the product will cost its normal price.')
     )
     item = models.ForeignKey(
         Item, related_name='vouchers',
@@ -186,19 +210,35 @@ class Voucher(LoggedModel):
         Returns whether this voucher applies to a given item (and optionally
         a variation).
         """
-        if self.quota:
-            return item.quotas.filter(pk=self.quota.pk).exists()
-        if self.item and not self.variation:
-            return self.item == item
-        return (self.item == item) and (self.variation == variation)
+        if self.quota_id:
+            return item.quotas.filter(pk=self.quota_id).exists()
+        if self.item_id and not self.variation_id:
+            return self.item_id == item.pk
+        return (self.item_id == item.pk) and (variation and self.variation_id == variation.pk)
 
     def is_active(self):
         """
         Returns True if a voucher has not yet been redeemed, but is still
         within its validity (if valid_until is set).
         """
-        if self.redeemed:
+        if self.redeemed >= self.max_usages:
             return False
         if self.valid_until and self.valid_until < now():
             return False
         return True
+
+    def calculate_price(self, original_price: Decimal) -> Decimal:
+        """
+        Returns how the price given in original_price would be modified if this
+        voucher is applied, i.e. replaced by a different price or reduced by a
+        certain percentage. If the voucher does not modify the price, the
+        original price will be returned.
+        """
+        if self.value is not None:
+            if self.price_mode == 'set':
+                return self.value
+            elif self.price_mode == 'subtract':
+                return original_price - self.value
+            elif self.price_mode == 'percent':
+                return round_decimal(original_price * (Decimal('100.00') - self.value) / Decimal('100.00'))
+        return original_price

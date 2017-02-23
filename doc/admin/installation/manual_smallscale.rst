@@ -38,10 +38,10 @@ Unix user
 
 As we do not want to run pretix as root, we first create a new unprivileged user::
 
-    # sudo adduser pretix --disabled-password --home /var/pretix
+    # adduser pretix --disabled-password --home /var/pretix
 
 In this guide, all code lines prepended with a ``#`` symbol are commands that you need to execute on your server as
-``root`` user; all lines prepended with a ``$`` symbol should be run by the unprivileged user.
+``root`` user (e.g. using ``sudo``); all lines prepended with a ``$`` symbol should be run by the unprivileged user.
 
 Database
 --------
@@ -70,7 +70,7 @@ We now create a config directory and config file for pretix::
 
     # mkdir /etc/pretix
     # touch /etc/pretix/pretix.cfg
-    # chown -R pretix:pretix/etc/pretix/
+    # chown -R pretix:pretix /etc/pretix/
     # chmod 0600 /etc/pretix/pretix.cfg
 
 Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following content (adjusted to your environment)::
@@ -82,7 +82,7 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     datadir=/var/pretix/data
 
     [database]
-    ; Replace mysql with psycopg2 for PostgreSQL
+    ; Replace mysql with postgresql_psycopg2 for PostgreSQL
     backend=mysql
     name=pretix
     user=pretix
@@ -100,13 +100,13 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     sessions=true
 
     [celery]
-    backend=redis://127.0.0.1?virtual_host=1
-    broker=redis://127.0.0.1?virtual_host=2
+    backend=redis://127.0.0.1/1
+    broker=redis://127.0.0.1/2
 
 See :ref:`email configuration <mail-settings>` to learn more about configuring mail features.
 
-Install pretix from source
---------------------------
+Install pretix from PyPI
+------------------------
 
 Now we will install pretix itself. The following steps are to be executed as the ``pretix`` user. Before we
 actually install pretix, we will create a virtual environment to isolate the python packages from your global
@@ -114,16 +114,15 @@ python installation::
 
     $ virtualenv -p python3 /var/pretix/venv
     $ source /var/pretix/venv/bin/activate
-    (venv)$ pip install -U pip setuptools wheel
+    (venv)$ pip3 install -U pip setuptools wheel
 
-We now clone pretix and install its Python dependencies (replace ``mysql`` with ``postgres`` if you're running
-PostgreSQL)::
+We now install pretix, its direct dependencies and gunicorn. Replace ``mysql`` with ``postgres`` in the following
+command if you're running PostgreSQL::
 
-    (venv)$ git clone https://github.com/pretix/pretix.git /var/pretix/source
-    (venv)$ cd /var/pretix/source/src
-    (venv)$ pip3 install -r requirements.txt -r requirements/mysql.txt \
-                         -r requirements/redis.txt \
-                         -r requirements/py34.txt gunicorn
+    (venv)$ pip3 install "pretix[mysql]" gunicorn
+
+If you are running Python 3.4, you also need to ``pip3 install typing``. This is not required on 3.5 or newer.
+You can find out your Python version using ``python -V``.
 
 We also need to create a data directory::
 
@@ -131,8 +130,8 @@ We also need to create a data directory::
 
 Finally, we compile static files and translation data and create the database structure::
 
-    (venv)$ make production
-    (venv)$ python manage.py migrate
+    (venv)$ python -m pretix migrate
+    (venv)$ python -m pretix rebuild
 
 
 Start pretix as a service
@@ -154,7 +153,7 @@ named ``/etc/systemd/system/pretix-web.service`` with the following content::
                           --name pretix --workers 5 \
                           --max-requests 1200  --max-requests-jitter 50 \
                           --log-level=info --bind=127.0.0.1:8345
-    WorkingDirectory=/var/pretix/source/src
+    WorkingDirectory=/var/pretix
     Restart=on-failure
 
     [Install]
@@ -171,8 +170,8 @@ For background tasks we need a second service ``/etc/systemd/system/pretix-worke
     Group=pretix
     Environment="VIRTUAL_ENV=/var/pretix/venv"
     Environment="PATH=/var/pretix/venv/bin:/usr/local/bin:/usr/bin:/bin"
-    ExecStart=/var/pretix/venv/bin/celery -A pretix worker -l info
-    WorkingDirectory=/var/pretix/source/src
+    ExecStart=/var/pretix/venv/bin/celery -A pretix.celery_app worker -l info
+    WorkingDirectory=/var/pretix
     Restart=on-failure
 
     [Install]
@@ -191,7 +190,7 @@ Cronjob
 You need to set up a cronjob that runs the management command ``runperiodic``. The exact interval is not important
 but should be something between every minute and every hour. You could for example configure cron like this::
 
-    15,45 * * * * export PATH=/var/pretix/venv/bin:$PATH && cd /var/pretix/source/src && ./manage.py runperiodic
+    15,45 * * * * export PATH=/var/pretix/venv/bin:$PATH && cd /var/pretix && python -m pretix runperiodic
 
 The cronjob should run as the ``pretix`` user (``crontab -e -u pretix``).
 
@@ -227,14 +226,25 @@ The following snippet is an example on how to configure a nginx proxy for pretix
             access_log off;
         }
 
+        location ^~ /media/cachedfiles {
+            deny all;
+            return 404;
+        }
+        location ^~ /media/invoices {
+            deny all;
+            return 404;
+        }
+
         location /static/ {
-            alias /var/pretix/source/src/pretix/static.dist/;
+            alias /var/pretix/venv/lib/python3.5/site-packages/pretix/static.dist/;
             access_log off;
             expires 365d;
             add_header Cache-Control "public";
         }
     }
 
+.. note:: Remember to replace the ``python3.5`` in the ``/static/`` path in the config 
+          above with your python version.
 
 We recommend reading about setting `strong encryption settings`_ for your web server.
 
@@ -254,15 +264,26 @@ To upgrade to a new pretix release, pull the latest code changes and run the fol
 ``mysql`` with ``postgres`` if necessary)::
 
     $ source /var/pretix/venv/bin/activate
-    (venv)$ cd /var/pretix/source/src
-    (venv)$ git pull origin master
-    (venv)$ pip3 install -r requirements.txt -r requirements/mysql.txt \
-                         -r requirements/redis.txt \
-                         -r requirements/py34.txt gunicorn
-    (venv)$ python manage.py migrate
-    (venv)$ make production
-    (venv)$ python manage.py updatestyles
+    (venv)$ pip3 install -U pretix[mysql] gunicorn
+    (venv)$ python -m pretix migrate
+    (venv)$ python -m pretix rebuild
+    (venv)$ python -m pretix updatestyles
     # systemctl restart pretix-web pretix-worker
+
+
+Install a plugin
+----------------
+
+To install a plugin, just use ``pip``! Depending on the plugin, you should probably apply database migrations and
+rebuild the static files afterwards. Replace ``pretix-passbook`` with the plugin of your choice in the following
+example::
+
+    $ source /var/pretix/venv/bin/activate
+    (venv)$ pip3 install pretix-passbook
+    (venv)$ python -m pretix migrate
+    (venv)$ python -m pretix rebuild
+    # systemctl restart pretix-web pretix-worker
+
 
 .. _Postfix: https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-16-04
 .. _nginx: https://botleg.com/stories/https-with-lets-encrypt-and-nginx/

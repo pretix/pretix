@@ -5,7 +5,7 @@ import pytest
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Event, EventPermission, Item, ItemVariation, Order, OrderPosition,
+    Checkin, Event, EventPermission, Item, ItemVariation, Order, OrderPosition,
     Organizer, User,
 )
 
@@ -111,7 +111,44 @@ def test_search(client, env):
     env[0].settings.set('pretixdroid_key', 'abcdefg')
     resp = client.get('/pretixdroid/api/%s/%s/search/?key=%s&query=%s' % (
         env[0].organizer.slug, env[0].slug, 'abcdefg', '567891'))
-    print(resp.content)
     jdata = json.loads(resp.content.decode("utf-8"))
     assert len(jdata['results']) == 1
     assert jdata['results'][0]['secret'] == '5678910'
+
+
+@pytest.mark.django_db
+def test_status(client, env):
+    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    Checkin.objects.create(position=env[3])
+    resp = client.get('/pretixdroid/api/%s/%s/status/?key=%s' % (
+        env[0].organizer.slug, env[0].slug, 'abcdefg'))
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert jdata['checkins'] == 1
+    assert jdata['total'] == 2
+    assert jdata['items'] == [
+        {'name': 'T-Shirt',
+         'id': env[3].item.pk,
+         'checkins': 1,
+         'admission': False,
+         'total': 1,
+         'variations': [
+             {'name': 'Red',
+              'id': env[3].variation.pk,
+              'checkins': 1,
+              'total': 1
+              },
+             {'name': 'Blue',
+              'id': env[3].item.variations.get(value='Blue').pk,
+              'checkins': 0,
+              'total': 0
+              }
+         ]
+         },
+        {'name': 'Ticket',
+         'id': env[4].item.pk,
+         'checkins': 0,
+         'admission': False,
+         'total': 1,
+         'variations': []
+         }
+    ]

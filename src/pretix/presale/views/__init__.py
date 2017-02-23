@@ -6,7 +6,8 @@ from django.db.models import Sum
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
-from pretix.base.models import CartPosition
+from pretix.base.decimal import round_decimal
+from pretix.base.models import CartPosition, OrderPosition
 from pretix.base.signals import register_payment_providers
 
 
@@ -39,12 +40,16 @@ class CartMixin:
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
         def keyfunc(pos):
+            if isinstance(pos, OrderPosition):
+                i = pos.positionid
+            else:
+                i = pos.pk
             if downloads:
-                return pos.id, 0, 0, 0, 0
+                return i, pos.pk, 0, 0, 0, 0,
             if answers and ((pos.item.admission and self.request.event.settings.attendee_names_asked)
                             or pos.item.questions.all()):
-                return pos.id, 0, 0, 0, 0
-            return 0, pos.item_id, pos.variation_id, pos.price, (pos.voucher_id or 0)
+                return i, pos.pk, 0, 0, 0, 0,
+            return 0, 0, pos.item_id, pos.variation_id, pos.price, (pos.voucher_id or 0)
 
         positions = []
         for k, g in groupby(sorted(list(cartpos), key=keyfunc), key=keyfunc):
@@ -52,15 +57,24 @@ class CartMixin:
             group = g[0]
             group.count = len(g)
             group.total = group.count * group.price
+            group.net_total = group.count * group.net_price
             group.has_questions = answers and k[0] != ""
             if answers:
                 group.cache_answers()
             positions.append(group)
 
         total = sum(p.total for p in positions)
+        net_total = sum(p.net_total for p in positions)
+        tax_total = sum(p.total - p.net_total for p in positions)
 
         payment_fee = payment_fee if payment_fee is not None else self.get_payment_fee(total)
-        payment_fee_tax_rate = payment_fee_tax_rate if payment_fee_tax_rate is not None else self.request.event.settings.tax_rate_default
+        payment_fee_tax_rate = round_decimal(payment_fee_tax_rate
+                                             if payment_fee_tax_rate is not None
+                                             else self.request.event.settings.tax_rate_default)
+        payment_fee_tax_value = round_decimal(payment_fee * (1 - 100 / (100 + payment_fee_tax_rate)))
+        payment_fee_net = payment_fee - payment_fee_tax_value
+        tax_total += payment_fee_tax_value
+        net_total += payment_fee_net
 
         try:
             first_expiry = min(p.expires for p in positions) if positions else now()
@@ -73,7 +87,10 @@ class CartMixin:
             'positions': positions,
             'raw': cartpos,
             'total': total + payment_fee,
+            'net_total': net_total,
+            'tax_total': tax_total,
             'payment_fee': payment_fee,
+            'payment_fee_net': payment_fee_net,
             'payment_fee_tax_rate': payment_fee_tax_rate,
             'answers': answers,
             'minutes_left': minutes_left,

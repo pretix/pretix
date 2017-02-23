@@ -15,11 +15,10 @@ import time
 from django.conf import settings
 from django.db import transaction
 
-from pretix.celery import app
+from pretix.celery_app import app
 
 
 class ProfiledTask(app.Task):
-    abstract = True
 
     def __call__(self, *args, **kwargs):
 
@@ -43,7 +42,6 @@ class TransactionAwareTask(ProfiledTask):
     Task class which is aware of django db transactions and only executes tasks
     after transaction has been committed
     """
-    abstract = True
 
     def apply_async(self, *args, **kwargs):
         """

@@ -20,6 +20,10 @@ DEFAULTS = {
         'default': '10',
         'type': int
     },
+    'display_net_prices': {
+        'default': 'False',
+        'type': bool
+    },
     'attendee_names_asked': {
         'default': 'True',
         'type': bool
@@ -128,6 +132,22 @@ DEFAULTS = {
         'default': 'False',
         'type': bool
     },
+    'show_variations_expanded': {
+        'default': 'False',
+        'type': bool
+    },
+    'waiting_list_enabled': {
+        'default': 'False',
+        'type': bool
+    },
+    'waiting_list_auto': {
+        'default': 'True',
+        'type': bool
+    },
+    'waiting_list_hours': {
+        'default': '48',
+        'type': int
+    },
     'ticket_download': {
         'default': 'False',
         'type': bool
@@ -231,6 +251,8 @@ Your {event} team"""))
 
 we successfully received your payment for {event}. Thank you!
 
+{payment_info}
+
 You can change your order details and view the status of your order at
 {url}
 
@@ -251,6 +273,29 @@ your payment before {expire_date}.
 
 You can view the payment information and the status of your order at
 {url}
+
+Best regards,
+Your {event} team"""))
+    },
+    'mail_text_waiting_list': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+you submitted yourself to the waiting list for {event},
+for the product {product}.
+
+We now have a ticket ready for you! You can redeem it in our ticket shop
+within the next {hours} hours by entering the following voucher code:
+
+{code}
+
+Alternatively, you can just click on the following link:
+
+{url}
+
+Please note that this link is only valid within the next {hours} hours!
+We will reassign the ticket to the next person on the list if you do not
+redeem the voucher within that timeframe.
 
 Best regards,
 Your {event} team"""))
@@ -296,6 +341,10 @@ Your {event} team"""))
         'type': str
     },
     'logo_image': {
+        'default': None,
+        'type': File
+    },
+    'invoice_logo_image': {
         'default': None,
         'type': File
     },
@@ -359,7 +408,7 @@ class SettingsProxy:
             settings[key] = self.get(key)
         return settings
 
-    def _unserialize(self, value: str, as_type: type) -> Any:
+    def _unserialize(self, value: str, as_type: type, binary_file=False) -> Any:
         if as_type is None and value is not None and value.startswith('file://'):
             as_type = File
 
@@ -375,7 +424,7 @@ class SettingsProxy:
             return value == 'True'
         elif as_type == File:
             try:
-                fi = default_storage.open(value[7:], 'r')
+                fi = default_storage.open(value[7:], 'rb' if binary_file else 'r')
                 fi.url = default_storage.url(value[7:])
                 return fi
             except OSError:
@@ -414,7 +463,7 @@ class SettingsProxy:
 
         raise TypeError('Unable to serialize %s into a setting.' % str(type(value)))
 
-    def get(self, key: str, default=None, as_type: type=None):
+    def get(self, key: str, default=None, as_type: type=None, binary_file=False):
         """
         Get a setting specified by key ``key``. Normally, settings are strings, but
         if you put non-strings into the settings object, you can request unserialization
@@ -440,7 +489,7 @@ class SettingsProxy:
             if value is None and default is not None:
                 value = default
 
-        return self._unserialize(value, as_type)
+        return self._unserialize(value, as_type, binary_file=binary_file)
 
     def __getitem__(self, key: str) -> Any:
         return self.get(key)

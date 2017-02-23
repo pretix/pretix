@@ -17,6 +17,9 @@ External Dependencies
 * ``pyvenv`` for Python 3 (Debian package: ``python3-venv``)
 * ``libffi`` (Debian package: ``libffi-dev``)
 * ``libssl`` (Debian package: ``libssl-dev``)
+* ``libxml2`` (Debian package ``libxml2-dev``)
+* ``libxslt`` (Debian package ``libxslt1-dev``)
+* ``msgfmt`` (Debian package ``gettext``)
 * ``git``
 
 Your local python environment
@@ -36,18 +39,18 @@ automatically). If you are working on Ubuntu or Debian, we strongly recommend up
 your pip and setuptools installation inside the virtual environment, otherwise some of
 the dependencies might fail::
 
-    pip install -U pip setuptools==28.6.1
+    pip3 install -U pip setuptools==28.6.1
 
 Working with the code
 ---------------------
 The first thing you need are all the main application's dependencies::
 
     cd src/
-    pip install -r requirements.txt -r requirements/dev.txt
+    pip3 install -r requirements.txt -r requirements/dev.txt
 
 If you are working with Python 3.4, you will also need (you can skip this for Python 3.5)::
 
-    pip install -r requirements/py34.txt
+    pip3 install -r requirements/py34.txt
 
 Next, you need to copy the SCSS files from the source folder to the STATIC_ROOT directory::
 
@@ -77,7 +80,7 @@ and head to http://localhost:8000/
 
 As we did not implement an overall front page yet, you need to go directly to
 http://localhost:8000/control/ for the admin view or, if you imported the test
-data as suggested above, to the event page at http://localhost:8000/mrmcd/2015/
+data as suggested above, to the event page at http://localhost:8000/bigevents/2017/
 
 .. _`checksandtests`:
 
@@ -91,7 +94,7 @@ Before you check in your code into git, always run the static checkers and unit 
     py.test
 
 .. note:: If you have multiple CPU cores and want to speed up the test suite, you can install the python
-          package ``pytest-xdist`` using ``pip install pytest-xdist`` and then run ``py.test -n NUM`` with
+          package ``pytest-xdist`` using ``pip3 install pytest-xdist`` and then run ``py.test -n NUM`` with
           ``NUM`` being the number of threads you want to use.
 
 It is a good idea to put this command into your git hook ``.git/hooks/pre-commit``,
@@ -118,8 +121,8 @@ Then execute ``python -m smtpd -n -c DebuggingServer localhost:1025``.
 
 Working with translations
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-If you want to translate new strings that are not yet known to the translation system, 
-you can use the following command to scan the source code for strings to be translated 
+If you want to translate new strings that are not yet known to the translation system,
+you can use the following command to scan the source code for strings to be translated
 and update the ``*.po`` files accordingly::
 
     make localegen
@@ -137,7 +140,7 @@ Make sure you have your virtual python environment activated (see above). Then, 
 packages by executing::
 
     cd doc/
-    pip install -r requirements.txt
+    pip3 install -r requirements.txt
 
 To build the documentation, run the following command from the ``doc/`` directory::
 

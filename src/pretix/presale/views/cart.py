@@ -6,6 +6,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView, View
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import CartPosition, Quota, Voucher
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, remove_items_from_cart,
@@ -30,27 +31,22 @@ class CartActionMixin:
     def get_error_url(self):
         return self.get_next_url()
 
-    def _item_from_post_value(self, key, value):
+    def _item_from_post_value(self, key, value, voucher=None):
         if value.strip() == '' or '_' not in key:
             return
-
-        parts = key.split("_")
-        if parts[-1] == "voucher":
-            voucher = value
-            value = 1
-            parts = parts[:-1]
-        else:
-            voucher = None
 
         if not key.startswith('item_') and not key.startswith('variation_'):
             return
 
+        parts = key.split("_")
         try:
             amount = int(value)
         except ValueError:
             raise CartError(_('Please enter numbers only.'))
-        if amount <= 0:
+        if amount < 0:
             raise CartError(_('Please enter positive numbers only.'))
+        elif amount == 0:
+            return
 
         price = self.request.POST.get('price_' + "_".join(parts[1:]), "")
         if key.startswith('item_'):
@@ -86,7 +82,7 @@ class CartActionMixin:
         req_items = list(self.request.POST.lists())
         if '_voucher_item' in self.request.POST and '_voucher_code' in self.request.POST:
             req_items.append((
-                '%s_voucher' % self.request.POST['_voucher_item'], (self.request.POST['_voucher_code'],)
+                '%s' % self.request.POST['_voucher_item'], ('1',)
             ))
             pass
 
@@ -94,7 +90,7 @@ class CartActionMixin:
         for key, values in req_items:
             for value in values:
                 try:
-                    item = self._item_from_post_value(key, value)
+                    item = self._item_from_post_value(key, value, self.request.POST.get('_voucher_code'))
                 except CartError as e:
                     messages.error(self.request, str(e))
                     return
@@ -109,19 +105,13 @@ class CartActionMixin:
 
 class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = remove_items_from_cart
+    known_errortypes = ['CartError']
 
     def get_success_message(self, value):
         if CartPosition.objects.filter(cart_id=self.request.session.session_key).exists():
             return _('Your cart has been updated.')
         else:
             return _('Your cart is empty.')
-
-    def get_error_message(self, exception):
-        if isinstance(exception, dict) and exception['exc_type'] == 'CartError':
-            return exception['exc_message']
-        elif isinstance(exception, CartError):
-            return str(exception)
-        return super().get_error_message(exception)
 
     def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
@@ -138,16 +128,10 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
 
 class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = add_items_to_cart
+    known_errortypes = ['CartError']
 
     def get_success_message(self, value):
         return _('The products have been successfully added to your cart.')
-
-    def get_error_message(self, exception):
-        if isinstance(exception, dict) and exception['exc_type'] == 'CartError':
-            return exception['exc_message']
-        elif isinstance(exception, CartError):
-            return str(exception)
-        return super().get_error_message(exception)
 
     def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
@@ -169,6 +153,7 @@ class RedeemView(EventViewMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         context['voucher'] = self.voucher
+        context['max_times'] = self.voucher.max_usages - self.voucher.redeemed
 
         # Fetch all items
         items = self.request.event.items.all().filter(
@@ -204,24 +189,22 @@ class RedeemView(EventViewMixin, TemplateView):
                     item.cached_availability = (Quota.AVAILABILITY_OK, 1)
                 else:
                     item.cached_availability = item.check_quotas()
-                if self.voucher.price is not None:
-                    item.price = self.voucher.price
-                else:
-                    item.price = item.default_price
+                item.price = self.voucher.calculate_price(item.default_price)
+                if self.request.event.settings.display_net_prices:
+                    item.price -= round_decimal(item.price * (1 - 100 / (100 + item.tax_rate)))
             else:
                 for var in item.available_variations:
                     if self.voucher.allow_ignore_quota or self.voucher.block_quota:
                         var.cached_availability = (Quota.AVAILABILITY_OK, 1)
                     else:
                         var.cached_availability = list(var.check_quotas())
-                    if self.voucher.price is not None:
-                        var.price = self.voucher.price
-                    else:
-                        var.price = var.default_price if var.default_price is not None else item.default_price
+                    var.display_price = self.voucher.calculate_price(var.price)
+                    if self.request.event.settings.display_net_prices:
+                        var.display_price -= round_decimal(var.display_price * (1 - 100 / (100 + item.tax_rate)))
 
                 if len(item.available_variations) > 0:
-                    item.min_price = min([v.price for v in item.available_variations])
-                    item.max_price = max([v.price for v in item.available_variations])
+                    item.min_price = min([v.display_price for v in item.available_variations])
+                    item.max_price = max([v.display_price for v in item.available_variations])
 
         items = [item for item in items if len(item.available_variations) > 0 or not item.has_variations]
         context['options'] = sum([(len(item.available_variations) if item.has_variations else 1)
@@ -242,10 +225,18 @@ class RedeemView(EventViewMixin, TemplateView):
             v = v.strip()
             try:
                 self.voucher = Voucher.objects.get(code=v, event=request.event)
-                if self.voucher.redeemed:
+                if self.voucher.redeemed >= self.voucher.max_usages:
                     err = error_messages['voucher_redeemed']
                 if self.voucher.valid_until is not None and self.voucher.valid_until < now():
                     err = error_messages['voucher_expired']
+
+                redeemed_in_carts = CartPosition.objects.filter(
+                    Q(voucher=self.voucher) & Q(event=request.event) &
+                    (Q(expires__gte=now()) | Q(cart_id=request.session.session_key))
+                )
+                v_avail = self.voucher.max_usages - self.voucher.redeemed - redeemed_in_carts.count()
+                if v_avail < 1:
+                    err = error_messages['voucher_redeemed']
             except Voucher.DoesNotExist:
                 err = error_messages['voucher_invalid']
         else:

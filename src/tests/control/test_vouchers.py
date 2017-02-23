@@ -80,24 +80,24 @@ class VoucherFormTest(SoupTest):
     def test_csv(self):
         self.event.vouchers.create(item=self.ticket, code='ABCDEFG')
         doc = self.client.get('/control/event/%s/%s/vouchers/?download=yes' % (self.orga.slug, self.event.slug))
-        assert doc.content.strip() == '"Voucher code","Valid until","Product","Reserve quota","Bypass quota","Price",' \
-                                      '"Tag","Redeemed"\r\n"ABCDEFG","","Early-bird ticket","No","No","","",' \
-                                      '"No"'.encode('utf-8')
+        assert doc.content.strip() == '"Voucher code","Valid until","Product","Reserve quota","Bypass quota",' \
+                                      '"Price effect","Value","Tag","Redeemed","Maximum usages"\r\n"ABCDEFG","",' \
+                                      '"Early-bird ticket","No","No","No effect","","","0","1"'.encode('utf-8')
 
     def test_filter_status_valid(self):
         v = self.event.vouchers.create(item=self.ticket)
         doc = self.client.get('/control/event/%s/%s/vouchers/?status=v' % (self.orga.slug, self.event.slug))
         assert v.code in doc.rendered_content
-        v.redeemed = True
+        v.redeemed = 1
         v.save()
         doc = self.client.get('/control/event/%s/%s/vouchers/?status=v' % (self.orga.slug, self.event.slug))
         assert v.code not in doc.rendered_content
 
     def test_filter_status_redeemed(self):
-        v = self.event.vouchers.create(item=self.ticket, redeemed=True)
+        v = self.event.vouchers.create(item=self.ticket, redeemed=1)
         doc = self.client.get('/control/event/%s/%s/vouchers/?status=r' % (self.orga.slug, self.event.slug))
         assert v.code in doc.rendered_content
-        v.redeemed = False
+        v.redeemed = 0
         v.save()
         doc = self.client.get('/control/event/%s/%s/vouchers/?status=r' % (self.orga.slug, self.event.slug))
         assert v.code not in doc.rendered_content
@@ -406,7 +406,7 @@ class VoucherFormTest(SoupTest):
         assert not self.event.vouchers.filter(pk=v.id).exists()
 
     def test_delete_voucher_redeemed(self):
-        v = self.event.vouchers.create(quota=self.quota_tickets, redeemed=True)
+        v = self.event.vouchers.create(quota=self.quota_tickets, redeemed=1)
         doc = self.get_doc('/control/event/%s/%s/vouchers/%s/delete' % (self.orga.slug, self.event.slug, v.pk),
                            follow=True)
         assert doc.select(".alert-danger")

@@ -11,9 +11,9 @@
         <fieldset>
             <legend>{% trans "Voucher codes" %}</legend>
             <div class="form-group">
-                <div class="col-md-6 col-md-offset-3">
+                <div class="col-md-7 col-sm-12 col-md-offset-3">
                     <div class="input-group">
-                        <input type="text" class="form-control input-xs"
+                        <input type="number" class="form-control input-xs"
                                id="voucher-bulk-codes-num"
                                placeholder="{% trans "Number" %}">
                         <div class="input-group-btn">
@@ -21,18 +21,32 @@
                                     data-rng-url="{% url 'control:event.vouchers.rng' organizer=request.event.organizer.slug event=request.event.slug %}">
                                 {% trans "Generate random codes" %}
                             </button>
+                            <button type="button" class="btn btn-default btn-clipboard" data-clipboard-target="#id_codes">
+                                <i class="fa fa-clipboard" aria-hidden="true"></i>
+                                {% trans "Copy codes" %}
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
             {% bootstrap_field form.codes layout="horizontal" %}
+
+            {% bootstrap_field form.max_usages layout="horizontal" %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Voucher details" %}</legend>
             {% bootstrap_field form.valid_until layout="horizontal" %}
             {% bootstrap_field form.block_quota layout="horizontal" %}
             {% bootstrap_field form.allow_ignore_quota layout="horizontal" %}
-            {% bootstrap_field form.price layout="horizontal" %}
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="id_tag">{% trans "Price effect" %}</label>
+                <div class="col-md-5">
+                    {% bootstrap_field form.price_mode show_label=False form_group_class="" %}
+                </div>
+                <div class="col-md-4">
+                    {% bootstrap_field form.value show_label=False form_group_class="" %}
+                </div>
+            </div>
             {% bootstrap_field form.itemvar layout="horizontal" %}
             <div class="form-group">
                 <div class="col-md-9 col-md-offset-3">

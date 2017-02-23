@@ -10,7 +10,7 @@ from django.core.files.storage import default_storage
 
 from pretix.base.models import Event
 from pretix.base.services.async import ProfiledTask
-from pretix.celery import app
+from pretix.celery_app import app
 
 logger = logging.getLogger('pretix.presale.style')
 

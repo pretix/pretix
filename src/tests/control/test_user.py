@@ -26,13 +26,11 @@ class UserSettingsTest(SoupTest):
 
     def test_set_name(self):
         doc = self.save({
-            'givenname': 'Peter',
-            'familyname': 'Miller'
+            'fullname': 'Peter Miller',
         })
         assert doc.select(".alert-success")
         self.user = User.objects.get(pk=self.user.pk)
-        assert self.user.givenname == 'Peter'
-        assert self.user.familyname == 'Miller'
+        assert self.user.fullname == 'Peter Miller'
 
     def test_change_email_require_password(self):
         doc = self.save({

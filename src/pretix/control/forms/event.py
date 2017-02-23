@@ -2,19 +2,50 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import ugettext_lazy as _
 from pytz import common_timezones
 
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.i18n import I18nFormField, I18nTextarea
-from pretix.base.models import Event
+from pretix.base.models import Event, Organizer
 from pretix.control.forms import ExtFileField
 
 
-class EventCreateForm(I18nModelForm):
+class EventWizardFoundationForm(forms.Form):
+    locales = forms.MultipleChoiceField(
+        choices=settings.LANGUAGES,
+        label=_("Use languages"),
+        widget=forms.CheckboxSelectMultiple,
+        help_text=_('Choose all languages that your event should be available in.')
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+        self.fields['organizer'] = forms.ModelChoiceField(
+            label=_("Organizer"),
+            queryset=Organizer.objects.filter(
+                id__in=self.user.organizer_perms.filter(can_create_events=True).values_list('organizer', flat=True)
+            ),
+            widget=forms.RadioSelect,
+            empty_label=None,
+            required=True
+        )
+
+
+class EventWizardBasicsForm(I18nModelForm):
     error_messages = {
         'duplicate_slug': _("You already used this slug for a different event. Please choose a new one."),
     }
+    timezone = forms.ChoiceField(
+        choices=((a, a) for a in common_timezones),
+        label=_("Default timezone"),
+    )
+    locale = forms.ChoiceField(
+        choices=settings.LANGUAGES,
+        label=_("Default language"),
+    )
 
     class Meta:
         model = Event
@@ -25,7 +56,8 @@ class EventCreateForm(I18nModelForm):
             'date_from',
             'date_to',
             'presale_start',
-            'presale_end'
+            'presale_end',
+            'location',
         ]
         widgets = {
             'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
@@ -36,7 +68,19 @@ class EventCreateForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
         self.organizer = kwargs.pop('organizer')
+        self.locales = kwargs.get('locales')
+        kwargs.pop('user')
         super().__init__(*args, **kwargs)
+        self.initial['timezone'] = get_current_timezone_name()
+        self.fields['locale'].choices = [(a, b) for a, b in settings.LANGUAGES if a in self.locales]
+
+    def clean(self):
+        data = super().clean()
+        if data['locale'] not in self.locales:
+            raise ValidationError({
+                'locale': _('Your default locale must also be enabled for your event (see box above).')
+            })
+        return data
 
     def clean_slug(self):
         slug = self.cleaned_data['slug']
@@ -48,27 +92,24 @@ class EventCreateForm(I18nModelForm):
         return slug
 
 
-class EventCreateSettingsForm(SettingsForm):
-    timezone = forms.ChoiceField(
-        choices=((a, a) for a in common_timezones),
-        label=_("Default timezone"),
-    )
-    locales = forms.MultipleChoiceField(
-        choices=settings.LANGUAGES,
-        label=_("Available langauges"),
-    )
-    locale = forms.ChoiceField(
-        choices=settings.LANGUAGES,
-        label=_("Default language"),
-    )
+class EventWizardCopyForm(forms.Form):
 
-    def clean(self):
-        data = super().clean()
-        if data['locale'] not in data['locales']:
-            raise ValidationError({
-                'locale': _('Your default locale must also be enabled for your event (see box above).')
-            })
-        return data
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('organizer')
+        kwargs.pop('locales')
+        self.user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+        self.fields['copy_from_event'] = forms.ModelChoiceField(
+            label=_("Copy configuration from"),
+            queryset=Event.objects.filter(
+                id__in=self.user.event_perms.filter(
+                    can_change_items=True, can_change_settings=True
+                ).values_list('event', flat=True)
+            ),
+            widget=forms.RadioSelect,
+            empty_label=_('Do not copy'),
+            required=False
+        )
 
 
 class EventUpdateForm(I18nModelForm):
@@ -91,6 +132,7 @@ class EventUpdateForm(I18nModelForm):
             'is_public',
             'presale_start',
             'presale_end',
+            'location',
         ]
         widgets = {
             'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
@@ -114,6 +156,12 @@ class EventSettingsForm(SettingsForm):
     show_items_outside_presale_period = forms.BooleanField(
         label=_("Show items outside presale period"),
         help_text=_("Show item details before presale has started and after presale has ended"),
+        required=False
+    )
+    display_net_prices = forms.BooleanField(
+        label=_("Show net prices instead of gross prices in the product list (not recommended!)"),
+        help_text=_("Independent of your choice, the cart will show gross prices as this the price that needs to be "
+                    "paid"),
         required=False
     )
     presale_start_show_date = forms.BooleanField(
@@ -143,6 +191,27 @@ class EventSettingsForm(SettingsForm):
     show_quota_left = forms.BooleanField(
         label=_("Show number of tickets left"),
         help_text=_("Publicly show how many tickets of a certain type are still available."),
+        required=False
+    )
+    waiting_list_enabled = forms.BooleanField(
+        label=_("Enable waiting list"),
+        help_text=_("Once a ticket is sold out, people can add themselves to a waiting list. As soon as a ticket "
+                    "becomes available again, it will be reserved for the first person on the waiting list and this "
+                    "person will receive an email notification with a voucher that can be used to buy a ticket."),
+        required=False
+    )
+    waiting_list_hours = forms.IntegerField(
+        label=_("Waiting list response time"),
+        min_value=6,
+        help_text=_("If a ticket voucher is sent to a person on the waiting list, it has to be redeemed within this "
+                    "number of hours until it expires and can be re-assigned to the next person on the list."),
+        required=False
+    )
+    waiting_list_auto = forms.BooleanField(
+        label=_("Automatic waiting list assignments"),
+        help_text=_("If ticket capacity becomes free, automatically create a voucher and send it to the first person "
+                    "on the waiting list for that product. If this is not active, mails will not be send automatically "
+                    "but you can send them manually via the control panel."),
         required=False
     )
     attendee_names_asked = forms.BooleanField(
@@ -231,6 +300,17 @@ class PaymentSettingsForm(SettingsForm):
                     "(in percent)."),
     )
 
+    def clean(self):
+        cleaned_data = super().clean()
+        payment_term_last = cleaned_data.get('payment_term_last')
+        if payment_term_last and self.obj.presale_end:
+            if payment_term_last < self.obj.presale_end.date():
+                self.add_error(
+                    'payment_term_last',
+                    _('The last payment date cannot be before the end of presale.'),
+                )
+        return cleaned_data
+
 
 class ProviderForm(SettingsForm):
     """
@@ -289,7 +369,8 @@ class InvoiceSettingsForm(SettingsForm):
             ('False', _('No')),
             ('admin', _('Manually in admin panel')),
             ('user', _('Automatically on user request')),
-            ('True', _('Automatically for all created orders'))
+            ('True', _('Automatically for all created orders')),
+            ('paid', _('Automatically on payment')),
         )
     )
     invoice_address_from = forms.CharField(
@@ -321,6 +402,12 @@ class InvoiceSettingsForm(SettingsForm):
         label=_("Invoice language"),
         choices=[('__user__', _('The user\'s language'))] + settings.LANGUAGES,
     )
+    invoice_logo_image = ExtFileField(
+        label=_('Logo image'),
+        ext_whitelist=(".png", ".jpg", ".svg", ".gif", ".jpeg"),
+        required=False,
+        help_text=_('We will show your logo with a maximal height and width of 2.5 cm.')
+    )
 
 
 class MailSettingsForm(SettingsForm):
@@ -338,31 +425,32 @@ class MailSettingsForm(SettingsForm):
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {total}, {currency}, {date}, {paymentinfo}, {url}")
+        help_text=_("Available placeholders: {event}, {total}, {currency}, {date}, {paymentinfo}, {url}, "
+                    "{invoice_name}, {invoice_company}")
     )
     mail_text_order_paid = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}")
+        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}, {payment_info}")
     )
     mail_text_order_free = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}")
+        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}")
     )
     mail_text_order_changed = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}")
+        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}")
     )
     mail_text_resend_link = I18nFormField(
         label=_("Text (sent by admin)"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}")
+        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}")
     )
     mail_text_resend_all_links = I18nFormField(
         label=_("Text (requested by user)"),
@@ -381,7 +469,13 @@ class MailSettingsForm(SettingsForm):
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {expire_date}")
+        help_text=_("Available placeholders: {event}, {url}, {expire_date}, {invoice_name}, {invoice_company}")
+    )
+    mail_text_waiting_list = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {url}, {product}, {hours}, {code}")
     )
     smtp_use_custom = forms.BooleanField(
         label=_("Use custom SMTP server"),
@@ -450,6 +544,10 @@ class DisplaySettingsForm(SettingsForm):
         label=_("Frontpage text"),
         required=False,
         widget=I18nTextarea
+    )
+    show_variations_expanded = forms.BooleanField(
+        label=_("Show variations of a product expanded by default"),
+        required=False
     )
 
 

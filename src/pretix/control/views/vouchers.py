@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.db.models import Case, Count, IntegerField, Q, Sum, When
+from django.db.models import Count, Q, Sum
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
     JsonResponse,
@@ -33,7 +33,7 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
     def get_queryset(self):
         qs = self.request.event.vouchers.all().select_related('item', 'variation')
         if self.request.GET.get("search", "") != "":
-            s = self.request.GET.get("search", "")
+            s = self.request.GET.get("search", "").strip()
             qs = qs.filter(Q(code__icontains=s) | Q(tag__icontains=s) | Q(comment__icontains=s))
         if self.request.GET.get("tag", "") != "":
             s = self.request.GET.get("tag", "")
@@ -41,11 +41,11 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
         if self.request.GET.get("status", "") != "":
             s = self.request.GET.get("status", "")
             if s == 'v':
-                qs = qs.filter(Q(valid_until__isnull=True) | Q(valid_until__gt=now())).filter(redeemed=False)
+                qs = qs.filter(Q(valid_until__isnull=True) | Q(valid_until__gt=now())).filter(redeemed=0)
             elif s == 'r':
-                qs = qs.filter(redeemed=True)
+                qs = qs.filter(redeemed__gt=0)
             elif s == 'e':
-                qs = qs.filter(Q(valid_until__isnull=False) & Q(valid_until__lt=now())).filter(redeemed=False)
+                qs = qs.filter(Q(valid_until__isnull=False) & Q(valid_until__lt=now())).filter(redeemed=0)
         return qs
 
     def get(self, request, *args, **kwargs):
@@ -59,7 +59,7 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
 
         headers = [
             _('Voucher code'), _('Valid until'), _('Product'), _('Reserve quota'), _('Bypass quota'),
-            _('Price'), _('Tag'), _('Redeemed')
+            _('Price effect'), _('Value'), _('Tag'), _('Redeemed'), _('Maximum usages')
         ]
         writer.writerow(headers)
 
@@ -77,9 +77,11 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
                 prod,
                 _("Yes") if v.block_quota else _("No"),
                 _("Yes") if v.allow_ignore_quota else _("No"),
-                str(v.price) if v.price else "",
+                v.get_price_mode_display(),
+                str(v.value) if v.value is not None else "",
                 v.tag,
-                _("Yes") if v.redeemed else _("No"),
+                str(v.redeemed),
+                str(v.max_usages)
             ]
             writer.writerow(row)
 
@@ -97,14 +99,7 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
 
         tags = self.request.event.vouchers.order_by('tag').filter(tag__isnull=False).values('tag').annotate(
             total=Count('id'),
-            # This is a fix for this MySQL issue: https://code.djangoproject.com/ticket/24662
-            redeemed=Sum(
-                Case(
-                    When(redeemed=True, then=1),
-                    When(redeemed=False, then=0),
-                    output_field=IntegerField()
-                )
-            )
+            redeemed=Sum('redeemed')
         )
         for t in tags:
             t['percentage'] = int((t['redeemed'] / t['total']) * 100)
@@ -128,7 +123,7 @@ class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
             raise Http404(_("The requested voucher does not exist."))
 
     def get(self, request, *args, **kwargs):
-        if self.get_object().redeemed:
+        if self.get_object().redeemed > 0:
             messages.error(request, _('A voucher can not be deleted if it already has been redeemed.'))
             return HttpResponseRedirect(self.get_success_url())
         return super().get(request, *args, **kwargs)
@@ -138,7 +133,7 @@ class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
         self.object = self.get_object()
         success_url = self.get_success_url()
 
-        if self.object.redeemed:
+        if self.object.redeemed > 0:
             messages.error(request, _('A voucher can not be deleted if it already has been redeemed.'))
         else:
             self.object.log_action('pretix.voucher.deleted', user=self.request.user)

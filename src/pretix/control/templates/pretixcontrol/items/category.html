@@ -7,11 +7,27 @@
 	<form action="" method="post" class="form-horizontal">
 		{% csrf_token %}
         {% bootstrap_form_errors form %}
-		<fieldset>
-			<legend>{% trans "General information" %}</legend>
-			{% bootstrap_field form.name layout="horizontal" %}
-			{% bootstrap_field form.description layout="horizontal" %}
-		</fieldset>
+        <div class="row">
+            <div class="col-xs-12{% if category %} col-lg-10{% endif %}">
+                <fieldset>
+                    <legend>{% trans "General information" %}</legend>
+                    {% bootstrap_field form.name layout="horizontal" %}
+                    {% bootstrap_field form.description layout="horizontal" %}
+                </fieldset>
+            </div>
+            {% if category %}
+                <div class="col-xs-12 col-lg-2">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                {% trans "Category history" %}
+                            </h3>
+                        </div>
+                        {% include "pretixcontrol/includes/logs.html" with obj=category %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
 		<div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}

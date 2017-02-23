@@ -52,6 +52,18 @@ class EventPluginSignal(django.dispatch.Signal):
         return responses
 
 
+event_live_issues = EventPluginSignal(
+    providing_args=[]
+)
+"""
+This signal is sent out to determine whether an event can be taken live. If you want to
+prevent the event from going live, return a string that will be displayed to the user
+as the error message. If you don't, your receiver should return ``None``.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+
 register_payment_providers = EventPluginSignal(
     providing_args=[]
 )
@@ -78,6 +90,18 @@ register_data_exporters = EventPluginSignal(
 """
 This signal is sent out to get all known data exporters. Receivers should return a
 subclass of pretix.base.exporter.BaseExporter
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+validate_cart = EventPluginSignal(
+    providing_args=["positions"]
+)
+"""
+This signal is sent out before the user starts checkout. It includes an iterable
+with the current CartPosition objects.
+The response of receivers will be ignored, but you can raise a CartError with an
+appropriate exception message.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -110,7 +134,21 @@ To display an instance of the ``LogEntry`` model to a human user,
 ``pretix.base.signals.logentry_display`` will be sent out with a ``logentry`` argument.
 
 The first received response that is not ``None`` will be used to display the log entry
-to the user.
+to the user. The receivers are expected to return plain text.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+requiredaction_display = EventPluginSignal(
+    providing_args=["action", "request"]
+)
+"""
+To display an instance of the ``RequiredAction`` model to a human user,
+``pretix.base.signals.requiredaction_display`` will be sent out with a ``action`` argument.
+You will also get the current ``request`` in a different argument.
+
+The first received response that is not ``None`` will be used to display the log entry
+to the user. The receivers are expected to return HTML code.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """

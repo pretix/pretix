@@ -70,6 +70,6 @@ jQuery
 
 jQuery plugin: Django formsets
     Our own modified version of `django-formset-js`_ is available as an independent
-    django app and installed via pip.
+    django app and installed via ``pip``.
 
 .. _django-formset-js: https://github.com/pretix/django-formset-js

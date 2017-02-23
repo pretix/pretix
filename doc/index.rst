@@ -8,4 +8,5 @@ Contents:
 
    admin/index
    development/index
+   plugins/index
 

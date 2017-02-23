@@ -29,6 +29,9 @@ Organizers and events
 .. autoclass:: pretix.base.models.EventPermission
    :members:
 
+.. autoclass:: pretix.base.models.RequiredAction
+   :members:
+
 
 Items
 -----
@@ -64,6 +67,9 @@ Carts and Orders
    :members:
 
 .. autoclass:: pretix.base.models.QuestionAnswer
+:members:
+
+.. autoclass:: pretix.base.models.Checkin
    :members:
 
 Logging

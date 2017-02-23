@@ -1,0 +1,17 @@
+@import "../../bootstrap/scss/_bootstrap.scss";
+@import "../../fontawesome/scss/font-awesome.scss";
+@import "colors.scss";
+
+
+body {
+    background: #ececec;
+    text-align: center;
+    padding: 50px 0;
+}
+
+.big-animated-icon {
+    -webkit-animation: fa-spin 8s infinite linear;
+    animation: fa-spin 8s infinite linear;
+    font-size: 200px;
+    color: $brand-primary;
+}

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.urlresolvers import Resolver404, get_script_prefix, resolve
 
-from .signals import html_head, nav_event
+from .signals import html_head, nav_event, nav_topbar
 from .utils.i18n import get_javascript_format, get_moment_locale
 
 
@@ -36,6 +36,11 @@ def contextprocessor(request):
             _js_payment_weekdays_disabled = '[0,6]'
     ctx['js_payment_weekdays_disabled'] = _js_payment_weekdays_disabled
     ctx['nav_event'] = _nav_event
+
+    _nav_topbar = []
+    for receiver, response in nav_topbar.send(request, request=request):
+        _nav_topbar += response
+    ctx['nav_topbar'] = _nav_topbar
 
     ctx['js_datetime_format'] = get_javascript_format('DATETIME_INPUT_FORMATS')
     ctx['js_date_format'] = get_javascript_format('DATE_INPUT_FORMATS')

@@ -2,13 +2,15 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.utils.functional import cached_property
+from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView, ListView, TemplateView
+from django.views.generic import ListView
+from formtools.wizard.views import SessionWizardView
 
 from pretix.base.models import Event, EventPermission, OrganizerPermission
-from pretix.control.forms.event import EventCreateForm, EventCreateSettingsForm
-from pretix.control.permissions import OrganizerPermissionRequiredMixin
+from pretix.control.forms.event import (
+    EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
+)
 
 
 class EventList(ListView):
@@ -18,83 +20,87 @@ class EventList(ListView):
     template_name = 'pretixcontrol/events/index.html'
 
     def get_queryset(self):
-        return Event.objects.filter(
-            permitted__id__exact=self.request.user.pk
-        ).select_related("organizer").prefetch_related(
-            "setting_objects", "organizer__setting_objects"
-        )
+        if self.request.user.is_superuser:
+            return Event.objects.all().select_related("organizer").prefetch_related(
+                "setting_objects", "organizer__setting_objects"
+            )
+        else:
+            return Event.objects.filter(
+                permitted__id__exact=self.request.user.pk
+            ).select_related("organizer").prefetch_related(
+                "setting_objects", "organizer__setting_objects"
+            )
 
 
-class EventCreateStart(TemplateView):
-    template_name = 'pretixcontrol/events/start.html'
+def condition_copy(wizard):
+    return EventPermission.objects.filter(
+        user=wizard.request.user, can_change_settings=True, can_change_items=True
+    ).exists()
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['organizers'] = [
-            p.organizer for p in OrganizerPermission.objects.filter(
-                user=self.request.user, can_create_events=True
-            ).select_related("organizer")
-        ]
+
+class EventWizard(SessionWizardView):
+    form_list = [
+        ('foundation', EventWizardFoundationForm),
+        ('basics', EventWizardBasicsForm),
+        ('copy', EventWizardCopyForm),
+    ]
+    templates = {
+        'foundation': 'pretixcontrol/events/create_foundation.html',
+        'basics': 'pretixcontrol/events/create_basics.html',
+        'copy': 'pretixcontrol/events/create_copy.html',
+    }
+    condition_dict = {
+        'copy': condition_copy
+    }
+
+    def get_context_data(self, form, **kwargs):
+        ctx = super().get_context_data(form, **kwargs)
+        ctx['has_organizer'] = OrganizerPermission.objects.filter(user=self.request.user,
+                                                                  can_create_events=True).exists()
         return ctx
 
-
-class EventCreate(OrganizerPermissionRequiredMixin, CreateView):
-    model = Event
-    form_class = EventCreateForm
-    template_name = 'pretixcontrol/events/create.html'
-    context_object_name = 'event'
-    permission = 'can_create_events'
-
-    @cached_property
-    def sform(self):
-        return EventCreateSettingsForm(
-            obj=Event(),
-            prefix='settings',
-            data=self.request.POST if self.request.method == 'POST' else None
-        )
-
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if form.is_valid() and self.sform.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    def get_context_data(self, *args, **kwargs) -> dict:
-        context = super().get_context_data(*args, **kwargs)
-        context['sform'] = self.sform
-        return context
-
-    def dispatch(self, request, *args, **kwargs):
-        self.object = Event()
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['organizer'] = self.request.organizer
+    def get_form_kwargs(self, step=None):
+        kwargs = {
+            'user': self.request.user
+        }
+        if step != 'foundation':
+            fdata = self.get_cleaned_data_for_step('foundation')
+            kwargs.update(fdata)
         return kwargs
 
-    @transaction.atomic
-    def form_valid(self, form):
-        messages.success(self.request, _('The new event has been created.'))
-        form.instance.organizer = self.request.organizer
-        ret = super().form_valid(form)
-        EventPermission.objects.create(
-            event=form.instance, user=self.request.user,
-        )
-        self.object = form.instance
-        self.object.plugins = settings.PRETIX_PLUGINS_DEFAULT
-        self.object.save()
+    def get_template_names(self):
+        return [self.templates[self.steps.current]]
 
-        self.sform.obj = form.instance
-        self.sform.save()
-        form.instance.log_action('pretix.event.settings', user=self.request.user, data={
-            k: form.instance.settings.get(k) for k in self.sform.changed_data
-        })
-        return ret
+    def done(self, form_list, form_dict, **kwargs):
+        foundation_data = self.get_cleaned_data_for_step('foundation')
+        basics_data = self.get_cleaned_data_for_step('basics')
+        copy_data = self.get_cleaned_data_for_step('copy')
 
-    def get_success_url(self) -> str:
-        return reverse('control:event.settings', kwargs={
-            'organizer': self.request.organizer.slug,
-            'event': self.object.slug,
-        })
+        with transaction.atomic():
+            event = form_dict['basics'].instance
+            event.organizer = foundation_data['organizer']
+            event.plugins = settings.PRETIX_PLUGINS_DEFAULT
+            form_dict['basics'].save()
+            EventPermission.objects.create(event=event, user=self.request.user)
+
+            logdata = {}
+            for f in form_list:
+                logdata.update({
+                    k: v for k, v in f.cleaned_data.items()
+                })
+            event.log_action('pretix.event.settings', user=self.request.user, data=logdata)
+
+            if copy_data and copy_data['copy_from_event']:
+                from_event = copy_data['copy_from_event']
+                event.copy_data_from(from_event)
+
+            event.settings.set('timezone', basics_data['timezone'])
+            event.settings.set('locale', basics_data['locale'])
+            event.settings.set('locales', foundation_data['locales'])
+
+        messages.success(self.request, _('The new event has been created. You can now adjust the event settings in '
+                                         'detail.'))
+        return redirect(reverse('control:event.settings', kwargs={
+            'organizer': event.organizer.slug,
+            'event': event.slug,
+        }))
