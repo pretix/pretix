@@ -8,6 +8,7 @@ from django.utils.timezone import now
 from stripe import APIConnectionError, CardError, StripeError
 
 from pretix.base.models import Event, Order, Organizer
+from pretix.base.payment import PaymentException
 from pretix.plugins.stripe.payment import Stripe
 
 
@@ -92,7 +93,8 @@ def test_perform_card_error(env, factory, monkeypatch):
     req.session = {}
     prov.checkout_prepare(req, {})
     assert 'payment_stripe_token' in req.session
-    prov.payment_perform(req, order)
+    with pytest.raises(PaymentException):
+        prov.payment_perform(req, order)
     order.refresh_from_db()
     assert order.status == Order.STATUS_PENDING
 
@@ -114,7 +116,8 @@ def test_perform_stripe_error(env, factory, monkeypatch):
     req.session = {}
     prov.checkout_prepare(req, {})
     assert 'payment_stripe_token' in req.session
-    prov.payment_perform(req, order)
+    with pytest.raises(PaymentException):
+        prov.payment_perform(req, order)
     order.refresh_from_db()
     assert order.status == Order.STATUS_PENDING
 
@@ -140,7 +143,8 @@ def test_perform_failed(env, factory, monkeypatch):
     req.session = {}
     prov.checkout_prepare(req, {})
     assert 'payment_stripe_token' in req.session
-    prov.payment_perform(req, order)
+    with pytest.raises(PaymentException):
+        prov.payment_perform(req, order)
     order.refresh_from_db()
     assert order.status == Order.STATUS_PENDING
 

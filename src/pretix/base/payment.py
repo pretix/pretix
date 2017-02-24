@@ -337,9 +337,7 @@ class BasePaymentProvider:
         The default implementation just returns ``None`` and therefore leaves the
         order unpaid. The user will be redirected to the order's detail page by default.
 
-        On errors, you should use Django's message framework to display an error message
-        to the user.
-
+        On errors, you should raise a ``PaymentException``.
         :param order: The order object
         """
         return None
@@ -483,6 +481,10 @@ class BasePaymentProvider:
                                     'back to the buyer manually.'))
 
 
+class PaymentException(Exception):
+    pass
+
+
 class FreeOrderProvider(BasePaymentProvider):
 
     @property
@@ -511,7 +513,7 @@ class FreeOrderProvider(BasePaymentProvider):
         try:
             mark_order_paid(order, 'free', send_mail=False)
         except Quota.QuotaExceededException as e:
-            messages.error(request, str(e))
+            raise PaymentException(str(e))
 
     @property
     def settings_form_fields(self) -> dict:

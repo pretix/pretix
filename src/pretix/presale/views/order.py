@@ -12,6 +12,7 @@ from django.views.generic import TemplateView, View
 
 from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
 from pretix.base.models.orders import CachedCombinedTicket, InvoiceAddress
+from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
 )
@@ -199,7 +200,11 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        resp = self.payment_provider.payment_perform(request, self.order)
+        try:
+            resp = self.payment_provider.payment_perform(request, self.order)
+        except PaymentException as e:
+            messages.error(request, str(e))
+            return redirect(self.get_order_url())
         if 'payment_change_{}'.format(self.order.pk) in request.session:
             del request.session['payment_change_{}'.format(self.order.pk)]
         return redirect(resp or self.get_order_url())
@@ -241,7 +246,12 @@ class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        resp = self.payment_provider.payment_perform(request, self.order)
+        try:
+            resp = self.payment_provider.payment_perform(request, self.order)
+        except PaymentException as e:
+            messages.error(request, str(e))
+            return redirect(self.get_order_url())
+
         if self.order.status == Order.STATUS_PAID:
             return redirect(resp or self.get_order_url() + '?paid=yes')
         else:
