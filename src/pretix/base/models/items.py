@@ -10,9 +10,9 @@ from django.db.models import F, Func, Q, Sum
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.decimal import round_decimal
-from pretix.base.i18n import I18nCharField, I18nTextField
 from pretix.base.models.base import LoggedModel
 
 from .event import Event

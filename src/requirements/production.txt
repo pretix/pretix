@@ -28,6 +28,7 @@ django-markup
 markdown
 bleach
 raven
+django-i18nfield
 # Stripe
 stripe==1.22.*
 # PayPal

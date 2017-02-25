@@ -97,7 +97,8 @@ setup(
         'redis==2.10.5',
         'stripe==1.22.*',
         'chardet>=2.3,<3',
-        'mt-940==3.2'
+        'mt-940==3.2',
+        'django-i18nfield'
     ],
     extras_require={
         'dev': [

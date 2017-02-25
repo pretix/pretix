@@ -6,116 +6,18 @@ One of pretix's major selling points is its multi-language capability. We make h
 way to translate *user-generated content*. In our case, we need to translate strings like product names
 or event descriptions, so we need event organizers to be able to fill in all fields in multiple languages.
 
-.. note:: Implementing object-level translation in a relational database is a task that requires some difficult
-          trade-off. We decided for a design that is not elegant on the database level (as it violates the `1NF`_) and
-          makes searching in the respective database fields very hard, but allows for a simple design on the ORM level
-          and adds only minimal performance overhead.
+For this purpose, we use ``django-i18nfield`` which started out as part of pretix and then got refactored into
+its own library. It has comprehensive documentation on how to work with its `strings`_, `database fields`_ and
+`forms`_.
 
-All classes and functions introduced in this document are located in ``pretix.base.i18n`` if not stated otherwise.
-
-Database storage
-----------------
-
-pretix provides two custom model field types that allow you to work with localized strings: ``I18nCharField`` and
-``I18nTextField``. Both of them are stored in the database as a ``TextField`` internally, they only differ in the
-default form widget that is used by ``ModelForm``.
-
-As pretix does not use these fields in places that need to be searched, the negative performance impact when searching
-and indexing these fields in negligible, as mentioned above. Lookups are currently not even implemented on these
-fields. In the database, the strings will be stored as a JSON-encoded mapping of language codes to strings.
-
-Whenever you interact with those fields, you will either provide or receive an instance of the following class:
-
-.. autoclass:: pretix.base.i18n.LazyI18nString
-   :members: __init__, localize, __str__
-
-Usage
------
-
-The following examples are given to illustrate how you can work with ``LazyI18nString``.
-
-.. testsetup:: *
-
-   from pretix.base.i18n import LazyI18nString, language
-
-To create a LazyI18nString, we can cast a simple string:
-
-.. doctest::
-
-   >>> naive = LazyI18nString('Naive untranslated string')
-   >>> naive
-   <LazyI18nString: 'Naive untranslated string'>
-
-Or we can provide a dictionary with multiple translations:
-
-.. doctest::
-
-   >>> translated = LazyI18nString({'en': 'English String', 'de': 'Deutscher String'})
-
-We can use ``localize`` to get the string in a specific language:
-
-.. doctest::
-
-   >>> translated.localize('de')
-   'Deutscher String'
-
-   >>> translated.localize('en')
-   'English String'
-
-If we try a locale that does not exist for the string, we might get a it either in a similar locale or in the system's default language:
-
-.. doctest::
-
-   >>> translated.localize('de-AT')
-   'Deutscher String'
-
-   >>> translated.localize('zh')
-   'English String'
-
-   >>> naive.localize('de')
-   'Naive untranslated string'
-
-If we cast a ``LazyI18nString`` to ``str``, ``localize`` will be called with the currently active language:
-
-.. doctest::
-
-   >>> from django.utils import translation
-   >>> str(translated)
-   'English String'
-   >>> translation.activate('de')
-   >>> str(translated)
-   'Deutscher String'
-
-You can also use our handy context manager to set the locale temporarily:
-
-.. doctest::
-
-   >>> translation.activate('en')
-   >>> with language('de'):
-   ...     str(translated)
-   'Deutscher String'
-   >>> str(translated)
-   'English String'
 
 Forms
 -----
 
-We provide i18n-aware versions of the respective form fields and widgets: ``I18nFormField`` with the ``I18nTextInput``
-and ``I18nTextarea`` widgets. They transparently allow you to use ``LazyI18nString`` values in forms and render text
-inputs for multiple languages.
-
-.. autoclass:: pretix.base.i18n.I18nFormField
-
-To easily limit the displayed languages to the languages relevant to an event, there is a custom ``ModelForm`` subclass
-that deals with this for you:
-
-.. autoclass:: pretix.base.forms.I18nModelForm
-
-There are equivalents for ``BaseModelFormSet`` and ``BaseInlineFormSet``:
-
-.. autoclass:: pretix.base.forms.I18nFormSet
-
-.. autoclass:: pretix.base.forms.I18nInlineFormSet
+For backwards-compatibility with older parts of pretix' code base and older plugins, ``pretix.base.forms`` still
+contains a number of forms that are equivalent in name and usage to their counterparts in ``i18nfield.forms`` with
+the difference that they take an ``event`` keyword argument and then set the ``locales`` argument based on
+``event.settings.get('locales')``.
 
 Useful utilities
 ----------------
@@ -135,4 +37,6 @@ action that causes the mail to be sent.
 
 .. _translation features: https://docs.djangoproject.com/en/1.9/topics/i18n/translation/
 .. _GNU gettext: https://www.gnu.org/software/gettext/
-.. _1NF: https://en.wikipedia.org/wiki/First_normal_form
+.. _strings: https://django-i18nfield.readthedocs.io/en/latest/strings.html
+.. _database fields: https://django-i18nfield.readthedocs.io/en/latest/quickstart.html
+.. _forms: https://django-i18nfield.readthedocs.io/en/latest/forms.html

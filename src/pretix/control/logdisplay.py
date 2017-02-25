@@ -4,8 +4,8 @@ from decimal import Decimal
 from django.dispatch import receiver
 from django.utils import formats
 from django.utils.translation import ugettext_lazy as _
+from i18nfield.strings import LazyI18nString
 
-from pretix.base.i18n import LazyI18nString
 from pretix.base.models import Event, ItemVariation, LogEntry
 from pretix.base.signals import logentry_display
 

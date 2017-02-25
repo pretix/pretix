@@ -6,9 +6,9 @@ from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
+from i18nfield.strings import LazyI18nString
 
 from pretix.base import settings
-from pretix.base.i18n import LazyI18nString
 from pretix.base.models import Event, Organizer, User
 from pretix.base.settings import SettingsSandbox
 from pretix.control.forms.global_settings import GlobalSettingsObject

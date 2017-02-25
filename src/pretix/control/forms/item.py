@@ -5,9 +5,9 @@ from django.core.exceptions import ValidationError
 from django.forms import BooleanField, ModelMultipleChoiceField
 from django.forms.formsets import DELETION_FIELD_NAME
 from django.utils.translation import ugettext as __, ugettext_lazy as _
+from i18nfield.forms import I18nFormField, I18nTextarea
 
 from pretix.base.forms import I18nFormSet, I18nModelForm
-from pretix.base.i18n import I18nFormField, I18nTextarea
 from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
 )

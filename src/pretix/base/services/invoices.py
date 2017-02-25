@@ -10,6 +10,7 @@ from django.db import transaction
 from django.utils.formats import date_format, localize
 from django.utils.timezone import now
 from django.utils.translation import pgettext, ugettext as _
+from i18nfield.strings import LazyI18nString
 from reportlab.lib import pagesizes
 from reportlab.lib.styles import ParagraphStyle, StyleSheet1
 from reportlab.lib.units import mm
@@ -21,7 +22,7 @@ from reportlab.platypus import (
     Table, TableStyle,
 )
 
-from pretix.base.i18n import LazyI18nString, language
+from pretix.base.i18n import language
 from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
 from pretix.base.services.async import TransactionAwareTask
 from pretix.base.signals import register_payment_providers
