@@ -362,9 +362,10 @@ class ItemVariation(models.Model):
 
 class Question(LoggedModel):
     """
-    A question is an input field that can be used to extend a ticket
-    by custom information, e.g. "Attendee age". A question can allow one of several
-    input types, currently:
+    A question is an input field that can be used to extend a ticket by custom information,
+    e.g. "Attendee age". The answers are found next to the position. The answers may be found
+    in QuestionAnswers, attached to OrderPositions/CartPositions. A question can allow one of
+    several input types, currently:
 
     * a number (``TYPE_NUMBER``)
     * a one-line string (``TYPE_STRING``)
