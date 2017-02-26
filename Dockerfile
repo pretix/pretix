@@ -31,7 +31,7 @@ RUN chmod +x /usr/local/bin/pretix && \
     rm /etc/nginx/sites-enabled/default && \
     pip3 install -U pip wheel setuptools && \
     cd /pretix/src && \
-    rm pretix.cfg && \
+    rm -f pretix.cfg && \
     pip3 install -r requirements.txt -r requirements/mysql.txt -r requirements/postgres.txt \
     	-r requirements/memcached.txt -r requirements/redis.txt \
 	    -r requirements/py34.txt gunicorn && \
