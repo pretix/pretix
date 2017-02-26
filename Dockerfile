@@ -36,7 +36,7 @@ RUN chmod +x /usr/local/bin/pretix && \
     	-r requirements/memcached.txt -r requirements/redis.txt \
 	    -r requirements/py34.txt gunicorn && \
 	mkdir -p data && \
-    chown -R pretixuser:pretixuser /static /pretix /data data && \
+    chown -R pretixuser:pretixuser /pretix /data data && \
 	sudo -u pretixuser make production
 
 USER pretixuser
