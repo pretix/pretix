@@ -141,9 +141,9 @@ See :ref:`email configuration <mail-settings>` to learn more about configuring m
 Docker image and service
 ------------------------
 
-First of all, download the latest pretix image by running::
+First of all, download the latest stable pretix image by running::
 
-    $ docker pull pretix/standalone:latest
+    $ docker pull pretix/standalone:stable
 
 We recommend starting the docker container using systemd to make sure it runs correctly after a reboot. Create a file
 named ``/etc/systemd/system/pretix.service`` with the following content::
@@ -229,11 +229,13 @@ Updates
 
 Updates are fairly simple, but require at least a short downtime::
 
-    # docker pull pretix/standalone
+    # docker pull pretix/standalone:stable
     # systemctl restart pretix.service
     # docker exec -it pretix.service pretix upgrade
 
 Restarting the service can take a few seconds, especially if the update requires changes to the database.
+Replace ``stable`` above with a specific version number like ``1.0`` or with ``latest`` for the development
+version, if you want to.
 
 Install a plugin
 ----------------
