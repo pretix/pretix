@@ -3,9 +3,8 @@
 from __future__ import unicode_literals
 
 import django.db.models.deletion
+import i18nfield.fields
 from django.db import migrations, models
-
-import pretix.base.i18n
 
 
 class Migration(migrations.Migration):
@@ -19,7 +18,7 @@ class Migration(migrations.Migration):
             name='QuestionOption',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('answer', pretix.base.i18n.I18nCharField(verbose_name='Answer')),
+                ('answer', i18nfield.fields.I18nCharField(verbose_name='Answer')),
             ],
         ),
         migrations.AlterField(

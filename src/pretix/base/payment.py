@@ -12,9 +12,10 @@ from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+from i18nfield.forms import I18nFormField, I18nTextarea
+from i18nfield.strings import LazyI18nString
 
 from pretix.base.decimal import round_decimal
-from pretix.base.i18n import I18nFormField, I18nTextarea, LazyI18nString
 from pretix.base.models import Event, Order, Quota
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers

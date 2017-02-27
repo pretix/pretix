@@ -3,8 +3,9 @@ from collections import OrderedDict
 
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
+from i18nfield.fields import I18nFormField, I18nTextarea
+from i18nfield.strings import LazyI18nString
 
-from pretix.base.i18n import I18nFormField, I18nTextarea, LazyI18nString
 from pretix.base.payment import BasePaymentProvider
 
 

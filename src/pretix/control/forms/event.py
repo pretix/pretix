@@ -4,10 +4,10 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import ugettext_lazy as _
+from i18nfield.forms import I18nFormField, I18nTextarea
 from pytz import common_timezones
 
 from pretix.base.forms import I18nModelForm, SettingsForm
-from pretix.base.i18n import I18nFormField, I18nTextarea
 from pretix.base.models import Event, Organizer
 from pretix.control.forms import ExtFileField
 

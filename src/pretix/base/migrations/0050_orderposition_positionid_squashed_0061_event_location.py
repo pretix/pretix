@@ -6,10 +6,10 @@ import django.core.validators
 import django.db.migrations.operations.special
 import django.db.models.deletion
 import django.utils.timezone
+import i18nfield.fields
 from django.conf import settings
 from django.db import migrations, models
 
-import pretix.base.i18n
 import pretix.base.models.event
 import pretix.base.models.orders
 import pretix.base.models.organizer
@@ -214,6 +214,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='location',
-            field=pretix.base.i18n.I18nCharField(blank=True, max_length=200, null=True, verbose_name='Location'),
+            field=i18nfield.fields.I18nCharField(blank=True, max_length=200, null=True, verbose_name='Location'),
         ),
     ]

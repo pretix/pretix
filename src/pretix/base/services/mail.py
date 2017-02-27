@@ -8,9 +8,10 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import get_template
 from django.utils.translation import ugettext as _
+from i18nfield.strings import LazyI18nString
 from inlinestyler.utils import inline_css
 
-from pretix.base.i18n import LazyI18nString, language
+from pretix.base.i18n import language
 from pretix.base.models import Event, InvoiceAddress, Order
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri

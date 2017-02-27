@@ -1,9 +1,9 @@
 from collections import OrderedDict
 
 from django.utils.translation import ugettext_lazy as _
+from i18nfield.forms import I18nFormField, I18nTextInput
 
 from pretix.base.forms import SettingsForm
-from pretix.base.i18n import I18nFormField, I18nTextInput
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.signals import register_global_settings
 

@@ -14,9 +14,9 @@ from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
+from i18nfield.fields import I18nCharField
 
 from pretix.base.email import CustomSMTPBackend
-from pretix.base.i18n import I18nCharField
 from pretix.base.models.base import LoggedModel
 from pretix.base.settings import SettingsProxy
 from pretix.base.validators import EventSlugBlacklistValidator

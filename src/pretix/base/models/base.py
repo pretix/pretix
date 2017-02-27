@@ -6,8 +6,7 @@ from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
-
-from pretix.base.i18n import I18nJSONEncoder
+from i18nfield.utils import I18nJSONEncoder
 
 
 def cachedfile_name(instance, filename: str) -> str:

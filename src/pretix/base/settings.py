@@ -12,7 +12,7 @@ from django.core.files.storage import default_storage
 from django.db.models import Model
 from django.utils.translation import ugettext_noop
 
-from pretix.base.i18n import LazyI18nString
+from i18nfield.strings import LazyI18nString
 from pretix.base.models.settings import GlobalSetting
 
 DEFAULTS = {

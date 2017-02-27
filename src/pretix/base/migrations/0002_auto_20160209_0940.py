@@ -7,10 +7,10 @@ from decimal import Decimal
 
 import django.core.validators
 import django.db.models.deletion
+import i18nfield.fields
 from django.conf import settings
 from django.db import migrations, models
 
-import pretix.base.i18n
 import pretix.base.models.base
 import pretix.base.models.items
 import pretix.base.models.orders
@@ -64,7 +64,7 @@ class Migration(migrations.Migration):
             name='Event',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', pretix.base.i18n.I18nCharField(max_length=200, verbose_name='Name')),
+                ('name', i18nfield.fields.I18nCharField(max_length=200, verbose_name='Name')),
                 ('slug', models.SlugField(help_text='Should be short, only contain lowercase letters and numbers, and must be unique among your events. This is being used in addresses and bank transfer references.', validators=[django.core.validators.RegexValidator(message='The slug may only contain letters, numbers, dots and dashes.', regex='^[a-zA-Z0-9.-]+$')], verbose_name='Slug')),
                 ('currency', models.CharField(default='EUR', max_length=10, verbose_name='Default currency')),
                 ('date_from', models.DateTimeField(verbose_name='Event start time')),
@@ -119,9 +119,9 @@ class Migration(migrations.Migration):
             name='Item',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', pretix.base.i18n.I18nCharField(max_length=255, verbose_name='Item name')),
+                ('name', i18nfield.fields.I18nCharField(max_length=255, verbose_name='Item name')),
                 ('active', models.BooleanField(default=True, verbose_name='Active')),
-                ('description', pretix.base.i18n.I18nTextField(blank=True, help_text='This is shown below the product name in lists.', null=True, verbose_name='Description')),
+                ('description', i18nfield.fields.I18nTextField(blank=True, help_text='This is shown below the product name in lists.', null=True, verbose_name='Description')),
                 ('default_price', models.DecimalField(decimal_places=2, max_digits=7, null=True, verbose_name='Default price')),
                 ('tax_rate', models.DecimalField(blank=True, decimal_places=2, max_digits=7, null=True, verbose_name='Taxes included in percent')),
                 ('admission', models.BooleanField(default=False, help_text='Whether or not buying this product allows a person to enter your event', verbose_name='Is an admission ticket')),
@@ -141,7 +141,7 @@ class Migration(migrations.Migration):
             name='ItemCategory',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', pretix.base.i18n.I18nCharField(max_length=255, verbose_name='Category name')),
+                ('name', i18nfield.fields.I18nCharField(max_length=255, verbose_name='Category name')),
                 ('position', models.IntegerField(default=0)),
                 ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='categories', to='pretixbase.Event')),
             ],
@@ -156,7 +156,7 @@ class Migration(migrations.Migration):
             name='ItemVariation',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('value', pretix.base.i18n.I18nCharField(max_length=255, verbose_name='Description')),
+                ('value', i18nfield.fields.I18nCharField(max_length=255, verbose_name='Description')),
                 ('active', models.BooleanField(default=True, verbose_name='Active')),
                 ('position', models.PositiveIntegerField(default=0, verbose_name='Position')),
                 ('default_price', models.DecimalField(blank=True, decimal_places=2, max_digits=7, null=True, verbose_name='Default price')),
@@ -264,7 +264,7 @@ class Migration(migrations.Migration):
             name='Question',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('question', pretix.base.i18n.I18nTextField(verbose_name='Question')),
+                ('question', i18nfield.fields.I18nTextField(verbose_name='Question')),
                 ('type', models.CharField(choices=[('N', 'Number'), ('S', 'Text (one line)'), ('T', 'Multiline text'), ('B', 'Yes/No')], max_length=5, verbose_name='Question type')),
                 ('required', models.BooleanField(default=False, verbose_name='Required question')),
                 ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='questions', to='pretixbase.Event')),

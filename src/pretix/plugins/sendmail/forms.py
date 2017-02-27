@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
-from pretix.base.i18n import I18nFormField, I18nTextarea, I18nTextInput
 from pretix.base.models import Order
 
 
