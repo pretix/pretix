@@ -4,6 +4,11 @@ set -x
 
 echo "Executing job $1"
 
+if [ "$PRETIX_CONFIG_FILE" == "tests/travis_mysql.cfg" ]; then
+    mysql -u root -e 'CREATE DATABASE pretix DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;'
+    pip3 install -Ur src/requirements/mysql.txt
+fi
+
 if [ "$1" == "style" ]; then
 	XDG_CACHE_HOME=/cache pip3 install -Ur src/requirements.txt -r src/requirements/dev.txt -r src/requirements/py34.txt
 	cd src
