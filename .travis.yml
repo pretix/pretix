@@ -9,6 +9,7 @@ cache:
     - $HOME/.cache/pip
 services:
   - mysql
+  - postgresql
 matrix:
   include:
     - python: 3.4
@@ -24,6 +25,14 @@ matrix:
     - python: 3.6
       env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_mysql.cfg
     - python: 3.4
+      env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_postgres.cfg
+    - python: 3.5
+      env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_postgres.cfg
+    - python: 3.6
+      env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_postgres.cfg
+    - python: 3.4
       env: JOB=style
     - python: 3.4
       env: JOB=tests-cov
+addons:
+  postgresql: "9.4"
