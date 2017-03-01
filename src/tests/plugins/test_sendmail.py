@@ -1,3 +1,4 @@
+from __future__ import print_function
 import datetime
 
 import pytest
@@ -56,14 +57,28 @@ def logged_in_client(client, event):
     return client
 
 
-@pytest.mark.parametrize('url,expected', [
-    ('/control/event/{orga}/{event}/sendmail/', 200),
-])
-@pytest.mark.django_db
-def test_sendmail_view(logged_in_client, url, expected, event):
-    url = url.format(
+@pytest.fixture
+def sendmail_url(event):
+    '''Returns a url for sendmail'''
+    url = '/control/event/{orga}/{event}/sendmail/'.format(
         event=event.slug, orga=event.organizer.slug,
     )
-    response = logged_in_client.get(url)
+    return url
 
+
+@pytest.mark.django_db
+def test_sendmail_view(logged_in_client, sendmail_url, expected=200):
+    response = logged_in_client.get(sendmail_url)
+
+    assert response.status_code == expected
+
+
+@pytest.mark.django_db
+def test_message_content(logged_in_client, sendmail_url, expected=200):
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'c',
+                                      'subject': 'test subject',
+                                      'message': 'test message'
+                                      })
+    print(response.content)
     assert response.status_code == expected
