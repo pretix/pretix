@@ -1,4 +1,4 @@
-from collections import Counter, namedtuple
+from collections import Counter, defaultdict, namedtuple
 from datetime import timedelta
 from decimal import Decimal
 from typing import List, Optional
@@ -48,11 +48,17 @@ error_messages = {
     'voucher_expired': _('This voucher is expired.'),
     'voucher_invalid_item': _('This voucher is not valid for this product.'),
     'voucher_required': _('You need a valid voucher code to order this product.'),
+    'addon_invalid_base': _('You can not select an add-on for the selected product.'),
+    'addon_duplicate_item': _('You can not select two variations of the same add-on product.'),
+    'addon_max_count': _('You can select at most %(max)s add-ons from the category %(cat)s for the product %(base)s.'),
+    'addon_min_count': _('You need to select at least %(min)s add-ons from the category %(cat)s for the '
+                         'product %(base)s.'),
 }
 
 
 class CartManager:
-    AddOperation = namedtuple('AddOperation', ('count', 'item', 'variation', 'price', 'voucher', 'quotas'))
+    AddOperation = namedtuple('AddOperation', ('count', 'item', 'variation', 'price', 'voucher', 'quotas',
+                                               'addon_to'))
     RemoveOperation = namedtuple('RemoveOperation', ('position',))
     ExtendOperation = namedtuple('ExtendOperation', ('position', 'count', 'item', 'variation', 'price', 'voucher',
                                                      'quotas'))
@@ -100,9 +106,15 @@ class CartManager:
 
     def _update_items_cache(self, item_ids: List[int], variation_ids: List[int]):
         self._items_cache.update(
-            {i.pk: i for i in self.event.items.prefetch_related('quotas').filter(
-                id__in=[i for i in item_ids if i and i not in self._items_cache]
-            )}
+            {
+                i.pk: i
+                for i
+                in self.event.items.select_related('category').prefetch_related(
+                    'addons', 'addons__addon_category', 'quotas'
+                ).filter(
+                    id__in=[i for i in item_ids if i and i not in self._items_cache]
+                )
+            }
         )
         self._variations_cache.update(
             {v.pk: v for v in
@@ -247,7 +259,8 @@ class CartManager:
 
             price = self._get_price(item, variation, voucher, i.get('price'))
             op = self.AddOperation(
-                count=i['count'], item=item, variation=variation, price=price, voucher=voucher, quotas=quotas
+                count=i['count'], item=item, variation=variation, price=price, voucher=voucher, quotas=quotas,
+                addon_to=False
             )
             self._check_item_constraints(op)
             operations.append(op)
@@ -279,6 +292,116 @@ class CartManager:
             if cnt > 0:
                 for cp in CartPosition.objects.filter(cw).order_by("-price")[:cnt]:
                     self._operations.append(self.RemoveOperation(position=cp))
+
+    def set_addons(self, addons):
+        self._update_items_cache(
+            [a['item'] for a in addons],
+            [a['variation'] for a in addons],
+        )
+
+        current_addons = defaultdict(dict)
+        input_addons = defaultdict(set)
+        selected_addons = defaultdict(set)
+        cpcache = {}
+        quota_diff = Counter()
+        operations = []
+        available_categories = defaultdict(set)
+        toplevel_cp = self.positions.filter(
+            addon_to__isnull=True
+        ).prefetch_related(
+            'addons', 'item__addons', 'item__addons__addon_category'
+        ).select_related('item', 'variation')
+
+        for cp in toplevel_cp:
+            available_categories[cp.pk] = {iao.addon_category_id for iao in cp.item.addons.all()}
+            cpcache[cp.pk] = cp
+            current_addons[cp] = {
+                (a.item_id, a.variation_id): a
+                for a in cp.addons.all()
+            }
+
+        for a in addons:
+            # Check whether the specified items are part of what we just fetched from the database
+            # If they are not, the user supplied item IDs which either do not exist or belong to
+            # a different event
+            if a['item'] not in self._items_cache or (a['variation'] and a['variation'] not in self._variations_cache):
+                raise CartError(error_messages['not_for_sale'])
+
+            if a['addon_to'] not in cpcache:
+                raise CartError(error_messages['addon_invalid_base'])
+
+            cp = cpcache[a['addon_to']]
+            item = self._items_cache[a['item']]
+            variation = self._variations_cache[a['variation']] if a['variation'] is not None else None
+
+            if item.category_id not in available_categories[cp.pk]:
+                raise CartError(error_messages['addon_invalid_base'])
+
+            # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
+            quotas = list(item.quotas.all()) if variation is None else list(variation.quotas.all())
+            if not quotas:
+                raise CartError(error_messages['unavailable'])
+
+            if a['item'] in ([_a[0] for _a in input_addons[cp.id]]):
+                raise CartError(error_messages['addon_duplicate_item'])
+
+            input_addons[cp.id].add((a['item'], a['variation']))
+            selected_addons[cp.id, item.category_id].add((a['item'], a['variation']))
+
+            if (a['item'], a['variation']) not in current_addons[cp]:
+                for quota in quotas:
+                    quota_diff[quota] += 1
+
+                price = self._get_price(item, variation, None, None)
+
+                op = self.AddOperation(
+                    count=1, item=item, variation=variation, price=price, voucher=None, quotas=quotas,
+                    addon_to=cp
+                )
+                self._check_item_constraints(op)
+                operations.append(op)
+
+        for cp in toplevel_cp:
+            item = cp.item
+            for iao in item.addons.all():
+                selected = selected_addons[cp.id, iao.addon_category_id]
+                if len(selected) > iao.max_count:
+                    # TODO: Proper i18n
+                    # TODO: Proper pluralization
+                    raise CartError(
+                        error_messages['addon_max_count'],
+                        {
+                            'base': str(item.name),
+                            'max': iao.max_count,
+                            'cat': str(iao.addon_category.name),
+                        }
+                    )
+                elif len(selected) < iao.min_count:
+                    # TODO: Proper i18n
+                    # TODO: Proper pluralization
+                    raise CartError(
+                        error_messages['addon_min_count'],
+                        {
+                            'base': str(item.name),
+                            'min': iao.min_count,
+                            'cat': str(iao.addon_category.name),
+                        }
+                    )
+
+        for cp, al in current_addons.items():
+            for k, v in al.items():
+                if k not in input_addons[cp.id]:
+                    if v.expires > self.now_dt:
+                        quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
+
+                        for quota in quotas:
+                            quota_diff[quota] -= 1
+
+                    op = self.RemoveOperation(position=v)
+                    operations.append(op)
+
+        self._quota_diff += quota_diff
+        self._operations += operations
 
     def _get_quota_availability(self):
         quotas_ok = {}
@@ -388,7 +511,8 @@ class CartManager:
                         new_cart_positions.append(CartPosition(
                             event=self.event, item=op.item, variation=op.variation,
                             price=op.price, expires=self._expiry,
-                            cart_id=self.cart_id, voucher=op.voucher
+                            cart_id=self.cart_id, voucher=op.voucher,
+                            addon_to=op.addon_to if op.addon_to else None
                         ))
                 elif isinstance(op, self.ExtendOperation):
                     if available_count == 1:
@@ -423,7 +547,7 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
-    :param items: A list of tuple of the form (item id, variation id or None, number, custom_price, voucher)
+    :param items: A list of dicts with the keys item, variation, number, custom_price, voucher
     :param session: Session ID of a guest
     :param coupon: A coupon that should also be reeemed
     :raises CartError: On any error that occured
@@ -446,7 +570,7 @@ def remove_items_from_cart(self, event: int, items: List[dict], cart_id: str=Non
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
-    :param items: A list of tuple of the form (item id, variation id or None, number)
+    :param items: A list of dicts with the keys item, variation, number, custom_price, voucher
     :param session: Session ID of a guest
     """
     with language(locale):
@@ -460,3 +584,23 @@ def remove_items_from_cart(self, event: int, items: List[dict], cart_id: str=Non
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
             raise CartError(error_messages['busy'])
+
+
+@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
+def set_cart_addons(self, event: int, addons: List[dict], cart_id: str=None) -> None:
+    """
+    Removes a list of items from a user's cart.
+    :param event: The event ID in question
+    :param addons: A list of dicts with the keys addon_to, item, variation
+    :param session: Session ID of a guest
+    """
+    event = Event.objects.get(id=event)
+    try:
+        try:
+            cm = CartManager(event=event, cart_id=cart_id)
+            cm.set_addons(addons)
+            cm.commit()
+        except LockTimeoutException:
+            self.retry()
+    except (MaxRetriesExceededError, LockTimeoutException):
+        raise CartError(error_messages['busy'])

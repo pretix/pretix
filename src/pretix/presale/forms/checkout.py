@@ -2,9 +2,12 @@ from decimal import Decimal
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.db.models import Count, Prefetch, Q
+from django.utils.formats import number_format
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Question
+from pretix.base.models import ItemVariation, Question
 from pretix.base.models.orders import InvoiceAddress
 
 
@@ -141,3 +144,90 @@ class QuestionsForm(forms.Form):
                 # Cache the answer object for later use
                 field.answer = answers[0]
             self.fields['question_%s' % q.id] = field
+
+
+class AddOnsForm(forms.Form):
+    """
+    This form class is responsible for selecting add-ons to a product in the cart.
+    """
+
+    def _label(self, event, item_or_variation):
+        if isinstance(item_or_variation, ItemVariation):
+            variation = item_or_variation
+            item = item_or_variation.item
+            price = variation.price
+            price_net = variation.net_price
+            label = variation.value
+        else:
+            item = item_or_variation
+            price = item.default_price
+            price_net = item.default_price_net
+            label = item.name
+
+        if not item.tax_rate or not price:
+            return '{name} (+ {currency} {price})'.format(
+                name=label, currency=event.currency, price=number_format(price)
+            )
+        elif event.settings.display_net_prices:
+            return '{name} (+ {currency} {price} plus {taxes}% taxes)'.format(
+                name=label, currency=event.currency, price=number_format(price_net),
+                taxes=number_format(item.tax_rate)
+            )
+        else:
+            return '{name} (+ {currency} {price} incl. {taxes}% taxes)'.format(
+                name=label, currency=event.currency, price=number_format(price),
+                taxes=number_format(item.tax_rate)
+            )
+
+    def __init__(self, *args, **kwargs):
+        """
+        Takes additional keyword arguments:
+
+        :param category: The category to choose from
+        :param event: The event this belongs to
+        """
+        category = kwargs.pop('category')
+        event = kwargs.pop('event')
+        current_addons = kwargs.pop('initial')
+
+        super().__init__(*args, **kwargs)
+
+        items = category.items.filter(
+            Q(active=True)
+            & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
+            & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+            & Q(hide_without_voucher=False)
+        ).prefetch_related(
+            'variations__quotas',  # for .availability()
+            Prefetch('quotas', queryset=event.quotas.all()),
+            Prefetch('variations', to_attr='available_variations',
+                     queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).distinct()),
+        ).annotate(
+            quotac=Count('quotas'),
+            has_variations=Count('variations')
+        ).filter(
+            quotac__gt=0
+        ).order_by('category__position', 'category_id', 'position', 'name')
+
+        for i in items:
+            if i.has_variations:
+                field = forms.ChoiceField(
+                    choices=[('', '–')] + [
+                        (
+                            v.pk,
+                            self._label(event, v)
+                        ) for v in i.available_variations
+                    ],
+                    label=i.name,
+                    required=False,
+                    widget=forms.RadioSelect,
+                    initial=current_addons.get(i.pk)
+                )
+            else:
+                field = forms.BooleanField(
+                    label=self._label(event, i),
+                    required=False,
+                    initial=i.pk in current_addons
+                )
+
+            self.fields['item_%s' % i.pk] = field

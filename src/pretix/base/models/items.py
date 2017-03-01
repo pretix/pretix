@@ -5,6 +5,7 @@ from decimal import Decimal
 from typing import Tuple
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F, Func, Q, Sum
 from django.utils.functional import cached_property
@@ -44,6 +45,13 @@ class ItemCategory(LoggedModel):
     position = models.IntegerField(
         default=0
     )
+    is_addon = models.BooleanField(
+        default=False,
+        verbose_name=_('Products in this category are add-on products'),
+        help_text=_('If selected, the products belonging to this category are not for sale on their own. They can '
+                    'only be bought in combination with a product that has this category configured as a possible '
+                    'source for add-ons.')
+    )
 
     class Meta:
         verbose_name = _("Product category")
@@ -51,6 +59,8 @@ class ItemCategory(LoggedModel):
         ordering = ('position', 'id')
 
     def __str__(self):
+        if self.is_addon:
+            return _('{category} (Add-On products)').format(category=str(self.name))
         return str(self.name)
 
     def delete(self, *args, **kwargs):
@@ -155,7 +165,8 @@ class Item(LoggedModel):
         verbose_name=_("Free price input"),
         help_text=_("If this option is active, your users can choose the price themselves. The price configured above "
                     "is then interpreted as the minimum price a user has to enter. You could use this e.g. to collect "
-                    "additional donations for your event.")
+                    "additional donations for your event. This is currently not supported for products that are "
+                    "bought as an add-on to other products.")
     )
     tax_rate = models.DecimalField(
         verbose_name=_("Taxes included in percent"),
@@ -375,6 +386,38 @@ class ItemVariation(models.Model):
         if self.position == other.position:
             return self.id < other.id
         return self.position < other.position
+
+
+class ItemAddOn(models.Model):
+    """
+    An instance of this model indicates that buying a ticket of the time ``base_item``
+    allows you to add up to ``max_count`` items from the category ``addon_category``
+    to your order that will be associated with the base item.
+    """
+    base_item = models.ForeignKey(
+        Item,
+        related_name='addons'
+    )
+    addon_category = models.ForeignKey(
+        ItemCategory,
+        related_name='addon_to',
+        verbose_name=_('Category')
+    )
+    min_count = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_('Minimum number')
+    )
+    max_count = models.PositiveIntegerField(
+        default=1,
+        verbose_name=_('Maximum number')
+    )
+
+    class Meta:
+        unique_together = (('base_item', 'addon_category'),)
+
+    def clean(self):
+        if self.max_count < self.min_count:
+            raise ValidationError(_('The minimum number needs to be lower than the maximum number.'))
 
 
 class Question(LoggedModel):

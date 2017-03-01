@@ -11,14 +11,17 @@ from django.views.generic.base import TemplateResponseMixin
 
 from pretix.base.models import Order
 from pretix.base.models.orders import InvoiceAddress
+from pretix.base.services.cart import set_cart_addons
 from pretix.base.services.orders import perform_order
 from pretix.base.signals import register_payment_providers
 from pretix.multidomain.urlreverse import eventreverse
-from pretix.presale.forms.checkout import ContactForm, InvoiceAddressForm
+from pretix.presale.forms.checkout import (
+    AddOnsForm, ContactForm, InvoiceAddressForm,
+)
 from pretix.presale.signals import (
     checkout_confirm_messages, checkout_flow_steps, order_meta_from_request,
 )
-from pretix.presale.views import CartMixin, get_cart_total
+from pretix.presale.views import CartMixin, get_cart, get_cart_total
 from pretix.presale.views.async import AsyncAction
 from pretix.presale.views.questions import QuestionsViewMixin
 
@@ -124,6 +127,116 @@ class TemplateFlowStep(TemplateResponseMixin, BaseCheckoutFlowStep):
     @property
     def identifier(self):
         raise NotImplementedError()
+
+
+class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
+    priority = 40
+    identifier = "addons"
+    template_name = "pretixpresale/event/checkout_addons.html"
+    task = set_cart_addons
+    known_errortypes = ['CartError']
+
+    def is_applicable(self, request):
+        return get_cart(request).filter(item__addons__isnull=False).exists()
+
+    def is_completed(self, request, warn=False):
+        for cartpos in get_cart(request).filter(addon_to__isnull=True).prefetch_related(
+            'item__addons', 'item__addons__addon_category', 'addons', 'addons__item'
+        ):
+            a = cartpos.addons.all()
+            for iao in cartpos.item.addons.all():
+                found = len([1 for p in a if p.item.category_id == iao.addon_category_id])
+                if found < iao.min_count or found > iao.max_count:
+                    return False
+        return True
+
+    @cached_property
+    def forms(self):
+        """
+        A list of forms with one form for each cart position that has questions
+        the user can answer. All forms have a custom prefix, so that they can all be
+        submitted at once.
+        """
+        formset = []
+        for cartpos in get_cart(self.request).filter(addon_to__isnull=True).prefetch_related(
+            'item__addons', 'item__addons__addon_category', 'addons', 'addons__variation'
+        ):
+            current_addon_products = {
+                a.item_id: a.variation_id for a in cartpos.addons.all()
+            }
+            formsetentry = {
+                'cartpos': cartpos,
+                'item': cartpos.item,
+                'variation': cartpos.variation,
+                'categories': []
+            }
+            for iao in cartpos.item.addons.all():
+                category = {
+                    'category': iao.addon_category,
+                    'min_count': iao.min_count,
+                    'max_count': iao.max_count,
+                    'form': AddOnsForm(
+                        event=self.request.event,
+                        prefix='{}_{}'.format(cartpos.pk, iao.addon_category.pk),
+                        category=iao.addon_category,
+                        initial=current_addon_products,
+                        data=(self.request.POST if self.request.method == 'POST' else None)
+                    )
+                }
+
+                if len(category['form'].fields) > 0:
+                    formsetentry['categories'].append(category)
+
+            formset.append(formsetentry)
+        return formset
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['forms'] = self.forms
+        return ctx
+
+    def get_success_message(self, value):
+        return None
+
+    def get_success_url(self, value):
+        return self.get_next_url(self.request)
+
+    def get_error_url(self):
+        return self.get_step_url()
+
+    def get(self, request):
+        self.request = request
+        if 'async_id' in request.GET and settings.HAS_CELERY:
+            return self.get_result(request)
+        return TemplateFlowStep.get(self, request)
+
+    def post(self, request, *args, **kwargs):
+        self.request = request
+        is_valid = True
+        data = []
+        for f in self.forms:
+            for c in f['categories']:
+                is_valid = is_valid and c['form'].is_valid()
+                if c['form'].is_valid():
+                    for k, v in c['form'].cleaned_data.items():
+                        itemid = int(k[5:])
+                        if v is True:
+                            data.append({
+                                'addon_to': f['cartpos'].pk,
+                                'item': itemid,
+                                'variation': None
+                            })
+                        elif v:
+                            data.append({
+                                'addon_to': f['cartpos'].pk,
+                                'item': itemid,
+                                'variation': int(v)
+                            })
+
+        if not is_valid:
+            return self.get(request, *args, **kwargs)
+
+        return self.do(self.request.event.id, data, self.request.session.session_key)
 
 
 class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
@@ -395,6 +508,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
 
 DEFAULT_FLOW = (
+    AddOnsStep,
     QuestionsStep,
     PaymentStep,
     ConfirmStep
