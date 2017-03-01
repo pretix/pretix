@@ -428,6 +428,9 @@ class AbstractPosition(models.Model):
     voucher = models.ForeignKey(
         'Voucher', null=True, blank=True
     )
+    addon_to = models.ForeignKey(
+        'self', null=True, blank=True, on_delete=models.CASCADE, related_name='addons'
+    )
 
     class Meta:
         abstract = True
