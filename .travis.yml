@@ -1,7 +1,5 @@
 language: python
 sudo: false
-python:
-    - "3.4"
 install:
     - pip install -U pip wheel setuptools==28.6.1
 script:
@@ -9,7 +7,15 @@ script:
 cache:
     directories:
         - $HOME/.cache/pip
-env:
-    - JOB=style
-    - JOB=doctests
-    - JOB=tests-cov
+matrix:
+  include:
+    - python: 3.4
+      env: JOB=tests PRETIX_CONFIG_FILE=tests/sqlite.cfg
+    - python: 3.5
+      env: JOB=tests PRETIX_CONFIG_FILE=tests/sqlite.cfg
+    - python: 3.6
+      env: JOB=tests PRETIX_CONFIG_FILE=tests/sqlite.cfg
+    - python: 3.4
+      env: JOB=style
+    - python: 3.4
+      env: JOB=tests-cov
