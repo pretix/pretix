@@ -56,6 +56,8 @@ class EventMiddlewareTest(EventTestMixin, SoupTest):
         self.assertEqual(resp.status_code, 404)
 
     def test_mandatory_field(self):
+        self.event.date_to = self.event.date_from + datetime.timedelta(days=2)
+        self.event.save()
         resp = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug))
         self.assertEqual(resp.status_code, 200)
 
@@ -564,6 +566,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.event.location = 'DUMMY ARENA'
         self.event.date_from = datetime.datetime(2013, 12, 26, 21, 57, 58, tzinfo=datetime.timezone.utc)
         self.event.date_to = self.event.date_from + datetime.timedelta(days=2)
+        self.event.settings.timezone = 'Europe/Berlin'
         self.event.save()
 
     def test_response_type(self):
@@ -611,6 +614,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
                       ical, 'incorrect end time')
 
     def test_no_time(self):
+        self.event.settings.show_date_to = True
         self.event.settings.show_times = False
         self.event.save()
         ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug)).content.decode()
@@ -619,6 +623,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
 
     def test_no_date_to(self):
         self.event.settings.show_date_to = False
+        self.event.settings.show_times = True
         self.event.save()
         ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug)).content.decode()
         self.assertIn('DTSTART;TZID=%s;VALUE=DATE-TIME:%s' %
