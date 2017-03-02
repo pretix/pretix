@@ -4,6 +4,7 @@ import tempfile
 
 tmpdir = tempfile.TemporaryDirectory()
 os.environ.setdefault('DATA_DIR', tmpdir.name)
+os.environ.setdefault('PRETIX_CONFIG_FILE', 'test/sqlite.cfg')
 
 from pretix.settings import *  # NOQA
 
@@ -31,12 +32,5 @@ HAS_REDIS = False
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
-}
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ':memory:'
     }
 }

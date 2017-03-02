@@ -10,8 +10,11 @@ from pkg_resources import iter_entry_points
 from . import __version__
 
 config = configparser.RawConfigParser()
-config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
-            encoding='utf-8')
+if 'PRETIX_CONFIG_FILE' in os.environ:
+    config.read([os.environ.get('PRETIX_CONFIG_FILE')], encoding='utf-8')
+else:
+    config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
+                encoding='utf-8')
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DATA_DIR = config.get('pretix', 'datadir', fallback=os.environ.get('DATA_DIR', 'data'))
