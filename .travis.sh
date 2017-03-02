@@ -39,3 +39,18 @@ if [ "$1" == "tests-cov" ]; then
 	make all compress
 	coverage run -m py.test --rerun 5 tests && codecov
 fi
+if [ "$1" == "plugins" ]; then
+	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt -r src/requirements/py34.txt
+	cd src
+	python setup.py develop
+	make all compress
+
+	pushd ~
+    git clone --depth 1 https://github.com/pretix/pretix-cartshare.git
+    cd pretix-cartshare
+    python setup.py develop
+    make
+	py.test --rerun 5 tests
+    popd
+
+fi

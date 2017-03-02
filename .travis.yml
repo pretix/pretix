@@ -33,6 +33,8 @@ matrix:
     - python: 3.4
       env: JOB=style
     - python: 3.4
+      env: JOB=plugins
+    - python: 3.4
       env: JOB=tests-cov
 addons:
   postgresql: "9.4"
