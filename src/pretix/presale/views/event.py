@@ -145,7 +145,7 @@ class EventIcalDownload(EventViewMixin, View):
         cal.add_component(event)
 
         resp = HttpResponse(cal.to_ical(), content_type='text/calendar')
-        resp['Content-Disposition'] = 'attachment; filename="{}"'.format('pretixevent.ics')
+        resp['Content-Disposition'] = 'attachment; filename="pretixevent.ics"'
         return resp
 
 
