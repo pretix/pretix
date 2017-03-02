@@ -116,7 +116,7 @@ class Stripe(BasePaymentProvider):
                 'message': err['message'],
             })
             order.save()
-            raise PaymentException(_('Stripe reported an error with your card:%s') % err['message'])
+            raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
 
         except stripe.error.StripeError as e:
             if e.json_body:
