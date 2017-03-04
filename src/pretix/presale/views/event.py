@@ -3,6 +3,7 @@ from datetime import datetime
 from importlib import import_module
 
 import pytz
+import vobject
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Prefetch, Q
@@ -15,7 +16,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
-from icalendar import Calendar, Event
 from pytz import timezone
 
 from pretix.base.models import ItemVariation
@@ -121,31 +121,31 @@ class EventIcalDownload(EventViewMixin, View):
         if not self.request.event:
             raise Http404(_('Unknown event code or not authorized to access this event.'))
 
-        cal = Calendar()
-        cal.add('version', '2.0')
-        cal.add('prodid', '-//pretix//{}//'.format(settings.PRETIX_INSTANCE_NAME))
+        event = self.request.event
+        cal = vobject.iCalendar()
+        cal.add('prodid').value = '-//pretix//{}//'.format(settings.PRETIX_INSTANCE_NAME)
 
-        event = Event()
-        event.add('summary', str(self.request.event.name))
-        event.add('dtstamp', datetime.now(pytz.utc))
-        event.add('location', str(self.request.event.location))
-        event.add('organizer', self.request.event.organizer.name)
+        vevent = cal.add('vevent')
+        vevent.add('summary').value = str(event.name)
+        vevent.add('dtstamp').value = datetime.now(pytz.utc)
+        vevent.add('location').value = str(event.location)
+        vevent.add('organizer').value = event.organizer.name
 
         if self.request.event.settings.show_times:
-            event.add('dtstart', self.request.event.date_from.replace(tzinfo=self.event_timezone))
+            vevent.add('dtstart').value = event.date_from.astimezone(self.event_timezone)
         else:
-            event.add('dtstart', self.request.event.date_from.date())
+            vevent.add('dtstart').value = event.date_from.astimezone(self.event_timezone).date()
 
         if self.request.event.settings.show_date_to:
             if self.request.event.settings.show_times:
-                event.add('dtend', self.request.event.date_to.replace(tzinfo=self.event_timezone))
+                vevent.add('dtend').value = event.date_to.astimezone(self.event_timezone)
             else:
-                event.add('dtend', self.request.event.date_to.date())
+                vevent.add('dtend').value = event.date_to.astimezone(self.event_timezone).date()
 
-        cal.add_component(event)
-
-        resp = HttpResponse(cal.to_ical(), content_type='text/calendar')
-        resp['Content-Disposition'] = 'attachment; filename="pretixevent.ics"'
+        resp = HttpResponse(cal.serialize(), content_type='text/calendar')
+        resp['Content-Disposition'] = 'attachment; filename="{}-{}.ics"'.format(
+            self.request.organizer.slug, event.slug
+        )
         return resp
 
 
