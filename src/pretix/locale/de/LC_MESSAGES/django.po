@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-01 20:23+0000\n"
+"POT-Creation-Date: 2017-03-04 04:00+0000\n"
 "PO-Revision-Date: 2017-03-01 21:25+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
@@ -5900,8 +5900,9 @@ msgid "The selected voucher has been deleted."
 msgstr "Der ausgewählte Gutschein wurde gelöscht."
 
 #: pretix/control/views/vouchers.py:218
-msgid "The new voucher has been created."
-msgstr "Der neue Gutschein wurde erstellt."
+#, fuzzy, python-brace-format
+msgid "The new voucher has been created: {code}"
+msgstr "Der neue Gutschein wurde erstellt: {code}"
 
 #: pretix/control/views/vouchers.py:250
 msgid "The new vouchers have been created."
@@ -7779,15 +7780,15 @@ msgstr ""
 "Wir haben Sie zur Warteliste hinzugefügt. Sie erhalten eine E-Mail, sobald "
 "wieder Tickets verfügbar sind."
 
-#: pretix/settings.py:281
+#: pretix/settings.py:284
 msgid "English"
 msgstr "Englisch"
 
-#: pretix/settings.py:282
+#: pretix/settings.py:285
 msgid "German"
 msgstr "Deutsch"
 
-#: pretix/settings.py:283
+#: pretix/settings.py:286
 msgid "German (informal)"
 msgstr "Deutsch (Du)"
 

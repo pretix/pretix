@@ -215,7 +215,7 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
     @transaction.atomic
     def form_valid(self, form):
         form.instance.event = self.request.event
-        messages.success(self.request, _('The new voucher has been created.'))
+        messages.success(self.request, _('The new voucher has been created: {code}').format(code=form.instance.code))
         ret = super().form_valid(form)
         form.instance.log_action('pretix.voucher.added', data=dict(form.cleaned_data), user=self.request.user)
         return ret

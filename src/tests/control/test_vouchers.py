@@ -133,6 +133,18 @@ class VoucherFormTest(SoupTest):
         assert len(codes) == 7
         assert all([len(r) == 16 for r in codes])
 
+    def test_display_voucher_code(self):
+        count_before = self.event.vouchers.count()
+        doc = self.get_doc('/control/event/%s/%s/vouchers/add' % (self.orga.slug, self.event.slug))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data.update({
+            'itemvar': '%d' % self.ticket.pk
+        })
+        doc = self.post_doc('/control/event/%s/%s/vouchers/add' % (self.orga.slug, self.event.slug), form_data)
+        v = Voucher.objects.latest('pk')
+        assert v.code in doc.select(".alert-success")[0].text
+        assert count_before + 1 == self.event.vouchers.count()
+
     def test_create_non_blocking_item_voucher(self):
         self._create_voucher({
             'itemvar': '%d' % self.ticket.pk
