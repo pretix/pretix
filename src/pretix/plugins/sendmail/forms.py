@@ -15,11 +15,11 @@ class MailForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['subject'] = I18nFormField(
             widget=I18nTextInput, required=True,
-            langcodes=event.settings.get('locales')
+            locales=event.settings.get('locales')
         )
         self.fields['message'] = I18nFormField(
             widget=I18nTextarea, required=True,
-            langcodes=event.settings.get('locales'),
+            locales=event.settings.get('locales'),
             help_text=_("Available placeholders: {due_date}, {event}, {order}, {order_date}, {order_url}, "
                         "{invoice_name}, {invoice_company}")
         )
