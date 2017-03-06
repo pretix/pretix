@@ -11,7 +11,7 @@
     <form class="form-inline helper-display-inline" action="" method="get">
         <p>
             <input type="text" name="search" class="form-control" placeholder="{% trans "Search voucher" %}"
-                   value="{{ request.GET.search }}">
+                   value="{{ request.GET.search }}" autofocus>
             <input type="text" name="tag" class="form-control" placeholder="{% trans "Filter by tag" %}"
                    value="{{ request.GET.tag }}">
             <select name="status" class="form-control">
