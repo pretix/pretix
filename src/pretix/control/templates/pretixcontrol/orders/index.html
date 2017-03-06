@@ -29,7 +29,7 @@
         <form class="form-inline helper-display-inline"
                 action="{% url "control:event.orders.go" event=request.event.slug organizer=request.event.organizer.slug %}">
             <div class="input-group">
-                <input type="text" name="code" class="form-control" placeholder="{% trans "Order code" %}">
+                <input type="text" name="code" class="form-control" placeholder="{% trans "Order code" %}" autofocus>
                 <span class="input-group-btn">
                     <button class="btn btn-primary" type="submit">{% trans "Go!" %}</button>
                 </span>
