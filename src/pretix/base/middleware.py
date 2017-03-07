@@ -141,11 +141,20 @@ class SecurityMiddleware(MiddlewareMixin):
         h = {}
         for part in header.split(';'):
             k, v = part.strip().split(' ', 1)
-            h[k.strip()] = v
+            h[k.strip()] = v.split(' ')
         return h
 
     def _render_csp(self, h):
-        return "; ".join(k + ' ' + v for k, v in h.items())
+        return "; ".join(k + ' ' + ' '.join(v) for k, v in h.items())
+
+    def _merge_csp(self, a, b):
+        for k, v in a.items():
+            if k in b:
+                a[k] += b[k]
+
+        for k, v in b.items():
+            if k not in a:
+                a[k] = b[k]
 
     def process_response(self, request, resp):
         if settings.DEBUG and resp.status_code >= 400:
@@ -155,23 +164,23 @@ class SecurityMiddleware(MiddlewareMixin):
 
         resp['X-XSS-Protection'] = '1'
         h = {
-            'default-src': "{static}",
-            'script-src': '{static} https://checkout.stripe.com https://js.stripe.com',
-            'object-src': "'none'",
+            'default-src': ["{static}"],
+            'script-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
+            'object-src': ["'none'"],
             # frame-src is deprecated but kept for compatibility with CSP 1.0 browsers, e.g. Safari 9
-            'frame-src': '{static} https://checkout.stripe.com https://js.stripe.com',
-            'child-src': '{static} https://checkout.stripe.com https://js.stripe.com',
-            'style-src': "{static}",
-            'connect-src': "{dynamic} https://checkout.stripe.com",
-            'img-src': "{static} data: https://*.stripe.com",
+            'frame-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
+            'child-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
+            'style-src': ["{static}"],
+            'connect-src': ["{dynamic}', 'https://checkout.stripe.com"],
+            'img-src': ["{static}', 'data:', 'https://*.stripe.com"],
             # form-action is not only used to match on form actions, but also on URLs
             # form-actions redirect to. In the context of e.g. payment providers or
             # single-sign-on this can be nearly anything so we cannot really restrict
             # this. However, we'll restrict it to HTTPS.
-            'form-action': "{dynamic} https:",
+            'form-action': ["{dynamic}', 'https:"],
         }
         if 'Content-Security-Policy' in resp:
-            h.update(self._parse_csp(resp['Content-Security-Policy']))
+            self._merge_csp(h, self._parse_csp(resp['Content-Security-Policy']))
 
         staticdomain = "'self'"
         dynamicdomain = "'self'"

@@ -33,5 +33,5 @@ class ChartContainingView:
     def get(self, request, *args, **kwargs):
         resp = super().get(request, *args, **kwargs)
         # required by raphael.js
-        resp['Content-Security-Policy'] = "script-src {static} 'unsafe-eval'; style-src {static} 'unsafe-inline'"
+        resp['Content-Security-Policy'] = "script-src 'unsafe-eval'; style-src 'unsafe-inline'"
         return resp
