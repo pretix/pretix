@@ -174,13 +174,13 @@ class SecurityMiddleware(MiddlewareMixin):
             'frame-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
             'child-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
             'style-src': ["{static}"],
-            'connect-src': ["{dynamic}', 'https://checkout.stripe.com"],
-            'img-src': ["{static}', 'data:', 'https://*.stripe.com"],
+            'connect-src': ["{dynamic}", "https://checkout.stripe.com"],
+            'img-src': ["{static}", "data:", "https://*.stripe.com"],
             # form-action is not only used to match on form actions, but also on URLs
             # form-actions redirect to. In the context of e.g. payment providers or
             # single-sign-on this can be nearly anything so we cannot really restrict
             # this. However, we'll restrict it to HTTPS.
-            'form-action': ["{dynamic}', 'https:"],
+            'form-action': ["{dynamic}", "https:"],
         }
         if 'Content-Security-Policy' in resp:
             _merge_csp(h, _parse_csp(resp['Content-Security-Policy']))
