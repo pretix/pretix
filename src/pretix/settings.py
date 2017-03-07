@@ -240,8 +240,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pretix.control.middleware.PermissionMiddleware',
     'pretix.base.middleware.LocaleMiddleware',
-    'pretix.presale.middleware.EventMiddleware',
     'pretix.base.middleware.SecurityMiddleware',
+    'pretix.presale.middleware.EventMiddleware',
 ]
 
 try:

@@ -135,26 +135,29 @@ def get_language_from_request(request: HttpRequest) -> str:
     )
 
 
+def _parse_csp(header):
+    h = {}
+    for part in header.split(';'):
+        k, v = part.strip().split(' ', 1)
+        h[k.strip()] = v.split(' ')
+    return h
+
+
+def _render_csp(h):
+    return "; ".join(k + ' ' + ' '.join(v) for k, v in h.items())
+
+
+def _merge_csp(a, b):
+    for k, v in a.items():
+        if k in b:
+            a[k] += b[k]
+
+    for k, v in b.items():
+        if k not in a:
+            a[k] = b[k]
+
+
 class SecurityMiddleware(MiddlewareMixin):
-
-    def _parse_csp(self, header):
-        h = {}
-        for part in header.split(';'):
-            k, v = part.strip().split(' ', 1)
-            h[k.strip()] = v.split(' ')
-        return h
-
-    def _render_csp(self, h):
-        return "; ".join(k + ' ' + ' '.join(v) for k, v in h.items())
-
-    def _merge_csp(self, a, b):
-        for k, v in a.items():
-            if k in b:
-                a[k] += b[k]
-
-        for k, v in b.items():
-            if k not in a:
-                a[k] = b[k]
 
     def process_response(self, request, resp):
         if settings.DEBUG and resp.status_code >= 400:
@@ -180,7 +183,7 @@ class SecurityMiddleware(MiddlewareMixin):
             'form-action': ["{dynamic}', 'https:"],
         }
         if 'Content-Security-Policy' in resp:
-            self._merge_csp(h, self._parse_csp(resp['Content-Security-Policy']))
+            _merge_csp(h, _parse_csp(resp['Content-Security-Policy']))
 
         staticdomain = "'self'"
         dynamicdomain = "'self'"
@@ -193,5 +196,5 @@ class SecurityMiddleware(MiddlewareMixin):
             else:
                 staticdomain += " " + settings.SITE_URL
                 dynamicdomain += " " + settings.SITE_URL
-        resp['Content-Security-Policy'] = self._render_csp(h).format(static=staticdomain, dynamic=dynamicdomain)
+        resp['Content-Security-Policy'] = _render_csp(h).format(static=staticdomain, dynamic=dynamicdomain)
         return resp
