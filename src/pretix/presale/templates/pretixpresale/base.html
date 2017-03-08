@@ -29,9 +29,9 @@
         <script type="text/javascript" src="{% static "pretixpresale/js/ui/cart.js" %}"></script>
         <script type="text/javascript" src="{% static "lightbox/js/lightbox.min.js" %}"></script>
     {% endcompress %}
+    <meta name="referrer" content="origin">
     {{ html_head|safe }}
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="referrer" content="origin">
     <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
 </head>
 <body data-locale="{{ request.LANGUAGE_CODE }}">
