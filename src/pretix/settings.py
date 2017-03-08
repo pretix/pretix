@@ -50,6 +50,14 @@ debug_fallback = "runserver" in sys.argv
 DEBUG = config.getboolean('django', 'debug', fallback=debug_fallback)
 
 db_backend = config.get('database', 'backend', fallback='sqlite3')
+DATABASE_IS_GALERA = config.getboolean('database', 'galera', fallback=False)
+if DATABASE_IS_GALERA and 'mysql' in db_backend:
+    db_options = {
+        'init_command': 'SET SESSION wsrep_sync_wait = 1;'
+    }
+else:
+    db_options = {}
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.' + db_backend,
@@ -58,10 +66,10 @@ DATABASES = {
         'PASSWORD': config.get('database', 'password', fallback=''),
         'HOST': config.get('database', 'host', fallback=''),
         'PORT': config.get('database', 'port', fallback=''),
-        'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120
+        'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
+        'OPTIONS': db_options
     }
 }
-DATABASE_IS_GALERA = config.getboolean('database', 'galera', fallback=False)
 
 STATIC_URL = config.get('urls', 'static', fallback='/static/')
 
