@@ -26,7 +26,7 @@ dj-static
 csscompressor
 django-markup
 markdown
-bleach
+bleach==1.5
 raven
 django-i18nfield
 # Stripe

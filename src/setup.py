@@ -89,7 +89,7 @@ setup(
         'csscompressor',
         'django-markup',
         'markdown',
-        'bleach',
+        'bleach==1.5',
         'raven',
         'paypalrestsdk==1.12.*',
         'pycparser==2.13',
