@@ -11,6 +11,17 @@ of every page in the frontend. You will get the request as the keyword argument
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+html_footer = EventPluginSignal(
+    providing_args=["request"]
+)
+"""
+This signal allows you to put code before the end of the HTML ``<body>`` tag
+of every page in the frontend. You will get the request as the keyword argument
+``request`` and are expected to return plain HTML.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 footer_link = EventPluginSignal(
     providing_args=["request"]
 )

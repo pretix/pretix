@@ -25,7 +25,7 @@ Frontend
 --------
 
 .. automodule:: pretix.presale.signals
-   :members: html_head, footer_links, front_page_top, front_page_bottom, checkout_confirm_messages
+   :members: html_head, html_footer, footer_links, front_page_top, front_page_bottom, checkout_confirm_messages
 
 
 .. automodule:: pretix.presale.signals

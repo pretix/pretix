@@ -4,7 +4,7 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.settings import GlobalSettingsObject
 
-from .signals import footer_link, html_head
+from .signals import footer_link, html_footer, html_head
 
 
 def contextprocessor(request):
@@ -19,6 +19,7 @@ def contextprocessor(request):
         'DEBUG': settings.DEBUG,
     }
     _html_head = []
+    _html_foot = []
     _footer = []
 
     if hasattr(request, 'event'):
@@ -40,6 +41,8 @@ def contextprocessor(request):
     if hasattr(request, 'event'):
         for receiver, response in html_head.send(request.event, request=request):
             _html_head.append(response)
+        for receiver, response in html_footer.send(request.event, request=request):
+            _html_foot.append(response)
         for receiver, response in footer_link.send(request.event, request=request):
             if isinstance(response, list):
                 _footer += response
@@ -52,6 +55,7 @@ def contextprocessor(request):
         ctx['event'] = request.event
 
     ctx['html_head'] = "".join(_html_head)
+    ctx['html_foot'] = "".join(_html_foot)
     ctx['footer'] = _footer
     ctx['site_url'] = settings.SITE_URL
 
