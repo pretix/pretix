@@ -70,16 +70,15 @@
     {% endif %}
     <div>
         {% if frontpage_text %}
-        <div class="pull-left">
+        <div>
             {{ frontpage_text|rich_text }}
         </div>
         {% endif %}
-        <div class="pull-right">
-            <a href="{% eventurl event "presale:event.ical.download" %}" class="btn btn-link">
+        <p class="text-right">
+            <a href="{% eventurl event "presale:event.ical.download" %}" class="btn btn-link btn-xs">
                 <i class="fa fa-calendar"></i> {% trans "Add to Calendar" %}
             </a>
-        </div>
-        <div class="clearfix"></div>
+        </p>
     </div>
 
     {% eventsignal event "pretix.presale.signals.front_page_top" %}
