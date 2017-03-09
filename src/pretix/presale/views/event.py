@@ -122,29 +122,33 @@ class EventIcalDownload(EventViewMixin, View):
             raise Http404(_('Unknown event code or not authorized to access this event.'))
 
         event = self.request.event
+        creation_time = datetime.now(pytz.utc)
         cal = vobject.iCalendar()
         cal.add('prodid').value = '-//pretix//{}//'.format(settings.PRETIX_INSTANCE_NAME)
 
         vevent = cal.add('vevent')
         vevent.add('summary').value = str(event.name)
-        vevent.add('dtstamp').value = datetime.now(pytz.utc)
+        vevent.add('dtstamp').value = creation_time
         vevent.add('location').value = str(event.location)
         vevent.add('organizer').value = event.organizer.name
+        vevent.add('uid').value = '{}-{}-{}'.format(
+            event.organizer.slug, event.slug, creation_time.strftime('%Y%m%d%H%M%S%f')
+        )
 
-        if self.request.event.settings.show_times:
+        if event.settings.show_times:
             vevent.add('dtstart').value = event.date_from.astimezone(self.event_timezone)
         else:
             vevent.add('dtstart').value = event.date_from.astimezone(self.event_timezone).date()
 
-        if self.request.event.settings.show_date_to:
-            if self.request.event.settings.show_times:
+        if event.settings.show_date_to:
+            if event.settings.show_times:
                 vevent.add('dtend').value = event.date_to.astimezone(self.event_timezone)
             else:
                 vevent.add('dtend').value = event.date_to.astimezone(self.event_timezone).date()
 
         resp = HttpResponse(cal.serialize(), content_type='text/calendar')
         resp['Content-Disposition'] = 'attachment; filename="{}-{}.ics"'.format(
-            self.request.organizer.slug, event.slug
+            event.organizer.slug, event.slug
         )
         return resp
 
