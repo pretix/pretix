@@ -1,16 +1,22 @@
 import sys
+from datetime import datetime
 from importlib import import_module
 
+import pytz
+import vobject
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Prefetch, Q
+from django.http import Http404, HttpResponse
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
+from pytz import timezone
 
 from pretix.base.models import ItemVariation
 from pretix.multidomain.urlreverse import eventreverse
@@ -103,6 +109,48 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
 
         context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
         return context
+
+
+class EventIcalDownload(EventViewMixin, View):
+
+    @cached_property
+    def event_timezone(self):
+        return timezone(self.request.event.settings.timezone)
+
+    def get(self, request, *args, **kwargs):
+        if not self.request.event:
+            raise Http404(_('Unknown event code or not authorized to access this event.'))
+
+        event = self.request.event
+        creation_time = datetime.now(pytz.utc)
+        cal = vobject.iCalendar()
+        cal.add('prodid').value = '-//pretix//{}//'.format(settings.PRETIX_INSTANCE_NAME)
+
+        vevent = cal.add('vevent')
+        vevent.add('summary').value = str(event.name)
+        vevent.add('dtstamp').value = creation_time
+        vevent.add('location').value = str(event.location)
+        vevent.add('organizer').value = event.organizer.name
+        vevent.add('uid').value = '{}-{}-{}'.format(
+            event.organizer.slug, event.slug, creation_time.strftime('%Y%m%d%H%M%S%f')
+        )
+
+        if event.settings.show_times:
+            vevent.add('dtstart').value = event.date_from.astimezone(self.event_timezone)
+        else:
+            vevent.add('dtstart').value = event.date_from.astimezone(self.event_timezone).date()
+
+        if event.settings.show_date_to:
+            if event.settings.show_times:
+                vevent.add('dtend').value = event.date_to.astimezone(self.event_timezone)
+            else:
+                vevent.add('dtend').value = event.date_to.astimezone(self.event_timezone).date()
+
+        resp = HttpResponse(cal.serialize(), content_type='text/calendar')
+        resp['Content-Disposition'] = 'attachment; filename="{}-{}.ics"'.format(
+            event.organizer.slug, event.slug
+        )
+        return resp
 
 
 class EventAuth(View):

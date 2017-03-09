@@ -68,9 +68,20 @@
             {% endif %}
         </div>
     {% endif %}
-    {% if frontpage_text %}
-        {{ frontpage_text|rich_text }}
-    {% endif %}
+    <div>
+        {% if frontpage_text %}
+        <div class="pull-left">
+            {{ frontpage_text|rich_text }}
+        </div>
+        {% endif %}
+        <div class="pull-right">
+            <a href="{% eventurl event "presale:event.ical.download" %}" class="btn btn-link">
+                <i class="fa fa-calendar"></i> {% trans "Add to Calendar" %}
+            </a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
     {% eventsignal event "pretix.presale.signals.front_page_top" %}
     {% if event.presale_is_running or event.settings.show_items_outside_presale_period %}
         <form method="post" data-asynctask
