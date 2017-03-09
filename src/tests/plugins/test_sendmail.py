@@ -1,14 +1,15 @@
-from __future__ import print_function
 import datetime
 
 import pytest
 
+from django.core import mail as djmail
 from django.utils.timezone import now
 
 from pretix.base.models import (
     Event, EventPermission, Item, ItemCategory, Order, OrderPosition,
     Organizer, OrganizerPermission, User,
 )
+from pretix.base.services.mail import mail
 
 
 @pytest.fixture
@@ -74,11 +75,24 @@ def test_sendmail_view(logged_in_client, sendmail_url, expected=200):
 
 
 @pytest.mark.django_db
-def test_message_content(logged_in_client, sendmail_url, expected=200):
+def test_sendmail_one_message(logged_in_client, sendmail_url, event, order, expected=200):
+    djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
-                                     {'sendto': 'c',
-                                      'subject': 'test subject',
-                                      'message': 'test message'
+                                     {'sendto': ('c'),
+                                      'subject': 'Test subject',
+                                      'message': 'This is a test file for sending mails.'
                                       })
-    print(response.content)
     assert response.status_code == expected
+
+    mail('dummy@dummy.test', 'Test subject', 'mailtest.txt', {}, event)
+
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [order.email]
+    assert djmail.outbox[0].subject == 'Test subject'
+    assert 'This is a test file for sending mails.' in djmail.outbox[0].body
+
+    url = sendmail_url + 'history/'
+    response = logged_in_client.get(url)
+
+    assert response.status_code == expected
+    assert 'Test subject' in response.rendered_content
