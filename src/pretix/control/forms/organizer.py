@@ -2,9 +2,10 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.forms import I18nModelForm
+from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.models import Organizer, Team
 from pretix.multidomain.models import KnownDomain
+from pretix.control.forms import ExtFileField
 
 
 class OrganizerForm(I18nModelForm):
@@ -98,3 +99,13 @@ class TeamForm(forms.ModelForm):
                                         'the permission to change teams and permissions.'))
 
         return data
+
+
+class OrganizerSettingsForm(SettingsForm):
+
+    logo_image = ExtFileField(
+        label=_('Logo image'),
+        ext_whitelist=(".png", ".jpg", ".svg", ".gif", ".jpeg"),
+        required=False,
+        help_text=_('Add a logo to your organizer page.')  # TODO: Use a better desc.
+    )

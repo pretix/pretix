@@ -15,6 +15,11 @@
                 {% bootstrap_field form.domain layout="horizontal" %}
             {% endif %}
         </fieldset>
+        {% bootstrap_form_errors sform %}
+        <fieldset>
+            <legend>{% trans "Display settings" %}</legend>
+            {% bootstrap_field sform.logo_image layout="horizontal" %}
+        </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
