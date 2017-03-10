@@ -111,16 +111,22 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
     def form_valid(self, form):
         self.sform.save()
         if form.has_changed():
-            self.request.organizer.log_action('pretix.organizer.changed', user=self.request.user, data={
-                k: getattr(form.cleaned_data, k) for k in form.changed_data
-                })
+            self.request.organizer.log_action(
+                'pretix.organizer.changed',
+                user=self.request.user,
+                data={k: getattr(form.cleaned_data, k) for k in form.changed_data}
+            )
         if self.sform.has_changed():
-            self.request.organizer.log_action('pretix.organizer.settings', user=self.request.user, data={
-                k: (self.sform.cleaned_data.get(k).name
-                    if isinstance(self.sform.changed_data.get(k), File)
-                    else self.sform.cleaned_data.get(k))
-                for k in self.sform.changed_data
-                })
+            self.request.organizer.log_action(
+                'pretix.organizer.settings',
+                user=self.request.user,
+                data={
+                    k: (self.sform.cleaned_data.get(k).name
+                        if isinstance(self.sform.changed_data.get(k), File)
+                        else self.sform.cleaned_data.get(k))
+                    for k in self.sform.changed_data
+                }
+            )
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
