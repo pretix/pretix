@@ -9,7 +9,6 @@ from pretix.base.models import (
     Event, EventPermission, Item, ItemCategory, Order, OrderPosition,
     Organizer, OrganizerPermission, User,
 )
-from pretix.base.services.mail import mail
 
 
 @pytest.fixture
@@ -75,16 +74,16 @@ def test_sendmail_view(logged_in_client, sendmail_url, expected=200):
 
 
 @pytest.mark.django_db
-def test_sendmail_one_message(logged_in_client, sendmail_url, event, order, expected=200):
+def test_sendmail_simple_case(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
-                                     {'sendto': ('c'),
-                                      'subject': 'Test subject',
-                                      'message': 'This is a test file for sending mails.'
-                                      })
-    assert response.status_code == expected
-
-    mail('dummy@dummy.test', 'Test subject', 'mailtest.txt', {}, event)
+                                     {'sendto': 'n',
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.'
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
 
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].to == [order.email]
@@ -94,5 +93,5 @@ def test_sendmail_one_message(logged_in_client, sendmail_url, event, order, expe
     url = sendmail_url + 'history/'
     response = logged_in_client.get(url)
 
-    assert response.status_code == expected
+    assert response.status_code == 200
     assert 'Test subject' in response.rendered_content
