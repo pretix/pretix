@@ -99,7 +99,7 @@ class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
         try:
             mail(
                 instance.invite_email,
-                _('Account information changed'),
+                _('pretix account invitation'),
                 'pretixcontrol/email/invitation_organizer.txt',
                 {
                     'user': self,
