@@ -99,7 +99,8 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
         return OrganizerSettingsForm(
             obj=self.object,
             prefix='settings',
-            data=self.request.POST if self.request.method == 'POST' else None
+            data=self.request.POST if self.request.method == 'POST' else None,
+            files=self.request.FILES if self.request.method == 'POST' else None
         )
 
     def get_context_data(self, *args, **kwargs) -> dict:
