@@ -4,20 +4,20 @@
 {% block title %}{% trans "Organizer" %}{% endblock %}
 {% block content %}
 	<h1>{% trans "Organizer" %}</h1>
-    <form action="" method="post" class="form-horizontal">
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
-        {% bootstrap_form_errors form %}
         <fieldset>
             <legend>{% trans "General information" %}</legend>
+            {% bootstrap_form_errors form %}
             {% bootstrap_field form.name layout="horizontal" %}
             {% bootstrap_field form.slug layout="horizontal" %}
             {% if form.domain %}
                 {% bootstrap_field form.domain layout="horizontal" %}
             {% endif %}
         </fieldset>
-        {% bootstrap_form_errors sform %}
         <fieldset>
             <legend>{% trans "Display settings" %}</legend>
+            {% bootstrap_form_errors sform %}
             {% bootstrap_field sform.logo_image layout="horizontal" %}
         </fieldset>
         <div class="form-group submit-group">
