@@ -53,6 +53,23 @@ class EventsTest(SoupTest):
         assert doc.select("[name=date_to]")[0]['value'] == "2013-12-30 17:00:00"
         assert doc.select("[name=settings-max_items_per_order]")[0]['value'] == "12"
 
+    def test_settings_timezone(self):
+        doc = self.get_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug))
+        doc.select("[name=date_to]")[0]['value'] = "2013-12-30 17:00:00"
+        doc.select("[name=settings-max_items_per_order]")[0]['value'] = "12"
+        doc.select("[name=settings-timezone]")[0]['value'] = "Asia/Tokyo"
+        doc.find('option', {"value": "Asia/Tokyo"})['selected'] = 'selected'
+        doc.find('option', {"value": "UTC"}).attrs.pop('selected')
+        print(extract_form_fields(doc.select('.container-fluid form')[0]))
+
+        doc = self.post_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug),
+                            extract_form_fields(doc.select('.container-fluid form')[0]))
+        assert len(doc.select(".alert-success")) > 0
+        # date_to should not be changed even though the timezone is changed
+        assert doc.select("[name=date_to]")[0]['value'] == "2013-12-30 17:00:00"
+        assert doc.find('option', {"value": "Asia/Tokyo"})['selected'] == "selected"
+        assert doc.select("[name=settings-max_items_per_order]")[0]['value'] == "12"
+
     def test_plugins(self):
         doc = self.get_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug))
         self.assertIn("PayPal", doc.select(".form-plugins")[0].text)

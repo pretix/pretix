@@ -87,12 +87,15 @@ class EventWizardBasicsForm(I18nModelForm):
 
         # change timezone
         zone = timezone(data['timezone'])
-        data['date_from'] = zone.localize(data['date_from'].replace(tzinfo=None))
-        data['date_to'] = zone.localize(data['date_to'].replace(tzinfo=None))
-        data['presale_start'] = zone.localize(data['presale_start'].replace(tzinfo=None))
-        data['presale_end'] = zone.localize(data['presale_end'].replace(tzinfo=None))
-
+        data['date_from'] = self.reset_timezone(zone, data['date_from'])
+        data['date_to'] = self.reset_timezone(zone, data['date_to'])
+        data['presale_start'] = self.reset_timezone(zone, data['presale_start'])
+        data['presale_end'] = self.reset_timezone(zone, data['presale_end'])
         return data
+
+    @staticmethod
+    def reset_timezone(tz, dt):
+        return tz.localize(dt.replace(tzinfo=None)) if dt is not None else None
 
     def clean_slug(self):
         slug = self.cleaned_data['slug']
