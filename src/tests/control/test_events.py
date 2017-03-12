@@ -1,6 +1,7 @@
 import datetime
 from decimal import Decimal
 
+from i18nfield.strings import LazyI18nString
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import (
@@ -193,3 +194,105 @@ class EventsTest(SoupTest):
                             data, follow=True)
         self.event1.settings._flush()
         assert self.event1.settings.get('ticket_download', as_type=bool)
+
+    def test_create_event_unauthorized(self):
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'foundation',
+            'foundation-organizer': self.orga2.pk,
+            'foundation-locales': ('en', 'de')
+        })
+        assert doc.select(".alert-danger")
+
+    def test_create_invalid_default_language(self):
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'foundation',
+            'foundation-organizer': self.orga1.pk,
+            'foundation-locales': ('de',)
+        })
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'basics',
+            'basics-name_0': '33C3',
+            'basics-name_1': '33C3',
+            'basics-slug': '33c3',
+            'basics-date_from': '2016-12-27 10:00:00',
+            'basics-date_to': '2016-12-30 19:00:00',
+            'basics-location_0': 'Hamburg',
+            'basics-location_1': 'Hamburg',
+            'basics-currency': 'EUR',
+            'basics-locale': 'en',
+            'basics-timezone': 'Europe/Berlin',
+            'basics-presale_start': '2016-11-01 10:00:00',
+            'basics-presale_end': '2016-11-30 18:00:00',
+        })
+        assert doc.select(".alert-danger")
+
+    def test_create_duplicate_slug(self):
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'foundation',
+            'foundation-organizer': self.orga1.pk,
+            'foundation-locales': ('de', 'en')
+        })
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'basics',
+            'basics-name_0': '33C3',
+            'basics-name_1': '33C3',
+            'basics-slug': '31c3',
+            'basics-date_from': '2016-12-27 10:00:00',
+            'basics-date_to': '2016-12-30 19:00:00',
+            'basics-location_0': 'Hamburg',
+            'basics-location_1': 'Hamburg',
+            'basics-currency': 'EUR',
+            'basics-locale': 'en',
+            'basics-timezone': 'Europe/Berlin',
+            'basics-presale_start': '2016-11-01 10:00:00',
+            'basics-presale_end': '2016-11-30 18:00:00',
+        })
+        assert doc.select(".alert-danger")
+
+    def test_create_event_success(self):
+        doc = self.get_doc('/control/events/add')
+        tabletext = doc.select("form")[0].text
+        self.assertIn("CCC", tabletext)
+        self.assertNotIn("MRM", tabletext)
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'foundation',
+            'foundation-organizer': self.orga1.pk,
+            'foundation-locales': ('en', 'de')
+        })
+        assert doc.select("#id_basics-name_0")
+        assert doc.select("#id_basics-name_1")
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'basics',
+            'basics-name_0': '33C3',
+            'basics-name_1': '33C3',
+            'basics-slug': '33c3',
+            'basics-date_from': '2016-12-27 10:00:00',
+            'basics-date_to': '2016-12-30 19:00:00',
+            'basics-location_0': 'Hamburg',
+            'basics-location_1': 'Hamburg',
+            'basics-currency': 'EUR',
+            'basics-locale': 'en',
+            'basics-timezone': 'Europe/Berlin',
+            'basics-presale_start': '2016-11-01 10:00:00',
+            'basics-presale_end': '2016-11-30 18:00:00',
+        })
+
+        assert doc.select("#id_copy-copy_from_event_1")
+
+        self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'copy',
+            'copy-copy_from_event': ''
+        })
+
+        ev = Event.objects.get(slug='33c3')
+        assert ev.name == LazyI18nString({'de': '33C3', 'en': '33C3'})
+        assert ev.settings.locales == ['en', 'de']
+        assert ev.settings.locale == 'en'
+        assert ev.currency == 'EUR'
+        assert ev.settings.timezone == 'Europe/Berlin'
+        assert ev.organizer == self.orga1
+        assert EventPermission.objects.filter(event=ev, user=self.user).exists()
