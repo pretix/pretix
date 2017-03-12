@@ -103,9 +103,10 @@ class TeamForm(forms.ModelForm):
 
 class OrganizerSettingsForm(SettingsForm):
 
-    logo_image = ExtFileField(
+    organizer_logo_image = ExtFileField(
         label=_('Logo image'),
         ext_whitelist=(".png", ".jpg", ".svg", ".gif", ".jpeg"),
         required=False,
-        help_text=_('Add a logo to your organizer page.')  # TODO: Use a better desc.
+        help_text=_('If you provide a logo image, we will by default not show your organization name '
+                    'in the page header. We will show your logo with a maximal height of 120 pixels.')
     )

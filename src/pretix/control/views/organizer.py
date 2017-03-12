@@ -80,11 +80,7 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
     model = Organizer
     form_class = OrganizerUpdateForm
     template_name = 'pretixcontrol/organizers/edit.html'
-<<<<<<< HEAD
     permission = 'can_change_organizer_settings'
-=======
-    permission = 'can_change_settings'
->>>>>>> 4ab9b34f... [WIP] Add logo to event organizers.
     context_object_name = 'organizer'
 
     @cached_property

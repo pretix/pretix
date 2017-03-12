@@ -39,7 +39,7 @@
         {% blocktrans with name=organizer.name %}Organizer: {{ name }}{% endblocktrans %}
         <a href="{% url "control:organizer.edit" organizer=organizer.slug %}"
            class="btn btn-default">
-            <span class="fa fa-sliders"></span>
+            <span class="fa fa-edit"></span>
             {% trans "Edit" %}
         </a>
     </h1>
