@@ -92,8 +92,8 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
 
 .i18n-form-group input,
 .i18n-form-group textarea {
-  @include border-top-radius(0 px);
-  @include border-bottom-radius(0 px);
+  @include border-top-radius(0px);
+  @include border-bottom-radius(0px);
   border-top-width: 0;
 
   &:first-child {
