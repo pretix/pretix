@@ -174,6 +174,12 @@
                         {% endfor %}
                     {% endif %}
 
+                    {% if debug_warning %}
+                        <div class="alert alert-danger">
+                            {% trans "pretix is running in debug mode. For security reasons, please never run debug mode on a production instance." %}
+                        </div>
+                    {% endif %}
+
                     {% block content %}
                     {% endblock %}
                     <footer>
@@ -182,6 +188,9 @@
                                 powered by <a {{ a_attr }}>pretix</a>
                             {% endblocktrans %}
                         {% endwith %}
+                        {% if development_warning %}
+                            <span class="text-warning">&middot {% trans "running in development mode" %}</span>
+                        {% endif %}
                     </footer>
                 </div>
             </div>

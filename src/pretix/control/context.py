@@ -1,3 +1,4 @@
+import sys
 from django.conf import settings
 from django.core.urlresolvers import Resolver404, get_script_prefix, resolve
 
@@ -45,5 +46,10 @@ def contextprocessor(request):
     ctx['js_datetime_format'] = get_javascript_format('DATETIME_INPUT_FORMATS')
     ctx['js_date_format'] = get_javascript_format('DATE_INPUT_FORMATS')
     ctx['js_locale'] = get_moment_locale()
+
+    if settings.DEBUG and 'runserver' not in sys.argv:
+        ctx['debug_warning'] = True
+    elif 'runserver' in sys.argv:
+        ctx['development_warning'] = True
 
     return ctx
