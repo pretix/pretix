@@ -1,10 +1,8 @@
-{% extends "pretixcontrol/base.html" %}
+{% extends "pretixcontrol/global_settings_base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
 
-{% block title %}{% trans "Global settings" %}{% endblock %}
-{% block content %}
-    <h1>{% trans "Global settings" %}</h1>
+{% block inner %}
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
