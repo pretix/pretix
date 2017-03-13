@@ -80,17 +80,17 @@ class EventWizardBasicsForm(I18nModelForm):
             raise ValidationError({
                 'locale': _('Your default locale must also be enabled for your event (see box above).')
             })
-        if data['timezone'] not in common_timezones:
+        if data.get('timezone') not in common_timezones:
             raise ValidationError({
                 'timezone': _('Your default locale must be specified.')
             })
 
         # change timezone
-        zone = timezone(data['timezone'])
-        data['date_from'] = self.reset_timezone(zone, data['date_from'])
-        data['date_to'] = self.reset_timezone(zone, data['date_to'])
-        data['presale_start'] = self.reset_timezone(zone, data['presale_start'])
-        data['presale_end'] = self.reset_timezone(zone, data['presale_end'])
+        zone = timezone(data.get('timezone'))
+        data['date_from'] = self.reset_timezone(zone, data.get('date_from'))
+        data['date_to'] = self.reset_timezone(zone, data.get('date_to'))
+        data['presale_start'] = self.reset_timezone(zone, data.get('presale_start'))
+        data['presale_end'] = self.reset_timezone(zone, data.get('presale_end'))
         return data
 
     @staticmethod
