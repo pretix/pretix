@@ -67,7 +67,7 @@ def update_check():
             })
         else:
             rdata = r.json()
-            update_available = rdata['version']['updateable'] or any(p['updateable'] for p in rdata['plugins'].values())
+            update_available = rdata['version']['updatable'] or any(p['updatable'] for p in rdata['plugins'].values())
             gs.settings.set('update_check_result_warning', update_available)
             if update_available and rdata != gs.settings.update_check_result:
                 send_update_notification_email()
@@ -114,11 +114,11 @@ def check_result_table():
         return res
 
     table = []
-    table.append(('pretix', __version__, res['version']['latest'], res['version']['updateable']))
+    table.append(('pretix', __version__, res['version']['latest'], res['version']['updatable']))
     for p in get_all_plugins():
         if p.module in res['plugins']:
             pdata = res['plugins'][p.module]
-            table.append((_('Plugin: %s') % p.name, p.version, pdata['latest'], pdata['updateable']))
+            table.append((_('Plugin: %s') % p.name, p.version, pdata['latest'], pdata['updatable']))
         else:
             table.append((_('Plugin: %s') % p.name, p.version, '?', False))
 
