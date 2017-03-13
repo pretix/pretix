@@ -5,7 +5,7 @@ from django.core.validators import RegexValidator
 from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
-from pytz import common_timezones
+from pytz import common_timezones, timezone
 
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.models import Event, Organizer
@@ -80,7 +80,22 @@ class EventWizardBasicsForm(I18nModelForm):
             raise ValidationError({
                 'locale': _('Your default locale must also be enabled for your event (see box above).')
             })
+        if data.get('timezone') not in common_timezones:
+            raise ValidationError({
+                'timezone': _('Your default locale must be specified.')
+            })
+
+        # change timezone
+        zone = timezone(data.get('timezone'))
+        data['date_from'] = self.reset_timezone(zone, data.get('date_from'))
+        data['date_to'] = self.reset_timezone(zone, data.get('date_to'))
+        data['presale_start'] = self.reset_timezone(zone, data.get('presale_start'))
+        data['presale_end'] = self.reset_timezone(zone, data.get('presale_end'))
         return data
+
+    @staticmethod
+    def reset_timezone(tz, dt):
+        return tz.localize(dt.replace(tzinfo=None)) if dt is not None else None
 
     def clean_slug(self):
         slug = self.cleaned_data['slug']

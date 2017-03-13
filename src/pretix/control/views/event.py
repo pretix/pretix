@@ -14,6 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, ListView
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
+from pytz import timezone
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import (
@@ -88,9 +89,20 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid() and self.sform.is_valid():
+            # reset timezone
+            zone = timezone(self.sform.cleaned_data['timezone'])
+            event = form.instance
+            event.date_from = self.reset_timezone(zone, event.date_from)
+            event.date_to = self.reset_timezone(zone, event.date_to)
+            event.presale_start = self.reset_timezone(zone, event.presale_start)
+            event.presale_end = self.reset_timezone(zone, event.presale_end)
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+    @staticmethod
+    def reset_timezone(tz, dt):
+        return tz.localize(dt.replace(tzinfo=None)) if dt is not None else None
 
 
 class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):

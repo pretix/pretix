@@ -1,7 +1,9 @@
 import datetime
 from decimal import Decimal
 
+import pytz
 from i18nfield.strings import LazyI18nString
+from pytz import timezone
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import (
@@ -45,13 +47,33 @@ class EventsTest(SoupTest):
         doc = self.get_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug))
         doc.select("[name=date_to]")[0]['value'] = "2013-12-30 17:00:00"
         doc.select("[name=settings-max_items_per_order]")[0]['value'] = "12"
-        print(extract_form_fields(doc.select('.container-fluid form')[0]))
 
         doc = self.post_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug),
                             extract_form_fields(doc.select('.container-fluid form')[0]))
         assert len(doc.select(".alert-success")) > 0
         assert doc.select("[name=date_to]")[0]['value'] == "2013-12-30 17:00:00"
         assert doc.select("[name=settings-max_items_per_order]")[0]['value'] == "12"
+
+    def test_settings_timezone(self):
+        doc = self.get_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug))
+        doc.select("[name=date_to]")[0]['value'] = "2013-12-30 17:00:00"
+        doc.select("[name=settings-max_items_per_order]")[0]['value'] = "12"
+        doc.select("[name=settings-timezone]")[0]['value'] = "Asia/Tokyo"
+        doc.find('option', {"value": "Asia/Tokyo"})['selected'] = 'selected'
+        doc.find('option', {"value": "UTC"}).attrs.pop('selected')
+
+        doc = self.post_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug),
+                            extract_form_fields(doc.select('.container-fluid form')[0]))
+        assert len(doc.select(".alert-success")) > 0
+        # date_to should not be changed even though the timezone is changed
+        assert doc.select("[name=date_to]")[0]['value'] == "2013-12-30 17:00:00"
+        assert doc.find('option', {"value": "Asia/Tokyo"})['selected'] == "selected"
+        assert doc.select("[name=settings-max_items_per_order]")[0]['value'] == "12"
+
+        self.event1.refresh_from_db()
+        # Asia/Tokyo -> GMT+9
+        assert self.event1.date_to.strftime('%Y-%m-%d %H:%M:%S') == "2013-12-30 08:00:00"
+        assert self.event1.settings.timezone == 'Asia/Tokyo'
 
     def test_plugins(self):
         doc = self.get_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug))
@@ -295,4 +317,72 @@ class EventsTest(SoupTest):
         assert ev.currency == 'EUR'
         assert ev.settings.timezone == 'Europe/Berlin'
         assert ev.organizer == self.orga1
+        assert ev.location == LazyI18nString({'de': 'Hamburg', 'en': 'Hamburg'})
         assert EventPermission.objects.filter(event=ev, user=self.user).exists()
+
+        berlin_tz = timezone('Europe/Berlin')
+        assert ev.date_from == berlin_tz.localize(datetime.datetime(2016, 12, 27, 10, 0, 0)).astimezone(pytz.utc)
+        assert ev.date_to == berlin_tz.localize(datetime.datetime(2016, 12, 30, 19, 0, 0)).astimezone(pytz.utc)
+        assert ev.presale_start == berlin_tz.localize(datetime.datetime(2016, 11, 1, 10, 0, 0)).astimezone(pytz.utc)
+        assert ev.presale_end == berlin_tz.localize(datetime.datetime(2016, 11, 30, 18, 0, 0)).astimezone(pytz.utc)
+
+    def test_create_event_only_date_from(self):
+        # date_to, presale_start & presale_end are optional fields
+        self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'foundation',
+            'foundation-organizer': self.orga1.pk,
+            'foundation-locales': 'en'
+        })
+        self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'basics',
+            'basics-name_0': '33C3',
+            'basics-slug': '33c3',
+            'basics-date_from': '2016-12-27 10:00:00',
+            'basics-date_to': '',
+            'basics-location_0': 'Hamburg',
+            'basics-currency': 'EUR',
+            'basics-locale': 'en',
+            'basics-timezone': 'UTC',
+            'basics-presale_start': '',
+            'basics-presale_end': '',
+        })
+        self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'copy',
+            'copy-copy_from_event': ''
+        })
+
+        ev = Event.objects.get(slug='33c3')
+        assert ev.name == LazyI18nString({'en': '33C3'})
+        assert ev.settings.locales == ['en']
+        assert ev.settings.locale == 'en'
+        assert ev.currency == 'EUR'
+        assert ev.settings.timezone == 'UTC'
+        assert ev.organizer == self.orga1
+        assert ev.location == LazyI18nString({'en': 'Hamburg'})
+        assert EventPermission.objects.filter(event=ev, user=self.user).exists()
+        assert ev.date_from == datetime.datetime(2016, 12, 27, 10, 0, 0, tzinfo=pytz.utc)
+        assert ev.date_to is None
+        assert ev.presale_start is None
+        assert ev.presale_end is None
+
+    def test_create_event_missing_date_from(self):
+        # date_from is mandatory
+        self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'foundation',
+            'foundation-organizer': self.orga1.pk,
+            'foundation-locales': 'en'
+        })
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'basics',
+            'basics-name_0': '33C3',
+            'basics-slug': '33c3',
+            'basics-date_from': '',
+            'basics-date_to': '2016-12-30 19:00:00',
+            'basics-location_0': 'Hamburg',
+            'basics-currency': 'EUR',
+            'basics-locale': 'en',
+            'basics-timezone': 'Europe/Berlin',
+            'basics-presale_start': '2016-11-20 11:00:00',
+            'basics-presale_end': '2016-11-24 18:00:00',
+        })
+        assert doc.select(".alert-danger")
