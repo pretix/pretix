@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load eventurl %}
-{% if avail == 0 %}
+{% if avail <= 10 %}
     <div class="col-md-2 col-xs-6 availability-box gone">
         <strong>{% trans "SOLD OUT" %}</strong>
         {% if event.settings.waiting_list_enabled %}
