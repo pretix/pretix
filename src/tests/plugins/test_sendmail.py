@@ -95,3 +95,82 @@ def test_sendmail_simple_case(logged_in_client, sendmail_url, event, order):
 
     assert response.status_code == 200
     assert 'Test subject' in response.rendered_content
+
+
+@pytest.mark.django_db
+def test_sendmail_email_not_sent_to_order(logged_in_client, sendmail_url, event, order):
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'p',
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.'
+                                      },
+                                     follow=True)
+    assert 'alert-danger' in response.rendered_content
+
+    assert len(djmail.outbox) == 0
+
+
+@pytest.mark.django_db
+def test_sendmail_preview(logged_in_client, sendmail_url, event, order):
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      'action': 'preview'
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'E-mail preview' in response.rendered_content
+
+    assert len(djmail.outbox) == 0
+
+
+@pytest.mark.django_db
+def test_sendmail_invalid_data(logged_in_client, sendmail_url, event, order):
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'subject_0': 'Test subject',
+                                      },
+                                     follow=True)
+
+    assert 'help-block' in response.rendered_content
+
+    assert len(djmail.outbox) == 0
+
+
+@pytest.mark.django_db
+def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
+    djmail.outbox = []
+
+    o = Order.objects.create(event=item.event, status=Order.STATUS_PAID,
+                             expires=now() + datetime.timedelta(hours=1),
+                             total=13, code='DUMMY', email='dummy@dummy.test',
+                             datetime=now(), payment_provider='banktransfer',
+                             locale='de')
+    OrderPosition.objects.create(order=o, item=item, price=13)
+
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'p',
+                                      'subject_0': 'Benutzer',
+                                      'message_0': 'Test nachricht',
+                                      'subject_1': 'Test subject',
+                                      'message_1': 'Test message'
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [o.email]
+    assert djmail.outbox[0].subject == 'Benutzer'
+    assert 'Test nachricht' in djmail.outbox[0].body
+
+    url = sendmail_url + 'history/'
+    response = logged_in_client.get(url)
+
+    assert response.status_code == 200
+    assert 'Benutzer' in response.rendered_content
+    assert 'Test nachricht' in response.rendered_content
