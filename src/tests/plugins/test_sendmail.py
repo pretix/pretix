@@ -98,7 +98,7 @@ def test_sendmail_simple_case(logged_in_client, sendmail_url, event, order):
 
 
 @pytest.mark.django_db
-def test_sendmail_email_not_sent_to_order(logged_in_client, sendmail_url, event, order):
+def test_sendmail_email_not_sent_if_order_not_match(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'p',
