@@ -13,7 +13,7 @@ from pretix.base.models import (
 
 @pytest.fixture
 def event():
-    '''Returns an event instance'''
+    """Returns an event instance"""
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
@@ -25,19 +25,19 @@ def event():
 
 @pytest.fixture
 def item(event):
-    '''Returns an item instance'''
+    """Returns an item instance"""
     return Item.objects.create(name='Test item', event=event, default_price=13)
 
 
 @pytest.fixture
 def item_category(event):
-    '''Returns an item category instance'''
+    """Returns an item category instance"""
     return ItemCategory.objects.create(event=event)
 
 
 @pytest.fixture
 def order(item):
-    '''Returns an order instance'''
+    """Returns an order instance"""
     o = Order.objects.create(event=item.event, status=Order.STATUS_PENDING,
                              expires=now() + datetime.timedelta(hours=1),
                              total=13, code='DUMMY', email='dummy@dummy.test',
@@ -48,7 +48,7 @@ def order(item):
 
 @pytest.fixture
 def logged_in_client(client, event):
-    '''Returns a logged client'''
+    """Returns a logged client"""
     user = User.objects.create_superuser('dummy@dummy.dummy', 'dummy')
     OrganizerPermission.objects.create(organizer=event.organizer, user=user, can_create_events=True)
     EventPermission.objects.create(event=event, user=user, can_change_items=True,
@@ -59,7 +59,7 @@ def logged_in_client(client, event):
 
 @pytest.fixture
 def sendmail_url(event):
-    '''Returns a url for sendmail'''
+    """Returns a url for sendmail"""
     url = '/control/event/{orga}/{event}/sendmail/'.format(
         event=event.slug, orga=event.organizer.slug,
     )
@@ -136,7 +136,7 @@ def test_sendmail_invalid_data(logged_in_client, sendmail_url, event, order):
                                       },
                                      follow=True)
 
-    assert 'help-block' in response.rendered_content
+    assert 'has-error' in response.rendered_content
 
     assert len(djmail.outbox) == 0
 
@@ -144,6 +144,8 @@ def test_sendmail_invalid_data(logged_in_client, sendmail_url, event, order):
 @pytest.mark.django_db
 def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
     djmail.outbox = []
+
+    event.settings.set('locales', ['en', 'de'])
 
     o = Order.objects.create(event=item.event, status=Order.STATUS_PAID,
                              expires=now() + datetime.timedelta(hours=1),
@@ -154,10 +156,10 @@ def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
 
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'p',
-                                      'subject_0': 'Benutzer',
-                                      'message_0': 'Test nachricht',
-                                      'subject_1': 'Test subject',
-                                      'message_1': 'Test message'
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'Test message',
+                                      'subject_1': 'Benutzer',
+                                      'message_1': 'Test nachricht'
                                       },
                                      follow=True)
     assert response.status_code == 200
