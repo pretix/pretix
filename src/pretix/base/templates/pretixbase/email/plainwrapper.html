@@ -117,7 +117,7 @@
         <tr>
             <td class="header" background="">
                 {% if event %}
-                    <h1><a href="{% eventurl event "presale:event.index" %}" target="_blank">{{ event.name }}</a></h1>
+                    <h1><a href="{% abseventurl event "presale:event.index" %}" target="_blank">{{ event.name }}</a></h1>
                 {% else %}
                     <h1><a href="{{ site_url }}" target="_blank">{{ site }}</a></h1>
                 {% endif %}
@@ -141,7 +141,7 @@
                         <strong>{% trans "Event:" %}</strong> {{ event.name }}<br>
                         <strong>{% trans "Order code:" %}</strong> {{ order.code }}<br>
                         <strong>{% trans "Order date:" %}</strong> {{ order.datetime|date:"SHORT_DATE_FORMAT" }}<br>
-                        <a href="{% eventurl event "presale:event.order" order=order.code secret=order.secret %}">
+                        <a href="{% abseventurl event "presale:event.order" order=order.code secret=order.secret %}">
                             {% trans "View order details" %}
                         </a>
                     </div>
