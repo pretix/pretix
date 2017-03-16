@@ -3,7 +3,7 @@ import io
 from collections import OrderedDict
 
 from django import forms
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext as _, ugettext_lazy
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Order, OrderPosition, Question
@@ -16,7 +16,7 @@ class BaseCheckinList(BaseExporter):
 class CSVCheckinList(BaseCheckinList):
     name = "overview"
     identifier = 'checkinlistcsv'
-    verbose_name = _('Check-in list (CSV)')
+    verbose_name = ugettext_lazy('Check-in list (CSV)')
 
     @property
     def export_form_fields(self):

@@ -8,7 +8,7 @@ from django import forms
 from django.db.models import Sum
 from django.dispatch import receiver
 from django.utils.formats import localize
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext as _, ugettext_lazy
 
 from pretix.base.models import InvoiceAddress, Order, OrderPosition
 
@@ -18,7 +18,7 @@ from ..signals import register_data_exporters, register_payment_providers
 
 class OrderListExporter(BaseExporter):
     identifier = 'orderlistcsv'
-    verbose_name = _('List of orders (CSV)')
+    verbose_name = ugettext_lazy('List of orders (CSV)')
 
     @property
     def export_form_fields(self):

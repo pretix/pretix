@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from django import forms
 from django.dispatch import receiver
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from ..exporter import BaseExporter
 from ..models import Order
