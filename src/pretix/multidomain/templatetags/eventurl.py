@@ -6,12 +6,15 @@ from django.template.defaulttags import URLNode
 from django.utils.encoding import smart_text
 from django.utils.html import conditional_escape
 
+from pretix.multidomain.urlreverse import build_absolute_uri
+
 register = template.Library()
 
 
 class EventURLNode(URLNode):
-    def __init__(self, event, view_name, kwargs, asvar):
+    def __init__(self, event, view_name, kwargs, asvar, absolute):
         self.event = event
+        self.absolute = absolute
         super().__init__(view_name, [], kwargs, asvar)
 
     def render(self, context):
@@ -24,7 +27,10 @@ class EventURLNode(URLNode):
         event = self.event.resolve(context)
         url = ''
         try:
-            url = eventreverse(event, view_name, kwargs=kwargs)
+            if self.absolute:
+                url = build_absolute_uri(event, view_name, kwargs=kwargs)
+            else:
+                url = eventreverse(event, view_name, kwargs=kwargs)
         except NoReverseMatch:
             if self.asvar is None:
                 raise
@@ -39,7 +45,7 @@ class EventURLNode(URLNode):
 
 
 @register.tag
-def eventurl(parser, token):
+def eventurl(parser, token, absolute=False):
     """
     Similar to {% url %} in the same way that eventreverse() is similar to reverse().
 
@@ -68,4 +74,14 @@ def eventurl(parser, token):
             else:
                 raise TemplateSyntaxError('Event urls only have keyword arguments.')
 
-    return EventURLNode(event, viewname, kwargs, asvar)
+    return EventURLNode(event, viewname, kwargs, asvar, absolute)
+
+
+@register.tag
+def abseventurl(parser, token):
+    """
+    Similar to {% url %} in the same way that eventreverse() is similar to reverse().
+
+    Returns an absolute URL.
+    """
+    return eventurl(parser, token, absolute=True)
