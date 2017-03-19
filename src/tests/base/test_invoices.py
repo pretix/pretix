@@ -41,12 +41,14 @@ def env():
         item=ticket,
         variation=None,
         price=Decimal("23.00"),
+        positionid=1,
     )
     OrderPosition.objects.create(
         order=o,
         item=t_shirt,
         variation=variation,
         price=Decimal("42.00"),
+        positionid=2,
     )
     return event, o
 
