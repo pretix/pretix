@@ -66,6 +66,12 @@ nav.navbar .danger, nav.navbar .danger:hover, nav.navbar .danger:active {
             padding-left: 20px;
         }
     }
+
+    .addon-signifier {
+        display: inline-block;
+        padding-left: 10px;
+        font-weight: bold;
+    }
 }
 
 h1 .btn-sm {
@@ -220,4 +226,3 @@ body.loading #wrapper {
 .action-col-2 {
     min-width: 95px;
 }
-

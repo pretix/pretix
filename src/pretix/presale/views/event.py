@@ -46,6 +46,7 @@ def get_grouped_items(event):
         & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
         & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
         & Q(hide_without_voucher=False)
+        & ~Q(category__is_addon=True)
     ).select_related(
         'category',  # for re-grouping
     ).prefetch_related(

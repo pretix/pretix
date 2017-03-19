@@ -496,13 +496,19 @@ class OrderPosition(AbstractPosition):
         from . import Voucher
 
         ops = []
-        for i, cartpos in enumerate(cp):
+        cp_mapping = {}
+        # The sorting key ensures that all addons come directly after the position they refer to
+        for i, cartpos in enumerate(sorted(cp, key=lambda c: (c.addon_to_id or c.pk, c.addon_to_id or 0))):
             op = OrderPosition(order=order)
             for f in AbstractPosition._meta.fields:
-                setattr(op, f.name, getattr(cartpos, f.name))
+                if f.name == 'addon_to':
+                    setattr(op, f.name, cp_mapping.get(cartpos.addon_to_id))
+                else:
+                    setattr(op, f.name, getattr(cartpos, f.name))
             op._calculate_tax()
             op.positionid = i + 1
             op.save()
+            cp_mapping[cartpos.pk] = op
             for answ in cartpos.answers.all():
                 answ.orderposition = op
                 answ.cartposition = None

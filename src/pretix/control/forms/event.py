@@ -257,7 +257,8 @@ class EventSettingsForm(SettingsForm):
     )
     max_items_per_order = forms.IntegerField(
         min_value=1,
-        label=_("Maximum number of items per order")
+        label=_("Maximum number of items per order"),
+        help_text=_("Add-on products will not be counted.")
     )
     reservation_time = forms.IntegerField(
         min_value=0,
@@ -606,6 +607,10 @@ class TicketSettingsForm(SettingsForm):
         help_text=_("Ticket download will be offered after this date."),
         required=True,
         widget=forms.DateTimeInput(attrs={'class': 'datetimepicker'})
+    )
+    ticket_download_addons = forms.BooleanField(
+        label=_("Offer to download tickets separately for add-on products"),
+        required=False
     )
 
     def prepare_fields(self):

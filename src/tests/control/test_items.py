@@ -264,6 +264,7 @@ class ItemsTest(ItemFormTest):
                                          require_voucher=True, allow_cancel=False)
         self.var1 = ItemVariation.objects.create(item=self.item2, value="Silver")
         self.var2 = ItemVariation.objects.create(item=self.item2, value="Gold")
+        self.addoncat = ItemCategory.objects.create(event=self.event1, name="Item category")
 
     def test_move(self):
         self.client.post('/control/event/%s/%s/items/%s/down' % (self.orga1.slug, self.event1.slug, self.item1.id),)
@@ -294,6 +295,49 @@ class ItemsTest(ItemFormTest):
         })
         self.item1.refresh_from_db()
         assert self.item1.default_price == Decimal('23.00')
+
+    def test_manipulate_addons(self):
+        self.client.post('/control/event/%s/%s/items/%d/addons' % (self.orga1.slug, self.event1.slug, self.item2.id), {
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
+            'form-0-id': '',
+            'form-0-addon_category': str(self.addoncat.pk),
+            'form-0-min_count': '1',
+            'form-0-max_count': '2',
+        })
+        assert self.item2.addons.exists()
+        assert self.item2.addons.first().addon_category == self.addoncat
+        self.client.post('/control/event/%s/%s/items/%d/addons' % (self.orga1.slug, self.event1.slug, self.item2.id), {
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '1',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
+            'form-0-id': str(self.item2.addons.first().pk),
+            'form-0-addon_category': str(self.addoncat.pk),
+            'form-0-min_count': '1',
+            'form-0-max_count': '2',
+            'form-0-DELETE': 'on',
+        })
+        assert not self.item2.addons.exists()
+
+        # Do not allow duplicates
+        self.client.post('/control/event/%s/%s/items/%d/addons' % (self.orga1.slug, self.event1.slug, self.item2.id), {
+            'form-TOTAL_FORMS': '2',
+            'form-INITIAL_FORMS': '0',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
+            'form-0-id': '',
+            'form-0-addon_category': str(self.addoncat.pk),
+            'form-0-min_count': '1',
+            'form-0-max_count': '2',
+            'form-1-id': '',
+            'form-1-addon_category': str(self.addoncat.pk),
+            'form-1-min_count': '1',
+            'form-1-max_count': '2',
+        })
+        assert not self.item2.addons.exists()
 
     def test_update_variations(self):
         self.client.post('/control/event/%s/%s/items/%d/variations' % (self.orga1.slug, self.event1.slug, self.item2.id), {

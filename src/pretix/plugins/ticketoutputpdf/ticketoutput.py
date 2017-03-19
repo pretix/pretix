@@ -91,6 +91,8 @@ class PdfTicketOutput(BaseTicketOutput):
         buffer = BytesIO()
         p = self._create_canvas(buffer)
         for op in order.positions.all():
+            if op.addon_to_id and not self.event.settings.ticket_download_addons:
+                continue
             self._draw_page(p, op, order)
         p.save()
         outbuffer = self._render_with_background(buffer)

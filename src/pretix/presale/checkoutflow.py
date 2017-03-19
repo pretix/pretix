@@ -153,11 +153,12 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     @cached_property
     def forms(self):
         """
-        A list of forms with one form for each cart position that has questions
-        the user can answer. All forms have a custom prefix, so that they can all be
-        submitted at once.
+        A list of forms with one form for each cart position that can have add-ons.
+        All forms have a custom prefix, so that they can all be submitted at once.
         """
         formset = []
+        quota_cache = {}
+        item_cache = {}
         for cartpos in get_cart(self.request).filter(addon_to__isnull=True).prefetch_related(
             'item__addons', 'item__addons__addon_category', 'addons', 'addons__variation'
         ):
@@ -180,7 +181,9 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                         prefix='{}_{}'.format(cartpos.pk, iao.addon_category.pk),
                         category=iao.addon_category,
                         initial=current_addon_products,
-                        data=(self.request.POST if self.request.method == 'POST' else None)
+                        data=(self.request.POST if self.request.method == 'POST' else None),
+                        quota_cache=quota_cache,
+                        item_cache=item_cache
                     )
                 }
 
@@ -324,7 +327,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['forms'] = self.forms
+        ctx['formgroups'] = self.formdict.items()
         ctx['contact_form'] = self.contact_form
         ctx['invoice_form'] = self.invoice_form
         return ctx

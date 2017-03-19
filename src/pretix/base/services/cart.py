@@ -54,6 +54,7 @@ error_messages = {
     'addon_max_count': _('You can select at most %(max)s add-ons from the category %(cat)s for the product %(base)s.'),
     'addon_min_count': _('You need to select at least %(min)s add-ons from the category %(cat)s for the '
                          'product %(base)s.'),
+    'addon_only': _('One of the products you selected can only be bought as an add-on to another project.'),
 }
 
 
@@ -127,9 +128,10 @@ class CartManager:
         )
 
     def _check_max_cart_size(self):
-        cartsize = self.positions.count()
-        cartsize += sum([op.count for op in self._operations if isinstance(op, self.AddOperation)])
-        cartsize -= len([1 for op in self._operations if isinstance(op, self.RemoveOperation)])
+        cartsize = self.positions.filter(addon_to__isnull=True).count()
+        cartsize += sum([op.count for op in self._operations if isinstance(op, self.AddOperation) and not op.addon_to])
+        cartsize -= len([1 for op in self._operations if isinstance(op, self.RemoveOperation) if
+                         not op.position.addon_to_id])
         if cartsize > int(self.event.settings.max_items_per_order):
             # TODO: i18n plurals
             raise CartError(_(error_messages['max_items']) % (self.event.settings.max_items_per_order,))
@@ -149,6 +151,9 @@ class CartManager:
                 raise CartError(error_messages['voucher_invalid_item'])
 
         if isinstance(op, self.AddOperation):
+            if op.item.category and op.item.category.is_addon and not op.addon_to:
+                raise CartError(error_messages['addon_only'])
+
             if op.item.max_per_order or op.item.min_per_order:
                 new_total = (
                     len([1 for p in self.positions if p.item_id == op.item.pk]) +
@@ -297,19 +302,21 @@ class CartManager:
             [a['variation'] for a in addons],
         )
 
-        current_addons = defaultdict(dict)
-        input_addons = defaultdict(set)
-        selected_addons = defaultdict(set)
-        cpcache = {}
-        quota_diff = Counter()
+        # Prepare various containers to hold data later
+        current_addons = defaultdict(dict)  # CartPos -> currently attached add-ons
+        input_addons = defaultdict(set)  # CartPos -> add-ons according to input
+        selected_addons = defaultdict(set)  # CartPos -> final desired set of add-ons
+        cpcache = {}  # CartPos.pk -> CartPos
+        quota_diff = Counter()  # Quota -> Number of usages
         operations = []
-        available_categories = defaultdict(set)
+        available_categories = defaultdict(set)  # CartPos -> Category IDs to choose from
         toplevel_cp = self.positions.filter(
             addon_to__isnull=True
         ).prefetch_related(
             'addons', 'item__addons', 'item__addons__addon_category'
         ).select_related('item', 'variation')
 
+        # Prefill some of the cache containers
         for cp in toplevel_cp:
             available_categories[cp.pk] = {iao.addon_category_id for iao in cp.item.addons.all()}
             cpcache[cp.pk] = cp
@@ -318,6 +325,7 @@ class CartManager:
                 for a in cp.addons.all()
             }
 
+        # Create operations, perform various checks
         for a in addons:
             # Check whether the specified items are part of what we just fetched from the database
             # If they are not, the user supplied item IDs which either do not exist or belong to
@@ -325,6 +333,7 @@ class CartManager:
             if a['item'] not in self._items_cache or (a['variation'] and a['variation'] not in self._variations_cache):
                 raise CartError(error_messages['not_for_sale'])
 
+            # Only attach addons to things that are actually in this user's cart
             if a['addon_to'] not in cpcache:
                 raise CartError(error_messages['addon_invalid_base'])
 
@@ -340,6 +349,7 @@ class CartManager:
             if not quotas:
                 raise CartError(error_messages['unavailable'])
 
+            # Every item can be attached to very CartPosition at most once
             if a['item'] in ([_a[0] for _a in input_addons[cp.id]]):
                 raise CartError(error_messages['addon_duplicate_item'])
 
@@ -347,6 +357,7 @@ class CartManager:
             selected_addons[cp.id, item.category_id].add((a['item'], a['variation']))
 
             if (a['item'], a['variation']) not in current_addons[cp]:
+                # This add-on is new, add it to the cart
                 for quota in quotas:
                     quota_diff[quota] += 1
 
@@ -359,6 +370,7 @@ class CartManager:
                 self._check_item_constraints(op)
                 operations.append(op)
 
+        # Check constraints on the add-on combinations
         for cp in toplevel_cp:
             item = cp.item
             for iao in item.addons.all():
@@ -386,6 +398,7 @@ class CartManager:
                         }
                     )
 
+        # Detect removed add-ons and create RemoveOperations
         for cp, al in current_addons.items():
             for k, v in al.items():
                 if k not in input_addons[cp.id]:

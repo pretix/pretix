@@ -36,23 +36,28 @@
                     </div>
                 </div>
             {% endif %}
-            {% for form in forms %}
+            {% for pos, forms in formgroups %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#cp{{ form.pos.id }}"
-                                    data-parent="#questions_accordion">
-                                <strong>{{ form.pos.item }}</strong>
-                                {% if form.pos.variation %}
-                                    – {{ form.pos.variation }}
+                            <a data-toggle="collapse" href="#cp{{ pos.id }}">
+                                <strong>{{ pos.item.name }}</strong>
+                                {% if pos.variation %}
+                                    – {{ pos.variation }}
                                 {% endif %}
                             </a>
                         </h4>
                     </div>
-                    <div id="cp{{ form.pos.id }}"
-                            class="panel-collapse collapsed {% if forloop.counter0 == 0 %}in{% endif %}">
+                    <div id="cp{{ pos.id }}"
+                            class="panel-collapse collapsed in">
                         <div class="panel-body">
-                            {% bootstrap_form form layout="horizontal" %}
+                            {% for form in forms %}
+                                {% if form.pos.item != pos.item %}
+                                    {# Add-Ons #}
+                                    <legend>+ {{ form.pos.item }}</legend>
+                                {% endif %}
+                                {% bootstrap_form form layout="horizontal" %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

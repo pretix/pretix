@@ -3,6 +3,9 @@
 {% for line in cart.positions %}
     <div class="row cart-row {% if download %}has-downloads{% endif %}">
         <div class="product">
+            {% if line.addon_to %}
+                <span class="addon-signifier">+</span>
+            {% endif %}
             <strong>{{ line.item.name }}</strong>
             {% if line.variation %}
                 – {{ line.variation }}
@@ -32,12 +35,23 @@
 
         {% if download %}
             <div class="download-desktop">
-                {% for b in download_buttons %}
-                    <a href="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
-                            class="btn btn-default btn-sm" data-asyncdownload>
-                        <span class="fa fa-download"></span> {{ b.text }}
-                    </a>
-                {% endfor %}
+                {% if not line.addon_to or event.settings.ticket_download_addons %}
+                    {% for b in download_buttons %}
+                        <a href="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
+                                class="btn btn-default btn-sm" data-asyncdownload>
+                            <span class="fa fa-download"></span> {{ b.text }}
+                        </a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% elif line.addon_to %}
+            <div class="count">&nbsp;</div>
+            <div class="singleprice price">
+                {% if event.settings.display_net_prices %}
+                    {{ event.currency }} {{ line.net_price|floatformat:2 }}
+                {% else %}
+                    {{ event.currency }} {{ line.price|floatformat:2 }}
+                {% endif %}
             </div>
         {% else %}
             <div class="count">
@@ -67,7 +81,9 @@
                         <input type="hidden" name="price_{{ line.item.id }}"
                                 value="{% if event.settings.display_net_prices %}{{ line.net_price }}{% else %}{{ line.price }}{% endif %}" />
                     {% endif %}
-                    <button class="btn btn-mini btn-link"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-mini btn-link">
+                        <i class="fa fa-plus"></i>
+                    </button>
                 </form>
                 {% endif %}
             </div>
@@ -98,12 +114,14 @@
         </div>
         {% if download %}
             <div class="download-mobile">
-                {% for b in download_buttons %}
-                    <a href="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
-                       class="btn btn-default btn-sm" data-asyncdownload>
-                        <span class="fa fa-download"></span> {{ b.text }}
-                    </a>
-                {% endfor %}
+                {% if not line.addon_to or event.settings.ticket_download_addons %}
+                    {% for b in download_buttons %}
+                        <a href="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
+                           class="btn btn-default btn-sm" data-asyncdownload>
+                            <span class="fa fa-download"></span> {{ b.text }}
+                        </a>
+                    {% endfor %}
+                {% endif %}
             </div>
         {% endif %}
         <div class="clearfix"></div>

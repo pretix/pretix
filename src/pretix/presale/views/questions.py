@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django import forms
 from django.utils.functional import cached_property
 
@@ -8,8 +10,18 @@ from pretix.presale.views import get_cart
 
 class QuestionsViewMixin:
 
+    @staticmethod
+    def _keyfunc(pos):
+        # Sort addons after the item they are an addon to
+        if isinstance(pos, OrderPosition):
+            i = pos.addon_to.positionid if pos.addon_to else pos.positionid
+        else:
+            i = pos.addon_to.pk if pos.addon_to else pos.pk
+        addon_penalty = 1 if pos.addon_to else 0
+        return i, addon_penalty, pos.pk
+
     def _positions_for_questions(self):
-        return get_cart(self.request)
+        return sorted(get_cart(self.request), key=self._keyfunc)
 
     @cached_property
     def forms(self):
@@ -31,6 +43,17 @@ class QuestionsViewMixin:
             if len(form.fields) > 0:
                 formlist.append(form)
         return formlist
+
+    @cached_property
+    def formdict(self):
+        storage = defaultdict(list)
+        for f in self.forms:
+            pos = f.cartpos or f.orderpos
+            if pos.addon_to_id:
+                storage[pos.addon_to].append(f)
+            else:
+                storage[pos].append(f)
+        return storage
 
     def save(self):
         failed = False

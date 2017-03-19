@@ -11,6 +11,8 @@ from pretix.base.models import (
     CartPosition, Event, Item, ItemCategory, ItemVariation, Organizer,
     Question, QuestionAnswer, Quota, Voucher,
 )
+from pretix.base.models.items import ItemAddOn
+from pretix.base.services.cart import CartError, CartManager
 
 
 class CartTestMixin:
@@ -513,12 +515,12 @@ class CartTest(CartTestMixin, TestCase):
             event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
-        CartPosition.objects.create(
+        cp = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
-            'item_%d' % self.ticket.id: '1',
+            'id': cp.pk
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('less than', doc.select('.alert-danger')[0].text)
@@ -535,6 +537,17 @@ class CartTest(CartTestMixin, TestCase):
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('empty', doc.select('.alert-success')[0].text)
         self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
+
+    def test_remove_invalid(self):
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id='invalid', item=self.shirt, variation=self.shirt_red,
+            price=14, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
+            'id': cp.pk
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        assert doc.select('.alert-danger')
 
     def test_remove_one_of_multiple(self):
         cp = CartPosition.objects.create(
@@ -995,3 +1008,361 @@ class CartTest(CartTestMixin, TestCase):
         }, follow=True)
         positions = CartPosition.objects.filter(cart_id=self.session_key, event=self.event)
         assert positions.count() == 1
+
+
+class CartAddonTest(CartTestMixin, TestCase):
+    def setUp(self):
+        super().setUp()
+        self.workshopcat = ItemCategory.objects.create(name="Workshops", is_addon=True, event=self.event)
+        self.workshopquota = Quota.objects.create(event=self.event, name='Workshop 1', size=5)
+        self.workshop1 = Item.objects.create(event=self.event, name='Workshop 1',
+                                             category=self.workshopcat, default_price=12)
+        self.workshop2 = Item.objects.create(event=self.event, name='Workshop 2',
+                                             category=self.workshopcat, default_price=12)
+        self.workshop3 = Item.objects.create(event=self.event, name='Workshop 3',
+                                             category=self.workshopcat, default_price=12)
+        self.workshop3a = ItemVariation.objects.create(item=self.workshop3, value='3a')
+        self.workshop3b = ItemVariation.objects.create(item=self.workshop3, value='3b')
+        self.workshopquota.items.add(self.workshop1)
+        self.workshopquota.items.add(self.workshop2)
+        self.workshopquota.items.add(self.workshop3)
+        self.workshopquota.variations.add(self.workshop3a)
+        self.workshopquota.variations.add(self.workshop3b)
+        self.addon1 = ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat)
+        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+
+    def test_cart_set_simple_addon(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            }
+        ])
+        self.cm.commit()
+        cp2 = cp1.addons.first()
+        assert cp2.item == self.workshop1
+
+    def test_wrong_category(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        self.workshop1.category = self.category
+        self.workshop1.save()
+        with self.assertRaises(CartError):
+            self.cm.set_addons([
+                {
+                    'addon_to': cp1.pk,
+                    'item': self.workshop1.pk,
+                    'variation': None
+                }
+            ])
+
+    def test_invalid_parent(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id='other'
+        )
+        with self.assertRaises(CartError):
+            self.cm.set_addons([
+                {
+                    'addon_to': cp1.pk,
+                    'item': self.workshop1.pk,
+                    'variation': None
+                }
+            ])
+
+    def test_no_quota_for_addon(self):
+        self.workshopquota.delete()
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        with self.assertRaises(CartError):
+            self.cm.set_addons([
+                {
+                    'addon_to': cp1.pk,
+                    'item': self.workshop1.pk,
+                    'variation': None
+                }
+            ])
+
+    def test_unknown_addon_item(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        with self.assertRaises(CartError):
+            self.cm.set_addons([
+                {
+                    'addon_to': cp1.pk,
+                    'item': 99999,
+                    'variation': None
+                }
+            ])
+
+    def test_duplicate_items_for_other_cp(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        cp2 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            }
+        ])
+        self.cm.set_addons([
+            {
+                'addon_to': cp2.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            }
+        ])
+        self.cm.commit()
+
+    def test_no_duplicate_items_for_same_cp(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        self.addon1.max_count = 2
+        self.addon1.save()
+        with self.assertRaises(CartError):
+            self.cm.set_addons([
+                {
+                    'addon_to': cp1.pk,
+                    'item': self.workshop1.pk,
+                    'variation': None
+                },
+                {
+                    'addon_to': cp1.pk,
+                    'item': self.workshop1.pk,
+                    'variation': None
+                }
+            ])
+        with self.assertRaises(CartError):
+            self.cm.set_addons([
+                {
+                    'addon_to': cp1.pk,
+                    'item': self.workshop3.pk,
+                    'variation': self.workshop3a.pk
+                },
+                {
+                    'addon_to': cp1.pk,
+                    'item': self.workshop3.pk,
+                    'variation': self.workshop3b.pk
+                }
+            ])
+
+    def test_addon_max_count(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        with self.assertRaises(CartError):
+            self.cm.set_addons([
+                {
+                    'addon_to': cp1.pk,
+                    'item': self.workshop1.pk,
+                    'variation': None
+                },
+                {
+                    'addon_to': cp1.pk,
+                    'item': self.workshop2.pk,
+                    'variation': None
+                }
+            ])
+
+        self.addon1.max_count = 2
+        self.addon1.save()
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            },
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop2.pk,
+                'variation': None
+            }
+        ])
+
+    def test_addon_min_count(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        self.addon1.min_count = 2
+        self.addon1.max_count = 9
+        self.addon1.save()
+        with self.assertRaises(CartError):
+            self.cm.set_addons([
+                {
+                    'addon_to': cp1.pk,
+                    'item': self.workshop2.pk,
+                    'variation': None
+                }
+            ])
+
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            },
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop2.pk,
+                'variation': None
+            }
+        ])
+
+    def test_remove_addons(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        cp2 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.workshop1, price=Decimal('12.00'),
+            event=self.event, cart_id=self.session_key, addon_to=cp1
+        )
+        self.cm.set_addons([])
+        self.cm.commit()
+        assert not CartPosition.objects.filter(pk=cp2.pk).exists()
+
+    def test_remove_addons_below_min(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        cp2 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.workshop1, price=Decimal('12.00'),
+            event=self.event, cart_id=self.session_key, addon_to=cp1
+        )
+        self.addon1.min_count = 1
+        self.addon1.save()
+        with self.assertRaises(CartError):
+            self.cm.set_addons([])
+            self.cm.commit()
+        assert CartPosition.objects.filter(pk=cp2.pk).exists()
+
+    def test_change_product(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.workshop1, price=Decimal('12.00'),
+            event=self.event, cart_id=self.session_key, addon_to=cp1
+        )
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop2.pk,
+                'variation': None
+            }
+        ])
+        self.cm.commit()
+        cp1.refresh_from_db()
+        assert cp1.addons.count() == 1
+        assert cp1.addons.first().item == self.workshop2
+
+    def test_unchanged(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.workshop1, price=Decimal('12.00'),
+            event=self.event, cart_id=self.session_key, addon_to=cp1
+        )
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            }
+        ])
+        assert not self.cm._operations
+
+    def test_exceed_max(self):
+        self.event.settings.max_items_per_order = 1
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            }
+        ])
+        self.cm.commit()
+
+    def test_sold_out(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        self.workshopquota.size = 0
+        self.workshopquota.save()
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            }
+        ])
+        with self.assertRaises(CartError):
+            self.cm.commit()
+
+    def test_sold_out_unchanged(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.workshop1, price=Decimal('12.00'),
+            event=self.event, cart_id=self.session_key, addon_to=cp1
+        )
+        self.workshopquota.size = 0
+        self.workshopquota.save()
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            }
+        ])
+        self.cm.commit()
+
+    def test_expand_expired(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() - timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        cp2 = CartPosition.objects.create(
+            expires=now() - timedelta(minutes=10), item=self.workshop1, price=Decimal('12.00'),
+            event=self.event, cart_id=self.session_key, addon_to=cp1
+        )
+        self.cm.extend_expired_positions()
+        self.cm.commit()
+        cp1.refresh_from_db()
+        cp2.refresh_from_db()
+        assert cp1.expires > now()
+        assert cp2.expires > now()
+        assert cp2.addon_to_id == cp1.pk

@@ -166,7 +166,11 @@
                     {% for line in items.positions %}
                         <div class="row-fluid product-row">
                             <div class="col-md-9 col-xs-6">
-                                #{{ line.positionid }} –
+                                {% if line.addon_to %}
+                                    <span class="addon-signifier">+</span>
+                                {% else %}
+                                    #{{ line.positionid }} –
+                                {% endif %}
                                 <strong>{{ line.item.name }}</strong>
                                 {% if line.variation %}
                                     – {{ line.variation }}

@@ -70,6 +70,7 @@ class JSONExporter(BaseExporter):
                                 'attendee_name': position.attendee_name,
                                 'attendee_email': position.attendee_email,
                                 'secret': position.secret,
+                                'addon_to': position.addon_to_id,
                                 'answers': [
                                     {
                                         'question': answer.question_id,

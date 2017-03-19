@@ -48,6 +48,13 @@
                         {% if position.variation %}
                             – {{ position.variation }}
                         {% endif %}
+                        {% if position.addon_to %}
+                            – <em>
+                                {% blocktrans trimmed with posid=position.addon_to.positionid %}
+                                    Add-On to position #{{ posid }}
+                                {% endblocktrans %}
+                            </em>
+                        {% endif %}
                     </h3>
                 </div>
                 <div class="panel-body">
@@ -89,6 +96,11 @@
                                 <input name="{{ position.form.prefix }}-operation" type="radio" value="cancel"
                                         {% if position.form.operation.value == "cancel" %}checked="checked"{% endif %}>
                                 {% trans "Remove from order" %}
+                                {% if position.addons.exists %}
+                                    <em class="text-danger">
+                                        {% trans "Removing this position will also remove all add-ons to this position." %}
+                                    </em>
+                                {% endif %}
                             </label>
                         </div>
                     </div>
