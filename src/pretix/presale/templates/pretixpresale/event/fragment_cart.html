@@ -45,19 +45,10 @@
                 <form action="{% eventurl event "presale:event.cart.remove" %}"
                         method="post" data-asynctask>
                     {% csrf_token %}
-
-                    {% if line.variation %}
-                        <input type="hidden" name="variation_{{ line.item.id }}_{{ line.variation.id }}"
-                                value="1" />
-                        <input type="hidden" name="price_{{ line.item.id }}_{{ line.variation.id }}"
-                                value="{{ line.price }}" />
-                    {% else %}
-                        <input type="hidden" name="item_{{ line.item.id }}"
-                                value="1" />
-                        <input type="hidden" name="price_{{ line.item.id }}"
-                                value="{{ line.price }}" />
-                    {% endif %}
-                    <button class="btn btn-mini btn-link"><i class="fa fa-minus"></i></button>
+                    <input type="hidden" name="id" value="{{ line.id }}" />
+                    <button class="btn btn-mini btn-link">
+                        <i class="fa fa-minus"></i>
+                    </button>
                 </form>
                 {% endif %}
                 {{ line.count }}

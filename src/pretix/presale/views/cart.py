@@ -10,7 +10,7 @@ from django.views.generic import TemplateView, View
 from pretix.base.decimal import round_decimal
 from pretix.base.models import CartPosition, Quota, Voucher
 from pretix.base.services.cart import (
-    CartError, add_items_to_cart, remove_items_from_cart,
+    CartError, add_items_to_cart, clear_cart, remove_cart_position,
 )
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import EventViewMixin
@@ -105,19 +105,18 @@ class CartActionMixin:
 
 
 class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
-    task = remove_items_from_cart
+    task = remove_cart_position
     known_errortypes = ['CartError']
 
     def get_success_message(self, value):
         if CartPosition.objects.filter(cart_id=self.request.session.session_key).exists():
             return _('Your cart has been updated.')
         else:
-            return _('Your cart is empty.')
+            return _('Your cart is now empty.')
 
     def post(self, request, *args, **kwargs):
-        items = self._items_from_post_data()
-        if items:
-            return self.do(self.request.event.id, items, self.request.session.session_key, translation.get_language())
+        if 'id' in request.POST:
+            return self.do(self.request.event.id, request.POST.get('id'), self.request.session.session_key, translation.get_language())
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
@@ -125,6 +124,17 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
                 })
             else:
                 return redirect(self.get_error_url())
+
+
+class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
+    task = clear_cart
+    known_errortypes = ['CartError']
+
+    def get_success_message(self, value):
+        return _('Your cart is now empty.')
+
+    def post(self, request, *args, **kwargs):
+        return self.do(self.request.event.id, self.request.session.session_key, translation.get_language())
 
 
 class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
