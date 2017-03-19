@@ -199,7 +199,7 @@ class QuotaTestCase(BaseQuotaTestCase):
 
         v.block_quota = True
         v.save()
-        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_RESERVED, 0))
 
     def test_voucher_variation(self):
         self.quota.variations.add(self.var1)
@@ -212,7 +212,7 @@ class QuotaTestCase(BaseQuotaTestCase):
 
         v.block_quota = True
         v.save()
-        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_RESERVED, 0))
 
     def test_voucher_quota(self):
         self.quota.variations.add(self.var1)
@@ -225,7 +225,7 @@ class QuotaTestCase(BaseQuotaTestCase):
 
         v.block_quota = True
         v.save()
-        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_RESERVED, 0))
 
     def test_voucher_quota_multiuse(self):
         self.quota.size = 5
@@ -234,7 +234,7 @@ class QuotaTestCase(BaseQuotaTestCase):
         Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, max_usages=5, redeemed=2)
         self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 2))
         Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, max_usages=2)
-        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_RESERVED, 0))
 
     def test_voucher_multiuse_count_overredeemed(self):
         if 'sqlite' not in settings.DATABASES['default']['ENGINE']:
@@ -266,7 +266,7 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.quota.save()
         Voucher.objects.create(quota=self.quota, event=self.event, valid_until=now() + timedelta(days=5),
                                block_quota=True)
-        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_RESERVED, 0))
 
     def test_voucher_quota_expired(self):
         self.quota.variations.add(self.var1)
