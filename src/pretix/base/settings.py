@@ -159,6 +159,10 @@ DEFAULTS = {
         'default': None,
         'type': datetime
     },
+    'ticket_download_addons': {
+        'default': 'False',
+        'type': bool
+    },
     'last_order_modification_date': {
         'default': None,
         'type': datetime

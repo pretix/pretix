@@ -29,35 +29,45 @@ class CartMixin:
             cartpos = queryset.order_by(
                 'item', 'variation'
             ).select_related(
-                'item', 'variation'
+                'item', 'variation', 'addon_to'
             ).prefetch_related(
                 *prefetch
             )
         else:
             cartpos = self.positions
 
+        lcp = list(cartpos)
+        has_addons = {cp.addon_to.pk for cp in lcp if cp.addon_to}
+
         # Group items of the same variation
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
         def keyfunc(pos):
             if isinstance(pos, OrderPosition):
-                i = pos.positionid
+                if pos.addon_to:
+                    i = pos.addon_to.positionid
+                else:
+                    i = pos.positionid
             else:
-                i = pos.pk
-            if downloads:
-                return i, pos.pk, 0, 0, 0, 0,
+                if pos.addon_to:
+                    i = pos.addon_to.pk
+                else:
+                    i = pos.pk
 
             has_attendee_data = pos.item.admission and (
                 self.request.event.settings.attendee_names_asked
                 or self.request.event.settings.attendee_emails_asked
             )
-
+            addon_penalty = 1 if pos.addon_to else 0
+            if downloads or pos.pk in has_addons or pos.addon_to:
+                return i, addon_penalty, pos.pk, 0, 0, 0, 0,
             if answers and (has_attendee_data or pos.item.questions.all()):
-                return i, pos.pk, 0, 0, 0, 0,
-            return 0, 0, pos.item_id, pos.variation_id, pos.price, (pos.voucher_id or 0)
+                return i, addon_penalty, pos.pk, 0, 0, 0, 0,
+
+            return 0, addon_penalty, 0, pos.item_id, pos.variation_id, pos.price, (pos.voucher_id or 0)
 
         positions = []
-        for k, g in groupby(sorted(list(cartpos), key=keyfunc), key=keyfunc):
+        for k, g in groupby(sorted(lcp, key=keyfunc), key=keyfunc):
             g = list(g)
             group = g[0]
             group.count = len(g)

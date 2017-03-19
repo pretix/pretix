@@ -76,6 +76,9 @@ class VoucherForm(I18nModelForm):
             else:
                 self.instance.variation = None
             self.instance.quota = None
+
+            if self.instance.item.category and self.instance.item.category.is_addon:
+                raise ValidationError(_('It is currently not possible to create vouchers for add-on products.'))
         else:
             self.instance.quota = Quota.objects.get(pk=quotaid, event=self.instance.event)
             self.instance.item = None

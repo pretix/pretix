@@ -265,3 +265,7 @@ class ItemAddOnForm(I18nModelForm):
             'min_count',
             'max_count',
         ]
+        help_texts = {
+            'min_count': _('Be aware that setting a minimal number makes it impossible to buy this product if all '
+                           'available add-ons are sold out.')
+        }

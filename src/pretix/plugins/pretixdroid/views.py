@@ -74,7 +74,7 @@ class ApiRedeemView(ApiView):
         try:
             with transaction.atomic():
                 created = False
-                op = OrderPosition.objects.select_related('item', 'variation', 'order').get(
+                op = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').get(
                     order__event=self.event, secret=secret
                 )
                 if op.order.status == Order.STATUS_PAID:
@@ -105,7 +105,7 @@ class ApiRedeemView(ApiView):
                 'order': op.order.code,
                 'item': str(op.item),
                 'variation': str(op.variation) if op.variation else None,
-                'attendee_name': op.attendee_name
+                'attendee_name': op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
             }
 
         except OrderPosition.DoesNotExist:
@@ -136,7 +136,7 @@ class ApiSearchView(ApiView):
                     'order': op.order.code,
                     'item': str(op.item),
                     'variation': str(op.variation) if op.variation else None,
-                    'attendee_name': op.attendee_name,
+                    'attendee_name': op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
                     'redeemed': bool(op.checkins.all()),
                     'paid': op.order.status == Order.STATUS_PAID,
                 } for op in ops

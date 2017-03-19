@@ -72,6 +72,8 @@ def build_invoice(invoice: Invoice) -> Invoice:
             desc = str(p.item.name)
             if p.variation:
                 desc += " - " + str(p.variation.value)
+            if p.addon_to_id:
+                desc = "  + " + desc
             InvoiceLine.objects.create(
                 invoice=invoice, description=desc,
                 gross_value=p.price, tax_value=p.tax_value,

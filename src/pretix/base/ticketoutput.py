@@ -51,10 +51,15 @@ class BaseTicketOutput:
         This method should generate a download file and return a tuple consisting of a
         filename, a file type and file content. The extension will be taken from the filename
         which is otherwise ignored.
+
+        If you override this method, make sure that positions that are addons (i.e. ``addon_to``
+        is set) are only outputted if the event setting ``ticket_download_addons`` is active.
         """
         with tempfile.TemporaryDirectory() as d:
             with ZipFile(os.path.join(d, 'tmp.zip'), 'w') as zipf:
                 for pos in order.positions.all():
+                    if pos.addon_to_id and not self.event.settings.ticket_download_addons:
+                        continue
                     fname, __, content = self.generate(pos)
                     zipf.writestr('{}-{}{}'.format(
                         order.code, pos.positionid, os.path.splitext(fname)[1]

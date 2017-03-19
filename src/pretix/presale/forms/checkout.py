@@ -59,8 +59,8 @@ class QuestionsForm(forms.Form):
         :param cartpos: The cart position the form should be for
         :param event: The event this belongs to
         """
-        cartpos = kwargs.pop('cartpos', None)
-        orderpos = kwargs.pop('orderpos', None)
+        cartpos = self.cartpos = kwargs.pop('cartpos', None)
+        orderpos = self.orderpos = kwargs.pop('orderpos', None)
         item = cartpos.item if cartpos else orderpos.item
         questions = list(item.questions.all())
         event = kwargs.pop('event')
@@ -151,7 +151,7 @@ class AddOnsForm(forms.Form):
     This form class is responsible for selecting add-ons to a product in the cart.
     """
 
-    def _label(self, event, item_or_variation):
+    def _label(self, event, item_or_variation, avail):
         if isinstance(item_or_variation, ItemVariation):
             variation = item_or_variation
             item = item_or_variation.item
@@ -165,19 +165,26 @@ class AddOnsForm(forms.Form):
             label = item.name
 
         if not item.tax_rate or not price:
-            return '{name} (+ {currency} {price})'.format(
+            n = '{name} (+ {currency} {price})'.format(
                 name=label, currency=event.currency, price=number_format(price)
             )
         elif event.settings.display_net_prices:
-            return '{name} (+ {currency} {price} plus {taxes}% taxes)'.format(
+            n = '{name} (+ {currency} {price} plus {taxes}% taxes)'.format(
                 name=label, currency=event.currency, price=number_format(price_net),
                 taxes=number_format(item.tax_rate)
             )
         else:
-            return '{name} (+ {currency} {price} incl. {taxes}% taxes)'.format(
+            n = '{name} (+ {currency} {price} incl. {taxes}% taxes)'.format(
                 name=label, currency=event.currency, price=number_format(price),
                 taxes=number_format(item.tax_rate)
             )
+
+        if avail[0] < 20:
+            n += ' – {}'.format(_('SOLD OUT'))
+        elif avail[0] < 100:
+            n += ' – {}'.format(_('Currently unavailable'))
+
+        return n
 
     def __init__(self, *args, **kwargs):
         """
@@ -185,49 +192,62 @@ class AddOnsForm(forms.Form):
 
         :param category: The category to choose from
         :param event: The event this belongs to
+        :param initial: The current set of add-ons
+        :param quota_cache: A shared dictionary for quota caching
+        :param item_cache: A shared dictionary for item/category caching
         """
         category = kwargs.pop('category')
         event = kwargs.pop('event')
         current_addons = kwargs.pop('initial')
+        quota_cache = kwargs.pop('quota_cache')
+        item_cache = kwargs.pop('item_cache')
 
         super().__init__(*args, **kwargs)
 
-        items = category.items.filter(
-            Q(active=True)
-            & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
-            & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
-            & Q(hide_without_voucher=False)
-        ).prefetch_related(
-            'variations__quotas',  # for .availability()
-            Prefetch('quotas', queryset=event.quotas.all()),
-            Prefetch('variations', to_attr='available_variations',
-                     queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).distinct()),
-        ).annotate(
-            quotac=Count('quotas'),
-            has_variations=Count('variations')
-        ).filter(
-            quotac__gt=0
-        ).order_by('category__position', 'category_id', 'position', 'name')
+        if category.pk not in item_cache:
+            # Get all items to possibly show
+            items = category.items.filter(
+                Q(active=True)
+                & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
+                & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+                & Q(hide_without_voucher=False)
+            ).prefetch_related(
+                'variations__quotas',  # for .availability()
+                Prefetch('quotas', queryset=event.quotas.all()),
+                Prefetch('variations', to_attr='available_variations',
+                         queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).distinct()),
+            ).annotate(
+                quotac=Count('quotas'),
+                has_variations=Count('variations')
+            ).filter(
+                quotac__gt=0
+            ).order_by('category__position', 'category_id', 'position', 'name')
+            item_cache[category.pk] = items
+        else:
+            items = item_cache[category.pk]
 
         for i in items:
             if i.has_variations:
+                choices = [('', '–')]
+                for v in i.available_variations:
+                    cached_availability = v.check_quotas(_cache=quota_cache)
+                    choices.append((v.pk, self._label(event, v, cached_availability)))
+
                 field = forms.ChoiceField(
-                    choices=[('', '–')] + [
-                        (
-                            v.pk,
-                            self._label(event, v)
-                        ) for v in i.available_variations
-                    ],
+                    choices=choices,
                     label=i.name,
                     required=False,
                     widget=forms.RadioSelect,
+                    help_text=i.description,
                     initial=current_addons.get(i.pk)
                 )
             else:
+                cached_availability = i.check_quotas(_cache=quota_cache)
                 field = forms.BooleanField(
-                    label=self._label(event, i),
+                    label=self._label(event, i, cached_availability),
                     required=False,
-                    initial=i.pk in current_addons
+                    initial=i.pk in current_addons,
+                    help_text=i.description
                 )
 
             self.fields['item_%s' % i.pk] = field

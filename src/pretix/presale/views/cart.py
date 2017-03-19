@@ -171,6 +171,7 @@ class RedeemView(EventViewMixin, TemplateView):
             Q(active=True)
             & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
             & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+            & ~Q(category__is_addon=True)
         )
 
         vouchq = Q(hide_without_voucher=False)

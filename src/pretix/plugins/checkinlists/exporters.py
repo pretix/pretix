@@ -3,6 +3,7 @@ import io
 from collections import OrderedDict
 
 from django import forms
+from django.db.models.functions import Coalesce
 from django.utils.translation import ugettext as _, ugettext_lazy
 
 from pretix.base.exporter import BaseExporter
@@ -70,10 +71,10 @@ class CSVCheckinList(BaseCheckinList):
             order__event=self.event, item_id__in=form_data['items']
         ).prefetch_related(
             'answers', 'answers__question'
-        ).select_related('order', 'item', 'variation')
+        ).select_related('order', 'item', 'variation', 'addon_to')
 
         if form_data['sort'] == 'name':
-            qs = qs.order_by('attendee_name')
+            qs = qs.order_by(Coalesce('attendee_name', 'addon_to__attendee_name'))
         elif form_data['sort'] == 'code':
             qs = qs.order_by('order__code')
 
@@ -100,7 +101,7 @@ class CSVCheckinList(BaseCheckinList):
         for op in qs:
             row = [
                 op.order.code,
-                op.attendee_name,
+                op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
                 str(op.item.name) + (" – " + str(op.variation.value) if op.variation else ""),
                 op.price,
             ]
@@ -109,7 +110,7 @@ class CSVCheckinList(BaseCheckinList):
             if form_data['secrets']:
                 row.append(op.secret)
             if self.event.settings.attendee_emails_asked:
-                row.append(op.attendee_email)
+                row.append(op.attendee_email or (op.addon_to.attendee_name if op.addon_to else ''))
             acache = {}
             for a in op.answers.all():
                 acache[a.question_id] = str(a)

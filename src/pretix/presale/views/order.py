@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import Sum
-from django.http import FileResponse, Http404, HttpResponse
+from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -392,9 +392,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
 
     @cached_property
     def positions(self):
-        return list(self.order.positions.order_by(
-            'item', 'variation'
-        ).select_related(
+        return list(self.order.positions.select_related(
             'item', 'variation'
         ).prefetch_related(
             'variation', 'item__questions', 'answers'
@@ -445,7 +443,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
-        ctx['forms'] = self.forms
+        ctx['formgroups'] = self.formdict.items()
         ctx['invoice_form'] = self.invoice_form
         return ctx
 
@@ -501,6 +499,12 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
 
 class OrderDownload(EventViewMixin, OrderDetailMixin, View):
 
+    def get_self_url(self):
+        return eventreverse(self.request.event,
+                            'presale:event.order.download' if 'position' in self.kwargs
+                            else 'presale:event.order.download.combined',
+                            kwargs=self.kwargs)
+
     @cached_property
     def output(self):
         responses = register_ticket_outputs.send(self.request.event)
@@ -516,20 +520,30 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
         except OrderPosition.DoesNotExist:
             return None
 
+    def error(self, msg):
+        messages.error(self.request, msg)
+        if "ajax" in self.request.POST or "ajax" in self.request.GET:
+            return JsonResponse({
+                'ready': True,
+                'success': False,
+                'redirect': self.get_order_url(),
+                'message': msg,
+            })
+        return redirect(self.get_order_url())
+
     def get(self, request, *args, **kwargs):
         if not self.output or not self.output.is_enabled:
-            messages.error(request, _('You requested an invalid ticket output type.'))
-            return redirect(self.get_order_url())
+            return self.error(_('You requested an invalid ticket output type.'))
         if not self.order or ('position' in kwargs and not self.order_position):
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         if self.order.status != Order.STATUS_PAID:
-            messages.error(request, _('Order is not paid.'))
-            return redirect(self.get_order_url())
+            return self.error(_('Order is not paid.'))
         if (not self.request.event.settings.ticket_download
             or (self.request.event.settings.ticket_download_date is not None
                 and now() < self.request.event.settings.ticket_download_date)):
-            messages.error(request, _('Ticket download is not (yet) enabled.'))
-            return redirect(self.get_order_url())
+            return self.error(_('Ticket download is not (yet) enabled.'))
+        if 'position' in kwargs and (self.order_position.addon_to and not self.request.event.settings.ticket_download_addons):
+            return self.error(_('Ticket download is not enabled for add-on products.'))
 
         if 'position' in kwargs:
             return self._download_position()
@@ -555,7 +569,11 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
                 generate_order.apply_async(args=(self.order.id, self.output.identifier))
 
         if 'ajax' in self.request.GET:
-            return HttpResponse('1' if ct and ct.file else '0')
+            return JsonResponse({
+                'ready': bool(ct and ct.file),
+                'success': False,
+                'redirect': self.get_self_url()
+            })
         elif not ct.file:
             return render(self.request, "pretixbase/cachedfiles/pending.html", {})
         else:
@@ -584,7 +602,11 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
                 generate.apply_async(args=(self.order_position.id, self.output.identifier))
 
         if 'ajax' in self.request.GET:
-            return HttpResponse('1' if ct and ct.file else '0')
+            return JsonResponse({
+                'ready': bool(ct and ct.file),
+                'success': False,
+                'redirect': self.get_self_url()
+            })
         elif not ct.file:
             return render(self.request, "pretixbase/cachedfiles/pending.html", {})
         else:

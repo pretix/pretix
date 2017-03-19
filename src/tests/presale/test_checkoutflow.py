@@ -76,10 +76,11 @@ def test_plugin_in_order(event, mocker):
         priority = 100
 
     flow = with_mocked_step(mocker, MockingStep, event)
-    assert isinstance(flow[0], checkoutflow.QuestionsStep)
-    assert isinstance(flow[1], MockingStep)
-    assert isinstance(flow[2], checkoutflow.PaymentStep)
-    assert isinstance(flow[3], checkoutflow.ConfirmStep)
+    assert isinstance(flow[0], checkoutflow.AddOnsStep)
+    assert isinstance(flow[1], checkoutflow.QuestionsStep)
+    assert isinstance(flow[2], MockingStep)
+    assert isinstance(flow[3], checkoutflow.PaymentStep)
+    assert isinstance(flow[4], checkoutflow.ConfirmStep)
 
 
 @pytest.mark.django_db
@@ -93,8 +94,8 @@ def test_step_ignored(event, mocker, req_with_session):
 
     flow = with_mocked_step(mocker, MockingStep, event)
     req_with_session.event = event
-    assert flow[0].get_next_applicable(req_with_session) is flow[2]
-    assert flow[0] is flow[2].get_prev_applicable(req_with_session)
+    assert flow[1].get_next_applicable(req_with_session) is flow[3]
+    assert flow[1] is flow[3].get_prev_applicable(req_with_session)
 
 
 @pytest.mark.django_db

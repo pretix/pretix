@@ -18,7 +18,7 @@ event_patterns = [
     url(r'^cart/clear$', pretix.presale.views.cart.CartClear.as_view(), name='event.cart.clear'),
     url(r'^waitinglist', pretix.presale.views.waiting.WaitingView.as_view(), name='event.waitinglist'),
     url(r'^checkout/start$', pretix.presale.views.checkout.CheckoutView.as_view(), name='event.checkout.start'),
-    url(r'^redeem$', pretix.presale.views.cart.RedeemView.as_view(),
+    url(r'^redeem/?$', pretix.presale.views.cart.RedeemView.as_view(),
         name='event.redeem'),
     url(r'^checkout/(?P<step>[^/]+)/$', pretix.presale.views.checkout.CheckoutView.as_view(),
         name='event.checkout'),

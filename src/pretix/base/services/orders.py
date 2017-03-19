@@ -562,6 +562,7 @@ class OrderChangeManager:
                     'new_item': op.item.pk,
                     'new_variation': op.variation.pk if op.variation else None,
                     'old_price': op.position.price,
+                    'addon_to': op.position.addon_to_id,
                     'new_price': op.price
                 })
                 op.position.item = op.item
@@ -574,18 +575,29 @@ class OrderChangeManager:
                     'position': op.position.pk,
                     'positionid': op.position.positionid,
                     'old_price': op.position.price,
+                    'addon_to': op.position.addon_to_id,
                     'new_price': op.price
                 })
                 op.position.price = op.price
                 op.position._calculate_tax()
                 op.position.save()
             elif isinstance(op, self.CancelOperation):
+                for opa in op.position.addons.all():
+                    self.order.log_action('pretix.event.order.changed.cancel', user=self.user, data={
+                        'position': opa.pk,
+                        'positionid': opa.positionid,
+                        'old_item': opa.item.pk,
+                        'old_variation': opa.variation.pk if opa.variation else None,
+                        'addon_to': opa.addon_to_id,
+                        'old_price': opa.price,
+                    })
                 self.order.log_action('pretix.event.order.changed.cancel', user=self.user, data={
                     'position': op.position.pk,
                     'positionid': op.position.positionid,
                     'old_item': op.position.item.pk,
                     'old_variation': op.position.variation.pk if op.position.variation else None,
                     'old_price': op.position.price,
+                    'addon_to': None,
                 })
                 op.position.delete()
 

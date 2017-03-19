@@ -11,6 +11,7 @@ from pretix.base.models import (
     CartPosition, Event, Item, ItemCategory, Order, OrderPosition, Organizer,
     Question, Quota, Voucher,
 )
+from pretix.base.models.items import ItemAddOn, ItemVariation
 
 
 class CheckoutTestCase(TestCase):
@@ -34,6 +35,19 @@ class CheckoutTestCase(TestCase):
         self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.session_key = self.client.cookies.get(settings.SESSION_COOKIE_NAME).value
         self._set_session('email', 'admin@localhost')
+
+        self.workshopcat = ItemCategory.objects.create(name="Workshops", is_addon=True, event=self.event)
+        self.workshopquota = Quota.objects.create(event=self.event, name='Workshop 1', size=5)
+        self.workshop1 = Item.objects.create(event=self.event, name='Workshop 1',
+                                             category=self.workshopcat, default_price=12)
+        self.workshop2 = Item.objects.create(event=self.event, name='Workshop 2',
+                                             category=self.workshopcat, default_price=12)
+        self.workshop2a = ItemVariation.objects.create(item=self.workshop2, value='A')
+        self.workshop2b = ItemVariation.objects.create(item=self.workshop2, value='B')
+        self.workshopquota.items.add(self.workshop1)
+        self.workshopquota.items.add(self.workshop2)
+        self.workshopquota.variations.add(self.workshop2a)
+        self.workshopquota.variations.add(self.workshop2b)
 
     def test_empty_cart(self):
         response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
@@ -766,3 +780,46 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
+
+    def test_addons_as_first_step(self):
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+
+        response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+    def test_set_addons_item_and_variation(self):
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat)
+        cp1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+        cp2 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+
+        response = self.client.post('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug), {
+            '{}_{}-item_{}'.format(cp1.pk, self.workshopcat.pk, self.workshop1.pk): 'on',
+            '{}_{}-item_{}'.format(cp2.pk, self.workshopcat.pk, self.workshop2.pk): self.workshop2a.pk,
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert cp1.addons.first().item == self.workshop1
+        assert cp2.addons.first().item == self.workshop2
+        assert cp2.addons.first().variation == self.workshop2a
+
+    def test_set_addons_required(self):
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug))
+        self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)

@@ -11,15 +11,16 @@ function async_dl_check() {
             'success': async_dl_check_callback,
             'error': async_dl_check_error,
             'context': this,
+            'dataType': 'json'
         }
     );
 }
 
 function async_dl_check_callback(data, jqXHR, status) {
     "use strict";
-    if (data == 1) {
+    if (data.ready && data.redirect) {
         $("body").data('ajaxing', false);
-        location.href = async_dl_url;
+        location.href = data.redirect;
         waitingDialog.hide();
         return;
     }
