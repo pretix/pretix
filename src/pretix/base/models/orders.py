@@ -479,6 +479,7 @@ class OrderPosition(AbstractPosition):
     class Meta:
         verbose_name = _("Order position")
         verbose_name_plural = _("Order positions")
+        ordering = ("positionid",)
 
     @classmethod
     def transform_cart_positions(cls, cp: List, order) -> list:

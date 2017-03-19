@@ -122,6 +122,7 @@ class Invoice(models.Model):
 
     class Meta:
         unique_together = ('event', 'invoice_no')
+        ordering = ('invoice_no',)
 
 
 class InvoiceLine(models.Model):
