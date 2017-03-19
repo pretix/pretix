@@ -30,7 +30,7 @@ if [ "$1" == "tests" ]; then
 	cd src
 	python manage.py check
 	make all compress
-	coverage run -m py.test --rerun 5 tests && coverage report
+	py.test --rerun 5 tests
 fi
 if [ "$1" == "tests-cov" ]; then
 	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt -r src/requirements/py34.txt
