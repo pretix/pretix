@@ -26,17 +26,8 @@
                 </em>
                 <div class="row checkout-button-row">
                     <div class="col-md-4 col-xs-12">
-                        <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.remove" %}" >
+                        <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" %}">
                             {% csrf_token %}
-                            {% for line in cart.positions %}
-                                {% if line.variation %}
-                                    <input type="hidden" name="variation_{{ line.item.id }}_{{ line.variation.id }}" value="{{ line.count }}" />
-                                    <input type="hidden" name="price_{{ line.item.id }}_{{ line.variation.id }}" value="{{ line.price }}" />
-                                {% else %}
-                                    <input type="hidden" name="item_{{ line.item.id }}" value="{{ line.count }}" />
-                                    <input type="hidden" name="price_{{ line.item.id }}" value="{{ line.price }}" />
-                                {% endif %}
-                            {% endfor %}
                             <button class="btn btn-block btn-default btn-lg" type="submit"><i class="fa fa-close"></i> {% trans "Empty cart" %}</button>
                         </form>
                     </div>

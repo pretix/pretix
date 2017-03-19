@@ -495,12 +495,12 @@ class CartTest(CartTestMixin, TestCase):
         self.assertFalse(CartPosition.objects.filter(id=cp1.id).exists())
 
     def test_remove_simple(self):
-        CartPosition.objects.create(
+        cp = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
-            'item_%d' % self.ticket.id: '1',
+            'id': cp.pk
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('empty', doc.select('.alert-success')[0].text)
@@ -525,19 +525,19 @@ class CartTest(CartTestMixin, TestCase):
         self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
 
     def test_remove_variation(self):
-        CartPosition.objects.create(
+        cp = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_red,
             price=14, expires=now() + timedelta(minutes=10)
         )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
-            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+            'id': cp.pk
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('empty', doc.select('.alert-success')[0].text)
         self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
 
     def test_remove_one_of_multiple(self):
-        CartPosition.objects.create(
+        cp = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
@@ -546,27 +546,11 @@ class CartTest(CartTestMixin, TestCase):
             price=23, expires=now() + timedelta(minutes=10)
         )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
-            'item_%d' % self.ticket.id: '1',
+            'id': cp.pk
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('updated', doc.select('.alert-success')[0].text)
         self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
-
-    def test_remove_multiple(self):
-        CartPosition.objects.create(
-            event=self.event, cart_id=self.session_key, item=self.ticket,
-            price=23, expires=now() + timedelta(minutes=10)
-        )
-        CartPosition.objects.create(
-            event=self.event, cart_id=self.session_key, item=self.ticket,
-            price=23, expires=now() + timedelta(minutes=10)
-        )
-        response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
-            'item_%d' % self.ticket.id: '2',
-        }, follow=True)
-        doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertIn('empty', doc.select('.alert-success')[0].text)
-        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
 
     def test_remove_all(self):
         CartPosition.objects.create(
@@ -581,49 +565,10 @@ class CartTest(CartTestMixin, TestCase):
             event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_red,
             price=14, expires=now() + timedelta(minutes=10)
         )
-        response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
-            'item_%d' % self.ticket.id: '2',
-            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
-        }, follow=True)
+        response = self.client.post('/%s/%s/cart/clear' % (self.orga.slug, self.event.slug), {}, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('empty', doc.select('.alert-success')[0].text)
         self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
-
-    def test_remove_all_same_variation_different_price(self):
-        CartPosition.objects.create(
-            event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_red,
-            price=14, expires=now() + timedelta(minutes=10)
-        )
-        v = Voucher.objects.create(item=self.shirt, variation=self.shirt_red, value=Decimal('10.00'), event=self.event)
-        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'variation_%d_%d_voucher' % (self.shirt.id, self.shirt_red.id): v.code,
-        }, follow=True)
-        response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
-            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): ('1', '1'),
-        }, follow=True)
-        doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertIn('empty', doc.select('.alert-success')[0].text)
-        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
-
-    def test_remove_most_expensive(self):
-        CartPosition.objects.create(
-            event=self.event, cart_id=self.session_key, item=self.ticket,
-            price=23, expires=now() + timedelta(minutes=10)
-        )
-        CartPosition.objects.create(
-            event=self.event, cart_id=self.session_key, item=self.ticket,
-            price=20, expires=now() + timedelta(minutes=10)
-        )
-        response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
-            'item_%d' % self.ticket.id: '1',
-        }, follow=True)
-        doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertIn('updated', doc.select('.alert-success')[0].text)
-        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
-        self.assertEqual(len(objs), 1)
-        self.assertEqual(objs[0].item, self.ticket)
-        self.assertIsNone(objs[0].variation)
-        self.assertEqual(objs[0].price, 20)
 
     def test_voucher(self):
         v = Voucher.objects.create(item=self.ticket, event=self.event)

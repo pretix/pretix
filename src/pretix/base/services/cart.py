@@ -27,6 +27,7 @@ error_messages = {
     'busy': _('We were not able to process your request completely as the '
               'server was too busy. Please try again.'),
     'empty': _('You did not select any products.'),
+    'unknown_position': _('Unknown cart position.'),
     'not_for_sale': _('You selected a product which is not available for sale.'),
     'unavailable': _('Some of the products you selected are no longer available. '
                      'Please see below for details.'),
@@ -269,29 +270,26 @@ class CartManager:
         self._voucher_use_diff += voucher_use_diff
         self._operations += operations
 
-    def remove_items(self, items: List[dict]):
+    def remove_item(self, pos_id: int):
         # TODO: We could calculate quotadiffs and voucherdiffs here, which would lead to more
         # flexible usages (e.g. a RemoveOperation and an AddOperation in the same transaction
         # could cancel each other out quota-wise). However, we are not taking this performance
         # penalty for now as there is currently no outside interface that would allow building
         # such a transaction.
-        for i in items:
-            cw = Q(cart_id=self.cart_id) & Q(item_id=i['item']) & Q(event=self.event)
-            if i['variation']:
-                cw &= Q(variation_id=i['variation'])
-            else:
-                cw &= Q(variation__isnull=True)
-            # Prefer to delete positions that have the same price as the one the user clicked on, after thet
-            # prefer the most expensive ones.
-            cnt = i['count']
-            if i['price']:
-                correctprice = CartPosition.objects.filter(cw).filter(price=Decimal(i['price'].replace(",", ".")))[:cnt]
-                for cp in correctprice:
-                    self._operations.append(self.RemoveOperation(position=cp))
-                cnt -= len(correctprice)
-            if cnt > 0:
-                for cp in CartPosition.objects.filter(cw).order_by("-price")[:cnt]:
-                    self._operations.append(self.RemoveOperation(position=cp))
+        try:
+            cp = self.positions.get(pk=pos_id)
+        except CartPosition.DoesNotExist:
+            raise CartError(error_messages['unknown_position'])
+        self._operations.append(self.RemoveOperation(position=cp))
+
+    def clear(self):
+        # TODO: We could calculate quotadiffs and voucherdiffs here, which would lead to more
+        # flexible usages (e.g. a RemoveOperation and an AddOperation in the same transaction
+        # could cancel each other out quota-wise). However, we are not taking this performance
+        # penalty for now as there is currently no outside interface that would allow building
+        # such a transaction.
+        for cp in self.positions.all():
+            self._operations.append(self.RemoveOperation(position=cp))
 
     def set_addons(self, addons):
         self._update_items_cache(
@@ -566,11 +564,11 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def remove_items_from_cart(self, event: int, items: List[dict], cart_id: str=None, locale='en') -> None:
+def remove_cart_position(self, event: int, position: int, cart_id: str=None, locale='en') -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
-    :param items: A list of dicts with the keys item, variation, number, custom_price, voucher
+    :param position: A cart position ID
     :param session: Session ID of a guest
     """
     with language(locale):
@@ -578,7 +576,7 @@ def remove_items_from_cart(self, event: int, items: List[dict], cart_id: str=Non
         try:
             try:
                 cm = CartManager(event=event, cart_id=cart_id)
-                cm.remove_items(items)
+                cm.remove_item(position)
                 cm.commit()
             except LockTimeoutException:
                 self.retry()
@@ -587,20 +585,41 @@ def remove_items_from_cart(self, event: int, items: List[dict], cart_id: str=Non
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def set_cart_addons(self, event: int, addons: List[dict], cart_id: str=None) -> None:
+def clear_cart(self, event: int, cart_id: str=None, locale='en') -> None:
+    """
+    Removes a list of items from a user's cart.
+    :param event: The event ID in question
+    :param session: Session ID of a guest
+    """
+    with language(locale):
+        event = Event.objects.get(id=event)
+        try:
+            try:
+                cm = CartManager(event=event, cart_id=cart_id)
+                cm.clear()
+                cm.commit()
+            except LockTimeoutException:
+                self.retry()
+        except (MaxRetriesExceededError, LockTimeoutException):
+            raise CartError(error_messages['busy'])
+
+
+@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
+def set_cart_addons(self, event: int, addons: List[dict], cart_id: str=None, locale='en') -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
     :param addons: A list of dicts with the keys addon_to, item, variation
     :param session: Session ID of a guest
     """
-    event = Event.objects.get(id=event)
-    try:
+    with language(locale):
+        event = Event.objects.get(id=event)
         try:
-            cm = CartManager(event=event, cart_id=cart_id)
-            cm.set_addons(addons)
-            cm.commit()
-        except LockTimeoutException:
-            self.retry()
-    except (MaxRetriesExceededError, LockTimeoutException):
-        raise CartError(error_messages['busy'])
+            try:
+                cm = CartManager(event=event, cart_id=cart_id)
+                cm.set_addons(addons)
+                cm.commit()
+            except LockTimeoutException:
+                self.retry()
+        except (MaxRetriesExceededError, LockTimeoutException):
+            raise CartError(error_messages['busy'])
