@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inside %}
-    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data" mail-preview-url="{% url "control:event.settings.mail.preview" event=request.event.slug organizer=request.event.organizer.slug %}">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         <fieldset>
@@ -21,9 +21,29 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="order_placed" class="panel-collapse collapse">
+                    <div id="order_placed" class="panel-collapse collapse preview-panel">
                         <div class="panel-body">
-                            {% bootstrap_field form.mail_text_order_placed layout="horizontal" %}
+                            <div>
+                                <label class="col-md-3 control-label">Text</label>
+                                <div class="col-md-9">
+                                    <div class="tab-content">
+                                        <div id="order_placed_edit" class="tab-pane fade in active">
+                                            {% bootstrap_field form.mail_text_order_placed show_label=False %}
+                                        </div>
+                                        <div id="order_placed_preview" class="tab-pane">
+                                            {% bootstrap_field form.mail_text_order_placed show_label=False %}
+                                        </div>
+                                    </div>
+                                    <ul class="nav nav-pills pull-right">
+                                        <li role="presentation" class="active">
+                                            <a data-toggle="pill" type="edit"><i class="fa fa-pencil-square-o fa-fw"></i> {% trans "Edit" %}</a>
+                                        </li>
+                                        <li role="presentation">
+                                            <a data-toggle="pill" type="preview"><i class="fa fa-tv fa-fw"></i> {% trans "Preview" %}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.forms import modelformset_factory
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -398,6 +399,19 @@ class MailSettings(EventSettingsFormView):
         else:
             messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.get(request)
+
+
+class MailSettingsPreview(EventPermissionRequiredMixin, View):
+    permission = 'can_change_settings'
+
+    def post(self, request, *args, **kwargs):
+        return JsonResponse({
+            'item': 'order_placed',
+            'msgs': {
+                'mail_text_order_placed_0': 'English version!',
+                'mail_text_order_placed_1': 'Deutsch version!'
+            }
+        })
 
 
 class TicketSettingsPreview(EventPermissionRequiredMixin, View):
