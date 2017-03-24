@@ -340,6 +340,36 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIn('more than', doc.select('.alert-danger')[0].text)
         self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
 
+    def test_max_per_item_failed(self):
+        self.ticket.max_per_order = 2
+        self.ticket.save()
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '2',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('more than', doc.select('.alert-danger')[0].text)
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
+
+    def test_max_per_item_success(self):
+        self.ticket.max_per_order = 3
+        self.ticket.save()
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '2',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 3)
+
     def test_quota_full(self):
         self.quota_tickets.size = 0
         self.quota_tickets.save()

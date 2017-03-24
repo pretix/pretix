@@ -553,6 +553,33 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.count(), 1)
 
+    def test_max_per_item_failed(self):
+        self.quota_tickets.size = 3
+        self.quota_tickets.save()
+        self.ticket.max_per_order = 1
+        self.ticket.save()
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10),
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10),
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key).count(), 1)
+        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        self.assertFalse(Order.objects.exists())
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.count(), 1)
+
     def test_confirm_expired_partial(self):
         self.quota_tickets.size = 1
         self.quota_tickets.save()

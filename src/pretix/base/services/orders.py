@@ -45,6 +45,8 @@ error_messages = {
                        'meantime. Please see below for details.'),
     'internal': _("An internal error occured, please try again."),
     'empty': _("Your cart is empty."),
+    'max_items_per_product': _("You cannot select more than %(max)s items of the product %(product)s. We removed the "
+                               "surplus items from your cart."),
     'busy': _('We were not able to process your request completely as the '
               'server was too busy. Please try again.'),
     'not_started': _('The presale period for this event has not yet started.'),
@@ -206,14 +208,24 @@ def _check_date(event: Event, now_dt: datetime):
 
 def _check_positions(event: Event, now_dt: datetime, positions: List[CartPosition]):
     err = None
+    errargs = None
     _check_date(event, now_dt)
 
+    products_seen = Counter()
     for i, cp in enumerate(positions):
         if not cp.item.active or (cp.variation and not cp.variation.active):
             err = err or error_messages['unavailable']
             cp.delete()
             continue
         quotas = list(cp.item.quotas.all()) if cp.variation is None else list(cp.variation.quotas.all())
+
+        products_seen[cp.item] += 1
+        if cp.item.max_per_order and products_seen[cp.item] > cp.item.max_per_order:
+            err = error_messages['max_items_per_product']
+            errargs = {'max': cp.item.max_per_order,
+                       'product': cp.item.name}
+            cp.delete()  # Sorry!
+            break
 
         if cp.voucher:
             redeemed_in_carts = CartPosition.objects.filter(
@@ -286,7 +298,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         else:
             cp.delete()  # Sorry!
     if err:
-        raise OrderError(err)
+        raise OrderError(err, errargs)
 
 
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,

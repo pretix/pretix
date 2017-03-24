@@ -167,7 +167,8 @@ class ItemUpdateForm(I18nModelForm):
             'available_until',
             'require_voucher',
             'hide_without_voucher',
-            'allow_cancel'
+            'allow_cancel',
+            'max_per_order'
         ]
         widgets = {
             'available_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),

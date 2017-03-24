@@ -33,6 +33,7 @@ error_messages = {
     'in_part': _('Some of the products you selected are no longer available in '
                  'the quantity you selected. Please see below for details.'),
     'max_items': _("You cannot select more than %s items per order."),
+    'max_items_per_product': _("You cannot select more than %(max)s items of the product %(product)s."),
     'not_started': _('The presale period for this event has not yet started.'),
     'ended': _('The presale period has ended.'),
     'price_too_high': _('The entered price is to high.'),
@@ -130,6 +131,21 @@ class CartManager:
 
             if op.voucher and not op.voucher.applies_to(op.item, op.variation):
                 raise CartError(error_messages['voucher_invalid_item'])
+
+        if isinstance(op, self.AddOperation):
+            if op.item.max_per_order:
+                new_total = (
+                    len([1 for p in self.positions if p.item_id == op.item.pk]) +
+                    sum([_op.count for _op in self._operations
+                         if isinstance(_op, self.AddOperation) and _op.item == op.item]) +
+                    op.count -
+                    len([1 for _op in self._operations
+                         if isinstance(_op, self.RemoveOperation) and _op.position.item_id == op.item.pk])
+                )
+
+                if new_total > op.item.max_per_order:
+                    raise CartError(error_messages['max_items_per_product'], {'max': op.item.max_per_order,
+                                                                              'product': op.item.name})
 
     def _get_price(self, item: Item, variation: Optional[ItemVariation],
                    voucher: Optional[Voucher], custom_price: Optional[Decimal]):

@@ -183,6 +183,8 @@ class RedeemView(EventViewMixin, TemplateView):
             if self.voucher.item_id and self.voucher.variation_id:
                 item.available_variations = [v for v in item.available_variations if v.pk == self.voucher.variation_id]
 
+            item.order_max = item.max_per_order or int(self.request.event.settings.max_items_per_order)
+
             item.has_variations = item.variations.exists()
             if not item.has_variations:
                 if self.voucher.allow_ignore_quota or self.voucher.block_quota:
