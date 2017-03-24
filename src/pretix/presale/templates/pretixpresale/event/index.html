@@ -171,9 +171,16 @@
                                                 </div>
                                             {% elif var.cached_availability.0 == 100 %}
                                                 <div class="col-md-2 col-xs-6 availability-box available">
-                                                    <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                            max="{{ var.order_max }}"
-                                                            name="variation_{{ item.id }}_{{ var.id }}">
+                                                    {% if item.max_per_order == 1 %}
+                                                        <label class="item-checkbox-label">
+                                                            <input type="checkbox" value="1"
+                                                                    name="variation_{{ item.id }}_{{ var.id }}">
+                                                        </label>
+                                                    {% else %}
+                                                        <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                                max="{{ var.order_max }}"
+                                                                name="variation_{{ item.id }}_{{ var.id }}">
+                                                    {% endif %}
                                                 </div>
                                             {% else %}
                                                 {% include "pretixpresale/event/fragment_availability.html" with avail=var.cached_availability.0 event=event item=item var=var %}
@@ -231,8 +238,15 @@
                                     </div>
                                 {% elif item.cached_availability.0 == 100 %}
                                     <div class="col-md-2 col-xs-6 availability-box available">
-                                        <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                max="{{ item.order_max }}" name="item_{{ item.id }}">
+                                        {% if item.max_per_order == 1 %}
+                                            <label class="item-checkbox-label">
+                                                <input type="checkbox" value="1"
+                                                        name="item_{{ item.id }}">
+                                            </label>
+                                        {% else %}
+                                            <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                    max="{{ item.order_max }}" name="item_{{ item.id }}">
+                                        {% endif %}
                                     </div>
                                 {% else %}
                                     {% include "pretixpresale/event/fragment_availability.html" with avail=item.cached_availability.0 event=event item=item var=0 %}
