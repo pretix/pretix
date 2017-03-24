@@ -1,3 +1,4 @@
+import json
 from contextlib import contextmanager
 
 from django.conf import settings
@@ -49,11 +50,25 @@ def language(lng):
 class LazyLocaleException(Exception):
     def __init__(self, msg, msgargs=None):
         self.msg = msg
+
+        if isinstance(msgargs, list) or isinstance(msgargs, tuple) or isinstance(msgargs, dict):
+            msgargs = json.dumps(msgargs, cls=I18nJSONEncoder)
+
         self.msgargs = msgargs
-        super().__init__(msg, msgargs)
+        super().__init__(msg, self.msgargs)
 
     def __str__(self):
         if self.msgargs:
-            return ugettext(self.msg) % self.msgargs
+            data = json.loads(self.msgargs)
+            if isinstance(data, dict):
+                for k, v in data.items():
+                    if isinstance(v, dict):
+                        data[k] = LazyI18nString(v)
+            elif isinstance(data, list):
+                for i, v in enumerate(data):
+                    if isinstance(v, dict):
+                        data[i] = LazyI18nString(v)
+
+            return ugettext(self.msg) % data
         else:
             return ugettext(self.msg)
