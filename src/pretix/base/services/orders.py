@@ -390,37 +390,36 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
         if not order.invoices.exists():
             generate_invoice(order)
 
-    with language(order.locale):
-        if order.total == Decimal('0.00'):
-            mailtext = event.settings.mail_text_order_free
-        else:
-            mailtext = event.settings.mail_text_order_placed
+    if order.total == Decimal('0.00'):
+        mailtext = event.settings.mail_text_order_free
+    else:
+        mailtext = event.settings.mail_text_order_placed
 
-        try:
-            invoice_name = order.invoice_address.name
-            invoice_company = order.invoice_address.company
-        except InvoiceAddress.DoesNotExist:
-            invoice_name = ""
-            invoice_company = ""
+    try:
+        invoice_name = order.invoice_address.name
+        invoice_company = order.invoice_address.company
+    except InvoiceAddress.DoesNotExist:
+        invoice_name = ""
+        invoice_company = ""
 
-        mail(
-            order.email, _('Your order: %(code)s') % {'code': order.code},
-            mailtext,
-            {
-                'total': LazyNumber(order.total),
-                'currency': event.currency,
-                'date': LazyDate(order.expires),
-                'event': event.name,
-                'url': build_absolute_uri(event, 'presale:event.order', kwargs={
-                    'order': order.code,
-                    'secret': order.secret
-                }),
-                'paymentinfo': str(pprov.order_pending_mail_render(order)),
-                'invoice_name': invoice_name,
-                'invoice_company': invoice_company,
-            },
-            event, locale=order.locale
-        )
+    mail(
+        order.email, _('Your order: %(code)s') % {'code': order.code},
+        mailtext,
+        {
+            'total': LazyNumber(order.total),
+            'currency': event.currency,
+            'date': LazyDate(order.expires),
+            'event': event.name,
+            'url': build_absolute_uri(event, 'presale:event.order', kwargs={
+                'order': order.code,
+                'secret': order.secret
+            }),
+            'paymentinfo': str(pprov.order_pending_mail_render(order)),
+            'invoice_name': invoice_name,
+            'invoice_company': invoice_company,
+        },
+        event, locale=order.locale
+    )
 
     return order.id
 
@@ -671,13 +670,14 @@ class OrderChangeManager:
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def perform_order(self, event: str, payment_provider: str, positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None):
-    try:
+    with language(locale):
         try:
-            return _perform_order(event, payment_provider, positions, email, locale, address, meta_info)
-        except LockTimeoutException:
-            self.retry()
-    except (MaxRetriesExceededError, LockTimeoutException):
-        return OrderError(error_messages['busy'])
+            try:
+                return _perform_order(event, payment_provider, positions, email, locale, address, meta_info)
+            except LockTimeoutException:
+                self.retry()
+        except (MaxRetriesExceededError, LockTimeoutException):
+            return OrderError(error_messages['busy'])
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))

@@ -1,6 +1,7 @@
 from collections import Counter, namedtuple
 from datetime import timedelta
 from decimal import Decimal
+
 from typing import List, Optional
 
 from celery.exceptions import MaxRetriesExceededError
@@ -10,7 +11,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
 from pretix.base.decimal import round_decimal
-from pretix.base.i18n import LazyLocaleException
+from pretix.base.i18n import LazyLocaleException, language
 from pretix.base.models import (
     CartPosition, Event, Item, ItemVariation, Voucher,
 )
@@ -116,7 +117,7 @@ class CartManager:
         cartsize -= len([1 for op in self._operations if isinstance(op, self.RemoveOperation)])
         if cartsize > int(self.event.settings.max_items_per_order):
             # TODO: i18n plurals
-            raise CartError(error_messages['max_items'], (self.event.settings.max_items_per_order,))
+            raise CartError(_(error_messages['max_items']) % (self.event.settings.max_items_per_order,))
 
     def _check_item_constraints(self, op):
         if isinstance(op, self.AddOperation) or isinstance(op, self.ExtendOperation):
@@ -144,8 +145,12 @@ class CartManager:
                 )
 
                 if new_total > op.item.max_per_order:
-                    raise CartError(error_messages['max_items_per_product'], {'max': op.item.max_per_order,
-                                                                              'product': op.item.name})
+                    raise CartError(
+                        _(error_messages['max_items_per_product']) % {
+                            'max': op.item.max_per_order,
+                            'product': op.item.name
+                        }
+                    )
 
     def _get_price(self, item: Item, variation: Optional[ItemVariation],
                    voucher: Optional[Voucher], custom_price: Optional[Decimal]):
@@ -369,7 +374,7 @@ class CartManager:
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None) -> None:
+def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, locale='en') -> None:
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
@@ -378,33 +383,35 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None) ->
     :param coupon: A coupon that should also be reeemed
     :raises CartError: On any error that occured
     """
-    event = Event.objects.get(id=event)
-    try:
+    with language(locale):
+        event = Event.objects.get(id=event)
         try:
-            cm = CartManager(event=event, cart_id=cart_id)
-            cm.add_new_items(items)
-            cm.commit()
-        except LockTimeoutException:
-            self.retry()
-    except (MaxRetriesExceededError, LockTimeoutException):
-        raise CartError(error_messages['busy'])
+            try:
+                cm = CartManager(event=event, cart_id=cart_id)
+                cm.add_new_items(items)
+                cm.commit()
+            except LockTimeoutException:
+                self.retry()
+        except (MaxRetriesExceededError, LockTimeoutException):
+            raise CartError(error_messages['busy'])
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def remove_items_from_cart(self, event: int, items: List[dict], cart_id: str=None) -> None:
+def remove_items_from_cart(self, event: int, items: List[dict], cart_id: str=None, locale='en') -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
     :param items: A list of tuple of the form (item id, variation id or None, number)
     :param session: Session ID of a guest
     """
-    event = Event.objects.get(id=event)
-    try:
+    with language(locale):
+        event = Event.objects.get(id=event)
         try:
-            cm = CartManager(event=event, cart_id=cart_id)
-            cm.remove_items(items)
-            cm.commit()
-        except LockTimeoutException:
-            self.retry()
-    except (MaxRetriesExceededError, LockTimeoutException):
-        raise CartError(error_messages['busy'])
+            try:
+                cm = CartManager(event=event, cart_id=cart_id)
+                cm.remove_items(items)
+                cm.commit()
+            except LockTimeoutException:
+                self.retry()
+        except (MaxRetriesExceededError, LockTimeoutException):
+            raise CartError(error_messages['busy'])

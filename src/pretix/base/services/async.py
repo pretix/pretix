@@ -19,7 +19,6 @@ from pretix.celery_app import app
 
 
 class ProfiledTask(app.Task):
-
     def __call__(self, *args, **kwargs):
 
         if settings.PROFILING_RATE > 0 and random.random() < settings.PROFILING_RATE / 100:

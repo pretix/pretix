@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.shortcuts import redirect
+from django.utils import translation
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView, View
@@ -116,7 +117,7 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
     def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
         if items:
-            return self.do(self.request.event.id, items, self.request.session.session_key)
+            return self.do(self.request.event.id, items, self.request.session.session_key, translation.get_language())
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
@@ -136,7 +137,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
         if items:
-            return self.do(self.request.event.id, items, self.request.session.session_key)
+            return self.do(self.request.event.id, items, self.request.session.session_key, translation.get_language())
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
