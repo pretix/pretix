@@ -6,7 +6,7 @@ if settings.HAS_REDIS:
     import django_redis
     redis = django_redis.get_redis_connection("redis")
 
-REDIS_KEY_PREFIX = "pretix_metrics_"
+REDIS_KEY = "pretix_metrics"
 _INF = float("inf")
 _MINUS_INF = float("-inf")
 
@@ -67,17 +67,15 @@ class Metric(object):
         """
         Increments given key in Redis.
         """
-        rkey = REDIS_KEY_PREFIX + key
         if settings.HAS_REDIS:
-            redis.incrbyfloat(rkey, amount)
+            redis.hincrbyfloat(REDIS_KEY, key, amount)
 
     def _set_in_redis(self, key, value):
         """
         Sets given key in Redis.
         """
-        rkey = REDIS_KEY_PREFIX + key
         if settings.HAS_REDIS:
-            redis.set(rkey, value)
+            redis.hset(REDIS_KEY, key, value)
 
 
 class Counter(Metric):
@@ -195,10 +193,10 @@ def metric_values():
 
     metrics = {}
 
-    for key in redis.scan_iter(match=REDIS_KEY_PREFIX + "*"):
+    for key, value in redis.hscan_iter(REDIS_KEY):
         dkey = key.decode("utf-8")
         _, _, output_key = dkey.split("_", 2)
-        value = float(redis.get(dkey).decode("utf-8"))
+        value = float(value.decode("utf-8"))
 
         metrics[output_key] = value
 
