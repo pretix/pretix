@@ -195,10 +195,8 @@ def metric_values():
 
     for key, value in redis.hscan_iter(REDIS_KEY):
         dkey = key.decode("utf-8")
-        _, _, output_key = dkey.split("_", 2)
         value = float(value.decode("utf-8"))
-
-        metrics[output_key] = value
+        metrics[dkey] = value
 
     return metrics
 
