@@ -1,3 +1,5 @@
+import math
+
 from django.conf import settings
 
 if settings.HAS_REDIS:
@@ -5,6 +7,20 @@ if settings.HAS_REDIS:
     redis = django_redis.get_redis_connection("redis")
 
 REDIS_KEY_PREFIX = "pretix_metrics_"
+_INF = float("inf")
+_MINUS_INF = float("-inf")
+
+
+def _float_to_go_string(d):
+    # inspired by https://github.com/prometheus/client_python/blob/master/prometheus_client/core.py
+    if d == _INF:
+        return '+Inf'
+    elif d == _MINUS_INF:
+        return '-Inf'
+    elif math.isnan(d):
+        return 'NaN'
+    else:
+        return repr(float(d))
 
 
 class Metric(object):
@@ -34,7 +50,7 @@ class Metric(object):
         if len(labels) != len(self.labelnames):
             raise ValueError("Unknown labels used: {}".format(", ".join(set(labels) - set(self.labelnames))))
 
-    def _construct_metric_identifier(self, metricname, labels=None):
+    def _construct_metric_identifier(self, metricname, labels=None, labelnames=None):
         """
         Constructs the scrapable metricname usable in the output format.
         """
@@ -42,7 +58,7 @@ class Metric(object):
             return metricname
         else:
             named_labels = []
-            for labelname in self.labelnames:
+            for labelname in (labelnames or self.labelnames):
                 named_labels.append('{}="{}"'.format(labelname, labels[labelname]))
 
             return metricname + "{" + ",".join(named_labels) + "}"
@@ -122,6 +138,52 @@ class Gauge(Metric):
 
         fullmetric = self._construct_metric_identifier(self.name, kwargs)
         self._inc_in_redis(fullmetric, amount * -1)
+
+
+class Histogram(Metric):
+    """
+    Histogram Metric Object
+    """
+
+    def __init__(self, name, helpstring, labelnames=None,
+                 buckets=(.005, .01, .025, .05, .075, .1, .25, .5, .75, 1.0, 2.5, 5.0, 7.5, 10.0, 30.0, _INF)):
+        if list(buckets) != sorted(buckets):
+            # This is probably an error on the part of the user,
+            # so raise rather than sorting for them.
+            raise ValueError('Buckets not in sorted order')
+
+        if buckets and buckets[-1] != _INF:
+            buckets.append(_INF)
+
+        if len(buckets) < 2:
+            raise ValueError('Must have at least two buckets')
+
+        self.buckets = buckets
+        super().__init__(name, helpstring, labelnames)
+
+    def observe(self, amount, **kwargs):
+        """
+        Stores a value in the histogram for the labels specified in kwargs.
+        """
+        if amount < 0:
+            raise ValueError("Amount must be greater than zero. Otherwise use inc().")
+
+        self._check_label_consistency(kwargs)
+
+        countmetric = self._construct_metric_identifier(self.name + '_count', kwargs)
+        self._inc_in_redis(countmetric, 1)
+
+        summetric = self._construct_metric_identifier(self.name + '_sum', kwargs)
+        self._inc_in_redis(summetric, amount)
+
+        for i, bound in enumerate(self.buckets):
+            if amount <= bound:
+                kwargs_le = dict(kwargs.items())
+                kwargs_le['le'] = _float_to_go_string(bound)
+                bmetric = self._construct_metric_identifier(self.name + '_bucket', kwargs_le,
+                                                            labelnames=self.labelnames + ["le"])
+                self._inc_in_redis(bmetric, 1)
+                break
 
 
 def metric_values():
