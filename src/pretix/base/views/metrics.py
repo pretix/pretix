@@ -1,3 +1,4 @@
+import base64
 import hmac
 
 from django.conf import settings
@@ -26,7 +27,7 @@ def serve_metrics(request):
     if method.lower() != "basic":
         return unauthed_response()
 
-    user, passphrase = credentials.strip().decode("base64").split(":", 1)
+    user, passphrase = base64.b64decode(credentials.strip()).decode().split(":", 1)
 
     if not hmac.compare_digest(user, settings.METRICS_USER):
         return unauthed_response()
@@ -37,7 +38,7 @@ def serve_metrics(request):
     m = metrics.metric_values()
 
     output = []
-    for metric, value in m:
+    for metric, value in m.items():
         output.append("{} {}".format(metric, str(value)))
 
     content = "\n".join(output)

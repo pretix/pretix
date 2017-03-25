@@ -43,7 +43,7 @@ class Metric(object):
         else:
             named_labels = []
             for labelname in self.labelnames:
-                named_labels.append('{}="{}",'.format(labelname, labels[labelname]))
+                named_labels.append('{}="{}"'.format(labelname, labels[labelname]))
 
             return metricname + "{" + ",".join(named_labels) + "}"
 
