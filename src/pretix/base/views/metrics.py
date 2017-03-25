@@ -41,6 +41,6 @@ def serve_metrics(request):
     for metric, value in m.items():
         output.append("{} {}".format(metric, str(value)))
 
-    content = "\n".join(output)
+    content = "\n".join(output) + "\n"
 
     return HttpResponse(content)
