@@ -1,7 +1,6 @@
 from collections import Counter, namedtuple
 from datetime import timedelta
 from decimal import Decimal
-
 from typing import List, Optional
 
 from celery.exceptions import MaxRetriesExceededError

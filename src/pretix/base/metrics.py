@@ -210,5 +210,9 @@ Provided metrics
 """
 http_view_requests = Counter("http_view_requests", "Total number of HTTP requests made.",
                              ["status_code", "method", "url_name"])
+http_view_times = Histogram("http_view_times", "Return time of views.",
+                            ["status_code", "method", "url_name"])
 celery_task_runs = Counter("celery_task_runs", "Total calls to a celery task",
                            ["task_name", "status"])
+celery_task_times = Histogram("celery_task_times", "Call time of a celery task",
+                              ["task_name"])

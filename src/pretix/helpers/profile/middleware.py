@@ -26,10 +26,10 @@ class CProfileMiddleware(object):
         if settings.PROFILING_RATE > 0 and random.random() < settings.PROFILING_RATE / 100:
             profiler = cProfile.Profile()
             profiler.enable()
-            starttime = time.time()
+            starttime = time.perf_counter()
             response = self.get_response(request)
             profiler.disable()
-            tottime = time.time() - starttime
+            tottime = time.perf_counter() - starttime
             profiler.dump_stats(os.path.join(settings.PROFILE_DIR, '{time:.0f}_{tottime:.3f}_{path}.pstat'.format(
                 path=request.path[1:].replace("/", "_"), tottime=tottime, time=time.time()
             )))

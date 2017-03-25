@@ -1,7 +1,6 @@
 import datetime
 
 import pytest
-
 from django.core import mail as djmail
 from django.utils.timezone import now
 
