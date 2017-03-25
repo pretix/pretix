@@ -155,6 +155,8 @@ Example::
 ``admins``
     Comma-separated list of email addresses that should receive a report about every error code 500 thrown by pretix.
 
+.. _`django-settings`:
+
 Django settings
 ---------------
 
@@ -179,6 +181,11 @@ Example::
 
     .. WARNING:: Never set this to ``True`` in production!
 
+``profile``
+    Enable code profiling for a random subset of requests. Disabled by default, see
+    :ref:`perf-monitoring` for details.
+
+.. _`metrics-settings`:
 
 Metrics
 -------

@@ -222,6 +222,8 @@ Yay, you are done! You should now be able to reach pretix at https://pretix.your
 *admin@localhost* with a password of *admin*. Don't forget to change that password! Create an organizer first, then
 create an event and start selling tickets!
 
+You should probably read :ref:`maintainance` next.
+
 Updates
 -------
 
