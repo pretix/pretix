@@ -15,12 +15,12 @@ import time
 from django.conf import settings
 from django.db import transaction
 
+from pretix.base.metrics import celery_task_runs
 from pretix.celery_app import app
 
 
 class ProfiledTask(app.Task):
     def __call__(self, *args, **kwargs):
-
         if settings.PROFILING_RATE > 0 and random.random() < settings.PROFILING_RATE / 100:
             profiler = cProfile.Profile()
             profiler.enable()
@@ -34,6 +34,23 @@ class ProfiledTask(app.Task):
             return ret
         else:
             return super().__call__(*args, **kwargs)
+
+    def on_failure(self, exc, task_id, args, kwargs, einfo):
+        if settings.METRICS_ENABLED:
+            expected = False
+            for t in self.throws:
+                if isinstance(exc, t):
+                    expected = True
+                    break
+            celery_task_runs.inc(1, task_name=self.name, status="expected-error" if expected else "error")
+
+        return super().on_failure(exc, task_id, args, kwargs, einfo)
+
+    def on_success(self, retval, task_id, args, kwargs):
+        if settings.METRICS_ENABLED:
+            celery_task_runs.inc(1, task_name=self.name, status="success")
+
+        return super().on_success(retval, task_id, args, kwargs)
 
 
 class TransactionAwareTask(ProfiledTask):

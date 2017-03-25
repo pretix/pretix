@@ -146,5 +146,7 @@ def metric_values():
 """
 Provided metrics
 """
-http_requests_total = Counter("http_requests_total", "Total number of HTTP requests made.", ["code", "handler", "method"])
-# usage: http_requests_total.inc(code="200", handler="/foo", method="GET")
+http_view_requests = Counter("http_view_requests", "Total number of HTTP requests made.",
+                             ["status_code", "method", "url_name"])
+celery_task_runs = Counter("celery_task_runs", "Total calls to a celery task",
+                           ["task_name", "status"])

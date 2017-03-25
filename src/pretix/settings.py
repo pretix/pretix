@@ -261,6 +261,11 @@ except ImportError:
     pass
 
 
+if METRICS_ENABLED:
+    MIDDLEWARE.insert(MIDDLEWARE.index('pretix.multidomain.middlewares.MultiDomainMiddleware') + 1,
+                      'pretix.helpers.metrics.middleware.MetricsMiddleware')
+
+
 PROFILING_RATE = config.getfloat('django', 'profile', fallback=0)  # Percentage of requests to profile
 if PROFILING_RATE > 0:
     if not os.path.exists(PROFILE_DIR):
