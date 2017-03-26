@@ -408,8 +408,8 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         return JsonResponse({
             'item': 'order_placed',
             'msgs': {
-                'mail_text_order_placed_0': 'English version!',
-                'mail_text_order_placed_1': 'Deutsch version!'
+                'mail_text_order_placed_0': 'English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!English version!',
+                'mail_text_order_placed_1': 'Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!Deutsch version!'
             }
         })
 
