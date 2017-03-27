@@ -238,9 +238,9 @@ CORE_MODULES = {
 }
 
 MIDDLEWARE = [
+    'django.middleware.common.CommonMiddleware',
     'pretix.multidomain.middlewares.MultiDomainMiddleware',
     'pretix.multidomain.middlewares.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'pretix.multidomain.middlewares.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
