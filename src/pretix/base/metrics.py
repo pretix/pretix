@@ -65,19 +65,31 @@ class Metric(object):
 
             return metricname + "{" + ",".join(named_labels) + "}"
 
-    def _inc_in_redis(self, key, amount):
+    def _inc_in_redis(self, key, amount, pipeline=None):
         """
         Increments given key in Redis.
         """
         if settings.HAS_REDIS:
-            redis.hincrbyfloat(REDIS_KEY, key, amount)
+            if not pipeline:
+                pipeline = redis
+            pipeline.hincrbyfloat(REDIS_KEY, key, amount)
 
-    def _set_in_redis(self, key, value):
+    def _set_in_redis(self, key, value, pipeline=None):
         """
         Sets given key in Redis.
         """
         if settings.HAS_REDIS:
-            redis.hset(REDIS_KEY, key, value)
+            if not pipeline:
+                pipeline = redis
+            pipeline.hset(REDIS_KEY, key, value)
+
+    def _get_redis_pipeline(self):
+        if settings.HAS_REDIS:
+            return redis.pipeline()
+
+    def _execute_redis_pipeline(self, pipeline):
+        if settings.HAS_REDIS:
+            return pipeline.execute()
 
 
 class Counter(Metric):
@@ -170,11 +182,13 @@ class Histogram(Metric):
 
         self._check_label_consistency(kwargs)
 
+        pipe = self._get_redis_pipeline()
+
         countmetric = self._construct_metric_identifier(self.name + '_count', kwargs)
-        self._inc_in_redis(countmetric, 1)
+        self._inc_in_redis(countmetric, 1, pipeline=pipe)
 
         summetric = self._construct_metric_identifier(self.name + '_sum', kwargs)
-        self._inc_in_redis(summetric, amount)
+        self._inc_in_redis(summetric, amount, pipeline=pipe)
 
         kwargs_le = dict(kwargs.items())
         for i, bound in enumerate(self.buckets):
@@ -182,7 +196,9 @@ class Histogram(Metric):
                 kwargs_le['le'] = _float_to_go_string(bound)
                 bmetric = self._construct_metric_identifier(self.name + '_bucket', kwargs_le,
                                                             labelnames=self.labelnames + ["le"])
-                self._inc_in_redis(bmetric, 1)
+                self._inc_in_redis(bmetric, 1, pipeline=pipe)
+
+        self._execute_redis_pipeline(pipe)
 
 
 def metric_values():
