@@ -38,8 +38,9 @@ def serve_metrics(request):
     m = metrics.metric_values()
 
     output = []
-    for metric, value in m.items():
-        output.append("{} {}".format(metric, str(value)))
+    for metric, sub in m.items():
+        for label, value in sub.items():
+            output.append("{}{} {}".format(metric, label, str(value)))
 
     content = "\n".join(output) + "\n"
 

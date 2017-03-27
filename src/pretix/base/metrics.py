@@ -1,4 +1,5 @@
 import math
+from collections import defaultdict
 
 from django.apps import apps
 from django.conf import settings
@@ -186,20 +187,28 @@ class Histogram(Metric):
 
 def metric_values():
     """
-    Produces the scrapable textformat to be presented to the monitoring system
+    Produces the the values to be presented to the monitoring system
     """
-    metrics = {}
+    metrics = defaultdict(dict)
 
     # Metrics from redis
     if settings.HAS_REDIS:
         for key, value in redis.hscan_iter(REDIS_KEY):
             dkey = key.decode("utf-8")
+            splitted = dkey.split("{", 2)
             value = float(value.decode("utf-8"))
-            metrics[dkey] = value
+            metrics[splitted[0]]["{" + splitted[1]] = value
+
+    # Aliases
+    aliases = {
+        'pretix_view_requests_total': 'pretix_view_duration_seconds_count'
+    }
+    for a, atarget in aliases.items():
+        metrics[a] = metrics[atarget]
 
     # Throwaway metrics
     for m in apps.get_models():  # Count all models
-        metrics['pretix_model_instances{model="%s"}' % m._meta] = m.objects.count()
+        metrics['pretix_model_instances']['{model="%s"}' % m._meta] = m.objects.count()
 
     return metrics
 
@@ -207,8 +216,6 @@ def metric_values():
 """
 Provided metrics
 """
-pretix_view_requests_total = Counter("pretix_view_requests_total", "Total number of HTTP requests made.",
-                                     ["status_code", "method", "url_name"])
 pretix_view_duration_seconds = Histogram("pretix_view_duration_seconds", "Return time of views.",
                                          ["status_code", "method", "url_name"])
 pretix_task_runs_total = Counter("pretix_task_runs_total", "Total calls to a celery task",

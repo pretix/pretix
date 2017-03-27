@@ -2,9 +2,7 @@ import time
 
 from django.urls import resolve
 
-from pretix.base.metrics import (
-    pretix_view_duration_seconds, pretix_view_requests_total,
-)
+from pretix.base.metrics import pretix_view_duration_seconds
 
 
 class MetricsMiddleware(object):
@@ -30,8 +28,6 @@ class MetricsMiddleware(object):
         t0 = time.perf_counter()
         resp = self.get_response(request)
         tdiff = time.perf_counter() - t0
-        pretix_view_requests_total.inc(1, status_code=resp.status_code, method=request.method,
-                                       url_name=url.namespace + ':' + url.url_name)
         pretix_view_duration_seconds.observe(tdiff, status_code=resp.status_code, method=request.method,
                                              url_name=url.namespace + ':' + url.url_name)
 

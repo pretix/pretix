@@ -34,29 +34,31 @@ def test_counter(monkeypatch):
     fake_redis = FakeRedis()
 
     monkeypatch.setattr(metrics, "redis", fake_redis, raising=False)
+    pretix_view_requests_total = metrics.Counter("pretix_view_requests_total", "Total number of HTTP requests made.",
+                                                 ["status_code", "method", "url_name"])
 
     # now test
-    fullname_get = metrics.pretix_view_requests_total._construct_metric_identifier(
+    fullname_get = pretix_view_requests_total._construct_metric_identifier(
         'pretix_view_requests_total', {"status_code": "200", "url_name": "foo", "method": "GET"}
     )
-    fullname_post = metrics.pretix_view_requests_total._construct_metric_identifier(
+    fullname_post = pretix_view_requests_total._construct_metric_identifier(
         'pretix_view_requests_total', {"status_code": "200", "url_name": "foo", "method": "POST"}
     )
-    metrics.pretix_view_requests_total.inc(status_code="200", url_name="foo", method="GET")
+    pretix_view_requests_total.inc(status_code="200", url_name="foo", method="GET")
     assert fake_redis.storage[fullname_get] == 1
-    metrics.pretix_view_requests_total.inc(status_code="200", url_name="foo", method="GET")
+    pretix_view_requests_total.inc(status_code="200", url_name="foo", method="GET")
     assert fake_redis.storage[fullname_get] == 2
-    metrics.pretix_view_requests_total.inc(7, status_code="200", url_name="foo", method="GET")
+    pretix_view_requests_total.inc(7, status_code="200", url_name="foo", method="GET")
     assert fake_redis.storage[fullname_get] == 9
-    metrics.pretix_view_requests_total.inc(7, status_code="200", url_name="foo", method="POST")
+    pretix_view_requests_total.inc(7, status_code="200", url_name="foo", method="POST")
     assert fake_redis.storage[fullname_get] == 9
     assert fake_redis.storage[fullname_post] == 7
 
     with pytest.raises(ValueError):
-        metrics.pretix_view_requests_total.inc(-4, status_code="200", url_name="foo", method="POST")
+        pretix_view_requests_total.inc(-4, status_code="200", url_name="foo", method="POST")
 
     with pytest.raises(ValueError):
-        metrics.pretix_view_requests_total.inc(-4, status_code="200", url_name="foo", method="POST", too="much")
+        pretix_view_requests_total.inc(-4, status_code="200", url_name="foo", method="POST", too="much")
 
     # test dimensionless counters
     dimless_counter = metrics.Counter("dimless_counter", "this is a helpstring")
@@ -166,11 +168,13 @@ def test_metrics_view(monkeypatch, client):
     monkeypatch.setattr(metricsview.metrics, "redis", fake_redis, raising=False)
 
     counter_value = 3
-    fullname = metrics.pretix_view_requests_total._construct_metric_identifier(
+    pretix_view_requests_total = metrics.Counter("pretix_view_requests_total", "Total number of HTTP requests made.",
+                                                 ["status_code", "method", "url_name"])
+    fullname = pretix_view_requests_total._construct_metric_identifier(
         'http_requests_total',
         {"status_code": "200", "url_name": "foo", "method": "GET"}
     )
-    metricsview.metrics.pretix_view_requests_total.inc(counter_value, status_code="200", url_name="foo", method="GET")
+    pretix_view_requests_total.inc(counter_value, status_code="200", url_name="foo", method="GET")
 
     # test unauthorized-page
     assert "You are not authorized" in client.get('/metrics').content.decode('utf-8')
