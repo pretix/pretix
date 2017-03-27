@@ -68,5 +68,32 @@ to your data directory. As this might impact performance significantly and write
 to disk, we recommend to only enable it for a small number of requests -- and only if you are
 really interested in the results.
 
+Available metrics
+^^^^^^^^^^^^^^^^^
+
+The metrics available in pretix follow the standard `metric types`_ from the Prometheus world.
+Currently, the following metrics are exported:
+
+pretix_view_requests_total
+    Counter. Counts requests to Django views, labeled with the resolved ``url_name``, the used
+    HTTP ``method`` and the ``status_code`` returned.
+
+pretix_view_durations_seconds
+    Histogram. Measures duration of requests to Django views, labeled with the resolved
+    ``url_name``, the used HTTP ``method`` and the ``status_code`` returned.
+
+pretix_task_runs_total
+    Counter. Counts executions of background tasks, labeled with the ``task_name`` and the
+    ``status``. The latter can be ``success``, ``error`` or ``expected-error``.
+
+pretix_task_duration_seconds
+    Histogram. Measures duration of successful background task executions, labeled with the
+    ``task_name``.
+
+pretix_model_instances
+    Gauge. Measures number of instances of a certain model within the database, labeled with
+    the ``model`` name.
+
+.. _metric types: https://prometheus.io/docs/concepts/metric_types/
 .. _Prometheus: https://prometheus.io/
 .. _cProfile: https://docs.python.org/3/library/profile.html

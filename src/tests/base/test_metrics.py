@@ -27,6 +27,12 @@ class FakeRedis(object):
         # bytes-conversion here for emulating redis behavior without making incr too hard
         return bytes(self.storage[rkey], encoding='utf-8')
 
+    def pipeline(self):
+        return self
+
+    def execute(self):
+        pass
+
 
 @override_settings(HAS_REDIS=True)
 def test_counter(monkeypatch):
