@@ -15,7 +15,9 @@ import time
 from django.conf import settings
 from django.db import transaction
 
-from pretix.base.metrics import celery_task_runs, celery_task_times
+from pretix.base.metrics import (
+    pretix_task_duration_seconds, pretix_task_runs_total,
+)
 from pretix.celery_app import app
 
 
@@ -38,7 +40,7 @@ class ProfiledTask(app.Task):
             tottime = time.perf_counter() - t0
 
         if settings.METRICS_ENABLED:
-            celery_task_times.observe(tottime, task_name=self.name)
+            pretix_task_duration_seconds.observe(tottime, task_name=self.name)
         return ret
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
@@ -48,13 +50,13 @@ class ProfiledTask(app.Task):
                 if isinstance(exc, t):
                     expected = True
                     break
-            celery_task_runs.inc(1, task_name=self.name, status="expected-error" if expected else "error")
+            pretix_task_runs_total.inc(1, task_name=self.name, status="expected-error" if expected else "error")
 
         return super().on_failure(exc, task_id, args, kwargs, einfo)
 
     def on_success(self, retval, task_id, args, kwargs):
         if settings.METRICS_ENABLED:
-            celery_task_runs.inc(1, task_name=self.name, status="success")
+            pretix_task_runs_total.inc(1, task_name=self.name, status="success")
 
         return super().on_success(retval, task_id, args, kwargs)
 

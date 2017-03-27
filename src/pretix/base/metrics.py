@@ -174,14 +174,13 @@ class Histogram(Metric):
         summetric = self._construct_metric_identifier(self.name + '_sum', kwargs)
         self._inc_in_redis(summetric, amount)
 
+        kwargs_le = dict(kwargs.items())
         for i, bound in enumerate(self.buckets):
             if amount <= bound:
-                kwargs_le = dict(kwargs.items())
                 kwargs_le['le'] = _float_to_go_string(bound)
                 bmetric = self._construct_metric_identifier(self.name + '_bucket', kwargs_le,
                                                             labelnames=self.labelnames + ["le"])
                 self._inc_in_redis(bmetric, 1)
-                break
 
 
 def metric_values():
@@ -204,11 +203,11 @@ def metric_values():
 """
 Provided metrics
 """
-http_view_requests = Counter("http_view_requests", "Total number of HTTP requests made.",
-                             ["status_code", "method", "url_name"])
-http_view_times = Histogram("http_view_times", "Return time of views.",
-                            ["status_code", "method", "url_name"])
-celery_task_runs = Counter("celery_task_runs", "Total calls to a celery task",
-                           ["task_name", "status"])
-celery_task_times = Histogram("celery_task_times", "Call time of a celery task",
-                              ["task_name"])
+pretix_view_requests_total = Counter("pretix_view_requests_total", "Total number of HTTP requests made.",
+                                     ["status_code", "method", "url_name"])
+pretix_view_duration_seconds = Histogram("pretix_view_duration_seconds", "Return time of views.",
+                                         ["status_code", "method", "url_name"])
+pretix_task_runs_total = Counter("pretix_task_runs_total", "Total calls to a celery task",
+                                 ["task_name", "status"])
+pretix_task_duration_seconds = Histogram("pretix_task_duration_seconds", "Call time of a celery task",
+                                         ["task_name"])
