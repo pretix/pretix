@@ -1,5 +1,6 @@
 import math
 
+from django.apps import apps
 from django.conf import settings
 
 if settings.HAS_REDIS:
@@ -187,15 +188,18 @@ def metric_values():
     """
     Produces the scrapable textformat to be presented to the monitoring system
     """
-    if not settings.HAS_REDIS:
-        return ""
-
     metrics = {}
 
-    for key, value in redis.hscan_iter(REDIS_KEY):
-        dkey = key.decode("utf-8")
-        value = float(value.decode("utf-8"))
-        metrics[dkey] = value
+    # Metrics from redis
+    if settings.HAS_REDIS:
+        for key, value in redis.hscan_iter(REDIS_KEY):
+            dkey = key.decode("utf-8")
+            value = float(value.decode("utf-8"))
+            metrics[dkey] = value
+
+    # Throwaway metrics
+    for m in apps.get_models():  # Count all models
+        metrics['pretix_model_instances{model="%s"}' % m._meta] = m.objects.count()
 
     return metrics
 
