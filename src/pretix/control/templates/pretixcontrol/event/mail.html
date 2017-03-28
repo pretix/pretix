@@ -21,27 +21,27 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="order_placed" class="panel-collapse collapse preview-panel">
+                    <div id="order_placed" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <div>
+                            <div id="mail_text_order_placed_panel" class="preview-panel" for="mail_text_order_placed">
                                 <label class="col-md-3 control-label">{% trans "Text" %}</label>
                                 <div class="col-md-9">
                                     <div class="tab-content">
-                                        <div id="order_placed_edit" class="tab-pane fade in active">
+                                        <div id="mail_text_order_placed_edit" class="tab-pane fade in active">
                                             {% bootstrap_field form.mail_text_order_placed show_label=False %}
                                         </div>
-                                        <div id="order_placed_preview" class="tab-pane">
+                                        <div id="mail_text_order_placed_preview" class="tab-pane">
                                             {% for l in request.event.settings.locales %}
-                                                <p lang="{{ l }}" preview-for="mail_text_order_placed_{{ forloop.counter0 }}">ss</p>
+                                                <pre lang="{{ l }}" for="mail_text_order_placed_{{ forloop.counter0 }}"></pre>
                                             {% endfor %}
                                         </div>
                                     </div>
                                     <ul class="nav nav-pills pull-right">
                                         <li role="presentation" class="active">
-                                            <a data-toggle="pill" type="edit" href="#order_placed_edit"><i class="fa fa-pencil-square-o fa-fw"></i> {% trans "Edit" %}</a>
+                                            <a data-toggle="pill" type="edit" href="#mail_text_order_placed_edit"><i class="fa fa-pencil-square-o fa-fw"></i> {% trans "Edit" %}</a>
                                         </li>
                                         <li role="presentation">
-                                            <a data-toggle="pill" type="preview" href="#order_placed_preview"><i class="fa fa-tv fa-fw"></i> {% trans "Preview" %}</a>
+                                            <a data-toggle="pill" type="preview" href="#mail_text_order_placed_preview"><i class="fa fa-tv fa-fw"></i> {% trans "Preview" %}</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -114,7 +114,7 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="order_expirew" class="panel-collapse collapse">
+                    <div id="order_expire" class="panel-collapse collapse">
                         <div class="panel-body">
                             {% bootstrap_field form.mail_days_order_expire_warning layout="horizontal" %}
                             {% bootstrap_field form.mail_text_order_expire_warning layout="horizontal" %}

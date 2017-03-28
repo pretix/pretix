@@ -1,9 +1,9 @@
 function preview_task_callback(data, jqXHR, status) {
     "use strict";
     if (data.item) {
-        $('#' + data.item).data('ajaxing', false);
+        $('#' + data.item + '_panel').data('ajaxing', false);
         for (var m in data.msgs){
-            var target = $('p[preview-for=' + m + ']');
+            var target = $('pre[for=' + m + ']');
             if (target.length === 1){
                 target.text(data.msgs[m]);
             }
@@ -14,8 +14,8 @@ function preview_task_callback(data, jqXHR, status) {
 function preview_task_error(item) {
     "use strict";
     return function(jqXHR, textStatus, errorThrown) {
-        $('#' + item).data('ajaxing', false);
-        $('#' + item + '_preview p').text(gettext('An error occurred.'));
+        $('#' + item + '_panel').data('ajaxing', false);
+        $('#' + item + '_preview pre').text(gettext('An error occurred.'));
         if (textStatus === "timeout") {
             alert(gettext("The request took to long. Please try again."));
         } else {
@@ -33,8 +33,8 @@ $(function () {
     "use strict";
 
     $('a[type=preview]').on('click', function () {
-        var itemName = $(this).closest('.preview-panel').attr('id');
-        if ($('#' + itemName).data('ajaxing') || $(this).parent('.active').length !== 0) {
+        var itemName = $(this).closest('.preview-panel').attr('for');
+        if ($('#' + itemName + '_panel').data('ajaxing') || $(this).parent('.active').length !== 0) {
             return;
         }
 
@@ -42,14 +42,14 @@ $(function () {
         var parentForm = $(this).closest('form');
         var previewUrl = $(parentForm).attr('mail-preview-url');
         var token = $(parentForm).find('input[name=csrfmiddlewaretoken]').val();
-        var dataString = 'item=' + itemName + '&csrfmiddlewaretoken=' + token + '&ajax=1';
+        var dataString = 'item=' + itemName + '&csrfmiddlewaretoken=' + token;
         $('#' + itemName + '_edit textarea').each(function () {
             dataString += '&' + $(this).serialize();
         });
 
         // prepare for ajax
-        $('#' + itemName).data('ajaxing', true);
-        $('#' + itemName + '_preview p').text(gettext('Generating messages …'));
+        $('#' + itemName + '_panel').data('ajaxing', true);
+        $('#' + itemName + '_preview pre').text(gettext('Generating messages …'));
 
         $.ajax(
             {
