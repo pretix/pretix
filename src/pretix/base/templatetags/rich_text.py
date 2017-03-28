@@ -25,6 +25,8 @@ ALLOWED_TAGS = [
     'tr',
     'td',
     'th',
+    'div',
+    'span'
 ]
 
 ALLOWED_ATTRIBUTES = {
@@ -33,6 +35,9 @@ ALLOWED_ATTRIBUTES = {
     'acronym': ['title'],
     'table': ['width'],
     'td': ['width', 'align'],
+    'div': ['class'],
+    'p': ['class'],
+    'span': ['class'],
 }
 
 
@@ -41,5 +46,9 @@ def rich_text(text: str, **kwargs):
     """
     Processes markdown and cleans HTML in a text input.
     """
-    body_md = bleach.linkify(bleach.clean(markdown.markdown(text), tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES))
+    body_md = bleach.linkify(bleach.clean(
+        markdown.markdown(text),
+        tags=ALLOWED_TAGS,
+        attributes=ALLOWED_ATTRIBUTES,
+    ))
     return mark_safe(body_md)
