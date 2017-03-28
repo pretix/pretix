@@ -76,7 +76,7 @@ class EventWizardBasicsForm(I18nModelForm):
 
     def clean(self):
         data = super().clean()
-        if data['locale'] not in self.locales:
+        if data.get('locale') not in self.locales:
             raise ValidationError({
                 'locale': _('Your default locale must also be enabled for your event (see box above).')
             })
