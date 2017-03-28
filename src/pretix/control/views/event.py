@@ -422,7 +422,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
     def dummy_data(self):
         return {
             'mail_text_order_placed': {
-                'event': self.request.event.name,
+                'event': str(self.request.event.name),
                 'total': 100,
                 'currency': self.request.event.currency,
                 'date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
@@ -431,8 +431,8 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                     'event': self.request.event,
                     'organizer': self.request.event.organizer
                 }),
-                'invoice_name': _('Invoice for %s.') % {self.request.event.name},
-                'invoice_company': self.request.event.organizer.name
+                'invoice_name': _('Invoice for %s.') % {str(self.request.event.name)},
+                'invoice_company': str(self.request.event.organizer.name)
             }
         }
 
