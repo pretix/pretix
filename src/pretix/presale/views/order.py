@@ -550,11 +550,13 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
                 extension='', type='', file=None)
             generate_order.apply_async(args=(self.order.id, self.output.identifier))
 
+        if not ct.file:
+            if now() - ct.created > timedelta(minutes=5):
+                generate_order.apply_async(args=(self.order.id, self.output.identifier))
+
         if 'ajax' in self.request.GET:
             return HttpResponse('1' if ct and ct.file else '0')
         elif not ct.file:
-            if now() - ct.created > timedelta(minutes=110):
-                generate_order.apply_async(args=(self.order.id, self.output.identifier))
             return render(self.request, "pretixbase/cachedfiles/pending.html", {})
         else:
             resp = FileResponse(ct.file.file, content_type=ct.type)
@@ -577,11 +579,13 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
                 extension='', type='', file=None)
             generate.apply_async(args=(self.order_position.id, self.output.identifier))
 
+        if not ct.file:
+            if now() - ct.created > timedelta(minutes=5):
+                generate.apply_async(args=(self.order_position.id, self.output.identifier))
+
         if 'ajax' in self.request.GET:
             return HttpResponse('1' if ct and ct.file else '0')
         elif not ct.file:
-            if now() - ct.created > timedelta(minutes=110):
-                generate.apply_async(args=(self.order_position.id, self.output.identifier))
             return render(self.request, "pretixbase/cachedfiles/pending.html", {})
         else:
             resp = FileResponse(ct.file.file, content_type=ct.type)
