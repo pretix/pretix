@@ -422,7 +422,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
     def dummy_data(self):
         return {
             'mail_text_order_placed': {
-                'event': str(self.request.event.name),
+                'event': self.request.event.name,
                 'total': 100,
                 'currency': self.request.event.currency,
                 'date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
@@ -431,8 +431,8 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                     'event': self.request.event,
                     'organizer': self.request.event.organizer
                 }),
-                'invoice_name': _('Invoice for %s.') % {str(self.request.event.name)},
-                'invoice_company': str(self.request.event.organizer.name)
+                'invoice_name': _('Invoice for {}.').format(self.request.event.name),
+                'invoice_company': self.request.event.organizer.name
             }
         }
 
@@ -441,7 +441,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         if preview_item not in self.items:
             raise HttpResponseBadRequest(_('invalid item'))
 
-        regex = r"^" + re.escape(preview_item) + r"_\d{1}$"
+        regex = r"^" + re.escape(preview_item) + r"_\d*$"
         msgs = {}
         for k, v in request.POST.items():
             # only accept allowed fields
