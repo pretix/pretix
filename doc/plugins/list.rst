@@ -26,9 +26,11 @@ The following plugins are from independent third-party authors, so we can make
 no statements about their stability:
 
 * `esPass ticket output`_
+* `IcePay integration`_
 
 .. _SEPA direct debit: https://github.com/pretix/pretix-sepadebit
 .. _Passbook/Wallet ticket output: https://github.com/pretix/pretix-passbook
 .. _Cartshare: https://github.com/pretix/pretix-cartshare
 .. _Pages: https://github.com/pretix/pretix-pages
 .. _esPass ticket output: https://github.com/esPass/pretix-espass
+.. _IcePay integration: https://github.com/chotee/pretix-icepay
