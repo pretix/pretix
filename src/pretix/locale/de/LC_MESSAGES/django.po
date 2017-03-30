@@ -6709,7 +6709,7 @@ msgstr "Steuer"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:6
 msgid "Send out emails"
-msgstr "E-Mails versenden"
+msgstr "E-Mails verschicken"
 
 #: pretix/plugins/sendmail/__init__.py:15
 msgid "This plugin allows you to send out emails to all your customers."

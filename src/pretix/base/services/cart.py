@@ -163,7 +163,7 @@ class CartManager:
             if not isinstance(custom_price, Decimal):
                 custom_price = Decimal(custom_price.replace(",", "."))
             if custom_price > 100000000:
-                return error_messages['price_too_high']
+                raise CartError(error_messages['price_too_high'])
             if self.event.settings.display_net_prices:
                 custom_price = round_decimal(custom_price * (100 + item.tax_rate) / 100)
             price = max(custom_price, price)

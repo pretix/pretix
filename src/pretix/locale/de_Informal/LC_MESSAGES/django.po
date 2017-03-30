@@ -6180,7 +6180,7 @@ msgstr "Beim Verarbeiten der Daten ist ein interner Fehler aufgetreten."
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:21
 msgid ""
 "Your import did not contain any transactions that you did not import before."
-msgstr "Dein Import enthielt neuen Überweisungen."
+msgstr "Dein Import enthielt keine neuen Überweisungen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:28
 msgid "Orders marked as paid"
@@ -6687,7 +6687,7 @@ msgstr "Steuer"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:6
 msgid "Send out emails"
-msgstr "E-Mails versenden"
+msgstr "E-Mails verschicken"
 
 #: pretix/plugins/sendmail/__init__.py:15
 msgid "This plugin allows you to send out emails to all your customers."

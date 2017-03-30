@@ -94,7 +94,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         if failures:
             messages.error(self.request, _('Failed to send mails to the following users: {}'.format(' '.join(failures))))
         else:
-            messages.success(self.request, _('Your message has been queued to be sent to the selected users.'))
+            messages.success(self.request, _('Your message has been queued and will be sent to the selected users.'))
 
         return redirect(
             'plugins:sendmail:send',
