@@ -115,7 +115,8 @@ setup(
             'isort',
             'pytest-mock',
             'pytest-rerunfailures',
-            'pytest-warnings'
+            'pytest-warnings',
+            'responses'
         ],
         'memcached': ['pylibmc'],
         'mysql': ['mysqlclient'],

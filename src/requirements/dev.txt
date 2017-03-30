@@ -13,3 +13,4 @@ isort
 pytest-mock
 pytest-rerunfailures
 pytest-warnings
+responses
