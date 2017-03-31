@@ -234,9 +234,10 @@ class User2FADeviceConfirmU2FView(RecentAuthenticationRequiredMixin, TemplateVie
 
             note = ''
             if not self.request.user.require_2fa:
-                note = ' ' + _('Please note that you still need to enable two-factor authentication for your account '
-                               'using the buttons below to make a second factor required for logging into your accont.')
-            messages.success(request, _('The device has been verified and can now be used.') + note)
+                note = ' ' + str(_('Please note that you still need to enable two-factor authentication for your '
+                                   'account using the buttons below to make a second factor required for logging '
+                                   'into your accont.'))
+            messages.success(request, str(_('The device has been verified and can now be used.')) + note)
             return redirect(reverse('control:user.settings.2fa'))
         except Exception:
             messages.error(request, _('The registration could not be completed. Please try again.'))
@@ -279,7 +280,12 @@ class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateVi
                 _('A new two-factor authentication device has been added to your account.')
             ])
 
-            messages.success(request, _('The device has been verified and can now be used.'))
+            note = ''
+            if not self.request.user.require_2fa:
+                note = ' ' + str(_('Please note that you still need to enable two-factor authentication for your '
+                                   'account using the buttons below to make a second factor required for logging '
+                                   'into your accont.'))
+            messages.success(request, str(_('The device has been verified and can now be used.')) + note)
             return redirect(reverse('control:user.settings.2fa'))
         else:
             messages.error(request, _('The code you entered was not valid. If this problem persists, please check '
