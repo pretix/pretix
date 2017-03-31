@@ -197,7 +197,8 @@ class EventSettingsForm(SettingsForm):
     )
     locales = forms.MultipleChoiceField(
         choices=settings.LANGUAGES,
-        label=_("Available langauges"),
+        widget=forms.CheckboxSelectMultiple,
+        label=_("Available languages"),
     )
     locale = forms.ChoiceField(
         choices=settings.LANGUAGES,

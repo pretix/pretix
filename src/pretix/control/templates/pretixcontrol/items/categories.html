@@ -29,8 +29,8 @@
                 <thead>
                 <tr>
                     <th>{% trans "Product categories" %}</th>
-                    <th></th>
-                    <th></th>
+                    <th class="action-col-2"></th>
+                    <th class="action-col-2"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -44,6 +44,7 @@
                             <a href="{% url "control:event.items.categories.down" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
                         </td>
                         <td class="text-right">
+                            <a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                             <a href="{% url "control:event.items.categories.delete" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>

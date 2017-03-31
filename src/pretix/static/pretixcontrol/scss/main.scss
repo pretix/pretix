@@ -208,3 +208,12 @@ body.loading #wrapper {
     height: 12px;
     margin-top: -2px;
 }
+
+.btn .fa {
+    @extend .fa-fw;
+}
+
+.action-col-2 {
+    min-width: 95px;
+}
+
