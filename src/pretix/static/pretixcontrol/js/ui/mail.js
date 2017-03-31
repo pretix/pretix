@@ -15,7 +15,7 @@ function preview_task_error(item) {
     "use strict";
     return function(jqXHR, textStatus, errorThrown) {
         $('#' + item + '_panel').data('ajaxing', false);
-        $('#' + item + '_preview pre').text(gettext('An error occurred.'));
+        $('#' + item + '_preview pre').text(gettext('An error has occurred.'));
         if (textStatus === "timeout") {
             alert(gettext("The request took to long. Please try again."));
         } else {

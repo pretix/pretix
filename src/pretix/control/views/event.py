@@ -11,6 +11,7 @@ from django.db import transaction
 from django.forms import modelformset_factory
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.utils import translation
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -441,12 +442,16 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         if preview_item not in self.items:
             raise HttpResponseBadRequest(_('invalid item'))
 
-        regex = r"^" + re.escape(preview_item) + r"_\d*$"
+        regex = r"^" + re.escape(preview_item) + r"_(\d+)$"
         msgs = {}
         for k, v in request.POST.items():
             # only accept allowed fields
-            if re.search(regex, k):
-                msgs[k] = v.format_map(self.SafeDict(self.dummy_data.get(preview_item)))
+            matched = re.search(regex, k)
+            if matched is not None:
+                idx = int(matched.group(1))
+                if idx < len(self.request.event.settings.locales):
+                    with translation.override(self.request.event.settings.locales[idx]):
+                        msgs[k] = v.format_map(self.SafeDict(self.dummy_data.get(preview_item)))
 
         return JsonResponse({
             'item': preview_item,
