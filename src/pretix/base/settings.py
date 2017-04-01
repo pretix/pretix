@@ -351,6 +351,34 @@ Your {event} team"""))
     'frontpage_text': {
         'default': '',
         'type': LazyI18nString
+    },
+    'update_check_ack': {
+        'default': 'False',
+        'type': bool
+    },
+    'update_check_email': {
+        'default': '',
+        'type': str
+    },
+    'update_check_perform': {
+        'default': 'True',
+        'type': bool
+    },
+    'update_check_result': {
+        'default': None,
+        'type': dict
+    },
+    'update_check_result_warning': {
+        'default': 'False',
+        'type': bool
+    },
+    'update_check_last': {
+        'default': None,
+        'type': datetime
+    },
+    'update_check_id': {
+        'default': None,
+        'type': str
     }
 }
 

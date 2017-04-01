@@ -105,6 +105,13 @@
                         </li>
                     {% endfor %}
 
+                    {% if warning_update_available %}
+                        <li>
+                            <a href="{% url 'control:global.update' %}" class="danger">
+                                <i class="fa fa-bell"></i>
+                            </a>
+                        </li>
+                    {% endif %}
                     <li>
                         <a href="{% url 'control:user.settings' %}">
                             <i class="fa fa-user"></i> {{ request.user.get_full_name }}
@@ -141,7 +148,8 @@
                                 </li>
                                 {% if request.user.is_superuser %}
                                     <li>
-                                        <a href="{% url 'control:global-settings' %}" {% if "global-settings" in url_name %}class="active"{% endif %}>
+                                        <a href="{% url 'control:global.settings' %}"
+                                                {% if "global.settings" in url_name %}class="active"{% endif %}>
                                             <i class="fa fa-wrench fa-fw"></i>
                                             {% trans "Global settings" %}
                                         </a>
@@ -172,6 +180,19 @@
                                 {{ message }}
                             </div>
                         {% endfor %}
+                    {% endif %}
+                    {% if warning_update_check_active %}
+                        <div class="alert alert-info">
+                            <a href="{% url "control:global.update" %}">
+                                {% blocktrans trimmed %}
+                                    Starting with version 1.2.0, pretix automatically checks for updates in the background.
+                                    During this check, anonymous data is transmitted to servers operated by pretix'
+                                    developers. Click on this message to find out more, disable this feature or enter your
+                                    email address to get notified via email if a new update arrives. This message will
+                                    disappear once you clicked it.
+                                {% endblocktrans %}
+                            </a>
+                        </div>
                     {% endif %}
 
                     {% if debug_warning %}

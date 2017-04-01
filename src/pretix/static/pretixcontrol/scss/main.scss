@@ -27,6 +27,10 @@ nav.navbar {
     display: inline;
 }
 
+nav.navbar .danger, nav.navbar .danger:hover, nav.navbar .danger:active {
+    background: $brand-danger !important;
+}
+
 .navbar-header .navbar-events {
     color: white;
     padding-top: 6px;
