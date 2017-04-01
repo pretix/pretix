@@ -15,6 +15,7 @@ External Dependencies
 * Python 3.4 or newer
 * ``pip`` for Python 3 (Debian package: ``python3-pip``)
 * ``pyvenv`` for Python 3 (Debian package: ``python3-venv``)
+* ``python-dev`` for Python 3 (Debian package: ``python3-dev``)
 * ``libffi`` (Debian package: ``libffi-dev``)
 * ``libssl`` (Debian package: ``libssl-dev``)
 * ``libxml2`` (Debian package ``libxml2-dev``)
