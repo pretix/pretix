@@ -156,6 +156,10 @@ class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
             'event': self.request.event.slug,
         })
 
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
 
 class CategoryCreate(EventPermissionRequiredMixin, CreateView):
     model = ItemCategory
@@ -177,6 +181,10 @@ class CategoryCreate(EventPermissionRequiredMixin, CreateView):
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.category.added', data=dict(form.cleaned_data), user=self.request.user)
         return ret
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
 
 
 class CategoryList(ListView):
@@ -479,6 +487,10 @@ class QuestionUpdate(EventPermissionRequiredMixin, QuestionMixin, UpdateView):
             'event': self.request.event.slug,
         })
 
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
 
 class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
     model = Question
@@ -500,6 +512,10 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
 
     def get_object(self, **kwargs):
         return None
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
 
     @transaction.atomic
     def form_valid(self, form):
@@ -591,6 +607,10 @@ class QuotaCreate(EventPermissionRequiredMixin, QuotaEditorMixin, CreateView):
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.quota.added', user=self.request.user, data=dict(form.cleaned_data))
         return ret
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
 
 
 class QuotaView(ChartContainingView, DetailView):
@@ -699,6 +719,10 @@ class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
             'quota': self.object.pk
         })
 
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
 
 class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
     model = Quota
@@ -794,6 +818,10 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
         kwargs.update({'instance': newinst})
         return kwargs
 
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
 
 class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateView):
     form_class = ItemUpdateForm
@@ -821,6 +849,10 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
             )
             CachedTicket.objects.filter(order_position__item=self.item).delete()
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
 
 
 class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
@@ -878,6 +910,7 @@ class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView
 
                 messages.success(self.request, _('Your changes have been saved.'))
                 return redirect(self.get_success_url())
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
         return self.get(request, *args, **kwargs)
 
     def get_success_url(self) -> str:

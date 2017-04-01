@@ -31,6 +31,10 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         kwargs['event'] = self.request.event
         return kwargs
 
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not send the email. See below for details.'))
+        return super().form_invalid(form)
+
     def form_valid(self, form):
         qs = Order.objects.filter(event=self.request.event)
         statusq = Q(status__in=form.cleaned_data['sendto'])

@@ -98,6 +98,7 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
             event.presale_end = self.reset_timezone(zone, event.presale_end)
             return self.form_valid(form)
         else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.form_invalid(form)
 
     @staticmethod
@@ -455,6 +456,10 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
         form.prepare_fields()
         return form
 
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         success = True
@@ -487,7 +492,7 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
             messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
-            return self.get(request)
+            return self.form_invalid(form)
 
     @cached_property
     def provider_forms(self) -> list:

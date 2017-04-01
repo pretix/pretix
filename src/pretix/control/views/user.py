@@ -155,6 +155,10 @@ class User2FADeviceAddView(RecentAuthenticationRequiredMixin, FormView):
             'device': dev.pk
         }))
 
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
 
 class User2FADeviceDeleteView(RecentAuthenticationRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/user/2fa_delete.html'
