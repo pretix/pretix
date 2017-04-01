@@ -415,43 +415,62 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
 
     @cached_property
     def items(self):
-        return ['mail_text_order_placed', 'mail_text_order_paid', 'mail_text_order_free', 'mail_text_resend_link',
-                'mail_text_resend_all_links', 'mail_text_order_changed', 'mail_days_order_expire_warning',
-                'mail_text_order_expire_warning', 'mail_text_waiting_list']
+        return {
+            'mail_text_order_placed': ['total', 'currency', 'date', 'invoice_company',
+                                       'event', 'paymentinfo', 'url', 'invoice_name'],
+            'mail_text_order_paid': ['event', 'url', 'invoice_name', 'invoice_company', 'payment_info'],
+            'mail_text_order_free': ['event', 'url', 'invoice_name', 'invoice_company'],
+            'mail_text_resend_link': ['event', 'url', 'invoice_name', 'invoice_company'],
+            'mail_text_resend_all_links': ['event', 'orders'],
+            'mail_text_order_changed': ['event', 'url', 'invoice_name', 'invoice_company'],
+            'mail_text_order_expire_warning': ['event', 'url', 'expire_date', 'invoice_name', 'invoice_company'],
+            'mail_text_waiting_list': ['event', 'url', 'product', 'hours', 'code']
+        }
 
     @cached_property
     def dummy_data(self):
+        print('dummy data called')
         return {
-            'mail_text_order_placed': {
-                'event': self.request.event.name,
-                'total': 100,
-                'currency': self.request.event.currency,
-                'date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
-                'paymentinfo': _('Please transfer money to this bank account: AXXXX1033'),
-                'url': build_absolute_uri('presale:event.index', kwargs={
-                    'event': self.request.event,
-                    'organizer': self.request.event.organizer
-                }),
-                'invoice_name': _('Invoice for {}.').format(self.request.event.name),
-                'invoice_company': self.request.event.organizer.name
-            }
+            'event': self.request.event.name,
+            'total': 100,
+            'currency': self.request.event.currency,
+            'date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
+            'paymentinfo': _('Please transfer money to this bank account: BANK-ACCOUNT-0001'),
+            'payment_info': _('Please transfer money to this bank account: BANK-ACCOUNT-0001'),
+            'url': build_absolute_uri('presale:event.index', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer
+            }),
+            'invoice_name': _('Invoice for {}.').format(self.request.event.name),
+            'invoice_company': self.request.event.organizer.name,
+            'orders': 'ORDER-0001\nORDER-0002\nORDER-0003\nORDER-0004',
+            'expire_date': date_format(now() + timedelta(days=15), 'SHORT_DATE_FORMAT'),
+            'product': _('Admission Ticket'),
+            'hours': 12,
+            'code': 'VOUCHER_CODE_001'
         }
+
+    def placeholders(self, item):
+        supported = {}
+        for key in self.items.get(item):
+            supported[key] = self.dummy_data.get(key)
+        return self.SafeDict(supported)
 
     def post(self, request, *args, **kwargs):
         preview_item = request.POST.get('item', '')
         if preview_item not in self.items:
             raise HttpResponseBadRequest(_('invalid item'))
 
-        regex = r"^" + re.escape(preview_item) + r"_(\d+)$"
+        regex = r"^" + re.escape(preview_item) + r"_(?P<idx>[\d+])$"
         msgs = {}
         for k, v in request.POST.items():
             # only accept allowed fields
             matched = re.search(regex, k)
             if matched is not None:
-                idx = int(matched.group(1))
+                idx = int(matched.group('idx'))
                 if idx < len(self.request.event.settings.locales):
                     with translation.override(self.request.event.settings.locales[idx]):
-                        msgs[k] = v.format_map(self.SafeDict(self.dummy_data.get(preview_item)))
+                        msgs[k] = v.format_map(self.placeholders(preview_item))
 
         return JsonResponse({
             'item': preview_item,

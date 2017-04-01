@@ -11,34 +11,42 @@
     </div>
     <div id="{{ pid }}" class="panel-collapse collapse">
         <div class="panel-body">
+            {% with exclude|split as exclusion %}
             {% with items|split as item_list %}
             {% for item in item_list %}
-            <div id="{{ item }}_panel" class="preview-panel" for="{{ item }}">
-                <label class="col-md-3 control-label">{% trans "Text" %}</label>
-                <div class="col-md-9">
-                    <div class="tab-content">
-                        <div id="{{ item }}_edit" class="tab-pane fade in active">
-                            {% with form|getattr:item as field %}
-                                {% bootstrap_field field show_label=False %}
-                            {% endwith %}
-                        </div>
-                        <div id="{{ item }}_preview" class="tab-pane">
-                            {% for l in request.event.settings.locales %}
-                                <pre lang="{{ l }}" for="{{ item }}_{{ forloop.counter0 }}"></pre>
-                            {% endfor %}
+                {% if item in exclusion %}
+                    {% with form|getattr:item as field %}
+                        {% bootstrap_field field layout="horizontal" %}
+                    {% endwith %}
+                {% else %}
+                    <div id="{{ item }}_panel" class="preview-panel form-group" for="{{ item }}">
+                        <label class="col-md-3 control-label">{% trans "Text" %}</label>
+                        <div class="col-md-9">
+                            <div class="tab-content">
+                                <div id="{{ item }}_edit" class="tab-pane fade in active">
+                                    {% with form|getattr:item as field %}
+                                        {% bootstrap_field field show_label=False form_group_class="" %}
+                                    {% endwith %}
+                                </div>
+                                <div id="{{ item }}_preview" class="tab-pane">
+                                    {% for l in request.event.settings.locales %}
+                                        <pre lang="{{ l }}" for="{{ item }}_{{ forloop.counter0 }}"></pre>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <ul class="nav nav-pills pull-right">
+                                <li role="presentation" class="active">
+                                    <a data-toggle="pill" type="edit" href="#{{ item }}_edit"><i class="fa fa-pencil-square-o fa-fw"></i> {% trans "Edit" %}</a>
+                                </li>
+                                <li role="presentation">
+                                    <a data-toggle="pill" type="preview" href="#{{ item }}_preview"><i class="fa fa-tv fa-fw"></i> {% trans "Preview" %}</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <ul class="nav nav-pills pull-right">
-                        <li role="presentation" class="active">
-                            <a data-toggle="pill" type="edit" href="#{{ item }}_edit"><i class="fa fa-pencil-square-o fa-fw"></i> {% trans "Edit" %}</a>
-                        </li>
-                        <li role="presentation">
-                            <a data-toggle="pill" type="preview" href="#{{ item }}_preview"><i class="fa fa-tv fa-fw"></i> {% trans "Preview" %}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                {% endif %}
             {% endfor %}
+            {% endwith %}
             {% endwith %}
         </div>
     </div>
