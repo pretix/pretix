@@ -14,13 +14,26 @@
         <fieldset>
             <legend>{% trans "E-mail content" %}</legend>
             <div class="panel-group" id="questions_group">
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_placed" title="Placed order" items="mail_text_order_placed" %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_paid" title="Paid order" items="mail_text_order_paid" %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_free" title="Free order" items="mail_text_order_free" %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="resend_link" title="Resend link" items="mail_text_resend_link,mail_text_resend_all_links" %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_changed" title="Order changed" items="mail_text_order_changed" %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_expirew" title="Payment reminder" items="mail_days_order_expire_warning,mail_text_order_expire_warning" exclude="mail_days_order_expire_warning" %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="waiting_list" title="Waiting list notification" items="mail_text_waiting_list" %}
+                {% blocktrans asvar title_placed_order %}Placed order{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_placed" title=title_placed_order items="mail_text_order_placed" %}
+
+                {% blocktrans asvar title_paid_order %}Paid order{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_paid" title=title_paid_order items="mail_text_order_paid" %}
+
+                {% blocktrans asvar title_free_order %}Free order{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_free" title=title_free_order items="mail_text_order_free" %}
+
+                {% blocktrans asvar title_resend_link %}Resend link{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="resend_link" title=title_resend_link items="mail_text_resend_link,mail_text_resend_all_links" %}
+
+                {% blocktrans asvar title_order_changed %}Order changed{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_changed" title=title_order_changed items="mail_text_order_changed" %}
+
+                {% blocktrans asvar title_payment_reminder %}Payment reminder{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_expirew" title=title_payment_reminder items="mail_days_order_expire_warning,mail_text_order_expire_warning" exclude="mail_days_order_expire_warning" %}
+
+                {% blocktrans asvar title_waiting_list_notification %}Waiting list notification{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="waiting_list" title=title_waiting_list_notification items="mail_text_waiting_list" %}
             </div>
         </fieldset>
         <fieldset>

@@ -429,7 +429,6 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
 
     @cached_property
     def dummy_data(self):
-        print('dummy data called')
         return {
             'event': self.request.event.name,
             'total': 100,

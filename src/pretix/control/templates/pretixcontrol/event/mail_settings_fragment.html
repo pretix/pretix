@@ -20,13 +20,12 @@
                     {% endwith %}
                 {% else %}
                     <div id="{{ item }}_panel" class="preview-panel form-group" for="{{ item }}">
-                        <label class="col-md-3 control-label">{% trans "Text" %}</label>
+                        {% with form|getattr:item as field %}
+                        <label class="col-md-3 control-label">{{ field.label }}</label>
                         <div class="col-md-9">
                             <div class="tab-content">
                                 <div id="{{ item }}_edit" class="tab-pane fade in active">
-                                    {% with form|getattr:item as field %}
-                                        {% bootstrap_field field show_label=False form_group_class="" %}
-                                    {% endwith %}
+                                    {% bootstrap_field field show_label=False form_group_class="" %}
                                 </div>
                                 <div id="{{ item }}_preview" class="tab-pane">
                                     {% for l in request.event.settings.locales %}
@@ -43,6 +42,7 @@
                                 </li>
                             </ul>
                         </div>
+                        {% endwith %}
                     </div>
                 {% endif %}
             {% endfor %}
