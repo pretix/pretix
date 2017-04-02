@@ -26,7 +26,6 @@ from .auth import User
 from .organizer import Organizer
 from .settings import EventSetting
 
-
 class Event(LoggedModel):
     """
     This model represents an event. An event is anything you can buy
@@ -81,8 +80,11 @@ class Event(LoggedModel):
     live = models.BooleanField(default=False, verbose_name=_("Shop is live"))
     permitted = models.ManyToManyField(User, through='EventPermission',
                                        related_name="events", )
+    CURRENCY_CHOICES = [(settings.CURRENCIES[i].alpha_3, settings.CURRENCIES[i].alpha_3 + " - " + settings.CURRENCIES[i].name)\
+            for i in range(0, len(settings.CURRENCIES))]
     currency = models.CharField(max_length=10,
                                 verbose_name=_("Default currency"),
+                                choices=CURRENCY_CHOICES,
                                 default=settings.DEFAULT_CURRENCY)
     date_from = models.DateTimeField(verbose_name=_("Event start time"))
     date_to = models.DateTimeField(null=True, blank=True,
