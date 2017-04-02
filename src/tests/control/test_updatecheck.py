@@ -1,4 +1,7 @@
+import json
+
 import pytest
+import responses
 
 from pretix.base.models import User
 from pretix.base.settings import GlobalSettingsObject
@@ -8,6 +11,20 @@ from pretix.base.settings import GlobalSettingsObject
 def user():
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     return user
+
+
+def request_callback_updatable(request):
+    json_data = json.loads(request.body.decode())
+    resp_body = {
+        'status': 'ok',
+        'version': {
+            'latest': '1000.0.0',
+            'yours': json_data.get('version'),
+            'updatable': True
+        },
+        'plugins': {}
+    }
+    return 200, {'Content-Type': 'text/json'}, json.dumps(resp_body)
 
 
 @pytest.mark.django_db
@@ -46,7 +63,14 @@ def test_settings(client, user):
 
 
 @pytest.mark.django_db
+@responses.activate
 def test_trigger(client, user):
+    responses.add_callback(
+        responses.POST, 'https://pretix.eu/.update_check/',
+        callback=request_callback_updatable,
+        content_type='application/json',
+    )
+
     user.is_superuser = True
     user.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
