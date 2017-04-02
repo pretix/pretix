@@ -12,7 +12,12 @@ class Command(BaseCommand):
         call_command('compilejsi18n', verbosity=1, interactive=False)
         call_command('collectstatic', verbosity=1, interactive=False)
         call_command('compress', verbosity=1, interactive=False)
-        gs = GlobalSettingsObject()
-        del gs.settings.update_check_last
-        del gs.settings.update_check_result
-        del gs.settings.update_check_result_warning
+        try:
+            gs = GlobalSettingsObject()
+            del gs.settings.update_check_last
+            del gs.settings.update_check_result
+            del gs.settings.update_check_result_warning
+        except:
+            # Fails when this is executed without a valid database configuration.
+            # We don't care.
+            pass
