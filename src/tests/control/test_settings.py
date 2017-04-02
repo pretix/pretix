@@ -1,9 +1,12 @@
 import datetime
-import re
 import json
+import re
 
-from pretix.base.models import User, Organizer, Event, OrganizerPermission, EventPermission
 from tests.base import SoupTest
+
+from pretix.base.models import (
+    Event, EventPermission, Organizer, OrganizerPermission, User,
+)
 
 
 class MailSettingPreviewTest(SoupTest):
