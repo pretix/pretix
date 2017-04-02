@@ -458,7 +458,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         preview_item = request.POST.get('item', '')
         if preview_item not in self.items:
-            raise HttpResponseBadRequest(_('invalid item'))
+            return HttpResponseBadRequest(_('invalid item'))
 
         regex = r"^" + re.escape(preview_item) + r"_(?P<idx>[\d+])$"
         msgs = {}
