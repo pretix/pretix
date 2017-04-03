@@ -386,3 +386,48 @@ class EventsTest(SoupTest):
             'basics-presale_end': '2016-11-24 18:00:00',
         })
         assert doc.select(".alert-danger")
+
+    def test_create_event_currency_symbol(self):
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'foundation',
+            'foundation-organizer': self.orga1.pk,
+            'foundation-locales': 'en'
+        })
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'basics',
+            'basics-name_0': '33C3',
+            'basics-slug': '31c4',
+            'basics-date_from': '2016-12-27 10:00:00',
+            'basics-date_to': '2016-12-30 19:00:00',
+            'basics-location_0': 'Hamburg',
+            'basics-currency': '$',
+            'basics-locale': 'en',
+            'basics-timezone': 'Europe/Berlin',
+            'basics-presale_start': '2016-11-01 10:00:00',
+            'basics-presale_end': '2016-11-30 18:00:00',
+        })
+        assert doc.select(".alert-danger")
+
+    def test_create_event_non_iso_currency(self):
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'foundation',
+            'foundation-organizer': self.orga1.pk,
+            'foundation-locales': 'en'
+        })
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'basics',
+            'basics-name_0': '33C3',
+            'basics-slug': '31c5',
+            'basics-date_from': '2016-12-27 10:00:00',
+            'basics-date_to': '2016-12-30 19:00:00',
+            'basics-location_0': 'Hamburg',
+            'basics-currency': 'ASD',
+            'basics-locale': 'en',
+            'basics-timezone': 'Europe/Berlin',
+            'basics-presale_start': '2016-11-01 10:00:00',
+            'basics-presale_end': '2016-11-30 18:00:00',
+        })
+        assert doc.select(".alert-danger")
+

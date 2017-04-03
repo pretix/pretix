@@ -59,6 +59,7 @@ class Event(LoggedModel):
     """
 
     settings_namespace = 'event'
+    CURRENCY_CHOICES = [(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES]
     organizer = models.ForeignKey(Organizer, related_name="events", on_delete=models.PROTECT)
     name = I18nCharField(
         max_length=200,
@@ -81,8 +82,6 @@ class Event(LoggedModel):
     live = models.BooleanField(default=False, verbose_name=_("Shop is live"))
     permitted = models.ManyToManyField(User, through='EventPermission',
                                        related_name="events", )
-    CURRENCY_CHOICES = [(settings.CURRENCIES[i].alpha_3, settings.CURRENCIES[i].alpha_3 + " - " + settings.CURRENCIES[i].name)
-                        for i in range(0, len(settings.CURRENCIES))]
     currency = models.CharField(max_length=10,
                                 verbose_name=_("Default currency"),
                                 choices=CURRENCY_CHOICES,
