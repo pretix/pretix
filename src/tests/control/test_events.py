@@ -430,4 +430,3 @@ class EventsTest(SoupTest):
             'basics-presale_end': '2016-11-30 18:00:00',
         })
         assert doc.select(".alert-danger")
-
