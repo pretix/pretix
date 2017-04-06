@@ -52,6 +52,7 @@ Receivers are expected to return a list of dictionaries. The dictionaries
 should contain at least the keys ``label`` and ``url``. You can also return
 a fontawesome icon name with the key ``icon``, it will be respected depending
 on the type of navigation. If set, on desktops only the ``icon`` will be shown.
+The ``title`` property can be used to set the alternative text. 
 
 If you use this, you should read the documentation on :ref:`how to deal with URLs <urlconf>`
 in pretix.
