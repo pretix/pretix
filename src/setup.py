@@ -98,7 +98,8 @@ setup(
         'chardet>=2.3,<3',
         'mt-940==3.2',
         'django-i18nfield',
-        'vobject==0.9.*'
+        'vobject==0.9.*',
+        'pycountry'
     ],
     extras_require={
         'dev': [

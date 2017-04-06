@@ -59,6 +59,7 @@ class Event(LoggedModel):
     """
 
     settings_namespace = 'event'
+    CURRENCY_CHOICES = [(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES]
     organizer = models.ForeignKey(Organizer, related_name="events", on_delete=models.PROTECT)
     name = I18nCharField(
         max_length=200,
@@ -83,6 +84,7 @@ class Event(LoggedModel):
                                        related_name="events", )
     currency = models.CharField(max_length=10,
                                 verbose_name=_("Default currency"),
+                                choices=CURRENCY_CHOICES,
                                 default=settings.DEFAULT_CURRENCY)
     date_from = models.DateTimeField(verbose_name=_("Event start time"))
     date_to = models.DateTimeField(null=True, blank=True,

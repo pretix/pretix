@@ -1,6 +1,7 @@
 import configparser
 import os
 import sys
+from pycountry import currencies
 
 import django.conf.locale
 from django.contrib.messages import constants as messages  # NOQA
@@ -85,6 +86,7 @@ PRETIX_PLUGINS_DEFAULT = config.get('pretix', 'plugins_default',
                                     fallback='pretix.plugins.sendmail,pretix.plugins.statistics')
 
 DEFAULT_CURRENCY = config.get('pretix', 'currency', fallback='EUR')
+CURRENCIES = list(currencies)
 
 ALLOWED_HOSTS = ['*']
 
