@@ -72,7 +72,12 @@
                         <dt>{% trans "Order code" %}</dt>
                         <dd>{{ order.code }}</dd>
                         <dt>{% trans "Order locale" %}</dt>
-                        <dd>{{ order.locale }}</dd>
+                        <dd>
+                            {{ order.locale }}
+                            <a href="{% url "control:event.order.locale" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
+                                <span class="fa fa-edit"></span>
+                            </a>
+                        </dd>
                         <dt>{% trans "Order date" %}</dt>
                         <dd>{{ order.datetime }}</dd>
                         {% if order.status == "p" %}
