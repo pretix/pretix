@@ -22,13 +22,13 @@ class EventList(ListView):
     def get_queryset(self):
         if self.request.user.is_superuser:
             return Event.objects.all().select_related("organizer").prefetch_related(
-                "setting_objects", "organizer__setting_objects"
+                "_settings_objects", "organizer___settings_objects"
             )
         else:
             return Event.objects.filter(
                 permitted__id__exact=self.request.user.pk
             ).select_related("organizer").prefetch_related(
-                "setting_objects", "organizer__setting_objects"
+                "_settings_objects", "organizer___settings_objects"
             )
 
 

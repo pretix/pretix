@@ -2,7 +2,10 @@ Settings storage
 ================
 
 pretix is highly configurable and therefore needs to store a lot of per-event and per-organizer settings.
-Those settings are stored in the database and accessed through a ``SettingsProxy`` instance. You can obtain
+For this purpose, we use `django-hierarkey`_ which started out as part of pretix and then got refactored into
+its own library. It has a comprehensive `documentation`_ which you should read if you work with settings in pretix.
+
+The settings are stored in the database and accessed through a ``HierarkeyProxy`` instance. You can obtain
 such an instance from any event or organizer model instance by just accessing ``event.settings`` or
 ``organizer.settings``, respectively.
 
@@ -17,12 +20,10 @@ includes serializers for serializing the following types:
 
 In code, we recommend to always use the ``.get()`` method on the settings object to access a value, but for
 convenience in templates you can also access settings values at ``settings[name]`` and ``settings.name``.
-
-.. autoclass:: pretix.base.settings.SettingsProxy
-   :members: get, set, delete, freeze
+See the hierarkey `documentation`_ for more information.
 
 To avoid naming conflicts, plugins are requested to prefix all settings they use with the name of the plugin
-or something unique, e.g. ``payment.paypal.api_key``. To reduce redundant typing of this prefix, we provide
+or something unique, e.g. ``payment_paypal_api_key``. To reduce redundant typing of this prefix, we provide
 another helper class:
 
 .. autoclass:: pretix.base.settings.SettingsSandbox
@@ -33,10 +34,10 @@ you will just be passed a sandbox object with a prefix generated from your provi
 Forms
 -----
 
-We also provide a base class for forms that allow the modification of settings:
+Hierarkey also provides a base class for forms that allow the modification of settings. pretix contains a
+subclass that also adds suport for internationalized fields:
 
 .. autoclass:: pretix.base.forms.SettingsForm
-   :members: save
 
 You can simply use it like this::
 
@@ -51,3 +52,17 @@ You can simply use it like this::
            help_text=_("The number of days after placing an order the user has to pay to "
                        "preserve his reservation."),
        )
+
+Defaults in plugins
+-------------------
+
+Plugins can add custom hardcoded defaults in the following way::
+
+    from pretix.base.settings import settings_hierarkey
+
+    settings_hierarkey.add_default('key', 'value', type)
+
+Make sure that you include this code in a module that is imported at app loading time.
+
+.. _django-hierarkey: https://github.com/raphaelm/django-hierarkey
+.. _documentation: https://django-hierarkey.readthedocs.io/en/latest/

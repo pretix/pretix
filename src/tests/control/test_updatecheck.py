@@ -52,12 +52,12 @@ def test_settings(client, user):
 
     client.post('/control/global/update/', {'update_check_email': 'test@example.org', 'update_check_perform': 'on'})
     gs = GlobalSettingsObject()
-    gs.settings._flush()
+    gs.settings.flush()
     assert gs.settings.update_check_perform
     assert gs.settings.update_check_email
 
     client.post('/control/global/update/', {'update_check_email': '', 'update_check_perform': ''})
-    gs.settings._flush()
+    gs.settings.flush()
     assert not gs.settings.update_check_perform
     assert not gs.settings.update_check_email
 
@@ -78,5 +78,5 @@ def test_trigger(client, user):
     gs = GlobalSettingsObject()
     assert not gs.settings.update_check_last
     client.post('/control/global/update/', {'trigger': 'on'})
-    gs.settings._flush()
+    gs.settings.flush()
     assert gs.settings.update_check_last
