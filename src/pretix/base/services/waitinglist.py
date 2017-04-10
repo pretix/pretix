@@ -54,7 +54,7 @@ def assign_automatically(event_id: int, user_id: int=None):
 
 @receiver(signal=periodic_task)
 def process_waitinglist(sender, **kwargs):
-    qs = Event.objects.prefetch_related('setting_objects', 'organizer__setting_objects').select_related('organizer')
+    qs = Event.objects.prefetch_related('_settings_objects', 'organizer___settings_objects').select_related('organizer')
     for e in qs:
         if e.settings.waiting_list_enabled and e.settings.waiting_list_auto:
             assign_automatically.apply_async(args=(e.pk,))

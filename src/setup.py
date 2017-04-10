@@ -68,6 +68,7 @@ setup(
         'django-bootstrap3==7.1.*',
         'django-formset-js-improved==0.5.0.1',
         'django-compressor==2.1',
+        'django-hierarkey==1.0.*',
         'reportlab==3.2.*',
         'easy-thumbnails==2.*',
         'PyPDF2==1.26.*',
