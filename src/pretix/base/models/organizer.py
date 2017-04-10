@@ -3,17 +3,16 @@ import string
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.crypto import get_random_string
-from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models.base import LoggedModel
-from pretix.base.settings import SettingsProxy
 from pretix.base.validators import OrganizerSlugBlacklistValidator
 
+from ..settings import settings_hierarkey
 from .auth import User
-from .settings import OrganizerSetting
 
 
+@settings_hierarkey.add(cache_namespace='organizer')
 class Organizer(LoggedModel):
     """
     This model represents an entity organizing events, e.g. a company, institution,
@@ -58,14 +57,6 @@ class Organizer(LoggedModel):
         obj = super().save(*args, **kwargs)
         self.get_cache().clear()
         return obj
-
-    @cached_property
-    def settings(self) -> SettingsProxy:
-        """
-        Returns an object representing this organizer's settings
-        """
-        from pretix.base.settings import GlobalSettingsObject
-        return SettingsProxy(self, type=OrganizerSetting, parent=GlobalSettingsObject())
 
     def get_cache(self) -> "pretix.base.cache.ObjectRelatedCache":
         """

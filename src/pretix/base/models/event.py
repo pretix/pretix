@@ -11,22 +11,21 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.template.defaultfilters import date as _date
 from django.utils.crypto import get_random_string
-from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.fields import I18nCharField
 
 from pretix.base.email import CustomSMTPBackend
 from pretix.base.models.base import LoggedModel
-from pretix.base.settings import SettingsProxy
 from pretix.base.validators import EventSlugBlacklistValidator
 from pretix.helpers.daterange import daterange
 
+from ..settings import settings_hierarkey
 from .auth import User
 from .organizer import Organizer
-from .settings import EventSetting
 
 
+@settings_hierarkey.add(parent_field='organizer', cache_namespace='event')
 class Event(LoggedModel):
     """
     This model represents an event. An event is anything you can buy
@@ -183,17 +182,6 @@ class Event(LoggedModel):
 
         return ObjectRelatedCache(self)
 
-    @cached_property
-    def settings(self) -> SettingsProxy:
-        """
-        Returns an object representing this event's settings.
-        """
-        try:
-            return SettingsProxy(self, type=EventSetting, parent=self.organizer)
-        except Organizer.DoesNotExist:
-            # Should only happen when creating new events
-            return SettingsProxy(self, type=EventSetting)
-
     @property
     def presale_has_ended(self):
         if self.presale_end and now() > self.presale_end:
@@ -290,7 +278,7 @@ class Event(LoggedModel):
                 o.question = q
                 o.save()
 
-        for s in EventSetting.objects.filter(object=other):
+        for s in other.settings._objects.all():
             s.object = self
             s.pk = None
             if s.value.startswith('file://'):

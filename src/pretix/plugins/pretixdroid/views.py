@@ -201,7 +201,7 @@ class ApiStatusView(ApiView):
         }
 
         response['items'] = []
-        for item in self.event.items.prefetch_related('variations'):
+        for item in self.event.items.order_by('pk').prefetch_related('variations'):
             i = {
                 'id': item.pk,
                 'name': str(item),

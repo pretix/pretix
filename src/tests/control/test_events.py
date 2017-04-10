@@ -135,7 +135,7 @@ class EventsTest(SoupTest):
             'settings-payment_term_days': '2',
             'settings-tax_rate_default': '19.00',
         })
-        self.event1.settings._flush()
+        self.event1.settings.flush()
         assert self.event1.settings.get('payment_banktransfer__enabled', as_type=bool)
         assert self.event1.settings.get('payment_banktransfer__fee_abs', as_type=Decimal) == Decimal('12.23')
 
@@ -177,7 +177,7 @@ class EventsTest(SoupTest):
         doc = self.post_doc('/control/event/%s/%s/settings/invoice' % (self.orga1.slug, self.event1.slug),
                             data, follow=True)
         assert doc.select('.alert-success')
-        self.event1.settings._flush()
+        self.event1.settings.flush()
         assert self.event1.settings.get('invoice_address_required', as_type=bool)
 
     def test_display_settings(self):
@@ -190,7 +190,7 @@ class EventsTest(SoupTest):
             doc = self.post_doc('/control/event/%s/%s/settings/display' % (self.orga1.slug, self.event1.slug),
                                 data, follow=True)
             assert doc.select('.alert-success')
-            self.event1.settings._flush()
+            self.event1.settings.flush()
             assert self.event1.settings.get('primary_color') == '#FF0000'
             mocked.assert_any_call(args=(self.event1.pk,))
 
@@ -204,7 +204,7 @@ class EventsTest(SoupTest):
             doc = self.post_doc('/control/event/%s/%s/settings/email' % (self.orga1.slug, self.event1.slug),
                                 data, follow=True)
             assert doc.select('.alert-success')
-            self.event1.settings._flush()
+            self.event1.settings.flush()
             assert mocked.called
 
     def test_ticket_settings(self):
@@ -214,7 +214,7 @@ class EventsTest(SoupTest):
         data['ticketoutput_testdummy__enabled'] = 'on'
         doc = self.post_doc('/control/event/%s/%s/settings/tickets' % (self.orga1.slug, self.event1.slug),
                             data, follow=True)
-        self.event1.settings._flush()
+        self.event1.settings.flush()
         assert self.event1.settings.get('ticket_download', as_type=bool)
 
     def test_create_event_unauthorized(self):
