@@ -130,4 +130,5 @@ class OrderLocaleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['locale'].choices = [(a, a) for a in self.instance.event.settings.locales]
+        locale_names = dict(settings.LANGUAGES)
+        self.fields['locale'].choices = [(a, locale_names[a]) for a in self.instance.event.settings.locales]

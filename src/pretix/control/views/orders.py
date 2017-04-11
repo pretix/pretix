@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Q
@@ -152,6 +153,7 @@ class OrderDetail(OrderView):
         ctx['payment'] = self.payment_provider.order_control_render(self.request, self.object)
         ctx['invoices'] = list(self.order.invoices.all().select_related('event'))
         ctx['comment_form'] = CommentForm(initial={'comment': self.order.comment})
+        ctx['display_locale'] = dict(settings.LANGUAGES)[self.object.locale]
         return ctx
 
     def get_items(self):

@@ -71,15 +71,15 @@
                     <dl class="dl-horizontal">
                         <dt>{% trans "Order code" %}</dt>
                         <dd>{{ order.code }}</dd>
+                        <dt>{% trans "Order date" %}</dt>
+                        <dd>{{ order.datetime }}</dd>
                         <dt>{% trans "Order locale" %}</dt>
                         <dd>
-                            {{ order.locale }}
+                            {{ display_locale }}
                             <a href="{% url "control:event.order.locale" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
                                 <span class="fa fa-edit"></span>
                             </a>
                         </dd>
-                        <dt>{% trans "Order date" %}</dt>
-                        <dd>{{ order.datetime }}</dd>
                         {% if order.status == "p" %}
                             <dt>{% trans "Payment date" %}</dt>
                             <dd>{{ order.payment_date }}</dd>
