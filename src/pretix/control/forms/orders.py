@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.formats import localize
@@ -118,3 +119,15 @@ class OrderContactForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['email']
+
+
+class OrderLocaleForm(forms.ModelForm):
+    locale = forms.ChoiceField()
+
+    class Meta:
+        model = Order
+        fields = ['locale']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['locale'].choices = [(a, a) for a in self.instance.event.settings.locales]

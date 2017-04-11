@@ -30,7 +30,7 @@ from pretix.base.signals import (
     register_data_exporters, register_payment_providers,
 )
 from pretix.control.forms.orders import (
-    CommentForm, ExporterForm, ExtendForm, OrderContactForm,
+    CommentForm, ExporterForm, ExtendForm, OrderContactForm, OrderLocaleForm,
     OrderPositionChangeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -545,6 +545,40 @@ class OrderContactChange(OrderView):
                     op.save()
                 CachedTicket.objects.filter(order_position__order=self.order).delete()
                 self.order.log_action('pretix.event.order.secret.changed', user=self.request.user)
+
+            self.form.save()
+            messages.success(self.request, _('The order has been changed.'))
+            return redirect(self.get_order_url())
+        return self.get(*args, **kwargs)
+
+
+class OrderLocaleChange(OrderView):
+    permission = 'can_change_orders'
+    template_name = 'pretixcontrol/order/change_locale.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['form'] = self.form
+        return ctx
+
+    @cached_property
+    def form(self):
+        return OrderLocaleForm(
+            instance=self.order,
+            data=self.request.POST if self.request.method == "POST" else None
+        )
+
+    def post(self, *args, **kwargs):
+        old_locale = self.order.locale
+        if self.form.is_valid():
+            self.order.log_action(
+                'pretix.event.order.locale.changed',
+                data={
+                    'old_locale': old_locale,
+                    'new_locale': self.form.cleaned_data['locale'],
+                },
+                user=self.request.user,
+            )
 
             self.form.save()
             messages.success(self.request, _('The order has been changed.'))

@@ -40,6 +40,7 @@ def env():
                                  category=None, default_price=23,
                                  admission=True)
     event.settings.set('attendee_names_asked', True)
+    event.settings.set('locales', ['en', 'de'])
     OrderPosition.objects.create(
         order=o,
         item=ticket,
@@ -102,6 +103,30 @@ def test_order_set_contact(client, env):
     })
     o = Order.objects.get(id=env[2].id)
     assert o.email == 'admin@rami.io'
+
+
+@pytest.mark.django_db
+def test_order_set_locale(client, env):
+    q = Quota.objects.create(event=env[0], size=0)
+    q.items.add(env[3])
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.post('/control/event/dummy/dummy/orders/FOO/locale', {
+        'locale': 'de'
+    })
+    o = Order.objects.get(id=env[2].id)
+    assert o.locale == 'de'
+
+
+@pytest.mark.django_db
+def test_order_set_locale_with_invalid_locale_value(client, env):
+    q = Quota.objects.create(event=env[0], size=0)
+    q.items.add(env[3])
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.post('/control/event/dummy/dummy/orders/FOO/locale', {
+        'locale': 'fr'
+    })
+    o = Order.objects.get(id=env[2].id)
+    assert o.locale == 'en'
 
 
 @pytest.mark.django_db
