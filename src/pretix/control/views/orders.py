@@ -154,7 +154,7 @@ class OrderDetail(OrderView):
         ctx['payment'] = self.payment_provider.order_control_render(self.request, self.object)
         ctx['invoices'] = list(self.order.invoices.all().select_related('event'))
         ctx['comment_form'] = CommentForm(initial={'comment': self.order.comment})
-        ctx['display_locale'] = dict(settings.LANGUAGES)[self.object.locale]
+        ctx['display_locale'] = dict(settings.LANGUAGES)[self.object.locale or self.request.event.settings.locale]
         return ctx
 
     def get_items(self):
