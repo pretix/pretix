@@ -21,3 +21,4 @@ def export(event: str, fileid: str, provider: str, form_data: Dict[str, Any]) ->
                 file.filename, file.type, data = ex.render(form_data)
                 file.file.save(cachedfile_name(file, file.filename), ContentFile(data))
                 file.save()
+    return file.pk

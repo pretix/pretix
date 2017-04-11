@@ -72,6 +72,7 @@ class AsyncAction:
                 # but handle the mssage itself
                 data.update({
                     'redirect': self.get_success_url(res.info),
+                    'success': True,
                     'message': str(self.get_success_message(res.info))
                 })
             else:
@@ -80,6 +81,7 @@ class AsyncAction:
                 # but handle the mssage itself
                 data.update({
                     'redirect': self.get_error_url(),
+                    'success': False,
                     'message': str(self.get_error_message(res.info))
                 })
         return data
@@ -103,6 +105,7 @@ class AsyncAction:
         if "ajax" in self.request.POST or "ajax" in self.request.GET:
             return JsonResponse({
                 'ready': True,
+                'success': True,
                 'redirect': self.get_success_url(value),
                 'message': str(self.get_success_message(value))
             })
@@ -113,6 +116,7 @@ class AsyncAction:
         if "ajax" in self.request.POST or "ajax" in self.request.GET:
             return JsonResponse({
                 'ready': True,
+                'success': False,
                 'redirect': self.get_error_url(),
                 'message': str(self.get_error_message(exception))
             })

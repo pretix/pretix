@@ -30,6 +30,7 @@ from pretix.base.services.stats import order_overview
 from pretix.base.signals import (
     register_data_exporters, register_payment_providers,
 )
+from pretix.base.views.async import AsyncAction
 from pretix.control.forms.orders import (
     CommentForm, ExporterForm, ExtendForm, OrderContactForm, OrderLocaleForm,
     OrderPositionChangeForm,
@@ -622,9 +623,7 @@ class OrderGo(EventPermissionRequiredMixin, View):
             return redirect('control:event.orders', event=request.event.slug, organizer=request.event.organizer.slug)
 
 
-class ExportView(EventPermissionRequiredMixin, TemplateView):
-    permission = 'can_view_orders'
-    template_name = 'pretixcontrol/orders/export.html'
+class ExportMixin:
 
     @cached_property
     def exporters(self):
@@ -640,10 +639,22 @@ class ExportView(EventPermissionRequiredMixin, TemplateView):
             exporters.append(ex)
         return exporters
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['exporters'] = self.exporters
-        return ctx
+
+class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, View):
+    permission = 'can_view_orders'
+    task = export
+
+    def get_success_message(self, value):
+        return None
+
+    def get_success_url(self, value):
+        return reverse('cachedfile.download', kwargs={'id': str(value)})
+
+    def get_error_url(self):
+        return reverse('control:event.orders.export', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug
+        })
 
     @cached_property
     def exporter(self):
@@ -651,13 +662,14 @@ class ExportView(EventPermissionRequiredMixin, TemplateView):
             if ex.identifier == self.request.POST.get("exporter"):
                 return ex
 
-    def post(self, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         if not self.exporter:
             messages.error(self.request, _('The selected exporter was not found.'))
             return redirect('control:event.orders.export', kwargs={
                 'event': self.request.event.slug,
                 'organizer': self.request.event.organizer.slug
             })
+
         if not self.exporter.form.is_valid():
             messages.error(self.request, _('There was a problem processing your input. See below for error details.'))
             return self.get(*args, **kwargs)
@@ -666,6 +678,14 @@ class ExportView(EventPermissionRequiredMixin, TemplateView):
         cf.date = now()
         cf.expires = now() + timedelta(days=3)
         cf.save()
-        export.apply_async(args=(self.request.event.id, str(cf.id), self.exporter.identifier,
-                                 self.exporter.form.cleaned_data))
-        return redirect(reverse('cachedfile.download', kwargs={'id': str(cf.id)}))
+        return self.do(self.request.event.id, str(cf.id), self.exporter.identifier, self.exporter.form.cleaned_data)
+
+
+class ExportView(EventPermissionRequiredMixin, ExportMixin, TemplateView):
+    permission = 'can_view_orders'
+    template_name = 'pretixcontrol/orders/export.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['exporters'] = self.exporters
+        return ctx

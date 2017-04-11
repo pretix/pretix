@@ -2,6 +2,9 @@
 var async_task_id = null;
 var async_task_timeout = null;
 var async_task_check_url = null;
+var async_task_old_url = null;
+var async_task_is_download = false;
+var async_task_is_long = false;
 
 function async_task_check() {
     "use strict";
@@ -20,13 +23,26 @@ function async_task_check() {
 function async_task_check_callback(data, jqXHR, status) {
     "use strict";
     if (data.ready && data.redirect) {
+        if (async_task_is_download && data.success) {
+            waitingDialog.hide();
+            if (location.href.indexOf("async_id") !== -1) {
+                history.replaceState({}, "pretix", async_task_old_url);
+            }
+        }
         location.href = data.redirect;
         return;
     }
     async_task_timeout = window.setTimeout(async_task_check, 250);
-    $("#loadingmodal p").text(gettext('Your request has been queued on the server and will now be ' +
-                                      'processed. If this takes longer than two minutes, please contact us or go ' +
-                                      'back in your browser and try again.'));
+
+    if (async_task_is_long) {
+        $("#loadingmodal p").text(gettext('Your request has been queued on the server and will now be ' +
+                                          'processed. Depending on the size of your event, this might take up to a ' +
+                                          'few minutes.'));
+    } else {
+        $("#loadingmodal p").text(gettext('Your request has been queued on the server and will now be ' +
+                                          'processed. If this takes longer than two minutes, please contact us or go ' +
+                                          'back in your browser and try again.'));
+    }
 }
 
 function async_task_check_error(jqXHR, textStatus, errorThrown) {
@@ -35,6 +51,9 @@ function async_task_check_error(jqXHR, textStatus, errorThrown) {
     if (c.length > 0) {
         $("body").data('ajaxing', false);
         waitingDialog.hide();
+        if (location.href.indexOf("async_id") !== -1) {
+            history.replaceState({}, "pretix", async_task_old_url);
+        }
         ajaxErrDialog.show(c.first().html());
     } else {
         if (jqXHR.status >= 400 && jqXHR.status < 500) {
@@ -54,6 +73,12 @@ function async_task_callback(data, jqXHR, status) {
     "use strict";
     $("body").data('ajaxing', false);
     if (data.redirect) {
+        if (async_task_is_download && data.success) {
+            waitingDialog.hide();
+            if (location.href.indexOf("async_id") !== -1) {
+                history.replaceState({}, "pretix", async_task_old_url);
+            }
+        }
         location.href = data.redirect;
         return;
     }
@@ -61,9 +86,15 @@ function async_task_callback(data, jqXHR, status) {
     async_task_check_url = data.check_url;
     async_task_timeout = window.setTimeout(async_task_check, 100);
 
-    $("#loadingmodal p").text(gettext('Your request has been queued on the server and will now be ' +
-                                      'processed. If this takes longer than two minutes, please contact us or go ' +
-                                      'back in your browser and try again.'));
+    if (async_task_is_long) {
+        $("#loadingmodal p").text(gettext('Your request has been queued on the server and will now be ' +
+                                          'processed. Depending on the size of your event, this might take up to a ' +
+                                          'few minutes.'));
+    } else {
+        $("#loadingmodal p").text(gettext('Your request has been queued on the server and will now be ' +
+                                          'processed. If this takes longer than two minutes, please contact us or go ' +
+                                          'back in your browser and try again.'));
+    }
     if (location.href.indexOf("async_id") === -1) {
         history.pushState({}, "Waiting", async_task_check_url.replace(/ajax=1/, ''));
     }
@@ -99,6 +130,9 @@ $(function () {
             return;
         }
         async_task_id = null;
+        async_task_is_download = $(this).is("[data-asynctask-download]");
+        async_task_is_long = $(this).is("[data-asynctask-long]");
+        async_task_old_url = location.href;
         $("body").data('ajaxing', true);
         waitingDialog.show(gettext('We are processing your request …'));
         $("#loadingmodal p").text(gettext('We are currently sending your request to the server. If this takes longer ' +

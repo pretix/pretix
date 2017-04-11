@@ -122,6 +122,7 @@ urlpatterns = [
             name='event.invoice.download'),
         url(r'^orders/overview/$', orders.OverView.as_view(), name='event.orders.overview'),
         url(r'^orders/export/$', orders.ExportView.as_view(), name='event.orders.export'),
+        url(r'^orders/export/do$', orders.ExportDoView.as_view(), name='event.orders.export.do'),
         url(r'^orders/go$', orders.OrderGo.as_view(), name='event.orders.go'),
         url(r'^orders/$', orders.OrderList.as_view(), name='event.orders'),
         url(r'^waitinglist/$', waitinglist.WaitingListView.as_view(), name='event.orders.waitinglist'),
