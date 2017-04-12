@@ -3,7 +3,7 @@ function preview_task_callback(data, jqXHR, status) {
     if (data.item) {
         $('#' + data.item + '_panel').data('ajaxing', false);
         for (var m in data.msgs){
-            var target = $('pre[for=' + m + ']');
+            var target = $('pre[for=' + data.item + '][lang=' + m +']');
             if (target.length === 1){
                 target.text(data.msgs[m]);
             }

@@ -3,6 +3,7 @@ from collections import OrderedDict
 from datetime import timedelta
 
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
@@ -413,6 +414,28 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         def __missing__(self, key):
             return '{' + key + '}'
 
+    @staticmethod
+    def generate_order_fullname(slug, code):
+        return '{event}-{code}'.format(event=slug.upper(), code=code)
+
+    # create data which depend on locale
+    def localized_data(self):
+        return {
+            'date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
+            'expire_date': date_format(now() + timedelta(days=15), 'SHORT_DATE_FORMAT'),
+            'payment_info': _('{} {} has been transferred to account<9999-9999-9999-9999> at {}').format(
+                42.23, self.request.event.currency, date_format(now(), 'SHORT_DATETIME_FORMAT'))
+        }
+
+    # create index-language mapping
+    @cached_property
+    def supported_locale(self):
+        locales = {}
+        for idx, val in enumerate(settings.LANGUAGES):
+            if val[0] in self.request.event.settings.locales:
+                locales[str(idx)] = val[0]
+        return locales
+
     @cached_property
     def items(self):
         return {
@@ -428,31 +451,43 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         }
 
     @cached_property
-    def dummy_data(self):
+    def base_data(self):
+        user_orders = [
+            {'code': 'F8VVL', 'secret': '6zzjnumtsx136ddy'},
+            {'code': 'HIDHK', 'secret': '98kusd8ofsj8dnkd'},
+            {'code': 'OPKSB', 'secret': '09pjdksflosk3njd'}
+        ]
+        orders = [' - {} - {}'.format(self.generate_order_fullname(self.request.event.slug, order['code']),
+                                      self.generate_order_url(order['code'], order['secret']))
+                  for order in user_orders]
         return {
             'event': self.request.event.name,
-            'total': 100,
+            'total': 42.23,
             'currency': self.request.event.currency,
-            'date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
-            'paymentinfo': _('Please transfer money to this bank account: BANK-ACCOUNT-0001'),
-            'payment_info': _('Please transfer money to this bank account: BANK-ACCOUNT-0001'),
-            'url': build_absolute_uri('presale:event.index', kwargs={
-                'event': self.request.event.slug,
-                'organizer': self.request.event.organizer
-            }),
-            'invoice_name': _('Invoice for {}.').format(self.request.event.name),
-            'invoice_company': self.request.event.organizer.name,
-            'orders': 'ORDER-0001\nORDER-0002\nORDER-0003\nORDER-0004',
-            'expire_date': date_format(now() + timedelta(days=15), 'SHORT_DATE_FORMAT'),
-            'product': _('Admission Ticket'),
-            'hours': 12,
-            'code': 'VOUCHER_CODE_001'
+            'url': self.generate_order_url(user_orders[0]['code'], user_orders[0]['secret']),
+            'orders': '\n'.join(orders),
+            'hours': self.request.event.settings.waiting_list_hours,
+            'product': _('Sample Admission Ticket'),
+            'code': '68CYU2H6ZTP3WLK5',
+            'invoice_name': _('John Doe'),
+            'invoice_company': _('Sample Corporation'),
+            'paymentinfo': _('Please transfer money to this bank account: 9999-9999-9999-9999')
         }
 
+    def generate_order_url(self, code, secret):
+        return build_absolute_uri('presale:event.order', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'order': code,
+            'secret': secret
+        })
+
+    # get all supported placeholders with dummy values
     def placeholders(self, item):
         supported = {}
+        local_data = self.localized_data()
         for key in self.items.get(item):
-            supported[key] = self.dummy_data.get(key)
+            supported[key] = self.base_data.get(key) if key in self.base_data else local_data.get(key)
         return self.SafeDict(supported)
 
     def post(self, request, *args, **kwargs):
@@ -466,10 +501,10 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             # only accept allowed fields
             matched = re.search(regex, k)
             if matched is not None:
-                idx = int(matched.group('idx'))
-                if idx < len(self.request.event.settings.locales):
-                    with translation.override(self.request.event.settings.locales[idx]):
-                        msgs[k] = v.format_map(self.placeholders(preview_item))
+                idx = matched.group('idx')
+                if idx in self.supported_locale:
+                    with translation.override(self.supported_locale[idx]):
+                        msgs[self.supported_locale[idx]] = v.format_map(self.placeholders(preview_item))
 
         return JsonResponse({
             'item': preview_item,
