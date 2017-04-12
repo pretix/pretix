@@ -1,19 +1,19 @@
 # Functional requirements
-Django>=1.10.7,<1.11
+Django>=1.11.*
 python-dateutil
 pytz
-django-bootstrap3==8.0.*
+django-bootstrap3==8.2.*
 django-formset-js-improved==0.5.0.1
-django-compressor==2.1
+django-compressor==2.1.1
 django-hierarkey==1.0.*
 reportlab==3.2.*
 PyPDF2==1.26.*
-easy-thumbnails==2.*
+easy-thumbnails==2.4.*
 django-libsass
 libsass
 django-otp==0.3.*
 python-u2flib-server==4.*
-django-formtools==1.0
+django-formtools==2.0
 celery==4.0.2
 kombu==4.0.2
 django-statici18n==1.3.*
@@ -28,7 +28,7 @@ django-markup
 markdown
 bleach==2.*
 raven
-django-i18nfield
+django-i18nfield>=1.0.1
 # Stripe
 stripe==1.22.*
 # PayPal
