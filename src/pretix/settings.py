@@ -258,7 +258,7 @@ try:
     import debug_toolbar  # noqa
     if DEBUG:
         INSTALLED_APPS.append('debug_toolbar.apps.DebugToolbarConfig')
-        MIDDLEWARE.insert(0, 'pretix.helpers.debug.DebugMiddlewareCompatibilityShim')
+        MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 except ImportError:
     pass
 

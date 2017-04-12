@@ -68,7 +68,7 @@ class EventsTest(SoupTest):
         assert len(doc.select(".alert-success")) > 0
         # date_to should not be changed even though the timezone is changed
         assert doc.select("[name=date_to]")[0]['value'] == "2013-12-30 17:00:00"
-        assert doc.find('option', {"value": "Asia/Tokyo"})['selected'] == "selected"
+        assert 'selected' in doc.find('option', {"value": "Asia/Tokyo"}).attrs
         assert doc.select("[name=settings-max_items_per_order]")[0]['value'] == "12"
 
         self.event1.refresh_from_db()
