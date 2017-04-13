@@ -4,6 +4,7 @@ from datetime import timedelta
 import pytz
 from django.contrib import messages
 from django.db.models import Q
+from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.formats import date_format
 from django.utils.timezone import now
@@ -29,10 +30,16 @@ class SenderView(EventPermissionRequiredMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
-        from_log_id = self.request.GET.get('from_log')
-        message = LogEntry.objects.get(id=from_log_id).display()
+        if 'from_log' in self.request.GET:
+            from_log_id = self.request.GET.get('from_log')
+        try:
+            print(repr(from_log_id))
+            print(repr(self.request.event.slug))
+            print('pretix.plugins.sendmail.sent')
+            message = LogEntry.objects.get(id=from_log_id, event=self.request.event, action_type='pretix.plugins.sendmail.sent').display()
+        except LogEntry.DoesNotExist:
+            raise Http404(_('You supplied an invalid log entry ID'))
         kwargs['message'] = message
-        self.form_class(initial=kwargs)
         print("content")
         print(LogEntry.objects.get(id=from_log_id).display())
         return kwargs
@@ -148,6 +155,5 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
             log.pdata['sendto'] = [
                 status[s] for s in log.pdata['sendto']
             ]
-            log.pdata['mailid'] = log.object_id
 
         return ctx
