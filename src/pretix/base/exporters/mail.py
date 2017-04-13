@@ -4,6 +4,7 @@ from django import forms
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.models import OrderPosition
 from ..exporter import BaseExporter
 from ..models import Order
 from ..signals import register_data_exporters
@@ -16,7 +17,11 @@ class MailExporter(BaseExporter):
     def render(self, form_data: dict):
         qs = self.event.orders.filter(status__in=form_data['status'])
         addrs = qs.values('email')
-        data = "\r\n".join(set(a['email'] for a in addrs))
+        pos = OrderPosition.objects.filter(
+            order__event=self.event, order__status__in=form_data['status']
+        ).values('attendee_email')
+        data = "\r\n".join(set(a['email'] for a in addrs)
+                           | set(a['attendee_email'] for a in pos if a['attendee_email']))
         return 'pretixemails.txt', 'text/plain', data.encode("utf-8")
 
     @property
