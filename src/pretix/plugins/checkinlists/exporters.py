@@ -89,6 +89,9 @@ class CSVCheckinList(BaseCheckinList):
         if form_data['secrets']:
             headers.append(_('Secret'))
 
+        if self.event.settings.attendee_emails_asked:
+            headers.append(_('E-mail'))
+
         for q in questions:
             headers.append(str(q.question))
 
@@ -105,6 +108,8 @@ class CSVCheckinList(BaseCheckinList):
                 row.append(_('Yes') if op.order.status == Order.STATUS_PAID else _('No'))
             if form_data['secrets']:
                 row.append(op.secret)
+            if self.event.settings.attendee_emails_asked:
+                row.append(op.attendee_email)
             acache = {}
             for a in op.answers.all():
                 acache[a.question_id] = str(a)

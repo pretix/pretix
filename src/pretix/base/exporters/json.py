@@ -68,6 +68,7 @@ class JSONExporter(BaseExporter):
                                 'variation': position.variation_id,
                                 'price': position.price,
                                 'attendee_name': position.attendee_name,
+                                'attendee_email': position.attendee_email,
                                 'secret': position.secret,
                                 'answers': [
                                     {

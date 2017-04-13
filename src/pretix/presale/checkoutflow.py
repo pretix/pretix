@@ -202,6 +202,11 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 if warn:
                     messages.warning(request, _('Please fill in answers to all required questions.'))
                 return False
+            if cp.item.admission and self.request.event.settings.get('attendee_emails_required', as_type=bool) \
+                    and cp.attendee_email is None:
+                if warn:
+                    messages.warning(request, _('Please fill in answers to all required questions.'))
+                return False
         return True
 
     def get_context_data(self, **kwargs):

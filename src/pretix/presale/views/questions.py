@@ -45,6 +45,9 @@ class QuestionsViewMixin:
                     if k == 'attendee_name':
                         form.pos.attendee_name = v if v != '' else None
                         form.pos.save()
+                    elif k == 'attendee_email':
+                        form.pos.attendee_email = v if v != '' else None
+                        form.pos.save()
                     elif k.startswith('question_') and v is not None:
                         field = form.fields[k]
                         if hasattr(field, 'answer'):
