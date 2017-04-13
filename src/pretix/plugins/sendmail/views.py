@@ -29,6 +29,11 @@ class SenderView(EventPermissionRequiredMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
+        from_log_id = self.request.GET.get('from_log')
+        message = LogEntry.objects.get(id=from_log_id).display()
+        self.form_class(initial={'message': message})
+        print("content")
+        print(LogEntry.objects.get(id=from_log_id).display())
         return kwargs
 
     def form_invalid(self, form):
@@ -142,5 +147,6 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
             log.pdata['sendto'] = [
                 status[s] for s in log.pdata['sendto']
             ]
+            log.pdata['mailid'] = log.object_id
 
         return ctx
