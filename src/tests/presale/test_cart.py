@@ -370,6 +370,40 @@ class CartTest(CartTestMixin, TestCase):
                              target_status_code=200)
         self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 3)
 
+    def test_min_per_item_failed(self):
+        self.quota_tickets.size = 30
+        self.quota_tickets.save()
+        self.event.settings.max_items_per_order = 20
+        self.ticket.min_per_order = 10
+        self.ticket.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '4',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('at least', doc.select('.alert-danger')[0].text)
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
+
+    def test_min_per_item_success(self):
+        self.quota_tickets.size = 30
+        self.quota_tickets.save()
+        self.event.settings.max_items_per_order = 20
+        self.ticket.min_per_order = 10
+        self.ticket.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '10',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 10)
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '3',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 13)
+
     def test_quota_full(self):
         self.quota_tickets.size = 0
         self.quota_tickets.save()
@@ -470,6 +504,24 @@ class CartTest(CartTestMixin, TestCase):
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('empty', doc.select('.alert-success')[0].text)
+        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
+
+    def test_remove_min(self):
+        self.ticket.min_per_order = 2
+        self.ticket.save()
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('less than', doc.select('.alert-danger')[0].text)
         self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
 
     def test_remove_variation(self):

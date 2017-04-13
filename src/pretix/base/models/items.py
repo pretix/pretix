@@ -113,6 +113,8 @@ class Item(LoggedModel):
     :type allow_cancel: bool
     :param max_per_order: Maximum number of times this item can be in an order. None for unlimited.
     :type max_per_order: int
+    :param min_per_order: Minimum number of times this item needs to be in an order if bought at all. None for unlimited.
+    :type min_per_order: int
     """
 
     event = models.ForeignKey(
@@ -204,6 +206,12 @@ class Item(LoggedModel):
         help_text=_('If this is active and the general event settings allo wit, orders containing this product can be '
                     'canceled by the user until the order is paid for. Users cannot cancel paid orders on their own '
                     'and you can cancel orders at all times, regardless of this setting')
+    )
+    min_per_order = models.IntegerField(
+        verbose_name=_('Minimum amount per order'),
+        null=True, blank=True,
+        help_text=_('This product can only be bought if it is added to the cart at least this many times. If you keep '
+                    'the field empty or set it to 0, there is no special limit for this product.')
     )
     max_per_order = models.IntegerField(
         verbose_name=_('Maximum amount per order'),

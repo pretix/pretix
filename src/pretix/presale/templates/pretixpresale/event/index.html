@@ -112,6 +112,13 @@
                                         </a>
                                         {% if item.description %}<p>{{ item.description|localize|rich_text }}</p>
                                         {% endif %}
+                                        {% if item.min_per_order %}
+                                            <p><small>
+                                                {% blocktrans trimmed with num=item.min_per_order %}
+                                                    minimum amount to order: {{ num }}
+                                                {% endblocktrans %}
+                                            </small></p>
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-2 col-xs-6 price">
                                         {% if item.min_price != item.max_price or item.free_price %}
@@ -206,6 +213,13 @@
                                         <p class="description">{{ item.description|localize|rich_text }}</p>{% endif %}
                                     {% if event.settings.show_quota_left %}
                                         {% include "pretixpresale/event/fragment_quota_left.html" with avail=item.cached_availability %}
+                                    {% endif %}
+                                    {% if item.min_per_order %}
+                                        <p><small>
+                                            {% blocktrans trimmed with num=item.min_per_order %}
+                                                minimum amount to order: {{ num }}
+                                            {% endblocktrans %}
+                                        </small></p>
                                     {% endif %}
                                 </div>
                                 <div class="col-md-2 col-xs-6 price">

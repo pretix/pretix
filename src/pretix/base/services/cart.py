@@ -34,6 +34,9 @@ error_messages = {
                  'the quantity you selected. Please see below for details.'),
     'max_items': _("You cannot select more than %s items per order."),
     'max_items_per_product': _("You cannot select more than %(max)s items of the product %(product)s."),
+    'min_items_per_product': _("You need to select at least %(min)s items of the product %(product)s."),
+    'min_items_per_product_removed': _("We removed %(product)s from your cart as you can not buy less than "
+                                       "%(min)s items of it."),
     'not_started': _('The presale period for this event has not yet started.'),
     'ended': _('The presale period has ended.'),
     'price_too_high': _('The entered price is to high.'),
@@ -74,7 +77,7 @@ class CartManager:
     def positions(self):
         return CartPosition.objects.filter(
             Q(cart_id=self.cart_id) & Q(event=self.event)
-        )
+        ).select_related('item')
 
     def _calculate_expiry(self):
         self._expiry = self.now_dt + timedelta(minutes=self.event.settings.get('reservation_time', as_type=int))
@@ -133,7 +136,7 @@ class CartManager:
                 raise CartError(error_messages['voucher_invalid_item'])
 
         if isinstance(op, self.AddOperation):
-            if op.item.max_per_order:
+            if op.item.max_per_order or op.item.min_per_order:
                 new_total = (
                     len([1 for p in self.positions if p.item_id == op.item.pk]) +
                     sum([_op.count for _op in self._operations
@@ -143,13 +146,21 @@ class CartManager:
                          if isinstance(_op, self.RemoveOperation) and _op.position.item_id == op.item.pk])
                 )
 
-                if new_total > op.item.max_per_order:
-                    raise CartError(
-                        _(error_messages['max_items_per_product']) % {
-                            'max': op.item.max_per_order,
-                            'product': op.item.name
-                        }
-                    )
+            if op.item.max_per_order and new_total > op.item.max_per_order:
+                raise CartError(
+                    _(error_messages['max_items_per_product']) % {
+                        'max': op.item.max_per_order,
+                        'product': op.item.name
+                    }
+                )
+
+            if op.item.min_per_order and new_total < op.item.min_per_order:
+                raise CartError(
+                    _(error_messages['min_items_per_product']) % {
+                        'min': op.item.min_per_order,
+                        'product': op.item.name
+                    }
+                )
 
     def _get_price(self, item: Item, variation: Optional[ItemVariation],
                    voucher: Optional[Voucher], custom_price: Optional[Decimal]):
@@ -298,11 +309,46 @@ class CartManager:
 
         return vouchers_ok
 
+    def _check_min_per_product(self):
+        per_product = Counter()
+        min_per_product = {}
+        for p in self.positions:
+            per_product[p.item_id] += 1
+            min_per_product[p.item.pk] = p.item.min_per_order
+
+        for op in self._operations:
+            if isinstance(op, self.AddOperation):
+                per_product[op.item.pk] += op.count
+                min_per_product[op.item.pk] = op.item.min_per_order
+            elif isinstance(op, self.RemoveOperation):
+                per_product[op.position.item_id] -= 1
+                min_per_product[op.position.item.pk] = op.position.item.min_per_order
+
+        err = None
+        for itemid, num in per_product.items():
+            min_p = min_per_product[itemid]
+            if min_p and num < min_p:
+                self._operations = [o for o in self._operations if not (
+                    isinstance(o, self.AddOperation) and o.item.pk == itemid
+                )]
+                removals = [o.position.pk for o in self._operations if isinstance(o, self.RemoveOperation)]
+                for p in self.positions:
+                    if p.item_id == itemid and p.pk not in removals:
+                        self._operations.append(self.RemoveOperation(position=p))
+                        err = _(error_messages['min_items_per_product_removed']) % {
+                            'min': min_p,
+                            'product': p.item.name
+                        }
+
+        return err
+
     def _perform_operations(self):
         vouchers_ok = self._get_voucher_availability()
         quotas_ok = self._get_quota_availability()
         err = None
         new_cart_positions = []
+
+        err = err or self._check_min_per_product()
 
         self._operations.sort(key=lambda a: self.order[type(a)])
 
