@@ -240,6 +240,21 @@ class EventSettingsForm(SettingsForm):
         help_text=_("Require customers to fill in the names of all attendees."),
         required=False
     )
+    attendee_emails_asked = forms.BooleanField(
+        label=_("Ask for attendee e-mails"),
+        help_text=_("Ask for an e-mail address for all tickets which include admission to the event. Important: For "
+                    "every order, an e-mail address needs to be provided, regardless of this setting. The order "
+                    "confirmation which can be used to change the order will always only be sent to the e-mail "
+                    "address provided for the order. Only check this box if you want to ask for additional e-mail "
+                    "addresses for each attendee, e.g. in case of group orders."),
+        required=False
+    )
+    attendee_emails_required = forms.BooleanField(
+        label=_("Require attendee e-mails"),
+        help_text=_("Require customers to fill in the e-mail addresses of all attendees. See the above option for "
+                    "more details."),
+        required=False
+    )
     max_items_per_order = forms.IntegerField(
         min_value=1,
         label=_("Maximum number of items per order")
@@ -273,6 +288,11 @@ class EventSettingsForm(SettingsForm):
         if data['attendee_names_required'] and not data['attendee_names_asked']:
             raise ValidationError({
                 'attendee_names_required': _('You cannot require specifying attendee names if you do not ask for them.')
+            })
+        if data['attendee_emails_required'] and not data['attendee_emails_asked']:
+            raise ValidationError({
+                'attendee_emails_required': _('You cannot require specifying attendee emails if you do not ask for '
+                                              'them.')
             })
         return data
 

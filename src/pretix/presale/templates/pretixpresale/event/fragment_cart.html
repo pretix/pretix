@@ -18,6 +18,10 @@
                         <dt>{% trans "Attendee name" %}</dt>
                         <dd>{% if line.attendee_name %}{{ line.attendee_name }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
                     {% endif %}
+                    {% if line.item.admission and event.settings.attendee_emails_asked%}
+                        <dt>{% trans "Attendee email" %}</dt>
+                        <dd>{% if line.attendee_email %}{{ line.attendee_email }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
+                    {% endif %}
                     {% for q in line.questions %}
                         <dt>{{ q.question }}</dt>
                         <dd>{% if q.answer %}{{ q.answer|linebreaksbr }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>

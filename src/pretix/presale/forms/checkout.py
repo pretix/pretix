@@ -9,7 +9,10 @@ from pretix.base.models.orders import InvoiceAddress
 
 
 class ContactForm(forms.Form):
-    email = forms.EmailField(label=_('E-mail'))
+    email = forms.EmailField(label=_('E-mail'),
+                             help_text=_('Make sure to enter a valid email address. We will send you an order '
+                                         'confirmation including a link that you need in case you want to make '
+                                         'modifications to your order or download your ticket later.'))
 
 
 class InvoiceAddressForm(forms.ModelForm):
@@ -66,6 +69,12 @@ class QuestionsForm(forms.Form):
                 max_length=255, required=event.settings.attendee_names_required,
                 label=_('Attendee name'),
                 initial=(cartpos.attendee_name if cartpos else orderpos.attendee_name)
+            )
+        if item.admission and event.settings.attendee_emails_asked:
+            self.fields['attendee_email'] = forms.EmailField(
+                required=event.settings.attendee_emails_required,
+                label=_('Attendee email'),
+                initial=(cartpos.attendee_email if cartpos else orderpos.attendee_email)
             )
 
         for q in questions:

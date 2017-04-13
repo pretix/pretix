@@ -54,6 +54,7 @@ class OrderList(EventPermissionRequiredMixin, ListView):
             u = self.request.GET.get("user", "")
             qs = qs.filter(
                 Q(email__icontains=u) | Q(positions__attendee_name__icontains=u)
+                | Q(positions__attendee_email__icontains=u)
             )
         if self.request.GET.get("status", "") != "":
             s = self.request.GET.get("status", "")
@@ -172,6 +173,7 @@ class OrderDetail(OrderView):
         for p in cartpos:
             p.has_questions = (
                 (p.item.admission and self.request.event.settings.attendee_names_asked) or
+                (p.item.admission and self.request.event.settings.attendee_emails_asked) or
                 p.item.questions.all()
             )
             p.cache_answers()

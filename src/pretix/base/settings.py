@@ -27,6 +27,14 @@ DEFAULTS = {
         'default': 'False',
         'type': bool
     },
+    'attendee_emails_asked': {
+        'default': 'False',
+        'type': bool
+    },
+    'attendee_emails_required': {
+        'default': 'False',
+        'type': bool
+    },
     'invoice_address_asked': {
         'default': 'True',
         'type': bool,

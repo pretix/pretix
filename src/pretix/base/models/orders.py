@@ -394,6 +394,8 @@ class AbstractPosition(models.Model):
     :type price: decimal.Decimal
     :param attendee_name: The attendee's name, if entered.
     :type attendee_name: str
+    :param attendee_email: The attendee's email, if entered.
+    :type attendee_email: str
     :param voucher: A voucher that has been applied to this sale
     :type voucher: Voucher
     """
@@ -415,6 +417,11 @@ class AbstractPosition(models.Model):
     attendee_name = models.CharField(
         max_length=255,
         verbose_name=_("Attendee name"),
+        blank=True, null=True,
+        help_text=_("Empty, if this product is not an admission ticket")
+    )
+    attendee_email = models.EmailField(
+        verbose_name=_("Attendee email"),
         blank=True, null=True,
         help_text=_("Empty, if this product is not an admission ticket")
     )

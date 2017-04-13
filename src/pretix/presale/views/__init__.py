@@ -46,8 +46,13 @@ class CartMixin:
                 i = pos.pk
             if downloads:
                 return i, pos.pk, 0, 0, 0, 0,
-            if answers and ((pos.item.admission and self.request.event.settings.attendee_names_asked)
-                            or pos.item.questions.all()):
+
+            has_attendee_data = pos.item.admission and (
+                self.request.event.settings.attendee_names_asked
+                or self.request.event.settings.attendee_emails_asked
+            )
+
+            if answers and (has_attendee_data or pos.item.questions.all()):
                 return i, pos.pk, 0, 0, 0, 0,
             return 0, 0, pos.item_id, pos.variation_id, pos.price, (pos.voucher_id or 0)
 
