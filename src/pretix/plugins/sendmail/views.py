@@ -31,7 +31,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         kwargs['event'] = self.request.event
         from_log_id = self.request.GET.get('from_log')
         message = LogEntry.objects.get(id=from_log_id).display()
-        self.form_class(initial={'message': message})
+        kwargs['message'] = message
+        self.form_class(initial=kwargs)
         print("content")
         print(LogEntry.objects.get(id=from_log_id).display())
         return kwargs
