@@ -31,18 +31,16 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
         if 'from_log' in self.request.GET:
-            from_log_id = self.request.GET.get('from_log')
-        try:
-            print(repr(from_log_id))
-            print(repr(self.request.event.slug))
-            print('pretix.plugins.sendmail.sent')
-            message = LogEntry.objects.get(id=from_log_id, event=self.request.event.slug, action_type='pretix.plugins.sendmail.sent').display()
-            # message = "random message"
-        except LogEntry.DoesNotExist:
-            raise Http404(_('You supplied an invalid log entry ID'))
+            try:
+                from_log_id = self.request.GET.get('from_log')
+                message = LogEntry.objects.get(
+                    id=from_log_id,
+                    event=self.request.event,
+                    action_type='pretix.plugins.sendmail.sent'
+                ).display()
+            except LogEntry.DoesNotExist:
+                raise Http404(_('You supplied an invalid log entry ID'))
         kwargs['initial'] = {'message': message}
-        print("content")
-        print(LogEntry.objects.get(id=from_log_id).display())
         return kwargs
 
     def form_invalid(self, form):

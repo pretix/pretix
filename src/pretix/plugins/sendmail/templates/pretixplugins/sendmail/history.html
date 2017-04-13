@@ -29,7 +29,7 @@
                             <pre>{{ value.message|linebreaksbr }}</pre>
                         {% endfor %}
                     </p>
-                    <a href="{% url 'plugins:sendmail:send' organizer=request.event.organizer.slug event=request.event.slug %}?from_log={{ log.object_id }}">{% trans "Send a new email based on this" %}</a>
+                    <a href="{% url 'plugins:sendmail:send' organizer=request.event.organizer.slug event=request.event.slug %}?from_log={{ log.id }}">{% trans "Send a new email based on this" %}</a>
                 </li>
             {% endfor %}
         </ul>
