@@ -11,7 +11,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, ListView
 
-from pretix.base.i18n import language, LazyI18nString
+from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import LogEntry, Order
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.permissions import EventPermissionRequiredMixin
