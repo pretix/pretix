@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import OrderPosition
+
 from ..exporter import BaseExporter
 from ..models import Order
 from ..signals import register_data_exporters

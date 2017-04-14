@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 from pytz import common_timezones, timezone
 
-from pretix.base.forms import I18nModelForm, SettingsForm, PlaceholderValidator
+from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer
 from pretix.control.forms import ExtFileField
 
