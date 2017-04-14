@@ -6,6 +6,7 @@ from django.utils import six
 from django.utils.crypto import get_random_string
 from hierarkey.forms import HierarkeyForm
 
+from .validators import PlaceholderValidator
 from pretix.base.models import Event
 
 logger = logging.getLogger('pretix.plugins.ticketoutputpdf')
