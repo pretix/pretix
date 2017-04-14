@@ -2,7 +2,8 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inside %}
-    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data"
+          mail-preview-url="{% url "control:event.settings.mail.preview" event=request.event.slug organizer=request.event.organizer.slug %}">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         <fieldset>
@@ -13,106 +14,26 @@
         <fieldset>
             <legend>{% trans "E-mail content" %}</legend>
             <div class="panel-group" id="questions_group">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#order_placed">
-                                <strong>{% trans "Placed order" %}</strong>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="order_placed" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            {% bootstrap_field form.mail_text_order_placed layout="horizontal" %}
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#order_paid">
-                                <strong>{% trans "Paid order" %}</strong>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="order_paid" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            {% bootstrap_field form.mail_text_order_paid layout="horizontal" %}
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#order_free">
-                                <strong>{% trans "Free order" %}</strong>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="order_free" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            {% bootstrap_field form.mail_text_order_free layout="horizontal" %}
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#resend_link">
-                                <strong>{% trans "Resend link" %}</strong>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="resend_link" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            {% bootstrap_field form.mail_text_resend_link layout="horizontal" %}
-                            {% bootstrap_field form.mail_text_resend_all_links layout="horizontal" %}
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#order_changed">
-                                <strong>{% trans "Order changed" %}</strong>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="order_changed" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            {% bootstrap_field form.mail_text_order_changed layout="horizontal" %}
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#order_expirew">
-                                <strong>{% trans "Payment reminder" %}</strong>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="order_expirew" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            {% bootstrap_field form.mail_days_order_expire_warning layout="horizontal" %}
-                            {% bootstrap_field form.mail_text_order_expire_warning layout="horizontal" %}
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#waiting_list">
-                                <strong>{% trans "Waiting list notification" %}</strong>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="waiting_list" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            {% bootstrap_field form.mail_text_waiting_list layout="horizontal" %}
-                        </div>
-                    </div>
-                </div>
+                {% blocktrans asvar title_placed_order %}Placed order{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_placed" title=title_placed_order items="mail_text_order_placed" %}
+
+                {% blocktrans asvar title_paid_order %}Paid order{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_paid" title=title_paid_order items="mail_text_order_paid" %}
+
+                {% blocktrans asvar title_free_order %}Free order{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_free" title=title_free_order items="mail_text_order_free" %}
+
+                {% blocktrans asvar title_resend_link %}Resend link{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="resend_link" title=title_resend_link items="mail_text_resend_link,mail_text_resend_all_links" %}
+
+                {% blocktrans asvar title_order_changed %}Order changed{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_changed" title=title_order_changed items="mail_text_order_changed" %}
+
+                {% blocktrans asvar title_payment_reminder %}Payment reminder{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_expirew" title=title_payment_reminder items="mail_days_order_expire_warning,mail_text_order_expire_warning" exclude="mail_days_order_expire_warning" %}
+
+                {% blocktrans asvar title_waiting_list_notification %}Waiting list notification{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="waiting_list" title=title_waiting_list_notification items="mail_text_waiting_list" %}
             </div>
         </fieldset>
         <fieldset>

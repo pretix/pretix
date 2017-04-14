@@ -1,15 +1,21 @@
+import re
 from collections import OrderedDict
+from datetime import timedelta
 
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.forms import modelformset_factory
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.utils import translation
+from django.utils.formats import date_format
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, ListView
 from django.views.generic.base import TemplateView, View
@@ -398,6 +404,112 @@ class MailSettings(EventSettingsFormView):
         else:
             messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.get(request)
+
+
+class MailSettingsPreview(EventPermissionRequiredMixin, View):
+    permission = 'can_change_settings'
+
+    # return the origin text if key is missing in dict
+    class SafeDict(dict):
+        def __missing__(self, key):
+            return '{' + key + '}'
+
+    @staticmethod
+    def generate_order_fullname(slug, code):
+        return '{event}-{code}'.format(event=slug.upper(), code=code)
+
+    # create data which depend on locale
+    def localized_data(self):
+        return {
+            'date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
+            'expire_date': date_format(now() + timedelta(days=15), 'SHORT_DATE_FORMAT'),
+            'payment_info': _('{} {} has been transferred to account<9999-9999-9999-9999> at {}').format(
+                42.23, self.request.event.currency, date_format(now(), 'SHORT_DATETIME_FORMAT'))
+        }
+
+    # create index-language mapping
+    @cached_property
+    def supported_locale(self):
+        locales = {}
+        for idx, val in enumerate(settings.LANGUAGES):
+            if val[0] in self.request.event.settings.locales:
+                locales[str(idx)] = val[0]
+        return locales
+
+    @cached_property
+    def items(self):
+        return {
+            'mail_text_order_placed': ['total', 'currency', 'date', 'invoice_company',
+                                       'event', 'paymentinfo', 'url', 'invoice_name'],
+            'mail_text_order_paid': ['event', 'url', 'invoice_name', 'invoice_company', 'payment_info'],
+            'mail_text_order_free': ['event', 'url', 'invoice_name', 'invoice_company'],
+            'mail_text_resend_link': ['event', 'url', 'invoice_name', 'invoice_company'],
+            'mail_text_resend_all_links': ['event', 'orders'],
+            'mail_text_order_changed': ['event', 'url', 'invoice_name', 'invoice_company'],
+            'mail_text_order_expire_warning': ['event', 'url', 'expire_date', 'invoice_name', 'invoice_company'],
+            'mail_text_waiting_list': ['event', 'url', 'product', 'hours', 'code']
+        }
+
+    @cached_property
+    def base_data(self):
+        user_orders = [
+            {'code': 'F8VVL', 'secret': '6zzjnumtsx136ddy'},
+            {'code': 'HIDHK', 'secret': '98kusd8ofsj8dnkd'},
+            {'code': 'OPKSB', 'secret': '09pjdksflosk3njd'}
+        ]
+        orders = [' - {} - {}'.format(self.generate_order_fullname(self.request.event.slug, order['code']),
+                                      self.generate_order_url(order['code'], order['secret']))
+                  for order in user_orders]
+        return {
+            'event': self.request.event.name,
+            'total': 42.23,
+            'currency': self.request.event.currency,
+            'url': self.generate_order_url(user_orders[0]['code'], user_orders[0]['secret']),
+            'orders': '\n'.join(orders),
+            'hours': self.request.event.settings.waiting_list_hours,
+            'product': _('Sample Admission Ticket'),
+            'code': '68CYU2H6ZTP3WLK5',
+            'invoice_name': _('John Doe'),
+            'invoice_company': _('Sample Corporation'),
+            'paymentinfo': _('Please transfer money to this bank account: 9999-9999-9999-9999')
+        }
+
+    def generate_order_url(self, code, secret):
+        return build_absolute_uri('presale:event.order', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'order': code,
+            'secret': secret
+        })
+
+    # get all supported placeholders with dummy values
+    def placeholders(self, item):
+        supported = {}
+        local_data = self.localized_data()
+        for key in self.items.get(item):
+            supported[key] = self.base_data.get(key) if key in self.base_data else local_data.get(key)
+        return self.SafeDict(supported)
+
+    def post(self, request, *args, **kwargs):
+        preview_item = request.POST.get('item', '')
+        if preview_item not in self.items:
+            return HttpResponseBadRequest(_('invalid item'))
+
+        regex = r"^" + re.escape(preview_item) + r"_(?P<idx>[\d+])$"
+        msgs = {}
+        for k, v in request.POST.items():
+            # only accept allowed fields
+            matched = re.search(regex, k)
+            if matched is not None:
+                idx = matched.group('idx')
+                if idx in self.supported_locale:
+                    with translation.override(self.supported_locale[idx]):
+                        msgs[self.supported_locale[idx]] = v.format_map(self.placeholders(preview_item))
+
+        return JsonResponse({
+            'item': preview_item,
+            'msgs': msgs
+        })
 
 
 class TicketSettingsPreview(EventPermissionRequiredMixin, View):
