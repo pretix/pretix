@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 from pytz import common_timezones, timezone
 
-from pretix.base.forms import I18nModelForm, SettingsForm
+from pretix.base.forms import I18nModelForm, SettingsForm, PlaceholderValidator
 from pretix.base.models import Event, Organizer
 from pretix.control.forms import ExtFileField
 
@@ -442,37 +442,44 @@ class MailSettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {total}, {currency}, {date}, {paymentinfo}, {url}, "
-                    "{invoice_name}, {invoice_company}")
+                    "{invoice_name}, {invoice_company}"),
+        validators=[PlaceholderValidator(['{event}', '{total}', '{currency}', '{date}', '{paymentinfo}',
+                                          '{url}', '{invoice_name}', '{invoice_company}'])]
     )
     mail_text_order_paid = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}, {payment_info}")
+        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}, {payment_info}"),
+        validators=[PlaceholderValidator(['{event}', '{url}', '{invoice_name}', '{invoice_company}', '{payment_info}'])]
     )
     mail_text_order_free = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}")
+        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}"),
+        validators=[PlaceholderValidator(['{event}', '{url}', '{invoice_name}', '{invoice_company}'])]
     )
     mail_text_order_changed = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}")
+        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}"),
+        validators=[PlaceholderValidator(['{event}', '{url}', '{invoice_name}', '{invoice_company}'])]
     )
     mail_text_resend_link = I18nFormField(
         label=_("Text (sent by admin)"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}")
+        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}"),
+        validators=[PlaceholderValidator(['{event}', '{url}', '{invoice_name}', '{invoice_company}'])]
     )
     mail_text_resend_all_links = I18nFormField(
         label=_("Text (requested by user)"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {orders}")
+        help_text=_("Available placeholders: {event}, {orders}"),
+        validators=[PlaceholderValidator(['{event}', '{orders}'])]
     )
     mail_days_order_expire_warning = forms.IntegerField(
         label=_("Number of days"),
@@ -485,13 +492,15 @@ class MailSettingsForm(SettingsForm):
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {expire_date}, {invoice_name}, {invoice_company}")
+        help_text=_("Available placeholders: {event}, {url}, {expire_date}, {invoice_name}, {invoice_company}"),
+        validators=[PlaceholderValidator(['{event}', '{url}', '{invoice_date}', '{invoice_name}', '{invoice_company}'])]
     )
     mail_text_waiting_list = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {product}, {hours}, {code}")
+        help_text=_("Available placeholders: {event}, {url}, {product}, {hours}, {code}"),
+        validators=[PlaceholderValidator(['{event}', '{url}', '{product}', '{hours}', '{code}'])]
     )
     smtp_use_custom = forms.BooleanField(
         label=_("Use custom SMTP server"),
