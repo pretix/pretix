@@ -291,8 +291,7 @@ class EventSettingsForm(SettingsForm):
             })
         if data['attendee_emails_required'] and not data['attendee_emails_asked']:
             raise ValidationError({
-                'attendee_emails_required': _('You cannot require specifying attendee emails if you do not ask for '
-                                              'them.')
+                'attendee_emails_required': _('You have to ask for attendee emails if you want to make them required.')
             })
         return data
 
