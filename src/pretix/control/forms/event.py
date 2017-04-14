@@ -493,7 +493,7 @@ class MailSettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {url}, {expire_date}, {invoice_name}, {invoice_company}"),
-        validators=[PlaceholderValidator(['{event}', '{url}', '{invoice_date}', '{invoice_name}', '{invoice_company}'])]
+        validators=[PlaceholderValidator(['{event}', '{url}', '{expire_date}', '{invoice_name}', '{invoice_company}'])]
     )
     mail_text_waiting_list = I18nFormField(
         label=_("Text"),
