@@ -423,7 +423,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         return {
             'date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
             'expire_date': date_format(now() + timedelta(days=15), 'SHORT_DATE_FORMAT'),
-            'payment_info': _('{} {} has been transferred to account<9999-9999-9999-9999> at {}').format(
+            'payment_info': _('{} {} has been transferred to account <9999-9999-9999-9999> at {}').format(
                 42.23, self.request.event.currency, date_format(now(), 'SHORT_DATETIME_FORMAT'))
         }
 

@@ -117,3 +117,24 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
 .ticketoutput-panel .panel-title {
   line-height: 30px;
 }
+
+pre.mail-preview {
+  white-space: pre-line;       /* Since CSS 2.1 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+.mail-preview-group pre[lang] {
+  @include border-top-radius(0px);
+  @include border-bottom-radius(0px);
+  border-top-width: 0;
+  margin-bottom: 0;
+
+  &:first-child {
+    @include border-top-radius($input-border-radius);
+    border-top-width: 1px;
+  }
+  &:last-child {
+    @include border-bottom-radius($input-border-radius);
+    margin-bottom: 20px;
+  }
+}

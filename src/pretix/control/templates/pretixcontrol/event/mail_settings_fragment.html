@@ -27,9 +27,9 @@
                                 <div id="{{ item }}_edit" class="tab-pane fade in active">
                                     {% bootstrap_field field show_label=False form_group_class="" %}
                                 </div>
-                                <div id="{{ item }}_preview" class="tab-pane">
+                                <div id="{{ item }}_preview" class="tab-pane mail-preview-group">
                                     {% for l in request.event.settings.locales %}
-                                        <pre lang="{{ l }}" for="{{ item }}"></pre>
+                                        <pre lang="{{ l }}" for="{{ item }}" class="mail-preview"></pre>
                                     {% endfor %}
                                 </div>
                             </div>

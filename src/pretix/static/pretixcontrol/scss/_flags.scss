@@ -9,7 +9,7 @@ textarea[lang] {
 pre[lang] {
   background: no-repeat 10px 10px;
   padding-left: 34px;
-  padding-top: 5px;
+  padding-top: 8px;
   margin-bottom: 20px;
 }
 
@@ -255,5 +255,4 @@ pre[lang=yt], input[lang=yt], textarea[lang=yt] { background-image: url(static('
 pre[lang=za], input[lang=za], textarea[lang=za] { background-image: url(static('pretixbase/img/flags/za.png')); }
 pre[lang=zm], input[lang=zm], textarea[lang=zm] { background-image: url(static('pretixbase/img/flags/zm.png')); }
 pre[lang=zw], input[lang=zw], textarea[lang=zw] { background-image: url(static('pretixbase/img/flags/zw.png')); }
-
 pre[lang=en], input[lang=en], textarea[lang=en] { background-image: url(static('pretixbase/img/flags/gb.png')); }
