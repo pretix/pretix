@@ -200,6 +200,14 @@ def _invoice_generate_german(invoice, f):
         p_size = p.wrap(85 * mm, 50 * mm)
         p.drawOn(canvas, 25 * mm, (297 - 52) * mm - p_size[1])
 
+        textobject = canvas.beginText(125 * mm, (297 - 38) * mm)
+        textobject.setFont('OpenSansBd', 8)
+        textobject.textLine(_('Order code').upper())
+        textobject.moveCursor(0, 5)
+        textobject.setFont('OpenSans', 10)
+        textobject.textLine(invoice.order.full_code)
+        canvas.drawText(textobject)
+
         textobject = canvas.beginText(125 * mm, (297 - 50) * mm)
         textobject.setFont('OpenSansBd', 8)
         if invoice.is_cancellation:
@@ -241,20 +249,6 @@ def _invoice_generate_german(invoice, f):
             textobject.textLine(date_format(invoice.date, "DATE_FORMAT"))
             textobject.moveCursor(0, 5)
 
-        canvas.drawText(textobject)
-
-        textobject = canvas.beginText(165 * mm, (297 - 50) * mm)
-        textobject.setFont('OpenSansBd', 8)
-        textobject.textLine(_('Order code').upper())
-        textobject.moveCursor(0, 5)
-        textobject.setFont('OpenSans', 10)
-        textobject.textLine(invoice.order.full_code)
-        textobject.moveCursor(0, 5)
-        textobject.setFont('OpenSansBd', 8)
-        textobject.textLine(_('Order date').upper())
-        textobject.moveCursor(0, 5)
-        textobject.setFont('OpenSans', 10)
-        textobject.textLine(date_format(invoice.order.datetime, "DATE_FORMAT"))
         canvas.drawText(textobject)
 
         if invoice.event.settings.invoice_logo_image:
