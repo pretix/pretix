@@ -26,6 +26,10 @@ td > .form-group > .checkbox {
   margin-bottom: 0;
 }
 
+.form-group.disabled {
+  opacity: 0.5;
+}
+
 .form-horizontal [data-formset] .form-group {
   width: 100%;
 }

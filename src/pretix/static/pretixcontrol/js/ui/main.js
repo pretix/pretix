@@ -170,6 +170,49 @@ $(function () {
         $(this).datetimepicker(opts);
     });
 
+    $(".datetimepicker[data-date-after], .datepickerfield[data-date-after]").each(function() {
+        var later_field = $(this),
+            earlier_field = $($(this).attr("data-date-after")),
+            update = function () {
+                var earlier = earlier_field.data('DateTimePicker').date(),
+                    later = later_field.data('DateTimePicker').date();
+                if (earlier === null) {
+                    earlier = false;
+                } else if (later !== null && later.isBefore(earlier) && !later.isSame(earlier)) {
+                    later_field.data('DateTimePicker').date(earlier.add(1, 'h'));
+                }
+                later_field.data('DateTimePicker').minDate(earlier);
+            };
+        update();
+        earlier_field.on("dp.change", update);
+    });
+
+    $("input[data-checkbox-dependency]").each(function () {
+        var dependent = $(this),
+            dependency = $($(this).attr("data-checkbox-dependency")),
+            update = function () {
+                var enabled = dependency.prop('checked');
+                dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
+                if (!enabled) {
+                    dependent.prop('checked', false);
+                }
+            };
+        update();
+        dependency.on("change", update);
+    });
+
+    $("input[data-display-dependency]").each(function () {
+        var dependent = $(this),
+            dependency = $($(this).attr("data-display-dependency")),
+            update = function () {
+                var enabled = (dependency.attr("type") === 'checkbox') ? dependency.prop('checked') : !!dependency.val();
+                dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
+            };
+        update();
+        dependency.on("change", update);
+        dependency.on("dp.change", update);
+    });
+
     $(".qrcode-canvas").each(function() {
         $(this).qrcode(
             {

@@ -151,9 +151,10 @@ class EventUpdateForm(I18nModelForm):
         ]
         widgets = {
             'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker', 'data-date-after': '#id_date_from'}),
             'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker',
+                                                      'data-date-after': '#id_presale_start'}),
         }
 
 
@@ -182,6 +183,7 @@ class EventSettingsForm(SettingsForm):
     presale_start_show_date = forms.BooleanField(
         label=_("Show start date"),
         help_text=_("Show the presale start date before presale has started."),
+        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_presale_start'}),
         required=False
     )
     last_order_modification_date = forms.DateTimeField(
@@ -221,24 +223,27 @@ class EventSettingsForm(SettingsForm):
         min_value=6,
         help_text=_("If a ticket voucher is sent to a person on the waiting list, it has to be redeemed within this "
                     "number of hours until it expires and can be re-assigned to the next person on the list."),
-        required=False
+        required=False,
+        widget=forms.NumberInput(attrs={'data-display-dependency': '#id_settings-waiting_list_enabled'}),
     )
     waiting_list_auto = forms.BooleanField(
         label=_("Automatic waiting list assignments"),
         help_text=_("If ticket capacity becomes free, automatically create a voucher and send it to the first person "
                     "on the waiting list for that product. If this is not active, mails will not be send automatically "
                     "but you can send them manually via the control panel."),
-        required=False
+        required=False,
+        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-waiting_list_enabled'}),
     )
     attendee_names_asked = forms.BooleanField(
         label=_("Ask for attendee names"),
         help_text=_("Ask for a name for all tickets which include admission to the event."),
-        required=False
+        required=False,
     )
     attendee_names_required = forms.BooleanField(
         label=_("Require attendee names"),
         help_text=_("Require customers to fill in the names of all attendees."),
-        required=False
+        required=False,
+        widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-attendee_names_asked'}),
     )
     attendee_emails_asked = forms.BooleanField(
         label=_("Ask for email addresses per ticket"),
@@ -253,7 +258,8 @@ class EventSettingsForm(SettingsForm):
         help_text=_("Require customers to fill in individual e-mail addresses for all admission tickets. See the "
                     "above option for more details. One email address for the order confirmation will always be "
                     "required regardless of this setting."),
-        required=False
+        required=False,
+        widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-attendee_emails_asked'}),
     )
     max_items_per_order = forms.IntegerField(
         min_value=1,
@@ -386,11 +392,13 @@ class InvoiceSettingsForm(SettingsForm):
     )
     invoice_address_required = forms.BooleanField(
         label=_("Require invoice address"),
-        required=False
+        required=False,
+        widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
     )
     invoice_address_vatid = forms.BooleanField(
         label=_("Ask for VAT ID"),
         help_text=_("Does only work if an invoice address is asked for. VAT ID is not required."),
+        widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
         required=False
     )
     invoice_numbers_consecutive = forms.BooleanField(
@@ -606,11 +614,13 @@ class TicketSettingsForm(SettingsForm):
         label=_("Download date"),
         help_text=_("Ticket download will be offered after this date."),
         required=True,
-        widget=forms.DateTimeInput(attrs={'class': 'datetimepicker'})
+        widget=forms.DateTimeInput(attrs={'class': 'datetimepicker',
+                                          'data-display-dependency': '#id_ticket_download'}),
     )
     ticket_download_addons = forms.BooleanField(
         label=_("Offer to download tickets separately for add-on products"),
-        required=False
+        required=False,
+        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_ticket_download'}),
     )
 
     def prepare_fields(self):
