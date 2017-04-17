@@ -9,7 +9,7 @@
     url(static('fontawesome/fonts/fontawesome-webfont.woff?v=#{$fa-version}')) format('woff'),
     url(static('fontawesome/fonts/fontawesome-webfont.ttf?v=#{$fa-version}')) format('truetype'),
     url(static('fontawesome/fonts/fontawesome-webfont.svg?v=#{$fa-version}#fontawesomeregular')) format('svg');
-//  src: url(static('fontawesome/fonts/FontAwesome.otf') format('opentype'); // used when developing fonts
+//  src: url('fontawesome/fonts/FontAwesome.otf') format('opentype'); // used when developing fonts
   font-weight: normal;
   font-style: normal;
 }
