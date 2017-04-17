@@ -122,6 +122,7 @@ $(function () {
     });
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
+    moment.locale($("body").attr("data-datetimelocale"));
 
     $(".datetimepicker").each(function() {
         $(this).datetimepicker({
@@ -141,6 +142,9 @@ $(function () {
                 close: 'fa fa-remove'
             }
         });
+        if (!$(this).val()) {
+            $(this).data("DateTimePicker").viewDate(moment().hour(0).minute(0).second(0));
+        }
     });
 
     $(".datepickerfield").each(function() {
