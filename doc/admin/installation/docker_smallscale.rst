@@ -246,7 +246,7 @@ To install a plugin, you need to build your own docker image. To do so, create a
 named ``Dockerfile`` in it. The Dockerfile could look like this (replace ``pretix-passbook`` with the plugins of your
 choice)::
 
-    FROM pretix/standalone
+    FROM pretix/standalone:stable
     USER root
     RUN pip3 install pretix-passbook
     USER pretixuser
