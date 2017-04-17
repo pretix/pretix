@@ -250,7 +250,7 @@ choice)::
     USER root
     RUN pip3 install pretix-passbook
     USER pretixuser
-    RUN make production
+    RUN cd /pretix/src && make production
 
 Then, go to that directory and build the image::
 
