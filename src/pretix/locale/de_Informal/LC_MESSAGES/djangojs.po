@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-17 13:29+0000\n"
-"PO-Revision-Date: 2017-04-13 23:16+0200\n"
+"POT-Creation-Date: 2017-04-17 15:09+0000\n"
+"PO-Revision-Date: 2017-04-17 17:09+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -123,22 +123,14 @@ msgid "Press Ctrl-C to copy!"
 msgstr "Drücke Strg+C zum kopieren!"
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:18
-#, fuzzy
-#| msgid "An error of type {code} occured."
 msgid "An error has occurred."
-msgstr "Ein Fehler ist aufgetreten. Fehlercode: {code}"
+msgstr "Ein Fehler ist aufgetreten."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:23
-#, fuzzy
-#| msgid "An error of type {code} occured."
 msgid "An error of type {code} occurred."
-msgstr "Ein Fehler ist aufgetreten. Fehlercode: {code}"
+msgstr "Ein Fehler vom Typ {code} ist aufgetreten."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:25
-#, fuzzy
-#| msgid ""
-#| "We currenctly cannot reach the server. Please try again. Error code: "
-#| "{code}"
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
@@ -147,7 +139,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
 msgid "Generating messages …"
-msgstr ""
+msgstr "Generiere Nachrichten…"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:43
 msgid "Unknown error."

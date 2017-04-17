@@ -244,13 +244,13 @@ class EventSettingsForm(SettingsForm):
         label=_("Ask for email addresses per ticket"),
         help_text=_("Normally, pretix asks for one email address per order and the order confirmation will be send "
                     "to that email address. If you enable this option, the system will additionally ask for "
-                    "individual email addresses for every admission ticket. This might be useful for example if "
-                    "you want to obtain individual addresses for every attendee even in case of group orders."),
+                    "individual email addresses for every admission ticket. This might be useful if you want to "
+                    "obtain individual addresses for every attendee even in case of group orders."),
         required=False
     )
     attendee_emails_required = forms.BooleanField(
         label=_("Require email addresses per ticket"),
-        help_text=_("Require customers to fill in an individual e-mail addresses for all admission tickets. See the "
+        help_text=_("Require customers to fill in individual e-mail addresses for all admission tickets. See the "
                     "above option for more details. One email address for the order confirmation will always be "
                     "required regardless of this setting."),
         required=False
