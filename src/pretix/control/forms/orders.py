@@ -6,12 +6,14 @@ from django.utils.formats import localize
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
-from pretix.base.forms import I18nModelForm, PlaceholderValidator
+from pretix.base.email import mail_text_order_custom_mail
+from pretix.base.forms import I18nModelForm
 from pretix.base.models import (
     InvoiceAddress, Item, ItemAddOn, Order, OrderPosition,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
+from pretix.base.validators import PlaceholderValidator
 
 
 class ExtendForm(I18nModelForm):
@@ -269,13 +271,9 @@ class OrderMailForm(forms.Form):
             initial=order.email
         )
         self.fields['sendto'].widget.attrs['readonly'] = 'readonly'
-        self.fields['message'] = forms.CharField(
+        self.fields['message'] = mail_text_order_custom_mail.formfield(
             label=_("Message"),
             required=True,
             widget=forms.Textarea,
             initial=order.event.settings.mail_text_order_custom_mail.localize(order.locale),
-            help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
-                        "{invoice_name}, {invoice_company}"),
-            validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
-                                              '{invoice_name}', '{invoice_company}'])]
         )

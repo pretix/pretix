@@ -17,6 +17,7 @@ from pretix.base.models.event import SubEvent
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.plugins.sendmail.email import mail_text_sendmail
 
 from . import forms
 
@@ -82,8 +83,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     self.output[l] = []
                     self.output[l].append(
                         _('Subject: {subject}').format(subject=form.cleaned_data['subject'].localize(l)))
-                    message = form.cleaned_data['message'].localize(l)
-                    preview_text = message.format(
+                    preview_text = mail_text_sendmail.preview(
+                        text=form.cleaned_data['message'].localize(l),
                         code='ORDER1234',
                         event=self.request.event.name,
                         date=date_format(now(), 'SHORT_DATE_FORMAT'),

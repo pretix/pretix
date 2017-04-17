@@ -9,8 +9,6 @@ from hierarkey.forms import HierarkeyForm
 from pretix.base.models import Event
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 
-from .validators import PlaceholderValidator  # NOQA
-
 logger = logging.getLogger('pretix.plugins.ticketoutputpdf')
 
 

@@ -2,9 +2,9 @@ from django import forms
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
-from pretix.base.forms import PlaceholderValidator
 from pretix.base.models import Order
 from pretix.base.models.event import SubEvent
+from pretix.plugins.sendmail.email import mail_text_sendmail
 
 
 class MailForm(forms.Form):
@@ -25,13 +25,9 @@ class MailForm(forms.Form):
             widget=I18nTextInput, required=True,
             locales=event.settings.get('locales')
         )
-        self.fields['message'] = I18nFormField(
+        self.fields['message'] = mail_text_sendmail.formfield(
             widget=I18nTextarea, required=True,
             locales=event.settings.get('locales'),
-            help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
-                        "{invoice_name}, {invoice_company}"),
-            validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
-                                              '{invoice_name}', '{invoice_company}'])]
         )
         choices = list(Order.STATUS_CHOICE)
         if not event.settings.get('payment_term_expire_automatically', as_type=bool):

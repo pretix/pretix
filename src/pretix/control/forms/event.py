@@ -8,13 +8,15 @@ from django.utils.translation import ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 from pytz import common_timezones, timezone
 
-from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
+from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.models import Event, Organizer, TaxRule
 from pretix.base.models.event import EventMetaValue
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
+from pretix.base.validators import PlaceholderValidator
 from pretix.control.forms import ExtFileField, SlugWidget
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.style import get_fonts
+from pretix.base import email
 
 
 class EventWizardFoundationForm(forms.Form):
@@ -580,7 +582,6 @@ class MailSettingsForm(SettingsForm):
         label=_("Sender address"),
         help_text=_("Sender address for outgoing emails")
     )
-
     mail_text_signature = I18nFormField(
         label=_("Signature"),
         required=False,
@@ -588,50 +589,29 @@ class MailSettingsForm(SettingsForm):
         help_text=_("This will be attached to every email. Available placeholders: {event}"),
         validators=[PlaceholderValidator(['{event}'])]
     )
-
-    mail_text_order_placed = I18nFormField(
+    mail_text_order_placed = email.mail_text_order_placed.formfield(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {total}, {currency}, {date}, {payment_info}, {url}, "
-                    "{invoice_name}, {invoice_company}"),
-        validators=[PlaceholderValidator(['{event}', '{total}', '{currency}', '{date}', '{payment_info}',
-                                          '{url}', '{invoice_name}', '{invoice_company}'])]
     )
-    mail_text_order_paid = I18nFormField(
+    mail_text_order_paid = email.mail_text_order_paid.formfield(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}, {payment_info}"),
-        validators=[PlaceholderValidator(['{event}', '{url}', '{invoice_name}', '{invoice_company}', '{payment_info}'])]
     )
-    mail_text_order_free = I18nFormField(
+    mail_text_order_free = email.mail_text_order_free.formfield(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}"),
-        validators=[PlaceholderValidator(['{event}', '{url}', '{invoice_name}', '{invoice_company}'])]
     )
-    mail_text_order_changed = I18nFormField(
+    mail_text_order_changed = email.mail_text_order_changed.formfield(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}"),
-        validators=[PlaceholderValidator(['{event}', '{url}', '{invoice_name}', '{invoice_company}'])]
     )
-    mail_text_resend_link = I18nFormField(
+    mail_text_resend_link = email.mail_text_resend_link.formfield(
         label=_("Text (sent by admin)"),
         required=False,
-        widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}"),
-        validators=[PlaceholderValidator(['{event}', '{url}', '{invoice_name}', '{invoice_company}'])]
     )
-    mail_text_resend_all_links = I18nFormField(
+    mail_text_resend_all_links = email.mail_text_resend_all_links.formfield(
         label=_("Text (requested by user)"),
         required=False,
-        widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {orders}"),
-        validators=[PlaceholderValidator(['{event}', '{orders}'])]
     )
     mail_days_order_expire_warning = forms.IntegerField(
         label=_("Number of days"),
@@ -640,42 +620,25 @@ class MailSettingsForm(SettingsForm):
         help_text=_("This email will be sent out this many days before the order expires. If the "
                     "value is 0, the mail will never be sent.")
     )
-    mail_text_order_expire_warning = I18nFormField(
+    mail_text_order_expire_warning = email.mail_text_order_expire_warning.formfield(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {expire_date}, {invoice_name}, {invoice_company}"),
-        validators=[PlaceholderValidator(['{event}', '{url}', '{expire_date}', '{invoice_name}', '{invoice_company}'])]
     )
-    mail_text_waiting_list = I18nFormField(
+    mail_text_waiting_list = email.mail_text_waiting_list.formfield(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}, {product}, {hours}, {code}"),
-        validators=[PlaceholderValidator(['{event}', '{url}', '{product}', '{hours}', '{code}'])]
     )
-    mail_text_order_canceled = I18nFormField(
+    mail_text_order_canceled = email.mail_text_order_canceled.formfield(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {code}, {url}"),
-        validators=[PlaceholderValidator(['{event}', '{code}', '{url}'])]
     )
-    mail_text_order_custom_mail = I18nFormField(
+    mail_text_order_custom_mail = email.mail_text_order_custom_mail.formfield(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
-        help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
-                    "{invoice_name}, {invoice_company}"),
-        validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
-                                          '{invoice_name}', '{invoice_company}'])]
     )
-    mail_text_download_reminder = I18nFormField(
+    mail_text_download_reminder = email.mail_text_download_reminder.formfield(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {url}"),
-        validators=[PlaceholderValidator(['{event}', '{url}'])]
     )
     mail_days_download_reminder = forms.IntegerField(
         label=_("Number of days"),
