@@ -65,14 +65,14 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                 for p in (OrderPosition.objects
                           .filter(order__event=self.request.event)
                           .values('item')
-                          .annotate(cnt=Count('id')))
+                          .annotate(cnt=Count('id')).order_by())
             }
             num_paid = {
                 p['item']: p['cnt']
                 for p in (OrderPosition.objects
                           .filter(order__event=self.request.event, order__status=Order.STATUS_PAID)
                           .values('item')
-                          .annotate(cnt=Count('id')))
+                          .annotate(cnt=Count('id')).order_by())
             }
             item_names = {
                 i.id: str(i.name)
