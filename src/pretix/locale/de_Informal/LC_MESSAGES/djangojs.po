@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-13 21:00+0000\n"
+"POT-Creation-Date: 2017-04-17 13:29+0000\n"
 "PO-Revision-Date: 2017-04-13 23:16+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
@@ -46,7 +46,7 @@ msgstr "Gesamtumsatz"
 msgid "Contacting Stripe …"
 msgstr "Kontaktiere Stripe …"
 
-#: pretix/static/pretixbase/js/asyncdownload.js:27
+#: pretix/static/pretixbase/js/asyncdownload.js:28
 #: pretix/static/pretixbase/js/asynctask.js:42
 #: pretix/static/pretixbase/js/asynctask.js:94
 msgid ""
@@ -58,18 +58,18 @@ msgstr ""
 "dies länger als zwei Minuten dauert, kontaktiere uns bitte oder gehe in "
 "deinem Browser einen Schritt zurück und versuche es erneut."
 
-#: pretix/static/pretixbase/js/asyncdownload.js:40
+#: pretix/static/pretixbase/js/asyncdownload.js:41
 #: pretix/static/pretixbase/js/asynctask.js:62
 #: pretix/static/pretixbase/js/asynctask.js:116
 msgid "An error of type {code} occured."
 msgstr "Ein Fehler ist aufgetreten. Fehlercode: {code}"
 
-#: pretix/static/pretixbase/js/asyncdownload.js:53
+#: pretix/static/pretixbase/js/asyncdownload.js:54
 #: pretix/static/pretixbase/js/asynctask.js:137
 msgid "We are processing your request …"
 msgstr "Wir verarbeiten deine Anfrage …"
 
-#: pretix/static/pretixbase/js/asyncdownload.js:54
+#: pretix/static/pretixbase/js/asyncdownload.js:55
 #: pretix/static/pretixbase/js/asynctask.js:138
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
@@ -98,6 +98,7 @@ msgstr ""
 "Letzter Fehlercode: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:107
+#: pretix/static/pretixcontrol/js/ui/mail.js:20
 msgid "The request took to long. Please try again."
 msgstr "Diese Anfrage hat zu lange gedauert. Bitte erneut versuchen."
 
@@ -120,6 +121,33 @@ msgstr "Kopiert!"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "Drücke Strg+C zum kopieren!"
+
+#: pretix/static/pretixcontrol/js/ui/mail.js:18
+#, fuzzy
+#| msgid "An error of type {code} occured."
+msgid "An error has occurred."
+msgstr "Ein Fehler ist aufgetreten. Fehlercode: {code}"
+
+#: pretix/static/pretixcontrol/js/ui/mail.js:23
+#, fuzzy
+#| msgid "An error of type {code} occured."
+msgid "An error of type {code} occurred."
+msgstr "Ein Fehler ist aufgetreten. Fehlercode: {code}"
+
+#: pretix/static/pretixcontrol/js/ui/mail.js:25
+#, fuzzy
+#| msgid ""
+#| "We currenctly cannot reach the server. Please try again. Error code: "
+#| "{code}"
+msgid ""
+"We currently cannot reach the server. Please try again. Error code: {code}"
+msgstr ""
+"Wir können den Server aktuell nicht erreichen. Bitte versuche es noch "
+"einmal. Fehlercode: {code}"
+
+#: pretix/static/pretixcontrol/js/ui/mail.js:52
+msgid "Generating messages …"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:43
 msgid "Unknown error."
