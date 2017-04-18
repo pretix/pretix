@@ -225,7 +225,7 @@ class Event(LoggedModel):
         ), tz)
 
     def copy_data_from(self, other):
-        from . import ItemCategory, Item, Question, Quota
+        from . import ItemAddOn, ItemCategory, Item, Question, Quota
         self.plugins = other.plugins
         self.save()
 
@@ -253,6 +253,12 @@ class Event(LoggedModel):
                 v.pk = None
                 v.item = i
                 v.save()
+
+        for ia in ItemAddOn.objects.filter(base_item__event=other).prefetch_related('base_item', 'addon_category'):
+            ia.pk = None
+            ia.base_item = item_map[ia.base_item.pk]
+            ia.addon_category = category_map[ia.addon_category.pk]
+            ia.save()
 
         for q in Quota.objects.filter(event=other).prefetch_related('items', 'variations'):
             items = list(q.items.all())
