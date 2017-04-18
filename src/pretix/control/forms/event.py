@@ -61,9 +61,11 @@ class EventWizardBasicsForm(I18nModelForm):
         ]
         widgets = {
             'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker',
+                                                  'data-date-after': '#id_basics-date_from'}),
             'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker',
+                                                      'data-date-after': '#id_basics-presale_start'}),
         }
 
     def __init__(self, *args, **kwargs):
