@@ -44,6 +44,9 @@ $(function () {
         var idx = $(this).data('id');
         copy_answers(idx);
     });
+
+    // Lightbox
+    lightbox.init();
 });
 
 function copy_answers(idx) {    
