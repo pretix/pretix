@@ -801,6 +801,8 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
             form.instance.require_voucher = form.cleaned_data['copy_from'].require_voucher
             form.instance.hide_without_voucher = form.cleaned_data['copy_from'].hide_without_voucher
             form.instance.allow_cancel = form.cleaned_data['copy_from'].allow_cancel
+            form.instance.min_per_order = form.cleaned_data['copy_from'].min_per_order
+            form.instance.max_per_order = form.cleaned_data['copy_from'].max_per_order
 
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.item.added', user=self.request.user, data={

@@ -231,6 +231,8 @@ class Item(LoggedModel):
                     'empty or set it to 0, there is no special limit for this product. The limit for the maximum '
                     'number of items in the whole order applies regardless.')
     )
+    # !!! Attention: If you add new fields here, also add them to the copying code in
+    # pretix/control/views/item.py if applicable.
 
     class Meta:
         verbose_name = _("Product")
