@@ -985,6 +985,21 @@ class ItemAddOns(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
                 return redirect(self.get_success_url())
         return self.get(request, *args, **kwargs)
 
+    def get(self, request, *args, **kwargs):
+        if self.get_object().category and self.get_object().category.is_addon:
+            messages.error(self.request, _('Your cannot add addons to a product that is only available as an add-on '
+                                           'itself.'))
+            return redirect(self.get_previous_url())
+
+        return super().get(request, *args, **kwargs)
+
+    def get_previous_url(self) -> str:
+        return reverse('control:event.item', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'item': self.get_object().id,
+        })
+
     def get_success_url(self) -> str:
         return reverse('control:event.item.addons', kwargs={
             'organizer': self.request.event.organizer.slug,
@@ -993,7 +1008,6 @@ class ItemAddOns(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
         })
 
     def get_context_data(self, **kwargs) -> dict:
-        self.object = self.get_object()
         context = super().get_context_data(**kwargs)
         context['formset'] = self.formset
         return context
