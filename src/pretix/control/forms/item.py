@@ -110,6 +110,7 @@ class ItemCreateForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         self.event = kwargs['event']
         super().__init__(*args, **kwargs)
+        self.fields['category'].queryset = self.instance.event.categories.all()
         self.fields['copy_from'] = forms.ModelChoiceField(
             label=_("Copy product information"),
             queryset=self.event.items.all(),
@@ -140,6 +141,7 @@ class ItemCreateForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'name',
+            'category',
             'admission',
             'default_price',
             'tax_rate',
