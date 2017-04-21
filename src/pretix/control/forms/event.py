@@ -374,7 +374,7 @@ class ProviderForm(SettingsForm):
             if isinstance(v, I18nFormField):
                 v._required = v.one_required
                 v.one_required = False
-                v.widget.enabled_langcodes = self.obj.settings.get('locales')
+                v.widget.enabled_locales = self.locales
 
     def clean(self):
         cleaned_data = super().clean()
@@ -631,6 +631,10 @@ class TicketSettingsForm(SettingsForm):
             v._required = v.required
             v.required = False
             v.widget.is_required = False
+            if isinstance(v, I18nFormField):
+                v._required = v.one_required
+                v.one_required = False
+                v.widget.enabled_locales = self.locales
 
     def clean(self):
         # required=True files should only be required if the feature is enabled

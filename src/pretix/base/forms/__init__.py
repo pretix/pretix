@@ -51,9 +51,9 @@ class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
 
     def __init__(self, *args, **kwargs):
         self.obj = kwargs.get('obj', None)
-        self.locales = kwargs.pop('locales', None)
+        self.locales = self.obj.settings.get('locales') if self.obj else kwargs.pop('locales', None)
         kwargs['attribute_name'] = 'settings'
-        kwargs['locales'] = self.obj.settings.get('locales') if self.obj else self.locales
+        kwargs['locales'] = self.locales
         kwargs['initial'] = self.obj.settings.freeze()
         super().__init__(*args, **kwargs)
 
