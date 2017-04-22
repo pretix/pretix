@@ -793,7 +793,6 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
         if form.cleaned_data['copy_from']:
-            form.instance.category = form.cleaned_data['copy_from'].category
             form.instance.description = form.cleaned_data['copy_from'].description
             form.instance.active = form.cleaned_data['copy_from'].active
             form.instance.available_from = form.cleaned_data['copy_from'].available_from
