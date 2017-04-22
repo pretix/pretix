@@ -676,6 +676,7 @@ class Quota(LoggedModel):
             func = 'GREATEST'
 
         return Voucher.objects.filter(
+            Q(event=self.event) &
             Q(block_quota=True) &
             Q(Q(valid_until__isnull=True) | Q(valid_until__gte=now_dt)) &
             Q(Q(self._position_lookup) | Q(quota=self))
@@ -695,6 +696,7 @@ class Quota(LoggedModel):
 
         now_dt = now_dt or now()
         return CartPosition.objects.filter(
+            Q(event=self.event) &
             Q(expires__gte=now_dt) &
             ~Q(
                 Q(voucher__isnull=False) & Q(voucher__block_quota=True)
@@ -708,14 +710,14 @@ class Quota(LoggedModel):
 
         # This query has beeen benchmarked against a Count('id', distinct=True) aggregate and won by a small margin.
         return OrderPosition.objects.filter(
-            self._position_lookup, order__status=Order.STATUS_PENDING,
+            self._position_lookup, order__status=Order.STATUS_PENDING, order__event=self.event
         ).values('id').distinct().count()
 
     def count_paid_orders(self):
         from pretix.base.models import Order, OrderPosition
 
         return OrderPosition.objects.filter(
-            self._position_lookup, order__status=Order.STATUS_PAID
+            self._position_lookup, order__status=Order.STATUS_PAID, order__event=self.event
         ).values('id').distinct().count()
 
     @cached_property
