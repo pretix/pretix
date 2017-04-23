@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, Union
+from typing import Any, Dict, List, Union
 
 import bleach
 import cssutils
@@ -138,7 +138,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
 
 
 @app.task
-def mail_send_task(to: str, subject: str, body: str, html: str, sender: str,
+def mail_send_task(to: List[str], subject: str, body: str, html: str, sender: str,
                    event: int=None, headers: dict=None) -> bool:
     email = EmailMultiAlternatives(subject, body, sender, to=to, headers=headers)
     email.attach_alternative(inline_css(html), "text/html")
