@@ -153,6 +153,21 @@ to the user. The receivers are expected to return HTML code.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+event_copy_data = EventPluginSignal(
+    providing_args=["other"]
+)
+"""
+This signal is sent out when a new event is created as a clone of an existing event, i.e.
+the settings from the older event are copied to the newer one. You can listen to this
+signal to copy data or configuration stored within your plugin's models as well.
+
+You don't need to copy data inside the general settings storage which is cloned automatically,
+but you might need to modify that data.
+
+The ``sender`` keyword argument will contain the event of the **new** event. The ``other``
+keyword argument will contain the event to **copy from**.
+"""
+
 periodic_task = django.dispatch.Signal()
 """
 This is a regular django signal (no pretix event signal) that we send out every

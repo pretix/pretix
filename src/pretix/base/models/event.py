@@ -226,6 +226,8 @@ class Event(LoggedModel):
 
     def copy_data_from(self, other):
         from . import ItemAddOn, ItemCategory, Item, Question, Quota
+        from ..signals import event_copy_data
+
         self.plugins = other.plugins
         self.save()
 
@@ -296,6 +298,8 @@ class Event(LoggedModel):
                 newname = default_storage.save(fname, fi)
                 s.value = 'file://' + newname
             s.save()
+
+        event_copy_data.send(sender=self, other=other)
 
 
 def generate_invite_token():
