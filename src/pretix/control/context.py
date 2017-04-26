@@ -5,7 +5,7 @@ from django.core.urlresolvers import Resolver404, get_script_prefix, resolve
 
 from pretix.base.settings import GlobalSettingsObject
 
-from .signals import html_head, nav_event, nav_topbar
+from .signals import html_head, nav_event, nav_global, nav_topbar
 from .utils.i18n import get_javascript_format, get_moment_locale
 
 
@@ -38,8 +38,14 @@ def contextprocessor(request):
             _nav_event += response
         if request.event.settings.get('payment_term_weekdays'):
             _js_payment_weekdays_disabled = '[0,6]'
-    ctx['js_payment_weekdays_disabled'] = _js_payment_weekdays_disabled
     ctx['nav_event'] = _nav_event
+    ctx['js_payment_weekdays_disabled'] = _js_payment_weekdays_disabled
+
+    _nav_global = []
+    if not hasattr(request, 'event'):
+        for receiver, response in nav_global.send(request, request=request):
+            _nav_global += response
+    ctx['nav_global'] = _nav_global
 
     _nav_topbar = []
     for receiver, response in nav_topbar.send(request, request=request):
