@@ -205,6 +205,12 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.request.user.is_superuser:
+            kwargs['domain'] = True
+        return kwargs
+
     def get_success_url(self) -> str:
         return reverse('control:organizer.edit', kwargs={
             'organizer': self.request.organizer.slug,

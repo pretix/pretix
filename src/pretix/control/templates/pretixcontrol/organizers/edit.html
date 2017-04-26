@@ -11,6 +11,9 @@
             <legend>{% trans "General information" %}</legend>
             {% bootstrap_field form.name layout="horizontal" %}
             {% bootstrap_field form.slug layout="horizontal" %}
+            {% if form.domain %}
+                {% bootstrap_field form.domain layout="horizontal" %}
+            {% endif %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
