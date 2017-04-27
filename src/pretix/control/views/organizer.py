@@ -14,7 +14,7 @@ from pretix.base.models import Organizer, OrganizerPermission, User
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.organizer import OrganizerForm, OrganizerUpdateForm
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
-from pretix.control.signals import organizer_edit_tabs
+from pretix.control.signals import nav_organizer
 from pretix.helpers.urls import build_absolute_uri
 
 
@@ -45,7 +45,23 @@ class OrganizerPermissionCreateForm(OrganizerPermissionForm):
     user = forms.EmailField(required=False, label=_('User'))
 
 
-class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
+class OrganizerDetailViewMixin:
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['nav_organizer'] = []
+        ctx['organizer'] = self.request.organizer
+
+        for recv, retv in nav_organizer.send(sender=self.request.organizer, request=self.request,
+                                             organizer=self.request.organizer):
+            ctx['nav_organizer'] += retv
+        return ctx
+
+    def get_object(self, queryset=None) -> Organizer:
+        return self.request.organizer
+
+
+class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
     model = Organizer
     template_name = 'pretixcontrol/organizers/detail.html'
     permission = None
@@ -53,6 +69,18 @@ class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
 
     def get_object(self, queryset=None) -> Organizer:
         return self.request.organizer
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['events'] = self.request.organizer.events.all()
+        return ctx
+
+
+class OrganizerTeamView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
+    model = Organizer
+    template_name = 'pretixcontrol/organizers/teams.html'
+    permission = 'can_change_permissions'
+    context_object_name = 'organizer'
 
     @cached_property
     def formset(self):
@@ -86,13 +114,6 @@ class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx['formset'] = self.formset
         ctx['add_form'] = self.add_form
-        ctx['events'] = self.request.organizer.events.all()
-        ctx['tabs'] = []
-
-        for recv, retv in organizer_edit_tabs.send(sender=self.request.organizer, request=self.request,
-                                                   organizer=self.request.organizer):
-            ctx['tabs'].append(retv)
-
         return ctx
 
     def _send_invite(self, instance):
@@ -116,12 +137,6 @@ class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
 
     @transaction.atomic
     def post(self, *args, **kwargs):
-        if not self.request.orgaperm.can_change_permissions:
-            raise PermissionDenied(_("You have no permission to do this."))
-
-        if 'formset-TOTAL_FORMS' not in self.request.POST:
-            return self.get(*args, **kwargs)
-
         if self.formset.is_valid() and self.add_form.is_valid():
             if self.add_form.has_changed():
                 logdata = {
@@ -186,7 +201,7 @@ class OrganizerDetail(OrganizerPermissionRequiredMixin, DetailView):
             return self.get(*args, **kwargs)
 
     def get_success_url(self) -> str:
-        return reverse('control:organizer', kwargs={
+        return reverse('control:organizer.teams', kwargs={
             'organizer': self.request.organizer.slug,
         })
 

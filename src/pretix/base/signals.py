@@ -1,3 +1,4 @@
+import warnings
 from typing import Any, Callable, List, Tuple
 
 import django.dispatch
@@ -50,6 +51,13 @@ class EventPluginSignal(django.dispatch.Signal):
                     response = receiver(signal=self, sender=sender, **named)
                     responses.append((receiver, response))
         return responses
+
+
+class DeprecatedSignal(django.dispatch.Signal):
+
+    def connect(self, receiver, sender=None, weak=True, dispatch_uid=None):
+        warnings.warn('This signal is deprecated and will soon be removed', stacklevel=3)
+        super().connect(receiver, sender=None, weak=True, dispatch_uid=None)
 
 
 event_live_issues = EventPluginSignal(

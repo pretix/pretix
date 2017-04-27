@@ -1,0 +1,39 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Organizer" %}{% endblock %}
+{% block content %}
+    <h1>
+        {% blocktrans with name=organizer.name %}Organizer: {{ name }}{% endblocktrans %}
+        <a href="{% url "control:organizer.edit" organizer=organizer.slug %}"
+                class="btn btn-default">
+            <span class="fa fa-edit"></span>
+            {% trans "Edit" %}
+        </a>
+    </h1>
+    <ul class="nav nav-pills">
+        <li {% if "organizer" == url_name %}class="active"{% endif %}>
+            <a href="{% url "control:organizer" organizer=organizer.slug %}">
+                {% trans "Events" %}
+            </a>
+        </li>
+        {% if request.orgaperm.can_change_permissions %}
+            <li {% if "organizer.teams" == url_name %}class="active"{% endif %}>
+                <a href="{% url "control:organizer.teams" organizer=organizer.slug %}">
+                    {% trans "Permissions" %}
+                </a>
+            </li>
+        {% endif %}
+        {% for nav in nav_organizer %}
+            <li {% if nav.active %}class="active"{% endif %}>
+                <a href="{{ nav.url }}">
+                    {{ nav.label }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% block inner %}
+    {% endblock %}
+
+{% endblock %}

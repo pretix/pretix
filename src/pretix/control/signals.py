@@ -1,6 +1,6 @@
 from django.dispatch import Signal
 
-from pretix.base.signals import EventPluginSignal
+from pretix.base.signals import DeprecatedSignal, EventPluginSignal
 
 restriction_formset = EventPluginSignal(
     providing_args=["item"]
@@ -143,14 +143,29 @@ quota as argument in the ``quota`` keyword argument.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-organizer_edit_tabs = Signal(
+organizer_edit_tabs = DeprecatedSignal(
     providing_args=['organizer', 'request']
 )
 """
-This signal is sent out to include tabs on the detail page of an organizer. Receivers
-should return a tuple with the first item being the tab title and the second item
-being the content as HTML. The receivers get the ``organizer`` and the ``request`` as
-keyword arguments.
+Deprecated signal, no longer works. We just keep the definition so old plugins don't
+break the installation.
+"""
 
-This is a regular django signal (no pretix event signal).
+
+nav_organizer = Signal(
+    providing_args=['organizer', 'request']
+)
+"""
+This signal is sent out to include tab links on the detail page of an organizer.
+Receivers are expected to return a list of dictionaries. The dictionaries
+should contain at least the keys ``label`` and ``url``. You should also return
+an ``active`` key with a boolean set to ``True``, when this item should be marked
+as active.
+
+If your linked view should stay in the tab-like context of this page, we recommend
+that you use ``pretix.control.views.organizer.OrganizerDetailViewMixin`` for your view
+and your tempalte inherits from ``pretixcontrol/organizers/base.html``.
+
+This is a regular django signal (no pretix event signal). Receivers will be passed
+the keyword arguments ``organizer`` and ``request``.
 """
