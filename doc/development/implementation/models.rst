@@ -20,13 +20,10 @@ Organizers and events
 .. autoclass:: pretix.base.models.Organizer
    :members:
 
-.. autoclass:: pretix.base.models.OrganizerPermission
-   :members:
-
 .. autoclass:: pretix.base.models.Event
    :members:
 
-.. autoclass:: pretix.base.models.EventPermission
+.. autoclass:: pretix.base.models.Team
    :members:
 
 .. autoclass:: pretix.base.models.RequiredAction

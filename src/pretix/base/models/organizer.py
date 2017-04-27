@@ -110,3 +110,115 @@ class OrganizerPermission(models.Model):
             'name': str(self.user),
             'object': str(self.organizer),
         }
+
+
+class Team(models.Model):
+    """
+    A team is a collection of people given certain access rights to one or more events of an organizer.
+
+    :param name: The name of this team
+    :type name: str
+    :param organizer: The organizer this team belongs to
+    :type organizer: Organizer
+    :param members: A set of users who belong to this team
+    :param all_events: Whether this team has access to all events of this organizer
+    :type all_events: bool
+    :param limit_events: A set of events this team has access to. Irrelevant if ``all_events`` is ``True``.
+    :param can_create_events: Whether or not the members can create new events with this organizer account.
+    :type can_create_events: bool
+    :param can_change_teams: If ``True``, the members can change the teams of this organizer account.
+    :type can_change_teams: bool
+    :param can_change_organizer_settings: If ``True``, the members can change the settings of this organizer account.
+    :type can_change_organizer_settings: bool
+    :param can_change_event_settings: If ``True``, the members can change the settings of the associated events.
+    :type can_change_event_settings: bool
+    :param can_change_items: If ``True``, the members can change and add items and related objects for the associated events.
+    :type can_change_items: bool
+    :param can_view_orders: If ``True``, the members can inspect details of all orders of the associated events.
+    :type can_view_orders: bool
+    :param can_change_orders: If ``True``, the members can change details of orders of the associated events.
+    :type can_change_orders: bool
+    :param can_view_vouchers: If ``True``, the members can inspect details of all vouchers of the associated events.
+    :type can_view_vouchers: bool
+    :param can_change_vouchers: If ``True``, the members can change and create vouchers for the associated events.
+    :type can_change_vouchers: bool
+    """
+    organizer = models.ForeignKey(Organizer, related_name="teams", on_delete=models.CASCADE)
+    name = models.CharField(max_length=190, verbose_name=_("Team name"))
+    members = models.ManyToManyField(User, related_name="teams", verbose_name=_("Team members"))
+    all_events = models.BooleanField(default=False, verbose_name=_("All events (including newly created ones)"))
+    limit_events = models.ManyToManyField('Event', verbose_name=_("Limit to events"))
+
+    can_create_events = models.BooleanField(
+        default=False,
+        verbose_name=_("Can create events"),
+    )
+    can_change_teams = models.BooleanField(
+        default=False,
+        verbose_name=_("Can change permissions"),
+    )
+    can_change_organizer_settings = models.BooleanField(
+        default=False,
+        verbose_name=_("Can change organizer settings")
+    )
+
+    can_change_event_settings = models.BooleanField(
+        default=False,
+        verbose_name=_("Can change event settings")
+    )
+    can_change_items = models.BooleanField(
+        default=False,
+        verbose_name=_("Can change product settings")
+    )
+    can_view_orders = models.BooleanField(
+        default=False,
+        verbose_name=_("Can view orders")
+    )
+    can_change_orders = models.BooleanField(
+        default=False,
+        verbose_name=_("Can change orders")
+    )
+    can_view_vouchers = models.BooleanField(
+        default=False,
+        verbose_name=_("Can view vouchers")
+    )
+    can_change_vouchers = models.BooleanField(
+        default=False,
+        verbose_name=_("Can change vouchers")
+    )
+
+    def __str__(self) -> str:
+        return _("%(name)s on %(object)s") % {
+            'name': str(self.name),
+            'object': str(self.organizer),
+        }
+
+    @property
+    def can_change_settings(self):  # Legacy compatiblilty
+        return self.can_change_event_settings
+
+    class Meta:
+        verbose_name = _("Team")
+        verbose_name_plural = _("Teams")
+
+
+class TeamInvite(models.Model):
+    """
+    A TeamInvite represents someone who has been invited to a team but hasn't accept the invitation
+    yet.
+
+    :param team: The team the person is invited to
+    :type team: Team
+    :param email: The email the invite has been sent to
+    :type email: str
+    :param token: The secret required to redeem the invite
+    :type token: str
+    """
+    team = models.ForeignKey(Team, related_name="invites", on_delete=models.CASCADE)
+    email = models.EmailField(null=True, blank=True)
+    token = models.CharField(default=generate_invite_token, max_length=64, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return _("Invite to team '{team}' for '{email}'").format(
+            team=str(self.team), email=self.email
+        )

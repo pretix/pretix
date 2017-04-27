@@ -18,6 +18,8 @@ from .orders import (
     cachedcombinedticket_name, cachedticket_name, generate_position_secret,
     generate_secret,
 )
-from .organizer import Organizer, Organizer_SettingsStore, OrganizerPermission
+from .organizer import (
+    Organizer, Organizer_SettingsStore, OrganizerPermission, Team, TeamInvite,
+)
 from .vouchers import Voucher
 from .waitinglist import WaitingListEntry
