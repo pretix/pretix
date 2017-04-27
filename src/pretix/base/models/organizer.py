@@ -112,7 +112,7 @@ class OrganizerPermission(models.Model):
         }
 
 
-class Team(models.Model):
+class Team(LoggedModel):
     """
     A team is a collection of people given certain access rights to one or more events of an organizer.
 
@@ -147,7 +147,7 @@ class Team(models.Model):
     name = models.CharField(max_length=190, verbose_name=_("Team name"))
     members = models.ManyToManyField(User, related_name="teams", verbose_name=_("Team members"))
     all_events = models.BooleanField(default=False, verbose_name=_("All events (including newly created ones)"))
-    limit_events = models.ManyToManyField('Event', verbose_name=_("Limit to events"))
+    limit_events = models.ManyToManyField('Event', verbose_name=_("Limit to events"), blank=True)
 
     can_create_events = models.BooleanField(
         default=False,
@@ -155,7 +155,7 @@ class Team(models.Model):
     )
     can_change_teams = models.BooleanField(
         default=False,
-        verbose_name=_("Can change permissions"),
+        verbose_name=_("Can change teams and permissions"),
     )
     can_change_organizer_settings = models.BooleanField(
         default=False,

@@ -3,16 +3,21 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.db.models import Count
 from django.forms import modelformset_factory
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.generic import (
+    CreateView, DeleteView, DetailView, ListView, UpdateView,
+)
 
 from pretix.base.forms import I18nModelForm
-from pretix.base.models import Organizer, OrganizerPermission, User
+from pretix.base.models import Organizer, OrganizerPermission, Team, User
 from pretix.base.services.mail import SendMailException, mail
-from pretix.control.forms.organizer import OrganizerForm, OrganizerUpdateForm
+from pretix.control.forms.organizer import (
+    OrganizerForm, OrganizerUpdateForm, TeamForm,
+)
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
 from pretix.control.signals import nav_organizer
 from pretix.helpers.urls import build_absolute_uri
@@ -254,3 +259,135 @@ class OrganizerCreate(CreateView):
 
     def get_success_url(self) -> str:
         return reverse('control:organizers')
+
+
+class TeamListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    model = Team
+    template_name = 'pretixcontrol/organizers/teams.html'
+    permission = 'can_change_teams'
+    context_object_name = 'teams'
+
+    def get_queryset(self):
+        return self.request.organizer.teams.annotate(
+            memcount=Count('members', distinct=True),
+            eventcount=Count('limit_events', distinct=True),
+            invcount=Count('invites', distinct=True)
+        ).all()
+
+
+class TeamCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
+    model = Team
+    template_name = 'pretixcontrol/organizers/team_edit.html'
+    permission = 'can_change_teams'
+    form_class = TeamForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['organizer'] = self.request.organizer
+        return kwargs
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Team, organizer=self.request.organizer, pk=self.kwargs.get('team'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.team.edit', kwargs={
+            'organizer': self.request.organizer.slug,
+            'team': self.object.pk
+        })
+
+    def form_valid(self, form):
+        messages.success(self.request, _('The team has been created. You can now add members to the team.'))
+        form.instance.organizer = self.request.organizer
+        ret = super().form_valid(form)
+        form.instance.log_action('pretix.team.created', user=self.request.user, data={
+            k: getattr(self.object, k) if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
+            for k in form.changed_data
+        })
+        return ret
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class TeamUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
+    model = Team
+    template_name = 'pretixcontrol/organizers/team_edit.html'
+    permission = 'can_change_teams'
+    context_object_name = 'team'
+    form_class = TeamForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['organizer'] = self.request.organizer
+        return kwargs
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Team, organizer=self.request.organizer, pk=self.kwargs.get('team'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.team.edit', kwargs={
+            'organizer': self.request.organizer.slug,
+            'team': self.object.pk
+        })
+
+    def form_valid(self, form):
+        if form.has_changed():
+            self.object.log_action('pretix.team.changed', user=self.request.user, data={
+                k: getattr(self.object, k) if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
+                for k in form.changed_data
+            })
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class TeamDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DeleteView):
+    model = Team
+    template_name = 'pretixcontrol/organizers/team_delete.html'
+    permission = 'can_change_teams'
+    context_object_name = 'team'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Team, organizer=self.request.organizer, pk=self.kwargs.get('team'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.teams', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        context['possible'] = self.is_allowed()
+        return context
+
+    def is_allowed(self) -> bool:
+        return self.request.organizer.teams.exclude(pk=self.kwargs.get('team')).filter(
+            can_change_teams=True, members__isnull=False
+        ).exists()
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        success_url = self.get_success_url()
+        self.object = self.get_object()
+        if self.is_allowed():
+            self.object.log_action('pretix.team.deleted', user=self.request.user)
+            self.object.delete()
+            messages.success(request, _('The selected team has been deleted.'))
+            return redirect(success_url)
+        else:
+            messages.error(request, _('The selected cannot be deleted.'))
+            return redirect(success_url)
+
+
+class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
+    template_name = 'pretixcontrol/organizers/team_members.html'
+    context_object_name = 'team'
+    permission = 'can_change_teams'
+    model = Team
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Team, organizer=self.request.organizer, pk=self.kwargs.get('team'))
