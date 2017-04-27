@@ -59,7 +59,7 @@ class OrderListExporter(BaseExporter):
         headers = [
             _('Order code'), _('Order total'), _('Status'), _('Email'), _('Order date'),
             _('Company'), _('Name'), _('Address'), _('ZIP code'), _('City'), _('Country'), _('VAT ID'),
-            _('Payment date'), _('Payment type'), _('Payment method fee'), _('Invoice numbers')
+            _('Payment date'), _('Payment type'), _('Payment method fee'),
         ]
 
         for tr in tax_rates:
@@ -68,6 +68,8 @@ class OrderListExporter(BaseExporter):
                 _('Net at {rate} % tax').format(rate=tr),
                 _('Tax value at {rate} % tax').format(rate=tr),
             ]
+
+        headers.append(_('Invoice numbers'))
 
         writer.writerow(headers)
 
