@@ -13,7 +13,9 @@ from django.views.generic import (
 )
 
 from pretix.base.forms import I18nModelForm
-from pretix.base.models import Organizer, OrganizerPermission, Team, User
+from pretix.base.models import (
+    Organizer, OrganizerPermission, Team, TeamInvite, User,
+)
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.organizer import (
     OrganizerForm, OrganizerUpdateForm, TeamForm,
@@ -46,7 +48,7 @@ class OrganizerPermissionForm(I18nModelForm):
         )
 
 
-class OrganizerPermissionCreateForm(OrganizerPermissionForm):
+class InviteForm(forms.Form):
     user = forms.EmailField(required=False, label=_('User'))
 
 
@@ -103,112 +105,6 @@ class OrganizerTeamView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
             prefix="formset",
             queryset=OrganizerPermission.objects.filter(organizer=self.request.organizer)
         )
-
-    @cached_property
-    def add_form(self):
-        return OrganizerPermissionCreateForm(
-            data=(
-                self.request.POST
-                if self.request.method == "POST" and 'formset-TOTAL_FORMS' in self.request.POST
-                else None
-            ),
-            prefix="add"
-        )
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['formset'] = self.formset
-        ctx['add_form'] = self.add_form
-        return ctx
-
-    def _send_invite(self, instance):
-        try:
-            mail(
-                instance.invite_email,
-                _('pretix account invitation'),
-                'pretixcontrol/email/invitation_organizer.txt',
-                {
-                    'user': self,
-                    'organizer': self.request.organizer.name,
-                    'url': build_absolute_uri('control:auth.invite', kwargs={
-                        'token': instance.invite_token
-                    })
-                },
-                event=None,
-                locale=self.request.LANGUAGE_CODE
-            )
-        except SendMailException:
-            pass  # Already logged
-
-    @transaction.atomic
-    def post(self, *args, **kwargs):
-        if self.formset.is_valid() and self.add_form.is_valid():
-            if self.add_form.has_changed():
-                logdata = {
-                    k: v for k, v in self.add_form.cleaned_data.items()
-                }
-
-                try:
-                    self.add_form.instance.organizer = self.request.organizer
-                    self.add_form.instance.organizer_id = self.request.organizer.id
-                    self.add_form.instance.user = User.objects.get(email=self.add_form.cleaned_data['user'])
-                    self.add_form.instance.user_id = self.add_form.instance.user.id
-                except User.DoesNotExist:
-                    self.add_form.instance.invite_email = self.add_form.cleaned_data['user']
-                    if OrganizerPermission.objects.filter(invite_email=self.add_form.instance.invite_email,
-                                                          organizer=self.request.organizer).exists():
-                        messages.error(self.request, _('This user already has been invited for this team.'))
-                        return self.get(*args, **kwargs)
-
-                    self.add_form.save()
-                    self._send_invite(self.add_form.instance)
-
-                    self.request.organizer.log_action(
-                        'pretix.organizer.permissions.invited', user=self.request.user, data=logdata
-                    )
-                else:
-                    if OrganizerPermission.objects.filter(user=self.add_form.instance.user,
-                                                          organizer=self.request.organizer).exists():
-                        messages.error(self.request, _('This user already has permissions for this team.'))
-                        return self.get(*args, **kwargs)
-                    self.add_form.save()
-                    logdata['user'] = self.add_form.instance.user_id
-                    self.request.organizer.log_action(
-                        'pretix.organizer.permissions.added', user=self.request.user, data=logdata
-                    )
-            for form in self.formset.forms:
-                if form.has_changed():
-                    changedata = {
-                        k: form.cleaned_data.get(k) for k in form.changed_data
-                    }
-                    changedata['user'] = form.instance.user_id
-                    self.request.organizer.log_action(
-                        'pretix.organizer.permissions.changed', user=self.request.user, data=changedata
-                    )
-                if form.instance.user_id == self.request.user.pk:
-                    if not form.cleaned_data['can_change_permissions'] or form in self.formset.deleted_forms:
-                        messages.error(self.request, _('You cannot remove your own permission to view this page.'))
-                        return self.get(*args, **kwargs)
-
-            for form in self.formset.deleted_forms:
-                logdata = {
-                    k: v for k, v in form.cleaned_data.items()
-                }
-                self.request.organizer.log_action(
-                    'pretix.organizer.permissions.deleted', user=self.request.user, data=logdata
-                )
-
-            self.formset.save()
-            messages.success(self.request, _('Your changes have been saved.'))
-            return redirect(self.get_success_url())
-        else:
-            messages.error(self.request, _('Your changes could not be saved.'))
-            return self.get(*args, **kwargs)
-
-    def get_success_url(self) -> str:
-        return reverse('control:organizer.teams', kwargs={
-            'organizer': self.request.organizer.slug,
-        })
 
 
 class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
@@ -391,3 +287,113 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
 
     def get_object(self, queryset=None):
         return get_object_or_404(Team, organizer=self.request.organizer, pk=self.kwargs.get('team'))
+
+    @cached_property
+    def add_form(self):
+        return InviteForm(data=self.request.POST if self.request.method == "POST" else None)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['add_form'] = self.add_form
+        return ctx
+
+    def _send_invite(self, instance):
+        try:
+            mail(
+                instance.email,
+                _('pretix account invitation'),
+                'pretixcontrol/email/invitation.txt',
+                {
+                    'user': self,
+                    'organizer': self.request.organizer.name,
+                    'team': instance.team.name,
+                    'url': build_absolute_uri('control:auth.invite', kwargs={
+                        'token': instance.token
+                    })
+                },
+                event=None,
+                locale=self.request.LANGUAGE_CODE
+            )
+        except SendMailException:
+            pass  # Already logged
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if 'remove-member' in request.POST:
+            try:
+                user = User.objects.get(pk=request.POST.get('remove-member'))
+            except User.DoesNotExist:
+                pass
+            else:
+                other_admin_teams = self.request.organizer.teams.exclude(pk=self.object.pk).filter(
+                    can_change_teams=True, members__isnull=False
+                ).exists()
+                if not other_admin_teams and self.object.can_change_teams and self.object.members.count() == 1:
+                    messages.error(self.request, _('You cannot remove the last member from this team as noone would '
+                                                   'be left with the permission to change teams.'))
+                    return redirect(self.get_success_url())
+                else:
+                    self.object.members.remove(user)
+                    self.request.organizer.log_action(
+                        'pretix.team.member.removed', user=self.request.user, data={
+                            'user': request.POST.get('remove-member')
+                        }
+                    )
+                    messages.success(self.request, _('The member has been removed from the team.'))
+                    return redirect(self.get_success_url())
+
+        elif 'remove-invite' in request.POST:
+            try:
+                invite = self.object.invites.get(pk=request.POST.get('remove-invite'))
+            except TeamInvite.DoesNotExist:
+                messages.error(self.request, _('Invalid invite selected.'))
+                return redirect(self.get_success_url())
+            else:
+                invite.delete()
+                self.request.organizer.log_action(
+                    'pretix.team.invite.deleted', user=self.request.user, data={
+                        'email': invite.email
+                    }
+                )
+                messages.success(self.request, _('The invite has been revoked.'))
+                return redirect(self.get_success_url())
+
+        elif self.add_form.is_valid() and self.add_form.has_changed():
+
+            try:
+                user = User.objects.get(email=self.add_form.cleaned_data['user'])
+            except User.DoesNotExist:
+                if self.object.invites.filter(email=self.add_form.cleaned_data['user']).exists():
+                    messages.error(self.request, _('This user already has been invited for this team.'))
+                    return self.get(request, *args, **kwargs)
+
+                invite = self.object.invites.create(email=self.add_form.cleaned_data['user'])
+                self._send_invite(invite)
+                self.request.organizer.log_action(
+                    'pretix.team.invite.created', user=self.request.user, data=self.add_form.cleaned_data
+                )
+                messages.success(self.request, _('The new member has been invited to the team.'))
+                return redirect(self.get_success_url())
+            else:
+                if self.object.members.filter(pk=user.pk).exists():
+                    messages.error(self.request, _('This user already has permissions for this team.'))
+                    return self.get(request, *args, **kwargs)
+
+                self.object.members.add(user)
+                self.request.organizer.log_action(
+                    'pretix.team.member.added', user=self.request.user, data=self.add_form.cleaned_data
+                )
+                messages.success(self.request, _('The new member has been added to the team.'))
+                return redirect(self.get_success_url())
+
+        else:
+            messages.error(self.request, _('Your changes could not be saved.'))
+            return self.get(request, *args, **kwargs)
+
+    def get_success_url(self) -> str:
+        return reverse('control:organizer.team', kwargs={
+            'organizer': self.request.organizer.slug,
+            'team': self.object.pk
+        })

@@ -5,12 +5,69 @@
     <h2>
         {% trans "Team:" %} {{ team.name }}
         <a href="{% url "control:organizer.team.edit" organizer=organizer.slug team=team.pk %}"
-                class="btn btn-default">
+           class="btn btn-default">
             <span class="fa fa-edit"></span>
             {% trans "Edit" %}
         </a>
     </h2>
-    <fieldset>
-        <legend>Members</legend>
-    </fieldset>
+    <form action="" method="post">
+        {% csrf_token %}
+        <!-- Trick browsers into taking this as a default -->
+        <button type="submit" class="btn btn-primary btn-sm btn-block nearly-gone"></button>
+        <table class="table table-condensed table-hover">
+            <thead>
+            <tr>
+                <th>{% trans "Member" %}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for u in team.members.all %}
+                <tr>
+                    <td>
+                        {{ u.email }}
+                    </td>
+                    <td class="text-right">
+                        <button type="submit" name="remove-member" value="{{ u.id }}"
+                                class="btn btn-danger btn-sm btn-block">
+                            <i class="fa fa-times"></i> {% trans "Remove" %}
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for i in team.invites.all %}
+                <tr>
+                    <td>
+                        {{ i.email }}
+                        <span class="fa fa-envelope-o" data-toggle="tooltip"
+                              title="{% trans "invited, pending response" %}"></span>
+                    </td>
+                    <td class="text-right">
+                        <button type="submit" name="remove-invite" value="{{ i.id }}"
+                                class="btn btn-danger btn-sm btn-block">
+                            <i class="fa fa-times"></i> {% trans "Remove" %}
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>
+                    {% bootstrap_field add_form.user layout='inline' %}<br>
+                    {% blocktrans trimmed %}
+                        To add a new user, you can enter their email address here. If they already have a
+                        pretix account, they will immediately be added to the event. Otherwise, they will
+                        be sent an email with an invitation.
+                    {% endblocktrans %}
+                </td>
+                <td class="text-right">
+                    <button type="submit" class="btn btn-primary btn-sm btn-block">
+                        <i class="fa fa-plus"></i> {% trans "Add" %}
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
 {% endblock %}
