@@ -121,7 +121,10 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.permissions.invited': _('A user has been invited to the event team.'),
         'pretix.event.permissions.changed': _('A user\'s permissions have been changed.'),
         'pretix.event.permissions.deleted': _('A user has been removed from the event team.'),
-        'pretix.waitinglist.voucher': _('A voucher has been sent to a person on the waiting list.')
+        'pretix.waitinglist.voucher': _('A voucher has been sent to a person on the waiting list.'),
+        'pretix.team.created': _('The team has been created.'),
+        'pretix.team.changed': _('The team settings have been modified.'),
+        'pretix.team.deleted': _('The team settings has been deleted.'),
     }
 
     data = json.loads(logentry.data)
@@ -148,6 +151,18 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if logentry.action_type.startswith('pretix.event.tickets.provider.'):
         return _('The settings of a ticket output provider have been changed.')
+
+    if logentry.action_type == 'pretix.team.member.added':
+        return _('{user} has been added to the team.').format(user=data.get('email'))
+
+    if logentry.action_type == 'pretix.team.member.removed':
+        return _('{user} has been removed from the team.').format(user=data.get('email'))
+
+    if logentry.action_type == 'pretix.team.invite.created':
+        return _('{user} has been invited to the team.').format(user=data.get('email'))
+
+    if logentry.action_type == 'pretix.team.invite.deleted':
+        return _('The invite for {user} has been revoked.').format(user=data.get('email'))
 
     if logentry.action_type == 'pretix.user.settings.changed':
         text = str(_('Your account settings have been changed.'))

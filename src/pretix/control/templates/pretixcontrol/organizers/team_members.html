@@ -70,4 +70,13 @@
             </tfoot>
         </table>
     </form>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Team history" %}
+            </h3>
+        </div>
+        {% include "pretixcontrol/includes/logs.html" with obj=team %}
+    </div>
+
 {% endblock %}

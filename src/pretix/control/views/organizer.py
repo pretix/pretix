@@ -53,7 +53,6 @@ class InviteForm(forms.Form):
 
 
 class OrganizerDetailViewMixin:
-
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['nav_organizer'] = []
@@ -186,7 +185,7 @@ class TeamCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         return get_object_or_404(Team, organizer=self.request.organizer, pk=self.kwargs.get('team'))
 
     def get_success_url(self):
-        return reverse('control:organizer.team.edit', kwargs={
+        return reverse('control:organizer.team', kwargs={
             'organizer': self.request.organizer.slug,
             'team': self.object.pk
         })
@@ -195,6 +194,7 @@ class TeamCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         messages.success(self.request, _('The team has been created. You can now add members to the team.'))
         form.instance.organizer = self.request.organizer
         ret = super().form_valid(form)
+        form.instance.members.add(self.request.user)
         form.instance.log_action('pretix.team.created', user=self.request.user, data={
             k: getattr(self.object, k) if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
             for k in form.changed_data
@@ -336,9 +336,10 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                     return redirect(self.get_success_url())
                 else:
                     self.object.members.remove(user)
-                    self.request.organizer.log_action(
+                    self.object.log_action(
                         'pretix.team.member.removed', user=self.request.user, data={
-                            'user': request.POST.get('remove-member')
+                            'email': user.email,
+                            'user': user.pk
                         }
                     )
                     messages.success(self.request, _('The member has been removed from the team.'))
@@ -352,7 +353,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                 return redirect(self.get_success_url())
             else:
                 invite.delete()
-                self.request.organizer.log_action(
+                self.object.log_action(
                     'pretix.team.invite.deleted', user=self.request.user, data={
                         'email': invite.email
                     }
@@ -371,8 +372,10 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
 
                 invite = self.object.invites.create(email=self.add_form.cleaned_data['user'])
                 self._send_invite(invite)
-                self.request.organizer.log_action(
-                    'pretix.team.invite.created', user=self.request.user, data=self.add_form.cleaned_data
+                self.object.log_action(
+                    'pretix.team.invite.created', user=self.request.user, data={
+                        'email': self.add_form.cleaned_data['user']
+                    }
                 )
                 messages.success(self.request, _('The new member has been invited to the team.'))
                 return redirect(self.get_success_url())
@@ -382,8 +385,12 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                     return self.get(request, *args, **kwargs)
 
                 self.object.members.add(user)
-                self.request.organizer.log_action(
-                    'pretix.team.member.added', user=self.request.user, data=self.add_form.cleaned_data
+                self.object.log_action(
+                    'pretix.team.member.added', user=self.request.user,
+                    data={
+                        'email': user.email,
+                        'user': user.pk,
+                    }
                 )
                 messages.success(self.request, _('The new member has been added to the team.'))
                 return redirect(self.get_success_url())
