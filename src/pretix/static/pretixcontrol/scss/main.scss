@@ -118,6 +118,21 @@ h1 .btn-sm {
     margin-bottom: 10px;
 }
 
+.section-moved {
+    margin: 20px 0;
+    text-align: center;
+
+    p {
+        font-size: 18px;
+        margin: 20px auto;
+        max-width: 800px;
+    }
+
+    .img-moved {
+        height: 200px;
+        width: auto;
+    }
+}
 .empty-collection {
     margin: 20px 0;
     text-align: center;

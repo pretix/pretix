@@ -158,6 +158,11 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
     if logentry.action_type == 'pretix.team.member.removed':
         return _('{user} has been removed from the team.').format(user=data.get('email'))
 
+    if logentry.action_type == 'pretix.team.member.joined':
+        return _('{user} has joined the team using the invite sent to {email}.').format(
+            user=data.get('email'), email=data.get('invite_email')
+        )
+
     if logentry.action_type == 'pretix.team.invite.created':
         return _('{user} has been invited to the team.').format(user=data.get('email'))
 
