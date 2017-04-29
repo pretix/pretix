@@ -207,11 +207,12 @@ def event_index(request, organizer, event):
     for r, result in event_dashboard_widgets.send(sender=request.event):
         widgets.extend(result)
 
+    can_change_orders = request.user.has_event_permisson(request.organizer, request.event, 'can_change_orders')
     qs = request.event.logentry_set.all().select_related('user', 'content_type').order_by('-datetime')
     qs = qs.exclude(action_type__in=OVERVIEW_BLACKLIST)
-    if not request.eventperm.can_view_orders:
+    if not request.user.has_event_permisson(request.organizer, request.event, 'can_view_orders'):
         qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
-    if not request.eventperm.can_view_vouchers:
+    if not request.user.has_event_permisson(request.organizer, request.event, 'can_view_vouchers'):
         qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
 
     a_qs = request.event.requiredaction_set.filter(done=False)
@@ -221,7 +222,7 @@ def event_index(request, organizer, event):
     ctx = {
         'widgets': rearrange(widgets),
         'logs': qs[:5],
-        'actions': a_qs[:5] if request.eventperm.can_change_orders else [],
+        'actions': a_qs[:5] if can_change_orders else [],
         'has_domain': has_domain
     }
 

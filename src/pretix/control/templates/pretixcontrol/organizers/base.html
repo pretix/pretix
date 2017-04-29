@@ -17,7 +17,7 @@
                 {% trans "Events" %}
             </a>
         </li>
-        {% if request.orgaperm.can_change_permissions %}
+        {% if 'can_change_teams' in request.orgaperms %}
             <li {% if "organizer.team" in url_name %}class="active"{% endif %}>
                 <a href="{% url "control:organizer.teams" organizer=organizer.slug %}">
                     {% trans "Teams" %}

@@ -21,7 +21,6 @@ from pretix.base.validators import EventSlugBlacklistValidator
 from pretix.helpers.daterange import daterange
 
 from ..settings import settings_hierarkey
-from .auth import User
 from .organizer import Organizer
 
 
@@ -79,8 +78,6 @@ class Event(LoggedModel):
         verbose_name=_("Short form"),
     )
     live = models.BooleanField(default=False, verbose_name=_("Shop is live"))
-    permitted = models.ManyToManyField(User, through='EventPermission',
-                                       related_name="events", )
     currency = models.CharField(max_length=10,
                                 verbose_name=_("Default currency"),
                                 choices=CURRENCY_CHOICES,
@@ -305,69 +302,6 @@ class Event(LoggedModel):
 
 def generate_invite_token():
     return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)
-
-
-class EventPermission(models.Model):
-    """
-    The relation between an Event and a User who has permissions to
-    access an event.
-
-    :param event: The event this permission refers to
-    :type event: Event
-    :param user: The user this permission set applies to
-    :type user: User
-    :param can_change_settings: If ``True``, the user can change all basic settings for this event.
-    :type can_change_settings: bool
-    :param can_change_items: If ``True``, the user can change and add items and related objects for this event.
-    :type can_change_items: bool
-    :param can_view_orders: If ``True``, the user can inspect details of all orders.
-    :type can_view_orders: bool
-    :param can_change_orders: If ``True``, the user can change details of orders
-    :type can_change_orders: bool
-    """
-
-    event = models.ForeignKey(Event, related_name="user_perms", on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name="event_perms", on_delete=models.CASCADE, null=True, blank=True)
-    invite_email = models.EmailField(null=True, blank=True)
-    invite_token = models.CharField(default=generate_invite_token, max_length=64, null=True, blank=True)
-    can_change_settings = models.BooleanField(
-        default=True,
-        verbose_name=_("Can change event settings")
-    )
-    can_change_items = models.BooleanField(
-        default=True,
-        verbose_name=_("Can change product settings")
-    )
-    can_view_orders = models.BooleanField(
-        default=True,
-        verbose_name=_("Can view orders")
-    )
-    can_change_permissions = models.BooleanField(
-        default=True,
-        verbose_name=_("Can change permissions")
-    )
-    can_change_orders = models.BooleanField(
-        default=True,
-        verbose_name=_("Can change orders")
-    )
-    can_view_vouchers = models.BooleanField(
-        default=True,
-        verbose_name=_("Can view vouchers")
-    )
-    can_change_vouchers = models.BooleanField(
-        default=True,
-        verbose_name=_("Can change vouchers")
-    )
-
-    class Meta:
-        verbose_name = _("Event permission")
-        verbose_name_plural = _("Event permissions")
-
-    def __str__(self):
-        return _("%(name)s on %(object)s") % {
-            'name': str(self.user),
-            'object': str(self.event),
-        }
 
 
 class EventLock(models.Model):

@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.middleware import LocaleMiddleware
-from pretix.base.models import Event, EventPermission, Organizer
+from pretix.base.models import Event, Organizer
 from pretix.multidomain.urlreverse import get_domain
 from pretix.presale.signals import process_request, process_response
 
@@ -67,10 +67,7 @@ def _detect_event(request, require_live=True):
                     url.url_name == 'event.auth'
                     or (
                         request.user.is_authenticated
-                        and (
-                            request.user.is_superuser
-                            or EventPermission.objects.filter(event=request.event, user=request.user).exists()
-                        )
+                        and request.user.has_event_permisson(request.organizer, request.event)
                     )
 
                 )

@@ -42,8 +42,6 @@ class Organizer(LoggedModel):
         ],
         verbose_name=_("Short form"),
     )
-    permitted = models.ManyToManyField(User, through='OrganizerPermission',
-                                       related_name="organizers")
 
     class Meta:
         verbose_name = _("Organizer")
@@ -72,44 +70,6 @@ class Organizer(LoggedModel):
 
 def generate_invite_token():
     return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)
-
-
-class OrganizerPermission(models.Model):
-    """
-    The relation between an Organizer and a User who has permissions to
-    access an organizer profile.
-
-    :param organizer: The organizer this relation refers to
-    :type organizer: Organizer
-    :param user: The user this set of permissions is valid for
-    :type user: User
-    :param can_create_events: Whether or not this user can create new events with this
-                              organizer account.
-    :type can_create_events: bool
-    """
-
-    organizer = models.ForeignKey(Organizer, related_name="user_perms", on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name="organizer_perms", on_delete=models.CASCADE, null=True, blank=True)
-    invite_email = models.EmailField(null=True, blank=True)
-    invite_token = models.CharField(default=generate_invite_token, max_length=64, null=True, blank=True)
-    can_create_events = models.BooleanField(
-        default=True,
-        verbose_name=_("Can create events"),
-    )
-    can_change_permissions = models.BooleanField(
-        default=True,
-        verbose_name=_("Can change permissions"),
-    )
-
-    class Meta:
-        verbose_name = _("Organizer permission")
-        verbose_name_plural = _("Organizer permissions")
-
-    def __str__(self) -> str:
-        return _("%(name)s on %(object)s") % {
-            'name': str(self.user),
-            'object': str(self.organizer),
-        }
 
 
 class Team(LoggedModel):
@@ -196,6 +156,18 @@ class Team(LoggedModel):
     @property
     def can_change_settings(self):  # Legacy compatiblilty
         return self.can_change_event_settings
+
+    def has_permission(self, perm_name):
+        try:
+            return getattr(self, perm_name)
+        except AttributeError:
+            raise ValueError('Invalid required permission: %s' % perm_name)
+
+    def permission_for_event(self, event):
+        if self.all_events:
+            return event.organizer_id == self.organizer_id
+        else:
+            return self.limit_events.filter(pk=event.pk).exists()
 
     class Meta:
         verbose_name = _("Team")

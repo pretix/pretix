@@ -4,6 +4,7 @@ from django.contrib.auth.models import (
 )
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django_otp.models import Device
 
@@ -81,6 +82,10 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
     objects = UserManager()
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._teamcache = {}
+
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
@@ -146,6 +151,60 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
         return LogEntry.objects.filter(content_type=ContentType.objects.get_for_model(User),
                                        object_id=self.pk)
+
+    def has_event_permisson(self, organizer, event, perm_name=None):
+        """
+        Checks if this user is part of any team that grants access of type ``perm_name``
+        to the event ``event``.
+
+        :param organizer: The organizer of the event
+        :param event: The event to check
+        :param perm_name: The permission, e.g. ``can_change_teams``
+        :return: bool
+        """
+        if self.is_superuser:
+            return True
+        teams = self._teamcache.get(event) or list(self.teams.filter(organizer=organizer).filter(
+            Q(all_events=True) | Q(limit_events=event)
+        ))
+        if teams:
+            self._teamcache[event] = teams
+            if not perm_name or any([team.has_permission(perm_name) for team in teams]):
+                return True
+        return False
+
+    def has_organizer_permisson(self, organizer, perm_name=None):
+        """
+        Checks if this user is part of any team that grants access of type ``perm_name``
+        to the organizer ``organizer``.
+
+        :param organizer: The organizer to check
+        :param perm_name: The permission, e.g. ``can_change_teams``
+        :return: bool
+        """
+        if self.is_superuser:
+            return True
+        teams = self._teamcache.get('o') or list(self.teams.filter(organizer=organizer))
+        if teams:
+            self._teamcache['o'] = teams
+            if not perm_name or any([team.has_permission(perm_name) for team in teams]):
+                return True
+        return False
+
+    def get_events_with_permissions(self, perm_list):
+        """
+        Returns a queryset of events the user has any permissions to.
+        :param perm_list:
+        :return:
+        """
+        from .event import Event
+
+        if self.is_superuser:
+            return Event.objects.all()
+
+        return Event.objects.filter()
+
+        self.teams.filter()
 
 
 class U2FDevice(Device):

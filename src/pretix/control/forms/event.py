@@ -26,7 +26,7 @@ class EventWizardFoundationForm(forms.Form):
         self.fields['organizer'] = forms.ModelChoiceField(
             label=_("Organizer"),
             queryset=Organizer.objects.filter(
-                id__in=self.user.organizer_perms.filter(can_create_events=True).values_list('organizer', flat=True)
+                id__in=self.user.teams.filter(can_create_events=True).values_list('organizer', flat=True)
             ),
             widget=forms.RadioSelect,
             empty_label=None,

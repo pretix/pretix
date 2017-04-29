@@ -4,7 +4,6 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Count
-from django.forms import modelformset_factory
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -12,10 +11,7 @@ from django.views.generic import (
     CreateView, DeleteView, DetailView, ListView, UpdateView,
 )
 
-from pretix.base.forms import I18nModelForm
-from pretix.base.models import (
-    Organizer, OrganizerPermission, Team, TeamInvite, User,
-)
+from pretix.base.models import Organizer, Team, TeamInvite, User
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.organizer import (
     OrganizerForm, OrganizerUpdateForm, TeamForm,
@@ -38,14 +34,6 @@ class OrganizerList(ListView):
             return Organizer.objects.filter(
                 permitted__id__exact=self.request.user.pk
             )
-
-
-class OrganizerPermissionForm(I18nModelForm):
-    class Meta:
-        model = OrganizerPermission
-        fields = (
-            'can_create_events', 'can_change_permissions'
-        )
 
 
 class InviteForm(forms.Form):
@@ -88,23 +76,6 @@ class OrganizerTeamView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
     permission = 'can_change_permissions'
     context_object_name = 'organizer'
 
-    @cached_property
-    def formset(self):
-        fs = modelformset_factory(
-            OrganizerPermission,
-            form=OrganizerPermissionForm,
-            can_delete=True, can_order=False, extra=0
-        )
-        return fs(
-            data=(
-                self.request.POST
-                if self.request.method == "POST" and 'formset-TOTAL_FORMS' in self.request.POST
-                else None
-            ),
-            prefix="formset",
-            queryset=OrganizerPermission.objects.filter(organizer=self.request.organizer)
-        )
-
 
 class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
     model = Organizer
@@ -146,10 +117,13 @@ class OrganizerCreate(CreateView):
     def form_valid(self, form):
         messages.success(self.request, _('The new organizer has been created.'))
         ret = super().form_valid(form)
-        OrganizerPermission.objects.create(
-            organizer=form.instance, user=self.request.user,
-            can_create_events=True
+        t = Team.objects.get_or_create(
+            organizer=form.instance, name=_('Administrators'),
+            all_events=True, can_create_events=True, can_change_teams=True,
+            can_change_organizer_settings=True, can_change_event_settings=True, can_change_items=True,
+            can_view_orders=True, can_change_orders=True, can_view_vouchers=True, can_change_vouchers=True
         )
+        t.members.add(self.request.user)
         return ret
 
     def get_success_url(self) -> str:
@@ -222,7 +196,7 @@ class TeamUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         return get_object_or_404(Team, organizer=self.request.organizer, pk=self.kwargs.get('team'))
 
     def get_success_url(self):
-        return reverse('control:organizer.team.edit', kwargs={
+        return reverse('control:organizer.team', kwargs={
             'organizer': self.request.organizer.slug,
             'team': self.object.pk
         })

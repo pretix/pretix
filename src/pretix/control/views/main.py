@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView
 from formtools.wizard.views import SessionWizardView
 
-from pretix.base.models import Event, EventPermission, OrganizerPermission
+from pretix.base.models import Event
 from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
 )
@@ -33,9 +33,13 @@ class EventList(ListView):
 
 
 def condition_copy(wizard):
+    # TODO
+    return True
+    """
     return EventPermission.objects.filter(
         user=wizard.request.user, can_change_settings=True, can_change_items=True
     ).exists()
+    """
 
 
 class EventWizard(SessionWizardView):
@@ -55,8 +59,7 @@ class EventWizard(SessionWizardView):
 
     def get_context_data(self, form, **kwargs):
         ctx = super().get_context_data(form, **kwargs)
-        ctx['has_organizer'] = OrganizerPermission.objects.filter(user=self.request.user,
-                                                                  can_create_events=True).exists()
+        ctx['has_organizer'] = self.request.user.teams.filter(can_create_events=True).exists()
         return ctx
 
     def get_form_kwargs(self, step=None):
@@ -81,7 +84,7 @@ class EventWizard(SessionWizardView):
             event.organizer = foundation_data['organizer']
             event.plugins = settings.PRETIX_PLUGINS_DEFAULT
             form_dict['basics'].save()
-            EventPermission.objects.create(event=event, user=self.request.user)
+            # EventPermission.objects.create(event=event, user=self.request.user)
 
             logdata = {}
             for f in form_list:
