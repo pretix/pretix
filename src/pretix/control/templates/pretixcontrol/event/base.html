@@ -10,7 +10,7 @@
             {% trans "Dashboard" %}
         </a>
     </li>
-    {% if request.eventperm.can_change_settings or request.eventperm.can_change_permissions %}
+    {% if request.eventperm.can_change_event_settings or request.eventperm.can_change_permissions %}
         <li>
             <a href="{% url 'control:event.settings' organizer=request.event.organizer.slug event=request.event.slug %}">
                 <i class="fa fa-wrench fa-fw"></i>

@@ -31,9 +31,7 @@ class OrganizerList(ListView):
         if self.request.user.is_superuser:
             return Organizer.objects.all()
         else:
-            return Organizer.objects.filter(
-                permitted__id__exact=self.request.user.pk
-            )
+            return Organizer.objects.filter(pk__in=self.request.user.teams.values_list('organizer', flat=True))
 
 
 class InviteForm(forms.Form):
@@ -81,7 +79,7 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
     model = Organizer
     form_class = OrganizerUpdateForm
     template_name = 'pretixcontrol/organizers/edit.html'
-    permission = None
+    permission = 'can_change_organizer_settings'
     context_object_name = 'organizer'
 
     def get_object(self, queryset=None) -> Organizer:
@@ -114,10 +112,11 @@ class OrganizerCreate(CreateView):
             raise PermissionDenied()  # TODO
         return super().dispatch(request, *args, **kwargs)
 
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('The new organizer has been created.'))
         ret = super().form_valid(form)
-        t = Team.objects.get_or_create(
+        t = Team.objects.create(
             organizer=form.instance, name=_('Administrators'),
             all_events=True, can_create_events=True, can_change_teams=True,
             can_change_organizer_settings=True, can_change_event_settings=True, can_change_items=True,

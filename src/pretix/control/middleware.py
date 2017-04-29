@@ -59,7 +59,7 @@ class PermissionMiddleware(MiddlewareMixin):
             return redirect_to_login(
                 path, resolved_login_url, REDIRECT_FIELD_NAME)
 
-        events = Event.objects.all() if request.user.is_superuser else request.user.events
+        events = request.user.get_events_with_any_permission()
         request.user.events_cache = events.order_by(
             "organizer", "date_from").prefetch_related("organizer")
         if 'event' in url.kwargs and 'organizer' in url.kwargs:

@@ -191,20 +191,21 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
                 return True
         return False
 
-    def get_events_with_permissions(self, perm_list):
+    def get_events_with_any_permission(self):
         """
         Returns a queryset of events the user has any permissions to.
-        :param perm_list:
-        :return:
+
+        :return: Iterable of Events
         """
         from .event import Event
 
         if self.is_superuser:
             return Event.objects.all()
 
-        return Event.objects.filter()
-
-        self.teams.filter()
+        return Event.objects.filter(
+            Q(organizer_id__in=self.teams.filter(all_events=True).values_list('organizer', flat=True))
+            | Q(id__in=self.teams.values_list('limit_events__id', flat=True))
+        )
 
 
 class U2FDevice(Device):

@@ -13,7 +13,7 @@ from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import (
-    Event, Item, Order, OrderPosition, Voucher, WaitingListEntry,
+    Item, Order, OrderPosition, Voucher, WaitingListEntry,
 )
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,
@@ -243,7 +243,8 @@ def event_index(request, organizer, event):
 def user_event_widgets(**kwargs):
     user = kwargs.pop('user')
     widgets = []
-    events = Event.objects.filter(permitted__id__exact=user.pk).select_related("organizer").order_by('-date_from')
+
+    events = user.get_events_with_any_permission().select_related('organizer')
     for event in events:
         widgets.append({
             'content': '<div class="event">{event}<span class="from">{df}</span><span class="to">{dt}</span></div>'.format(

@@ -20,26 +20,13 @@ class EventList(ListView):
     template_name = 'pretixcontrol/events/index.html'
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return Event.objects.all().select_related("organizer").prefetch_related(
-                "_settings_objects", "organizer___settings_objects"
-            )
-        else:
-            return Event.objects.filter(
-                permitted__id__exact=self.request.user.pk
-            ).select_related("organizer").prefetch_related(
-                "_settings_objects", "organizer___settings_objects"
-            )
+        return self.request.user.get_events_with_any_permission().select_related('organizer').prefetch_related(
+            '_settings_objects', 'organizer___settings_objects'
+        )
 
 
 def condition_copy(wizard):
-    # TODO
-    return True
-    """
-    return EventPermission.objects.filter(
-        user=wizard.request.user, can_change_settings=True, can_change_items=True
-    ).exists()
-    """
+    return EventWizardCopyForm.copy_from_queryset(wizard.request.user).exists()
 
 
 class EventWizard(SessionWizardView):

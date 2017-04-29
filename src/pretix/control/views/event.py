@@ -46,7 +46,7 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
     model = Event
     form_class = EventUpdateForm
     template_name = 'pretixcontrol/event/settings.html'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     @cached_property
     def object(self) -> Event:
@@ -111,7 +111,7 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
 class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
     model = Event
     context_object_name = 'event'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
     template_name = 'pretixcontrol/event/plugins.html'
 
     def get_object(self, queryset=None) -> Event:
@@ -174,7 +174,7 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
 class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
     model = Event
     context_object_name = 'event'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
     template_name = 'pretixcontrol/event/payment.html'
 
     def get_object(self, queryset=None) -> Event:
@@ -260,7 +260,7 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
 
 class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
     model = Event
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
@@ -296,7 +296,7 @@ class InvoiceSettings(EventSettingsFormView):
     model = Event
     form_class = InvoiceSettingsForm
     template_name = 'pretixcontrol/event/invoicing.html'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     def get_success_url(self) -> str:
         if 'preview' in self.request.POST:
@@ -311,7 +311,7 @@ class InvoiceSettings(EventSettingsFormView):
 
 
 class InvoicePreview(EventPermissionRequiredMixin, View):
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     def get(self, request, *args, **kwargs):
         pdf = build_preview_invoice_pdf(request.event)
@@ -324,7 +324,7 @@ class DisplaySettings(EventSettingsFormView):
     model = Event
     form_class = DisplaySettingsForm
     template_name = 'pretixcontrol/event/display.html'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings.display', kwargs={
@@ -360,7 +360,7 @@ class MailSettings(EventSettingsFormView):
     model = Event
     form_class = MailSettingsForm
     template_name = 'pretixcontrol/event/mail.html'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings.mail', kwargs={
@@ -403,7 +403,7 @@ class MailSettings(EventSettingsFormView):
 
 
 class MailSettingsPreview(EventPermissionRequiredMixin, View):
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     # return the origin text if key is missing in dict
     class SafeDict(dict):
@@ -509,7 +509,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
 
 
 class TicketSettingsPreview(EventPermissionRequiredMixin, View):
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     @cached_property
     def output(self):
@@ -541,7 +541,7 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
     model = Event
     form_class = TicketSettingsForm
     template_name = 'pretixcontrol/event/tickets.html'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
@@ -638,7 +638,7 @@ class EventPermissions(EventPermissionRequiredMixin, TemplateView):
 
 
 class EventLive(EventPermissionRequiredMixin, TemplateView):
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
     template_name = 'pretixcontrol/event/live.html'
 
     def get_context_data(self, **kwargs):
