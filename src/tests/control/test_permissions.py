@@ -20,6 +20,7 @@ def env():
         datetime=now(), expires=now() + timedelta(days=10),
         total=0, payment_provider='banktransfer'
     )
+    Team.objects.create(pk=1, organizer=o)
     return event, user, o
 
 superuser_urls = [
