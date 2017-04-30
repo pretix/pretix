@@ -5,8 +5,8 @@ import pytest
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Checkin, Event, EventPermission, Item, ItemVariation, Order, OrderPosition,
-    Organizer, User,
+    Checkin, Event, Item, ItemVariation, Order, OrderPosition, Organizer, Team,
+    User,
 )
 
 
@@ -18,7 +18,11 @@ def env():
         date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.pretixdroid'
     )
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    EventPermission.objects.create(user=user, event=event)
+
+    t = Team.objects.create(organizer=o, can_change_event_settings=True, can_change_items=True)
+    t.members.add(user)
+    t.limit_events.add(event)
+
     shirt = Item.objects.create(event=event, name='T-Shirt', default_price=12)
     shirt_red = ItemVariation.objects.create(item=shirt, default_price=14, value="Red")
     ItemVariation.objects.create(item=shirt, value="Blue")

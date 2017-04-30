@@ -60,23 +60,22 @@ class PermissionMiddleware(MiddlewareMixin):
                 path, resolved_login_url, REDIRECT_FIELD_NAME)
 
         events = request.user.get_events_with_any_permission()
-        request.user.events_cache = events.order_by(
-            "organizer", "date_from").prefetch_related("organizer")
+        request.user.events_cache = events.order_by("organizer", "date_from").prefetch_related("organizer")
         if 'event' in url.kwargs and 'organizer' in url.kwargs:
             request.event = Event.objects.filter(
                 slug=url.kwargs['event'],
                 organizer__slug=url.kwargs['organizer'],
-            ).select_related('organizer')[0]
-            request.organizer = request.event.organizer
-            if not request.user.has_event_permisson(request.organizer, request.event):
+            ).select_related('organizer').first()
+            if not request.event or not request.user.has_event_permisson(request.event.organizer, request.event):
                 raise Http404(_("The selected event was not found or you "
                                 "have no permission to administrate it."))
+            request.organizer = request.event.organizer
             request.eventpermset = request.user.get_event_permission_set(request.organizer, request.event)
         elif 'organizer' in url.kwargs:
             request.organizer = Organizer.objects.filter(
                 slug=url.kwargs['organizer'],
-            )[0]
-            if not request.user.has_organizer_permisson(request.organizer):
+            ).first()
+            if not request.organizer or not request.user.has_organizer_permisson(request.organizer):
                 raise Http404(_("The selected organizer was not found or you "
                                 "have no permission to administrate it."))
             request.orgapermset = request.user.get_organizer_permission_set(request.organizer)

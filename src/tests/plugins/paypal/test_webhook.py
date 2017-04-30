@@ -6,7 +6,7 @@ import pytest
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Event, EventPermission, Order, Organizer, RequiredAction, User,
+    Event, Order, Organizer, RequiredAction, Team, User,
 )
 
 
@@ -18,7 +18,9 @@ def env():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), live=True
     )
-    EventPermission.objects.create(event=event, user=user)
+    t = Team.objects.create(organizer=event.organizer, can_view_orders=True, can_change_orders=True)
+    t.members.add(user)
+    t.limit_events.add(event)
     o1 = Order.objects.create(
         code='FOOBAR', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PAID,
