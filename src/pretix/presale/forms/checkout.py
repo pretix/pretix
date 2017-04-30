@@ -164,17 +164,21 @@ class AddOnsForm(forms.Form):
             price_net = item.default_price_net
             label = item.name
 
-        if not item.tax_rate or not price:
-            n = '{name} (+ {currency} {price})'.format(
+        if not price:
+            n = '{name}'.format(
+                name=label
+            )
+        elif not item.tax_rate:
+            n = _('{name} (+ {currency} {price})').format(
                 name=label, currency=event.currency, price=number_format(price)
             )
         elif event.settings.display_net_prices:
-            n = '{name} (+ {currency} {price} plus {taxes}% taxes)'.format(
+            n = _('{name} (+ {currency} {price} plus {taxes}% taxes)').format(
                 name=label, currency=event.currency, price=number_format(price_net),
                 taxes=number_format(item.tax_rate)
             )
         else:
-            n = '{name} (+ {currency} {price} incl. {taxes}% taxes)'.format(
+            n = _('{name} (+ {currency} {price} incl. {taxes}% taxes)').format(
                 name=label, currency=event.currency, price=number_format(price),
                 taxes=number_format(item.tax_rate)
             )
@@ -228,7 +232,7 @@ class AddOnsForm(forms.Form):
 
         for i in items:
             if i.has_variations:
-                choices = [('', '–')]
+                choices = [('', _('no selection'))]
                 for v in i.available_variations:
                     cached_availability = v.check_quotas(_cache=quota_cache)
                     choices.append((v.pk, self._label(event, v, cached_availability)))
