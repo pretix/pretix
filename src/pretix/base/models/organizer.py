@@ -153,6 +153,12 @@ class Team(LoggedModel):
             'object': str(self.organizer),
         }
 
+    def permission_set(self) -> set:
+        attribs = dir(self)
+        return {
+            a for a in attribs if a.startswith('can_') and self.has_permission(a)
+        }
+
     @property
     def can_change_settings(self):  # Legacy compatiblilty
         return self.can_change_event_settings

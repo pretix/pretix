@@ -5,11 +5,13 @@
 {% block content %}
     <h1>
         {% blocktrans with name=organizer.name %}Organizer: {{ name }}{% endblocktrans %}
-        <a href="{% url "control:organizer.edit" organizer=organizer.slug %}"
-                class="btn btn-default">
-            <span class="fa fa-edit"></span>
-            {% trans "Edit" %}
-        </a>
+        {% if 'can_change_organizer_settings' in request.orgapermset %}
+            <a href="{% url "control:organizer.edit" organizer=organizer.slug %}"
+                    class="btn btn-default">
+                <span class="fa fa-edit"></span>
+                {% trans "Edit" %}
+            </a>
+        {% endif %}
     </h1>
     <ul class="nav nav-pills">
         <li {% if "organizer" == url_name %}class="active"{% endif %}>
@@ -17,7 +19,7 @@
                 {% trans "Events" %}
             </a>
         </li>
-        {% if 'can_change_teams' in request.orgaperms %}
+        {% if 'can_change_teams' in request.orgapermset %}
             <li {% if "organizer.team" in url_name %}class="active"{% endif %}>
                 <a href="{% url "control:organizer.teams" organizer=organizer.slug %}">
                     {% trans "Teams" %}

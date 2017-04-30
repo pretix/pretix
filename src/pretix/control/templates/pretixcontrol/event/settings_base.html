@@ -5,7 +5,7 @@
 {% block content %}
     <h1>{% trans "Settings" %}</h1>
     <ul class="nav nav-pills">
-        {% if request.eventperm.can_change_event_settings %}
+        {% if 'can_change_event_settings' in request.eventpermset %}
             <li {% if "event.settings" == url_name %}class="active"{% endif %}>
                 <a href="{% url 'control:event.settings' organizer=request.event.organizer.slug event=request.event.slug %}">
                     {% trans "General" %}
@@ -41,8 +41,6 @@
                     {% trans "Invoicing" %}
                 </a>
             </li>
-        {% endif %}
-        {% if request.eventperm.can_change_permissions %}
             <li {% if "event.settings.permissions" == url_name %}class="active"{% endif %}>
                 <a href="{% url 'control:event.settings.permissions' organizer=request.event.organizer.slug event=request.event.slug %}">
                     {% trans "Permissions" %}
