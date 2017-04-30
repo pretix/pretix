@@ -13,7 +13,7 @@ from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import (
-    Item, Order, OrderPosition, Voucher, WaitingListEntry,
+    Checkin, Item, Order, OrderPosition, Voucher, WaitingListEntry,
 )
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,
@@ -162,6 +162,21 @@ def shop_state_widget(sender, **kwargs):
             cls='live' if sender.live else 'off'
         ),
         'url': reverse('control:event.live', kwargs={
+            'event': sender.slug,
+            'organizer': sender.organizer.slug
+        })
+    }]
+
+
+@receiver(signal=event_dashboard_widgets)
+def checkin_widget(sender, **kwargs):
+    size = OrderPosition.objects.filter(order__event=sender, order__status='p', item__admission=True).count()
+    checked = Checkin.objects.filter(position__order__event=sender, position__order__status='p', position__item__admission=True).count()
+    return [{
+        'content': NUM_WIDGET.format(num='{}/{}'.format(checked, size), text=_('Checked in')),
+        'display_size': 'small',
+        'priority': 50,
+        'url': reverse('control:event.orders.checkins', kwargs={
             'event': sender.slug,
             'organizer': sender.organizer.slug
         })
