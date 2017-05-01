@@ -23,6 +23,7 @@ def env():
     Team.objects.create(pk=1, organizer=o)
     return event, user, o
 
+
 superuser_urls = [
     "global/settings/",
     "global/update/",
