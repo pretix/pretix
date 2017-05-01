@@ -101,7 +101,10 @@
                                         <a href="#" data-toggle="variations">
                                             <strong>{{ item.name }}</strong>
                                         </a>
-                                        {% if item.description %}<p>{{ item.description|localize|rich_text }}</p>
+                                        {% if item.description %}
+                                            <div class="product-description">
+                                                {{ item.description|localize|rich_text }}
+                                            </div>
                                         {% endif %}
                                         {% if item.min_per_order %}
                                             <p><small>
@@ -134,6 +137,11 @@
                                         <div class="row-fluid product-row variation">
                                             <div class="col-md-8 col-xs-12">
                                                 {{ var }}
+                                                {% if var.description %}
+                                                    <div class="variation-description">
+                                                        {{ var.description|localize|rich_text }}
+                                                    </div>
+                                                {% endif %}
                                                 {% if event.settings.show_quota_left %}
                                                     {% include "pretixpresale/event/fragment_quota_left.html" with avail=var.cached_availability %}
                                                 {% endif %}
@@ -201,7 +209,10 @@
                                     {% endif %}
                                     <strong>{{ item.name }}</strong>
                                     {% if item.description %}
-                                        <p class="description">{{ item.description|localize|rich_text }}</p>{% endif %}
+                                        <div class="product-description">
+                                            {{ item.description|localize|rich_text }}
+                                        </div>
+                                    {% endif %}
                                     {% if event.settings.show_quota_left %}
                                         {% include "pretixpresale/event/fragment_quota_left.html" with avail=item.cached_availability %}
                                     {% endif %}

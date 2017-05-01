@@ -945,7 +945,7 @@ class ItemAddOns(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
         formsetclass = inlineformset_factory(
             Item, ItemAddOn,
             form=ItemAddOnForm, formset=ItemAddOnsFormSet,
-            can_order=False, can_delete=True, extra=0
+            can_order=True, can_delete=True, extra=0
         )
         return formsetclass(self.request.POST if self.request.method == "POST" else None,
                             queryset=ItemAddOn.objects.filter(base_item=self.get_object()),
@@ -965,12 +965,13 @@ class ItemAddOns(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
                     form.instance.delete()
                     form.instance.pk = None
 
-                forms = [
-                    ef for ef in self.formset.extra_forms + self.formset.initial_forms
-                    if ef not in self.formset.deleted_forms
+                forms = self.formset.ordered_forms + [
+                    ef for ef in self.formset.extra_forms
+                    if ef not in self.formset.ordered_forms and ef not in self.formset.deleted_forms
                 ]
                 for i, form in enumerate(forms):
                     form.instance.base_item = self.get_object()
+                    form.instance.position = i
                     created = not form.instance.pk
                     form.save()
                     if form.has_changed():

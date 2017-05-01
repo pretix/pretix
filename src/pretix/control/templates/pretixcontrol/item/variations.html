@@ -37,6 +37,7 @@
                             {% bootstrap_form_errors form %}
                             {% bootstrap_field form.active layout='horizontal' %}
                             {% bootstrap_field form.default_price layout='horizontal' %}
+                            {% bootstrap_field form.description layout='horizontal' %}
                         </div>
                     </div>
                 {% endfor %}
@@ -69,6 +70,7 @@
                         <div class="panel-body form-horizontal">
                             {% bootstrap_field formset.empty_form.active layout='horizontal' %}
                             {% bootstrap_field formset.empty_form.default_price layout='horizontal' %}
+                            {% bootstrap_field formset.empty_form.description layout='horizontal' %}
                         </div>
                     </div>
                 {% endescapescript %}

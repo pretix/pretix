@@ -37,7 +37,10 @@
                                         {% endif %}
                                         <strong>{{ item.name }}</strong>
                                         {% if item.description %}
-                                            <p>{{ item.description|localize|rich_text }}</p>{% endif %}
+                                            <div class="product-description">
+                                                {{ item.description|localize|rich_text }}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-2 col-xs-6 price">
                                         {% if item.min_price != item.max_price or item.free_price %}
@@ -57,6 +60,11 @@
                                         <div class="row-fluid product-row variation">
                                             <div class="col-md-8 col-xs-12">
                                                 {{ var }}
+                                                {% if var.description %}
+                                                    <div class="variation-description">
+                                                        {{ var.description|localize|rich_text }}
+                                                    </div>
+                                                {% endif %}
                                             </div>
                                             <div class="col-md-2 col-xs-6 price">
                                                 {% if item.free_price %}
@@ -116,7 +124,10 @@
                                     {% endif %}
                                     <strong>{{ item.name }}</strong>
                                     {% if item.description %}
-                                        <p class="description">{{ item.description|localize|rich_text }}</p>{% endif %}
+                                        <div class="product-description">
+                                            {{ item.description|localize|rich_text }}
+                                        </div>
+                                    {% endif %}
                                 </div>
                                 <div class="col-md-2 col-xs-6 price">
                                     {% if item.free_price %}
