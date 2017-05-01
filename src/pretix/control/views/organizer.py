@@ -248,7 +248,7 @@ class TeamDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
             messages.success(request, _('The selected team has been deleted.'))
             return redirect(success_url)
         else:
-            messages.error(request, _('The selected cannot be deleted.'))
+            messages.error(request, _('The selected team cannot be deleted.'))
             return redirect(success_url)
 
 
