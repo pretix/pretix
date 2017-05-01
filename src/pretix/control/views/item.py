@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.files import File
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.db.models import Count, F, Q
+from django.db.models import Count, F, Max, Q
 from django.forms.models import ModelMultipleChoiceField, inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -72,7 +72,7 @@ def item_move(request, item, up=True):
         if item.position != i:
             item.position = i
             item.save()
-    messages.success(request, _('The order of items as been updated.'))
+    messages.success(request, _('The order of items has been updated.'))
 
 
 @event_permission_required("can_change_items")
@@ -802,6 +802,8 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
             form.instance.allow_cancel = form.cleaned_data['copy_from'].allow_cancel
             form.instance.min_per_order = form.cleaned_data['copy_from'].min_per_order
             form.instance.max_per_order = form.cleaned_data['copy_from'].max_per_order
+
+        form.instance.position = (self.request.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
 
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.item.added', user=self.request.user, data={
