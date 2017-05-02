@@ -11,6 +11,7 @@ ALLOWED_TAGS = [
     'acronym',
     'b',
     'blockquote',
+    'br',
     'code',
     'em',
     'i',
