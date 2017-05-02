@@ -21,7 +21,7 @@ from pytz import timezone
 from pretix.base.models import ItemVariation
 from pretix.multidomain.urlreverse import eventreverse
 
-from . import CartMixin, EventViewMixin
+from . import CartMixin, EventViewMixin, get_cart
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
@@ -108,6 +108,7 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         context['vouchers_exist'] = vouchers_exist
 
         context['cart'] = self.get_cart()
+        context['has_addon_choices'] = get_cart(self.request).filter(item__addons__isnull=False).exists()
 
         context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
         return context
