@@ -381,6 +381,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['providers'] = self.provider_forms
+        ctx['show_fees'] = any(p['fee'] for p in self.provider_forms)
         ctx['selected'] = self.request.POST.get('payment', self.request.session.get('payment', ''))
         return ctx
 

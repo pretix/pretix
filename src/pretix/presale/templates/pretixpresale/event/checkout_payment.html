@@ -13,7 +13,9 @@
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <label class="radio">
-                                <strong class="pull-right">+ {{ p.fee|floatformat:2 }} {{ event.currency }}</strong>
+                                {% if show_fees %}
+                                    <strong class="pull-right">+ {{ p.fee|floatformat:2 }} {{ event.currency }}</strong>
+                                {% endif %}
                                 <input type="radio" name="payment" value="{{ p.provider.identifier }}"
                                         data-parent="#payment_accordion"
                                         {% if selected == p.provider.identifier %}checked="checked"{% endif %}
