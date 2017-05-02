@@ -71,7 +71,7 @@ def create_teams(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0056_auto_20170414_1044'),
+        ('pretixbase', '0051_auto_20170206_2027_squashed_0057_auto_20170501_2116'),
     ]
 
     operations = [
