@@ -14,7 +14,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#cp{{ form.pos.id }}">
+                            <a data-toggle="collapse" href="#cp{{ form.cartpos.pk }}">
                                 <strong>{{ form.item.name }}</strong>
                                 {% if form.variation %}
                                     – {{ form.variation }}
@@ -22,7 +22,7 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="cp{{ form.pos.id }}"
+                    <div id="cp{{ form.cartpos.pk }}"
                             class="panel-collapse collapsed in">
                         <div class="panel-body">
                             {% for c in form.categories %}
