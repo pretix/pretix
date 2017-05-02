@@ -92,5 +92,3 @@ Vouchers
 
 .. autoclass:: pretix.base.models.Voucher
    :members:
-
-.. _cleanerversion: https://github.com/swisscom/cleanerversion

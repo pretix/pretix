@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-02 08:59+0000\n"
-"PO-Revision-Date: 2017-05-02 11:01+0200\n"
+"POT-Creation-Date: 2017-05-02 15:55+0000\n"
+"PO-Revision-Date: 2017-05-02 17:56+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -1287,17 +1287,17 @@ msgid "Calculate the fee from the total value including the fee."
 msgstr "Berechne die Gebühr als Anteil vom Endbetrag."
 
 #: pretix/base/payment.py:152
+#, python-brace-format
 msgid ""
 "We recommend you to enable this if you want your users to pay the payment "
-"fees of your payment provider. <a href=\"/control/help/payment/fee_reverse\" "
-"target=\"_blank\">Click here for detailled information on what this does.</"
-"a> Don't forget to set the correct fees above!"
+"fees of your payment provider. <a href=\"{docs_url}\" target=\"_blank"
+"\">Click here for detailled information on what this does.</a> Don't forget "
+"to set the correct fees above!"
 msgstr ""
 "Wir empfehlen, diese Option zu aktivieren, wenn Sie die Gebühren Ihres "
 "Zahlungsdienstleisters an Ihre Kunden weitergeben wollen. Denken Sie daran, "
 "oben die richtigen Gebührensätze des Zahlungsanbieters einzustellen. <a href="
-"\"/control/help/payment/fee_reverse\" target=\"_blank\">Weitere "
-"Informationen</a>."
+"\"{docs_url}\" target=\"_blank\">Weitere Informationen</a>."
 
 #: pretix/base/payment.py:160
 msgid "Text on invoices"
@@ -4406,10 +4406,6 @@ msgstr "Neuste Version"
 #: pretix/control/templates/pretixcontrol/global_update.html:80
 msgid "Update check settings"
 msgstr "Update-Check-Einstellungen"
-
-#: pretix/control/templates/pretixcontrol/help/base.html:4
-msgid "Help center"
-msgstr "Hilfe"
 
 #: pretix/control/templates/pretixcontrol/item/addons.html:7
 msgid ""
@@ -8411,6 +8407,9 @@ msgstr "Deutsch"
 #: pretix/settings.py:301
 msgid "German (informal)"
 msgstr "Deutsch (Du)"
+
+#~ msgid "Help center"
+#~ msgstr "Hilfe"
 
 #~ msgid "Team"
 #~ msgstr "Team"

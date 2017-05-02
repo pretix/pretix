@@ -1,8 +1,8 @@
 from django.conf.urls import include, url
 
 from pretix.control.views import (
-    auth, dashboards, event, global_settings, help, item, main, orders,
-    organizer, user, vouchers, waitinglist,
+    auth, dashboards, event, global_settings, item, main, orders, organizer,
+    user, vouchers, waitinglist,
 )
 
 urlpatterns = [
@@ -132,5 +132,4 @@ urlpatterns = [
         url(r'^waitinglist/$', waitinglist.WaitingListView.as_view(), name='event.orders.waitinglist'),
         url(r'^waitinglist/auto_assign$', waitinglist.AutoAssign.as_view(), name='event.orders.waitinglist.auto'),
     ])),
-    url(r'^help/(?P<topic>[a-zA-Z0-9_/]+)$', help.HelpView.as_view(), name='help'),
 ]
