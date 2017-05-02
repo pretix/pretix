@@ -22,16 +22,22 @@ class CheckoutView(View):
             messages.error(request, _("Your cart is empty"))
             return redirect(eventreverse(self.request.event, 'presale:event.index'))
 
+        cart_error = None
         try:
             validate_cart.send(sender=self.request.event, positions=cart_pos)
         except CartError as e:
-            messages.error(request, str(e))
-            return redirect(eventreverse(self.request.event, 'presale:event.index'))
+            cart_error = e
 
         flow = get_checkout_flow(self.request.event)
+        previous_step = None
         for step in flow:
             if not step.is_applicable(request):
                 continue
+            if step.requires_valid_cart and cart_error:
+                messages.error(request, str(cart_error))
+                return redirect(previous_step.get_step_url() if previous_step
+                                else eventreverse(self.request.event, 'presale:event.index'))
+
             if 'step' not in kwargs:
                 return redirect(step.get_step_url())
             is_selected = (step.identifier == kwargs.get('step', ''))
@@ -43,4 +49,6 @@ class CheckoutView(View):
                 else:
                     handler = self.http_method_not_allowed
                 return handler(request)
+            else:
+                previous_step = step
         raise Http404()

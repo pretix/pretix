@@ -27,6 +27,8 @@ from pretix.presale.views.questions import QuestionsViewMixin
 
 
 class BaseCheckoutFlowStep:
+    requires_valid_cart = True
+
     def __init__(self, event):
         self.event = event
         self.request = None
@@ -135,6 +137,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     template_name = "pretixpresale/event/checkout_addons.html"
     task = set_cart_addons
     known_errortypes = ['CartError']
+    requires_valid_cart = False
 
     def is_applicable(self, request):
         return get_cart(request).filter(item__addons__isnull=False).exists()
