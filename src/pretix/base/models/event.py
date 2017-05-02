@@ -269,7 +269,8 @@ class Event(LoggedModel):
             q.event = self
             q.save()
             for i in items:
-                q.items.add(item_map[i.pk])
+                if i.pk in item_map:
+                    q.items.add(item_map[i.pk])
             for v in vars:
                 q.variations.add(variation_map[v.pk])
 
