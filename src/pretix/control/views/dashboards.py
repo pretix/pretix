@@ -244,7 +244,7 @@ def user_event_widgets(**kwargs):
     user = kwargs.pop('user')
     widgets = []
 
-    events = user.get_events_with_any_permission().select_related('organizer')
+    events = user.get_events_with_any_permission().order_by('-date_from', 'name').select_related('organizer')
     for event in events:
         widgets.append({
             'content': '<div class="event">{event}<span class="from">{df}</span><span class="to">{dt}</span></div>'.format(

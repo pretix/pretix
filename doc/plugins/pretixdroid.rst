@@ -4,6 +4,10 @@ pretixdroid HTTP API
 The pretixdroid plugin provides a HTTP API that the `pretixdroid Android app`_
 uses to communicate with the pretix server.
 
+.. warning:: This API is intended **only** to serve the pretixdroid Android app. There are no backwards compatibility
+             guarantees on this API. We will not add features that are not required for the Android App. There will be
+             a proper general-use API for pretix at a later point in time.
+
 .. http:post:: /pretixdroid/api/(organizer)/(event)/redeem/
 
    Redeems a ticket, i.e. checks the user in.
@@ -18,6 +22,12 @@ uses to communicate with the pretix server.
       Content-Type: application/x-www-form-urlencoded
 
       secret=az9u4mymhqktrbupmwkvv6xmgds5dk3
+
+   You can optionally include the additional parameter ``datetime`` in the body containing an ISO8601-encoded
+   datetime of the entry attempt. If you don't, the current date and time will be used.
+
+   You can optionally include the additional parameter ``force`` to indicate that the request should be logged
+   regardless of previous check-ins for the same ticket. This might be useful if you made the entry decision offline.
 
    **Example successful response**:
 
@@ -51,9 +61,9 @@ uses to communicate with the pretix server.
    * ``unknown_ticket`` - Secret does not match a ticket in the database
 
    :query key: Secret API key
-         :statuscode 200: Valid request
-         :statuscode 404: Unknown organizer or event
-         :statuscode 403: Invalid authorization key
+   :statuscode 200: Valid request
+   :statuscode 404: Unknown organizer or event
+   :statuscode 403: Invalid authorization key
 
 .. http:get:: /pretixdroid/api/(organizer)/(event)/search/
 
@@ -96,6 +106,46 @@ uses to communicate with the pretix server.
          :statuscode 200: Valid request
          :statuscode 404: Unknown organizer or event
          :statuscode 403: Invalid authorization key
+
+.. http:get:: /pretixdroid/api/(organizer)/(event)/download/
+
+   Download data for all tickets.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /pretixdroid/api/demoorga/democon/download/?key=ABCDEF HTTP/1.1
+      Host: demo.pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: text/json
+
+      {
+        "results": [
+          {
+            "secret": "az9u4mymhqktrbupmwkvv6xmgds5dk3",
+            "order": "ABCE6",
+            "item": "Standard ticket",
+            "variation": null,
+            "attendee_name": "Peter Higgs",
+            "redeemed": false,
+            "paid": true
+          },
+          ...
+        ],
+        "version": 2
+      }
+
+   :query key: Secret API key
+   :statuscode 200: Valid request
+   :statuscode 404: Unknown organizer or event
+   :statuscode 403: Invalid authorization key
 
 .. http:get:: /pretixdroid/api/(organizer)/(event)/status/
 
