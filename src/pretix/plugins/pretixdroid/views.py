@@ -153,7 +153,7 @@ class ApiSearchView(ApiView):
         }
 
         if len(query) >= 4:
-            ops = OrderPosition.objects.select_related('item', 'variation', 'order').filter(
+            ops = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').filter(
                 Q(order__event=self.event)
                 & Q(
                     Q(secret__istartswith=query) | Q(attendee_name__icontains=query) | Q(order__code__istartswith=query)
@@ -173,7 +173,7 @@ class ApiDownloadView(ApiView):
             'version': API_VERSION
         }
 
-        ops = OrderPosition.objects.select_related('item', 'variation', 'order').filter(
+        ops = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').filter(
             Q(order__event=self.event)
         ).annotate(checkin_cnt=Count('checkins'))
         response['results'] = [serialize_op(op) for op in ops]
