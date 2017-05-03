@@ -66,7 +66,7 @@ class PermissionMiddleware(MiddlewareMixin):
                 slug=url.kwargs['event'],
                 organizer__slug=url.kwargs['organizer'],
             ).select_related('organizer').first()
-            if not request.event or not request.user.has_event_permisson(request.event.organizer, request.event):
+            if not request.event or not request.user.has_event_permission(request.event.organizer, request.event):
                 raise Http404(_("The selected event was not found or you "
                                 "have no permission to administrate it."))
             request.organizer = request.event.organizer
@@ -75,7 +75,7 @@ class PermissionMiddleware(MiddlewareMixin):
             request.organizer = Organizer.objects.filter(
                 slug=url.kwargs['organizer'],
             ).first()
-            if not request.organizer or not request.user.has_organizer_permisson(request.organizer):
+            if not request.organizer or not request.user.has_organizer_permission(request.organizer):
                 raise Http404(_("The selected organizer was not found or you "
                                 "have no permission to administrate it."))
             request.orgapermset = request.user.get_organizer_permission_set(request.organizer)

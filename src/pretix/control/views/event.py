@@ -708,9 +708,9 @@ class EventLog(EventPermissionRequiredMixin, ListView):
     def get_queryset(self):
         qs = self.request.event.logentry_set.all().select_related('user', 'content_type').order_by('-datetime')
         qs = qs.exclude(action_type__in=OVERVIEW_BLACKLIST)
-        if not self.request.user.has_event_permisson(self.request.organizer, self.request.event, 'can_view_orders'):
+        if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_orders'):
             qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
-        if not self.request.user.has_event_permisson(self.request.organizer, self.request.event, 'can_view_vouchers'):
+        if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_vouchers'):
             qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
 
         if self.request.GET.get('user') == 'yes':

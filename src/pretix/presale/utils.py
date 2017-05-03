@@ -67,7 +67,7 @@ def _detect_event(request, require_live=True):
                     url.url_name == 'event.auth'
                     or (
                         request.user.is_authenticated
-                        and request.user.has_event_permisson(request.organizer, request.event)
+                        and request.user.has_event_permission(request.organizer, request.event)
                     )
 
                 )

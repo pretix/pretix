@@ -33,90 +33,90 @@ def test_invalid_permission(event, user):
 @pytest.mark.django_db
 def test_any_event_permission_limited(event, user):
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event)
+    assert not user.has_event_permission(event.organizer, event)
 
     team = Team.objects.create(organizer=event.organizer)
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event)
+    assert not user.has_event_permission(event.organizer, event)
 
     team.members.add(user)
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event)
+    assert not user.has_event_permission(event.organizer, event)
     assert not team.permission_for_event(event)
 
     team.limit_events.add(event)
     user._teamcache = {}
     assert team.permission_for_event(event)
-    assert user.has_event_permisson(event.organizer, event)
+    assert user.has_event_permission(event.organizer, event)
 
 
 @pytest.mark.django_db
 def test_any_event_permission_all(event, user):
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event)
+    assert not user.has_event_permission(event.organizer, event)
 
     team = Team.objects.create(organizer=event.organizer)
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event)
+    assert not user.has_event_permission(event.organizer, event)
 
     team.members.add(user)
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event)
+    assert not user.has_event_permission(event.organizer, event)
     assert not team.permission_for_event(event)
 
     team.all_events = True
     team.save()
     user._teamcache = {}
     assert team.permission_for_event(event)
-    assert user.has_event_permisson(event.organizer, event)
+    assert user.has_event_permission(event.organizer, event)
 
 
 @pytest.mark.django_db
 def test_specific_event_permission_limited(event, user):
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event, 'can_change_orders')
+    assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
 
     team = Team.objects.create(organizer=event.organizer, can_change_orders=True)
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event, 'can_change_orders')
+    assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
 
     team.members.add(user)
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event, 'can_change_orders')
+    assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
 
     team.limit_events.add(event)
     user._teamcache = {}
-    assert user.has_event_permisson(event.organizer, event, 'can_change_orders')
-    assert not user.has_event_permisson(event.organizer, event, 'can_change_event_settings')
+    assert user.has_event_permission(event.organizer, event, 'can_change_orders')
+    assert not user.has_event_permission(event.organizer, event, 'can_change_event_settings')
 
     team.can_change_orders = False
     team.save()
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event, 'can_change_orders')
+    assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
 
 
 @pytest.mark.django_db
 def test_specific_event_permission_all(event, user):
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event, 'can_change_orders')
+    assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
 
     team = Team.objects.create(organizer=event.organizer, can_change_orders=True)
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event, 'can_change_orders')
+    assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
 
     team.members.add(user)
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event, 'can_change_orders')
+    assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
 
     team.all_events = True
     team.save()
     user._teamcache = {}
-    assert user.has_event_permisson(event.organizer, event, 'can_change_orders')
+    assert user.has_event_permission(event.organizer, event, 'can_change_orders')
 
     team.can_change_orders = False
     team.save()
     user._teamcache = {}
-    assert not user.has_event_permisson(event.organizer, event, 'can_change_orders')
+    assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
 
 
 @pytest.mark.django_db
@@ -134,9 +134,9 @@ def test_event_permissions_multiple_teams(event, user):
     team2.limit_events.add(event)
     team3.limit_events.add(event2)
 
-    assert user.has_event_permisson(event.organizer, event, 'can_change_orders')
-    assert user.has_event_permisson(event.organizer, event, 'can_change_vouchers')
-    assert not user.has_event_permisson(event.organizer, event, 'can_change_event_settings')
+    assert user.has_event_permission(event.organizer, event, 'can_change_orders')
+    assert user.has_event_permission(event.organizer, event, 'can_change_vouchers')
+    assert not user.has_event_permission(event.organizer, event, 'can_change_event_settings')
     assert user.get_event_permission_set(event.organizer, event) == {'can_change_orders', 'can_change_vouchers'}
     assert user.get_event_permission_set(event.organizer, event2) == {'can_change_orders', 'can_change_event_settings',
                                                                       'can_change_settings'}
@@ -145,29 +145,29 @@ def test_event_permissions_multiple_teams(event, user):
 @pytest.mark.django_db
 def test_any_organizer_permission(event, user):
     user._teamcache = {}
-    assert not user.has_organizer_permisson(event.organizer)
+    assert not user.has_organizer_permission(event.organizer)
 
     team = Team.objects.create(organizer=event.organizer)
     user._teamcache = {}
-    assert not user.has_organizer_permisson(event.organizer)
+    assert not user.has_organizer_permission(event.organizer)
 
     team.members.add(user)
     user._teamcache = {}
-    assert user.has_organizer_permisson(event.organizer)
+    assert user.has_organizer_permission(event.organizer)
 
 
 @pytest.mark.django_db
 def test_specific_organizer_permission(event, user):
     user._teamcache = {}
-    assert not user.has_organizer_permisson(event.organizer, 'can_create_events')
+    assert not user.has_organizer_permission(event.organizer, 'can_create_events')
 
     team = Team.objects.create(organizer=event.organizer, can_create_events=True)
     user._teamcache = {}
-    assert not user.has_organizer_permisson(event.organizer, 'can_create_events')
+    assert not user.has_organizer_permission(event.organizer, 'can_create_events')
 
     team.members.add(user)
     user._teamcache = {}
-    assert user.has_organizer_permisson(event.organizer, 'can_create_events')
+    assert user.has_organizer_permission(event.organizer, 'can_create_events')
 
 
 @pytest.mark.django_db
@@ -180,9 +180,9 @@ def test_organizer_permissions_multiple_teams(event, user):
     team3 = Team.objects.create(organizer=orga2, can_change_teams=True)
     team3.members.add(user)
 
-    assert user.has_organizer_permisson(event.organizer, 'can_create_events')
-    assert user.has_organizer_permisson(event.organizer, 'can_change_organizer_settings')
-    assert not user.has_organizer_permisson(event.organizer, 'can_change_teams')
+    assert user.has_organizer_permission(event.organizer, 'can_create_events')
+    assert user.has_organizer_permission(event.organizer, 'can_change_organizer_settings')
+    assert not user.has_organizer_permission(event.organizer, 'can_change_teams')
     assert user.get_organizer_permission_set(event.organizer) == {'can_create_events', 'can_change_organizer_settings'}
     assert user.get_organizer_permission_set(orga2) == {'can_change_teams'}
 
@@ -192,10 +192,10 @@ def test_superuser(event, user):
     user.is_superuser = True
     user.save()
 
-    assert user.has_organizer_permisson(event.organizer)
-    assert user.has_organizer_permisson(event.organizer, 'can_create_events')
-    assert user.has_event_permisson(event.organizer, event)
-    assert user.has_event_permisson(event.organizer, event, 'can_change_event_settings')
+    assert user.has_organizer_permission(event.organizer)
+    assert user.has_organizer_permission(event.organizer, 'can_create_events')
+    assert user.has_event_permission(event.organizer, event)
+    assert user.has_event_permission(event.organizer, event, 'can_change_event_settings')
 
     assert 'arbitrary' in user.get_event_permission_set(event.organizer, event)
     assert 'arbitrary' in user.get_organizer_permission_set(event.organizer)

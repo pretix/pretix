@@ -199,7 +199,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         teams = self._get_teams_for_organizer(organizer)
         return set.union(*[t.permission_set() for t in teams])
 
-    def has_event_permisson(self, organizer, event, perm_name=None) -> bool:
+    def has_event_permission(self, organizer, event, perm_name=None) -> bool:
         """
         Checks if this user is part of any team that grants access of type ``perm_name``
         to the event ``event``.
@@ -218,7 +218,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
                 return True
         return False
 
-    def has_organizer_permisson(self, organizer, perm_name=None):
+    def has_organizer_permission(self, organizer, perm_name=None):
         """
         Checks if this user is part of any team that grants access of type ``perm_name``
         to the organizer ``organizer``.

@@ -19,7 +19,7 @@ def event_permission_required(permission):
 
             allowed = (
                 request.user.is_superuser
-                or request.user.has_event_permisson(request.organizer, request.event, permission)
+                or request.user.has_event_permission(request.organizer, request.event, permission)
             )
             if allowed:
                 return function(request, *args, **kw)
@@ -59,7 +59,7 @@ def organizer_permission_required(permission):
 
             allowed = (
                 request.user.is_superuser
-                or request.user.has_organizer_permisson(request.organizer, permission)
+                or request.user.has_organizer_permission(request.organizer, permission)
             )
             if allowed:
                 return function(request, *args, **kw)
