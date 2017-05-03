@@ -57,6 +57,18 @@ def test_flush_key(client, env):
 
 
 @pytest.mark.django_db
+def test_custom_datetime(client, env):
+    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    dt = now() - timedelta(days=1)
+    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
+                       data={'secret': '1234', 'datetime': dt.isoformat()})
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert jdata['version'] == 2
+    assert jdata['status'] == 'ok'
+    assert Checkin.objects.last().datetime == dt
+
+
+@pytest.mark.django_db
 def test_only_once(client, env):
     env[0].settings.set('pretixdroid_key', 'abcdefg')
 
@@ -70,6 +82,21 @@ def test_only_once(client, env):
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['status'] == 'error'
     assert jdata['reason'] == 'already_redeemed'
+
+
+@pytest.mark.django_db
+def test_forced_multiple(client, env):
+    env[0].settings.set('pretixdroid_key', 'abcdefg')
+
+    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
+                       data={'secret': '1234'})
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert jdata['version'] == 2
+    assert jdata['status'] == 'ok'
+    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
+                       data={'secret': '1234', 'force': 'true'})
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert jdata['status'] == 'ok'
 
 
 @pytest.mark.django_db
@@ -118,6 +145,16 @@ def test_search(client, env):
     jdata = json.loads(resp.content.decode("utf-8"))
     assert len(jdata['results']) == 1
     assert jdata['results'][0]['secret'] == '5678910'
+
+
+@pytest.mark.django_db
+def test_download_all_data(client, env):
+    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    resp = client.get('/pretixdroid/api/%s/%s/download/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'))
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert len(jdata['results']) == 2
+    assert jdata['results'][0]['secret'] == '1234'
+    assert jdata['results'][1]['secret'] == '5678910'
 
 
 @pytest.mark.django_db

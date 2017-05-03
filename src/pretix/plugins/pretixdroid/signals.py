@@ -1,7 +1,9 @@
 import json
 
+import dateutil.parser
 from django.core.urlresolvers import resolve, reverse
 from django.dispatch import receiver
+from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.signals import logentry_display
@@ -37,6 +39,14 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
             posid=data.get('positionid')
         ))
     else:
+        if data.get('forced'):
+            return _(
+                'A scan for position #{posid} at {datetime} has been uploaded even though it has '
+                'been scanned already.'.format(
+                    posid=data.get('positionid'),
+                    datetime=date_format(dateutil.parser.parse(data.get('datetime')), "SHORT_DATETIME_FORMAT")
+                )
+            )
         return _('Position #{posid} has been scanned and rejected because it has already been scanned before.'.format(
             posid=data.get('positionid')
         ))

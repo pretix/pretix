@@ -2,6 +2,7 @@ import json
 import logging
 import string
 
+import dateutil.parser
 from django.db import transaction
 from django.db.models import Count, Q
 from django.http import (
@@ -9,6 +10,7 @@ from django.http import (
 )
 from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
+from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
 
@@ -67,9 +69,15 @@ class ApiView(View):
 class ApiRedeemView(ApiView):
     def post(self, request, **kwargs):
         secret = request.POST.get('secret', '!INVALID!')
+        force = request.POST.get('force', 'false') in ('true', 'True')
         response = {
             'version': API_VERSION
         }
+
+        if 'datetime' in request.POST:
+            dt = dateutil.parser.parse(request.POST.get('datetime'))
+        else:
+            dt = now()
 
         try:
             with transaction.atomic():
@@ -79,6 +87,9 @@ class ApiRedeemView(ApiView):
                 )
                 if op.order.status == Order.STATUS_PAID:
                     ci, created = Checkin.objects.get_or_create(position=op)
+                    if created and 'datetime' in request.POST:
+                        ci.datetime = dt
+                        ci.save()
                 else:
                     response['status'] = 'error'
                     response['reason'] = 'unpaid'
@@ -90,14 +101,21 @@ class ApiRedeemView(ApiView):
                         'position': op.id,
                         'positionid': op.positionid,
                         'first': True,
+                        'forced': False,
+                        'datetime': dt,
                     })
                 else:
-                    response['status'] = 'error'
-                    response['reason'] = 'already_redeemed'
+                    if force:
+                        response['status'] = 'ok'
+                    else:
+                        response['status'] = 'error'
+                        response['reason'] = 'already_redeemed'
                     op.order.log_action('pretix.plugins.pretixdroid.scan', data={
                         'position': op.id,
                         'positionid': op.positionid,
                         'first': False,
+                        'forced': force,
+                        'datetime': dt,
                     })
 
             response['data'] = {
@@ -115,6 +133,18 @@ class ApiRedeemView(ApiView):
         return JsonResponse(response)
 
 
+def serialize_op(op):
+    return {
+        'secret': op.secret,
+        'order': op.order.code,
+        'item': str(op.item),
+        'variation': str(op.variation) if op.variation else None,
+        'attendee_name': op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
+        'redeemed': bool(op.checkin_cnt),
+        'paid': op.order.status == Order.STATUS_PAID,
+    }
+
+
 class ApiSearchView(ApiView):
     def get(self, request, **kwargs):
         query = request.GET.get('query', '!INVALID!')
@@ -128,21 +158,25 @@ class ApiSearchView(ApiView):
                 & Q(
                     Q(secret__istartswith=query) | Q(attendee_name__icontains=query) | Q(order__code__istartswith=query)
                 )
-            ).prefetch_related('checkins')[:25]
+            ).annotate(checkin_cnt=Count('checkins'))[:25]
 
-            response['results'] = [
-                {
-                    'secret': op.secret,
-                    'order': op.order.code,
-                    'item': str(op.item),
-                    'variation': str(op.variation) if op.variation else None,
-                    'attendee_name': op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
-                    'redeemed': bool(op.checkins.all()),
-                    'paid': op.order.status == Order.STATUS_PAID,
-                } for op in ops
-            ]
+            response['results'] = [serialize_op(op) for op in ops]
         else:
             response['results'] = []
+
+        return JsonResponse(response)
+
+
+class ApiDownloadView(ApiView):
+    def get(self, request, **kwargs):
+        response = {
+            'version': API_VERSION
+        }
+
+        ops = OrderPosition.objects.select_related('item', 'variation', 'order').filter(
+            Q(order__event=self.event)
+        ).annotate(checkin_cnt=Count('checkins'))
+        response['results'] = [serialize_op(op) for op in ops]
 
         return JsonResponse(response)
 
