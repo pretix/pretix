@@ -15,9 +15,11 @@
                     {% trans "Customer actions" %}
                 </option>
                 {% for up in userlist %}
-                    <option value="{{ up.user_id }}" {% if request.GET.user == up.user_id %}selected="selected"{% endif %}>
-                        {{ up.user }}
-                    </option>
+                    {% if up.user__id %}
+                        <option value="{{ up.user__id }}" {% if request.GET.user == up.user__id %}selected="selected"{% endif %}>
+                            {{ up.user__email }}
+                        </option>
+                    {% endif %}
                 {% endfor %}
             </select>
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>

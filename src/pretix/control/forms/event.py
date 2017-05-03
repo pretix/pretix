@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.db.models import Q
 from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
@@ -26,7 +27,7 @@ class EventWizardFoundationForm(forms.Form):
         self.fields['organizer'] = forms.ModelChoiceField(
             label=_("Organizer"),
             queryset=Organizer.objects.filter(
-                id__in=self.user.organizer_perms.filter(can_create_events=True).values_list('organizer', flat=True)
+                id__in=self.user.teams.filter(can_create_events=True).values_list('organizer', flat=True)
             ),
             widget=forms.RadioSelect,
             empty_label=None,
@@ -111,6 +112,16 @@ class EventWizardBasicsForm(I18nModelForm):
 
 class EventWizardCopyForm(forms.Form):
 
+    @staticmethod
+    def copy_from_queryset(user):
+        return Event.objects.filter(
+            Q(organizer_id__in=user.teams.filter(
+                all_events=True, can_change_event_settings=True, can_change_items=True
+            ).values_list('organizer', flat=True)) | Q(id__in=user.teams.filter(
+                can_change_event_settings=True, can_change_items=True
+            ).values_list('limit_events__id', flat=True))
+        )
+
     def __init__(self, *args, **kwargs):
         kwargs.pop('organizer')
         kwargs.pop('locales')
@@ -118,11 +129,7 @@ class EventWizardCopyForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['copy_from_event'] = forms.ModelChoiceField(
             label=_("Copy configuration from"),
-            queryset=Event.objects.filter(
-                id__in=self.user.event_perms.filter(
-                    can_change_items=True, can_change_settings=True
-                ).values_list('event', flat=True)
-            ),
+            queryset=EventWizardCopyForm.copy_from_queryset(self.user),
             widget=forms.RadioSelect,
             empty_label=_('Do not copy'),
             required=False

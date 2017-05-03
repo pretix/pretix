@@ -201,6 +201,17 @@ $(function () {
         dependency.on("change", update);
     });
 
+    $("input[data-inverse-dependency]").each(function () {
+        var dependent = $(this),
+            dependency = $($(this).attr("data-inverse-dependency")),
+            update = function () {
+                var enabled = !dependency.prop('checked');
+                dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
+            };
+        update();
+        dependency.on("change", update);
+    });
+
     $("input[data-display-dependency]").each(function () {
         var dependent = $(this),
             dependency = $($(this).attr("data-display-dependency")),

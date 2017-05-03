@@ -17,7 +17,7 @@ def register_payment_provider(sender, **kwargs):
 @receiver(nav_event, dispatch_uid="payment_banktransfer_nav")
 def control_nav_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
-    if not request.eventperm.can_change_orders:
+    if not request.user.has_event_permisson(request.organizer, request.event, 'can_change_orders'):
         return []
     return [
         {

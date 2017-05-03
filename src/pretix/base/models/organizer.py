@@ -42,8 +42,6 @@ class Organizer(LoggedModel):
         ],
         verbose_name=_("Short form"),
     )
-    permitted = models.ManyToManyField(User, through='OrganizerPermission',
-                                       related_name="organizers")
 
     class Meta:
         verbose_name = _("Organizer")
@@ -74,39 +72,131 @@ def generate_invite_token():
     return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)
 
 
-class OrganizerPermission(models.Model):
+class Team(LoggedModel):
     """
-    The relation between an Organizer and a User who has permissions to
-    access an organizer profile.
+    A team is a collection of people given certain access rights to one or more events of an organizer.
 
-    :param organizer: The organizer this relation refers to
+    :param name: The name of this team
+    :type name: str
+    :param organizer: The organizer this team belongs to
     :type organizer: Organizer
-    :param user: The user this set of permissions is valid for
-    :type user: User
-    :param can_create_events: Whether or not this user can create new events with this
-                              organizer account.
+    :param members: A set of users who belong to this team
+    :param all_events: Whether this team has access to all events of this organizer
+    :type all_events: bool
+    :param limit_events: A set of events this team has access to. Irrelevant if ``all_events`` is ``True``.
+    :param can_create_events: Whether or not the members can create new events with this organizer account.
     :type can_create_events: bool
+    :param can_change_teams: If ``True``, the members can change the teams of this organizer account.
+    :type can_change_teams: bool
+    :param can_change_organizer_settings: If ``True``, the members can change the settings of this organizer account.
+    :type can_change_organizer_settings: bool
+    :param can_change_event_settings: If ``True``, the members can change the settings of the associated events.
+    :type can_change_event_settings: bool
+    :param can_change_items: If ``True``, the members can change and add items and related objects for the associated events.
+    :type can_change_items: bool
+    :param can_view_orders: If ``True``, the members can inspect details of all orders of the associated events.
+    :type can_view_orders: bool
+    :param can_change_orders: If ``True``, the members can change details of orders of the associated events.
+    :type can_change_orders: bool
+    :param can_view_vouchers: If ``True``, the members can inspect details of all vouchers of the associated events.
+    :type can_view_vouchers: bool
+    :param can_change_vouchers: If ``True``, the members can change and create vouchers for the associated events.
+    :type can_change_vouchers: bool
     """
+    organizer = models.ForeignKey(Organizer, related_name="teams", on_delete=models.CASCADE)
+    name = models.CharField(max_length=190, verbose_name=_("Team name"))
+    members = models.ManyToManyField(User, related_name="teams", verbose_name=_("Team members"))
+    all_events = models.BooleanField(default=False, verbose_name=_("All events (including newly created ones)"))
+    limit_events = models.ManyToManyField('Event', verbose_name=_("Limit to events"), blank=True)
 
-    organizer = models.ForeignKey(Organizer, related_name="user_perms", on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name="organizer_perms", on_delete=models.CASCADE, null=True, blank=True)
-    invite_email = models.EmailField(null=True, blank=True)
-    invite_token = models.CharField(default=generate_invite_token, max_length=64, null=True, blank=True)
     can_create_events = models.BooleanField(
-        default=True,
+        default=False,
         verbose_name=_("Can create events"),
     )
-    can_change_permissions = models.BooleanField(
-        default=True,
-        verbose_name=_("Can change permissions"),
+    can_change_teams = models.BooleanField(
+        default=False,
+        verbose_name=_("Can change teams and permissions"),
+    )
+    can_change_organizer_settings = models.BooleanField(
+        default=False,
+        verbose_name=_("Can change organizer settings")
     )
 
-    class Meta:
-        verbose_name = _("Organizer permission")
-        verbose_name_plural = _("Organizer permissions")
+    can_change_event_settings = models.BooleanField(
+        default=False,
+        verbose_name=_("Can change event settings")
+    )
+    can_change_items = models.BooleanField(
+        default=False,
+        verbose_name=_("Can change product settings")
+    )
+    can_view_orders = models.BooleanField(
+        default=False,
+        verbose_name=_("Can view orders")
+    )
+    can_change_orders = models.BooleanField(
+        default=False,
+        verbose_name=_("Can change orders")
+    )
+    can_view_vouchers = models.BooleanField(
+        default=False,
+        verbose_name=_("Can view vouchers")
+    )
+    can_change_vouchers = models.BooleanField(
+        default=False,
+        verbose_name=_("Can change vouchers")
+    )
 
     def __str__(self) -> str:
         return _("%(name)s on %(object)s") % {
-            'name': str(self.user),
+            'name': str(self.name),
             'object': str(self.organizer),
         }
+
+    def permission_set(self) -> set:
+        attribs = dir(self)
+        return {
+            a for a in attribs if a.startswith('can_') and self.has_permission(a)
+        }
+
+    @property
+    def can_change_settings(self):  # Legacy compatiblilty
+        return self.can_change_event_settings
+
+    def has_permission(self, perm_name):
+        try:
+            return getattr(self, perm_name)
+        except AttributeError:
+            raise ValueError('Invalid required permission: %s' % perm_name)
+
+    def permission_for_event(self, event):
+        if self.all_events:
+            return event.organizer_id == self.organizer_id
+        else:
+            return self.limit_events.filter(pk=event.pk).exists()
+
+    class Meta:
+        verbose_name = _("Team")
+        verbose_name_plural = _("Teams")
+
+
+class TeamInvite(models.Model):
+    """
+    A TeamInvite represents someone who has been invited to a team but hasn't accept the invitation
+    yet.
+
+    :param team: The team the person is invited to
+    :type team: Team
+    :param email: The email the invite has been sent to
+    :type email: str
+    :param token: The secret required to redeem the invite
+    :type token: str
+    """
+    team = models.ForeignKey(Team, related_name="invites", on_delete=models.CASCADE)
+    email = models.EmailField(null=True, blank=True)
+    token = models.CharField(default=generate_invite_token, max_length=64, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return _("Invite to team '{team}' for '{email}'").format(
+            team=str(self.team), email=self.email
+        )

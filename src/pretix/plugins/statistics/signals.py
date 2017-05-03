@@ -9,7 +9,7 @@ from pretix.control.signals import nav_event
 @receiver(nav_event, dispatch_uid="statistics_nav")
 def control_nav_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
-    if not request.eventperm.can_view_orders:
+    if not request.user.has_event_permisson(request.organizer, request.event, 'can_view_orders'):
         return []
     return [
         {

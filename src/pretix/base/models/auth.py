@@ -1,9 +1,12 @@
+from typing import Union
+
 from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin,
 )
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django_otp.models import Device
 
@@ -81,6 +84,10 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
     objects = UserManager()
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._teamcache = {}
+
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
@@ -146,6 +153,103 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
         return LogEntry.objects.filter(content_type=ContentType.objects.get_for_model(User),
                                        object_id=self.pk)
+
+    def _get_teams_for_organizer(self, organizer):
+        if 'o{}'.format(organizer.pk) not in self._teamcache:
+            self._teamcache['o{}'.format(organizer.pk)] = list(self.teams.filter(organizer=organizer))
+        return self._teamcache['o{}'.format(organizer.pk)]
+
+    def _get_teams_for_event(self, organizer, event):
+        if 'e{}'.format(event.pk) not in self._teamcache:
+            self._teamcache['e{}'.format(event.pk)] = list(self.teams.filter(organizer=organizer).filter(
+                Q(all_events=True) | Q(limit_events=event)
+            ))
+        return self._teamcache['e{}'.format(event.pk)]
+
+    class SuperuserPermissionSet:
+        def __contains__(self, item):
+            return True
+
+    def get_event_permission_set(self, organizer, event) -> Union[set, SuperuserPermissionSet]:
+        """
+        Gets a set of permissions (as strings) that a user holds for a particular event
+
+        :param organizer: The organizer of the event
+        :param event: The event to check
+        :return: set in case of a normal user and a SuperuserPermissionSet in case of a superuser (fake object where
+                 a in b always returns true).
+        """
+        if self.is_superuser:
+            return self.SuperuserPermissionSet()
+
+        teams = self._get_teams_for_event(organizer, event)
+        return set.union(*[t.permission_set() for t in teams])
+
+    def get_organizer_permission_set(self, organizer) -> Union[set, SuperuserPermissionSet]:
+        """
+        Gets a set of permissions (as strings) that a user holds for a particular organizer
+
+        :param organizer: The organizer of the event
+        :return: set in case of a normal user and a SuperuserPermissionSet in case of a superuser (fake object where
+                 a in b always returns true).
+        """
+        if self.is_superuser:
+            return self.SuperuserPermissionSet()
+
+        teams = self._get_teams_for_organizer(organizer)
+        return set.union(*[t.permission_set() for t in teams])
+
+    def has_event_permisson(self, organizer, event, perm_name=None) -> bool:
+        """
+        Checks if this user is part of any team that grants access of type ``perm_name``
+        to the event ``event``.
+
+        :param organizer: The organizer of the event
+        :param event: The event to check
+        :param perm_name: The permission, e.g. ``can_change_teams``
+        :return: bool
+        """
+        if self.is_superuser:
+            return True
+        teams = self._get_teams_for_event(organizer, event)
+        if teams:
+            self._teamcache['e{}'.format(event.pk)] = teams
+            if not perm_name or any([team.has_permission(perm_name) for team in teams]):
+                return True
+        return False
+
+    def has_organizer_permisson(self, organizer, perm_name=None):
+        """
+        Checks if this user is part of any team that grants access of type ``perm_name``
+        to the organizer ``organizer``.
+
+        :param organizer: The organizer to check
+        :param perm_name: The permission, e.g. ``can_change_teams``
+        :return: bool
+        """
+        if self.is_superuser:
+            return True
+        teams = self._get_teams_for_organizer(organizer)
+        if teams:
+            if not perm_name or any([team.has_permission(perm_name) for team in teams]):
+                return True
+        return False
+
+    def get_events_with_any_permission(self):
+        """
+        Returns a queryset of events the user has any permissions to.
+
+        :return: Iterable of Events
+        """
+        from .event import Event
+
+        if self.is_superuser:
+            return Event.objects.all()
+
+        return Event.objects.filter(
+            Q(organizer_id__in=self.teams.filter(all_events=True).values_list('organizer', flat=True))
+            | Q(id__in=self.teams.values_list('limit_events__id', flat=True))
+        )
 
 
 class U2FDevice(Device):

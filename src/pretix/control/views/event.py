@@ -2,14 +2,12 @@ import re
 from collections import OrderedDict
 from datetime import timedelta
 
-from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.forms import modelformset_factory
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
@@ -22,14 +20,12 @@ from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
 from pytz import timezone
 
-from pretix.base.forms import I18nModelForm
 from pretix.base.models import (
-    CachedTicket, Event, EventPermission, Item, ItemVariation, LogEntry, Order,
-    RequiredAction, User, Voucher,
+    CachedTicket, Event, Item, ItemVariation, LogEntry, Order, RequiredAction,
+    Voucher,
 )
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
-from pretix.base.services.mail import SendMailException, mail
 from pretix.base.signals import (
     event_live_issues, register_payment_providers, register_ticket_outputs,
 )
@@ -50,7 +46,7 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
     model = Event
     form_class = EventUpdateForm
     template_name = 'pretixcontrol/event/settings.html'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     @cached_property
     def object(self) -> Event:
@@ -115,7 +111,7 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
 class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
     model = Event
     context_object_name = 'event'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
     template_name = 'pretixcontrol/event/plugins.html'
 
     def get_object(self, queryset=None) -> Event:
@@ -178,7 +174,7 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
 class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
     model = Event
     context_object_name = 'event'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
     template_name = 'pretixcontrol/event/payment.html'
 
     def get_object(self, queryset=None) -> Event:
@@ -264,7 +260,7 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
 
 class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
     model = Event
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
@@ -300,7 +296,7 @@ class InvoiceSettings(EventSettingsFormView):
     model = Event
     form_class = InvoiceSettingsForm
     template_name = 'pretixcontrol/event/invoicing.html'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     def get_success_url(self) -> str:
         if 'preview' in self.request.POST:
@@ -315,7 +311,7 @@ class InvoiceSettings(EventSettingsFormView):
 
 
 class InvoicePreview(EventPermissionRequiredMixin, View):
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     def get(self, request, *args, **kwargs):
         pdf = build_preview_invoice_pdf(request.event)
@@ -328,7 +324,7 @@ class DisplaySettings(EventSettingsFormView):
     model = Event
     form_class = DisplaySettingsForm
     template_name = 'pretixcontrol/event/display.html'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings.display', kwargs={
@@ -364,7 +360,7 @@ class MailSettings(EventSettingsFormView):
     model = Event
     form_class = MailSettingsForm
     template_name = 'pretixcontrol/event/mail.html'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings.mail', kwargs={
@@ -407,7 +403,7 @@ class MailSettings(EventSettingsFormView):
 
 
 class MailSettingsPreview(EventPermissionRequiredMixin, View):
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     # return the origin text if key is missing in dict
     class SafeDict(dict):
@@ -513,7 +509,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
 
 
 class TicketSettingsPreview(EventPermissionRequiredMixin, View):
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     @cached_property
     def output(self):
@@ -545,7 +541,7 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
     model = Event
     form_class = TicketSettingsForm
     template_name = 'pretixcontrol/event/tickets.html'
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
@@ -637,140 +633,12 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
         return providers
 
 
-class EventPermissionForm(I18nModelForm):
-    class Meta:
-        model = EventPermission
-        fields = (
-            'can_change_settings', 'can_change_items', 'can_change_permissions', 'can_view_orders',
-            'can_change_orders', 'can_view_vouchers', 'can_change_vouchers'
-        )
-
-
-class EventPermissionCreateForm(EventPermissionForm):
-    user = forms.EmailField(required=False, label=_('User'))
-
-
 class EventPermissions(EventPermissionRequiredMixin, TemplateView):
-    model = Event
-    form_class = TicketSettingsForm
     template_name = 'pretixcontrol/event/permissions.html'
-    permission = 'can_change_permissions'
-
-    @cached_property
-    def formset(self):
-        fs = modelformset_factory(
-            EventPermission,
-            form=EventPermissionForm,
-            can_delete=True, can_order=False, extra=0
-        )
-        return fs(data=self.request.POST if self.request.method == "POST" else None,
-                  prefix="formset",
-                  queryset=EventPermission.objects.filter(event=self.request.event))
-
-    @cached_property
-    def add_form(self):
-        return EventPermissionCreateForm(data=self.request.POST if self.request.method == "POST" else None,
-                                         prefix="add")
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['formset'] = self.formset
-        ctx['add_form'] = self.add_form
-        return ctx
-
-    def _send_invite(self, instance):
-        try:
-            mail(
-                instance.invite_email,
-                _('pretix account invitation'),
-                'pretixcontrol/email/invitation.txt',
-                {
-                    'user': self,
-                    'event': self.request.event.name,
-                    'url': build_absolute_uri('control:auth.invite', kwargs={
-                        'token': instance.invite_token
-                    })
-                },
-                event=None,
-                locale=self.request.LANGUAGE_CODE
-            )
-        except SendMailException:
-            pass  # Already logged
-
-    @transaction.atomic
-    def post(self, *args, **kwargs):
-        if self.formset.is_valid() and self.add_form.is_valid():
-            if self.add_form.has_changed():
-                logdata = {
-                    k: v for k, v in self.add_form.cleaned_data.items()
-                }
-
-                try:
-                    self.add_form.instance.event = self.request.event
-                    self.add_form.instance.event_id = self.request.event.id
-                    self.add_form.instance.user = User.objects.get(email=self.add_form.cleaned_data['user'])
-                    self.add_form.instance.user_id = self.add_form.instance.user.id
-                except User.DoesNotExist:
-                    self.add_form.instance.invite_email = self.add_form.cleaned_data['user']
-                    if EventPermission.objects.filter(invite_email=self.add_form.instance.invite_email,
-                                                      event=self.request.event).exists():
-                        messages.error(self.request, _('This user already has been invited for this event.'))
-                        return self.get(*args, **kwargs)
-
-                    self.add_form.save()
-                    self._send_invite(self.add_form.instance)
-
-                    self.request.event.log_action(
-                        'pretix.event.permissions.invited', user=self.request.user, data=logdata
-                    )
-                else:
-                    if EventPermission.objects.filter(user=self.add_form.instance.user,
-                                                      event=self.request.event).exists():
-                        messages.error(self.request, _('This user already has permissions for this event.'))
-                        return self.get(*args, **kwargs)
-                    self.add_form.save()
-                    logdata['user'] = self.add_form.instance.user_id
-                    self.request.event.log_action(
-                        'pretix.event.permissions.added', user=self.request.user, data=logdata
-                    )
-            for form in self.formset.forms:
-                if form.has_changed():
-                    changedata = {
-                        k: form.cleaned_data.get(k) for k in form.changed_data
-                    }
-                    changedata['user'] = form.instance.user_id
-                    self.request.event.log_action(
-                        'pretix.event.permissions.changed', user=self.request.user, data=changedata
-                    )
-                if form.instance.user_id == self.request.user.pk:
-                    if not form.cleaned_data['can_change_permissions'] or form in self.formset.deleted_forms:
-                        messages.error(self.request, _('You cannot remove your own permission to view this page.'))
-                        return self.get(*args, **kwargs)
-
-            for form in self.formset.deleted_forms:
-                logdata = {
-                    k: v for k, v in form.cleaned_data.items()
-                }
-                self.request.event.log_action(
-                    'pretix.event.permissions.deleted', user=self.request.user, data=logdata
-                )
-
-            self.formset.save()
-            messages.success(self.request, _('Your changes have been saved.'))
-            return redirect(self.get_success_url())
-        else:
-            messages.error(self.request, _('Your changes could not be saved.'))
-            return self.get(*args, **kwargs)
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.settings.permissions', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug
-        })
 
 
 class EventLive(EventPermissionRequiredMixin, TemplateView):
-    permission = 'can_change_settings'
+    permission = 'can_change_event_settings'
     template_name = 'pretixcontrol/event/live.html'
 
     def get_context_data(self, **kwargs):
@@ -840,9 +708,9 @@ class EventLog(EventPermissionRequiredMixin, ListView):
     def get_queryset(self):
         qs = self.request.event.logentry_set.all().select_related('user', 'content_type').order_by('-datetime')
         qs = qs.exclude(action_type__in=OVERVIEW_BLACKLIST)
-        if not self.request.eventperm.can_view_orders:
+        if not self.request.user.has_event_permisson(self.request.organizer, self.request.event, 'can_view_orders'):
             qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
-        if not self.request.eventperm.can_view_vouchers:
+        if not self.request.user.has_event_permisson(self.request.organizer, self.request.event, 'can_view_vouchers'):
             qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
 
         if self.request.GET.get('user') == 'yes':
@@ -856,7 +724,7 @@ class EventLog(EventPermissionRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
-        ctx['userlist'] = self.request.event.user_perms.select_related('user')
+        ctx['userlist'] = self.request.event.logentry_set.order_by().distinct().values('user__id', 'user__email')
         return ctx
 
 
