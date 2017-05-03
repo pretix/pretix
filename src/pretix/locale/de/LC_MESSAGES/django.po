@@ -5304,7 +5304,7 @@ msgstr "Team:"
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:11
 msgid "Create a new team"
-msgstr "Neues Team erstellen."
+msgstr "Neues Team erstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:10
 msgid "You will be able to add team members in the next step."
@@ -5364,7 +5364,7 @@ msgstr "Mitglieder"
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:34
 #, python-format
 msgid "+ %(count)s invited"
-msgstr "%(count)s eingeladen"
+msgstr "+ %(count)s eingeladen"
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:41
 msgid "All"
