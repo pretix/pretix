@@ -124,7 +124,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.waitinglist.voucher': _('A voucher has been sent to a person on the waiting list.'),
         'pretix.team.created': _('The team has been created.'),
         'pretix.team.changed': _('The team settings have been modified.'),
-        'pretix.team.deleted': _('The team settings has been deleted.'),
+        'pretix.team.deleted': _('The team has been deleted.'),
     }
 
     data = json.loads(logentry.data)

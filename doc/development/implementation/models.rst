@@ -64,7 +64,7 @@ Carts and Orders
    :members:
 
 .. autoclass:: pretix.base.models.QuestionAnswer
-:members:
+   :members:
 
 .. autoclass:: pretix.base.models.Checkin
    :members:
