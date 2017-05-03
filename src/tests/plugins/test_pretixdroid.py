@@ -60,6 +60,7 @@ def test_flush_key(client, env):
 def test_custom_datetime(client, env):
     env[0].settings.set('pretixdroid_key', 'abcdefg')
     dt = now() - timedelta(days=1)
+    dt = dt.replace(microsecond=0)
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '1234', 'datetime': dt.isoformat()})
     jdata = json.loads(resp.content.decode("utf-8"))
