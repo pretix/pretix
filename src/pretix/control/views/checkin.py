@@ -13,21 +13,16 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
     permission = 'can_view_orders'
 
     def get_queryset(self):
-        filters = {}
+
+        qs = OrderPosition.objects.filter(order__event=self.request.event, order__status='p')
+
         if self.request.GET.get("status", "") != "":
             p = self.request.GET.get("status", "")
             if p == '1':
                 # records with check-in record
-                filters['checkins__isnull'] = False
+                qs = qs.filter(checkins__isnull=False)
             elif p == '0':
-                filters['checkins__isnull'] = True
-
-        filters['order__event'] = self.request.event
-        filters['order__status'] = 'p'
-        filters['item__admission'] = True
-        qs = OrderPosition.objects.filter(**filters).prefetch_related(
-            Prefetch('checkins', queryset=Checkin.objects.filter(position__order__event=self.request.event))
-        ).select_related('order')
+                qs = qs.filter(checkins__isnull=True)
 
         if self.request.GET.get("user", "") != "":
             u = self.request.GET.get("user", "")
@@ -36,10 +31,19 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
                 | Q(order__positions__attendee_email__icontains=u)
             )
 
+        if self.request.GET.get("item", "") != "":
+            u = self.request.GET.get("item", "")
+            qs = qs.filter(item__name__icontains=u)
+
+        qs = qs.prefetch_related(
+            Prefetch('checkins', queryset=Checkin.objects.filter(position__order__event=self.request.event))
+        ).select_related('order', 'item')
+
         if self.request.GET.get("ordering", "") != "":
             p = self.request.GET.get("ordering", "")
             allowed_ordering_keys = ('-order__code', 'order__code', '-order__email', 'order__email',
-                                     '-checkins__id', 'checkins__id', '-checkins__datetime', 'checkins__datetime')
+                                     '-checkins__id', 'checkins__id', '-checkins__datetime', 'checkins__datetime',
+                                     '-attendee_name', 'attendee_name', '-item__name', 'item__name')
             if p in allowed_ordering_keys:
                 qs = qs.order_by(p)
 

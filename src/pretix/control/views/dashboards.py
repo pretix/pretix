@@ -170,8 +170,8 @@ def shop_state_widget(sender, **kwargs):
 
 @receiver(signal=event_dashboard_widgets)
 def checkin_widget(sender, **kwargs):
-    size = OrderPosition.objects.filter(order__event=sender, order__status='p', item__admission=True).count()
-    checked = Checkin.objects.filter(position__order__event=sender, position__order__status='p', position__item__admission=True).count()
+    size = OrderPosition.objects.filter(order__event=sender, order__status='p').count()
+    checked = OrderPosition.objects.filter(order__event=sender, order__status='p', checkins__isnull=False).count()
     return [{
         'content': NUM_WIDGET.format(num='{}/{}'.format(checked, size), text=_('Checked in')),
         'display_size': 'small',
