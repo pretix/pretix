@@ -1,6 +1,7 @@
 import json
 
 import dateutil.parser
+import pytz
 from django.core.urlresolvers import resolve, reverse
 from django.dispatch import receiver
 from django.utils.formats import date_format
@@ -34,17 +35,31 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
         return
 
     data = json.loads(logentry.data)
+
+    show_dt = False
+    if 'datetime' in data:
+        dt = dateutil.parser.parse(data.get('datetime'))
+        show_dt = abs((logentry.datetime - dt).total_seconds()) > 60 or 'forced' in data
+        tz = pytz.timezone(sender.settings.timezone)
+        dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
+
     if data.get('first'):
-        return _('Position #{posid} has been scanned.'.format(
-            posid=data.get('positionid')
-        ))
+        if show_dt:
+            return _('Position #{posid} has been scanned at {datetime}.').format(
+                posid=data.get('positionid'),
+                datetime=dt_formatted
+            )
+        else:
+            return _('Position #{posid} has been scanned.').format(
+                posid=data.get('positionid')
+            )
     else:
         if data.get('forced'):
             return _(
                 'A scan for position #{posid} at {datetime} has been uploaded even though it has '
                 'been scanned already.'.format(
                     posid=data.get('positionid'),
-                    datetime=date_format(dateutil.parser.parse(data.get('datetime')), "SHORT_DATETIME_FORMAT")
+                    datetime=dt_formatted
                 )
             )
         return _('Position #{posid} has been scanned and rejected because it has already been scanned before.'.format(

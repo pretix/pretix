@@ -86,7 +86,7 @@ class ApiRedeemView(ApiView):
                 op = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').get(
                     order__event=self.event, secret=secret
                 )
-                if op.order.status == Order.STATUS_PAID:
+                if op.order.status == Order.STATUS_PAID or force:
                     ci, created = Checkin.objects.get_or_create(position=op, defaults={
                         'datetime': dt,
                         'nonce': nonce,
@@ -103,7 +103,7 @@ class ApiRedeemView(ApiView):
                             'position': op.id,
                             'positionid': op.positionid,
                             'first': True,
-                            'forced': False,
+                            'forced': op.order.status != Order.STATUS_PAID,
                             'datetime': dt,
                         })
                 else:
