@@ -70,6 +70,7 @@ class ApiRedeemView(ApiView):
     def post(self, request, **kwargs):
         secret = request.POST.get('secret', '!INVALID!')
         force = request.POST.get('force', 'false') in ('true', 'True')
+        nonce = request.POST.get('nonce')
         response = {
             'version': API_VERSION
         }
@@ -86,24 +87,25 @@ class ApiRedeemView(ApiView):
                     order__event=self.event, secret=secret
                 )
                 if op.order.status == Order.STATUS_PAID:
-                    ci, created = Checkin.objects.get_or_create(position=op)
-                    if created and 'datetime' in request.POST:
-                        ci.datetime = dt
-                        ci.save()
+                    ci, created = Checkin.objects.get_or_create(position=op, defaults={
+                        'datetime': dt,
+                        'nonce': nonce,
+                    })
                 else:
                     response['status'] = 'error'
                     response['reason'] = 'unpaid'
 
             if 'status' not in response:
-                if created:
+                if created or (nonce and nonce == ci.nonce):
                     response['status'] = 'ok'
-                    op.order.log_action('pretix.plugins.pretixdroid.scan', data={
-                        'position': op.id,
-                        'positionid': op.positionid,
-                        'first': True,
-                        'forced': False,
-                        'datetime': dt,
-                    })
+                    if created:
+                        op.order.log_action('pretix.plugins.pretixdroid.scan', data={
+                            'position': op.id,
+                            'positionid': op.positionid,
+                            'first': True,
+                            'forced': False,
+                            'datetime': dt,
+                        })
                 else:
                     if force:
                         response['status'] = 'ok'

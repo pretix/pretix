@@ -86,6 +86,22 @@ def test_only_once(client, env):
 
 
 @pytest.mark.django_db
+def test_reupload_same_nonce(client, env):
+    env[0].settings.set('pretixdroid_key', 'abcdefg')
+
+    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
+                       data={'secret': '1234', 'nonce': 'fooobar'})
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert jdata['version'] == 2
+    assert jdata['status'] == 'ok'
+    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
+                       data={'secret': '1234', 'nonce': 'fooobar'})
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert jdata['status'] == 'ok'
+    assert Checkin.objects.count() == 1
+
+
+@pytest.mark.django_db
 def test_forced_multiple(client, env):
     env[0].settings.set('pretixdroid_key', 'abcdefg')
 

@@ -29,6 +29,10 @@ uses to communicate with the pretix server.
    You can optionally include the additional parameter ``force`` to indicate that the request should be logged
    regardless of previous check-ins for the same ticket. This might be useful if you made the entry decision offline.
 
+   You can optionally include the additional parameter ``nonce`` with a globally unique random value to identify this
+   check-in. This is meant to be used to prevent duplicate check-ins when you are just retrying after a connection
+   failure.
+
    **Example successful response**:
 
    .. sourcecode:: http
