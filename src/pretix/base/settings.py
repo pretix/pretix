@@ -187,6 +187,10 @@ DEFAULTS = {
         'default': settings.MAIL_FROM,
         'type': str
     },
+    'mail_text_signature': {
+        'type': LazyI18nString,
+        'default': None
+    },
     'mail_text_resend_link': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,

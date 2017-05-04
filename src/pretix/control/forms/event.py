@@ -474,6 +474,15 @@ class MailSettingsForm(SettingsForm):
         label=_("Sender address"),
         help_text=_("Sender address for outgoing emails")
     )
+    
+    mail_text_signature = I18nFormField(
+        label=_("Signature"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("This will be attached to every email. Available placeholders: {event}, {url}"),
+        validators=[PlaceholderValidator(['{event}', '{url}'])]
+    )
+    
     mail_text_order_placed = I18nFormField(
         label=_("Text"),
         required=False,
