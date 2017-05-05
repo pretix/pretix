@@ -137,7 +137,7 @@ class Event(LoggedModel):
             return []
         return self.plugins.split(",")
 
-    def get_date_from_display(self, tz=None) -> str:
+    def get_date_from_display(self, tz=None, show_times=True) -> str:
         """
         Returns a formatted string containing the start date of the event with respect
         to the current locale and to the ``show_times`` setting.
@@ -145,7 +145,17 @@ class Event(LoggedModel):
         tz = tz or pytz.timezone(self.settings.timezone)
         return _date(
             self.date_from.astimezone(tz),
-            "DATETIME_FORMAT" if self.settings.show_times else "DATE_FORMAT"
+            "DATETIME_FORMAT" if self.settings.show_times and show_times else "DATE_FORMAT"
+        )
+
+    def get_time_from_display(self, tz=None) -> str:
+        """
+        Returns a formatted string containing the start time of the event, ignoring
+        the ``show_times`` setting.
+        """
+        tz = tz or pytz.timezone(self.settings.timezone)
+        return _date(
+            self.date_from.astimezone(tz), "TIME_FORMAT"
         )
 
     def get_date_to_display(self, tz=None) -> str:

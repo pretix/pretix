@@ -4,7 +4,10 @@ src/static/typeahead/* linguist-vendored
 src/static/moment/* linguist-vendored
 src/static/datetimepicker/* linguist-vendored
 src/static/colorpicker/* linguist-vendored
+src/static/fileupload/* linguist-vendored
 src/static/charts/* linguist-vendored
+src/pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/fabric.* linguist-vendored
+src/pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/pdf.* linguist-vendored
 
 # Denote all files that are truly binary and should not be modified.
 *.eot binary
