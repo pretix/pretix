@@ -1,0 +1,138 @@
+import json
+import logging
+import mimetypes
+from datetime import timedelta
+
+from django.core.files import File
+from django.core.files.storage import default_storage
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.utils.crypto import get_random_string
+from django.utils.timezone import now
+from django.utils.translation import ugettext as _
+from django.views.generic import TemplateView
+
+from pretix.base.i18n import language
+from pretix.base.models import CachedFile
+from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views import ChartContainingView
+from pretix.helpers.database import rolledback_transaction
+from pretix.plugins.ticketoutputpdf.signals import get_fonts
+
+from .ticketoutput import PdfTicketOutput
+
+logger = logging.getLogger(__name__)
+
+
+class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView):
+    template_name = 'pretixplugins/ticketoutputpdf/index.html'
+    permission = 'can_change_settings'
+    accepted_formats = (
+        'application/pdf',
+    )
+    maxfilesize = 1024 * 1024 * 10
+    minfilesize = 10
+
+    def process_upload(self):
+        f = self.request.FILES.get('background')
+        error = False
+        if f.size > self.maxfilesize:
+            error = _('The uploaded PDF file is to large.')
+        if f.size < self.minfilesize:
+            error = _('The uploaded PDF file is to small.')
+        if mimetypes.guess_type(f.name)[0] not in self.accepted_formats:
+            error = _('Please only upload PDF files.')
+        # if there was an error, add error message to response_data and return
+        if error:
+            return error, None
+        return None, f
+
+    def post(self, request, *args, **kwargs):
+        if "background" in request.FILES:
+            error, fileobj = self.process_upload()
+            if error:
+                return JsonResponse({
+                    "status": "error",
+                    "error": error
+                })
+            c = CachedFile()
+            c.expires = now() + timedelta(days=7)
+            c.date = now()
+            c.filename = 'background.pdf'
+            c.type = 'application/pdf'
+            c.file = fileobj
+            c.save()
+            c.refresh_from_db()
+            return JsonResponse({
+                "status": "ok",
+                "id": c.id,
+                "url": c.file.url
+            })
+
+        cf = None
+        if request.POST.get("background", "").strip():
+            try:
+                cf = CachedFile.objects.get(id=request.POST.get("background"))
+            except CachedFile.DoesNotExist:
+                pass
+
+        if "preview" in request.POST:
+            with rolledback_transaction(), language(request.event.settings.locale):
+                item = request.event.items.create(name=_("Sample product"), default_price=42.23)
+
+                from pretix.base.models import Order
+                order = request.event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
+                                                    email='sample@pretix.eu',
+                                                    expires=now(), code="PREVIEW1234", total=119)
+
+                p = order.positions.create(item=item, attendee_name=_("John Doe"), price=item.default_price)
+
+                prov = PdfTicketOutput(request.event,
+                                       override_layout=json.loads(request.POST.get("data")),
+                                       override_background=cf.file if cf else None)
+                fname, mimet, data = prov.generate(p)
+
+            resp = HttpResponse(data, content_type=mimet)
+            ftype = fname.split(".")[-1]
+            resp['Content-Security-Policy'] = "style-src 'unsafe-inline'; object-src 'self'"
+            resp['Content-Disposition'] = 'inline; filename="ticket-preview.{}"'.format(ftype)
+            return resp
+        elif "data" in request.POST:
+            if cf:
+                fexisting = request.event.settings.get('ticketoutput_pdf_layout', as_type=File)
+                if fexisting:
+                    try:
+                        default_storage.delete(fexisting.name)
+                    except OSError:  # pragma: no cover
+                        logger.error('Deleting file %s failed.' % fexisting.name)
+
+                # Create new file
+                nonce = get_random_string(length=8)
+                fname = '%s-%s/%s/%s.%s.%s' % (
+                    'event', 'settings', self.request.event.pk, 'ticketoutput_pdf_layout', nonce, 'pdf'
+                )
+                newname = default_storage.save(fname, cf.file)
+                request.event.settings.set('ticketoutput_pdf_background', 'file://' + newname)
+
+            request.event.settings.set('ticketoutput_pdf_layout', request.POST.get("data"))
+            return JsonResponse({'status': 'ok'})
+        return HttpResponseBadRequest()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        prov = PdfTicketOutput(self.request.event)
+        ctx['fonts'] = get_fonts()
+        ctx['layout'] = json.dumps(
+            self.request.event.settings.get('ticketoutput_pdf_layout', as_type=list)
+            or prov._default_layout()
+        )
+        return ctx
+
+
+class FontsCSSView(TemplateView):
+    content_type = 'text/css'
+    template_name = 'pretixplugins/ticketoutputpdf/webfonts.css'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['fonts'] = get_fonts()
+        return ctx

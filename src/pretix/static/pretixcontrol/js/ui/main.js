@@ -83,7 +83,7 @@ $(function () {
     });
 
     $('.collapsible').collapse();
-    
+
     $('[data-toggle="tooltip"]').tooltip();
 
     var url = document.location.toString();
@@ -190,7 +190,19 @@ $(function () {
     $(".colorpickerfield").colorpicker({
         format: 'hex',
         align: 'left',
-        customClass: 'colorpicker-2x'
+        customClass: 'colorpicker-2x',
+        sliders: {
+            saturation: {
+                maxLeft: 200,
+                maxTop: 200
+            },
+            hue: {
+                maxTop: 200
+            },
+            alpha: {
+                maxTop: 200
+            }
+        }
     });
 
     $("input[data-checkbox-dependency]").each(function () {
