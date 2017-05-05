@@ -163,6 +163,10 @@ DEFAULTS = {
         'default': 'False',
         'type': bool
     },
+    'ticket_download_nonadm': {
+        'default': 'True',
+        'type': bool
+    },
     'last_order_modification_date': {
         'default': None,
         'type': datetime
