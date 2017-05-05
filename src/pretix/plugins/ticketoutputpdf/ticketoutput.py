@@ -93,6 +93,8 @@ class PdfTicketOutput(BaseTicketOutput):
         for op in order.positions.all():
             if op.addon_to_id and not self.event.settings.ticket_download_addons:
                 continue
+            if not op.item.admission and not self.event.settings.ticket_download_nonadm:
+                continue
             self._draw_page(p, op, order)
         p.save()
         outbuffer = self._render_with_background(buffer)
