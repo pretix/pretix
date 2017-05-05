@@ -479,8 +479,8 @@ class MailSettingsForm(SettingsForm):
         label=_("Signature"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("This will be attached to every email. Available placeholders: {event}, {url}"),
-        validators=[PlaceholderValidator(['{event}', '{url}'])]
+        help_text=_("This will be attached to every email. Available placeholders: {event}"),
+        validators=[PlaceholderValidator(['{event}'])]
     )
     
     mail_text_order_placed = I18nFormField(
