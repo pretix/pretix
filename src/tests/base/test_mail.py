@@ -47,6 +47,16 @@ def test_send_mail_with_event_sender(env):
     assert djmail.outbox[0].subject == 'Test subject'
     assert djmail.outbox[0].from_email == 'foo@bar'
 
+@pytest.mark.django_db
+def test_send_mail_with_event_signature(env):
+    djmail.outbox = []
+    event, user, organizer = env
+    event.settings.set('mail_text_signature', 'This is a test signature.')
+    mail('dummy@dummy.dummy', 'Test subject', 'mailtest.txt', {}, event)
+
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [user.email]
+    assert 'This is a test signature.' in djmail.outbox[0].body
 
 @pytest.mark.django_db
 def test_send_mail_with_default_sender(env):
