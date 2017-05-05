@@ -189,7 +189,7 @@ DEFAULTS = {
     },
     'mail_text_signature': {
         'type': LazyI18nString,
-        'default': None
+        'default': ""
     },
     'mail_text_resend_link': {
         'type': LazyI18nString,
