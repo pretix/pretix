@@ -13,7 +13,7 @@ from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import (
-    Checkin, Item, Order, OrderPosition, Voucher, WaitingListEntry,
+    Item, Order, OrderPosition, Voucher, WaitingListEntry,
 )
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,

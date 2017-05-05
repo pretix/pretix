@@ -201,6 +201,7 @@ event_permission_urls = [
     ("can_change_vouchers", "vouchers/1234/delete", 404),
     ("can_view_orders", "waitinglist/", 200),
     ("can_change_orders", "waitinglist/auto_assign", 405),
+    ("can_view_orders", "checkins/", 200),
 ]
 
 

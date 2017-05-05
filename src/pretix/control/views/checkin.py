@@ -27,8 +27,7 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
         if self.request.GET.get("user", "") != "":
             u = self.request.GET.get("user", "")
             qs = qs.filter(
-                Q(order__email__icontains=u) | Q(order__positions__attendee_name__icontains=u)
-                | Q(order__positions__attendee_email__icontains=u)
+                Q(order__email__icontains=u) | Q(attendee_name__icontains=u) | Q(attendee_email__icontains=u)
             )
 
         if self.request.GET.get("item", "") != "":
