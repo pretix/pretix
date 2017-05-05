@@ -114,16 +114,16 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
                 subject = "[%s] %s" % (prefix, subject)
 
             body_plain += "\r\n\r\n-- \r\n"
-            
+
             signature = str(event.settings.get('mail_text_signature'))
             if signature:
                 signature = signature.format(event=event.name)
                 signature_md = signature.replace('\n', '<br>\n')
-                signature_md = bleach.linkify(bleach.clean(markdown.markdown(signature_md), tags=bleach.ALLOWED_TAGS + ['p','br']))
+                signature_md = bleach.linkify(bleach.clean(markdown.markdown(signature_md), tags=bleach.ALLOWED_TAGS + ['p', 'br']))
                 htmlctx['signature'] = signature_md
                 body_plain += signature
                 body_plain += "\r\n\r\n-- \r\n"
-                
+
             body_plain += _(
                 "You are receiving this email because you placed an order for {event}."
             ).format(event=event.name)
