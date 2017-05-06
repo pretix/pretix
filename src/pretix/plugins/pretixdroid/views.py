@@ -21,7 +21,7 @@ from pretix.multidomain.urlreverse import \
     build_absolute_uri as event_absolute_uri
 
 logger = logging.getLogger('pretix.plugins.pretixdroid')
-API_VERSION = 2
+API_VERSION = 3
 
 
 class ConfigView(EventPermissionRequiredMixin, TemplateView):

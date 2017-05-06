@@ -8,6 +8,7 @@ from pretix.base.models import (
     Checkin, Event, Item, ItemVariation, Order, OrderPosition, Organizer, Team,
     User,
 )
+from pretix.plugins.pretixdroid.views import API_VERSION
 
 
 @pytest.fixture
@@ -64,7 +65,7 @@ def test_custom_datetime(client, env):
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '1234', 'datetime': dt.isoformat()})
     jdata = json.loads(resp.content.decode("utf-8"))
-    assert jdata['version'] == 2
+    assert jdata['version'] == API_VERSION
     assert jdata['status'] == 'ok'
     assert Checkin.objects.last().datetime == dt
 
@@ -76,7 +77,7 @@ def test_only_once(client, env):
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '1234'})
     jdata = json.loads(resp.content.decode("utf-8"))
-    assert jdata['version'] == 2
+    assert jdata['version'] == API_VERSION
     assert jdata['status'] == 'ok'
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '1234'})
@@ -92,7 +93,7 @@ def test_reupload_same_nonce(client, env):
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '1234', 'nonce': 'fooobar'})
     jdata = json.loads(resp.content.decode("utf-8"))
-    assert jdata['version'] == 2
+    assert jdata['version'] == API_VERSION
     assert jdata['status'] == 'ok'
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '1234', 'nonce': 'fooobar'})
@@ -108,7 +109,7 @@ def test_forced_multiple(client, env):
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '1234'})
     jdata = json.loads(resp.content.decode("utf-8"))
-    assert jdata['version'] == 2
+    assert jdata['version'] == API_VERSION
     assert jdata['status'] == 'ok'
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '1234', 'force': 'true'})
