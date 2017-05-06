@@ -544,6 +544,8 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             return self.error(_('Ticket download is not (yet) enabled.'))
         if 'position' in kwargs and (self.order_position.addon_to and not self.request.event.settings.ticket_download_addons):
             return self.error(_('Ticket download is not enabled for add-on products.'))
+        if 'position' in kwargs and (not self.order_position.item.admission and not self.request.event.settings.ticket_download_nonadm):
+            return self.error(_('Ticket download is not enabled for non-admission products.'))
 
         if 'position' in kwargs:
             return self._download_position()

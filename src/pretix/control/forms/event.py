@@ -631,6 +631,11 @@ class TicketSettingsForm(SettingsForm):
         required=False,
         widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_ticket_download'}),
     )
+    ticket_download_nonadm = forms.BooleanField(
+        label=_("Generate tickets for non-admission products"),
+        required=False,
+        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_ticket_download'}),
+    )
 
     def prepare_fields(self):
         # See clean()
