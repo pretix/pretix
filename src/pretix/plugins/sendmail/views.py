@@ -38,8 +38,11 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     event=self.request.event,
                     action_type='pretix.plugins.sendmail.sent'
                 )
-                message = LazyI18nString(logentry.parsed_data['message'])
-                kwargs['initial'] = {'message': message}
+                kwargs['initial'] = {
+                    'message': LazyI18nString(logentry.parsed_data['message']),
+                    'subject': LazyI18nString(logentry.parsed_data['subject']),
+                    'sendto': logentry.parsed_data['sendto'],
+                }
             except LogEntry.DoesNotExist:
                 raise Http404(_('You supplied an invalid log entry ID'))
         return kwargs
