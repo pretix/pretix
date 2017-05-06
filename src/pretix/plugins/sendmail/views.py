@@ -4,13 +4,14 @@ from datetime import timedelta
 import pytz
 from django.contrib import messages
 from django.db.models import Q
+from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, ListView
 
-from pretix.base.i18n import language
+from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import LogEntry, Order
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -29,6 +30,18 @@ class SenderView(EventPermissionRequiredMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
+        if 'from_log' in self.request.GET:
+            try:
+                from_log_id = self.request.GET.get('from_log')
+                logentry = LogEntry.objects.get(
+                    id=from_log_id,
+                    event=self.request.event,
+                    action_type='pretix.plugins.sendmail.sent'
+                )
+                message = LazyI18nString(logentry.parsed_data['message'])
+                kwargs['initial'] = {'message': message}
+            except LogEntry.DoesNotExist:
+                raise Http404(_('You supplied an invalid log entry ID'))
         return kwargs
 
     def form_invalid(self, form):
