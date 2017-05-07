@@ -602,7 +602,8 @@ class DisplaySettingsForm(SettingsForm):
         validators=[
             RegexValidator(regex='^#[0-9a-fA-F]{6}$',
                            message=_('Please enter the hexadecimal code of a color, e.g. #990000.'))
-        ]
+        ],
+        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
     )
     logo_image = ExtFileField(
         label=_('Logo image'),
