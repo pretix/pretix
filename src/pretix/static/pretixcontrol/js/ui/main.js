@@ -187,6 +187,12 @@ $(function () {
         earlier_field.on("dp.change", update);
     });
 
+    $(".colorpickerfield").colorpicker({
+        format: 'hex',
+        align: 'left',
+        customClass: 'colorpicker-2x'
+    });
+
     $("input[data-checkbox-dependency]").each(function () {
         var dependent = $(this),
             dependency = $($(this).attr("data-checkbox-dependency")),
