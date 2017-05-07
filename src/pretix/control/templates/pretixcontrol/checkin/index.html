@@ -12,7 +12,15 @@
                 <option value="1" {% if request.GET.status == "1" %}selected="selected"{% endif %}>{% trans "Checked in" %}</option>
                 <option value="0" {% if request.GET.status == "0" %}selected="selected"{% endif %}>{% trans "Not checked in" %}</option>
             </select>
-            <input type="text" name="item" class="form-control" placeholder="{% trans "Search item" %}" value="{{ request.GET.item }}">
+            <select name="item" class="form-control">
+                <option value="">{% trans "All products" %}</option>
+                {% for item in items %}
+                    <option value="{{ item.id }}"
+                            {% if request.GET.item|add:0 == item.id %}selected="selected"{% endif %}>
+                        {{ item.name }}
+                    </option>
+                {% endfor %}
+            </select>
             <input type="text" name="user" class="form-control" placeholder="{% trans "Search user" %}" value="{{ request.GET.user }}">
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
         </form>
@@ -33,18 +41,18 @@
                 <table class="table table-condensed table-hover">
                     <thead>
                     <tr>
-                        <th>{% trans "Order code" %} <a href="?{% url_replace request 'ordering' '-order__code'%}"><i class="fa fa-caret-down"></i></a>
-                      <a href="?{% url_replace request 'ordering' 'order__code'%}"><i class="fa fa-caret-up"></i></a></th>
-                        <th>{% trans "Item" %} <a href="?{% url_replace request 'ordering' '-item__name'%}"><i class="fa fa-caret-down"></i></a>
-                      <a href="?{% url_replace request 'ordering' 'item__name'%}"><i class="fa fa-caret-up"></i></a></th>
-                        <th>{% trans "Email" %} <a href="?{% url_replace request 'ordering' '-order__email'%}"><i class="fa fa-caret-down"></i></a>
-                      <a href="?{% url_replace request 'ordering' 'order__email'%}"><i class="fa fa-caret-up"></i></a></th>
-                        <th>{% trans "Name" %} <a href="?{% url_replace request 'ordering' '-attendee_name'%}"><i class="fa fa-caret-down"></i></a>
-                      <a href="?{% url_replace request 'ordering' 'attendee_name'%}"><i class="fa fa-caret-up"></i></a></th>
-                        <th>{% trans "Status" %} <a href="?{% url_replace request 'ordering' '-checkins__id'%}"><i class="fa fa-caret-down"></i></a>
-                      <a href="?{% url_replace request 'ordering' 'checkins__id'%}"><i class="fa fa-caret-up"></i></a></th>
-                        <th>{% trans "Timestamp" %} <a href="?{% url_replace request 'ordering' '-checkins__datetime'%}"><i class="fa fa-caret-down"></i></a>
-                      <a href="?{% url_replace request 'ordering' 'checkins__datetime'%}"><i class="fa fa-caret-up"></i></a></th>
+                        <th>{% trans "Order code" %} <a href="?{% url_replace request 'ordering' '-code'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'code'%}"><i class="fa fa-caret-up"></i></a></th>
+                        <th>{% trans "Item" %} <a href="?{% url_replace request 'ordering' '-item'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'item'%}"><i class="fa fa-caret-up"></i></a></th>
+                        <th>{% trans "Email" %} <a href="?{% url_replace request 'ordering' '-email'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'email'%}"><i class="fa fa-caret-up"></i></a></th>
+                        <th>{% trans "Name" %} <a href="?{% url_replace request 'ordering' '-name'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'name'%}"><i class="fa fa-caret-up"></i></a></th>
+                        <th>{% trans "Status" %} <a href="?{% url_replace request 'ordering' '-status'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'status'%}"><i class="fa fa-caret-up"></i></a></th>
+                        <th>{% trans "Timestamp" %} <a href="?{% url_replace request 'ordering' '-timestamp'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'timestamp'%}"><i class="fa fa-caret-up"></i></a></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -58,7 +66,9 @@
                             <td>{{ e.item.name }}</td>
                             <td>{{ e.order.email }}</td>
                             <td>
-                                {% if e.attendee_name %}
+                                {% if e.addon_to %}
+                                    {{ e.addon_to.attendee_name }}
+                                {% elif e.attendee_name %}
                                     {{ e.attendee_name }}
                                 {% endif %}
                             </td>

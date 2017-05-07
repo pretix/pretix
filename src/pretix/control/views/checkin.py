@@ -1,7 +1,8 @@
 from django.db.models import Prefetch, Q
+from django.db.models.functions import Coalesce
 from django.views.generic import ListView
 
-from pretix.base.models import Checkin, OrderPosition
+from pretix.base.models import Checkin, Item, OrderPosition
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 
@@ -15,6 +16,10 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
     def get_queryset(self):
 
         qs = OrderPosition.objects.filter(order__event=self.request.event, order__status='p')
+
+        # if this setting is False, we check only items for admission
+        if not self.request.event.settings.ticket_download_nonadm:
+            qs = qs.filter(item__admission=True)
 
         if self.request.GET.get("status", "") != "":
             p = self.request.GET.get("status", "")
@@ -32,23 +37,43 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
 
         if self.request.GET.get("item", "") != "":
             u = self.request.GET.get("item", "")
-            qs = qs.filter(item__name__icontains=u)
+            qs = qs.filter(item_id__in=(u,))
 
         qs = qs.prefetch_related(
             Prefetch('checkins', queryset=Checkin.objects.filter(position__order__event=self.request.event))
-        ).select_related('order', 'item')
+        ).select_related('order', 'item', 'addon_to')
 
         if self.request.GET.get("ordering", "") != "":
             p = self.request.GET.get("ordering", "")
-            allowed_ordering_keys = ('-order__code', 'order__code', '-order__email', 'order__email',
-                                     '-checkins__id', 'checkins__id', '-checkins__datetime', 'checkins__datetime',
-                                     '-attendee_name', 'attendee_name', '-item__name', 'item__name')
-            if p in allowed_ordering_keys:
-                qs = qs.order_by(p)
+            keys_allowed = self.get_ordering_keys_mappings()
+            if p in keys_allowed:
+                mapped_field = keys_allowed[p]
+                if type(mapped_field) is tuple:
+                    qs = qs.annotate(**mapped_field[1]).order_by(mapped_field[0])
+                else:
+                    qs = qs.order_by(mapped_field)
 
         return qs.distinct()
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['filtered'] = ("status" in self.request.GET or "user" in self.request.GET)
+        ctx['items'] = Item.objects.filter(event=self.request.event)
+        ctx['filtered'] = ("status" in self.request.GET or "user" in self.request.GET or "item" in self.request.GET)
         return ctx
+
+    @staticmethod
+    def get_ordering_keys_mappings():
+        return {
+            'code': 'order__code',
+            '-code': '-order__code',
+            'email': 'order__email',
+            '-email': '-order__email',
+            'status': 'checkins__id',
+            '-status': '-checkins__id',
+            'timestamp': 'checkins__datetime',
+            '-timestamp': '-checkins__datetime',
+            'item': 'item__name',
+            '-item': '-item__name',
+            'name': ('display_name', {'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')}),
+            '-name': ('-display_name', {'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')}),
+        }
