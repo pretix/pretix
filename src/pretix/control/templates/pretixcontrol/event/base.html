@@ -90,6 +90,12 @@
                         {% trans "Waiting list" %}
                     </a>
                 </li>
+                <li>
+                    <a href="{% url 'control:event.orders.checkins' organizer=request.event.organizer.slug event=request.event.slug %}"
+                       {% if url_name == "event.orders.checkins" %}class="active"{% endif %}>
+                        {% trans "Check-ins" %}
+                    </a>
+                </li>
             </ul>
         </li>
     {% endif %}
