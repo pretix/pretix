@@ -4,8 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.models import Organizer, Team
-from pretix.multidomain.models import KnownDomain
 from pretix.control.forms import ExtFileField
+from pretix.multidomain.models import KnownDomain
 
 
 class OrganizerForm(I18nModelForm):
