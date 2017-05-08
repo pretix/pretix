@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Count
@@ -14,7 +15,7 @@ from django.views.generic import (
 from pretix.base.models import Organizer, Team, TeamInvite, User
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.organizer import (
-    OrganizerForm, OrganizerUpdateForm, TeamForm,
+    OrganizerForm, OrganizerSettingsForm, OrganizerUpdateForm, TeamForm,
 )
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
 from pretix.control.signals import nav_organizer
@@ -82,10 +83,47 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
     permission = 'can_change_organizer_settings'
     context_object_name = 'organizer'
 
-    def get_object(self, queryset=None) -> Organizer:
+    @cached_property
+    def object(self) -> Organizer:
         return self.request.organizer
 
+    def get_object(self, queryset=None) -> Organizer:
+        return self.object
+
+    @cached_property
+    def sform(self):
+        return OrganizerSettingsForm(
+            obj=self.object,
+            prefix='settings',
+            data=self.request.POST if self.request.method == 'POST' else None,
+            files=self.request.FILES if self.request.method == 'POST' else None
+        )
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        context['sform'] = self.sform
+        return context
+
+    @transaction.atomic
     def form_valid(self, form):
+        self.sform.save()
+        if self.sform.has_changed():
+            self.request.organizer.log_action(
+                'pretix.organizer.settings',
+                user=self.request.user,
+                data={
+                    k: (self.sform.cleaned_data.get(k).name
+                        if isinstance(self.sform.cleaned_data.get(k), File)
+                        else self.sform.cleaned_data.get(k))
+                    for k in self.sform.changed_data
+                }
+            )
+        if form.has_changed():
+            self.request.organizer.log_action(
+                'pretix.organizer.changed',
+                user=self.request.user,
+                data={k: form.cleaned_data.get(k) for k in form.changed_data}
+            )
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
@@ -99,6 +137,13 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
         return reverse('control:organizer.edit', kwargs={
             'organizer': self.request.organizer.slug,
         })
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid() and self.sform.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 
 class OrganizerCreate(CreateView):
