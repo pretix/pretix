@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-03 15:13+0000\n"
-"PO-Revision-Date: 2017-05-03 17:23+0200\n"
+"POT-Creation-Date: 2017-05-09 09:07+0000\n"
+"PO-Revision-Date: 2017-05-09 11:21+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -48,6 +48,7 @@ msgstr "Nur bezahlte Bestellungen"
 #: pretix/plugins/checkinlists/exporters.py:50
 #: pretix/plugins/checkinlists/exporters.py:82
 #: pretix/plugins/reports/exporters.py:319
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:262
 msgid "Order code"
 msgstr "Bestellnummer"
 
@@ -168,7 +169,7 @@ msgid "E-mail"
 msgstr "E-Mail"
 
 #: pretix/base/forms/auth.py:17 pretix/base/forms/auth.py:80
-#: pretix/base/forms/auth.py:126 pretix/control/forms/event.py:560
+#: pretix/base/forms/auth.py:126 pretix/control/forms/event.py:569
 #: pretix/control/templates/pretixcontrol/user/reauth.html:14
 msgid "Password"
 msgstr "Passwort"
@@ -288,7 +289,7 @@ msgstr "Zeitzone"
 #: pretix/control/templates/pretixcontrol/order/index.html:90
 #: pretix/control/templates/pretixcontrol/orders/index.html:78
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:94
-#: pretix/control/views/organizer.py:38 tests/base/test_mail.py:74
+#: pretix/control/views/organizer.py:38 tests/base/test_mail.py:86
 msgid "User"
 msgstr "Benutzer"
 
@@ -382,7 +383,7 @@ msgid "Event"
 msgstr "Veranstaltung"
 
 #: pretix/base/models/event.py:114
-#: pretix/control/templates/pretixcontrol/base.html:162
+#: pretix/control/templates/pretixcontrol/base.html:165
 #: pretix/control/templates/pretixcontrol/events/index.html:3
 #: pretix/control/templates/pretixcontrol/events/index.html:5
 #: pretix/control/templates/pretixcontrol/organizers/base.html:19
@@ -905,6 +906,7 @@ msgid "Variation"
 msgstr "Variante"
 
 #: pretix/base/models/orders.py:415 pretix/plugins/checkinlists/exporters.py:82
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:266
 msgid "Price"
 msgstr "Preis"
 
@@ -912,6 +914,7 @@ msgstr "Preis"
 #: pretix/control/templates/pretixcontrol/order/index.html:190
 #: pretix/plugins/checkinlists/exporters.py:49
 #: pretix/plugins/checkinlists/exporters.py:82
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:267
 #: pretix/presale/forms/checkout.py:78
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:21
 msgid "Attendee name"
@@ -979,7 +982,7 @@ msgid "Organizer"
 msgstr "Veranstalter"
 
 #: pretix/base/models/organizer.py:48
-#: pretix/control/templates/pretixcontrol/base.html:168
+#: pretix/control/templates/pretixcontrol/base.html:171
 #: pretix/control/templates/pretixcontrol/organizers/index.html:3
 #: pretix/control/templates/pretixcontrol/organizers/index.html:5
 msgid "Organizers"
@@ -1272,7 +1275,7 @@ msgid "You have been selected from the waitinglist for {event}"
 msgstr "Du wurdest von der Warteliste für {event} ausgewählt"
 
 #: pretix/base/payment.py:31 pretix/control/forms/event.py:394
-#: pretix/control/forms/event.py:655
+#: pretix/control/forms/event.py:670
 msgid "This field is required."
 msgstr "Dieses Feld ist erforderlich."
 
@@ -1673,14 +1676,14 @@ msgstr ""
 msgid "Sample product A"
 msgstr "Beispielprodukt A"
 
-#: pretix/base/services/mail.py:118
+#: pretix/base/services/mail.py:128
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
 msgstr ""
 "Du erhältst diese E-Mail, weil du eine Bestellung für die Veranstaltung "
 "{event} getätigt hast."
 
-#: pretix/base/services/mail.py:124
+#: pretix/base/services/mail.py:134
 #, python-brace-format
 msgid ""
 "You can view your order details at the following URL:\n"
@@ -1860,10 +1863,12 @@ msgid "Payment method fees"
 msgstr "Zahlungsgebühren"
 
 #: pretix/base/services/tickets.py:75
+#: pretix/plugins/ticketoutputpdf/views.py:80
 msgid "Sample product"
 msgstr "Beispielprodukt"
 
-#: pretix/base/services/tickets.py:81 pretix/control/views/event.py:468
+#: pretix/base/services/tickets.py:81 pretix/control/views/event.py:469
+#: pretix/plugins/ticketoutputpdf/views.py:87
 msgid "John Doe"
 msgstr "Max Mustermann"
 
@@ -1912,7 +1917,7 @@ msgstr ""
 msgid "Plugin: %s"
 msgstr "Plugin: %s"
 
-#: pretix/base/settings.py:192
+#: pretix/base/settings.py:200
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -1938,7 +1943,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:205
+#: pretix/base/settings.py:213
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -1963,7 +1968,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:217
+#: pretix/base/settings.py:225
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -1989,7 +1994,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:230
+#: pretix/base/settings.py:238
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -2017,7 +2022,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:245
+#: pretix/base/settings.py:253
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -2040,7 +2045,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:257
+#: pretix/base/settings.py:265
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -2067,7 +2072,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:275
+#: pretix/base/settings.py:283
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -2095,7 +2100,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:289
+#: pretix/base/settings.py:297
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -2266,19 +2271,19 @@ msgstr "Bestelldatum:"
 msgid "View order details"
 msgstr "Bestelldetails anzeigen"
 
-#: pretix/base/templates/pretixbase/email/plainwrapper.html:155
+#: pretix/base/templates/pretixbase/email/plainwrapper.html:167
 #: pretix/control/templates/pretixcontrol/auth/base.html:29
-#: pretix/control/templates/pretixcontrol/base.html:235
+#: pretix/control/templates/pretixcontrol/base.html:238
 #: pretix/presale/templates/pretixpresale/base_footer.html:5
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
 msgstr "powered by <a %(a_attr)s>pretix</a>"
 
-#: pretix/base/ticketoutput.py:122
+#: pretix/base/ticketoutput.py:125
 msgid "Enable output"
 msgstr "Aktivieren"
 
-#: pretix/base/ticketoutput.py:140
+#: pretix/base/ticketoutput.py:143
 msgid "Download ticket"
 msgstr "Ticket herunterladen"
 
@@ -2796,7 +2801,7 @@ msgstr "Rechnungssprache"
 msgid "The user's language"
 msgstr "Sprache des Benutzers"
 
-#: pretix/control/forms/event.py:459 pretix/control/forms/event.py:599
+#: pretix/control/forms/event.py:459 pretix/control/forms/event.py:609
 msgid "Logo image"
 msgstr "Logo"
 
@@ -2824,13 +2829,23 @@ msgstr "Absender-Adresse"
 msgid "Sender address for outgoing emails"
 msgstr "Absender-Adresse für ausgehende E-Mails"
 
-#: pretix/control/forms/event.py:478 pretix/control/forms/event.py:487
-#: pretix/control/forms/event.py:494 pretix/control/forms/event.py:501
-#: pretix/control/forms/event.py:529 pretix/control/forms/event.py:536
+#: pretix/control/forms/event.py:479
+msgid "Signature"
+msgstr "Signatur"
+
+#: pretix/control/forms/event.py:482
+#, python-brace-format
+msgid "This will be attached to every email. Available placeholders: {event}"
+msgstr "Diese wird an jede E-Mail angehängt. Verfügbare Platzhalter: {event}"
+
+#: pretix/control/forms/event.py:487 pretix/control/forms/event.py:496
+#: pretix/control/forms/event.py:503 pretix/control/forms/event.py:510
+#: pretix/control/forms/event.py:538 pretix/control/forms/event.py:545
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:287
 msgid "Text"
 msgstr "Text"
 
-#: pretix/control/forms/event.py:481
+#: pretix/control/forms/event.py:490
 #, python-brace-format
 msgid ""
 "Available placeholders: {event}, {total}, {currency}, {date}, {paymentinfo}, "
@@ -2839,7 +2854,7 @@ msgstr ""
 "Verfügbare Platzhalter: {event}, {total}, {currency}, {date}, {paymentinfo}, "
 "{url}, {invoice_name}, {invoice_company}"
 
-#: pretix/control/forms/event.py:490
+#: pretix/control/forms/event.py:499
 #, python-brace-format
 msgid ""
 "Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}, "
@@ -2848,32 +2863,32 @@ msgstr ""
 "Verfügbare Platzhalter: {event}, {url}, {invoice_name}, {invoice_company}, "
 "{payment_info}"
 
-#: pretix/control/forms/event.py:497 pretix/control/forms/event.py:504
-#: pretix/control/forms/event.py:511
+#: pretix/control/forms/event.py:506 pretix/control/forms/event.py:513
+#: pretix/control/forms/event.py:520
 #, python-brace-format
 msgid ""
 "Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}"
 msgstr ""
 "Verfügbare Platzhalter:{event}, {url}, {invoice_name}, {invoice_company}"
 
-#: pretix/control/forms/event.py:508
+#: pretix/control/forms/event.py:517
 msgid "Text (sent by admin)"
 msgstr "Text (vom Admin verschickt)"
 
-#: pretix/control/forms/event.py:515
+#: pretix/control/forms/event.py:524
 msgid "Text (requested by user)"
 msgstr "Text (vom Benutzer beantragt)"
 
-#: pretix/control/forms/event.py:518
+#: pretix/control/forms/event.py:527
 #, python-brace-format
 msgid "Available placeholders: {event}, {orders}"
 msgstr "Verfügbare Platzhalter: {event}, {orders}"
 
-#: pretix/control/forms/event.py:522
+#: pretix/control/forms/event.py:531
 msgid "Number of days"
 msgstr "Anzahl Tage"
 
-#: pretix/control/forms/event.py:525
+#: pretix/control/forms/event.py:534
 msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
@@ -2881,7 +2896,7 @@ msgstr ""
 "Die E-Mail wird die angegebene Anzahl an Tagen vor dem Ablaufdatum "
 "verschickt. Ist der Wert 0, wird die Mail nie verschickt."
 
-#: pretix/control/forms/event.py:532
+#: pretix/control/forms/event.py:541
 #, python-brace-format
 msgid ""
 "Available placeholders: {event}, {url}, {expire_date}, {invoice_name}, "
@@ -2890,16 +2905,16 @@ msgstr ""
 "Verfügbare Platzhalter: {event}, {url}, {expire_date}, {invoice_name}, "
 "{invoice_company}"
 
-#: pretix/control/forms/event.py:539
+#: pretix/control/forms/event.py:548
 #, python-brace-format
 msgid "Available placeholders: {event}, {url}, {product}, {hours}, {code}"
 msgstr "Verfügbare Platzhalter: {event}, {url}, {product}, {hours}, {code}"
 
-#: pretix/control/forms/event.py:543
+#: pretix/control/forms/event.py:552
 msgid "Use custom SMTP server"
 msgstr "Eigenen SMTP-Server verwenden"
 
-#: pretix/control/forms/event.py:544
+#: pretix/control/forms/event.py:553
 msgid ""
 "All mail related to your event will be sent over the smtp server specified "
 "by you."
@@ -2907,49 +2922,49 @@ msgstr ""
 "Alle E-Mails bezüglich deiner Veranstaltung werden über den von dir "
 "angegebenen SMTP-Server versendet."
 
-#: pretix/control/forms/event.py:548
+#: pretix/control/forms/event.py:557
 msgid "Hostname"
 msgstr "Hostname"
 
-#: pretix/control/forms/event.py:552
+#: pretix/control/forms/event.py:561
 msgid "Port"
 msgstr "Port"
 
-#: pretix/control/forms/event.py:556
+#: pretix/control/forms/event.py:565
 msgid "Username"
 msgstr "Benutzername"
 
-#: pretix/control/forms/event.py:567
+#: pretix/control/forms/event.py:576
 msgid "Use STARTTLS"
 msgstr "STARTTLS verwenden"
 
-#: pretix/control/forms/event.py:568
+#: pretix/control/forms/event.py:577
 msgid "Commonly enabled on port 587."
 msgstr "Meistens auf Port 587 verfügbar."
 
-#: pretix/control/forms/event.py:572
+#: pretix/control/forms/event.py:581
 msgid "Use SSL"
 msgstr "SSL verwenden"
 
-#: pretix/control/forms/event.py:573
+#: pretix/control/forms/event.py:582
 msgid "Commonly enabled on port 465."
 msgstr "Meistens auf Port 465 verfügbar."
 
-#: pretix/control/forms/event.py:586
+#: pretix/control/forms/event.py:595
 msgid ""
 "You can activate either SSL or STARTTLS security, but not both at the same "
 "time."
 msgstr "Du kannst nur SSL oder STARTTLS aktivieren, nicht beides."
 
-#: pretix/control/forms/event.py:591
+#: pretix/control/forms/event.py:600
 msgid "Primary color"
 msgstr "Hauptfarbe"
 
-#: pretix/control/forms/event.py:595
+#: pretix/control/forms/event.py:604
 msgid "Please enter the hexadecimal code of a color, e.g. #990000."
 msgstr "Bitte gib einen hexadezimalen Farbwert ein, z.B. #990000."
 
-#: pretix/control/forms/event.py:602
+#: pretix/control/forms/event.py:612
 msgid ""
 "If you provide a logo image, we will by default not show your events name "
 "and date in the page header. We will show your logo with a maximal height of "
@@ -2959,35 +2974,39 @@ msgstr ""
 "Veranstaltung nicht mehr oben auf der Seite an. Wir zeigen das Logo mit "
 "einer Höhe von maximal 120 Pixeln an."
 
-#: pretix/control/forms/event.py:606
+#: pretix/control/forms/event.py:616
 msgid "Frontpage text"
 msgstr "Text auf der Startseite"
 
-#: pretix/control/forms/event.py:611
+#: pretix/control/forms/event.py:621
 msgid "Show variations of a product expanded by default"
 msgstr "Zeige Produkt-Varianten standardmäßig ausgeklappt an"
 
-#: pretix/control/forms/event.py:618
+#: pretix/control/forms/event.py:628
 msgid "Use feature"
 msgstr "Funktion benutzen"
 
-#: pretix/control/forms/event.py:619
+#: pretix/control/forms/event.py:629
 msgid "Use pretix to generate tickets for the user to download and print out."
 msgstr ""
 "Wenn diese Funktion aktiviert ist, generiert pretix Tickets, die der "
 "Benutzer herunterladen und ausdrucken kann."
 
-#: pretix/control/forms/event.py:623
+#: pretix/control/forms/event.py:633
 msgid "Download date"
 msgstr "Download-Datum"
 
-#: pretix/control/forms/event.py:624
+#: pretix/control/forms/event.py:634
 msgid "Ticket download will be offered after this date."
 msgstr "Der Ticket-Download wird zu diesem Zeitpunkt freigeschaltet."
 
-#: pretix/control/forms/event.py:630
+#: pretix/control/forms/event.py:640
 msgid "Offer to download tickets separately for add-on products"
 msgstr "Biete Ticket-Download für Zusatz-Produkte an"
+
+#: pretix/control/forms/event.py:645
+msgid "Generate tickets for non-admission products"
+msgstr "Tickets für Produkte generieren, die keinen Zutritt enthalten"
 
 #: pretix/control/forms/global_settings.py:21
 msgid "Additional footer text"
@@ -3501,7 +3520,7 @@ msgid "The team settings have been modified."
 msgstr "Die Team-Einstellungen wurden geändert."
 
 #: pretix/control/logdisplay.py:127
-msgid "The team settings has been deleted."
+msgid "The team has been deleted."
 msgstr "Das Team wurde gelöscht."
 
 #: pretix/control/logdisplay.py:150
@@ -3669,10 +3688,10 @@ msgstr "Neues Passwort setzen"
 #: pretix/control/templates/pretixcontrol/auth/recover.html:15
 #: pretix/control/templates/pretixcontrol/event/display.html:17
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:27
-#: pretix/control/templates/pretixcontrol/event/mail.html:51
+#: pretix/control/templates/pretixcontrol/event/mail.html:52
 #: pretix/control/templates/pretixcontrol/event/payment.html:40
 #: pretix/control/templates/pretixcontrol/event/settings.html:56
-#: pretix/control/templates/pretixcontrol/event/tickets.html:39
+#: pretix/control/templates/pretixcontrol/event/tickets.html:40
 #: pretix/control/templates/pretixcontrol/global_settings.html:12
 #: pretix/control/templates/pretixcontrol/global_update.html:86
 #: pretix/control/templates/pretixcontrol/item/addons.html:92
@@ -3690,6 +3709,7 @@ msgstr "Neues Passwort setzen"
 #: pretix/control/templates/pretixcontrol/user/settings.html:49
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:70
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:73
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:306
 msgid "Save"
 msgstr "Speichern"
 
@@ -3697,38 +3717,38 @@ msgstr "Speichern"
 msgid "Create a new account"
 msgstr "Neuen Benutzer erstellen"
 
-#: pretix/control/templates/pretixcontrol/base.html:49
+#: pretix/control/templates/pretixcontrol/base.html:52
 msgid "Toggle navigation"
 msgstr "Navigation umschalten"
 
-#: pretix/control/templates/pretixcontrol/base.html:68
-#: pretix/control/templates/pretixcontrol/base.html:131
+#: pretix/control/templates/pretixcontrol/base.html:71
+#: pretix/control/templates/pretixcontrol/base.html:134
 msgid "Event overview"
 msgstr "Überblick"
 
-#: pretix/control/templates/pretixcontrol/base.html:117
+#: pretix/control/templates/pretixcontrol/base.html:120
 msgid "Account Settings"
 msgstr "Kontoeinstellungen"
 
-#: pretix/control/templates/pretixcontrol/base.html:122
-#: pretix/control/templates/pretixcontrol/base.html:124
+#: pretix/control/templates/pretixcontrol/base.html:125
+#: pretix/control/templates/pretixcontrol/base.html:127
 msgid "Log out"
 msgstr "Abmelden"
 
-#: pretix/control/templates/pretixcontrol/base.html:147
+#: pretix/control/templates/pretixcontrol/base.html:150
 #: pretix/control/templates/pretixcontrol/dashboard.html:3
 #: pretix/control/templates/pretixcontrol/dashboard.html:5
 #: pretix/control/templates/pretixcontrol/event/base.html:10
 msgid "Dashboard"
 msgstr "Übersicht"
 
-#: pretix/control/templates/pretixcontrol/base.html:155
+#: pretix/control/templates/pretixcontrol/base.html:158
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:5
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:7
 msgid "Global settings"
 msgstr "Globale Einstellungen"
 
-#: pretix/control/templates/pretixcontrol/base.html:214
+#: pretix/control/templates/pretixcontrol/base.html:217
 msgid ""
 "Starting with version 1.2.0, pretix automatically checks for updates in the "
 "background. During this check, anonymous data is transmitted to servers "
@@ -3744,7 +3764,7 @@ msgstr ""
 "neue Updates benachrichtigt zu werden. Diese Nachricht verschwindet, sobald "
 "sie einmal angeklickt wurde."
 
-#: pretix/control/templates/pretixcontrol/base.html:227
+#: pretix/control/templates/pretixcontrol/base.html:230
 msgid ""
 "pretix is running in debug mode. For security reasons, please never run "
 "debug mode on a production instance."
@@ -3752,17 +3772,17 @@ msgstr ""
 "pretix läuft im Debug-Modus. Bitte setze den Debug-Modus aus "
 "Sicherheitsgründen nie in einer produktiv genutzten Installation ein."
 
-#: pretix/control/templates/pretixcontrol/base.html:240
+#: pretix/control/templates/pretixcontrol/base.html:243
 msgid "running in development mode"
 msgstr "im Entwicklermodus"
 
-#: pretix/control/templates/pretixcontrol/base.html:250
+#: pretix/control/templates/pretixcontrol/base.html:253
 #: pretix/presale/templates/pretixpresale/base.html:61
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
 msgstr "Wir verarbeiten deine Anfrage …"
 
-#: pretix/control/templates/pretixcontrol/base.html:252
+#: pretix/control/templates/pretixcontrol/base.html:255
 #: pretix/presale/templates/pretixpresale/base.html:63
 #: pretix/presale/templates/pretixpresale/waiting.html:25
 msgid "If this takes longer than a few minutes, please contact us."
@@ -4029,44 +4049,44 @@ msgstr "Keine Ergebnisse"
 msgid "E-mail settings"
 msgstr "E-Mail-Einstellungen"
 
-#: pretix/control/templates/pretixcontrol/event/mail.html:15
+#: pretix/control/templates/pretixcontrol/event/mail.html:16
 msgid "E-mail content"
 msgstr "E-Mail-Inhalt"
 
-#: pretix/control/templates/pretixcontrol/event/mail.html:17
+#: pretix/control/templates/pretixcontrol/event/mail.html:18
 msgid "Placed order"
 msgstr "Getätigte Bestellung"
 
-#: pretix/control/templates/pretixcontrol/event/mail.html:20
+#: pretix/control/templates/pretixcontrol/event/mail.html:21
 msgid "Paid order"
 msgstr "Bezahlte Bestellung"
 
-#: pretix/control/templates/pretixcontrol/event/mail.html:23
+#: pretix/control/templates/pretixcontrol/event/mail.html:24
 msgid "Free order"
 msgstr "Kostenlose Bestellung"
 
-#: pretix/control/templates/pretixcontrol/event/mail.html:26
+#: pretix/control/templates/pretixcontrol/event/mail.html:27
 #: pretix/control/templates/pretixcontrol/order/index.html:101
 msgid "Resend link"
 msgstr "Link erneut senden"
 
-#: pretix/control/templates/pretixcontrol/event/mail.html:29
+#: pretix/control/templates/pretixcontrol/event/mail.html:30
 msgid "Order changed"
 msgstr "Bestellung geändert"
 
-#: pretix/control/templates/pretixcontrol/event/mail.html:32
+#: pretix/control/templates/pretixcontrol/event/mail.html:33
 msgid "Payment reminder"
 msgstr "Zahlungserinnerung"
 
-#: pretix/control/templates/pretixcontrol/event/mail.html:35
+#: pretix/control/templates/pretixcontrol/event/mail.html:36
 msgid "Waiting list notification"
 msgstr "Wartelisten-Benachrichtigung"
 
-#: pretix/control/templates/pretixcontrol/event/mail.html:40
+#: pretix/control/templates/pretixcontrol/event/mail.html:41
 msgid "SMTP settings"
 msgstr "SMTP-Einstellungen"
 
-#: pretix/control/templates/pretixcontrol/event/mail.html:54
+#: pretix/control/templates/pretixcontrol/event/mail.html:55
 msgid "Save and test custom SMTP connection"
 msgstr "Speichern und SMTP-Einstellung testen"
 
@@ -4077,7 +4097,8 @@ msgid "Edit"
 msgstr "Bearbeiten"
 
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html:41
-#: pretix/control/templates/pretixcontrol/event/tickets.html:19
+#: pretix/control/templates/pretixcontrol/event/tickets.html:20
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:303
 msgid "Preview"
 msgstr "Vorschau"
 
@@ -4116,7 +4137,7 @@ msgstr "Installierte Erweiterungen"
 #: pretix/control/templates/pretixcontrol/event/plugins.html:11
 #: pretix/control/views/event.py:82 pretix/control/views/event.py:164
 #: pretix/control/views/event.py:248 pretix/control/views/event.py:288
-#: pretix/control/views/event.py:398 pretix/control/views/event.py:600
+#: pretix/control/views/event.py:399 pretix/control/views/event.py:605
 #: pretix/control/views/global_settings.py:20
 #: pretix/control/views/global_settings.py:43 pretix/control/views/item.py:146
 #: pretix/control/views/item.py:483 pretix/control/views/item.py:708
@@ -4220,7 +4241,7 @@ msgstr "Berechtigungen"
 msgid "Ticket download"
 msgstr "Ticket-Download"
 
-#: pretix/control/templates/pretixcontrol/event/tickets.html:33
+#: pretix/control/templates/pretixcontrol/event/tickets.html:34
 msgid ""
 "There are no ticket outputs available. Please go to the plugin settings and "
 "activate one or more ticket output plugins."
@@ -4296,6 +4317,7 @@ msgstr "Du hast zur Zeit auf keine Veranstaltungen Zugriff."
 
 #: pretix/control/templates/pretixcontrol/events/index.html:19
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:13
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:268
 msgid "Event name"
 msgstr "Veranstaltungstitel"
 
@@ -4498,6 +4520,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:24
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:21
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:15
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:131
 msgid "Delete"
 msgstr "Löschen"
 
@@ -4589,6 +4612,7 @@ msgid "Create a new product"
 msgstr "Neues Produkt erstellen"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:33
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:263
 msgid "Product name"
 msgstr "Produktbezeichnung"
 
@@ -6013,8 +6037,8 @@ msgid "Create a first quota"
 msgstr "Erstes Kontingent erstellen"
 
 #: pretix/control/views/event.py:103 pretix/control/views/event.py:251
-#: pretix/control/views/event.py:291 pretix/control/views/event.py:355
-#: pretix/control/views/event.py:401 pretix/control/views/event.py:568
+#: pretix/control/views/event.py:291 pretix/control/views/event.py:356
+#: pretix/control/views/event.py:402 pretix/control/views/event.py:573
 #: pretix/control/views/item.py:162 pretix/control/views/item.py:188
 #: pretix/control/views/item.py:493 pretix/control/views/item.py:519
 #: pretix/control/views/item.py:614 pretix/control/views/item.py:725
@@ -6025,7 +6049,7 @@ msgstr ""
 "Die Änderungen konnten nicht gespeichert werden, siehe weiter unten für "
 "Details."
 
-#: pretix/control/views/event.py:350
+#: pretix/control/views/event.py:351
 msgid ""
 "Your changes have been saved. Please note that it can take a short period of "
 "time until your changes become active."
@@ -6033,12 +6057,12 @@ msgstr ""
 "Deine Änderungen wurden gespeichert. Beachte, dass es einen Moment dauern "
 "kann, bis diese wirksam werden."
 
-#: pretix/control/views/event.py:388
+#: pretix/control/views/event.py:389
 #, python-format
 msgid "An error occured while contacting the SMTP server: %s"
 msgstr "Ein Fehler trat auf beim Versuch, den SMTP-Server zu erreichen: %s"
 
-#: pretix/control/views/event.py:391
+#: pretix/control/views/event.py:392
 msgid ""
 "Your changes have been saved and the connection attempt to your SMTP server "
 "was successful."
@@ -6046,7 +6070,7 @@ msgstr ""
 "Deine Änderungen wurden gespeichert und die Verbindung zum SMTP-Server war "
 "erfolgreich."
 
-#: pretix/control/views/event.py:394
+#: pretix/control/views/event.py:395
 msgid ""
 "We've been able to contact the SMTP server you configured. Remember to check "
 "the \"use custom SMTP server\" checkbox, otherwise your SMTP server will not "
@@ -6056,32 +6080,32 @@ msgstr ""
 "\"Eigenen SMTP-Server verwenden\" zu setzen, damit der Server auch benutzt "
 "wird."
 
-#: pretix/control/views/event.py:422
+#: pretix/control/views/event.py:423
 msgid "{} {} has been transferred to account <9999-9999-9999-9999> at {}"
 msgstr "{} {} wurden am {} auf das Bankkonto <9999-9999-9999-9999> eingezahlt"
 
-#: pretix/control/views/event.py:466
+#: pretix/control/views/event.py:467
 msgid "Sample Admission Ticket"
 msgstr "Beispiel-Ticket"
 
-#: pretix/control/views/event.py:469
+#: pretix/control/views/event.py:470
 msgid "Sample Corporation"
 msgstr "Musterfirma"
 
-#: pretix/control/views/event.py:470
+#: pretix/control/views/event.py:471
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr ""
 "Bitte überweise den vollen Betrag auf das Bankkonto 9999-9999-9999-9999"
 
-#: pretix/control/views/event.py:492
+#: pretix/control/views/event.py:493
 msgid "invalid item"
 msgstr "Ungültiges Produkt"
 
-#: pretix/control/views/event.py:524 pretix/presale/views/order.py:536
+#: pretix/control/views/event.py:525 pretix/presale/views/order.py:536
 msgid "You requested an invalid ticket output type."
 msgstr "Du hast einen ungültigen Ausgabetyp gewählt."
 
-#: pretix/control/views/event.py:666
+#: pretix/control/views/event.py:671
 msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
@@ -6089,21 +6113,21 @@ msgstr ""
 "Du hast mindestens ein kostenpflichtiges Produkt konfiguriert, aber noch "
 "keine Zahlungsmethoden aktiviert."
 
-#: pretix/control/views/event.py:669
+#: pretix/control/views/event.py:674
 msgid "You need to configure at least one quota to sell anything."
 msgstr "Du musst mindestens ein Kontingent anlegen, um etwas zu verkaufen."
 
-#: pretix/control/views/event.py:685
+#: pretix/control/views/event.py:690
 msgid "Your shop is live now!"
 msgstr "Dein Shop ist nun online!"
 
-#: pretix/control/views/event.py:692
+#: pretix/control/views/event.py:697
 msgid "We've taken your shop down. You can re-enable it whenever you want!"
 msgstr ""
 "Wir haben deinen Shop ausgeschaltet. Du kannst ihn hier jederzeit wieder "
 "einschalten."
 
-#: pretix/control/views/event.py:757
+#: pretix/control/views/event.py:762
 msgid "The issue has been marked as resolved!"
 msgstr "Das Problem wurde als gelöst markiert."
 
@@ -6256,11 +6280,11 @@ msgstr "Die Rechnung wurde bereits storniert."
 msgid "The email has been queued to be sent."
 msgstr "Die E-Mail wurde zum Versenden gespeichert."
 
-#: pretix/control/views/orders.py:382 pretix/presale/views/order.py:634
+#: pretix/control/views/orders.py:382 pretix/presale/views/order.py:649
 msgid "This invoice has not been found"
 msgstr "Diese Rechnung wurde nicht gefunden"
 
-#: pretix/control/views/orders.py:390 pretix/presale/views/order.py:642
+#: pretix/control/views/orders.py:390 pretix/presale/views/order.py:657
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
@@ -7127,16 +7151,30 @@ msgid ""
 "This plugin allows you to use the pretixdroid Android app for your event."
 msgstr "Dieses Plugin erlaubt, die pretixdroid-Android-App zu verwenden."
 
-#: pretix/plugins/pretixdroid/signals.py:18
+#: pretix/plugins/pretixdroid/signals.py:21
 msgid "pretixdroid"
 msgstr "pretixdroid"
 
-#: pretix/plugins/pretixdroid/signals.py:36
+#: pretix/plugins/pretixdroid/signals.py:48
+#, python-brace-format
+msgid "Position #{posid} has been scanned at {datetime}."
+msgstr "Ticket #{posid} wurde am {datetime} gescannt."
+
+#: pretix/plugins/pretixdroid/signals.py:53
 #, python-brace-format
 msgid "Position #{posid} has been scanned."
 msgstr "Ticket #{posid} wurde gescannt."
 
-#: pretix/plugins/pretixdroid/signals.py:40
+#: pretix/plugins/pretixdroid/signals.py:59
+#, python-brace-format
+msgid ""
+"A scan for position #{posid} at {datetime} has been uploaded even though it "
+"has been scanned already."
+msgstr ""
+"Ein Scan für Ticket #{posid} am {datetime} wurde hochgeladen, obwohl es "
+"bereits gescannt wurde."
+
+#: pretix/plugins/pretixdroid/signals.py:65
 #, python-brace-format
 msgid ""
 "Position #{posid} has been scanned and rejected because it has already been "
@@ -7269,7 +7307,7 @@ msgstr ""
 "Verfügbare Platzhalter: {due_date}, {event}, {order}, {order_date}, "
 "{order_url}, {invoice_name}, {invoice_company}"
 
-#: pretix/plugins/sendmail/forms.py:32 pretix/plugins/sendmail/views.py:133
+#: pretix/plugins/sendmail/forms.py:32 pretix/plugins/sendmail/views.py:149
 msgid "pending with payment overdue"
 msgstr "Zahlung ausstehend aber überfällig"
 
@@ -7302,6 +7340,10 @@ msgstr "An Bestellungen:"
 msgid "Subject:"
 msgstr "Betreff:"
 
+#: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:32
+msgid "Send a new email based on this"
+msgstr "Neue Mail auf dieser Basis verschicken"
+
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:15
 msgid "E-mail preview"
 msgstr "E-Mail-Vorschau"
@@ -7314,27 +7356,31 @@ msgstr "E-Mail-Vorschau"
 msgid "Send"
 msgstr "Senden"
 
-#: pretix/plugins/sendmail/views.py:35
+#: pretix/plugins/sendmail/views.py:47
+msgid "You supplied an invalid log entry ID"
+msgstr "Ungültige Log-ID übergeben"
+
+#: pretix/plugins/sendmail/views.py:51
 msgid "We could not send the email. See below for details."
 msgstr ""
 "Wir könnten die E-Mail nicht senden, siehe weiter unten für weitere "
 "Informationen."
 
-#: pretix/plugins/sendmail/views.py:50
+#: pretix/plugins/sendmail/views.py:66
 msgid "There are no orders matching this selection."
 msgstr ""
 "Es existiert keine Bestellung, die zu den eingegebenen Kriterien passt."
 
-#: pretix/plugins/sendmail/views.py:57
+#: pretix/plugins/sendmail/views.py:73
 #, python-brace-format
 msgid "Subject: {subject}"
 msgstr "Betreff: {subject}"
 
-#: pretix/plugins/sendmail/views.py:99
+#: pretix/plugins/sendmail/views.py:115
 msgid "Failed to send mails to the following users: {}"
 msgstr "Mails an die folgenden Benutzer konnten nicht versendet werden: {}"
 
-#: pretix/plugins/sendmail/views.py:101
+#: pretix/plugins/sendmail/views.py:117
 msgid "Your message has been queued and will be sent to the selected users."
 msgstr ""
 "Die Nachricht wurde gespeichert und wird nun an die ausgewählten Benutzer "
@@ -7624,134 +7670,229 @@ msgstr "PDF-Ticketausgabe"
 msgid "This plugin allows you to print out tickets as PDF files"
 msgstr "Dieses Plugin erlaubt, Tickets als PDF-Dateien herunterzuladen"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:21
-msgid "PDF output"
-msgstr "PDF-Ausgabe"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
+msgid "Ticket design"
+msgstr "Ticket-Design"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:22
-msgid "PDF"
-msgstr "PDF"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:8
+msgid ""
+"You can customize the ticket design with our PDF ticket editor. There, you "
+"can upload a PDF file used as a background for the tickets and then place "
+"various texts and QR codes on the background at the positions of your "
+"choice. The editor is easy to use thanks to its drag-and-drop user "
+"interface, but it requires a modern browser and a decent internet connection."
+msgstr ""
+"Du kannst das Ticket-Design mit unserem PDF-Editor anpassen. Dort kannst du "
+"eine PDF-Datei als Hintergrund hochladen und dann verschiedene Texte und QR-"
+"Codes auf dem Hintergrund an den Positionen deiner Wahl platzieren. Dank "
+"seines Drag-and-Drop-Interfaces ist der Editor einfach zu bedienen, "
+"erfordert jedoch einen modernen Browser und eine stabile Internetverbindung."
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:42
-#, python-brace-format
-msgid "Order code: {code}"
-msgstr "Bestellnummer: {code}"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:18
+msgid "Open the PDF editor in a new tab"
+msgstr "PDF-Editor in neuem Tab öffnen"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:152
-msgid "Paper size"
-msgstr "Papierformat"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:4
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:6
+msgid "PDF Ticket Editor"
+msgstr "PDF-Ticket-Editor"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:165
-msgid "Paper orientation"
-msgstr "Orientierung"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:18
+msgid "Paste"
+msgstr "Einfügen"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:167
-msgid "Portrait"
-msgstr "Hochformat"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:22
+msgid "Undo"
+msgstr "Rückgängig"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:168
-msgid "Landscape"
-msgstr "Querformat"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:26
+msgid "Redo"
+msgstr "Wiederholen"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:174
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:31
+msgid "Editor"
+msgstr "Editor"
+
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:52
+msgid "Uploading new PDF background…"
+msgstr "Lade neuen Hintergrund hoch…"
+
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:60
+msgid "Welcome to the PDF ticket editor!"
+msgstr "Willkommen zum PDF-Ticket-Editor!"
+
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:62
+msgid ""
+"This editor allows you to create a design for the PDF tickets of your event. "
+"You can upload a background PDF and then use this tool to place texts and a "
+"QR code on the ticket."
+msgstr ""
+"Dieser Editor erlaubt dir, ein Design für die PDF-Tickets zu Ihrer "
+"Veranstaltung zu erstellen. Du kannst eine PDF-Datei als Hintergrund "
+"hochladen und dann mit diesem Werkzeug Texte und einen QR-Code auf dem "
+"Hintergrund platzieren."
+
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:73
+msgid ""
+"Please note that the editor can only provide a rough preview. Some details, "
+"for example in text rendering, might look slightly different in the final "
+"tickets. You can use the \"Preview\" button on the right for a more precise "
+"preview."
+msgstr ""
+"Bitte beachte, dass der Editor nur eine grobe Vorschau bieten kann. Einige "
+"Details, z.B. die Textdarstellung, können auf den finalen Tickets leicht "
+"anders aussehen. Du kannst den \"Vorschau\"-Knopf rechts benutzen um eine "
+"präzisere Vorschau zu erhalten."
+
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:87
+msgid ""
+"The editor is tested with recent versions of Google Chome, Mozilla Firefox "
+"and Opera. Other browsers, especially Internet Explorer or Microsoft Edge, "
+"might have problems displaying your background PDF or loading the correct "
+"fonts."
+msgstr ""
+"Dieser Editor wurde mit aktuellen Versionen von Google Chrome, Mozilla "
+"Firefox und Opera getestet. Andere Browser, besonders Internet Explorer oder "
+"Microsoft Edge, haben möglicherweise Probleme Ihr Hintergrund-PDF korrekt "
+"darzustellen oder die richtigen Schriftarten zu laden."
+
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:95
+msgid ""
+"The editor requires JavaScript to work. Please enable JavaScript in your "
+"browser to continue."
+msgstr ""
+"Der Editor funktioniert nur mit JavaScript. Bitte aktiviere JavaScript, um "
+"fortzufahren."
+
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:105
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:137
+msgid "Loading…"
+msgstr "Lade…"
+
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:108
+msgid "Start editing"
+msgstr "Editor starten"
+
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:123
+msgid "Cut"
+msgstr "Ausschneiden"
+
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:127
+msgid "Copy"
+msgstr "Kopieren"
+
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:143
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:252
+msgid "Width (mm)"
+msgstr "Breite (mm)"
+
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:147
+msgid "Height (mm)"
+msgstr "Höhe (mm)"
+
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:153
 msgid "Background PDF"
 msgstr "Hintergrund-PDF"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:178
-msgid "QR-Code x position (mm)"
-msgstr "QR-Code-x-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:156
+msgid "Upload new background"
+msgstr "Neuen Hintergrund hochladen"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:179
-msgid "QR-Code y position (mm)"
-msgstr "QR-Code-y-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:163
+msgid "x (mm)"
+msgstr "x (mm)"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:180
-msgid "QR-Code size (mm)"
-msgstr "QR-Code-Größe (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:168
+msgid "y (mm)"
+msgstr "y (mm)"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:181
-msgid "Ticket code x position (mm)"
-msgstr "Ticket-Code-x-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:175
+msgid "Size (mm)"
+msgstr "Größe (mm)"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:182
-msgid "Ticket code y position (mm)"
-msgstr "Ticket-Code-y-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:183
+msgid ""
+"The final QR code will be slightly smaller because some whitespace is "
+"required for proper scanning."
+msgstr ""
+"Der letztendliche QR-Code wird leicht kleiner sein, da etwas weißer Rand für "
+"ein gutes Scanergebnis benötigt wird."
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:183
-msgid "Ticket code size (mm)"
-msgstr "Ticket-Code-Größe (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:192
+msgid "Font size (pt)"
+msgstr "Schriftgröße (pt)"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:184
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:188
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:192
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:196
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:200
-msgid "Visible by default, set this to 0 to hide the element."
-msgstr "Standardmäßig sichtbar, ein Wert von 0 versteckt das Element."
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:214
+msgid "Text color"
+msgstr "Textfarbe"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:185
-msgid "Order x position (mm)"
-msgstr "Bestellnummer-x-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:241
+msgid "Font"
+msgstr "Schriftart"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:186
-msgid "Order y position (mm)"
-msgstr "Bestellnummer-y-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:259
+msgid "Text content"
+msgstr "Textinhalt"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:187
-msgid "Order size (mm)"
-msgstr "Bestellnummer-Größe (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:261
+msgid "Ticket code (barcode content)"
+msgstr "Ticket-Code (QR-Code-Inhalt)"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:189
-msgid "Product name x position (mm)"
-msgstr "Produktname-x-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:264
+msgid "Variation name"
+msgstr "Produktvariante"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:190
-msgid "Product name y position (mm)"
-msgstr "Produktname-y-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:265
+msgid "Product name and variation"
+msgstr "Produkt und Variante"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:191
-msgid "Product name size (mm)"
-msgstr "Produktname-Größe (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:269
+msgid "Event date"
+msgstr "Veranstaltungsdatum"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:193
-msgid "Price x position (mm)"
-msgstr "Preis-x-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:270
+msgid "Event begin time"
+msgstr "Veranstaltungsuhrzeit"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:194
-msgid "Price y position (mm)"
-msgstr "Preis-y-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:271
+msgid "Event location"
+msgstr "Veranstaltungsort"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:195
-msgid "Price size (mm)"
-msgstr "Preis-Größe (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:272
+msgid "Other…"
+msgstr "Sonstiges…"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:197
-msgid "Event name x position (mm)"
-msgstr "Veranstaltungsname-x-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:282
+msgid "Add a new object"
+msgstr "Neues Objekt hinzufpgen"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:198
-msgid "Event name y position (mm)"
-msgstr "Veranstaltungsname-y-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:291
+msgid "QR code area"
+msgstr "QR-Code-Bereich"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:199
-msgid "Event name size (mm)"
-msgstr "Veranstaltungsname-Größe (mm)"
+#: pretix/plugins/ticketoutputpdf/ticketoutput.py:35
+msgid "PDF output"
+msgstr "PDF-Ausgabe"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:201
-msgid "Attendee name x position (mm)"
-msgstr "Teilnehmername-x-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/ticketoutput.py:36
+msgid "PDF"
+msgstr "PDF"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:202
-msgid "Attendee name y position (mm)"
-msgstr "Teilnehmername-y-Position (mm)"
+#: pretix/plugins/ticketoutputpdf/ticketoutput.py:162
+msgid "Ticket"
+msgstr "Ticket"
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:203
-msgid "Attendee name size (mm)"
-msgstr "Teilnehmername-Größe (mm)"
+#: pretix/plugins/ticketoutputpdf/views.py:39
+msgid "The uploaded PDF file is to large."
+msgstr "Die hochgeladene PDF-Datei ist zu groß."
 
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:204
-msgid "Invisible by default, set this to a number greater than 0 to show."
-msgstr "Standardmäßig unsichtbar, eine positive Größe zeigt das Element an."
+#: pretix/plugins/ticketoutputpdf/views.py:41
+msgid "The uploaded PDF file is to small."
+msgstr "Die hochgeladene PDF-Datei ist zu klein."
+
+#: pretix/plugins/ticketoutputpdf/views.py:43
+msgid "Please only upload PDF files."
+msgstr "Bitte nur PDF-Dateien hochladen."
 
 #: pretix/presale/checkoutflow.py:287 pretix/presale/views/order.py:418
 msgid ""
@@ -8385,7 +8526,7 @@ msgstr "Bitte gehe einen Schritt zurück und versuche es erneut."
 #: pretix/presale/views/order.py:273 pretix/presale/views/order.py:370
 #: pretix/presale/views/order.py:437 pretix/presale/views/order.py:458
 #: pretix/presale/views/order.py:485 pretix/presale/views/order.py:538
-#: pretix/presale/views/order.py:625
+#: pretix/presale/views/order.py:640
 msgid "Unknown order code or not authorized to access this order."
 msgstr ""
 "Unbekannte Bestellnummer oder Bestellung gehört einem anderen Benutzer."
@@ -8418,6 +8559,10 @@ msgstr "Der Ticket-Download ist (noch) nicht freigeschaltet."
 #: pretix/presale/views/order.py:546
 msgid "Ticket download is not enabled for add-on products."
 msgstr "Der Ticket-Download ist für Zusatzprodukte nicht freigeschaltet."
+
+#: pretix/presale/views/order.py:548
+msgid "Ticket download is not enabled for non-admission products."
+msgstr "Der Ticket-Download ist nur für Zutrittsprodukte freigeschaltet."
 
 #: pretix/presale/views/user.py:25
 msgid "We had difficulties processing your input."
@@ -8475,6 +8620,87 @@ msgstr "Deutsch"
 #: pretix/settings.py:301
 msgid "German (informal)"
 msgstr "Deutsch (Du)"
+
+#~ msgid "The team settings has been deleted."
+#~ msgstr "Das Team wurde gelöscht."
+
+#~ msgid "Order code: {code}"
+#~ msgstr "Bestellnummer: {code}"
+
+#~ msgid "Paper size"
+#~ msgstr "Papierformat"
+
+#~ msgid "Paper orientation"
+#~ msgstr "Orientierung"
+
+#~ msgid "Portrait"
+#~ msgstr "Hochformat"
+
+#~ msgid "Landscape"
+#~ msgstr "Querformat"
+
+#~ msgid "QR-Code x position (mm)"
+#~ msgstr "QR-Code-x-Position (mm)"
+
+#~ msgid "QR-Code y position (mm)"
+#~ msgstr "QR-Code-y-Position (mm)"
+
+#~ msgid "QR-Code size (mm)"
+#~ msgstr "QR-Code-Größe (mm)"
+
+#~ msgid "Ticket code y position (mm)"
+#~ msgstr "Ticket-Code-y-Position (mm)"
+
+#~ msgid "Ticket code size (mm)"
+#~ msgstr "Ticket-Code-Größe (mm)"
+
+#~ msgid "Visible by default, set this to 0 to hide the element."
+#~ msgstr "Standardmäßig sichtbar, ein Wert von 0 versteckt das Element."
+
+#~ msgid "Order x position (mm)"
+#~ msgstr "Bestellnummer-x-Position (mm)"
+
+#~ msgid "Order y position (mm)"
+#~ msgstr "Bestellnummer-y-Position (mm)"
+
+#~ msgid "Product name x position (mm)"
+#~ msgstr "Produktname-x-Position (mm)"
+
+#~ msgid "Product name y position (mm)"
+#~ msgstr "Produktname-y-Position (mm)"
+
+#~ msgid "Product name size (mm)"
+#~ msgstr "Produktname-Größe (mm)"
+
+#~ msgid "Price x position (mm)"
+#~ msgstr "Preis-x-Position (mm)"
+
+#~ msgid "Price y position (mm)"
+#~ msgstr "Preis-y-Position (mm)"
+
+#~ msgid "Price size (mm)"
+#~ msgstr "Preis-Größe (mm)"
+
+#~ msgid "Event name x position (mm)"
+#~ msgstr "Veranstaltungsname-x-Position (mm)"
+
+#~ msgid "Event name y position (mm)"
+#~ msgstr "Veranstaltungsname-y-Position (mm)"
+
+#~ msgid "Event name size (mm)"
+#~ msgstr "Veranstaltungsname-Größe (mm)"
+
+#~ msgid "Attendee name x position (mm)"
+#~ msgstr "Teilnehmername-x-Position (mm)"
+
+#~ msgid "Attendee name y position (mm)"
+#~ msgstr "Teilnehmername-y-Position (mm)"
+
+#~ msgid "Attendee name size (mm)"
+#~ msgstr "Teilnehmername-Größe (mm)"
+
+#~ msgid "Invisible by default, set this to a number greater than 0 to show."
+#~ msgstr "Standardmäßig unsichtbar, eine positive Größe zeigt das Element an."
 
 #~ msgid "Event permission"
 #~ msgstr "Veranstaltungs-Berechtigung"
