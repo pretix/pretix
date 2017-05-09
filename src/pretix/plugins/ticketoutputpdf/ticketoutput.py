@@ -199,7 +199,7 @@ class PdfTicketOutput(BaseTicketOutput):
         })
 
     def _legacy_layout(self):
-        if self.settings.get('ticketoutput_pdf_background'):
+        if self.settings.get('background'):
             return self._migrate_from_old_settings()
         else:
             return self._default_layout()
