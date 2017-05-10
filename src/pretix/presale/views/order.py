@@ -320,20 +320,21 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 request.session['payment'] = p['provider'].identifier
                 request.session['payment_change_{}'.format(self.order.pk)] = '1'
 
+                new_fee = p['provider'].calculate_fee(self._total_order_value)
+                self.order.payment_provider = p['provider'].identifier
+                self.order.payment_fee = new_fee
+                self.order.total = self._total_order_value + new_fee
+                self.order._calculate_tax()
+
                 resp = p['provider'].order_prepare(request, self.order)
                 if resp:
                     with transaction.atomic():
-                        new_fee = p['provider'].calculate_fee(self._total_order_value)
                         self.order.log_action('pretix.event.order.payment.changed', {
                             'old_fee': self.order.payment_fee,
                             'new_fee': new_fee,
                             'old_provider': self.order.payment_provider,
                             'new_provider': p['provider'].identifier
                         })
-                        self.order.payment_provider = p['provider'].identifier
-                        self.order.payment_fee = new_fee
-                        self.order.total = self._total_order_value + new_fee
-                        self.order._calculate_tax()
                         self.order.save()
 
                         i = self.order.invoices.filter(is_cancellation=False).last()
