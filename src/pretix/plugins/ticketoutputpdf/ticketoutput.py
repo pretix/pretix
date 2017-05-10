@@ -8,8 +8,9 @@ from django.core.files import File
 from django.core.files.storage import default_storage
 from django.http import HttpRequest
 from django.template.loader import get_template
-from django.utils.formats import localize
+from django.utils.formats import date_format, localize
 from django.utils.translation import ugettext_lazy as _
+from pytz import timezone
 from reportlab.graphics import renderPDF
 from reportlab.graphics.barcode.qr import QrCodeWidget
 from reportlab.graphics.shapes import Drawing
@@ -85,8 +86,18 @@ class PdfTicketOutput(BaseTicketOutput):
             return str(order.event.location).replace("\n", "<br/>\n")
         elif o['content'] == 'event_date':
             return order.event.get_date_from_display(show_times=False)
+        elif o['content'] == 'event_begin':
+            return order.event.get_date_from_display(show_times=True)
         elif o['content'] == 'event_begin_time':
-            return order.event.get_date_from_display(show_times=False)
+            return order.event.get_time_from_display()
+        elif o['content'] == 'event_admission':
+            if order.event.date_admission:
+                tz = timezone(order.event.settings.timezone)
+                return date_format(order.event.date_admission.astimezone(tz), "SHORT_DATETIME_FORMAT")
+        elif o['content'] == 'event_admission_time':
+            if order.event.date_admission:
+                tz = timezone(order.event.settings.timezone)
+                return date_format(order.event.date_admission.astimezone(tz), "TIME_FORMAT")
         return ''
 
     def _draw_textarea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
