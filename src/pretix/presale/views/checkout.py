@@ -22,6 +22,10 @@ class CheckoutView(View):
             messages.error(request, _("Your cart is empty"))
             return redirect(eventreverse(self.request.event, 'presale:event.index'))
 
+        if not request.event.presale_is_running:
+            messages.error(request, _("The presale for this event is over or has not yet started."))
+            return redirect(eventreverse(self.request.event, 'presale:event.index'))
+
         cart_error = None
         try:
             validate_cart.send(sender=self.request.event, positions=cart_pos)

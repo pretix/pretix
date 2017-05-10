@@ -8,7 +8,7 @@
 {% block title %}{% trans "Presale" %}{% endblock %}
 
 {% block content %}
-    {% if cart.positions %}
+    {% if cart.positions and event.presale_is_running %}
         <div class="panel panel-primary cart">
             <div class="panel-heading">
                 <h3 class="panel-title">{% trans "Your cart" %}</h3>
