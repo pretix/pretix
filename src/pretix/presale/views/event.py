@@ -10,6 +10,7 @@ from django.db.models import Count, Prefetch, Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
+from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -148,6 +149,11 @@ class EventIcalDownload(EventViewMixin, View):
                 vevent.add('dtend').value = event.date_to.astimezone(self.event_timezone)
             else:
                 vevent.add('dtend').value = event.date_to.astimezone(self.event_timezone).date()
+
+        if event.date_admission:
+            vevent.add('description').value = str(_('Admission: {datetime}')).format(
+                datetime=date_format(event.date_admission.astimezone(self.event_timezone), 'SHORT_DATETIME_FORMAT')
+            )
 
         resp = HttpResponse(cal.serialize(), content_type='text/calendar')
         resp['Content-Disposition'] = 'attachment; filename="{}-{}.ics"'.format(

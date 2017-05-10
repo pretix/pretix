@@ -13,7 +13,7 @@ from django.template.defaultfilters import date as _date
 from django.utils.crypto import get_random_string
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
-from i18nfield.fields import I18nCharField
+from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.email import CustomSMTPBackend
 from pretix.base.models.base import LoggedModel
@@ -85,6 +85,8 @@ class Event(LoggedModel):
     date_from = models.DateTimeField(verbose_name=_("Event start time"))
     date_to = models.DateTimeField(null=True, blank=True,
                                    verbose_name=_("Event end time"))
+    date_admission = models.DateTimeField(null=True, blank=True,
+                                          verbose_name=_("Admission time"))
     is_public = models.BooleanField(default=False,
                                     verbose_name=_("Visible in public lists"),
                                     help_text=_("If selected, this event may show up on the ticket system's start page "
@@ -99,7 +101,7 @@ class Event(LoggedModel):
         verbose_name=_("Start of presale"),
         help_text=_("No products will be sold before this date."),
     )
-    location = I18nCharField(
+    location = I18nTextField(
         null=True, blank=True,
         max_length=200,
         verbose_name=_("Location"),

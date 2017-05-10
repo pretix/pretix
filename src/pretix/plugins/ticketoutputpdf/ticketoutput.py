@@ -82,7 +82,7 @@ class PdfTicketOutput(BaseTicketOutput):
         elif o['content'] == 'event_name':
             return str(order.event)
         elif o['content'] == 'event_location':
-            return str(order.event.location)
+            return str(order.event.location).replace("\n", "<br/>\n")
         elif o['content'] == 'event_date':
             return order.event.get_date_from_display(show_times=False)
         elif o['content'] == 'event_begin_time':
