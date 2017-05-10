@@ -12,11 +12,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, ListView
 
 from pretix.base.i18n import LazyI18nString, language
-from pretix.base.models import LogEntry, Order
+from pretix.base.models import InvoiceAddress, LogEntry, Order
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
-
 from . import forms
 
 logger = logging.getLogger('pretix.plugins.sendmail')
@@ -65,54 +64,71 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         if not orders:
             messages.error(self.request, _('There are no orders matching this selection.'))
             return self.get(self.request, *self.args, **self.kwargs)
+
+        if self.request.POST.get("action") == "preview":
+            for l in self.request.event.settings.locales:
+                with language(l):
+                    self.output[l] = []
+                    self.output[l].append(
+                        _('Subject: {subject}').format(subject=form.cleaned_data['subject'].localize(l)))
+                    message = form.cleaned_data['message'].localize(l)
+                    preview_text = message.format(
+                        order='ORDER1234',
+                        event=self.request.event.name,
+                        order_date=date_format(now(), 'SHORT_DATE_FORMAT'),
+                        due_date=date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
+                        order_url=build_absolute_uri(self.request.event, 'presale:event.order', kwargs={
+                            'order': 'ORDER1234',
+                            'secret': 'longrandomsecretabcdef123456'
+                        }),
+                        invoice_name=_('John Doe'),
+                        invoice_company=_('Sample Company LLC'),
+                    )
+                    self.output[l].append(preview_text)
+            return self.get(self.request, *self.args, **self.kwargs)
+
         for o in orders:
-            if self.request.POST.get("action") == "preview":
-                for l in self.request.event.settings.locales:
-                    with language(l):
-                        self.output[l] = []
-                        self.output[l].append(_('Subject: {subject}').format(subject=form.cleaned_data['subject'].localize(l)))
-                        message = form.cleaned_data['message'].localize(l)
-                        preview_text = message.format(
-                            order='ORDER1234',
-                            event=self.request.event.name,
-                            order_date=date_format(now(), 'SHORT_DATE_FORMAT'),
-                            due_date=date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
-                            order_url=build_absolute_uri(self.request.event, 'presale:event.order', kwargs={
-                                'order': 'ORDER1234',
-                                'secret': 'longrandomsecretabcdef123456'
-                            }))
-                        self.output[l].append(preview_text)
-                return self.get(self.request, *self.args, **self.kwargs)
-            else:
-                try:
-                    with language(o.locale):
-                        mail(o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
-                             {
-                                 'event': o.event,
-                                 'order': o.code,
-                                 'order_date': date_format(o.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
-                                 'due_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
-                                 'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                                     'order': o.code,
-                                     'secret': o.secret
-                                 })},
-                             self.request.event, locale=o.locale, order=o)
-                        o.log_action(
-                            'pretix.plugins.sendmail.order.email.sent',
-                            user=self.request.user,
-                            data={
-                                'subject': form.cleaned_data['subject'],
-                                'message': form.cleaned_data['message'],
-                                'recipient': o.email
-                            }
-                        )
-                except SendMailException:
-                    failures.append(o.email)
+            try:
+                invoice_name = o.invoice_address.name
+                invoice_company = o.invoice_address.company
+            except InvoiceAddress.DoesNotExist:
+                invoice_name = ""
+                invoice_company = ""
+
+            try:
+                with language(o.locale):
+                    mail(
+                        o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
+                        {
+                            'event': o.event,
+                            'order': o.code,
+                            'order_date': date_format(o.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+                            'due_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
+                            'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                                'order': o.code,
+                                'secret': o.secret
+                            }),
+                            'invoice_name': invoice_name,
+                            'invoice_company': invoice_company,
+                        },
+                        self.request.event, locale=o.locale, order=o)
+                    o.log_action(
+                        'pretix.plugins.sendmail.order.email.sent',
+                        user=self.request.user,
+                        data={
+                            'subject': form.cleaned_data['subject'],
+                            'message': form.cleaned_data['message'],
+                            'recipient': o.email
+                        }
+                    )
+            except SendMailException:
+                failures.append(o.email)
         self.request.event.log_action('pretix.plugins.sendmail.sent',
                                       user=self.request.user,
                                       data=dict(form.cleaned_data))
         if failures:
-            messages.error(self.request, _('Failed to send mails to the following users: {}'.format(' '.join(failures))))
+            messages.error(self.request,
+                           _('Failed to send mails to the following users: {}'.format(' '.join(failures))))
         else:
             messages.success(self.request, _('Your message has been queued and will be sent to the selected users.'))
 
