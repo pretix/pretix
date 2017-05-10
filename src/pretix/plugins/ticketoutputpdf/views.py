@@ -5,7 +5,11 @@ from datetime import timedelta
 
 from django.core.files import File
 from django.core.files.storage import default_storage
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import (
+    FileResponse, HttpResponse, HttpResponseBadRequest, JsonResponse,
+)
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
@@ -57,7 +61,7 @@ class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView
             c = CachedFile()
             c.expires = now() + timedelta(days=7)
             c.date = now()
-            c.filename = 'background.pdf'
+            c.filename = 'background_preview.pdf'
             c.type = 'application/pdf'
             c.file = fileobj
             c.save()
@@ -65,7 +69,11 @@ class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView
             return JsonResponse({
                 "status": "ok",
                 "id": c.id,
-                "url": c.file.url
+                "url": reverse('plugins:ticketoutputpdf:pdf', kwargs={
+                    'event': request.event.slug,
+                    'organizer': request.organizer.slug,
+                    'filename': str(c.id)
+                })
             })
 
         cf = None
@@ -93,7 +101,7 @@ class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView
 
             resp = HttpResponse(data, content_type=mimet)
             ftype = fname.split(".")[-1]
-            resp['Content-Security-Policy'] = "style-src 'unsafe-inline'; object-src 'self'"
+            resp['Content-Security-Policy'] = "style-src 'unsafe-inline'; script-src 'unsafe-inline'; object-src 'self'"
             resp['Content-Disposition'] = 'inline; filename="ticket-preview.{}"'.format(ftype)
             return resp
         elif "data" in request.POST:
@@ -136,3 +144,11 @@ class FontsCSSView(TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['fonts'] = get_fonts()
         return ctx
+
+
+class PdfView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        cf = get_object_or_404(CachedFile, id=kwargs.get("filename"), filename="background_preview.pdf")
+        resp = FileResponse(cf.file, content_type='application/pdf')
+        resp['Content-Disposition'] = 'attachment; filename="{}"'.format(cf.filename)
+        return resp
