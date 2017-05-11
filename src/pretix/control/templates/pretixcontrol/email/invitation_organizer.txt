@@ -1,9 +1,9 @@
 {% load i18n %}{% blocktrans with url=url|safe %}Hello,
 
-you have been invited to the team of an event that uses pretix for their
-ticket sales.
+you have been invited to the team of an event organizer that uses pretix
+for their ticket sales.
 
-Event: {{ event }}
+Organizer: {{ organizer }}
 
 If you want to join that team, just click on the following link:
 {{ url }}

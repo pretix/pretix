@@ -1,32 +1,17 @@
 import copy
 import logging
-import uuid
+from collections import OrderedDict
 from io import BytesIO
 
+from django import forms
 from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.storage import default_storage
-from django.http import HttpRequest
-from django.template.loader import get_template
-from django.utils.formats import date_format, localize
 from django.utils.translation import ugettext_lazy as _
-from pytz import timezone
-from reportlab.graphics import renderPDF
-from reportlab.graphics.barcode.qr import QrCodeWidget
-from reportlab.graphics.shapes import Drawing
-from reportlab.lib.colors import Color
-from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
-from reportlab.lib.styles import ParagraphStyle
-from reportlab.lib.units import mm
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.pdfmetrics import getAscentDescent
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen.canvas import Canvas
-from reportlab.platypus import Paragraph
 
-from pretix.base.models import Order, OrderPosition
+from pretix.base.models import Order
 from pretix.base.ticketoutput import BaseTicketOutput
-from pretix.plugins.ticketoutputpdf.signals import get_fonts
+from pretix.control.forms import ExtFileField
 
 logger = logging.getLogger('pretix.plugins.ticketoutputpdf')
 
@@ -36,115 +21,77 @@ class PdfTicketOutput(BaseTicketOutput):
     verbose_name = _('PDF output')
     download_button_text = _('PDF')
 
-    def __init__(self, event, override_layout=None, override_background=None):
-        self.override_layout = override_layout
-        self.override_background = override_background
-        super().__init__(event)
+    def _draw_page(self, p, op, order):
+        from reportlab.graphics.shapes import Drawing
+        from reportlab.lib import units
+        from reportlab.graphics.barcode.qr import QrCodeWidget
+        from reportlab.graphics import renderPDF
 
-    def _register_fonts(self):
-        pdfmetrics.registerFont(TTFont('Open Sans', finders.find('fonts/OpenSans-Regular.ttf')))
-        pdfmetrics.registerFont(TTFont('Open Sans I', finders.find('fonts/OpenSans-Italic.ttf')))
-        pdfmetrics.registerFont(TTFont('Open Sans B', finders.find('fonts/OpenSans-Bold.ttf')))
-        pdfmetrics.registerFont(TTFont('Open Sans B I', finders.find('fonts/OpenSans-BoldItalic.ttf')))
+        event_s = self.settings.get('event_s', default=22, as_type=float)
+        if event_s:
+            p.setFont("Helvetica", event_s)
+            event_x = self.settings.get('event_x', default=15, as_type=float)
+            event_y = self.settings.get('event_y', default=235, as_type=float)
+            p.drawString(event_x * units.mm, event_y * units.mm, str(self.event.name))
 
-        for family, styles in get_fonts().items():
-            print(family, finders.find(styles['regular']['truetype']))
-            pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
-            pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
-            pdfmetrics.registerFont(TTFont(family + ' B', finders.find(styles['bold']['truetype'])))
-            pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
+        order_s = self.settings.get('order_s', default=17, as_type=float)
+        if order_s:
+            p.setFont("Helvetica", order_s)
+            order_x = self.settings.get('order_x', default=15, as_type=float)
+            order_y = self.settings.get('order_y', default=220, as_type=float)
+            p.drawString(order_x * units.mm, order_y * units.mm, _('Order code: {code}').format(code=order.code))
 
-    def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, o: dict):
-        reqs = float(o['size']) * mm
-        qrw = QrCodeWidget(op.secret, barLevel='H', barHeight=reqs, barWidth=reqs)
-        d = Drawing(reqs, reqs)
-        d.add(qrw)
-        qr_x = float(o['left']) * mm
-        qr_y = float(o['bottom']) * mm
-        renderPDF.draw(d, canvas, qr_x, qr_y)
+        name_s = self.settings.get('name_s', default=17, as_type=float)
+        if name_s:
+            p.setFont("Helvetica", name_s)
+            name_x = self.settings.get('name_x', default=15, as_type=float)
+            name_y = self.settings.get('name_y', default=210, as_type=float)
+            item = str(op.item.name)
+            if op.variation:
+                item += " – " + str(op.variation)
+            p.drawString(name_x * units.mm, name_y * units.mm, item)
 
-    def _get_text_content(self, op: OrderPosition, order: Order, o: dict):
-        if o['content'] == 'other':
-            return o['text'].replace("\n", "<br/>\n")
-        elif o['content'] == 'order':
-            return order.code
-        elif o['content'] == 'item':
-            return str(op.item)
-        elif o['content'] == 'secret':
-            return op.secret
-        elif o['content'] == 'variation':
-            return str(op.variation) if op.variation else ''
-        elif o['content'] == 'itemvar':
-            return '{} - {}'.format(op.item, op.variation) if op.variation else str(op.item)
-        elif o['content'] == 'price':
-            return '{} {}'.format(order.event.currency, localize(op.price))
-        elif o['content'] == 'attendee_name':
-            return op.attendee_name or (op.addon_to.attendee_name if op.addon_to else '')
-        elif o['content'] == 'event_name':
-            return str(order.event)
-        elif o['content'] == 'event_location':
-            return str(order.event.location).replace("\n", "<br/>\n")
-        elif o['content'] == 'event_date':
-            return order.event.get_date_from_display(show_times=False)
-        elif o['content'] == 'event_begin':
-            return order.event.get_date_from_display(show_times=True)
-        elif o['content'] == 'event_begin_time':
-            return order.event.get_time_from_display()
-        elif o['content'] == 'event_admission':
-            if order.event.date_admission:
-                tz = timezone(order.event.settings.timezone)
-                return date_format(order.event.date_admission.astimezone(tz), "SHORT_DATETIME_FORMAT")
-        elif o['content'] == 'event_admission_time':
-            if order.event.date_admission:
-                tz = timezone(order.event.settings.timezone)
-                return date_format(order.event.date_admission.astimezone(tz), "TIME_FORMAT")
-        return ''
+        price_s = self.settings.get('price_s', default=17, as_type=float)
+        if price_s:
+            p.setFont("Helvetica", price_s)
+            price_x = self.settings.get('price_x', default=15, as_type=float)
+            price_y = self.settings.get('price_y', default=200, as_type=float)
+            p.drawString(price_x * units.mm, price_y * units.mm, "%s %s" % (str(op.price), self.event.currency))
 
-    def _draw_textarea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
-        font = o['fontfamily']
-        if o['bold']:
-            font += ' B'
-        if o['italic']:
-            font += ' I'
+        qr_s = self.settings.get('qr_s', default=80, as_type=float)
+        if qr_s:
+            reqs = qr_s * units.mm
+            qrw = QrCodeWidget(op.secret, barLevel='H')
+            b = qrw.getBounds()
+            w = b[2] - b[0]
+            h = b[3] - b[1]
+            d = Drawing(reqs, reqs, transform=[reqs / w, 0, 0, reqs / h, 0, 0])
+            d.add(qrw)
+            qr_x = self.settings.get('qr_x', default=10, as_type=float)
+            qr_y = self.settings.get('qr_y', default=120, as_type=float)
+            renderPDF.draw(d, p, qr_x * units.mm, qr_y * units.mm)
 
-        align_map = {
-            'left': TA_LEFT,
-            'center': TA_CENTER,
-            'right': TA_RIGHT
-        }
-        style = ParagraphStyle(
-            name=uuid.uuid4().hex,
-            fontName=font,
-            fontSize=float(o['fontsize']),
-            leading=float(o['fontsize']),
-            autoLeading="max",
-            textColor=Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255),
-            alignment=align_map[o['align']]
-        )
+        code_s = self.settings.get('code_s', default=11, as_type=float)
+        if code_s:
+            p.setFont("Helvetica", code_s)
+            code_x = self.settings.get('code_x', default=15, as_type=float)
+            code_y = self.settings.get('code_y', default=120, as_type=float)
+            p.drawString(code_x * units.mm, code_y * units.mm, op.secret)
 
-        p = Paragraph(self._get_text_content(op, order, o), style=style)
-        p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
-        # p_size = p.wrap(float(o['width']) * mm, 1000 * mm)
-        ad = getAscentDescent(font, float(o['fontsize']))
-        p.drawOn(canvas, float(o['left']) * mm, float(o['bottom']) * mm - ad[1])
+        attendee_s = self.settings.get('attendee_s', default=0, as_type=float)
+        if code_s and op.attendee_name:
+            p.setFont("Helvetica", attendee_s)
+            attendee_x = self.settings.get('attendee_x', default=15, as_type=float)
+            attendee_y = self.settings.get('attendee_y', default=90, as_type=float)
+            p.drawString(attendee_x * units.mm, attendee_y * units.mm, op.attendee_name)
 
-    def _draw_page(self, canvas: Canvas, op: OrderPosition, order: Order):
-        objs = self.override_layout or self.settings.get('layout', as_type=list) or self._legacy_layout()
-        for o in objs:
-            if o['type'] == "barcodearea":
-                self._draw_barcodearea(canvas, op, o)
-            elif o['type'] == "textarea":
-                self._draw_textarea(canvas, op, order, o)
-
-        canvas.showPage()
+        p.showPage()
 
     def generate_order(self, order: Order):
         buffer = BytesIO()
         p = self._create_canvas(buffer)
         for op in order.positions.all():
             if op.addon_to_id and not self.event.settings.ticket_download_addons:
-                continue
-            if not op.item.admission and not self.event.settings.ticket_download_nonadm:
                 continue
             self._draw_page(p, op, order)
         p.save()
@@ -164,198 +111,97 @@ class PdfTicketOutput(BaseTicketOutput):
         from reportlab.pdfgen import canvas
         from reportlab.lib import pagesizes
 
-        # Doesn't matter as we'll overpaint it over a background later
-        pagesize = pagesizes.A4
+        pagesize = self.settings.get('pagesize', default='A4')
+        if hasattr(pagesizes, pagesize):
+            pagesize = getattr(pagesizes, pagesize)
+        else:
+            pagesize = pagesizes.A4
+        orientation = self.settings.get('orientation', default='portrait')
+        if hasattr(pagesizes, orientation):
+            pagesize = getattr(pagesizes, orientation)(pagesize)
 
-        self._register_fonts()
         return canvas.Canvas(buffer, pagesize=pagesize)
 
-    def _render_with_background(self, buffer, title=_('Ticket')):
+    def _render_with_background(self, buffer):
         from PyPDF2 import PdfFileWriter, PdfFileReader
         buffer.seek(0)
         new_pdf = PdfFileReader(buffer)
         output = PdfFileWriter()
         bg_file = self.settings.get('background', as_type=File)
-        if self.override_background:
-            bgf = default_storage.open(self.override_background.name, "rb")
-        elif isinstance(bg_file, File):
+        if isinstance(bg_file, File):
             bgf = default_storage.open(bg_file.name, "rb")
         else:
             bgf = open(finders.find('pretixpresale/pdf/ticket_default_a4.pdf'), "rb")
         bg_pdf = PdfFileReader(bgf)
-
         for page in new_pdf.pages:
             bg_page = copy.copy(bg_pdf.getPage(0))
             bg_page.mergePage(page)
             output.addPage(bg_page)
 
-        output.addMetadata({
-            '/Title': str(title),
-            '/Creator': 'pretix',
-        })
         outbuffer = BytesIO()
         output.write(outbuffer)
         outbuffer.seek(0)
         return outbuffer
 
-    def settings_content_render(self, request: HttpRequest) -> str:
-        """
-        When the event's administrator visits the event configuration
-        page, this method is called. It may return HTML containing additional information
-        that is displayed below the form fields configured in ``settings_form_fields``.
-        """
-        template = get_template('pretixplugins/ticketoutputpdf/form.html')
-        return template.render({
-            'request': request
-        })
-
-    def _legacy_layout(self):
-        if self.settings.get('background'):
-            return self._migrate_from_old_settings()
-        else:
-            return self._default_layout()
-
-    def _default_layout(self):
-        return [
-            {"type": "textarea", "left": "17.50", "bottom": "274.60", "fontsize": "16.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "175.00", "content": "event_name",
-             "text": "Sample event name", "align": "left"},
-            {"type": "textarea", "left": "17.50", "bottom": "262.90", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00", "content": "itemvar",
-             "text": "Sample product – sample variation", "align": "left"},
-            {"type": "textarea", "left": "17.50", "bottom": "252.50", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00", "content": "attendee_name",
-             "text": "John Doe", "align": "left"},
-            {"type": "textarea", "left": "17.50", "bottom": "242.10", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00", "content": "event_date",
-             "text": "May 31st, 2017", "align": "left"},
-            {"type": "textarea", "left": "17.50", "bottom": "234.30", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00", "content": "event_location",
-             "text": "Random City", "align": "left"},
-            {"type": "textarea", "left": "17.50", "bottom": "194.50", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "30.00", "content": "order",
-             "text": "A1B2C", "align": "left"},
-            {"type": "textarea", "left": "52.50", "bottom": "194.50", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "45.00", "content": "price",
-             "text": "123.45 EUR", "align": "right"},
-            {"type": "textarea", "left": "102.50", "bottom": "194.50", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "90.00", "content": "secret",
-             "text": "tdmruoekvkpbv1o2mv8xccvqcikvr58u", "align": "left"},
-            {"type": "barcodearea", "left": "130.40", "bottom": "204.50", "size": "64.00"}
-        ]
-
-    def _migrate_from_old_settings(self):
-        l = []
-
-        event_s = self.settings.get('event_s', default=22, as_type=float)
-        if event_s:
-            l.append({
-                'type': 'textarea',
-                'fontfamily': 'Helvetica',
-                'left': self.settings.get('event_x', default=15, as_type=float),
-                'bottom': self.settings.get('event_y', default=235, as_type=float),
-                'fontsize': event_s,
-                'color': [0, 0, 0, 1],
-                'bold': False,
-                'italic': False,
-                'width': 150,
-                'content': 'event_name',
-                'text': 'Sample event',
-                'align': 'left'
-            })
-
-        order_s = self.settings.get('order_s', default=17, as_type=float)
-        if order_s:
-            l.append({
-                'type': 'textarea',
-                'fontfamily': 'Helvetica',
-                'left': self.settings.get('order_x', default=15, as_type=float),
-                'bottom': self.settings.get('order_y', default=220, as_type=float),
-                'fontsize': order_s,
-                'color': [0, 0, 0, 1],
-                'bold': False,
-                'italic': False,
-                'width': 150,
-                'content': 'order',
-                'text': 'AB1C2',
-                'align': 'left'
-            })
-
-        name_s = self.settings.get('name_s', default=17, as_type=float)
-        if name_s:
-            l.append({
-                'type': 'textarea',
-                'fontfamily': 'Helvetica',
-                'left': self.settings.get('name_x', default=15, as_type=float),
-                'bottom': self.settings.get('name_y', default=210, as_type=float),
-                'fontsize': name_s,
-                'color': [0, 0, 0, 1],
-                'bold': False,
-                'italic': False,
-                'width': 150,
-                'content': 'itemvar',
-                'text': 'Sample Producs - XS',
-                'align': 'left'
-            })
-
-        price_s = self.settings.get('price_s', default=17, as_type=float)
-        if price_s:
-            l.append({
-                'type': 'textarea',
-                'fontfamily': 'Helvetica',
-                'left': self.settings.get('price_x', default=15, as_type=float),
-                'bottom': self.settings.get('price_y', default=200, as_type=float),
-                'fontsize': price_s,
-                'color': [0, 0, 0, 1],
-                'bold': False,
-                'italic': False,
-                'width': 150,
-                'content': 'price',
-                'text': 'EUR 12,34',
-                'align': 'left'
-            })
-
-        qr_s = self.settings.get('qr_s', default=80, as_type=float)
-        if qr_s:
-            l.append({
-                'type': 'barcodearea',
-                'left': self.settings.get('qr_x', default=10, as_type=float),
-                'bottom': self.settings.get('qr_y', default=120, as_type=float),
-                'size': qr_s,
-            })
-
-        code_s = self.settings.get('code_s', default=11, as_type=float)
-        if code_s:
-            l.append({
-                'type': 'textarea',
-                'fontfamily': 'Helvetica',
-                'left': self.settings.get('code_x', default=15, as_type=float),
-                'bottom': self.settings.get('code_y', default=120, as_type=float),
-                'fontsize': code_s,
-                'color': [0, 0, 0, 1],
-                'bold': False,
-                'italic': False,
-                'width': 150,
-                'content': 'secret',
-                'text': 'asdsdgjfgbgkjdastjrxfdg',
-                'align': 'left'
-            })
-
-        attendee_s = self.settings.get('attendee_s', default=0, as_type=float)
-        if attendee_s:
-            l.append({
-                'type': 'textarea',
-                'fontfamily': 'Helvetica',
-                'left': self.settings.get('attendee_x', default=15, as_type=float),
-                'bottom': self.settings.get('attendee_y', default=90, as_type=float),
-                'fontsize': attendee_s,
-                'color': [0, 0, 0, 1],
-                'bold': False,
-                'italic': False,
-                'width': 150,
-                'content': 'attendee_name',
-                'text': 'John Doe',
-                'align': 'left'
-            })
-
-        return l
+    @property
+    def settings_form_fields(self) -> dict:
+        return OrderedDict(
+            list(super().settings_form_fields.items()) + [
+                ('paper_size',
+                 forms.ChoiceField(
+                     label=_('Paper size'),
+                     choices=(
+                         ('A4', 'A4'),
+                         ('A5', 'A5'),
+                         ('B4', 'B4'),
+                         ('B5', 'B5'),
+                         ('letter', 'Letter'),
+                         ('legal', 'Legal'),
+                     ),
+                     required=False
+                 )),
+                ('orientation',
+                 forms.ChoiceField(
+                     label=_('Paper orientation'),
+                     choices=(
+                         ('portrait', _('Portrait')),
+                         ('landscape', _('Landscape')),
+                     ),
+                     required=False
+                 )),
+                ('background',
+                 ExtFileField(
+                     label=_('Background PDF'),
+                     ext_whitelist=(".pdf", ),
+                     required=False
+                 )),
+                ('qr_x', forms.FloatField(label=_('QR-Code x position (mm)'), required=False)),
+                ('qr_y', forms.FloatField(label=_('QR-Code y position (mm)'), required=False)),
+                ('qr_s', forms.FloatField(label=_('QR-Code size (mm)'), required=False)),
+                ('code_x', forms.FloatField(label=_('Ticket code x position (mm)'), required=False)),
+                ('code_y', forms.FloatField(label=_('Ticket code y position (mm)'), required=False)),
+                ('code_s', forms.FloatField(label=_('Ticket code size (mm)'), required=False,
+                                            help_text=_('Visible by default, set this to 0 to hide the element.'))),
+                ('order_x', forms.FloatField(label=_('Order x position (mm)'), required=False)),
+                ('order_y', forms.FloatField(label=_('Order y position (mm)'), required=False)),
+                ('order_s', forms.FloatField(label=_('Order size (mm)'), required=False,
+                                             help_text=_('Visible by default, set this to 0 to hide the element.'))),
+                ('name_x', forms.FloatField(label=_('Product name x position (mm)'), required=False)),
+                ('name_y', forms.FloatField(label=_('Product name y position (mm)'), required=False)),
+                ('name_s', forms.FloatField(label=_('Product name size (mm)'), required=False,
+                                            help_text=_('Visible by default, set this to 0 to hide the element.'))),
+                ('price_x', forms.FloatField(label=_('Price x position (mm)'), required=False)),
+                ('price_y', forms.FloatField(label=_('Price y position (mm)'), required=False)),
+                ('price_s', forms.FloatField(label=_('Price size (mm)'), required=False,
+                                             help_text=_('Visible by default, set this to 0 to hide the element.'))),
+                ('event_x', forms.FloatField(label=_('Event name x position (mm)'), required=False)),
+                ('event_y', forms.FloatField(label=_('Event name y position (mm)'), required=False)),
+                ('event_s', forms.FloatField(label=_('Event name size (mm)'), required=False,
+                                             help_text=_('Visible by default, set this to 0 to hide the element.'))),
+                ('attendee_x', forms.FloatField(label=_('Attendee name x position (mm)'), required=False)),
+                ('attendee_y', forms.FloatField(label=_('Attendee name y position (mm)'), required=False)),
+                ('attendee_s', forms.FloatField(label=_('Attendee name size (mm)'), required=False,
+                                                help_text=_('Invisible by default, set this to a number greater than 0 '
+                                                            'to show.')))
+            ]
+        )

@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from datetime import date
 from decimal import Decimal
-from typing import Any, Dict, Union
+from typing import Any, Dict
 
 import pytz
 from django import forms
@@ -150,9 +150,9 @@ class BasePaymentProvider:
              forms.BooleanField(
                  label=_('Calculate the fee from the total value including the fee.'),
                  help_text=_('We recommend you to enable this if you want your users to pay the payment fees of your '
-                             'payment provider. <a href="{docs_url}" target="_blank">Click here '
+                             'payment provider. <a href="/control/help/payment/fee_reverse" target="_blank">Click here '
                              'for detailled information on what this does.</a> Don\'t forget to set the correct fees '
-                             'above!').format(docs_url='https://docs.pretix.eu/en/latest/user/payments/fees.html'),
+                             'above!'),
                  required=False
              )),
             ('_invoice_text',
@@ -266,7 +266,7 @@ class BasePaymentProvider:
         """
         raise NotImplementedError()  # NOQA
 
-    def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> Union[bool, str]:
+    def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> "bool|str":
         """
         Will be called after the user selects this provider as his payment method.
         If you provided a form to the user to enter payment data, this method should
@@ -394,14 +394,14 @@ class BasePaymentProvider:
         """
         return False
 
-    def retry_prepare(self, request: HttpRequest, order: Order) -> Union[bool, str]:
+    def retry_prepare(self, request: HttpRequest, order: Order) -> "bool|str":
         """
         Deprecated, use order_prepare instead
         """
         raise DeprecationWarning('retry_prepare is deprecated, use order_prepare instead')
         return self.order_prepare(request, order)
 
-    def order_prepare(self, request: HttpRequest, order: Order) -> Union[bool, str]:
+    def order_prepare(self, request: HttpRequest, order: Order) -> "bool|str":
         """
         Will be called if the user retries to pay an unpaid order (after the user filled in
         e.g. the form returned by :py:meth:`payment_form`) or if the user changes the payment
@@ -409,10 +409,6 @@ class BasePaymentProvider:
 
         It should return and report errors the same way as :py:meth:`checkout_prepare`, but
         receives an ``Order`` object instead of a cart object.
-
-        Note: The ``Order`` object given to this method might be different from the version
-        stored in the database as it's total will already contain the payment fee for the
-        new payment method.
         """
         form = self.payment_form(request)
         if form.is_valid():
@@ -462,7 +458,7 @@ class BasePaymentProvider:
         return '<div class="alert alert-warning">%s</div>' % _('The money can not be automatically refunded, '
                                                                'please transfer the money back manually.')
 
-    def order_control_refund_perform(self, request: HttpRequest, order: Order) -> Union[bool, str]:
+    def order_control_refund_perform(self, request: HttpRequest, order: Order) -> "bool|str":
         """
         Will be called if the event administrator confirms the refund.
 
@@ -527,7 +523,7 @@ class FreeOrderProvider(BasePaymentProvider):
     def order_control_refund_render(self, order: Order) -> str:
         return ''
 
-    def order_control_refund_perform(self, request: HttpRequest, order: Order) -> Union[bool, str]:
+    def order_control_refund_perform(self, request: HttpRequest, order: Order) -> "bool|str":
         """
         Will be called if the event administrator confirms the refund.
 

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-11 10:12+0000\n"
-"PO-Revision-Date: 2017-05-11 12:13+0200\n"
+"POT-Creation-Date: 2017-04-17 15:09+0000\n"
+"PO-Revision-Date: 2017-04-17 17:10+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:53
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:59
@@ -45,96 +45,6 @@ msgstr "Gesamtumsatz"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:47
 msgid "Contacting Stripe …"
 msgstr "Kontaktiere Stripe …"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:21
-msgid "QR Code"
-msgstr "QR-Code"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:157
-msgid "Sample product"
-msgstr "Beispielprodukt"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:158
-msgid "Sample variation"
-msgstr "Beispielvariante"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:159
-msgid "Sample product – sample variation"
-msgstr "Beispielprodukt – Beispielvariante"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:160
-msgid "123.45 EUR"
-msgstr "123,45 EUR"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:161
-msgid "John Doe"
-msgstr "Max Mustermann"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:162
-msgid "Sample event name"
-msgstr "Beispielevent"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:163
-msgid "May 31st, 2017"
-msgstr "31. Mai 2017"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:164
-msgid "20:00"
-msgstr "20:00"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:165
-msgid "19:00"
-msgstr "19:00"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:166
-msgid "2017-05-31 20:00"
-msgstr "31.05.2016 20:00"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:167
-msgid "2017-05-31 19:00"
-msgstr "31.05.2016 19:00"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:168
-msgid "Random City"
-msgstr "Musterstadt"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:213
-msgid "The PDF background file could not be loaded for the following reason:"
-msgstr "Die Hintergrund-PDF-Datei konnte nicht geladen werden:"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:362
-msgid "Group of objects"
-msgstr "Gruppe von Objekten"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:368
-msgid "Text object"
-msgstr "Text-Objekt"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:370
-msgid "Barcode area"
-msgstr "QR-Code-Bereich"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:372
-msgid "Object"
-msgstr "Objekt"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:376
-msgid "Ticket design"
-msgstr "Ticket-Design"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:612
-msgid "Saving failed."
-msgstr "Speichern fehlgeschlagen."
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:644
-msgid "Do you really want to leave the editor without saving your changes?"
-msgstr ""
-"Möchten Sie den Editor wirklich schließen ohne Ihre Änderungen zu speichern?"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:657
-msgid "Error while uploading your PDF file, please try again."
-msgstr ""
-"Es gab ein Problem beim Hochladen der PDF-Datei, bitte erneut versuchen."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:28
 #: pretix/static/pretixbase/js/asynctask.js:42

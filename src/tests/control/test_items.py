@@ -5,8 +5,8 @@ from django.utils.timezone import now
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import (
-    Event, Item, ItemCategory, ItemVariation, Order, OrderPosition, Organizer,
-    Question, Quota, Team, User,
+    Event, EventPermission, Item, ItemCategory, ItemVariation, Order,
+    OrderPosition, Organizer, OrganizerPermission, Question, Quota, User,
 )
 
 
@@ -20,9 +20,9 @@ class ItemFormTest(SoupTest):
             organizer=self.orga1, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
         )
-        t = Team.objects.create(organizer=self.orga1, can_change_event_settings=True, can_change_items=True)
-        t.members.add(self.user)
-        t.limit_events.add(self.event1)
+        OrganizerPermission.objects.create(organizer=self.orga1, user=self.user)
+        EventPermission.objects.create(event=self.event1, user=self.user, can_change_items=True,
+                                       can_change_settings=True)
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
 

@@ -11,8 +11,6 @@
 @import "_orders.scss";
 @import "_dashboard.scss";
 @import "../../pretixbase/scss/webfont.scss";
-@import "../../fileupload/jquery.fileupload.scss";
-@import "../../colorpicker/bootstrap-colorpicker.scss";
 
 footer {
     text-align: center;
@@ -120,21 +118,6 @@ h1 .btn-sm {
     margin-bottom: 10px;
 }
 
-.section-moved {
-    margin: 20px 0;
-    text-align: center;
-
-    p {
-        font-size: 18px;
-        margin: 20px auto;
-        max-width: 800px;
-    }
-
-    .img-moved {
-        height: 200px;
-        width: auto;
-    }
-}
 .empty-collection {
     margin: 20px 0;
     text-align: center;
@@ -246,30 +229,4 @@ body.loading #wrapper {
 
 .fa-danger {
     color: $brand-danger;
-}
-
-.nearly-gone {
-    overflow: visible !important;
-    height: 0 !important;
-    width: 0 !important;
-    margin: 0 !important;
-    border: 0 !important;
-    padding: 0 !important;
-    display: block !important;
-}
-
-.colorpicker-2x .colorpicker-saturation {
-    width: 200px;
-    height: 200px;
-}
-
-.colorpicker-2x .colorpicker-hue,
-.colorpicker-2x .colorpicker-alpha {
-    width: 30px;
-    height: 200px;
-}
-
-.colorpicker-2x .colorpicker-color,
-.colorpicker-2x .colorpicker-color div {
-    height: 30px;
 }

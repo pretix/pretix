@@ -11,7 +11,7 @@
         </div>
     {% endif %}
     <div class="row">
-        {% if 'can_change_orders' in request.eventpermset %}
+        {% if request.eventperm.can_change_orders %}
             <form method="post" class="col-md-6"
                     action="{% url "control:event.orders.waitinglist.auto" event=request.event.slug organizer=request.organizer.slug %}"
                     data-asynctask>
@@ -48,7 +48,7 @@
                 </div>
             </form>
         {% endif %}
-        <div class="{% if 'can_change_orders' in request.eventpermset %}col-md-6{% else %}col-md-12{% endif %}">
+        <div class="{% if request.eventperm.can_change_orders %}col-md-6{% else %}col-md-12{% endif %}">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {% trans "Sales estimate" %}

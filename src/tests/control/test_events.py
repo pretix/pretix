@@ -6,7 +6,9 @@ from i18nfield.strings import LazyI18nString
 from pytz import timezone
 from tests.base import SoupTest, extract_form_fields
 
-from pretix.base.models import Event, Organizer, Team, User
+from pretix.base.models import (
+    Event, EventPermission, Organizer, OrganizerPermission, User,
+)
 from pretix.testutils.mock import mocker_context
 
 
@@ -29,12 +31,9 @@ class EventsTest(SoupTest):
             organizer=self.orga2, name='MRMCD14', slug='mrmcd14',
             date_from=datetime.datetime(2014, 9, 5, tzinfo=datetime.timezone.utc),
         )
-
-        t = Team.objects.create(organizer=self.orga1, can_create_events=True, can_change_event_settings=True,
-                                can_change_items=True)
-        t.members.add(self.user)
-        t.limit_events.add(self.event1)
-
+        OrganizerPermission.objects.create(organizer=self.orga1, user=self.user)
+        EventPermission.objects.create(event=self.event1, user=self.user, can_change_items=True,
+                                       can_change_settings=True)
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
     def test_event_list(self):
@@ -319,7 +318,7 @@ class EventsTest(SoupTest):
         assert ev.settings.timezone == 'Europe/Berlin'
         assert ev.organizer == self.orga1
         assert ev.location == LazyI18nString({'de': 'Hamburg', 'en': 'Hamburg'})
-        assert Team.objects.filter(limit_events=ev, members=self.user).exists()
+        assert EventPermission.objects.filter(event=ev, user=self.user).exists()
 
         berlin_tz = timezone('Europe/Berlin')
         assert ev.date_from == berlin_tz.localize(datetime.datetime(2016, 12, 27, 10, 0, 0)).astimezone(pytz.utc)
@@ -360,7 +359,7 @@ class EventsTest(SoupTest):
         assert ev.settings.timezone == 'UTC'
         assert ev.organizer == self.orga1
         assert ev.location == LazyI18nString({'en': 'Hamburg'})
-        assert Team.objects.filter(limit_events=ev, members=self.user).exists()
+        assert EventPermission.objects.filter(event=ev, user=self.user).exists()
         assert ev.date_from == datetime.datetime(2016, 12, 27, 10, 0, 0, tzinfo=pytz.utc)
         assert ev.date_to is None
         assert ev.presale_start is None

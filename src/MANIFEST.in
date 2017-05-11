@@ -16,5 +16,3 @@ recursive-include pretix/plugins/statistics/templates *
 recursive-include pretix/plugins/statistics/static *
 recursive-include pretix/plugins/stripe/templates *
 recursive-include pretix/plugins/stripe/static *
-recursive-include pretix/plugins/ticketoutputpdf/templates *
-recursive-include pretix/plugins/ticketoutputpdf/static *

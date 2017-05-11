@@ -7,7 +7,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Event, Item, Order, OrderPosition, Organizer, Quota, Team, User,
+    Event, EventPermission, Item, Order, OrderPosition, Organizer, Quota, User,
 )
 from pretix.plugins.banktransfer.models import BankImportJob
 from pretix.plugins.banktransfer.tasks import process_banktransfers
@@ -21,9 +21,7 @@ def env():
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    t = Team.objects.create(organizer=event.organizer, can_view_orders=True, can_change_orders=True)
-    t.members.add(user)
-    t.limit_events.add(event)
+    EventPermission.objects.create(user=user, event=event)
     o1 = Order.objects.create(
         code='1Z3AS', event=event,
         status=Order.STATUS_PENDING,

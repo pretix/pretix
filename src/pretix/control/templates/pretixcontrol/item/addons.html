@@ -24,7 +24,6 @@
                     <div class="panel panel-default" data-formset-form>
                         <div class="sr-only">
                             {{ form.id }}
-                            {% bootstrap_field form.ORDER form_group_class="" layout="inline" %}
                             {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
                         </div>
                         <div class="panel-heading">
@@ -32,12 +31,8 @@
                                 <div class="col-sm-8">
                                     <h3 class="panel-title">{% trans "Add-On" %}</h3>
                                 </div>
-                                <div class="col-sm-4 text-right">
-                                    <button type="button" class="btn btn-xs btn-default" data-formset-move-up-button>
-                                        <i class="fa fa-arrow-up"></i></button>
-                                    <button type="button" class="btn btn-xs btn-default" data-formset-move-down-button>
-                                        <i class="fa fa-arrow-down"></i></button>
-                                    <button type="button" class="btn btn-xs btn-danger" data-formset-delete-button>
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-xs btn-danger pull-right" data-formset-delete-button>
                                         <i class="fa fa-trash"></i></button>
                                 </div>
                             </div>
@@ -56,7 +51,6 @@
                     <div class="panel panel-default" data-formset-form>
                         <div class="sr-only">
                             {{ formset.empty_form.id }}
-                            {% bootstrap_field formset.empty_form.ORDER form_group_class="" layout="inline" %}
                             {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
                         </div>
                         <div class="panel-heading">
@@ -65,11 +59,7 @@
                                     <h3 class="panel-title">{% trans "Add-On" %}</h3>
                                 </div>
                                 <div class="col-sm-4">
-                                    <button type="button" class="btn btn-xs btn-default" data-formset-move-up-button>
-                                        <i class="fa fa-arrow-up"></i></button>
-                                    <button type="button" class="btn btn-xs btn-default" data-formset-move-down-button>
-                                        <i class="fa fa-arrow-down"></i></button>
-                                    <button type="button" class="btn btn-xs btn-danger" data-formset-delete-button>
+                                    <button type="button" class="btn btn-xs btn-danger pull-right" data-formset-delete-button>
                                         <i class="fa fa-trash"></i></button>
                                 </div>
                             </div>

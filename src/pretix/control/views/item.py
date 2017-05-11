@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.files import File
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.db.models import Count, F, Max, Q
+from django.db.models import Count, F, Q
 from django.forms.models import ModelMultipleChoiceField, inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -72,7 +72,7 @@ def item_move(request, item, up=True):
         if item.position != i:
             item.position = i
             item.save()
-    messages.success(request, _('The order of items has been updated.'))
+    messages.success(request, _('The order of items as been updated.'))
 
 
 @event_permission_required("can_change_items")
@@ -803,8 +803,6 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
             form.instance.min_per_order = form.cleaned_data['copy_from'].min_per_order
             form.instance.max_per_order = form.cleaned_data['copy_from'].max_per_order
 
-        form.instance.position = (self.request.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
-
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.item.added', user=self.request.user, data={
             k: (form.cleaned_data.get(k).name
@@ -945,7 +943,7 @@ class ItemAddOns(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
         formsetclass = inlineformset_factory(
             Item, ItemAddOn,
             form=ItemAddOnForm, formset=ItemAddOnsFormSet,
-            can_order=True, can_delete=True, extra=0
+            can_order=False, can_delete=True, extra=0
         )
         return formsetclass(self.request.POST if self.request.method == "POST" else None,
                             queryset=ItemAddOn.objects.filter(base_item=self.get_object()),
@@ -965,13 +963,12 @@ class ItemAddOns(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
                     form.instance.delete()
                     form.instance.pk = None
 
-                forms = self.formset.ordered_forms + [
-                    ef for ef in self.formset.extra_forms
-                    if ef not in self.formset.ordered_forms and ef not in self.formset.deleted_forms
+                forms = [
+                    ef for ef in self.formset.extra_forms + self.formset.initial_forms
+                    if ef not in self.formset.deleted_forms
                 ]
                 for i, form in enumerate(forms):
                     form.instance.base_item = self.get_object()
-                    form.instance.position = i
                     created = not form.instance.pk
                     form.save()
                     if form.has_changed():
@@ -989,7 +986,7 @@ class ItemAddOns(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         if self.get_object().category and self.get_object().category.is_addon:
-            messages.error(self.request, _('You cannot add addons to a product that is only available as an add-on '
+            messages.error(self.request, _('Your cannot add addons to a product that is only available as an add-on '
                                            'itself.'))
             return redirect(self.get_previous_url())
 

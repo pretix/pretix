@@ -2,7 +2,8 @@ import pytest
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Event, Item, Organizer, Quota, Team, User, Voucher, WaitingListEntry,
+    Event, EventPermission, Item, Organizer, Quota, User, Voucher,
+    WaitingListEntry,
 )
 from pretix.control.views.dashboards import waitinglist_widgets
 
@@ -33,9 +34,12 @@ def env():
         event=event, item=item2, email='item2@example.org'
     )
 
-    t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True)
-    t.members.add(user)
-    t.limit_events.add(event)
+    EventPermission.objects.create(
+        event=event,
+        user=user,
+        can_view_orders=True,
+        can_change_orders=True
+    )
     return event, user, o, item1
 
 

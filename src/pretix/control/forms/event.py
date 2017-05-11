@@ -2,7 +2,6 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from django.db.models import Q
 from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
@@ -27,7 +26,7 @@ class EventWizardFoundationForm(forms.Form):
         self.fields['organizer'] = forms.ModelChoiceField(
             label=_("Organizer"),
             queryset=Organizer.objects.filter(
-                id__in=self.user.teams.filter(can_create_events=True).values_list('organizer', flat=True)
+                id__in=self.user.organizer_perms.filter(can_create_events=True).values_list('organizer', flat=True)
             ),
             widget=forms.RadioSelect,
             empty_label=None,
@@ -112,16 +111,6 @@ class EventWizardBasicsForm(I18nModelForm):
 
 class EventWizardCopyForm(forms.Form):
 
-    @staticmethod
-    def copy_from_queryset(user):
-        return Event.objects.filter(
-            Q(organizer_id__in=user.teams.filter(
-                all_events=True, can_change_event_settings=True, can_change_items=True
-            ).values_list('organizer', flat=True)) | Q(id__in=user.teams.filter(
-                can_change_event_settings=True, can_change_items=True
-            ).values_list('limit_events__id', flat=True))
-        )
-
     def __init__(self, *args, **kwargs):
         kwargs.pop('organizer')
         kwargs.pop('locales')
@@ -129,7 +118,11 @@ class EventWizardCopyForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['copy_from_event'] = forms.ModelChoiceField(
             label=_("Copy configuration from"),
-            queryset=EventWizardCopyForm.copy_from_queryset(self.user),
+            queryset=Event.objects.filter(
+                id__in=self.user.event_perms.filter(
+                    can_change_items=True, can_change_settings=True
+                ).values_list('event', flat=True)
+            ),
             widget=forms.RadioSelect,
             empty_label=_('Do not copy'),
             required=False
@@ -143,7 +136,6 @@ class EventUpdateForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['slug'].widget.attrs['readonly'] = 'readonly'
-        self.fields['location'].widget.attrs['rows'] = '3'
 
     class Meta:
         model = Event
@@ -154,7 +146,6 @@ class EventUpdateForm(I18nModelForm):
             'currency',
             'date_from',
             'date_to',
-            'date_admission',
             'is_public',
             'presale_start',
             'presale_end',
@@ -163,7 +154,6 @@ class EventUpdateForm(I18nModelForm):
         widgets = {
             'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
             'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker', 'data-date-after': '#id_date_from'}),
-            'date_admission': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
             'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
             'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker',
                                                       'data-date-after': '#id_presale_start'}),
@@ -477,15 +467,6 @@ class MailSettingsForm(SettingsForm):
         label=_("Sender address"),
         help_text=_("Sender address for outgoing emails")
     )
-
-    mail_text_signature = I18nFormField(
-        label=_("Signature"),
-        required=False,
-        widget=I18nTextarea,
-        help_text=_("This will be attached to every email. Available placeholders: {event}"),
-        validators=[PlaceholderValidator(['{event}'])]
-    )
-
     mail_text_order_placed = I18nFormField(
         label=_("Text"),
         required=False,
@@ -605,8 +586,7 @@ class DisplaySettingsForm(SettingsForm):
         validators=[
             RegexValidator(regex='^#[0-9a-fA-F]{6}$',
                            message=_('Please enter the hexadecimal code of a color, e.g. #990000.'))
-        ],
-        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
+        ]
     )
     logo_image = ExtFileField(
         label=_('Logo image'),
@@ -641,11 +621,6 @@ class TicketSettingsForm(SettingsForm):
     )
     ticket_download_addons = forms.BooleanField(
         label=_("Offer to download tickets separately for add-on products"),
-        required=False,
-        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_ticket_download'}),
-    )
-    ticket_download_nonadm = forms.BooleanField(
-        label=_("Generate tickets for non-admission products"),
         required=False,
         widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_ticket_download'}),
     )

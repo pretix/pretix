@@ -20,10 +20,10 @@ def regenerate_css(event_id: int):
     event = Event.objects.select_related('organizer').get(pk=event_id)
     sassdir = os.path.join(settings.STATIC_ROOT, 'pretixpresale/scss')
 
-    sassrules = []
-    if event.settings.get('primary_color'):
-        sassrules.append('$brand-primary: {};'.format(event.settings.get('primary_color')))
-    sassrules.append('@import "main.scss";')
+    sassrules = [
+        '$brand-primary: {};'.format(event.settings.get('primary_color')),
+        '@import "main.scss";',
+    ]
 
     css = sass.compile(
         string="\n".join(sassrules),

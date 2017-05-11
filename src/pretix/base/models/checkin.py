@@ -8,4 +8,3 @@ class Checkin(models.Model):
     """
     position = models.ForeignKey('pretixbase.OrderPosition', related_name='checkins')
     datetime = models.DateTimeField(default=now)
-    nonce = models.CharField(max_length=190, null=True, blank=True)

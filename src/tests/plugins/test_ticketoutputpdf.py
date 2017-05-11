@@ -39,7 +39,8 @@ def env():
 
 
 @pytest.mark.django_db
-def test_generate_pdf(env):
+def test_generate_pdf(env, mocker):
+    mocked = mocker.patch('reportlab.pdfgen.canvas.Canvas.drawString')
     event, order = env
     event.settings.set('ticketoutput_pdf_code_x', 30)
     event.settings.set('ticketoutput_pdf_code_y', 50)
@@ -49,3 +50,4 @@ def test_generate_pdf(env):
     assert ftype == 'application/pdf'
     pdf = PdfFileReader(BytesIO(buf))
     assert pdf.numPages == 1
+    assert mocked.called

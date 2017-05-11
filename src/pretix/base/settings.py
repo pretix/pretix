@@ -163,10 +163,6 @@ DEFAULTS = {
         'default': 'False',
         'type': bool
     },
-    'ticket_download_nonadm': {
-        'default': 'True',
-        'type': bool
-    },
     'last_order_modification_date': {
         'default': None,
         'type': datetime
@@ -190,10 +186,6 @@ DEFAULTS = {
     'mail_from': {
         'default': settings.MAIL_FROM,
         'type': str
-    },
-    'mail_text_signature': {
-        'type': LazyI18nString,
-        'default': ""
     },
     'mail_text_resend_link': {
         'type': LazyI18nString,

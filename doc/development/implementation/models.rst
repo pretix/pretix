@@ -20,10 +20,13 @@ Organizers and events
 .. autoclass:: pretix.base.models.Organizer
    :members:
 
+.. autoclass:: pretix.base.models.OrganizerPermission
+   :members:
+
 .. autoclass:: pretix.base.models.Event
    :members:
 
-.. autoclass:: pretix.base.models.Team
+.. autoclass:: pretix.base.models.EventPermission
    :members:
 
 .. autoclass:: pretix.base.models.RequiredAction
@@ -64,7 +67,7 @@ Carts and Orders
    :members:
 
 .. autoclass:: pretix.base.models.QuestionAnswer
-   :members:
+:members:
 
 .. autoclass:: pretix.base.models.Checkin
    :members:
@@ -89,3 +92,5 @@ Vouchers
 
 .. autoclass:: pretix.base.models.Voucher
    :members:
+
+.. _cleanerversion: https://github.com/swisscom/cleanerversion

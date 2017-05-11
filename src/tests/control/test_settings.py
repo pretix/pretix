@@ -4,7 +4,9 @@ import re
 
 from tests.base import SoupTest
 
-from pretix.base.models import Event, Organizer, Team, User
+from pretix.base.models import (
+    Event, EventPermission, Organizer, OrganizerPermission, User,
+)
 
 
 class MailSettingPreviewTest(SoupTest):
@@ -23,10 +25,11 @@ class MailSettingPreviewTest(SoupTest):
         )
         self.locale_event.settings.locales = ['en', 'de-informal']
         self.locale_event.save()
-        t = Team.objects.create(organizer=self.orga1, can_change_items=True, can_change_event_settings=True)
-        t.members.add(self.user)
-        t.limit_events.add(self.locale_event)
-        t.limit_events.add(self.event1)
+        OrganizerPermission.objects.create(organizer=self.orga1, user=self.user)
+        EventPermission.objects.create(event=self.event1, user=self.user, can_change_items=True,
+                                       can_change_settings=True)
+        EventPermission.objects.create(event=self.locale_event, user=self.user, can_change_items=True,
+                                       can_change_settings=True)
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
         self.target = '/control/event/{}/{}/settings/email/preview'

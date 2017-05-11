@@ -4,8 +4,8 @@ import pytest
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Event, Item, ItemCategory, Order, OrderPosition, Organizer, Question,
-    Quota, Team, User, Voucher,
+    Event, EventPermission, Item, ItemCategory, Order, OrderPosition,
+    Organizer, OrganizerPermission, Question, Quota, User, Voucher,
 )
 
 
@@ -57,13 +57,9 @@ def voucher(quota):
 @pytest.fixture
 def logged_in_client(client, event):
     user = User.objects.create_superuser('dummy@dummy.dummy', 'dummy')
-    t = Team.objects.create(
-        organizer=event.organizer,
-        all_events=True, can_create_events=True, can_change_teams=True,
-        can_change_organizer_settings=True, can_change_event_settings=True, can_change_items=True,
-        can_view_orders=True, can_change_orders=True, can_view_vouchers=True, can_change_vouchers=True
-    )
-    t.members.add(user)
+    OrganizerPermission.objects.create(organizer=event.organizer, user=user, can_create_events=True)
+    EventPermission.objects.create(event=event, user=user, can_change_items=True,
+                                   can_change_settings=True, can_change_orders=True, can_view_orders=True)
     client.force_login(user)
     return client
 
@@ -72,9 +68,6 @@ def logged_in_client(client, event):
     ('/control/', 200),
     ('/control/settings/2fa/', 302),
     ('/control/settings/history/', 200),
-
-    ('/control/global/settings/', 200),
-    ('/control/global/update/', 200),
 
     ('/control/organizers/', 200),
     ('/control/organizers/add', 200),
@@ -125,7 +118,6 @@ def logged_in_client(client, event):
     ('/control/event/{orga}/{event}/orders/{order_code}/contact', 200),
     ('/control/event/{orga}/{event}/orders/{order_code}/comment', 405),
     ('/control/event/{orga}/{event}/orders/{order_code}/change', 200),
-    ('/control/event/{orga}/{event}/orders/{order_code}/locale', 200),
     ('/control/event/{orga}/{event}/orders/{order_code}/', 200),
     ('/control/event/{orga}/{event}/orders/overview/', 200),
     ('/control/event/{orga}/{event}/orders/export/', 200),

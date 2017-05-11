@@ -14,7 +14,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#cp{{ form.cartpos.pk }}">
+                            <a data-toggle="collapse" href="#cp{{ form.pos.id }}">
                                 <strong>{{ form.item.name }}</strong>
                                 {% if form.variation %}
                                     – {{ form.variation }}
@@ -22,7 +22,7 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="cp{{ form.cartpos.pk }}"
+                    <div id="cp{{ form.pos.id }}"
                             class="panel-collapse collapsed in">
                         <div class="panel-body">
                             {% for c in form.categories %}
@@ -35,7 +35,7 @@
                                             {% endblocktrans %}
                                         {% elif c.min_count == 0 %}
                                             {% blocktrans trimmed with max_count=c.max_count %}
-                                                You can choose up to {{ max_count }} options from this category.
+                                                You can to choose up to {{ max_count }} options from this category.
                                             {% endblocktrans %}
                                         {% else %}
                                             {% blocktrans trimmed with min_count=c.min_count max_count=c.max_count %}

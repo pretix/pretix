@@ -23,7 +23,7 @@ footer {
     .loginbox {
         padding-top: 15px;
     }
-    .event-logo, .organizer-logo {
+    .event-logo {
         max-width: 100%;
         height: auto;
     }
@@ -114,22 +114,6 @@ body.loading .container {
     transition: opacity .5s ease-in-out;
     -moz-transition: opacity .5s ease-in-out;
     -webkit-transition: opacity .5s ease-in-out;
-}
-
-.info-row {
-    & > .fa {
-        font-size: 26px;
-        color: $brand-primary;
-        float: left;
-        margin-top: 3px;
-    }
-    p {
-        min-height: 30px;
-        margin-left: 40px;
-    }
-    p:first-child {
-        margin-top: 0;
-    }
 }
 
 @media (min-width: $screen-md-min) {

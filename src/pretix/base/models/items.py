@@ -310,8 +310,6 @@ class ItemVariation(models.Model):
     :type item: Item
     :param value: A string defining this variation
     :type value: str
-    :param description: A short description
-    :type description: str
     :param active: Whether this variation is being sold.
     :type active: bool
     :param default_price: This variation's default price
@@ -328,11 +326,6 @@ class ItemVariation(models.Model):
     active = models.BooleanField(
         default=True,
         verbose_name=_("Active"),
-    )
-    description = I18nTextField(
-        verbose_name=_("Description"),
-        help_text=_("This is shown below the variation name in lists."),
-        null=True, blank=True,
     )
     position = models.PositiveIntegerField(
         default=0,
@@ -420,14 +413,9 @@ class ItemAddOn(models.Model):
         default=1,
         verbose_name=_('Maximum number')
     )
-    position = models.PositiveIntegerField(
-        default=0,
-        verbose_name=_("Position")
-    )
 
     class Meta:
         unique_together = (('base_item', 'addon_category'),)
-        ordering = ('position', 'pk')
 
     def clean(self):
         if self.max_count < self.min_count:

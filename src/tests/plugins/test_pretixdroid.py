@@ -5,10 +5,9 @@ import pytest
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Checkin, Event, Item, ItemVariation, Order, OrderPosition, Organizer, Team,
-    User,
+    Checkin, Event, EventPermission, Item, ItemVariation, Order, OrderPosition,
+    Organizer, User,
 )
-from pretix.plugins.pretixdroid.views import API_VERSION
 
 
 @pytest.fixture
@@ -19,11 +18,7 @@ def env():
         date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.pretixdroid'
     )
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-
-    t = Team.objects.create(organizer=o, can_change_event_settings=True, can_change_items=True)
-    t.members.add(user)
-    t.limit_events.add(event)
-
+    EventPermission.objects.create(user=user, event=event)
     shirt = Item.objects.create(event=event, name='T-Shirt', default_price=12)
     shirt_red = ItemVariation.objects.create(item=shirt, default_price=14, value="Red")
     ItemVariation.objects.create(item=shirt, value="Blue")
@@ -58,63 +53,19 @@ def test_flush_key(client, env):
 
 
 @pytest.mark.django_db
-def test_custom_datetime(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
-    dt = now() - timedelta(days=1)
-    dt = dt.replace(microsecond=0)
-    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
-                       data={'secret': '1234', 'datetime': dt.isoformat()})
-    jdata = json.loads(resp.content.decode("utf-8"))
-    assert jdata['version'] == API_VERSION
-    assert jdata['status'] == 'ok'
-    assert Checkin.objects.last().datetime == dt
-
-
-@pytest.mark.django_db
 def test_only_once(client, env):
     env[0].settings.set('pretixdroid_key', 'abcdefg')
 
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '1234'})
     jdata = json.loads(resp.content.decode("utf-8"))
-    assert jdata['version'] == API_VERSION
+    assert jdata['version'] == 2
     assert jdata['status'] == 'ok'
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '1234'})
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['status'] == 'error'
     assert jdata['reason'] == 'already_redeemed'
-
-
-@pytest.mark.django_db
-def test_reupload_same_nonce(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
-
-    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
-                       data={'secret': '1234', 'nonce': 'fooobar'})
-    jdata = json.loads(resp.content.decode("utf-8"))
-    assert jdata['version'] == API_VERSION
-    assert jdata['status'] == 'ok'
-    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
-                       data={'secret': '1234', 'nonce': 'fooobar'})
-    jdata = json.loads(resp.content.decode("utf-8"))
-    assert jdata['status'] == 'ok'
-    assert Checkin.objects.count() == 1
-
-
-@pytest.mark.django_db
-def test_forced_multiple(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
-
-    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
-                       data={'secret': '1234'})
-    jdata = json.loads(resp.content.decode("utf-8"))
-    assert jdata['version'] == API_VERSION
-    assert jdata['status'] == 'ok'
-    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
-                       data={'secret': '1234', 'force': 'true'})
-    jdata = json.loads(resp.content.decode("utf-8"))
-    assert jdata['status'] == 'ok'
 
 
 @pytest.mark.django_db
@@ -163,16 +114,6 @@ def test_search(client, env):
     jdata = json.loads(resp.content.decode("utf-8"))
     assert len(jdata['results']) == 1
     assert jdata['results'][0]['secret'] == '5678910'
-
-
-@pytest.mark.django_db
-def test_download_all_data(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
-    resp = client.get('/pretixdroid/api/%s/%s/download/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'))
-    jdata = json.loads(resp.content.decode("utf-8"))
-    assert len(jdata['results']) == 2
-    assert jdata['results'][0]['secret'] == '1234'
-    assert jdata['results'][1]['secret'] == '5678910'
 
 
 @pytest.mark.django_db
