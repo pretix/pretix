@@ -54,6 +54,10 @@ def contextprocessor(request):
         ctx['event_logo'] = request.event.settings.get('logo_image', as_type=str, default='')[7:]
         ctx['event'] = request.event
 
+    if hasattr(request, 'organizer'):
+        ctx['organizer_logo'] = request.organizer.settings.get('organizer_logo_image', as_type=str, default='')[7:]
+        ctx['organizer'] = request.organizer
+
     ctx['html_head'] = "".join(_html_head)
     ctx['html_foot'] = "".join(_html_foot)
     ctx['footer'] = _footer

@@ -148,6 +148,18 @@
                 </td>
             </tr>
         {% endif %}
+	{% if signature %}
+            <tr>
+                <td class="gap"></td>
+            </tr>
+            <tr>
+                <td class="order containertd">
+                    <div class="content">
+                        {{ signature | safe }}
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
         <tr>
             <td class="footer">
                 <div>

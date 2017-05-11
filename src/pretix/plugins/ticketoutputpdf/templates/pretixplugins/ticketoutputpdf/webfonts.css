@@ -1,0 +1,36 @@
+{% load staticfiles %}
+
+{% for family, styles in fonts.items %}
+{% for style, formats in styles.items %}
+@font-face {
+    font-family: '{{ family }}';
+    {% if style == "italic" or style == "bolditalic" %}
+        font-style: italic;
+    {% else %}
+        font-style: normal;
+    {% endif %}
+    {% if style == "bold" or style == "bolditalic" %}
+        font-weight: bold;
+    {% else %}
+        font-weight: normal;
+    {% endif %}
+    src: {% if "woff2" in formats %}url('{% static formats.woff2 %}') format('woff2'),{% endif %}
+         {% if "woff" in formats %}url('{% static formats.woff %}') format('woff'),{% endif %}
+         {% if "truetype" in formats %}url('{% static formats.truetype %}') format('truetype'){% endif %};
+}
+.preload-font[data-family="{{family}}"][data-style="{{style}}"] {
+    font-family: '{{ family }}';
+    {% if style == "italic" or style == "bolditalic" %}
+        font-style: italic;
+    {% else %}
+        font-style: normal;
+    {% endif %}
+    {% if style == "bold" or style == "bolditalic" %}
+        font-weight: bold;
+    {% else %}
+        font-weight: normal;
+    {% endif %}
+
+}
+{% endfor %}
+{% endfor %}

@@ -20,6 +20,7 @@ $(function () {
         $($(this).attr("data-target")).collapse('show');
     });
     $(".js-only").removeClass("js-only");
+    $(".js-hidden").hide();
     $(".variations-collapsed").hide();
     $("a[data-toggle=variations]").click(function (e) {
         $(this).parent().parent().parent().find(".variations").slideToggle();
@@ -37,6 +38,12 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
+
+    // AddOns
+    $('.addon-variation-description').hide();
+    $('.toggle-variation-description').click(function () {
+        $(this).parent().find('.addon-variation-description').slideToggle();
+    });
     
     // Copy answers
     $(".js-copy-answers").click(function (e) {

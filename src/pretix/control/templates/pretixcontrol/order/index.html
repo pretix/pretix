@@ -14,7 +14,7 @@
         {% endblocktrans %}
         {% include "pretixcontrol/orders/fragment_order_status.html" with order=order class="pull-right" %}
     </h1>
-    {% if request.eventperm.can_change_orders %}
+    {% if 'can_change_orders' in request.eventpermset %}
         {% if order.status == 'n' or order.status == 'p' or order.status == 'e' %}
             <form action="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
                     method="post">
@@ -151,7 +151,7 @@
             <div class="panel panel-default items">
                 <div class="panel-heading">
                     <div class="pull-right">
-                        {% if order.changable and request.eventperm.can_change_orders %}
+                        {% if order.changable and 'can_change_orders' in request.eventpermset %}
                             <a href="{% url "control:event.order.change" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                 <span class="fa fa-edit"></span>
                                 {% trans "Change products" %}

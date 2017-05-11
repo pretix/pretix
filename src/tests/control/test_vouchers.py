@@ -5,8 +5,7 @@ from django.utils.timezone import now
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import (
-    Event, EventPermission, Item, ItemVariation, Organizer,
-    OrganizerPermission, Quota, User, Voucher,
+    Event, Item, ItemVariation, Organizer, Quota, Team, User, Voucher,
 )
 
 
@@ -19,9 +18,9 @@ class VoucherFormTest(SoupTest):
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
         )
-        OrganizerPermission.objects.create(organizer=self.orga, user=self.user)
-        EventPermission.objects.create(event=self.event, user=self.user, can_change_vouchers=True,
-                                       can_change_settings=True)
+        t = Team.objects.create(organizer=self.orga, can_view_vouchers=True, can_change_vouchers=True)
+        t.members.add(self.user)
+        t.limit_events.add(self.event)
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
         self.quota_shirts = Quota.objects.create(event=self.event, name='Shirts', size=2)

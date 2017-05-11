@@ -109,7 +109,7 @@ class CartMixin:
             'payment_fee_tax_rate': payment_fee_tax_rate,
             'answers': answers,
             'minutes_left': minutes_left,
-            'first_expiry': first_expiry
+            'first_expiry': first_expiry,
         }
 
     def get_payment_fee(self, total):

@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView
 from formtools.wizard.views import SessionWizardView
 
-from pretix.base.models import Event, EventPermission, OrganizerPermission
+from pretix.base.models import Event, Team
 from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
 )
@@ -20,22 +20,13 @@ class EventList(ListView):
     template_name = 'pretixcontrol/events/index.html'
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return Event.objects.all().select_related("organizer").prefetch_related(
-                "_settings_objects", "organizer___settings_objects"
-            )
-        else:
-            return Event.objects.filter(
-                permitted__id__exact=self.request.user.pk
-            ).select_related("organizer").prefetch_related(
-                "_settings_objects", "organizer___settings_objects"
-            )
+        return self.request.user.get_events_with_any_permission().select_related('organizer').prefetch_related(
+            '_settings_objects', 'organizer___settings_objects'
+        )
 
 
 def condition_copy(wizard):
-    return EventPermission.objects.filter(
-        user=wizard.request.user, can_change_settings=True, can_change_items=True
-    ).exists()
+    return EventWizardCopyForm.copy_from_queryset(wizard.request.user).exists()
 
 
 class EventWizard(SessionWizardView):
@@ -55,8 +46,7 @@ class EventWizard(SessionWizardView):
 
     def get_context_data(self, form, **kwargs):
         ctx = super().get_context_data(form, **kwargs)
-        ctx['has_organizer'] = OrganizerPermission.objects.filter(user=self.request.user,
-                                                                  can_create_events=True).exists()
+        ctx['has_organizer'] = self.request.user.teams.filter(can_create_events=True).exists()
         return ctx
 
     def get_form_kwargs(self, step=None):
@@ -81,7 +71,20 @@ class EventWizard(SessionWizardView):
             event.organizer = foundation_data['organizer']
             event.plugins = settings.PRETIX_PLUGINS_DEFAULT
             form_dict['basics'].save()
-            EventPermission.objects.create(event=event, user=self.request.user)
+
+            has_control_rights = self.request.user.teams.filter(
+                organizer=event.organizer, all_events=True, can_change_event_settings=True, can_change_items=True,
+                can_change_orders=True, can_change_vouchers=True
+            ).exists()
+            if not has_control_rights:
+                t = Team.objects.create(
+                    organizer=event.organizer, name=_('Team {event}').format(event=event.name),
+                    can_change_event_settings=True, can_change_items=True,
+                    can_view_orders=True, can_change_orders=True, can_view_vouchers=True,
+                    can_change_vouchers=True
+                )
+                t.members.add(self.request.user)
+                t.limit_events.add(event)
 
             logdata = {}
             for f in form_list:

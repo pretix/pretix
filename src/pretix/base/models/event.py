@@ -13,7 +13,7 @@ from django.template.defaultfilters import date as _date
 from django.utils.crypto import get_random_string
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
-from i18nfield.fields import I18nCharField
+from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.email import CustomSMTPBackend
 from pretix.base.models.base import LoggedModel
@@ -21,7 +21,6 @@ from pretix.base.validators import EventSlugBlacklistValidator
 from pretix.helpers.daterange import daterange
 
 from ..settings import settings_hierarkey
-from .auth import User
 from .organizer import Organizer
 
 
@@ -79,8 +78,6 @@ class Event(LoggedModel):
         verbose_name=_("Short form"),
     )
     live = models.BooleanField(default=False, verbose_name=_("Shop is live"))
-    permitted = models.ManyToManyField(User, through='EventPermission',
-                                       related_name="events", )
     currency = models.CharField(max_length=10,
                                 verbose_name=_("Default currency"),
                                 choices=CURRENCY_CHOICES,
@@ -88,6 +85,8 @@ class Event(LoggedModel):
     date_from = models.DateTimeField(verbose_name=_("Event start time"))
     date_to = models.DateTimeField(null=True, blank=True,
                                    verbose_name=_("Event end time"))
+    date_admission = models.DateTimeField(null=True, blank=True,
+                                          verbose_name=_("Admission time"))
     is_public = models.BooleanField(default=False,
                                     verbose_name=_("Visible in public lists"),
                                     help_text=_("If selected, this event may show up on the ticket system's start page "
@@ -102,7 +101,7 @@ class Event(LoggedModel):
         verbose_name=_("Start of presale"),
         help_text=_("No products will be sold before this date."),
     )
-    location = I18nCharField(
+    location = I18nTextField(
         null=True, blank=True,
         max_length=200,
         verbose_name=_("Location"),
@@ -140,7 +139,7 @@ class Event(LoggedModel):
             return []
         return self.plugins.split(",")
 
-    def get_date_from_display(self, tz=None) -> str:
+    def get_date_from_display(self, tz=None, show_times=True) -> str:
         """
         Returns a formatted string containing the start date of the event with respect
         to the current locale and to the ``show_times`` setting.
@@ -148,7 +147,17 @@ class Event(LoggedModel):
         tz = tz or pytz.timezone(self.settings.timezone)
         return _date(
             self.date_from.astimezone(tz),
-            "DATETIME_FORMAT" if self.settings.show_times else "DATE_FORMAT"
+            "DATETIME_FORMAT" if self.settings.show_times and show_times else "DATE_FORMAT"
+        )
+
+    def get_time_from_display(self, tz=None) -> str:
+        """
+        Returns a formatted string containing the start time of the event, ignoring
+        the ``show_times`` setting.
+        """
+        tz = tz or pytz.timezone(self.settings.timezone)
+        return _date(
+            self.date_from.astimezone(tz), "TIME_FORMAT"
         )
 
     def get_date_to_display(self, tz=None) -> str:
@@ -269,7 +278,8 @@ class Event(LoggedModel):
             q.event = self
             q.save()
             for i in items:
-                q.items.add(item_map[i.pk])
+                if i.pk in item_map:
+                    q.items.add(item_map[i.pk])
             for v in vars:
                 q.variations.add(variation_map[v.pk])
 
@@ -304,69 +314,6 @@ class Event(LoggedModel):
 
 def generate_invite_token():
     return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)
-
-
-class EventPermission(models.Model):
-    """
-    The relation between an Event and a User who has permissions to
-    access an event.
-
-    :param event: The event this permission refers to
-    :type event: Event
-    :param user: The user this permission set applies to
-    :type user: User
-    :param can_change_settings: If ``True``, the user can change all basic settings for this event.
-    :type can_change_settings: bool
-    :param can_change_items: If ``True``, the user can change and add items and related objects for this event.
-    :type can_change_items: bool
-    :param can_view_orders: If ``True``, the user can inspect details of all orders.
-    :type can_view_orders: bool
-    :param can_change_orders: If ``True``, the user can change details of orders
-    :type can_change_orders: bool
-    """
-
-    event = models.ForeignKey(Event, related_name="user_perms", on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name="event_perms", on_delete=models.CASCADE, null=True, blank=True)
-    invite_email = models.EmailField(null=True, blank=True)
-    invite_token = models.CharField(default=generate_invite_token, max_length=64, null=True, blank=True)
-    can_change_settings = models.BooleanField(
-        default=True,
-        verbose_name=_("Can change event settings")
-    )
-    can_change_items = models.BooleanField(
-        default=True,
-        verbose_name=_("Can change product settings")
-    )
-    can_view_orders = models.BooleanField(
-        default=True,
-        verbose_name=_("Can view orders")
-    )
-    can_change_permissions = models.BooleanField(
-        default=True,
-        verbose_name=_("Can change permissions")
-    )
-    can_change_orders = models.BooleanField(
-        default=True,
-        verbose_name=_("Can change orders")
-    )
-    can_view_vouchers = models.BooleanField(
-        default=True,
-        verbose_name=_("Can view vouchers")
-    )
-    can_change_vouchers = models.BooleanField(
-        default=True,
-        verbose_name=_("Can change vouchers")
-    )
-
-    class Meta:
-        verbose_name = _("Event permission")
-        verbose_name_plural = _("Event permissions")
-
-    def __str__(self):
-        return _("%(name)s on %(object)s") % {
-            'name': str(self.user),
-            'object': str(self.event),
-        }
 
 
 class EventLock(models.Model):

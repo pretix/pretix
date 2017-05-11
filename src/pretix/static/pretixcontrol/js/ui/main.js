@@ -83,7 +83,7 @@ $(function () {
     });
 
     $('.collapsible').collapse();
-    
+
     $('[data-toggle="tooltip"]').tooltip();
 
     var url = document.location.toString();
@@ -187,6 +187,24 @@ $(function () {
         earlier_field.on("dp.change", update);
     });
 
+    $(".colorpickerfield").colorpicker({
+        format: 'hex',
+        align: 'left',
+        customClass: 'colorpicker-2x',
+        sliders: {
+            saturation: {
+                maxLeft: 200,
+                maxTop: 200
+            },
+            hue: {
+                maxTop: 200
+            },
+            alpha: {
+                maxTop: 200
+            }
+        }
+    });
+
     $("input[data-checkbox-dependency]").each(function () {
         var dependent = $(this),
             dependency = $($(this).attr("data-checkbox-dependency")),
@@ -196,6 +214,17 @@ $(function () {
                 if (!enabled) {
                     dependent.prop('checked', false);
                 }
+            };
+        update();
+        dependency.on("change", update);
+    });
+
+    $("input[data-inverse-dependency]").each(function () {
+        var dependent = $(this),
+            dependency = $($(this).attr("data-inverse-dependency")),
+            update = function () {
+                var enabled = !dependency.prop('checked');
+                dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
             };
         update();
         dependency.on("change", update);

@@ -13,7 +13,7 @@ from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import (
-    Event, Item, Order, OrderPosition, Voucher, WaitingListEntry,
+    Item, Order, OrderPosition, Voucher, WaitingListEntry,
 )
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,
@@ -169,6 +169,27 @@ def shop_state_widget(sender, **kwargs):
 
 
 @receiver(signal=event_dashboard_widgets)
+def checkin_widget(sender, **kwargs):
+    size_qs = OrderPosition.objects.filter(order__event=sender, order__status='p')
+    checked_qs = OrderPosition.objects.filter(order__event=sender, order__status='p', checkins__isnull=False)
+
+    # if this setting is False, we check only items for admission
+    if not sender.settings.ticket_download_nonadm:
+        size_qs = size_qs.filter(item__admission=True)
+        checked_qs = checked_qs.filter(item__admission=True)
+
+    return [{
+        'content': NUM_WIDGET.format(num='{}/{}'.format(checked_qs.count(), size_qs.count()), text=_('Checked in')),
+        'display_size': 'small',
+        'priority': 50,
+        'url': reverse('control:event.orders.checkins', kwargs={
+            'event': sender.slug,
+            'organizer': sender.organizer.slug
+        })
+    }]
+
+
+@receiver(signal=event_dashboard_widgets)
 def welcome_wizard_widget(sender, **kwargs):
     template = get_template('pretixcontrol/event/dashboard_widget_welcome.html')
     ctx = {
@@ -207,11 +228,12 @@ def event_index(request, organizer, event):
     for r, result in event_dashboard_widgets.send(sender=request.event):
         widgets.extend(result)
 
+    can_change_orders = request.user.has_event_permission(request.organizer, request.event, 'can_change_orders')
     qs = request.event.logentry_set.all().select_related('user', 'content_type').order_by('-datetime')
     qs = qs.exclude(action_type__in=OVERVIEW_BLACKLIST)
-    if not request.eventperm.can_view_orders:
+    if not request.user.has_event_permission(request.organizer, request.event, 'can_view_orders'):
         qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
-    if not request.eventperm.can_view_vouchers:
+    if not request.user.has_event_permission(request.organizer, request.event, 'can_view_vouchers'):
         qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
 
     a_qs = request.event.requiredaction_set.filter(done=False)
@@ -221,7 +243,7 @@ def event_index(request, organizer, event):
     ctx = {
         'widgets': rearrange(widgets),
         'logs': qs[:5],
-        'actions': a_qs[:5] if request.eventperm.can_change_orders else [],
+        'actions': a_qs[:5] if can_change_orders else [],
         'has_domain': has_domain
     }
 
@@ -242,7 +264,8 @@ def event_index(request, organizer, event):
 def user_event_widgets(**kwargs):
     user = kwargs.pop('user')
     widgets = []
-    events = Event.objects.filter(permitted__id__exact=user.pk).select_related("organizer").order_by('-date_from')
+
+    events = user.get_events_with_any_permission().order_by('-date_from', 'name').select_related('organizer')
     for event in events:
         widgets.append({
             'content': '<div class="event">{event}<span class="from">{df}</span><span class="to">{dt}</span></div>'.format(

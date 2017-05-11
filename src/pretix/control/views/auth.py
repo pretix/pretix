@@ -9,6 +9,7 @@ from django.contrib.auth import (
 )
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -23,9 +24,7 @@ from u2flib_server.utils import rand_bytes
 from pretix.base.forms.auth import (
     LoginForm, PasswordForgotForm, PasswordRecoverForm, RegistrationForm,
 )
-from pretix.base.models import (
-    EventPermission, OrganizerPermission, U2FDevice, User,
-)
+from pretix.base.models import TeamInvite, U2FDevice, User
 from pretix.base.services.mail import SendMailException, mail
 from pretix.helpers.urls import build_absolute_uri
 
@@ -108,35 +107,30 @@ def invite(request, token):
     ctx = {}
 
     try:
-        perm = EventPermission.objects.get(invite_token=token)
-        desc = perm.event.name
-    except EventPermission.DoesNotExist:
-        try:
-            perm = OrganizerPermission.objects.get(invite_token=token)
-            desc = perm.organizer.name
-        except OrganizerPermission.DoesNotExist:
-            messages.error(request, _('You used an invalid link. Please copy the link from your email to the address bar '
-                                      'and make sure it is correct and that the link has not been used before.'))
-            return redirect('control:auth.login')
+        inv = TeamInvite.objects.get(token=token)
+    except TeamInvite.DoesNotExist:
+        messages.error(request, _('You used an invalid link. Please copy the link from your email to the address bar '
+                                  'and make sure it is correct and that the link has not been used before.'))
+        return redirect('control:auth.login')
 
     if request.user.is_authenticated:
-        try:
-            if isinstance(perm, EventPermission):
-                EventPermission.objects.get(event=perm.event, user=request.user)
-            else:
-                OrganizerPermission.objects.get(organizer=perm.organizer, user=request.user)
+        if inv.team.members.filter(pk=request.user.pk).exists():
             messages.error(request, _('You cannot accept the invitation for "{}" as you already are part of '
-                                      'this team.').format(desc))
+                                      'this team.').format(inv.team.name))
             return redirect('control:index')
-        except (EventPermission.DoesNotExist, OrganizerPermission.DoesNotExist):
-            pass
-
-        perm.invite_token = None
-        perm.invite_email = None
-        perm.user = request.user
-        perm.save()
-        messages.success(request, _('You have now access to "{}".').format(desc))
-        return redirect('control:index')
+        else:
+            with transaction.atomic():
+                inv.team.members.add(request.user)
+                inv.team.log_action(
+                    'pretix.team.member.joined', data={
+                        'email': request.user.email,
+                        'invite_email': inv.email,
+                        'user': request.user.pk
+                    }
+                )
+                inv.delete()
+            messages.success(request, _('You are now part of the team "{}".').format(inv.team.name))
+            return redirect('control:index')
 
     if request.method == 'POST':
         form = RegistrationForm(data=request.POST)
@@ -151,14 +145,20 @@ def invite(request, token):
             auth_login(request, user)
             request.session['pretix_auth_login_time'] = int(time.time())
 
-            perm.invite_token = None
-            perm.invite_email = None
-            perm.user = user
-            perm.save()
-            messages.success(request, _('Welcome to pretix! You have now access to "{}".').format(desc))
+            with transaction.atomic():
+                inv.team.members.add(request.user)
+                inv.team.log_action(
+                    'pretix.team.member.joined', data={
+                        'email': user.email,
+                        'invite_email': inv.email,
+                        'user': user.pk
+                    }
+                )
+                inv.delete()
+            messages.success(request, _('Welcome to pretix! You are now part of the team "{}".').format(inv.team.name))
             return redirect('control:index')
     else:
-        form = RegistrationForm(initial={'email': perm.invite_email})
+        form = RegistrationForm(initial={'email': inv.email})
     ctx['form'] = form
     return render(request, 'pretixcontrol/auth/invite.html', ctx)
 

@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 
 from pretix.control.views import (
-    auth, dashboards, event, global_settings, help, item, main, orders,
+    auth, checkin, dashboards, event, global_settings, item, main, orders,
     organizer, user, vouchers, waitinglist,
 )
 
@@ -35,7 +35,14 @@ urlpatterns = [
     url(r'^organizers/add$', organizer.OrganizerCreate.as_view(), name='organizers.add'),
     url(r'^organizer/(?P<organizer>[^/]+)/$', organizer.OrganizerDetail.as_view(), name='organizer'),
     url(r'^organizer/(?P<organizer>[^/]+)/edit$', organizer.OrganizerUpdate.as_view(), name='organizer.edit'),
-    url(r'^organizer/(?P<organizer>[^/]+)/teams$', organizer.OrganizerTeamView.as_view(), name='organizer.teams'),
+    url(r'^organizer/(?P<organizer>[^/]+)/teams$', organizer.TeamListView.as_view(), name='organizer.teams'),
+    url(r'^organizer/(?P<organizer>[^/]+)/team/add$', organizer.TeamCreateView.as_view(), name='organizer.team.add'),
+    url(r'^organizer/(?P<organizer>[^/]+)/team/(?P<team>[^/]+)/$', organizer.TeamMemberView.as_view(),
+        name='organizer.team'),
+    url(r'^organizer/(?P<organizer>[^/]+)/team/(?P<team>[^/]+)/edit$', organizer.TeamUpdateView.as_view(),
+        name='organizer.team.edit'),
+    url(r'^organizer/(?P<organizer>[^/]+)/team/(?P<team>[^/]+)/delete$', organizer.TeamDeleteView.as_view(),
+        name='organizer.team.delete'),
     url(r'^events/$', main.EventList.as_view(), name='events'),
     url(r'^events/add$', main.EventWizard.as_view(), name='events.add'),
     url(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
@@ -131,6 +138,6 @@ urlpatterns = [
         url(r'^orders/$', orders.OrderList.as_view(), name='event.orders'),
         url(r'^waitinglist/$', waitinglist.WaitingListView.as_view(), name='event.orders.waitinglist'),
         url(r'^waitinglist/auto_assign$', waitinglist.AutoAssign.as_view(), name='event.orders.waitinglist.auto'),
+        url(r'^checkins/$', checkin.CheckInView.as_view(), name='event.orders.checkins'),
     ])),
-    url(r'^help/(?P<topic>[a-zA-Z0-9_/]+)$', help.HelpView.as_view(), name='help'),
 ]

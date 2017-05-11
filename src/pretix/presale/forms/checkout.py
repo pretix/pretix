@@ -3,12 +3,17 @@ from decimal import Decimal
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Count, Prefetch, Q
+from django.forms.widgets import RadioChoiceInput, RadioFieldRenderer
+from django.utils.encoding import force_text
 from django.utils.formats import number_format
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import ItemVariation, Question
 from pretix.base.models.orders import InvoiceAddress
+from pretix.base.templatetags.rich_text import rich_text
 
 
 class ContactForm(forms.Form):
@@ -146,6 +151,63 @@ class QuestionsForm(forms.Form):
             self.fields['question_%s' % q.id] = field
 
 
+# The following will get totally different once Django 1.11 is integrated
+class AddOnVariationSelectInput(RadioChoiceInput):
+
+    def __init__(self, name, value, attrs, choice, index):
+        super().__init__(name, value, attrs, choice, index)
+        self.description = force_text(choice[2])
+
+    def render(self, name=None, value=None, attrs=None):
+        if self.id_for_label:
+            label_for = format_html(' for="{}"', self.id_for_label)
+        else:
+            label_for = ''
+        attrs = dict(self.attrs, **attrs) if attrs else self.attrs
+        if self.description:
+            return format_html(
+                '<label{}>{} {}</label> <span class="fa fa-info-circle toggle-variation-description"></span>'
+                '<div class="variation-description addon-variation-description">{}</div>',
+                label_for, self.tag(attrs), self.choice_label,
+                rich_text(str(self.description))
+            )
+        else:
+            return format_html(
+                '<label{}>{} {}</label>',
+                label_for, self.tag(attrs), self.choice_label,
+            )
+
+
+class AddOnVariationSelectRenderer(RadioFieldRenderer):
+    choice_input_class = AddOnVariationSelectInput
+
+    def render(self):
+        id_ = self.attrs.get('id')
+        output = []
+        for i, choice in enumerate(self.choices):
+            w = self.choice_input_class(self.name, self.value, self.attrs.copy(), choice, i)
+            output.append(format_html(self.inner_html, choice_value=force_text(w), sub_widgets=''))
+        return format_html(
+            self.outer_html,
+            id_attr=format_html(' id="{}"', id_) if id_ else '',
+            content=mark_safe('\n'.join(output)),
+        )
+
+
+class AddOnVariationSelect(forms.RadioSelect):
+    renderer = AddOnVariationSelectRenderer
+
+
+class AddOnVariationField(forms.ChoiceField):
+
+    def valid_value(self, value):
+        text_value = force_text(value)
+        for k, v, d in self.choices:
+            if value == k or text_value == force_text(k):
+                return True
+        return False
+
+
 class AddOnsForm(forms.Form):
     """
     This form class is responsible for selecting add-ons to a product in the cart.
@@ -232,18 +294,18 @@ class AddOnsForm(forms.Form):
 
         for i in items:
             if i.has_variations:
-                choices = [('', _('no selection'))]
+                choices = [('', _('no selection'), '')]
                 for v in i.available_variations:
                     cached_availability = v.check_quotas(_cache=quota_cache)
-                    choices.append((v.pk, self._label(event, v, cached_availability)))
+                    choices.append((v.pk, self._label(event, v, cached_availability), v.description))
 
-                field = forms.ChoiceField(
+                field = AddOnVariationField(
                     choices=choices,
                     label=i.name,
                     required=False,
-                    widget=forms.RadioSelect,
-                    help_text=i.description,
-                    initial=current_addons.get(i.pk)
+                    widget=AddOnVariationSelect,
+                    help_text=rich_text(str(i.description)),
+                    initial=current_addons.get(i.pk),
                 )
             else:
                 cached_availability = i.check_quotas(_cache=quota_cache)
@@ -251,7 +313,7 @@ class AddOnsForm(forms.Form):
                     label=self._label(event, i, cached_availability),
                     required=False,
                     initial=i.pk in current_addons,
-                    help_text=i.description
+                    help_text=rich_text(str(i.description)),
                 )
 
             self.fields['item_%s' % i.pk] = field

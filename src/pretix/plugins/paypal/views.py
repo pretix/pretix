@@ -57,7 +57,19 @@ def success(request, *args, **kwargs):
 @event_view(require_live=False)
 def abort(request, *args, **kwargs):
     messages.error(request, _('It looks like you canceled the PayPal payment'))
-    return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs={'step': 'payment'}))
+
+    if request.session.get('payment_paypal_order'):
+        order = Order.objects.get(pk=request.session.get('payment_paypal_order'))
+    else:
+        order = None
+
+    if order:
+        return redirect(eventreverse(request.event, 'presale:event.order', kwargs={
+            'order': order.code,
+            'secret': order.secret
+        }) + ('?paid=yes' if order.status == Order.STATUS_PAID else ''))
+    else:
+        return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs={'step': 'payment'}))
 
 
 @csrf_exempt
