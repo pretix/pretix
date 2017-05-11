@@ -5,8 +5,7 @@ from django.core import mail as djmail
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Event, EventPermission, Item, ItemCategory, Order, OrderPosition,
-    Organizer, OrganizerPermission, User,
+    Event, Item, ItemCategory, Order, OrderPosition, Organizer, Team, User,
 )
 
 
@@ -49,9 +48,9 @@ def order(item):
 def logged_in_client(client, event):
     """Returns a logged client"""
     user = User.objects.create_superuser('dummy@dummy.dummy', 'dummy')
-    OrganizerPermission.objects.create(organizer=event.organizer, user=user, can_create_events=True)
-    EventPermission.objects.create(event=event, user=user, can_change_items=True,
-                                   can_change_settings=True, can_change_orders=True, can_view_orders=True)
+    t = Team.objects.create(organizer=event.organizer, can_view_orders=True, can_change_orders=True)
+    t.members.add(user)
+    t.limit_events.add(event)
     client.force_login(user)
     return client
 

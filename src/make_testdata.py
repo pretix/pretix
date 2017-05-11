@@ -23,9 +23,6 @@ user.save()
 organizer = Organizer.objects.create(
     name='BigEvents LLC', slug='bigevents'
 )
-OrganizerPermission.objects.get_or_create(
-    organizer=organizer, user=user
-)
 year = now().year + 1
 event = Event.objects.create(
     organizer=organizer, name='Demo Conference {}'.format(year),
@@ -33,9 +30,13 @@ event = Event.objects.create(
     date_from=datetime(year, 9, 4, 17, 0, 0),
     date_to=datetime(year, 9, 6, 17, 0, 0),
 )
-EventPermission.objects.get_or_create(
-    event=event, user=user
+t = Team.objects.get_or_create(
+    organizer=organizer, name='Admin Team',
+    all_events=True, can_create_events=True, can_change_teams=True,
+    can_change_organizer_settings=True, can_change_event_settings=True, can_change_items=True,
+    can_view_orders=True, can_change_orders=True, can_view_vouchers=True, can_change_vouchers=True
 )
+t.members.add(user)
 cat_tickets = ItemCategory.objects.create(
     event=event, name='Tickets'
 )

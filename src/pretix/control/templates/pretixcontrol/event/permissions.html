@@ -1,88 +1,19 @@
 {% extends "pretixcontrol/event/settings_base.html" %}
 {% load i18n %}
+{% load staticfiles %}
 {% load bootstrap3 %}
 {% block inside %}
-	<form action="" method="post" class="form-horizontal form-permissions">
-		{% csrf_token %}
-		<fieldset>
-			<legend>{% trans "Permissions" %}</legend>
-            {% bootstrap_formset_errors formset %}
-            {{ formset.management_form }}
-            <div class="table-responsive">
-                <table class="table table-striped table-condensed">
-                    <thead>
-                        <tr>
-                            <th>{% trans "User" %}</th>
-                            <th>{% trans "Change settings" %}</th>
-                            <th>{% trans "Change products" %}</th>
-                            <th>{% trans "View orders" %}</th>
-                            <th>{% trans "Change orders" %}</th>
-                            <th>{% trans "Change permissions" %}</th>
-                            <th>{% trans "View vouchers" %}</th>
-                            <th>{% trans "Change vouchers" %}</th>
-                            <th>{% trans "Delete" %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for form in formset %}
-                            <tr>
-                                <td>
-                                    {{ form.id }}
-                                    {% if form.instance.user %}
-                                        {{ form.instance.user }}
-                                    {% else %}
-                                        {{ form.instance.invite_email }}
-                                        <span class="fa fa-envelope-o" data-toggle="tooltip"
-                                            title="{% trans "invited, pending response" %}"></span>
-                                    {% endif %}
-                                </td>
-                                <td>{{ form.can_change_settings }}</td>
-                                <td>{{ form.can_change_items }}</td>
-                                <td>{{ form.can_view_orders }}</td>
-                                <td>{{ form.can_change_orders }}</td>
-                                <td>{{ form.can_change_permissions }}</td>
-                                <td>{{ form.can_view_vouchers }}</td>
-                                <td>{{ form.can_change_vouchers }}</td>
-                                <td>{{ form.DELETE }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="9">
-                                <strong>{% trans "Adding a new user" %}</strong><br>
-                                {% blocktrans trimmed %}
-                                    To add a new user, you can enter their email address here. If they already have a
-                                    pretix account, they will immediately be added to the event. Otherwise, they will
-                                    be sent an email with an invitation.
-                                {% endblocktrans %}
-                            </td>
 
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="row-fluid">
-                                    <div class="col-sm-12">
-                                        {% bootstrap_field add_form.user layout='inline' %}
-                                    </div>
-                                </div>
-                            </td>
-                            <td>{{ add_form.can_change_settings }}</td>
-                            <td>{{ add_form.can_change_items }}</td>
-                            <td>{{ add_form.can_view_orders }}</td>
-                            <td>{{ add_form.can_change_orders }}</td>
-                            <td>{{ add_form.can_change_permissions }}</td>
-                            <td>{{ add_form.can_view_vouchers }}</td>
-                            <td>{{ add_form.can_change_vouchers }}</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-		</fieldset>
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
+        <div class="section-moved">
+            <img src="{% static "pretixcontrol/img/moved.svg" %}" class="img-moved">
+            <p>
+                {% blocktrans trimmed %}
+                    Permission settings have moved and are now configured as part of an organizer account instead
+                    of every event on its own.
+                {% endblocktrans %}
+            </p>
+
+            <a href="{% url "control:organizer.teams" organizer=request.event.organizer.slug %}"
+                    class="btn btn-link btn-lg">{% trans "Go to the organizer team settings" %}</a>
         </div>
-	</form>
 {% endblock %}

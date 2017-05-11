@@ -7,8 +7,8 @@ from django.utils.timezone import now
 from tests.base import SoupTest
 
 from pretix.base.models import (
-    Event, EventPermission, InvoiceAddress, Item, Order, OrderPosition,
-    Organizer, Quota, User,
+    Event, InvoiceAddress, Item, Order, OrderPosition, Organizer, Quota, Team,
+    User,
 )
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice,
@@ -24,12 +24,9 @@ def env():
     )
     event.settings.set('ticketoutput_testdummy__enabled', True)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    EventPermission.objects.create(
-        event=event,
-        user=user,
-        can_view_orders=True,
-        can_change_orders=True
-    )
+    t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True)
+    t.members.add(user)
+    t.limit_events.add(event)
     o = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
@@ -477,12 +474,9 @@ class OrderChangeTests(SoupTest):
             price=Decimal("23.00"), attendee_name="Dieter"
         )
         user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-        EventPermission.objects.create(
-            event=self.event,
-            user=user,
-            can_view_orders=True,
-            can_change_orders=True
-        )
+        t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True)
+        t.members.add(user)
+        t.limit_events.add(self.event)
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
     def test_change_item_success(self):

@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-from pretix.base.models import Event, EventPermission, Organizer, User
+from pretix.base.models import Event, Organizer, Team, User
 
 
 @pytest.fixture
@@ -17,7 +17,9 @@ def env(client):
     event.settings.set('attendee_names_asked', False)
     event.settings.set('payment_paypal__enabled', True)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    EventPermission.objects.create(user=user, event=event, can_change_settings=True)
+    t = Team.objects.create(organizer=event.organizer, can_change_event_settings=True)
+    t.members.add(user)
+    t.limit_events.add(event)
     client.force_login(user)
     return client, event
 

@@ -2,83 +2,57 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inner %}
-    <form action="" method="post" class="form-horizontal form-permissions">
-        {% csrf_token %}
-        <p>
-            {% blocktrans trimmed %}
-                You can use the following list to control who can create new events in the name of
-                this organizer and who can add more people to this list. This does <strong>not</strong>
-                control who has access to a particular event. You can control the access to an
-                event in the "Permissions" section of the event's settings. A user does not need to
-                be on the list here to get access to an event.
-            {% endblocktrans %}
-        </p>
-        <p>
-            {% trans "Everyone on this list can control the organizer settings on this page." %}
-        </p>
-
-        {% bootstrap_formset_errors formset %}
-        {{ formset.management_form }}
-        <div class="table-responsive">
-            <table class="table table-striped table-condensed">
-                <thead>
-                <tr>
-                    <th>{% trans "User" %}</th>
-                    <th>{% trans "Create events" %}</th>
-                    <th>{% trans "Change permissions" %}</th>
-                    <th>{% trans "Delete" %}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for form in formset %}
-                    <tr>
-                        <td>
-                            {{ form.id }}
-                            {% if form.instance.user %}
-                                {{ form.instance.user }}
-                            {% else %}
-                                {{ form.instance.invite_email }}
-                                <span class="fa fa-envelope-o" data-toggle="tooltip"
-                                        title="{% trans "invited, pending response" %}"></span>
-                            {% endif %}
-                        </td>
-                        <td>{{ form.can_create_events }}</td>
-                        <td>{{ form.can_change_permissions }}</td>
-                        <td>{{ form.DELETE }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-                <tfoot>
-                <tr>
-                    <td colspan="9">
-                        <strong>{% trans "Adding a new user" %}</strong><br>
-                        {% blocktrans trimmed %}
-                            To add a new user, you can enter their email address here. If they
-                            already have a pretix account, they will immediately be added to the team.
-                            Otherwise, they will be sent an email with an invitation.
+    <p>
+        {% trans "The list below shows all teams that exist within this organizer." %}
+    </p>
+    {% if request.user.is_superuser %}
+        <a href="{% url "control:organizer.team.add" organizer=request.organizer.slug %}" class="btn btn-default">
+            <span class="fa fa-plus"></span>
+            {% trans "Create a new team" %}
+        </a>
+    {% endif %}
+    <table class="table table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>{% trans "Team name" %}</th>
+            <th>{% trans "Members" %}</th>
+            <th>{% trans "Events" %}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for t in teams %}
+            <tr>
+                <td><strong>
+                    <a href="{% url "control:organizer.team" organizer=request.organizer.slug team=t.id %}">
+                        {{ t.name }}
+                    </a>
+                </strong></td>
+                <td>
+                    {{ t.memcount }}
+                    {% if t.invcount %}
+                        {% blocktrans trimmed with count=t.invcount %}
+                            + {{ count }} invited
                         {% endblocktrans %}
-                    </td>
-
-                </tr>
-                <tr>
-                    <td>
-                        <div class="row-fluid">
-                            <div class="col-sm-12">
-                                {% bootstrap_field add_form.user layout='inline' %}
-                            </div>
-                        </div>
-                    </td>
-                    <td>{{ add_form.can_create_events }}</td>
-                    <td>{{ add_form.can_change_permissions }}</td>
-                </tr>
-                </tfoot>
-            </table>
-        </div>
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
-        </div>
-
-    </form>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if t.all_events %}
+                        {% trans "All" %}
+                    {% else %}
+                        {{ t.eventcount }}
+                    {% endif %}
+                </td>
+                <td class="text-right">
+                    <a href="{% url "control:organizer.team" organizer=request.organizer.slug team=t.id %}"
+                            class="btn btn-default btn-sm"><i class="fa fa-list"></i></a>
+                    <a href="{% url "control:organizer.team.edit" organizer=request.organizer.slug team=t.id %}"
+                            class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                    <a href="{% url "control:organizer.team.delete" organizer=request.organizer.slug team=t.id %}"
+                            class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

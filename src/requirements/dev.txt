@@ -13,4 +13,6 @@ isort
 pytest-mock==1.4.*
 pytest-rerunfailures
 pytest-warnings
+pytest-cache
+pytest-sugar
 responses

@@ -1,37 +1,29 @@
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
 
-from pretix.base.models import EventPermission, OrganizerPermission
-
 
 def event_permission_required(permission):
     """
     This view decorator rejects all requests with a 403 response which are not from
     users having the given permission for the event the request is associated with.
     """
+    if permission == 'can_change_settings':
+        # Legacy support
+        permission = 'can_change_event_settings'
+
     def decorator(function):
         def wrapper(request, *args, **kw):
             if not request.user.is_authenticated:  # NOQA
                 # just a double check, should not ever happen
                 raise PermissionDenied()
-            if request.user.is_superuser:
+
+            allowed = (
+                request.user.is_superuser
+                or request.user.has_event_permission(request.organizer, request.event, permission)
+            )
+            if allowed:
                 return function(request, *args, **kw)
-            try:
-                perm = EventPermission.objects.get(
-                    event=request.event,
-                    user=request.user
-                )
-            except EventPermission.DoesNotExist:
-                pass
-            else:
-                allowed = not permission
-                try:
-                    if permission:
-                        allowed = getattr(perm, permission)
-                except AttributeError:
-                    pass
-                if allowed or request.user.is_superuser:
-                    return function(request, *args, **kw)
+
             raise PermissionDenied(_('You do not have permission to view this content.'))
         return wrapper
     return decorator
@@ -55,29 +47,23 @@ def organizer_permission_required(permission):
     This view decorator rejects all requests with a 403 response which are not from
     users having the given permission for the event the request is associated with.
     """
+    if permission == 'can_change_settings':
+        # Legacy support
+        permission = 'can_change_organizer_settings'
+
     def decorator(function):
         def wrapper(request, *args, **kw):
             if not request.user.is_authenticated:  # NOQA
                 # just a double check, should not ever happen
                 raise PermissionDenied()
-            if request.user.is_superuser:
+
+            allowed = (
+                request.user.is_superuser
+                or request.user.has_organizer_permission(request.organizer, permission)
+            )
+            if allowed:
                 return function(request, *args, **kw)
-            try:
-                perm = OrganizerPermission.objects.get(
-                    organizer=request.organizer,
-                    user=request.user
-                )
-            except OrganizerPermission.DoesNotExist:
-                pass
-            else:
-                allowed = not permission
-                try:
-                    if permission:
-                        allowed = getattr(perm, permission)
-                except AttributeError:
-                    pass
-                if allowed or request.user.is_superuser:
-                    return function(request, *args, **kw)
+
             raise PermissionDenied(_('You do not have permission to view this content.'))
         return wrapper
     return decorator

@@ -47,8 +47,17 @@
         }
     }
 }
+.radio .variation-description {
+    padding-left: 20px;
+}
+.variation-description {
+    color: lighten($text-color, 25%);
+}
 .voucher-row {
     margin-top: 10px;
+}
+.toggle-variation-description {
+    cursor: pointer;
 }
 #voucher-toggle {
     display: none;

@@ -9,9 +9,7 @@ from django.utils.deprecation import MiddlewareMixin
 from django.utils.encoding import force_str
 from django.utils.translation import ugettext as _
 
-from pretix.base.models import (
-    Event, EventPermission, Organizer, OrganizerPermission,
-)
+from pretix.base.models import Event, Organizer
 
 
 class PermissionMiddleware(MiddlewareMixin):
@@ -61,53 +59,23 @@ class PermissionMiddleware(MiddlewareMixin):
             return redirect_to_login(
                 path, resolved_login_url, REDIRECT_FIELD_NAME)
 
-        events = Event.objects.all() if request.user.is_superuser else request.user.events
-        request.user.events_cache = events.order_by(
-            "organizer", "date_from").prefetch_related("organizer")
+        events = request.user.get_events_with_any_permission()
+        request.user.events_cache = events.order_by("organizer", "date_from").prefetch_related("organizer")
         if 'event' in url.kwargs and 'organizer' in url.kwargs:
-            try:
-                if request.user.is_superuser:
-                    request.event = Event.objects.filter(
-                        slug=url.kwargs['event'],
-                        organizer__slug=url.kwargs['organizer'],
-                    ).select_related('organizer')[0]
-                    request.eventperm = EventPermission(
-                        event=request.event,
-                        user=request.user
-                    )
-                else:
-                    request.event = Event.objects.filter(
-                        slug=url.kwargs['event'],
-                        permitted__id__exact=request.user.id,
-                        organizer__slug=url.kwargs['organizer'],
-                    ).select_related('organizer')[0]
-                    request.eventperm = EventPermission.objects.get(
-                        event=request.event,
-                        user=request.user
-                    )
-                request.organizer = request.event.organizer
-            except IndexError:
+            request.event = Event.objects.filter(
+                slug=url.kwargs['event'],
+                organizer__slug=url.kwargs['organizer'],
+            ).select_related('organizer').first()
+            if not request.event or not request.user.has_event_permission(request.event.organizer, request.event):
                 raise Http404(_("The selected event was not found or you "
                                 "have no permission to administrate it."))
+            request.organizer = request.event.organizer
+            request.eventpermset = request.user.get_event_permission_set(request.organizer, request.event)
         elif 'organizer' in url.kwargs:
-            try:
-                if request.user.is_superuser:
-                    request.organizer = Organizer.objects.filter(
-                        slug=url.kwargs['organizer'],
-                    )[0]
-                    request.orgaperm = OrganizerPermission(
-                        organizer=request.organizer,
-                        user=request.user
-                    )
-                else:
-                    request.organizer = Organizer.objects.filter(
-                        slug=url.kwargs['organizer'],
-                        permitted__id__exact=request.user.id,
-                    )[0]
-                    request.orgaperm = OrganizerPermission.objects.get(
-                        organizer=request.organizer,
-                        user=request.user
-                    )
-            except IndexError:
+            request.organizer = Organizer.objects.filter(
+                slug=url.kwargs['organizer'],
+            ).first()
+            if not request.organizer or not request.user.has_organizer_permission(request.organizer):
                 raise Http404(_("The selected organizer was not found or you "
                                 "have no permission to administrate it."))
+            request.orgapermset = request.user.get_organizer_permission_set(request.organizer)

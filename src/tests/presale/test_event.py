@@ -11,8 +11,8 @@ from pytz import timezone
 from tests.base import SoupTest
 
 from pretix.base.models import (
-    Event, EventPermission, Item, ItemCategory, ItemVariation, Order,
-    Organizer, Quota, User, WaitingListEntry,
+    Event, Item, ItemCategory, ItemVariation, Order, Organizer, Quota, Team,
+    User, WaitingListEntry,
 )
 
 
@@ -26,7 +26,9 @@ class EventTestMixin:
             live=True
         )
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-        EventPermission.objects.create(user=self.user, event=self.event)
+        t = Team.objects.create(organizer=self.orga, can_change_event_settings=True)
+        t.members.add(self.user)
+        t.limit_events.add(self.event)
 
 
 class EventMiddlewareTest(EventTestMixin, SoupTest):

@@ -10,7 +10,7 @@
             {% trans "Dashboard" %}
         </a>
     </li>
-    {% if request.eventperm.can_change_settings or request.eventperm.can_change_permissions %}
+    {% if 'can_change_event_settings' in request.eventpermset or 'can_change_permissions' in request.eventpermset %}
         <li>
             <a href="{% url 'control:event.settings' organizer=request.event.organizer.slug event=request.event.slug %}">
                 <i class="fa fa-wrench fa-fw"></i>
@@ -18,7 +18,7 @@
             </a>
         </li>
     {% endif %}
-    {% if request.eventperm.can_change_items %}
+    {% if 'can_change_items' in request.eventpermset %}
         <li>
             <a href="{% url 'control:event.items' organizer=request.event.organizer.slug event=request.event.slug %}"
                 class="has-children">
@@ -55,7 +55,7 @@
             </ul>
         </li>
     {% endif %}
-    {% if request.eventperm.can_view_orders %}
+    {% if 'can_view_orders' in request.eventpermset %}
         <li>
             <a href="{% url 'control:event.orders' organizer=request.event.organizer.slug event=request.event.slug %}"
                 class="has-children">
@@ -90,10 +90,16 @@
                         {% trans "Waiting list" %}
                     </a>
                 </li>
+                <li>
+                    <a href="{% url 'control:event.orders.checkins' organizer=request.event.organizer.slug event=request.event.slug %}"
+                       {% if url_name == "event.orders.checkins" %}class="active"{% endif %}>
+                        {% trans "Check-ins" %}
+                    </a>
+                </li>
             </ul>
         </li>
     {% endif %}
-    {% if request.eventperm.can_view_vouchers %}
+    {% if 'can_view_vouchers' in request.eventpermset %}
         <li>
             <a href="{% url 'control:event.vouchers' organizer=request.event.organizer.slug event=request.event.slug %}"
                     {% if url_name == "event.vouchers" %}class="active"{% endif %}>
