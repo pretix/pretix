@@ -262,7 +262,7 @@ class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateVi
         ctx = super().get_context_data()
 
         ctx['secret'] = base64.b32encode(self.device.bin_key).decode('utf-8')
-        ctx['secretGrouped'] = "  ".join([ctx['secret'].lower()[i*4 : (i+1)*4] for i in range(len(ctx['secret'])//4)])
+        ctx['secretGrouped'] = "  ".join([ctx['secret'].lower()[(i * 4): (i + 1) * 4] for i in range(len(ctx['secret']) // 4)])
         ctx['qrdata'] = 'otpauth://totp/{label}%3A%20{user}?issuer={label}&secret={secret}&digits={digits}'.format(
             label=quote(settings.PRETIX_INSTANCE_NAME), user=quote(self.request.user.email),
             secret=ctx['secret'],
