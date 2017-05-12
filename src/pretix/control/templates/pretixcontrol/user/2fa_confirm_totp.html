@@ -38,6 +38,37 @@
         <li>
             {% trans "Add a new account to the app by scanning the following barcode:" %}
             <div class="qrcode-canvas" data-qrdata="#qrdata"></div>
+            <p>
+              <a data-toggle="collapse" href="#no_scan" aria-expanded="false" aria-controls="collapseExample">
+                {% trans "Can't scan the barcode?" %}
+              </a>
+            </p>
+          <div class="collapse" id="no_scan">
+            <ol class="multi-step-tutorial">
+              <li>
+                {% trans "Use the \"provide a key\" option of your authenticator app." %}
+              </li>
+              <li>
+                {% trans "In \"Account name\", type your login name for Pretix." %}
+              </li>
+              <li>
+                {% trans "In \"Secret\"/\"Account Key\", enter the following code:" %}
+                <div>
+                  <code id="otp_secret" style="white-space: pre">{{ secretGrouped }}</code>
+                  <button type="button" class="btn btn-default btn-xs btn-clipboard" data-clipboard-target="#otp_secret">
+                      <span class="fa fa-clipboard" aria-hidden="true"></span>
+                      {% trans "copy" %}
+                  </button>
+                </div>
+                <div>
+                  <small>Spaces don't matter.</small>
+                </div>
+              </li>
+              <li>
+                {% trans "If present, make sure \"Time-based\"/\"TOTP\" and 6 digit codes are selected." %}
+              </li>
+            </ol>
+          </div>
         </li>
         <li>
             {% trans "Enter the displayed code here:" %}
