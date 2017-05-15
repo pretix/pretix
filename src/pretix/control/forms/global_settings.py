@@ -29,7 +29,7 @@ class GlobalSettingsForm(SettingsForm):
             ))
         ])
         responses = register_global_settings.send(self)
-        for r, response in responses:
+        for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():
                 # We need to be this explicit, since OrderedDict.update does not retain ordering
                 self.fields[key] = value

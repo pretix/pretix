@@ -50,7 +50,7 @@ class EventPluginSignal(django.dispatch.Signal):
                 if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
                     response = receiver(signal=self, sender=sender, **named)
                     responses.append((receiver, response))
-        return responses
+        return sorted(responses, key=lambda r: (receiver.__module__, receiver.__name__))
 
 
 class DeprecatedSignal(django.dispatch.Signal):

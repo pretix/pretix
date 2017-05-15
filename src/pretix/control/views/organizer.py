@@ -48,6 +48,7 @@ class OrganizerDetailViewMixin:
         for recv, retv in nav_organizer.send(sender=self.request.organizer, request=self.request,
                                              organizer=self.request.organizer):
             ctx['nav_organizer'] += retv
+        ctx['nav_organizer'].sort(key=lambda n: n['label'])
         return ctx
 
     def get_object(self, queryset=None) -> Organizer:

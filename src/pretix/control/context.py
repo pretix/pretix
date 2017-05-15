@@ -45,12 +45,12 @@ def contextprocessor(request):
     if not hasattr(request, 'event'):
         for receiver, response in nav_global.send(request, request=request):
             _nav_global += response
-    ctx['nav_global'] = _nav_global
+    ctx['nav_global'] = sorted(_nav_global, key=lambda n: n['label'])
 
     _nav_topbar = []
     for receiver, response in nav_topbar.send(request, request=request):
         _nav_topbar += response
-    ctx['nav_topbar'] = _nav_topbar
+    ctx['nav_topbar'] = sorted(_nav_topbar, key=lambda n: n['label'])
 
     ctx['js_datetime_format'] = get_javascript_format('DATETIME_INPUT_FORMATS')
     ctx['js_date_format'] = get_javascript_format('DATE_INPUT_FORMATS')

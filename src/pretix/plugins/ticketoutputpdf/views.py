@@ -21,7 +21,6 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import ChartContainingView
 from pretix.helpers.database import rolledback_transaction
 from pretix.plugins.ticketoutputpdf.signals import get_fonts
-
 from .ticketoutput import PdfTicketOutput
 
 logger = logging.getLogger(__name__)
@@ -95,7 +94,8 @@ class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView
                 p = order.positions.create(item=item, attendee_name=_("John Doe"), price=item.default_price)
 
                 prov = PdfTicketOutput(request.event,
-                                       override_layout=json.loads(request.POST.get("data")),
+                                       override_layout=(json.loads(request.POST.get("data"))
+                                                        if request.POST.get("data") else None),
                                        override_background=cf.file if cf else None)
                 fname, mimet, data = prov.generate(p)
 

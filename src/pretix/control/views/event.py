@@ -674,7 +674,7 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
             issues.append(_('You need to configure at least one quota to sell anything.'))
 
         responses = event_live_issues.send(self.request.event)
-        for receiver, response in responses:
+        for receiver, response in sorted(responses, key=lambda r: str(r[0])):
             if response:
                 issues.append(response)
 
