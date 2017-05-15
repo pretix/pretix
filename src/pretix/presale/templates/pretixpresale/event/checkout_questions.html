@@ -74,6 +74,12 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="alert alert-warning typo-alert">
+            <strong>{% trans "Are you sure your email address is correct?" %}</strong><br>
+            {% blocktrans trimmed with entered="<span data-typodisplay></span>" suggestion="<span data-typosuggest></span>" %}
+                You entered "{{ entered }}". Did you mean "{{ suggestion }}"?
+            {% endblocktrans %}
+        </div>
         <div class="row checkout-button-row">
             <div class="col-md-4">
                 <a class="btn btn-block btn-default btn-lg"

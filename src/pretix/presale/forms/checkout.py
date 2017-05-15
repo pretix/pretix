@@ -20,7 +20,8 @@ class ContactForm(forms.Form):
     email = forms.EmailField(label=_('E-mail'),
                              help_text=_('Make sure to enter a valid email address. We will send you an order '
                                          'confirmation including a link that you need in case you want to make '
-                                         'modifications to your order or download your ticket later.'))
+                                         'modifications to your order or download your ticket later.'),
+                             widget=forms.EmailInput(attrs={'data-typocheck-target': '1'}))
 
 
 class InvoiceAddressForm(forms.ModelForm):
@@ -30,6 +31,8 @@ class InvoiceAddressForm(forms.ModelForm):
         fields = ('company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id')
         widgets = {
             'street': forms.Textarea(attrs={'rows': 2, 'placeholder': _('Street and Number')}),
+            'company': forms.TextInput(attrs={'data-typocheck-source': '1'}),
+            'name': forms.TextInput(attrs={'data-typocheck-source': '1'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -76,7 +79,8 @@ class QuestionsForm(forms.Form):
             self.fields['attendee_name'] = forms.CharField(
                 max_length=255, required=event.settings.attendee_names_required,
                 label=_('Attendee name'),
-                initial=(cartpos.attendee_name if cartpos else orderpos.attendee_name)
+                initial=(cartpos.attendee_name if cartpos else orderpos.attendee_name),
+                widget=forms.TextInput(attrs={'data-typocheck-source': '1'}),
             )
         if item.admission and event.settings.attendee_emails_asked:
             self.fields['attendee_email'] = forms.EmailField(

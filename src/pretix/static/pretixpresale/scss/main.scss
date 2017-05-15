@@ -116,6 +116,11 @@ body.loading .container {
     -webkit-transition: opacity .5s ease-in-out;
 }
 
+.typo-alert span[data-typosuggest] {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .info-row {
     & > .fa {
         font-size: 26px;
