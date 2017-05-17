@@ -56,6 +56,7 @@ def contextprocessor(request):
 
     if hasattr(request, 'organizer'):
         ctx['organizer_logo'] = request.organizer.settings.get('organizer_logo_image', as_type=str, default='')[7:]
+        ctx['organizer_homepage_text'] = request.organizer.settings.get('organizer_homepage_text', as_type=LazyI18nString)
         ctx['organizer'] = request.organizer
 
     ctx['html_head'] = "".join(_html_head)

@@ -1,8 +1,14 @@
 {% extends "pretixpresale/organizers/base.html" %}
 {% load i18n %}
+{% load rich_text %}
 {% load eventurl %}
 {% block title %}{% trans "Event list" %}{% endblock %}
 {% block content %}
+    <div>
+	{% if organizer_homepage_text %}
+                {{ organizer_homepage_text | rich_text }}
+	{% endif %}
+    </div>	
     {% if "old" in request.GET %}
         <h3>Past events</h3>
         <p>

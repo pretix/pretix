@@ -47,6 +47,7 @@ def rich_text(text: str, **kwargs):
     """
     Processes markdown and cleans HTML in a text input.
     """
+    text = str(text)
     body_md = bleach.linkify(bleach.clean(
         markdown.markdown(text),
         tags=ALLOWED_TAGS,
