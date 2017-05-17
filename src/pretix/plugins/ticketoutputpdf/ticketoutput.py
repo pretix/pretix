@@ -48,7 +48,6 @@ class PdfTicketOutput(BaseTicketOutput):
         pdfmetrics.registerFont(TTFont('Open Sans B I', finders.find('fonts/OpenSans-BoldItalic.ttf')))
 
         for family, styles in get_fonts().items():
-            print(family, finders.find(styles['regular']['truetype']))
             pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
             pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
             pdfmetrics.registerFont(TTFont(family + ' B', finders.find(styles['bold']['truetype'])))
