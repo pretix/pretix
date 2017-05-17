@@ -26,8 +26,11 @@ pretix/
     multidomain/
         Additional code implementing our customized :ref:`URL handling <urlconf>`.
 
-static/
-    Contains all static files (CSS, JavaScript, images)
+    static/
+        Contains all static files (CSS, JavaScript, images)
+
+    static/
+        Contains some pretix plugins that ship with pretix itself
 
 tests/
     This is the root directory for all test codes. It includes subdirectories ``base``,
@@ -37,7 +40,8 @@ tests/
 
 Language files
 --------------
-The language files live in ``locale/*/LC_MESSAGES/``.
+
+The language files live in ``pretix/locale/*/LC_MESSAGES/``.
 
 Static files
 ------------
@@ -49,27 +53,14 @@ We use libsass as a preprocessor for CSS. Our own sass code is built in the same
 step as Bootstrap and FontAwesome, so their mixins etc. are fully available.
 
 pretix.control
-    pretixcontrol has two main SCSS files, ``pretix/control/static/pretixcontrol/scss/main.scss`` and
-    ``pretix/control/static/pretixcontrol/scss/auth.scss``, importing everything else.
+    pretixcontrol has two main SCSS files, ``pretix/static/pretixcontrol/scss/main.scss`` and
+    ``pretix/static/pretixcontrol/scss/auth.scss``, importing everything else.
 
 pretix.presale
-    pretixpresale has one main SCSS files, ``pretix/control/static/pretix/presale/scss/main.scss``,
+    pretixpresale has one main SCSS files, ``pretix/pretixpresale/scss/main.scss``,
     importing everything else.
 
 3rd-party assets
 ^^^^^^^^^^^^^^^^
 
-Bootstrap
-    Bootstrap lives vendored at ``static/bootstrap/``
-
-Font Awesome
-    Font Awesome lives vendored at ``static/fontawesome/``
-
-jQuery
-    jQuery lives as a single JavaScript file in ``static/jquery/js/``
-
-jQuery plugin: Django formsets
-    Our own modified version of `django-formset-js`_ is available as an independent
-    django app and installed via ``pip``.
-
-.. _django-formset-js: https://github.com/pretix/django-formset-js
+Most client-side 3rd-party assets are vendored in various subdirectories of ``pretix/static``.
