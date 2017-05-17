@@ -766,15 +766,6 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
     @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
-        if form.cleaned_data['copy_from']:
-            form.instance.category = form.cleaned_data['copy_from'].category
-            form.instance.description = form.cleaned_data['copy_from'].description
-            form.instance.active = form.cleaned_data['copy_from'].active
-            form.instance.available_from = form.cleaned_data['copy_from'].available_from
-            form.instance.available_until = form.cleaned_data['copy_from'].available_until
-            form.instance.require_voucher = form.cleaned_data['copy_from'].require_voucher
-            form.instance.hide_without_voucher = form.cleaned_data['copy_from'].hide_without_voucher
-            form.instance.allow_cancel = form.cleaned_data['copy_from'].allow_cancel
 
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.item.added', user=self.request.user, data={
