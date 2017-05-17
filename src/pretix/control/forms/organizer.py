@@ -1,6 +1,8 @@
 from django import forms
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+from i18nfield.forms import I18nFormField, I18nTextarea
 
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.models import Organizer, Team
@@ -102,6 +104,20 @@ class TeamForm(forms.ModelForm):
 
 
 class OrganizerSettingsForm(SettingsForm):
+
+    locales = forms.MultipleChoiceField(
+        choices=settings.LANGUAGES,
+        label=_("Use languages"),
+        widget=forms.CheckboxSelectMultiple,
+        help_text=_('Choose all languages that your organizer homepage should be available in.')
+    )
+
+    organizer_homepage_text = I18nFormField(
+        label=_('Homepage text'),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_('This will be displayed on the organizer homepage.')
+    )
 
     organizer_logo_image = ExtFileField(
         label=_('Logo image'),
