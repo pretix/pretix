@@ -4928,7 +4928,7 @@ msgid ""
 msgstr ""
 "Bitte wählen Sie die Produkte oder Produktvariationen aus, auf die dieses "
 "Kontingent wirken soll. Wenn Sie ein Produkt zu zwei Kontingenten "
-"hinzufügen, wird es nur verkauft, wenn <strong>beide</strong>Kontingente "
+"hinzufügen, wird es nur verkauft, wenn <strong>beide</strong> Kontingente "
 "noch übrige Kapazität haben."
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:7
