@@ -2,6 +2,7 @@ import copy
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.db.models import Max
 from django.forms import BooleanField, ModelMultipleChoiceField
 from django.forms.formsets import DELETION_FIELD_NAME
 from django.utils.translation import ugettext as __, ugettext_lazy as _
@@ -120,7 +121,20 @@ class ItemCreateForm(I18nModelForm):
         )
 
     def save(self, *args, **kwargs):
+        if self.cleaned_data.get('copy_from'):
+            self.instance.description = self.cleaned_data['copy_from'].description
+            self.instance.active = self.cleaned_data['copy_from'].active
+            self.instance.available_from = self.cleaned_data['copy_from'].available_from
+            self.instance.available_until = self.cleaned_data['copy_from'].available_until
+            self.instance.require_voucher = self.cleaned_data['copy_from'].require_voucher
+            self.instance.hide_without_voucher = self.cleaned_data['copy_from'].hide_without_voucher
+            self.instance.allow_cancel = self.cleaned_data['copy_from'].allow_cancel
+            self.instance.min_per_order = self.cleaned_data['copy_from'].min_per_order
+            self.instance.max_per_order = self.cleaned_data['copy_from'].max_per_order
+            self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
+
         instance = super().save(*args, **kwargs)
+
         if self.cleaned_data.get('has_variations'):
             if self.cleaned_data.get('copy_from') and self.cleaned_data.get('copy_from').has_variations:
                 for variation in self.cleaned_data['copy_from'].variations.all():
@@ -131,8 +145,9 @@ class ItemCreateForm(I18nModelForm):
                     item=instance, value=__('Standard')
                 )
 
-        for question in Question.objects.filter(items=self.cleaned_data.get('copy_from')):
-            question.items.add(instance)
+        if self.cleaned_data.get('copy_from'):
+            for question in self.cleaned_data['copy_from'].questions.all():
+                question.items.add(instance)
 
         return instance
 
