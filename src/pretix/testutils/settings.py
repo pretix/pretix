@@ -17,8 +17,10 @@ atexit.register(tmpdir.cleanup)
 EMAIL_BACKEND = 'django.core.mail.outbox'
 
 COMPRESS_ENABLED = COMPRESS_OFFLINE = False
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 DEBUG = True
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher']
 
