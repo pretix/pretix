@@ -46,13 +46,13 @@
             <div class="collapse" id="no_scan">
                 <ol class="multi-step-tutorial">
                     <li>
-                        {% trans "Use the \"provide a key\" option of your authenticator app." %}
+                        {% trans 'Use the "provide a key" option of your authenticator app.' %}
                     </li>
                     <li>
-                        {% trans "In \"Account name\", type your login name for pretix." %}
+                        {% trans 'In "Account name", type your login name for pretix.' %}
                     </li>
                     <li>
-                        {% trans "In \"Secret\"/\"Account Key\", enter the following code:" %}
+                        {% trans 'In "Secret"/"Account Key", enter the following code:' %}
                         <div>
                             <code id="otp_secret" style="white-space: pre">{{ secretGrouped }}</code>
                             <button type="button" class="btn btn-default btn-xs btn-clipboard" data-clipboard-target="#otp_secret">
@@ -65,7 +65,7 @@
                         </div>
                     </li>
                 <li>
-                        {% trans "If present, make sure \"Time-based\"/\"TOTP\" and 6 digit codes are selected." %}
+                        {% trans 'If present, make sure "Time-based"/"TOTP" and 6 digit codes are selected.' %}
                 </li>
                 </ol>
             </div>
