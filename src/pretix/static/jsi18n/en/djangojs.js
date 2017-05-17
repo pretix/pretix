@@ -90,7 +90,7 @@
     "SHORT_DATETIME_FORMAT": "Y-m-d H:i",
     "SHORT_DATE_FORMAT": "Y-m-d",
     "THOUSAND_SEPARATOR": ",",
-    "TIME_FORMAT": "P",
+    "TIME_FORMAT": "H:i",
     "TIME_INPUT_FORMATS": [
       "%H:%M:%S",
       "%H:%M:%S.%f",
