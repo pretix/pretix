@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.files import File
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.db.models import Count, F, Max, Q
+from django.db.models import Count, F, Q
 from django.forms.models import ModelMultipleChoiceField, inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -792,18 +792,6 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
     @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
-        if form.cleaned_data['copy_from']:
-            form.instance.description = form.cleaned_data['copy_from'].description
-            form.instance.active = form.cleaned_data['copy_from'].active
-            form.instance.available_from = form.cleaned_data['copy_from'].available_from
-            form.instance.available_until = form.cleaned_data['copy_from'].available_until
-            form.instance.require_voucher = form.cleaned_data['copy_from'].require_voucher
-            form.instance.hide_without_voucher = form.cleaned_data['copy_from'].hide_without_voucher
-            form.instance.allow_cancel = form.cleaned_data['copy_from'].allow_cancel
-            form.instance.min_per_order = form.cleaned_data['copy_from'].min_per_order
-            form.instance.max_per_order = form.cleaned_data['copy_from'].max_per_order
-
-        form.instance.position = (self.request.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
 
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.item.added', user=self.request.user, data={
