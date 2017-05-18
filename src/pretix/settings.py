@@ -185,10 +185,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'pretix.base',
     'pretix.control',
     'pretix.presale',
     'pretix.multidomain',
+    'pretix.api',
     'compressor',
     'bootstrap3',
     'djangoformsetjs',
@@ -231,6 +233,15 @@ if config.has_option('sentry', 'dsn'):
         'release': __version__,
         'environment': SITE_URL,
     }
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser',
+    ],
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'PAGE_SIZE': 10
+}
 
 
 CORE_MODULES = {

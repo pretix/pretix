@@ -1,5 +1,6 @@
 # Functional requirements
 Django>=1.11.*
+djangorestframework==3.6.*
 python-dateutil
 pytz
 django-bootstrap3==8.2.*
@@ -29,6 +30,9 @@ markdown
 bleach==2.*
 raven
 django-i18nfield>=1.0.1
+# API docs
+coreapi==2.3.*
+pygments
 # Stripe
 stripe==1.22.*
 # PayPal
