@@ -12,7 +12,7 @@ function typocheck() {
 
     $sources.each(function () {
         $.each($(this).val().toLowerCase().replace('-', '').split(' '), function (i, w) {
-            if (w) {
+            if (w && w.length > 5) {
                 words.push(w);
             }
         });
