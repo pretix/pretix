@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-17 15:37+0000\n"
+"POT-Creation-Date: 2017-05-18 09:17+0000\n"
 "PO-Revision-Date: 2017-05-17 17:43+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
@@ -95,7 +95,7 @@ msgstr "Firma"
 #: pretix/control/templates/pretixcontrol/order/index.html:320
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:79
 #: pretix/presale/templates/pretixpresale/event/order.html:176
-#: pretix/presale/templates/pretixpresale/organizers/index.html:21
+#: pretix/presale/templates/pretixpresale/organizers/index.html:27
 msgid "Name"
 msgstr "Name"
 
@@ -811,7 +811,7 @@ msgstr "Sprache"
 #: pretix/base/models/orders.py:127 pretix/base/models/orders.py:569
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:17
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:9
-#: pretix/presale/templates/pretixpresale/organizers/index.html:22
+#: pretix/presale/templates/pretixpresale/organizers/index.html:28
 msgid "Date"
 msgstr "Datum"
 
@@ -2352,7 +2352,7 @@ msgstr ""
 msgid "Filetype not allowed!"
 msgstr "Dateityp nicht erlaubt!"
 
-#: pretix/control/forms/event.py:19
+#: pretix/control/forms/event.py:19 pretix/control/forms/organizer.py:110
 msgid "Use languages"
 msgstr "Verfügbare Sprachen"
 
@@ -2812,7 +2812,7 @@ msgid "The user's language"
 msgstr "Sprache des Benutzers"
 
 #: pretix/control/forms/event.py:462 pretix/control/forms/event.py:612
-#: pretix/control/forms/organizer.py:107
+#: pretix/control/forms/organizer.py:123
 msgid "Logo image"
 msgstr "Logo"
 
@@ -3149,19 +3149,19 @@ msgstr ""
 "danach den Link neu verschicken; der User muss auch die Tickets neu "
 "herunterladen, da die alten Versionen ungültig gemacht werden."
 
-#: pretix/control/forms/organizer.py:13
+#: pretix/control/forms/organizer.py:15
 msgid "This slug is already in use. Please choose a different one."
 msgstr "Diese Kurzform ist bereits in Verwendung, bitte wähle eine andere."
 
-#: pretix/control/forms/organizer.py:46
+#: pretix/control/forms/organizer.py:48
 msgid "Custom domain"
 msgstr "Eigene Domain"
 
-#: pretix/control/forms/organizer.py:48
+#: pretix/control/forms/organizer.py:50
 msgid "You need to configure the custom domain in the webserver beforehand."
 msgstr "Du musst die eigene Domain vorher im Webserver konfigurieren."
 
-#: pretix/control/forms/organizer.py:98
+#: pretix/control/forms/organizer.py:100
 msgid ""
 "The changes could not be saved because there would be no remaining team with "
 "the permission to change teams and permissions."
@@ -3169,7 +3169,25 @@ msgstr ""
 "Die Änderungen konnten nicht gespeichert werden, da es sonst kein Team mehr "
 "mit der Berechtigung gäbe, Teams zu verwalten."
 
-#: pretix/control/forms/organizer.py:110
+#: pretix/control/forms/organizer.py:112
+#, fuzzy
+#| msgid "Choose all languages that your event should be available in."
+msgid ""
+"Choose all languages that your organizer homepage should be available in."
+msgstr ""
+"Wähle alle Sprachen aus, in denen der Veranstaltungsshop verfügbar sein soll."
+
+#: pretix/control/forms/organizer.py:116
+#, fuzzy
+#| msgid "Frontpage text"
+msgid "Homepage text"
+msgstr "Text auf der Startseite"
+
+#: pretix/control/forms/organizer.py:119
+msgid "This will be displayed on the organizer homepage."
+msgstr ""
+
+#: pretix/control/forms/organizer.py:126
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. We will show your logo with a maximal height of 120 "
@@ -3725,7 +3743,7 @@ msgstr "Neues Passwort setzen"
 #: pretix/control/templates/pretixcontrol/order/change_locale.html:25
 #: pretix/control/templates/pretixcontrol/order/extend.html:22
 #: pretix/control/templates/pretixcontrol/organizers/create.html:17
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:25
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:27
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:42
 #: pretix/control/templates/pretixcontrol/user/settings.html:49
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:70
@@ -8560,35 +8578,39 @@ msgstr "Dieser Vorverkauf läuft mit <a %(a_attr)s>pretix</a>."
 msgid "There is nothing to see here yet."
 msgstr "Hier gibt es zur Zeit nichts zu sehen."
 
-#: pretix/presale/templates/pretixpresale/organizers/index.html:4
+#: pretix/presale/templates/pretixpresale/organizers/index.html:5
 msgid "Event list"
 msgstr "Veranstaltungs-Liste"
 
-#: pretix/presale/templates/pretixpresale/organizers/index.html:9
+#: pretix/presale/templates/pretixpresale/organizers/index.html:13
+msgid "Past events"
+msgstr "Vergangene Veranstaltungen"
+
+#: pretix/presale/templates/pretixpresale/organizers/index.html:15
 msgid "Show upcoming"
 msgstr "Zukünftige Veranstaltungen zeigen"
 
-#: pretix/presale/templates/pretixpresale/organizers/index.html:12
+#: pretix/presale/templates/pretixpresale/organizers/index.html:18
 msgid "Upcoming events"
 msgstr "Nächste Veranstaltungen"
 
-#: pretix/presale/templates/pretixpresale/organizers/index.html:14
+#: pretix/presale/templates/pretixpresale/organizers/index.html:20
 msgid "Show past events"
 msgstr "Vergangene Veranstaltungen zeigen"
 
-#: pretix/presale/templates/pretixpresale/organizers/index.html:36
+#: pretix/presale/templates/pretixpresale/organizers/index.html:42
 msgid "Buy tickets"
 msgstr "Tickets kaufen"
 
-#: pretix/presale/templates/pretixpresale/organizers/index.html:37
+#: pretix/presale/templates/pretixpresale/organizers/index.html:43
 msgid "More info"
 msgstr "Mehr Infos"
 
-#: pretix/presale/templates/pretixpresale/organizers/index.html:46
+#: pretix/presale/templates/pretixpresale/organizers/index.html:52
 msgid "No archived events found."
 msgstr "Keine archivierten Veranstaltungen gefunden."
 
-#: pretix/presale/templates/pretixpresale/organizers/index.html:52
+#: pretix/presale/templates/pretixpresale/organizers/index.html:58
 msgid "No public upcoming events found."
 msgstr "Keine öffentlichen Veranstaltungen geplant."
 
