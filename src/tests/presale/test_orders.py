@@ -25,7 +25,7 @@ class OrdersTest(TestCase):
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.event.settings.set('ticketoutput_testdummy__enabled', True)
 
-        self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
+        self.category = ItemCategory.all.create(event=self.event, name="Everything", position=0)
         self.quota_shirts = Quota.objects.create(event=self.event, name='Shirts', size=2)
         self.shirt = Item.objects.create(event=self.event, name='T-Shirt', category=self.category, default_price=12)
         self.quota_shirts.items.add(self.shirt)

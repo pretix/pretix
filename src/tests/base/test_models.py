@@ -687,8 +687,8 @@ class ItemCategoryTest(TestCase):
         )
 
     def test_sorting(self):
-        c1 = ItemCategory.objects.create(event=self.event)
-        c2 = ItemCategory.objects.create(event=self.event)
+        c1 = ItemCategory.all.create(event=self.event)
+        c2 = ItemCategory.all.create(event=self.event)
         assert c1 < c2
         c1.position = 2
         c2.position = 1

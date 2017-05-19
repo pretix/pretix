@@ -18,7 +18,7 @@ def env(client):
         plugins='pretix.plugins.paypal',
         live=True
     )
-    category = ItemCategory.objects.create(event=event, name="Everything", position=0)
+    category = ItemCategory.all.create(event=event, name="Everything", position=0)
     quota_tickets = Quota.objects.create(event=event, name='Tickets', size=5)
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
                                  category=category, default_price=23, admission=True)

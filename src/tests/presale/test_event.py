@@ -116,7 +116,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertNotIn("Early-bird", html)
 
     def test_simple_with_category(self):
-        c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+        c = ItemCategory.all.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         q.items.add(item)
@@ -125,13 +125,13 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
 
     def test_simple_without_quota(self):
-        c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+        c = ItemCategory.all.create(event=self.event, name="Entry tickets", position=0)
         Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertNotIn("Early-bird", resp.rendered_content)
 
     def test_no_variations_in_quota(self):
-        c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+        c = ItemCategory.all.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         ItemVariation.objects.create(item=item, value='Blue')
@@ -140,7 +140,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertNotIn("Early-bird", resp.rendered_content)
 
     def test_one_variation_in_quota(self):
-        c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+        c = ItemCategory.all.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         var1 = ItemVariation.objects.create(item=item, value='Red')
@@ -150,7 +150,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self._assert_variation_found()
 
     def test_one_variation_in_unlimited_quota(self):
-        c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+        c = ItemCategory.all.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=None)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         var1 = ItemVariation.objects.create(item=item, value='Red')
@@ -166,7 +166,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertNotIn("Black", doc.select("section:nth-of-type(1)")[0].text)
 
     def test_variation_prices_in_quota(self):
-        c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+        c = ItemCategory.all.create(event=self.event, name="Entry tickets", position=0)
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=12)
         var1 = ItemVariation.objects.create(item=item, value='Red', default_price=14, position=1)

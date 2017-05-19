@@ -30,7 +30,7 @@ def item(event):
 @pytest.fixture
 def item_category(event):
     """Returns an item category instance"""
-    return ItemCategory.objects.create(event=event)
+    return ItemCategory.all.create(event=event)
 
 
 @pytest.fixture

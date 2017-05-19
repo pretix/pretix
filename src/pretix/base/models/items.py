@@ -14,12 +14,12 @@ from django.utils.translation import ugettext_lazy as _
 from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models.base import LoggedModel
+from pretix.base.models.base import EventBoundModelMixin, LoggedModel
 
 from .event import Event
 
 
-class ItemCategory(LoggedModel):
+class ItemCategory(EventBoundModelMixin, LoggedModel):
     """
     Items can be sorted into these categories.
 
@@ -52,6 +52,8 @@ class ItemCategory(LoggedModel):
                     'only be bought in combination with a product that has this category configured as a possible '
                     'source for add-ons.')
     )
+
+    all = models.Manager()
 
     class Meta:
         verbose_name = _("Product category")

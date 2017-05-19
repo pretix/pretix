@@ -21,6 +21,7 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import ChartContainingView
 from pretix.helpers.database import rolledback_transaction
 from pretix.plugins.ticketoutputpdf.signals import get_fonts
+
 from .ticketoutput import PdfTicketOutput
 
 logger = logging.getLogger(__name__)

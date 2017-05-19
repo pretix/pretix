@@ -24,7 +24,7 @@ class CheckoutTestCase(TestCase):
             plugins='pretix.plugins.stripe,pretix.plugins.banktransfer',
             live=True
         )
-        self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
+        self.category = ItemCategory.all.create(event=self.event, name="Everything", position=0)
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=5)
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                           category=self.category, default_price=23, admission=True)
@@ -36,7 +36,7 @@ class CheckoutTestCase(TestCase):
         self.session_key = self.client.cookies.get(settings.SESSION_COOKIE_NAME).value
         self._set_session('email', 'admin@localhost')
 
-        self.workshopcat = ItemCategory.objects.create(name="Workshops", is_addon=True, event=self.event)
+        self.workshopcat = ItemCategory.all.create(name="Workshops", is_addon=True, event=self.event)
         self.workshopquota = Quota.objects.create(event=self.event, name='Workshop 1', size=5)
         self.workshop1 = Item.objects.create(event=self.event, name='Workshop 1',
                                              category=self.workshopcat, default_price=12)
