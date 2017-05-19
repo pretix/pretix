@@ -16,6 +16,7 @@ from pretix.base.models import InvoiceAddress, LogEntry, Order
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
+
 from . import forms
 
 logger = logging.getLogger('pretix.plugins.sendmail')

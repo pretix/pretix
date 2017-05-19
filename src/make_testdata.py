@@ -37,10 +37,10 @@ t = Team.objects.get_or_create(
     can_view_orders=True, can_change_orders=True, can_view_vouchers=True, can_change_vouchers=True
 )
 t.members.add(user)
-cat_tickets = ItemCategory.objects.create(
+cat_tickets = ItemCategory.all.create(
     event=event, name='Tickets'
 )
-cat_merch = ItemCategory.objects.create(
+cat_merch = ItemCategory.all.create(
     event=event, name='Merchandise'
 )
 question = Question.objects.create(

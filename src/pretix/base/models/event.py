@@ -234,14 +234,14 @@ class Event(LoggedModel):
         ), tz)
 
     def copy_data_from(self, other):
-        from . import ItemAddOn, ItemCategory, Item, Question, Quota
+        from . import ItemAddOn, Item, Question, Quota
         from ..signals import event_copy_data
 
         self.plugins = other.plugins
         self.save()
 
         category_map = {}
-        for c in ItemCategory.objects.filter(event=other):
+        for c in other.categories.all():
             category_map[c.pk] = c
             c.pk = None
             c.event = self

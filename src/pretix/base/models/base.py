@@ -2,6 +2,7 @@ import json
 import uuid
 
 from django.contrib.contenttypes.models import ContentType
+from django.core import checks
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
@@ -34,7 +35,6 @@ def cached_file_delete(sender, instance, **kwargs):
 
 
 class LoggingMixin:
-
     def log_action(self, action, data=None, user=None):
         """
         Create a LogEntry object that is related to this object.
@@ -59,7 +59,6 @@ class LoggingMixin:
 
 
 class LoggedModel(models.Model, LoggingMixin):
-
     class Meta:
         abstract = True
 
@@ -74,3 +73,38 @@ class LoggedModel(models.Model, LoggingMixin):
         return LogEntry.objects.filter(
             content_type=ContentType.objects.get_for_model(type(self)), object_id=self.pk
         ).select_related('user', 'event')
+
+
+class EventBoundModelMixin:
+    event_lookup = 'event'
+
+    @classmethod
+    def for_event(cls, event):
+        return cls.all.filter(**{
+            cls.event_lookup: event
+        })
+
+    @classmethod
+    def check(cls, **kwargs):
+        try:
+            errors = super(cls).check(**kwargs)
+        except AttributeError:
+            errors = []
+        if hasattr(cls, 'objects'):
+            errors.append(
+                checks.Error(
+                    'Default model manager "objects" defined.',
+                    hint='Replace the objects manager by a manager called "all".',
+                    obj=cls,
+                    id='pretixbase.E001',
+                )
+            )
+        if not hasattr(cls, 'all'):
+            errors.append(
+                checks.Error(
+                    'Model manager "all" not defined.',
+                    obj=cls,
+                    id='pretixbase.E002',
+                )
+            )
+        return errors

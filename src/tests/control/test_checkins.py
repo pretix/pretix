@@ -289,8 +289,8 @@ def checkin_list_with_addon_env():
     team.limit_events.add(event)
 
     # item
-    cat_adm = ItemCategory.objects.create(event=event, name="Admission")
-    cat_workshop = ItemCategory.objects.create(event=event, name="Admission", is_addon=True)
+    cat_adm = ItemCategory.all.create(event=event, name="Admission")
+    cat_workshop = ItemCategory.all.create(event=event, name="Admission", is_addon=True)
     item_ticket = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, category=cat_adm)
     item_workshop = Item.objects.create(event=event, name="Workshop", default_price=10, admission=False,
                                         category=cat_workshop)

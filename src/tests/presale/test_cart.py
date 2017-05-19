@@ -24,7 +24,7 @@ class CartTestMixin:
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
             live=True
         )
-        self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
+        self.category = ItemCategory.all.create(event=self.event, name="Everything", position=0)
         self.quota_shirts = Quota.objects.create(event=self.event, name='Shirts', size=2)
         self.shirt = Item.objects.create(event=self.event, name='T-Shirt', category=self.category, default_price=12)
         self.quota_shirts.items.add(self.shirt)
@@ -1013,7 +1013,7 @@ class CartTest(CartTestMixin, TestCase):
 class CartAddonTest(CartTestMixin, TestCase):
     def setUp(self):
         super().setUp()
-        self.workshopcat = ItemCategory.objects.create(name="Workshops", is_addon=True, event=self.event)
+        self.workshopcat = ItemCategory.all.create(name="Workshops", is_addon=True, event=self.event)
         self.workshopquota = Quota.objects.create(event=self.event, name='Workshop 1', size=5)
         self.workshop1 = Item.objects.create(event=self.event, name='Workshop 1',
                                              category=self.workshopcat, default_price=12)

@@ -92,6 +92,7 @@ class I18nFieldTest(TestCase):
     """
     This test case tests the I18n*Field classes
     """
+
     @classmethod
     def setUpTestData(cls):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
@@ -101,8 +102,8 @@ class I18nFieldTest(TestCase):
         )
 
     def test_save_load_cycle_plain_string(self):
-        obj = ItemCategory.objects.create(event=self.event, name="Hello")
-        obj = ItemCategory.objects.get(id=obj.id)
+        obj = ItemCategory.all.create(event=self.event, name="Hello")
+        obj = ItemCategory.all.get(id=obj.id)
         self.assertIsInstance(obj.name, LazyI18nString)
         translation.activate('en')
         self.assertEqual(str(obj.name), "Hello")
@@ -110,14 +111,14 @@ class I18nFieldTest(TestCase):
         self.assertEqual(str(obj.name), "Hello")
 
     def test_save_load_cycle_i18n_string(self):
-        obj = ItemCategory.objects.create(event=self.event,
-                                          name=LazyI18nString(
-                                              {
-                                                  'de': 'Hallo',
-                                                  'en': 'Hello'
-                                              }
-                                          ))
-        obj = ItemCategory.objects.get(id=obj.id)
+        obj = ItemCategory.all.create(event=self.event,
+                                      name=LazyI18nString(
+                                          {
+                                              'de': 'Hallo',
+                                              'en': 'Hello'
+                                          }
+                                      ))
+        obj = ItemCategory.all.get(id=obj.id)
         self.assertIsInstance(obj.name, LazyI18nString)
         translation.activate('en')
         self.assertEqual(str(obj.name), "Hello")

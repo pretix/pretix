@@ -26,7 +26,7 @@ def item(event):
 
 @pytest.fixture
 def item_category(event):
-    return ItemCategory.objects.create(event=event)
+    return ItemCategory.all.create(event=event)
 
 
 @pytest.fixture
