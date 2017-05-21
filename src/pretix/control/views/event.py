@@ -437,7 +437,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
     def items(self):
         return {
             'mail_text_order_placed': ['total', 'currency', 'date', 'invoice_company',
-                                       'event', 'paymentinfo', 'url', 'invoice_name'],
+                                       'event', 'payment_info', 'url', 'invoice_name'],
             'mail_text_order_paid': ['event', 'url', 'invoice_name', 'invoice_company', 'payment_info'],
             'mail_text_order_free': ['event', 'url', 'invoice_name', 'invoice_company'],
             'mail_text_resend_link': ['event', 'url', 'invoice_name', 'invoice_company'],
@@ -468,7 +468,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             'code': '68CYU2H6ZTP3WLK5',
             'invoice_name': _('John Doe'),
             'invoice_company': _('Sample Corporation'),
-            'paymentinfo': _('Please transfer money to this bank account: 9999-9999-9999-9999')
+            'payment_info': _('Please transfer money to this bank account: 9999-9999-9999-9999')
         }
 
     def generate_order_url(self, code, secret):

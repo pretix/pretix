@@ -141,7 +141,7 @@ class MailSettingPreviewTest(SoupTest):
         assert res['msgs']['en'] == self.locale_event.name['en']
 
     def test_mail_text_order_placed(self):
-        text = '{event}{total}{currency}{date}{paymentinfo}{url}{invoice_name}{invoice_company}'
+        text = '{event}{total}{currency}{date}{payment_info}{url}{invoice_name}{invoice_company}'
         response = self.client.post(self.target.format(
             self.orga1.slug, self.event1.slug), {
             'item': 'mail_text_order_placed',
