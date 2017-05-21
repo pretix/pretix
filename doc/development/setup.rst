@@ -81,7 +81,7 @@ and head to http://localhost:8000/
 
 As we did not implement an overall front page yet, you need to go directly to
 http://localhost:8000/control/ for the admin view or, if you imported the test
-data as suggested above, to the event page at http://localhost:8000/bigevents/2017/
+data as suggested above, to the event page at http://localhost:8000/bigevents/2018/
 
 .. note:: If you want the development server to listen on a different interface or
           port (for example because you develop on `pretixdroid`_), you can check
