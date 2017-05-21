@@ -11,7 +11,7 @@ from pretix.base.services.mail import mail
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 from .base import LoggedModel
-from .event import Event
+from .event import Event, SubEvent
 from .items import Item, ItemVariation
 
 
@@ -25,6 +25,12 @@ class WaitingListEntry(LoggedModel):
         on_delete=models.CASCADE,
         related_name="waitinglistentries",
         verbose_name=_("Event"),
+    )
+    subevent = models.ForeignKey(
+        SubEvent,
+        null=True, blank=True,
+        on_delete=models.CASCADE,
+        verbose_name=_("Sub-event"),
     )
     created = models.DateTimeField(
         verbose_name=_("On waiting list since"),

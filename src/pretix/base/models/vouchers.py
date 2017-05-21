@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ..decimal import round_decimal
 from .base import LoggedModel
-from .event import Event
+from .event import Event, SubEvent
 from .items import Item, ItemVariation, Quota
 
 
@@ -33,6 +33,8 @@ class Voucher(LoggedModel):
 
     :param event: The event this voucher is valid for
     :type event: Event
+    :param subevent: The subevent, if subevents are enabled
+    :type subevent: SubEvent
     :param code: The secret voucher code
     :type code: str
     :param max_usages: The number of times this voucher can be redeemed
@@ -79,6 +81,12 @@ class Voucher(LoggedModel):
         on_delete=models.CASCADE,
         related_name="vouchers",
         verbose_name=_("Event"),
+    )
+    subevent = models.ForeignKey(
+        SubEvent,
+        null=True, blank=True,
+        on_delete=models.CASCADE,
+        verbose_name=_("Sub-event"),
     )
     code = models.CharField(
         verbose_name=_("Voucher code"),

@@ -16,7 +16,7 @@ from i18nfield.fields import I18nCharField, I18nTextField
 from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
 
-from .event import Event
+from .event import Event, SubEvent
 
 
 class ItemCategory(LoggedModel):
@@ -86,6 +86,20 @@ def itempicture_upload_to(instance, filename: str) -> str:
         instance.event.organizer.slug, instance.event.slug, instance.id,
         str(uuid.uuid4()), filename.split('.')[-1]
     )
+
+
+class SubEventItem(models.Model):
+    subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
+    item = models.ForeignKey('Item', on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
+    price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+
+
+class SubEventItemVariation(models.Model):
+    subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
+    item = models.ForeignKey('ItemVariation', on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
+    price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
 
 
 class Item(LoggedModel):
@@ -574,6 +588,8 @@ class Quota(LoggedModel):
 
     :param event: The event this belongs to
     :type event: Event
+    :param subevent: The subevent this belongs to, if subevents are enabled
+    :type subevent: SubEvent
     :param name: This quota's name
     :type name: str
     :param size: The number of items in this quota
@@ -592,6 +608,13 @@ class Quota(LoggedModel):
         on_delete=models.CASCADE,
         related_name="quotas",
         verbose_name=_("Event"),
+    )
+    subevent = models.ForeignKey(
+        SubEvent,
+        null=True, blank=True,
+        on_delete=models.CASCADE,
+        related_name="quotas",
+        verbose_name=_("Sub-event"),
     )
     name = models.CharField(
         max_length=200,

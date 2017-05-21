@@ -24,8 +24,73 @@ from ..settings import settings_hierarkey
 from .organizer import Organizer
 
 
+class EventMixin:
+
+    def clean(self):
+        if self.presale_start and self.presale_end and self.presale_start > self.presale_end:
+            raise ValidationError({'presale_end': _('The end of the presale period has to be later than its start.')})
+        if self.date_from and self.date_to and self.date_from > self.date_to:
+            raise ValidationError({'date_to': _('The end of the event has to be later than its start.')})
+        super().clean()
+
+    def get_date_from_display(self, tz=None, show_times=True) -> str:
+        """
+        Returns a formatted string containing the start date of the event with respect
+        to the current locale and to the ``show_times`` setting.
+        """
+        tz = tz or pytz.timezone(self.settings.timezone)
+        return _date(
+            self.date_from.astimezone(tz),
+            "DATETIME_FORMAT" if self.settings.show_times and show_times else "DATE_FORMAT"
+        )
+
+    def get_time_from_display(self, tz=None) -> str:
+        """
+        Returns a formatted string containing the start time of the event, ignoring
+        the ``show_times`` setting.
+        """
+        tz = tz or pytz.timezone(self.settings.timezone)
+        return _date(
+            self.date_from.astimezone(tz), "TIME_FORMAT"
+        )
+
+    def get_date_to_display(self, tz=None) -> str:
+        """
+        Returns a formatted string containing the start date of the event with respect
+        to the current locale and to the ``show_times`` setting. Returns an empty string
+        if ``show_date_to`` is ``False``.
+        """
+        tz = tz or pytz.timezone(self.settings.timezone)
+        if not self.settings.show_date_to or not self.date_to:
+            return ""
+        return _date(
+            self.date_to.astimezone(tz),
+            "DATETIME_FORMAT" if self.settings.show_times else "DATE_FORMAT"
+        )
+
+    def get_date_range_display(self, tz=None) -> str:
+        tz = tz or pytz.timezone(self.settings.timezone)
+        if not self.settings.show_date_to or not self.date_to:
+            return _date(self.date_from.astimezone(tz), "DATE_FORMAT")
+        return daterange(self.date_from.astimezone(tz), self.date_to.astimezone(tz))
+
+    @property
+    def presale_has_ended(self):
+        if self.presale_end and now() > self.presale_end:
+            return True
+        return False
+
+    @property
+    def presale_is_running(self):
+        if self.presale_start and now() < self.presale_start:
+            return False
+        if self.presale_end and now() > self.presale_end:
+            return False
+        return True
+
+
 @settings_hierarkey.add(parent_field='organizer', cache_namespace='event')
-class Event(LoggedModel):
+class Event(EventMixin, LoggedModel):
     """
     This model represents an event. An event is anything you can buy
     tickets for.
@@ -54,6 +119,8 @@ class Event(LoggedModel):
     :param plugins: A comma-separated list of plugin names that are active for this
                     event.
     :type plugins: str
+    :param has_subevents: Enable sub-events functionality
+    :type has_subevents: bool
     """
 
     settings_namespace = 'event'
@@ -116,6 +183,14 @@ class Event(LoggedModel):
         verbose_name=_("Internal comment"),
         null=True, blank=True
     )
+    has_subevents = models.BooleanField(
+        verbose_name=_('Use sub-event functionality'),
+        help_text=_('If you enable this feature, this event does not represent a single instance of an event, '
+                    'but for example a series of events that may differ in date, time, location, product prices '
+                    'and quota sizes, but not in other settings. This is only recommended for advanced users. '
+                    'You cannot change this setting later.'),
+        default=False
+    )
 
     class Meta:
         verbose_name = _("Event")
@@ -130,13 +205,6 @@ class Event(LoggedModel):
         self.get_cache().clear()
         return obj
 
-    def clean(self):
-        if self.presale_start and self.presale_end and self.presale_start > self.presale_end:
-            raise ValidationError({'presale_end': _('The end of the presale period has to be later than its start.')})
-        if self.date_from and self.date_to and self.date_from > self.date_to:
-            raise ValidationError({'date_to': _('The end of the event has to be later than its start.')})
-        super().clean()
-
     def get_plugins(self) -> "list[str]":
         """
         Returns the names of the plugins activated for this event as a list.
@@ -144,47 +212,6 @@ class Event(LoggedModel):
         if self.plugins is None:
             return []
         return self.plugins.split(",")
-
-    def get_date_from_display(self, tz=None, show_times=True) -> str:
-        """
-        Returns a formatted string containing the start date of the event with respect
-        to the current locale and to the ``show_times`` setting.
-        """
-        tz = tz or pytz.timezone(self.settings.timezone)
-        return _date(
-            self.date_from.astimezone(tz),
-            "DATETIME_FORMAT" if self.settings.show_times and show_times else "DATE_FORMAT"
-        )
-
-    def get_time_from_display(self, tz=None) -> str:
-        """
-        Returns a formatted string containing the start time of the event, ignoring
-        the ``show_times`` setting.
-        """
-        tz = tz or pytz.timezone(self.settings.timezone)
-        return _date(
-            self.date_from.astimezone(tz), "TIME_FORMAT"
-        )
-
-    def get_date_to_display(self, tz=None) -> str:
-        """
-        Returns a formatted string containing the start date of the event with respect
-        to the current locale and to the ``show_times`` setting. Returns an empty string
-        if ``show_date_to`` is ``False``.
-        """
-        tz = tz or pytz.timezone(self.settings.timezone)
-        if not self.settings.show_date_to or not self.date_to:
-            return ""
-        return _date(
-            self.date_to.astimezone(tz),
-            "DATETIME_FORMAT" if self.settings.show_times else "DATE_FORMAT"
-        )
-
-    def get_date_range_display(self, tz=None) -> str:
-        tz = tz or pytz.timezone(self.settings.timezone)
-        if not self.settings.show_date_to or not self.date_to:
-            return _date(self.date_from.astimezone(tz), "DATE_FORMAT")
-        return daterange(self.date_from.astimezone(tz), self.date_to.astimezone(tz))
 
     def get_cache(self) -> "pretix.base.cache.ObjectRelatedCache":
         """
@@ -196,20 +223,6 @@ class Event(LoggedModel):
         from pretix.base.cache import ObjectRelatedCache
 
         return ObjectRelatedCache(self)
-
-    @property
-    def presale_has_ended(self):
-        if self.presale_end and now() > self.presale_end:
-            return True
-        return False
-
-    @property
-    def presale_is_running(self):
-        if self.presale_start and now() < self.presale_start:
-            return False
-        if self.presale_end and now() > self.presale_end:
-            return False
-        return True
 
     def lock(self):
         """
@@ -347,6 +360,65 @@ class Event(LoggedModel):
     def invoice_renderer(self):
         irs = self.get_invoice_renderers()
         return irs[self.settings.invoice_renderer]
+
+
+class SubEvent(EventMixin, LoggedModel):
+    """
+    This model represents a subevent.
+
+    :param event: The event this subevent belongs to
+    :type event: Event
+    :param name: This event's full title
+    :type name: str
+    :param date_from: The datetime this event starts
+    :type date_from: datetime
+    :param date_to: The datetime this event ends
+    :type date_to: datetime
+    :param presale_start: No tickets will be sold before this date.
+    :type presale_start: datetime
+    :param presale_end: No tickets will be sold after this date.
+    :type presale_end: datetime
+    :param location: venue
+    :type location: str
+    """
+
+    event = models.ForeignKey(Event, related_name="subevents", on_delete=models.PROTECT)
+    name = I18nCharField(
+        max_length=200,
+        verbose_name=_("Name"),
+    )
+    date_from = models.DateTimeField(verbose_name=_("Event start time"))
+    date_to = models.DateTimeField(null=True, blank=True,
+                                   verbose_name=_("Event end time"))
+    date_admission = models.DateTimeField(null=True, blank=True,
+                                          verbose_name=_("Admission time"))
+    presale_end = models.DateTimeField(
+        null=True, blank=True,
+        verbose_name=_("End of presale"),
+        help_text=_("No products will be sold after this date."),
+    )
+    presale_start = models.DateTimeField(
+        null=True, blank=True,
+        verbose_name=_("Start of presale"),
+        help_text=_("No products will be sold before this date."),
+    )
+    location = I18nTextField(
+        null=True, blank=True,
+        max_length=200,
+        verbose_name=_("Location"),
+    )
+
+    items = models.ManyToManyField('Item', through='SubEventItem')
+    variations = models.ManyToManyField('ItemVariation', through='SubEventItemVariation')
+
+    class Meta:
+        verbose_name = _("Sub-Event")
+        verbose_name_plural = _("Sub-Events")
+        ordering = ("date_from", "name")
+
+    @property
+    def settings(self):
+        return self.event.settings
 
 
 def generate_invite_token():

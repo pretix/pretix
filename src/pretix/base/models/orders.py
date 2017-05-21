@@ -21,7 +21,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ..decimal import round_decimal
 from .base import LoggedModel
-from .event import Event
+from .event import Event, SubEvent
 from .items import Item, ItemVariation, Question, QuestionOption, Quota
 
 
@@ -430,6 +430,8 @@ class AbstractPosition(models.Model):
     """
     A position can either be one line of an order or an item placed in a cart.
 
+    :param subevent: The subevent, if subevents are enabled
+    :type subevent: SubEvent
     :param item: The selected item
     :type item: Item
     :param variation: The selected ItemVariation or null, if the item has no variations
@@ -449,6 +451,12 @@ class AbstractPosition(models.Model):
     :param meta_info: Additional meta information on the position, JSON-encoded.
     :type meta_info: str
     """
+    subevent = models.ForeignKey(
+        SubEvent,
+        null=True, blank=True,
+        on_delete=models.CASCADE,
+        verbose_name=_("Sub-event"),
+    )
     item = models.ForeignKey(
         Item,
         verbose_name=_("Item"),
