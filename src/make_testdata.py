@@ -36,7 +36,7 @@ t = Team.objects.get_or_create(
     can_change_organizer_settings=True, can_change_event_settings=True, can_change_items=True,
     can_view_orders=True, can_change_orders=True, can_view_vouchers=True, can_change_vouchers=True
 )
-t.members.add(user)
+t[0].members.add(user)
 cat_tickets = ItemCategory.objects.create(
     event=event, name='Tickets'
 )
