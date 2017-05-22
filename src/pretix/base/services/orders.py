@@ -414,7 +414,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
                 'order': order.code,
                 'secret': order.secret
             }),
-            'paymentinfo': str(pprov.order_pending_mail_render(order)),
+            'payment_info': str(pprov.order_pending_mail_render(order)),
             'invoice_name': invoice_name,
             'invoice_company': invoice_company,
         },

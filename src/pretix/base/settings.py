@@ -240,7 +240,7 @@ Your {event} team"""))
 we successfully received your order for {event} with a total value
 of {total} {currency}. Please complete your payment before {date}.
 
-{paymentinfo}
+{payment_info}
 
 You can change your order details and view the status of your order at
 {url}
