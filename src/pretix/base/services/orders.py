@@ -512,7 +512,7 @@ class OrderChangeManager:
         if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
             raise OrderError(self.error_messages['product_without_variation'])
         price = item.default_price if variation is None else variation.price
-        if not price:
+        if price is None:
             raise OrderError(self.error_messages['product_invalid'])
         self._totaldiff = price - position.price
         self._quotadiff.update(variation.quotas.all() if variation else item.quotas.all())
