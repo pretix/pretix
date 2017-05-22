@@ -97,7 +97,7 @@ class SubEventItem(models.Model):
 
 class SubEventItemVariation(models.Model):
     subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
-    item = models.ForeignKey('ItemVariation', on_delete=models.CASCADE)
+    variation = models.ForeignKey('ItemVariation', on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
 

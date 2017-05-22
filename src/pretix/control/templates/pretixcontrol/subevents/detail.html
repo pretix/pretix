@@ -15,6 +15,9 @@
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
+        {% for f in itemvar_forms %}
+            {% bootstrap_form_errors f %}
+        {% endfor %}
         <div class="row">
             <div class="col-xs-12 {% if subevent.pk %}col-lg-10{% endif %}">
                 <fieldset>
@@ -29,6 +32,22 @@
                     <legend>{% trans "Timeline" %}</legend>
                     {% bootstrap_field form.presale_start layout="horizontal" %}
                     {% bootstrap_field form.presale_end layout="horizontal" %}
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Items" %}</legend>
+                    {% for f in itemvar_forms %}
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                {{ f.item }}{% if f.variation %} – {{ f.variation }}{% endif %}
+                            </div>
+                            <div class="col-xs-12 col-md-3">
+                                {% bootstrap_field f.active layout="inline" %}
+                            </div>
+                            <div class="col-xs-12 col-md-3">
+                                {% bootstrap_field f.price layout="inline" %}
+                            </div>
+                        </div>
+                    {% endfor %}
                 </fieldset>
             </div>
             {% if subevent.pk %}
