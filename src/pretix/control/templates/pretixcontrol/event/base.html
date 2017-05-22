@@ -11,13 +11,23 @@
             {% trans "Dashboard" %}
         </a>
     </li>
-    {% if 'can_change_event_settings' in request.eventpermset or 'can_change_permissions' in request.eventpermset %}
+    {% if 'can_change_event_settings' in request.eventpermset %}
         <li>
-            <a href="{% url 'control:event.settings' organizer=request.event.organizer.slug event=request.event.slug %}">
+            <a href="{% url 'control:event.settings' organizer=request.event.organizer.slug event=request.event.slug %}"
+                    {% if "event.settings" == url_name or "event.settings." in url_name %}class="active"{% endif %}>
                 <i class="fa fa-wrench fa-fw"></i>
                 {% trans "Settings" %}
             </a>
         </li>
+        {% if request.event.has_subevents %}
+            <li>
+                <a href="{% url 'control:event.subevents' organizer=request.event.organizer.slug event=request.event.slug %}"
+                        {% if "event.subevent" in url_name %}class="active"{% endif %}>
+                    <i class="fa fa-calendar fa-fw"></i>
+                    {% trans "Sub-events" %}
+                </a>
+            </li>
+        {% endif %}
     {% endif %}
     {% if 'can_change_items' in request.eventpermset %}
         <li>

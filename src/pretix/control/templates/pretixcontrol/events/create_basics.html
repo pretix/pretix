@@ -18,9 +18,11 @@
         {% bootstrap_field form.locale layout="horizontal" %}
         {% bootstrap_field form.timezone layout="horizontal" %}
     </fieldset>
-    <fieldset>
-        <legend>{% trans "Timeline" %}</legend>
-        {% bootstrap_field form.presale_start layout="horizontal" %}
-        {% bootstrap_field form.presale_end layout="horizontal" %}
-    </fieldset>
+    {% if form.presale_tart %}
+        <fieldset>
+            <legend>{% trans "Timeline" %}</legend>
+            {% bootstrap_field form.presale_start layout="horizontal" %}
+            {% bootstrap_field form.presale_end layout="horizontal" %}
+        </fieldset>
+    {% endif %}
 {% endblock %}

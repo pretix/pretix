@@ -1,0 +1,53 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load eventsignal %}
+{% block title %}{% trans "Sub-event" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Sub-event" %}</h1>
+    {% if not subevent.pk %}
+        <p>
+            {% blocktrans trimmed %}
+                You can change more settings in the next step after you saved the sub-event.
+            {% endblocktrans %}
+        </p>
+    {% endif %}
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <div class="row">
+            <div class="col-xs-12 {% if subevent.pk %}col-lg-10{% endif %}">
+                <fieldset>
+                    <legend>{% trans "General information" %}</legend>
+                    {% bootstrap_field form.name layout="horizontal" %}
+                    {% bootstrap_field form.date_from layout="horizontal" %}
+                    {% bootstrap_field form.date_to layout="horizontal" %}
+                    {% bootstrap_field form.location layout="horizontal" %}
+                    {% bootstrap_field form.date_admission layout="horizontal" %}
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Timeline" %}</legend>
+                    {% bootstrap_field form.presale_start layout="horizontal" %}
+                    {% bootstrap_field form.presale_end layout="horizontal" %}
+                </fieldset>
+            </div>
+            {% if subevent.pk %}
+                <div class="col-xs-12 col-lg-2">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                {% trans "Sub-event history" %}
+                            </h3>
+                        </div>
+                        {% include "pretixcontrol/includes/logs.html" with obj=subevent %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

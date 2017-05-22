@@ -1,0 +1,50 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Sub-events" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Sub-events" %}</h1>
+    {% if subevents|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't created any sub-events yet.
+                {% endblocktrans %}
+            </p>
+
+            <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new sub-event" %}</a>
+        </div>
+    {% else %}
+        <p>
+            <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new sub-event" %}</a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-hover table-quotas">
+                <thead>
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Begin" %}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for s in subevents %}
+                    <tr>
+                        <td>
+                            <strong><a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}">
+                                {{ s.name }}</a></strong>
+                        </td>
+                        <td>{{ s.get_date_from_display }}</td>
+                        <td class="text-right">
+                            <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                            <a href="{% url "control:event.subevent.delete" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}

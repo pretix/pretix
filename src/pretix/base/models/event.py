@@ -185,10 +185,6 @@ class Event(EventMixin, LoggedModel):
     )
     has_subevents = models.BooleanField(
         verbose_name=_('Use sub-event functionality'),
-        help_text=_('If you enable this feature, this event does not represent a single instance of an event, '
-                    'but for example a series of events that may differ in date, time, location, product prices '
-                    'and quota sizes, but not in other settings. This is only recommended for advanced users. '
-                    'You cannot change this setting later.'),
         default=False
     )
 

@@ -20,6 +20,13 @@ class EventWizardFoundationForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
         help_text=_('Choose all languages that your event should be available in.')
     )
+    has_subevents = forms.BooleanField(
+        label=_("Use sub-event functionality"),
+        help_text=_('If you enable this feature, this event does not represent a single instance of an event, '
+                    'but for example a series of events that may differ in date, time, location, product prices '
+                    'and quota sizes, but not in other settings. This is only recommended for advanced users. '
+                    'You cannot change this setting later.'),
+    )
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
@@ -72,10 +79,15 @@ class EventWizardBasicsForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         self.organizer = kwargs.pop('organizer')
         self.locales = kwargs.get('locales')
+        self.has_subevents = kwargs.pop('has_subevents')
         kwargs.pop('user')
         super().__init__(*args, **kwargs)
         self.initial['timezone'] = get_current_timezone_name()
         self.fields['locale'].choices = [(a, b) for a, b in settings.LANGUAGES if a in self.locales]
+        self.fields['location'].widget.attrs['rows'] = '3'
+        if not self.has_subevents:
+            del self.fields['presale_start']
+            del self.fields['presale_end']
 
     def clean(self):
         data = super().clean()
@@ -125,11 +137,12 @@ class EventWizardCopyForm(forms.Form):
     def __init__(self, *args, **kwargs):
         kwargs.pop('organizer')
         kwargs.pop('locales')
+        has_subevents = kwargs.pop('has_subevents')
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
         self.fields['copy_from_event'] = forms.ModelChoiceField(
             label=_("Copy configuration from"),
-            queryset=EventWizardCopyForm.copy_from_queryset(self.user),
+            queryset=EventWizardCopyForm.copy_from_queryset(self.user).filter(has_subevents=has_subevents),
             widget=forms.RadioSelect,
             empty_label=_('Do not copy'),
             required=False
