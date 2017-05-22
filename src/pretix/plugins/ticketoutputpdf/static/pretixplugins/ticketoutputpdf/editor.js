@@ -165,7 +165,8 @@ var editor = {
         "event_admission_time": gettext("19:00"),
         "event_begin": gettext("2017-05-31 20:00"),
         "event_admission": gettext("2017-05-31 19:00"),
-        "event_location": gettext("Random City")
+        "event_location": gettext("Random City"),
+        "addons": gettext("Addon 1\nAddon 2"),
     },
 
     _load_pdf: function (dump) {

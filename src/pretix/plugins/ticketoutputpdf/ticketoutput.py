@@ -97,6 +97,11 @@ class PdfTicketOutput(BaseTicketOutput):
             if order.event.date_admission:
                 tz = timezone(order.event.settings.timezone)
                 return date_format(order.event.date_admission.astimezone(tz), "TIME_FORMAT")
+        elif o['content'] == 'addons':
+            return "<br/>".join([
+                '{} - {}'.format(p.item, p.variation) if p.variation else str(p.item)
+                for p in op.addons.select_related('item', 'variation')
+            ])
         return ''
 
     def _draw_textarea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
@@ -228,7 +233,7 @@ class PdfTicketOutput(BaseTicketOutput):
             {"type": "textarea", "left": "17.50", "bottom": "242.10", "fontsize": "13.0", "color": [0, 0, 0, 1],
              "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00", "content": "event_date",
              "text": "May 31st, 2017", "align": "left"},
-            {"type": "textarea", "left": "17.50", "bottom": "234.30", "fontsize": "13.0", "color": [0, 0, 0, 1],
+            {"type": "textarea", "left": "17.50", "bottom": "204.80", "fontsize": "13.0", "color": [0, 0, 0, 1],
              "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00", "content": "event_location",
              "text": "Random City", "align": "left"},
             {"type": "textarea", "left": "17.50", "bottom": "194.50", "fontsize": "13.0", "color": [0, 0, 0, 1],

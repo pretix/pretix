@@ -85,6 +85,7 @@ class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView
         if "preview" in request.POST:
             with rolledback_transaction(), language(request.event.settings.locale):
                 item = request.event.items.create(name=_("Sample product"), default_price=42.23)
+                item2 = request.event.items.create(name=_("Sample workshop"), default_price=23.40)
 
                 from pretix.base.models import Order
                 order = request.event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
@@ -92,6 +93,8 @@ class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView
                                                     expires=now(), code="PREVIEW1234", total=119)
 
                 p = order.positions.create(item=item, attendee_name=_("John Doe"), price=item.default_price)
+                order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
+                order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
 
                 prov = PdfTicketOutput(request.event,
                                        override_layout=(json.loads(request.POST.get("data"))
