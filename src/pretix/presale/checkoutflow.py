@@ -19,7 +19,8 @@ from pretix.presale.forms.checkout import (
     AddOnsForm, ContactForm, InvoiceAddressForm,
 )
 from pretix.presale.signals import (
-    checkout_confirm_messages, checkout_flow_steps, order_meta_from_request,
+    checkout_confirm_messages, checkout_flow_steps, contact_form_fields,
+    order_meta_from_request,
 )
 from pretix.presale.views import CartMixin, get_cart, get_cart_total
 from pretix.presale.views.async import AsyncAction
@@ -255,10 +256,13 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     @cached_property
     def contact_form(self):
+        initial = {
+            'email': self.request.session.get('email', '')
+        }
+        initial.update(self.request.session.get('contact_form_data', {}))
         return ContactForm(data=self.request.POST if self.request.method == "POST" else None,
-                           initial={
-                               'email': self.request.session.get('email', '')
-                           })
+                           event=self.request.event,
+                           initial=initial)
 
     @cached_property
     def invoice_address(self):
@@ -290,6 +294,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         if request.event.settings.invoice_address_asked:
             addr = self.invoice_form.save()
             request.session['invoice_address'] = addr.pk
+            request.session['contact_form_data'] = self.contact_form.cleaned_data
 
         return redirect(self.get_next_url(request))
 
@@ -435,6 +440,18 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['payment_provider'] = self.payment_provider
         ctx['addr'] = self.invoice_address
         ctx['confirm_messages'] = self.confirm_messages
+
+        ctx['contact_info'] = []
+        responses = contact_form_fields.send(self.event)
+        for r, response in sorted(responses, key=lambda r: str(r[0])):
+            for key, value in response.items():
+                v = self.request.session.get('contact_form_data', {}).get(key)
+                if v is True:
+                    v = _('Yes')
+                elif v is False:
+                    v = _('No')
+                ctx['contact_info'].append((value.label, v))
+
         return ctx
 
     @cached_property
@@ -485,9 +502,12 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
                         })
                     return redirect(self.get_error_url())
 
-        meta_info = {}
+        meta_info = {
+            'contact_form_data': self.request.session.get('contact_form_data', {})
+        }
         for receiver, response in order_meta_from_request.send(sender=request.event, request=request):
             meta_info.update(response)
+
         return self.do(self.request.event.id, self.payment_provider.identifier,
                        [p.id for p in self.positions], request.session.get('email'),
                        translation.get_language(), self.invoice_address.pk, meta_info)

@@ -14,6 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.base.models import ItemVariation, Question
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.templatetags.rich_text import rich_text
+from pretix.presale.signals import contact_form_fields
 
 
 class ContactForm(forms.Form):
@@ -22,6 +23,16 @@ class ContactForm(forms.Form):
                                          'confirmation including a link that you need in case you want to make '
                                          'modifications to your order or download your ticket later.'),
                              widget=forms.EmailInput(attrs={'data-typocheck-target': '1'}))
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+
+        responses = contact_form_fields.send(self.event)
+        for r, response in sorted(responses, key=lambda r: str(r[0])):
+            for key, value in response.items():
+                # We need to be this explicit, since OrderedDict.update does not retain ordering
+                self.fields[key] = value
 
 
 class InvoiceAddressForm(forms.ModelForm):

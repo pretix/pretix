@@ -69,6 +69,18 @@ You will recieve the request triggering the order creation as the ``request`` ke
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+contact_form_fields = EventPluginSignal(
+    providing_args=[]
+)
+"""
+This signals allows you to add form fields to the contact form that is presented during checkout
+and by default only asks for the email address. You are supposed to return a dictionary of
+form fields with globally unique keys. The validated form results will be saved into the
+``contact_form_data`` entry of the order metadata dictionary.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 order_info = EventPluginSignal(
     providing_args=["order"]
 )
