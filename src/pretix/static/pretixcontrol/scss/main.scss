@@ -29,6 +29,11 @@ nav.navbar {
     display: inline;
 }
 
+#side-menu img.fa-img {
+    height: auto;
+    width: 1.28571em;
+}
+
 nav.navbar .danger, nav.navbar .danger:hover, nav.navbar .danger:active {
     background: $brand-danger !important;
 }
