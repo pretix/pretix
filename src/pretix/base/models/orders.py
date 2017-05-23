@@ -1,4 +1,5 @@
 import copy
+import json
 import os
 import string
 from datetime import datetime
@@ -182,6 +183,10 @@ class Order(LoggedModel):
 
     def __str__(self):
         return self.full_code
+
+    @cached_property
+    def meta_info_data(self):
+        return json.loads(self.meta_info)
 
     @property
     def full_code(self):
