@@ -15,7 +15,8 @@ ways that pretix itself is:
 * PDF ticket output
 
 The following plugins are not shipped with pretix but are maintained by the
-same team:
+same team. We update them regularly to make them compatible with the latest
+pretix releases:
 
 * `SEPA direct debit`_
 * `Pages`_
@@ -23,8 +24,17 @@ same team:
 * `Cartshare`_
 * `Fontpack Free fonts`_
 
+The following closed-source plugins are available to customers of the hosted pretix.eu platform.
+Please get in touch with the pretix team if you want to have them for your self-hosted
+pretix installation:
+
+* Campaign tracking
+* Integration with Google Analytics and Facebook Pixel
+* Integration with Slack
+* Integration with MailChimp
+
 The following plugins are from independent third-party authors, so we can make
-no statements about their stability:
+no statements about their stability or compatibility:
 
 * `esPass ticket output`_
 * `IcePay integration`_
