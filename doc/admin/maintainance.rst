@@ -51,7 +51,7 @@ If there is a problem, a status code in the ``5xx`` range will be returned.
 Performance monitoring
 ----------------------
 
-If you to generate detailled performance statistics of your pretix installation, there is an
+If you want to generate detailed performance statistics of your pretix installation, there is an
 endpoint at ``https://pretix.mydomain.com/metrics`` (no slash at the end) which returns a
 number of values in the text format understood by monitoring tools like Prometheus_. This data
 is only collected and exposed if you enable it in the :ref:`metrics-settings` section of your
