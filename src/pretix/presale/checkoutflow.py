@@ -186,7 +186,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                         initial=current_addon_products,
                         data=(self.request.POST if self.request.method == 'POST' else None),
                         quota_cache=quota_cache,
-                        item_cache=item_cache
+                        item_cache=item_cache,
+                        subevent=cartpos.subevent
                     )
                 }
 

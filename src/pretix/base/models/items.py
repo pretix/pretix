@@ -283,7 +283,7 @@ class Item(LoggedModel):
             return False
         return True
 
-    def check_quotas(self, ignored_quotas=None, count_waitinglist=True, _cache=None):
+    def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None):
         """
         This method is used to determine whether this Item is currently available
         for sale.
@@ -297,12 +297,15 @@ class Item(LoggedModel):
         :raises ValueError: if you call this on an item which has variations associated with it.
                             Please use the method on the ItemVariation object you are interested in.
         """
-        check_quotas = set(self.quotas.all())
+        check_quotas = set(getattr(
+            self, '_subevent_quotas',  # Utilize cache in product list
+            self.quotas.filter(subevent=subevent) if subevent else self.quotas.all()
+        ))
         if ignored_quotas:
             check_quotas -= set(ignored_quotas)
         if not check_quotas:
             return Quota.AVAILABILITY_OK, sys.maxsize
-        if self.variations.count() > 0:  # NOQA
+        if self.has_variations:  # NOQA
             raise ValueError('Do not call this directly on items which have variations '
                              'but call this on their ItemVariation objects')
         return min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
@@ -383,7 +386,7 @@ class ItemVariation(models.Model):
         if self.item:
             self.item.event.get_cache().clear()
 
-    def check_quotas(self, ignored_quotas=None, count_waitinglist=True, _cache=None) -> Tuple[int, int]:
+    def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None) -> Tuple[int, int]:
         """
         This method is used to determine whether this ItemVariation is currently
         available for sale in terms of quotas.
@@ -395,7 +398,10 @@ class ItemVariation(models.Model):
         :param count_waitinglist: If ``False``, waiting list entries will be ignored for quota calculation.
         :returns: any of the return codes of :py:meth:`Quota.availability()`.
         """
-        check_quotas = set(self.quotas.all())
+        check_quotas = set(getattr(
+            self, '_subevent_quotas',  # Utilize cache in product list
+            self.quotas.filter(subevent=subevent) if subevent else self.quotas.all()
+        ))
         if ignored_quotas:
             check_quotas -= set(ignored_quotas)
         if not check_quotas:

@@ -60,7 +60,8 @@ class CartActionMixin:
                     'variation': None,
                     'count': amount,
                     'price': price,
-                    'voucher': voucher
+                    'voucher': voucher,
+                    'subevent': self.request.POST.get("subevent")
                 }
             except ValueError:
                 raise CartError(_('Please enter numbers only.'))
@@ -71,7 +72,8 @@ class CartActionMixin:
                     'variation': int(parts[2]),
                     'count': amount,
                     'price': price,
-                    'voucher': voucher
+                    'voucher': voucher,
+                    'subevent': self.request.POST.get("subevent")
                 }
             except ValueError:
                 raise CartError(_('Please enter numbers only.'))

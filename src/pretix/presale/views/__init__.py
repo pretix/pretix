@@ -144,7 +144,7 @@ def get_cart(request):
         ).order_by(
             'item', 'variation'
         ).select_related(
-            'item', 'variation'
+            'item', 'variation', 'subevent'
         ).prefetch_related(
             'item__questions', 'answers'
         )

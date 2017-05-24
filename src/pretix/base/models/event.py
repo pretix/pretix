@@ -11,6 +11,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.template.defaultfilters import date as _date
 from django.utils.crypto import get_random_string
+from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.fields import I18nCharField, I18nTextField
@@ -415,6 +416,24 @@ class SubEvent(EventMixin, LoggedModel):
     @property
     def settings(self):
         return self.event.settings
+
+    @cached_property
+    def item_price_overrides(self):
+        from .items import SubEventItem
+
+        return {
+            si.item_id: si.price
+            for si in SubEventItem.objects.filter(subevent=self, price__isnull=False)
+        }
+
+    @cached_property
+    def var_price_overrides(self):
+        from .items import SubEventItemVariation
+
+        return {
+            si.variation_id: si.price
+            for si in SubEventItemVariation.objects.filter(subevent=self, price__isnull=False)
+        }
 
 
 def generate_invite_token():

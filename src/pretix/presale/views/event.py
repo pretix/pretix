@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Prefetch, Q
 from django.http import Http404, HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
@@ -20,6 +20,7 @@ from django.views.generic import TemplateView
 from pytz import timezone
 
 from pretix.base.models import ItemVariation
+from pretix.base.models.event import SubEvent
 from pretix.multidomain.urlreverse import eventreverse
 
 from . import CartMixin, EventViewMixin, get_cart
@@ -41,7 +42,7 @@ def item_group_by_category(items):
     )
 
 
-def get_grouped_items(event):
+def get_grouped_items(event, subevent=None):
     items = event.items.all().filter(
         Q(active=True)
         & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
@@ -51,11 +52,15 @@ def get_grouped_items(event):
     ).select_related(
         'category',  # for re-grouping
     ).prefetch_related(
-        'variations__quotas',  # for .availability()
         Prefetch('quotas',
-                 queryset=event.quotas.all()),
+                 to_attr='_subevent_quotas',
+                 queryset=event.quotas.filter(subevent=subevent)),
         Prefetch('variations', to_attr='available_variations',
-                 queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).distinct()),
+                 queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).prefetch_related(
+                     Prefetch('quotas',
+                              to_attr='_subevent_quotas',
+                              queryset=event.quotas.filter(subevent=subevent))
+                 ).distinct()),
     ).annotate(
         quotac=Count('quotas'),
         has_variations=Count('variations')
@@ -64,39 +69,73 @@ def get_grouped_items(event):
     ).order_by('category__position', 'category_id', 'position', 'name')
     display_add_to_cart = False
     quota_cache = {}
+
+    if subevent:
+        item_price_override = subevent.item_price_overrides
+        var_price_override = subevent.var_price_overrides
+    else:
+        item_price_override = {}
+        var_price_override = {}
+
     for item in items:
         max_per_order = item.max_per_order or int(event.settings.max_items_per_order)
         if not item.has_variations:
-            item.cached_availability = list(item.check_quotas(_cache=quota_cache))
+            item._remove = not bool(item._subevent_quotas)
+            item.cached_availability = list(item.check_quotas(subevent=subevent, _cache=quota_cache))
             item.order_max = min(item.cached_availability[1]
                                  if item.cached_availability[1] is not None else sys.maxsize,
                                  max_per_order)
             item.price = item.default_price
-            item.display_price = item.default_price_net if event.settings.display_net_prices else item.price
+            item.display_price = item_price_override.get(
+                item.pk,
+                item.default_price_net if event.settings.display_net_prices else item.price
+            )
             display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
             for var in item.available_variations:
-                var.cached_availability = list(var.check_quotas(_cache=quota_cache))
+                var.cached_availability = list(var.check_quotas(subevent=subevent, _cache=quota_cache))
                 var.order_max = min(var.cached_availability[1]
                                     if var.cached_availability[1] is not None else sys.maxsize,
                                     max_per_order)
-                var.display_price = var.net_price if event.settings.display_net_prices else var.price
+                var.display_price = var_price_override.get(
+                    var.pk,
+                    var.net_price if event.settings.display_net_prices else var.price
+                )
                 display_add_to_cart = display_add_to_cart or var.order_max > 0
+            item.available_variations = [
+                v for v in item.available_variations if v._subevent_quotas
+            ]
             if len(item.available_variations) > 0:
                 item.min_price = min([v.display_price for v in item.available_variations])
                 item.max_price = max([v.display_price for v in item.available_variations])
+            item._remove = not bool(item.available_variations)
 
-    items = [item for item in items if len(item.available_variations) > 0 or not item.has_variations]
+    items = [item for item in items
+             if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove]
     return items, display_add_to_cart
 
 
 class EventIndex(EventViewMixin, CartMixin, TemplateView):
     template_name = "pretixpresale/event/index.html"
 
+    def get(self, request, *args, **kwargs):
+        self.subevent = None
+        if request.event.has_subevents:
+            if 'subevent' in kwargs:
+                self.subevent = get_object_or_404(SubEvent, event=request.event, pk=kwargs['subevent'])
+                return super().get(request, *args, **kwargs)
+            else:
+                return super().get(request, *args, **kwargs)
+        else:
+            if 'subevent' in kwargs:
+                return redirect(eventreverse(request.event, 'presale:event.index'))
+            else:
+                return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Fetch all items
-        items, display_add_to_cart = get_grouped_items(self.request.event)
+        items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent)
 
         # Regroup those by category
         context['items_by_category'] = item_group_by_category(items)
@@ -112,6 +151,9 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         context['has_addon_choices'] = get_cart(self.request).filter(item__addons__isnull=False).exists()
 
         context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
+
+        context['ev'] = self.subevent or self.request.event
+        context['subevent'] = self.subevent
         return context
 
 
