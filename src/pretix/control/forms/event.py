@@ -26,6 +26,7 @@ class EventWizardFoundationForm(forms.Form):
                     'but for example a series of events that may differ in date, time, location, product prices '
                     'and quota sizes, but not in other settings. This is only recommended for advanced users. '
                     'You cannot change this setting later.'),
+        required=False,
     )
 
     def __init__(self, *args, **kwargs):

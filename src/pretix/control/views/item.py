@@ -5,7 +5,7 @@ from django.core.files import File
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
 from django.db.models import Count, F, Q
-from django.forms.models import ModelMultipleChoiceField, inlineformset_factory
+from django.forms.models import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
@@ -554,49 +554,7 @@ class QuotaList(ListView):
         ).prefetch_related("items")
 
 
-class QuotaEditorMixin:
-    @cached_property
-    def items(self) -> "List[Item]":
-        return list(self.request.event.items.all().prefetch_related("variations"))
-
-    def get_form(self, form_class=QuotaForm):
-        if not hasattr(self, '_form'):
-            kwargs = self.get_form_kwargs()
-            kwargs['items'] = self.items
-            self._form = form_class(**kwargs)
-        return self._form
-
-    def get_context_data(self, *args, **kwargs) -> dict:
-        context = super().get_context_data(*args, **kwargs)
-        context['items'] = self.items
-        for item in context['items']:
-            item.field = self.get_form(QuotaForm)['item_%s' % item.id]
-        return context
-
-    @transaction.atomic
-    def form_valid(self, form):
-        res = super().form_valid(form)
-        items = self.object.items.all()
-        variations = self.object.variations.all()
-        selected_variations = []
-        self.object = form.instance
-        for item in self.items:
-            field = form.fields['item_%s' % item.id]
-            data = form.cleaned_data['item_%s' % item.id]
-            if isinstance(field, ModelMultipleChoiceField):
-                for v in data:
-                    selected_variations.append(v)
-            if data and item not in items:
-                self.object.items.add(item)
-            elif not data and item in items:
-                self.object.items.remove(item)
-
-        self.object.variations.add(*[v for v in selected_variations if v not in variations])
-        self.object.variations.remove(*[v for v in variations if v not in selected_variations])
-        return res
-
-
-class QuotaCreate(EventPermissionRequiredMixin, QuotaEditorMixin, CreateView):
+class QuotaCreate(EventPermissionRequiredMixin, CreateView):
     model = Quota
     form_class = QuotaForm
     template_name = 'pretixcontrol/items/quota_edit.html'
@@ -691,7 +649,7 @@ class QuotaView(ChartContainingView, DetailView):
             raise Http404(_("The requested quota does not exist."))
 
 
-class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
+class QuotaUpdate(EventPermissionRequiredMixin, UpdateView):
     model = Quota
     form_class = QuotaForm
     template_name = 'pretixcontrol/items/quota_edit.html'

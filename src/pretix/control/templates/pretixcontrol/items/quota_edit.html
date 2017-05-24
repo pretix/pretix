@@ -30,27 +30,7 @@
                     left.
                 {% endblocktrans %}
             </p>
-            <div class="panel-group items-on-quota">
-                {% for item in items %}
-                    <div class="panel panel-default" data-formset-form>
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion"
-                                        href="#collapse{{ item.id }}">
-                                    {{ item.name }}
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapse{{ item.id }}" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                                <div class="form-horizontal">
-                                    {% bootstrap_field item.field layout="horizontal" %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
+            {% bootstrap_field form.itemvars layout="horizontal" %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

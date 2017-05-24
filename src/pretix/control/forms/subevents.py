@@ -1,4 +1,5 @@
 from django import forms
+from i18nfield.forms import I18nInlineFormSet
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models.event import SubEvent
@@ -49,7 +50,7 @@ class SubEventItemForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
 
     class Meta:
         model = SubEventItem
-        fields = ['active', 'price']
+        fields = ['price']
 
 
 class SubEventItemVariationForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
@@ -61,4 +62,29 @@ class SubEventItemVariationForm(SubEventItemOrVariationFormMixin, forms.ModelFor
 
     class Meta:
         model = SubEventItem
-        fields = ['active', 'price']
+        fields = ['price']
+
+
+class QuotaFormSet(I18nInlineFormSet):
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event', None)
+        self.locales = self.event.settings.get('locales')
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['locales'] = self.locales
+        kwargs['event'] = self.event
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            locales=self.locales,
+            event=self.event
+        )
+        self.add_fields(form, None)
+        return form

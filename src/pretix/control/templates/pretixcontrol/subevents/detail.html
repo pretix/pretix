@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load formset_tags %}
 {% load eventsignal %}
 {% block title %}{% trans "Sub-event" %}{% endblock %}
 {% block content %}
@@ -34,16 +35,78 @@
                     {% bootstrap_field form.presale_end layout="horizontal" %}
                 </fieldset>
                 <fieldset>
-                    <legend>{% trans "Items" %}</legend>
+                    <legend>{% trans "Quotas" %}</legend>
+                    <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+                        {{ formset.management_form }}
+                        {% bootstrap_formset_errors formset %}
+                        <div data-formset-body>
+                            {% for form in formset %}
+                                <div class="panel panel-default" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ form.id }}
+                                        {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    {% bootstrap_field form.name layout='inline' form_group_class="" %}
+                                                </div>
+                                                <div class="col-md-2 text-right">
+                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                        <i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body form-horizontal">
+                                        {% bootstrap_form_errors form %}
+                                        {% bootstrap_field form.size layout='horizontal' %}
+                                        {% bootstrap_field form.itemvars layout='horizontal' %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <script type="form-template" data-formset-empty-form>
+                            {% escapescript %}
+                                <div class="panel panel-default" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ formset.empty_form.id }}
+                                        {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    {% bootstrap_field formset.empty_form.name layout='inline' form_group_class="" %}
+                                                </div>
+                                                <div class="col-md-2 text-right">
+                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                        <i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body form-horizontal">
+                                        {% bootstrap_field formset.empty_form.size layout='horizontal' %}
+                                        {% bootstrap_field formset.empty_form.itemvars layout='horizontal' %}
+                                    </div>
+                                </div>
+                            {% endescapescript %}
+                        </script>
+                        <p>
+                            <button type="button" class="btn btn-default" data-formset-add>
+                                <i class="fa fa-plus"></i> {% trans "Add a new quota" %}</button>
+                        </p>
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Item prices" %}</legend>
                     {% for f in itemvar_forms %}
                         <div class="row">
                             <div class="col-xs-12 col-md-6">
                                 {{ f.item }}{% if f.variation %} – {{ f.variation }}{% endif %}
                             </div>
-                            <div class="col-xs-12 col-md-3">
-                                {% bootstrap_field f.active layout="inline" %}
-                            </div>
-                            <div class="col-xs-12 col-md-3">
+                            <div class="col-xs-12 col-md-6">
                                 {% bootstrap_field f.price layout="inline" %}
                             </div>
                         </div>
