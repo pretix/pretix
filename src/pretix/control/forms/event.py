@@ -86,7 +86,7 @@ class EventWizardBasicsForm(I18nModelForm):
         self.initial['timezone'] = get_current_timezone_name()
         self.fields['locale'].choices = [(a, b) for a, b in settings.LANGUAGES if a in self.locales]
         self.fields['location'].widget.attrs['rows'] = '3'
-        if not self.has_subevents:
+        if self.has_subevents:
             del self.fields['presale_start']
             del self.fields['presale_end']
 

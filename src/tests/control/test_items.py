@@ -231,7 +231,7 @@ class QuotaTest(ItemFormTest):
         ItemVariation.objects.create(item=item2, value="Silver")
         ItemVariation.objects.create(item=item2, value="Gold")
         doc = self.get_doc('/control/event/%s/%s/quotas/%s/change' % (self.orga1.slug, self.event1.slug, c.id))
-        doc.select('[name=item_%s]' % item1.id)[0]['checked'] = 'checked'
+        [i for i in doc.select('[name=itemvars]') if i.get('value') == str(item1.id)][0]['checked'] = 'checked'
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         form_data['size'] = '350'
         doc = self.post_doc('/control/event/%s/%s/quotas/%s/change' % (self.orga1.slug, self.event1.slug, c.id),
