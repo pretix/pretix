@@ -210,12 +210,12 @@ def checkin_list_env():
     ('code', ['A1Ticket', 'A1Mascot', 'A2Ticket', 'A3Ticket']),
     ('-email', ['A3Ticket', 'A2Ticket', 'A1Ticket', 'A1Mascot']),
     ('email', ['A1Ticket', 'A1Mascot', 'A2Ticket', 'A3Ticket']),
-    # ('-status', ['A3Ticket', 'A1Ticket', 'A1Mascot', 'A2Ticket']),
-    # ('status', ['A1Mascot', 'A2Ticket', 'A1Ticket', 'A3Ticket']),
-    # ('-timestamp', ['A1Ticket', 'A3Ticket', 'A1Mascot', 'A2Ticket']),  # A1 checkin date > A3 checkin date
-    # ('timestamp', ['A1Mascot', 'A2Ticket', 'A3Ticket', 'A1Ticket']),
-    # ('-name', ['A3Ticket', 'A2Ticket', 'A1Ticket', 'A1Mascot']),
-    # ('name', ['A1Mascot', 'A1Ticket', 'A2Ticket', 'A3Ticket']),  # mascot doesn't include attendee name
+    ('-status', ['A3Ticket', 'A1Ticket', 'A1Mascot', 'A2Ticket']),
+    ('status', ['A1Mascot', 'A2Ticket', 'A1Ticket', 'A3Ticket']),
+    ('-timestamp', ['A1Ticket', 'A3Ticket', 'A1Mascot', 'A2Ticket']),  # A1 checkin date > A3 checkin date
+    ('timestamp', ['A1Mascot', 'A2Ticket', 'A3Ticket', 'A1Ticket']),
+    ('-name', ['A3Ticket', 'A2Ticket', 'A1Ticket', 'A1Mascot']),
+    ('name', ['A1Mascot', 'A1Ticket', 'A2Ticket', 'A3Ticket']),  # mascot doesn't include attendee name
     ('-item', ['A1Ticket', 'A2Ticket', 'A3Ticket', 'A1Mascot']),
     ('item', ['A1Mascot', 'A1Ticket', 'A2Ticket', 'A3Ticket']),
 ])
@@ -259,8 +259,7 @@ def test_checkins_item_filter(client, checkin_list_env):
 @pytest.mark.parametrize("query, expected", [
     ('status=&item=&user=&ordering=', ['A1Ticket', 'A1Mascot', 'A2Ticket', 'A3Ticket']),
     ('status=1&item=&user=&ordering=timestamp', ['A3Ticket', 'A1Ticket']),
-    # ('status=0&item=&user=&ordering=-name', ['A2Ticket', 'A1Mascot']),
-    # ('status=&item=Ticket&user=&ordering=checkins__datetime', ['A2Ticket', 'A3Ticket', 'A1Ticket']),
+    ('status=0&item=&user=&ordering=-name', ['A2Ticket', 'A1Mascot']),
 ])
 def test_checkins_list_mixed(client, checkin_list_env, query, expected):
     client.login(email='dummy@dummy.dummy', password='dummy')
