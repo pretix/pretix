@@ -1,4 +1,4 @@
-from django.db.models import Prefetch, Q
+from django.db.models import F, Prefetch, Q
 from django.db.models.functions import Coalesce
 from django.views.generic import ListView
 
@@ -68,12 +68,15 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
             '-code': '-order__code',
             'email': 'order__email',
             '-email': '-order__email',
-            'status': 'checkins__id',
-            '-status': '-checkins__id',
-            'timestamp': 'checkins__datetime',
-            '-timestamp': '-checkins__datetime',
+            # Set nulls_first to be consistent over databases
+            'status': F('checkins__id').asc(nulls_first=True),
+            '-status': F('checkins__id').desc(nulls_last=True),
+            'timestamp': F('checkins__datetime').asc(nulls_first=True),
+            '-timestamp': F('checkins__datetime').desc(nulls_last=True),
             'item': 'item__name',
             '-item': '-item__name',
-            'name': ('display_name', {'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')}),
-            '-name': ('-display_name', {'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')}),
+            'name': (F('display_name').asc(nulls_first=True),
+                     {'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')}),
+            '-name': (F('display_name').desc(nulls_last=True),
+                      {'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')}),
         }
