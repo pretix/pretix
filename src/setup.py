@@ -97,7 +97,7 @@ setup(
         'redis==2.10.5',
         'stripe==1.22.*',
         'chardet>=2.3,<3',
-        'mt-940==3.2',
+        'mt-940==4.7',
         'django-i18nfield>=1.0.1',
         'vobject==0.9.*',
         'pycountry'
