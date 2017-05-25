@@ -20,7 +20,7 @@ def parse(file):
         result.append({
             'reference': "\n".join([
                 t.data.get(f) for f in ('transaction_details', 'customer_reference', 'bank_reference',
-                                        'extra_details') if t.data.get(f, '')]),
+                                        'extra_details', 'non_swift_text') if t.data.get(f, '')]),
             'amount': str(round_decimal(t.data['amount'].amount)),
             'date': t.data['date'].isoformat()
         })
