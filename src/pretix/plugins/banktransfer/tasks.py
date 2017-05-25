@@ -84,7 +84,7 @@ def _get_unknown_transactions(event: Event, job: BankImportJob, data: list):
             amount = Decimal("0.00")
 
         trans = BankTransaction(event=event, import_job=job,
-                                payer=row['payer'],
+                                payer=row.get('payer', ''),
                                 reference=row['reference'],
                                 amount=amount,
                                 date=row['date'])
