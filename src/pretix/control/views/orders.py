@@ -674,7 +674,7 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, View)
 
         if not self.exporter.form.is_valid():
             messages.error(self.request, _('There was a problem processing your input. See below for error details.'))
-            return self.get(*args, **kwargs)
+            return self.get(request, *args, **kwargs)
 
         cf = CachedFile()
         cf.date = now()
