@@ -83,7 +83,7 @@ PRETIX_PASSWORD_RESET = config.getboolean('pretix', 'password_reset', fallback=T
 SITE_URL = config.get('pretix', 'url', fallback='http://localhost')
 
 PRETIX_PLUGINS_DEFAULT = config.get('pretix', 'plugins_default',
-                                    fallback='pretix.plugins.sendmail,pretix.plugins.statistics')
+                                    fallback='pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists')
 
 DEFAULT_CURRENCY = config.get('pretix', 'currency', fallback='EUR')
 CURRENCIES = list(currencies)
