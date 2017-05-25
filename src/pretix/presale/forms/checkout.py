@@ -1,13 +1,11 @@
 from decimal import Decimal
+from itertools import chain
 
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Count, Prefetch, Q
-from django.forms.widgets import RadioChoiceInput, RadioFieldRenderer
 from django.utils.encoding import force_text
 from django.utils.formats import number_format
-from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -166,51 +164,35 @@ class QuestionsForm(forms.Form):
             self.fields['question_%s' % q.id] = field
 
 
-# The following will get totally different once Django 1.11 is integrated
-class AddOnVariationSelectInput(RadioChoiceInput):
+class AddOnRadioSelect(forms.RadioSelect):
+    option_template_name = 'pretixpresale/forms/addon_choice_option.html'
 
-    def __init__(self, name, value, attrs, choice, index):
-        super().__init__(name, value, attrs, choice, index)
-        self.description = force_text(choice[2])
+    def optgroups(self, name, value, attrs=None):
+        attrs = attrs or {}
+        groups = []
+        has_selected = False
+        for index, (option_value, option_label, option_desc) in enumerate(chain(self.choices)):
+            if option_value is None:
+                option_value = ''
+            if isinstance(option_label, (list, tuple)):
+                raise TypeError('Choice groups are not supported here')
+            group_name = None
+            subgroup = []
+            groups.append((group_name, subgroup, index))
 
-    def render(self, name=None, value=None, attrs=None):
-        if self.id_for_label:
-            label_for = format_html(' for="{}"', self.id_for_label)
-        else:
-            label_for = ''
-        attrs = dict(self.attrs, **attrs) if attrs else self.attrs
-        if self.description:
-            return format_html(
-                '<label{}>{} {}</label> <span class="fa fa-info-circle toggle-variation-description"></span>'
-                '<div class="variation-description addon-variation-description">{}</div>',
-                label_for, self.tag(attrs), self.choice_label,
-                rich_text(str(self.description))
+            selected = (
+                force_text(option_value) in value and
+                (has_selected is False or self.allow_multiple_selected)
             )
-        else:
-            return format_html(
-                '<label{}>{} {}</label>',
-                label_for, self.tag(attrs), self.choice_label,
-            )
+            if selected is True and has_selected is False:
+                has_selected = True
+            attrs['description'] = option_desc
+            subgroup.append(self.create_option(
+                name, option_value, option_label, selected, index,
+                subindex=None, attrs=attrs,
+            ))
 
-
-class AddOnVariationSelectRenderer(RadioFieldRenderer):
-    choice_input_class = AddOnVariationSelectInput
-
-    def render(self):
-        id_ = self.attrs.get('id')
-        output = []
-        for i, choice in enumerate(self.choices):
-            w = self.choice_input_class(self.name, self.value, self.attrs.copy(), choice, i)
-            output.append(format_html(self.inner_html, choice_value=force_text(w), sub_widgets=''))
-        return format_html(
-            self.outer_html,
-            id_attr=format_html(' id="{}"', id_) if id_ else '',
-            content=mark_safe('\n'.join(output)),
-        )
-
-
-class AddOnVariationSelect(forms.RadioSelect):
-    renderer = AddOnVariationSelectRenderer
+        return groups
 
 
 class AddOnVariationField(forms.ChoiceField):
@@ -318,7 +300,7 @@ class AddOnsForm(forms.Form):
                     choices=choices,
                     label=i.name,
                     required=False,
-                    widget=AddOnVariationSelect,
+                    widget=AddOnRadioSelect,
                     help_text=rich_text(str(i.description)),
                     initial=current_addons.get(i.pk),
                 )
