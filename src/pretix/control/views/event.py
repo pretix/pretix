@@ -316,8 +316,7 @@ class InvoicePreview(EventPermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         pdf = build_preview_invoice_pdf(request.event)
         resp = HttpResponse(pdf, content_type='application/pdf')
-        resp['Content-Security-Policy'] = "style-src 'unsafe-inline'; script-src 'unsafe-inline'; object-src 'self'"
-        resp['Content-Disposition'] = 'inline; filename="invoice-preview.pdf"'
+        resp['Content-Disposition'] = 'attachment; filename="invoice-preview.pdf"'
         return resp
 
 
@@ -528,11 +527,7 @@ class TicketSettingsPreview(EventPermissionRequiredMixin, View):
         fname, mimet, data = tickets.preview(self.request.event.pk, self.output.identifier)
         resp = HttpResponse(data, content_type=mimet)
         ftype = fname.split(".")[-1]
-        if mimet == "application/pdf":
-            resp['Content-Security-Policy'] = "style-src 'unsafe-inline'; script-src 'unsafe-inline'; object-src 'self'"
-            resp['Content-Disposition'] = 'inline; filename="ticket-preview.{}"'.format(ftype)
-        else:
-            resp['Content-Disposition'] = 'attachment; filename="ticket-preview.{}"'.format(ftype)
+        resp['Content-Disposition'] = 'attachment; filename="ticket-preview.{}"'.format(ftype)
         return resp
 
     def get_error_url(self) -> str:

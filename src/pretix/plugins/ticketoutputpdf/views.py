@@ -105,8 +105,7 @@ class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView
 
             resp = HttpResponse(data, content_type=mimet)
             ftype = fname.split(".")[-1]
-            resp['Content-Security-Policy'] = "style-src 'unsafe-inline'; script-src 'unsafe-inline'; object-src 'self'"
-            resp['Content-Disposition'] = 'inline; filename="ticket-preview.{}"'.format(ftype)
+            resp['Content-Disposition'] = 'attachment; filename="ticket-preview.{}"'.format(ftype)
             return resp
         elif "data" in request.POST:
             if cf:

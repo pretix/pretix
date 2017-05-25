@@ -581,15 +581,9 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             return render(self.request, "pretixbase/cachedfiles/pending.html", {})
         else:
             resp = FileResponse(ct.file.file, content_type=ct.type)
-            if ct.type == "application/pdf":
-                resp['Content-Security-Policy'] = "style-src 'unsafe-inline'; script-src 'unsafe-inline'; object-src 'self'"
-                resp['Content-Disposition'] = 'inline; filename="{}-{}-{}{}"'.format(
-                    self.request.event.slug.upper(), self.order.code, self.output.identifier, ct.extension
-                )
-            else:
-                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
-                    self.request.event.slug.upper(), self.order.code, self.output.identifier, ct.extension
-                )
+            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
+                self.request.event.slug.upper(), self.order.code, self.output.identifier, ct.extension
+            )
             return resp
 
     def _download_position(self):
@@ -620,17 +614,10 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             return render(self.request, "pretixbase/cachedfiles/pending.html", {})
         else:
             resp = FileResponse(ct.file.file, content_type=ct.type)
-            if ct.type == "application/pdf":
-                resp['Content-Security-Policy'] = "style-src 'unsafe-inline'; script-src 'unsafe-inline'; object-src 'self'"
-                resp['Content-Disposition'] = 'inline; filename="{}-{}-{}-{}{}"'.format(
-                    self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
-                    self.output.identifier, ct.extension
-                )
-            else:
-                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
-                    self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
-                    self.output.identifier, ct.extension
-                )
+            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
+                self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
+                self.output.identifier, ct.extension
+            )
             return resp
 
 
@@ -660,6 +647,5 @@ class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
             return redirect(self.get_order_url())
 
         resp = FileResponse(invoice.file.file, content_type='application/pdf')
-        resp['Content-Security-Policy'] = "style-src 'unsafe-inline'; script-src 'unsafe-inline'; object-src 'self'"
-        resp['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(invoice.number)
+        resp['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(invoice.number)
         return resp
