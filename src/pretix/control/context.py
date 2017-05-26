@@ -33,7 +33,7 @@ def contextprocessor(request):
 
     _js_payment_weekdays_disabled = '[]'
     _nav_event = []
-    if hasattr(request, 'event'):
+    if getattr(request, 'event', None) and hasattr(request, 'organizer'):
         for receiver, response in nav_event.send(request.event, request=request):
             _nav_event += response
         if request.event.settings.get('payment_term_weekdays'):
