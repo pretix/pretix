@@ -35,7 +35,7 @@ stripe==1.22.*
 paypalrestsdk==1.12.*
 pycparser==2.13  # https://github.com/eliben/pycparser/issues/147
 # Banktransfer
-chardet>=2.3,<3
+chardet
 mt-940==3.2
 vobject==0.9.*
 pycountry
