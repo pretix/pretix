@@ -110,7 +110,7 @@ class CSVCheckinList(BaseCheckinList):
             if form_data['secrets']:
                 row.append(op.secret)
             if self.event.settings.attendee_emails_asked:
-                row.append(op.attendee_email or (op.addon_to.attendee_name if op.addon_to else ''))
+                row.append(op.attendee_email or (op.addon_to.attendee_email if op.addon_to else ''))
             acache = {}
             for a in op.answers.all():
                 acache[a.question_id] = str(a)
