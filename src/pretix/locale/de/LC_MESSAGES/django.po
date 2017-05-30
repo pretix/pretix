@@ -7800,7 +7800,7 @@ msgstr "Dieses Plugin erlaubt, Tickets als PDF-Dateien herunterzuladen"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
 msgid "Ticket design"
-msgstr "Ticket-Deesign"
+msgstr "Ticket-Design"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:8
 msgid ""
