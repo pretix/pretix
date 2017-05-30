@@ -14,6 +14,7 @@ from pretix.base.models import (
     Event, Item, ItemCategory, ItemVariation, Order, Organizer, Quota, Team,
     User, WaitingListEntry,
 )
+from pretix.base.models.items import SubEventItem
 
 
 class EventTestMixin:
@@ -129,6 +130,62 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertNotIn("Early-bird", resp.rendered_content)
+
+    def test_subevents(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name='Foo', date_from=now())
+        se2 = self.event.subevents.create(name='Foo', date_from=now())
+        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0)
+        q.items.add(item)
+
+        resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
+        self.assertIn("Early-bird", resp.rendered_content)
+        resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se2.pk))
+        self.assertNotIn("Early-bird", resp.rendered_content)
+
+    def test_subevent_prices(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name='Foo', date_from=now())
+        se2 = self.event.subevents.create(name='Foo', date_from=now())
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=15)
+        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+        q.items.add(item)
+        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se2)
+        q.items.add(item)
+        SubEventItem.objects.create(subevent=se1, item=item, price=12)
+
+        resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
+        self.assertIn("12.00", resp.rendered_content)
+        self.assertNotIn("15.00", resp.rendered_content)
+        resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se2.pk))
+        self.assertIn("15.00", resp.rendered_content)
+        self.assertNotIn("12.00", resp.rendered_content)
+
+    def test_subevent_net_prices(self):
+        self.event.has_subevents = True
+        self.event.save()
+        self.event.settings.display_net_prices = True
+        se1 = self.event.subevents.create(name='Foo', date_from=now())
+        se2 = self.event.subevents.create(name='Foo', date_from=now())
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=15,
+                                   tax_rate=19)
+        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+        q.items.add(item)
+        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se2)
+        q.items.add(item)
+        SubEventItem.objects.create(subevent=se1, item=item, price=12)
+
+        resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
+        self.assertIn("10.08", resp.rendered_content)
+        self.assertNotIn("12.00", resp.rendered_content)
+        self.assertNotIn("15.00", resp.rendered_content)
+        resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se2.pk))
+        self.assertIn("12.61", resp.rendered_content)
+        self.assertNotIn("12.00", resp.rendered_content)
+        self.assertNotIn("15.00", resp.rendered_content)
 
     def test_no_variations_in_quota(self):
         c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)

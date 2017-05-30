@@ -11,7 +11,9 @@ from pretix.base.models import (
     CartPosition, Event, Item, ItemCategory, ItemVariation, Organizer,
     Question, QuestionAnswer, Quota, Voucher,
 )
-from pretix.base.models.items import ItemAddOn
+from pretix.base.models.items import (
+    ItemAddOn, SubEventItem, SubEventItemVariation,
+)
 from pretix.base.services.cart import CartError, CartManager
 
 
@@ -87,6 +89,55 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 23)
+
+    def test_subevent_missing(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        self.quota_tickets.subevent = se
+        self.quota_tickets.save()
+        q = se.quotas.create(name="foo", size=None, event=self.event)
+        q.items.add(self.ticket)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+        }, follow=False)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
+    def test_simple_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        q = se.quotas.create(name="foo", size=None, event=self.event)
+        q.items.add(self.ticket)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'subevent': se.pk
+        }, follow=False)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+        self.assertEqual(objs[0].subevent, se)
+
+    def test_subevent_price(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        q = se.quotas.create(name="foo", size=None, event=self.event)
+        q.items.add(self.ticket)
+        SubEventItem.objects.create(subevent=se, item=self.ticket, price=42)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'subevent': se.pk
+        }, follow=False)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 42)
+        self.assertEqual(objs[0].subevent, se)
 
     def test_free_price(self):
         self.ticket.free_price = True
@@ -198,6 +249,24 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].variation, self.shirt_red)
         self.assertEqual(objs[0].price, 16)
 
+    def test_subevent_variation_price(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        q = se.quotas.create(name="foo", size=None, event=self.event)
+        q.variations.add(self.shirt_red)
+        SubEventItemVariation.objects.create(subevent=se, variation=self.shirt_red, price=42)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+            'subevent': se.pk
+        }, follow=False)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.shirt)
+        self.assertEqual(objs[0].variation, self.shirt_red)
+        self.assertEqual(objs[0].price, 42)
+        self.assertEqual(objs[0].subevent, se)
+
     def test_count(self):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '2'
@@ -295,6 +364,22 @@ class CartTest(CartTestMixin, TestCase):
         shirt2 = Item.objects.create(event=self.event, name='T-Shirt', default_price=12)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % shirt2.id: '1',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
+        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
+
+    def test_subevent_no_quota(self):
+        shirt2 = Item.objects.create(event=self.event, name='T-Shirt', default_price=12)
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        SubEventItem.objects.create(subevent=se, item=shirt2, price=42)
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % shirt2.id: '1',
+            'subevent': se.pk
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -438,6 +523,30 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 23)
 
+    def test_subevent_quota_partly(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        self.quota_tickets.size = 1
+        self.quota_tickets.subevent = se
+        self.quota_tickets.save()
+        q2 = self.event.quotas.create(name='Foo', size=15)
+        q2.items.add(self.ticket)
+
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '2',
+            'subevent': se.pk
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+
     def test_renew_in_time(self):
         cp = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -491,6 +600,48 @@ class CartTest(CartTestMixin, TestCase):
         )
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
+        self.assertFalse(CartPosition.objects.filter(id=cp1.id).exists())
+
+    def test_subevent_renew_expired_successfully(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        self.quota_tickets.subevent = se
+        self.quota_tickets.save()
+        self.quota_shirts.subevent = se
+        self.quota_shirts.save()
+        cp1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10), subevent=se
+        )
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+            'subevent': se.pk,
+        }, follow=True)
+        obj = CartPosition.objects.get(id=cp1.id)
+        self.assertEqual(obj.item, self.ticket)
+        self.assertIsNone(obj.variation)
+        self.assertEqual(obj.price, 23)
+        self.assertEqual(obj.subevent, se)
+        self.assertGreater(obj.expires, now())
+
+    def test_subevent_renew_expired_failed(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        self.quota_tickets.subevent = se
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        cp1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10), subevent=se
+        )
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'subevent': se.pk,
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
@@ -1047,6 +1198,50 @@ class CartAddonTest(CartTestMixin, TestCase):
         self.cm.commit()
         cp2 = cp1.addons.first()
         assert cp2.item == self.workshop1
+
+    def test_cart_subevent_set_simple_addon(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        self.workshopquota.subevent = se
+        self.workshopquota.save()
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key, subevent=se
+        )
+
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            }
+        ])
+        self.cm.commit()
+        cp2 = cp1.addons.first()
+        assert cp2.item == self.workshop1
+        assert cp2.subevent == se
+
+    def test_cart_subevent_set_addon_for_wrong_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        se2 = self.event.subevents.create(name='Foo', date_from=now())
+        self.workshopquota.subevent = se2
+        self.workshopquota.save()
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key, subevent=se
+        )
+
+        with self.assertRaises(CartError):
+            self.cm.set_addons([
+                {
+                    'addon_to': cp1.pk,
+                    'item': self.workshop1.pk,
+                    'variation': None
+                }
+            ])
 
     def test_wrong_category(self):
         cp1 = CartPosition.objects.create(

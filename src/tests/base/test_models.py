@@ -15,6 +15,8 @@ from pretix.base.models import (
     CachedFile, CartPosition, Event, Item, ItemCategory, ItemVariation, Order,
     OrderPosition, Organizer, Question, Quota, User, Voucher, WaitingListEntry,
 )
+from pretix.base.models.event import SubEvent
+from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.services.orders import (
     OrderError, cancel_order, mark_order_paid, perform_order,
 )
@@ -377,6 +379,62 @@ class QuotaTestCase(BaseQuotaTestCase):
 
         with self.assertNumQueries(1):
             self.assertEqual(self.var1.check_quotas(_cache=cache, count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+    def test_subevent_isolation(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(date_from=now(), name="SE 1")
+        se2 = self.event.subevents.create(date_from=now(), name="SE 2")
+        q1 = self.event.quotas.create(name="Q1", subevent=se1, size=50)
+        q2 = self.event.quotas.create(name="Q2", subevent=se2, size=50)
+        q1.items.add(self.item1)
+        q2.items.add(self.item1)
+
+        # Create orders
+        order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
+                                     expires=now() + timedelta(days=3),
+                                     total=6)
+        OrderPosition.objects.create(order=order, item=self.item1, subevent=se1, price=2)
+        OrderPosition.objects.create(order=order, item=self.item1, subevent=se1, price=2)
+        OrderPosition.objects.create(order=order, item=self.item1, subevent=se2, price=2)
+        order = Order.objects.create(event=self.event, status=Order.STATUS_PENDING,
+                                     expires=now() + timedelta(days=3),
+                                     total=8)
+        OrderPosition.objects.create(order=order, item=self.item1, subevent=se1, price=2)
+        OrderPosition.objects.create(order=order, item=self.item1, subevent=se1, price=2)
+        OrderPosition.objects.create(order=order, item=self.item1, subevent=se1, price=2)
+        OrderPosition.objects.create(order=order, item=self.item1, subevent=se2, price=2)
+
+        Voucher.objects.create(item=self.item1, event=self.event, valid_until=now() + timedelta(days=5),
+                               block_quota=True, max_usages=6, subevent=se1)
+        Voucher.objects.create(item=self.item1, event=self.event, valid_until=now() + timedelta(days=5),
+                               block_quota=True, max_usages=4, subevent=se2)
+
+        for i in range(8):
+            CartPosition.objects.create(event=self.event, item=self.item1, price=2, subevent=se1,
+                                        expires=now() + timedelta(days=3))
+
+        for i in range(5):
+            CartPosition.objects.create(event=self.event, item=self.item1, price=2, subevent=se2,
+                                        expires=now() + timedelta(days=3))
+
+        for i in range(16):
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item1, email='foo@bar.com', subevent=se1
+            )
+
+        for i in range(13):
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item1, email='foo@bar.com', subevent=se2
+            )
+
+        with self.assertRaises(TypeError):
+            self.item1.check_quotas()
+
+        self.assertEqual(self.item1.check_quotas(subevent=se1), (Quota.AVAILABILITY_OK, 50 - 5 - 6 - 8 - 16))
+        self.assertEqual(self.item1.check_quotas(subevent=se2), (Quota.AVAILABILITY_OK, 50 - 2 - 4 - 5 - 13))
+        self.assertEqual(q1.availability(), (Quota.AVAILABILITY_OK, 50 - 5 - 6 - 8 - 16))
+        self.assertEqual(q2.availability(), (Quota.AVAILABILITY_OK, 50 - 2 - 4 - 5 - 13))
 
 
 class WaitingListTestCase(BaseQuotaTestCase):
@@ -769,6 +827,41 @@ class EventTest(TestCase):
             event.full_clean()
 
         self.assertIn('slug', str(context.exception))
+
+
+class SubEventTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+        cls.event = Event.objects.create(
+            organizer=cls.organizer, name='Dummy', slug='dummy',
+            date_from=now(), date_to=now() - timedelta(hours=1),
+            has_subevents=True
+        )
+        cls.se = SubEvent.objects.create(
+            name='Testsub', date_from=now(), event=cls.event
+        )
+
+    def test_override_prices(self):
+        i = Item.objects.create(
+            event=self.event, name="Ticket", default_price=23,
+            active=True, available_until=now() + timedelta(days=1),
+        )
+        SubEventItem.objects.create(item=i, subevent=self.se, price=Decimal('30.00'))
+        assert self.se.item_price_overrides == {
+            i.pk: Decimal('30.00')
+        }
+
+    def test_override_var_prices(self):
+        i = Item.objects.create(
+            event=self.event, name="Ticket", default_price=23,
+            active=True, available_until=now() + timedelta(days=1),
+        )
+        v = i.variations.create(value='Type 1')
+        SubEventItemVariation.objects.create(variation=v, subevent=self.se, price=Decimal('30.00'))
+        assert self.se.var_price_overrides == {
+            v.pk: Decimal('30.00')
+        }
 
 
 class CachedFileTestCase(TestCase):

@@ -13,7 +13,7 @@ from pretix.base.models import (
     CartPosition, Event, Item, ItemCategory, Order, OrderPosition, Organizer,
     Question, Quota, Voucher,
 )
-from pretix.base.models.items import ItemAddOn, ItemVariation
+from pretix.base.models.items import ItemAddOn, ItemVariation, SubEventItem
 
 
 class CheckoutTestCase(TestCase):
@@ -862,3 +862,50 @@ class CheckoutTestCase(TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug))
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
+
+    def test_set_addons_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        self.workshopquota.size = 1
+        self.workshopquota.subevent = se
+        self.workshopquota.save()
+        SubEventItem.objects.create(subevent=se, item=self.workshop1, price=42)
+
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10), subevent=se
+        )
+
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'Workshop 1 (+ EUR 42.00)' in response.rendered_content
+
+    def test_set_addons_subevent_net_prices(self):
+        self.event.has_subevents = True
+        self.event.settings.display_net_prices = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        self.workshopquota.size = 1
+        self.workshopquota.subevent = se
+        self.workshopquota.save()
+        self.workshop1.tax_rate = 19
+        self.workshop1.save()
+        self.workshop2.tax_rate = 19
+        self.workshop2.save()
+        SubEventItem.objects.create(subevent=se, item=self.workshop1, price=42)
+
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10), subevent=se
+        )
+
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        print(response.rendered_content)
+        assert 'Workshop 1 (+ EUR 35.29 plus 19.00% taxes)' in response.rendered_content
+        assert 'A (+ EUR 10.08 plus 19.00% taxes)' in response.rendered_content

@@ -299,8 +299,11 @@ class Item(LoggedModel):
         """
         check_quotas = set(getattr(
             self, '_subevent_quotas',  # Utilize cache in product list
-            self.quotas.filter(subevent=subevent) if subevent else self.quotas.all()
+            self.quotas.select_related('subevent').filter(subevent=subevent)
+            if subevent else self.quotas.all()
         ))
+        if not subevent and self.event.has_subevents:
+            raise TypeError('You need to supply a subevent.')
         if ignored_quotas:
             check_quotas -= set(ignored_quotas)
         if not check_quotas:
@@ -400,10 +403,13 @@ class ItemVariation(models.Model):
         """
         check_quotas = set(getattr(
             self, '_subevent_quotas',  # Utilize cache in product list
-            self.quotas.filter(subevent=subevent) if subevent else self.quotas.all()
+            self.quotas.filter(subevent=subevent).select_related('subevent')
+            if subevent else self.quotas.all()
         ))
         if ignored_quotas:
             check_quotas -= set(ignored_quotas)
+        if not subevent and self.item.event.has_subevents:
+            raise TypeError('You need to supply a subevent.')
         if not check_quotas:
             return Quota.AVAILABILITY_OK, sys.maxsize
         return min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],

@@ -149,26 +149,24 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Fetch all items
-        items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent)
+        if not self.request.event.has_subevents or self.subevent:
+            # Fetch all items
+            items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent)
 
-        # Regroup those by category
-        context['items_by_category'] = item_group_by_category(items)
-        context['display_add_to_cart'] = display_add_to_cart
+            # Regroup those by category
+            context['items_by_category'] = item_group_by_category(items)
+            context['display_add_to_cart'] = display_add_to_cart
 
+        context['subevent'] = self.subevent
+        context['cart'] = self.get_cart()
+        context['has_addon_choices'] = get_cart(self.request).filter(item__addons__isnull=False).exists()
         vouchers_exist = self.request.event.get_cache().get('vouchers_exist')
         if vouchers_exist is None:
             vouchers_exist = self.request.event.vouchers.exists()
             self.request.event.get_cache().set('vouchers_exist', vouchers_exist)
         context['vouchers_exist'] = vouchers_exist
-
-        context['cart'] = self.get_cart()
-        context['has_addon_choices'] = get_cart(self.request).filter(item__addons__isnull=False).exists()
-
-        context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
-
         context['ev'] = self.subevent or self.request.event
-        context['subevent'] = self.subevent
+        context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
         return context
 
 
