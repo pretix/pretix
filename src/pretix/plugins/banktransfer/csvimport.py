@@ -13,6 +13,7 @@ def parse(data, hint):
         raise HintMismatchError('Invalid hint')
     if len(data[0]) != hint['cols']:
         raise HintMismatchError('Wrong column count')
+    good_hint = False
     for row in data:
         resrow = {}
         if None in row or len(row) != hint['cols']:
@@ -31,8 +32,10 @@ def parse(data, hint):
                 or len(resrow['reference']) == 0 or resrow['date'] == '':
             # This is probably a headline or something other special.
             continue
+        if resrow['reference'] or resrow['payer']:
+            good_hint = True
         result.append(resrow)
-    return result
+    return result, good_hint
 
 
 def get_rows_from_file(file):

@@ -15,7 +15,7 @@ class CsvImportTest(TestCase):
         with open(os.path.join(DATA_DIR, filename), 'rb') as f:
             data = csvimport.get_rows_from_file(f)
             self.assertEqual(data, expected)
-            parsed = csvimport.parse(data, hint)
+            parsed, good = csvimport.parse(data, hint)
             self.assertEqual(parsed, expected_parsed)
 
     def test_sample_file_bbbank(self):

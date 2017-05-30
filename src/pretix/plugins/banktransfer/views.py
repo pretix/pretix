@@ -275,12 +275,14 @@ class ImportView(EventPermissionRequiredMixin, ListView):
 
         if self.request.event.settings.get('banktransfer_csvhint') is not None:
             hint = self.request.event.settings.get('banktransfer_csvhint', as_type=dict)
+
             try:
-                parsed = csvimport.parse(data, hint)
+                parsed, good = csvimport.parse(data, hint)
             except csvimport.HintMismatchError:  # TODO: narrow down
                 logger.exception('Import using stored hint failed')
             else:
-                return self.start_processing(parsed)
+                if good:
+                    return self.start_processing(parsed)
 
         return self.assign_view(data)
 
@@ -308,7 +310,7 @@ class ImportView(EventPermissionRequiredMixin, ListView):
             logger.error('Import using stored hint failed: ' + str(e))
             pass
         else:
-            parsed = csvimport.parse(data, hint)
+            parsed, __ = csvimport.parse(data, hint)
             return self.start_processing(parsed)
 
     def process_csv(self):
