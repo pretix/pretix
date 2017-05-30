@@ -19,6 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from pytz import timezone
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import ItemVariation
 from pretix.base.models.event import SubEvent
 from pretix.multidomain.urlreverse import eventreverse
@@ -86,10 +87,16 @@ def get_grouped_items(event, subevent=None):
                                  if item.cached_availability[1] is not None else sys.maxsize,
                                  max_per_order)
             item.price = item.default_price
-            item.display_price = item_price_override.get(
-                item.pk,
-                item.default_price_net if event.settings.display_net_prices else item.price
-            )
+
+            if event.settings.display_net_prices:
+                if item_price_override.get(item.pk):
+                    _p = item_price_override.get(item.pk)
+                    tax_value = round_decimal(_p * (1 - 100 / (100 + item.tax_rate)))
+                    item.display_price = _p - tax_value
+                else:
+                    item.display_price = item.default_price_net
+            else:
+                item.display_price = item_price_override.get(item.pk, item.price)
             display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
             for var in item.available_variations:
@@ -97,11 +104,19 @@ def get_grouped_items(event, subevent=None):
                 var.order_max = min(var.cached_availability[1]
                                     if var.cached_availability[1] is not None else sys.maxsize,
                                     max_per_order)
-                var.display_price = var_price_override.get(
-                    var.pk,
-                    var.net_price if event.settings.display_net_prices else var.price
-                )
+
+                if event.settings.display_net_prices:
+                    if var_price_override.get(var.pk):
+                        _p = var_price_override.get(var.pk)
+                        tax_value = round_decimal(_p * (1 - 100 / (100 + item.tax_rate)))
+                        var.display_price = _p - tax_value
+                    else:
+                        var.display_price = var.net_price
+                else:
+                    var.display_price = var_price_override.get(var.pk, var.price)
+
                 display_add_to_cart = display_add_to_cart or var.order_max > 0
+
             item.available_variations = [
                 v for v in item.available_variations if v._subevent_quotas
             ]
