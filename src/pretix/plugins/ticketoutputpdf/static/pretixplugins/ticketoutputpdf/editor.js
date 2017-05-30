@@ -161,6 +161,7 @@ var editor = {
         "attendee_name": gettext("John Doe"),
         "event_name": gettext("Sample event name"),
         "event_date": gettext("May 31st, 2017"),
+        "event_date_range": gettext("May 31st – June 4th, 2017"),
         "event_begin_time": gettext("20:00"),
         "event_admission_time": gettext("19:00"),
         "event_begin": gettext("2017-05-31 20:00"),

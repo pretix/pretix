@@ -7960,6 +7960,10 @@ msgstr "Veranstaltungsdatum"
 msgid "Event begin date and time"
 msgstr "Veranstaltungsdatum und Uhrzeit"
 
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:270
+msgid "Event date range"
+msgstr "Veranstaltungsdatum Beginn und Ende"
+
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:271
 msgid "Event begin time"
 msgstr "Veranstaltungsuhrzeit"

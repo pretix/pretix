@@ -85,6 +85,8 @@ class PdfTicketOutput(BaseTicketOutput):
             return str(order.event.location).replace("\n", "<br/>\n")
         elif o['content'] == 'event_date':
             return order.event.get_date_from_display(show_times=False)
+        elif o['content'] == 'event_date_range':
+            return order.event.get_date_range_display()
         elif o['content'] == 'event_begin':
             return order.event.get_date_from_display(show_times=True)
         elif o['content'] == 'event_begin_time':
@@ -231,8 +233,8 @@ class PdfTicketOutput(BaseTicketOutput):
              "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00", "content": "attendee_name",
              "text": "John Doe", "align": "left"},
             {"type": "textarea", "left": "17.50", "bottom": "242.10", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00", "content": "event_date",
-             "text": "May 31st, 2017", "align": "left"},
+             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00",
+             "content": "event_date_range", "text": "May 31st, 2017", "align": "left"},
             {"type": "textarea", "left": "17.50", "bottom": "204.80", "fontsize": "13.0", "color": [0, 0, 0, 1],
              "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00", "content": "event_location",
              "text": "Random City", "align": "left"},
