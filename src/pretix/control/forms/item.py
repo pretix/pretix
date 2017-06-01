@@ -61,18 +61,17 @@ class QuestionOptionForm(I18nModelForm):
 
 class QuotaForm(I18nModelForm):
     def __init__(self, **kwargs):
-        instance = kwargs.get('instance', None)
+        self.instance = kwargs.get('instance', None)
         self.event = kwargs.get('event')
         items = self.event.items.prefetch_related('variations')
-        self.original_instance = copy.copy(instance) if instance else None
-        super().__init__(**kwargs)
-
-        if hasattr(self, 'instance') and self.instance.pk:
-            initial = set([str(i.pk) for i in self.instance.items.all()] + [
+        self.original_instance = copy.copy(self.instance) if self.instance else None
+        initial = kwargs.get('initial', {})
+        if self.instance and self.instance.pk:
+            initial['itemvars'] = [str(i.pk) for i in self.instance.items.all()] + [
                 '{}-{}'.format(v.item_id, v.pk) for v in self.instance.variations.all()
-            ])
-        else:
-            initial = set()
+            ]
+        kwargs['initial'] = initial
+        super().__init__(**kwargs)
 
         choices = []
         for item in items:
@@ -85,7 +84,6 @@ class QuotaForm(I18nModelForm):
         self.fields['itemvars'] = forms.MultipleChoiceField(
             label=_('Products'),
             required=False,
-            initial=initial,
             choices=choices,
             widget=forms.CheckboxSelectMultiple
         )
