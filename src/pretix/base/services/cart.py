@@ -195,12 +195,16 @@ class CartManager:
         expired = self.positions.filter(expires__lte=self.now_dt).select_related(
             'item', 'variation', 'voucher'
         ).prefetch_related('item__quotas', 'variation__quotas')
+        err = None
         for cp in expired:
             price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent)
 
             quotas = list(cp.quotas)
             if not quotas:
-                raise CartError(error_messages['unavailable'])
+                self._operations.append(self.RemoveOperation(position=cp))
+                continue
+                err = error_messages['unavailable']
+
             if not cp.voucher or (not cp.voucher.allow_ignore_quota and not cp.voucher.block_quota):
                 for quota in quotas:
                     self._quota_diff[quota] += 1
@@ -217,6 +221,7 @@ class CartManager:
                 self._voucher_use_diff[cp.voucher] += 1
 
             self._operations.append(op)
+        return err
 
     def add_new_items(self, items: List[dict]):
         # Fetch items from the database
@@ -549,7 +554,7 @@ class CartManager:
             with transaction.atomic():
                 self.now_dt = now_dt
                 self._extend_expiry_of_valid_existing_positions()
-                self.extend_expired_positions()
+                err = self.extend_expired_positions()
                 err = self._perform_operations()
             if err:
                 raise CartError(err)
