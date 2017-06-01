@@ -1,11 +1,9 @@
-FROM debian:jessie
+FROM python:3.6
 
 RUN apt-get update && \
-    apt-get install -y python3 git python3-pip \
-	  libxml2-dev libxslt1-dev python-dev python-virtualenv locales libffi-dev \
-	  build-essential python3-dev zlib1g-dev libssl-dev gettext \
-	  libpq-dev libmysqlclient-dev libmemcached-dev libjpeg-dev \
-	  aqbanking-tools supervisor nginx sudo \
+    apt-get install -y git libxml2-dev libxslt1-dev python-dev python-virtualenv locales \
+      libffi-dev build-essential python3-dev zlib1g-dev libssl-dev gettext libpq-dev \
+      libmysqlclient-dev libmemcached-dev libjpeg-dev supervisor nginx sudo \
 	  --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
@@ -33,8 +31,7 @@ RUN chmod +x /usr/local/bin/pretix && \
     cd /pretix/src && \
     rm -f pretix.cfg && \
     pip3 install -r requirements.txt -r requirements/mysql.txt -r requirements/postgres.txt \
-    	-r requirements/memcached.txt -r requirements/redis.txt \
-	    -r requirements/py34.txt gunicorn && \
+    	-r requirements/memcached.txt -r requirements/redis.txt gunicorn && \
 	mkdir -p data && \
     chown -R pretixuser:pretixuser /pretix /data data && \
 	sudo -u pretixuser make production
