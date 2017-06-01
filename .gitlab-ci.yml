@@ -5,7 +5,6 @@ tests:
         - virtualenv env
         - source env/bin/activate
         - pip install -U pip wheel setuptools
-        - XDG_CACHE_HOME=/cache bash .travis.sh style
         - XDG_CACHE_HOME=/cache bash .travis.sh tests
     tags:
         - python3

@@ -2,8 +2,9 @@ import time
 from urllib.parse import urlparse
 
 from django.conf import settings
-from django.contrib.sessions.middleware import \
-    SessionMiddleware as BaseSessionMiddleware
+from django.contrib.sessions.middleware import (
+    SessionMiddleware as BaseSessionMiddleware,
+)
 from django.core.cache import cache
 from django.core.exceptions import DisallowedHost
 from django.core.urlresolvers import set_urlconf
