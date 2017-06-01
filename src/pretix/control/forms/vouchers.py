@@ -147,9 +147,11 @@ class VoucherForm(I18nModelForm):
             if self.initial_instance_data.quota:
                 quotas.add(self.initial_instance_data.quota)
             elif self.initial_instance_data.variation:
-                quotas |= set(self.initial_instance_data.variation.quotas.all())
+                quotas |= set(self.initial_instance_data.variation.quotas.filter(
+                    subevent=self.initial_instance_data.subevent))
             elif self.initial_instance_data.item:
-                quotas |= set(self.initial_instance_data.item.quotas.all())
+                quotas |= set(self.initial_instance_data.item.quotas.filter(
+                    subevent=self.initial_instance_data.subevent))
         return quotas
 
     def _clean_quota_check(self, data, cnt):
@@ -164,9 +166,9 @@ class VoucherForm(I18nModelForm):
             raise ValidationError(_('You can only block quota if you specify a specific product variation. '
                                     'Otherwise it might be unclear which quotas to block.'))
         elif self.instance.item and self.instance.variation:
-            avail = self.instance.variation.check_quotas(ignored_quotas=old_quotas)
+            avail = self.instance.variation.check_quotas(ignored_quotas=old_quotas, subevent=self.instance.subevent)
         elif self.instance.item and not self.instance.item.has_variations:
-            avail = self.instance.item.check_quotas(ignored_quotas=old_quotas)
+            avail = self.instance.item.check_quotas(ignored_quotas=old_quotas, subevent=self.instance.subevent)
         else:
             raise ValidationError(_('You need to specify either a quota or a product.'))
 

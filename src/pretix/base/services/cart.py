@@ -9,7 +9,6 @@ from django.db.models import Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
-from pretix.base.decimal import round_decimal
 from pretix.base.i18n import LazyLocaleException, language
 from pretix.base.models import (
     CartPosition, Event, Item, ItemVariation, Voucher,
@@ -17,6 +16,7 @@ from pretix.base.models import (
 from pretix.base.models.event import SubEvent
 from pretix.base.services.async import ProfiledTask
 from pretix.base.services.locking import LockTimeoutException
+from pretix.base.services.pricing import get_price
 from pretix.celery_app import app
 
 
@@ -189,29 +189,7 @@ class CartManager:
     def _get_price(self, item: Item, variation: Optional[ItemVariation],
                    voucher: Optional[Voucher], custom_price: Optional[Decimal],
                    subevent: Optional[SubEvent]):
-        price = item.default_price
-        if subevent and item.pk in subevent.item_price_overrides:
-            price = subevent.item_price_overrides[item.pk]
-
-        if variation is not None:
-            if variation.default_price is not None:
-                price = variation.default_price
-            if subevent and variation.pk in subevent.var_price_overrides:
-                price = subevent.var_price_overrides[variation.pk]
-
-        if voucher:
-            price = voucher.calculate_price(price)
-
-        if item.free_price and custom_price is not None and custom_price != "":
-            if not isinstance(custom_price, Decimal):
-                custom_price = Decimal(custom_price.replace(",", "."))
-            if custom_price > 100000000:
-                raise CartError(error_messages['price_too_high'])
-            if self.event.settings.display_net_prices:
-                custom_price = round_decimal(custom_price * (100 + item.tax_rate) / 100)
-            price = max(custom_price, price)
-
-        return price
+        return get_price(item, variation, voucher, custom_price, subevent, self.event.settings.display_net_prices)
 
     def extend_expired_positions(self):
         expired = self.positions.filter(expires__lte=self.now_dt).select_related(
@@ -220,8 +198,7 @@ class CartManager:
         for cp in expired:
             price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent)
 
-            quotas = list(cp.item.quotas.filter(subevent=cp.subevent)
-                          if cp.variation is None else cp.variation.quotas.filter(subevent=cp.subevent))
+            quotas = list(cp.quotas)
             if not quotas:
                 raise CartError(error_messages['unavailable'])
             if not cp.voucher or (not cp.voucher.allow_ignore_quota and not cp.voucher.block_quota):
@@ -427,8 +404,7 @@ class CartManager:
             for k, v in al.items():
                 if k not in input_addons[cp.id]:
                     if v.expires > self.now_dt:
-                        quotas = list(cp.item.quotas.filter(subevent=cp.subevent)
-                                      if cp.variation is None else cp.variation.quotas.filter(subevent=cp.subevent))
+                        quotas = list(cp.quotas)
 
                         for quota in quotas:
                             quota_diff[quota] -= 1

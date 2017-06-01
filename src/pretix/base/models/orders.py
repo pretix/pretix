@@ -320,7 +320,7 @@ class Order(LoggedModel):
         quota_cache = {}
         try:
             for i, op in enumerate(positions):
-                quotas = list(op.item.quotas.all()) if op.variation is None else list(op.variation.quotas.all())
+                quotas = list(op.quotas)
                 if len(quotas) == 0:
                     raise Quota.QuotaExceededException(error_messages['unavailable'])
 
@@ -527,6 +527,12 @@ class AbstractPosition(models.Model):
     @property
     def net_price(self):
         return self.price - self.tax_value
+
+    @property
+    def quotas(self):
+        return (self.item.quotas.filter(subevent=self.subevent)
+                if self.variation is None
+                else self.variation.quotas.filter(subevent=self.subevent))
 
 
 class OrderPosition(AbstractPosition):
