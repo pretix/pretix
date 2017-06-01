@@ -30,11 +30,11 @@ matrix:
       env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_postgres.cfg
     - python: 3.6
       env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_postgres.cfg
-    - python: 3.4
+    - python: 3.6
       env: JOB=style
-    - python: 3.4
+    - python: 3.6
       env: JOB=plugins
-    - python: 3.4
+    - python: 3.6
       env: JOB=tests-cov
 addons:
   postgresql: "9.4"
