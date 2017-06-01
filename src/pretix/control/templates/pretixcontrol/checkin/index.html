@@ -21,6 +21,17 @@
                     </option>
                 {% endfor %}
             </select>
+            {% if request.event.has_subevents %}
+                <select name="subevent" class="form-control">
+                    <option value="">{% trans "All sub-events" %}</option>
+                    {% for se in request.event.subevents.all %}
+                        <option value="{{ se.id }}"
+                                {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
+                            {{ se.name }} – {{ se.get_date_range_display }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% endif %}
             <input type="text" name="user" class="form-control" placeholder="{% trans "Search user" %}" value="{{ request.GET.user }}">
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
         </form>
@@ -45,6 +56,10 @@
                       <a href="?{% url_replace request 'ordering' 'code'%}"><i class="fa fa-caret-up"></i></a></th>
                         <th>{% trans "Item" %} <a href="?{% url_replace request 'ordering' '-item'%}"><i class="fa fa-caret-down"></i></a>
                       <a href="?{% url_replace request 'ordering' 'item'%}"><i class="fa fa-caret-up"></i></a></th>
+                      {% if request.event.has_subevents %}
+                          <th>{% trans "Sub-event" %} <a href="?{% url_replace request 'ordering' '-subevent'%}"><i class="fa fa-caret-down"></i></a>
+                              <a href="?{% url_replace request 'ordering' 'subevent'%}"><i class="fa fa-caret-up"></i></a></th>
+                      {% endif %}
                         <th>{% trans "Email" %} <a href="?{% url_replace request 'ordering' '-email'%}"><i class="fa fa-caret-down"></i></a>
                       <a href="?{% url_replace request 'ordering' 'email'%}"><i class="fa fa-caret-up"></i></a></th>
                         <th>{% trans "Name" %} <a href="?{% url_replace request 'ordering' '-name'%}"><i class="fa fa-caret-down"></i></a>
@@ -60,10 +75,12 @@
                         {% with e.checkins.first as checkin %}
                         <tr>
                             <td>
-                                <strong><a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=e.order.code %}"
-                        >{{ e.order.code }}</a></strong>
+                                <strong><a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=e.order.code %}">{{ e.order.code }}</a></strong>
                             </td>
-                            <td>{{ e.item.name }}</td>
+                            <td>{{ e.item.name }}{% if e.variation %} – {{ e.variation }}{% endif %}</td>
+                            {% if request.event.has_subevents %}
+                                <td>{{ e.subevent.name }} – {{ e.subevent.get_date_range_display }}</td>
+                            {% endif %}
                             <td>{{ e.order.email }}</td>
                             <td>
                                 {% if e.addon_to %}

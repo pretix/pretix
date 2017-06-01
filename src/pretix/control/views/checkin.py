@@ -37,7 +37,11 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
 
         if self.request.GET.get("item", "") != "":
             u = self.request.GET.get("item", "")
-            qs = qs.filter(item_id__in=(u,))
+            qs = qs.filter(item_id=id)
+
+        if self.request.GET.get("subevent", "") != "":
+            s = self.request.GET.get("subevent", "")
+            qs = qs.filter(subevent_id=s)
 
         qs = qs.prefetch_related(
             Prefetch('checkins', queryset=Checkin.objects.filter(position__order__event=self.request.event))
@@ -48,8 +52,11 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
             keys_allowed = self.get_ordering_keys_mappings()
             if p in keys_allowed:
                 mapped_field = keys_allowed[p]
-                if type(mapped_field) is tuple:
-                    qs = qs.annotate(**mapped_field[1]).order_by(mapped_field[0])
+                if isinstance(mapped_field, dict):
+                    order = mapped_field.pop('_order')
+                    qs = qs.annotate(**mapped_field).order_by(order)
+                elif isinstance(mapped_field, (list, tuple)):
+                    qs = qs.order_by(*mapped_field)
                 else:
                     qs = qs.order_by(mapped_field)
 
@@ -58,7 +65,8 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['items'] = Item.objects.filter(event=self.request.event)
-        ctx['filtered'] = ("status" in self.request.GET or "user" in self.request.GET or "item" in self.request.GET)
+        ctx['filtered'] = ("status" in self.request.GET or "user" in self.request.GET or "item" in self.request.GET
+                           or "subevent" in self.request.GET)
         return ctx
 
     @staticmethod
@@ -73,10 +81,12 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
             '-status': F('checkins__id').desc(nulls_last=True),
             'timestamp': F('checkins__datetime').asc(nulls_first=True),
             '-timestamp': F('checkins__datetime').desc(nulls_last=True),
-            'item': 'item__name',
-            '-item': '-item__name',
-            'name': (F('display_name').asc(nulls_first=True),
-                     {'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')}),
-            '-name': (F('display_name').desc(nulls_last=True),
-                      {'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')}),
+            'item': ('item__name', 'variation__value'),
+            '-item': ('-item__name', 'variation__value'),
+            'subevent': ('subevent__date_from', 'subevent__name'),
+            '-subevent': ('-subevent__date_from', '-subevent__name'),
+            'name': {'_order': F('display_name').asc(nulls_first=True),
+                     'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')},
+            '-name': {'_order': F('display_name').desc(nulls_last=True),
+                      'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')},
         }
