@@ -18,7 +18,7 @@ if [ "$1" == "style" ]; then
 	XDG_CACHE_HOME=/cache pip3 install -Ur src/requirements.txt -r src/requirements/dev.txt -r src/requirements/py34.txt
 	cd src
     flake8 .
-    isort -c -rc .
+    isort -c -rc -df .
 fi
 if [ "$1" == "doctests" ]; then
 	XDG_CACHE_HOME=/cache pip3 install -Ur doc/requirements.txt -r src/requirements/py34.txt
