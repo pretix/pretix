@@ -435,6 +435,8 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.assertEqual(self.item1.check_quotas(subevent=se2), (Quota.AVAILABILITY_OK, 50 - 2 - 4 - 5 - 13))
         self.assertEqual(q1.availability(), (Quota.AVAILABILITY_OK, 50 - 5 - 6 - 8 - 16))
         self.assertEqual(q2.availability(), (Quota.AVAILABILITY_OK, 50 - 2 - 4 - 5 - 13))
+        self.event.has_subevents = False
+        self.event.save()
 
 
 class WaitingListTestCase(BaseQuotaTestCase):
