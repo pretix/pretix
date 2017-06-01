@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-18 09:17+0000\n"
-"PO-Revision-Date: 2017-05-11 12:13+0200\n"
+"POT-Creation-Date: 2017-06-01 10:54+0000\n"
+"PO-Revision-Date: 2017-06-01 12:56+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -79,59 +79,71 @@ msgid "May 31st, 2017"
 msgstr "31. Mai 2017"
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:164
+msgid "May 31st – June 4th, 2017"
+msgstr "31. Mai – 4. Juni 2017"
+
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:165
 msgid "20:00"
 msgstr "20:00"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:165
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:166
 msgid "19:00"
 msgstr "19:00"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:166
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:167
 msgid "2017-05-31 20:00"
 msgstr "31.05.2016 20:00"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:167
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:168
 msgid "2017-05-31 19:00"
 msgstr "31.05.2016 19:00"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:168
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:169
 msgid "Random City"
 msgstr "Musterstadt"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:213
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:170
+msgid ""
+"Addon 1\n"
+"Addon 2"
+msgstr ""
+"Workshop 1\n"
+"Workshop 2"
+
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:215
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Die Hintergrund-PDF-Datei konnte nicht geladen werden:"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:362
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:364
 msgid "Group of objects"
 msgstr "Gruppe von Objekten"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:368
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:370
 msgid "Text object"
 msgstr "Text-Objekt"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:370
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:372
 msgid "Barcode area"
 msgstr "QR-Code-Bereich"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:372
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:374
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:376
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:378
 msgid "Ticket design"
 msgstr "Ticket-Design"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:612
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:614
 msgid "Saving failed."
 msgstr "Speichern fehlgeschlagen."
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:644
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:646
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Möchtest du den Editor wirklich schließen ohne Ihre Änderungen zu speichern?"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:657
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:659
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Es gab ein Problem beim Hochladen der PDF-Datei, bitte erneut versuchen."
