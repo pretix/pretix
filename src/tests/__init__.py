@@ -2,10 +2,9 @@ from django.db import DEFAULT_DB_ALIAS, connections
 from django.test.utils import CaptureQueriesContext
 
 
-# Inspired by /django/test/testcases.py
-# but copied over to work without the unit test module
-
 class _AssertNumQueriesContext(CaptureQueriesContext):
+    # Inspired by /django/test/testcases.py
+    # but copied over to work without the unit test module
     def __init__(self, num, connection):
         self.num = num
         super(_AssertNumQueriesContext, self).__init__(connection)

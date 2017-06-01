@@ -17,8 +17,9 @@ from django.views.generic import TemplateView, View
 from pretix.base.models import Checkin, Event, Order, OrderPosition
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.urls import build_absolute_uri
-from pretix.multidomain.urlreverse import \
-    build_absolute_uri as event_absolute_uri
+from pretix.multidomain.urlreverse import (
+    build_absolute_uri as event_absolute_uri,
+)
 
 logger = logging.getLogger('pretix.plugins.pretixdroid')
 API_VERSION = 3
