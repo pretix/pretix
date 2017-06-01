@@ -1,14 +1,13 @@
 from decimal import Decimal
-from typing import Optional
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import Item, ItemVariation, Voucher
 from pretix.base.models.event import SubEvent
 
 
-def get_price(item: Item, variation: Optional[ItemVariation],
-              voucher: Optional[Voucher], custom_price: Optional[Decimal],
-              subevent: Optional[SubEvent], custom_price_is_net=False):
+def get_price(item: Item, variation: ItemVariation = None,
+              voucher: Voucher = None, custom_price: Decimal = None,
+              subevent: SubEvent = None, custom_price_is_net: bool = False):
     price = item.default_price
     if subevent and item.pk in subevent.item_price_overrides:
         price = subevent.item_price_overrides[item.pk]
@@ -24,7 +23,7 @@ def get_price(item: Item, variation: Optional[ItemVariation],
 
     if item.free_price and custom_price is not None and custom_price != "":
         if not isinstance(custom_price, Decimal):
-            custom_price = Decimal(custom_price.replace(",", "."))
+            custom_price = Decimal(str(custom_price).replace(",", "."))
         if custom_price > 100000000:
             raise ValueError('price_too_high')
         if custom_price_is_net:
