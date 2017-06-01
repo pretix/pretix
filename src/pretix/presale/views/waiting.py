@@ -1,9 +1,11 @@
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
+
+from pretix.base.models.event import SubEvent
 
 from ...base.models import Item, ItemVariation, WaitingListEntry
 from ...multidomain.urlreverse import eventreverse
@@ -19,13 +21,15 @@ class WaitingView(FormView):
         kwargs['event'] = self.request.event
         kwargs['instance'] = WaitingListEntry(
             item=self.item_and_variation[0], variation=self.item_and_variation[1],
-            event=self.request.event, locale=translation.get_language()
+            event=self.request.event, locale=translation.get_language(),
+            subevent=self.subevent
         )
         return kwargs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['event'] = self.request.event
+        ctx['subevent'] = self.subevent
         ctx['item'], ctx['variation'] = self.item_and_variation
         return ctx
 
@@ -54,13 +58,21 @@ class WaitingView(FormView):
             messages.error(request, _("We could not identify the product you selected."))
             return redirect(eventreverse(self.request.event, 'presale:event.index'))
 
+        self.subevent = None
+        if request.event.has_subevents:
+            if 'subevent' in request.GET:
+                self.subevent = get_object_or_404(SubEvent, event=request.event, pk=request.GET['subevent'])
+            else:
+                messages.error(request, _("You need to select a subevent."))
+                return redirect(eventreverse(self.request.event, 'presale:event.index'))
+
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         availability = (
-            self.item_and_variation[1].check_quotas(count_waitinglist=False)
+            self.item_and_variation[1].check_quotas(count_waitinglist=False, subevent=self.subevent)
             if self.item_and_variation[1]
-            else self.item_and_variation[0].check_quotas(count_waitinglist=False)
+            else self.item_and_variation[0].check_quotas(count_waitinglist=False, subevent=self.subevent)
         )
         if availability[0] == 100:
             messages.error(self.request, _("You cannot add yourself to the waiting list as this product is currently "

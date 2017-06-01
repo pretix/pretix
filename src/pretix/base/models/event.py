@@ -413,6 +413,9 @@ class SubEvent(EventMixin, LoggedModel):
         verbose_name_plural = _("Sub-Events")
         ordering = ("date_from", "name")
 
+    def __str__(self):
+        return '{} - {}'.format(self.name, self.get_date_range_display())
+
     @property
     def settings(self):
         return self.event.settings

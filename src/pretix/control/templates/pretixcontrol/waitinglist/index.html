@@ -82,6 +82,17 @@
                 </option>
             {% endfor %}
         </select>
+        {% if request.event.has_subevents %}
+            <select name="subevent" class="form-control">
+                <option value="">{% trans "All sub-events" %}</option>
+                {% for se in request.event.subevents.all %}
+                    <option value="{{ se.id }}"
+                            {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
+                        {{ se.name }} – {{ se.get_date_range_display }}
+                    </option>
+                {% endfor %}
+            </select>
+        {% endif %}
         <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
     </form>
     </p>
@@ -93,6 +104,9 @@
                 <tr>
                     <th>{% trans "User" %}</th>
                     <th>{% trans "Product" %}</th>
+                    {% if request.event.has_subevents %}
+                        <th>{% trans "Sub-event" %}</th>
+                    {% endif %}
                     <th>{% trans "On the list since" %}</th>
                     <th>{% trans "Status" %}</th>
                     <th>{% trans "Voucher" %}</th>
@@ -108,6 +122,9 @@
                                 – {{ e.variation }}
                             {% endif %}
                         </td>
+                        {% if request.event.has_subevents %}
+                            <td>{{ e.subevent.name }} – {{ e.subevent.get_date_range_display }}</td>
+                        {% endif %}
                         <td>{{ e.created|date:"SHORT_DATETIME_FORMAT" }}</td>
                         <td>
                             {% if e.voucher %}

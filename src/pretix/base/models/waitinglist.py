@@ -83,9 +83,9 @@ class WaitingListEntry(LoggedModel):
 
     def send_voucher(self, quota_cache=None, user=None):
         availability = (
-            self.variation.check_quotas(count_waitinglist=False, _cache=quota_cache)
+            self.variation.check_quotas(count_waitinglist=False, subevent=self.subevent, _cache=quota_cache)
             if self.variation
-            else self.item.check_quotas(count_waitinglist=False, _cache=quota_cache)
+            else self.item.check_quotas(count_waitinglist=False, subevent=self.subevent, _cache=quota_cache)
         )
         if availability[1] < 1:
             raise WaitingListException(_('This product is currently not available.'))
@@ -104,6 +104,7 @@ class WaitingListEntry(LoggedModel):
                     email=self.email
                 ),
                 block_quota=True,
+                subevent=self.subevent,
             )
             v.log_action('pretix.voucher.added.waitinglist', {
                 'item': self.item.pk,
@@ -113,7 +114,8 @@ class WaitingListEntry(LoggedModel):
                 'valid_until': v.valid_until.isoformat(),
                 'max_usages': 1,
                 'email': self.email,
-                'waitinglistentry': self.pk
+                'waitinglistentry': self.pk,
+                'subevent': self.subevent.pk,
             }, user=user)
             self.log_action('pretix.waitinglist.voucher', user=user)
             self.voucher = v
