@@ -48,6 +48,7 @@ class UserSettingsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
+        self.fields['email'].required = True
 
     def clean_old_pw(self):
         old_pw = self.cleaned_data.get('old_pw')
