@@ -4,22 +4,9 @@
 {% load staticfiles %}
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
-    <form action="{% eventurl request.event "presale:event.auth" %}" method="post" target="_blank">
-        <h1>
-            {{ request.event.name }}
-            {% if has_domain and not request.event.live %}
-                <input type="hidden" value="{{ new_session }}" name="session">
-                <button type="submit" class="btn btn-default btn-sm">
-                    {% trans "Go to shop" %}
-                </button>
-            {% else %}
-                <a href="{% eventurl request.event "presale:event.index" %}" class="btn btn-default btn-sm" target="_blank">
-                    {% trans "Go to shop" %}
-                </a>
-            {% endif %}
-        </h1>
-    </form>
-
+<h1>
+    {{ request.event.name }}            
+</h1>
     {% if actions|length > 0 %}
         <div class="panel panel-danger">
             <div class="panel-heading">

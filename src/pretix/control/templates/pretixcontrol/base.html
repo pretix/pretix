@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% load i18n %}
 {% load statici18n %}
+{% load eventurl %}
 <!DOCTYPE html>
 <html>
 	<head>
@@ -78,6 +79,22 @@
                             {% endfor %}
                         </ul>
                     </li>
+                    {% if request.event %}
+                        <li>
+                            {% if has_domain and not request.event.live %}
+                                <form action="{% eventurl request.event "presale:event.auth" %}" method="post" target="_blank">
+                                    <input type="hidden" value="{{ new_session }}" name="session">
+                                    <button type="submit" class="btn btn-link" id="button-shop">
+                                       <i class="fa fa-eye"></i> {% trans "Go to shop" %}
+                                    </button>
+                                </form>
+                            {% else %}
+                                <a href="{% eventurl request.event "presale:event.index" %}" title="{% trans "Go to Shop" %}"  target="_blank">
+                                    <i class="fa fa-eye"></i> {% trans "Go to shop" %}
+                                </a>
+                            {% endif %}
+                        </li>
+                    {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-top-links navbar-right">
                     {% for nav in nav_topbar %}
