@@ -237,10 +237,13 @@ if config.has_option('sentry', 'dsn'):
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAdminUser',
+        'pretix.api.auth.permission.EventPermission',
     ],
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 50,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'pretix.api.auth.token.TeamTokenAuthentication',
+    ),
 }
 
 

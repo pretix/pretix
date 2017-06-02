@@ -72,6 +72,10 @@ def generate_invite_token():
     return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)
 
 
+def generate_api_token():
+    return get_random_string(length=64, allowed_chars=string.ascii_lowercase + string.digits)
+
+
 class Team(LoggedModel):
     """
     A team is a collection of people given certain access rights to one or more events of an organizer.
@@ -175,6 +179,10 @@ class Team(LoggedModel):
         else:
             return self.limit_events.filter(pk=event.pk).exists()
 
+    @property
+    def active_tokens(self):
+        return self.tokens.filter(active=True)
+
     class Meta:
         verbose_name = _("Team")
         verbose_name_plural = _("Teams")
@@ -200,3 +208,81 @@ class TeamInvite(models.Model):
         return _("Invite to team '{team}' for '{email}'").format(
             team=str(self.team), email=self.email
         )
+
+
+class TeamAPIToken(models.Model):
+    """
+    A TeamAPIToken represents an API token that has the same access level as the team it belongs to.
+
+    :param team: The team the person is invited to
+    :type team: Team
+    :param name: A human-readable name for the token
+    :type name: str
+    :param active: Whether or not this token is active
+    :type active: bool
+    :param token: The secret required to submit to the API
+    :type token: str
+    """
+    team = models.ForeignKey(Team, related_name="tokens", on_delete=models.CASCADE)
+    name = models.CharField(max_length=190)
+    active = models.BooleanField(default=True)
+    token = models.CharField(default=generate_api_token, max_length=64)
+
+    def get_event_permission_set(self, organizer, event) -> set:
+        """
+        Gets a set of permissions (as strings) that a token holds for a particular event
+
+        :param organizer: The organizer of the event
+        :param event: The event to check
+        :return: set of permissions
+        """
+        has_event_access = (self.team.all_events and organizer == self.team.organizer) or (
+            event in self.team.limit_events
+        )
+        return self.team.permission_set() if has_event_access else set()
+
+    def get_organizer_permission_set(self, organizer) -> set:
+        """
+        Gets a set of permissions (as strings) that a token holds for a particular organizer
+
+        :param organizer: The organizer of the event
+        :return: set of permissions
+        """
+        return self.team.permission_set() if self.team.organizer == organizer else set()
+
+    def has_event_permission(self, organizer, event, perm_name=None) -> bool:
+        """
+        Checks if this token is part of a team that grants access of type ``perm_name``
+        to the event ``event``.
+
+        :param organizer: The organizer of the event
+        :param event: The event to check
+        :param perm_name: The permission, e.g. ``can_change_teams``
+        :return: bool
+        """
+        has_event_access = (self.team.all_events and organizer == self.team.organizer) or (
+            event in self.team.limit_events
+        )
+        return has_event_access and (not perm_name or self.team.has_permission(perm_name))
+
+    def has_organizer_permission(self, organizer, perm_name=None):
+        """
+        Checks if this token is part of a team that grants access of type ``perm_name``
+        to the organizer ``organizer``.
+
+        :param organizer: The organizer to check
+        :param perm_name: The permission, e.g. ``can_change_teams``
+        :return: bool
+        """
+        return organizer == self.team.organizer and (not perm_name or self.team.has_permission(perm_name))
+
+    def get_events_with_any_permission(self):
+        """
+        Returns a queryset of events the token has any permissions to.
+
+        :return: Iterable of Events
+        """
+        if self.team.all_events:
+            return self.team.organizer.events.all()
+        else:
+            return self.team.limit_events.all()
