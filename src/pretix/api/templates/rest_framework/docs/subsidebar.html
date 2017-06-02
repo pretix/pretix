@@ -1,0 +1,15 @@
+{% load rest_framework %}
+{% for section_key, section in d.data|items %}
+    {% if section.links %}
+        <li data-toggle="collapse" data-target="#{{ techprefix }}{{ section_key }}-dropdown" class="collapsed">
+            <a><i class="fa fa-dot-circle-o fa-lg"></i>
+                {% if section_key %}{{ humanprefix }}{{ section_key }}{% else %}API Endpoints{% endif %} <span class="arrow"></span></a>
+        </li>
+    {% endif %}
+    <ul class="sub-menu {% if section_key %}collapse{% endif %}" id="{{ techprefix }}{{ section_key }}-dropdown">
+        {% for link_key, link in section.links|items %}
+            <li><a href="#{{ techprefix }}{{ section_key }}-{{ link_key }}">{{ link.title|default:link_key }}</a></li>
+        {% endfor %}
+    </ul>
+    {% include "rest_framework/docs/subsidebar.html" with d=section humanprefix=humanprefix|default:""|add:section_key|add:"/" techprefix=techprefix|default:""|add:section_key|add:"-" %}
+{% endfor %}

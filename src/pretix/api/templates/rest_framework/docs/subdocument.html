@@ -1,0 +1,19 @@
+{% load rest_framework %}
+
+{% for link_key, link in d.links|items %}
+    {% include "rest_framework/docs/link.html" %}
+{% endfor %}
+
+{% for section_key, section in d.data|items %}
+    {% if section_key %}
+        {% if section.links %}
+            <h2 id="{{ techprefix }}{{ section_key }}" class="coredocs-section-title">{{ humanprefix }}{{ section_key }}
+                <a href="#{{ techprefix }}{{ section_key }}">
+                    <i class="fa fa-link" aria-hidden="true"></i>
+                </a>
+            </h2>
+        {% endif %}
+    {% endif %}
+
+    {% include "rest_framework/docs/subdocument.html" with d=section humanprefix=humanprefix|default:""|add:section_key|add:"/" techprefix=techprefix|default:""|add:section_key|add:"-" %}
+{% endfor %}

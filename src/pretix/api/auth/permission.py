@@ -1,6 +1,7 @@
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
-from pretix.base.models.organizer import TeamAPIToken
+from pretix.base.models import Event
+from pretix.base.models.organizer import Organizer, TeamAPIToken
 
 
 class EventPermission(BasePermission):
@@ -12,11 +13,22 @@ class EventPermission(BasePermission):
                 return True
             return False
 
-        """
-        if 'event' in request.kwargs:
-            pass  # …
-
-        if 'organizer' in request.kwargs:
-            pass  # …
-        """
+        perm_holder = (request.auth if isinstance(request.auth, TeamAPIToken)
+                       else request.user)
+        if 'event' in request.resolver_match.kwargs and 'organizer' in request.resolver_match.kwargs:
+            request.event = Event.objects.filter(
+                slug=request.resolver_match.kwargs['event'],
+                organizer__slug=request.resolver_match.kwargs['organizer'],
+            ).select_related('organizer').first()
+            if not request.event or not perm_holder.has_event_permission(request.event.organizer, request.event):
+                return False
+            request.organizer = request.event.organizer
+            request.eventpermset = perm_holder.get_event_permission_set(request.organizer, request.event)
+        elif 'organizer' in request.resolver_match.kwargs:
+            request.organizer = Organizer.objects.filter(
+                slug=request.resolver_match.kwargs['organizer'],
+            ).first()
+            if not request.organizer or not perm_holder.has_organizer_permission(request.organizer):
+                return False
+            request.orgapermset = perm_holder.get_organizer_permission_set(request.organizer)
         return True
