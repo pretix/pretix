@@ -243,6 +243,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 50,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'pretix.api.auth.token.TeamTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
 }
 
