@@ -10,7 +10,4 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'slug'
 
     def get_queryset(self):
-        if self.request.user.is_authenticated():
-            return self.request.user.get_events_with_any_permission()
-        else:
-            return self.request.auth.get_events_with_any_permission()
+        return self.request.organizer.events.all()
