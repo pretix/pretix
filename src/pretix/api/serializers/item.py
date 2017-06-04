@@ -1,9 +1,12 @@
 from rest_framework import serializers
 
-from pretix.base.models import Item, ItemAddOn, ItemCategory, ItemVariation
+from pretix.api.serializers.i18n import I18nAwareModelSerializer
+from pretix.base.models import (
+    Item, ItemAddOn, ItemCategory, ItemVariation, Question, QuestionOption,
+)
 
 
-class InlineItemVariationSerializer(serializers.ModelSerializer):
+class InlineItemVariationSerializer(I18nAwareModelSerializer):
     class Meta:
         model = ItemVariation
         fields = ('id', 'value', 'active', 'description',
@@ -17,7 +20,7 @@ class InlineItemAddOnSerializer(serializers.ModelSerializer):
                   'position')
 
 
-class ItemSerializer(serializers.ModelSerializer):
+class ItemSerializer(I18nAwareModelSerializer):
     addons = InlineItemAddOnSerializer(many=True)
     variations = InlineItemVariationSerializer(many=True)
 
@@ -31,8 +34,23 @@ class ItemSerializer(serializers.ModelSerializer):
                   'variations', 'addons')
 
 
-class ItemCategorySerializer(serializers.ModelSerializer):
+class ItemCategorySerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = ItemCategory
         fields = ('id', 'name', 'description', 'position', 'is_addon')
+
+
+class InlineQuestionOptionSerializer(I18nAwareModelSerializer):
+
+    class Meta:
+        model = QuestionOption
+        fields = ('id', 'answer')
+
+
+class QuestionSerializer(I18nAwareModelSerializer):
+    options = InlineQuestionOptionSerializer(many=True)
+
+    class Meta:
+        model = Question
+        fields = ('id', 'question', 'type', 'required', 'items', 'options')

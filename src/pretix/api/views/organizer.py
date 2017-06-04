@@ -8,6 +8,7 @@ class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = OrganizerSerializer
     queryset = Organizer.objects.none()
     lookup_field = 'slug'
+    lookup_url_kwarg = 'organizer'
 
     def get_queryset(self):
         if self.request.user.is_authenticated():

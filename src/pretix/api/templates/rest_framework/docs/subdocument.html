@@ -7,7 +7,7 @@
 {% for section_key, section in d.data|items %}
     {% if section_key %}
         {% if section.links %}
-            <h2 id="{{ techprefix }}{{ section_key }}" class="coredocs-section-title">{{ humanprefix }}{{ section_key }}
+            <h2 id="{{ techprefix }}{{ section_key }}" class="coredocs-section-title">{{ section_key }}
                 <a href="#{{ techprefix }}{{ section_key }}">
                     <i class="fa fa-link" aria-hidden="true"></i>
                 </a>

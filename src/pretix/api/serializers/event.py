@@ -1,9 +1,8 @@
-from rest_framework import serializers
-
+from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import Event
 
 
-class EventSerializer(serializers.ModelSerializer):
+class EventSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Event
         fields = ('name', 'slug', 'live', 'currency', 'date_from',

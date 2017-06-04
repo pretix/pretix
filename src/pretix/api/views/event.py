@@ -8,6 +8,7 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = EventSerializer
     queryset = Event.objects.none()
     lookup_field = 'slug'
+    lookup_url_kwarg = 'event'
 
     def get_queryset(self):
         return self.request.organizer.events.all()
