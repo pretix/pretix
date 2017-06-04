@@ -11,6 +11,7 @@ orga_router.register(r'events', event.EventViewSet)
 
 event_router = routers.DefaultRouter()
 event_router.register(r'items', item.ItemViewSet)
+event_router.register(r'categories', item.ItemCategoryViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
