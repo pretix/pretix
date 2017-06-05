@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from urllib.parse import urlsplit
 
 import pytz
 from django.conf import settings
@@ -12,6 +13,8 @@ from django.utils.translation.trans_real import (
     check_for_language, get_supported_language_variant, language_code_re,
     parse_accept_lang_header,
 )
+
+from pretix.multidomain.urlreverse import get_domain
 
 _supported = None
 
@@ -196,5 +199,13 @@ class SecurityMiddleware(MiddlewareMixin):
             else:
                 staticdomain += " " + settings.SITE_URL
                 dynamicdomain += " " + settings.SITE_URL
+        if hasattr(request, 'organizer') and request.organizer:
+            domain = get_domain(request.organizer)
+            if domain:
+                siteurlsplit = urlsplit(settings.SITE_URL)
+                if siteurlsplit.port and siteurlsplit.port not in (80, 443):
+                    domain = '%s:%d' % (domain, siteurlsplit.port)
+                dynamicdomain += " " + domain
+
         resp['Content-Security-Policy'] = _render_csp(h).format(static=staticdomain, dynamic=dynamicdomain)
         return resp
