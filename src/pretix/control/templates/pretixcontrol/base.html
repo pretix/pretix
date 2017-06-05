@@ -189,6 +189,13 @@
                                         {% trans "Organizers" %}
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{% url 'control:search.orders' %}"
+                                            {% if url_name == "search.orders" %}class="active"{% endif %}>
+                                        <i class="fa fa-search fa-fw"></i>
+                                        {% trans "Order search" %}
+                                    </a>
+                                </li>
                                 {% for nav in nav_global %}
                                     <li>
                                         <a href="{{ nav.url }}" {% if nav.active %}class="active"{% endif %}

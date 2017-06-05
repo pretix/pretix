@@ -142,3 +142,12 @@ pre.mail-preview {
     margin-bottom: 20px;
   }
 }
+
+.search-line {
+  width: 100%;
+  margin-bottom: 20px;
+
+  .input-group-btn {
+    width: 1% !important;
+  }
+}

@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 
 from pretix.control.views import (
     auth, checkin, dashboards, event, global_settings, item, main, orders,
-    organizer, typeahead, user, vouchers, waitinglist,
+    organizer, search, typeahead, user, vouchers, waitinglist,
 )
 
 urlpatterns = [
@@ -46,6 +46,7 @@ urlpatterns = [
     url(r'^events/$', main.EventList.as_view(), name='events'),
     url(r'^events/add$', main.EventWizard.as_view(), name='events.add'),
     url(r'^events/typeahead/$', typeahead.event_list, name='events.typeahead'),
+    url(r'^search/orders/$', search.OrderSearch.as_view(), name='search.orders'),
     url(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
         url(r'^$', dashboards.event_index, name='event.index'),
         url(r'^live/$', event.EventLive.as_view(), name='event.live'),
