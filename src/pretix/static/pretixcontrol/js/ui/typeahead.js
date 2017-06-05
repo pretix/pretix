@@ -22,7 +22,7 @@ $(function () {
                             $("<li>").append(
                                 $("<a>").attr("href", res.url).append(
                                     $("<div>").append(
-                                        $("<span>").addClass("event-name").append(res.name)
+                                        $("<span>").addClass("event-name-full").append(res.name)
                                     ).append(
                                         $("<span>").addClass("event-organizer").append(
                                             $("<span>").addClass("fa fa-users fa-fw")
