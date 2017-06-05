@@ -297,3 +297,28 @@ body.loading #wrapper {
     text-overflow: ellipsis;
     vertical-align: bottom;
 }
+
+.dropdown-menu .form-box {
+    padding: 3px 10px;
+}
+
+.event-dropdown {
+    width: 300px;
+}
+.event-dropdown, .mobile-event-dropdown {
+    .event-name {
+        display: block;
+    }
+    .event-daterange, .event-organizer {
+        display: block;
+        font-size: $font-size-small;
+        color: $text-muted;
+    }
+    .active .event-daterange, .active .event-organizer, .active a {
+        color: white;
+    }
+    .active {
+        background: $brand-primary;
+        color: white;
+    }
+}

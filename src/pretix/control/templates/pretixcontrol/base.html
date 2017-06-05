@@ -34,6 +34,7 @@
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/quota.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/question.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/mail.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/ui/typeahead.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixbase/js/asynctask.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixbase/js/asyncdownload.js" %}"></script>
             <script type="text/javascript" src="{% static "colorpicker/bootstrap-colorpicker.js" %}"></script>
@@ -69,15 +70,15 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i>
                             <span class="event-name">{{ request.event }}</span>
                             <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="{% url "control:events" %}">{% trans "Events overview" %}</a></li>
-                            {% regroup request.user.events_cache by organizer as event_list %}
-                            {% for g in event_list %}
-                                <li class="dropdown-header">{{ g.grouper }}</li>
-                                {% for e in g.list %}
-                                    <li><a href="{% url "control:event.index" organizer=g.grouper.slug event=e.slug %}">{{ e.name }}</a></li>
-                                {% endfor %}
-                            {% endfor %}
+                        <ul class="dropdown-menu event-dropdown" role="menu" data-event-typeahead
+                            data-source="{% url "control:events.typeahead" %}">
+                            <li>
+                                <div class="form-box">
+                                    <input type="text" class="form-control"
+                                            placeholder="{% trans "Search for events" %}"
+                                            data-typeahead-query>
+                                </div>
+                            </li>
                         </ul>
                     </li>
                     {% if request.event %}
@@ -147,16 +148,15 @@
                     </li>
                 </ul>
                 <div class="navbar-default sidebar" role="navigation">
-                    <div class="sidebar-nav navbar-events-collapse navbar-collapse hidden-sm hidden-md hidden-lg">
-                        <ul class="nav">
-                            <li><a href="{% url "control:events" %}">{% trans "Event overview" %}</a></li>
-                            {% for e in request.user.events_cache %}
-                                <li>
-                                    <a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">
-                                        {{ e.name }}
-                                    </a>
-                                </li>
-                            {% endfor %}
+                    <div class="sidebar-nav navbar-events-collapse navbar-collapse hidden-sm hidden-md hidden-lg mobile-event-dropdown">
+                        <ul class="nav" data-event-typeahead data-source="{% url "control:events.typeahead" %}">
+                            <li>
+                                <div class="form-box">
+                                    <input type="text" class="form-control"
+                                            placeholder="{% trans "Search for events" %}"
+                                            data-typeahead-query>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                     <div class="sidebar-nav navbar-nav-collapse navbar-collapse">
