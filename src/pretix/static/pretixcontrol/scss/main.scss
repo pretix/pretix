@@ -288,3 +288,12 @@ body.loading #wrapper {
 .colorpicker-2x .colorpicker-color div {
     height: 30px;
 }
+
+.event-name {
+    display: inline-block;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+}
