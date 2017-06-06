@@ -4,7 +4,7 @@ from .base import CachedFile, LoggedModel, cachedfile_name
 from .checkin import Checkin
 from .event import (
     Event, Event_SettingsStore, EventLock, RequiredAction,
-    generate_invite_token,
+    generate_invite_token, SubEvent
 )
 from .invoices import Invoice, InvoiceLine, invoice_filename
 from .items import (

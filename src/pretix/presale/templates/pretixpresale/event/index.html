@@ -361,6 +361,7 @@
                                     placeholder="{% trans "Voucher code" %}">
                         </div>
                     </div>
+                    <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />
                     <div class="col-md-4 col-sm-6 col-xs-12">
                         <button class="btn btn-block btn-primary" type="submit">
                             {% trans "Redeem voucher" %}

@@ -50,6 +50,7 @@ error_messages = {
                         'cart if you want to use it for a different product.'),
     'voucher_expired': _('This voucher is expired.'),
     'voucher_invalid_item': _('This voucher is not valid for this product.'),
+    'voucher_invalid_subevent': _('This voucher is not valid for this subevent.'),
     'voucher_required': _('You need a valid voucher code to order this product.'),
     'addon_invalid_base': _('You can not select an add-on for the selected product.'),
     'addon_duplicate_item': _('You can not select two variations of the same add-on product.'),
@@ -155,6 +156,9 @@ class CartManager:
 
             if op.voucher and not op.voucher.applies_to(op.item, op.variation):
                 raise CartError(error_messages['voucher_invalid_item'])
+
+            if op.voucher and op.voucher.subevent_id and op.voucher.subevent_id != op.subevent.pk:
+                raise CartError(error_messages['voucher_invalid_subevent'])
 
         if isinstance(op, self.AddOperation):
             if op.item.category and op.item.category.is_addon and not op.addon_to:
