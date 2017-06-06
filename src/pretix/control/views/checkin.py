@@ -37,7 +37,7 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
 
         if self.request.GET.get("item", "") != "":
             u = self.request.GET.get("item", "")
-            qs = qs.filter(item_id=id)
+            qs = qs.filter(item_id=u)
 
         if self.request.GET.get("subevent", "") != "":
             s = self.request.GET.get("subevent", "")

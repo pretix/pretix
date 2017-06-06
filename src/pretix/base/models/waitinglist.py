@@ -115,7 +115,7 @@ class WaitingListEntry(LoggedModel):
                 'max_usages': 1,
                 'email': self.email,
                 'waitinglistentry': self.pk,
-                'subevent': self.subevent.pk,
+                'subevent': self.subevent.pk if self.subevent else None,
             }, user=user)
             self.log_action('pretix.waitinglist.voucher', user=user)
             self.voucher = v
