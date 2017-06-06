@@ -52,6 +52,9 @@
                             </div>
                         </div>
                     </div>
+                    {% if form.subevent %}
+                        {% bootstrap_field form.subevent layout="horizontal" %}
+                    {% endif %}
                     {% bootstrap_field form.tag layout="horizontal" %}
                     {% bootstrap_field form.comment layout="horizontal" %}
                 </fieldset>

@@ -194,6 +194,8 @@ class Voucher(LoggedModel):
                                         'Otherwise it might be unclear which quotas to block.'))
         else:
             raise ValidationError(_('You need to specify either a quota or a product.'))
+        if self.event.has_subevents and self.block_quota and not self.subevent:
+            raise ValidationError(_('If you want this voucher to block quota, you need to select a specific subevent.'))
 
     def save(self, *args, **kwargs):
         self.code = self.code.upper()

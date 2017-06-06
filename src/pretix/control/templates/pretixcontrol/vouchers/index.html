@@ -20,6 +20,17 @@
                 <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Redeemed" %}</option>
                 <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
             </select>
+            {% if request.event.has_subevents %}
+                <select name="subevent" class="form-control">
+                    <option value="">{% trans "All sub-events" %}</option>
+                    {% for se in request.event.subevents.all %}
+                        <option value="{{ se.id }}"
+                                {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
+                            {{ se.name }} – {{ se.get_date_range_display }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% endif %}
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
             <button class="btn btn-default" type="submit" name="download" value="yes">{% trans "Download list" %}</button>
         </p>
@@ -27,7 +38,7 @@
     {% if vouchers|length == 0 %}
         <div class="empty-collection">
             <p>
-                {% if request.GET.search or request.GET.tag or request.GET.status %}
+                {% if request.GET.search or request.GET.tag or request.GET.status or request.GET.subevent %}
                     {% trans "Your search did not match any vouchers." %}
                 {% else %}
                     {% blocktrans trimmed %}
@@ -58,6 +69,9 @@
                     <th>{% trans "Expiry" %}</th>
                     <th>{% trans "Tag" %}</th>
                     <th>{% trans "Product" %}</th>
+                    {% if request.event.has_subevents %}
+                        <th>{% trans "Sub-event" %}</th>
+                    {% endif %}
                     <th></th>
                 </tr>
                 </thead>
@@ -85,6 +99,9 @@
                                 {% endblocktrans %}
                             {% endif %}
                         </td>
+                        {% if request.event.has_subevents %}
+                            <td>{{ v.subevent.name }} – {{ v.subevent.get_date_range_display }}</td>
+                        {% endif %}
                         <td class="text-right">
                             <a href="{% url "control:event.voucher.delete" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                         </td>
