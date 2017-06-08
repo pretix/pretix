@@ -81,6 +81,16 @@
                                 {% bootstrap_field position.form.itemvar layout='inline' %}
                             </label>
                         </div>
+                        {% if request.event.has_subevents %}
+                            <div class="radio">
+                                <label>
+                                    <input name="{{ position.form.prefix }}-operation" type="radio" value="subevent"
+                                            {% if position.form.operation.value == "subevent" %}checked="checked"{% endif %}>
+                                    {% trans "Change sub-event to" %}
+                                    {% bootstrap_field position.form.subevent layout='inline' %}
+                                </label>
+                            </div>
+                        {% endif %}
                         <div class="radio">
                             <label>
                                 <input name="{{ position.form.prefix }}-operation" type="radio" value="price"

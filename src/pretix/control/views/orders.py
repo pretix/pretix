@@ -506,6 +506,8 @@ class OrderChange(OrderView):
                     ocm.change_item(p, item, variation)
                 elif p.form.cleaned_data['operation'] == 'price':
                     ocm.change_price(p, p.form.cleaned_data['price'])
+                elif p.form.cleaned_data['operation'] == 'subevent':
+                    ocm.change_subevent(p, p.form.cleaned_data['subevent'])
                 elif p.form.cleaned_data['operation'] == 'cancel':
                     ocm.cancel(p)
 

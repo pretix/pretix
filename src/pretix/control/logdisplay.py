@@ -33,6 +33,17 @@ def _display_order_changed(event: Event, logentry: LogEntry):
             new_price=formats.localize(Decimal(data['new_price'])),
             currency=event.currency
         )
+    elif logentry.action_type == 'pretix.event.order.changed.subevent':
+        old_se = str(event.subevents.get(pk=data['old_subevent']))
+        new_se = str(event.subevents.get(pk=data['new_subevent']))
+        return text + ' ' + _('Position #{posid}: Sub-event "{old_event}" ({old_price} {currency}) changed '
+                              'to "{new_event}" ({new_price} {currency}).').format(
+            posid=data.get('positionid', '?'),
+            old_event=old_se, new_event=new_se,
+            old_price=formats.localize(Decimal(data['old_price'])),
+            new_price=formats.localize(Decimal(data['new_price'])),
+            currency=event.currency
+        )
     elif logentry.action_type == 'pretix.event.order.changed.price':
         return text + ' ' + _('Price of position #{posid} changed from {old_price} {currency} '
                               'to {new_price} {currency}.').format(

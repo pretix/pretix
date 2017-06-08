@@ -22,6 +22,7 @@ from pretix.base.models import (
     CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Quota,
     User, Voucher,
 )
+from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import CachedTicket, InvoiceAddress
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.async import ProfiledTask
@@ -507,6 +508,7 @@ class OrderChangeManager:
         'addon_invalid': _('The selected base position does not allow you to add this product as an add-on.'),
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation', 'price'))
+    SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent', 'price'))
     PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
     CancelOperation = namedtuple('CancelOperation', ('position',))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to'))
@@ -521,16 +523,30 @@ class OrderChangeManager:
     def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation]):
         if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
             raise OrderError(self.error_messages['product_without_variation'])
-        price = item.default_price if variation is None else variation.price
+
+        price = get_price(item, variation, voucher=position.voucher, subevent=position.subevent)
+
         if price is None:
             raise OrderError(self.error_messages['product_invalid'])
         self._totaldiff = price - position.price
-        # TODO: Subevent might change
         self._quotadiff.update(variation.quotas.filter(subevent=position.subevent)
                                if variation
                                else item.quotas.filter(subevent=position.subevent))
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.ItemOperation(position, item, variation, price))
+
+    def change_subevent(self, position: OrderPosition, subevent: SubEvent):
+        price = get_price(position.item, position.variation, voucher=position.voucher, subevent=subevent)
+
+        if price is None:
+            raise OrderError(self.error_messages['product_invalid'])
+
+        self._totaldiff = price - position.price
+        self._quotadiff.update(position.variation.quotas.filter(subevent=subevent)
+                               if position.variation
+                               else position.item.quotas.filter(subevent=subevent))
+        self._quotadiff.subtract(position.quotas)
+        self._operations.append(self.SubeventOperation(position, subevent, price))
 
     def change_price(self, position: OrderPosition, price: Decimal):
         self._totaldiff = price - position.price
@@ -596,6 +612,19 @@ class OrderChangeManager:
                 })
                 op.position.item = op.item
                 op.position.variation = op.variation
+                op.position.price = op.price
+                op.position._calculate_tax()
+                op.position.save()
+            elif isinstance(op, self.SubeventOperation):
+                self.order.log_action('pretix.event.order.changed.subevent', user=self.user, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                    'old_subevent': op.position.subevent.pk,
+                    'new_subevent': op.subevent.pk,
+                    'old_price': op.position.price,
+                    'new_price': op.price
+                })
+                op.position.subevent = op.subevent
                 op.position.price = op.price
                 op.position._calculate_tax()
                 op.position.save()
