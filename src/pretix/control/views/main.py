@@ -107,6 +107,16 @@ class EventWizard(SessionWizardView):
                 t.members.add(self.request.user)
                 t.limit_events.add(event)
 
+            if event.has_subevents:
+                event.subevents.create(
+                    name=event.name,
+                    date_from=event.date_from,
+                    date_to=event.date_to,
+                    presale_start=event.presale_start,
+                    presale_end=event.presale_end,
+                    location=event.location
+                )
+
             logdata = {}
             for f in form_list:
                 logdata.update({
