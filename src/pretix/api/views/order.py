@@ -2,12 +2,16 @@ import django_filters
 from django.http import FileResponse
 from rest_framework import filters, viewsets
 from rest_framework.decorators import detail_route
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import APIException, NotFound, PermissionDenied
 
 from pretix.api.filters.ordering import ExplicitOrderingFilter
 from pretix.api.serializers.order import InvoiceSerializer, OrderSerializer
-from pretix.base.models import Invoice, Order
+from pretix.base.models import Invoice, Order, OrderPosition
 from pretix.base.services.invoices import invoice_pdf
+from pretix.base.services.tickets import (
+    get_cachedticket_for_order, get_cachedticket_for_position,
+)
+from pretix.base.signals import register_ticket_outputs
 
 
 class OrderFilter(filters.FilterSet):
@@ -23,9 +27,71 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ('datetime',)
     ordering_fields = ('datetime', 'code', 'status')
     filter_class = OrderFilter
+    lookup_field = 'code'
 
     def get_queryset(self):
-        return self.request.event.orders.prefetch_related('positions').select_related('invoice_address')
+        return self.request.event.orders.prefetch_related(
+            'positions', 'positions__checkins', 'positions__item',
+        ).select_related(
+            'invoice_address'
+        )
+
+    def _get_output_provider(self, identifier):
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            prov = response(self.request.event)
+            if prov.identifier == identifier:
+                return prov
+        raise NotFound('Unknown output provider.')
+
+    @detail_route(url_name='download', url_path='download/(?P<output>[^/]+)')
+    def download_order(self, request, output, **kwargs):
+        provider = self._get_output_provider(output)
+        order = self.get_object()
+
+        if order.status != Order.STATUS_PAID:
+            raise PermissionDenied("Downloads are not available for unpaid orders.")
+
+        ct = get_cachedticket_for_order(order, provider.identifier)
+
+        if not ct.file:
+            raise RetryException()
+        else:
+            resp = FileResponse(ct.file.file, content_type=ct.type)
+            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
+                self.request.event.slug.upper(), order.code,
+                provider.identifier, ct.extension
+            )
+            return resp
+
+    @detail_route(url_name='download-position', url_path='positions/(?P<position>[^/]+)/download/(?P<output>[^/]+)')
+    def download_position(self, request, output, **kwargs):
+        provider = self._get_output_provider(output)
+        order = self.get_object()
+
+        try:
+            pos = order.positions.get(pk=self.kwargs.get('position'))
+        except OrderPosition.DoesNotExist:
+            raise NotFound('Unknown order position.')
+
+        if order.status != Order.STATUS_PAID:
+            raise PermissionDenied("Downloads are not available for unpaid orders.")
+        if pos.addon_to_id and not request.event.settings.ticket_download_addons:
+            raise PermissionDenied("Downloads are not enabled for add-on products.")
+        if not pos.item.admission and not request.event.settings.ticket_download_nonadm:
+            raise PermissionDenied("Downloads are not enabled for non-admission products.")
+
+        ct = get_cachedticket_for_position(pos, provider.identifier)
+
+        if not ct.file:
+            raise RetryException()
+        else:
+            resp = FileResponse(ct.file.file, content_type=ct.type)
+            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
+                self.request.event.slug.upper(), order.code, pos.positionid,
+                provider.identifier, ct.extension
+            )
+            return resp
 
 
 class InvoiceFilter(filters.FilterSet):

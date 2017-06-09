@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
@@ -85,3 +86,43 @@ def preview(event: int, provider: str):
             prov = response(event)
             if prov.identifier == provider:
                 return prov.generate(p)
+
+
+def get_cachedticket_for_position(pos, identifier):
+    try:
+        ct = CachedTicket.objects.filter(
+            order_position=pos, provider=identifier
+        ).last()
+    except CachedTicket.DoesNotExist:
+        ct = None
+
+    if not ct:
+        ct = CachedTicket.objects.create(
+            order_position=pos, provider=identifier,
+            extension='', type='', file=None)
+        generate.apply_async(args=(pos.id, identifier))
+
+    if not ct.file:
+        if now() - ct.created > timedelta(minutes=5):
+            generate.apply_async(args=(pos.id, identifier))
+    return ct
+
+
+def get_cachedticket_for_order(order, identifier):
+    try:
+        ct = CachedCombinedTicket.objects.filter(
+            order=order, provider=identifier
+        ).last()
+    except CachedCombinedTicket.DoesNotExist:
+        ct = None
+
+    if not ct:
+        ct = CachedCombinedTicket.objects.create(
+            order=order, provider=identifier,
+            extension='', type='', file=None)
+        generate_order.apply_async(args=(order.id, identifier))
+
+    if not ct.file:
+        if now() - ct.created > timedelta(minutes=5):
+            generate_order.apply_async(args=(order.id, identifier))
+    return ct
