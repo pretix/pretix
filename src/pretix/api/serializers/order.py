@@ -60,11 +60,10 @@ class PositionDownloadsField(serializers.Field):
             if provider.is_enabled:
                 res.append({
                     'output': provider.identifier,
-                    'url': reverse('api-v1:order-download-position', kwargs={
+                    'url': reverse('api-v1:orderposition-download', kwargs={
                         'organizer': instance.order.event.organizer.slug,
                         'event': instance.order.event.slug,
-                        'code': instance.order.code,
-                        'position': instance.pk,
+                        'pk': instance.pk,
                         'output': provider.identifier,
                     }, request=request)
                 })
@@ -74,11 +73,12 @@ class PositionDownloadsField(serializers.Field):
 class OrderPositionSerializer(I18nAwareModelSerializer):
     checkins = CheckinSerializer(many=True)
     downloads = PositionDownloadsField(source='*')
+    order = serializers.SlugRelatedField(slug_field='code', read_only=True)
 
     class Meta:
         model = OrderPosition
-        fields = ('id', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_email', 'voucher',
-                  'tax_rate', 'tax_value', 'secret', 'addon_to', 'checkins', 'downloads')
+        fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_email',
+                  'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'checkins', 'downloads')
 
 
 class OrderSerializer(I18nAwareModelSerializer):

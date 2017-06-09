@@ -5,7 +5,9 @@ from rest_framework.decorators import detail_route
 from rest_framework.exceptions import APIException, NotFound, PermissionDenied
 
 from pretix.api.filters.ordering import ExplicitOrderingFilter
-from pretix.api.serializers.order import InvoiceSerializer, OrderSerializer
+from pretix.api.serializers.order import (
+    InvoiceSerializer, OrderPositionSerializer, OrderSerializer,
+)
 from pretix.base.models import Invoice, Order, OrderPosition
 from pretix.base.services.invoices import invoice_pdf
 from pretix.base.services.tickets import (
@@ -45,7 +47,7 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
         raise NotFound('Unknown output provider.')
 
     @detail_route(url_name='download', url_path='download/(?P<output>[^/]+)')
-    def download_order(self, request, output, **kwargs):
+    def download(self, request, output, **kwargs):
         provider = self._get_output_provider(output)
         order = self.get_object()
 
@@ -64,17 +66,49 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
             )
             return resp
 
-    @detail_route(url_name='download-position', url_path='positions/(?P<position>[^/]+)/download/(?P<output>[^/]+)')
-    def download_position(self, request, output, **kwargs):
+
+class OrderPositionFilter(filters.FilterSet):
+    order = django_filters.CharFilter(name='order', lookup_expr='code')
+    has_checkin = django_filters.rest_framework.BooleanFilter(method='has_checkin_qs')
+
+    def has_checkin_qs(self, queryset, name, value):
+        print(value)
+        return queryset.filter(checkins__isnull=not value)
+
+    class Meta:
+        model = OrderPosition
+        fields = ['item', 'variation', 'attendee_name', 'secret', 'order', 'order__status', 'has_checkin']
+
+
+class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = OrderPositionSerializer
+    queryset = OrderPosition.objects.none()
+    filter_backends = (filters.DjangoFilterBackend, ExplicitOrderingFilter)
+    ordering = ('order__datetime', 'positionid')
+    ordering_fields = ('order__code', 'order__datetime', 'positionid', 'attendee_name', 'order__status',)
+    filter_class = OrderPositionFilter
+
+    def get_queryset(self):
+        return OrderPosition.objects.filter(order__event=self.request.event).prefetch_related(
+            'checkins',
+        ).select_related(
+            'item', 'order', 'order__event', 'order__event__organizer'
+        )
+
+    def _get_output_provider(self, identifier):
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            prov = response(self.request.event)
+            if prov.identifier == identifier:
+                return prov
+        raise NotFound('Unknown output provider.')
+
+    @detail_route(url_name='download', url_path='download/(?P<output>[^/]+)')
+    def download(self, request, output, **kwargs):
         provider = self._get_output_provider(output)
-        order = self.get_object()
+        pos = self.get_object()
 
-        try:
-            pos = order.positions.get(pk=self.kwargs.get('position'))
-        except OrderPosition.DoesNotExist:
-            raise NotFound('Unknown order position.')
-
-        if order.status != Order.STATUS_PAID:
+        if pos.order.status != Order.STATUS_PAID:
             raise PermissionDenied("Downloads are not available for unpaid orders.")
         if pos.addon_to_id and not request.event.settings.ticket_download_addons:
             raise PermissionDenied("Downloads are not enabled for add-on products.")
@@ -88,7 +122,7 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
         else:
             resp = FileResponse(ct.file.file, content_type=ct.type)
             resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
-                self.request.event.slug.upper(), order.code, pos.positionid,
+                self.request.event.slug.upper(), pos.order.code, pos.positionid,
                 provider.identifier, ct.extension
             )
             return resp

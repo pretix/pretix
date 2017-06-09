@@ -16,6 +16,7 @@ event_router.register(r'questions', item.QuestionViewSet)
 event_router.register(r'quotas', item.QuotaViewSet)
 event_router.register(r'vouchers', voucher.VoucherViewSet)
 event_router.register(r'orders', order.OrderViewSet)
+event_router.register(r'orderpositions', order.OrderPositionViewSet)
 event_router.register(r'invoices', order.InvoiceViewSet)
 event_router.register(r'waitinglistentries', waitinglist.WaitingListViewSet)
 
