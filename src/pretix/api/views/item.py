@@ -3,8 +3,9 @@ from rest_framework import filters, viewsets
 from pretix.api.filters.ordering import ExplicitOrderingFilter
 from pretix.api.serializers.item import (
     ItemCategorySerializer, ItemSerializer, QuestionSerializer,
+    QuotaSerializer,
 )
-from pretix.base.models import Item, ItemCategory, Question
+from pretix.base.models import Item, ItemCategory, Question, Quota
 
 
 class ItemFilter(filters.FilterSet):
@@ -22,7 +23,7 @@ class ItemViewSet(viewsets.ReadOnlyModelViewSet):
     filter_class = ItemFilter
 
     def get_queryset(self):
-        return self.request.event.items.all()
+        return self.request.event.items.prefetch_related('variations', 'addons').all()
 
 
 class ItemCategoryFilter(filters.FilterSet):
@@ -51,4 +52,15 @@ class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ('position', 'id')
 
     def get_queryset(self):
-        return self.request.event.questions.all()
+        return self.request.event.questions.prefetch_related('options').all()
+
+
+class QuotaViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = QuotaSerializer
+    queryset = Quota.objects.none()
+    filter_backends = (ExplicitOrderingFilter,)
+    ordering_fields = ('id', 'size')
+    ordering = ('id',)
+
+    def get_queryset(self):
+        return self.request.event.quotas.all()

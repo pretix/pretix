@@ -3,6 +3,7 @@ from rest_framework import serializers
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import (
     Item, ItemAddOn, ItemCategory, ItemVariation, Question, QuestionOption,
+    Quota,
 )
 
 
@@ -54,3 +55,10 @@ class QuestionSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Question
         fields = ('id', 'question', 'type', 'required', 'items', 'options')
+
+
+class QuotaSerializer(I18nAwareModelSerializer):
+
+    class Meta:
+        model = Quota
+        fields = ('id', 'name', 'size', 'items', 'variations')

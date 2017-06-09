@@ -191,6 +191,7 @@ INSTALLED_APPS = [
     'pretix.multidomain',
     'pretix.api',
     'rest_framework',
+    'django_filters',
     'compressor',
     'bootstrap3',
     'djangoformsetjs',
