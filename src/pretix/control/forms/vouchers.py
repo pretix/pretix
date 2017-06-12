@@ -15,7 +15,8 @@ class VoucherForm(I18nModelForm):
         label=_("Product"),
         help_text=_(
             "This product is added to the user's cart if the voucher is redeemed."
-        )
+        ),
+        required=True
     )
 
     class Meta:
@@ -61,30 +62,33 @@ class VoucherForm(I18nModelForm):
 
     def clean(self):
         data = super().clean()
-        itemid = quotaid = None
-        if self.data['itemvar'].startswith('q-'):
-            quotaid = self.data['itemvar'][2:]
-        elif '-' in self.data['itemvar']:
-            itemid, varid = self.data['itemvar'].split('-')
-        else:
-            itemid, varid = self.data['itemvar'], None
 
-        if itemid:
-            self.instance.item = Item.objects.get(pk=itemid, event=self.instance.event)
-            if varid:
-                self.instance.variation = ItemVariation.objects.get(pk=varid, item=self.instance.item)
+        if not self._errors:
+            itemid = quotaid = None
+            iv = self.data.get('itemvar', '')
+            if iv.startswith('q-'):
+                quotaid = iv[2:]
+            elif '-' in iv:
+                itemid, varid = iv.split('-')
             else:
+                itemid, varid = iv, None
+
+            if itemid:
+                self.instance.item = Item.objects.get(pk=itemid, event=self.instance.event)
+                if varid:
+                    self.instance.variation = ItemVariation.objects.get(pk=varid, item=self.instance.item)
+                else:
+                    self.instance.variation = None
+                self.instance.quota = None
+
+                if self.instance.item.category and self.instance.item.category.is_addon:
+                    raise ValidationError(_('It is currently not possible to create vouchers for add-on products.'))
+            else:
+                self.instance.quota = Quota.objects.get(pk=quotaid, event=self.instance.event)
+                self.instance.item = None
                 self.instance.variation = None
-            self.instance.quota = None
 
-            if self.instance.item.category and self.instance.item.category.is_addon:
-                raise ValidationError(_('It is currently not possible to create vouchers for add-on products.'))
-        else:
-            self.instance.quota = Quota.objects.get(pk=quotaid, event=self.instance.event)
-            self.instance.item = None
-            self.instance.variation = None
-
-        if data['max_usages'] < self.instance.redeemed:
+        if data.get('max_usages', 0) < self.instance.redeemed:
             raise ValidationError(
                 _('This voucher has already been redeemed %(redeemed)s times. You cannot reduce the maximum number of '
                   'usages below this number.'),
