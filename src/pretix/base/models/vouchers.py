@@ -13,8 +13,10 @@ from .event import Event
 from .items import Item, ItemVariation, Quota
 
 
-def _generate_random_code():
+def _generate_random_code(prefix=None):
     charset = list('ABCDEFGHKLMNPQRSTUVWXYZ23456789')
+    if prefix:
+        return prefix + get_random_string(length=settings.ENTROPY['voucher_code'], allowed_chars=charset)
     return get_random_string(length=settings.ENTROPY['voucher_code'], allowed_chars=charset)
 
 
