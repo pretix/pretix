@@ -51,7 +51,7 @@
 
     {% if event.has_subevents %}
         <ul>
-            {% for subev in event.subevents.all %}
+            {% for subev in event.active_subevents %}
                 <li>
                     <a href="{% eventurl event "presale:event.index" subevent=subev.id %}">
                         {{ subev.name }}

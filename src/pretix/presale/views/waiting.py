@@ -61,7 +61,8 @@ class WaitingView(FormView):
         self.subevent = None
         if request.event.has_subevents:
             if 'subevent' in request.GET:
-                self.subevent = get_object_or_404(SubEvent, event=request.event, pk=request.GET['subevent'])
+                self.subevent = get_object_or_404(SubEvent, event=request.event, pk=request.GET['subevent'],
+                                                  active=True)
             else:
                 messages.error(request, _("You need to select a subevent."))
                 return redirect(eventreverse(self.request.event, 'presale:event.index'))

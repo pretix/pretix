@@ -137,7 +137,7 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         self.subevent = None
         if request.event.has_subevents:
             if 'subevent' in kwargs:
-                self.subevent = get_object_or_404(SubEvent, event=request.event, pk=kwargs['subevent'])
+                self.subevent = get_object_or_404(SubEvent, event=request.event, pk=kwargs['subevent'], active=True)
                 return super().get(request, *args, **kwargs)
             else:
                 return super().get(request, *args, **kwargs)

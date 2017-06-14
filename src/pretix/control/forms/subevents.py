@@ -17,6 +17,7 @@ class SubEventForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'name',
+            'active',
             'date_from',
             'date_to',
             'date_admission',

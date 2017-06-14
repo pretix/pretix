@@ -114,7 +114,8 @@ class EventWizard(SessionWizardView):
                     date_to=event.date_to,
                     presale_start=event.presale_start,
                     presale_end=event.presale_end,
-                    location=event.location
+                    location=event.location,
+                    active=True
                 )
 
             logdata = {}

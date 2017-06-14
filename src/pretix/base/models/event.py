@@ -358,6 +358,10 @@ class Event(EventMixin, LoggedModel):
         irs = self.get_invoice_renderers()
         return irs[self.settings.invoice_renderer]
 
+    @property
+    def active_subevents(self):
+        return self.subevents.filter(active=True)
+
 
 class SubEvent(EventMixin, LoggedModel):
     """
@@ -365,6 +369,8 @@ class SubEvent(EventMixin, LoggedModel):
 
     :param event: The event this subevent belongs to
     :type event: Event
+    :param active: Whether to show the subevent
+    :type active: bool
     :param name: This event's full title
     :type name: str
     :param date_from: The datetime this event starts
@@ -380,6 +386,9 @@ class SubEvent(EventMixin, LoggedModel):
     """
 
     event = models.ForeignKey(Event, related_name="subevents", on_delete=models.PROTECT)
+    active = models.BooleanField(default=False, verbose_name=_("Active"),
+                                 help_text=_("Only with this checkbox enabled, this sub-event is visible in the "
+                                             "frontend to users."))
     name = I18nCharField(
         max_length=200,
         verbose_name=_("Name"),
