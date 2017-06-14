@@ -93,7 +93,7 @@ class CartTest(CartTestMixin, TestCase):
     def test_subevent_missing(self):
         self.event.has_subevents = True
         self.event.save()
-        se = self.event.subevents.create(name='Foo', date_from=now())
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         self.quota_tickets.subevent = se
         self.quota_tickets.save()
         q = se.quotas.create(name="foo", size=None, event=self.event)
@@ -104,10 +104,23 @@ class CartTest(CartTestMixin, TestCase):
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 0)
 
+    def test_inactive_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=False)
+        q = se.quotas.create(name="foo", size=None, event=self.event)
+        q.items.add(self.ticket)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'subevent': se.pk
+        }, follow=False)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
     def test_simple_subevent(self):
         self.event.has_subevents = True
         self.event.save()
-        se = self.event.subevents.create(name='Foo', date_from=now())
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         q = se.quotas.create(name="foo", size=None, event=self.event)
         q.items.add(self.ticket)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
@@ -124,7 +137,7 @@ class CartTest(CartTestMixin, TestCase):
     def test_subevent_price(self):
         self.event.has_subevents = True
         self.event.save()
-        se = self.event.subevents.create(name='Foo', date_from=now())
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         q = se.quotas.create(name="foo", size=None, event=self.event)
         q.items.add(self.ticket)
         SubEventItem.objects.create(subevent=se, item=self.ticket, price=42)
@@ -252,7 +265,7 @@ class CartTest(CartTestMixin, TestCase):
     def test_subevent_variation_price(self):
         self.event.has_subevents = True
         self.event.save()
-        se = self.event.subevents.create(name='Foo', date_from=now())
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         q = se.quotas.create(name="foo", size=None, event=self.event)
         q.variations.add(self.shirt_red)
         SubEventItemVariation.objects.create(subevent=se, variation=self.shirt_red, price=42)
@@ -375,7 +388,7 @@ class CartTest(CartTestMixin, TestCase):
         shirt2 = Item.objects.create(event=self.event, name='T-Shirt', default_price=12)
         self.event.has_subevents = True
         self.event.save()
-        se = self.event.subevents.create(name='Foo', date_from=now())
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         SubEventItem.objects.create(subevent=se, item=shirt2, price=42)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % shirt2.id: '1',
@@ -526,7 +539,7 @@ class CartTest(CartTestMixin, TestCase):
     def test_subevent_quota_partly(self):
         self.event.has_subevents = True
         self.event.save()
-        se = self.event.subevents.create(name='Foo', date_from=now())
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         self.quota_tickets.size = 1
         self.quota_tickets.subevent = se
         self.quota_tickets.save()
@@ -608,7 +621,7 @@ class CartTest(CartTestMixin, TestCase):
     def test_subevent_renew_expired_successfully(self):
         self.event.has_subevents = True
         self.event.save()
-        se = self.event.subevents.create(name='Foo', date_from=now())
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         self.quota_tickets.subevent = se
         self.quota_tickets.save()
         self.quota_shirts.subevent = se
@@ -631,7 +644,7 @@ class CartTest(CartTestMixin, TestCase):
     def test_subevent_renew_expired_failed(self):
         self.event.has_subevents = True
         self.event.save()
-        se = self.event.subevents.create(name='Foo', date_from=now())
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         self.quota_tickets.subevent = se
         self.quota_tickets.size = 0
         self.quota_tickets.save()
@@ -1202,7 +1215,7 @@ class CartAddonTest(CartTestMixin, TestCase):
     def test_cart_subevent_set_simple_addon(self):
         self.event.has_subevents = True
         self.event.save()
-        se = self.event.subevents.create(name='Foo', date_from=now())
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         self.workshopquota.subevent = se
         self.workshopquota.save()
         cp1 = CartPosition.objects.create(
@@ -1225,8 +1238,8 @@ class CartAddonTest(CartTestMixin, TestCase):
     def test_cart_subevent_set_addon_for_wrong_subevent(self):
         self.event.has_subevents = True
         self.event.save()
-        se = self.event.subevents.create(name='Foo', date_from=now())
-        se2 = self.event.subevents.create(name='Foo', date_from=now())
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         self.workshopquota.subevent = se2
         self.workshopquota.save()
         cp1 = CartPosition.objects.create(

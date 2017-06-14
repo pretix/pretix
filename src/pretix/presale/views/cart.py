@@ -248,6 +248,9 @@ class RedeemView(EventViewMixin, TemplateView):
                 item.available_variations = [
                     v for v in item.avail_variations if v._subevent_quotas
                 ]
+                if self.voucher.variation_id:
+                    item.available_variations = [v for v in item.available_variations
+                                                 if v.pk == self.voucher.variation_id]
                 if len(item.available_variations) > 0:
                     item.min_price = min([v.display_price for v in item.avail_variations])
                     item.max_price = max([v.display_price for v in item.avail_variations])

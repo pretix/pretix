@@ -134,8 +134,8 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
     def test_subevents(self):
         self.event.has_subevents = True
         self.event.save()
-        se1 = self.event.subevents.create(name='Foo', date_from=now())
-        se2 = self.event.subevents.create(name='Foo', date_from=now())
+        se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0)
         q.items.add(item)
@@ -148,8 +148,8 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
     def test_subevent_prices(self):
         self.event.has_subevents = True
         self.event.save()
-        se1 = self.event.subevents.create(name='Foo', date_from=now())
-        se2 = self.event.subevents.create(name='Foo', date_from=now())
+        se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=15)
         q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
         q.items.add(item)
@@ -168,8 +168,8 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.event.has_subevents = True
         self.event.save()
         self.event.settings.display_net_prices = True
-        se1 = self.event.subevents.create(name='Foo', date_from=now())
-        se2 = self.event.subevents.create(name='Foo', date_from=now())
+        se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=15,
                                    tax_rate=19)
         q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
@@ -634,7 +634,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
     def test_response_type(self):
         ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug))
         self.assertEqual(ical['Content-Type'], 'text/calendar')
-        self.assertEqual(ical['Content-Disposition'], 'attachment; filename="{}-{}.ics"'.format(
+        self.assertEqual(ical['Content-Disposition'], 'attachment; filename="{}-{}-0.ics"'.format(
             self.orga.slug, self.event.slug
         ))
 
@@ -667,7 +667,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.assertIn('LOCATION:DUMMY ARENA', ical, 'incorrect location')
         self.assertIn('ORGANIZER:%s' % self.event.organizer.name, ical, 'incorrect organizer')
         self.assertTrue(re.search(r'DTSTAMP:\d{8}T\d{6}Z', ical), 'incorrect timestamp')
-        self.assertTrue(re.search(r'UID:\w*-\w*-\d{20}', ical), 'missing UID key')
+        self.assertTrue(re.search(r'UID:\w*-\w*-0-\d{20}', ical), 'missing UID key')
 
     def test_utc_timezone(self):
         ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug)).content.decode()
