@@ -41,7 +41,11 @@ error_messages = {
     'min_items_per_product_removed': _("We removed %(product)s from your cart as you can not buy less than "
                                        "%(min)s items of it."),
     'not_started': _('The presale period for this event has not yet started.'),
-    'ended': _('The presale period has ended.'),
+    'ended': _('The presale period for this event has ended.'),
+    'some_subevent_not_started': _('The presale period for this event has not yet started. The affected positions '
+                                   'have been removed from your cart.'),
+    'some_subevent_ended': _('The presale period for one of the events in your cart has ended. The affected '
+                             'positions have been removed from your cart.'),
     'price_too_high': _('The entered price is to high.'),
     'voucher_invalid': _('This voucher code is not known in our database.'),
     'voucher_redeemed': _('This voucher code has already been used the maximum number of times allowed.'),
@@ -90,7 +94,7 @@ class CartManager:
     def positions(self):
         return CartPosition.objects.filter(
             Q(cart_id=self.cart_id) & Q(event=self.event)
-        ).select_related('item')
+        ).select_related('item', 'subevent')
 
     def _calculate_expiry(self):
         self._expiry = self.now_dt + timedelta(minutes=self.event.settings.get('reservation_time', as_type=int))
@@ -106,10 +110,17 @@ class CartManager:
         # We can extend the reservation of items which are not yet expired without risk
         self.positions.filter(expires__gt=self.now_dt).update(expires=self._expiry)
 
-    def _delete_expired(self, expired: List[CartPosition]):
-        for cp in expired:
-            if cp.expires <= self.now_dt:
+    def _delete_out_of_timeframe(self):
+        err = None
+        for cp in self.positions:
+            if cp.subevent and cp.subevent.presale_start and self.now_dt < cp.subevent.presale_start:
+                err = error_messages['some_subevent_not_started']
                 cp.delete()
+
+            if cp.subevent and cp.subevent.presale_end and self.now_dt > cp.subevent.presale_end:
+                err = error_messages['some_subevent_ended']
+                cp.delete()
+        return err
 
     def _update_subevents_cache(self, se_ids: List[int]):
         self._subevents_cache.update({
@@ -163,6 +174,12 @@ class CartManager:
 
             if op.subevent and not op.subevent.active:
                 raise CartError(error_messages['inactive_subevent'])
+
+            if op.subevent and op.subevent.presale_start and self.now_dt < op.subevent.presale_start:
+                raise CartError(error_messages['not_started'])
+
+            if op.subevent and op.subevent.presale_end and self.now_dt > op.subevent.presale_end:
+                raise CartError(error_messages['ended'])
 
         if isinstance(op, self.AddOperation):
             if op.item.category and op.item.category.is_addon and not op.addon_to:
@@ -562,8 +579,9 @@ class CartManager:
             with transaction.atomic():
                 self.now_dt = now_dt
                 self._extend_expiry_of_valid_existing_positions()
-                err = self.extend_expired_positions()
-                err = self._perform_operations()
+                err = self._delete_out_of_timeframe()
+                err = self.extend_expired_positions() or err
+                err = self._perform_operations() or err
             if err:
                 raise CartError(err)
 

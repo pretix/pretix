@@ -60,6 +60,10 @@ error_messages = {
                               'removed this item from your cart.'),
     'voucher_required': _('You need a valid voucher code to order one of the products in your cart. We removed this '
                           'item from your cart.'),
+    'some_subevent_not_started': _('The presale period for this event has not yet started. The affected positions '
+                                   'have been removed from your cart.'),
+    'some_subevent_ended': _('The presale period for one of the events in your cart has ended. The affected '
+                             'positions have been removed from your cart.'),
 }
 
 logger = logging.getLogger(__name__)
@@ -252,9 +256,19 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 cp.delete()  # Sorry!
                 continue
 
+        if cp.subevent and cp.subevent.presale_start and now_dt < cp.subevent.presale_start:
+            err = err or error_messages['some_subevent_not_started']
+            cp.delete()
+            break
+
+        if cp.subevent and cp.subevent.presale_end and now_dt > cp.subevent.presale_end:
+            err = err or error_messages['some_subevent_ended']
+            cp.delete()
+            break
+
         if cp.item.require_voucher and cp.voucher is None:
             cp.delete()
-            err = error_messages['voucher_required']
+            err = err or error_messages['voucher_required']
             break
 
         if cp.item.hide_without_voucher and (cp.voucher is None or cp.voucher.item is None
@@ -385,7 +399,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
 
     with event.lock() as now_dt:
         positions = list(CartPosition.objects.filter(
-            id__in=position_ids).select_related('item', 'variation'))
+            id__in=position_ids).select_related('item', 'variation', 'subevent'))
         if len(positions) == 0:
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
