@@ -50,7 +50,7 @@ class VoucherForm(I18nModelForm):
 
         if instance.event.has_subevents:
             self.fields['subevent'].queryset = instance.event.subevents.all()
-        else:
+        elif 'subevent':
             del self.fields['subevent']
 
         choices = []
@@ -109,7 +109,7 @@ class VoucherForm(I18nModelForm):
         else:
             cnt = data['max_usages']
 
-        if self.instance.event.has_subevents and data['block_quota'] and not data['subevent']:
+        if self.instance.event.has_subevents and data['block_quota'] and not data.get('subevent'):
             raise ValidationError(_('If you want this voucher to block quota, you need to select a specific subevent.'))
 
         if self._clean_quota_needs_checking(data):
@@ -179,9 +179,9 @@ class VoucherForm(I18nModelForm):
             raise ValidationError(_('You can only block quota if you specify a specific product variation. '
                                     'Otherwise it might be unclear which quotas to block.'))
         elif self.instance.item and self.instance.variation:
-            avail = self.instance.variation.check_quotas(ignored_quotas=old_quotas, subevent=data['subevent'])
+            avail = self.instance.variation.check_quotas(ignored_quotas=old_quotas, subevent=data.get('subevent'))
         elif self.instance.item and not self.instance.item.has_variations:
-            avail = self.instance.item.check_quotas(ignored_quotas=old_quotas, subevent=data['subevent'])
+            avail = self.instance.item.check_quotas(ignored_quotas=old_quotas, subevent=data.get('subevent'))
         else:
             raise ValidationError(_('You need to specify either a quota or a product.'))
 
@@ -210,7 +210,7 @@ class VoucherBulkForm(VoucherForm):
         localized_fields = '__all__'
         fields = [
             'valid_until', 'block_quota', 'allow_ignore_quota', 'value', 'tag', 'comment',
-            'max_usages', 'price_mode'
+            'max_usages', 'price_mode', 'subevent'
         ]
         widgets = {
             'valid_until': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
