@@ -38,6 +38,7 @@
                         <td>{{ s.get_date_from_display }}</td>
                         <td class="text-right">
                             <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                            <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ s.id }}" class="btn btn-default btn-sm"><i class="fa fa-copy"></i></a>
                             <a href="{% url "control:event.subevent.delete" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>

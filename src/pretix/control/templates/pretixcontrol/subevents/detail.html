@@ -5,13 +5,10 @@
 {% load eventsignal %}
 {% block title %}{% trans "Sub-event" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Sub-event" %}</h1>
     {% if not subevent.pk %}
-        <p>
-            {% blocktrans trimmed %}
-                You can change more settings in the next step after you saved the sub-event.
-            {% endblocktrans %}
-        </p>
+        <h1>{% trans "Create sub-event" %}</h1>
+    {% else %}
+        <h1>{% trans "Sub-event" %}</h1>
     {% endif %}
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}

@@ -1,3 +1,5 @@
+import copy
+
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import transaction
@@ -72,14 +74,32 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
 class SubEventEditorMixin:
     @cached_property
     def formset(self):
+        extra = 0
+        kwargs = {}
+
+        if self.copy_from:
+            kwargs['initial'] = [
+                {
+                    'size': q.size,
+                    'name': q.name,
+                    'itemvars': [str(i.pk) for i in q.items.all()] + [
+                        '{}-{}'.format(v.item_id, v.pk) for v in q.variations.all()
+                    ]
+                } for q in self.copy_from.quotas.prefetch_related('items', 'variations')
+            ]
+            extra = len(kwargs['initial'])
+
         formsetclass = inlineformset_factory(
             SubEvent, Quota,
             form=QuotaForm, formset=QuotaFormSet,
-            can_order=False, can_delete=True, extra=0
+            can_order=False, can_delete=True, extra=extra,
         )
+        if self.object:
+            kwargs['queryset'] = self.object.quotas.prefetch_related('items', 'variations')
+
         return formsetclass(self.request.POST if self.request.method == "POST" else None,
                             instance=self.object,
-                            event=self.request.event)
+                            event=self.request.event, **kwargs)
 
     def save_formset(self, obj):
         for form in self.formset.initial_forms:
@@ -125,6 +145,14 @@ class SubEventEditorMixin:
         return ctx
 
     @cached_property
+    def copy_from(self):
+        if self.request.GET.get("copy_from") and not getattr(self, 'object'):
+            try:
+                return self.request.event.subevents.get(pk=self.request.GET.get("copy_from"))
+            except SubEvent.DoesNotExist:
+                pass
+
+    @cached_property
     def itemvar_forms(self):
         se_item_instances = {
             sei.item_id: sei for sei in SubEventItem.objects.filter(subevent=self.object)
@@ -132,6 +160,17 @@ class SubEventEditorMixin:
         se_var_instances = {
             sei.variation_id: sei for sei in SubEventItemVariation.objects.filter(subevent=self.object)
         }
+
+        if self.copy_from:
+            se_item_instances = {
+                sei.item_id: SubEventItem(item=sei.item, price=sei.price)
+                for sei in SubEventItem.objects.filter(subevent=self.copy_from).select_related('item')
+            }
+            se_var_instances = {
+                sei.variation_id: SubEventItemVariation(variation=sei.variation, price=sei.price)
+                for sei in SubEventItemVariation.objects.filter(subevent=self.copy_from).select_related('variation')
+            }
+
         formlist = []
         for i in self.request.event.items.filter(active=True).prefetch_related('variations'):
             if i.has_variations:
@@ -232,8 +271,13 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['instance'] = getattr(self, 'object', SubEvent(event=self.request.event))
         kwargs['event'] = self.request.event
+        if self.copy_from:
+            i = copy.copy(self.copy_from)
+            i.pk = None
+            kwargs['instance'] = i
+        else:
+            kwargs['instance'] = SubEvent(event=self.request.event)
         return kwargs
 
     @transaction.atomic

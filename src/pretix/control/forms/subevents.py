@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.functional import cached_property
 from i18nfield.forms import I18nInlineFormSet
 
 from pretix.base.forms import I18nModelForm
@@ -73,9 +74,14 @@ class QuotaFormSet(I18nInlineFormSet):
         self.locales = self.event.settings.get('locales')
         super().__init__(*args, **kwargs)
 
+    @cached_property
+    def items(self):
+        return self.event.items.prefetch_related('variations').all()
+
     def _construct_form(self, i, **kwargs):
         kwargs['locales'] = self.locales
         kwargs['event'] = self.event
+        kwargs['items'] = self.items
         return super()._construct_form(i, **kwargs)
 
     @property
@@ -85,7 +91,8 @@ class QuotaFormSet(I18nInlineFormSet):
             prefix=self.add_prefix('__prefix__'),
             empty_permitted=True,
             locales=self.locales,
-            event=self.event
+            event=self.event,
+            items=self.items
         )
         self.add_fields(form, None)
         return form

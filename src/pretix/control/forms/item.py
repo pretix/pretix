@@ -63,7 +63,7 @@ class QuotaForm(I18nModelForm):
     def __init__(self, **kwargs):
         self.instance = kwargs.get('instance', None)
         self.event = kwargs.get('event')
-        items = self.event.items.prefetch_related('variations')
+        items = kwargs.pop('items', None) or self.event.items.prefetch_related('variations')
         self.original_instance = copy.copy(self.instance) if self.instance else None
         initial = kwargs.get('initial', {})
         if self.instance and self.instance.pk:
