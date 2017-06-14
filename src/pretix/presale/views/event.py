@@ -180,39 +180,52 @@ class EventIcalDownload(EventViewMixin, View):
         if not self.request.event:
             raise Http404(_('Unknown event code or not authorized to access this event.'))
 
+        subevent = None
+        if request.event.has_subevents:
+            if 'subevent' in kwargs:
+                subevent = get_object_or_404(SubEvent, event=request.event, pk=kwargs['subevent'], active=True)
+            else:
+                raise Http404(_('No sub-event selected.'))
+        else:
+            if 'subevent' in kwargs:
+                raise Http404(_('Unknown sub-event selected.'))
+
         event = self.request.event
+        ev = subevent or event
         creation_time = datetime.now(pytz.utc)
         cal = vobject.iCalendar()
         cal.add('prodid').value = '-//pretix//{}//'.format(settings.PRETIX_INSTANCE_NAME)
 
         vevent = cal.add('vevent')
-        vevent.add('summary').value = str(event.name)
+        vevent.add('summary').value = str(ev.name)
         vevent.add('dtstamp').value = creation_time
-        vevent.add('location').value = str(event.location)
+        vevent.add('location').value = str(ev.location)
         vevent.add('organizer').value = event.organizer.name
-        vevent.add('uid').value = '{}-{}-{}'.format(
-            event.organizer.slug, event.slug, creation_time.strftime('%Y%m%d%H%M%S%f')
+        vevent.add('uid').value = '{}-{}-{}-{}'.format(
+            event.organizer.slug, event.slug,
+            subevent.pk if subevent else '0',
+            creation_time.strftime('%Y%m%d%H%M%S%f')
         )
 
         if event.settings.show_times:
-            vevent.add('dtstart').value = event.date_from.astimezone(self.event_timezone)
+            vevent.add('dtstart').value = ev.date_from.astimezone(self.event_timezone)
         else:
-            vevent.add('dtstart').value = event.date_from.astimezone(self.event_timezone).date()
+            vevent.add('dtstart').value = ev.date_from.astimezone(self.event_timezone).date()
 
-        if event.settings.show_date_to:
+        if event.settings.show_date_to and ev.date_to:
             if event.settings.show_times:
-                vevent.add('dtend').value = event.date_to.astimezone(self.event_timezone)
+                vevent.add('dtend').value = ev.date_to.astimezone(self.event_timezone)
             else:
-                vevent.add('dtend').value = event.date_to.astimezone(self.event_timezone).date()
+                vevent.add('dtend').value = ev.date_to.astimezone(self.event_timezone).date()
 
         if event.date_admission:
             vevent.add('description').value = str(_('Admission: {datetime}')).format(
-                datetime=date_format(event.date_admission.astimezone(self.event_timezone), 'SHORT_DATETIME_FORMAT')
+                datetime=date_format(ev.date_admission.astimezone(self.event_timezone), 'SHORT_DATETIME_FORMAT')
             )
 
         resp = HttpResponse(cal.serialize(), content_type='text/calendar')
-        resp['Content-Disposition'] = 'attachment; filename="{}-{}.ics"'.format(
-            event.organizer.slug, event.slug
+        resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}.ics"'.format(
+            event.organizer.slug, event.slug, subevent.pk if subevent else '0',
         )
         return resp
 

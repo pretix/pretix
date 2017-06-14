@@ -120,7 +120,11 @@
                         {% endif %}
                     {% endif %}
                     <br>
-                    <a href="{% eventurl event "presale:event.ical.download" %}">
+                    {% if subevent %}
+                        <a href="{% eventurl event "presale:event.ical.download" subevent=subevent.pk %}">
+                    {% else %}
+                        <a href="{% eventurl event "presale:event.ical.download" %}">
+                    {% endif %}
                         {% trans "Add to Calendar" %}
                     </a>
                 </p>
