@@ -1,5 +1,7 @@
+from datetime import datetime
+
 import pytest
-from django.utils.timezone import now
+from pytz import UTC
 from rest_framework.test import APIClient
 
 from pretix.base.models import Event, Organizer, Team, User
@@ -19,7 +21,7 @@ def organizer():
 def event(organizer):
     return Event.objects.create(
         organizer=organizer, name='Dummy', slug='dummy',
-        date_from=now(), plugins='pretix.plugins.banktransfer'
+        date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC), plugins='pretix.plugins.banktransfer'
     )
 
 
