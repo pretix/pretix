@@ -1,16 +1,5 @@
 import pytest
 
-
-@pytest.fixture
-def token_client(client, team):
-    team.can_view_orders = True
-    team.can_view_vouchers = True
-    team.save()
-    t = team.tokens.create(name='Foo')
-    client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
-    return client
-
-
 TEST_ORGANIZER_RES = {
     "name": "Dummy",
     "slug": "dummy"

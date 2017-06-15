@@ -33,3 +33,14 @@ def team(organizer):
 @pytest.fixture
 def user():
     return User.objects.create_user('dummy@dummy.dummy', 'dummy')
+
+
+@pytest.fixture
+def token_client(client, team):
+    team.can_view_orders = True
+    team.can_view_vouchers = True
+    team.all_events = True
+    team.save()
+    t = team.tokens.create(name='Foo')
+    client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
+    return client
