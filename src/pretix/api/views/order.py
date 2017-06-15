@@ -30,6 +30,7 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ('datetime', 'code', 'status')
     filter_class = OrderFilter
     lookup_field = 'code'
+    permission = 'can_view_orders'
 
     def get_queryset(self):
         return self.request.event.orders.prefetch_related(
@@ -87,6 +88,7 @@ class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ('order__datetime', 'positionid')
     ordering_fields = ('order__code', 'order__datetime', 'positionid', 'attendee_name', 'order__status',)
     filter_class = OrderPositionFilter
+    permission = 'can_view_orders'
 
     def get_queryset(self):
         return OrderPosition.objects.filter(order__event=self.request.event).prefetch_related(
@@ -152,6 +154,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     filter_class = InvoiceFilter
     lookup_field = 'invoice_no'
     lookup_url_kwarg = 'invoice_no'
+    permission = 'can_view_orders'
 
     def get_queryset(self):
         return self.request.event.invoices.prefetch_related('lines').select_related('order')

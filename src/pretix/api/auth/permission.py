@@ -24,6 +24,11 @@ class EventPermission(BasePermission):
                 return False
             request.organizer = request.event.organizer
             request.eventpermset = perm_holder.get_event_permission_set(request.organizer, request.event)
+
+            if hasattr(view, 'permission'):
+                if view.permission and view.permission not in request.eventpermset:
+                    return False
+
         elif 'organizer' in request.resolver_match.kwargs:
             request.organizer = Organizer.objects.filter(
                 slug=request.resolver_match.kwargs['organizer'],
@@ -31,4 +36,8 @@ class EventPermission(BasePermission):
             if not request.organizer or not perm_holder.has_organizer_permission(request.organizer):
                 return False
             request.orgapermset = perm_holder.get_organizer_permission_set(request.organizer)
+
+            if hasattr(view, 'permission'):
+                if view.permission and view.permission not in request.orgapermset:
+                    return False
         return True

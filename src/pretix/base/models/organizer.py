@@ -237,7 +237,7 @@ class TeamAPIToken(models.Model):
         :return: set of permissions
         """
         has_event_access = (self.team.all_events and organizer == self.team.organizer) or (
-            event in self.team.limit_events
+            event in self.team.limit_events.all()
         )
         return self.team.permission_set() if has_event_access else set()
 
@@ -261,7 +261,7 @@ class TeamAPIToken(models.Model):
         :return: bool
         """
         has_event_access = (self.team.all_events and organizer == self.team.organizer) or (
-            event in self.team.limit_events
+            event in self.team.limit_events.all()
         )
         return has_event_access and (not perm_name or self.team.has_permission(perm_name))
 

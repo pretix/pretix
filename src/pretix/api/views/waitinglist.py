@@ -18,6 +18,7 @@ class WaitingListViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ('created',)
     ordering_fields = ('id', 'created', 'email', 'item')
     filter_class = WaitingListFilter
+    permission = 'can_view_orders'
 
     def get_queryset(self):
         return self.request.event.waitinglistentries.all()

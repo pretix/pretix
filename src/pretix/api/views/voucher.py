@@ -32,6 +32,7 @@ class VoucherViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ('id',)
     ordering_fields = ('id', 'code', 'max_usages', 'valid_until', 'value')
     filter_class = VoucherFilter
+    permission = 'can_view_vouchers'
 
     def get_queryset(self):
         return self.request.event.vouchers.all()
