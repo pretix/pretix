@@ -6028,3 +6028,27 @@ url('../opensans_regular_macroman/OpenSans-Regular-webfont.svg#open_sansregular'
     font-style: normal;
 
 }
+
+
+/* Frontpage */
+.sectionbox {
+    width: 50%;
+    float: left;
+    min-height: 70px;
+}
+.sectionbox .icon {
+    float: left;
+    font-size: 48px;
+    width: 70px;
+    text-align: center;
+}
+.sectionbox .text {
+    margin-left: 70px;
+}
+
+@media screen and (max-width: 480px) {
+    .sectionbox {
+        width: 100%;
+        float: none;
+    }
+}
