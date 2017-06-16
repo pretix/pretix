@@ -19,6 +19,8 @@ import os
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
+from datetime import date
+
 sys.path.insert(0, os.path.abspath('../src'))
 
 import django
@@ -55,7 +57,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pretix'
-copyright = '2014-2017, Raphael Michel'
+copyright = '2014-{}, Raphael Michel'.format(date.today().year)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -115,7 +117,9 @@ pygments_style = 'sphinx'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+html_theme_options = {
+    'logo_only': True,
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
@@ -129,7 +133,7 @@ pygments_style = 'sphinx'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#html_logo = None
+html_logo = 'images/logo-white.svg'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -139,7 +143,11 @@ pygments_style = 'sphinx'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = [
+    '_static',
+    os.path.abspath('../src/pretix/static/fonts/'),
+    os.path.abspath('../src/pretix/static/fontawesome/fonts/'),
+]
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
@@ -171,7 +179,7 @@ html_use_index = False
 #html_split_index = False
 
 # If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
+html_show_sourcelink = True
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 #html_show_sphinx = True
@@ -190,11 +198,8 @@ html_use_index = False
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'pretixdoc'
 
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-if not on_rtd:  # only import and set the theme if we're building docs locally
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = 'pretix_theme'
+html_theme_path = [os.path.abspath('_themes')]
 
 
 # -- Options for LaTeX output ---------------------------------------------
