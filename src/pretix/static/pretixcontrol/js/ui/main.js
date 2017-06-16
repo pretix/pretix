@@ -105,11 +105,11 @@ $(function () {
     // Vouchers
     $("#voucher-bulk-codes-generate").click(function () {
         var num = $("#voucher-bulk-codes-num").val();
+        var prefix = $('#voucher-bulk-codes-prefix').val();
         if (num != "") {
-            $(".form-group:has(#voucher-bulk-codes-num)").addClass("has-error");
             var url = $(this).attr("data-rng-url");
             $("#id_codes").html("Generating...");
-            $.getJSON(url + '?num=' + num, function (data) {
+            $.getJSON(url + '?num=' + num + '&prefix=' + escape(prefix), function (data) {
                 $("#id_codes").val(data.codes.join("\n"));
             });
         } else {

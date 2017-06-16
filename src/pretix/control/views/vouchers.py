@@ -278,10 +278,11 @@ class VoucherRNG(EventPermissionRequiredMixin, View):
         except ValueError:  # NOQA
             return HttpResponseBadRequest()
 
+        prefix = request.GET.get('prefix')
         while len(codes) < num:
             new_codes = set()
             for i in range(min(num - len(codes), 500)):  # Work around SQLite's SQLITE_MAX_VARIABLE_NUMBER
-                new_codes.add(_generate_random_code())
+                new_codes.add(_generate_random_code(prefix=prefix))
             new_codes -= set([v['code'] for v in Voucher.objects.filter(code__in=new_codes).values('code')])
             codes |= new_codes
 
