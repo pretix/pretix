@@ -221,7 +221,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'pretix.tex', 'pretix Documentation',
+  ('contents', 'pretix.tex', 'pretix Documentation',
    'Raphael Michel', 'manual'),
 ]
 
