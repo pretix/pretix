@@ -109,6 +109,7 @@ $(function () {
         if (num != "") {
             var url = $(this).attr("data-rng-url");
             $("#id_codes").html("Generating...");
+            $(".form-group:has(#voucher-bulk-codes-num)").removeClass("has-error");
             $.getJSON(url + '?num=' + num + '&prefix=' + escape(prefix), function (data) {
                 $("#id_codes").val(data.codes.join("\n"));
             });
