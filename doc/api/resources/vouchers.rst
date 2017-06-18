@@ -6,6 +6,8 @@ Resource description
 
 The voucher resource contains the following public fields:
 
+.. rst-class:: rest-resource-table
+
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================

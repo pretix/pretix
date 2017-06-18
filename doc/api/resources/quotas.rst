@@ -7,6 +7,8 @@ Resource description
 Questions define how many times an item can be sold.
 The quota resource contains the following public fields:
 
+.. rst-class:: rest-resource-table
+
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================

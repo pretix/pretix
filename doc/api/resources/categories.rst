@@ -7,6 +7,8 @@ Resource description
 Categories provide grouping for items (better known as products).
 The category resource contains the following public fields:
 
+.. rst-class:: rest-resource-table
+
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================

@@ -6,6 +6,8 @@ Resource description
 
 The event resource contains the following public fields:
 
+.. rst-class:: rest-resource-table
+
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================

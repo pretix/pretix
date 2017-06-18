@@ -7,6 +7,8 @@ Resource description
 Questions define additional fields that need to be filled out by customers during checkout.
 The question resource contains the following public fields:
 
+.. rst-class:: rest-resource-table
+
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================

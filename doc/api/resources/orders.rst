@@ -6,6 +6,8 @@ Order resource
 
 The order resource contains the following public fields:
 
+.. rst-class:: rest-resource-table
+
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
@@ -50,6 +52,8 @@ downloads                             list of objects            List of ticket 
 
 Order position resource
 -----------------------
+
+.. rst-class:: rest-resource-table
 
 ===================================== ========================== =======================================================
 Field                                 Type                       Description

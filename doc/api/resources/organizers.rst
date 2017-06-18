@@ -9,6 +9,7 @@ organizer and various settings, such as teams and permissions, are managed on or
 
 The organizer resource contains the following public fields:
 
+.. rst-class:: rest-resource-table
 
 ===================================== ========================== =======================================================
 Field                                 Type                       Description

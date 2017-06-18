@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.conf.urls import include, url
-from rest_framework.documentation import include_docs_urls
+from django.views.generic import RedirectView
 
 import pretix.control.urls
 import pretix.presale.urls
@@ -16,8 +16,8 @@ base_patterns = [
     url(r'^jsi18n/(?P<lang>[a-zA-Z-_]+)/$', js_catalog.js_catalog, name='javascript-catalog'),
     url(r'^metrics$', metrics.serve_metrics,
         name='metrics'),
-    url(r'^api/v1/docs/', include_docs_urls(title='pretix API')),
     url(r'^api/v1/', include('pretix.api.urls', namespace='api-v1')),
+    url(r'^api/$', RedirectView.as_view(url='/api/v1/'), name='redirect-api-version')
 ]
 
 control_patterns = [

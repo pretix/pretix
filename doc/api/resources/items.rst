@@ -7,6 +7,8 @@ Resource description
 Items (better known as products) are the things that can be sold using pretix.
 The item resource contains the following public fields:
 
+.. rst-class:: rest-resource-table
+
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
