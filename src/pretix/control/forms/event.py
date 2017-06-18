@@ -295,7 +295,7 @@ class EventSettingsForm(SettingsForm):
         help_text=_("Public email address for contacting the organizer")
     )
     cancel_allow_user = forms.BooleanField(
-        label=_("Allow user to cancel unpaid orders"),
+        label=_("Allow users to cancel unpaid orders"),
         help_text=_("If checked, users can cancel orders by themselves as long as they are not yet paid."),
         required=False
     )
