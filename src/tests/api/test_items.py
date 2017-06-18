@@ -232,6 +232,7 @@ TEST_QUESTION_RES = {
     "type": "C",
     "required": False,
     "items": [],
+    "position": 0,
     "options": [
         {
             "id": 0,
