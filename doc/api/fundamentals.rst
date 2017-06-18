@@ -133,5 +133,13 @@ Money                 String with decimal number   ``"23.42"``
 Currency              String with ISO 4217 code    ``"EUR"``, ``"USD"``
 ===================== ============================ ===================================
 
+Query parameters
+^^^^^^^^^^^^^^^^
+
+Most list endpoints allow a filtering of the results using query parameters. In this case, booleans should be passed
+as the string values ``true`` and ``false``.
+
+If the ``ordering`` parameter is documented for a resource, you can use it to sort the result set by one of the allowed
+fields. Prepend a ``-`` to the field name to reverse the sort order.
 
 .. _CSRF policies: https://docs.djangoproject.com/en/1.11/ref/csrf/#ajax

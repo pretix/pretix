@@ -54,7 +54,7 @@ class QuestionSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'question', 'type', 'required', 'items', 'options')
+        fields = ('id', 'question', 'type', 'required', 'items', 'options', 'position')
 
 
 class QuotaSerializer(I18nAwareModelSerializer):

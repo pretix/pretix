@@ -12,5 +12,4 @@ in functionality over time.
    :maxdepth: 2
 
    fundamentals
-   organizers
-   events
+   resources/index
