@@ -165,6 +165,7 @@ class Voucher(LoggedModel):
         verbose_name = _("Voucher")
         verbose_name_plural = _("Vouchers")
         unique_together = (("event", "code"),)
+        ordering = ('code', )
 
     def __str__(self):
         return self.code
