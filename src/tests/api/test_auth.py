@@ -42,3 +42,12 @@ def test_token_auth_valid(client, team):
     resp = client.get('/api/v1/organizers/')
     assert resp.status_code == 200
     assert len(resp.data['results']) == 1
+
+
+@pytest.mark.django_db
+def test_token_auth_inactive(client, team):
+    Organizer.objects.create(name='Other dummy', slug='dummy')
+    t = team.tokens.create(name='Foo', active=False)
+    client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
+    resp = client.get('/api/v1/organizers/')
+    assert resp.status_code == 401

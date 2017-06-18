@@ -1,14 +1,16 @@
 from django.db.models import F, Q
 from django.utils.timezone import now
-from django_filters.rest_framework import BooleanFilter
-from rest_framework import filters, viewsets
+from django_filters.rest_framework import (
+    BooleanFilter, DjangoFilterBackend, FilterSet,
+)
+from rest_framework import viewsets
+from rest_framework.filters import OrderingFilter
 
-from pretix.api.filters.ordering import ExplicitOrderingFilter
 from pretix.api.serializers.voucher import VoucherSerializer
 from pretix.base.models import Voucher
 
 
-class VoucherFilter(filters.FilterSet):
+class VoucherFilter(FilterSet):
     active = BooleanFilter(method='filter_active')
 
     class Meta:
@@ -28,7 +30,7 @@ class VoucherFilter(filters.FilterSet):
 class VoucherViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VoucherSerializer
     queryset = Voucher.objects.none()
-    filter_backends = (filters.DjangoFilterBackend, ExplicitOrderingFilter)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering = ('id',)
     ordering_fields = ('id', 'code', 'max_usages', 'valid_until', 'value')
     filter_class = VoucherFilter

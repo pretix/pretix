@@ -1,6 +1,7 @@
-from rest_framework import filters, viewsets
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
+from rest_framework import viewsets
+from rest_framework.filters import OrderingFilter
 
-from pretix.api.filters.ordering import ExplicitOrderingFilter
 from pretix.api.serializers.item import (
     ItemCategorySerializer, ItemSerializer, QuestionSerializer,
     QuotaSerializer,
@@ -8,7 +9,7 @@ from pretix.api.serializers.item import (
 from pretix.base.models import Item, ItemCategory, Question, Quota
 
 
-class ItemFilter(filters.FilterSet):
+class ItemFilter(FilterSet):
     class Meta:
         model = Item
         fields = ['active', 'category', 'admission', 'tax_rate', 'free_price']
@@ -17,7 +18,7 @@ class ItemFilter(filters.FilterSet):
 class ItemViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ItemSerializer
     queryset = Item.objects.none()
-    filter_backends = (filters.DjangoFilterBackend, ExplicitOrderingFilter)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
     filter_class = ItemFilter
@@ -26,7 +27,7 @@ class ItemViewSet(viewsets.ReadOnlyModelViewSet):
         return self.request.event.items.prefetch_related('variations', 'addons').all()
 
 
-class ItemCategoryFilter(filters.FilterSet):
+class ItemCategoryFilter(FilterSet):
     class Meta:
         model = ItemCategory
         fields = ['is_addon']
@@ -35,7 +36,7 @@ class ItemCategoryFilter(filters.FilterSet):
 class ItemCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ItemCategorySerializer
     queryset = ItemCategory.objects.none()
-    filter_backends = (filters.DjangoFilterBackend, ExplicitOrderingFilter)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
     filter_class = ItemCategoryFilter
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
@@ -47,7 +48,7 @@ class ItemCategoryViewSet(viewsets.ReadOnlyModelViewSet):
 class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = QuestionSerializer
     queryset = Question.objects.none()
-    filter_backends = (ExplicitOrderingFilter,)
+    filter_backends = (OrderingFilter,)
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
 
@@ -58,7 +59,7 @@ class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
 class QuotaViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = QuotaSerializer
     queryset = Quota.objects.none()
-    filter_backends = (ExplicitOrderingFilter,)
+    filter_backends = (OrderingFilter,)
     ordering_fields = ('id', 'size')
     ordering = ('id',)
 

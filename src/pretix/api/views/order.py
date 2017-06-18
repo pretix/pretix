@@ -1,10 +1,11 @@
 import django_filters
 from django.http import FileResponse
-from rest_framework import filters, viewsets
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
+from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.exceptions import APIException, NotFound, PermissionDenied
+from rest_framework.filters import OrderingFilter
 
-from pretix.api.filters.ordering import ExplicitOrderingFilter
 from pretix.api.serializers.order import (
     InvoiceSerializer, OrderPositionSerializer, OrderSerializer,
 )
@@ -16,7 +17,7 @@ from pretix.base.services.tickets import (
 from pretix.base.signals import register_ticket_outputs
 
 
-class OrderFilter(filters.FilterSet):
+class OrderFilter(FilterSet):
     class Meta:
         model = Order
         fields = ['code', 'status', 'email', 'locale']
@@ -25,7 +26,7 @@ class OrderFilter(filters.FilterSet):
 class OrderViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderSerializer
     queryset = Order.objects.none()
-    filter_backends = (filters.DjangoFilterBackend, ExplicitOrderingFilter)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering = ('datetime',)
     ordering_fields = ('datetime', 'code', 'status')
     filter_class = OrderFilter
@@ -68,7 +69,7 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
             return resp
 
 
-class OrderPositionFilter(filters.FilterSet):
+class OrderPositionFilter(FilterSet):
     order = django_filters.CharFilter(name='order', lookup_expr='code')
     has_checkin = django_filters.rest_framework.BooleanFilter(method='has_checkin_qs')
 
@@ -83,7 +84,7 @@ class OrderPositionFilter(filters.FilterSet):
 class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderPositionSerializer
     queryset = OrderPosition.objects.none()
-    filter_backends = (filters.DjangoFilterBackend, ExplicitOrderingFilter)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering = ('order__datetime', 'positionid')
     ordering_fields = ('order__code', 'order__datetime', 'positionid', 'attendee_name', 'order__status',)
     filter_class = OrderPositionFilter
@@ -129,7 +130,7 @@ class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):
             return resp
 
 
-class InvoiceFilter(filters.FilterSet):
+class InvoiceFilter(FilterSet):
     refers = django_filters.CharFilter(name='refers', lookup_expr='invoice_no__iexact')
     order = django_filters.CharFilter(name='order', lookup_expr='code__iexact')
 
@@ -147,7 +148,7 @@ class RetryException(APIException):
 class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = InvoiceSerializer
     queryset = Invoice.objects.none()
-    filter_backends = (filters.DjangoFilterBackend, ExplicitOrderingFilter)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering = ('invoice_no',)
     ordering_fields = ('invoice_no', 'date')
     filter_class = InvoiceFilter
