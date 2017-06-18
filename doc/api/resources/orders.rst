@@ -75,8 +75,8 @@ downloads                             list of objects            List of ticket 
 ===================================== ========================== =======================================================
 
 
-Endpoints
----------
+Order endpoints
+---------------
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/
 
@@ -104,24 +104,62 @@ Endpoints
         "previous": null,
         "results": [
           {
-            "id": 1,
-            "question": {"en": "T-Shirt size"},
-            "type": "C",
-            "required": false,
-            "items": [1, 2],
-            "position": 1,
-            "options": [
+            "code": "ABC12",
+            "status": "p",
+            "secret": "k24fiuwvu8kxz3y1",
+            "email": "tester@example.org",
+            "locale": "en",
+            "datetime": "2017-12-01T10:00:00Z",
+            "expires": "2017-12-10T10:00:00Z",
+            "payment_date": "2017-12-05",
+            "payment_provider": "banktransfer",
+            "payment_fee": "0.00",
+            "payment_fee_tax_rate": "0.00",
+            "payment_fee_tax_value": "0.00",
+            "total": "23.00",
+            "comment": "",
+            "invoice_address": {
+                "last_modified": "2017-12-01T10:00:00Z",
+                "company": "Sample company",
+                "name": "John Doe",
+                "street": "Test street 12",
+                "zipcode": "12345",
+                "city": "Testington",
+                "country": "Testikistan",
+                "vat_id": "EU123456789"
+            },
+            "positions": [
               {
-                "id": 1,
-                "answer": {"en": "S"}
-              },
+                "id": 23442,
+                "order": "ABC12",
+                "positionid": 1,
+                "item": 1345,
+                "variation": null,
+                "price": "23.00",
+                "attendee_name": "Peter",
+                "attendee_email": null,
+                "voucher": null,
+                "tax_rate": "0.00",
+                "tax_value": "0.00",
+                "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+                "addon_to": null,
+                "checkins": [
+                  {
+                    "datetime": "2017-12-25T12:45:23Z"
+                  }
+                ],
+                "downloads": [
+                  {
+                    "output": "pdf",
+                    "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/pdf/"
+                  }
+                ]
+              }
+            ],
+            "downloads": [
               {
-                "id": 2,
-                "answer": {"en": "M"}
-              },
-              {
-                "id": 3,
-                "answer": {"en": "L"}
+                "output": "pdf",
+                "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/download/pdf/"
               }
             ]
           }
@@ -129,23 +167,27 @@ Endpoints
       }
 
    :query integer page: The page number in case of a multi-page result set, default is 1
-   :query string ordering: Manually set the ordering of results. Valid fields to be used are ``id`` and ``position``.
-                           Default: ``position``
+   :query string ordering: Manually set the ordering of results. Valid fields to be used are ``datetime``, ``code`` and
+                           ``status``. Default: ``datetime``
+   :query string code: Only return orders that match the given order code
+   :query string status: Only return orders in the given order status (see above)
+   :query string email: Only return orders created with the given email address
+   :query string locale: Only return orders with the given customer locale
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
-.. http:get:: /api/v1/organizers/(organizer)/events/(event)/questions/(id)/
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/
 
-   Returns information on one question, identified by its ID.
+   Returns information on one order, identified by its order code.
 
    **Example request**:
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/sampleconf/questions/1/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -158,30 +200,280 @@ Endpoints
       Content-Type: text/javascript
 
       {
-        "id": 1,
-        "question": {"en": "T-Shirt size"},
-        "type": "C",
-        "required": false,
-        "items": [1, 2],
-        "position": 1,
-        "options": [
+        "code": "ABC12",
+        "status": "p",
+        "secret": "k24fiuwvu8kxz3y1",
+        "email": "tester@example.org",
+        "locale": "en",
+        "datetime": "2017-12-01T10:00:00Z",
+        "expires": "2017-12-10T10:00:00Z",
+        "payment_date": "2017-12-05",
+        "payment_provider": "banktransfer",
+        "payment_fee": "0.00",
+        "payment_fee_tax_rate": "0.00",
+        "payment_fee_tax_value": "0.00",
+        "total": "23.00",
+        "comment": "",
+        "invoice_address": {
+            "last_modified": "2017-12-01T10:00:00Z",
+            "company": "Sample company",
+            "name": "John Doe",
+            "street": "Test street 12",
+            "zipcode": "12345",
+            "city": "Testington",
+            "country": "Testikistan",
+            "vat_id": "EU123456789"
+        },
+        "positions": [
           {
-            "id": 1,
-            "answer": {"en": "S"}
-          },
+            "id": 23442,
+            "order": "ABC12",
+            "positionid": 1,
+            "item": 1345,
+            "variation": null,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": null,
+            "voucher": null,
+            "tax_rate": "0.00",
+            "tax_value": "0.00",
+            "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+            "addon_to": null,
+            "checkins": [
+              {
+                "datetime": "2017-12-25T12:45:23Z"
+              }
+            ],
+            "downloads": [
+              {
+                "output": "pdf",
+                "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/pdf/"
+              }
+            ]
+          }
+        ],
+        "downloads": [
           {
-            "id": 2,
-            "answer": {"en": "M"}
-          },
-          {
-            "id": 3,
-            "answer": {"en": "L"}
+            "output": "pdf",
+            "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/download/pdf/"
           }
         ]
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
+   :param code: The ``code`` field of the order to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/download/(output)/
+
+   Download tickets for an order, identified by its order code. Depending on the chosen output, the response might
+   be a ZIP file, PDF file or something else. The order details response contains a list of output options for this
+   partictular order.
+
+   Tickets can be only downloaded if the order is paid and if ticket downloads are active. Note that in some cases the
+   ticket file might not yet have been created. In that case, you will receive a status code :http:statuscode:`409` and
+   you are expected to retry the request after a short period of waiting.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/download/pdf/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/pdf
+
+      ...
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param code: The ``code`` field of the order to fetch
+   :param output: The internal name of the output provider to use
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource
+                    **or** downlodas are not available for this order at this time. The response content will
+                    contain more details.
+   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting vor a few
+                          seconds.
+
+
+Order position endpoints
+------------------------
+
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/
+
+   Returns a list of all order positions within a given event.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/orderpositions/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: text/javascript
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id": 23442,
+            "order": "ABC12",
+            "positionid": 1,
+            "item": 1345,
+            "variation": null,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": null,
+            "voucher": null,
+            "tax_rate": "0.00",
+            "tax_value": "0.00",
+            "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+            "addon_to": null,
+            "checkins": [
+              {
+                "datetime": "2017-12-25T12:45:23Z"
+              }
+            ],
+            "downloads": [
+              {
+                "output": "pdf",
+                "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/pdf/"
+              }
+            ]
+          }
+        ]
+      }
+
+   :query integer page: The page number in case of a multi-page result set, default is 1
+   :query string ordering: Manually set the ordering of results. Valid fields to be used are ``order__code``,
+                           ``order__datetime``, ``positionid``, ``attendee_name``, and ``order__status``. Default:
+                           ``order__datetime,positionid``
+   :query string order: Only return positions of the order with the given order code
+   :query integer item: Only return positions with the purchased item matching the given ID.
+   :query integer variation: Only return positions with the purchased item variation matching the given ID.
+   :query string attendee_name: Only return positions with the given attendee name.
+   :query string secret: Only return positions with the given ticket secret.
+   :query string order__status: Only return positions with the given order status.
+   :query bollean has_checkin: If set to ``true`` or ``false``, only return positions that have or have not been
+                               checked in already.
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
+
+   Returns information on one order position, identified by its internal ID.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: text/javascript
+
+      {
+        "id": 23442,
+        "order": "ABC12",
+        "positionid": 1,
+        "item": 1345,
+        "variation": null,
+        "price": "23.00",
+        "attendee_name": "Peter",
+        "attendee_email": null,
+        "voucher": null,
+        "tax_rate": "0.00",
+        "tax_value": "0.00",
+        "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+        "addon_to": null,
+        "checkins": [
+          {
+            "datetime": "2017-12-25T12:45:23Z"
+          }
+        ],
+        "downloads": [
+          {
+            "output": "pdf",
+            "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/pdf/"
+          }
+        ]
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param id: The ``id`` field of the order position to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/download/(output)/
+
+   Download tickets for one order position, identified by its internal ID.
+   Depending on the chosen output, the response might be a ZIP file, PDF file or something else. The order details
+   response contains a list of output options for this partictular order position.
+
+   Tickets can be only downloaded if the order is paid and if ticket downloads are active. Also, depending on event
+   configuration downloads might be only unavailable for add-on products or non-admission products.
+   Note that in some cases the ticket file might not yet have been created. In that case, you will receive a status
+   code :http:statuscode:`409` and you are expected to retry the request after a short period of waiting.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/pdf/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/pdf
+
+      ...
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param id: The ``id`` field of the order position to fetch
+   :param output: The internal name of the output provider to use
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource
+                    **or** downlodas are not available for this order position at this time. The response content will
+                    contain more details.
+   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting vor a few
+                    seconds.
