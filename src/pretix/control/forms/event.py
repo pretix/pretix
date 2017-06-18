@@ -209,7 +209,7 @@ class EventSettingsForm(SettingsForm):
     presale_start_show_date = forms.BooleanField(
         label=_("Show start date"),
         help_text=_("Show the presale start date before presale has started."),
-        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_presale_start'}),
+        widget=forms.CheckboxInput,
         required=False
     )
     last_order_modification_date = forms.DateTimeField(

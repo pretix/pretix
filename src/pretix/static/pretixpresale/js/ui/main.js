@@ -52,6 +52,14 @@ $(function () {
         copy_answers(idx);
     });
 
+    // Subevent choice
+    if ($(".subevent-toggle").length) {
+        $(".subevent-list").css("max-height", "0").css("position", "absolute").width($(".container").width());
+        $(".subevent-toggle").css("display", "block").click(function() {
+            $(".subevent-list").animate({"max-height": "30px"}, 100);
+        });
+    }
+
     // Lightbox
     lightbox.init();
 });

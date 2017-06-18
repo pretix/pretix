@@ -9,6 +9,7 @@ from django.core.files.storage import default_storage
 from django.core.mail import get_connection
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import Q
 from django.template.defaultfilters import date as _date
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -360,7 +361,16 @@ class Event(EventMixin, LoggedModel):
 
     @property
     def active_subevents(self):
-        return self.subevents.filter(active=True)
+        return self.subevents.filter(active=True).order_by('-date_from', 'name')
+
+    @property
+    def active_future_subevents(self):
+        return self.subevents.filter(
+            Q(active=True) & (
+                Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
+                | Q(date_to__gte=now())
+            )
+        ).order_by('date_from', 'name')
 
 
 class SubEvent(EventMixin, LoggedModel):
