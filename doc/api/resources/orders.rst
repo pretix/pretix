@@ -376,11 +376,13 @@ Order position endpoints
    :query string order: Only return positions of the order with the given order code
    :query integer item: Only return positions with the purchased item matching the given ID.
    :query integer variation: Only return positions with the purchased item variation matching the given ID.
-   :query string attendee_name: Only return positions with the given attendee name.
+   :query string attendee_name: Only return positions with the given value in the attendee_name field. Also, add-on
+                                products positions are shown if they refer to an attendee with the given name.
    :query string secret: Only return positions with the given ticket secret.
    :query string order__status: Only return positions with the given order status.
    :query bollean has_checkin: If set to ``true`` or ``false``, only return positions that have or have not been
                                checked in already.
+   :query integer addon_to: Only return positions that are add-ons to the position with the given ID.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error

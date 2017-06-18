@@ -1,4 +1,5 @@
 import django_filters
+from django.db.models import Q
 from django.http import FileResponse
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
@@ -72,13 +73,18 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
 class OrderPositionFilter(FilterSet):
     order = django_filters.CharFilter(name='order', lookup_expr='code')
     has_checkin = django_filters.rest_framework.BooleanFilter(method='has_checkin_qs')
+    attendee_name = django_filters.CharFilter(method='attendee_name_qs')
 
     def has_checkin_qs(self, queryset, name, value):
         return queryset.filter(checkins__isnull=not value)
 
+    def attendee_name_qs(self, queryset, name, value):
+        return queryset.filter(Q(attendee_name=value) | Q(addon_to__attendee_name=value))
+
     class Meta:
         model = OrderPosition
-        fields = ['item', 'variation', 'attendee_name', 'secret', 'order', 'order__status', 'has_checkin']
+        fields = ['item', 'variation', 'attendee_name', 'secret', 'order', 'order__status', 'has_checkin',
+                  'addon_to']
 
 
 class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):
