@@ -1,8 +1,8 @@
 import string
-from datetime import date
 from decimal import Decimal
 
 from django.db import DatabaseError, models, transaction
+from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 
@@ -56,7 +56,7 @@ class Invoice(models.Model):
     refers = models.ForeignKey('Invoice', related_name='refered', null=True, blank=True)
     invoice_from = models.TextField()
     invoice_to = models.TextField()
-    date = models.DateField(default=date.today)
+    date = models.DateField(default=lambda: timezone.now().date())
     locale = models.CharField(max_length=50, default='en')
     introductory_text = models.TextField(blank=True)
     additional_text = models.TextField(blank=True)

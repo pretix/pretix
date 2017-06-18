@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from decimal import Decimal
 from unittest import mock
 
@@ -6,6 +6,9 @@ import pytest
 from pytz import UTC
 
 from pretix.base.models import InvoiceAddress, Order, OrderPosition
+from pretix.base.services.invoices import (
+    generate_cancellation, generate_invoice,
+)
 
 
 @pytest.fixture
@@ -15,15 +18,15 @@ def item(event):
 
 @pytest.fixture
 def order(event, item):
-    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
-            datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
-            expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
+            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
             total=23, payment_provider='banktransfer', locale='en'
         )
         InvoiceAddress.objects.create(order=o, company="Sample company")
@@ -194,7 +197,7 @@ def test_orderposition_list(token_client, organizer, event, order, item):
         '/api/v1/organizers/{}/events/{}/orderpositions/?has_checkin=true'.format(organizer.slug, event.slug))
     assert [] == resp.data['results']
 
-    order.positions.first().checkins.create(datetime=datetime(2017, 12, 26, 10, 0, 0, tzinfo=UTC))
+    order.positions.first().checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=UTC))
     res['checkins'] = [{'datetime': '2017-12-26T10:00:00Z'}]
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/orderpositions/?has_checkin=true'.format(organizer.slug, event.slug))
@@ -208,5 +211,95 @@ def test_orderposition_detail(token_client, organizer, event, order, item):
     res["item"] = item.pk
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
                                                                                         order.positions.first().pk))
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.fixture
+def invoice(order):
+    testtime = datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        return generate_invoice(order)
+
+
+TEST_INVOICE_RES = {
+    "order": "FOO",
+    "invoice_no": "00001",
+    "is_cancellation": False,
+    "invoice_from": "",
+    "invoice_to": "Sample company",
+    "date": "2017-12-10",
+    "refers": None,
+    "locale": "en",
+    "introductory_text": "",
+    "additional_text": "",
+    "payment_provider_text": "",
+    "footer_text": "",
+    "lines": [
+        {
+            "description": "Budget Ticket",
+            "gross_value": "23.00",
+            "tax_value": "0.00",
+            "tax_rate": "0.00"
+        }
+    ]
+}
+
+
+@pytest.mark.django_db
+def test_invoice_list(token_client, organizer, event, order, invoice):
+    res = dict(TEST_INVOICE_RES)
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?order=FOO'.format(organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?order=BAR'.format(organizer.slug, event.slug))
+    assert [] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?invoice_no={}'.format(
+        organizer.slug, event.slug, invoice.invoice_no))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?invoice_no=XXX'.format(
+        organizer.slug, event.slug))
+    assert [] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?locale=en'.format(
+        organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?locale=de'.format(
+        organizer.slug, event.slug))
+    assert [] == resp.data['results']
+
+    ic = generate_cancellation(invoice)
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?is_cancellation=false'.format(
+        organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?is_cancellation=true'.format(
+        organizer.slug, event.slug))
+    assert len(resp.data['results']) == 1
+    assert resp.data['results'][0]['invoice_no'] == ic.invoice_no
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?refers={}'.format(
+        organizer.slug, event.slug, invoice.invoice_no))
+    assert len(resp.data['results']) == 1
+    assert resp.data['results'][0]['invoice_no'] == ic.invoice_no
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?refers={}'.format(
+        organizer.slug, event.slug, ic.invoice_no))
+    assert [] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_invoice_detail(token_client, organizer, event, invoice):
+    res = dict(TEST_INVOICE_RES)
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/{}/'.format(organizer.slug, event.slug,
+                                                                                  invoice.invoice_no))
     assert resp.status_code == 200
     assert res == resp.data
