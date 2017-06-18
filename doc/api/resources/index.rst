@@ -11,3 +11,6 @@ Resources and endpoints
    questions
    quotas
    orders
+   invoices
+   vouchers
+   waitinglist

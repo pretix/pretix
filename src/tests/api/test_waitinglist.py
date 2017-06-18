@@ -86,7 +86,7 @@ def test_wle_list(token_client, organizer, event, wle, item):
     v = event.vouchers.create(item=item, price_mode='set', value=12, tag='Foo')
     wle.voucher = v
     wle.save()
-    res['voucher'] = v.code
+    res['voucher'] = v.pk
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/waitinglistentries/?has_voucher=true'.format(organizer.slug, event.slug))
     assert [res] == resp.data['results']
