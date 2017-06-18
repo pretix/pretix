@@ -15,6 +15,10 @@ def invoice_filename(instance, filename: str) -> str:
     )
 
 
+def today():
+    return timezone.now().date()
+
+
 class Invoice(models.Model):
     """
     Represents an invoice that is issued because of an order. Because invoices are legally required
@@ -56,7 +60,7 @@ class Invoice(models.Model):
     refers = models.ForeignKey('Invoice', related_name='refered', null=True, blank=True)
     invoice_from = models.TextField()
     invoice_to = models.TextField()
-    date = models.DateField(default=lambda: timezone.now().date())
+    date = models.DateField(default=today)
     locale = models.CharField(max_length=50, default='en')
     introductory_text = models.TextField(blank=True)
     additional_text = models.TextField(blank=True)
