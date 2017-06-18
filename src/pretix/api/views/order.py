@@ -73,7 +73,6 @@ class OrderPositionFilter(filters.FilterSet):
     has_checkin = django_filters.rest_framework.BooleanFilter(method='has_checkin_qs')
 
     def has_checkin_qs(self, queryset, name, value):
-        print(value)
         return queryset.filter(checkins__isnull=not value)
 
     class Meta:
