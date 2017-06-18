@@ -1,3 +1,6 @@
+import importlib
+
+from django.apps import apps
 from django.conf.urls import include, url
 from rest_framework import routers
 
@@ -19,6 +22,12 @@ event_router.register(r'orders', order.OrderViewSet)
 event_router.register(r'orderpositions', order.OrderPositionViewSet)
 event_router.register(r'invoices', order.InvoiceViewSet)
 event_router.register(r'waitinglistentries', waitinglist.WaitingListViewSet)
+
+# Force import of all plugins to give them a chance to register URLs with the router
+for app in apps.get_app_configs():
+    if hasattr(app, 'PretixPluginMeta'):
+        if importlib.util.find_spec(app.name + '.urls'):
+            importlib.import_module(app.name + '.urls')
 
 urlpatterns = [
     url(r'^', include(router.urls)),

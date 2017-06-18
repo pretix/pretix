@@ -246,6 +246,10 @@ REST_FRAMEWORK = {
         'pretix.api.auth.token.TeamTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'UNICODE_JSON': False
 }
 
 

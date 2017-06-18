@@ -96,3 +96,35 @@ correctly ensure that:
 * The ``request.event`` attribute contains the correct ``Event`` object
 * The ``request.organizer`` attribute contains the correct ``Organizer`` object
 * The locale is set correctly
+
+REST API viewsets
+-----------------
+
+Our REST API is built upon `Django REST Framework`_ (DRF). DRF has two important concepts that are different from
+standard Django request handling: There are `ViewSets`_ to group related views in a single class and `Routers`_ to
+automatically build URL configurations from them.
+
+To integrate a custom viewset with pretix' REST API, you can just register with one of our routers within the
+``urls.py`` module of your plugin::
+
+
+    from pretix.api.urls import event_router, router, orga_router
+
+    router.register('global_viewset', MyViewSet)
+    orga_router.register('orga_level_viewset', MyViewSet)
+    event_router.register('event_level_viewset', MyViewSet)
+
+Routes registered with ``router`` are inserted into the global API space at ``/api/v1/``. Routes registered with
+``orga_router`` will be included at ``/api/v1/organizers/(organizer)/`` and routes registered with ``event_router``
+will be included at ``/api/v1/organizers/(organizer)/events/(event)/``.
+
+In case of ``orga_router`` and ``event_router``, permission checking is done for you similarly as with custom views
+in the control panel. However, you need to make sure on your own only to return the correct subset of data! ``request
+.event`` and ``request.organizer`` are available as usual.
+
+.. warning:: It is important that you do this in the ``yourplugin.urls`` module, otherwise pretix will not find your
+             routes early enough during system startup.
+
+.. _Django REST Framework: http://www.django-rest-framework.org/
+.. _ViewSets: http://www.django-rest-framework.org/api-guide/viewsets/
+.. _Routers: http://www.django-rest-framework.org/api-guide/routers/
