@@ -20,9 +20,9 @@ def _generate_random_code(prefix=None):
     return get_random_string(length=settings.ENTROPY['voucher_code'], allowed_chars=charset)
 
 
-def generate_code():
+def generate_code(prefix=None):
     while True:
-        code = _generate_random_code()
+        code = _generate_random_code(prefix=prefix)
         if not Voucher.objects.filter(code=code).exists():
             return code
 
