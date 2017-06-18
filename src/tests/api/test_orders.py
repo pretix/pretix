@@ -131,6 +131,14 @@ def test_order_detail(token_client, organizer, event, order, item):
     assert resp.status_code == 200
     assert res == resp.data
 
+    order.status = 'p'
+    order.save()
+    event.settings.ticketoutput_pdf__enabled = True
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/'.format(organizer.slug, event.slug,
+                                                                                order.code))
+    assert len(resp.data['downloads']) == 1
+    assert len(resp.data['positions'][0]['downloads']) == 1
+
 
 @pytest.mark.django_db
 def test_orderposition_list(token_client, organizer, event, order, item):
@@ -207,12 +215,20 @@ def test_orderposition_list(token_client, organizer, event, order, item):
 @pytest.mark.django_db
 def test_orderposition_detail(token_client, organizer, event, order, item):
     res = dict(TEST_ORDERPOSITION_RES)
-    res["id"] = order.positions.first().pk
+    op = order.positions.first()
+    res["id"] = op.pk
     res["item"] = item.pk
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
-                                                                                        order.positions.first().pk))
+                                                                                        op.pk))
     assert resp.status_code == 200
     assert res == resp.data
+
+    order.status = 'p'
+    order.save()
+    event.settings.ticketoutput_pdf__enabled = True
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
+                                                                                        op.pk))
+    assert len(resp.data['downloads']) == 1
 
 
 @pytest.fixture

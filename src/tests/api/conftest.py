@@ -21,7 +21,8 @@ def organizer():
 def event(organizer):
     return Event.objects.create(
         organizer=organizer, name='Dummy', slug='dummy',
-        date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC), plugins='pretix.plugins.banktransfer'
+        date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC),
+        plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf'
     )
 
 
