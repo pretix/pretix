@@ -1,39 +1,30 @@
-Coding style
-============
+Coding style and quality
+========================
 
-Python code
------------
+* Basically, we want all python code to follow the `PEP 8`_ standard. There are a few exceptions where
+  we see things differently or just aren't that strict. The ``setup.cfg`` file in the project's source
+  folder contains definitions that allow `flake8`_ to check for violations automatically. See :ref:`checksandtests`
+  for more information. Use four spaces for indentation.
 
-* Basically: Follow `PEP 8`_.
+* We sort our imports by a certain schema, but you don't have to do this by hand. Again, ``setup.cfg`` contains
+  some definitions that allow the command ``isort -rc <directory>`` to automatically sort the imports in your source
+  files.
 
-  Use `flake8`_ to check for conformance problems. The project includes a setup.cfg file
-  with a default configuration for flake8 that excludes migrations and other non-relevant
-  code parts. It also silences a few checks, e.g. ``N802`` (function names should be lowercase)
-  and increases the maximum line length to more than 79 characters. **However** you should
-  still name all your functions lowercase [#f1]_ and keep your lines short when possible.
+* For templates and models, please take a look at the `Django Coding Style`_. We like Django's `class-based views`_ and
+  kindly ask you to use them where appropriate.
 
-* Our build server will reject all code violating other flake8 checks than the following:
+* Please remember to always mark all strings ever displayed to any user for `translation`_.
 
-  * E123: closing bracket does not match indentation of opening bracket’s line
-  * F403: ``from module import *`` used; unable to detect undefined names
-  * F401: module imported but unused
-  * N802: function names should be lowercase
-
- So please make sure that you *always* follow all other rules and break these rules *only when
- it makes sense*.
-
-* Use ``isort -rc pretix`` in the source directory to order your imports.
-
-* Indent your code with four spaces.
-
-* For templates and models, follow the `Django Coding Style`_.
-
-* Use Django's class-based views
-
-* Always mark all strings ever displayed to any user for translation.
+* We expect all new code to come with proper tests. When writing new tests, please write them using `pytest-style`_
+  test functions and raw ``assert`` statements. Use `fixtures`_ to prevent repetitive code. Some old parts of pretix'
+  test suite are in the style of Python's unit test module. If you extend those files, you might continue in this style,
+  but please use pytest style for any new test files.
 
 
 .. _PEP 8: http://legacy.python.org/dev/peps/pep-0008/
 .. _flake8: https://pypi.python.org/pypi/flake8
 .. _Django Coding Style: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
-.. [#f1] But Python's very own ``unittest`` module forces us to use ``setUp`` as a method name...
+.. _translation: https://docs.djangoproject.com/en/1.11/topics/i18n/translation/
+.. _class-based views: https://docs.djangoproject.com/en/1.11/topics/class-based-views/
+.. _pytest-style: https://docs.pytest.org/en/latest/assert.html
+.. _fixtures: https://docs.pytest.org/en/latest/fixture.html

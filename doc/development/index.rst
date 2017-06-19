@@ -6,10 +6,10 @@ Developer documentation
 
    concepts
    setup
-   structure
    contribution/index
    implementation/index
    api/index
+   structure
 
 .. TODO::
    Document settings objects, ItemVariation objects, form fields.

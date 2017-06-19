@@ -1,5 +1,5 @@
-Plugin hooks
-============
+Plugin development
+==================
 
 Contents:
 

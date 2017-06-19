@@ -1,7 +1,11 @@
 .. _`devsetup`:
 
-The development setup
-=====================
+Development setup
+=================
+
+This tutorial helps you to get started hacking with pretix on your own computer. You need this to
+be able to contribute to pretix, but it might also be helpful if you want to write your own plugins.
+If you want to install pretix on a server for actual usage, go to the :ref:`admindocs` instead.
 
 Obtain a copy of the source code
 --------------------------------
@@ -12,6 +16,8 @@ You can just clone our git repository::
 
 External Dependencies
 ---------------------
+Your should install the following on your system:
+
 * Python 3.4 or newer
 * ``pip`` for Python 3 (Debian package: ``python3-pip``)
 * ``pyvenv`` for Python 3 (Debian package: ``python3-venv``)
@@ -49,7 +55,7 @@ The first thing you need are all the main application's dependencies::
     cd src/
     pip3 install -r requirements.txt -r requirements/dev.txt
 
-If you are working with Python 3.4, you will also need (you can skip this for Python 3.5)::
+If you are working with Python 3.4, you will also need (you can skip this for Python 3.5+)::
 
     pip3 install -r requirements/py34.txt
 
@@ -91,11 +97,18 @@ data as suggested above, to the event page at http://localhost:8000/bigevents/20
 
 Code checks and unit tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-Before you check in your code into git, always run the static checkers and unit tests::
+Before you check in your code into git, always run static checkers and linters. If any of these commands fail,
+your pull request will not be merged into pretix. If you have trouble figuring out *why* they fail, create your
+pull request nevertheless and ask us for help, we are happy to assist you.
+
+Execute the following commands to check for code style errors::
 
     flake8 .
     isort -c -rc .
     python manage.py check
+
+Execute the following command to run pretix' test suite (might take a coumple of minutes)::
+
     py.test
 
 .. note:: If you have multiple CPU cores and want to speed up the test suite, you can install the python
@@ -107,9 +120,10 @@ for example::
 
     #!/bin/sh
     cd $GIT_DIR/../src
-    source ../env/bin/activate
-    flake8 --ignore=E123,E128,F403,F401,N802,W503 .
+    flake8 . || exit 1
+    isort -q -rc -c . || exit 1
 
+This keeps you from accidentally creating commits violating the sdtyle guide.
 
 Working with mails
 ^^^^^^^^^^^^^^^^^^
@@ -151,8 +165,14 @@ To build the documentation, run the following command from the ``doc/`` director
 
     make html
 
-You will now find the generated documentation in the ``doc/_build/html/`` subdirectory.
+You will now find the generated documentation in the ``doc/_build/html/`` subdirectory. If you work
+with the documentation a lot, you might find it useful to use sphinx-autobuild::
 
+    pip3 install sphinx-autobuild
+    sphinx-autobuild . _build/html -p 8081
+
+Then, go to http://localhost:8081 for a version of the documentation that automatically re-builds
+whenever you change a source file.
 
 .. _Django's documentation: https://docs.djangoproject.com/en/1.11/ref/django-admin/#runserver
 .. _pretixdroid: https://github.com/pretix/pretixdroid

@@ -1,5 +1,5 @@
-Contribution guide
-==================
+Contributing to pretix
+======================
 
 .. toctree::
    :maxdepth: 2

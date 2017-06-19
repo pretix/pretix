@@ -9,7 +9,8 @@ constructive and friendly feedback on your changes.
 First of all, you'll need pretix running locally on your machine. Head over to :ref:`devsetup` to learn how to do this.
 If you run into any problems on your way, please do not hesitate to ask us anytime!
 
-Please note that we have a :ref:`coc` in place that applies to all communication around the project.
+Please note that we bound ourselves to a :ref:`coc` that applies to all communication around the project. You can be
+assured that we will not tolerate any form of harassment.
 
 Sending a patch
 ---------------

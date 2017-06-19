@@ -1,8 +1,6 @@
 Accepting payments
 ==================
 
-Contents:
-
 .. toctree::
    :maxdepth: 2
 
