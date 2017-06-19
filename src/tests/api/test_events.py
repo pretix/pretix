@@ -12,6 +12,7 @@ TEST_EVENT_RES = {
     "presale_end": None,
     "location": None,
     "slug": "dummy",
+    "has_subevents": False,
 }
 
 

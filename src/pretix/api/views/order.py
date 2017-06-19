@@ -84,7 +84,7 @@ class OrderPositionFilter(FilterSet):
     class Meta:
         model = OrderPosition
         fields = ['item', 'variation', 'attendee_name', 'secret', 'order', 'order__status', 'has_checkin',
-                  'addon_to']
+                  'addon_to', 'subevent']
 
 
 class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):

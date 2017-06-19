@@ -85,6 +85,12 @@ class OrderPositionAddForm(forms.Form):
         label=_('Gross price'),
         help_text=_("Keep empty for the product's default price")
     )
+    subevent = forms.ModelChoiceField(
+        SubEvent.objects.none(),
+        label=_('Sub-event'),
+        required=True,
+        empty_label=None
+    )
 
     def __init__(self, *args, **kwargs):
         order = kwargs.pop('order')
@@ -111,12 +117,17 @@ class OrderPositionAddForm(forms.Form):
         else:
             del self.fields['addon_to']
 
+        if order.event.has_subevents:
+            self.fields['subevent'].queryset = order.event.subevents.all()
+        else:
+            del self.fields['subevent']
+
 
 class OrderPositionChangeForm(forms.Form):
     itemvar = forms.ChoiceField()
     subevent = SubEventChoiceField(
         SubEvent.objects.none(),
-        label=_('New subevent'),
+        label=_('New sub-event'),
         required=True,
         empty_label=None
     )

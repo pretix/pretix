@@ -17,6 +17,7 @@ name                                  string                     The internal na
 size                                  integer                    The size of the quota or ``null`` for unlimited
 items                                 list of integers           List of item IDs this quota acts on.
 variations                            list of integers           List of item variation IDs this quota acts on.
+subevent                              integer                    ID of the sub-event this quota belongs to (or ``null``).
 ===================================== ========================== =======================================================
 
 
@@ -53,7 +54,8 @@ Endpoints
             "name": "Ticket Quota",
             "size": 200,
             "items": [1, 2],
-            "variations": [1, 4, 5, 7]
+            "variations": [1, 4, 5, 7],
+            "subevent": null
           }
         ]
       }
@@ -61,6 +63,7 @@ Endpoints
    :query integer page: The page number in case of a multi-page result set, default is 1
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``id`` and ``position``.
                            Default: ``position``
+   :query integer subevent: Only return quotas of the sub-event with the given ID
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error
@@ -92,7 +95,8 @@ Endpoints
         "name": "Ticket Quota",
         "size": 200,
         "items": [1, 2],
-        "variations": [1, 4, 5, 7]
+        "variations": [1, 4, 5, 7],
+        "subevent": null
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch

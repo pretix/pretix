@@ -138,6 +138,9 @@
                     {% if add_form.addon_to %}
                         {% bootstrap_field add_form.addon_to layout='horizontal' %}
                     {% endif %}
+                    {% if add_form.subevent %}
+                        {% bootstrap_field add_form.subevent layout='horizontal' %}
+                    {% endif %}
                 </div>
             </div>
         </div>

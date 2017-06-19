@@ -28,12 +28,13 @@ TEST_WLE_RES = {
     "voucher": None,
     "item": 2,
     "variation": None,
-    "locale": "en"
+    "locale": "en",
+    "subevent": None,
 }
 
 
 @pytest.mark.django_db
-def test_wle_list(token_client, organizer, event, wle, item):
+def test_wle_list(token_client, organizer, event, wle, item, subevent):
     var = item.variations.create(value="Children")
     res = dict(TEST_WLE_RES)
     wle.variation = var
@@ -90,6 +91,18 @@ def test_wle_list(token_client, organizer, event, wle, item):
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/waitinglistentries/?has_voucher=true'.format(organizer.slug, event.slug))
     assert [res] == resp.data['results']
+
+    wle.subevent = subevent
+    wle.save()
+    res['subevent'] = subevent.pk
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/waitinglistentries/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
+    assert [res] == resp.data['results']
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/waitinglistentries/?subevent={}'.format(organizer.slug, event.slug,
+                                                                                 subevent.pk + 1))
+    assert [] == resp.data['results']
 
 
 @pytest.mark.django_db

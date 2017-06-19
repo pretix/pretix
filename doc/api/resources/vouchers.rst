@@ -40,6 +40,7 @@ quota                                 integer                    An ID of a quot
                                                                  for all items without restriction.
 tag                                   string                     A string that is used for grouping vouchers
 comment                               string                     An internal comment on the voucher
+subevent                              integer                    ID of the sub-event this voucher belongs to (or ``null``).
 ===================================== ========================== =======================================================
 
 
@@ -85,7 +86,8 @@ Endpoints
             "variation": null,
             "quota": null,
             "tag": "testvoucher",
-            "comment": ""
+            "comment": "",
+            "subevent": null
           }
         ]
       }
@@ -107,6 +109,7 @@ Endpoints
    :query integer variation: If set, only vouchers attached to the variation with the given ID will be shown.
    :query integer quota: If set, only vouchers attached to the quota with the given ID will be shown.
    :query string tag: If set, only vouchers with the given tag will be shown.
+   :query integer subevent: Only return vouchers of the sub-event with the given ID
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``id``, ``code``,
                            ``max_usages``, ``valid_until``, and ``value``. Default: ``id``
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -149,7 +152,8 @@ Endpoints
         "variation": null,
         "quota": null,
         "tag": "testvoucher",
-        "comment": ""
+        "comment": "",
+        "subevent": null
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch

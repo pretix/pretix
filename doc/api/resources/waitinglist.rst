@@ -23,6 +23,7 @@ item                                  integer                    An ID of an ite
 variation                             integer                    An ID of a variation the user is waiting to be
                                                                  available again (or ``null``)
 locale                                string                     Locale of the waiting user
+subevent                              integer                    ID of the sub-event this entry belongs to (or ``null``).
 ===================================== ========================== =======================================================
 
 
@@ -61,7 +62,8 @@ Endpoints
             "voucher": null,
             "item": 2,
             "variation": null,
-            "locale": "en"
+            "locale": "en",
+            "subevent": null
           }
         ]
       }
@@ -73,6 +75,7 @@ Endpoints
                                have not been sent a voucher.
    :query integer item: If set, only entries of users waiting for the item with the given ID will be shown.
    :query integer variation: If set, only entries of users waiting for the variation with the given ID will be shown.
+   :query integer subevent: Only return entries of the sub-event with the given ID
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``id``, ``created``,
                            ``email``, ``item``. Default: ``created``
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -108,7 +111,8 @@ Endpoints
         "voucher": null,
         "item": 2,
         "variation": null,
-        "locale": "en"
+        "locale": "en",
+        "subevent": null
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch

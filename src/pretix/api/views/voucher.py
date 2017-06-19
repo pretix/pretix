@@ -16,7 +16,7 @@ class VoucherFilter(FilterSet):
     class Meta:
         model = Voucher
         fields = ['code', 'max_usages', 'redeemed', 'block_quota', 'allow_ignore_quota',
-                  'price_mode', 'value', 'item', 'variation', 'quota', 'tag']
+                  'price_mode', 'value', 'item', 'variation', 'quota', 'tag', 'subevent']
 
     def filter_active(self, queryset, name, value):
         if value:

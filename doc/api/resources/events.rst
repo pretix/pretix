@@ -24,6 +24,8 @@ is_public                             boolean                    If ``true``, th
 presale_start                         datetime                   The date at which the ticket shop opens (or ``null``)
 presale_end                           datetime                   The date at which the ticket shop closes (or ``null``)
 location                              multi-lingual string       The event location (or ``null``)
+has_subevents                         boolean                    ``True`` if the sub-event feature is active for this
+                                                                 event
 ===================================== ========================== =======================================================
 
 
@@ -67,6 +69,7 @@ Endpoints
             "presale_start": null,
             "presale_end": null,
             "location": null,
+            "has_subevents": false
           }
         ]
       }
@@ -109,6 +112,7 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "has_subevents": false
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch

@@ -520,12 +520,13 @@ class OrderChangeManager:
                                'price of the order as partial payments or refunds are not yet supported.'),
         'addon_to_required': _('This is an addon product, please select the base position it should be added to.'),
         'addon_invalid': _('The selected base position does not allow you to add this product as an add-on.'),
+        'subevent_required': _('You need to choose a subevent for the new position.'),
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation', 'price'))
     SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent', 'price'))
     PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
     CancelOperation = namedtuple('CancelOperation', ('position',))
-    AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to'))
+    AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent'))
 
     def __init__(self, order: Order, user):
         self.order = order
@@ -571,9 +572,10 @@ class OrderChangeManager:
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.CancelOperation(position))
 
-    def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: Order):
+    def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: Order,
+                     subevent: SubEvent):
         if price is None:
-            price = item.default_price if variation is None else variation.price
+            price = get_price(item, variation, subevent=subevent)
         if price is None:
             raise OrderError(self.error_messages['product_invalid'])
         if not addon_to and item.category and item.category.is_addon:
@@ -581,10 +583,13 @@ class OrderChangeManager:
         if addon_to:
             if not item.category or item.category_id not in addon_to.item.addons.values_list('addon_category', flat=True):
                 raise OrderError(self.error_messages['addon_invalid'])
+        if self.order.event.has_subevents and not subevent:
+            raise OrderError(self.error_messages['subevent_required'])
 
         self._totaldiff = price
-        self._quotadiff.update(variation.quotas.all() if variation else item.quotas.all())
-        self._operations.append(self.AddOperation(item, variation, price, addon_to))
+        self._quotadiff.update(variation.quotas.filter(subevent=subevent)
+                               if variation else item.quotas.filter(subevent=subevent))
+        self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent))
 
     def _check_quotas(self):
         for quota, diff in self._quotadiff.items():
@@ -676,7 +681,7 @@ class OrderChangeManager:
                 pos = OrderPosition.objects.create(
                     item=op.item, variation=op.variation, addon_to=op.addon_to,
                     price=op.price, order=self.order,
-                    positionid=nextposid
+                    positionid=nextposid, subevent=op.subevent
                 )
                 nextposid += 1
                 self.order.log_action('pretix.event.order.changed.add', user=self.user, data={
@@ -685,7 +690,8 @@ class OrderChangeManager:
                     'variation': op.variation.pk if op.variation else None,
                     'addon_to': op.addon_to.pk if op.addon_to else None,
                     'price': op.price,
-                    'positionid': pos.positionid
+                    'positionid': pos.positionid,
+                    'subevent': op.subevent.pk if op.subevent else None,
                 })
 
     def _recalculate_total_and_payment_fee(self):

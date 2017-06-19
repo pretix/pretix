@@ -6,6 +6,7 @@ Resources and endpoints
 
    organizers
    events
+   subevents
    categories
    items
    questions
