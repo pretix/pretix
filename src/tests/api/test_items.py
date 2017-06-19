@@ -219,6 +219,21 @@ def test_quota_detail(token_client, organizer, event, quota, item):
     assert res == resp.data
 
 
+@pytest.mark.django_db
+def test_quota_availability(token_client, organizer, event, quota, item):
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/quotas/{}/availability/'.format(
+        organizer.slug, event.slug, quota.pk))
+    assert resp.status_code == 200
+    assert {'blocking_vouchers': 0,
+            'available_number': 200,
+            'pending_orders': 0,
+            'cart_positions': 0,
+            'available': True,
+            'total_size': 200,
+            'paid_orders': 0,
+            'waiting_list': 0} == resp.data
+
+
 @pytest.fixture
 def question(event, item):
     q = event.questions.create(question="T-Shirt size", type="C")

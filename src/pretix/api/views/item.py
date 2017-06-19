@@ -1,6 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
+from rest_framework.decorators import detail_route
 from rest_framework.filters import OrderingFilter
+from rest_framework.response import Response
 
 from pretix.api.serializers.item import (
     ItemCategorySerializer, ItemSerializer, QuestionSerializer,
@@ -65,3 +67,21 @@ class QuotaViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return self.request.event.quotas.all()
+
+    @detail_route(methods=['get'])
+    def availability(self, request, *args, **kwargs):
+        quota = self.get_object()
+
+        avail = quota.availability()
+
+        data = {
+            'paid_orders': quota.count_paid_orders(),
+            'pending_orders': quota.count_pending_orders(),
+            'blocking_vouchers': quota.count_blocking_vouchers(),
+            'cart_positions': quota.count_in_cart(),
+            'waiting_list': quota.count_waiting_list_pending(),
+            'available_number': avail[1],
+            'available': avail[0] == Quota.AVAILABILITY_OK,
+            'total_size': quota.size,
+        }
+        return Response(data)
