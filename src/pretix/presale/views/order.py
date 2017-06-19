@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import Sum
@@ -11,13 +9,15 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
-from pretix.base.models.orders import CachedCombinedTicket, InvoiceAddress
+from pretix.base.models.orders import InvoiceAddress
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
 )
 from pretix.base.services.orders import cancel_order
-from pretix.base.services.tickets import generate, generate_order
+from pretix.base.services.tickets import (
+    get_cachedticket_for_order, get_cachedticket_for_position,
+)
 from pretix.base.signals import (
     register_payment_providers, register_ticket_outputs,
 )
@@ -554,22 +554,7 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             return self._download_order()
 
     def _download_order(self):
-        try:
-            ct = CachedCombinedTicket.objects.filter(
-                order=self.order, provider=self.output.identifier
-            ).last()
-        except CachedCombinedTicket.DoesNotExist:
-            ct = None
-
-        if not ct:
-            ct = CachedCombinedTicket.objects.create(
-                order=self.order, provider=self.output.identifier,
-                extension='', type='', file=None)
-            generate_order.apply_async(args=(self.order.id, self.output.identifier))
-
-        if not ct.file:
-            if now() - ct.created > timedelta(minutes=5):
-                generate_order.apply_async(args=(self.order.id, self.output.identifier))
+        ct = get_cachedticket_for_order(self.order, self.output.identifier)
 
         if 'ajax' in self.request.GET:
             return JsonResponse({
@@ -587,22 +572,7 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             return resp
 
     def _download_position(self):
-        try:
-            ct = CachedTicket.objects.filter(
-                order_position=self.order_position, provider=self.output.identifier
-            ).last()
-        except CachedTicket.DoesNotExist:
-            ct = None
-
-        if not ct:
-            ct = CachedTicket.objects.create(
-                order_position=self.order_position, provider=self.output.identifier,
-                extension='', type='', file=None)
-            generate.apply_async(args=(self.order_position.id, self.output.identifier))
-
-        if not ct.file:
-            if now() - ct.created > timedelta(minutes=5):
-                generate.apply_async(args=(self.order_position.id, self.output.identifier))
+        ct = get_cachedticket_for_position(self.order_position, self.output.identifier)
 
         if 'ajax' in self.request.GET:
             return JsonResponse({

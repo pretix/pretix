@@ -1,0 +1,10 @@
+@import "_variables.scss";
+@import "../../pretixbase/scss/colors.scss";
+@import "../../bootstrap/scss/_bootstrap.scss";
+@import "../../pretixbase/scss/webfont.scss";
+
+.alert-docs-link {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+}

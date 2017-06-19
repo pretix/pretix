@@ -1,11 +1,13 @@
 # Functional requirements
 Django>=1.11.*
+djangorestframework==3.6.*
 python-dateutil
 pytz
 django-bootstrap3==8.2.*
 django-formset-js-improved==0.5.0.1
 django-compressor==2.1.1
-django-hierarkey==1.0.*
+django-hierarkey==1.0.*,>=1.0.2
+django-filter==1.0.*
 reportlab==3.2.*
 PyPDF2==1.26.*
 easy-thumbnails==2.4.*
@@ -29,6 +31,9 @@ markdown
 bleach==2.*
 raven
 django-i18nfield>=1.0.1
+# API docs
+coreapi==2.3.*
+pygments
 # Stripe
 stripe==1.22.*
 # PayPal

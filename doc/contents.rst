@@ -6,6 +6,7 @@ Table of contents
 
    user/index
    admin/index
+   api/index
    development/index
    plugins/index
 

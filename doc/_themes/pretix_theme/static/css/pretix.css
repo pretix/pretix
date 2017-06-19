@@ -4183,10 +4183,14 @@ input[type="radio"][disabled], input[type="checkbox"][disabled] {
 }
 
 .wy-table td, .rst-content table.docutils td, .rst-content table.field-list td, .wy-table th, .rst-content table.docutils th, .rst-content table.field-list th {
-    font-size: 90%;
+    font-size: 14px;
     margin: 0;
     overflow: visible;
     padding: 8px 16px
+}
+.rst-content table td p, .rst-content .section table td ul {
+    font-size: 14px;
+    margin-bottom: 12px;
 }
 
 .wy-table td:first-child, .rst-content table.docutils td:first-child, .rst-content table.field-list td:first-child, .wy-table th:first-child, .rst-content table.docutils th:first-child, .rst-content table.field-list th:first-child {
@@ -6050,5 +6054,12 @@ url('../opensans_regular_macroman/OpenSans-Regular-webfont.svg#open_sansregular'
     .sectionbox {
         width: 100%;
         float: none;
+    }
+}
+
+/* REST */
+@media screen and (min-width: 480px) {
+    .wy-table-responsive table.rest-resource-table td, .wy-table-responsive table.rest-resource-table th {
+        white-space: normal;
     }
 }

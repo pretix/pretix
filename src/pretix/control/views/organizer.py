@@ -13,6 +13,7 @@ from django.views.generic import (
 )
 
 from pretix.base.models import Organizer, Team, TeamInvite, User
+from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.organizer import (
     OrganizerForm, OrganizerSettingsForm, OrganizerUpdateForm, TeamForm,
@@ -37,6 +38,10 @@ class OrganizerList(ListView):
 
 class InviteForm(forms.Form):
     user = forms.EmailField(required=False, label=_('User'))
+
+
+class TokenForm(forms.Form):
+    name = forms.CharField(required=False, label=_('Token name'))
 
 
 class OrganizerDetailViewMixin:
@@ -309,11 +314,18 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
 
     @cached_property
     def add_form(self):
-        return InviteForm(data=self.request.POST if self.request.method == "POST" else None)
+        return InviteForm(data=(self.request.POST
+                                if self.request.method == "POST" and "user" in self.request.POST else None))
+
+    @cached_property
+    def add_token_form(self):
+        return TokenForm(data=(self.request.POST
+                               if self.request.method == "POST" and "name" in self.request.POST else None))
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['add_form'] = self.add_form
+        ctx['add_token_form'] = self.add_token_form
         return ctx
 
     def _send_invite(self, instance):
@@ -380,7 +392,24 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                 messages.success(self.request, _('The invite has been revoked.'))
                 return redirect(self.get_success_url())
 
-        elif self.add_form.is_valid() and self.add_form.has_changed():
+        elif 'remove-token' in request.POST:
+            try:
+                token = self.object.tokens.get(pk=request.POST.get('remove-token'))
+            except TeamAPIToken.DoesNotExist:
+                messages.error(self.request, _('Invalid token selected.'))
+                return redirect(self.get_success_url())
+            else:
+                token.active = False
+                token.save()
+                self.object.log_action(
+                    'pretix.team.token.deleted', user=self.request.user, data={
+                        'name': token.name
+                    }
+                )
+                messages.success(self.request, _('The token has been revoked.'))
+                return redirect(self.get_success_url())
+
+        elif "user" in self.request.POST and self.add_form.is_valid() and self.add_form.has_changed():
 
             try:
                 user = User.objects.get(email=self.add_form.cleaned_data['user'])
@@ -414,6 +443,18 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                 messages.success(self.request, _('The new member has been added to the team.'))
                 return redirect(self.get_success_url())
 
+        elif "name" in self.request.POST and self.add_token_form.is_valid() and self.add_token_form.has_changed():
+            token = self.object.tokens.create(name=self.add_token_form.cleaned_data['name'])
+            self.object.log_action(
+                'pretix.team.token.created', user=self.request.user, data={
+                    'name': self.add_token_form.cleaned_data['name'],
+                    'id': token.pk
+                }
+            )
+            messages.success(self.request, _('A new API token has been created with the following secret: {}\n'
+                                             'Please copy this secret to a safe place. You will not be able to '
+                                             'view it again here.').format(token.token))
+            return redirect(self.get_success_url())
         else:
             messages.error(self.request, _('Your changes could not be saved.'))
             return self.get(request, *args, **kwargs)

@@ -10,6 +10,7 @@
             {% trans "Edit" %}
         </a>
     </h2>
+    <h3>{% trans "Team members" %}</h3>
     <form action="" method="post">
         {% csrf_token %}
         <!-- Trick browsers into taking this as a default -->
@@ -18,7 +19,7 @@
             <thead>
             <tr>
                 <th>{% trans "Member" %}</th>
-                <th></th>
+                <th width="150"></th>
             </tr>
             </thead>
             <tbody>
@@ -60,6 +61,47 @@
                         pretix account, they will immediately be added to the event. Otherwise, they will
                         be sent an email with an invitation.
                     {% endblocktrans %}
+                </td>
+                <td class="text-right">
+                    <button type="submit" class="btn btn-primary btn-sm btn-block">
+                        <i class="fa fa-plus"></i> {% trans "Add" %}
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <h3>{% trans "API tokens" %}</h3>
+    <form action="" method="post">
+        {% csrf_token %}
+        <!-- Trick browsers into taking this as a default -->
+        <button type="submit" class="btn btn-primary btn-sm btn-block nearly-gone"></button>
+        <table class="table table-condensed table-hover">
+            <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th width="150"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for t in team.active_tokens %}
+                <tr>
+                    <td>
+                        {{ t.name }}
+                    </td>
+                    <td class="text-right">
+                        <button type="submit" name="remove-token" value="{{ t.id }}"
+                                class="btn btn-danger btn-sm btn-block">
+                            <i class="fa fa-times"></i> {% trans "Remove" %}
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>
+                    {% bootstrap_field add_token_form.name layout='inline' %}<br>
                 </td>
                 <td class="text-right">
                     <button type="submit" class="btn btn-primary btn-sm btn-block">

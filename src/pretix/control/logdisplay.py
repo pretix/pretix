@@ -169,6 +169,12 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
     if logentry.action_type == 'pretix.team.invite.deleted':
         return _('The invite for {user} has been revoked.').format(user=data.get('email'))
 
+    if logentry.action_type == 'pretix.team.token.created':
+        return _('The token "{name}" has been created.').format(name=data.get('name'))
+
+    if logentry.action_type == 'pretix.team.token.deleted':
+        return _('The token "{name}" has been revoked.').format(name=data.get('name'))
+
     if logentry.action_type == 'pretix.user.settings.changed':
         text = str(_('Your account settings have been changed.'))
         if 'email' in data:

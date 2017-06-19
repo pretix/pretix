@@ -77,6 +77,33 @@ def test_team_create_invite(event, admin_user, admin_team, client):
 
 
 @pytest.mark.django_db
+def test_team_create_token(event, admin_user, admin_team, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    djmail.outbox = []
+
+    resp = client.post('/control/organizer/dummy/team/{}/'.format(admin_team.pk), {
+        'name': 'Test token'
+    }, follow=True)
+    assert 'Test token' in resp.rendered_content
+    assert admin_team.tokens.first().name == 'Test token'
+    assert admin_team.tokens.first().token in resp.rendered_content
+
+
+@pytest.mark.django_db
+def test_team_remove_token(event, admin_user, admin_team, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+
+    tk = admin_team.tokens.create(name='Test token')
+    resp = client.post('/control/organizer/dummy/team/{}/'.format(admin_team.pk), {
+        'remove-token': str(tk.pk)
+    }, follow=True)
+    assert tk.token not in resp.rendered_content
+    assert 'Test token' in resp.rendered_content
+    tk.refresh_from_db()
+    assert not tk.active
+
+
+@pytest.mark.django_db
 def test_team_revoke_invite(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
 

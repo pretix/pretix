@@ -189,6 +189,9 @@ INSTALLED_APPS = [
     'pretix.control',
     'pretix.presale',
     'pretix.multidomain',
+    'pretix.api',
+    'rest_framework',
+    'django_filters',
     'compressor',
     'bootstrap3',
     'djangoformsetjs',
@@ -231,6 +234,23 @@ if config.has_option('sentry', 'dsn'):
         'release': __version__,
         'environment': SITE_URL,
     }
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'pretix.api.auth.permission.EventPermission',
+    ],
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'PAGE_SIZE': 50,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'pretix.api.auth.token.TeamTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'UNICODE_JSON': False
+}
 
 
 CORE_MODULES = {

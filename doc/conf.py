@@ -24,7 +24,7 @@ from datetime import date
 sys.path.insert(0, os.path.abspath('../src'))
 
 import django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pretix.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pretix.testutils.settings")
 django.setup()
 
 # -- General configuration ------------------------------------------------

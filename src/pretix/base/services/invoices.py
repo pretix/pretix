@@ -1,14 +1,13 @@
 import copy
 import tempfile
 from collections import defaultdict
-from datetime import date
 from decimal import Decimal
 
 from django.contrib.staticfiles import finders
 from django.core.files.base import ContentFile
 from django.db import transaction
+from django.utils import timezone
 from django.utils.formats import date_format, localize
-from django.utils.timezone import now
 from django.utils.translation import pgettext, ugettext as _
 from i18nfield.strings import LazyI18nString
 from reportlab.lib import pagesizes
@@ -108,7 +107,7 @@ def generate_cancellation(invoice: Invoice):
     cancellation.invoice_no = None
     cancellation.refers = invoice
     cancellation.is_cancellation = True
-    cancellation.date = date.today()
+    cancellation.date = timezone.now().date()
     cancellation.payment_provider_text = ''
     cancellation.save()
 
@@ -135,7 +134,7 @@ def generate_invoice(order: Order):
     invoice = Invoice(
         order=order,
         event=order.event,
-        date=date.today(),
+        date=timezone.now().date(),
         locale=locale
     )
     invoice = build_invoice(invoice)
@@ -430,11 +429,11 @@ def build_preview_invoice_pdf(event):
         locale = event.settings.locale
 
     with rolledback_transaction(), language(locale):
-        order = event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
-                                    expires=now(), code="PREVIEW", total=119)
+        order = event.orders.create(status=Order.STATUS_PENDING, datetime=timezone.now(),
+                                    expires=timezone.now(), code="PREVIEW", total=119)
         invoice = Invoice(
             order=order, event=event, invoice_no="PREVIEW",
-            date=date.today(), locale=locale
+            date=timezone.now().date(), locale=locale
         )
         invoice.invoice_from = event.settings.get('invoice_address_from')
 
