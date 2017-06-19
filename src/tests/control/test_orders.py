@@ -487,6 +487,7 @@ class OrderChangeTests(SoupTest):
             'op-{}-itemvar'.format(self.op1.pk): str(self.shirt.pk),
             'op-{}-operation'.format(self.op2.pk): '',
             'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+            'add-itemvar'.format(self.op2.pk): str(self.ticket.pk),
         })
         self.op1.refresh_from_db()
         self.order.refresh_from_db()
@@ -504,6 +505,7 @@ class OrderChangeTests(SoupTest):
             'op-{}-price'.format(self.op1.pk): '24.00',
             'op-{}-operation'.format(self.op2.pk): '',
             'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+            'add-itemvar'.format(self.op2.pk): str(self.ticket.pk),
         })
         self.op1.refresh_from_db()
         self.order.refresh_from_db()
@@ -521,6 +523,7 @@ class OrderChangeTests(SoupTest):
             'op-{}-operation'.format(self.op2.pk): '',
             'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
             'op-{}-price'.format(self.op2.pk): str(self.op2.price),
+            'add-itemvar'.format(self.op2.pk): str(self.ticket.pk),
         })
         self.order.refresh_from_db()
         assert self.order.positions.count() == 1

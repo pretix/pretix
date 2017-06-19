@@ -499,7 +499,7 @@ class OrderChange(OrderView):
                 try:
                     ocm.add_position(item, variation,
                                      self.add_form.cleaned_data['price'],
-                                     self.add_form.cleaned_data['addon_to'])
+                                     self.add_form.cleaned_data.get('addon_to'))
                 except OrderError as e:
                     self.add_form.custom_error = str(e)
                     return False
