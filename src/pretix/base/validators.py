@@ -29,7 +29,8 @@ class EventSlugBlacklistValidator(BlacklistValidator):
         'jsi18n',
         'metrics',
         '_global',
-        '__debug__'
+        '__debug__',
+        'api',
     ]
 
 
@@ -47,5 +48,6 @@ class OrganizerSlugBlacklistValidator(BlacklistValidator):
         'metrics',
         '_global',
         '__debug__',
-        'about'
+        'about',
+        'api',
     ]
