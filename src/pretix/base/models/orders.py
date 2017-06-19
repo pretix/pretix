@@ -310,7 +310,7 @@ class Order(LoggedModel):
 
     def _is_still_available(self, now_dt: datetime=None) -> Union[bool, str]:
         error_messages = {
-            'unavailable': _('Some of the ordered products are no longer available.'),
+            'unavailable': _('The ordered product "{item}" is no longer available.'),
         }
         now_dt = now_dt or now()
         positions = self.positions.all().select_related('item', 'variation')
@@ -332,7 +332,9 @@ class Order(LoggedModel):
                         quota.cached_availability -= 1
                         if quota.cached_availability < 0:
                             # This quota is sold out/currently unavailable, so do not sell this at all
-                            raise Quota.QuotaExceededException(error_messages['unavailable'])
+                            raise Quota.QuotaExceededException(error_messages['unavailable'].format(
+                                item=str(op.item) + (' - ' + str(op.variation) if op.variation else '')
+                            ))
         except Quota.QuotaExceededException as e:
             return str(e)
         return True
