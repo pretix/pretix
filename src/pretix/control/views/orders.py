@@ -33,7 +33,7 @@ from pretix.base.signals import (
 from pretix.base.views.async import AsyncAction
 from pretix.control.forms.orders import (
     CommentForm, ExporterForm, ExtendForm, OrderContactForm, OrderLocaleForm,
-    OrderPositionChangeForm,
+    OrderPositionAddForm, OrderPositionChangeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -166,7 +166,7 @@ class OrderDetail(OrderView):
         cartpos = queryset.order_by(
             'item', 'variation'
         ).select_related(
-            'item', 'variation'
+            'item', 'variation', 'addon_to'
         ).prefetch_related(
             'item__questions', 'answers', 'answers__question', 'checkins'
         ).order_by('positionid')
@@ -180,6 +180,8 @@ class OrderDetail(OrderView):
             )
             p.cache_answers()
             positions.append(p)
+
+        positions.sort(key=lambda p: p.sort_key)
 
         return {
             'positions': positions,
@@ -461,6 +463,11 @@ class OrderChange(OrderView):
         return super().dispatch(request, *args, **kwargs)
 
     @cached_property
+    def add_form(self):
+        return OrderPositionAddForm(prefix='add', order=self.order,
+                                    data=self.request.POST if self.request.method == "POST" else None)
+
+    @cached_property
     def positions(self):
         positions = list(self.order.positions.all())
         for p in positions:
@@ -471,15 +478,37 @@ class OrderChange(OrderView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['positions'] = self.positions
+        ctx['add_form'] = self.add_form
         return ctx
 
-    def post(self, *args, **kwargs):
-        ocm = OrderChangeManager(self.order, self.request.user)
-        form_valid = True
+    def _process_add(self, ocm):
+        if not self.add_form.is_valid():
+            return False
+        else:
+            if self.add_form.cleaned_data['do']:
+                if '-' in self.add_form.cleaned_data['itemvar']:
+                    itemid, varid = self.add_form.cleaned_data['itemvar'].split('-')
+                else:
+                    itemid, varid = self.add_form.cleaned_data['itemvar'], None
+
+                item = Item.objects.get(pk=itemid, event=self.request.event)
+                if varid:
+                    variation = ItemVariation.objects.get(pk=varid, item=item)
+                else:
+                    variation = None
+                try:
+                    ocm.add_position(item, variation,
+                                     self.add_form.cleaned_data['price'],
+                                     self.add_form.cleaned_data['addon_to'])
+                except OrderError as e:
+                    self.add_form.custom_error = str(e)
+                    return False
+        return True
+
+    def _process_change(self, ocm):
         for p in self.positions:
             if not p.form.is_valid():
-                form_valid = False
-                break
+                return False
 
             try:
                 if p.form.cleaned_data['operation'] == 'product':
@@ -501,8 +530,12 @@ class OrderChange(OrderView):
 
             except OrderError as e:
                 p.custom_error = str(e)
-                form_valid = False
-                break
+                return False
+        return True
+
+    def post(self, *args, **kwargs):
+        ocm = OrderChangeManager(self.order, self.request.user)
+        form_valid = self._process_add(ocm) and self._process_change(ocm)
 
         if not form_valid:
             messages.error(self.request, _('An error occured. Please see the details below.'))

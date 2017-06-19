@@ -146,11 +146,11 @@ class OrderChangeManagerTests(TestCase):
                                          default_price=Decimal('12.00'))
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Peter"
+            price=Decimal("23.00"), attendee_name="Peter", positionid=1
         )
         self.op2 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Dieter"
+            price=Decimal("23.00"), attendee_name="Dieter", positionid=2
         )
         self.ocm = OrderChangeManager(self.order, None)
 
@@ -324,3 +324,54 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.order.total == 46
         assert self.order.status == Order.STATUS_PAID
+
+    def test_add_item_success(self):
+        self.ocm.add_position(self.shirt, None, None, None)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 3
+        nop = self.order.positions.last()
+        assert nop.item == self.shirt
+        assert nop.price == self.shirt.default_price
+        assert nop.tax_rate == self.shirt.tax_rate
+        assert round_decimal(nop.price * (1 - 100 / (100 + self.shirt.tax_rate))) == nop.tax_value
+        assert self.order.total == self.op1.price + self.op2.price + nop.price
+        assert nop.positionid == 3
+
+    def test_add_item_custom_price(self):
+        self.ocm.add_position(self.shirt, None, Decimal('13.00'), None)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 3
+        nop = self.order.positions.last()
+        assert nop.item == self.shirt
+        assert nop.price == Decimal('13.00')
+        assert nop.tax_rate == self.shirt.tax_rate
+        assert round_decimal(nop.price * (1 - 100 / (100 + self.shirt.tax_rate))) == nop.tax_value
+        assert self.order.total == self.op1.price + self.op2.price + nop.price
+
+    def test_add_item_quota_full(self):
+        q1 = self.event.quotas.create(name='Test', size=0)
+        q1.items.add(self.shirt)
+        self.ocm.add_position(self.shirt, None, None, None)
+        with self.assertRaises(OrderError):
+            self.ocm.commit()
+        assert self.order.positions.count() == 2
+
+    def test_add_item_addon(self):
+        self.shirt.category = self.event.categories.create(name='Add-ons', is_addon=True)
+        self.ticket.addons.create(addon_category=self.shirt.category)
+        self.ocm.add_position(self.shirt, None, Decimal('13.00'), self.op1)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 3
+        nop = self.order.positions.last()
+        assert nop.item == self.shirt
+        assert nop.addon_to == self.op1
+
+    def test_add_item_addon_invalid(self):
+        with self.assertRaises(OrderError):
+            self.ocm.add_position(self.shirt, None, Decimal('13.00'), self.op1)
+        self.shirt.category = self.event.categories.create(name='Add-ons', is_addon=True)
+        with self.assertRaises(OrderError):
+            self.ocm.add_position(self.shirt, None, Decimal('13.00'), None)

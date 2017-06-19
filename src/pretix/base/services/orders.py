@@ -9,7 +9,7 @@ import pytz
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
-from django.db.models import F, Q
+from django.db.models import F, Max, Q
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.timezone import make_aware, now
@@ -495,11 +495,14 @@ class OrderChangeManager:
         'paid_to_free_exceeded': _('This operation would make the order free and therefore immediately paid, however '
                                    'no quota is available.'),
         'paid_price_change': _('Currently, paid orders can only be changed in a way that does not change the total '
-                               'price of the order as partial payments or refunds are not yet supported.')
+                               'price of the order as partial payments or refunds are not yet supported.'),
+        'addon_to_required': _('This is an addon product, please select the base position it should be added to.'),
+        'addon_invalid': _('The selected base position does not allow you to add this product as an add-on.'),
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation', 'price'))
     PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
     CancelOperation = namedtuple('CancelOperation', ('position',))
+    AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to'))
 
     def __init__(self, order: Order, user):
         self.order = order
@@ -528,6 +531,21 @@ class OrderChangeManager:
         self._quotadiff.subtract(position.variation.quotas.all() if position.variation else position.item.quotas.all())
         self._operations.append(self.CancelOperation(position))
 
+    def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: Order):
+        if price is None:
+            price = item.default_price if variation is None else variation.price
+        if price is None:
+            raise OrderError(self.error_messages['product_invalid'])
+        if not addon_to and item.category and item.category.is_addon:
+            raise OrderError(self.error_messages['addon_to_required'])
+        if addon_to:
+            if not item.category or item.category_id not in addon_to.item.addons.values_list('addon_category', flat=True):
+                raise OrderError(self.error_messages['addon_invalid'])
+
+        self._totaldiff = price
+        self._quotadiff.update(variation.quotas.all() if variation else item.quotas.all())
+        self._operations.append(self.AddOperation(item, variation, price, addon_to))
+
     def _check_quotas(self):
         for quota, diff in self._quotadiff.items():
             if diff <= 0:
@@ -552,6 +570,7 @@ class OrderChangeManager:
                 raise OrderError(self.error_messages['paid_to_free_exceeded'])
 
     def _perform_operations(self):
+        nextposid = self.order.positions.aggregate(m=Max('positionid'))['m'] + 1
         for op in self._operations:
             if isinstance(op, self.ItemOperation):
                 self.order.log_action('pretix.event.order.changed.item', user=self.user, data={
@@ -600,6 +619,21 @@ class OrderChangeManager:
                     'addon_to': None,
                 })
                 op.position.delete()
+            elif isinstance(op, self.AddOperation):
+                pos = OrderPosition.objects.create(
+                    item=op.item, variation=op.variation, addon_to=op.addon_to,
+                    price=op.price, order=self.order,
+                    positionid=nextposid
+                )
+                nextposid += 1
+                self.order.log_action('pretix.event.order.changed.add', user=self.user, data={
+                    'position': pos.pk,
+                    'item': op.item.pk,
+                    'variation': op.variation.pk if op.variation else None,
+                    'addon_to': op.addon_to.pk if op.addon_to else None,
+                    'price': op.price,
+                    'positionid': pos.positionid
+                })
 
     def _recalculate_total_and_payment_fee(self):
         self.order.total = sum([p.price for p in self.order.positions.all()])

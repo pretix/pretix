@@ -22,8 +22,7 @@
     <p>
         {% blocktrans trimmed %}
             The user will receive a notification about the change but in the case of new required questions, the user
-            will not be forced to answer them. You cannot use this form to add something to the order, please create
-            a second order instead.
+            will not be forced to answer them.
         {% endblocktrans %}
     </p>
     <p>
@@ -31,13 +30,15 @@
             If an invoice is attached to the order, a cancellation will be created together with a new invoice.
         {% endblocktrans %}
     </p>
-    <div class="alert alert-warning">
+    <div class="alert alert-warning"><strong>
         {% blocktrans trimmed %}
-            Please use this tool carefully. Changes you make here are not reversible. In most cases it is easier to
-            cancel the order completely and create a new one.
+            Please use this tool carefully. Changes you make here are not reversible. Also, if you change an order
+            manually, not all constraints (e.g. on required add-ons) will be checked. Therefore, you might construct
+            an order that would not be able to exist otherwise.
+            In most cases it is easier to cancel the order completely and create a new one.
         {% endblocktrans %}
-    </div>
-    <form method="post" class="form-horizontal" href="">
+    </strong></div>
+    <form method="post" href="">
         {% csrf_token %}
         {% for position in positions %}
             <div class="panel panel-default items">
@@ -107,6 +108,29 @@
                 </div>
             </div>
         {% endfor %}
+        <div class="panel panel-default items">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Add product
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    {% bootstrap_form_errors add_form %}
+                    {% if add_form.custom_error %}
+                        <div class="alert alert-danger">
+                            {{ add_form.custom_error }}
+                        </div>
+                    {% endif %}
+                    {% bootstrap_field add_form.do layout='horizontal' %}
+                    {% bootstrap_field add_form.itemvar layout='horizontal' %}
+                    {% bootstrap_field add_form.price layout='horizontal' %}
+                    {% if add_form.addon_to %}
+                        {% bootstrap_field add_form.addon_to layout='horizontal' %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
         <div class="form-group submit-group">
             <a class="btn btn-default btn-lg"
                     href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">

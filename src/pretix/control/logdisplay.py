@@ -6,7 +6,7 @@ from django.utils import formats
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.models import Event, ItemVariation, LogEntry
+from pretix.base.models import Event, ItemVariation, LogEntry, OrderPosition
 from pretix.base.signals import logentry_display
 
 OVERVIEW_BLACKLIST = [
@@ -51,6 +51,26 @@ def _display_order_changed(event: Event, logentry: LogEntry):
             old_price=formats.localize(Decimal(data['old_price'])),
             currency=event.currency
         )
+    elif logentry.action_type == 'pretix.event.order.changed.add':
+        item = str(event.items.get(pk=data['item']))
+        if data['variation']:
+            item += ' - ' + str(ItemVariation.objects.get(item__event=event, pk=data['variation']))
+        if data['addon_to']:
+            addon_to = OrderPosition.objects.get(order__event=event, pk=data['addon_to'])
+            return text + ' ' + _('Position #{posid} created: {item} ({price} {currency}) as an add-on to '
+                                  'position #{addon_to}.').format(
+                posid=data.get('positionid', '?'),
+                item=item, addon_to=addon_to.positionid,
+                price=formats.localize(Decimal(data['price'])),
+                currency=event.currency
+            )
+        else:
+            return text + ' ' + _('Position #{posid} created: {item} ({price} {currency}).').format(
+                posid=data.get('positionid', '?'),
+                item=item,
+                price=formats.localize(Decimal(data['price'])),
+                currency=event.currency
+            )
 
 
 @receiver(signal=logentry_display, dispatch_uid="pretixcontrol_logentry_display")

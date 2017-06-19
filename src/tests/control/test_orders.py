@@ -525,3 +525,21 @@ class OrderChangeTests(SoupTest):
         self.order.refresh_from_db()
         assert self.order.positions.count() == 1
         assert self.order.total == self.op2.price
+
+    def test_add_item_success(self):
+        self.client.post('/control/event/{}/{}/orders/{}/change'.format(
+            self.event.organizer.slug, self.event.slug, self.order.code
+        ), {
+            'op-{}-operation'.format(self.op1.pk): '',
+            'op-{}-operation'.format(self.op2.pk): '',
+            'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+            'op-{}-price'.format(self.op2.pk): str(self.op2.price),
+            'op-{}-itemvar'.format(self.op1.pk): str(self.ticket.pk),
+            'op-{}-price'.format(self.op1.pk): str(self.op1.price),
+            'add-itemvar': str(self.shirt.pk),
+            'add-do': 'on',
+            'add-price': '14.00',
+        })
+        assert self.order.positions.count() == 3
+        assert self.order.positions.last().item == self.shirt
+        assert self.order.positions.last().price == 14

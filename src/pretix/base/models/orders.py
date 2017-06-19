@@ -498,6 +498,10 @@ class OrderPosition(AbstractPosition):
         verbose_name_plural = _("Order positions")
         ordering = ("positionid", "id")
 
+    @cached_property
+    def sort_key(self):
+        return self.addon_to.positionid if self.addon_to else self.positionid, self.addon_to_id or 0
+
     @classmethod
     def transform_cart_positions(cls, cp: List, order) -> list:
         from . import Voucher
@@ -528,6 +532,13 @@ class OrderPosition(AbstractPosition):
 
             cartpos.delete()
         return ops
+
+    def __str__(self):
+        if self.variation:
+            return '#{} – {} – {}'.format(
+                self.positionid, str(self.item), str(self.variation)
+            )
+        return '#{} – {}'.format(self.positionid, str(self.item))
 
     def __repr__(self):
         return '<OrderPosition: item %d, variation %d for order %s>' % (

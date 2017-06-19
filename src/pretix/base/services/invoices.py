@@ -67,7 +67,9 @@ def build_invoice(invoice: Invoice) -> Invoice:
         invoice.save()
         invoice.lines.all().delete()
 
-        for p in invoice.order.positions.all():
+        positions = list(invoice.order.positions.select_related('addon_to', 'item', 'variation'))
+        positions.sort(key=lambda p: p.sort_key)
+        for p in positions:
             desc = str(p.item.name)
             if p.variation:
                 desc += " - " + str(p.variation.value)

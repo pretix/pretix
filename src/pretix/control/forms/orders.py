@@ -7,7 +7,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
-from pretix.base.models import Item, Order
+from pretix.base.models import Item, ItemAddOn, Order, OrderPosition
 
 
 class ExtendForm(I18nModelForm):
@@ -53,6 +53,52 @@ class CommentForm(I18nModelForm):
                 'class': 'helper-width-100',
             }),
         }
+
+
+class OrderPositionAddForm(forms.Form):
+    do = forms.BooleanField(
+        label=_('Add a new product to the order'),
+        required=False
+    )
+    itemvar = forms.ChoiceField(
+        label=_('Product')
+    )
+    addon_to = forms.ModelChoiceField(
+        OrderPosition.objects.none(),
+        required=False,
+        label=_('Add-on to'),
+    )
+    price = forms.DecimalField(
+        required=False,
+        max_digits=10, decimal_places=2,
+        label=_('Gross price'),
+        help_text=_("Keep empty for the product's default price")
+    )
+
+    def __init__(self, *args, **kwargs):
+        order = kwargs.pop('order')
+        super().__init__(*args, **kwargs)
+        choices = []
+        for i in order.event.items.prefetch_related('variations').all():
+            pname = str(i.name)
+            if not i.is_available():
+                pname += ' ({})'.format(_('inactive'))
+            variations = list(i.variations.all())
+            if variations:
+                for v in variations:
+                    choices.append(('%d-%d' % (i.pk, v.pk),
+                                    '%s – %s (%s %s)' % (pname, v.value, localize(v.price),
+                                                         order.event.currency)))
+            else:
+                choices.append((str(i.pk), '%s (%s %s)' % (pname, localize(i.default_price),
+                                                           order.event.currency)))
+        self.fields['itemvar'].choices = choices
+        if ItemAddOn.objects.filter(base_item__event=order.event).exists():
+            self.fields['addon_to'].queryset = order.positions.filter(addon_to__isnull=True).select_related(
+                'item', 'variation'
+            )
+        else:
+            del self.fields['addon_to']
 
 
 class OrderPositionChangeForm(forms.Form):
