@@ -443,7 +443,7 @@ Order position endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
-.. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/download/(output)/
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/download/(output)/
 
    Download tickets for one order position, identified by its internal ID.
    Depending on the chosen output, the response might be a ZIP file, PDF file or something else. The order details

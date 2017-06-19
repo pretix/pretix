@@ -122,6 +122,23 @@ In case of ``orga_router`` and ``event_router``, permission checking is done for
 in the control panel. However, you need to make sure on your own only to return the correct subset of data! ``request
 .event`` and ``request.organizer`` are available as usual.
 
+To require a special permission like ``can_view_orders``, you do not need to inherit from a special ViewSet base
+class, you can just set the ``permission`` attribute on your viewset::
+
+    class MyViewSet(ModelViewSet):
+        permission = 'can_view_orders'
+        ...
+
+If you want to check the permission only for some methods of your viewset, you have to do it yourself. Note here that
+API authentications can be done via user sessions or API tokens and you should therefore check something like the
+following::
+
+
+    perm_holder = (request.auth if isinstance(request.auth, TeamAPIToken) else request.user)
+    if perm_holder.has_event_permission(request.event.organizer, request.event, 'can_view_orders'):
+        ...
+
+
 .. warning:: It is important that you do this in the ``yourplugin.urls`` module, otherwise pretix will not find your
              routes early enough during system startup.
 

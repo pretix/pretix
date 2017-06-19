@@ -152,7 +152,7 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
-.. http:get:: /api/v1/organizers/(organizer)/events/(event)/invoices/(invoice_no)/download/(output)/
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/invoices/(invoice_no)/download/
 
    Download an invoice in PDF format.
 
