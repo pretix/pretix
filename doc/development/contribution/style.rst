@@ -20,6 +20,9 @@ Coding style and quality
   test suite are in the style of Python's unit test module. If you extend those files, you might continue in this style,
   but please use pytest style for any new test files.
 
+* Please keep the first line of your commit messages short. When referencing an issue, please phrase it like
+  ``Fix #123 -- Problems with order creation`` or ``Refs #123 -- Fix this part of that bug``.
+
 
 .. _PEP 8: http://legacy.python.org/dev/peps/pep-0008/
 .. _flake8: https://pypi.python.org/pypi/flake8
