@@ -2,7 +2,7 @@
 {% load staticfiles %}
 <div class="table-responsive">
     {% csrf_token %}
-    <table class="table table-condensed transaction-list" data-url="{% url "plugins:banktransfer:import.action" event=request.event.slug organizer=request.event.organizer.slug %}">
+    <table class="table table-condensed transaction-list" data-url="{% if request.event %}{% url "plugins:banktransfer:import.action" event=request.event.slug organizer=request.organizer.slug %}{% else %}{% url "plugins:banktransfer:import.action" organizer=request.organizer.slug %}{% endif %}">
         <thead>
         <tr>
             <th></th>
@@ -83,9 +83,13 @@
                 </td>
                 <td>
                     {% if trans.order %}
-                        <a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=trans.order.code %}"
-                            data-toggle="tooltip" title="{{ trans.order.total|floatformat:2 }} {{ request.event.currency }}">
-                            {{ trans.order.code }}
+                        <a href="{% url "control:event.order" event=trans.order.event.slug organizer=request.organizer.slug code=trans.order.code %}"
+                            data-toggle="tooltip" title="{{ trans.order.total|floatformat:2 }} {{ trans.order.event.currency }}">
+                            {% if not request.event %}
+                                {{ trans.order.event.slug|upper }}-{{ trans.order.code }}
+                            {% else %}
+                                {{ trans.order.code }}
+                            {% endif %}
                         </a>
                     {% endif %}
                 </td>

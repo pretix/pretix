@@ -16,9 +16,17 @@ class BankImportJob(models.Model):
         (STATE_COMPLETED, 'completed'),
     )
 
-    event = models.ForeignKey('pretixbase.Event')
+    event = models.ForeignKey('pretixbase.Event', null=True)
+    organizer = models.ForeignKey('pretixbase.Organizer', null=True)
     created = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=32, choices=STATES, default=STATE_PENDING)
+
+    @property
+    def owner_kwargs(self):
+        if self.event:
+            return {'event': self.event}
+        else:
+            return {'organizer': self.organizer}
 
 
 class BankTransaction(models.Model):
@@ -40,7 +48,8 @@ class BankTransaction(models.Model):
         (STATE_DISCARDED, 'manually discarded'),
     )
 
-    event = models.ForeignKey('pretixbase.Event')
+    event = models.ForeignKey('pretixbase.Event', null=True)
+    organizer = models.ForeignKey('pretixbase.Organizer', null=True)
     import_job = models.ForeignKey('BankImportJob', related_name='transactions')
     state = models.CharField(max_length=32, choices=STATES, default=STATE_UNCHECKED)
     message = models.TextField()
@@ -66,4 +75,4 @@ class BankTransaction(models.Model):
         self.reference = ""
 
     class Meta:
-        unique_together = ('event', 'checksum')
+        unique_together = ('event', 'organizer', 'checksum')

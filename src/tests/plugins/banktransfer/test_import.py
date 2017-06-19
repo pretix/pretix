@@ -90,9 +90,14 @@ def job(env):
     return BankImportJob.objects.create(event=env[0]).pk
 
 
+@pytest.fixture
+def orga_job(env):
+    return BankImportJob.objects.create(organizer=env[0].organizer).pk
+
+
 @pytest.mark.django_db
 def test_mark_paid(env, job):
-    process_banktransfers(env[0].pk, job, [{
+    process_banktransfers(job, [{
         'payer': 'Karla Kundin',
         'reference': 'Bestellung DUMMY1234S',
         'date': '2016-01-26',
@@ -104,7 +109,7 @@ def test_mark_paid(env, job):
 
 @pytest.mark.django_db
 def test_check_amount(env, job):
-    process_banktransfers(env[0].pk, job, [{
+    process_banktransfers(job, [{
         'payer': 'Karla Kundin',
         'reference': 'Bestellung DUMMY1Z3AS',
         'date': '2016-01-26',
@@ -116,7 +121,7 @@ def test_check_amount(env, job):
 
 @pytest.mark.django_db
 def test_ignore_canceled(env, job):
-    process_banktransfers(env[0].pk, job, [{
+    process_banktransfers(job, [{
         'payer': 'Karla Kundin',
         'reference': 'Bestellung DUMMY6789Z',
         'date': '2016-01-26',
@@ -128,7 +133,7 @@ def test_ignore_canceled(env, job):
 
 @pytest.mark.django_db
 def test_autocorrection(env, job):
-    process_banktransfers(env[0].pk, job, [{
+    process_banktransfers(job, [{
         'payer': 'Karla Kundin',
         'reference': 'Bestellung DUMMY12345',
         'amount': '23.00',
@@ -142,7 +147,7 @@ def test_autocorrection(env, job):
 def test_huge_amount(env, job):
     env[2].total = Decimal('23000.00')
     env[2].save()
-    process_banktransfers(env[0].pk, job, [{
+    process_banktransfers(job, [{
         'payer': 'Karla Kundin',
         'reference': 'Bestellung DUMMY12345',
         'amount': '23.000,00',
@@ -150,3 +155,45 @@ def test_huge_amount(env, job):
     }])
     env[2].refresh_from_db()
     assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_mark_paid_organizer(env, orga_job):
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY-1234S',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_mark_paid_organizer_weird_slug(env, orga_job):
+    env[0].slug = 'du.m-y'
+    env[0].save()
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DU.M-Y-1234S',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_wrong_event_organizer(env, orga_job):
+    Event.objects.create(
+        organizer=env[0].organizer, name='Wrong', slug='wrong',
+        date_from=now(), plugins='pretix.plugins.banktransfer'
+    )
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung WRONG-1234S',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PENDING

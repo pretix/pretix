@@ -17,7 +17,10 @@ from pretix.base.models import Order, Quota
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.settings import SettingsSandbox
-from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.permissions import (
+    EventPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
+)
+from pretix.control.views.organizer import OrganizerDetailViewMixin
 from pretix.plugins.banktransfer import csvimport, mt940import
 from pretix.plugins.banktransfer.models import BankImportJob, BankTransaction
 from pretix.plugins.banktransfer.tasks import process_banktransfers
@@ -25,7 +28,7 @@ from pretix.plugins.banktransfer.tasks import process_banktransfers
 logger = logging.getLogger('pretix.plugins.banktransfer')
 
 
-class ActionView(EventPermissionRequiredMixin, View):
+class ActionView(View):
     permission = 'can_change_orders'
 
     def _discard(self, trans):
@@ -89,7 +92,10 @@ class ActionView(EventPermissionRequiredMixin, View):
 
     def _assign(self, trans, code):
         try:
-            trans.order = self.request.event.orders.get(code=code)
+            if '-' in code:
+                trans.order = self.order_qs().get(code=code.split('-')[1], event__slug__iexact=code.split('-')[0])
+            else:
+                trans.order = self.order_qs().get(code=code.split('-')[-1])
         except Order.DoesNotExist:
             return JsonResponse({
                 'status': 'error',
@@ -109,7 +115,10 @@ class ActionView(EventPermissionRequiredMixin, View):
         for k, v in request.POST.items():
             if not k.startswith('action_'):
                 continue
-            trans = get_object_or_404(BankTransaction, id=k.split('_')[1], event=self.request.event)
+            if 'event' in kwargs:
+                trans = get_object_or_404(BankTransaction, id=k.split('_')[1], event=request.event)
+            else:
+                trans = get_object_or_404(BankTransaction, id=k.split('_')[1], organizer=request.organizer)
 
             if v == 'discard' and trans.state in (BankTransaction.STATE_INVALID, BankTransaction.STATE_ERROR,
                                                   BankTransaction.STATE_NOMATCH, BankTransaction.STATE_DUPLICATE):
@@ -140,52 +149,64 @@ class ActionView(EventPermissionRequiredMixin, View):
         if len(query) < 2:
             return JsonResponse({'results': []})
 
-        qs = self.request.event.orders.filter(Q(code__icontains=query) | Q(code__icontains=Order.normalize_code(query)))
+        qs = self.order_qs().filter(Q(code__icontains=query) | Q(code__icontains=Order.normalize_code(query))).select_related('event')
         return JsonResponse({
             'results': [
                 {
-                    'code': o.code,
+                    'code': o.event.slug.upper() + '-' + o.code,
                     'status': o.get_status_display(),
-                    'total': localize(o.total) + ' ' + self.request.event.currency
+                    'total': localize(o.total) + ' ' + o.event.currency
                 } for o in qs
             ]
         })
 
+    def order_qs(self):
+        return self.request.event.orders
 
-class JobDetailView(EventPermissionRequiredMixin, DetailView):
+
+class JobDetailView(DetailView):
     template_name = 'pretixplugins/banktransfer/job_detail.html'
     permission = 'can_change_orders'
     context_objectname = 'job'
 
     def redirect_form(self):
-        return redirect(reverse('plugins:banktransfer:import', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
-        }))
+        kwargs = {
+            'organizer': self.request.organizer.slug,
+        }
+        if 'event' in self.kwargs:
+            kwargs['event'] = self.kwargs['event']
+        return redirect(reverse('plugins:banktransfer:import', kwargs=kwargs))
 
     def redirect_back(self):
-        return redirect(reverse('plugins:banktransfer:import.job', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
+        kwargs = {
+            'organizer': self.request.organizer.slug,
             'job': self.kwargs['job']
-        }))
+        }
+        if 'event' in self.kwargs:
+            kwargs['event'] = self.kwargs['event']
+        return redirect(reverse('plugins:banktransfer:import.job', kwargs=kwargs))
 
-    def get_object(self, queryset=None):
-        return get_object_or_404(BankImportJob, id=self.kwargs['job'], event=self.request.event)
+    @cached_property
+    def job(self):
+        if 'event' in self.kwargs:
+            kwargs = {'event': self.request.event}
+        else:
+            kwargs = {'organizer': self.request.organizer}
+        return get_object_or_404(BankImportJob, id=self.kwargs['job'], **kwargs)
 
     def get(self, request, *args, **kwargs):
         if 'ajax' in request.GET:
-            self.object = self.get_object()
             return JsonResponse({
-                'state': self.object.state
+                'state': self.job.state
             })
 
-        return super().get(request, *args, **kwargs)
+        context = self.get_context_data()
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data()
+        ctx = {}
 
-        qs = self.object.transactions.select_related('order')
+        qs = self.job.transactions.select_related('order', 'order__event')
 
         ctx['transactions_valid'] = qs.filter(state=BankTransaction.STATE_VALID).count()
         ctx['transactions_invalid'] = qs.filter(state__in=[
@@ -194,21 +215,33 @@ class JobDetailView(EventPermissionRequiredMixin, DetailView):
         ctx['transactions_ignored'] = qs.filter(state__in=[
             BankTransaction.STATE_DUPLICATE, BankTransaction.STATE_NOMATCH
         ]).count()
-        ctx['job'] = self.object
+        ctx['job'] = self.job
+        ctx['organizer'] = self.request.organizer
+
+        if 'event' in self.kwargs:
+            ctx['basetpl'] = 'pretixplugins/banktransfer/import_base.html'
+        else:
+            ctx['basetpl'] = 'pretixplugins/banktransfer/import_base_organizer.html'
 
         return ctx
 
 
-class ImportView(EventPermissionRequiredMixin, ListView):
+class ImportView(ListView):
     template_name = 'pretixplugins/banktransfer/import_form.html'
     permission = 'can_change_orders'
     context_object_name = 'transactions_unhandled'
     paginate_by = 30
 
     def get_queryset(self):
-        qs = BankTransaction.objects.filter(
-            event=self.request.event
-        ).select_related('order').filter(state__in=[
+        if 'event' in self.kwargs:
+            qs = BankTransaction.objects.filter(
+                Q(event=self.request.event)
+            )
+        else:
+            qs = BankTransaction.objects.filter(
+                Q(organizer=self.request.organizer)
+            )
+        qs = qs.select_related('order').filter(state__in=[
             BankTransaction.STATE_INVALID, BankTransaction.STATE_ERROR,
             BankTransaction.STATE_DUPLICATE, BankTransaction.STATE_NOMATCH
         ])
@@ -245,12 +278,12 @@ class ImportView(EventPermissionRequiredMixin, ListView):
 
         else:
             messages.error(self.request, _('We were unable to detect the file type of this import. Please '
-                           'contact support for help.'))
+                                           'contact support for help.'))
             return self.redirect_back()
 
     @cached_property
     def settings(self):
-        return SettingsSandbox('payment', 'banktransfer', self.request.event)
+        return SettingsSandbox('payment', 'banktransfer', getattr(self.request, 'event', self.request.organizer))
 
     def process_mt940(self):
         try:
@@ -261,6 +294,7 @@ class ImportView(EventPermissionRequiredMixin, ListView):
             return self.redirect_back()
 
     def process_csv_file(self):
+        o = getattr(self.request, 'event', self.request.organizer)
         try:
             data = csvimport.get_rows_from_file(self.request.FILES['file'])
         except csv.Error as e:  # TODO: narrow down
@@ -273,8 +307,8 @@ class ImportView(EventPermissionRequiredMixin, ListView):
             messages.error(self.request, _('I\'m sorry, but we detected this file as empty. Please '
                                            'contact support for help.'))
 
-        if self.request.event.settings.get('banktransfer_csvhint') is not None:
-            hint = self.request.event.settings.get('banktransfer_csvhint', as_type=dict)
+        if o.settings.get('banktransfer_csvhint') is not None:
+            hint = o.settings.get('banktransfer_csvhint', as_type=dict)
 
             try:
                 parsed, good = csvimport.parse(data, hint)
@@ -304,8 +338,9 @@ class ImportView(EventPermissionRequiredMixin, ListView):
             logger.error('Parsing hint failed: ' + str(e))
             messages.error(self.request, _('We were unable to process your input.'))
             return self.assign_view(data)
+        o = getattr(self.request, 'event', self.request.organizer)
         try:
-            self.request.event.settings.set('banktransfer_csvhint', hint)
+            o.settings.set('banktransfer_csvhint', hint)
         except Exception as e:  # TODO: narrow down
             logger.error('Import using stored hint failed: ' + str(e))
             pass
@@ -321,44 +356,117 @@ class ImportView(EventPermissionRequiredMixin, ListView):
         return super().get(self.request)
 
     def assign_view(self, parsed):
-        return render(self.request, 'pretixplugins/banktransfer/import_assign.html', {
-            'rows': parsed
-        })
+        ctx = {'rows': parsed}
+        if 'event' in self.kwargs:
+            ctx['basetpl'] = 'pretixplugins/banktransfer/import_base.html'
+        else:
+            ctx['basetpl'] = 'pretixplugins/banktransfer/import_base_organizer.html'
+            ctx['organizer'] = self.request.organizer
+        return render(self.request, 'pretixplugins/banktransfer/import_assign.html', ctx)
 
     @cached_property
     def job_running(self):
-        return BankImportJob.objects.filter(
-            event=self.request.event, state=BankImportJob.STATE_RUNNING,
+        if 'event' in self.kwargs:
+            qs = BankImportJob.objects.filter(
+                Q(event=self.request.event) | Q(organizer=self.request.organizer)
+            )
+        else:
+            qs = BankImportJob.objects.filter(
+                Q(organizer=self.request.organizer)
+            )
+        return qs.filter(
+            state=BankImportJob.STATE_RUNNING,
             created__lte=now() - timedelta(minutes=30)  # safety timeout
         ).first()
 
     def redirect_back(self):
-        return redirect(reverse('plugins:banktransfer:import', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
-        }))
+        kwargs = {
+            'organizer': self.request.organizer.slug
+        }
+        if 'event' in self.kwargs:
+            kwargs['event'] = self.kwargs['event']
+        return redirect(reverse('plugins:banktransfer:import', kwargs=kwargs))
 
     def start_processing(self, parsed):
         if self.job_running:
-            messages.error(self.request, _('An import is currently being processed, please try again in a few minutes.'))
+            messages.error(self.request,
+                           _('An import is currently being processed, please try again in a few minutes.'))
             return self.redirect_back()
-        job = BankImportJob.objects.create(event=self.request.event)
+        if 'event' in self.kwargs:
+            job = BankImportJob.objects.create(event=self.request.event, organizer=self.request.organizer)
+        else:
+            job = BankImportJob.objects.create(organizer=self.request.organizer)
         process_banktransfers.apply_async(kwargs={
-            'event': self.request.event.pk,
             'job': job.pk,
             'data': parsed
         })
-        return redirect(reverse('plugins:banktransfer:import.job', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
+        kwargs = {
+            'organizer': self.request.organizer.slug,
             'job': job.pk
-        }))
+        }
+        if 'event' in self.kwargs:
+            kwargs['event'] = self.kwargs['event']
+        return redirect(reverse('plugins:banktransfer:import.job', kwargs=kwargs))
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['job_running'] = self.job_running
         ctx['no_more_payments'] = False
-        if self.request.event.settings.get('payment_term_last'):
-            if now() > self.request.event.payment_term_last:
-                ctx['no_more_payments'] = True
+
+        if 'event' in self.kwargs:
+            ctx['basetpl'] = 'pretixplugins/banktransfer/import_base.html'
+            if self.request.event.settings.get('payment_term_last'):
+                if now() > self.request.event.payment_term_last:
+                    ctx['no_more_payments'] = True
+        else:
+            ctx['basetpl'] = 'pretixplugins/banktransfer/import_base_organizer.html'
+            ctx['organizer'] = self.request.organizer
         return ctx
+
+
+class OrganizerBanktransferView:
+    def dispatch(self, request, *args, **kwargs):
+        if len(request.organizer.events.order_by('currency').values_list('currency', flat=True).distinct()) > 1:
+            messages.error(request, _('Please perform per-event bank imports as this organizer has events with '
+                                      'multuple currencies.'))
+            return redirect('control:organizer', organizer=request.organizer.slug)
+        return super().dispatch(request, *args, **kwargs)
+
+
+class EventImportView(EventPermissionRequiredMixin, ImportView):
+    permission = 'can_change_orders'
+
+
+class OrganizerImportView(OrganizerBanktransferView, OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin,
+                          ImportView):
+    permission = 'can_change_orders'
+
+
+class EventJobDetailView(EventPermissionRequiredMixin, JobDetailView):
+    permission = 'can_change_orders'
+
+
+class OrganizerJobDetailView(OrganizerBanktransferView, OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin,
+                             JobDetailView):
+    permission = 'can_change_orders'
+
+
+class EventActionView(EventPermissionRequiredMixin, ActionView):
+    permission = 'can_change_orders'
+
+
+class OrganizerActionView(OrganizerBanktransferView, OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin,
+                          ActionView):
+    permission = 'can_change_orders'
+
+    def order_qs(self):
+        all = self.request.user.teams.filter(organizer=self.request.organizer, can_change_orders=True,
+                                             can_view_orders=True, all_events=True).exists()
+        if self.request.user.is_superuser or all:
+            return Order.objects.filter(event__organizer=self.request.organizer)
+        else:
+            return Order.objects.filter(
+                event_id__in=self.request.user.teams.filter(
+                    organizer=self.request.organizer, can_change_orders=True, can_view_orders=True
+                ).values_list('limit_events__id', flat=True)
+            )

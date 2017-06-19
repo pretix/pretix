@@ -4,7 +4,7 @@ from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.signals import register_payment_providers
-from pretix.control.signals import html_head, nav_event
+from pretix.control.signals import html_head, nav_event, nav_organizer
 
 from .payment import BankTransfer
 
@@ -25,6 +25,25 @@ def control_nav_import(sender, request=None, **kwargs):
             'url': reverse('plugins:banktransfer:import', kwargs={
                 'event': request.event.slug,
                 'organizer': request.event.organizer.slug,
+            }),
+            'active': (url.namespace == 'plugins:banktransfer' and url.url_name == 'import'),
+            'icon': 'upload',
+        }
+    ]
+
+
+@receiver(nav_organizer, dispatch_uid="payment_banktransfer_organav")
+def control_nav_orga_import(sender, request=None, **kwargs):
+    url = resolve(request.path_info)
+    if not request.user.has_organizer_permission(request.organizer, 'can_change_orders'):
+        return []
+    if not request.organizer.events.filter(plugins__icontains='pretix.plugins.banktransfer'):
+        return []
+    return [
+        {
+            'label': _('Import bank data'),
+            'url': reverse('plugins:banktransfer:import', kwargs={
+                'organizer': request.organizer.slug,
             }),
             'active': (url.namespace == 'plugins:banktransfer' and url.url_name == 'import'),
             'icon': 'upload',

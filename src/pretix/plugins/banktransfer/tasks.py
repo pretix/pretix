@@ -6,10 +6,11 @@ from decimal import Decimal
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
+from django.db.models import Q
 from django.utils.translation import ugettext_noop
 
 from pretix.base.i18n import language
-from pretix.base.models import Event, Order, Quota
+from pretix.base.models import Event, Order, Organizer, Quota
 from pretix.base.services.async import TransactionAwareTask
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException
@@ -21,17 +22,33 @@ from .models import BankImportJob, BankTransaction
 logger = logging.getLogger(__name__)
 
 
-def _handle_transaction(event: Event, trans: BankTransaction, code: str):
-    try:
-        trans.order = event.orders.get(code=code)
-    except Order.DoesNotExist:
-        normalized_code = Order.normalize_code(code)
+def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, organizer: Organizer=None,
+                        slug: str=None):
+    if event:
         try:
-            trans.order = event.orders.get(code=normalized_code)
+            trans.order = event.orders.get(code=code)
         except Order.DoesNotExist:
-            trans.state = BankTransaction.STATE_NOMATCH
-            trans.save()
-            return
+            normalized_code = Order.normalize_code(code)
+            try:
+                trans.order = event.orders.get(code=normalized_code)
+            except Order.DoesNotExist:
+                trans.state = BankTransaction.STATE_NOMATCH
+                trans.save()
+                return
+    else:
+        qs = Order.objects.filter(event__organizer=organizer)
+        if slug:
+            qs = qs.filter(event__slug__iexact=slug)
+        try:
+            trans.order = qs.get(code=code)
+        except Order.DoesNotExist:
+            normalized_code = Order.normalize_code(code)
+            try:
+                trans.order = qs.get(code=normalized_code)
+            except Order.DoesNotExist:
+                trans.state = BankTransaction.STATE_NOMATCH
+                trans.save()
+                return
 
     if trans.order.status == Order.STATUS_PAID:
         trans.state = BankTransaction.STATE_DUPLICATE
@@ -63,9 +80,11 @@ def _handle_transaction(event: Event, trans: BankTransaction, code: str):
     trans.save()
 
 
-def _get_unknown_transactions(event: Event, job: BankImportJob, data: list):
+def _get_unknown_transactions(job: BankImportJob, data: list, event: Event=None, organizer: Organizer=None):
     amount_pattern = re.compile("[^0-9.-]")
-    known_checksums = set(t['checksum'] for t in BankTransaction.objects.filter(event=event).values('checksum'))
+    known_checksums = set(t['checksum'] for t in BankTransaction.objects.filter(
+        Q(event=event) if event else Q(organizer=organizer)
+    ).values('checksum'))
 
     transactions = []
     for row in data:
@@ -83,7 +102,7 @@ def _get_unknown_transactions(event: Event, job: BankImportJob, data: list):
             logger.exception('Could not parse amount of transaction: {}'.format(amount))
             amount = Decimal("0.00")
 
-        trans = BankTransaction(event=event, import_job=job,
+        trans = BankTransaction(event=event, organizer=organizer, import_job=job,
                                 payer=row.get('payer', ''),
                                 reference=row['reference'],
                                 amount=amount,
@@ -99,29 +118,41 @@ def _get_unknown_transactions(event: Event, job: BankImportJob, data: list):
 
 
 @app.task(base=TransactionAwareTask, bind=True, max_retries=5, default_retry_delay=1)
-def process_banktransfers(self, event: int, job: int, data: list) -> None:
+def process_banktransfers(self, job: int, data: list) -> None:
     with language("en"):  # We'll translate error messages at display time
-        event = Event.objects.get(pk=event)
         job = BankImportJob.objects.get(pk=job)
         job.state = BankImportJob.STATE_RUNNING
         job.save()
+        prefixes = []
 
         try:
             # Delete left-over transactions from a failed run before so they can reimported
-            BankTransaction.objects.filter(event=event, state=BankTransaction.STATE_UNCHECKED).delete()
+            BankTransaction.objects.filter(state=BankTransaction.STATE_UNCHECKED, **job.owner_kwargs).delete()
 
-            transactions = _get_unknown_transactions(event, job, data)
+            transactions = _get_unknown_transactions(job, data, **job.owner_kwargs)
 
             code_len = settings.ENTROPY['order_code']
-            pattern = re.compile(event.slug.upper() + "[ \-_]*([A-Z0-9]{%s})" % code_len)
+            if job.event:
+                pattern = re.compile(job.event.slug.upper() + "[ \-_]*([A-Z0-9]{%s})" % code_len)
+            else:
+                if not prefixes:
+                    prefixes = [e.slug.upper().replace(".", r"\.").replace("-", r"\-")
+                                for e in job.organizer.events.all()]
+                pattern = re.compile("(%s)[ \-_]*([A-Z0-9]{%s})" % ("|".join(prefixes), code_len))
 
             for trans in transactions:
                 match = pattern.search(trans.reference.upper())
 
                 if match:
-                    code = match.group(1)
-                    with transaction.atomic():
-                        _handle_transaction(event, trans, code)
+                    if job.event:
+                        code = match.group(1)
+                        with transaction.atomic():
+                            _handle_transaction(trans, code, event=job.event)
+                    else:
+                        slug = match.group(1)
+                        code = match.group(2)
+                        with transaction.atomic():
+                            _handle_transaction(trans, code, organizer=job.organizer, slug=slug)
                 else:
                     trans.state = BankTransaction.STATE_NOMATCH
                     trans.save()

@@ -1,5 +1,6 @@
-{% extends "pretixplugins/banktransfer/import_base.html" %}
+{% extends basetpl %}
 {% load i18n %}
+{% load staticfiles %}
 {% block inner %}
     <h2>{% trans "Import result" %}</h2>
     {% if job.state == "running" or job.state == "pending" %}
@@ -37,11 +38,12 @@
             </tr>
         </table>
         {% if transactions_ignored or transactions_invalid %}
-            <a href="{% url "plugins:banktransfer:import" event=request.event.slug organizer=request.organizer.slug %}"
+            <a href="{% if request.event %}{% url "plugins:banktransfer:import" event=request.event.slug organizer=request.organizer.slug %}{% else %}{% url "plugins:banktransfer:import" organizer=request.organizer.slug %}{% endif %}"
                 class="btn btn-primary">
                 {% trans "Review invalid and ignored payments" %} &raquo;
             </a>
         {% endif %}
 
     {% endif %}
+    <script type="application/javascript" src="{% static "pretixplugins/banktransfer/ui.js" %}"></script>
 {% endblock %}

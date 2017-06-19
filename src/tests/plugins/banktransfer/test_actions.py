@@ -208,3 +208,68 @@ def test_retry_paid(env, client):
     assert trans.state == BankTransaction.STATE_ERROR
     env[3].refresh_from_db()
     assert env[3].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_assign_order_organizer(env, client):
+    job = BankImportJob.objects.create(organizer=env[0].organizer)
+    trans = BankTransaction.objects.create(organizer=env[0].organizer, import_job=job, payer='Foo',
+                                           state=BankTransaction.STATE_NOMATCH,
+                                           amount=23, date='unknown')
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = json.loads(client.post('/control/organizer/{}/banktransfer/action/'.format(env[0].organizer.slug), {
+        'action_{}'.format(trans.pk): 'assign:{}'.format(env[2].code),
+    }).content.decode('utf-8'))
+    assert r['status'] == 'ok'
+    trans.refresh_from_db()
+    assert trans.state == BankTransaction.STATE_VALID
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_assign_order_organizer_full_code(env, client):
+    job = BankImportJob.objects.create(organizer=env[0].organizer)
+    trans = BankTransaction.objects.create(organizer=env[0].organizer, import_job=job, payer='Foo',
+                                           state=BankTransaction.STATE_NOMATCH,
+                                           amount=23, date='unknown')
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = json.loads(client.post('/control/organizer/{}/banktransfer/action/'.format(env[0].organizer.slug), {
+        'action_{}'.format(trans.pk): 'assign:{}-{}'.format(env[0].slug.upper(), env[2].code),
+    }).content.decode('utf-8'))
+    assert r['status'] == 'ok'
+    trans.refresh_from_db()
+    assert trans.state == BankTransaction.STATE_VALID
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_assign_order_organizer_no_permission(env, client):
+    job = BankImportJob.objects.create(organizer=env[0].organizer)
+    trans = BankTransaction.objects.create(organizer=env[0].organizer, import_job=job, payer='Foo',
+                                           state=BankTransaction.STATE_NOMATCH,
+                                           amount=23, date='unknown')
+    team = env[1].teams.first()
+    team.can_change_orders = False
+    team.save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = client.post('/control/organizer/{}/banktransfer/action/'.format(env[0].organizer.slug), {
+        'action_{}'.format(trans.pk): 'assign:{}-{}'.format(env[0].slug.upper(), env[2].code),
+    })
+    assert r.status_code == 403
+
+
+@pytest.mark.django_db
+def test_assign_order_organizer_no_permission_for_event(env, client):
+    job = BankImportJob.objects.create(organizer=env[0].organizer)
+    trans = BankTransaction.objects.create(organizer=env[0].organizer, import_job=job, payer='Foo',
+                                           state=BankTransaction.STATE_NOMATCH,
+                                           amount=23, date='unknown')
+    team = env[1].teams.first()
+    team.limit_events.clear()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = json.loads(client.post('/control/organizer/{}/banktransfer/action/'.format(env[0].organizer.slug), {
+        'action_{}'.format(trans.pk): 'assign:{}-{}'.format(env[0].slug.upper(), env[2].code),
+    }).content.decode('utf-8'))
+    assert r['status'] == 'error'

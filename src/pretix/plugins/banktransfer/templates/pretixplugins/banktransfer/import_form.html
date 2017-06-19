@@ -1,6 +1,7 @@
-{% extends "pretixplugins/banktransfer/import_base.html" %}
+{% extends basetpl %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load static %}
 {% block inner %}
     {% if no_more_payments %}
         <div class="alert alert-danger">
@@ -47,6 +48,16 @@
                 <h3 class="panel-title">{% trans "Unresolved transactions" %}</h3>
             </div>
             <div class="panel-body">
+                {% if request.event %}
+                    <p>
+                        {% blocktrans %}
+                            On this page, you can import banking data on a per-event level. You also only see
+                            unmatched transactions imported directly for this event.
+                        {% endblocktrans %}
+                        <a href="{% url "plugins:banktransfer:import" organizer=request.organizer.slug %}"
+                                class="btn btn-default btn-xs">{% trans "Go to organizer-level import" %}</a>
+                    </p>
+                {% endif %}
                 <p>
                 <form class="form-inline helper-display-inline" action="" method="get">
                     <input type="text" name="search" class="form-control" placeholder="{% trans "Search" %}"
@@ -74,4 +85,5 @@
             </div>
         </div>
     {% endif %}
+    <script type="application/javascript" src="{% static "pretixplugins/banktransfer/ui.js" %}"></script>
 {% endblock %}
