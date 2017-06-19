@@ -549,9 +549,13 @@ class QuotaList(ListView):
     template_name = 'pretixcontrol/items/quotas.html'
 
     def get_queryset(self):
-        return Quota.objects.filter(
+        qs = Quota.objects.filter(
             event=self.request.event
         ).prefetch_related("items")
+        if self.request.GET.get("subevent", "") != "":
+            s = self.request.GET.get("subevent", "")
+            qs = qs.filter(subevent_id=s)
+        return qs
 
 
 class QuotaCreate(EventPermissionRequiredMixin, CreateView):

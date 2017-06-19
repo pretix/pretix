@@ -21,6 +21,9 @@
             <legend>{% trans "General information" %}</legend>
             {% bootstrap_field form.name layout="horizontal" %}
             {% bootstrap_field form.size layout="horizontal" %}
+            {% if form.subevent %}
+                {% bootstrap_field form.subevent layout="horizontal" %}
+            {% endif %}
             <legend>{% trans "Items" %}</legend>
             <p>
                 {% blocktrans trimmed %}

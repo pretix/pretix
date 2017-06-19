@@ -88,12 +88,18 @@ class QuotaForm(I18nModelForm):
             widget=forms.CheckboxSelectMultiple
         )
 
+        if self.event.has_subevents:
+            self.fields['subevent'].queryset = self.event.subevents.all()
+        else:
+            del self.fields['subevent']
+
     class Meta:
         model = Quota
         localized_fields = '__all__'
         fields = [
             'name',
             'size',
+            'subevent'
         ]
 
     def save(self, *args, **kwargs):
