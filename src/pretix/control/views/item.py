@@ -21,6 +21,7 @@ from pretix.base.models import (
     CachedTicket, Item, ItemCategory, ItemVariation, Order, Question,
     QuestionAnswer, QuestionOption, Quota, Voucher,
 )
+from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn
 from pretix.control.forms.item import (
     CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemCreateForm,
@@ -681,6 +682,22 @@ class QuotaUpdate(EventPermissionRequiredMixin, UpdateView):
                     k: form.cleaned_data.get(k) for k in form.changed_data
                 }
             )
+            if ((form.initial.get('subevent') and not form.instance.subevent)
+                    or (form.instance.subevent and form.initial.get('subevent') != form.instance.subevent.pk)):
+
+                if form.initial.get('subevent'):
+                    se = SubEvent.objects.get(event=self.request.event, pk=form.initial.get('subevent'))
+                    se.log_action(
+                        'pretix.subevent.quota.deleted', user=self.request.user, data={
+                            'id': form.instance.pk
+                        }
+                    )
+                if form.instance.subevent:
+                    form.instance.subevent.log_action(
+                        'pretix.subevent.quota.added', user=self.request.user, data={
+                            'id': form.instance.pk
+                        }
+                    )
         return super().form_valid(form)
 
     def get_success_url(self) -> str:

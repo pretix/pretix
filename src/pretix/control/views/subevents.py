@@ -106,11 +106,10 @@ class SubEventEditorMixin:
             if form in self.formset.deleted_forms:
                 if not form.instance.pk:
                     continue
-                obj.log_action(
-                    'pretix.subevent.quota.deleted', user=self.request.user, data={
-                        'id': form.instance.pk
-                    }
-                )
+                form.instance.log_action(action='pretix.event.quota.deleted', user=self.request.user)
+                obj.log_action('pretix.subevent.quota.deleted', user=self.request.user, data={
+                    'id': form.instance.pk
+                })
                 form.instance.delete()
                 form.instance.pk = None
             elif form.has_changed():
@@ -119,8 +118,14 @@ class SubEventEditorMixin:
                 change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
                 change_data['id'] = form.instance.pk
                 obj.log_action(
-                    'pretix.subevent.quota.changed',
-                    user=self.request.user, data=change_data
+                    'pretix.subevent.quota.changed', user=self.request.user, data={
+                        k: form.cleaned_data.get(k) for k in form.changed_data
+                    }
+                )
+                form.instance.log_action(
+                    'pretix.event.quota.changed', user=self.request.user, data={
+                        k: form.cleaned_data.get(k) for k in form.changed_data
+                    }
                 )
 
         for form in self.formset.extra_forms:
@@ -133,10 +138,8 @@ class SubEventEditorMixin:
             form.save()
             change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
             change_data['id'] = form.instance.pk
-            obj.log_action(
-                'pretix.subevent.quota.added',
-                user=self.request.user, data=change_data
-            )
+            form.instance.log_action(action='pretix.event.quota.added', user=self.request.user, data=change_data)
+            obj.log_action('pretix.subevent.quota.added', user=self.request.user, data=change_data)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

@@ -157,6 +157,12 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.team.created': _('The team has been created.'),
         'pretix.team.changed': _('The team settings have been modified.'),
         'pretix.team.deleted': _('The team has been deleted.'),
+        'pretix.subevent.deleted': _('The sub-event has been deleted.'),
+        'pretix.subevent.changed': _('The sub-event has been modified.'),
+        'pretix.subevent.added': _('The sub-event has been created.'),
+        'pretix.subevent.quota.added': _('A quota has been added to the subevent.'),
+        'pretix.subevent.quota.changed': _('A quota has been modified on the subevent.'),
+        'pretix.subevent.quota.deleted': _('A quota has been removed from the subevent.'),
     }
 
     data = json.loads(logentry.data)
