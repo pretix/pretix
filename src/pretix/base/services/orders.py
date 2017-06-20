@@ -572,8 +572,8 @@ class OrderChangeManager:
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.CancelOperation(position))
 
-    def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: Order,
-                     subevent: SubEvent):
+    def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: Order = None,
+                     subevent: SubEvent = None):
         if price is None:
             price = get_price(item, variation, subevent=subevent)
         if price is None:
