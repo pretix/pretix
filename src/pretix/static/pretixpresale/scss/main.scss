@@ -20,6 +20,9 @@ footer {
     h1 {
         margin: 0;
     }
+    h1 small {
+        white-space: nowrap;
+    }
     .loginbox {
         padding-top: 15px;
     }

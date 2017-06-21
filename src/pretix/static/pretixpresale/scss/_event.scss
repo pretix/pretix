@@ -122,6 +122,7 @@ section.front-page {
 @media (max-width: $screen-sm-max) {
     .page-header h1 small {
         display: block;
+        white-space: normal;
     }
     .row-voucher > div:first-child {
         margin-bottom: 15px;
