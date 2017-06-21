@@ -32,7 +32,8 @@ class AutoAssign(EventPermissionRequiredMixin, AsyncAction, View):
         })
 
     def post(self, request, *args, **kwargs):
-        return self.do(self.request.event.id, self.request.user.id)
+        return self.do(self.request.event.id, self.request.user.id,
+                       self.request.POST.get('subevent'))
 
 
 class WaitingListView(EventPermissionRequiredMixin, ListView):

@@ -19,7 +19,7 @@
                     <div class="panel-heading">
                         {% trans "Send vouchers" %}
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body form-inline">
                         {% csrf_token %}
                         {% if request.event.settings.waiting_list_auto %}
                             <p>
@@ -40,6 +40,17 @@
                                     possible to the persons who waitet longest.
                                 {% endblocktrans %}
                             </p>
+                        {% endif %}
+                        {% if request.event.has_subevents %}
+                            <select name="subevent" class="form-control">
+                                <option value="">{% trans "All sub-events" %}</option>
+                                {% for se in request.event.subevents.all %}
+                                    <option value="{{ se.id }}"
+                                            {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
+                                        {{ se.name }} – {{ se.get_date_range_display }}
+                                    </option>
+                                {% endfor %}
+                            </select>
                         {% endif %}
                         <button class="btn btn-large btn-primary" type="submit">
                             {% trans "Send as many vouchers as possible" %}

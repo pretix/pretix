@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Item, Order, Organizer
+from pretix.base.models import Item, Order, Organizer, SubEvent
 from pretix.base.signals import register_payment_providers
 from pretix.control.utils.i18n import i18ncomp
 
@@ -86,6 +86,12 @@ class EventOrderFilterForm(OrderFilterForm):
         ],
         required=False,
     )
+    subevent = forms.ModelChoiceField(
+        label=_('Sub-event'),
+        queryset=SubEvent.objects.none(),
+        required=False,
+        empty_label=_('All sub-events')
+    )
 
     def get_payment_providers(self):
         providers = []
@@ -105,12 +111,20 @@ class EventOrderFilterForm(OrderFilterForm):
         self.fields['provider'].choices += [(k, v.verbose_name) for k, v
                                             in self.event.get_payment_providers().items()]
 
+        if self.event.has_subevents:
+            self.fields['subevent'].queryset = self.event.subevents.all()
+        elif 'subevent':
+            del self.fields['subevent']
+
     def filter_qs(self, qs):
         fdata = self.cleaned_data
         qs = super().filter_qs(qs)
 
         if fdata.get('item'):
-            qs = qs.filter(positions__item_id__in=(fdata.get('item'),))
+            qs = qs.filter(positions__item=fdata.get('item'))
+
+        if fdata.get('subevent'):
+            qs = qs.filter(positions__subevent=fdata.get('subevent'))
 
         if fdata.get('provider'):
             qs = qs.filter(payment_provider=fdata.get('provider'))

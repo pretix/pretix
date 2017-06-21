@@ -16,6 +16,7 @@ from pretix.base.models import (
     CachedFile, CachedTicket, Invoice, InvoiceAddress, Item, ItemVariation,
     Order, Quota, generate_position_secret, generate_secret,
 )
+from pretix.base.models.event import SubEvent
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
@@ -52,13 +53,6 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         ).annotate(pcnt=Count('positions')).select_related('invoice_address')
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
-
-        if self.request.GET.get("ordering", "") != "":
-            p = self.request.GET.get("ordering", "")
-            p_admissable = ('-code', 'code', '-email', 'email', '-total', 'total', '-datetime', 'datetime',
-                            '-status', 'status', 'pcnt', '-pcnt')
-            if p in p_admissable:
-                qs = qs.order_by(p)
 
         return qs.distinct()
 
@@ -616,7 +610,19 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
-        ctx['items_by_category'], ctx['total'] = order_overview(self.request.event)
+
+        subevent = None
+        if self.request.GET.get("subevent", "") != "" and self.request.event.has_subevents:
+            i = self.request.GET.get("subevent", "")
+            try:
+                subevent = self.request.event.subevents.get(pk=i)
+            except SubEvent.DoesNotExist:
+                pass
+
+        ctx['items_by_category'], ctx['total'] = order_overview(self.request.event, subevent=subevent)
+        ctx['subevent_warning'] = self.request.event.has_subevents and subevent and (
+            self.request.event.orders.filter(payment_fee__gt=0).exists()
+        )
         return ctx
 
 

@@ -4,12 +4,19 @@ from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
 from pretix.base.forms import PlaceholderValidator
 from pretix.base.models import Order
+from pretix.base.models.event import SubEvent
 
 
 class MailForm(forms.Form):
     sendto = forms.MultipleChoiceField()  # overridden later
     subject = forms.CharField(label=_("Subject"))
     message = forms.CharField(label=_("Message"))
+    subevent = forms.ModelChoiceField(
+        SubEvent.objects.none(),
+        label=_('Only send to customers of'),
+        required=False,
+        empty_label=_('All sub-events')
+    )
 
     def __init__(self, *args, **kwargs):
         event = kwargs.pop('event')
@@ -35,3 +42,7 @@ class MailForm(forms.Form):
             label=_("Send to"), widget=forms.CheckboxSelectMultiple,
             choices=choices
         )
+        if event.has_subevents:
+            self.fields['subevent'].queryset = event.subevents.all()
+        else:
+            del self.fields['subevent']

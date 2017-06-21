@@ -12,6 +12,32 @@
         </div>
     </div>
 	<h1>{% trans "Order overview" %}</h1>
+    {% if request.event.has_subevents %}
+        <form class="form-inline helper-display-inline" action="" method="get">
+            <p>
+                {% if request.event.has_subevents %}
+                    <select name="subevent" class="form-control">
+                        <option value="">{% trans "All sub-events" %}</option>
+                        {% for se in request.event.subevents.all %}
+                            <option value="{{ se.id }}"
+                                    {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
+                                {{ se.name }} – {{ se.get_date_range_display }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+                <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+            </p>
+        </form>
+    {% endif %}
+    {% if subevent_warning %}
+        <div class="alert alert-info">
+            {% blocktrans trimmed %}
+                If you select a sub-event, payment method fees will not be listed here as it might not be clear which
+                sub-event they belong to.
+            {% endblocktrans %}
+        </div>
+    {% endif %}
     <div class="table-responsive">
         <table class="table table-condensed table-hover table-product-overview">
             <thead>

@@ -13,6 +13,7 @@ from django.utils.translation import ugettext as _
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Order, OrderPosition
+from pretix.base.models.event import SubEvent
 from pretix.base.services.stats import order_overview
 
 
@@ -161,6 +162,13 @@ class OverviewReport(Report):
             Paragraph(_('Orders by product'), headlinestyle),
             Spacer(1, 5 * mm)
         ]
+        if self.form_data.get('subevent'):
+            try:
+                subevent = self.event.subevents.get(pk=self.form_data.get('subevent'))
+            except SubEvent.DoesNotExist:
+                subevent = self.form_data.get('subevent')
+            story.append(Paragraph(_('Sub-event: {}').format(subevent), self.get_style()))
+            story.append(Spacer(1, 5 * mm))
         tdata = [
             [
                 _('Product'), _('Canceled'), '', _('Refunded'), '', _('Expired'), '', _('Purchased'),
@@ -180,7 +188,7 @@ class OverviewReport(Report):
             ],
         ]
 
-        items_by_category, total = order_overview(self.event)
+        items_by_category, total = order_overview(self.event, subevent=self.form_data.get('subevent'))
 
         for tup in items_by_category:
             if tup[0]:
@@ -230,6 +238,18 @@ class OverviewReport(Report):
         table.setStyle(TableStyle(tstyledata))
         story.append(table)
         return story
+
+    @property
+    def export_form_fields(self) -> dict:
+        d = OrderedDict()
+        if self.event.has_subevents:
+            d['subevent'] = forms.ModelChoiceField(
+                self.event.subevents.all(),
+                label=_('Sub-event'),
+                required=False,
+                empty_label=_('All sub-events')
+            )
+        return d
 
 
 class OrderTaxListReport(Report):
