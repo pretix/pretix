@@ -23,7 +23,7 @@ def env():
     se2 = event.subevents.create(name='Bar', date_from=now())
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
 
-    t = Team.objects.create(organizer=o, can_change_event_settings=True, can_change_items=True)
+    t = Team.objects.create(organizer=o, can_change_event_settings=True, can_change_orders=True)
     t.members.add(user)
     t.limit_events.add(event)
 
@@ -45,6 +45,20 @@ def env():
         price=23, attendee_name="Peter", secret='5678910', subevent=se2
     )
     return event, user, o1, op1, op2, se1, se2
+
+
+@pytest.mark.django_db
+def test_config(client, env):
+    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    client.login(email='dummy@dummy.dummy', password='dummy')
+
+    r = client.get('/control/event/%s/%s/pretixdroid/' % (env[0].organizer.slug, env[0].slug))
+    print(r.content)
+    assert 'qrcodeCanvas' not in r.rendered_content
+
+    r = client.get('/control/event/%s/%s/pretixdroid/?subevent=%d' % (env[0].organizer.slug, env[0].slug, env[5].pk))
+    assert 'qrcodeCanvas' in r.rendered_content
+    assert '/%d/' % env[5].pk in r.rendered_content
 
 
 @pytest.mark.django_db

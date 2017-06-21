@@ -242,6 +242,19 @@ class QuotaTest(ItemFormTest):
         assert Quota.objects.get(id=c.id).size == 350
         assert item1 in Quota.objects.get(id=c.id).items.all()
 
+    def test_update_subevent(self):
+        self.event1.has_subevents = True
+        self.event1.save()
+        se1 = self.event1.subevents.create(name="Foo", date_from=now())
+        se2 = self.event1.subevents.create(name="Bar", date_from=now())
+        c = Quota.objects.create(event=self.event1, name="Full house", size=500, subevent=se1)
+        doc = self.get_doc('/control/event/%s/%s/quotas/%s/change' % (self.orga1.slug, self.event1.slug, c.id))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['subevent'] = se2.pk
+        self.post_doc('/control/event/%s/%s/quotas/%s/change' % (self.orga1.slug, self.event1.slug, c.id),
+                      form_data)
+        assert Quota.objects.get(id=c.id).subevent == se2
+
     def test_delete(self):
         c = Quota.objects.create(event=self.event1, name="Full house", size=500)
         doc = self.get_doc('/control/event/%s/%s/quotas/%s/delete' % (self.orga1.slug, self.event1.slug, c.id))

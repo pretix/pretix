@@ -997,6 +997,39 @@ class CheckoutTestCase(TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        print(response.rendered_content)
         assert 'Workshop 1 (+ EUR 35.29 plus 19.00% taxes)' in response.rendered_content
         assert 'A (+ EUR 10.08 plus 19.00% taxes)' in response.rendered_content
+
+    def test_confirm_subevent_presale_not_yet(self):
+        self.event.has_subevents = True
+        self.event.settings.display_net_prices = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), presale_start=now() + datetime.timedelta(days=1))
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10), subevent=se
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+        assert 'presale period for one of the events in your cart has not yet started.' in response.rendered_content
+        assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
+
+    def test_confirm_subevent_presale_over(self):
+        self.event.has_subevents = True
+        self.event.settings.display_net_prices = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), presale_end=now() - datetime.timedelta(days=1))
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10), subevent=se
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+        assert 'presale period for one of the events in your cart has ended.' in response.rendered_content
+        assert not CartPosition.objects.filter(cart_id=self.session_key).exists()

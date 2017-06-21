@@ -104,10 +104,93 @@ class CartTest(CartTestMixin, TestCase):
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 0)
 
+    def test_voucher_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        self.quota_tickets.subevent = se
+        self.quota_tickets.save()
+        v = Voucher.objects.create(item=self.ticket, event=self.event, subevent=se)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+            'subevent': se.pk
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+        self.assertEqual(objs[0].subevent, se)
+
+    def test_voucher_any_subevent(self):
+        v = Voucher.objects.create(item=self.ticket, event=self.event)
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        self.quota_tickets.subevent = se
+        self.quota_tickets.save()
+        print(self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+            'subevent': se.pk
+        }, follow=True).rendered_content)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+        self.assertEqual(objs[0].subevent, se)
+
+    def test_voucher_wrong_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        v = Voucher.objects.create(item=self.ticket, event=self.event, subevent=se2)
+        self.quota_tickets.subevent = se
+        self.quota_tickets.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+            'subevent': se.pk
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
     def test_inactive_subevent(self):
         self.event.has_subevents = True
         self.event.save()
         se = self.event.subevents.create(name='Foo', date_from=now(), active=False)
+        q = se.quotas.create(name="foo", size=None, event=self.event)
+        q.items.add(self.ticket)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'subevent': se.pk
+        }, follow=False)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
+    def test_subevent_sale_over(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True,
+                                         presale_end=now() - timedelta(days=1))
+        q = se.quotas.create(name="foo", size=None, event=self.event)
+        q.items.add(self.ticket)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'subevent': se.pk
+        }, follow=False)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
+    def test_subevent_sale_not_yet(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True,
+                                         presale_start=now() + timedelta(days=1))
         q = se.quotas.create(name="foo", size=None, event=self.event)
         q.items.add(self.ticket)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
@@ -133,6 +216,50 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 23)
         self.assertEqual(objs[0].subevent, se)
+
+    def test_subevent_sold_out(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        q = se1.quotas.create(name="foo", size=0, event=self.event)
+        q.items.add(self.ticket)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'subevent': se1.pk
+        }, follow=False)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
+    def test_other_subevent_sold_out(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        q = se1.quotas.create(name="foo", size=0, event=self.event)
+        q.items.add(self.ticket)
+        q = se2.quotas.create(name="foo", size=100, event=self.event)
+        q.items.add(self.ticket)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'subevent': se2.pk
+        }, follow=False)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+
+    def test_subevent_no_quota(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        q = se1.quotas.create(name="foo", size=None, event=self.event)
+        q.items.add(self.ticket)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'subevent': se2.pk
+        }, follow=False)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
 
     def test_subevent_price(self):
         self.event.has_subevents = True
@@ -377,22 +504,6 @@ class CartTest(CartTestMixin, TestCase):
         shirt2 = Item.objects.create(event=self.event, name='T-Shirt', default_price=12)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % shirt2.id: '1',
-        }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
-                             target_status_code=200)
-        doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
-        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
-
-    def test_subevent_no_quota(self):
-        shirt2 = Item.objects.create(event=self.event, name='T-Shirt', default_price=12)
-        self.event.has_subevents = True
-        self.event.save()
-        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
-        SubEventItem.objects.create(subevent=se, item=shirt2, price=42)
-        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'item_%d' % shirt2.id: '1',
-            'subevent': se.pk
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)

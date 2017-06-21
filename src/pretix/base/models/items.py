@@ -408,7 +408,7 @@ class ItemVariation(models.Model):
         ))
         if ignored_quotas:
             check_quotas -= set(ignored_quotas)
-        if not subevent and self.item.event.has_subevents:
+        if not subevent and self.item.event.has_subevents:  # NOQA
             raise TypeError('You need to supply a subevent.')
         if not check_quotas:
             return Quota.AVAILABILITY_OK, sys.maxsize
@@ -720,7 +720,7 @@ class Quota(LoggedModel):
         now_dt = now_dt or now()
         if 'sqlite3' in settings.DATABASES['default']['ENGINE']:
             func = 'MAX'
-        else:
+        else:  # NOQA
             func = 'GREATEST'
 
         return Voucher.objects.filter(

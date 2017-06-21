@@ -60,8 +60,8 @@ error_messages = {
                               'removed this item from your cart.'),
     'voucher_required': _('You need a valid voucher code to order one of the products in your cart. We removed this '
                           'item from your cart.'),
-    'some_subevent_not_started': _('The presale period for this event has not yet started. The affected positions '
-                                   'have been removed from your cart.'),
+    'some_subevent_not_started': _('The presale period for one of the events in your cart has not yet started. The '
+                                   'affected positions have been removed from your cart.'),
     'some_subevent_ended': _('The presale period for one of the events in your cart has ended. The affected '
                              'positions have been removed from your cart.'),
 }
@@ -511,6 +511,7 @@ class OrderChangeManager:
         'free_to_paid': _('You cannot change a free order to a paid order.'),
         'product_without_variation': _('You need to select a variation of the product.'),
         'quota': _('The quota {name} does not have enough capacity left to perform the operation.'),
+        'quota_missing': _('There is no quota defined that allows this operation.'),
         'product_invalid': _('The selected product is not active or has no price set.'),
         'complete_cancel': _('This operation would leave the order empty. Please cancel the order itself instead.'),
         'not_pending_or_paid': _('Only pending or paid orders can be changed.'),
@@ -541,25 +542,32 @@ class OrderChangeManager:
 
         price = get_price(item, variation, voucher=position.voucher, subevent=position.subevent)
 
-        if price is None:
+        if price is None:  # NOQA
             raise OrderError(self.error_messages['product_invalid'])
+
+        new_quotas = (variation.quotas.filter(subevent=position.subevent)
+                      if variation else item.quotas.filter(subevent=position.subevent))
+        if not new_quotas:
+            raise OrderError(self.error_messages['quota_missing'])
+
         self._totaldiff = price - position.price
-        self._quotadiff.update(variation.quotas.filter(subevent=position.subevent)
-                               if variation
-                               else item.quotas.filter(subevent=position.subevent))
+        self._quotadiff.update(new_quotas)
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.ItemOperation(position, item, variation, price))
 
     def change_subevent(self, position: OrderPosition, subevent: SubEvent):
         price = get_price(position.item, position.variation, voucher=position.voucher, subevent=subevent)
 
-        if price is None:
+        if price is None:  # NOQA
             raise OrderError(self.error_messages['product_invalid'])
 
+        new_quotas = (position.variation.quotas.filter(subevent=subevent)
+                      if position.variation else position.item.quotas.filter(subevent=subevent))
+        if not new_quotas:
+            raise OrderError(self.error_messages['quota_missing'])
+
         self._totaldiff = price - position.price
-        self._quotadiff.update(position.variation.quotas.filter(subevent=subevent)
-                               if position.variation
-                               else position.item.quotas.filter(subevent=subevent))
+        self._quotadiff.update(new_quotas)
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.SubeventOperation(position, subevent, price))
 
@@ -586,9 +594,13 @@ class OrderChangeManager:
         if self.order.event.has_subevents and not subevent:
             raise OrderError(self.error_messages['subevent_required'])
 
+        new_quotas = (variation.quotas.filter(subevent=subevent)
+                      if variation else item.quotas.filter(subevent=subevent))
+        if not new_quotas:
+            raise OrderError(self.error_messages['quota_missing'])
+
         self._totaldiff = price
-        self._quotadiff.update(variation.quotas.filter(subevent=subevent)
-                               if variation else item.quotas.filter(subevent=subevent))
+        self._quotadiff.update(new_quotas)
         self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent))
 
     def _check_quotas(self):

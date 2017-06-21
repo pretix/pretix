@@ -131,6 +131,15 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertNotIn("Early-bird", resp.rendered_content)
 
+    def test_subevents_inactive_unknown(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name='Foo', date_from=now(), active=False)
+        resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
+        assert resp.status_code == 404
+        resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk + 1000))
+        assert resp.status_code == 404
+
     def test_subevents(self):
         self.event.has_subevents = True
         self.event.save()
@@ -632,14 +641,14 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.event.save()
 
     def test_response_type(self):
-        ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug))
+        ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug))
         self.assertEqual(ical['Content-Type'], 'text/calendar')
         self.assertEqual(ical['Content-Disposition'], 'attachment; filename="{}-{}-0.ics"'.format(
             self.orga.slug, self.event.slug
         ))
 
     def test_header_footer(self):
-        ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug)).content.decode()
+        ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         self.assertTrue(ical.startswith('BEGIN:VCALENDAR'), 'missing VCALENDAR header')
         self.assertTrue(ical.strip().endswith('END:VCALENDAR'), 'missing VCALENDAR footer')
         self.assertIn('BEGIN:VEVENT', ical, 'missing VEVENT header')
@@ -648,7 +657,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
     def test_timezone_header_footer(self):
         self.event.settings.timezone = 'Asia/Tokyo'
         self.event.save()
-        ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug)).content.decode()
+        ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         self.assertTrue(ical.startswith('BEGIN:VCALENDAR'), 'missing VCALENDAR header')
         self.assertTrue(ical.strip().endswith('END:VCALENDAR'), 'missing VCALENDAR footer')
         self.assertIn('BEGIN:VEVENT', ical, 'missing VEVENT header')
@@ -657,12 +666,12 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.assertIn('END:VTIMEZONE', ical, 'missing VTIMEZONE footer')
 
     def test_metadata(self):
-        ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug)).content.decode()
+        ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         self.assertIn('VERSION:2.0', ical, 'incorrect version tag - 2.0')
         self.assertIn('-//pretix//%s//' % settings.PRETIX_INSTANCE_NAME, ical, 'incorrect PRODID')
 
     def test_event_info(self):
-        ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug)).content.decode()
+        ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         self.assertIn('SUMMARY:%s' % self.event.name, ical, 'incorrect correct summary')
         self.assertIn('LOCATION:DUMMY ARENA', ical, 'incorrect location')
         self.assertIn('ORGANIZER:%s' % self.event.organizer.name, ical, 'incorrect organizer')
@@ -670,7 +679,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.assertTrue(re.search(r'UID:\w*-\w*-0-\d{20}', ical), 'missing UID key')
 
     def test_utc_timezone(self):
-        ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug)).content.decode()
+        ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         # according to icalendar spec, timezone must NOT be shown if it is UTC
         self.assertIn('DTSTART:%s' % self.event.date_from.strftime('%Y%m%dT%H%M%SZ'), ical, 'incorrect start time')
         self.assertIn('DTEND:%s' % self.event.date_to.strftime('%Y%m%dT%H%M%SZ'), ical, 'incorrect end time')
@@ -678,7 +687,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
     def test_include_timezone(self):
         self.event.settings.timezone = 'Asia/Tokyo'
         self.event.save()
-        ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug)).content.decode()
+        ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         # according to icalendar spec, timezone must be shown if it is not UTC
         fmt = '%Y%m%dT%H%M%S'
         self.assertIn('DTSTART;TZID=%s:%s' %
@@ -694,7 +703,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
     def test_no_time(self):
         self.event.settings.show_times = False
         self.event.save()
-        ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug)).content.decode()
+        ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         self.assertIn('DTSTART;VALUE=DATE:%s' % self.event.date_from.strftime('%Y%m%d'), ical, 'incorrect start date')
         self.assertIn('DTEND;VALUE=DATE:%s' % self.event.date_to.strftime('%Y%m%d'), ical, 'incorrect end date')
 
@@ -702,7 +711,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.event.settings.timezone = 'Asia/Tokyo'
         self.event.settings.show_date_to = False
         self.event.save()
-        ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug)).content.decode()
+        ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         fmt = '%Y%m%dT%H%M%S'
         self.assertIn('DTSTART;TZID=%s:%s' %
                       (self.event.settings.timezone,
@@ -714,7 +723,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.event.settings.show_date_to = False
         self.event.settings.show_times = False
         self.event.save()
-        ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug)).content.decode()
+        ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         self.assertIn('DTSTART;VALUE=DATE:%s' % self.event.date_from.strftime('%Y%m%d'), ical, 'incorrect start date')
         self.assertNotIn('DTEND', ical, 'unexpected end time attribute')
 
@@ -724,9 +733,34 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.event.settings.timezone = 'Asia/Tokyo'
         self.event.settings.show_times = False
         self.event.save()
-        ical = self.client.get('/%s/%s/ical' % (self.orga.slug, self.event.slug)).content.decode()
+        ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         self.assertIn('DTSTART;VALUE=DATE:20131227', ical, 'incorrect start date')
         self.assertIn('DTEND;VALUE=DATE:20131229', ical, 'incorrect end date')
+
+    def test_subevent_required(self):
+        self.event.has_subevents = True
+        self.event.save()
+        resp = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug))
+        assert resp.status_code == 404
+        resp = self.client.get('/%s/%s/ical/100/' % (self.orga.slug, self.event.slug))
+        assert resp.status_code == 404
+
+    def test_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(
+            name='My fancy subevent',
+            location='Heeeeeere',
+            date_from=datetime.datetime(2014, 12, 26, 21, 57, 58, tzinfo=datetime.timezone.utc),
+            date_to=datetime.datetime(2014, 12, 28, 21, 57, 58, tzinfo=datetime.timezone.utc),
+            active=True
+        )
+        self.event.settings.show_times = False
+        ical = self.client.get('/%s/%s/ical/%d/' % (self.orga.slug, self.event.slug, se1.pk)).content.decode()
+        self.assertIn('DTSTART;VALUE=DATE:20141226', ical, 'incorrect start date')
+        self.assertIn('DTEND;VALUE=DATE:20141228', ical, 'incorrect end date')
+        self.assertIn('SUMMARY:%s' % se1.name, ical, 'incorrect correct summary')
+        self.assertIn('LOCATION:Heeeeeere', ical, 'incorrect location')
 
 
 class EventSlugBlacklistValidatorTest(EventTestMixin, SoupTest):

@@ -20,7 +20,7 @@ def env():
     )
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
 
-    t = Team.objects.create(organizer=o, can_change_event_settings=True, can_change_items=True)
+    t = Team.objects.create(organizer=o, can_change_event_settings=True, can_change_orders=True)
     t.members.add(user)
     t.limit_events.add(event)
 
@@ -47,14 +47,15 @@ def env():
 @pytest.mark.django_db
 def test_flush_key(client, env):
     env[0].settings.set('pretixdroid_key', 'abcdefg')
+    client.login(email='dummy@dummy.dummy', password='dummy')
 
     client.get('/control/event/%s/%s/pretixdroid/' % (env[0].organizer.slug, env[0].slug))
     env[0].settings.flush()
-    env[0].settings.get('pretixdroid_key') == 'abcdefg'
+    assert env[0].settings.get('pretixdroid_key') == 'abcdefg'
 
     client.get('/control/event/%s/%s/pretixdroid/?flush_key=1' % (env[0].organizer.slug, env[0].slug))
     env[0].settings.flush()
-    env[0].settings.get('pretixdroid_key') != 'abcdefg'
+    assert env[0].settings.get('pretixdroid_key') != 'abcdefg'
 
 
 @pytest.mark.django_db

@@ -476,6 +476,9 @@ class OrderChangeTests(SoupTest):
             order=self.order, item=self.ticket, variation=None,
             price=Decimal("23.00"), attendee_name="Dieter"
         )
+        self.quota = self.event.quotas.create(name="All", size=100)
+        self.quota.items.add(self.ticket)
+        self.quota.items.add(self.shirt)
         user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True)
         t.members.add(user)
@@ -498,6 +501,38 @@ class OrderChangeTests(SoupTest):
         assert self.op1.price == self.shirt.default_price
         assert self.op1.tax_rate == self.shirt.tax_rate
         assert self.order.total == self.op1.price + self.op2.price
+
+    def test_change_subevent_success(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name='Foo', date_from=now())
+        se2 = self.event.subevents.create(name='Bar', date_from=now())
+        self.op1.subevent = se1
+        self.op1.save()
+        self.op2.subevent = se1
+        self.op2.save()
+        self.quota.subevent = se1
+        self.quota.save()
+        q2 = self.event.quotas.create(name='Q2', size=100, subevent=se2)
+        q2.items.add(self.ticket)
+        q2.items.add(self.shirt)
+        self.client.post('/control/event/{}/{}/orders/{}/change'.format(
+            self.event.organizer.slug, self.event.slug, self.order.code
+        ), {
+            'op-{}-operation'.format(self.op1.pk): 'subevent',
+            'op-{}-subevent'.format(self.op1.pk): str(se2.pk),
+            'op-{}-itemvar'.format(self.op1.pk): str(self.ticket.pk),
+            'op-{}-operation'.format(self.op2.pk): '',
+            'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+            'op-{}-subevent'.format(self.op2.pk): str(se1.pk),
+            'add-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+            'add-subevent'.format(self.op2.pk): str(se1.pk),
+        })
+        self.op1.refresh_from_db()
+        self.op2.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.subevent == se2
+        assert self.op2.subevent == se1
 
     def test_change_price_success(self):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
