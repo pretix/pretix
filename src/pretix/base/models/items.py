@@ -214,7 +214,7 @@ class Item(LoggedModel):
     allow_cancel = models.BooleanField(
         verbose_name=_('Allow product to be canceled'),
         default=True,
-        help_text=_('If this is active and the general event settings allo wit, orders containing this product can be '
+        help_text=_('If this is active and the general event settings allow it, orders containing this product can be '
                     'canceled by the user until the order is paid for. Users cannot cancel paid orders on their own '
                     'and you can cancel orders at all times, regardless of this setting')
     )
