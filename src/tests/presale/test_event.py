@@ -442,7 +442,7 @@ class WaitingListTest(EventTestMixin, SoupTest):
         self.assertEqual(response.status_code, 200)
         self.assertNotIn('waitinglist', response.rendered_content)
         response = self.client.get(
-            '/%s/%s/waitinglist?item=%d' % (self.orga.slug, self.event.slug, self.item.pk + 1)
+            '/%s/%s/waitinglist/?item=%d' % (self.orga.slug, self.event.slug, self.item.pk + 1)
         )
         self.assertEqual(response.status_code, 302)
 
@@ -455,12 +455,12 @@ class WaitingListTest(EventTestMixin, SoupTest):
 
     def test_submit_form(self):
         response = self.client.get(
-            '/%s/%s/waitinglist?item=%d' % (self.orga.slug, self.event.slug, self.item.pk)
+            '/%s/%s/waitinglist/?item=%d' % (self.orga.slug, self.event.slug, self.item.pk)
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn('waiting list', response.rendered_content)
         response = self.client.post(
-            '/%s/%s/waitinglist?item=%d' % (self.orga.slug, self.event.slug, self.item.pk), {
+            '/%s/%s/waitinglist/?item=%d' % (self.orga.slug, self.event.slug, self.item.pk), {
                 'email': 'foo@bar.com'
             }
         )
@@ -472,17 +472,77 @@ class WaitingListTest(EventTestMixin, SoupTest):
         assert wle.voucher is None
         assert wle.locale == 'en'
 
-    def test_invalid_item(self):
+    def test_subevent_valid(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="Foo", date_from=now(), active=True)
+        se2 = self.event.subevents.create(name="Foobar", date_from=now(), active=True)
+        self.q.subevent = se1
+        self.q.save()
+        q2 = self.event.quotas.create(name="Foobar", size=100, subevent=se2)
+        q2.items.add(self.item)
         response = self.client.get(
-            '/%s/%s/waitinglist?item=%d' % (self.orga.slug, self.event.slug, self.item.pk + 1)
+            '/%s/%s/waitinglist/?item=%d&subevent=%d' % (self.orga.slug, self.event.slug, self.item.pk, se1.pk)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('waiting list', response.rendered_content)
+        response = self.client.post(
+            '/%s/%s/waitinglist/?item=%d&subevent=%d' % (self.orga.slug, self.event.slug, self.item.pk, se1.pk), {
+                'email': 'foo@bar.com'
+            }
         )
         self.assertEqual(response.status_code, 302)
+        wle = WaitingListEntry.objects.get(email='foo@bar.com')
+        assert wle.event == self.event
+        assert wle.item == self.item
+        assert wle.subevent == se1
+
+    def test_invalid_item(self):
+        response = self.client.get(
+            '/%s/%s/waitinglist/?item=%d' % (self.orga.slug, self.event.slug, self.item.pk + 1)
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_invalid_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="Foo", date_from=now(), active=False)
+        response = self.client.get(
+            '/%s/%s/waitinglist/?item=%d' % (self.orga.slug, self.event.slug, self.item.pk)
+        )
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get(
+            '/%s/%s/waitinglist/?item=%d&subevent=%d' % (self.orga.slug, self.event.slug, self.item.pk, se1.pk + 100)
+        )
+        self.assertEqual(response.status_code, 404)
+        response = self.client.get(
+            '/%s/%s/waitinglist/?item=%d&subevent=%d' % (self.orga.slug, self.event.slug, self.item.pk, se1.pk)
+        )
+        self.assertEqual(response.status_code, 404)
 
     def test_available(self):
         self.q.size = 1
         self.q.save()
         response = self.client.post(
-            '/%s/%s/waitinglist?item=%d' % (self.orga.slug, self.event.slug, self.item.pk), {
+            '/%s/%s/waitinglist/?item=%d' % (self.orga.slug, self.event.slug, self.item.pk), {
+                'email': 'foo@bar.com'
+            }
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(WaitingListEntry.objects.filter(email='foo@bar.com').exists())
+
+    def test_subevent_available(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="Foo", date_from=now(), active=True)
+        se2 = self.event.subevents.create(name="Foobar", date_from=now(), active=True)
+        self.q.size = 1
+        self.q.subevent = se1
+        self.q.save()
+        q2 = self.event.quotas.create(name="Foobar", size=0, subevent=se2)
+        q2.items.add(self.item)
+        response = self.client.post(
+            '/%s/%s/waitinglist/?item=%d&subevent=%d' % (self.orga.slug, self.event.slug, self.item.pk, se1.pk), {
                 'email': 'foo@bar.com'
             }
         )

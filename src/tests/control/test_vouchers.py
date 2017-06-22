@@ -425,3 +425,53 @@ class VoucherFormTest(SoupTest):
         doc = self.post_doc('/control/event/%s/%s/vouchers/%s/delete' % (self.orga.slug, self.event.slug, v.pk),
                             {}, follow=True)
         assert doc.select(".alert-danger")
+
+    def test_subevent_optional(self):
+        self.event.has_subevents = True
+        self.event.save()
+        self._create_voucher({
+            'itemvar': '%d' % self.ticket.pk,
+        })
+
+    def test_subevent_required_for_blocking(self):
+        self.event.has_subevents = True
+        self.event.save()
+        self._create_voucher({
+            'itemvar': '%d' % self.ticket.pk,
+            'block_quota': 'on'
+        }, expected_failure=True)
+
+    def test_subevent_blocking_quota_free(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="Foo", date_from=now())
+        se2 = self.event.subevents.create(name="Bar", date_from=now())
+
+        self.quota_tickets.subevent = se1
+        self.quota_tickets.save()
+        q2 = Quota.objects.create(event=self.event, name='Tickets', size=0, subevent=se2)
+        q2.items.add(self.ticket)
+
+        self._create_voucher({
+            'itemvar': '%d' % self.ticket.pk,
+            'block_quota': 'on',
+            'subevent': se1.pk
+        })
+
+    def test_subevent_blocking_quota_full(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="Foo", date_from=now())
+        se2 = self.event.subevents.create(name="Bar", date_from=now())
+
+        self.quota_tickets.subevent = se1
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        q2 = Quota.objects.create(event=self.event, name='Tickets', size=5, subevent=se2)
+        q2.items.add(self.ticket)
+
+        self._create_voucher({
+            'itemvar': '%d' % self.ticket.pk,
+            'block_quota': 'on',
+            'subevent': se1.pk
+        }, expected_failure=True)
