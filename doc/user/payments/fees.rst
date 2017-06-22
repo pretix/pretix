@@ -12,6 +12,12 @@ The choice totally depends on you and what your customers expect from you. Optio
 offer different payment methods and want to encourage your customers to use the ones that come you cheaper, but you
 might also decide to go for option one to make it easier for customers who don't have the option.
 
+.. warning:: Please note that EU Directive 2015/2366 bans surcharging payment fees for most common payment
+             methods within the Europen Union. Depending on the payment method, this might affect
+             selling to consumers only or to business customers as well. Depending on your country, this
+             legislation might already be in place or become relevant from January 2018 the latest. This is not
+             legal advice. If in doubt, consult a lawyer or refrain from charging payment fees.
+
 If you go for the second option, you can configure pretix to charge the payment method fees to your user. You can
 define both an absolute fee as well as a percental fee based on the order total. If you do so, there are two
 different ways in which pretix can calculate the fee. Normally, it is fine to just go with the default setting, but
