@@ -13,7 +13,7 @@ offer different payment methods and want to encourage your customers to use the 
 might also decide to go for option one to make it easier for customers who don't have the option.
 
 .. warning:: Please note that EU Directive 2015/2366 bans surcharging payment fees for most common payment
-             methods within the Europen Union. Depending on the payment method, this might affect
+             methods within the European Union. Depending on the payment method, this might affect
              selling to consumers only or to business customers as well. Depending on your country, this
              legislation might already be in place or become relevant from January 2018 the latest. This is not
              legal advice. If in doubt, consult a lawyer or refrain from charging payment fees.
