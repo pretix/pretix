@@ -18,9 +18,9 @@ function typocheck() {
         });
     });
     words.push(
-        '@gmail.', '@web.', '@gmx.', '@hotmail.', '@live.', '@outlook.', '@yahoo.', '@mail.', '@msn.', '@me.',
-        '@verizon.', '@mac.', '@email.', '@icloud.', '@inbox.', '@rocketmail.', '@bt.', '@orange.',
-        '@online.', '@t-online.'
+        '@gmail.', '@web.', '@gmx.', '@hotmail.', '@live.', '@outlook.', '@yahoo.', '@msn.', '@me.',
+        '@verizon.', '@mac.', '@icloud.', '@inbox.', '@rocketmail.', '@bt.', '@orange.',
+        '@online.', '@t-online.', '@googlemail.'
     );
 
     var word, patterns, i, j, k, r,
@@ -46,15 +46,15 @@ function typocheck() {
                 if (k === i) {
                     continue;
                 }
-                if (words[k] === '@mail.com') {
-                    console.log(words[k], r, words[k].match(r));
-                }
                 if (words[k].match(r)) {
                     patterns.splice(j, 1);
                 }
             }
         }
-        val = val.replace(new RegExp('(' + patterns.join('|') + ')', 'i'), word);
+        var newval = val.replace(new RegExp('(' + patterns.join('|') + ')', 'i'), word);
+        if (newval.split("@").length === 2) {
+            val = newval;
+        }
     }
     val = val.replace(/gmail\.(?!com$)[a-z]*$/i, 'gmail.com');
 
