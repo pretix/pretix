@@ -35,13 +35,13 @@ class OrderListExporter(BaseExporter):
 
     def _get_all_tax_rates(self, qs):
         tax_rates = set(
-            qs.exclude(payment_fee=0).values_list('payment_fee_tax_rate', flat=True)
-              .distinct().order_by()
+            qs.exclude(payment_fee=0).values_list('payment_fee_tax_rate', flat=True).distinct().order_by()
         )
         tax_rates |= set(
             a for a
-            in OrderPosition.objects.filter(order__event=self.event)
-                                    .values_list('tax_rate', flat=True).distinct().order_by()
+            in OrderPosition.objects.filter(
+                order__event=self.event
+            ).values_list('tax_rate', flat=True).distinct().order_by()
         )
         tax_rates = sorted(tax_rates)
         return tax_rates
@@ -131,6 +131,42 @@ class OrderListExporter(BaseExporter):
         return 'orders.csv', 'text/csv', output.getvalue().encode("utf-8")
 
 
+class QuotaListExporter(BaseExporter):
+    identifier = 'quotalistcsv'
+    verbose_name = ugettext_lazy('Quota availabilities (CSV)')
+
+    def render(self, form_data: dict):
+        output = io.StringIO()
+        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
+
+        headers = [
+            _('Quota name'), _('Total quota'), _('Paid orders'), _('Pending orders'), _('Blocking vouchers'),
+            _('Current user\'s carts'), _('Waiting list'), _('Current availability')
+        ]
+        writer.writerow(headers)
+
+        for quota in self.event.quotas.all():
+            avail = quota.availability()
+            row = [
+                quota.name,
+                _('Infinite') if quota.size is None else quota.size,
+                quota.count_paid_orders(),
+                quota.count_pending_orders(),
+                quota.count_blocking_vouchers(),
+                quota.count_in_cart(),
+                quota.count_waiting_list_pending(),
+                _('Infinite') if avail[1] is None else avail[1]
+            ]
+            writer.writerow(row)
+
+        return 'quotas.csv', 'text/csv', output.getvalue().encode("utf-8")
+
+
 @receiver(register_data_exporters, dispatch_uid="exporter_orderlist")
 def register_orderlist_exporter(sender, **kwargs):
     return OrderListExporter
+
+
+@receiver(register_data_exporters, dispatch_uid="exporter_quotalist")
+def register_quotalist_exporter(sender, **kwargs):
+    return QuotaListExporter
