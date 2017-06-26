@@ -467,7 +467,7 @@ class InvoiceSettingsForm(SettingsForm):
     )
     invoice_logo_image = ExtFileField(
         label=_('Logo image'),
-        ext_whitelist=(".png", ".jpg", ".svg", ".gif", ".jpeg"),
+        ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
         required=False,
         help_text=_('We will show your logo with a maximal height and width of 2.5 cm.')
     )
