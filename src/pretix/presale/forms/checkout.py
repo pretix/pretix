@@ -26,11 +26,22 @@ class ContactForm(forms.Form):
         self.event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
 
+        if self.event.settings.order_email_asked_twice:
+            self.fields['email_repeat'] = forms.EmailField(
+                label=_('E-mail address (repeated)'),
+                help_text=_('Please enter the same email address again to make sure you typed it correctly.')
+            )
+
         responses = contact_form_fields.send(self.event)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():
                 # We need to be this explicit, since OrderedDict.update does not retain ordering
                 self.fields[key] = value
+
+    def clean(self):
+        if self.event.settings.order_email_asked_twice:
+            if self.cleaned_data['email'] != self.cleaned_data['email_repeat']:
+                raise ValidationError(_('Please enter the same email address twice.'))
 
 
 class InvoiceAddressForm(forms.ModelForm):

@@ -275,6 +275,11 @@ class EventSettingsForm(SettingsForm):
         required=False,
         widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-attendee_emails_asked'}),
     )
+    order_email_asked_twice = forms.BooleanField(
+        label=_("Ask for the order email address twice"),
+        help_text=_("Require customers to fill in the primary email address twice to avoid errors."),
+        required=False,
+    )
     max_items_per_order = forms.IntegerField(
         min_value=1,
         label=_("Maximum number of items per order"),

@@ -35,6 +35,10 @@ DEFAULTS = {
         'default': 'False',
         'type': bool
     },
+    'order_email_asked_twice': {
+        'default': 'False',
+        'type': bool
+    },
     'invoice_address_asked': {
         'default': 'True',
         'type': bool,
