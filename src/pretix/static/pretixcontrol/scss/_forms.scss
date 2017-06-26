@@ -74,8 +74,15 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
   margin-bottom: 0;
 }
 
-.container ul.nav-pills {
-  margin: 20px 0;
+.container ul.nav-tabs {
+  margin: 0px 0;
+}
+
+.tab-content {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
 }
 
 .variation-matrix {
