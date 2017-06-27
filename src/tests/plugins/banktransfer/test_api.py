@@ -1,9 +1,11 @@
 import copy
 import json
-from datetime import timedelta
+from datetime import datetime, timedelta
 
+import mock
 import pytest
 from django.utils.timezone import now
+from pytz import UTC
 
 from pretix.base.models import (
     Event, Item, Order, OrderPosition, Organizer, Quota, Team, User,
@@ -63,13 +65,17 @@ RES_JOB = {
 
 @pytest.mark.django_db
 def test_api_list(env, client):
-    job = BankImportJob.objects.create(event=env[0], organizer=env[0].organizer)
-    BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
-                                   state=BankTransaction.STATE_ERROR,
-                                   amount=0, date='unknown')
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        job = BankImportJob.objects.create(event=env[0], organizer=env[0].organizer)
+        BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
+                                       state=BankTransaction.STATE_ERROR,
+                                       amount=0, date='unknown')
     res = copy.copy(RES_JOB)
     res['id'] = job.pk
-    res['created'] = job.created.isoformat().replace('+00:00', 'Z')
+    res['created'] = testtime.isoformat().replace('+00:00', 'Z')
     client.login(email='dummy@dummy.dummy', password='dummy')
     r = json.loads(
         client.get('/api/v1/organizers/{}/bankimportjobs/'.format(env[0].organizer.slug)).content.decode('utf-8')
@@ -79,13 +85,17 @@ def test_api_list(env, client):
 
 @pytest.mark.django_db
 def test_api_detail(env, client):
-    job = BankImportJob.objects.create(event=env[0], organizer=env[0].organizer)
-    BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
-                                   state=BankTransaction.STATE_ERROR,
-                                   amount=0, date='unknown')
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        job = BankImportJob.objects.create(event=env[0], organizer=env[0].organizer)
+        BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
+                                       state=BankTransaction.STATE_ERROR,
+                                       amount=0, date='unknown')
     res = copy.copy(RES_JOB)
     res['id'] = job.pk
-    res['created'] = job.created.isoformat().replace('+00:00', 'Z')
+    res['created'] = testtime.isoformat().replace('+00:00', 'Z')
     client.login(email='dummy@dummy.dummy', password='dummy')
     r = json.loads(
         client.get(
