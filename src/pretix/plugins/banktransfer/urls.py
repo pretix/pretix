@@ -1,5 +1,8 @@
 from django.conf.urls import url
 
+from pretix.api.urls import orga_router
+from pretix.plugins.banktransfer.api import BankImportJobViewSet
+
 from . import views
 
 urlpatterns = [
@@ -19,3 +22,5 @@ urlpatterns = [
     url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/banktransfer/action/',
         views.EventActionView.as_view(), name='import.action'),
 ]
+
+orga_router.register('bankimportjobs', BankImportJobViewSet)

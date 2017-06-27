@@ -89,18 +89,19 @@ def _get_unknown_transactions(job: BankImportJob, data: list, event: Event=None,
     transactions = []
     for row in data:
         amount = row['amount']
-        if ',' in amount and '.' in amount:
-            # Handle thousand-seperator , or .
-            if amount.find(',') < amount.find('.'):
-                amount = amount.replace(',', '')
-            else:
-                amount = amount.replace('.', '')
-        amount = amount_pattern.sub("", amount.replace(',', '.'))
-        try:
-            amount = Decimal(amount)
-        except:
-            logger.exception('Could not parse amount of transaction: {}'.format(amount))
-            amount = Decimal("0.00")
+        if not isinstance(amount, Decimal):
+            if ',' in amount and '.' in amount:
+                # Handle thousand-seperator , or .
+                if amount.find(',') < amount.find('.'):
+                    amount = amount.replace(',', '')
+                else:
+                    amount = amount.replace('.', '')
+            amount = amount_pattern.sub("", amount.replace(',', '.'))
+            try:
+                amount = Decimal(amount)
+            except:
+                logger.exception('Could not parse amount of transaction: {}'.format(amount))
+                amount = Decimal("0.00")
 
         trans = BankTransaction(event=event, organizer=organizer, import_job=job,
                                 payer=row.get('payer', ''),
