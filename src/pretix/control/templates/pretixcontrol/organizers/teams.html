@@ -5,12 +5,10 @@
     <p>
         {% trans "The list below shows all teams that exist within this organizer." %}
     </p>
-    {% if request.user.is_superuser %}
-        <a href="{% url "control:organizer.team.add" organizer=request.organizer.slug %}" class="btn btn-default">
-            <span class="fa fa-plus"></span>
-            {% trans "Create a new team" %}
-        </a>
-    {% endif %}
+    <a href="{% url "control:organizer.team.add" organizer=request.organizer.slug %}" class="btn btn-default">
+        <span class="fa fa-plus"></span>
+        {% trans "Create a new team" %}
+    </a>
     <table class="table table-condensed table-hover">
         <thead>
         <tr>
