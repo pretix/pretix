@@ -163,11 +163,7 @@
         <tr>
             <td class="footer">
                 <div>
-                    {% with 'target="blank" href="https://pretix.eu"'|safe as a_attr %}
-                        {% blocktrans trimmed %}
-                            powered by <a {{ a_attr }}>pretix</a>
-                        {% endblocktrans %}
-                    {% endwith %}
+                    {% include "pretixbase/email/email_footer.html" %}
                 </div>
             </td>
         </tr>
