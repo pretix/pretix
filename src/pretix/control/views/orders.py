@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.db.models import Count
 from django.http import FileResponse, Http404, HttpResponseNotAllowed
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
@@ -49,13 +50,14 @@ class OrderList(EventPermissionRequiredMixin, ListView):
     def get_queryset(self):
         qs = Order.objects.filter(
             event=self.request.event
-        )
+        ).annotate(pcnt=Count('positions')).select_related('invoice_address')
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 
         if self.request.GET.get("ordering", "") != "":
             p = self.request.GET.get("ordering", "")
-            p_admissable = ('-code', 'code', '-email', 'email', '-total', 'total', '-datetime', 'datetime', '-status', 'status')
+            p_admissable = ('-code', 'code', '-email', 'email', '-total', 'total', '-datetime', 'datetime',
+                            '-status', 'status', 'pcnt', '-pcnt')
             if p in p_admissable:
                 qs = qs.order_by(p)
 

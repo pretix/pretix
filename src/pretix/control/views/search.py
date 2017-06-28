@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.utils.functional import cached_property
 from django.views.generic import ListView
 
@@ -22,7 +22,7 @@ class OrderSearch(ListView):
         return ctx
 
     def get_queryset(self):
-        qs = Order.objects.all()
+        qs = Order.objects.all().annotate(pcnt=Count('positions')).select_related('invoice_address')
         if not self.request.user.is_superuser:
             qs = qs.filter(
                 Q(event__organizer_id__in=self.request.user.teams.filter(
@@ -37,7 +37,7 @@ class OrderSearch(ListView):
         if self.request.GET.get("ordering", "") != "":
             p = self.request.GET.get("ordering", "")
             p_admissable = ('event', '-event', '-code', 'code', '-email', 'email', '-total', 'total', '-datetime',
-                            'datetime', '-status', 'status')
+                            'datetime', '-status', 'status', 'pcnt', '-pcnt')
             if p in p_admissable:
                 qs = qs.order_by(p)
 

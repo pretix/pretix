@@ -70,14 +70,17 @@
                     <th>{% trans "User" %}
                         <a href="?{% url_replace request 'ordering' '-email' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'email' %}"><i class="fa fa-caret-up"></i></a></th>
-                    <th>{% trans "Order total" %}
-                        <a href="?{% url_replace request 'ordering' '-total' %}"><i class="fa fa-caret-down"></i></a>
-                        <a href="?{% url_replace request 'ordering' 'total' %}"><i class="fa fa-caret-up"></i></a></th>
                     <th>{% trans "Order date" %}
                         <a href="?{% url_replace request 'ordering' '-datetime' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'datetime' %}"><i class="fa fa-caret-up"></i></a>
                     </th>
-                    <th>{% trans "Status" %}
+                    <th class="text-right">{% trans "Order total" %}
+                        <a href="?{% url_replace request 'ordering' '-total' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'total' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th class="text-right">{% trans "Positions" %}
+                        <a href="?{% url_replace request 'ordering' '-pcnt' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'pcnt' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th class="text-right">{% trans "Status" %}
                         <a href="?{% url_replace request 'ordering' '-status' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'status' %}"><i class="fa fa-caret-up"></i></a></th>
                 </tr>
@@ -88,10 +91,16 @@
                         <td><strong><a
                                 href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code %}"
                         >{{ o.code }}</a></strong></td>
-                        <td>{{ o.email }}</td>
-                        <td>{{ o.total|floatformat:2 }} {{ request.event.currency }}</td>
+                        <td>
+                            {{ o.email }}
+                            {% if o.invoice_address.name %}
+                                <br>{{ o.invoice_address.name }}
+                            {% endif %}
+                        </td>
                         <td>{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
-                        <td>{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
+                        <td class="text-right">{{ o.total|floatformat:2 }} {{ request.event.currency }}</td>
+                        <td class="text-right">{{ o.pcnt }}</td>
+                        <td class="text-right">{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
