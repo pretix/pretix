@@ -2,16 +2,25 @@
 {% load i18n %}
 {% load eventurl %}
 {% load urlreplace %}
+{% load bootstrap3 %}
 {% block title %}{% trans "Order search" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Order search" %}</h1>
-    <form class="form-inline" action="" method="get">
-        <div class="input-group search-line">
-            <input type="text" name="query" class="form-control" placeholder="{% trans "Search for..." %}"
-                    value="{{ request.GET.query }}" autofocus>
-            <span class="input-group-btn">
-                <button class="btn btn-primary" type="submit">{% trans "Search" %}</button>
-            </span>
+    <form class="row filter-form" action="" method="get">
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            {% bootstrap_field filter_form.query layout='inline' %}
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            {% bootstrap_field filter_form.status layout='inline' %}
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            {% bootstrap_field filter_form.organizer layout='inline' %}
+        </div>
+        <div class="col-md-2 col-sm-6 col-xs-12">
+            <button class="btn btn-primary btn-block" type="submit">
+                <span class="fa fa-filter"></span>
+                {% trans "Filter" %}
+            </button>
         </div>
     </form>
     <div class="table-responsive">
