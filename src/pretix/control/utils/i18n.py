@@ -1,5 +1,6 @@
 # Inspired by https://github.com/asaglimbeni/django-datetime-widget/blob/master/datetimewidget/widgets.py
 # Copyright (c) 2013, Alfredo Saglimbeni (BSD license)
+import json
 import re
 
 from django.utils import translation
@@ -63,3 +64,7 @@ def get_moment_locale(locale=None):
         if main in moment_locales:
             return main
     return settings.LANGUAGE_CODE
+
+
+def i18ncomp(query):
+    return json.dumps(str(query))[1:-1]

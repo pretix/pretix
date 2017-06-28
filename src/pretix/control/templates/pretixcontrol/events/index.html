@@ -1,18 +1,49 @@
 {% extends "pretixcontrol/base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
 {% block title %}{% trans "Events" %}{% endblock %}
 {% block content %}
-	<h1>{% trans "Events" %}</h1>
-	<p>{% trans "The list below shows all events you have administrative access to. Click on the event name to access event details." %}</p>
-    <a href="{% url "control:events.add" %}" class="btn btn-default">
-        <span class="fa fa-plus"></span>
-        {% trans "Create a new event" %}
-    </a>
-    {% if events|length == 0 %}
-        <p>
-            <em>{% trans "You currently do not have access to any events." %}</em>
-        </p>
+    <h1>{% trans "Events" %}</h1>
+    <p>{% trans "The list below shows all events you have administrative access to. Click on the event name to access event details." %}</p>
+    {% if events|length == 0 and not filter_form.filtered %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You currently do not have access to any events.
+                {% endblocktrans %}
+            </p>
+
+            <a href="{% url "control:events.add" %}" class="btn btn-primary btn-lg">
+                <span class="fa fa-plus"></span>
+                {% trans "Create a new event" %}
+            </a>
+        </div>
     {% else %}
+        <form class="row filter-form" action="" method="get">
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.query layout='inline' %}
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.status layout='inline' %}
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.organizer layout='inline' %}
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-12">
+                <button class="btn btn-primary btn-block" type="submit">
+                    <span class="fa fa-filter"></span>
+                    <span class="hidden-md">
+                    {% trans "Filter" %}
+                </span>
+                </button>
+            </div>
+        </form>
+        <p>
+            <a href="{% url "control:events.add" %}" class="btn btn-default">
+                <span class="fa fa-plus"></span>
+                {% trans "Create a new event" %}
+            </a>
+        </p>
         <table class="table table-condensed table-hover">
             <thead>
             <tr>
@@ -20,15 +51,29 @@
                 <th>{% trans "Organizer" %}</th>
                 <th>{% trans "Start date" %}</th>
                 <th>{% trans "End date" %}</th>
+                <th class="text-right">{% trans "Status" %}</th>
             </tr>
             </thead>
             <tbody>
             {% for e in events %}
                 <tr>
-                    <td><strong><a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong></td>
+                    <td>
+                        <strong><a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong>
+                    </td>
                     <td>{{ e.organizer }}</td>
                     <td>{{ e.get_date_from_display }}</td>
                     <td>{{ e.get_date_to_display }}</td>
+                    <td class="text-right">
+                        {% if not e.live %}
+                            <span class="label label-danger">{% trans "Shop disabled" %}</span>
+                        {% elif e.presale_has_ended %}
+                            <span class="label label-warning">{% trans "Presale over" %}</span>
+                        {% elif not e.presale_is_running %}
+                            <span class="label label-warning">{% trans "Presale not started" %}</span>
+                        {% else %}
+                            <span class="label label-success">{% trans "On sale" %}</span>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

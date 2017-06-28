@@ -6,7 +6,7 @@
 {% block title %}{% trans "Orders" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Orders" %}</h1>
-    {% if not filtered and orders|length == 0 %}
+    {% if not filter_form.filtered and orders|length == 0 %}
         <div class="empty-collection">
             <p>
                 {% blocktrans trimmed %}
@@ -88,9 +88,14 @@
                 <tbody>
                 {% for o in orders %}
                     <tr>
-                        <td><strong><a
-                                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code %}"
-                        >{{ o.code }}</a></strong></td>
+                        <td>
+                            <strong>
+                                <a
+                                        href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code %}">
+                                    {{ o.code }}
+                                </a>
+                            </strong>
+                        </td>
                         <td>
                             {{ o.email }}
                             {% if o.invoice_address.name %}

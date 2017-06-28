@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.shortcuts import redirect
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView
 from formtools.wizard.views import SessionWizardView
@@ -11,6 +12,7 @@ from pretix.base.models import Event, Team
 from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
 )
+from pretix.control.forms.filter import EventFilterForm
 
 
 class EventList(ListView):
@@ -20,9 +22,21 @@ class EventList(ListView):
     template_name = 'pretixcontrol/events/index.html'
 
     def get_queryset(self):
-        return self.request.user.get_events_with_any_permission().select_related('organizer').prefetch_related(
+        qs = self.request.user.get_events_with_any_permission().select_related('organizer').prefetch_related(
             '_settings_objects', 'organizer___settings_objects'
         )
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['filter_form'] = self.filter_form
+        return ctx
+
+    @cached_property
+    def filter_form(self):
+        return EventFilterForm(data=self.request.GET, request=self.request)
 
 
 def condition_copy(wizard):

@@ -1,12 +1,8 @@
-import json
-
 from django.db.models import Q
 from django.http import JsonResponse
 from django.urls import reverse
 
-
-def i18ncomp(query):
-    return json.dumps(str(query))[1:-1]
+from pretix.control.utils.i18n import i18ncomp
 
 
 def event_list(request):

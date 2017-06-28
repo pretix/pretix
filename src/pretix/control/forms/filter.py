@@ -5,9 +5,19 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Item, Order, Organizer
 from pretix.base.signals import register_payment_providers
+from pretix.control.utils.i18n import i18ncomp
 
 
-class OrderFilterForm(forms.Form):
+class FilterForm(forms.Form):
+    def filter_qs(self, qs):
+        return qs
+
+    @property
+    def filtered(self):
+        return self.is_valid() and any(self.cleaned_data.values())
+
+
+class OrderFilterForm(FilterForm):
     query = forms.CharField(
         label=_('Search for…'),
         widget=forms.TextInput(attrs={
@@ -60,10 +70,6 @@ class OrderFilterForm(forms.Form):
                 qs = qs.filter(status=s)
 
         return qs
-
-    @property
-    def filtered(self):
-        return self.is_valid() and any(self.cleaned_data.values())
 
 
 class EventOrderFilterForm(OrderFilterForm):
@@ -135,5 +141,75 @@ class OrderSearchFilterForm(OrderFilterForm):
 
         if fdata.get('organizer'):
             qs = qs.filter(event__organizer=fdata.get('organizer'))
+
+        return qs
+
+
+class EventFilterForm(FilterForm):
+    status = forms.ChoiceField(
+        label=_('Status'),
+        choices=(
+            ('', _('All events')),
+            ('live', _('Shop live')),
+            ('running', _('Shop live and presale running')),
+            ('notlive', _('Shop not live')),
+            ('future', _('Presale not started')),
+            ('past', _('Presale over')),
+        ),
+        required=False
+    )
+    organizer = forms.ModelChoiceField(
+        label=_('Organizer'),
+        queryset=Organizer.objects.none(),
+        required=False,
+        empty_label=_('All organizers')
+    )
+    query = forms.CharField(
+        label=_('Event name'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Event name'),
+            'autofocus': 'autofocus'
+        }),
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        request = kwargs.pop('request')
+        super().__init__(*args, **kwargs)
+        if request.user.is_superuser:
+            self.fields['organizer'].queryset = Organizer.objects.all()
+        else:
+            self.fields['organizer'].queryset = Organizer.objects.filter(
+                pk__in=request.user.teams.values_list('organizer', flat=True)
+            )
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('status') == 'live':
+            qs = qs.filter(live=True)
+        elif fdata.get('status') == 'running':
+            qs = qs.filter(
+                live=True
+            ).filter(
+                Q(presale_start__isnull=True) | Q(presale_start__lte=now())
+            ).filter(
+                Q(presale_end__isnull=True) | Q(presale_end__gte=now())
+            )
+        elif fdata.get('status') == 'notlive':
+            qs = qs.filter(live=False)
+        elif fdata.get('status') == 'future':
+            qs = qs.filter(presale_start__gte=now())
+        elif fdata.get('status') == 'past':
+            qs = qs.filter(presale_end__lte=now())
+
+        if fdata.get('organizer'):
+            qs = qs.filter(organizer=fdata.get('organizer'))
+
+        if fdata.get('query'):
+            query = fdata.get('query')
+            qs = qs.filter(
+                Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query)
+            )
 
         return qs
