@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load eventurl %}
 {% load urlreplace %}
+{% load bootstrap3 %}
 {% block title %}{% trans "Orders" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Orders" %}</h1>
@@ -25,64 +26,60 @@
             {% endif %}
         </div>
     {% else %}
-        <p>
-        <form class="form-inline helper-display-inline"
-                action="{% url "control:event.orders.go" event=request.event.slug organizer=request.event.organizer.slug %}">
-            <div class="input-group">
-                <input type="text" name="code" class="form-control" placeholder="{% trans "Order code" %}" autofocus>
-                <span class="input-group-btn">
+        <div class="row filter-form">
+            <form class="col-md-2 col-xs-12"
+                    action="{% url "control:event.orders.go" event=request.event.slug organizer=request.event.organizer.slug %}">
+                <div class="input-group">
+                    <input type="text" name="code" class="form-control" placeholder="{% trans "Order code" %}" autofocus>
+                    <span class="input-group-btn">
                     <button class="btn btn-primary" type="submit">{% trans "Go!" %}</button>
                 </span>
-            </div>
-        </form>
-        <form class="form-inline helper-display-inline" action="" method="get">
-            <select name="status" class="form-control">
-                <option value="">{% trans "All orders" %}</option>
-                <option value="p" {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "Paid" %}</option>
-                <option value="n" {% if request.GET.status == "n" %}selected="selected"{% endif %}>{% trans "Pending" %}</option>
-                <option value="o" {% if request.GET.status == "o" %}selected="selected"{% endif %}>{% trans "Pending (overdue)" %}</option>
-                <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
-                <option value="ne" {% if request.GET.status == "ne" %}selected="selected"{% endif %}>{% trans "Pending or expired" %}</option>
-                <option value="c" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Canceled" %}</option>
-                <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Refunded" %}</option>
-            </select>
-            <select name="item" class="form-control">
-                <option value="">{% trans "All products" %}</option>
-                {% for item in items %}
-                    <option value="{{ item.id }}"
-                            {% if request.GET.item|add:0 == item.id %}selected="selected"{% endif %}>
-                        {{ item.name }}
-                    </option>
-                {% endfor %}
-            </select>
-            <select name="provider" class="form-control">
-                <option value="">{% trans "All payment providers" %}</option>
-                {% for p in providers %}
-                    <option value="{{ p.name }}"
-                            {% if request.GET.provider == p.name %}selected="selected"{% endif %}>
-                        {{ p.verbose_name }}
-                    </option>
-                {% endfor %}
-            </select>
-            <input type="text" name="user" class="form-control" placeholder="{% trans "Search user" %}" value="{{ request.GET.user }}">
-            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
-        </form>
-        </p>
+                </div>
+            </form>
+            <form class="" action="" method="get">
+                <div class="col-md-2 col-xs-6">
+                    {% bootstrap_field filter_form.status layout='inline' %}
+                </div>
+                <div class="col-md-2 col-xs-6">
+                    {% bootstrap_field filter_form.item layout='inline' %}
+                </div>
+                <div class="col-md-2 col-xs-6">
+                    {% bootstrap_field filter_form.provider layout='inline' %}
+                </div>
+                <div class="col-md-2 col-xs-6">
+                    {% bootstrap_field filter_form.query layout='inline' %}
+                </div>
+                <div class="col-md-2 col-xs-6">
+                    <button class="btn btn-primary btn-block" type="submit">
+                        <span class="fa fa-filter"></span>
+                        <span class="hidden-md">
+                            {% trans "Filter" %}
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
         {% include "pretixcontrol/pagination.html" %}
         <div class="table-responsive">
             <table class="table table-condensed table-hover">
                 <thead>
                 <tr>
-                    <th>{% trans "Order code" %} <a href="?{% url_replace request 'ordering' '-code'%}"><i class="fa fa-caret-down"></i></a>
-                      <a href="?{% url_replace request 'ordering' 'code'%}"><i class="fa fa-caret-up"></i></a></th>
-                    <th>{% trans "User" %} <a href="?{% url_replace request 'ordering' '-email'%}"><i class="fa fa-caret-down"></i></a>
-                      <a href="?{% url_replace request 'ordering' 'email'%}"><i class="fa fa-caret-up"></i></a></th>
-                    <th>{% trans "Order total" %} <a href="?{% url_replace request 'ordering' '-total'%}"><i class="fa fa-caret-down"></i></a>
-                      <a href="?{% url_replace request 'ordering' 'total'%}"><i class="fa fa-caret-up"></i></a></th>
-                    <th>{% trans "Order date" %} <a href="?{% url_replace request 'ordering' '-datetime'%}"><i class="fa fa-caret-down"></i></a>
-                      <a href="?{% url_replace request 'ordering' 'datetime'%}"><i class="fa fa-caret-up"></i></a></th>
-                    <th>{% trans "Status" %} <a href="?{% url_replace request 'ordering' '-status'%}"><i class="fa fa-caret-down"></i></a>
-                      <a href="?{% url_replace request 'ordering' 'status'%}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Order code" %}
+                        <a href="?{% url_replace request 'ordering' '-code' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'code' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "User" %}
+                        <a href="?{% url_replace request 'ordering' '-email' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'email' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Order total" %}
+                        <a href="?{% url_replace request 'ordering' '-total' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'total' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Order date" %}
+                        <a href="?{% url_replace request 'ordering' '-datetime' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'datetime' %}"><i class="fa fa-caret-up"></i></a>
+                    </th>
+                    <th>{% trans "Status" %}
+                        <a href="?{% url_replace request 'ordering' '-status' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'status' %}"><i class="fa fa-caret-up"></i></a></th>
                 </tr>
                 </thead>
                 <tbody>

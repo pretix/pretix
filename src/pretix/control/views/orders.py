@@ -3,7 +3,6 @@ from datetime import timedelta
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.db.models import Q
 from django.http import FileResponse, Http404, HttpResponseNotAllowed
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
@@ -31,6 +30,7 @@ from pretix.base.signals import (
     register_data_exporters, register_payment_providers,
 )
 from pretix.base.views.async import AsyncAction
+from pretix.control.forms.filter import EventOrderFilterForm
 from pretix.control.forms.orders import (
     CommentForm, ExporterForm, ExtendForm, OrderContactForm, OrderLocaleForm,
     OrderPositionAddForm, OrderPositionChangeForm,
@@ -50,28 +50,9 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         qs = Order.objects.filter(
             event=self.request.event
         )
-        if self.request.GET.get("user", "") != "":
-            u = self.request.GET.get("user", "")
-            qs = qs.filter(
-                Q(email__icontains=u) | Q(positions__attendee_name__icontains=u)
-                | Q(positions__attendee_email__icontains=u)
-                | Q(invoice_address__name__icontains=u)
-                | Q(invoice_address__company__icontains=u)
-            )
-        if self.request.GET.get("status", "") != "":
-            s = self.request.GET.get("status", "")
-            if s == 'o':
-                qs = qs.filter(status=Order.STATUS_PENDING, expires__lt=now().replace(hour=0, minute=0, second=0))
-            elif s == 'ne':
-                qs = qs.filter(status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
-            else:
-                qs = qs.filter(status=s)
-        if self.request.GET.get("item", "") != "":
-            i = self.request.GET.get("item", "")
-            qs = qs.filter(positions__item_id__in=(i,))
-        if self.request.GET.get("provider", "") != "":
-            p = self.request.GET.get("provider", "")
-            qs = qs.filter(payment_provider=p)
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+
         if self.request.GET.get("ordering", "") != "":
             p = self.request.GET.get("ordering", "")
             p_admissable = ('-code', 'code', '-email', 'email', '-total', 'total', '-datetime', 'datetime', '-status', 'status')
@@ -80,23 +61,14 @@ class OrderList(EventPermissionRequiredMixin, ListView):
 
         return qs.distinct()
 
-    def get_payment_providers(self):
-        providers = []
-        responses = register_payment_providers.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
-            providers.append({
-                'name': provider.identifier,
-                'verbose_name': provider.verbose_name
-            })
-        return providers
-
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['items'] = Item.objects.filter(event=self.request.event)
-        ctx['filtered'] = ("status" in self.request.GET or "item" in self.request.GET or "user" in self.request.GET or "provider" in self.request.GET)
-        ctx['providers'] = self.get_payment_providers()
+        ctx['filter_form'] = self.filter_form
         return ctx
+
+    @cached_property
+    def filter_form(self):
+        return EventOrderFilterForm(data=self.request.GET, event=self.request.event)
 
 
 class OrderView(EventPermissionRequiredMixin, DetailView):
