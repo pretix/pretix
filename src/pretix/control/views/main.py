@@ -24,7 +24,7 @@ class EventList(ListView):
     def get_queryset(self):
         qs = self.request.user.get_events_with_any_permission().select_related('organizer').prefetch_related(
             '_settings_objects', 'organizer___settings_objects'
-        )
+        ).order_by('-date_from')
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
         return qs
