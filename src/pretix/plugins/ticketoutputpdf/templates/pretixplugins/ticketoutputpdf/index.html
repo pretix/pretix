@@ -14,6 +14,10 @@
                 <div class="panel-heading">
                     <div class="pull-right">
                         <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-xs" id="toolbox-source"
+                                    title="{% trans "Code" %}">
+                                <span class="fa fa-code"></span>
+                            </button>
                             <button type="button" class="btn btn-default btn-xs" id="toolbox-paste"
                                     title="{% trans "Paste" %}">
                                 <span class="fa fa-paste"></span>
@@ -44,6 +48,27 @@
                         <div id="fabric-container">
                             <canvas id="fabric-canvas">
                             </canvas>
+                        </div>
+                        <div id="source-container">
+                            <div class="alert alert-warning">
+                                <strong>
+                                    {% blocktrans trimmed %}
+                                        This feature is only intended for advanced users. We recommend to only use it
+                                        to copy and share ticket designs, not to modify the design source code.
+                                    {% endblocktrans %}
+                                </strong>
+                            </div>
+                            <p>
+                                <textarea id="source-textarea" class="form-control"></textarea>
+                            </p>
+                            <p class="text-right">
+                                <button class="btn btn-default" id="source-close">
+                                    {% trans "Cancel" %}
+                                </button>
+                                <button class="btn btn-default" id="source-save">
+                                    {% trans "Save" %}
+                                </button>
+                            </p>
                         </div>
                         <div id="loading-container">
                             <div id="loading-upload">

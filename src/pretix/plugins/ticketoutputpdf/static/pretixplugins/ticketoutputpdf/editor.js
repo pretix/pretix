@@ -629,6 +629,20 @@ var editor = {
         editor._load_pdf(d);
     },
 
+    _source_show: function () {
+        $("#source-textarea").text(JSON.stringify(editor.dump()));
+        $("#source-container").show();
+    },
+
+    _source_close: function () {
+        $("#source-container").hide();
+    },
+
+    _source_save: function () {
+        editor.load(JSON.parse($("#source-textarea").val()));
+        $("#source-container").hide();
+    },
+
     init: function () {
         editor.$pdfcv = $("#pdf-canvas");
         editor.pdf_url = editor.$pdfcv.attr("data-pdf-url");
@@ -646,6 +660,7 @@ var editor = {
                 return gettext("Do you really want to leave the editor without saving your changes?");
             }
         };
+        $("#source-container").hide();
 
 
         $('#fileupload').fileupload({
@@ -704,6 +719,9 @@ var editor = {
         $("#toolbox-paste").bind('click', editor._paste);
         $("#toolbox-undo").bind('click', editor._undo);
         $("#toolbox-redo").bind('click', editor._redo);
+        $("#toolbox-source").bind('click', editor._source_show);
+        $("#source-close").bind('click', editor._source_close);
+        $("#source-save").bind('click', editor._source_save);
     }
 };
 
