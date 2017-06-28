@@ -5,7 +5,9 @@
     <fieldset>
         <legend>{% trans "General information" %}</legend>
         {% bootstrap_field form.name layout="horizontal" %}
-        {% bootstrap_field form.slug layout="horizontal" %}
+        {% trans "Random" as rndlabel %}
+        {% url "control:events.add.slugrng" organizer=organizer.slug as rngurl %}
+        {% bootstrap_field form.slug layout="horizontal" addon_after='<button class="btn btn-default" type="button" id="event-slug-random-generate" data-rng-url="'|add:rngurl|add:'">'|add:rndlabel|add:'</button>' addon_after_class='input-group-btn' %}
         {% bootstrap_field form.date_from layout="horizontal" %}
         {% bootstrap_field form.date_to layout="horizontal" %}
         {% bootstrap_field form.location layout="horizontal" %}

@@ -102,6 +102,15 @@ $(function () {
         question_page_toggle_view();
     }
 
+    // Event wizard
+    $("#event-slug-random-generate").click(function () {
+        var url = $(this).attr("data-rng-url");
+        $("#id_basics-slug").val("Generating...");
+        $.getJSON(url, function (data) {
+            $("#id_basics-slug").val(data.slug);
+        });
+    });
+
     // Vouchers
     $("#voucher-bulk-codes-generate").click(function () {
         var num = $("#voucher-bulk-codes-num").val();

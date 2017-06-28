@@ -2,9 +2,12 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.http import JsonResponse
 from django.shortcuts import redirect
+from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
+from django.views import View
 from django.views.generic import ListView
 from formtools.wizard.views import SessionWizardView
 
@@ -13,6 +16,7 @@ from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
 )
 from pretix.control.forms.filter import EventFilterForm
+from pretix.control.permissions import OrganizerPermissionRequiredMixin
 
 
 class EventList(ListView):
@@ -61,6 +65,8 @@ class EventWizard(SessionWizardView):
     def get_context_data(self, form, **kwargs):
         ctx = super().get_context_data(form, **kwargs)
         ctx['has_organizer'] = self.request.user.teams.filter(can_create_events=True).exists()
+        if self.steps.current == 'basics':
+            ctx['organizer'] = self.get_cleaned_data_for_step('foundation').get('organizer')
         return ctx
 
     def get_form_kwargs(self, step=None):
@@ -121,3 +127,16 @@ class EventWizard(SessionWizardView):
             'organizer': event.organizer.slug,
             'event': event.slug,
         }))
+
+
+class SlugRNG(OrganizerPermissionRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        # See Order.assign_code
+        charset = list('abcdefghjklmnpqrstuvwxyz3789')
+        for i in range(100):
+            val = get_random_string(length=settings.ENTROPY['order_code'], allowed_chars=charset)
+            if not self.request.organizer.events.filter(slug__iexact=val).exists():
+                break
+
+        return JsonResponse({'slug': val})

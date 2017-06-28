@@ -67,7 +67,9 @@ class Event(LoggedModel):
         max_length=50, db_index=True,
         help_text=_(
             "Should be short, only contain lowercase letters and numbers, and must be unique among your events. "
-            "This will be used in order codes, invoice numbers, links and bank transfer references."),
+            "We recommend some kind of abbreviation or a date with less than 10 characters that can be easily "
+            "remembered, but you can also choose to use a random value. "
+            "This will be used in URLs, order codes, invoice numbers, and bank transfer references."),
         validators=[
             RegexValidator(
                 regex="^[a-zA-Z0-9.-]+$",
