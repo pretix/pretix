@@ -81,14 +81,21 @@ var editor = {
     dump: function (objs) {
         var d = [];
         objs = objs || editor.fabric.getObjects();
+
         for (var i in objs) {
             var o = objs[i];
+            var top = o.top;
+            var left = o.left;
+            if (o.group) {
+                top += o.group.top + o.group.height / 2;
+                left += o.group.left + o.group.width / 2;
+            }
             if (o.type === "textarea") {
                 var col = (new fabric.Color(o.getFill()))._source;
                 d.push({
                     type: "textarea",
-                    left: editor._px2mm(o.left).toFixed(2),
-                    bottom: editor._px2mm(editor.pdf_viewport.height - o.height - o.top).toFixed(2),
+                    left: editor._px2mm(left).toFixed(2),
+                    bottom: editor._px2mm(editor.pdf_viewport.height - o.height - top).toFixed(2),
                     fontsize: editor._px2pt(o.getFontSize()).toFixed(1),
                     color: col,
                     //lineheight: o.lineHeight,
@@ -103,8 +110,8 @@ var editor = {
             } else  if (o.type === "barcodearea") {
                 d.push({
                     type: "barcodearea",
-                    left: editor._px2mm(o.left).toFixed(2),
-                    bottom: editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - o.top).toFixed(2),
+                    left: editor._px2mm(left).toFixed(2),
+                    bottom: editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - top).toFixed(2),
                     size: editor._px2mm(o.height * o.scaleY).toFixed(2)
                 });
             }
