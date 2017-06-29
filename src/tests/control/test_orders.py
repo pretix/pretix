@@ -53,11 +53,11 @@ def test_order_list(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/orders/')
     assert 'FOO' in response.rendered_content
-    response = client.get('/control/event/dummy/dummy/orders/?user=peter')
+    response = client.get('/control/event/dummy/dummy/orders/?query=peter')
     assert 'FOO' in response.rendered_content
-    response = client.get('/control/event/dummy/dummy/orders/?user=hans')
+    response = client.get('/control/event/dummy/dummy/orders/?query=hans')
     assert 'FOO' not in response.rendered_content
-    response = client.get('/control/event/dummy/dummy/orders/?user=dummy')
+    response = client.get('/control/event/dummy/dummy/orders/?query=dummy')
     assert 'FOO' in response.rendered_content
     response = client.get('/control/event/dummy/dummy/orders/?status=p')
     assert 'FOO' not in response.rendered_content
