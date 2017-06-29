@@ -313,6 +313,19 @@ class Event(LoggedModel):
 
         event_copy_data.send(sender=self, other=other)
 
+    def get_payment_providers(self) -> dict:
+        from ..signals import register_payment_providers
+
+        responses = register_payment_providers.send(self)
+        providers = {}
+        for receiver, response in responses:
+            if not isinstance(response, list):
+                response = [response]
+            for p in response:
+                pp = p(self)
+                providers[pp.identifier] = pp
+        return providers
+
 
 def generate_invite_token():
     return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)

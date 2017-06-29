@@ -27,9 +27,7 @@ from pretix.base.services.orders import (
     OrderChangeManager, OrderError, cancel_order, mark_order_paid,
 )
 from pretix.base.services.stats import order_overview
-from pretix.base.signals import (
-    register_data_exporters, register_payment_providers,
-)
+from pretix.base.signals import register_data_exporters
 from pretix.base.views.async import AsyncAction
 from pretix.control.forms.filter import EventOrderFilterForm
 from pretix.control.forms.orders import (
@@ -106,11 +104,7 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
 
     @cached_property
     def payment_provider(self):
-        responses = register_payment_providers.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
-            if provider.identifier == self.order.payment_provider:
-                return provider
+        return self.request.event.get_payment_providers().get(self.order.payment_provider)
 
     def get_order_url(self):
         return reverse('control:event.order', kwargs={

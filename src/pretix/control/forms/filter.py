@@ -102,7 +102,8 @@ class EventOrderFilterForm(OrderFilterForm):
         self.event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
         self.fields['item'].queryset = self.event.items.all()
-        self.fields['provider'].choices += [(p['name'], p['verbose_name']) for p in self.get_payment_providers()]
+        self.fields['provider'].choices += [(k, v.verbose_name) for k, v
+                                            in self.event.get_payment_providers().items()]
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data

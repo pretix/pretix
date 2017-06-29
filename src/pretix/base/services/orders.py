@@ -30,9 +30,7 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException, mail
-from pretix.base.signals import (
-    order_paid, order_placed, periodic_task, register_payment_providers,
-)
+from pretix.base.signals import order_paid, order_placed, periodic_task
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -366,12 +364,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
                    email: str, locale: str, address: int, meta_info: dict=None):
 
     event = Event.objects.get(id=event)
-    responses = register_payment_providers.send(event)
-    pprov = None
-    for rec, response in responses:
-        provider = response(event)
-        if provider.identifier == payment_provider:
-            pprov = provider
+    pprov = event.get_payment_providers().get(payment_provider)
     if not pprov:
         raise OrderError(error_messages['internal'])
 
@@ -637,10 +630,11 @@ class OrderChangeManager:
 
     def _recalculate_total_and_payment_fee(self):
         self.order.total = sum([p.price for p in self.order.positions.all()])
-        if self.order.total == 0:
-            payment_fee = Decimal('0.00')
-        else:
-            payment_fee = self._get_payment_provider().calculate_fee(self.order.total)
+        payment_fee = Decimal('0.00')
+        if self.order.total != 0:
+            prov = self._get_payment_provider()
+            if prov:
+                payment_fee = prov.calculate_fee(self.order.total)
         self.order.payment_fee = payment_fee
         self.order.total += payment_fee
         self.order._calculate_tax()
@@ -703,12 +697,7 @@ class OrderChangeManager:
         CachedTicket.objects.filter(order_position__order=self.order).delete()
 
     def _get_payment_provider(self):
-        responses = register_payment_providers.send(self.order.event)
-        pprov = None
-        for rec, response in responses:
-            provider = response(self.order.event)
-            if provider.identifier == self.order.payment_provider:
-                return provider
+        pprov = self.order.event.get_payment_providers().get(self.order.payment_provider)
         if not pprov:
             raise OrderError(error_messages['internal'])
 

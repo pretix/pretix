@@ -13,7 +13,7 @@ from django.utils.translation import ugettext as _, ugettext_lazy
 from pretix.base.models import InvoiceAddress, Order, OrderPosition
 
 from ..exporter import BaseExporter
-from ..signals import register_data_exporters, register_payment_providers
+from ..signals import register_data_exporters
 
 
 class OrderListExporter(BaseExporter):
@@ -73,11 +73,10 @@ class OrderListExporter(BaseExporter):
 
         writer.writerow(headers)
 
-        provider_names = {}
-        responses = register_payment_providers.send(self.event)
-        for rec, response in responses:
-            provider = response(self.event)
-            provider_names[provider.identifier] = provider.verbose_name
+        provider_names = {
+            k: v.verbose_name
+            for k, v in self.event.get_payment_providers().items()
+        }
 
         sum_cache = {
             (o['order__id'], o['tax_rate']): o for o in

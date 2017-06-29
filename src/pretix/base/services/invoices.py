@@ -24,7 +24,6 @@ from reportlab.platypus import (
 from pretix.base.i18n import language
 from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
 from pretix.base.services.async import TransactionAwareTask
-from pretix.base.signals import register_payment_providers
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
 
@@ -32,12 +31,7 @@ from pretix.helpers.database import rolledback_transaction
 @transaction.atomic
 def build_invoice(invoice: Invoice) -> Invoice:
     with language(invoice.locale):
-        responses = register_payment_providers.send(invoice.event)
-        for receiver, response in responses:
-            provider = response(invoice.event)
-            if provider.identifier == invoice.order.payment_provider:
-                payment_provider = provider
-                break
+        payment_provider = invoice.event.get_payment_providers().get(invoice.order.payment_provider)
 
         invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
 

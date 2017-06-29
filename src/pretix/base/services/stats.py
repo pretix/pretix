@@ -5,7 +5,6 @@ from django.db.models import Count, Sum
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Event, Item, ItemCategory, Order, OrderPosition
-from pretix.base.signals import register_payment_providers
 
 
 class DummyObject:
@@ -182,11 +181,10 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
     }
     num_total = dictsum(num_pending, num_paid)
 
-    provider_names = {}
-    responses = register_payment_providers.send(event)
-    for receiver, response in responses:
-        provider = response(event)
-        provider_names[provider.identifier] = provider.verbose_name
+    provider_names = {
+        k: v.verbose_name
+        for k, v in event.get_payment_providers().items()
+    }
 
     for pprov, total in num_total.items():
         ppobj = DummyObject()

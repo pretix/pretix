@@ -8,7 +8,6 @@ from django.utils.timezone import now
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import CartPosition, OrderPosition
-from pretix.base.signals import register_payment_providers
 
 
 class CartMixin:
@@ -117,11 +116,9 @@ class CartMixin:
             return Decimal('0.00')
         payment_fee = 0
         if 'payment' in self.request.session:
-            responses = register_payment_providers.send(self.request.event)
-            for receiver, response in responses:
-                provider = response(self.request.event)
-                if provider.identifier == self.request.session['payment']:
-                    payment_fee = provider.calculate_fee(total)
+            provider = self.request.event.get_payment_providers().get(self.request.session['payment'])
+            if provider:
+                payment_fee = provider.calculate_fee(total)
         return payment_fee
 
 

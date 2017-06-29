@@ -18,9 +18,7 @@ from pretix.base.services.orders import cancel_order
 from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,
 )
-from pretix.base.signals import (
-    register_payment_providers, register_ticket_outputs,
-)
+from pretix.base.signals import register_ticket_outputs
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm
 from pretix.presale.views import CartMixin, EventViewMixin
@@ -46,11 +44,7 @@ class OrderDetailMixin:
 
     @cached_property
     def payment_provider(self):
-        responses = register_payment_providers.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
-            if provider.identifier == self.order.payment_provider:
-                return provider
+        return self.request.event.get_payment_providers().get(self.order.payment_provider)
 
     def get_order_url(self):
         return eventreverse(self.request.event, 'presale:event.order', kwargs={
@@ -112,9 +106,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
             )
 
             ctx['can_change_method'] = False
-            responses = register_payment_providers.send(self.request.event)
-            for receiver, response in responses:
-                provider = response(self.request.event)
+            for provider in self.request.event.get_payment_providers().values():
                 if (provider.identifier != self.order.payment_provider and provider.is_enabled
                         and provider.order_change_allowed(self.order)):
                     ctx['can_change_method'] = True
@@ -295,9 +287,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
     @cached_property
     def provider_forms(self):
         providers = []
-        responses = register_payment_providers.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
+        for provider in self.request.event.get_payment_providers().values():
             if provider.identifier == self.order.payment_provider:
                 continue
             if not provider.is_enabled or not provider.order_change_allowed(self.order):

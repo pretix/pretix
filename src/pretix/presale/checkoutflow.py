@@ -13,7 +13,6 @@ from pretix.base.models import Order
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.services.cart import set_cart_addons
 from pretix.base.services.orders import perform_order
-from pretix.base.signals import register_payment_providers
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
     AddOnsForm, ContactForm, InvoiceAddressForm,
@@ -353,9 +352,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     @cached_property
     def provider_forms(self):
         providers = []
-        responses = register_payment_providers.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
+        for provider in self.request.event.get_payment_providers().values():
             if not provider.is_enabled or not provider.is_allowed(self.request):
                 continue
             fee = provider.calculate_fee(self._total_order_value)
@@ -392,11 +389,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     @cached_property
     def payment_provider(self):
-        responses = register_payment_providers.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
-            if provider.identifier == self.request.session['payment']:
-                return provider
+        return self.request.event.get_payment_providers().get(self.request.session['payment'])
 
     def is_completed(self, request, warn=False):
         self.request = request
@@ -464,11 +457,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
     @cached_property
     def payment_provider(self):
-        responses = register_payment_providers.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
-            if provider.identifier == self.request.session['payment']:
-                return provider
+        return self.request.event.get_payment_providers().get(self.request.session['payment'])
 
     @cached_property
     def invoice_address(self):

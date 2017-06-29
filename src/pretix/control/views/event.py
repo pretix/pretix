@@ -26,9 +26,7 @@ from pretix.base.models import (
 )
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
-from pretix.base.signals import (
-    event_live_issues, register_payment_providers, register_ticket_outputs,
-)
+from pretix.base.signals import event_live_issues, register_ticket_outputs
 from pretix.control.forms.event import (
     DisplaySettingsForm, EventSettingsForm, EventUpdateForm,
     InvoiceSettingsForm, MailSettingsForm, PaymentSettingsForm, ProviderForm,
@@ -183,9 +181,7 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
     @cached_property
     def provider_forms(self) -> list:
         providers = []
-        responses = register_payment_providers.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
+        for provider in self.request.event.get_payment_providers().values():
             provider.form = ProviderForm(
                 obj=self.request.event,
                 settingspref='payment_%s_' % provider.identifier,
@@ -655,9 +651,7 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
         )
 
         has_payment_provider = False
-        responses = register_payment_providers.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
+        for provider in self.request.event.get_payment_providers().values():
             if provider.is_enabled and provider.identifier != 'free':
                 has_payment_provider = True
                 break
