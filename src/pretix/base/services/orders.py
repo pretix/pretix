@@ -700,6 +700,7 @@ class OrderChangeManager:
         pprov = self.order.event.get_payment_providers().get(self.order.payment_provider)
         if not pprov:
             raise OrderError(error_messages['internal'])
+        return pprov
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))

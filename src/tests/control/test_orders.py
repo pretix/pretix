@@ -50,6 +50,9 @@ def env():
 
 @pytest.mark.django_db
 def test_order_list(client, env):
+    otherticket = Item.objects.create(event=env[0], name='Early-bird ticket',
+                                      category=None, default_price=23,
+                                      admission=True)
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/orders/')
     assert 'FOO' in response.rendered_content
@@ -65,11 +68,11 @@ def test_order_list(client, env):
     assert 'FOO' in response.rendered_content
     response = client.get('/control/event/dummy/dummy/orders/?status=ne')
     assert 'FOO' in response.rendered_content
-    response = client.get('/control/event/dummy/dummy/orders/?item=15')
+    response = client.get('/control/event/dummy/dummy/orders/?item=%s' % otherticket.id)
     assert 'FOO' not in response.rendered_content
     response = client.get('/control/event/dummy/dummy/orders/?item=%s' % env[3].id)
     assert 'FOO' in response.rendered_content
-    response = client.get('/control/event/dummy/dummy/orders/?provider=foo')
+    response = client.get('/control/event/dummy/dummy/orders/?provider=free')
     assert 'FOO' not in response.rendered_content
     response = client.get('/control/event/dummy/dummy/orders/?provider=banktransfer')
     assert 'FOO' in response.rendered_content
