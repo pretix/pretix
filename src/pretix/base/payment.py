@@ -81,6 +81,16 @@ class BasePaymentProvider:
         raise NotImplementedError()  # NOQA
 
     @property
+    def public_name(self) -> str:
+        """
+        A human-readable name for this payment provider to be shown to the public.
+        This should be short but self-explaining. Good examples include 'Bank transfer'
+        and 'Credit card', but 'Credit card via Stripe' might be to explicit. By default,
+        this is the same as ``verbose_name``
+        """
+        return self.verbose_name
+
+    @property
     def identifier(self) -> str:
         """
         A short and unique identifier for this payment provider.
