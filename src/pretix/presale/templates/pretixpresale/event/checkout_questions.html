@@ -5,7 +5,7 @@
 {% block content %}
     <h2>{% trans "Checkout" %}</h2>
     <p>{% trans "Before we continue, we need you to answer some questions." %}</p>
-    <form class="form-horizontal" method="post">
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="panel-group" id="questions_group">
             <div class="panel panel-default">

@@ -12,7 +12,10 @@ from django.db.models import F, Sum
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
+from django.utils.encoding import escape_uri_path
 from django.utils.functional import cached_property
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -340,6 +343,17 @@ class Order(LoggedModel):
         return True
 
 
+def answerfile_name(instance, filename: str) -> str:
+    secret = get_random_string(length=32, allowed_chars=string.ascii_letters + string.digits)
+    pos = instance.orderposition or instance.cartposition
+    return 'cachedfiles/answers/{org}/{ev}/{secret}.{filename}'.format(
+        org=pos.event.organizer.slug,
+        ev=pos.event.slug,
+        secret=secret,
+        filename=escape_uri_path(filename),
+    )
+
+
 class QuestionAnswer(models.Model):
     """
     The answer to a Question, connected to an OrderPosition or CartPosition.
@@ -370,12 +384,26 @@ class QuestionAnswer(models.Model):
         QuestionOption, related_name='answers', blank=True
     )
     answer = models.TextField()
+    file = models.FileField(
+        null=True, blank=True, upload_to=answerfile_name
+    )
+
+    @property
+    def file_link(self):
+        if self.file:
+            return mark_safe("<a href='{}'>{}</a>".format(
+                self.file.url,
+                escape(self.file.name.split('.', 1)[-1])
+            ))
+        return ""
 
     def __str__(self):
         if self.question.type == Question.TYPE_BOOLEAN and self.answer == "True":
             return str(_("Yes"))
         elif self.question.type == Question.TYPE_BOOLEAN and self.answer == "False":
             return str(_("No"))
+        elif self.question.type == Question.TYPE_FILE:
+            return str(_("<file>"))
         else:
             return self.answer
 

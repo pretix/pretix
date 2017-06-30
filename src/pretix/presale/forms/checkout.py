@@ -1,3 +1,4 @@
+import os
 from decimal import Decimal
 from itertools import chain
 
@@ -71,6 +72,25 @@ class InvoiceAddressForm(forms.ModelForm):
         data = self.cleaned_data
         if not data['name'] and not data['company'] and self.event.settings.invoice_address_required:
             raise ValidationError(_('You need to provide either a company name or your name.'))
+
+
+class UploadedFileWidget(forms.ClearableFileInput):
+
+    class FakeFile:
+        def __init__(self, file):
+            self.file = file
+
+        def __str__(self):
+            return os.path.basename(self.file.name).split('.', 1)[-1]
+
+        @property
+        def url(self):
+            # TODO: implement
+            return self.file.url
+
+    def format_value(self, value):
+        if self.is_initial(value):
+            return self.FakeFile(value)
 
 
 class QuestionsForm(forms.Form):
@@ -168,6 +188,12 @@ class QuestionsForm(forms.Form):
                     label=q.question, required=q.required,
                     widget=forms.CheckboxSelectMultiple,
                     initial=initial.options.all() if initial else None,
+                )
+            elif q.type == Question.TYPE_FILE:
+                field = forms.FileField(
+                    label=q.question, required=q.required,
+                    initial=initial.file if initial else None,
+                    widget=UploadedFileWidget
                 )
             field.question = q
             if answers:

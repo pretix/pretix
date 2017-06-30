@@ -27,7 +27,17 @@
                     {% endif %}
                     {% for q in line.questions %}
                         <dt>{{ q.question }}</dt>
-                        <dd>{% if q.answer %}{{ q.answer|linebreaksbr }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
+                        <dd>
+                            {% if q.answer %}
+                                {% if q.answer.file %}
+                                    <span class="fa fa-file"></span> {{ q.answer.file_link }}
+                                {% else %}
+                                    {{ q.answer|linebreaksbr }}
+                                {% endif %}
+                            {% else %}
+                                <em>{% trans "not answered" %}</em>
+                            {% endif %}
+                        </dd>
                     {% endfor %}
                     {% for q in line.additional_answers %}
                         <dt>{{ q.question }}</dt>

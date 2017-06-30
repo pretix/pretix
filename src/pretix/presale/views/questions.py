@@ -2,6 +2,7 @@ import json
 from collections import defaultdict
 
 from django import forms
+from django.core.files.uploadedfile import UploadedFile
 from django.utils.functional import cached_property
 
 from pretix.base.models import CartPosition, OrderPosition, QuestionAnswer
@@ -39,7 +40,8 @@ class QuestionsViewMixin:
                                  prefix=cr.id,
                                  cartpos=cartpos,
                                  orderpos=orderpos,
-                                 data=(self.request.POST if self.request.method == 'POST' else None))
+                                 data=(self.request.POST if self.request.method == 'POST' else None),
+                                 files=(self.request.FILES if self.request.method == 'POST' else None))
             form.pos = cartpos or orderpos
             if len(form.fields) > 0:
                 formlist.append(form)
@@ -78,7 +80,9 @@ class QuestionsViewMixin:
                         if hasattr(field, 'answer'):
                             # We already have a cached answer object, so we don't
                             # have to create a new one
-                            if v == '':
+                            if v == '' or v is None:
+                                if field.answer.file:
+                                    field.answer.file.delete()
                                 field.answer.delete()
                             else:
                                 self._save_to_answer(field, field.answer, v)
@@ -119,5 +123,9 @@ class QuestionsViewMixin:
                 answer.options.clear()
             answer.options.add(value)
             answer.answer = value.answer
+        elif isinstance(field, forms.FileField):
+            if isinstance(value, UploadedFile):
+                answer.file.save(value.name, value)
+                answer.answer = 'file://' + value.name
         else:
             answer.answer = value
