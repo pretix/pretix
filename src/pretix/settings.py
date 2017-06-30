@@ -1,6 +1,8 @@
 import configparser
 import os
 import sys
+from urllib.parse import urlparse
+
 from pycountry import currencies
 
 import django.conf.locale
@@ -81,6 +83,7 @@ PRETIX_REGISTRATION = config.getboolean('pretix', 'registration', fallback=True)
 PRETIX_PASSWORD_RESET = config.getboolean('pretix', 'password_reset', fallback=True)
 
 SITE_URL = config.get('pretix', 'url', fallback='http://localhost')
+CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).hostname]
 
 PRETIX_PLUGINS_DEFAULT = config.get('pretix', 'plugins_default',
                                     fallback='pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists')
