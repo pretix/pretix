@@ -76,6 +76,10 @@ checkins                              list of objects            List of check-i
 downloads                             list of objects            List of ticket download options
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)
 └ url                                 string                     Download URL
+answers                               list of objects            Answers to user-defined questions
+├ question                            integer                    Internal ID of the answered question
+├ answer                              string                     Text representation of the answer
+└ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
 ===================================== ========================== =======================================================
 
 
@@ -150,6 +154,13 @@ Order endpoints
                 "checkins": [
                   {
                     "datetime": "2017-12-25T12:45:23Z"
+                  }
+                ],
+                "answers": [
+                  {
+                    "question": 12,
+                    "answer": "Foo",
+                    "options": []
                   }
                 ],
                 "downloads": [
@@ -246,6 +257,13 @@ Order endpoints
             "checkins": [
               {
                 "datetime": "2017-12-25T12:45:23Z"
+              }
+            ],
+            "answers": [
+              {
+                "question": 12,
+                "answer": "Foo",
+                "options": []
               }
             ],
             "downloads": [
@@ -359,6 +377,13 @@ Order position endpoints
                 "datetime": "2017-12-25T12:45:23Z"
               }
             ],
+            "answers": [
+              {
+                "question": 12,
+                "answer": "Foo",
+                "options": []
+              }
+            ],
             "downloads": [
               {
                 "output": "pdf",
@@ -426,6 +451,13 @@ Order position endpoints
         "checkins": [
           {
             "datetime": "2017-12-25T12:45:23Z"
+          }
+        ],
+        "answers": [
+          {
+            "question": 12,
+            "answer": "Foo",
+            "options": []
           }
         ],
         "downloads": [
