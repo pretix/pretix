@@ -428,7 +428,7 @@ class OrganizerBanktransferView:
     def dispatch(self, request, *args, **kwargs):
         if len(request.organizer.events.order_by('currency').values_list('currency', flat=True).distinct()) > 1:
             messages.error(request, _('Please perform per-event bank imports as this organizer has events with '
-                                      'multuple currencies.'))
+                                      'multiple currencies.'))
             return redirect('control:organizer', organizer=request.organizer.slug)
         return super().dispatch(request, *args, **kwargs)
 
