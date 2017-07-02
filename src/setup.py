@@ -63,7 +63,7 @@ setup(
     keywords='tickets web shop ecommerce',
     install_requires=[
         'Django==1.11.*',
-        '+djangorestframework==3.6.*',
+        'djangorestframework==3.6.*',
         'python-dateutil==2.4.*',
         'pytz',
         'django-bootstrap3==8.2.*',
