@@ -76,7 +76,23 @@ contact_form_fields = EventPluginSignal(
 This signals allows you to add form fields to the contact form that is presented during checkout
 and by default only asks for the email address. You are supposed to return a dictionary of
 form fields with globally unique keys. The validated form results will be saved into the
-``contact_form_data`` entry of the order metadata dictionary.
+``contact_form_data`` entry of the order's meta_info dictionary.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+question_form_fields = EventPluginSignal(
+    providing_args=["position"]
+)
+"""
+This signals allows you to add form fields to the questions form that is presented during checkout
+and by default asks for the questions configured in the backend. You are supposed to return a dictionary
+of form fields with globally unique keys. The validated form results will be saved into the
+``question_form_data`` entry of the position's meta_info dictionary.
+
+The ``position`` keyword argument will contain either a ``CartPosition`` object or an ``OrderPosition``
+object, depending on whether the form is called as part of the order checkout or for changing an order
+later.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """

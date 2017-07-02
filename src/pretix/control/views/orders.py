@@ -36,6 +36,7 @@ from pretix.control.forms.orders import (
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.presale.signals import question_form_fields
 
 
 class OrderList(EventPermissionRequiredMixin, ListView):
@@ -141,12 +142,24 @@ class OrderDetail(OrderView):
 
         positions = []
         for p in cartpos:
+            responses = question_form_fields.send(sender=self.request.event, position=p)
+            p.additional_fields = []
+            data = p.meta_info_data
+            for r, response in sorted(responses, key=lambda r: str(r[0])):
+                for key, value in response.items():
+                    p.additional_fields.append({
+                        'answer': data.get('question_form_data', {}).get(key),
+                        'question': value.label
+                    })
+
             p.has_questions = (
+                p.additional_fields or
                 (p.item.admission and self.request.event.settings.attendee_names_asked) or
                 (p.item.admission and self.request.event.settings.attendee_emails_asked) or
                 p.item.questions.all()
             )
             p.cache_answers()
+
             positions.append(p)
 
         positions.sort(key=lambda p: p.sort_key)

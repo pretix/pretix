@@ -201,6 +201,11 @@
                                             <dd>{% if q.answer %}{{ q.answer|linebreaksbr }}{% else %}
                                                 <em>{% trans "not answered" %}</em>{% endif %}</dd>
                                         {% endfor %}
+                                        {% for q in line.additional_fields %}
+                                            <dt>{{ q.question }}</dt>
+                                            <dd>{% if q.answer %}{{ q.answer|linebreaksbr }}{% else %}
+                                                <em>{% trans "not answered" %}</em>{% endif %}</dd>
+                                        {% endfor %}
                                     </dl>
                                 {% endif %}
                             </div>

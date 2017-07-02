@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.base.models import ItemVariation, Question
 from pretix.base.models.orders import InvoiceAddress
 from pretix.base.templatetags.rich_text import rich_text
-from pretix.presale.signals import contact_form_fields
+from pretix.presale.signals import contact_form_fields, question_form_fields
 
 
 class ContactForm(forms.Form):
@@ -89,7 +89,8 @@ class QuestionsForm(forms.Form):
         """
         cartpos = self.cartpos = kwargs.pop('cartpos', None)
         orderpos = self.orderpos = kwargs.pop('orderpos', None)
-        item = cartpos.item if cartpos else orderpos.item
+        pos = cartpos or orderpos
+        item = pos.item
         questions = list(item.questions.all())
         event = kwargs.pop('event')
 
@@ -173,6 +174,14 @@ class QuestionsForm(forms.Form):
                 # Cache the answer object for later use
                 field.answer = answers[0]
             self.fields['question_%s' % q.id] = field
+
+        responses = question_form_fields.send(sender=event, position=pos)
+        data = pos.meta_info_data
+        for r, response in sorted(responses, key=lambda r: str(r[0])):
+            for key, value in response.items():
+                # We need to be this explicit, since OrderedDict.update does not retain ordering
+                self.fields[key] = value
+                value.initial = data.get('question_form_data', {}).get(key)
 
 
 class AddOnRadioSelect(forms.RadioSelect):

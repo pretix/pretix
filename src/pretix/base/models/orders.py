@@ -405,6 +405,8 @@ class AbstractPosition(models.Model):
     :type attendee_email: str
     :param voucher: A voucher that has been applied to this sale
     :type voucher: Voucher
+    :param meta_info: Additional meta information on the position, JSON-encoded.
+    :type meta_info: str
     """
     item = models.ForeignKey(
         Item,
@@ -438,9 +440,20 @@ class AbstractPosition(models.Model):
     addon_to = models.ForeignKey(
         'self', null=True, blank=True, on_delete=models.CASCADE, related_name='addons'
     )
+    meta_info = models.TextField(
+        verbose_name=_("Meta information"),
+        null=True, blank=True
+    )
 
     class Meta:
         abstract = True
+
+    @property
+    def meta_info_data(self):
+        if self.meta_info:
+            return json.loads(self.meta_info)
+        else:
+            return {}
 
     def cache_answers(self):
         """

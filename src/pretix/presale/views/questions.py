@@ -1,3 +1,4 @@
+import json
 from collections import defaultdict
 
 from django import forms
@@ -58,6 +59,7 @@ class QuestionsViewMixin:
     def save(self):
         failed = False
         for form in self.forms:
+            meta_info = form.pos.meta_info_data
             # Every form represents a CartPosition or OrderPosition with questions attached
             if not form.is_valid():
                 failed = True
@@ -89,6 +91,16 @@ class QuestionsViewMixin:
                             )
                             self._save_to_answer(field, answer, v)
                             answer.save()
+                    else:
+                        meta_info.setdefault('question_form_data', {})
+                        if v is None:
+                            if k in meta_info['question_form_data']:
+                                del meta_info['question_form_data'][k]
+                        else:
+                            meta_info['question_form_data'][k] = v
+
+            form.pos.meta_info = json.dumps(meta_info)
+            form.pos.save(update_fields=['meta_info'])
         return not failed
 
     def _save_to_answer(self, field, answer, value):

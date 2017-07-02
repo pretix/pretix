@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import timedelta
 from decimal import Decimal
 from itertools import groupby
@@ -8,6 +9,7 @@ from django.utils.timezone import now
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import CartPosition, OrderPosition
+from pretix.presale.signals import question_form_fields
 
 
 class CartMixin:
@@ -38,6 +40,17 @@ class CartMixin:
         lcp = list(cartpos)
         has_addons = {cp.addon_to.pk for cp in lcp if cp.addon_to}
 
+        pos_additional_fields = defaultdict(list)
+        for cp in lcp:
+            responses = question_form_fields.send(sender=self.request.event, position=cp)
+            data = cp.meta_info_data
+            for r, response in sorted(responses, key=lambda r: str(r[0])):
+                for key, value in response.items():
+                    pos_additional_fields[cp.pk].append({
+                        'answer': data.get('question_form_data', {}).get(key),
+                        'question': value.label
+                    })
+
         # Group items of the same variation
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
@@ -56,6 +69,7 @@ class CartMixin:
             has_attendee_data = pos.item.admission and (
                 self.request.event.settings.attendee_names_asked
                 or self.request.event.settings.attendee_emails_asked
+                or pos_additional_fields.get(pos.pk)
             )
             addon_penalty = 1 if pos.addon_to else 0
             if downloads or pos.pk in has_addons or pos.addon_to:
@@ -75,6 +89,7 @@ class CartMixin:
             group.has_questions = answers and k[0] != ""
             if answers:
                 group.cache_answers()
+                group.additional_answers = pos_additional_fields.get(group.pk)
             positions.append(group)
 
         total = sum(p.total for p in positions)
