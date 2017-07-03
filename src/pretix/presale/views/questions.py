@@ -80,7 +80,7 @@ class QuestionsViewMixin:
                         if hasattr(field, 'answer'):
                             # We already have a cached answer object, so we don't
                             # have to create a new one
-                            if v == '' or v is None:
+                            if v == '' or v is None or (isinstance(field, forms.FileField) and v is False):
                                 if field.answer.file:
                                     field.answer.file.delete()
                                 field.answer.delete()

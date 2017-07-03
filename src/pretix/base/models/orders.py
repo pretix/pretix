@@ -345,10 +345,10 @@ class Order(LoggedModel):
 
 def answerfile_name(instance, filename: str) -> str:
     secret = get_random_string(length=32, allowed_chars=string.ascii_letters + string.digits)
-    pos = instance.orderposition or instance.cartposition
+    event = (instance.cartposition if instance.cartposition else instance.orderposition.order).event
     return 'cachedfiles/answers/{org}/{ev}/{secret}.{filename}'.format(
-        org=pos.event.organizer.slug,
-        ev=pos.event.slug,
+        org=event.organizer.slug,
+        ev=event.slug,
         secret=secret,
         filename=escape_uri_path(filename),
     )
@@ -390,9 +390,22 @@ class QuestionAnswer(models.Model):
 
     @property
     def file_link(self):
+        from pretix.multidomain.urlreverse import eventreverse
+
         if self.file:
+            if self.orderposition:
+                url = eventreverse(self.orderposition.order.event, 'presale:event.order.download.answer', kwargs={
+                    'order': self.orderposition.order.code,
+                    'secret': self.orderposition.order.secret,
+                    'answer': self.pk,
+                })
+            else:
+                url = eventreverse(self.cartposition.event, 'presale:event.cart.download.answer', kwargs={
+                    'answer': self.pk,
+                })
+
             return mark_safe("<a href='{}'>{}</a>".format(
-                self.file.url,
+                url,
                 escape(self.file.name.split('.', 1)[-1])
             ))
         return ""
@@ -709,6 +722,20 @@ class CachedCombinedTicket(models.Model):
 
 @receiver(post_delete, sender=CachedTicket)
 def cachedticket_delete(sender, instance, **kwargs):
+    if instance.file:
+        # Pass false so FileField doesn't save the model.
+        instance.file.delete(False)
+
+
+@receiver(post_delete, sender=CachedCombinedTicket)
+def cachedcombinedticket_delete(sender, instance, **kwargs):
+    if instance.file:
+        # Pass false so FileField doesn't save the model.
+        instance.file.delete(False)
+
+
+@receiver(post_delete, sender=QuestionAnswer)
+def answer_delete(sender, instance, **kwargs):
     if instance.file:
         # Pass false so FileField doesn't save the model.
         instance.file.delete(False)

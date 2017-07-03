@@ -11,8 +11,9 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import ItemVariation, Question
-from pretix.base.models.orders import InvoiceAddress
+from pretix.base.models.orders import InvoiceAddress, OrderPosition
 from pretix.base.templatetags.rich_text import rich_text
+from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import contact_form_fields, question_form_fields
 
 
@@ -76,21 +77,38 @@ class InvoiceAddressForm(forms.ModelForm):
 
 class UploadedFileWidget(forms.ClearableFileInput):
 
+    def __init__(self, *args, **kwargs):
+        self.position = kwargs.pop('position')
+        self.event = kwargs.pop('event')
+        self.answer = kwargs.pop('answer')
+        super().__init__(*args, **kwargs)
+
     class FakeFile:
-        def __init__(self, file):
+        def __init__(self, file, position, event, answer):
             self.file = file
+            self.position = position
+            self.event = event
+            self.answer = answer
 
         def __str__(self):
             return os.path.basename(self.file.name).split('.', 1)[-1]
 
         @property
         def url(self):
-            # TODO: implement
-            return self.file.url
+            if isinstance(self.position, OrderPosition):
+                return eventreverse(self.event, 'presale:event.order.download.answer', kwargs={
+                    'order': self.position.order.code,
+                    'secret': self.position.order.secret,
+                    'answer': self.answer.pk,
+                })
+            else:
+                return eventreverse(self.event, 'presale:event.cart.download.answer', kwargs={
+                    'answer': self.answer.pk,
+                })
 
     def format_value(self, value):
         if self.is_initial(value):
-            return self.FakeFile(value)
+            return self.FakeFile(value, self.position, self.event, self.answer)
 
 
 class QuestionsForm(forms.Form):
@@ -193,7 +211,7 @@ class QuestionsForm(forms.Form):
                 field = forms.FileField(
                     label=q.question, required=q.required,
                     initial=initial.file if initial else None,
-                    widget=UploadedFileWidget
+                    widget=UploadedFileWidget(position=pos, event=event, answer=initial)
                 )
             field.question = q
             if answers:

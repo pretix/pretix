@@ -1,9 +1,11 @@
 import datetime
+import os
 from datetime import timedelta
 from decimal import Decimal
 
 from bs4 import BeautifulSoup
 from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
 
@@ -109,6 +111,43 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(cr2.answers.filter(question=q1).count(), 1)
         self.assertEqual(cr1.answers.filter(question=q2).count(), 1)
         self.assertFalse(cr2.answers.filter(question=q2).exists())
+
+    def test_question_file_upload(self):
+        q1 = Question.objects.create(
+            event=self.event, question='Student ID', type=Question.TYPE_FILE,
+            required=False
+        )
+        self.ticket.questions.add(q1)
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+
+        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr1.id, q1.id))), 1)
+
+        f = SimpleUploadedFile("testfile.txt", b"file_content")
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-question_%s' % (cr1.id, q1.id): f,
+            'email': 'admin@localhost'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        cr1 = CartPosition.objects.get(id=cr1.id)
+        a = cr1.answers.get(question=q1)
+        assert a.file
+        assert a.file.read() == b"file_content"
+        assert os.path.exists(os.path.join(settings.MEDIA_ROOT, a.file.name))
+
+        # Delete
+        self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-question_%s-clear' % (cr1.id, q1.id): 'on',
+            'email': 'admin@localhost'
+        }, follow=True)
+        assert not cr1.answers.exists()
+        assert not os.path.exists(os.path.join(settings.MEDIA_ROOT, a.file.name))
 
     def test_attendee_email_required(self):
         self.event.settings.set('attendee_emails_asked', True)
