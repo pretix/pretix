@@ -63,5 +63,6 @@ def contextprocessor(request):
     ctx['html_foot'] = "".join(_html_foot)
     ctx['footer'] = _footer
     ctx['site_url'] = settings.SITE_URL
+    ctx['languages'] = settings.LANGUAGES
 
     return ctx
