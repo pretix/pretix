@@ -7,4 +7,3 @@ def get_item(dictionary, key):
         if t[0] == key:
             value = t[1]
     return value
-    #return dictionary.get(key)
