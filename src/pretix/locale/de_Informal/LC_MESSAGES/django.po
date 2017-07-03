@@ -4411,11 +4411,15 @@ msgstr "Zahlungserinnerung"
 msgid "Waiting list notification"
 msgstr "Wartelisten-Benachrichtigung"
 
-#: pretix/control/templates/pretixcontrol/event/mail.html:41
+#: pretix/control/templates/pretixcontrol/event/mail.html:39
+msgid "Order canceled"
+msgstr "Bestellung storniert"
+
+#: pretix/control/templates/pretixcontrol/event/mail.html:46
 msgid "SMTP settings"
 msgstr "SMTP-Einstellungen"
 
-#: pretix/control/templates/pretixcontrol/event/mail.html:55
+#: pretix/control/templates/pretixcontrol/event/mail.html:60
 msgid "Save and test custom SMTP connection"
 msgstr "Speichern und SMTP-Einstellung testen"
 
