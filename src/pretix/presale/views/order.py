@@ -1,15 +1,18 @@
+import mimetypes
+import os
+
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import Sum
 from django.http import FileResponse, Http404, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
-from pretix.base.models.orders import InvoiceAddress
+from pretix.base.models.orders import InvoiceAddress, QuestionAnswer
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
@@ -29,13 +32,13 @@ from pretix.presale.views.questions import QuestionsViewMixin
 class OrderDetailMixin:
     @cached_property
     def order(self):
-        try:
-            order = self.request.event.orders.get(code=self.kwargs['order'])
+        order = self.request.event.orders.filter(code=self.kwargs['order']).select_related('event').first()
+        if order:
             if order.secret.lower() == self.kwargs['secret'].lower():
                 return order
             else:
                 return None
-        except Order.DoesNotExist:
+        else:
             # Do a comparison as well to harden timing attacks
             if 'abcdefghijklmnopq'.lower() == self.kwargs['secret'].lower():
                 return None
@@ -89,7 +92,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         ctx['download_buttons'] = self.download_buttons
         ctx['cart'] = self.get_cart(
             answers=True, downloads=ctx['can_download'],
-            queryset=OrderPosition.objects.filter(order=self.order),
+            queryset=self.order.positions.all(),
             payment_fee=self.order.payment_fee, payment_fee_tax_rate=self.order.payment_fee_tax_rate
         )
         ctx['invoices'] = list(self.order.invoices.all())
@@ -486,6 +489,23 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
 
     def get_success_message(self, value):
         return _('The order has been canceled.')
+
+
+class AnswerDownload(EventViewMixin, OrderDetailMixin, View):
+    def get(self, request, *args, **kwargs):
+        answid = kwargs.get('answer')
+        answer = get_object_or_404(QuestionAnswer, orderposition__order=self.order, id=answid)
+        if not answer.file:
+            return Http404()
+
+        ftype, _ = mimetypes.guess_type(answer.file.name)
+        resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
+        resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}"'.format(
+            self.request.event.slug.upper(), self.order.code,
+            answer.orderposition.positionid,
+            os.path.basename(answer.file.name).split('.', 1)[1]
+        )
+        return resp
 
 
 class OrderDownload(EventViewMixin, OrderDetailMixin, View):

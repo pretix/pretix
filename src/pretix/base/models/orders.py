@@ -12,7 +12,10 @@ from django.db.models import F, Sum
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
+from django.utils.encoding import escape_uri_path
 from django.utils.functional import cached_property
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -340,6 +343,17 @@ class Order(LoggedModel):
         return True
 
 
+def answerfile_name(instance, filename: str) -> str:
+    secret = get_random_string(length=32, allowed_chars=string.ascii_letters + string.digits)
+    event = (instance.cartposition if instance.cartposition else instance.orderposition.order).event
+    return 'cachedfiles/answers/{org}/{ev}/{secret}.{filename}'.format(
+        org=event.organizer.slug,
+        ev=event.slug,
+        secret=secret,
+        filename=escape_uri_path(filename),
+    )
+
+
 class QuestionAnswer(models.Model):
     """
     The answer to a Question, connected to an OrderPosition or CartPosition.
@@ -370,12 +384,39 @@ class QuestionAnswer(models.Model):
         QuestionOption, related_name='answers', blank=True
     )
     answer = models.TextField()
+    file = models.FileField(
+        null=True, blank=True, upload_to=answerfile_name
+    )
+
+    @property
+    def file_link(self):
+        from pretix.multidomain.urlreverse import eventreverse
+
+        if self.file:
+            if self.orderposition:
+                url = eventreverse(self.orderposition.order.event, 'presale:event.order.download.answer', kwargs={
+                    'order': self.orderposition.order.code,
+                    'secret': self.orderposition.order.secret,
+                    'answer': self.pk,
+                })
+            else:
+                url = eventreverse(self.cartposition.event, 'presale:event.cart.download.answer', kwargs={
+                    'answer': self.pk,
+                })
+
+            return mark_safe("<a href='{}'>{}</a>".format(
+                url,
+                escape(self.file.name.split('.', 1)[-1])
+            ))
+        return ""
 
     def __str__(self):
         if self.question.type == Question.TYPE_BOOLEAN and self.answer == "True":
             return str(_("Yes"))
         elif self.question.type == Question.TYPE_BOOLEAN and self.answer == "False":
             return str(_("No"))
+        elif self.question.type == Question.TYPE_FILE:
+            return str(_("<file>"))
         else:
             return self.answer
 
@@ -681,6 +722,20 @@ class CachedCombinedTicket(models.Model):
 
 @receiver(post_delete, sender=CachedTicket)
 def cachedticket_delete(sender, instance, **kwargs):
+    if instance.file:
+        # Pass false so FileField doesn't save the model.
+        instance.file.delete(False)
+
+
+@receiver(post_delete, sender=CachedCombinedTicket)
+def cachedcombinedticket_delete(sender, instance, **kwargs):
+    if instance.file:
+        # Pass false so FileField doesn't save the model.
+        instance.file.delete(False)
+
+
+@receiver(post_delete, sender=QuestionAnswer)
+def answer_delete(sender, instance, **kwargs):
     if instance.file:
         # Pass false so FileField doesn't save the model.
         instance.file.delete(False)
