@@ -2,6 +2,7 @@ import mimetypes
 import os
 
 from django.contrib import messages
+from django.db.models import Count, Prefetch, Q
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
@@ -10,7 +11,9 @@ from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView, View
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models import CartPosition, ItemVariation, QuestionAnswer, Quota, Voucher, SubEvent
+from pretix.base.models import (
+    CartPosition, ItemVariation, QuestionAnswer, Quota, SubEvent, Voucher,
+)
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, clear_cart, remove_cart_position,
 )
