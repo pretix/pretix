@@ -53,6 +53,8 @@ def contextprocessor(request):
             ctx['css_file'] = default_storage.url(request.event.settings.presale_css_file)
         ctx['event_logo'] = request.event.settings.get('logo_image', as_type=str, default='')[7:]
         ctx['event'] = request.event
+        ctx['languages'] = [l for l in settings.LANGUAGES if l[0] in request.event.settings.locales]
+
 
     if hasattr(request, 'organizer'):
         ctx['organizer_logo'] = request.organizer.settings.get('organizer_logo_image', as_type=str, default='')[7:]
@@ -63,6 +65,5 @@ def contextprocessor(request):
     ctx['html_foot'] = "".join(_html_foot)
     ctx['footer'] = _footer
     ctx['site_url'] = settings.SITE_URL
-    ctx['languages'] = settings.LANGUAGES
 
     return ctx

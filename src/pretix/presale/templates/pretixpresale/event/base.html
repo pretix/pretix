@@ -37,11 +37,18 @@
         <div class="pull-right loginbox">
             {% if request.event.settings.locales|length > 1 %}
                 <div class="locales">
-                    {% for l in request.event.settings.locales %}
-                        <a href="{% url "presale:locale.set" %}?locale={{ l }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}"
-                            class="{% if l == request.LANGUAGE_CODE %}active{% endif %}"
-                            >{{ languages|get_item:l }}</a>
+                    {% for l, langname in languages %}
+                        {% if l in request.event.settings.locales %}
+                            <a href="{% url "presale:locale.set" %}?locale={{ l }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l == request.LANGUAGE_CODE %}active{% endif %}">
+                                {{ langname }}
+                            </a>
+                        {% endif %}
                     {% endfor %}
+                    <!--{% for l in request.event.settings.locales %}
+                        <a href="{% url "presale:locale.set" %}?locale={{ l }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l == request.LANGUAGE_CODE %}active{% endif %}">
+                        </a>
+                    {% endfor %}
+                -->
                 </div>
             {% endif %}
         </div>
