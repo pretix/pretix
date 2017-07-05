@@ -55,7 +55,6 @@ def contextprocessor(request):
         ctx['event'] = request.event
         ctx['languages'] = [l for l in settings.LANGUAGES if l[0] in request.event.settings.locales]
 
-
     if hasattr(request, 'organizer'):
         ctx['organizer_logo'] = request.organizer.settings.get('organizer_logo_image', as_type=str, default='')[7:]
         ctx['organizer_homepage_text'] = request.organizer.settings.get('organizer_homepage_text', as_type=LazyI18nString)
