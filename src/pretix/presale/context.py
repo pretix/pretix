@@ -22,8 +22,6 @@ def contextprocessor(request):
     _html_head = []
     _html_foot = []
     _footer = []
-    temp_lang=[]
-
 
     if hasattr(request, 'event'):
         pretix_settings = request.event.settings
