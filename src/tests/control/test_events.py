@@ -2,11 +2,15 @@ import datetime
 from decimal import Decimal
 
 import pytz
+from django.utils.timezone import now
 from i18nfield.strings import LazyI18nString
 from pytz import timezone
 from tests.base import SoupTest, extract_form_fields
 
-from pretix.base.models import Event, Organizer, Team, User
+from pretix.base.models import (
+    Event, Order, OrderPosition, Organizer, Team, User,
+)
+from pretix.base.models.items import SubEventItem
 from pretix.testutils.mock import mocker_context
 
 
@@ -466,3 +470,132 @@ class EventsTest(SoupTest):
             'basics-presale_end': '2016-11-30 18:00:00',
         })
         assert doc.select(".alert-danger")
+
+
+class SubEventsTest(SoupTest):
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
+        self.orga1 = Organizer.objects.create(name='CCC', slug='ccc')
+        self.event1 = Event.objects.create(
+            organizer=self.orga1, name='30C3', slug='30c3',
+            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+            plugins='pretix.plugins.banktransfer,tests.testdummy',
+            has_subevents=True
+        )
+
+        t = Team.objects.create(organizer=self.orga1, can_create_events=True, can_change_event_settings=True,
+                                can_change_items=True)
+        t.members.add(self.user)
+        t.limit_events.add(self.event1)
+        self.ticket = self.event1.items.create(name='Early-bird ticket',
+                                               category=None, default_price=23,
+                                               admission=True)
+
+        self.client.login(email='dummy@dummy.dummy', password='dummy')
+
+        self.subevent1 = self.event1.subevents.create(name='SE1', date_from=now())
+
+    def test_list(self):
+        doc = self.get_doc('/control/event/ccc/30c3/subevents/')
+        tabletext = doc.select("#page-wrapper .table")[0].text
+        self.assertIn("SE1", tabletext)
+
+    def test_create(self):
+        doc = self.get_doc('/control/event/ccc/30c3/subevents/add')
+        assert doc.select("input[name=quotas-TOTAL_FORMS]")
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/add', {
+            'name_0': 'SE2',
+            'active': 'on',
+            'date_from': '2017-07-01 10:00:00',
+            'date_to': '2017-07-01 12:00:00',
+            'location_0': 'Hamburg',
+            'presale_start': '2017-06-20 10:00:00',
+            'quotas-TOTAL_FORMS': '1',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'quotas-0-name': 'Q1',
+            'quotas-0-size': '50',
+            'quotas-0-itemvars': str(self.ticket.pk),
+            'item-%d-price' % self.ticket.pk: '12'
+        })
+        assert doc.select(".alert-success")
+        se = self.event1.subevents.first()
+        assert str(se.name) == "SE2"
+        assert se.active
+        assert se.date_from.isoformat() == "2017-07-01T10:00:00+00:00"
+        assert se.date_to.isoformat() == "2017-07-01T12:00:00+00:00"
+        assert str(se.location) == "Hamburg"
+        assert se.presale_start.isoformat() == "2017-06-20T10:00:00+00:00"
+        assert not se.presale_end
+        assert se.quotas.count() == 1
+        q = se.quotas.last()
+        assert q.name == "Q1"
+        assert q.size == 50
+        assert list(q.items.all()) == [self.ticket]
+        sei = SubEventItem.objects.get(subevent=se, item=self.ticket)
+        assert sei.price == 12
+
+    def test_modify(self):
+        doc = self.get_doc('/control/event/ccc/30c3/subevents/%d/' % self.subevent1.pk)
+        assert doc.select("input[name=quotas-TOTAL_FORMS]")
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/' % self.subevent1.pk, {
+            'name_0': 'SE2',
+            'active': 'on',
+            'date_from': '2017-07-01 10:00:00',
+            'date_to': '2017-07-01 12:00:00',
+            'location_0': 'Hamburg',
+            'presale_start': '2017-06-20 10:00:00',
+            'quotas-TOTAL_FORMS': '1',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'quotas-0-name': 'Q1',
+            'quotas-0-size': '50',
+            'quotas-0-itemvars': str(self.ticket.pk),
+            'item-%d-price' % self.ticket.pk: '12'
+        })
+        assert doc.select(".alert-success")
+        self.subevent1.refresh_from_db()
+        se = self.subevent1
+        assert str(se.name) == "SE2"
+        assert se.active
+        assert se.date_from.isoformat() == "2017-07-01T10:00:00+00:00"
+        assert se.date_to.isoformat() == "2017-07-01T12:00:00+00:00"
+        assert str(se.location) == "Hamburg"
+        assert se.presale_start.isoformat() == "2017-06-20T10:00:00+00:00"
+        assert not se.presale_end
+        assert se.quotas.count() == 1
+        q = se.quotas.last()
+        assert q.name == "Q1"
+        assert q.size == 50
+        assert list(q.items.all()) == [self.ticket]
+        sei = SubEventItem.objects.get(subevent=se, item=self.ticket)
+        assert sei.price == 12
+
+    def test_delete(self):
+        doc = self.get_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk)
+        assert doc.select("button")
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk, {})
+        assert doc.select(".alert-success")
+        assert not SubEventItem.objects.filter(pk=self.subevent1.pk).exists()
+
+    def test_delete_with_orders(self):
+        o = Order.objects.create(
+            code='FOO', event=self.event1, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now() + datetime.timedelta(days=10),
+            total=14, payment_provider='banktransfer', locale='en'
+        )
+        OrderPosition.objects.create(
+            order=o,
+            item=self.ticket,
+            subevent=self.subevent1,
+            price=Decimal("14"),
+        )
+        doc = self.get_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk, follow=True)
+        assert doc.select(".alert-danger")
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk, {}, follow=True)
+        assert doc.select(".alert-danger")
+        assert self.event1.subevents.filter(pk=self.subevent1.pk).exists()

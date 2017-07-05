@@ -14,7 +14,7 @@ from pretix.base.models import (
     Event, Item, ItemCategory, ItemVariation, Order, Organizer, Quota, Team,
     User, WaitingListEntry,
 )
-from pretix.base.models.items import SubEventItem
+from pretix.base.models.items import SubEventItem, SubEventItemVariation
 
 
 class EventTestMixin:
@@ -422,6 +422,99 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         self.event.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, 'ABC'), follow=True)
         assert "alert-danger" in html.rendered_content
+
+    def test_subevent_net_prices(self):
+        self.event.settings.display_net_prices = True
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
+        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+
+        var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
+        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+        q.variations.add(var1)
+        q.variations.add(var2)
+        SubEventItemVariation.objects.create(subevent=se1, variation=var1, price=10)
+
+        self.v.value = Decimal("2.00")
+        self.v.price_mode = 'subtract'
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s&subevent=%s' % (
+            self.orga.slug, self.event.slug, self.v.code, se1.pk
+        ))
+        assert "SE1" in html.rendered_content
+        assert "Early-bird" in html.rendered_content
+        assert "10.00" in html.rendered_content
+        assert "8.00" in html.rendered_content
+        assert "variation_1_1" in html.rendered_content
+        assert "variation_1_2" in html.rendered_content
+
+    def test_subevent_prices(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
+        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+
+        var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
+        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+        q.variations.add(var1)
+        q.variations.add(var2)
+        SubEventItemVariation.objects.create(subevent=se1, variation=var1, price=10)
+
+        self.v.value = Decimal("2.00")
+        self.v.price_mode = 'subtract'
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s&subevent=%s' % (
+            self.orga.slug, self.event.slug, self.v.code, se1.pk
+        ))
+        assert "SE1" in html.rendered_content
+        assert "Early-bird" in html.rendered_content
+        assert "10.00" in html.rendered_content
+        assert "8.00" in html.rendered_content
+        assert "variation_1_1" in html.rendered_content
+        assert "variation_1_2" in html.rendered_content
+
+    def test_voucher_ignore_other_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
+        se2 = self.event.subevents.create(name='SE2', date_from=now(), active=True)
+        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+
+        var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
+        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+        q.variations.add(var1)
+        q.variations.add(var2)
+
+        self.v.subevent = se1
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s&subevent=%s' % (
+            self.orga.slug, self.event.slug, self.v.code, se2.pk
+        ))
+        assert "SE1" in html.rendered_content
+
+    def test_voucher_quota(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
+        se2 = self.event.subevents.create(name='SE2', date_from=now(), active=True)
+        q = Quota.objects.create(event=self.event, name='Quota', size=0, subevent=se1)
+        q2 = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se2)
+
+        var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
+        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+        q.variations.add(var1)
+        q2.variations.add(var1)
+        q.variations.add(var2)
+        q2.variations.add(var1)
+
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s&subevent=%s' % (
+            self.orga.slug, self.event.slug, self.v.code, se1.pk
+        ))
+        assert "SE1" in html.rendered_content
+        assert "variation_1_1" not in html.rendered_content
+        assert "variation_1_2" not in html.rendered_content
 
 
 class WaitingListTest(EventTestMixin, SoupTest):
