@@ -98,8 +98,7 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
-            self.request.event.settings.invoice_generate == 'admin' or
-            self.request.event.settings.invoice_generate == 'user'
+            self.request.event.settings.invoice_generate in ('admin', 'user', 'paid')
         )
         return ctx
 
@@ -245,8 +244,7 @@ class OrderInvoiceCreate(OrderView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user') or not invoice_qualified(
-                self.order):
+        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid') or not invoice_qualified(self.order):
             messages.error(self.request, _('You cannot generate an invoice for this order.'))
         elif self.order.invoices.exists():
             messages.error(self.request, _('An invoice for this order already exists.'))
