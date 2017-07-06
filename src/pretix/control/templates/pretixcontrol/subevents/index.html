@@ -1,9 +1,10 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
 {% block title %}{% trans "Sub-events" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Sub-events" %}</h1>
-    {% if subevents|length == 0 %}
+    {% if subevents|length == 0 and not filter_form.filtered %}
         <div class="empty-collection">
             <p>
                 {% blocktrans trimmed %}
@@ -15,6 +16,22 @@
                     class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new sub-event" %}</a>
         </div>
     {% else %}
+        <form class="row filter-form" action="" method="get">
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.query layout='inline' %}
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.status layout='inline' %}
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-12">
+                <button class="btn btn-primary btn-block" type="submit">
+                    <span class="fa fa-filter"></span>
+                    <span class="hidden-md">
+                    {% trans "Filter" %}
+                </span>
+                </button>
+            </div>
+        </form>
         <p>
             <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                     class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new sub-event" %}</a>
@@ -25,7 +42,7 @@
                 <tr>
                     <th>{% trans "Name" %}</th>
                     <th>{% trans "Begin" %}</th>
-                    <th>{% trans "Active" %}</th>
+                    <th>{% trans "Status" %}</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -38,10 +55,14 @@
                         </td>
                         <td>{{ s.get_date_from_display }}</td>
                         <td>
-                            {% if s.active %}
-                                <span class="label label-success">{% trans "Yes" %}</span>
+                            {% if not e.live %}
+                                <span class="label label-danger">{% trans "Disabled" %}</span>
+                            {% elif e.presale_has_ended %}
+                                <span class="label label-warning">{% trans "Presale over" %}</span>
+                            {% elif not e.presale_is_running %}
+                                <span class="label label-warning">{% trans "Presale not started" %}</span>
                             {% else %}
-                                <span class="label label-danger">{% trans "No" %}</span>
+                                <span class="label label-success">{% trans "On sale" %}</span>
                             {% endif %}
                         </td>
                         <td class="text-right">

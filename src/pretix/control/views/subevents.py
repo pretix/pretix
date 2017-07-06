@@ -11,6 +11,7 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import Quota, SubEventItem, SubEventItemVariation
+from pretix.control.forms.filter import SubEventFilterForm
 from pretix.control.forms.item import QuotaForm
 from pretix.control.forms.subevents import (
     QuotaFormSet, SubEventForm, SubEventItemForm, SubEventItemVariationForm,
@@ -27,7 +28,18 @@ class SubEventList(EventPermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = self.request.event.subevents.all()
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
         return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['filter_form'] = self.filter_form
+        return ctx
+
+    @cached_property
+    def filter_form(self):
+        return SubEventFilterForm(data=self.request.GET)
 
 
 class SubEventDelete(EventPermissionRequiredMixin, DeleteView):

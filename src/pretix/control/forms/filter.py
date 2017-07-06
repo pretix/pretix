@@ -160,6 +160,57 @@ class OrderSearchFilterForm(OrderFilterForm):
         return qs
 
 
+class SubEventFilterForm(FilterForm):
+    status = forms.ChoiceField(
+        label=_('Status'),
+        choices=(
+            ('', _('All sub-events')),
+            ('active', _('Active')),
+            ('running', _('Shop live and presale running')),
+            ('inactive', _('Inactive')),
+            ('future', _('Presale not started')),
+            ('past', _('Presale over')),
+        ),
+        required=False
+    )
+    query = forms.CharField(
+        label=_('Event name'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Event name'),
+            'autofocus': 'autofocus'
+        }),
+        required=False
+    )
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('status') == 'active':
+            qs = qs.filter(active=True)
+        elif fdata.get('status') == 'running':
+            qs = qs.filter(
+                active=True
+            ).filter(
+                Q(presale_start__isnull=True) | Q(presale_start__lte=now())
+            ).filter(
+                Q(presale_end__isnull=True) | Q(presale_end__gte=now())
+            )
+        elif fdata.get('status') == 'inactive':
+            qs = qs.filter(active=False)
+        elif fdata.get('status') == 'future':
+            qs = qs.filter(presale_start__gte=now())
+        elif fdata.get('status') == 'past':
+            qs = qs.filter(presale_end__lte=now())
+
+        if fdata.get('query'):
+            query = fdata.get('query')
+            qs = qs.filter(
+                Q(name__icontains=i18ncomp(query)) | Q(location__icontains=query)
+            )
+
+        return qs
+
+
 class EventFilterForm(FilterForm):
     status = forms.ChoiceField(
         label=_('Status'),
