@@ -92,6 +92,8 @@ class Order(LoggedModel):
     :type total: decimal.Decimal
     :param comment: An internal comment that will only be visible to staff, and never displayed to the user
     :type comment: str
+    :param download_reminder_sent: A field to indicate whether a download reminder has been sent.
+    :type download_reminder_sent: boolean
     :param meta_info: Additional meta information on the order, JSON-encoded.
     :type meta_info: str
     """
@@ -179,6 +181,10 @@ class Order(LoggedModel):
                     "convenience.")
     )
     expiry_reminder_sent = models.BooleanField(
+        default=False
+    )
+
+    download_reminder_sent = models.BooleanField(
         default=False
     )
     meta_info = models.TextField(

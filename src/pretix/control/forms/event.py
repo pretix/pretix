@@ -631,6 +631,13 @@ class MailSettingsForm(SettingsForm):
         validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
                                           '{invoice_name}', '{invoice_company}'])]
     )
+    mail_text_download_reminder = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {url}"),
+        validators=[PlaceholderValidator(['{event}', '{url}'])]
+    )
     smtp_use_custom = forms.BooleanField(
         label=_("Use custom SMTP server"),
         help_text=_("All mail related to your event will be sent over the smtp server specified by you."),

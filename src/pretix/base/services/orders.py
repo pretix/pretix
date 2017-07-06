@@ -528,6 +528,46 @@ def send_expiry_warnings(sender, **kwargs):
                 logger.exception('Reminder email could not be sent')
 
 
+@receiver(signal=periodic_task)
+def send_download_reminders(sender, **kwargs):
+    eventcache = {}
+    today = now().replace(hour=0, minute=0, second=0)
+
+    for e in Event.objects.filter(date_from__gte=today):
+        eventsettings = eventcache.get(e.pk, None)
+        if eventsettings is None:
+            eventsettings = e.settings
+            eventcache[e.pk] = eventsettings
+
+        days = eventsettings.get('mail_days_download_reminder', as_type=int)
+        if days is not None:
+            continue
+
+        reminder_date = (e.date_from - timedelta(days=days)).replace(hour=0, minute=0, second=0)
+
+        if (today > reminder_date):
+            continue
+        for o in e.orders.filter(status="paid", download_reminder_sent=False):
+            o.download_reminder_sent = True
+            o.save()
+            email_template = eventsettings.mail_text_download_reminder
+            email_context = {
+                'event': o.event.name,
+                'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                    'order': o.code,
+                    'secret': o.secret
+                }),
+            }
+            email_subject = _('Your ticket is ready for download: %(code)s') % {'code': o.code}
+            try:
+                o.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.expire_warning_sent'
+                )
+            except SendMailException:
+                logger.exception('Reminder email could not be sent')
+
+
 class OrderChangeManager:
     error_messages = {
         'free_to_paid': _('You cannot change a free order to a paid order.'),
