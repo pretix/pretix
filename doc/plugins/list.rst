@@ -19,10 +19,12 @@ same team. We update them regularly to make them compatible with the latest
 pretix releases:
 
 * `SEPA direct debit`_
+* `Wirecard payment`_
 * `Pages`_
 * `Passbook/Wallet ticket output`_
 * `Cartshare`_
 * `Fontpack Free fonts`_
+* `Mailing list subscription`_
 
 The following closed-source plugins are available to customers of the hosted pretix.eu platform.
 Please get in touch with the pretix team if you want to have them for your self-hosted
@@ -46,3 +48,5 @@ no statements about their stability or compatibility:
 .. _esPass ticket output: https://github.com/esPass/pretix-espass
 .. _IcePay integration: https://github.com/chotee/pretix-icepay
 .. _Fontpack Free fonts: https://github.com/pretix/pretix-fontpack-free
+.. _Wirecard payment: https://github.com/pretix/pretix-wirecard
+.. _Mailing list subscription: https://github.com/pretix/pretix-newsletter-ml
