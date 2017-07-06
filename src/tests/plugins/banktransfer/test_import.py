@@ -144,6 +144,18 @@ def test_autocorrection(env, job):
 
 
 @pytest.mark.django_db
+def test_random_spaces(env, job):
+    process_banktransfers(job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUM MY123 45NEXTLINE',
+        'amount': '23.00',
+        'date': '2016-01-26',
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
 def test_huge_amount(env, job):
     env[2].total = Decimal('23000.00')
     env[2].save()
