@@ -1,9 +1,10 @@
 import datetime
 import sys
-from datetime import timedelta
+from datetime import date, timedelta
 from decimal import Decimal
 
 import pytest
+import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
@@ -17,6 +18,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
+from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.orders import (
     OrderError, cancel_order, mark_order_paid, perform_order,
 )
@@ -556,27 +558,27 @@ class VoucherTestCase(BaseQuotaTestCase):
 
     def test_calculate_price_none(self):
         v = Voucher.objects.create(event=self.event, price_mode='none', value=Decimal('10.00'))
-        v.calculate_price(Decimal('23.42')) == Decimal('23.42')
+        assert v.calculate_price(Decimal('23.42')) == Decimal('23.42')
 
     def test_calculate_price_set_empty(self):
         v = Voucher.objects.create(event=self.event, price_mode='set')
-        v.calculate_price(Decimal('23.42')) == Decimal('23.42')
+        assert v.calculate_price(Decimal('23.42')) == Decimal('23.42')
 
     def test_calculate_price_set(self):
         v = Voucher.objects.create(event=self.event, price_mode='set', value=Decimal('10.00'))
-        v.calculate_price(Decimal('23.42')) == Decimal('10.00')
+        assert v.calculate_price(Decimal('23.42')) == Decimal('10.00')
 
     def test_calculate_price_set_zero(self):
         v = Voucher.objects.create(event=self.event, price_mode='set', value=Decimal('0.00'))
-        v.calculate_price(Decimal('23.42')) == Decimal('0.00')
+        assert v.calculate_price(Decimal('23.42')) == Decimal('0.00')
 
     def test_calculate_price_subtract(self):
         v = Voucher.objects.create(event=self.event, price_mode='subtract', value=Decimal('10.00'))
-        v.calculate_price(Decimal('23.42')) == Decimal('13.42')
+        assert v.calculate_price(Decimal('23.42')) == Decimal('13.42')
 
     def test_calculate_price_percent(self):
         v = Voucher.objects.create(event=self.event, price_mode='percent', value=Decimal('23.00'))
-        v.calculate_price(Decimal('100.00')) == Decimal('77.00')
+        assert v.calculate_price(Decimal('100.00')) == Decimal('77.00')
 
 
 class OrderTestCase(BaseQuotaTestCase):
@@ -589,10 +591,10 @@ class OrderTestCase(BaseQuotaTestCase):
             expires=now() + timedelta(days=5), total=46
         )
         self.quota.items.add(self.item1)
-        OrderPosition.objects.create(order=self.order, item=self.item1,
-                                     variation=None, price=23)
-        OrderPosition.objects.create(order=self.order, item=self.item1,
-                                     variation=None, price=23)
+        self.op1 = OrderPosition.objects.create(order=self.order, item=self.item1,
+                                                variation=None, price=23)
+        self.op2 = OrderPosition.objects.create(order=self.order, item=self.item1,
+                                                variation=None, price=23)
 
     def test_paid_in_time(self):
         self.quota.size = 0
@@ -619,6 +621,29 @@ class OrderTestCase(BaseQuotaTestCase):
             mark_order_paid(self.order)
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_EXPIRED)
+
+    def test_paid_expired_after_last_date_subevent_relative(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="SE1", date_from=now() + timedelta(days=10))
+        se2 = self.event.subevents.create(name="SE2", date_from=now() + timedelta(days=1))
+        self.op1.subevent = se1
+        self.op1.save()
+        self.op2.subevent = se2
+        self.op2.save()
+        self.event.settings.set('payment_term_last', RelativeDateWrapper(
+            RelativeDate(days_before=2, time=None, base_date_name='date_from')
+        ))
+
+        self.order.status = Order.STATUS_EXPIRED
+        self.order.expires = now() - timedelta(days=2)
+        self.order.save()
+        with self.assertRaises(Quota.QuotaExceededException):
+            mark_order_paid(self.order)
+        self.order = Order.objects.get(id=self.order.id)
+        self.assertEqual(self.order.status, Order.STATUS_EXPIRED)
+        self.event.has_subevents = False
+        self.event.save()
 
     def test_paid_expired_late_not_allowed(self):
         self.event.settings.payment_term_accept_late = False
@@ -674,6 +699,86 @@ class OrderTestCase(BaseQuotaTestCase):
         assert self.order.can_modify_answers
         self.event.settings.set('last_order_modification_date', now() - timedelta(days=1))
         assert not self.order.can_modify_answers
+
+    def test_can_modify_answers_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="SE1", date_from=now() + timedelta(days=10))
+        se2 = self.event.subevents.create(name="SE2", date_from=now() + timedelta(days=8))
+        se3 = self.event.subevents.create(name="SE2", date_from=now() + timedelta(days=1))
+        self.op1.subevent = se1
+        self.op1.save()
+        self.op2.subevent = se2
+        self.op2.save()
+        self.event.settings.set('last_order_modification_date', RelativeDateWrapper(
+            RelativeDate(days_before=2, time=None, base_date_name='date_from')
+        ))
+        assert self.order.can_modify_answers
+        self.op2.subevent = se3
+        self.op2.save()
+        assert not self.order.can_modify_answers
+        self.event.has_subevents = False
+        self.event.save()
+
+    def test_payment_term_last_relative(self):
+        self.event.settings.set('payment_term_last', date(2017, 5, 3))
+        assert self.order.payment_term_last == datetime.datetime(2017, 5, 3, 23, 59, 59, tzinfo=pytz.UTC)
+        self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=pytz.UTC)
+        self.event.save()
+        self.event.settings.set('payment_term_last', RelativeDateWrapper(
+            RelativeDate(days_before=2, time=None, base_date_name='date_from')
+        ))
+        assert self.order.payment_term_last == datetime.datetime(2017, 5, 1, 23, 59, 59, tzinfo=pytz.UTC)
+
+    def test_payment_term_last_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="SE1", date_from=now() + timedelta(days=10))
+        se2 = self.event.subevents.create(name="SE2", date_from=now() + timedelta(days=8))
+        se3 = self.event.subevents.create(name="SE2", date_from=now() + timedelta(days=1))
+        self.op1.subevent = se1
+        self.op1.save()
+        self.op2.subevent = se2
+        self.op2.save()
+        self.event.settings.set('payment_term_last', RelativeDateWrapper(
+            RelativeDate(days_before=2, time=None, base_date_name='date_from')
+        ))
+        assert self.order.payment_term_last > now()
+        self.op2.subevent = se3
+        self.op2.save()
+        assert self.order.payment_term_last < now()
+        self.event.has_subevents = False
+        self.event.save()
+
+    def test_ticket_download_date_relative(self):
+        self.event.settings.set('ticket_download_date', datetime.datetime(2017, 5, 3, 12, 59, 59, tzinfo=pytz.UTC))
+        assert self.order.ticket_download_date == datetime.datetime(2017, 5, 3, 12, 59, 59, tzinfo=pytz.UTC)
+        self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=pytz.UTC)
+        self.event.save()
+        self.event.settings.set('ticket_download_date', RelativeDateWrapper(
+            RelativeDate(days_before=2, time=None, base_date_name='date_from')
+        ))
+        assert self.order.ticket_download_date == datetime.datetime(2017, 5, 1, 12, 0, 0, tzinfo=pytz.UTC)
+
+    def test_ticket_download_date_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="SE1", date_from=now() + timedelta(days=10))
+        se2 = self.event.subevents.create(name="SE2", date_from=now() + timedelta(days=8))
+        se3 = self.event.subevents.create(name="SE2", date_from=now() + timedelta(days=1))
+        self.op1.subevent = se1
+        self.op1.save()
+        self.op2.subevent = se2
+        self.op2.save()
+        self.event.settings.set('ticket_download_date', RelativeDateWrapper(
+            RelativeDate(days_before=2, time=None, base_date_name='date_from')
+        ))
+        assert self.order.ticket_download_date > now()
+        self.op2.subevent = se3
+        self.op2.save()
+        assert self.order.ticket_download_date < now()
+        self.event.has_subevents = False
+        self.event.save()
 
     def test_can_cancel_order(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,

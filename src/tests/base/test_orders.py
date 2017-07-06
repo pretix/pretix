@@ -7,9 +7,12 @@ from django.test import TestCase
 from django.utils.timezone import make_aware, now
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models import Event, Item, Order, OrderPosition, Organizer
+from pretix.base.models import (
+    CartPosition, Event, Item, Order, OrderPosition, Organizer,
+)
 from pretix.base.models.items import SubEventItem
 from pretix.base.payment import FreeOrderProvider
+from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, expire_orders,
 )
@@ -70,6 +73,52 @@ def test_expiry_last(event):
                           now_dt=today, payment_provider=FreeOrderProvider(event),
                           locale='de')
     assert (order.expires - today).days == 5
+
+
+@pytest.mark.django_db
+def test_expiry_last_relative(event):
+    today = now()
+    event.settings.set('payment_term_days', 5)
+    event.settings.set('payment_term_weekdays', False)
+    event.date_from = now() + timedelta(days=5)
+    event.save()
+    event.settings.set('payment_term_last', RelativeDateWrapper(
+        RelativeDate(days_before=2, time=None, base_date_name='date_from')
+    ))
+    order = _create_order(event, email='dummy@example.org', positions=[],
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
+                          locale='de')
+    assert (order.expires - today).days == 3
+
+
+@pytest.mark.django_db
+def test_expiry_last_relative_subevents(event):
+    today = now()
+    event.settings.set('payment_term_days', 100)
+    event.settings.set('payment_term_weekdays', False)
+    event.date_from = now() + timedelta(days=5)
+    event.has_subevents = True
+    event.save()
+    ticket = Item.objects.create(event=event, name='Early-bird ticket', tax_rate=Decimal('7.00'),
+                                 default_price=Decimal('23.00'), admission=True)
+
+    se1 = event.subevents.create(name="SE1", date_from=now() + timedelta(days=10))
+    se2 = event.subevents.create(name="SE2", date_from=now() + timedelta(days=8))
+
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), subevent=se1, event=event, cart_id="123"
+    )
+    cp2 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), subevent=se2, event=event, cart_id="123"
+    )
+
+    event.settings.set('payment_term_last', RelativeDateWrapper(
+        RelativeDate(days_before=2, time=None, base_date_name='date_from')
+    ))
+    order = _create_order(event, email='dummy@example.org', positions=[cp1, cp2],
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
+                          locale='de')
+    assert (order.expires - today).days == 6
 
 
 @pytest.mark.django_db

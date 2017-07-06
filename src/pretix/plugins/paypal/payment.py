@@ -280,7 +280,7 @@ class Paypal(BasePaymentProvider):
             order.save()
 
     def order_can_retry(self, order):
-        return self._is_still_available()
+        return self._is_still_available(order=order)
 
     def order_prepare(self, request, order):
         self.init_api()

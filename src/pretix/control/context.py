@@ -74,6 +74,7 @@ def contextprocessor(request):
 
     ctx['js_datetime_format'] = get_javascript_format('DATETIME_INPUT_FORMATS')
     ctx['js_date_format'] = get_javascript_format('DATE_INPUT_FORMATS')
+    ctx['js_time_format'] = get_javascript_format('TIME_INPUT_FORMATS')
     ctx['js_locale'] = get_moment_locale()
 
     if settings.DEBUG and 'runserver' not in sys.argv:

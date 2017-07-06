@@ -25,6 +25,7 @@ from pretix.base.models import (
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import CachedTicket, InvoiceAddress
 from pretix.base.payment import BasePaymentProvider
+from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.async import ProfiledTask
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
@@ -331,7 +332,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None, address: int=None,
                   meta_info: dict=None):
-    from datetime import date, time
+    from datetime import time
 
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
@@ -348,13 +349,21 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 
     expires = exp_by_date
 
-    if event.settings.get('payment_term_last'):
-        last_date = make_aware(datetime.combine(
-            event.settings.get('payment_term_last', as_type=date),
+    term_last = event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
+    if term_last:
+        if event.has_subevents:
+            term_last = min([
+                term_last.datetime(se).date()
+                for se in event.subevents.filter(id__in=[p.subevent_id for p in positions])
+            ])
+        else:
+            term_last = term_last.datetime(event).date()
+        term_last = make_aware(datetime.combine(
+            term_last,
             time(hour=23, minute=59, second=59)
         ), tz)
-        if last_date < expires:
-            expires = last_date
+        if term_last < expires:
+            expires = term_last
 
     with transaction.atomic():
         order = Order.objects.create(

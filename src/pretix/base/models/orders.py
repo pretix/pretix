@@ -2,10 +2,11 @@ import copy
 import json
 import os
 import string
-from datetime import datetime
+from datetime import datetime, time
 from decimal import Decimal
 from typing import List, Union
 
+import pytz
 from django.conf import settings
 from django.db import models
 from django.db.models import F, Sum
@@ -16,8 +17,10 @@ from django.utils.encoding import escape_uri_path
 from django.utils.functional import cached_property
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.utils.timezone import now
+from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
+
+from pretix.base.reldate import RelativeDateWrapper
 
 from ..decimal import round_decimal
 from .base import LoggedModel
@@ -267,7 +270,16 @@ class Order(LoggedModel):
         """
         if self.status not in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED):
             return False
-        modify_deadline = self.event.settings.get('last_order_modification_date', as_type=datetime)
+
+        modify_deadline = self.event.settings.get('last_order_modification_date', as_type=RelativeDateWrapper)
+        if self.event.has_subevents and modify_deadline:
+            modify_deadline = min([
+                modify_deadline.datetime(se)
+                for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
+            ])
+        elif modify_deadline:
+            modify_deadline = modify_deadline.datetime(self.event)
+
         if modify_deadline is not None and now() > modify_deadline:
             return False
         if self.event.settings.get('invoice_address_asked', as_type=bool):
@@ -292,6 +304,37 @@ class Order(LoggedModel):
             and not self.event.settings.get('payment_term_expire_automatically')
         )
 
+    @property
+    def ticket_download_date(self):
+        dl_date = self.event.settings.get('ticket_download_date', as_type=RelativeDateWrapper)
+        if dl_date:
+            if self.event.has_subevents:
+                dl_date = min([
+                    dl_date.datetime(se)
+                    for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
+                ])
+            else:
+                dl_date = dl_date.datetime(self.event)
+        return dl_date
+
+    @property
+    def payment_term_last(self):
+        tz = pytz.timezone(self.event.settings.timezone)
+        term_last = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
+        if term_last:
+            if self.event.has_subevents:
+                term_last = min([
+                    term_last.datetime(se).date()
+                    for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
+                ])
+            else:
+                term_last = term_last.datetime(self.event).date()
+            term_last = make_aware(datetime.combine(
+                term_last,
+                time(hour=23, minute=59, second=59)
+            ), tz)
+        return term_last
+
     def _can_be_paid(self) -> Union[bool, str]:
         error_messages = {
             'late_lastdate': _("The payment can not be accepted as the last date of payments configured in the "
@@ -299,9 +342,9 @@ class Order(LoggedModel):
             'late': _("The payment can not be accepted as it the order is expired and you configured that no late "
                       "payments should be accepted in the payment settings."),
         }
-
-        if self.event.settings.get('payment_term_last'):
-            if now() > self.event.payment_term_last:
+        term_last = self.payment_term_last
+        if term_last:
+            if now() > term_last:
                 return error_messages['late_lastdate']
 
         if self.status == self.STATUS_PENDING:
@@ -322,7 +365,9 @@ class Order(LoggedModel):
             for i, op in enumerate(positions):
                 quotas = list(op.quotas)
                 if len(quotas) == 0:
-                    raise Quota.QuotaExceededException(error_messages['unavailable'])
+                    raise Quota.QuotaExceededException(error_messages['unavailable'].format(
+                        item=str(op.item) + (' - ' + str(op.variation) if op.variation else '')
+                    ))
 
                 for quota in quotas:
                     if quota.id not in quota_cache:

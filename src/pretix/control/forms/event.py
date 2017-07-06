@@ -10,6 +10,7 @@ from pytz import common_timezones, timezone
 
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer
+from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.control.forms import ExtFileField
 
 
@@ -212,12 +213,12 @@ class EventSettingsForm(SettingsForm):
         widget=forms.CheckboxInput,
         required=False
     )
-    last_order_modification_date = forms.DateTimeField(
+    last_order_modification_date = RelativeDateTimeField(
         label=_('Last date of modifications'),
         help_text=_("The last date users can modify details of their orders, such as attendee names or "
-                    "answers to questions."),
+                    "answers to questions. If you use the sub-event feature and an order contains tickest for "
+                    "multiple sub-events, the earliest date will be used."),
         required=False,
-        widget=forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
     )
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
@@ -341,12 +342,12 @@ class PaymentSettingsForm(SettingsForm):
         label=_('Payment term in days'),
         help_text=_("The number of days after placing an order the user has to pay to preserve his reservation."),
     )
-    payment_term_last = forms.DateField(
+    payment_term_last = RelativeDateField(
         label=_('Last date of payments'),
         help_text=_("The last date any payments are accepted. This has precedence over the number of "
-                    "days configured above."),
+                    "days configured above. If you use the sub-event feature and an order contains tickets for "
+                    "multiple subevents, the earliest date will be used."),
         required=False,
-        widget=forms.DateInput(attrs={'class': 'datepickerfield'})
     )
     payment_term_weekdays = forms.BooleanField(
         label=_('Only end payment terms on weekdays'),
@@ -378,8 +379,10 @@ class PaymentSettingsForm(SettingsForm):
     def clean(self):
         cleaned_data = super().clean()
         payment_term_last = cleaned_data.get('payment_term_last')
+        print(payment_term_last)
         if payment_term_last and self.obj.presale_end:
-            if payment_term_last < self.obj.presale_end.date():
+            print(payment_term_last, payment_term_last.datetime(self.obj), self.obj.presale_end.date())
+            if payment_term_last.datetime(self.obj) < self.obj.presale_end.date():
                 self.add_error(
                     'payment_term_last',
                     _('The last payment date cannot be before the end of presale.'),
@@ -672,12 +675,12 @@ class TicketSettingsForm(SettingsForm):
         help_text=_("Use pretix to generate tickets for the user to download and print out."),
         required=False
     )
-    ticket_download_date = forms.DateTimeField(
+    ticket_download_date = RelativeDateTimeField(
         label=_("Download date"),
-        help_text=_("Ticket download will be offered after this date."),
-        required=True,
-        widget=forms.DateTimeInput(attrs={'class': 'datetimepicker',
-                                          'data-display-dependency': '#id_ticket_download'}),
+        help_text=_("Ticket download will be offered after this date. If you use the sub-events feature and an order "
+                    "contains tickets for multiple sub-events, download of all tickets will be available if at least "
+                    "one of the subevent dates allows it."),
+        required=False,
     )
     ticket_download_addons = forms.BooleanField(
         label=_("Offer to download tickets separately for add-on products"),

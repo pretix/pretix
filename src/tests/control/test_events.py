@@ -168,7 +168,10 @@ class EventsTest(SoupTest):
             'payment_banktransfer__fee_abs': '12.23',
             'payment_banktransfer_bank_details_0': 'Test',
             'settings-payment_term_days': '2',
-            'settings-payment_term_last': (self.event1.presale_end - datetime.timedelta(1)).strftime('%Y-%m-%d'),
+            'settings-payment_term_last_0': 'absolute',
+            'settings-payment_term_last_1': (self.event1.presale_end - datetime.timedelta(1)).strftime('%Y-%m-%d'),
+            'settings-payment_term_last_2': '0',
+            'settings-payment_term_last_3': 'date_from',
             'settings-tax_rate_default': '19.00',
         })
         assert doc.select('.alert-danger')

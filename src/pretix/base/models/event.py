@@ -1,6 +1,6 @@
 import string
 import uuid
-from datetime import date, datetime, time
+from datetime import datetime, time
 
 import pytz
 from django.conf import settings
@@ -19,6 +19,7 @@ from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.email import CustomSMTPBackend
 from pretix.base.models.base import LoggedModel
+from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.validators import EventSlugBlacklistValidator
 from pretix.helpers.daterange import daterange
 
@@ -246,7 +247,7 @@ class Event(EventMixin, LoggedModel):
     def payment_term_last(self):
         tz = pytz.timezone(self.settings.timezone)
         return make_aware(datetime.combine(
-            self.settings.get('payment_term_last', as_type=date),
+            self.settings.get('payment_term_last', as_type=RelativeDateWrapper).datetime(self).date(),
             time(hour=23, minute=59, second=59)
         ), tz)
 
@@ -288,7 +289,7 @@ class Event(EventMixin, LoggedModel):
             ia.addon_category = category_map[ia.addon_category.pk]
             ia.save()
 
-        for q in Quota.objects.filter(event=other).prefetch_related('items', 'variations'):
+        for q in Quota.objects.filter(event=other, subevent__isnull=True).prefetch_related('items', 'variations'):
             items = list(q.items.all())
             vars = list(q.variations.all())
             q.pk = None

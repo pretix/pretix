@@ -427,6 +427,8 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         self.event.settings.display_net_prices = True
         self.event.has_subevents = True
         self.event.save()
+        self.item.tax_rate = 19
+        self.item.save()
         se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
         q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
 
@@ -444,10 +446,8 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         ))
         assert "SE1" in html.rendered_content
         assert "Early-bird" in html.rendered_content
-        assert "10.00" in html.rendered_content
-        assert "8.00" in html.rendered_content
-        assert "variation_1_1" in html.rendered_content
-        assert "variation_1_2" in html.rendered_content
+        assert "8.40" in html.rendered_content
+        assert "6.72" in html.rendered_content
 
     def test_subevent_prices(self):
         self.event.has_subevents = True
@@ -471,8 +471,8 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         assert "Early-bird" in html.rendered_content
         assert "10.00" in html.rendered_content
         assert "8.00" in html.rendered_content
-        assert "variation_1_1" in html.rendered_content
-        assert "variation_1_2" in html.rendered_content
+        assert "variation_%d_%d" % (self.item.pk, var1.pk) in html.rendered_content
+        assert "variation_%d_%d" % (self.item.pk, var2.pk) in html.rendered_content
 
     def test_voucher_ignore_other_subevent(self):
         self.event.has_subevents = True
@@ -513,8 +513,8 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
             self.orga.slug, self.event.slug, self.v.code, se1.pk
         ))
         assert "SE1" in html.rendered_content
-        assert "variation_1_1" not in html.rendered_content
-        assert "variation_1_2" not in html.rendered_content
+        assert "variation_%d_%d" % (self.item.pk, var1.pk) not in html.rendered_content
+        assert "variation_%d_%d" % (self.item.pk, var2.pk) not in html.rendered_content
 
 
 class WaitingListTest(EventTestMixin, SoupTest):
