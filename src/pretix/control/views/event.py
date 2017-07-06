@@ -439,7 +439,8 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             'mail_text_resend_all_links': ['event', 'orders'],
             'mail_text_order_changed': ['event', 'url', 'invoice_name', 'invoice_company'],
             'mail_text_order_expire_warning': ['event', 'url', 'expire_date', 'invoice_name', 'invoice_company'],
-            'mail_text_waiting_list': ['event', 'url', 'product', 'hours', 'code']
+            'mail_text_waiting_list': ['event', 'url', 'product', 'hours', 'code'],
+            'mail_text_order_canceled': ['code', 'event', 'url'],
         }
 
     @cached_property

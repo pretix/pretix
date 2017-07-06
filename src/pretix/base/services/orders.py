@@ -165,7 +165,7 @@ def mark_order_refunded(order, user=None):
 
 
 @transaction.atomic
-def _cancel_order(order, user=None):
+def _cancel_order(order, user=None, send_mail: bool=True):
     """
     Mark this order as canceled
     :param order: The order to change
@@ -190,6 +190,21 @@ def _cancel_order(order, user=None):
         if position.voucher:
             Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=F('redeemed') - 1)
 
+    if send_mail:
+        with language(order.locale):
+            mail(
+                order.email, _('Order canceled: %(code)s') % {'code': order.code},
+                order.event.settings.mail_text_order_canceled,
+                {
+                    'event': order.event.name,
+                    'code': order.code,
+                    'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
+                        'order': order.code,
+                        'secret': order.secret
+                    })
+                },
+                order.event, locale=order.locale
+            )
     return order.pk
 
 

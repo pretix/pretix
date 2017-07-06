@@ -558,6 +558,13 @@ class MailSettingsForm(SettingsForm):
         help_text=_("Available placeholders: {event}, {url}, {product}, {hours}, {code}"),
         validators=[PlaceholderValidator(['{event}', '{url}', '{product}', '{hours}', '{code}'])]
     )
+    mail_text_order_canceled = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {code}, {url}"),
+        validators=[PlaceholderValidator(['{event}', '{code}', '{url}'])]
+    )
     smtp_use_custom = forms.BooleanField(
         label=_("Use custom SMTP server"),
         help_text=_("All mail related to your event will be sent over the smtp server specified by you."),

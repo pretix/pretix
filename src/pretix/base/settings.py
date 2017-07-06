@@ -319,6 +319,18 @@ redeem the voucher within that timeframe.
 Best regards,
 Your {event} team"""))
     },
+    'mail_text_order_canceled': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+your order {code} for {event} has been canceled.
+
+You can view the details of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
     'smtp_use_custom': {
         'default': 'False',
         'type': bool

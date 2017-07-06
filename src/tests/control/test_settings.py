@@ -244,6 +244,19 @@ class MailSettingPreviewTest(SoupTest):
         assert len(res['msgs']) == 1
         assert re.match('.*{.*}.*', res['msgs']['en']) is None
 
+    def test_mail_text_order_canceled(self):
+        text = '{event}{code}{url}'
+        response = self.client.post(self.target.format(
+            self.orga1.slug, self.event1.slug), {
+            'item': 'mail_text_order_canceled',
+            'mail_text_order_canceled_0': text
+        })
+        assert response.status_code == 200
+        res = json.loads(response.content.decode())
+        assert res['item'] == 'mail_text_order_canceled'
+        assert len(res['msgs']) == 1
+        assert re.match('.*{.*}.*', res['msgs']['en']) is None
+
     def test_unsupported_placeholders(self):
         text = '{event1}'
         response = self.client.post(self.target.format(
