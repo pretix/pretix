@@ -49,6 +49,19 @@ def test_relative_date_other_base_point(event):
     assert rdw.datetime(event) == datetime(2017, 12, 26, 5, 0, 0, tzinfo=TOKYO)
     assert rdw.to_string() == 'RELDATE/1/-/presale_end/'
 
+    # subevent base
+    se = event.subevents.create(name="SE1", date_from=datetime(2017, 11, 27, 5, 0, 0, tzinfo=TOKYO))
+    rdw = RelativeDateWrapper(RelativeDate(days_before=1, time=None, base_date_name='date_from'))
+    assert rdw.datetime(se) == datetime(2017, 11, 26, 5, 0, 0, tzinfo=TOKYO)
+
+    # presale_start is unset on subevent, default to event
+    rdw = RelativeDateWrapper(RelativeDate(days_before=1, time=None, base_date_name='presale_start'))
+    assert rdw.datetime(se) == datetime(2017, 11, 30, 5, 0, 0, tzinfo=TOKYO)
+
+    # presale_end is unset on all, default to date_from of subevent
+    rdw = RelativeDateWrapper(RelativeDate(days_before=1, time=None, base_date_name='presale_end'))
+    assert rdw.datetime(se) == datetime(2017, 11, 26, 5, 0, 0, tzinfo=TOKYO)
+
 
 @pytest.mark.django_db
 def test_relative_date_with_time(event):

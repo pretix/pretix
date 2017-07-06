@@ -34,12 +34,22 @@ class RelativeDateWrapper:
         self.data = data
 
     def datetime(self, event) -> datetime.datetime:
+        from .models import SubEvent
+
         if isinstance(self.data, (datetime.datetime, datetime.date)):
             return self.data
         else:
             tz = pytz.timezone(event.settings.timezone)
-            base_date = (getattr(event, self.data.base_date_name) or event.date_from).astimezone(tz)
-            new_date = base_date - datetime.timedelta(days=self.data.days_before)
+            if isinstance(event, SubEvent):
+                base_date = (
+                    getattr(event, self.data.base_date_name)
+                    or getattr(event.event, self.data.base_date_name)
+                    or event.date_from
+                )
+            else:
+                base_date = getattr(event, self.data.base_date_name) or event.date_from
+
+            new_date = base_date.astimezone(tz) - datetime.timedelta(days=self.data.days_before)
             if self.data.time:
                 new_date = new_date.replace(
                     hour=self.data.time.hour,
@@ -139,6 +149,11 @@ class RelativeDateTimeField(forms.MultiValueField):
             fields=fields, require_all_fields=False, *args, **kwargs
         )
 
+    def set_event(self, event):
+        self.widget.widgets[3].choices = [
+            (k, v) for k, v in BASE_CHOICES if getattr(event, k, None)
+        ]
+
     def compress(self, data_list):
         if not data_list:
             return None
@@ -186,6 +201,7 @@ class RelativeDateWidget(RelativeDateTimeWidget):
 
 
 class RelativeDateField(RelativeDateTimeField):
+
     def __init__(self, *args, **kwargs):
         status_choices = [
             ('absolute', _('Fixed date:')),

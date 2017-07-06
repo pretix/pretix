@@ -409,6 +409,8 @@ class ProviderForm(SettingsForm):
                 v._required = v.one_required
                 v.one_required = False
                 v.widget.enabled_locales = self.locales
+            elif isinstance(v, (RelativeDateTimeField, RelativeDateField)):
+                v.set_event(self.obj)
 
     def clean(self):
         cleaned_data = super().clean()

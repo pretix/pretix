@@ -7,7 +7,7 @@ from django.utils.crypto import get_random_string
 from hierarkey.forms import HierarkeyForm
 
 from pretix.base.models import Event
-from pretix.base.reldate import RelativeDateTimeField
+from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 
 from .validators import PlaceholderValidator  # NOQA
 
@@ -57,9 +57,9 @@ class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
         kwargs['locales'] = self.locales
         kwargs['initial'] = self.obj.settings.freeze()
         super().__init__(*args, **kwargs)
-        for f in self.fields:
-            if isinstance(f, RelativeDateTimeField):
-                f.event = self.obj
+        for f in self.fields.values():
+            if isinstance(f, (RelativeDateTimeField, RelativeDateField)):
+                f.set_event(self.obj)
 
     def get_new_filename(self, name: str) -> str:
         nonce = get_random_string(length=8)
