@@ -732,10 +732,10 @@ def perform_order(self, event: str, payment_provider: str, positions: List[str],
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
-def cancel_order(self, order: int, user: int=None):
+def cancel_order(self, order: int, user: int=None, send_mail: bool=True):
     try:
         try:
-            return _cancel_order(order, user)
+            return _cancel_order(order, user, send_mail)
         except LockTimeoutException:
             self.retry(exc=OrderError(error_messages['busy']))
     except (MaxRetriesExceededError, LockTimeoutException):

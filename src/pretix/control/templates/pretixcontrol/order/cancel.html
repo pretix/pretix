@@ -13,7 +13,13 @@
 
     <form method="post" href="">
         {% csrf_token %}
-        <input type="hidden" name="status" value="c" />
+        <input type="hidden" name="status" value="c"/>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="send_email" value="on" checked="checked">
+                {% trans "Notify user by e-mail" %}
+            </label>
+        </div>
         <div class="row checkout-button-row">
             <div class="col-md-4">
                 <a class="btn btn-block btn-default btn-lg"
