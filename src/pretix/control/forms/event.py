@@ -697,3 +697,15 @@ class TicketSettingsForm(SettingsForm):
             val = cleaned_data.get(k)
             if v._required and (val is None or val == ""):
                 self.add_error(k, _('This field is required.'))
+
+
+class CommentForm(I18nModelForm):
+    class Meta:
+        model = Event
+        fields = ['comment']
+        widgets = {
+            'comment': forms.Textarea(attrs={
+                'rows': 3,
+                'class': 'helper-width-100',
+            }),
+        }

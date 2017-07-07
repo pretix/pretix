@@ -181,7 +181,9 @@ class OrderComment(OrderView):
         if form.is_valid():
             self.order.comment = form.cleaned_data.get('comment')
             self.order.save()
-            self.order.log_action('pretix.event.order.comment', user=self.request.user)
+            self.order.log_action('pretix.event.order.comment', user=self.request.user, data={
+                'new_comment': form.cleaned_data.get('comment')
+            })
             messages.success(self.request, _('The comment has been updated.'))
         else:
             messages.error(self.request, _('Could not update the comment.'))

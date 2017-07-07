@@ -112,6 +112,10 @@ class Event(LoggedModel):
         null=True, blank=True,
         verbose_name=_("Plugins"),
     )
+    comment = models.TextField(
+        verbose_name=_("Internal comment"),
+        null=True, blank=True
+    )
 
     class Meta:
         verbose_name = _("Event")
