@@ -288,7 +288,7 @@ class EventSettingsForm(SettingsForm):
     reservation_time = forms.IntegerField(
         min_value=0,
         label=_("Reservation period"),
-        help_text=_("The number of minutes the items in a user's card are reserved for this user."),
+        help_text=_("The number of minutes the items in a user's cart are reserved for this user."),
     )
     imprint_url = forms.URLField(
         label=_("Imprint URL"),
