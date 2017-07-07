@@ -436,6 +436,11 @@ class InvoiceSettingsForm(SettingsForm):
             ('paid', _('Automatically on payment')),
         )
     )
+    invoice_renderer = forms.ChoiceField(
+        label=_("Invoice style"),
+        required=True,
+        choices=[]
+    )
     invoice_address_from = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 5}), required=False,
         label=_("Your address"),
@@ -471,6 +476,13 @@ class InvoiceSettingsForm(SettingsForm):
         required=False,
         help_text=_('We will show your logo with a maximal height and width of 2.5 cm.')
     )
+
+    def __init__(self, *args, **kwargs):
+        event = kwargs.get('obj')
+        super().__init__(*args, **kwargs)
+        self.fields['invoice_renderer'].choices = [
+            (r.identifier, r.verbose_name) for r in event.get_invoice_renderers().values()
+        ]
 
 
 class MailSettingsForm(SettingsForm):

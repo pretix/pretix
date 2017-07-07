@@ -326,6 +326,24 @@ class Event(LoggedModel):
                 providers[pp.identifier] = pp
         return providers
 
+    def get_invoice_renderers(self) -> dict:
+        from ..signals import register_invoice_renderers
+
+        responses = register_invoice_renderers.send(self)
+        renderers = {}
+        for receiver, response in responses:
+            if not isinstance(response, list):
+                response = [response]
+            for p in response:
+                pp = p(self)
+                renderers[pp.identifier] = pp
+        return renderers
+
+    @property
+    def invoice_renderer(self):
+        irs = self.get_invoice_renderers()
+        return irs[self.settings.invoice_renderer]
+
 
 def generate_invite_token():
     return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)

@@ -310,9 +310,9 @@ class InvoicePreview(EventPermissionRequiredMixin, View):
     permission = 'can_change_event_settings'
 
     def get(self, request, *args, **kwargs):
-        pdf = build_preview_invoice_pdf(request.event)
-        resp = HttpResponse(pdf, content_type='application/pdf')
-        resp['Content-Disposition'] = 'attachment; filename="invoice-preview.pdf"'
+        fname, ftype, fcontent = build_preview_invoice_pdf(request.event)
+        resp = HttpResponse(fcontent, content_type=ftype)
+        resp['Content-Disposition'] = 'attachment; filename="{}"'.format(fname)
         return resp
 
 

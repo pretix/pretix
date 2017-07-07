@@ -55,6 +55,10 @@ DEFAULTS = {
         'default': 'True',
         'type': bool,
     },
+    'invoice_renderer': {
+        'default': 'classic',
+        'type': str,
+    },
     'reservation_time': {
         'default': '30',
         'type': int
