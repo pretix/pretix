@@ -19,7 +19,7 @@ from pretix.presale.forms.checkout import (
 )
 from pretix.presale.signals import (
     checkout_confirm_messages, checkout_flow_steps, contact_form_fields,
-    order_meta_from_request,
+    order_meta_from_request, question_form_fields,
 )
 from pretix.presale.views import CartMixin, get_cart, get_cart_total
 from pretix.presale.views.async import AsyncAction
@@ -330,6 +330,13 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 if warn:
                     messages.warning(request, _('Please fill in answers to all required questions.'))
                 return False
+
+            responses = question_form_fields.send(sender=self.request.event, position=cp)
+            form_data = cp.meta_info_data.get('question_form_data', {})
+            for r, response in sorted(responses, key=lambda r: str(r[0])):
+                for key, value in response.items():
+                    if value.required and not form_data.get(key):
+                        return False
         return True
 
     def get_context_data(self, **kwargs):

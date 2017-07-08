@@ -55,6 +55,8 @@ urlpatterns = [
         url(r'^requiredactions/$', event.EventActions.as_view(), name='event.requiredactions'),
         url(r'^requiredactions/(?P<id>\d+)/discard$', event.EventActionDiscard.as_view(),
             name='event.requiredaction.discard'),
+        url(r'^comment/$', event.EventComment.as_view(),
+            name='event.comment'),
         url(r'^settings/$', event.EventUpdate.as_view(), name='event.settings'),
         url(r'^settings/plugins$', event.EventPlugins.as_view(), name='event.settings.plugins'),
         url(r'^settings/permissions$', event.EventPermissions.as_view(), name='event.settings.permissions'),

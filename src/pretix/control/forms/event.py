@@ -288,7 +288,7 @@ class EventSettingsForm(SettingsForm):
     reservation_time = forms.IntegerField(
         min_value=0,
         label=_("Reservation period"),
-        help_text=_("The number of minutes the items in a user's card are reserved for this user."),
+        help_text=_("The number of minutes the items in a user's cart are reserved for this user."),
     )
     imprint_url = forms.URLField(
         label=_("Imprint URL"),
@@ -436,6 +436,11 @@ class InvoiceSettingsForm(SettingsForm):
             ('paid', _('Automatically on payment')),
         )
     )
+    invoice_renderer = forms.ChoiceField(
+        label=_("Invoice style"),
+        required=True,
+        choices=[]
+    )
     invoice_address_from = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 5}), required=False,
         label=_("Your address"),
@@ -471,6 +476,13 @@ class InvoiceSettingsForm(SettingsForm):
         required=False,
         help_text=_('We will show your logo with a maximal height and width of 2.5 cm.')
     )
+
+    def __init__(self, *args, **kwargs):
+        event = kwargs.get('obj')
+        super().__init__(*args, **kwargs)
+        self.fields['invoice_renderer'].choices = [
+            (r.identifier, r.verbose_name) for r in event.get_invoice_renderers().values()
+        ]
 
 
 class MailSettingsForm(SettingsForm):
@@ -557,6 +569,13 @@ class MailSettingsForm(SettingsForm):
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {url}, {product}, {hours}, {code}"),
         validators=[PlaceholderValidator(['{event}', '{url}', '{product}', '{hours}', '{code}'])]
+    )
+    mail_text_order_canceled = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {code}, {url}"),
+        validators=[PlaceholderValidator(['{event}', '{code}', '{url}'])]
     )
     smtp_use_custom = forms.BooleanField(
         label=_("Use custom SMTP server"),
@@ -678,3 +697,15 @@ class TicketSettingsForm(SettingsForm):
             val = cleaned_data.get(k)
             if v._required and (val is None or val == ""):
                 self.add_error(k, _('This field is required.'))
+
+
+class CommentForm(I18nModelForm):
+    class Meta:
+        model = Event
+        fields = ['comment']
+        widgets = {
+            'comment': forms.Textarea(attrs={
+                'rows': 3,
+                'class': 'helper-width-100',
+            }),
+        }

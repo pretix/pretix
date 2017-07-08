@@ -55,6 +55,10 @@ DEFAULTS = {
         'default': 'True',
         'type': bool,
     },
+    'invoice_renderer': {
+        'default': 'classic',
+        'type': str,
+    },
     'reservation_time': {
         'default': '30',
         'type': int
@@ -315,6 +319,18 @@ Alternatively, you can just click on the following link:
 Please note that this link is only valid within the next {hours} hours!
 We will reassign the ticket to the next person on the list if you do not
 redeem the voucher within that timeframe.
+
+Best regards,
+Your {event} team"""))
+    },
+    'mail_text_order_canceled': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+your order {code} for {event} has been canceled.
+
+You can view the details of your order at
+{url}
 
 Best regards,
 Your {event} team"""))

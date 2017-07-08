@@ -1,14 +1,17 @@
+import mimetypes
+import os
+
 from django.contrib import messages
 from django.db.models import Count, Q
-from django.http import JsonResponse
-from django.shortcuts import redirect
+from django.http import FileResponse, Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView, View
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models import CartPosition, Quota, Voucher
+from pretix.base.models import CartPosition, QuestionAnswer, Quota, Voucher
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, clear_cart, remove_cart_position,
 )
@@ -266,3 +269,23 @@ class RedeemView(EventViewMixin, TemplateView):
             return redirect(eventreverse(request.event, 'presale:event.index'))
 
         return super().dispatch(request, *args, **kwargs)
+
+
+class AnswerDownload(EventViewMixin, View):
+    def get(self, request, *args, **kwargs):
+        answid = kwargs.get('answer')
+        answer = get_object_or_404(
+            QuestionAnswer,
+            cartposition__cart_id=self.request.session.session_key,
+            id=answid
+        )
+        if not answer.file:
+            return Http404()
+
+        ftype, _ = mimetypes.guess_type(answer.file.name)
+        resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
+        resp['Content-Disposition'] = 'attachment; filename="{}-cart-{}"'.format(
+            self.request.event.slug.upper(),
+            os.path.basename(answer.file.name).split('.', 1)[1]
+        )
+        return resp

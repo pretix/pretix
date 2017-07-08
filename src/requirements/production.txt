@@ -31,9 +31,6 @@ markdown
 bleach==2.*
 raven
 django-i18nfield>=1.0.1
-# API docs
-coreapi==2.3.*
-pygments
 # Stripe
 stripe==1.22.*
 # PayPal

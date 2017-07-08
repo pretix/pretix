@@ -8,7 +8,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import (
+    HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse,
+)
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
 from django.utils.formats import date_format
@@ -28,7 +30,7 @@ from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import event_live_issues, register_ticket_outputs
 from pretix.control.forms.event import (
-    DisplaySettingsForm, EventSettingsForm, EventUpdateForm,
+    CommentForm, DisplaySettingsForm, EventSettingsForm, EventUpdateForm,
     InvoiceSettingsForm, MailSettingsForm, PaymentSettingsForm, ProviderForm,
     TicketSettingsForm,
 )
@@ -310,9 +312,9 @@ class InvoicePreview(EventPermissionRequiredMixin, View):
     permission = 'can_change_event_settings'
 
     def get(self, request, *args, **kwargs):
-        pdf = build_preview_invoice_pdf(request.event)
-        resp = HttpResponse(pdf, content_type='application/pdf')
-        resp['Content-Disposition'] = 'attachment; filename="invoice-preview.pdf"'
+        fname, ftype, fcontent = build_preview_invoice_pdf(request.event)
+        resp = HttpResponse(fcontent, content_type=ftype)
+        resp['Content-Disposition'] = 'attachment; filename="{}"'.format(fname)
         return resp
 
 
@@ -439,7 +441,8 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             'mail_text_resend_all_links': ['event', 'orders'],
             'mail_text_order_changed': ['event', 'url', 'invoice_name', 'invoice_company'],
             'mail_text_order_expire_warning': ['event', 'url', 'expire_date', 'invoice_name', 'invoice_company'],
-            'mail_text_waiting_list': ['event', 'url', 'product', 'hours', 'code']
+            'mail_text_waiting_list': ['event', 'url', 'product', 'hours', 'code'],
+            'mail_text_order_canceled': ['code', 'event', 'url'],
         }
 
     @cached_property
@@ -750,6 +753,32 @@ class EventActionDiscard(EventPermissionRequiredMixin, View):
         action.save()
         messages.success(self.request, _('The issue has been marked as resolved!'))
         return redirect(self.get_success_url())
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.index', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })
+
+
+class EventComment(EventPermissionRequiredMixin, View):
+    permission = 'can_change_event_settings'
+
+    def post(self, *args, **kwargs):
+        form = CommentForm(self.request.POST)
+        if form.is_valid():
+            self.request.event.comment = form.cleaned_data.get('comment')
+            self.request.event.save()
+            self.request.event.log_action('pretix.event.comment', user=self.request.user, data={
+                'new_comment': form.cleaned_data.get('comment')
+            })
+            messages.success(self.request, _('The comment has been updated.'))
+        else:
+            messages.error(self.request, _('Could not update the comment.'))
+        return redirect(self.get_success_url())
+
+    def get(self, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])
 
     def get_success_url(self) -> str:
         return reverse('control:event.index', kwargs={

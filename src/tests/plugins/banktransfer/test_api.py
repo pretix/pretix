@@ -1,8 +1,8 @@
 import copy
 import json
 from datetime import datetime, timedelta
+from unittest import mock
 
-import mock
 import pytest
 from django.utils.timezone import now
 from pytz import UTC
