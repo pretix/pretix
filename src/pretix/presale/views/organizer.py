@@ -8,7 +8,7 @@ from django.utils.timezone import now
 from django.views.generic import ListView, TemplateView
 from pytz import UTC
 
-from pretix.base.models import Event
+from pretix.base.models import Event, SubEvent
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import OrganizerViewMixin
 
@@ -48,11 +48,34 @@ class CalendarView(OrganizerViewMixin, TemplateView):
             self.year = int(kwargs.get('year'))
             self.month = int(kwargs.get('month'))
         else:
-            next_ev = Event.objects.filter(live=True, is_public=True, date_from__gte=now()).order_by('date_from').first()
-            tz = pytz.timezone(next_ev.settings.timezone)
-            datetime_from = next_ev.date_from.astimezone(tz)
-            self.year = datetime_from.year
-            self.month = datetime_from.month
+            next_ev = Event.objects.filter(
+                live=True,
+                is_public=True,
+                date_from__gte=now(),
+                has_subevents=False
+            ).order_by('date_from').first()
+            next_sev = SubEvent.objects.filter(
+                event__organizer=self.request.organizer,
+                event__is_public=True,
+                event__live=True,
+                active=True,
+                date_from__gte=now()
+            ).select_related('event').order_by('date_from').first()
+
+            datetime_from = None
+            if (next_ev and next_sev and next_sev.date_from < next_ev.date_from) or (next_sev and not next_ev):
+                datetime_from = next_sev.date_from
+                next_ev = next_sev.event
+            elif next_ev:
+                datetime_from = next_ev.date_from
+
+            if datetime_from:
+                tz = pytz.timezone(next_ev.settings.timezone)
+                self.year = datetime_from.astimezone(tz).year
+                self.month = datetime_from.astimezone(tz).month
+            else:
+                self.year = now().year
+                self.month = now().month
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -90,7 +113,8 @@ class CalendarView(OrganizerViewMixin, TemplateView):
         before = datetime(self.year, self.month, 1, 0, 0, 0, tzinfo=UTC) - timedelta(days=1)
         after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=UTC) + timedelta(days=1)
         ebd = defaultdict(list)
-        qs = self.request.organizer.events.filter(is_public=True, live=True).filter(
+
+        qs = self.request.organizer.events.filter(is_public=True, live=True, has_subevents=False).filter(
             Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
             Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
             Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
@@ -128,5 +152,50 @@ class CalendarView(OrganizerViewMixin, TemplateView):
                     'timezone': event.settings.timezone,
                 })
 
+        qs = SubEvent.objects.filter(
+            event__organizer=self.request.organizer,
+            event__is_public=True,
+            event__live=True,
+            active=True
+        ).filter(
+            Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
+            Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
+            Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
+        ).order_by(
+            'date_from'
+        ).select_related('event').prefetch_related(
+            'event___settings_objects', 'event__organizer___settings_objects'
+        )
+        for se in qs:
+            timezones.add(se.event.settings.timezones)
+            tz = pytz.timezone(se.event.settings.timezone)
+            datetime_from = se.date_from.astimezone(tz)
+            date_from = datetime_from.date()
+            if se.event.settings.show_date_to and se.date_to:
+                date_to = se.date_to.astimezone(tz).date()
+                d = max(date_from, before.date())
+                while d <= date_to and d <= after.date():
+                    first = d == date_from
+                    ebd[d].append({
+                        'event': se,
+                        'continued': not first,
+                        'time': datetime_from.time().replace(tzinfo=None) if first and se.event.settings.show_times else None,
+                        'url': eventreverse(se.event, 'presale:event.index', kwargs={
+                            'subevent': se.pk
+                        }),
+                        'timezone': se.event.settings.timezone,
+                    })
+                    d += timedelta(days=1)
+
+            else:
+                ebd[date_from].append({
+                    'event': se,
+                    'continued': False,
+                    'time': datetime_from.time().replace(tzinfo=None) if se.event.settings.show_times else None,
+                    'url': eventreverse(se.event, 'presale:event.index', kwargs={
+                        'subevent': se.pk
+                    }),
+                    'timezone': se.event.settings.timezone,
+                })
         self._multiple_timezones = len(timezones) > 1
         return ebd

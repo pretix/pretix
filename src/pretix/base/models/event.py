@@ -188,10 +188,6 @@ class Event(EventMixin, LoggedModel):
     )
     has_subevents = models.BooleanField(
         verbose_name=_('Event series'),
-        help_text=_('Only recommended for advanced users. If this feature is enabled, this will not only be a '
-                    'single event but a series of very similar events that are handled within a single shop. '
-                    'The single events inside the series can only differ in prices and quotas, not in other settings, '
-                    'and buying tickets across multiple of these events at the same time is possible.'),
         default=False
     )
 

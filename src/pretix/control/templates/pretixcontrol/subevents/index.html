@@ -55,11 +55,11 @@
                         </td>
                         <td>{{ s.get_date_from_display }}</td>
                         <td>
-                            {% if not e.live %}
+                            {% if not s.active %}
                                 <span class="label label-danger">{% trans "Disabled" %}</span>
-                            {% elif e.presale_has_ended %}
+                            {% elif s.presale_has_ended %}
                                 <span class="label label-warning">{% trans "Presale over" %}</span>
-                            {% elif not e.presale_is_running %}
+                            {% elif not s.presale_is_running %}
                                 <span class="label label-warning">{% trans "Presale not started" %}</span>
                             {% else %}
                                 <span class="label label-success">{% trans "On sale" %}</span>

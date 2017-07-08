@@ -22,11 +22,12 @@ class EventWizardFoundationForm(forms.Form):
         help_text=_('Choose all languages that your event should be available in.')
     )
     has_subevents = forms.BooleanField(
-        label=_("Use sub-event functionality"),
-        help_text=_('If you enable this feature, this event does not represent a single instance of an event, '
-                    'but for example a series of events that may differ in date, time, location, product prices '
-                    'and quota sizes, but not in other settings. This is only recommended for advanced users. '
-                    'You cannot change this setting later.'),
+        label=_("This is an event series"),
+        help_text=_('Only recommended for advanced users. If this feature is enabled, this will not only be a '
+                    'single event but a series of very similar events that are handled within a single shop. '
+                    'The single events inside the series can only differ in date, time, location, prices and '
+                    'quotas, but not in other settings, and buying tickets across multiple of these events at '
+                    'the same time is possible. You cannot change this setting for this event later.'),
         required=False,
     )
 
