@@ -126,3 +126,11 @@ class OrganizerSettingsForm(SettingsForm):
         help_text=_('If you provide a logo image, we will by default not show your organization name '
                     'in the page header. We will show your logo with a maximal height of 120 pixels.')
     )
+
+    event_list_type = forms.ChoiceField(
+        label=_('Event overview stile'),
+        choices=(
+            ('list', _('List')),
+            ('calendar', _('Calendar'))
+        )
+    )

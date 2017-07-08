@@ -175,6 +175,10 @@ DEFAULTS = {
         'default': 'True',
         'type': bool
     },
+    'event_list_type': {
+        'default': 'list',
+        'type': str
+    },
     'last_order_modification_date': {
         'default': None,
         'type': datetime
