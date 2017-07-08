@@ -326,6 +326,19 @@ class Event(LoggedModel):
                 providers[pp.identifier] = pp
         return providers
 
+    @property
+    def get_event_microdata(self):
+        import json
+
+        eventdict = {"@context": "http://schema.org", "@type": "Event"}
+        eventdict["location"] = {"@type": "Place",
+                                 "address": str(self.location)}
+        eventdict["startDate"] = str(self.date_from)
+        eventdict["name"] = str(self.name)
+        eventdict["endDate"] = str(self.date_to)
+
+        return json.dumps(eventdict)
+
 
 def generate_invite_token():
     return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)
