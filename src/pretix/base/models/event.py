@@ -436,7 +436,7 @@ class SubEvent(EventMixin, LoggedModel):
     def __str__(self):
         return '{} - {}'.format(self.name, self.get_date_range_display())
 
-    @property
+    @cached_property
     def settings(self):
         return self.event.settings
 

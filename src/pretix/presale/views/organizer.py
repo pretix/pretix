@@ -97,7 +97,7 @@ class CalendarView(OrganizerViewMixin, TemplateView):
                 {
                     'day': day,
                     'date': date(self.year, self.month, day),
-                    'events': ebd[date(self.year, self.month, day)]
+                    'events': ebd.get(date(self.year, self.month, day))
                 }
                 if day > 0
                 else None
@@ -131,8 +131,8 @@ class CalendarView(OrganizerViewMixin, TemplateView):
             date_from = datetime_from.date()
             if event.settings.show_date_to and event.date_to:
                 date_to = event.date_to.astimezone(tz).date()
-                d = date_from
-                while d <= date_to:
+                d = max(date_from, before.date())
+                while d <= date_to and d <= after.date():
                     first = d == date_from
                     ebd[d].append({
                         'event': event,
@@ -163,7 +163,7 @@ class CalendarView(OrganizerViewMixin, TemplateView):
             Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
         ).order_by(
             'date_from'
-        ).select_related('event').prefetch_related(
+        ).select_related('event', 'event__organizer').prefetch_related(
             'event___settings_objects', 'event__organizer___settings_objects'
         )
         for se in qs:
@@ -177,13 +177,13 @@ class CalendarView(OrganizerViewMixin, TemplateView):
                 while d <= date_to and d <= after.date():
                     first = d == date_from
                     ebd[d].append({
-                        'event': se,
                         'continued': not first,
+                        'timezone': se.event.settings.timezone,
                         'time': datetime_from.time().replace(tzinfo=None) if first and se.event.settings.show_times else None,
+                        'event': se,
                         'url': eventreverse(se.event, 'presale:event.index', kwargs={
                             'subevent': se.pk
                         }),
-                        'timezone': se.event.settings.timezone,
                     })
                     d += timedelta(days=1)
 
