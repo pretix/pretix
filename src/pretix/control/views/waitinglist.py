@@ -1,11 +1,14 @@
 from django.contrib import messages
+from django.db import transaction
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.generic import ListView
+from django.views.generic.edit import DeleteView
 
 from pretix.base.models import Item, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
@@ -125,3 +128,34 @@ class WaitingListView(EventPermissionRequiredMixin, ListView):
             )
         )
         return qs['s']
+
+
+class EntryDelete(EventPermissionRequiredMixin, DeleteView):
+    model = WaitingListEntry
+    template_name = 'pretixcontrol/waitinglist/delete.html'
+    permission = 'can_change_orders'
+    context_object_name = 'entry'
+
+    def get_object(self, queryset=None) -> WaitingListEntry:
+        try:
+            return self.request.event.waitinglistentries.get(
+                id=self.kwargs['entry'],
+                voucher__isnull=True,
+            )
+        except WaitingListEntry.DoesNotExist:
+            raise Http404(_("The requested entry does not exist."))
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.log_action('pretix.event.orders.waitinglist.delete', user=self.request.user)
+        self.object.delete()
+        messages.success(self.request, _('The selected entry has been deleted.'))
+        return HttpResponseRedirect(success_url)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.orders.waitinglist', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug
+        })
