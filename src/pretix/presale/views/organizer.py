@@ -40,6 +40,105 @@ class OrganizerIndex(OrganizerViewMixin, ListView):
         ).order_by(order)
 
 
+def add_events_for_days(organizer, before, after, ebd, timezones):
+    qs = organizer.events.filter(is_public=True, live=True, has_subevents=False).filter(
+        Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
+        Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
+        Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
+    ).order_by(
+        'date_from'
+    ).prefetch_related(
+        '_settings_objects', 'organizer___settings_objects'
+    )
+    for event in qs:
+        timezones.add(event.settings.timezones)
+        tz = pytz.timezone(event.settings.timezone)
+        datetime_from = event.date_from.astimezone(tz)
+        date_from = datetime_from.date()
+        if event.settings.show_date_to and event.date_to:
+            date_to = event.date_to.astimezone(tz).date()
+            d = max(date_from, before.date())
+            while d <= date_to and d <= after.date():
+                first = d == date_from
+                ebd[d].append({
+                    'event': event,
+                    'continued': not first,
+                    'time': datetime_from.time().replace(tzinfo=None) if first and event.settings.show_times else None,
+                    'url': eventreverse(event, 'presale:event.index'),
+                    'timezone': event.settings.timezone,
+                })
+                d += timedelta(days=1)
+
+        else:
+            ebd[date_from].append({
+                'event': event,
+                'continued': False,
+                'time': datetime_from.time().replace(tzinfo=None) if event.settings.show_times else None,
+                'url': eventreverse(event, 'presale:event.index'),
+                'timezone': event.settings.timezone,
+            })
+
+
+def add_subevents_for_days(qs, before, after, ebd, timezones):
+    qs = qs.filter(active=True).filter(
+        Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
+        Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
+        Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
+    ).order_by(
+        'date_from'
+    ).select_related('event', 'event__organizer').prefetch_related(
+        'event___settings_objects', 'event__organizer___settings_objects'
+    )
+    for se in qs:
+        timezones.add(se.event.settings.timezones)
+    tz = pytz.timezone(se.event.settings.timezone)
+    datetime_from = se.date_from.astimezone(tz)
+    date_from = datetime_from.date()
+    if se.event.settings.show_date_to and se.date_to:
+        date_to = se.date_to.astimezone(tz).date()
+    d = max(date_from, before.date())
+    while d <= date_to and d <= after.date():
+        first = d == date_from
+        ebd[d].append({
+            'continued': not first,
+            'timezone': se.event.settings.timezone,
+            'time': datetime_from.time().replace(tzinfo=None) if first and se.event.settings.show_times else None,
+            'event': se,
+            'url': eventreverse(se.event, 'presale:event.index', kwargs={
+                'subevent': se.pk
+            }),
+        })
+        d += timedelta(days=1)
+
+    else:
+        ebd[date_from].append({
+            'event': se,
+            'continued': False,
+            'time': datetime_from.time().replace(tzinfo=None) if se.event.settings.show_times else None,
+            'url': eventreverse(se.event, 'presale:event.index', kwargs={
+                'subevent': se.pk
+            }),
+            'timezone': se.event.settings.timezone,
+        })
+
+
+def weeks_for_template(ebd, year, month):
+    calendar.setfirstweekday(0)  # TODO: Configurable
+    return [
+        [
+            {
+                'day': day,
+                'date': date(year, month, day),
+                'events': ebd.get(date(year, month, day))
+            }
+            if day > 0
+            else None
+            for day in week
+        ]
+        for week in calendar.monthcalendar(year, month)
+    ]
+
+
 class CalendarView(OrganizerViewMixin, TemplateView):
     template_name = 'pretixpresale/organizers/calendar.html'
 
@@ -88,114 +187,21 @@ class CalendarView(OrganizerViewMixin, TemplateView):
         ctx['date'] = date(self.year, self.month, 1)
         ctx['before'] = before
         ctx['after'] = after
-        ebd = self._events_by_day()
+        ebd = self._events_by_day(before, after)
 
-        calendar.setfirstweekday(0)  # TODO: Configurable
         ctx['multiple_timezones'] = self._multiple_timezones
-        ctx['weeks'] = [
-            [
-                {
-                    'day': day,
-                    'date': date(self.year, self.month, day),
-                    'events': ebd.get(date(self.year, self.month, day))
-                }
-                if day > 0
-                else None
-                for day in week
-            ]
-            for week in calendar.monthcalendar(self.year, self.month)
-        ]
+        ctx['weeks'] = weeks_for_template(ebd, self.year, self.month)
 
         return ctx
 
-    def _events_by_day(self):
-        _, ndays = calendar.monthrange(self.year, self.month)
-        before = datetime(self.year, self.month, 1, 0, 0, 0, tzinfo=UTC) - timedelta(days=1)
-        after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=UTC) + timedelta(days=1)
+    def _events_by_day(self, before, after):
         ebd = defaultdict(list)
-
-        qs = self.request.organizer.events.filter(is_public=True, live=True, has_subevents=False).filter(
-            Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
-            Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
-            Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
-        ).order_by(
-            'date_from'
-        ).prefetch_related(
-            '_settings_objects', 'organizer___settings_objects'
-        )
         timezones = set()
-        for event in qs:
-            timezones.add(event.settings.timezones)
-            tz = pytz.timezone(event.settings.timezone)
-            datetime_from = event.date_from.astimezone(tz)
-            date_from = datetime_from.date()
-            if event.settings.show_date_to and event.date_to:
-                date_to = event.date_to.astimezone(tz).date()
-                d = max(date_from, before.date())
-                while d <= date_to and d <= after.date():
-                    first = d == date_from
-                    ebd[d].append({
-                        'event': event,
-                        'continued': not first,
-                        'time': datetime_from.time().replace(tzinfo=None) if first and event.settings.show_times else None,
-                        'url': eventreverse(event, 'presale:event.index'),
-                        'timezone': event.settings.timezone,
-                    })
-                    d += timedelta(days=1)
-
-            else:
-                ebd[date_from].append({
-                    'event': event,
-                    'continued': False,
-                    'time': datetime_from.time().replace(tzinfo=None) if event.settings.show_times else None,
-                    'url': eventreverse(event, 'presale:event.index'),
-                    'timezone': event.settings.timezone,
-                })
-
-        qs = SubEvent.objects.filter(
+        add_events_for_days(self.request.organizer, before, after, ebd, timezones)
+        add_subevents_for_days(SubEvent.objects.filter(
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
-            active=True
-        ).filter(
-            Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
-            Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
-            Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
-        ).order_by(
-            'date_from'
-        ).select_related('event', 'event__organizer').prefetch_related(
-            'event___settings_objects', 'event__organizer___settings_objects'
-        )
-        for se in qs:
-            timezones.add(se.event.settings.timezones)
-            tz = pytz.timezone(se.event.settings.timezone)
-            datetime_from = se.date_from.astimezone(tz)
-            date_from = datetime_from.date()
-            if se.event.settings.show_date_to and se.date_to:
-                date_to = se.date_to.astimezone(tz).date()
-                d = max(date_from, before.date())
-                while d <= date_to and d <= after.date():
-                    first = d == date_from
-                    ebd[d].append({
-                        'continued': not first,
-                        'timezone': se.event.settings.timezone,
-                        'time': datetime_from.time().replace(tzinfo=None) if first and se.event.settings.show_times else None,
-                        'event': se,
-                        'url': eventreverse(se.event, 'presale:event.index', kwargs={
-                            'subevent': se.pk
-                        }),
-                    })
-                    d += timedelta(days=1)
-
-            else:
-                ebd[date_from].append({
-                    'event': se,
-                    'continued': False,
-                    'time': datetime_from.time().replace(tzinfo=None) if se.event.settings.show_times else None,
-                    'url': eventreverse(se.event, 'presale:event.index', kwargs={
-                        'subevent': se.pk
-                    }),
-                    'timezone': se.event.settings.timezone,
-                })
+        ), before, after, ebd, timezones)
         self._multiple_timezones = len(timezones) > 1
         return ebd
