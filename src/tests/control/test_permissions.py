@@ -31,6 +31,7 @@ superuser_urls = [
 
 event_urls = [
     "",
+    "comment/",
     "settings/",
     "settings/plugins",
     "settings/payment",
@@ -157,6 +158,7 @@ event_permission_urls = [
     ("can_change_event_settings", "settings/display", 200),
     ("can_change_event_settings", "settings/invoice", 200),
     ("can_change_event_settings", "settings/invoice/preview", 200),
+    ("can_change_event_settings", "comment/", 405),
     # Lists are currently not access-controlled
     # ("can_change_items", "items/", 200),
     ("can_change_items", "items/add", 200),

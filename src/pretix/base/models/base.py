@@ -16,7 +16,7 @@ def cachedfile_name(instance, filename: str) -> str:
 
 class CachedFile(models.Model):
     """
-    A cached file (e.g. pre-generated ticket PDF)
+    An uploaded file, with an optional expiry date.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     expires = models.DateTimeField(null=True, blank=True)

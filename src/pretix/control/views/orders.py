@@ -36,6 +36,7 @@ from pretix.control.forms.orders import (
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.presale.signals import question_form_fields
 
 
 class OrderList(EventPermissionRequiredMixin, ListView):
@@ -97,8 +98,7 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
-            self.request.event.settings.invoice_generate == 'admin' or
-            self.request.event.settings.invoice_generate == 'user'
+            self.request.event.settings.invoice_generate in ('admin', 'user', 'paid')
         )
         return ctx
 
@@ -141,12 +141,24 @@ class OrderDetail(OrderView):
 
         positions = []
         for p in cartpos:
+            responses = question_form_fields.send(sender=self.request.event, position=p)
+            p.additional_fields = []
+            data = p.meta_info_data
+            for r, response in sorted(responses, key=lambda r: str(r[0])):
+                for key, value in response.items():
+                    p.additional_fields.append({
+                        'answer': data.get('question_form_data', {}).get(key),
+                        'question': value.label
+                    })
+
             p.has_questions = (
+                p.additional_fields or
                 (p.item.admission and self.request.event.settings.attendee_names_asked) or
                 (p.item.admission and self.request.event.settings.attendee_emails_asked) or
                 p.item.questions.all()
             )
             p.cache_answers()
+
             positions.append(p)
 
         positions.sort(key=lambda p: p.sort_key)
@@ -169,7 +181,9 @@ class OrderComment(OrderView):
         if form.is_valid():
             self.order.comment = form.cleaned_data.get('comment')
             self.order.save()
-            self.order.log_action('pretix.event.order.comment', user=self.request.user)
+            self.order.log_action('pretix.event.order.comment', user=self.request.user, data={
+                'new_comment': form.cleaned_data.get('comment')
+            })
             messages.success(self.request, _('The comment has been updated.'))
         else:
             messages.error(self.request, _('Could not update the comment.'))
@@ -194,7 +208,7 @@ class OrderTransition(OrderView):
             else:
                 messages.success(self.request, _('The order has been marked as paid.'))
         elif self.order.status == Order.STATUS_PENDING and to == 'c':
-            cancel_order(self.order, user=self.request.user)
+            cancel_order(self.order, user=self.request.user, send_mail=self.request.POST.get("send_email") == "on")
             messages.success(self.request, _('The order has been canceled.'))
         elif self.order.status == Order.STATUS_PAID and to == 'n':
             self.order.status = Order.STATUS_PENDING
@@ -232,8 +246,7 @@ class OrderInvoiceCreate(OrderView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user') or not invoice_qualified(
-                self.order):
+        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid') or not invoice_qualified(self.order):
             messages.error(self.request, _('You cannot generate an invoice for this order.'))
         elif self.order.invoices.exists():
             messages.error(self.request, _('An invoice for this order already exists.'))

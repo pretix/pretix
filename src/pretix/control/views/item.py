@@ -414,7 +414,14 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             i = self.request.GET.get("item", "")
             qs = qs.filter(orderposition__item_id__in=(i,))
 
-        if self.object.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+        if self.object.type == Question.TYPE_FILE:
+            qs = [
+                {
+                    'answer': ugettext('File uploaded'),
+                    'count': qs.filter(file__isnull=False).count()
+                }
+            ]
+        elif self.object.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
             qs = qs.order_by('options').values('options', 'options__answer')\
                    .annotate(count=Count('id')).order_by('-count')
             for a in qs:

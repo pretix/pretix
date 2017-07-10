@@ -1,3 +1,4 @@
+import os
 from decimal import Decimal
 from itertools import chain
 
@@ -10,9 +11,10 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import ItemVariation, Question
-from pretix.base.models.orders import InvoiceAddress
+from pretix.base.models.orders import InvoiceAddress, OrderPosition
 from pretix.base.templatetags.rich_text import rich_text
-from pretix.presale.signals import contact_form_fields
+from pretix.multidomain.urlreverse import eventreverse
+from pretix.presale.signals import contact_form_fields, question_form_fields
 
 
 class ContactForm(forms.Form):
@@ -73,6 +75,42 @@ class InvoiceAddressForm(forms.ModelForm):
             raise ValidationError(_('You need to provide either a company name or your name.'))
 
 
+class UploadedFileWidget(forms.ClearableFileInput):
+
+    def __init__(self, *args, **kwargs):
+        self.position = kwargs.pop('position')
+        self.event = kwargs.pop('event')
+        self.answer = kwargs.pop('answer')
+        super().__init__(*args, **kwargs)
+
+    class FakeFile:
+        def __init__(self, file, position, event, answer):
+            self.file = file
+            self.position = position
+            self.event = event
+            self.answer = answer
+
+        def __str__(self):
+            return os.path.basename(self.file.name).split('.', 1)[-1]
+
+        @property
+        def url(self):
+            if isinstance(self.position, OrderPosition):
+                return eventreverse(self.event, 'presale:event.order.download.answer', kwargs={
+                    'order': self.position.order.code,
+                    'secret': self.position.order.secret,
+                    'answer': self.answer.pk,
+                })
+            else:
+                return eventreverse(self.event, 'presale:event.cart.download.answer', kwargs={
+                    'answer': self.answer.pk,
+                })
+
+    def format_value(self, value):
+        if self.is_initial(value):
+            return self.FakeFile(value, self.position, self.event, self.answer)
+
+
 class QuestionsForm(forms.Form):
     """
     This form class is responsible for asking order-related questions. This includes
@@ -89,7 +127,8 @@ class QuestionsForm(forms.Form):
         """
         cartpos = self.cartpos = kwargs.pop('cartpos', None)
         orderpos = self.orderpos = kwargs.pop('orderpos', None)
-        item = cartpos.item if cartpos else orderpos.item
+        pos = cartpos or orderpos
+        item = pos.item
         questions = list(item.questions.all())
         event = kwargs.pop('event')
 
@@ -168,11 +207,25 @@ class QuestionsForm(forms.Form):
                     widget=forms.CheckboxSelectMultiple,
                     initial=initial.options.all() if initial else None,
                 )
+            elif q.type == Question.TYPE_FILE:
+                field = forms.FileField(
+                    label=q.question, required=q.required,
+                    initial=initial.file if initial else None,
+                    widget=UploadedFileWidget(position=pos, event=event, answer=initial)
+                )
             field.question = q
             if answers:
                 # Cache the answer object for later use
                 field.answer = answers[0]
             self.fields['question_%s' % q.id] = field
+
+        responses = question_form_fields.send(sender=event, position=pos)
+        data = pos.meta_info_data
+        for r, response in sorted(responses, key=lambda r: str(r[0])):
+            for key, value in response.items():
+                # We need to be this explicit, since OrderedDict.update does not retain ordering
+                self.fields[key] = value
+                value.initial = data.get('question_form_data', {}).get(key)
 
 
 class AddOnRadioSelect(forms.RadioSelect):

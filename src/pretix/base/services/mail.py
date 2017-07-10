@@ -33,7 +33,7 @@ class SendMailException(Exception):
 
 def mail(email: str, subject: str, template: Union[str, LazyI18nString],
          context: Dict[str, Any]=None, event: Event=None, locale: str=None,
-         order: Order=None, headers: dict=None):
+         order: Order=None, headers: dict=None, sender: str=None):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -57,6 +57,9 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
     :param headers: A dict of custom mail headers to add to the mail
 
     :param locale: The locale to be used while evaluating the subject and the template
+
+    :param sender: Set the sender email address. If not set and ``event`` is set, the event's default will be used,
+        otherwise the system default.
 
     :raises MailOrderException: on obvious, immediate failures. Not raising an exception does not necessarily mean
         that the email has been sent, just that it has been queued by the email backend.
@@ -90,7 +93,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             body = tpl.render(context)
             body_md = bleach.linkify(markdown.markdown(body))
 
-        sender = event.settings.get('mail_from') if event else settings.MAIL_FROM
+        sender = sender or (event.settings.get('mail_from') if event else settings.MAIL_FROM)
 
         subject = str(subject)
         body_plain = body

@@ -4,6 +4,7 @@ from rest_framework.reverse import reverse
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import (
     Checkin, Invoice, InvoiceAddress, InvoiceLine, Order, OrderPosition,
+    QuestionAnswer,
 )
 from pretix.base.signals import register_ticket_outputs
 
@@ -12,6 +13,12 @@ class InvoiceAdddressSerializer(I18nAwareModelSerializer):
     class Meta:
         model = InvoiceAddress
         fields = ('last_modified', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id')
+
+
+class AnswerSerializer(I18nAwareModelSerializer):
+    class Meta:
+        model = QuestionAnswer
+        fields = ('question', 'answer', 'options')
 
 
 class CheckinSerializer(I18nAwareModelSerializer):
@@ -72,13 +79,14 @@ class PositionDownloadsField(serializers.Field):
 
 class OrderPositionSerializer(I18nAwareModelSerializer):
     checkins = CheckinSerializer(many=True)
+    answers = AnswerSerializer(many=True)
     downloads = PositionDownloadsField(source='*')
     order = serializers.SlugRelatedField(slug_field='code', read_only=True)
 
     class Meta:
         model = OrderPosition
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_email',
-                  'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'checkins', 'downloads')
+                  'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'checkins', 'downloads', 'answers')
 
 
 class OrderSerializer(I18nAwareModelSerializer):

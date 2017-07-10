@@ -82,6 +82,16 @@ subclass of pretix.base.payment.BasePaymentProvider
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+register_invoice_renderers = EventPluginSignal(
+    providing_args=[]
+)
+"""
+This signal is sent out to get all known invoice renderers. Receivers should return a
+subclass of pretix.base.invoice.BaseInvoiceRenderer
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 register_ticket_outputs = EventPluginSignal(
     providing_args=[]
 )

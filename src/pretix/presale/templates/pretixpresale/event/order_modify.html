@@ -8,7 +8,7 @@
             Modify order: {{ code }}
         {% endblocktrans %}
     </h2>
-    <form class="form-horizontal" method="post">
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="panel-group" id="questions_accordion">
             {% if event.settings.invoice_address_asked %}

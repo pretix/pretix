@@ -329,7 +329,7 @@ EXTRA_LANG_INFO = {
         'bidi': False,
         'code': 'de-informal',
         'name': 'German (informal)',
-        'name_local': 'Deutsch (Du)'
+        'name_local': 'Deutsch'
     },
 }
 

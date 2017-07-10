@@ -10,9 +10,10 @@ at the following locations. It will try to read the file from the specified path
 the following order. The file that is found *last* will override the settings from
 the files found before.
 
-1. ``/etc/pretix/pretix.cfg``
-2. ``~/.pretix.cfg``
-3. ``pretix.cfg`` in the current working directory
+1. ``PREFIX_CONFIG_FILE`` environment variable
+2. ``/etc/pretix/pretix.cfg``
+3. ``~/.pretix.cfg``
+4. ``pretix.cfg`` in the current working directory
 
 The file is expected to be in the INI format as specified in the `Python documentation`_.
 

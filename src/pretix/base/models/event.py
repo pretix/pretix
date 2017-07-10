@@ -96,12 +96,12 @@ class Event(LoggedModel):
     presale_end = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("End of presale"),
-        help_text=_("No products will be sold after this date."),
+        help_text=_("Optional. No products will be sold after this date."),
     )
     presale_start = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("Start of presale"),
-        help_text=_("No products will be sold before this date."),
+        help_text=_("Optional. No products will be sold before this date."),
     )
     location = I18nTextField(
         null=True, blank=True,
@@ -111,6 +111,10 @@ class Event(LoggedModel):
     plugins = models.TextField(
         null=True, blank=True,
         verbose_name=_("Plugins"),
+    )
+    comment = models.TextField(
+        verbose_name=_("Internal comment"),
+        null=True, blank=True
     )
 
     class Meta:
@@ -326,6 +330,7 @@ class Event(LoggedModel):
                 providers[pp.identifier] = pp
         return providers
 
+
     @property
     def event_microdata(self):
         import json
@@ -345,6 +350,25 @@ class Event(LoggedModel):
         eventdict["name"] = str(self.name)
 
         return json.dumps(eventdict)
+
+
+    def get_invoice_renderers(self) -> dict:
+        from ..signals import register_invoice_renderers
+
+        responses = register_invoice_renderers.send(self)
+        renderers = {}
+        for receiver, response in responses:
+            if not isinstance(response, list):
+                response = [response]
+            for p in response:
+                pp = p(self)
+                renderers[pp.identifier] = pp
+        return renderers
+
+    @property
+    def invoice_renderer(self):
+        irs = self.get_invoice_renderers()
+        return irs[self.settings.invoice_renderer]
 
 
 def generate_invite_token():

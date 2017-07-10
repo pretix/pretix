@@ -9,9 +9,10 @@ from django.utils.functional import cached_property
 
 def invoice_filename(instance, filename: str) -> str:
     secret = get_random_string(length=16, allowed_chars=string.ascii_letters + string.digits)
-    return 'invoices/{org}/{ev}/{no}-{code}-{secret}.pdf'.format(
+    return 'invoices/{org}/{ev}/{no}-{code}-{secret}.{ext}'.format(
         org=instance.event.organizer.slug, ev=instance.event.slug,
-        no=instance.number, code=instance.order.code, secret=secret
+        no=instance.number, code=instance.order.code, secret=secret,
+        ext=filename.split('.')[-1]
     )
 
 
