@@ -387,7 +387,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                   pgettext('invoice', 'Net value'), pgettext('invoice', 'Gross value'), pgettext('invoice', 'Tax'))]
 
         for rate, gross in grossvalue_map.items():
-            if line.tax_rate == 0:
+            if rate == 0:
                 continue
             tax = taxvalue_map[rate]
             tdata.append((
