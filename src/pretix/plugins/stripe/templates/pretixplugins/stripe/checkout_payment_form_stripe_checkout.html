@@ -30,11 +30,11 @@
             {% endblocktrans %}
         </p>
     {% endif %}
-    <p>
-        <em>{% blocktrans trimmed %}
+    <p class="help-block">
+        {% blocktrans trimmed %}
             Your payment will be processed by Stripe, Inc. Your credit card data will be transmitted directly to
             Stripe and never touches our servers.
-        {% endblocktrans %}</em>
+        {% endblocktrans %}
     </p>
     <input type="hidden" name="stripe_token" value="{{ request.session.payment_stripe_token }}" id="stripe_token"/>
     <input type="hidden" name="stripe_card_last4" value="{{ request.session.payment_stripe_last4 }}"
