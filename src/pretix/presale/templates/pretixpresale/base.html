@@ -33,7 +33,7 @@
     {% if event %}
         {% autoescape off %}
         <script type="application/ld+json">
-            {{ event.get_event_microdata }}
+            {{ event.event_microdata }}
         </script>
     {   % endautoescape %}
     {% endif %}
