@@ -79,19 +79,18 @@ def add_events_for_days(organizer, before, after, ebd, timezones):
             })
 
 
-def add_subevents_for_days(qs, before, after, ebd, timezones):
+def add_subevents_for_days(qs, before, after, ebd, timezones, event=None):
     qs = qs.filter(active=True).filter(
         Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
         Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
         Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
     ).order_by(
         'date_from'
-    ).select_related('event', 'event__organizer').prefetch_related(
-        'event___settings_objects', 'event__organizer___settings_objects'
     )
     for se in qs:
-        timezones.add(se.event.settings.timezones)
-        tz = pytz.timezone(se.event.settings.timezone)
+        settings = event.settings if event else se.event.settings
+        timezones.add(settings.timezones)
+        tz = pytz.timezone(settings.timezone)
         datetime_from = se.date_from.astimezone(tz)
         date_from = datetime_from.date()
         if se.event.settings.show_date_to and se.date_to:
@@ -101,8 +100,8 @@ def add_subevents_for_days(qs, before, after, ebd, timezones):
                 first = d == date_from
                 ebd[d].append({
                     'continued': not first,
-                    'timezone': se.event.settings.timezone,
-                    'time': datetime_from.time().replace(tzinfo=None) if first and se.event.settings.show_times else None,
+                    'timezone': settings.timezone,
+                    'time': datetime_from.time().replace(tzinfo=None) if first and settings.show_times else None,
                     'event': se,
                     'url': eventreverse(se.event, 'presale:event.index', kwargs={
                         'subevent': se.pk
@@ -211,6 +210,8 @@ class CalendarView(OrganizerViewMixin, TemplateView):
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
+        ).prefetch_related(
+            'event___settings_objects', 'event__organizer___settings_objects'
         ), before, after, ebd, timezones)
         self._multiple_timezones = len(timezones) > 1
         return ebd

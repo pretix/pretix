@@ -52,14 +52,20 @@
     {% if event.has_subevents %}
         {% if subevent %}
             <a class="subevent-toggle">
-                {% trans "Choose other event" %}
+                {% trans "View other date" %}
             </a>
+        {% else %}
+            <h3>{% trans "Choose date to buy a ticket" %}</h3>
         {% endif %}
         <div class="subevent-list">
-            {% include "pretixpresale/event/fragment_subevent_list.html" %}
+            {% if event.settings.event_list_type == "calendar" %}
+                {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
+            {% else %}
+                {% include "pretixpresale/event/fragment_subevent_list.html" %}
+            {% endif %}
         </div>
         {% if subevent %}
-            <h2>{{ subevent.name }}</h2>
+            <h2 class="subevent-head">{{ subevent.name }}</h2>
         {% endif %}
     {% endif %}
 

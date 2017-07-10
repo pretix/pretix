@@ -1,5 +1,7 @@
+import calendar
 import sys
-from datetime import datetime
+from collections import defaultdict
+from datetime import date, datetime, timedelta
 from importlib import import_module
 
 import pytz
@@ -23,6 +25,9 @@ from pretix.base.decimal import round_decimal
 from pretix.base.models import ItemVariation
 from pretix.base.models.event import SubEvent
 from pretix.multidomain.urlreverse import eventreverse
+from pretix.presale.views.organizer import (
+    add_subevents_for_days, weeks_for_template,
+)
 
 from . import CartMixin, EventViewMixin, get_cart
 
@@ -137,7 +142,9 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         self.subevent = None
         if request.event.has_subevents:
             if 'subevent' in kwargs:
-                self.subevent = get_object_or_404(SubEvent, event=request.event, pk=kwargs['subevent'], active=True)
+                self.subevent = request.event.subevents.filter(pk=kwargs['subevent'], active=True).first()
+                if not self.subevent:
+                    raise Http404()
                 return super().get(request, *args, **kwargs)
             else:
                 return super().get(request, *args, **kwargs)
@@ -146,6 +153,32 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
                 return redirect(eventreverse(request.event, 'presale:event.index'))
             else:
                 return super().get(request, *args, **kwargs)
+
+    def _set_month_year(self):
+        tz = pytz.timezone(self.request.event.settings.timezone)
+        if self.subevent:
+            self.year = self.subevent.date_from.astimezone(tz).year
+            self.month = self.subevent.date_from.astimezone(tz).month
+        elif 'year' in self.request.GET and 'month' in self.request.GET:
+            try:
+                self.year = int(self.request.GET.get('year'))
+                self.month = int(self.request.GET.get('month'))
+            except ValueError:
+                self.year = now().year
+                self.month = now().month
+        else:
+            next_sev = self.request.event.subevents.filter(
+                active=True,
+                date_from__gte=now()
+            ).select_related('event').order_by('date_from').first()
+
+            if next_sev:
+                datetime_from = next_sev.date_from
+                self.year = datetime_from.astimezone(tz).year
+                self.month = datetime_from.astimezone(tz).month
+            else:
+                self.year = now().year
+                self.month = now().month
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -167,6 +200,24 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         context['vouchers_exist'] = vouchers_exist
         context['ev'] = self.subevent or self.request.event
         context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
+
+        if self.request.event.settings.event_list_type == "calendar":
+            self._set_month_year()
+            tz = pytz.timezone(self.request.event.settings.timezone)
+            _, ndays = calendar.monthrange(self.year, self.month)
+            before = datetime(self.year, self.month, 1, 0, 0, 0, tzinfo=tz) - timedelta(days=1)
+            after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=tz) + timedelta(days=1)
+
+            context['date'] = date(self.year, self.month, 1)
+            context['before'] = before
+            context['after'] = after
+
+            ebd = defaultdict(list)
+            add_subevents_for_days(self.request.event.subevents.all(), before, after, ebd, set(), self.request.event)
+
+            context['weeks'] = weeks_for_template(ebd, self.year, self.month)
+            context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
+            context['years'] = range(now().year - 2, now().year + 3)
 
         context['show_cart'] = (
             context['cart']['positions'] and (

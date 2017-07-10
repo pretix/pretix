@@ -131,12 +131,10 @@ section.front-page {
 
 .subevent-list {
     background-color: $body-bg;
-    max-height: 100px;
-    overflow-y: auto;
 
-    transition-property: height;
-	transition-duration: .5s;
-	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    form {
+        padding: 10px 0;
+    }
 
     .row {
         margin: 0;
@@ -144,6 +142,7 @@ section.front-page {
     a.subevent-row {
         display: block;
         color: $text-color;
+        padding: 3px 0;
     }
     a.subevent-row:nth-child(2n) {
         background-color: $gray-lighter;
@@ -171,4 +170,7 @@ section.front-page {
         text-decoration: none;
         background-color: darken($gray-lighter, 40%);
     }
+}
+h2.subevent-head {
+    margin-top: 10px;
 }
