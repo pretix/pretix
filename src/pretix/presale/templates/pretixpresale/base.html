@@ -31,11 +31,11 @@
         <script type="text/javascript" src="{% static "lightbox/js/lightbox.min.js" %}"></script>
     {% endcompress %}
     {% if event %}
-    {% autoescape off %}
-    <script type="application/ld+json">
-    {{ event.get_event_microdata }}
-    </script>
-    {% endautoescape %}
+        {% autoescape off %}
+        <script type="application/ld+json">
+            {{ event.get_event_microdata }}
+        </script>
+    {   % endautoescape %}
     {% endif %}
     <meta name="referrer" content="origin">
     {{ html_head|safe }}

@@ -327,15 +327,22 @@ class Event(LoggedModel):
         return providers
 
     @property
-    def get_event_microdata(self):
+    def event_microdata(self):
         import json
 
         eventdict = {"@context": "http://schema.org", "@type": "Event"}
         eventdict["location"] = {"@type": "Place",
                                  "address": str(self.location)}
-        eventdict["startDate"] = str(self.date_from)
+        if self.settings.show_times:
+            eventdict["startDate"] = str(self.date_from.isoformat())
+            if self.settings.show_date_to & self.date_to is not None:
+                eventdict["endDate"] = str(self.date_to.isoformat())
+        else:
+            eventdict["startDate"] = str(self.date_from.date().isoformat())
+            if self.settings.show_date_to & self.date_to is not None:
+                eventdict["endDate"] = str(self.date_to.date().isoformat())
+
         eventdict["name"] = str(self.name)
-        eventdict["endDate"] = str(self.date_to)
 
         return json.dumps(eventdict)
 
