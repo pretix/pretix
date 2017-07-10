@@ -60,6 +60,10 @@ $(function () {
         });
     }
 
+    $("#monthselform select").change(function () {
+        $(this).closest("form").get(0).submit();
+    });
+
     // Lightbox
     lightbox.init();
 });

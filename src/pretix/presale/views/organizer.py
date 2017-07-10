@@ -91,35 +91,35 @@ def add_subevents_for_days(qs, before, after, ebd, timezones):
     )
     for se in qs:
         timezones.add(se.event.settings.timezones)
-    tz = pytz.timezone(se.event.settings.timezone)
-    datetime_from = se.date_from.astimezone(tz)
-    date_from = datetime_from.date()
-    if se.event.settings.show_date_to and se.date_to:
-        date_to = se.date_to.astimezone(tz).date()
-    d = max(date_from, before.date())
-    while d <= date_to and d <= after.date():
-        first = d == date_from
-        ebd[d].append({
-            'continued': not first,
-            'timezone': se.event.settings.timezone,
-            'time': datetime_from.time().replace(tzinfo=None) if first and se.event.settings.show_times else None,
-            'event': se,
-            'url': eventreverse(se.event, 'presale:event.index', kwargs={
-                'subevent': se.pk
-            }),
-        })
-        d += timedelta(days=1)
+        tz = pytz.timezone(se.event.settings.timezone)
+        datetime_from = se.date_from.astimezone(tz)
+        date_from = datetime_from.date()
+        if se.event.settings.show_date_to and se.date_to:
+            date_to = se.date_to.astimezone(tz).date()
+            d = max(date_from, before.date())
+            while d <= date_to and d <= after.date():
+                first = d == date_from
+                ebd[d].append({
+                    'continued': not first,
+                    'timezone': se.event.settings.timezone,
+                    'time': datetime_from.time().replace(tzinfo=None) if first and se.event.settings.show_times else None,
+                    'event': se,
+                    'url': eventreverse(se.event, 'presale:event.index', kwargs={
+                        'subevent': se.pk
+                    }),
+                })
+                d += timedelta(days=1)
 
-    else:
-        ebd[date_from].append({
-            'event': se,
-            'continued': False,
-            'time': datetime_from.time().replace(tzinfo=None) if se.event.settings.show_times else None,
-            'url': eventreverse(se.event, 'presale:event.index', kwargs={
-                'subevent': se.pk
-            }),
-            'timezone': se.event.settings.timezone,
-        })
+        else:
+            ebd[date_from].append({
+                'event': se,
+                'continued': False,
+                'time': datetime_from.time().replace(tzinfo=None) if se.event.settings.show_times else None,
+                'url': eventreverse(se.event, 'presale:event.index', kwargs={
+                    'subevent': se.pk
+                }),
+                'timezone': se.event.settings.timezone,
+            })
 
 
 def weeks_for_template(ebd, year, month):
@@ -146,6 +146,13 @@ class CalendarView(OrganizerViewMixin, TemplateView):
         if 'year' in kwargs and 'month' in kwargs:
             self.year = int(kwargs.get('year'))
             self.month = int(kwargs.get('month'))
+        elif 'year' in request.GET and 'month' in request.GET:
+            try:
+                self.year = int(request.GET.get('year'))
+                self.month = int(request.GET.get('month'))
+            except ValueError:
+                self.year = now().year
+                self.month = now().month
         else:
             next_ev = Event.objects.filter(
                 live=True,
@@ -191,6 +198,8 @@ class CalendarView(OrganizerViewMixin, TemplateView):
 
         ctx['multiple_timezones'] = self._multiple_timezones
         ctx['weeks'] = weeks_for_template(ebd, self.year, self.month)
+        ctx['months'] = [date(self.year, i + 1, 1) for i in range(12)]
+        ctx['years'] = range(now().year - 2, now().year + 3)
 
         return ctx
 
