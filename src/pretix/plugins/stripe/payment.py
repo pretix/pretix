@@ -1,3 +1,4 @@
+import hashlib
 import json
 import logging
 from collections import OrderedDict
@@ -12,7 +13,7 @@ from pretix.base.models import Quota, RequiredAction
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
@@ -92,20 +93,19 @@ class Stripe(BasePaymentProvider):
     def order_can_retry(self, order):
         return self._is_still_available()
 
-    def payment_perform(self, request, order) -> str:
-        self._init_api()
+    def _charge_source(self, source, order):
         try:
             charge = stripe.Charge.create(
                 amount=int(order.total * 100),
                 currency=self.event.currency.lower(),
-                source=request.session['payment_stripe_token'],
+                source=source,
                 metadata={
                     'order': str(order.id),
                     'event': self.event.id,
                     'code': order.code
                 },
                 # TODO: Is this sufficient?
-                idempotency_key=str(self.event.id) + order.code + request.session['payment_stripe_token']
+                idempotency_key=str(self.event.id) + order.code + source
             )
         except stripe.error.CardError as e:
             if e.json_body:
@@ -119,7 +119,7 @@ class Stripe(BasePaymentProvider):
                 'error': True,
                 'message': err['message'],
             })
-            order.save()
+            order.save(update_fields=['payment_info'])
             raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
 
         except stripe.error.StripeError as e:
@@ -133,7 +133,7 @@ class Stripe(BasePaymentProvider):
                 'error': True,
                 'message': err['message'],
             })
-            order.save()
+            order.save(update_fields=['payment_info'])
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
         else:
@@ -142,7 +142,7 @@ class Stripe(BasePaymentProvider):
                     mark_order_paid(order, 'stripe', str(charge))
                 except Quota.QuotaExceededException as e:
                     RequiredAction.objects.create(
-                        event=request.event, action_type='pretix.plugins.stripe.overpaid', data=json.dumps({
+                        event=self.event, action_type='pretix.plugins.stripe.overpaid', data=json.dumps({
                             'order': order.code,
                             'charge': charge.id
                         })
@@ -154,9 +154,44 @@ class Stripe(BasePaymentProvider):
             else:
                 logger.info('Charge failed: %s' % str(charge))
                 order.payment_info = str(charge)
-                order.save()
+                order.save(update_fields=['payment_info'])
                 raise PaymentException(_('Stripe reported an error: %s') % charge.failure_message)
-        del request.session['payment_stripe_token']
+
+    def payment_perform(self, request, order) -> str:
+        self._init_api()
+
+        if request.session['payment_stripe_token'].startswith('src_'):
+            src = stripe.Source.retrieve(request.session['payment_stripe_token'])
+            if src.type == 'card' and src.card and src.card.three_d_secure == 'required':
+                request.session['payment_stripe_order_secret'] = order.secret
+                source = stripe.Source.create(
+                    type='three_d_secure',
+                    amount=int(order.total * 100),
+                    currency=self.event.currency.lower(),
+                    three_d_secure={
+                        'card': src.id
+                    },
+                    metadata={
+                        'order': str(order.id),
+                        'event': self.event.id,
+                        'code': order.code
+                    },
+                    redirect={
+                        'return_url': eventreverse(self.event, 'plugins:stripe:return', kwargs={
+                            'order': order.code,
+                            'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
+                        })
+                    },
+                )
+                if source.status == "pending":
+                    order.payment_info = str(source)
+                    order.save(update_fields=['payment_info'])
+                    return source.redirect.url
+
+        try:
+            self._charge_source(request.session['payment_stripe_token'], order)
+        finally:
+            del request.session['payment_stripe_token']
 
     def order_pending_render(self, request, order) -> str:
         if order.payment_info:

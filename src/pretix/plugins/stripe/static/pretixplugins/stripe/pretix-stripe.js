@@ -10,7 +10,7 @@ var pretixstripe = {
         waitingDialog.show(gettext("Contacting Stripe …"));
         $(".stripe-errors").hide();
 
-        pretixstripe.stripe.createToken(pretixstripe.card).then(function (result) {
+        pretixstripe.stripe.createSource(pretixstripe.card).then(function (result) {
             waitingDialog.hide();
             if (result.error) {
                 $(".stripe-errors").stop().hide().removeClass("sr-only");
@@ -19,9 +19,9 @@ var pretixstripe = {
             } else {
                 var $form = $("#stripe_token").closest("form");
                 // Insert the token into the form so it gets submitted to the server
-                $("#stripe_token").val(result.token.id);
-                $("#stripe_card_brand").val(result.token.card.brand);
-                $("#stripe_card_last4").val(result.token.card.last4);
+                $("#stripe_token").val(result.source.id);
+                $("#stripe_card_brand").val(result.source.card.brand);
+                $("#stripe_card_last4").val(result.source.card.last4);
                 // and submit
                 $form.get(0).submit();
             }

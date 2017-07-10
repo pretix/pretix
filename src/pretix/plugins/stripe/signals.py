@@ -56,6 +56,12 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
         text = _('Dispute updated. Reason: {}').format(data['data']['object']['reason'])
     elif event_type == 'charge.dispute.closed':
         text = _('Dispute closed. Status: {}').format(data['data']['object']['status'])
+    elif event_type == 'source.chargeable':
+        text = _('Payment authorized.')
+    elif event_type == 'source.canceled':
+        text = _('Payment authorization canceled.')
+    elif event_type == 'source.failed':
+        text = _('Payment authorization failed.')
 
     if text:
         return _('Stripe reported an event: {}').format(text)

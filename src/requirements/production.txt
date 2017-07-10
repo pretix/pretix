@@ -32,7 +32,7 @@ bleach==2.*
 raven
 django-i18nfield>=1.0.1
 # Stripe
-stripe==1.22.*
+stripe==1.62.*
 # PayPal
 paypalrestsdk==1.12.*
 pycparser==2.13  # https://github.com/eliben/pycparser/issues/147

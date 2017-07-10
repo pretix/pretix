@@ -1,10 +1,11 @@
 from django.conf.urls import include, url
 
-from .views import refund, webhook
+from .views import ReturnView, refund, webhook
 
 event_patterns = [
     url(r'^stripe/', include([
         url(r'^webhook/$', webhook, name='webhook'),
+        url(r'^return/(?P<order>[^/]+)/(?P<hash>[^/]+)/$', ReturnView.as_view(), name='return'),
     ])),
 ]
 
