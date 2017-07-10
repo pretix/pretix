@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-07 09:34+0000\n"
-"PO-Revision-Date: 2017-07-07 11:37+0200\n"
+"POT-Creation-Date: 2017-07-10 12:26+0000\n"
+"PO-Revision-Date: 2017-07-10 14:28+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -16,11 +16,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Poedit 2.0.2\n"
 
 #: pretix/base/exporters/answers.py:18
-#, fuzzy
-#| msgid "Answer options"
 msgid "Answers to file upload questions"
 msgstr "Antworten zu Fragen mit Dateiupload"
 
@@ -2060,7 +2058,7 @@ msgstr ""
 msgid "Plugin: %s"
 msgstr "Plugin: %s"
 
-#: pretix/base/settings.py:208
+#: pretix/base/settings.py:212
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -2086,7 +2084,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:221
+#: pretix/base/settings.py:225
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -2111,7 +2109,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:233
+#: pretix/base/settings.py:237
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -2137,7 +2135,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:246
+#: pretix/base/settings.py:250
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -2165,7 +2163,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:261
+#: pretix/base/settings.py:265
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -2188,7 +2186,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:273
+#: pretix/base/settings.py:277
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -2215,7 +2213,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:291
+#: pretix/base/settings.py:295
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -2243,7 +2241,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:305
+#: pretix/base/settings.py:309
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -2291,7 +2289,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Dein {event} Team"
 
-#: pretix/base/settings.py:328
+#: pretix/base/settings.py:332
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -3507,6 +3505,18 @@ msgstr ""
 "mehr oben auf der Seite an. Wir zeigen das Logo mit einer Höhe von maximal "
 "120 Pixeln an."
 
+#: pretix/control/forms/organizer.py:131
+msgid "Event overview stile"
+msgstr "Art des Veranstaltungsüberblicks"
+
+#: pretix/control/forms/organizer.py:133
+msgid "List"
+msgstr "Liste"
+
+#: pretix/control/forms/organizer.py:134
+msgid "Calendar"
+msgstr "Kalender"
+
 #: pretix/control/forms/vouchers.py:54
 #, python-brace-format
 msgid "{product} – Any variation"
@@ -4081,7 +4091,7 @@ msgstr "Neues Passwort setzen"
 #: pretix/control/templates/pretixcontrol/order/change_locale.html:25
 #: pretix/control/templates/pretixcontrol/order/extend.html:22
 #: pretix/control/templates/pretixcontrol/organizers/create.html:17
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:27
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:28
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:42
 #: pretix/control/templates/pretixcontrol/user/settings.html:49
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:73
@@ -4940,6 +4950,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:18
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:17
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:12
+#: pretix/control/templates/pretixcontrol/waitinglist/delete.html:12
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:66
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:21
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:51
@@ -4968,6 +4979,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:24
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:21
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:15
+#: pretix/control/templates/pretixcontrol/waitinglist/delete.html:15
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:156
 msgid "Delete"
 msgstr "Löschen"
@@ -6193,6 +6205,18 @@ msgstr "Du hast noch keine Tags zu Gutscheinen hinzugefügt."
 msgid "Redeemed vouchers"
 msgstr "Eingelöste Gutscheine"
 
+#: pretix/control/templates/pretixcontrol/waitinglist/delete.html:4
+#: pretix/control/templates/pretixcontrol/waitinglist/delete.html:6
+msgid "Delete entry"
+msgstr "Eintrag löschen"
+
+#: pretix/control/templates/pretixcontrol/waitinglist/delete.html:9
+#, python-format
+msgid ""
+"Are you sure you want to delete the following waiting list entry <strong>"
+"%(entry)s</strong>?"
+msgstr "Möchtest du den Eintrag <strong>%(entry)s</strong> wirklich löschen?"
+
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:10
 msgid ""
 "The waiting list is disabled, so if the event is sold out, people cannot add "
@@ -6265,7 +6289,7 @@ msgid "Waiting"
 msgstr "Wartet"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:74
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:114
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:115
 msgid "Voucher assigned"
 msgstr "Gutschein zugewiesen"
 
@@ -6273,7 +6297,7 @@ msgstr "Gutschein zugewiesen"
 msgid "On the list since"
 msgstr "Auf der Liste seit"
 
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:117
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:118
 #, python-format
 msgid ""
 "\n"
@@ -6284,11 +6308,11 @@ msgstr ""
 "                                    Wartet, Produkt %(num)sx verfügbar\n"
 "                                "
 
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:122
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:123
 msgid "Waiting, product unavailable"
 msgstr "Wartet, Produkt nicht verfügbar"
 
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:132
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:133
 msgid "Send a voucher"
 msgstr "Gutschein verschicken"
 
@@ -6939,24 +6963,32 @@ msgstr "Der neue Gutschein wurde erstellt: {code}"
 msgid "The new vouchers have been created."
 msgstr "Die neuen Gutscheine wurden erstellt."
 
-#: pretix/control/views/waitinglist.py:23
+#: pretix/control/views/waitinglist.py:26
 #, python-brace-format
 msgid "{num} vouchers have been created and sent out via email."
 msgstr "{num} Gutscheine wurden erstellt und per E-Mail verschickt."
 
-#: pretix/control/views/waitinglist.py:48
+#: pretix/control/views/waitinglist.py:51
 msgid "You do not have permission to do this"
 msgstr "Du hast keine Berechtigung, diese Aktion durchzuführen."
 
-#: pretix/control/views/waitinglist.py:62
+#: pretix/control/views/waitinglist.py:65
 msgid ""
 "An email containing a voucher code has been sent to the specified address."
 msgstr ""
 "Eine E-Mail mit einem Gutschein wurde an die angegebene Adresse verschickt."
 
-#: pretix/control/views/waitinglist.py:69
+#: pretix/control/views/waitinglist.py:72
 msgid "Waiting list entry not found."
 msgstr "Wartelisten-Eintrag nicht gefunden."
+
+#: pretix/control/views/waitinglist.py:146
+msgid "The requested entry does not exist."
+msgstr "Der ausgewählte Eintrag existiert nicht."
+
+#: pretix/control/views/waitinglist.py:154
+msgid "The selected entry has been deleted."
+msgstr "Der ausgewählte Eintrag wurde gelöscht."
 
 #: pretix/multidomain/models.py:13
 msgid "Known domain"
@@ -8980,6 +9012,39 @@ msgstr "Dieser Vorverkauf läuft mit <a %(a_attr)s>pretix</a>."
 msgid "There is nothing to see here yet."
 msgstr "Hier gibt es zur Zeit nichts zu sehen."
 
+#: pretix/presale/templates/pretixpresale/organizers/calendar.html:5
+msgid "Event overview"
+msgstr "Überblick"
+
+#: pretix/presale/templates/pretixpresale/organizers/calendar.html:66
+msgid "Tickets on sale"
+msgstr "Verkauf läuft"
+
+#: pretix/presale/templates/pretixpresale/organizers/calendar.html:68
+msgid "Sale over"
+msgstr "Verkauf vorrüber"
+
+#: pretix/presale/templates/pretixpresale/organizers/calendar.html:71
+#, python-format
+msgid ""
+"\n"
+"                                                    from %(start_date)s\n"
+"                                                "
+msgstr ""
+"\n"
+"                                    ab %(start_date)s\n"
+"                                "
+
+#: pretix/presale/templates/pretixpresale/organizers/calendar.html:75
+msgid "Soon"
+msgstr "Bald"
+
+#: pretix/presale/templates/pretixpresale/organizers/calendar.html:92
+msgid "Note that the events in this view are in different timezones."
+msgstr ""
+"Achtung: Die angezeigten Veranstaltungen liegen in unterschiedlichen "
+"Zeitzonen."
+
 #: pretix/presale/templates/pretixpresale/organizers/index.html:5
 msgid "Event list"
 msgstr "Veranstaltungs-Liste"
@@ -9180,9 +9245,6 @@ msgstr "Deutsch (Du)"
 
 #~ msgid "Events overview"
 #~ msgstr "Veranstaltungsüberblick"
-
-#~ msgid "Event overview"
-#~ msgstr "Überblick"
 
 #, fuzzy
 #~| msgid "Use feature"
@@ -9628,9 +9690,6 @@ msgstr "Deutsch (Du)"
 #~ msgid "Order process settings"
 #~ msgstr "Bestellzeile"
 
-#~ msgid "Tickets sold"
-#~ msgstr "Tickets verkauft"
-
 #~ msgid "Orders overview"
 #~ msgstr "Bestellübersicht"
 
@@ -9817,9 +9876,6 @@ msgstr "Deutsch (Du)"
 #~ msgstr ""
 #~ "Die Eigenschaft <strong>%(property)s</strong> kann nicht gelöscht werden, "
 #~ "solange sie von den folgenden Produkten benutzt wird:"
-
-#~ msgid "The requested property does not exist."
-#~ msgstr "Die ausgewählte Eigenschaft existiert nicht."
 
 #~ msgid "The new property has been created."
 #~ msgstr "Eine neue Eigenschaft wurde erstellt."
