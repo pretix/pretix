@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views.generic import FormView
 
 from pretix.base.models.event import SubEvent
@@ -64,7 +64,7 @@ class WaitingView(FormView):
                 self.subevent = get_object_or_404(SubEvent, event=request.event, pk=request.GET['subevent'],
                                                   active=True)
             else:
-                messages.error(request, _("You need to select a subevent."))
+                messages.error(request, pgettext_lazy('subevent', "You need to select a date."))
                 return redirect(eventreverse(self.request.event, 'presale:event.index'))
 
         return super().dispatch(request, *args, **kwargs)

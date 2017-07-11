@@ -9,7 +9,7 @@ from .event import (
 from .invoices import Invoice, InvoiceLine, invoice_filename
 from .items import (
     Item, ItemAddOn, ItemCategory, ItemVariation, Question, QuestionOption,
-    Quota, itempicture_upload_to,
+    Quota, SubEventItem, SubEventItemVariation, itempicture_upload_to,
 )
 from .log import LogEntry
 from .orders import (

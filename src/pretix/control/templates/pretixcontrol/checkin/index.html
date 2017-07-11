@@ -23,7 +23,7 @@
             </select>
             {% if request.event.has_subevents %}
                 <select name="subevent" class="form-control">
-                    <option value="">{% trans "All sub-events" %}</option>
+                    <option value="">{% trans "All dates" context "subevent" %}</option>
                     {% for se in request.event.subevents.all %}
                         <option value="{{ se.id }}"
                                 {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
@@ -57,7 +57,7 @@
                         <th>{% trans "Item" %} <a href="?{% url_replace request 'ordering' '-item'%}"><i class="fa fa-caret-down"></i></a>
                       <a href="?{% url_replace request 'ordering' 'item'%}"><i class="fa fa-caret-up"></i></a></th>
                       {% if request.event.has_subevents %}
-                          <th>{% trans "Sub-event" %} <a href="?{% url_replace request 'ordering' '-subevent'%}"><i class="fa fa-caret-down"></i></a>
+                          <th>{% trans "Date" context "subevent" %} <a href="?{% url_replace request 'ordering' '-subevent'%}"><i class="fa fa-caret-down"></i></a>
                               <a href="?{% url_replace request 'ordering' 'subevent'%}"><i class="fa fa-caret-up"></i></a></th>
                       {% endif %}
                         <th>{% trans "Email" %} <a href="?{% url_replace request 'ordering' '-email'%}"><i class="fa fa-caret-down"></i></a>

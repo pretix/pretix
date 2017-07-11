@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.i18n import language
 from pretix.base.models import Voucher
@@ -30,7 +30,7 @@ class WaitingListEntry(LoggedModel):
         SubEvent,
         null=True, blank=True,
         on_delete=models.CASCADE,
-        verbose_name=_("Sub-event"),
+        verbose_name=pgettext_lazy("subevent", "Date"),
     )
     created = models.DateTimeField(
         verbose_name=_("On waiting list since"),

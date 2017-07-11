@@ -17,7 +17,7 @@
             <p>
                 {% if request.event.has_subevents %}
                     <select name="subevent" class="form-control">
-                        <option value="">{% trans "All sub-events" %}</option>
+                        <option value="">{% trans "All dates" context "subevent" %}</option>
                         {% for se in request.event.subevents.all %}
                             <option value="{{ se.id }}"
                                     {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
@@ -32,7 +32,7 @@
     {% endif %}
     {% if subevent_warning %}
         <div class="alert alert-info">
-            {% blocktrans trimmed %}
+            {% blocktrans trimmed context "subevent" %}
                 If you select a sub-event, payment method fees will not be listed here as it might not be clear which
                 sub-event they belong to.
             {% endblocktrans %}

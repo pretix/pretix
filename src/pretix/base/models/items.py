@@ -10,7 +10,7 @@ from django.db import models
 from django.db.models import F, Func, Q, Sum
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.decimal import round_decimal
@@ -89,12 +89,34 @@ def itempicture_upload_to(instance, filename: str) -> str:
 
 
 class SubEventItem(models.Model):
+    """
+    This model can be used to change the price of a product for a single subevent (i.e. a
+    date in an event series).
+
+    :param subevent: The date this belongs to
+    :type subevent: SubEvent
+    :param item: The item to modify the price for
+    :type item: Item
+    :param price: The modified price (or ``None`` for the original price)
+    :type price: Decimal
+    """
     subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
     item = models.ForeignKey('Item', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
 
 
 class SubEventItemVariation(models.Model):
+    """
+    This model can be used to change the price of a product variation for a single
+    subevent (i.e. a date in an event series).
+
+    :param subevent: The date this belongs to
+    :type subevent: SubEvent
+    :param variation: The variation to modify the price for
+    :type variation: ItemVariation
+    :param price: The modified price (or ``None`` for the original price)
+    :type price: Decimal
+    """
     subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
     variation = models.ForeignKey('ItemVariation', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
@@ -426,6 +448,17 @@ class ItemAddOn(models.Model):
     An instance of this model indicates that buying a ticket of the time ``base_item``
     allows you to add up to ``max_count`` items from the category ``addon_category``
     to your order that will be associated with the base item.
+
+    :param base_item: The base item the add-ons are attached to
+    :type base_item: Item
+    :param addon_category: The category the add-on can be chosen from
+    :type addon_category: ItemCategory
+    :param min_count: The minimal number of add-ons to be chosen
+    :type min_count: int
+    :param max_count: The maximal number of add-ons to be chosen
+    :type max_count: int
+    :param position: An integer used for sorting
+    :type position: int
     """
     base_item = models.ForeignKey(
         Item,
@@ -598,7 +631,7 @@ class Quota(LoggedModel):
 
     :param event: The event this belongs to
     :type event: Event
-    :param subevent: The subevent this belongs to, if subevents are enabled
+    :param subevent: The event series date this belongs to, if event series are enabled
     :type subevent: SubEvent
     :param name: This quota's name
     :type name: str
@@ -624,7 +657,7 @@ class Quota(LoggedModel):
         null=True, blank=True,
         on_delete=models.CASCADE,
         related_name="quotas",
-        verbose_name=_("Sub-event"),
+        verbose_name=pgettext_lazy('subevent', "Date"),
     )
     name = models.CharField(
         max_length=200,

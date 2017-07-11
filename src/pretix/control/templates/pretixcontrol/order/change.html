@@ -86,7 +86,7 @@
                                 <label>
                                     <input name="{{ position.form.prefix }}-operation" type="radio" value="subevent"
                                             {% if position.form.operation.value == "subevent" %}checked="checked"{% endif %}>
-                                    {% trans "Change sub-event to" %}
+                                    {% trans "Change date to" context "subevent" %}
                                     {% bootstrap_field position.form.subevent layout='inline' %}
                                 </label>
                             </div>

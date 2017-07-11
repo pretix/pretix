@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.formats import localize
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import Item, ItemAddOn, Order, OrderPosition
@@ -87,7 +87,7 @@ class OrderPositionAddForm(forms.Form):
     )
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
-        label=_('Sub-event'),
+        label=pgettext_lazy('subevent', 'Date'),
         required=True,
         empty_label=None
     )
@@ -127,7 +127,7 @@ class OrderPositionChangeForm(forms.Form):
     itemvar = forms.ChoiceField()
     subevent = SubEventChoiceField(
         SubEvent.objects.none(),
-        label=_('New sub-event'),
+        label=pgettext_lazy('subevent', 'New date'),
         required=True,
         empty_label=None
     )
@@ -142,7 +142,7 @@ class OrderPositionChangeForm(forms.Form):
         choices=(
             ('product', 'Change product'),
             ('price', 'Change price'),
-            ('subevent', 'Change sub-event'),
+            ('subevent', 'Change event date'),
             ('cancel', 'Remove product')
         )
     )

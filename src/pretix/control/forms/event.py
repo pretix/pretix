@@ -217,8 +217,8 @@ class EventSettingsForm(SettingsForm):
     last_order_modification_date = RelativeDateTimeField(
         label=_('Last date of modifications'),
         help_text=_("The last date users can modify details of their orders, such as attendee names or "
-                    "answers to questions. If you use the sub-event feature and an order contains tickest for "
-                    "multiple sub-events, the earliest date will be used."),
+                    "answers to questions. If you use the event series feature and an order contains tickest for "
+                    "multiple event dates, the earliest date will be used."),
         required=False,
     )
     timezone = forms.ChoiceField(
@@ -346,8 +346,8 @@ class PaymentSettingsForm(SettingsForm):
     payment_term_last = RelativeDateField(
         label=_('Last date of payments'),
         help_text=_("The last date any payments are accepted. This has precedence over the number of "
-                    "days configured above. If you use the sub-event feature and an order contains tickets for "
-                    "multiple subevents, the earliest date will be used."),
+                    "days configured above. If you use the event series feature and an order contains tickets for "
+                    "multiple dates, the earliest date will be used."),
         required=False,
     )
     payment_term_weekdays = forms.BooleanField(
@@ -680,9 +680,9 @@ class TicketSettingsForm(SettingsForm):
     )
     ticket_download_date = RelativeDateTimeField(
         label=_("Download date"),
-        help_text=_("Ticket download will be offered after this date. If you use the sub-events feature and an order "
-                    "contains tickets for multiple sub-events, download of all tickets will be available if at least "
-                    "one of the subevent dates allows it."),
+        help_text=_("Ticket download will be offered after this date. If you use the event series feature and an order "
+                    "contains tickets for multiple event dates, download of all tickets will be available if at least "
+                    "one of the event dates allows it."),
         required=False,
     )
     ticket_download_addons = forms.BooleanField(

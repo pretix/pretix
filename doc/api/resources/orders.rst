@@ -71,7 +71,7 @@ tax_rate                              decimal (string)           VAT rate applie
 tax_value                             money (string)             VAT included in this position
 secret                                string                     Secret code printed on the tickets for validation
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
-subevent                              integer                    ID of the sub-event this position belongs to (or ``null``).
+subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``).
 checkins                              list of objects            List of check-ins with this ticket
 └ datetime                            datetime                   Time of check-in
 downloads                             list of objects            List of ticket download options

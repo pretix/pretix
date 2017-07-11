@@ -72,6 +72,11 @@ class EventMixin:
         )
 
     def get_date_range_display(self, tz=None) -> str:
+        """
+        Returns a formatted string containing the start date and the event date
+        of the event with respect to the current locale and to the ``show_times`` and
+        ``show_date_to`` settings.
+        """
         tz = tz or pytz.timezone(self.settings.timezone)
         if not self.settings.show_date_to or not self.date_to:
             return _date(self.date_from.astimezone(tz), "DATE_FORMAT")
@@ -79,12 +84,19 @@ class EventMixin:
 
     @property
     def presale_has_ended(self):
+        """
+        Is true, when ``presale_end`` is set and in the past.
+        """
         if self.presale_end and now() > self.presale_end:
             return True
         return False
 
     @property
     def presale_is_running(self):
+        """
+        Is true, when ``presale_end`` is not set or in the future and ``presale_start`` is not
+        set or in the past.
+        """
         if self.presale_start and now() < self.presale_start:
             return False
         if self.presale_end and now() > self.presale_end:
@@ -122,7 +134,7 @@ class Event(EventMixin, LoggedModel):
     :param plugins: A comma-separated list of plugin names that are active for this
                     event.
     :type plugins: str
-    :param has_subevents: Enable sub-events functionality
+    :param has_subevents: Enable event series functionality
     :type has_subevents: bool
     """
 
@@ -232,6 +244,10 @@ class Event(EventMixin, LoggedModel):
         return locking.LockManager(self)
 
     def get_mail_backend(self, force_custom=False):
+        """
+        Returns an email server connection, either by using the system-wide connection
+        or by returning a custom one based on the event's settings.
+        """
         if self.settings.smtp_use_custom or force_custom:
             return CustomSMTPBackend(host=self.settings.smtp_host,
                                      port=self.settings.smtp_port,
@@ -245,6 +261,9 @@ class Event(EventMixin, LoggedModel):
 
     @property
     def payment_term_last(self):
+        """
+        The last datetime of payments for this event.
+        """
         tz = pytz.timezone(self.settings.timezone)
         return make_aware(datetime.combine(
             self.settings.get('payment_term_last', as_type=RelativeDateWrapper).datetime(self).date(),
@@ -330,6 +349,9 @@ class Event(EventMixin, LoggedModel):
         event_copy_data.send(sender=self, other=other)
 
     def get_payment_providers(self) -> dict:
+        """
+        Returns a dictionary of initialized payment providers mapped by their identifiers.
+        """
         from ..signals import register_payment_providers
 
         responses = register_payment_providers.send(self)
@@ -343,6 +365,9 @@ class Event(EventMixin, LoggedModel):
         return providers
 
     def get_invoice_renderers(self) -> dict:
+        """
+        Returns a dictionary of initialized invoice renderers mapped by their identifiers.
+        """
         from ..signals import register_invoice_renderers
 
         responses = register_invoice_renderers.send(self)
@@ -357,11 +382,17 @@ class Event(EventMixin, LoggedModel):
 
     @property
     def invoice_renderer(self):
+        """
+        Returns the currently configured invoice renderer.
+        """
         irs = self.get_invoice_renderers()
         return irs[self.settings.invoice_renderer]
 
     @property
     def active_subevents(self):
+        """
+        Returns a queryset of active subevents.
+        """
         return self.subevents.filter(active=True).order_by('-date_from', 'name')
 
     @property
@@ -376,9 +407,9 @@ class Event(EventMixin, LoggedModel):
 
 class SubEvent(EventMixin, LoggedModel):
     """
-    This model represents a subevent.
+    This model represents a date within an event series.
 
-    :param event: The event this subevent belongs to
+    :param event: The event this belongs to
     :type event: Event
     :param active: Whether to show the subevent
     :type active: bool
@@ -398,7 +429,7 @@ class SubEvent(EventMixin, LoggedModel):
 
     event = models.ForeignKey(Event, related_name="subevents", on_delete=models.PROTECT)
     active = models.BooleanField(default=False, verbose_name=_("Active"),
-                                 help_text=_("Only with this checkbox enabled, this sub-event is visible in the "
+                                 help_text=_("Only with this checkbox enabled, this date is visible in the "
                                              "frontend to users."))
     name = I18nCharField(
         max_length=200,
@@ -429,8 +460,8 @@ class SubEvent(EventMixin, LoggedModel):
     variations = models.ManyToManyField('ItemVariation', through='SubEventItemVariation')
 
     class Meta:
-        verbose_name = _("Sub-Event")
-        verbose_name_plural = _("Sub-Events")
+        verbose_name = _("Date in event series")
+        verbose_name_plural = _("Dates in event series")
         ordering = ("date_from", "name")
 
     def __str__(self):

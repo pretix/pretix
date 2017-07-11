@@ -1,11 +1,11 @@
-Sub-events
-==========
+Event series dates / Sub-events
+===============================
 
 Resource description
 --------------------
 
-Events can contain sub-events if the ``has_subevents`` property of the event is active. In this case,
-many other resources are additionally connected to a sub-event.
+Events can represent whole event series if the ``has_subevents`` property of the event is active.
+In this case, many other resources are additionally connected to an event date (also called sub-event).
 The sub-event resource contains the following public fields:
 
 .. rst-class:: rest-resource-table

@@ -6,7 +6,7 @@ from django.db import transaction
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from pretix.base.models.event import SubEvent
@@ -54,11 +54,12 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
                 id=self.kwargs['subevent']
             )
         except SubEvent.DoesNotExist:
-            raise Http404(_("The requested sub-event does not exist."))
+            raise Http404(pgettext_lazy("subevent", "The requested date does not exist."))
 
     def get(self, request, *args, **kwargs):
         if self.get_object().orderposition_set.count() > 0:
-            messages.error(request, _('A sub-event can not be deleted if orders already have been placed.'))
+            messages.error(request, pgettext_lazy('subevent', 'A date can not be deleted if orders already have been '
+                                                  'placed.'))
             return HttpResponseRedirect(self.get_success_url())
         return super().get(request, *args, **kwargs)
 
@@ -68,12 +69,13 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
         success_url = self.get_success_url()
 
         if self.get_object().orderposition_set.count() > 0:
-            messages.error(request, _('A sub-event can not be deleted if orders already have been placed.'))
+            messages.error(request, pgettext_lazy('subevent', 'A date can not be deleted if orders already have been '
+                                                  'placed.'))
             return HttpResponseRedirect(self.get_success_url())
         else:
             self.object.log_action('pretix.subevent.deleted', user=self.request.user)
             self.object.delete()
-            messages.success(request, _('The selected subevent has been deleted.'))
+            messages.success(request, pgettext_lazy('subevent', 'The selected date has been deleted.'))
         return HttpResponseRedirect(success_url)
 
     def get_success_url(self) -> str:
@@ -232,7 +234,7 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
                 id=self.kwargs['subevent']
             )
         except SubEvent.DoesNotExist:
-            raise Http404(_("The requested sub-event does not exist."))
+            raise Http404(pgettext_lazy("subevent", "The requested date does not exist."))
 
     @transaction.atomic
     def form_valid(self, form):
@@ -298,7 +300,7 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
     @transaction.atomic
     def form_valid(self, form):
         form.instance.event = self.request.event
-        messages.success(self.request, _('The new sub-event has been created.'))
+        messages.success(self.request, pgettext_lazy('subevent', 'The new date has been created.'))
         ret = super().form_valid(form)
         form.instance.log_action('pretix.subevent.added', data=dict(form.cleaned_data), user=self.request.user)
 

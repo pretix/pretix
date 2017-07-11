@@ -18,7 +18,7 @@ from django.utils.functional import cached_property
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware, now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.reldate import RelativeDateWrapper
 
@@ -475,7 +475,7 @@ class AbstractPosition(models.Model):
     """
     A position can either be one line of an order or an item placed in a cart.
 
-    :param subevent: The subevent, if subevents are enabled
+    :param subevent: The date in the event series, if event series are enabled
     :type subevent: SubEvent
     :param item: The selected item
     :type item: Item
@@ -500,7 +500,7 @@ class AbstractPosition(models.Model):
         SubEvent,
         null=True, blank=True,
         on_delete=models.CASCADE,
-        verbose_name=_("Sub-event"),
+        verbose_name=pgettext_lazy("subevent", "Date"),
     )
     item = models.ForeignKey(
         Item,

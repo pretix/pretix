@@ -15,7 +15,7 @@ from django.utils.decorators import method_decorator
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
@@ -243,10 +243,10 @@ class EventIcalDownload(EventViewMixin, View):
             if 'subevent' in kwargs:
                 subevent = get_object_or_404(SubEvent, event=request.event, pk=kwargs['subevent'], active=True)
             else:
-                raise Http404(_('No sub-event selected.'))
+                raise Http404(pgettext_lazy('subevent', 'No date selected.'))
         else:
             if 'subevent' in kwargs:
-                raise Http404(_('Unknown sub-event selected.'))
+                raise Http404(pgettext_lazy('subevent', 'Unknown date selected.'))
 
         event = self.request.event
         ev = subevent or event

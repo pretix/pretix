@@ -23,7 +23,7 @@ item                                  integer                    An ID of an ite
 variation                             integer                    An ID of a variation the user is waiting to be
                                                                  available again (or ``null``)
 locale                                string                     Locale of the waiting user
-subevent                              integer                    ID of the sub-event this entry belongs to (or ``null``).
+subevent                              integer                    ID of the date inside an event series this entry belongs to (or ``null``).
 ===================================== ========================== =======================================================
 
 

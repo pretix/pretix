@@ -3,12 +3,12 @@
 {% load bootstrap3 %}
 {% load formset_tags %}
 {% load eventsignal %}
-{% block title %}{% trans "Sub-event" %}{% endblock %}
+{% block title %}{% trans "Date" context "subevent" %}{% endblock %}
 {% block content %}
     {% if not subevent.pk %}
-        <h1>{% trans "Create sub-event" %}</h1>
+        <h1>{% trans "Create date" context "subevent" %}</h1>
     {% else %}
-        <h1>{% trans "Sub-event" %}</h1>
+        <h1>{% trans "Date" context "subevent" %}</h1>
     {% endif %}
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
@@ -116,7 +116,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">
-                                {% trans "Sub-event history" %}
+                                {% trans "Date history" context "subevent" %}
                             </h3>
                         </div>
                         {% include "pretixcontrol/includes/logs.html" with obj=subevent %}

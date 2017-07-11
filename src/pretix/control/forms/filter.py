@@ -1,7 +1,7 @@
 from django import forms
 from django.db.models import Q
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.models import Item, Order, Organizer, SubEvent
 from pretix.base.signals import register_payment_providers
@@ -87,10 +87,10 @@ class EventOrderFilterForm(OrderFilterForm):
         required=False,
     )
     subevent = forms.ModelChoiceField(
-        label=_('Sub-event'),
+        label=pgettext_lazy('subevent', 'Date'),
         queryset=SubEvent.objects.none(),
         required=False,
-        empty_label=_('All sub-events')
+        empty_label=pgettext_lazy('subevent', 'All dates')
     )
 
     def get_payment_providers(self):
@@ -164,7 +164,7 @@ class SubEventFilterForm(FilterForm):
     status = forms.ChoiceField(
         label=_('Status'),
         choices=(
-            ('', _('All sub-events')),
+            ('', _('All')),
             ('active', _('Active')),
             ('running', _('Shop live and presale running')),
             ('inactive', _('Inactive')),

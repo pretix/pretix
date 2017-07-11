@@ -40,7 +40,7 @@ quota                                 integer                    An ID of a quot
                                                                  for all items without restriction.
 tag                                   string                     A string that is used for grouping vouchers
 comment                               string                     An internal comment on the voucher
-subevent                              integer                    ID of the sub-event this voucher belongs to (or ``null``).
+subevent                              integer                    ID of the date inside an event series this voucher belongs to (or ``null``).
 ===================================== ========================== =======================================================
 
 

@@ -17,7 +17,7 @@ name                                  string                     The internal na
 size                                  integer                    The size of the quota or ``null`` for unlimited
 items                                 list of integers           List of item IDs this quota acts on.
 variations                            list of integers           List of item variation IDs this quota acts on.
-subevent                              integer                    ID of the sub-event this quota belongs to (or ``null``).
+subevent                              integer                    ID of the date inside an event series this quota belongs to (or ``null``).
 ===================================== ========================== =======================================================
 
 

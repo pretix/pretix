@@ -4,7 +4,9 @@ from collections import OrderedDict
 
 from django import forms
 from django.db.models.functions import Coalesce
-from django.utils.translation import ugettext as _, ugettext_lazy
+from django.utils.translation import (
+    pgettext, pgettext_lazy, ugettext as _, ugettext_lazy,
+)
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Order, OrderPosition, Question
@@ -64,9 +66,9 @@ class CSVCheckinList(BaseCheckinList):
         if self.event.has_subevents:
             d['subevent'] = forms.ModelChoiceField(
                 self.event.subevents.all(),
-                label=_('Sub-event'),
+                label=pgettext_lazy('subevent', 'Date'),
                 required=False,
-                empty_label=_('All sub-events')
+                empty_label=pgettext_lazy('subevent', 'All dates')
             )
         return d
 
@@ -104,7 +106,7 @@ class CSVCheckinList(BaseCheckinList):
             headers.append(_('E-mail'))
 
         if self.event.has_subevents:
-            headers.append(_('Sub-event'))
+            headers.append(pgettext('subevent', 'Date'))
 
         for q in questions:
             headers.append(str(q.question))

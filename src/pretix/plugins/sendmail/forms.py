@@ -1,5 +1,5 @@
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
 from pretix.base.forms import PlaceholderValidator
@@ -15,7 +15,7 @@ class MailForm(forms.Form):
         SubEvent.objects.none(),
         label=_('Only send to customers of'),
         required=False,
-        empty_label=_('All sub-events')
+        empty_label=pgettext_lazy('subevent', 'All dates')
     )
 
     def __init__(self, *args, **kwargs):

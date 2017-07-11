@@ -1,19 +1,20 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block title %}{% trans "Sub-events" %}{% endblock %}
+{% block title %}{% trans "Dates" context "subevent" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Sub-events" %}</h1>
+    <h1>{% trans "Dates" context "subevent" %}</h1>
     {% if subevents|length == 0 and not filter_form.filtered %}
         <div class="empty-collection">
             <p>
                 {% blocktrans trimmed %}
-                    You haven't created any sub-events yet.
+                    You haven't created any dates for this event series yet.
                 {% endblocktrans %}
             </p>
 
             <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new sub-event" %}</a>
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i>
+                {% trans "Create a new date" context "subevent" %}</a>
         </div>
     {% else %}
         <form class="row filter-form" action="" method="get">
@@ -34,7 +35,8 @@
         </form>
         <p>
             <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new sub-event" %}</a>
+                    class="btn btn-default"><i class="fa fa-plus"></i>
+                {% trans "Create a new date" context "subevent" %}</a>
         </p>
         <div class="table-responsive">
             <table class="table table-hover table-quotas">

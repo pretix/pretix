@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django.dispatch import receiver
 from django.utils import formats
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.models import Event, ItemVariation, LogEntry, OrderPosition
@@ -36,7 +36,7 @@ def _display_order_changed(event: Event, logentry: LogEntry):
     elif logentry.action_type == 'pretix.event.order.changed.subevent':
         old_se = str(event.subevents.get(pk=data['old_subevent']))
         new_se = str(event.subevents.get(pk=data['new_subevent']))
-        return text + ' ' + _('Position #{posid}: Sub-event "{old_event}" ({old_price} {currency}) changed '
+        return text + ' ' + _('Position #{posid}: Event date "{old_event}" ({old_price} {currency}) changed '
                               'to "{new_event}" ({new_price} {currency}).').format(
             posid=data.get('positionid', '?'),
             old_event=old_se, new_event=new_se,
@@ -157,12 +157,12 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.team.created': _('The team has been created.'),
         'pretix.team.changed': _('The team settings have been modified.'),
         'pretix.team.deleted': _('The team has been deleted.'),
-        'pretix.subevent.deleted': _('The sub-event has been deleted.'),
-        'pretix.subevent.changed': _('The sub-event has been modified.'),
-        'pretix.subevent.added': _('The sub-event has been created.'),
-        'pretix.subevent.quota.added': _('A quota has been added to the subevent.'),
-        'pretix.subevent.quota.changed': _('A quota has been modified on the subevent.'),
-        'pretix.subevent.quota.deleted': _('A quota has been removed from the subevent.'),
+        'pretix.subevent.deleted': pgettext_lazy('subevent', 'The event date has been deleted.'),
+        'pretix.subevent.changed': pgettext_lazy('subevent', 'The event date has been modified.'),
+        'pretix.subevent.added': pgettext_lazy('subevent', 'The event date has been created.'),
+        'pretix.subevent.quota.added': pgettext_lazy('subevent', 'A quota has been added to the event date.'),
+        'pretix.subevent.quota.changed': pgettext_lazy('subevent', 'A quota has been modified on the event date.'),
+        'pretix.subevent.quota.deleted': pgettext_lazy('subevent', 'A quota has been removed from the event date.'),
     }
 
     data = json.loads(logentry.data)

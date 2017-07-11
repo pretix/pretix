@@ -4,7 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import Item, ItemVariation, Quota, Voucher
@@ -110,7 +110,9 @@ class VoucherForm(I18nModelForm):
             cnt = data['max_usages']
 
         if self.instance.event.has_subevents and data['block_quota'] and not data.get('subevent'):
-            raise ValidationError(_('If you want this voucher to block quota, you need to select a specific subevent.'))
+            raise ValidationError(pgettext_lazy(
+                'If you want this voucher to block quota, you need to select a specific date.'
+            ))
 
         if self._clean_quota_needs_checking(data):
             self._clean_quota_check(data, cnt)

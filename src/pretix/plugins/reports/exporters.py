@@ -9,7 +9,7 @@ from django.contrib.staticfiles import finders
 from django.db.models import Sum
 from django.utils.formats import date_format, localize
 from django.utils.timezone import now
-from django.utils.translation import ugettext as _
+from django.utils.translation import pgettext, pgettext_lazy, ugettext as _
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Order, OrderPosition
@@ -167,7 +167,7 @@ class OverviewReport(Report):
                 subevent = self.event.subevents.get(pk=self.form_data.get('subevent'))
             except SubEvent.DoesNotExist:
                 subevent = self.form_data.get('subevent')
-            story.append(Paragraph(_('Sub-event: {}').format(subevent), self.get_style()))
+            story.append(Paragraph(pgettext('subevent', 'Date: {}').format(subevent), self.get_style()))
             story.append(Spacer(1, 5 * mm))
         tdata = [
             [
@@ -245,9 +245,9 @@ class OverviewReport(Report):
         if self.event.has_subevents:
             d['subevent'] = forms.ModelChoiceField(
                 self.event.subevents.all(),
-                label=_('Sub-event'),
+                label=pgettext_lazy('subevent', 'Date'),
                 required=False,
-                empty_label=_('All sub-events')
+                empty_label=pgettext_lazy('subevent', 'All dates')
             )
         return d
 

@@ -7,7 +7,7 @@ from celery.exceptions import MaxRetriesExceededError
 from django.db import transaction
 from django.db.models import Q
 from django.utils.timezone import now
-from django.utils.translation import ugettext as _
+from django.utils.translation import pgettext_lazy, ugettext as _
 
 from pretix.base.i18n import LazyLocaleException, language
 from pretix.base.models import (
@@ -29,7 +29,7 @@ error_messages = {
               'server was too busy. Please try again.'),
     'empty': _('You did not select any products.'),
     'unknown_position': _('Unknown cart position.'),
-    'subevent_required': _('No sub-event was specified.'),
+    'subevent_required': pgettext_lazy('subevent', 'No date was specified.'),
     'not_for_sale': _('You selected a product which is not available for sale.'),
     'unavailable': _('Some of the products you selected are no longer available. '
                      'Please see below for details.'),
@@ -54,9 +54,9 @@ error_messages = {
                         'cart if you want to use it for a different product.'),
     'voucher_expired': _('This voucher is expired.'),
     'voucher_invalid_item': _('This voucher is not valid for this product.'),
-    'voucher_invalid_subevent': _('This voucher is not valid for this sub-event.'),
+    'voucher_invalid_subevent': pgettext_lazy('subevent', 'This voucher is not valid for this event date.'),
     'voucher_required': _('You need a valid voucher code to order this product.'),
-    'inactive_subevent': _('The selected sub-event is not active.'),
+    'inactive_subevent': pgettext_lazy('subevent', 'The selected event date is not active.'),
     'addon_invalid_base': _('You can not select an add-on for the selected product.'),
     'addon_duplicate_item': _('You can not select two variations of the same add-on product.'),
     'addon_max_count': _('You can select at most %(max)s add-ons from the category %(cat)s for the product %(base)s.'),
