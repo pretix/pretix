@@ -443,12 +443,12 @@ class SubEvent(EventMixin, LoggedModel):
     presale_end = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("End of presale"),
-        help_text=_("No products will be sold after this date."),
+        help_text=_("Optional. No products will be sold after this date."),
     )
     presale_start = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("Start of presale"),
-        help_text=_("No products will be sold before this date."),
+        help_text=_("Optional. No products will be sold before this date."),
     )
     location = I18nTextField(
         null=True, blank=True,
