@@ -5,11 +5,11 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from ..decimal import round_decimal
 from .base import LoggedModel
-from .event import Event
+from .event import Event, SubEvent
 from .items import Item, ItemVariation, Quota
 
 
@@ -33,6 +33,8 @@ class Voucher(LoggedModel):
 
     :param event: The event this voucher is valid for
     :type event: Event
+    :param subevent: The date in the event series, if event series are enabled
+    :type subevent: SubEvent
     :param code: The secret voucher code
     :type code: str
     :param max_usages: The number of times this voucher can be redeemed
@@ -79,6 +81,12 @@ class Voucher(LoggedModel):
         on_delete=models.CASCADE,
         related_name="vouchers",
         verbose_name=_("Event"),
+    )
+    subevent = models.ForeignKey(
+        SubEvent,
+        null=True, blank=True,
+        on_delete=models.CASCADE,
+        verbose_name=pgettext_lazy("subevent", "Date"),
     )
     code = models.CharField(
         verbose_name=_("Voucher code"),
@@ -186,6 +194,8 @@ class Voucher(LoggedModel):
                                         'Otherwise it might be unclear which quotas to block.'))
         else:
             raise ValidationError(_('You need to specify either a quota or a product.'))
+        if self.event.has_subevents and self.block_quota and not self.subevent:
+            raise ValidationError(_('If you want this voucher to block quota, you need to select a specific date.'))
 
     def save(self, *args, **kwargs):
         self.code = self.code.upper()

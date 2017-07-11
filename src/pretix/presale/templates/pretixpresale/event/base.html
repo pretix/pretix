@@ -30,7 +30,9 @@
             {% else %}
                 <h1>
                     <a href="{% eventurl event "presale:event.index" %}">{{ event.name }}</a>
-                    <small>{{ event.get_date_range_display }}</small>
+                    {% if not event.has_subevents %}
+                        <small>{{ event.get_date_range_display }}</small>
+                    {% endif %}
                 </h1>
             {% endif %}
         </div>

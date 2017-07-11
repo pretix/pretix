@@ -4,7 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import Item, ItemVariation, Quota, Voucher
@@ -24,7 +24,7 @@ class VoucherForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'code', 'valid_until', 'block_quota', 'allow_ignore_quota', 'value', 'tag',
-            'comment', 'max_usages', 'price_mode'
+            'comment', 'max_usages', 'price_mode', 'subevent'
         ]
         widgets = {
             'valid_until': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
@@ -47,6 +47,12 @@ class VoucherForm(I18nModelForm):
         else:
             self.initial_instance_data = None
         super().__init__(*args, **kwargs)
+
+        if instance.event.has_subevents:
+            self.fields['subevent'].queryset = instance.event.subevents.all()
+        elif 'subevent':
+            del self.fields['subevent']
+
         choices = []
         for i in self.instance.event.items.prefetch_related('variations').all():
             variations = list(i.variations.all())
@@ -103,6 +109,12 @@ class VoucherForm(I18nModelForm):
         else:
             cnt = data['max_usages']
 
+        if self.instance.event.has_subevents and data['block_quota'] and not data.get('subevent'):
+            raise ValidationError(pgettext_lazy(
+                'subevent',
+                'If you want this voucher to block quota, you need to select a specific date.'
+            ))
+
         if self._clean_quota_needs_checking(data):
             self._clean_quota_check(data, cnt)
 
@@ -136,6 +148,10 @@ class VoucherForm(I18nModelForm):
                 # The voucher has been reassigned to a different item, variation or quota
                 return True
 
+            if data.get('subevent') != self.initial.get('subevent'):
+                # The voucher has been reassigned to a different subevent
+                return True
+
         return False
 
     def _clean_was_valid(self):
@@ -147,9 +163,11 @@ class VoucherForm(I18nModelForm):
             if self.initial_instance_data.quota:
                 quotas.add(self.initial_instance_data.quota)
             elif self.initial_instance_data.variation:
-                quotas |= set(self.initial_instance_data.variation.quotas.all())
+                quotas |= set(self.initial_instance_data.variation.quotas.filter(
+                    subevent=self.initial_instance_data.subevent))
             elif self.initial_instance_data.item:
-                quotas |= set(self.initial_instance_data.item.quotas.all())
+                quotas |= set(self.initial_instance_data.item.quotas.filter(
+                    subevent=self.initial_instance_data.subevent))
         return quotas
 
     def _clean_quota_check(self, data, cnt):
@@ -164,9 +182,9 @@ class VoucherForm(I18nModelForm):
             raise ValidationError(_('You can only block quota if you specify a specific product variation. '
                                     'Otherwise it might be unclear which quotas to block.'))
         elif self.instance.item and self.instance.variation:
-            avail = self.instance.variation.check_quotas(ignored_quotas=old_quotas)
+            avail = self.instance.variation.check_quotas(ignored_quotas=old_quotas, subevent=data.get('subevent'))
         elif self.instance.item and not self.instance.item.has_variations:
-            avail = self.instance.item.check_quotas(ignored_quotas=old_quotas)
+            avail = self.instance.item.check_quotas(ignored_quotas=old_quotas, subevent=data.get('subevent'))
         else:
             raise ValidationError(_('You need to specify either a quota or a product.'))
 
@@ -195,7 +213,7 @@ class VoucherBulkForm(VoucherForm):
         localized_fields = '__all__'
         fields = [
             'valid_until', 'block_quota', 'allow_ignore_quota', 'value', 'tag', 'comment',
-            'max_usages', 'price_mode'
+            'max_usages', 'price_mode', 'subevent'
         ]
         widgets = {
             'valid_until': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),

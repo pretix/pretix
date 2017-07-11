@@ -8,6 +8,7 @@ from django.db.models import Count, Q
 from django.http import (
     HttpResponseForbidden, HttpResponseNotFound, JsonResponse,
 )
+from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
@@ -15,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import Checkin, Event, Order, OrderPosition
+from pretix.base.models.event import SubEvent
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.urls import build_absolute_uri
 from pretix.multidomain.urlreverse import (
@@ -37,13 +39,26 @@ class ConfigView(EventPermissionRequiredMixin, TemplateView):
                                     allowed_chars=string.ascii_uppercase + string.ascii_lowercase + string.digits)
             self.request.event.settings.set('pretixdroid_key', key)
 
+        subevent = None
+        url = build_absolute_uri('plugins:pretixdroid:api.redeem', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })
+        if self.request.event.has_subevents:
+            if self.request.GET.get('subevent'):
+                subevent = get_object_or_404(SubEvent, event=self.request.event, pk=self.request.GET['subevent'])
+                url = build_absolute_uri('plugins:pretixdroid:api.redeem', kwargs={
+                    'organizer': self.request.event.organizer.slug,
+                    'event': self.request.event.slug,
+                    'subevent': subevent.pk
+                })
+
+        ctx['subevent'] = subevent
+
         ctx['qrdata'] = json.dumps({
             'version': API_VERSION,
-            'url': build_absolute_uri('plugins:pretixdroid:api.redeem', kwargs={
-                'organizer': self.request.event.organizer.slug,
-                'event': self.request.event.slug
-            })[:-7],  # the slice removes the redeem/ part at the end
-            'key': key
+            'url': url[:-7],  # the slice removes the redeem/ part at the end
+            'key': key,
         })
         return ctx
 
@@ -61,8 +76,18 @@ class ApiView(View):
             return HttpResponseNotFound('Unknown event')
 
         if (not self.event.settings.get('pretixdroid_key')
-                or self.event.settings.get('pretixdroid_key') != request.GET.get('key', '')):
+                or self.event.settings.get('pretixdroid_key') != request.GET.get('key', '-unset-')):
             return HttpResponseForbidden('Invalid key')
+
+        self.subevent = None
+        if self.event.has_subevents:
+            if 'subevent' in kwargs:
+                self.subevent = get_object_or_404(SubEvent, event=self.event, pk=kwargs['subevent'])
+            else:
+                return HttpResponseForbidden('No subevent selected.')
+        else:
+            if 'subevent' in kwargs:
+                return HttpResponseForbidden('Subevents not enabled.')
 
         return super().dispatch(request, **kwargs)
 
@@ -85,7 +110,7 @@ class ApiRedeemView(ApiView):
             with transaction.atomic():
                 created = False
                 op = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').get(
-                    order__event=self.event, secret=secret
+                    order__event=self.event, secret=secret, subevent=self.subevent
                 )
                 if op.order.status == Order.STATUS_PAID or force:
                     ci, created = Checkin.objects.get_or_create(position=op, defaults={
@@ -161,6 +186,7 @@ class ApiSearchView(ApiView):
                 & Q(
                     Q(secret__istartswith=query) | Q(attendee_name__icontains=query) | Q(order__code__istartswith=query)
                 )
+                & Q(subevent=self.subevent)
             ).annotate(checkin_cnt=Count('checkins'))[:25]
 
             response['results'] = [serialize_op(op) for op in ops]
@@ -177,7 +203,7 @@ class ApiDownloadView(ApiView):
         }
 
         ops = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').filter(
-            Q(order__event=self.event)
+            Q(order__event=self.event) & Q(subevent=self.subevent)
         ).annotate(checkin_cnt=Count('checkins'))
         response['results'] = [serialize_op(op) for op in ops]
 
@@ -186,25 +212,27 @@ class ApiDownloadView(ApiView):
 
 class ApiStatusView(ApiView):
     def get(self, request, **kwargs):
+        ev = self.subevent or self.event
         response = {
             'version': API_VERSION,
             'event': {
-                'name': str(self.event),
+                'name': str(ev.name),
                 'slug': self.event.slug,
                 'organizer': {
                     'name': str(self.event.organizer),
                     'slug': self.event.organizer.slug
                 },
-                'date_from': self.event.date_from,
-                'date_to': self.event.date_to,
+                'subevent': self.subevent.pk if self.subevent else str(self.event),
+                'date_from': ev.date_from,
+                'date_to': ev.date_to,
                 'timezone': self.event.settings.timezone,
                 'url': event_absolute_uri(self.event, 'presale:event.index')
             },
             'checkins': Checkin.objects.filter(
-                position__order__event=self.event
+                position__order__event=self.event, position__subevent=self.subevent
             ).count(),
             'total': OrderPosition.objects.filter(
-                order__event=self.event, order__status=Order.STATUS_PAID
+                order__event=self.event, order__status=Order.STATUS_PAID, subevent=self.subevent
             ).count()
         }
 
@@ -212,28 +240,32 @@ class ApiStatusView(ApiView):
             p['item']: p['cnt']
             for p in OrderPosition.objects.filter(
                 order__event=self.event,
-                order__status=Order.STATUS_PAID
+                order__status=Order.STATUS_PAID,
+                subevent=self.subevent
             ).order_by().values('item').annotate(cnt=Count('id'))
         }
         op_by_variation = {
             p['variation']: p['cnt']
             for p in OrderPosition.objects.filter(
                 order__event=self.event,
-                order__status=Order.STATUS_PAID
+                order__status=Order.STATUS_PAID,
+                subevent=self.subevent
             ).order_by().values('variation').annotate(cnt=Count('id'))
         }
         c_by_item = {
             p['position__item']: p['cnt']
             for p in Checkin.objects.filter(
                 position__order__event=self.event,
-                position__order__status=Order.STATUS_PAID
+                position__order__status=Order.STATUS_PAID,
+                position__subevent=self.subevent
             ).order_by().values('position__item').annotate(cnt=Count('id'))
         }
         c_by_variation = {
             p['position__variation']: p['cnt']
             for p in Checkin.objects.filter(
                 position__order__event=self.event,
-                position__order__status=Order.STATUS_PAID
+                position__order__status=Order.STATUS_PAID,
+                position__subevent=self.subevent
             ).order_by().values('position__variation').annotate(cnt=Count('id'))
         }
 

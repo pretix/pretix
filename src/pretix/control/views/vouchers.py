@@ -46,6 +46,9 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
                 qs = qs.filter(redeemed__gt=0)
             elif s == 'e':
                 qs = qs.filter(Q(valid_until__isnull=False) & Q(valid_until__lt=now())).filter(redeemed=0)
+        if self.request.GET.get("subevent", "") != "":
+            s = self.request.GET.get("subevent", "")
+            qs = qs.filter(subevent_id=s)
         return qs
 
     def get(self, request, *args, **kwargs):

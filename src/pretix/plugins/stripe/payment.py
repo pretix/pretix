@@ -91,7 +91,7 @@ class Stripe(BasePaymentProvider):
         return template.render(ctx)
 
     def order_can_retry(self, order):
-        return self._is_still_available()
+        return self._is_still_available(order=order)
 
     def _charge_source(self, source, order):
         try:

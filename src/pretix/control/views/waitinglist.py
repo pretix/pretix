@@ -35,7 +35,8 @@ class AutoAssign(EventPermissionRequiredMixin, AsyncAction, View):
         })
 
     def post(self, request, *args, **kwargs):
-        return self.do(self.request.event.id, self.request.user.id)
+        return self.do(self.request.event.id, self.request.user.id,
+                       self.request.POST.get('subevent'))
 
 
 class WaitingListView(EventPermissionRequiredMixin, ListView):
@@ -78,7 +79,9 @@ class WaitingListView(EventPermissionRequiredMixin, ListView):
     def get_queryset(self):
         qs = WaitingListEntry.objects.filter(
             event=self.request.event
-        ).select_related('item', 'variation', 'voucher').prefetch_related('item__quotas', 'variation__quotas')
+        ).select_related('item', 'variation', 'voucher').prefetch_related(
+            'item__quotas', 'variation__quotas'
+        )
 
         s = self.request.GET.get("status", "")
         if s == 's':
@@ -90,7 +93,11 @@ class WaitingListView(EventPermissionRequiredMixin, ListView):
 
         if self.request.GET.get("item", "") != "":
             i = self.request.GET.get("item", "")
-            qs = qs.filter(item_id__in=(i,))
+            qs = qs.filter(item_id=i)
+
+        if self.request.GET.get("subevent", "") != "":
+            s = self.request.GET.get("subevent", "")
+            qs = qs.filter(subevent_id=s)
 
         return qs
 
@@ -107,9 +114,9 @@ class WaitingListView(EventPermissionRequiredMixin, ListView):
                 wle.availability = itemvar_cache.get((wle.item, wle.variation))
             else:
                 wle.availability = (
-                    wle.variation.check_quotas(count_waitinglist=False, _cache=quota_cache)
+                    wle.variation.check_quotas(count_waitinglist=False, subevent=wle.subevent, _cache=quota_cache)
                     if wle.variation
-                    else wle.item.check_quotas(count_waitinglist=False, _cache=quota_cache)
+                    else wle.item.check_quotas(count_waitinglist=False, subevent=wle.subevent, _cache=quota_cache)
                 )
                 itemvar_cache[(wle.item, wle.variation)] = wle.availability
             if wle.availability[0] == 100:

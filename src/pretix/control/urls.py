@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 
 from pretix.control.views import (
     auth, checkin, dashboards, event, global_settings, item, main, orders,
-    organizer, search, typeahead, user, vouchers, waitinglist,
+    organizer, search, subevents, typeahead, user, vouchers, waitinglist,
 )
 
 urlpatterns = [
@@ -69,6 +69,11 @@ urlpatterns = [
         url(r'^settings/invoice$', event.InvoiceSettings.as_view(), name='event.settings.invoice'),
         url(r'^settings/invoice/preview$', event.InvoicePreview.as_view(), name='event.settings.invoice.preview'),
         url(r'^settings/display', event.DisplaySettings.as_view(), name='event.settings.display'),
+        url(r'^subevents/$', subevents.SubEventList.as_view(), name='event.subevents'),
+        url(r'^subevents/(?P<subevent>\d+)/$', subevents.SubEventUpdate.as_view(), name='event.subevent'),
+        url(r'^subevents/(?P<subevent>\d+)/delete$', subevents.SubEventDelete.as_view(),
+            name='event.subevent.delete'),
+        url(r'^subevents/add$', subevents.SubEventCreate.as_view(), name='event.subevents.add'),
         url(r'^items/$', item.ItemList.as_view(), name='event.items'),
         url(r'^items/add$', item.ItemCreate.as_view(), name='event.items.add'),
         url(r'^items/(?P<item>\d+)/$', item.ItemUpdateGeneral.as_view(), name='event.item'),

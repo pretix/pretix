@@ -192,12 +192,13 @@ TEST_QUOTA_RES = {
     "name": "Budget Quota",
     "size": 200,
     "items": [],
-    "variations": []
+    "variations": [],
+    "subevent": None
 }
 
 
 @pytest.mark.django_db
-def test_quota_list(token_client, organizer, event, quota, item):
+def test_quota_list(token_client, organizer, event, quota, item, subevent):
     res = dict(TEST_QUOTA_RES)
     res["id"] = quota.pk
     res["items"] = [item.pk]
@@ -205,6 +206,16 @@ def test_quota_list(token_client, organizer, event, quota, item):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
+
+    quota.subevent = subevent
+    quota.save()
+    res["subevent"] = subevent.pk
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/quotas/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
+    assert [res] == resp.data['results']
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/quotas/?subevent={}'.format(organizer.slug, event.slug, subevent.pk + 1))
+    assert [] == resp.data['results']
 
 
 @pytest.mark.django_db

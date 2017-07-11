@@ -15,7 +15,7 @@ class WaitingListFilter(FilterSet):
 
     class Meta:
         model = WaitingListEntry
-        fields = ['item', 'variation', 'email', 'locale', 'has_voucher']
+        fields = ['item', 'variation', 'email', 'locale', 'has_voucher', 'subevent']
 
 
 class WaitingListViewSet(viewsets.ReadOnlyModelViewSet):

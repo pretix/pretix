@@ -52,6 +52,25 @@ $(function () {
         copy_answers(idx);
     });
 
+    // Subevent choice
+    if ($(".subevent-toggle").length) {
+        $(".subevent-list").hide();
+        $(".subevent-toggle").css("display", "block").click(function() {
+            $(".subevent-list").slideToggle(300);
+        });
+    }
+
+    $("#monthselform select").change(function () {
+        $(this).closest("form").get(0).submit();
+    });
+
+    $(".table-calendar td.has-events").click(function () {
+        var $tr = $(this).closest(".table-calendar").find(".selected-day");
+        $tr.find("td").html($(this).find(".events").html());
+        $tr.find("td").prepend($("<h3>").text($(this).attr("data-date")));
+        $tr.show();
+    });
+
     // Lightbox
     lightbox.init();
 });

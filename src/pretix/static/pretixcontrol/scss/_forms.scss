@@ -164,3 +164,14 @@ pre.mail-preview {
 .input-group-btn .btn {
   padding-bottom: 7px;
 }
+.reldatetime {
+  input[type=text], select {
+    display: inline-block;
+    max-width: 200px;
+  }
+  input[type=number] {
+    display: inline-block;
+    width: 80px;
+  }
+
+}

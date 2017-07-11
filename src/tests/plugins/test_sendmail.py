@@ -174,3 +174,42 @@ def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
     assert response.status_code == 200
     assert 'Benutzer' in response.rendered_content
     assert 'Test nachricht' in response.rendered_content
+
+
+@pytest.mark.django_db
+def test_sendmail_subevents(logged_in_client, sendmail_url, event, order):
+    event.has_subevents = True
+    event.save()
+    se1 = event.subevents.create(name='Subevent FOO', date_from=now())
+    se2 = event.subevents.create(name='Bar', date_from=now())
+    op = order.positions.last()
+    op.subevent = se1
+    op.save()
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      'subevent': se1.pk
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      'subevent': se2.pk
+                                      },
+                                     follow=True)
+    assert len(djmail.outbox) == 0
+
+    url = sendmail_url + 'history/'
+    response = logged_in_client.get(url)
+
+    assert response.status_code == 200
+    assert 'Subevent FOO' in response.rendered_content

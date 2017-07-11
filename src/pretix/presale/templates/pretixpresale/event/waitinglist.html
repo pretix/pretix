@@ -13,6 +13,15 @@
                            value="{{ item.name }}{% if variation %} – {{ variation.value }}{% endif %}">
                 </div>
             </div>
+            {% if subevent %}
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="id_email">{% trans "Event" %}</label>
+                    <div class="col-md-9">
+                        <input class="form-control" readonly="readonly"
+                                value="{{ subevent.name }} – {{ subevent.get_date_range_display }}">
+                    </div>
+                </div>
+            {% endif %}
             {% bootstrap_form form layout='horizontal' %}
             <div class="form-group">
                 <div class="col-md-9 col-md-offset-3">

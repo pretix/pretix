@@ -82,11 +82,14 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
+
+        if self.request.event.settings.ticket_download_date:
+            ctx['ticket_download_date'] = self.order.ticket_download_date
         ctx['can_download'] = (
             self.request.event.settings.ticket_download
             and (
                 self.request.event.settings.ticket_download_date is None
-                or now() > self.request.event.settings.ticket_download_date
+                or now() > self.order.ticket_download_date
             ) and self.order.status == Order.STATUS_PAID
         )
         ctx['download_buttons'] = self.download_buttons
@@ -138,10 +141,10 @@ class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
             messages.error(request, _('The payment for this order cannot be continued.'))
             return redirect(self.get_order_url())
 
-        if self.request.event.settings.get('payment_term_last'):
-            if now() > self.request.event.payment_term_last:
-                messages.error(request, _('The payment is too late to be accepted.'))
-                return redirect(self.get_order_url())
+        term_last = self.order.payment_term_last
+        if term_last and now() > term_last:
+            messages.error(request, _('The payment is too late to be accepted.'))
+            return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -233,10 +236,10 @@ class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
             messages.error(request, _('The payment information you entered was incomplete.'))
             return redirect(self.get_payment_url())
 
-        if self.request.event.settings.get('payment_term_last'):
-            if now() > self.request.event.payment_term_last:
-                messages.error(request, _('The payment is too late to be accepted.'))
-                return redirect(self.get_order_url())
+        term_last = self.order.payment_term_last
+        if term_last and now() > term_last:
+            messages.error(request, _('The payment is too late to be accepted.'))
+            return redirect(self.get_order_url())
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -270,10 +273,10 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
             messages.error(request, _('The payment method for this order cannot be changed.'))
             return redirect(self.get_order_url())
 
-        if self.request.event.settings.get('payment_term_last'):
-            if now() > self.request.event.payment_term_last:
-                messages.error(request, _('The payment is too late to be accepted.'))
-                return redirect(self.get_order_url())
+        term_last = self.order.payment_term_last
+        if term_last and now() > term_last:
+            messages.error(request, _('The payment is too late to be accepted.'))
+            return redirect(self.get_order_url())
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -551,7 +554,7 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             return self.error(_('Order is not paid.'))
         if (not self.request.event.settings.ticket_download
             or (self.request.event.settings.ticket_download_date is not None
-                and now() < self.request.event.settings.ticket_download_date)):
+                and now() < self.order.ticket_download_date)):
             return self.error(_('Ticket download is not (yet) enabled.'))
         if 'position' in kwargs and (self.order_position.addon_to and not self.request.event.settings.ticket_download_addons):
             return self.error(_('Ticket download is not enabled for add-on products.'))

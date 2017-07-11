@@ -1,9 +1,9 @@
 from django import forms
 from django.db.models import Q
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
-from pretix.base.models import Item, Order, Organizer
+from pretix.base.models import Item, Order, Organizer, SubEvent
 from pretix.base.signals import register_payment_providers
 from pretix.control.utils.i18n import i18ncomp
 
@@ -86,6 +86,12 @@ class EventOrderFilterForm(OrderFilterForm):
         ],
         required=False,
     )
+    subevent = forms.ModelChoiceField(
+        label=pgettext_lazy('subevent', 'Date'),
+        queryset=SubEvent.objects.none(),
+        required=False,
+        empty_label=pgettext_lazy('subevent', 'All dates')
+    )
 
     def get_payment_providers(self):
         providers = []
@@ -105,12 +111,20 @@ class EventOrderFilterForm(OrderFilterForm):
         self.fields['provider'].choices += [(k, v.verbose_name) for k, v
                                             in self.event.get_payment_providers().items()]
 
+        if self.event.has_subevents:
+            self.fields['subevent'].queryset = self.event.subevents.all()
+        elif 'subevent':
+            del self.fields['subevent']
+
     def filter_qs(self, qs):
         fdata = self.cleaned_data
         qs = super().filter_qs(qs)
 
         if fdata.get('item'):
-            qs = qs.filter(positions__item_id__in=(fdata.get('item'),))
+            qs = qs.filter(positions__item=fdata.get('item'))
+
+        if fdata.get('subevent'):
+            qs = qs.filter(positions__subevent=fdata.get('subevent'))
 
         if fdata.get('provider'):
             qs = qs.filter(payment_provider=fdata.get('provider'))
@@ -142,6 +156,57 @@ class OrderSearchFilterForm(OrderFilterForm):
 
         if fdata.get('organizer'):
             qs = qs.filter(event__organizer=fdata.get('organizer'))
+
+        return qs
+
+
+class SubEventFilterForm(FilterForm):
+    status = forms.ChoiceField(
+        label=_('Status'),
+        choices=(
+            ('', _('All')),
+            ('active', _('Active')),
+            ('running', _('Shop live and presale running')),
+            ('inactive', _('Inactive')),
+            ('future', _('Presale not started')),
+            ('past', _('Presale over')),
+        ),
+        required=False
+    )
+    query = forms.CharField(
+        label=_('Event name'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Event name'),
+            'autofocus': 'autofocus'
+        }),
+        required=False
+    )
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('status') == 'active':
+            qs = qs.filter(active=True)
+        elif fdata.get('status') == 'running':
+            qs = qs.filter(
+                active=True
+            ).filter(
+                Q(presale_start__isnull=True) | Q(presale_start__lte=now())
+            ).filter(
+                Q(presale_end__isnull=True) | Q(presale_end__gte=now())
+            )
+        elif fdata.get('status') == 'inactive':
+            qs = qs.filter(active=False)
+        elif fdata.get('status') == 'future':
+            qs = qs.filter(presale_start__gte=now())
+        elif fdata.get('status') == 'past':
+            qs = qs.filter(presale_end__lte=now())
+
+        if fdata.get('query'):
+            query = fdata.get('query')
+            qs = qs.filter(
+                Q(name__icontains=i18ncomp(query)) | Q(location__icontains=query)
+            )
 
         return qs
 

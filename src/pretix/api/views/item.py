@@ -58,10 +58,17 @@ class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
         return self.request.event.questions.prefetch_related('options').all()
 
 
+class QuotaFilter(FilterSet):
+    class Meta:
+        model = Quota
+        fields = ['subevent']
+
+
 class QuotaViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = QuotaSerializer
     queryset = Quota.objects.none()
-    filter_backends = (OrderingFilter,)
+    filter_backends = (DjangoFilterBackend, OrderingFilter,)
+    filter_class = QuotaFilter
     ordering_fields = ('id', 'size')
     ordering = ('id',)
 

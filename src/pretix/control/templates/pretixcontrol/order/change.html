@@ -81,6 +81,16 @@
                                 {% bootstrap_field position.form.itemvar layout='inline' %}
                             </label>
                         </div>
+                        {% if request.event.has_subevents %}
+                            <div class="radio">
+                                <label>
+                                    <input name="{{ position.form.prefix }}-operation" type="radio" value="subevent"
+                                            {% if position.form.operation.value == "subevent" %}checked="checked"{% endif %}>
+                                    {% trans "Change date to" context "subevent" %}
+                                    {% bootstrap_field position.form.subevent layout='inline' %}
+                                </label>
+                            </div>
+                        {% endif %}
                         <div class="radio">
                             <label>
                                 <input name="{{ position.form.prefix }}-operation" type="radio" value="price"
@@ -127,6 +137,9 @@
                     {% bootstrap_field add_form.price layout='horizontal' %}
                     {% if add_form.addon_to %}
                         {% bootstrap_field add_form.addon_to layout='horizontal' %}
+                    {% endif %}
+                    {% if add_form.subevent %}
+                        {% bootstrap_field add_form.subevent layout='horizontal' %}
                     {% endif %}
                 </div>
             </div>

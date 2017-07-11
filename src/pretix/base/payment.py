@@ -1,5 +1,5 @@
+import logging
 from collections import OrderedDict
-from datetime import date
 from decimal import Decimal
 from typing import Any, Dict, Union
 
@@ -16,10 +16,13 @@ from i18nfield.forms import I18nFormField, I18nTextarea
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models import Event, Order, Quota
+from pretix.base.models import CartPosition, Event, Order, Quota
+from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
 from pretix.presale.views import get_cart_total
+
+logger = logging.getLogger(__name__)
 
 
 class PaymentProviderForm(Form):
@@ -150,11 +153,10 @@ class BasePaymentProvider:
                  required=False
              )),
             ('_availability_date',
-             forms.DateField(
+             RelativeDateField(
                  label=_('Available until'),
                  help_text=_('Users will not be able to choose this payment provider after the given date.'),
                  required=False,
-                 widget=forms.DateInput(attrs={'class': 'datepickerfield'})
              )),
             ('_fee_reverse_calc',
              forms.BooleanField(
@@ -230,12 +232,36 @@ class BasePaymentProvider:
 
         return form
 
-    def _is_still_available(self, now_dt=None):
+    def _is_still_available(self, now_dt=None, cart_id=None, order=None):
         now_dt = now_dt or now()
         tz = pytz.timezone(self.event.settings.timezone)
-        availability_date = self.settings.get('_availability_date', as_type=date)
+
+        availability_date = self.settings.get('_availability_date', as_type=RelativeDateWrapper)
         if availability_date:
+            if self.event.has_subevents and cart_id:
+                availability_date = min([
+                    availability_date.datetime(se).date()
+                    for se in self.event.subevents.filter(
+                        id__in=CartPosition.objects.filter(
+                            cart_id=cart_id, event=self.event
+                        ).values_list('subevent', flat=True)
+                    )
+                ])
+            elif self.event.has_subevents and order:
+                availability_date = min([
+                    availability_date.datetime(se).date()
+                    for se in self.event.subevents.filter(
+                        id__in=order.positions.values_list('subevent', flat=True)
+                    )
+                ])
+            elif self.event.has_subevents:
+                logger.error('Payment provider is not subevent-ready.')
+                return False
+            else:
+                availability_date = availability_date.datetime(self.event).date()
+
             return availability_date >= now_dt.astimezone(tz).date()
+
         return True
 
     def is_allowed(self, request: HttpRequest) -> bool:
@@ -247,7 +273,7 @@ class BasePaymentProvider:
 
         The default implementation checks for the _availability_date setting to be either unset or in the future.
         """
-        return self._is_still_available()
+        return self._is_still_available(cart_id=request.session.session_key)
 
     def payment_form_render(self, request: HttpRequest) -> str:
         """
@@ -385,7 +411,7 @@ class BasePaymentProvider:
 
         :param order: The order object
         """
-        return self._is_still_available()
+        return self._is_still_available(order=order)
 
     def order_can_retry(self, order: Order) -> bool:
         """

@@ -184,6 +184,9 @@
                                         {{ line.voucher.code }}
                                     </a>
                                 {% endif %}
+                                {% if line.subevent %}
+                                    <br /><span class="fa fa-calendar"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
+                                {% endif %}
                                 {% if line.has_questions %}
                                     <dl>
                                         {% if line.item.admission and event.settings.attendee_names_asked %}

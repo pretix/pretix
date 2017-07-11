@@ -10,83 +10,41 @@
         {% endif %}
     </div>
     <h3 class="text-center">{{ date|date:"F Y" }}</h3>
-    <div class="row">
-        <div class="col-sm-6">
-            <a href="{% eventurl request.organizer "presale:organizer.calendar" year=before.year month=before.month %}"
-               class="btn btn-default">
-                <span class="fa fa-arrow-left"></span>
-                {{ before|date:"F Y" }}
-            </a>
+    <form class="form-inline" method="get" id="monthselform" action="{% eventurl request.organizer "presale:organizer.calendar" %}">
+        <div class="row">
+            <div class="col-sm-4 hidden-xs">
+                <a href="{% eventurl request.organizer "presale:organizer.calendar" year=before.year month=before.month %}"
+                        class="btn btn-default">
+                    <span class="fa fa-arrow-left"></span>
+                    {{ before|date:"F Y" }}
+                </a>
+            </div>
+            <div class="col-sm-4 col-xs-12 text-center">
+                <select name="month" class="form-control">
+                    {% for m in months %}
+                        <option value="{{ m|date:"m" }}" {% if m == date %}selected{% endif %}>{{ m|date:"F" }}</option>
+                    {% endfor %}
+                </select>
+                <select name="year" class="form-control">
+                    {% for y in years %}
+                        <option value="{{ y }}" {% if y == date.year %}selected{% endif %}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="js-hidden btn btn-default">
+                    {% trans "Go" %}
+                </button>
+            </div>
+            <div class="col-sm-4 hidden-xs text-right">
+                <a href="{% eventurl request.organizer "presale:organizer.calendar" year=after.year month=after.month %}"
+                        class="btn btn-default">
+                    <span class="fa fa-arrow-right"></span>
+                    {{ after|date:"F Y" }}
+                </a>
+            </div>
         </div>
-        <div class="col-sm-6 text-right">
-            <a href="{% eventurl request.organizer "presale:organizer.calendar" year=after.year month=after.month %}"
-               class="btn btn-default">
-                <span class="fa fa-arrow-right"></span>
-                {{ after|date:"F Y" }}
-            </a>
-        </div>
-    </div>
-    <div class="table-responsive">
-    <table class="table table-calendar">
-        <thead>
-        <tr>
-            <th>{{ weeks.1.0.date|date:"D" }}</th>
-            <th>{{ weeks.1.1.date|date:"D" }}</th>
-            <th>{{ weeks.1.2.date|date:"D" }}</th>
-            <th>{{ weeks.1.3.date|date:"D" }}</th>
-            <th>{{ weeks.1.4.date|date:"D" }}</th>
-            <th>{{ weeks.1.5.date|date:"D" }}</th>
-            <th>{{ weeks.1.6.date|date:"D" }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for week in weeks %}
-            <tr>
-                {% for day in week %}
-                    {% if day %}
-                        <td class="day">
-                            <h3>{{ day.day }}</h3>
-                            {% for event in day.events %}
-                                <a class="event {% if event.continued %}continued{% endif %}" href="{{ event.url }}">
-                                    <span class="event-name">
-                                        {{ event.event.name }}
-                                    </span>
-                                    {% if not event.continued %}
-                                        {% if event.time %}
-                                            <span class="event-time">
-                                            <span class="fa fa-clock-o"></span>
-                                            {{ event.time|date:"TIME_FORMAT" }}
-                                                {% if multiple_timezones %}
-                                                    {{ event.timezone }}
-                                                {% endif %}
-                                            </span>
-                                        {% endif %}
-                                        <span class="event-status">
-                                            {% if event.event.presale_is_running %}
-                                                <span class="fa fa-ticket"></span> {% trans "Tickets on sale" %}
-                                            {% elif event.event.presale_has_ended %}
-                                                <span class="fa fa-ticket"></span> {% trans "Sale over" %}
-                                            {% elif event.event.settings.presale_start_show_date and event.event.presale_start %}
-                                                <span class="fa fa-ticket"></span>
-                                                {% blocktrans with start_date=event.event.presale_start|date:"SHORT_DATE_FORMAT" %}
-                                                    from {{ start_date }}
-                                                {% endblocktrans %}
-                                            {% else %}
-                                                <span class="fa fa-ticket"></span> {% trans "Soon" %}
-                                            {% endif %}
-                                        </span>
-                                    {% endif %}
-                                </a>
-                            {% endfor %}
-                        </td>
-                    {% else %}
-                        <td class="no-day"></td>
-                    {% endif %}
-                {% endfor %}
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    </form>
+
+    {% include "pretixpresale/fragment_calendar.html" %}
     {% if multiple_timezones %}
         <div class="alert alert-info">
             {% blocktrans trimmed %}

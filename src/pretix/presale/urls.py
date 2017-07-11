@@ -66,7 +66,11 @@ event_patterns = [
     url(r'^ical/?$',
         pretix.presale.views.event.EventIcalDownload.as_view(),
         name='event.ical.download'),
+    url(r'^ical/(?P<subevent>[0-9]+)/$',
+        pretix.presale.views.event.EventIcalDownload.as_view(),
+        name='event.ical.download'),
     url(r'^auth/$', pretix.presale.views.event.EventAuth.as_view(), name='event.auth'),
+    url(r'^(?P<subevent>[0-9]+)/$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
     url(r'^$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
 ]
 
