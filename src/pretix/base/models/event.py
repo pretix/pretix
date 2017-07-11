@@ -330,7 +330,6 @@ class Event(LoggedModel):
                 providers[pp.identifier] = pp
         return providers
 
-
     @property
     def event_microdata(self):
         import json
@@ -339,18 +338,17 @@ class Event(LoggedModel):
         eventdict["location"] = {"@type": "Place",
                                  "address": str(self.location)}
         if self.settings.show_times:
-            eventdict["startDate"] = str(self.date_from.isoformat())
-            if self.settings.show_date_to & self.date_to is not None:
-                eventdict["endDate"] = str(self.date_to.isoformat())
+            eventdict["startDate"] = self.date_from.isoformat()
+            if self.settings.show_date_to and self.date_to is not None:
+                eventdict["endDate"] = self.date_to.isoformat()
         else:
-            eventdict["startDate"] = str(self.date_from.date().isoformat())
-            if self.settings.show_date_to & self.date_to is not None:
-                eventdict["endDate"] = str(self.date_to.date().isoformat())
+            eventdict["startDate"] = self.date_from.date().isoformat()
+            if self.settings.show_date_to and self.date_to is not None:
+                eventdict["endDate"] = self.date_to.date().isoformat()
 
         eventdict["name"] = str(self.name)
 
         return json.dumps(eventdict)
-
 
     def get_invoice_renderers(self) -> dict:
         from ..signals import register_invoice_renderers
