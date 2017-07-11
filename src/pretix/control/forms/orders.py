@@ -6,7 +6,7 @@ from django.utils.formats import localize
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
-from pretix.base.forms import I18nModelForm
+from pretix.base.forms import I18nModelForm, PlaceholderValidator
 from pretix.base.models import Item, ItemAddOn, Order, OrderPosition
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
@@ -215,3 +215,30 @@ class OrderLocaleForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         locale_names = dict(settings.LANGUAGES)
         self.fields['locale'].choices = [(a, locale_names[a]) for a in self.instance.event.settings.locales]
+
+
+class OrderMailForm(forms.Form):
+    subject = forms.CharField(
+        label=_("Subject"),
+        required=True
+    )
+
+    def __init__(self, *args, **kwargs):
+        order = kwargs.pop('order')
+        super().__init__(*args, **kwargs)
+        self.fields['sendto'] = forms.EmailField(
+            label=_("Recipient"),
+            required=True,
+            initial=order.email
+        )
+        self.fields['sendto'].widget.attrs['readonly'] = 'readonly'
+        self.fields['message'] = forms.CharField(
+            label=_("Message"),
+            required=True,
+            widget=forms.Textarea,
+            initial=order.event.settings.mail_text_order_custom_mail.localize(order.locale),
+            help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
+                        "{invoice_name}, {invoice_company}"),
+            validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
+                                              '{invoice_name}', '{invoice_company}'])]
+        )

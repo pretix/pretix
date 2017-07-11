@@ -107,6 +107,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.payment.changed': _('The payment method has been changed.'),
         'pretix.event.order.expire_warning_sent': _('An email has been sent with a warning that the order is about '
                                                     'to expire.'),
+        'pretix.event.order.mail_sent': _('A custom email has been sent.'),
         'pretix.user.settings.2fa.enabled': _('Two-factor authentication has been enabled.'),
         'pretix.user.settings.2fa.disabled': _('Two-factor authentication has been disabled.'),
         'pretix.user.settings.2fa.regenemergency': _('Your two-factor emergency codes have been regenerated.'),

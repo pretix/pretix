@@ -28,9 +28,9 @@ class MailForm(forms.Form):
         self.fields['message'] = I18nFormField(
             widget=I18nTextarea, required=True,
             locales=event.settings.get('locales'),
-            help_text=_("Available placeholders: {due_date}, {event}, {order}, {order_date}, {order_url}, "
+            help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
                         "{invoice_name}, {invoice_company}"),
-            validators=[PlaceholderValidator(['{due_date}', '{event}', '{order}', '{order_date}', '{order_url}',
+            validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
                                               '{invoice_name}', '{invoice_company}'])]
         )
         choices = list(Order.STATUS_CHOICE)

@@ -84,11 +84,11 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                         _('Subject: {subject}').format(subject=form.cleaned_data['subject'].localize(l)))
                     message = form.cleaned_data['message'].localize(l)
                     preview_text = message.format(
-                        order='ORDER1234',
+                        code='ORDER1234',
                         event=self.request.event.name,
-                        order_date=date_format(now(), 'SHORT_DATE_FORMAT'),
-                        due_date=date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
-                        order_url=build_absolute_uri(self.request.event, 'presale:event.order', kwargs={
+                        date=date_format(now(), 'SHORT_DATE_FORMAT'),
+                        expire_date=date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
+                        url=build_absolute_uri(self.request.event, 'presale:event.order', kwargs={
                             'order': 'ORDER1234',
                             'secret': 'longrandomsecretabcdef123456'
                         }),
@@ -105,31 +105,31 @@ class SenderView(EventPermissionRequiredMixin, FormView):
             except InvoiceAddress.DoesNotExist:
                 invoice_name = ""
                 invoice_company = ""
-
             try:
                 with language(o.locale):
+                    email_context = {
+                        'event': o.event,
+                        'code': o.code,
+                        'date': date_format(o.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+                        'expire_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
+                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                            'order': o.code,
+                            'secret': o.secret
+                        }),
+                        'invoice_name': invoice_name,
+                        'invoice_company': invoice_company,
+                    }
                     mail(
                         o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
-                        {
-                            'event': o.event,
-                            'order': o.code,
-                            'order_date': date_format(o.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
-                            'due_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
-                            'order_url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                                'order': o.code,
-                                'secret': o.secret
-                            }),
-                            'invoice_name': invoice_name,
-                            'invoice_company': invoice_company,
-                        },
+                        email_context,
                         self.request.event, locale=o.locale, order=o)
                     o.log_action(
                         'pretix.plugins.sendmail.order.email.sent',
                         user=self.request.user,
                         data={
-                            'subject': form.cleaned_data['subject'],
-                            'message': form.cleaned_data['message'],
-                            'recipient': o.email,
+                            'subject': form.cleaned_data['subject'].localize(o.locale),
+                            'message': form.cleaned_data['message'].localize(o.locale).format_map(email_context),
+                            'recipient': o.email
                         }
                     )
             except SendMailException:
