@@ -140,12 +140,12 @@ class EventWizardCopyForm(forms.Form):
     def __init__(self, *args, **kwargs):
         kwargs.pop('organizer')
         kwargs.pop('locales')
-        has_subevents = kwargs.pop('has_subevents')
+        kwargs.pop('has_subevents')
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
         self.fields['copy_from_event'] = forms.ModelChoiceField(
             label=_("Copy configuration from"),
-            queryset=EventWizardCopyForm.copy_from_queryset(self.user).filter(has_subevents=has_subevents),
+            queryset=EventWizardCopyForm.copy_from_queryset(self.user),
             widget=forms.RadioSelect,
             empty_label=_('Do not copy'),
             required=False
