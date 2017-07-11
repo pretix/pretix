@@ -13,7 +13,7 @@ from pretix.base.models import Quota, RequiredAction
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
@@ -177,7 +177,7 @@ class Stripe(BasePaymentProvider):
                         'code': order.code
                     },
                     redirect={
-                        'return_url': eventreverse(self.event, 'plugins:stripe:return', kwargs={
+                        'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
                             'order': order.code,
                             'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
                         })
