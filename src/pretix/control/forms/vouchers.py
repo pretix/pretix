@@ -111,6 +111,7 @@ class VoucherForm(I18nModelForm):
 
         if self.instance.event.has_subevents and data['block_quota'] and not data.get('subevent'):
             raise ValidationError(pgettext_lazy(
+                'subevent',
                 'If you want this voucher to block quota, you need to select a specific date.'
             ))
 

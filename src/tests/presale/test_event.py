@@ -140,6 +140,29 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk + 1000))
         assert resp.status_code == 404
 
+    def test_subevent_list(self):
+        self.event.has_subevents = True
+        self.event.save()
+        self.event.subevents.create(name='Foo SE1', date_from=now() + datetime.timedelta(days=1), active=True)
+        self.event.subevents.create(name='Foo SE2', date_from=now() + datetime.timedelta(days=1), active=False)
+        resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn("Foo SE1", resp.rendered_content)
+        self.assertNotIn("Foo SE2", resp.rendered_content)
+
+    def test_subevent_calendar(self):
+        self.event.settings.event_list_type = 'calendar'
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name='Foo SE1', date_from=now() + datetime.timedelta(days=64), active=True)
+        self.event.subevents.create(name='Foo SE2', date_from=now() + datetime.timedelta(days=32), active=True)
+        resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn("Foo SE2", resp.rendered_content)
+        self.assertNotIn("Foo SE1", resp.rendered_content)
+        resp = self.client.get('/%s/%s/?year=%d&month=%d' % (self.orga.slug, self.event.slug, se1.date_from.year,
+                                                             se1.date_from.month))
+        self.assertIn("Foo SE1", resp.rendered_content)
+        self.assertNotIn("Foo SE2", resp.rendered_content)
+
     def test_subevents(self):
         self.event.has_subevents = True
         self.event.save()
