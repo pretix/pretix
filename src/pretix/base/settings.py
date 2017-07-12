@@ -463,6 +463,9 @@ class SettingsSandbox:
         self._type = typestr
         self._key = key
 
+    def get_prefix(self):
+        return '%s_%s_' % (self._type, self._key)
+
     def _convert_key(self, key: str) -> str:
         return '%s_%s_%s' % (self._type, self._key, key)
 

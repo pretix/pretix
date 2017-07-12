@@ -20,7 +20,7 @@ from pretix.base.payment import PaymentException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
-from pretix.plugins.stripe.payment import Stripe
+from pretix.plugins.stripe.payment import StripeCC
 from pretix.presale.utils import event_view
 
 logger = logging.getLogger('pretix.plugins.stripe')
@@ -48,7 +48,7 @@ def webhook(request, *args, **kwargs):
 
 
 def charge_webhook(request, event_json, charge_id):
-    prov = Stripe(request.event)
+    prov = StripeCC(request.event)
     prov._init_api()
     try:
         charge = stripe.Charge.retrieve(charge_id)
@@ -67,6 +67,10 @@ def charge_webhook(request, event_json, charge_id):
         order = request.event.orders.get(id=metadata['order'], payment_provider='stripe')
     except Order.DoesNotExist:
         return HttpResponse('Order not found', status=200)
+
+    if order.payment_provider != prov.identifier:
+        prov = request.event.get_payment_providers()[order.payment_provider]
+        prov._init_api()
 
     order.log_action('pretix.plugins.stripe.event', data=event_json)
 
@@ -97,7 +101,7 @@ def charge_webhook(request, event_json, charge_id):
 
 
 def source_webhook(request, event_json, source_id):
-    prov = Stripe(request.event)
+    prov = StripeCC(request.event)
     prov._init_api()
     try:
         src = stripe.Source.retrieve(source_id)
@@ -118,12 +122,16 @@ def source_webhook(request, event_json, source_id):
         except Order.DoesNotExist:
             return HttpResponse('Order not found', status=200)
 
+        if order.payment_provider != prov.identifier:
+            prov = request.event.get_payment_providers()[order.payment_provider]
+            prov._init_api()
+
         order.log_action('pretix.plugins.stripe.event', data=event_json)
         go = (event_json['type'] == 'source.chargeable' and order.status == Order.STATUS_PENDING and
               src.status == 'chargeable')
         if go:
             try:
-                prov._charge_source(source_id, order)
+                prov._charge_source(request, source_id, order)
             except PaymentException:
                 logger.exception('Webhook error')
 
@@ -178,7 +186,7 @@ class StripeOrderView:
 @method_decorator(event_view, name='dispatch')
 class ReturnView(StripeOrderView, View):
     def get(self, request, *args, **kwargs):
-        prov = Stripe(request.event)
+        prov = self.pprov
         prov._init_api()
         src = stripe.Source.retrieve(request.GET.get('source'))
         if src.client_secret != request.GET.get('client_secret'):
@@ -194,12 +202,13 @@ class ReturnView(StripeOrderView, View):
 
             if src.status == 'chargeable':
                 try:
-                    prov._charge_source(src.id, self.order)
+                    prov._charge_source(request, src.id, self.order)
                 except PaymentException as e:
                     messages.error(request, str(e))
                     return self._redirect_to_order()
                 finally:
-                    del request.session['payment_stripe_token']
+                    if 'payment_stripe_token' in request.session:
+                        del request.session['payment_stripe_token']
             else:
                 messages.error(self.request, _('We had trouble authorizing your card payment. Please try again and '
                                                'get in touch with us if this problem persists.'))
