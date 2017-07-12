@@ -11,7 +11,7 @@
 					{% trans "Your changes have been saved." %}
 				</div>
 			{% endif %}
-            <div class="row">
+            <div class="row row-plugins">
                 {% for plugin in plugins %}
                     <div class="col-md-6 col-sm-12">
                         <div class="panel panel-{% if plugin.app.compatibility_errors %}warning{% elif plugin.module in plugins_active %}success{% else %}default{% endif %}">
