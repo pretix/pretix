@@ -351,3 +351,21 @@ body.loading #wrapper {
     padding: 6px 10px;
     color: white !important;
 }
+
+@media (min-width: $screen-md-min) {
+    .row-plugins {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .row-plugins > [class*=col] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .row-plugins > [class*=col] > .panel {
+        height: 100%
+    }
+}
+
+
