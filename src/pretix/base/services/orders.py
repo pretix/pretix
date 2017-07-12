@@ -282,7 +282,8 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             # Other checks are not necessary
             continue
 
-        price = get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent, custom_price_is_net=False)
+        price = get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent, custom_price_is_net=False,
+                          addon_to=cp.addon_to)
 
         if price is False or len(quotas) == 0:
             err = err or error_messages['unavailable']

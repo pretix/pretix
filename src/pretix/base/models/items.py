@@ -477,6 +477,12 @@ class ItemAddOn(models.Model):
         default=1,
         verbose_name=_('Maximum number')
     )
+    price_included = models.BooleanField(
+        default=False,
+        verbose_name=_('Add-Ons are included in the price'),
+        help_text=_('If selected, adding add-ons to this ticket is free, even if the add-ons would normally cost '
+                    'money individually.')
+    )
     position = models.PositiveIntegerField(
         default=0,
         verbose_name=_("Position")

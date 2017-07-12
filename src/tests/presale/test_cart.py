@@ -1306,6 +1306,26 @@ class CartAddonTest(CartTestMixin, TestCase):
         self.addon1 = ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat)
         self.cm = CartManager(event=self.event, cart_id=self.session_key)
 
+    def test_cart_set_simple_addon_included(self):
+        self.addon1.price_included = True
+        self.addon1.save()
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            }
+        ])
+        self.cm.commit()
+        cp2 = cp1.addons.first()
+        assert cp2.item == self.workshop1
+        assert cp2.price == 0
+
     def test_cart_set_simple_addon(self):
         cp1 = CartPosition.objects.create(
             expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
@@ -1322,6 +1342,7 @@ class CartAddonTest(CartTestMixin, TestCase):
         self.cm.commit()
         cp2 = cp1.addons.first()
         assert cp2.item == self.workshop1
+        assert cp2.price == 12
 
     def test_cart_subevent_set_simple_addon(self):
         self.event.has_subevents = True
@@ -1345,6 +1366,7 @@ class CartAddonTest(CartTestMixin, TestCase):
         cp2 = cp1.addons.first()
         assert cp2.item == self.workshop1
         assert cp2.subevent == se
+        assert cp2.value == 12
 
     def test_cart_subevent_set_addon_for_wrong_subevent(self):
         self.event.has_subevents = True

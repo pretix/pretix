@@ -340,6 +340,7 @@ class CartManager:
         quota_diff = Counter()  # Quota -> Number of usages
         operations = []
         available_categories = defaultdict(set)  # CartPos -> Category IDs to choose from
+        price_included = defaultdict(dict)  # CartPos -> CategoryID -> bool(price is included)
         toplevel_cp = self.positions.filter(
             addon_to__isnull=True
         ).prefetch_related(
@@ -349,6 +350,7 @@ class CartManager:
         # Prefill some of the cache containers
         for cp in toplevel_cp:
             available_categories[cp.pk] = {iao.addon_category_id for iao in cp.item.addons.all()}
+            price_included[cp.pk] = {iao.addon_category_id: iao.price_included for iao in cp.item.addons.all()}
             cpcache[cp.pk] = cp
             current_addons[cp] = {
                 (a.item_id, a.variation_id): a
@@ -392,7 +394,10 @@ class CartManager:
                 for quota in quotas:
                     quota_diff[quota] += 1
 
-                price = self._get_price(item, variation, None, None, cp.subevent)
+                if price_included[cp.pk].get(item.category_id):
+                    price = Decimal('0.00')
+                else:
+                    price = self._get_price(item, variation, None, None, cp.subevent)
 
                 op = self.AddOperation(
                     count=1, item=item, variation=variation, price=price, voucher=None, quotas=quotas,

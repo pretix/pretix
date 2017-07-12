@@ -293,6 +293,9 @@ class AddOnsForm(forms.Form):
             tax_value = round_decimal(price * (1 - 100 / (100 + item.tax_rate)))
             price_net = price - tax_value
 
+        if self.price_included:
+            price = Decimal('0.00')
+
         if not price:
             n = '{name}'.format(
                 name=label
@@ -336,6 +339,7 @@ class AddOnsForm(forms.Form):
         current_addons = kwargs.pop('initial')
         quota_cache = kwargs.pop('quota_cache')
         item_cache = kwargs.pop('item_cache')
+        self.price_included = kwargs.pop('price_included')
 
         super().__init__(*args, **kwargs)
 

@@ -407,6 +407,25 @@ class CheckoutTestCase(TestCase):
         cr1 = CartPosition.objects.get(id=cr1.id)
         self.assertEqual(cr1.price, 24)
 
+    def test_addon_price_included(self):
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1,
+                                 price_included=True)
+        cp1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.workshop1,
+            price=0, expires=now() - timedelta(minutes=10),
+            addon_to=cp1
+        )
+
+        self._set_session('payment', 'banktransfer')
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertEqual(OrderPosition.objects.filter(item=self.workshop1).last().price, 0)
+
     def test_confirm_price_changed(self):
         self.ticket.default_price = 24
         self.ticket.save()
@@ -953,6 +972,23 @@ class CheckoutTestCase(TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug))
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
+        response = self.client.get('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug))
+        assert 'Workshop 1' in response.rendered_content
+        assert 'EUR 12.00' in response.rendered_content
+
+    def test_set_addons_included(self):
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1,
+                                 price_included=True)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'Workshop 1' in response.rendered_content
+        assert 'EUR 12.00' not in response.rendered_content
 
     def test_set_addons_subevent(self):
         self.event.has_subevents = True

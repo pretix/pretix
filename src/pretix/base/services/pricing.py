@@ -1,13 +1,24 @@
 from decimal import Decimal
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models import Item, ItemVariation, Voucher
+from pretix.base.models import (
+    AbstractPosition, Item, ItemAddOn, ItemVariation, Voucher,
+)
 from pretix.base.models.event import SubEvent
 
 
 def get_price(item: Item, variation: ItemVariation = None,
               voucher: Voucher = None, custom_price: Decimal = None,
-              subevent: SubEvent = None, custom_price_is_net: bool = False):
+              subevent: SubEvent = None, custom_price_is_net: bool = False,
+              addon_to: AbstractPosition = None):
+    if addon_to:
+        try:
+            iao = addon_to.item.addons.get(addon_category_id=item.category_id)
+            if iao.price_included:
+                return Decimal('0.00')
+        except ItemAddOn.DoesNotExist:
+            pass
+
     price = item.default_price
     if subevent and item.pk in subevent.item_price_overrides:
         price = subevent.item_price_overrides[item.pk]
