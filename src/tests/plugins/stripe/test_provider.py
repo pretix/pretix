@@ -9,7 +9,7 @@ from stripe import APIConnectionError, CardError, StripeError
 
 from pretix.base.models import Event, Order, Organizer
 from pretix.base.payment import PaymentException
-from pretix.plugins.stripe.payment import Stripe
+from pretix.plugins.stripe.payment import StripeCC
 
 
 @pytest.fixture
@@ -62,7 +62,7 @@ def test_perform_success(env, factory, monkeypatch):
         return c
 
     monkeypatch.setattr("stripe.Charge.create", charge_create)
-    prov = Stripe(event)
+    prov = StripeCC(event)
     req = factory.post('/', {
         'stripe_token': 'tok_189fTT2eZvKYlo2CvJKzEzeu',
         'stripe_last4': '4242',
@@ -84,7 +84,7 @@ def test_perform_card_error(env, factory, monkeypatch):
         raise CardError(message='Foo', param='foo', code=100)
 
     monkeypatch.setattr("stripe.Charge.create", charge_create)
-    prov = Stripe(event)
+    prov = StripeCC(event)
     req = factory.post('/', {
         'stripe_token': 'tok_189fTT2eZvKYlo2CvJKzEzeu',
         'stripe_last4': '4242',
@@ -107,7 +107,7 @@ def test_perform_stripe_error(env, factory, monkeypatch):
         raise StripeError(message='Foo')
 
     monkeypatch.setattr("stripe.Charge.create", charge_create)
-    prov = Stripe(event)
+    prov = StripeCC(event)
     req = factory.post('/', {
         'stripe_token': 'tok_189fTT2eZvKYlo2CvJKzEzeu',
         'stripe_last4': '4242',
@@ -134,7 +134,7 @@ def test_perform_failed(env, factory, monkeypatch):
         return c
 
     monkeypatch.setattr("stripe.Charge.create", charge_create)
-    prov = Stripe(event)
+    prov = StripeCC(event)
     req = factory.post('/', {
         'stripe_token': 'tok_189fTT2eZvKYlo2CvJKzEzeu',
         'stripe_last4': '4242',
@@ -168,7 +168,7 @@ def test_refund_success(env, factory, monkeypatch):
         'id': 'ch_123345345'
     })
     order.save()
-    prov = Stripe(event)
+    prov = StripeCC(event)
     req = factory.get('/')
     req.user = None
     prov.order_control_refund_perform(req, order)
@@ -195,7 +195,7 @@ def test_refund_unavailable(env, factory, monkeypatch):
         'id': 'ch_123345345'
     })
     order.save()
-    prov = Stripe(event)
+    prov = StripeCC(event)
     req = factory.get('/')
     req.user = None
     prov.order_control_refund_perform(req, order)
