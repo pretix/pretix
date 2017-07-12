@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-11 16:35+0000\n"
-"PO-Revision-Date: 2017-07-11 18:38+0200\n"
+"POT-Creation-Date: 2017-07-12 15:15+0000\n"
+"PO-Revision-Date: 2017-07-12 17:19+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -78,7 +78,7 @@ msgstr "Gesamtbetrag"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:47
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:122
 #: pretix/plugins/reports/exporters.py:339
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:31
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:51
 msgid "Status"
 msgstr "Status"
 
@@ -7792,12 +7792,12 @@ msgstr "API-Endpunkt"
 msgid "Client ID"
 msgstr "Client-ID"
 
-#: pretix/plugins/paypal/payment.py:42 pretix/plugins/stripe/payment.py:32
+#: pretix/plugins/paypal/payment.py:42 pretix/plugins/stripe/payment.py:46
 #, python-brace-format
 msgid "<a target=\"_blank\" href=\"{docs_url}\">{text}</a>"
 msgstr "<a target=\"_blank\" href=\"{docs_url}\">{text}</a>"
 
-#: pretix/plugins/paypal/payment.py:43 pretix/plugins/stripe/payment.py:33
+#: pretix/plugins/paypal/payment.py:43 pretix/plugins/stripe/payment.py:47
 msgid "Click here for a tutorial on how to obtain the required keys"
 msgstr "Hier klicken für eine Anleitung"
 
@@ -7832,16 +7832,16 @@ msgstr ""
 "PayPal hat die Bezahlung noch nicht bestätigt. Wir informieren Sie, sobald "
 "die Bezahlung abgeschlossen ist."
 
-#: pretix/plugins/paypal/payment.py:223 pretix/plugins/stripe/payment.py:153
+#: pretix/plugins/paypal/payment.py:223 pretix/plugins/stripe/payment.py:198
 msgid "There was an error sending the confirmation mail."
 msgstr "Es gab einen Fehler beim Versenden der Bestätigungs-E-Mail."
 
-#: pretix/plugins/paypal/payment.py:249 pretix/plugins/stripe/payment.py:219
+#: pretix/plugins/paypal/payment.py:249 pretix/plugins/stripe/payment.py:247
 msgid "The money will be automatically refunded."
 msgstr "Der Geldbetrag wird automatisch zurückerstattet."
 
 #: pretix/plugins/paypal/payment.py:261 pretix/plugins/paypal/payment.py:274
-#: pretix/plugins/stripe/payment.py:231 pretix/plugins/stripe/payment.py:252
+#: pretix/plugins/stripe/payment.py:259 pretix/plugins/stripe/payment.py:280
 msgid ""
 "We were unable to transfer the money back automatically. Please get in touch "
 "with the customer and transfer it back manually."
@@ -7951,12 +7951,12 @@ msgid "Last update"
 msgstr "Letzte Änderung"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:24
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:27
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:47
 msgid "Total value"
 msgstr "Gesamtbetrag"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:26
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:29
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:49
 msgid "Currency"
 msgstr "Währung"
 
@@ -7984,13 +7984,13 @@ msgstr "PayPal hat uns eine ungültige Antwort geschickt."
 msgid "It looks like you canceled the PayPal payment"
 msgstr "Die PayPal-Zahlung wurde abgebrochen"
 
-#: pretix/plugins/paypal/views.py:149 pretix/plugins/stripe/views.py:145
+#: pretix/plugins/paypal/views.py:149 pretix/plugins/stripe/views.py:153
 msgid "The order cannot be marked as refunded as it is not marked as paid!"
 msgstr ""
 "Die Bestellung kann nicht als erstattet markiert werden, da sie nicht als "
 "bezahlt markiert ist."
 
-#: pretix/plugins/paypal/views.py:153 pretix/plugins/stripe/views.py:149
+#: pretix/plugins/paypal/views.py:153 pretix/plugins/stripe/views.py:157
 msgid ""
 "The order has been marked as refunded and the issue has been marked as "
 "resolved!"
@@ -8297,6 +8297,7 @@ msgstr ""
 "Bestellungen eingegangen sind!"
 
 #: pretix/plugins/stripe/__init__.py:10 pretix/plugins/stripe/__init__.py:13
+#: pretix/plugins/stripe/payment.py:24
 msgid "Stripe"
 msgstr "Stripe"
 
@@ -8304,51 +8305,86 @@ msgstr "Stripe"
 msgid "This plugin allows you to receive credit card payments via Stripe"
 msgstr "Dieses Plugin erlaubt, Kreditkartenzahlungen über Stripe anzunehmen"
 
-#: pretix/plugins/stripe/payment.py:23
-msgid "Credit Card via Stripe"
-msgstr "Kreditkarte über Stripe"
-
-#: pretix/plugins/stripe/payment.py:31
-msgid "Secret key"
-msgstr "Geheimer Schlüssel"
-
-#: pretix/plugins/stripe/payment.py:39
-msgid "Publishable key"
-msgstr "Veröffentlichbarer Schlüssel"
-
-#: pretix/plugins/stripe/payment.py:43
-msgid "User interface"
-msgstr "Benutzeroberfläche"
-
-#: pretix/plugins/stripe/payment.py:45
-msgid "Simple (pretix design)"
-msgstr "Einfach (pretix-Design)"
-
-#: pretix/plugins/stripe/payment.py:46
-msgid "Stripe Checkout"
-msgstr "Stripe Checkout"
-
-#: pretix/plugins/stripe/payment.py:54
+#: pretix/plugins/stripe/payment.py:33
 msgid ""
 "Please configure a <a href=\"https://dashboard.stripe.com/account/webhooks"
 "\">Stripe Webhook</a> to the following endpoint in order to automatically "
-"cancel orders when charges are refunded externally."
+"cancel orders when charges are refunded externally and to process "
+"asynchronous payment methods like SOFORT."
 msgstr ""
 "Bitte konfigurieren Sie einen <a href=\"https://dashboard.stripe.com/account/"
 "webhooks\">Stripe Webhook</a> zum folgenden Endpunkt, damit Bestellungen "
 "automatisch als storniert markiert werden, wenn die Zahlung zurückerstattet "
-"wird."
+"wird und zur Verarbeitung asynchroner Zahlmethoden wie SOFORT."
 
-#: pretix/plugins/stripe/payment.py:71
-msgid "You may need to enable JavaScript for Stripe payments."
-msgstr "Sie müssen JavaScript aktivieren, um mit Stripe zu bezahlen."
+#: pretix/plugins/stripe/payment.py:45
+msgid "Secret key"
+msgstr "Geheimer Schlüssel"
 
-#: pretix/plugins/stripe/payment.py:123
+#: pretix/plugins/stripe/payment.py:53
+msgid "Publishable key"
+msgstr "Veröffentlichbarer Schlüssel"
+
+#: pretix/plugins/stripe/payment.py:57
+msgid "User interface"
+msgstr "Benutzeroberfläche"
+
+#: pretix/plugins/stripe/payment.py:59
+msgid "Simple (pretix design)"
+msgstr "Einfach (pretix-Design)"
+
+#: pretix/plugins/stripe/payment.py:60
+msgid "Stripe Checkout"
+msgstr "Stripe Checkout"
+
+#: pretix/plugins/stripe/payment.py:62
+msgid "Only relevant for credit card payments."
+msgstr "Nur für Kreditkartenzahlung relevant."
+
+#: pretix/plugins/stripe/payment.py:66
+msgid "Credit card payments"
+msgstr "Kreditkartenzahlungen"
+
+#: pretix/plugins/stripe/payment.py:71 pretix/plugins/stripe/payment.py:399
+msgid "giropay"
+msgstr "giropay"
+
+#: pretix/plugins/stripe/payment.py:73 pretix/plugins/stripe/payment.py:80
+#: pretix/plugins/stripe/payment.py:87 pretix/plugins/stripe/payment.py:94
+msgid "Needs to be enabled in your Stripe account first."
+msgstr "Muss erst im Stripe-Account aktiviert werden."
+
+#: pretix/plugins/stripe/payment.py:78 pretix/plugins/stripe/payment.py:466
+msgid "iDEAL"
+msgstr "iDEAL"
+
+#: pretix/plugins/stripe/payment.py:85 pretix/plugins/stripe/payment.py:513
+msgid "Alipay"
+msgstr "Alipay"
+
+#: pretix/plugins/stripe/payment.py:92 pretix/plugins/stripe/payment.py:554
+msgid "Bancontact"
+msgstr "Bancontact"
+
+#: pretix/plugins/stripe/payment.py:99 pretix/plugins/stripe/payment.py:621
+msgid "SOFORT"
+msgstr "SOFORT"
+
+#: pretix/plugins/stripe/payment.py:101
+msgid ""
+"Needs to be enabled in your Stripe account first. Note that, despite the "
+"name, payments are not immediately confirmed but might take some time."
+msgstr ""
+"Muss erst im Stripe-Account aktiviert werden. Achtung: Trotz des Namens "
+"werden Zahlungen nicht sofort verbucht, sondern benötigen ein wenig Zeit."
+
+#: pretix/plugins/stripe/payment.py:168
 #, python-format
 msgid "Stripe reported an error with your card: %s"
 msgstr "Stripe meldete einen Fehler: %s"
 
-#: pretix/plugins/stripe/payment.py:137
+#: pretix/plugins/stripe/payment.py:182 pretix/plugins/stripe/payment.py:303
+#: pretix/plugins/stripe/payment.py:387
 msgid ""
 "We had trouble communicating with Stripe. Please try again and get in touch "
 "with us if this problem persists."
@@ -8357,12 +8393,20 @@ msgstr ""
 "versuchen Sie es erneut und setzen Sie sich mit uns in Verbindung, wenn das "
 "Problem fortbesteht."
 
-#: pretix/plugins/stripe/payment.py:158
+#: pretix/plugins/stripe/payment.py:200
+msgid ""
+"Your payment is pending completion. We will inform you as soon as the "
+"payment completed."
+msgstr ""
+"Die Zahlung wurde noch nicht bestätigt. Wir informieren Sie, sobald die "
+"Bezahlung abgeschlossen ist."
+
+#: pretix/plugins/stripe/payment.py:209
 #, python-format
 msgid "Stripe reported an error: %s"
 msgstr "Stripe meldete einen Fehler: %s"
 
-#: pretix/plugins/stripe/payment.py:247
+#: pretix/plugins/stripe/payment.py:275
 msgid ""
 "We had trouble communicating with Stripe. Please try again and contact "
 "support if the problem persists."
@@ -8371,47 +8415,119 @@ msgstr ""
 "versuchen Sie es erneut und setzen Sie sich mit dem Support in Verbindung, "
 "wenn das Problem fortbesteht."
 
-#: pretix/plugins/stripe/signals.py:44
+#: pretix/plugins/stripe/payment.py:314
+msgid "Credit card via Stripe"
+msgstr "Kreditkarte über Stripe"
+
+#: pretix/plugins/stripe/payment.py:315
+msgid "Credit card"
+msgstr "Kreditkarte"
+
+#: pretix/plugins/stripe/payment.py:340
+msgid "You may need to enable JavaScript for Stripe payments."
+msgstr "Sie müssen JavaScript aktivieren, um mit Stripe zu bezahlen."
+
+#: pretix/plugins/stripe/payment.py:398
+msgid "giropay via Stripe"
+msgstr "giropay über Stripe"
+
+#: pretix/plugins/stripe/payment.py:415 pretix/plugins/stripe/payment.py:570
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:22
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:25
+msgid "Account holder"
+msgstr "Kontoinhaber"
+
+#: pretix/plugins/stripe/payment.py:430 pretix/plugins/stripe/payment.py:585
+msgid "unknown name"
+msgstr "unbekannter Name"
+
+#: pretix/plugins/stripe/payment.py:433 pretix/plugins/stripe/payment.py:489
+#: pretix/plugins/stripe/payment.py:588 pretix/plugins/stripe/payment.py:658
+#, python-brace-format
+msgid "{event}-{code}"
+msgstr "{event}-{code}"
+
+#: pretix/plugins/stripe/payment.py:465
+msgid "iDEAL via Stripe"
+msgstr "iDEAL über Stripe"
+
+#: pretix/plugins/stripe/payment.py:512
+msgid "Alipay via Stripe"
+msgstr "Alipay über Stripe"
+
+#: pretix/plugins/stripe/payment.py:553
+msgid "Bancontact via Stripe"
+msgstr "Bancontact über Stripe"
+
+#: pretix/plugins/stripe/payment.py:620
+msgid "SOFORT via Stripe"
+msgstr "SOFORT via Stripe"
+
+#: pretix/plugins/stripe/payment.py:637
+msgid "Country of your bank"
+msgstr "Land der Bank"
+
+#: pretix/plugins/stripe/payment.py:638
+msgid "Germany"
+msgstr "Deutschland"
+
+#: pretix/plugins/stripe/payment.py:639
+msgid "Austria"
+msgstr "Österreich"
+
+#: pretix/plugins/stripe/payment.py:640
+msgid "Belgium"
+msgstr "Belgien"
+
+#: pretix/plugins/stripe/payment.py:641
+msgid "Netherlands"
+msgstr "Niederlande"
+
+#: pretix/plugins/stripe/payment.py:642
+msgid "Spain"
+msgstr "Spanien"
+
+#: pretix/plugins/stripe/signals.py:48
 msgid "Charge succeeded."
 msgstr "Buchung erfolgreich."
 
-#: pretix/plugins/stripe/signals.py:45
+#: pretix/plugins/stripe/signals.py:49
 msgid "Charge refunded."
 msgstr "Buchung erstattet."
 
-#: pretix/plugins/stripe/signals.py:46
+#: pretix/plugins/stripe/signals.py:50
 msgid "Charge updated."
 msgstr "Buchung geändert."
 
-#: pretix/plugins/stripe/signals.py:52
+#: pretix/plugins/stripe/signals.py:56
 msgid "Charge failed. Reason: {}"
 msgstr "Buchung fehlgeschlagen. Grund: {}"
 
-#: pretix/plugins/stripe/signals.py:54
+#: pretix/plugins/stripe/signals.py:58
 msgid "Dispute created. Reason: {}"
 msgstr "Buchung durch Kunden angefochten. Grund: {}"
 
-#: pretix/plugins/stripe/signals.py:56
+#: pretix/plugins/stripe/signals.py:60
 msgid "Dispute updated. Reason: {}"
 msgstr "Die Anfechtung hat sich geändert. Grund: {}"
 
-#: pretix/plugins/stripe/signals.py:58
+#: pretix/plugins/stripe/signals.py:62
 msgid "Dispute closed. Status: {}"
 msgstr "Anfechtungsverfahren beendet. Grund. {}"
 
-#: pretix/plugins/stripe/signals.py:60
+#: pretix/plugins/stripe/signals.py:64
 msgid "Payment authorized."
 msgstr "Zahlung authorisiert."
 
-#: pretix/plugins/stripe/signals.py:62
+#: pretix/plugins/stripe/signals.py:66
 msgid "Payment authorization canceled."
 msgstr "Zahlungsauthorisierung abgebrochen."
 
-#: pretix/plugins/stripe/signals.py:64
+#: pretix/plugins/stripe/signals.py:68
 msgid "Payment authorization failed."
 msgstr "Zahlungsauthorisierung fehlgeschlagen."
 
-#: pretix/plugins/stripe/signals.py:67
+#: pretix/plugins/stripe/signals.py:71
 msgid "Stripe reported an event: {}"
 msgstr "Stripe meldete ein Ereignis: {}"
 
@@ -8440,23 +8556,41 @@ msgstr ""
 "erstattet oder storniert wurde. Soll die passende Bestellung (%(order)s) als "
 "erstattet markiert werden?"
 
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:3
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
 msgstr "Der Gesamtbetrag wird von Ihrer Kreditkarte eingezogen."
 
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:7
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:19
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:14
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:21
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:22
 msgid "Card type"
 msgstr "Kartentyp"
 
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:9
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:10
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:21
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:16
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:23
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:24
 msgid "Card number"
 msgstr "Kreditkartennummer"
+
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_bancontact.html:4
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_giropay.html:4
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple.html:2
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sofort.html:4
+msgid ""
+"After you submitted your order, we will redirect you to the payment service "
+"provider to complete your payment. You will then be redirected back here to "
+"get your tickets."
+msgstr ""
+"Nach dem Klick auf „Weiter“ werden wir Sie zum Zahlungsdienstleister "
+"weiterleiten, um Ihre Zahlungsdaten einzugeben. Sie werden danach wieder "
+"hierher zurückgeleitet, um Ihre Bestellung zu bestätigen."
+
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:19
+msgid "Payment method"
+msgstr "Zahlungsmethode"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:9
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:6
@@ -8494,19 +8628,50 @@ msgid "Please continue below to start the credit card payment."
 msgstr "Bitte fahren Sie unten fort, um die Kreditkartenzahlung zu starten."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:5
-msgid "This order has been paid via Stripe."
-msgstr "Diese Bestellung wurde über Stripe bezahlt."
+#, python-format
+msgid "This order has been paid with %(method)s."
+msgstr "Diese Bestellung wurde mit %(method)s bezahlt."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:9
+#, python-format
 msgid ""
-"This order has been planned to be paid via Stripe and has been marked as "
-"refunded."
+"This order has been planned to be paid with %(method)s and has been marked "
+"as refunded."
 msgstr ""
-"Diese Bestellung sollte per Stripe bezahlt werden und ist als erstattet "
+"Diese Bestellung sollte mit %(method)s bezahlt werden und ist als erstattet "
 "markiert."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:13
+#, python-format
+msgid ""
+"This order has been planned to be paid with %(method)s, but the payment has "
+"not yet been completed."
+msgstr ""
+"Diese Bestellung soll mit %(method)s bezahlt werden, aber die Bezahlung "
+"wurde noch nicht abgeschlossen."
+
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:19
+msgid "Charge ID"
+msgstr "Charge-ID"
+
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:26
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:32
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:38
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:44
+msgid "Payer name"
+msgstr "Name des Zahlenden"
+
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:30
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:36
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:42
+msgid "Bank"
+msgstr "Bank"
+
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:57
+msgid "Error message"
+msgstr "Fehlermeldung"
+
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:62
 msgid ""
 "This order has been planned to be paid via Stripe, but the payment has not "
 "yet been completed."
@@ -8514,30 +8679,25 @@ msgstr ""
 "Diese Bestellung soll per Stripe bezahlt werden, aber die Bezahlung wurde "
 "noch nicht abgeschlossen."
 
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:19
-msgid "Charge ID"
-msgstr "Charge-ID"
-
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:25
-msgid "Payer name"
-msgstr "Name des Zahlenden"
-
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:37
-msgid "Error message"
-msgstr "Fehlermeldung"
-
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:3
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:4
 msgid ""
-"The credit card transaction could not be completed for the following reason:"
+"We're waiting for an answer from the payment provider regarding your "
+"payment. Please contact us if this takes more than a few days."
 msgstr ""
-"Die Kreditkartentransaktion konnte aus folgendem Grund nicht abgeschlossen "
-"werden:"
+"Wir warten auf eine Antwort des Zahlungsdienstleisters bezüglich Ihrer "
+"Zahlung. Bitte kontaktieren Sie uns, falls dies mehr als ein paar Tage "
+"dauert."
 
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:10
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:9
+msgid ""
+"The payment transaction could not be completed for the following reason:"
+msgstr "Die Zahlung konnte aus folgendem Grund nicht abgeschlossen werden:"
+
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:16
 msgid "Unknown reason"
 msgstr "Unbekannter Grund"
 
-#: pretix/plugins/stripe/views.py:185 pretix/plugins/stripe/views.py:210
+#: pretix/plugins/stripe/views.py:193 pretix/plugins/stripe/views.py:219
 msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
@@ -8545,7 +8705,7 @@ msgstr ""
 "Es gab einen Fehler im Zahlungsablauf. Bitte nutzen Sie den Link aus der an "
 "Sie verschickten E-Mail, um fortzufahren."
 
-#: pretix/plugins/stripe/views.py:204
+#: pretix/plugins/stripe/views.py:213
 msgid ""
 "We had trouble authorizing your card payment. Please try again and get in "
 "touch with us if this problem persists."
@@ -9704,9 +9864,6 @@ msgstr "Deutsch (Du)"
 #~ msgid "Activate"
 #~ msgstr "aktiviert"
 
-#~ msgid "Credit card number"
-#~ msgstr "Kreditkartennummer"
-
 #~ msgid "Month"
 #~ msgstr "Monat"
 
@@ -10062,9 +10219,6 @@ msgstr "Deutsch (Du)"
 #~ "HBCI ist nur verfügbar, wenn auf dem Server aqbanking-cli und aqhbci-"
 #~ "tool4 installiert sind."
 
-#~ msgid "Bank code"
-#~ msgstr "Bankleitzahl"
-
 #~ msgid "User ID"
 #~ msgstr "Benutzer-ID"
 
@@ -10135,9 +10289,6 @@ msgstr "Deutsch (Du)"
 
 #~ msgid "Total revenue"
 #~ msgstr "Gesamtumsatz"
-
-#~ msgid "Contacting Stripe…"
-#~ msgstr "Kontaktiere Stripe…"
 
 #~ msgid "Sold out (or reserved)"
 #~ msgstr "Ausverkauft (oder reserviert)"
