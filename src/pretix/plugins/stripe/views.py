@@ -64,7 +64,7 @@ def charge_webhook(request, event_json, charge_id):
         return HttpResponse('Not interested in this event', status=200)
 
     try:
-        order = request.event.orders.get(id=metadata['order'], payment_provider='stripe')
+        order = request.event.orders.get(id=metadata['order'], payment_provider__startswith='stripe')
     except Order.DoesNotExist:
         return HttpResponse('Order not found', status=200)
 
@@ -118,7 +118,7 @@ def source_webhook(request, event_json, source_id):
 
     with transaction.atomic():
         try:
-            order = request.event.orders.get(id=metadata['order'], payment_provider='stripe')
+            order = request.event.orders.get(id=metadata['order'], payment_provider__startswith='stripe')
         except Order.DoesNotExist:
             return HttpResponse('Order not found', status=200)
 
