@@ -1366,7 +1366,7 @@ class CartAddonTest(CartTestMixin, TestCase):
         cp2 = cp1.addons.first()
         assert cp2.item == self.workshop1
         assert cp2.subevent == se
-        assert cp2.value == 12
+        assert cp2.price == 12
 
     def test_cart_subevent_set_addon_for_wrong_subevent(self):
         self.event.has_subevents = True
