@@ -104,6 +104,8 @@ class RelativeDateTimeWidget(forms.MultiWidget):
         super().__init__(widgets=widgets, *args, **kwargs)
 
     def decompress(self, value):
+        if isinstance(value, str):
+            value = RelativeDateWrapper.from_string(value)
         if not value:
             return ['unset', None, 1, 'date_from', None]
         elif isinstance(value.data, (datetime.datetime, datetime.date)):
@@ -193,6 +195,8 @@ class RelativeDateWidget(RelativeDateTimeWidget):
         forms.MultiWidget.__init__(self, widgets=widgets, *args, **kwargs)
 
     def decompress(self, value):
+        if isinstance(value, str):
+            value = RelativeDateWrapper.from_string(value)
         if not value:
             return ['unset', None, 1, 'date_from']
         elif isinstance(value.data, (datetime.datetime, datetime.date)):
