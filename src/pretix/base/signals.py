@@ -45,15 +45,17 @@ class EventPluginSignal(django.dispatch.Signal):
         for receiver in self._live_receivers(sender):
             # Find the Django application this belongs to
             searchpath = receiver.__module__
-            mod = None
-            while True:
-                app = app_cache.get(searchpath)
-                if "." not in searchpath or app:
-                    break
-                searchpath, mod = searchpath.rsplit(".", 1)
+            core_module = any([searchpath.startswith(cm) for cm in settings.CORE_MODULES])
+            app = None
+            if not core_module:
+                while True:
+                    app = app_cache.get(searchpath)
+                    if "." not in searchpath or app:
+                        break
+                    searchpath, _ = searchpath.rsplit(".", 1)
 
             # Only fire receivers from active plugins and core modules
-            if (searchpath, mod) in settings.CORE_MODULES or (sender and app and app.name in sender.get_plugins()):
+            if core_module or (sender and app and app.name in sender.get_plugins()):
                 if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
                     response = receiver(signal=self, sender=sender, **named)
                     responses.append((receiver, response))

@@ -257,9 +257,9 @@ REST_FRAMEWORK = {
 
 
 CORE_MODULES = {
-    ("pretix", "base"),
-    ("pretix", "presale"),
-    ("pretix", "control")
+    "pretix.base",
+    "pretix.presale",
+    "pretix.control"
 }
 
 MIDDLEWARE = [
