@@ -179,7 +179,8 @@ class EventUpdateForm(I18nModelForm):
         widgets = {
             'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
             'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker', 'data-date-after': '#id_date_from'}),
-            'date_admission': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'date_admission': forms.DateTimeInput(attrs={'class': 'datetimepicker',
+                                                         'data-date-default': '#id_date_from'}),
             'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
             'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker',
                                                       'data-date-after': '#id_presale_start'}),

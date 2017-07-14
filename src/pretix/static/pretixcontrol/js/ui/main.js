@@ -220,6 +220,19 @@ $(function () {
         earlier_field.on("dp.change", update);
     });
 
+    $(".datetimepicker[data-date-default]").each(function() {
+        var fill_field = $(this),
+            default_field = $($(this).attr("data-date-default")),
+            show = function () {
+                var fill_date = fill_field.data('DateTimePicker').date(),
+                    default_date = default_field.data('DateTimePicker').date();
+                if (fill_date === null) {
+                    fill_field.data("DateTimePicker").defaultDate(default_date);
+                }
+            };
+        fill_field.on("dp.show", show);
+    });
+
     $(".colorpickerfield").colorpicker({
         format: 'hex',
         align: 'left',
