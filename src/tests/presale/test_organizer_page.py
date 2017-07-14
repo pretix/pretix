@@ -119,3 +119,31 @@ def test_calendar(env, client):
     r = client.get('/mrmcd/events/?month=10&year=2017')
     assert 'MRMCD2017' not in r.rendered_content
     assert 'October 2017' in r.rendered_content
+
+
+@pytest.mark.django_db
+def test_ics(env, client):
+    e = Event.objects.create(
+        organizer=env[0], name='MRMCD2017', slug='2017',
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
+        live=True
+    )
+    r = client.get('/mrmcd/events.ics')
+    assert b'MRMCD2017' not in r.content
+    e.is_public = True
+    e.save()
+    r = client.get('/mrmcd/events.ics')
+    assert b'MRMCD2017' in r.content
+
+
+@pytest.mark.django_db
+def test_ics_subevents(env, client):
+    e = Event.objects.create(
+        organizer=env[0], name='MRMCD2017', slug='2017',
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
+        live=True, is_public=True, has_subevents=True
+    )
+    e.subevents.create(date_from=now(), name='SE1', active=True)
+    r = client.get('/mrmcd/events.ics')
+    assert b'MRMCD2017' not in r.content
+    assert b'SE1' in r.content

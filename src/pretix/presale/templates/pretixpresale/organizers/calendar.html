@@ -52,6 +52,13 @@
             {% endblocktrans %}
         </div>
     {% endif %}
+    <p class="text-center">
+        <a href="{% eventurl request.organizer "presale:organizer.ical" %}?locale={{ request.LANGUAGE_CODE }}"
+            class="btn btn-default">
+            <span class="fa fa-calendar"></span>
+           {% trans "Download calendar as iCal file" %}
+        </a>
+    </p>
 
     {% include "pretixpresale/pagination.html" %}
 {% endblock %}

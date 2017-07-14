@@ -5,26 +5,23 @@ from datetime import date, datetime, timedelta
 from importlib import import_module
 
 import pytz
-import vobject
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Prefetch, Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
-from django.utils.formats import date_format
-from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
-from pytz import timezone
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import ItemVariation
 from pretix.base.models.event import SubEvent
 from pretix.multidomain.urlreverse import eventreverse
+from pretix.presale.ical import get_ical
 from pretix.presale.views.organizer import (
     add_subevents_for_days, weeks_for_template,
 )
@@ -230,10 +227,6 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
 
 class EventIcalDownload(EventViewMixin, View):
 
-    @cached_property
-    def event_timezone(self):
-        return timezone(self.request.event.settings.timezone)
-
     def get(self, request, *args, **kwargs):
         if not self.request.event:
             raise Http404(_('Unknown event code or not authorized to access this event.'))
@@ -249,37 +242,7 @@ class EventIcalDownload(EventViewMixin, View):
                 raise Http404(pgettext_lazy('subevent', 'Unknown date selected.'))
 
         event = self.request.event
-        ev = subevent or event
-        creation_time = datetime.now(pytz.utc)
-        cal = vobject.iCalendar()
-        cal.add('prodid').value = '-//pretix//{}//'.format(settings.PRETIX_INSTANCE_NAME)
-
-        vevent = cal.add('vevent')
-        vevent.add('summary').value = str(ev.name)
-        vevent.add('dtstamp').value = creation_time
-        vevent.add('location').value = str(ev.location)
-        vevent.add('organizer').value = event.organizer.name
-        vevent.add('uid').value = '{}-{}-{}-{}'.format(
-            event.organizer.slug, event.slug,
-            subevent.pk if subevent else '0',
-            creation_time.strftime('%Y%m%d%H%M%S%f')
-        )
-
-        if event.settings.show_times:
-            vevent.add('dtstart').value = ev.date_from.astimezone(self.event_timezone)
-        else:
-            vevent.add('dtstart').value = ev.date_from.astimezone(self.event_timezone).date()
-
-        if event.settings.show_date_to and ev.date_to:
-            if event.settings.show_times:
-                vevent.add('dtend').value = ev.date_to.astimezone(self.event_timezone)
-            else:
-                vevent.add('dtend').value = ev.date_to.astimezone(self.event_timezone).date()
-
-        if event.date_admission:
-            vevent.add('description').value = str(_('Admission: {datetime}')).format(
-                datetime=date_format(ev.date_admission.astimezone(self.event_timezone), 'SHORT_DATETIME_FORMAT')
-            )
+        cal = get_ical([subevent or event])
 
         resp = HttpResponse(cal.serialize(), content_type='text/calendar')
         resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}.ics"'.format(
