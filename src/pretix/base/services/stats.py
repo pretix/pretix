@@ -74,7 +74,7 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
         'category',  # for re-grouping
     ).prefetch_related(
         'variations'
-    ).order_by('category__position', 'category_id', 'name')
+    ).order_by('category__position', 'category_id', 'position', 'name')
 
     qs = OrderPosition.objects
     if subevent:
