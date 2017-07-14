@@ -79,7 +79,7 @@ organizer_patterns = [
     url(r'^events/$',
         pretix.presale.views.organizer.CalendarView.as_view(),
         name='organizer.calendar'),
-    url(r'^events.ics$',
+    url(r'^events/ical/$',
         pretix.presale.views.organizer.OrganizerIcalDownload.as_view(),
         name='organizer.ical'),
     url(r'^events/(?P<year>[0-9]{4})/(?P<month>[0-9]{1,2})/$',
