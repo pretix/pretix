@@ -93,6 +93,17 @@ def test_address_vat_id(env):
 
 
 @pytest.mark.django_db
+def test_positions_skip_free(env):
+    event, order = env
+    event.settings.invoice_include_free = False
+    op1 = order.positions.first()
+    op1.price = Decimal('0.00')
+    op1.save()
+    inv = generate_invoice(order)
+    assert inv.lines.count() == 2
+
+
+@pytest.mark.django_db
 def test_positions(env):
     event, order = env
     inv = generate_invoice(order)

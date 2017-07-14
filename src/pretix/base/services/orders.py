@@ -545,6 +545,7 @@ class OrderChangeManager:
         self._totaldiff = 0
         self._quotadiff = Counter()
         self._operations = []
+        self._invoice_dirty = False
 
     def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation]):
         if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
@@ -559,6 +560,9 @@ class OrderChangeManager:
                       if variation else item.quotas.filter(subevent=position.subevent))
         if not new_quotas:
             raise OrderError(self.error_messages['quota_missing'])
+
+        if self.order.event.settings.invoice_include_free or price != Decimal('0.00') or position.price != Decimal('0.00'):
+            self._invoice_dirty = True
 
         self._totaldiff = price - position.price
         self._quotadiff.update(new_quotas)
@@ -576,6 +580,9 @@ class OrderChangeManager:
         if not new_quotas:
             raise OrderError(self.error_messages['quota_missing'])
 
+        if self.order.event.settings.invoice_include_free or price != Decimal('0.00') or position.price != Decimal('0.00'):
+            self._invoice_dirty = True
+
         self._totaldiff = price - position.price
         self._quotadiff.update(new_quotas)
         self._quotadiff.subtract(position.quotas)
@@ -583,12 +590,19 @@ class OrderChangeManager:
 
     def change_price(self, position: OrderPosition, price: Decimal):
         self._totaldiff = price - position.price
+
+        if self.order.event.settings.invoice_include_free or price != Decimal('0.00') or position.price != Decimal('0.00'):
+            self._invoice_dirty = True
+
         self._operations.append(self.PriceOperation(position, price))
 
     def cancel(self, position: OrderPosition):
         self._totaldiff = -position.price
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.CancelOperation(position))
+
+        if self.order.event.settings.invoice_include_free or position.price != Decimal('0.00'):
+            self._invoice_dirty = True
 
     def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: Order = None,
                      subevent: SubEvent = None):
@@ -608,6 +622,9 @@ class OrderChangeManager:
                       if variation else item.quotas.filter(subevent=subevent))
         if not new_quotas:
             raise OrderError(self.error_messages['quota_missing'])
+
+        if self.order.event.settings.invoice_include_free or price != Decimal('0.00'):
+            self._invoice_dirty = True
 
         self._totaldiff = price
         self._quotadiff.update(new_quotas)
@@ -730,7 +747,7 @@ class OrderChangeManager:
 
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
-        if i:
+        if i and self._invoice_dirty:
             generate_cancellation(i)
             generate_invoice(self.order)
 

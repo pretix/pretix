@@ -13,6 +13,7 @@ from pretix.base.models import (
 from pretix.base.models.items import SubEventItem
 from pretix.base.payment import FreeOrderProvider
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
+from pretix.base.services.invoices import generate_invoice
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, expire_orders,
 )
@@ -184,7 +185,7 @@ class OrderChangeManagerTests(TestCase):
         self.event = Event.objects.create(organizer=o, name='Dummy', slug='dummy', date_from=now(), plugins='pretix.plugins.banktransfer')
         self.order = Order.objects.create(
             code='FOO', event=self.event, email='dummy@dummy.test',
-            status=Order.STATUS_PENDING,
+            status=Order.STATUS_PENDING, locale='en',
             datetime=now(), expires=now() + timedelta(days=10),
             total=Decimal('46.00'), payment_provider='banktransfer'
         )
@@ -510,3 +511,18 @@ class OrderChangeManagerTests(TestCase):
         assert nop.item == self.ticket
         assert nop.price == Decimal('12.00')
         assert nop.subevent == se1
+
+    def test_reissue_invoice(self):
+        generate_invoice(self.order)
+        assert self.order.invoices.count() == 1
+        self.ocm.add_position(self.ticket, None, Decimal('0.00'))
+        self.ocm.commit()
+        assert self.order.invoices.count() == 3
+
+    def test_dont_reissue_invoice_on_free_product_changes(self):
+        self.event.settings.invoice_include_free = False
+        generate_invoice(self.order)
+        assert self.order.invoices.count() == 1
+        self.ocm.add_position(self.ticket, None, Decimal('0.00'))
+        self.ocm.commit()
+        assert self.order.invoices.count() == 1

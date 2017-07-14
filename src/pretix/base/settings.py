@@ -53,6 +53,10 @@ DEFAULTS = {
         'default': 'False',
         'type': bool,
     },
+    'invoice_include_free': {
+        'default': 'True',
+        'type': bool,
+    },
     'invoice_numbers_consecutive': {
         'default': 'True',
         'type': bool,

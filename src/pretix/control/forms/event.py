@@ -440,6 +440,12 @@ class InvoiceSettingsForm(SettingsForm):
         widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
         required=False
     )
+    invoice_include_free = forms.BooleanField(
+        label=_("Show free products on invoices"),
+        help_text=_("Note that invoices will never be generated for orders that contain only free "
+                    "products."),
+        required=False
+    )
     invoice_numbers_consecutive = forms.BooleanField(
         label=_("Generate invoices with consecutive numbers"),
         help_text=_("If deactivated, the order code will be used in the invoice number."),
