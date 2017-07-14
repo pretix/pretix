@@ -196,7 +196,10 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
             self.request.event.get_cache().set('vouchers_exist', vouchers_exist)
         context['vouchers_exist'] = vouchers_exist
         context['ev'] = self.subevent or self.request.event
-        context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
+        if self.subevent:
+            context['frontpage_text'] = str(self.subevent.frontpage_text)
+        else:
+            context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
 
         if self.request.event.settings.event_list_type == "calendar":
             self._set_month_year()

@@ -456,6 +456,10 @@ class SubEvent(EventMixin, LoggedModel):
         max_length=200,
         verbose_name=_("Location"),
     )
+    frontpage_text = I18nTextField(
+        null=True, blank=True,
+        verbose_name=_("Frontpage text")
+    )
 
     items = models.ManyToManyField('Item', through='SubEventItem')
     variations = models.ManyToManyField('ItemVariation', through='SubEventItemVariation')

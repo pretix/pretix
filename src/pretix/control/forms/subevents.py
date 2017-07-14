@@ -25,6 +25,7 @@ class SubEventForm(I18nModelForm):
             'presale_start',
             'presale_end',
             'location',
+            'frontpage_text'
         ]
         widgets = {
             'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
