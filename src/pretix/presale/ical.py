@@ -19,6 +19,12 @@ def get_ical(events):
     for ev in events:
         event = ev if isinstance(ev, Event) else ev.event
         tz = pytz.timezone(event.settings.timezone)
+        if isinstance(ev, Event):
+            url = build_absolute_uri(event, 'presale:event.index')
+        else:
+            url = build_absolute_uri(event, 'presale:event.index', {
+                'subevent': ev.pk
+            })
 
         vevent = cal.add('vevent')
         vevent.add('summary').value = str(ev.name)
@@ -29,7 +35,7 @@ def get_ical(events):
         vevent.add('uid').value = 'pretix-{}-{}-{}@{}'.format(
             event.organizer.slug, event.slug,
             ev.pk if not isinstance(ev, Event) else '0',
-            urlparse(settings.SITE_URL).netloc
+            urlparse(url).netloc
         )
 
         if event.settings.show_times:
@@ -44,13 +50,7 @@ def get_ical(events):
                 vevent.add('dtend').value = ev.date_to.astimezone(tz).date()
 
         descr = []
-
-        if isinstance(ev, Event):
-            descr.append(_('Tickets: {url}').format(url=build_absolute_uri(event, 'presale:event.index')))
-        else:
-            descr.append(_('Tickets: {url}').format(url=build_absolute_uri(event, 'presale:event.index', {
-                'subevent': ev.pk
-            })))
+        descr.append(_('Tickets: {url}').format(url=url))
 
         if ev.date_admission:
             descr.append(str(_('Admission: {datetime}')).format(

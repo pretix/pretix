@@ -852,7 +852,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.assertIn('LOCATION:DUMMY ARENA', ical, 'incorrect location')
         self.assertIn('ORGANIZER:%s' % self.event.organizer.name, ical, 'incorrect organizer')
         self.assertTrue(re.search(r'DTSTAMP:\d{8}T\d{6}Z', ical), 'incorrect timestamp')
-        self.assertTrue(re.search(r'UID:\w*-\w*-0-\d{20}', ical), 'missing UID key')
+        self.assertTrue(re.search(r'UID:pretix-\w*-\w*-0@', ical), 'missing UID key')
 
     def test_utc_timezone(self):
         ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
