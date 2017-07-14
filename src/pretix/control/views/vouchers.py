@@ -101,7 +101,7 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
 
         tags = self.request.event.vouchers.order_by('tag').filter(tag__isnull=False).values('tag').annotate(
-            total=Count('id'),
+            total=Sum('max_usages'),
             redeemed=Sum('redeemed')
         )
         for t in tags:
