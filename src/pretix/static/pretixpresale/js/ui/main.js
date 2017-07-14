@@ -64,6 +64,20 @@ $(function () {
         $(this).closest("form").get(0).submit();
     });
 
+    var update_cart_form = function () {
+        var is_enabled = $(".product-row input[type=checkbox]:checked, .variations input[type=checkbox]:checked, .product-row input[type=radio]:checked, .variations input[type=radio]:checked").length;
+        if (!is_enabled) {
+            $(".input-item-count").each(function() {
+                if ($(this).val() && $(this).val() !== "0") {
+                    is_enabled = true;
+                }
+            });
+        }
+        $("#btn-add-to-cart").prop("disabled", !is_enabled);
+    };
+    update_cart_form();
+    $(".product-row input[type=checkbox], .variations input[type=checkbox], .product-row input[type=radio], .variations input[type=radio], .input-item-count").on("change mouseup keyup", update_cart_form);
+
     $(".table-calendar td.has-events").click(function () {
         var $tr = $(this).closest(".table-calendar").find(".selected-day");
         $tr.find("td").html($(this).find(".events").html());
