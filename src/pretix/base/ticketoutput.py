@@ -32,6 +32,14 @@ class BaseTicketOutput:
         """
         return self.settings.get('_enabled', as_type=bool)
 
+    @property
+    def multi_download_enabled(self) -> bool:
+        """
+        Returns whether or not the ``generate_order`` method may be called. Returns
+        ``True`` by default.
+        """
+        return True
+
     def generate(self, position: OrderPosition) -> Tuple[str, str, str]:
         """
         This method should generate the download file and return a tuple consisting of a

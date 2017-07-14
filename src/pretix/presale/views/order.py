@@ -76,6 +76,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
             buttons.append({
                 'text': provider.download_button_text or 'Download',
                 'identifier': provider.identifier,
+                'multi': provider.multi_download_enabled
             })
         return buttons
 
@@ -93,6 +94,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
             ) and self.order.status == Order.STATUS_PAID
         )
         ctx['download_buttons'] = self.download_buttons
+        ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons])
         ctx['cart'] = self.get_cart(
             answers=True, downloads=ctx['can_download'],
             queryset=self.order.positions.all(),
