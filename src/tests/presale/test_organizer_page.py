@@ -128,11 +128,11 @@ def test_ics(env, client):
         date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
         live=True
     )
-    r = client.get('/mrmcd/events.ics')
+    r = client.get('/mrmcd/events/ical/')
     assert b'MRMCD2017' not in r.content
     e.is_public = True
     e.save()
-    r = client.get('/mrmcd/events.ics')
+    r = client.get('/mrmcd/events/ical/')
     assert b'MRMCD2017' in r.content
 
 
@@ -144,6 +144,6 @@ def test_ics_subevents(env, client):
         live=True, is_public=True, has_subevents=True
     )
     e.subevents.create(date_from=now(), name='SE1', active=True)
-    r = client.get('/mrmcd/events.ics')
+    r = client.get('/mrmcd/events/ical/')
     assert b'MRMCD2017' not in r.content
     assert b'SE1' in r.content
