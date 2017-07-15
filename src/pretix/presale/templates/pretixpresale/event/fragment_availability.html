@@ -5,7 +5,7 @@
         <strong>{% trans "SOLD OUT" %}</strong>
         {% if event.settings.waiting_list_enabled %}
             <br/>
-            <a href="{% eventurl event "presale:event.waitinglist" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}">
+            <a href="{% eventurl event "presale:event.waitinglist" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">
                 <span class="fa fa-plus-circle"></span>
                 {% trans "Waiting list" %}
             </a>
@@ -19,7 +19,7 @@
         </strong>
         {% if event.settings.waiting_list_enabled %}
             <br/>
-            <a href="{% eventurl event "presale:event.waitinglist" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}">
+            <a href="{% eventurl event "presale:event.waitinglist" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">
                 <span class="fa fa-plus-circle"></span>
                 {% trans "Waiting list" %}
             </a>

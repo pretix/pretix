@@ -19,7 +19,7 @@
                     <div class="panel-heading">
                         {% trans "Send vouchers" %}
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body form-inline">
                         {% csrf_token %}
                         {% if request.event.settings.waiting_list_auto %}
                             <p>
@@ -40,6 +40,17 @@
                                     possible to the persons who waitet longest.
                                 {% endblocktrans %}
                             </p>
+                        {% endif %}
+                        {% if request.event.has_subevents %}
+                            <select name="subevent" class="form-control">
+                                <option value="">{% trans "All dates" context "subevent" %}</option>
+                                {% for se in request.event.subevents.all %}
+                                    <option value="{{ se.id }}"
+                                            {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
+                                        {{ se.name }} – {{ se.get_date_range_display }}
+                                    </option>
+                                {% endfor %}
+                            </select>
                         {% endif %}
                         <button class="btn btn-large btn-primary" type="submit">
                             {% trans "Send as many vouchers as possible" %}
@@ -82,6 +93,17 @@
                 </option>
             {% endfor %}
         </select>
+        {% if request.event.has_subevents %}
+            <select name="subevent" class="form-control">
+                <option value="">{% trans "All dates" context "subevent" %}</option>
+                {% for se in request.event.subevents.all %}
+                    <option value="{{ se.id }}"
+                            {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
+                        {{ se.name }} – {{ se.get_date_range_display }}
+                    </option>
+                {% endfor %}
+            </select>
+        {% endif %}
         <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
     </form>
     </p>
@@ -93,9 +115,13 @@
                 <tr>
                     <th>{% trans "User" %}</th>
                     <th>{% trans "Product" %}</th>
+                    {% if request.event.has_subevents %}
+                        <th>{% trans "Date" context "subevent" %}</th>
+                    {% endif %}
                     <th>{% trans "On the list since" %}</th>
                     <th>{% trans "Status" %}</th>
                     <th>{% trans "Voucher" %}</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -108,6 +134,9 @@
                                 – {{ e.variation }}
                             {% endif %}
                         </td>
+                        {% if request.event.has_subevents %}
+                            <td>{{ e.subevent.name }} – {{ e.subevent.get_date_range_display }}</td>
+                        {% endif %}
                         <td>{{ e.created|date:"SHORT_DATETIME_FORMAT" }}</td>
                         <td>
                             {% if e.voucher %}
@@ -131,6 +160,13 @@
                                 <button name="assign" value="{{ e.pk }}" class="btn btn-default btn-xs">
                                     {% trans "Send a voucher" %}
                                 </button>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not e.voucher %}
+                                <a href="{% url "control:event.orders.waitinglist.delete" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                            {% else %}
+                                <span class="btn btn-danger btn-sm disabled"><i class="fa fa-trash"></i></span>
                             {% endif %}
                         </td>
                         <td class="text-right">

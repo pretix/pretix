@@ -1,0 +1,34 @@
+{% load i18n %}
+{% load eventurl %}
+<form class="form-inline" method="get" id="monthselform" action="{% eventurl event "presale:event.index" %}">
+    <div class="row">
+        <div class="col-sm-4 hidden-xs">
+            <a href="{% eventurl event "presale:event.index" %}?year={{ before.year }}&month={{ before.month }}" class="btn btn-default">
+                <span class="fa fa-arrow-left"></span>
+                {{ before|date:"F Y" }}
+            </a>
+        </div>
+        <div class="col-sm-4 col-xs-12 text-center">
+            <select name="month" class="form-control">
+                {% for m in months %}
+                    <option value="{{ m|date:"m" }}" {% if m == date %}selected{% endif %}>{{ m|date:"F" }}</option>
+                {% endfor %}
+            </select>
+            <select name="year" class="form-control">
+                {% for y in years %}
+                    <option value="{{ y }}" {% if y == date.year %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="js-hidden btn btn-default">
+                {% trans "Go" %}
+            </button>
+        </div>
+        <div class="col-sm-4 hidden-xs text-right">
+            <a href="{% eventurl event "presale:event.index" %}?year={{ after.year }}&month={{ after.month }}" class="btn btn-default">
+                <span class="fa fa-arrow-right"></span>
+                {{ after|date:"F Y" }}
+            </a>
+        </div>
+    </div>
+</form>
+{% include "pretixpresale/fragment_calendar.html" %}

@@ -21,7 +21,7 @@ class InvoiceExporter(BaseExporter):
                     if not i.file:
                         invoice_pdf_task.apply(args=(i.pk,))
                         i.refresh_from_db()
-                    i.file.open('r')
+                    i.file.open('rb')
                     zipf.writestr('{}.pdf'.format(i.number), i.file.read())
                     i.file.close()
 

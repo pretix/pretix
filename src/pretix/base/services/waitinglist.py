@@ -8,7 +8,7 @@ from pretix.celery_app import app
 
 
 @app.task(base=ProfiledTask)
-def assign_automatically(event_id: int, user_id: int=None):
+def assign_automatically(event_id: int, user_id: int=None, subevent_id: int=None):
     event = Event.objects.get(id=event_id)
     if user_id:
         user = User.objects.get(id=user_id)
@@ -21,17 +21,24 @@ def assign_automatically(event_id: int, user_id: int=None):
     qs = WaitingListEntry.objects.filter(
         event=event, voucher__isnull=True
     ).select_related('item', 'variation').prefetch_related('item__quotas', 'variation__quotas').order_by('created')
+
+    if subevent_id and event.has_subevents:
+        subevent = event.subevents.get(id=subevent_id)
+        qs = qs.filter(subevent=subevent)
+
     sent = 0
 
     for wle in qs:
         if (wle.item, wle.variation) in gone:
             continue
 
-        quotas = wle.variation.quotas.all() if wle.variation else wle.item.quotas.all()
+        quotas = (wle.variation.quotas.filter(subevent=wle.subevent)
+                  if wle.variation
+                  else wle.item.quotas.filter(subevent=wle.subevent))
         availability = (
-            wle.variation.check_quotas(count_waitinglist=False, _cache=quota_cache)
+            wle.variation.check_quotas(count_waitinglist=False, _cache=quota_cache, subevent=wle.subevent)
             if wle.variation
-            else wle.item.check_quotas(count_waitinglist=False, _cache=quota_cache)
+            else wle.item.check_quotas(count_waitinglist=False, _cache=quota_cache, subevent=wle.subevent)
         )
         if availability[1] > 0:
             try:

@@ -2,7 +2,6 @@
 @import "../../bootstrap/scss/_bootstrap.scss";
 @import "../../fontawesome/scss/font-awesome.scss";
 @import "../../typeahead/typeahead.css";
-@import "../css/metisMenu.min.css";
 @import "../../charts/morris.css";
 @import "../../datetimepicker/_bootstrap-datetimepicker.scss";
 @import "_sb-admin-2.scss";
@@ -350,4 +349,24 @@ body.loading #wrapper {
 .mobile-navbar-view-link {
     padding: 6px 10px;
     color: white !important;
+}
+
+@media (min-width: $screen-md-min) {
+    .row-plugins {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .row-plugins > [class*=col] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .row-plugins > [class*=col] > .panel {
+        height: 100%
+    }
+}
+
+.dl-horizontal dt  {
+    white-space: normal;
 }

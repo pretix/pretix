@@ -35,12 +35,13 @@ TEST_VOUCHER_RES = {
     'variation': None,
     'quota': None,
     'tag': 'Foo',
-    'comment': ''
+    'comment': '',
+    'subevent': None
 }
 
 
 @pytest.mark.django_db
-def test_voucher_list(token_client, organizer, event, voucher, item, quota):
+def test_voucher_list(token_client, organizer, event, voucher, item, quota, subevent):
     res = dict(TEST_VOUCHER_RES)
     res['item'] = item.pk
     res['id'] = voucher.pk
@@ -186,6 +187,18 @@ def test_voucher_list(token_client, organizer, event, voucher, item, quota):
         '/api/v1/organizers/{}/events/{}/vouchers/?active=false'.format(organizer.slug, event.slug)
     )
     assert [res] == resp.data['results']
+
+    voucher.subevent = subevent
+    voucher.save()
+    res['subevent'] = subevent.pk
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/vouchers/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
+    assert [res] == resp.data['results']
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/vouchers/?subevent={}'.format(organizer.slug, event.slug,
+                                                                       subevent.pk + 1))
+    assert [] == resp.data['results']
 
 
 @pytest.mark.django_db

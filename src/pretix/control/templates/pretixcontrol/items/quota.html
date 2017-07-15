@@ -14,6 +14,11 @@
             </a>
         {% endif %}
     </h1>
+    {% if quota.subevent %}
+        <p>
+            <span class="fa fa-calendar"></span> {{ quota.subevent.name }} – {{ quota.subevent.get_date_range_display }}
+        </p>
+    {% endif %}
     <div class="row" id="quota-stats">
         <div class="col-md-5 col-xs-12">
             <legend>{% trans "Usage overview" %}</legend>

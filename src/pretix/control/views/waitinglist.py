@@ -1,11 +1,14 @@
 from django.contrib import messages
+from django.db import transaction
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.generic import ListView
+from django.views.generic.edit import DeleteView
 
 from pretix.base.models import Item, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
@@ -32,7 +35,8 @@ class AutoAssign(EventPermissionRequiredMixin, AsyncAction, View):
         })
 
     def post(self, request, *args, **kwargs):
-        return self.do(self.request.event.id, self.request.user.id)
+        return self.do(self.request.event.id, self.request.user.id,
+                       self.request.POST.get('subevent'))
 
 
 class WaitingListView(EventPermissionRequiredMixin, ListView):
@@ -75,7 +79,9 @@ class WaitingListView(EventPermissionRequiredMixin, ListView):
     def get_queryset(self):
         qs = WaitingListEntry.objects.filter(
             event=self.request.event
-        ).select_related('item', 'variation', 'voucher').prefetch_related('item__quotas', 'variation__quotas')
+        ).select_related('item', 'variation', 'voucher').prefetch_related(
+            'item__quotas', 'variation__quotas'
+        )
 
         s = self.request.GET.get("status", "")
         if s == 's':
@@ -87,7 +93,11 @@ class WaitingListView(EventPermissionRequiredMixin, ListView):
 
         if self.request.GET.get("item", "") != "":
             i = self.request.GET.get("item", "")
-            qs = qs.filter(item_id__in=(i,))
+            qs = qs.filter(item_id=i)
+
+        if self.request.GET.get("subevent", "") != "":
+            s = self.request.GET.get("subevent", "")
+            qs = qs.filter(subevent_id=s)
 
         return qs
 
@@ -104,9 +114,9 @@ class WaitingListView(EventPermissionRequiredMixin, ListView):
                 wle.availability = itemvar_cache.get((wle.item, wle.variation))
             else:
                 wle.availability = (
-                    wle.variation.check_quotas(count_waitinglist=False, _cache=quota_cache)
+                    wle.variation.check_quotas(count_waitinglist=False, subevent=wle.subevent, _cache=quota_cache)
                     if wle.variation
-                    else wle.item.check_quotas(count_waitinglist=False, _cache=quota_cache)
+                    else wle.item.check_quotas(count_waitinglist=False, subevent=wle.subevent, _cache=quota_cache)
                 )
                 itemvar_cache[(wle.item, wle.variation)] = wle.availability
             if wle.availability[0] == 100:
@@ -125,3 +135,34 @@ class WaitingListView(EventPermissionRequiredMixin, ListView):
             )
         )
         return qs['s']
+
+
+class EntryDelete(EventPermissionRequiredMixin, DeleteView):
+    model = WaitingListEntry
+    template_name = 'pretixcontrol/waitinglist/delete.html'
+    permission = 'can_change_orders'
+    context_object_name = 'entry'
+
+    def get_object(self, queryset=None) -> WaitingListEntry:
+        try:
+            return self.request.event.waitinglistentries.get(
+                id=self.kwargs['entry'],
+                voucher__isnull=True,
+            )
+        except WaitingListEntry.DoesNotExist:
+            raise Http404(_("The requested entry does not exist."))
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.log_action('pretix.event.orders.waitinglist.delete', user=self.request.user)
+        self.object.delete()
+        messages.success(self.request, _('The selected entry has been deleted.'))
+        return HttpResponseRedirect(success_url)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.orders.waitinglist', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug
+        })

@@ -8,6 +8,15 @@ from django.dispatch.dispatcher import NO_RECEIVERS
 
 from .models import Event
 
+app_cache = {}
+
+
+def _populate_app_cache():
+    global app_cache
+    apps.check_apps_ready()
+    for ac in apps.app_configs.values():
+        app_cache[ac.name] = ac
+
 
 class EventPluginSignal(django.dispatch.Signal):
     """
@@ -30,23 +39,23 @@ class EventPluginSignal(django.dispatch.Signal):
         if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
             return responses
 
+        if not app_cache:
+            _populate_app_cache()
+
         for receiver in self._live_receivers(sender):
             # Find the Django application this belongs to
             searchpath = receiver.__module__
+            core_module = any([searchpath.startswith(cm) for cm in settings.CORE_MODULES])
             app = None
-            mod = None
-            while True:
-                try:
-                    if apps.is_installed(searchpath):
-                        app = apps.get_app_config(searchpath.split(".")[-1])
-                except LookupError:
-                    pass
-                if "." not in searchpath:
-                    break
-                searchpath, mod = searchpath.rsplit(".", 1)
+            if not core_module:
+                while True:
+                    app = app_cache.get(searchpath)
+                    if "." not in searchpath or app:
+                        break
+                    searchpath, _ = searchpath.rsplit(".", 1)
 
             # Only fire receivers from active plugins and core modules
-            if (searchpath, mod) in settings.CORE_MODULES or (sender and app and app.name in sender.get_plugins()):
+            if core_module or (sender and app and app.name in sender.get_plugins()):
                 if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
                     response = receiver(signal=self, sender=sender, **named)
                     responses.append((receiver, response))

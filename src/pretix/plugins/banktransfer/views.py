@@ -415,7 +415,7 @@ class ImportView(ListView):
 
         if 'event' in self.kwargs:
             ctx['basetpl'] = 'pretixplugins/banktransfer/import_base.html'
-            if self.request.event.settings.get('payment_term_last'):
+            if not self.request.event.has_subevents and self.request.event.settings.get('payment_term_last'):
                 if now() > self.request.event.payment_term_last:
                     ctx['no_more_payments'] = True
         else:

@@ -6,7 +6,7 @@ pytz
 django-bootstrap3==8.2.*
 django-formset-js-improved==0.5.0.1
 django-compressor==2.1.1
-django-hierarkey==1.0.*,>=1.0.2
+django-hierarkey==1.0.*,>=1.0.3
 django-filter==1.0.*
 reportlab==3.2.*
 PyPDF2==1.26.*
@@ -32,7 +32,7 @@ bleach==2.*
 raven
 django-i18nfield>=1.0.1
 # Stripe
-stripe==1.22.*
+stripe==1.62.*
 # PayPal
 paypalrestsdk==1.12.*
 pycparser==2.13  # https://github.com/eliben/pycparser/issues/147

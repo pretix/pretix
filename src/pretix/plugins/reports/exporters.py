@@ -9,10 +9,11 @@ from django.contrib.staticfiles import finders
 from django.db.models import Sum
 from django.utils.formats import date_format, localize
 from django.utils.timezone import now
-from django.utils.translation import ugettext as _
+from django.utils.translation import pgettext, pgettext_lazy, ugettext as _
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Order, OrderPosition
+from pretix.base.models.event import SubEvent
 from pretix.base.services.stats import order_overview
 
 
@@ -161,6 +162,13 @@ class OverviewReport(Report):
             Paragraph(_('Orders by product'), headlinestyle),
             Spacer(1, 5 * mm)
         ]
+        if self.form_data.get('subevent'):
+            try:
+                subevent = self.event.subevents.get(pk=self.form_data.get('subevent'))
+            except SubEvent.DoesNotExist:
+                subevent = self.form_data.get('subevent')
+            story.append(Paragraph(pgettext('subevent', 'Date: {}').format(subevent), self.get_style()))
+            story.append(Spacer(1, 5 * mm))
         tdata = [
             [
                 _('Product'), _('Canceled'), '', _('Refunded'), '', _('Expired'), '', _('Purchased'),
@@ -180,7 +188,7 @@ class OverviewReport(Report):
             ],
         ]
 
-        items_by_category, total = order_overview(self.event)
+        items_by_category, total = order_overview(self.event, subevent=self.form_data.get('subevent'))
 
         for tup in items_by_category:
             if tup[0]:
@@ -230,6 +238,18 @@ class OverviewReport(Report):
         table.setStyle(TableStyle(tstyledata))
         story.append(table)
         return story
+
+    @property
+    def export_form_fields(self) -> dict:
+        d = OrderedDict()
+        if self.event.has_subevents:
+            d['subevent'] = forms.ModelChoiceField(
+                self.event.subevents.all(),
+                label=pgettext_lazy('subevent', 'Date'),
+                required=False,
+                empty_label=pgettext_lazy('subevent', 'All dates')
+            )
+        return d
 
 
 class OrderTaxListReport(Report):

@@ -16,6 +16,7 @@ from pretix.base.models import (
     CachedFile, CachedTicket, Invoice, InvoiceAddress, Item, ItemVariation,
     Order, Quota, generate_position_secret, generate_secret,
 )
+from pretix.base.models.event import SubEvent
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
@@ -52,13 +53,6 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         ).annotate(pcnt=Count('positions')).select_related('invoice_address')
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
-
-        if self.request.GET.get("ordering", "") != "":
-            p = self.request.GET.get("ordering", "")
-            p_admissable = ('-code', 'code', '-email', 'email', '-total', 'total', '-datetime', 'datetime',
-                            '-status', 'status', 'pcnt', '-pcnt')
-            if p in p_admissable:
-                qs = qs.order_by(p)
 
         return qs.distinct()
 
@@ -480,7 +474,8 @@ class OrderChange(OrderView):
                 try:
                     ocm.add_position(item, variation,
                                      self.add_form.cleaned_data['price'],
-                                     self.add_form.cleaned_data.get('addon_to'))
+                                     self.add_form.cleaned_data.get('addon_to'),
+                                     self.add_form.cleaned_data.get('subevent'))
                 except OrderError as e:
                     self.add_form.custom_error = str(e)
                     return False
@@ -506,6 +501,8 @@ class OrderChange(OrderView):
                     ocm.change_item(p, item, variation)
                 elif p.form.cleaned_data['operation'] == 'price':
                     ocm.change_price(p, p.form.cleaned_data['price'])
+                elif p.form.cleaned_data['operation'] == 'subevent':
+                    ocm.change_subevent(p, p.form.cleaned_data['subevent'])
                 elif p.form.cleaned_data['operation'] == 'cancel':
                     ocm.cancel(p)
 
@@ -613,7 +610,19 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
-        ctx['items_by_category'], ctx['total'] = order_overview(self.request.event)
+
+        subevent = None
+        if self.request.GET.get("subevent", "") != "" and self.request.event.has_subevents:
+            i = self.request.GET.get("subevent", "")
+            try:
+                subevent = self.request.event.subevents.get(pk=i)
+            except SubEvent.DoesNotExist:
+                pass
+
+        ctx['items_by_category'], ctx['total'] = order_overview(self.request.event, subevent=subevent)
+        ctx['subevent_warning'] = self.request.event.has_subevents and subevent and (
+            self.request.event.orders.filter(payment_fee__gt=0).exists()
+        )
         return ctx
 
 

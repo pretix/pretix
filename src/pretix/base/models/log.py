@@ -5,7 +5,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+
+from pretix.base.models.event import SubEvent
 
 
 class LogEntry(models.Model):
@@ -87,6 +89,16 @@ class LogEntry(models.Model):
                     'item': co.id
                 }),
                 'val': co.name,
+            }
+        elif isinstance(co, SubEvent):
+            a_text = pgettext_lazy('subevent', 'Date {val}')
+            a_map = {
+                'href': reverse('control:event.subevent', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                    'subevent': co.id
+                }),
+                'val': str(co)
             }
         elif isinstance(co, Quota):
             a_text = _('Quota {val}')

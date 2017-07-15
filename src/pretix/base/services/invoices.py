@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from django.core.files.base import ContentFile
 from django.db import transaction
+from django.db.models import Count
 from django.utils import timezone
 from django.utils.translation import pgettext, ugettext as _
 from i18nfield.strings import LazyI18nString
@@ -47,9 +48,16 @@ def build_invoice(invoice: Invoice) -> Invoice:
         invoice.save()
         invoice.lines.all().delete()
 
-        positions = list(invoice.order.positions.select_related('addon_to', 'item', 'variation'))
+        positions = list(
+            invoice.order.positions.select_related('addon_to', 'item', 'variation').annotate(
+                addon_c=Count('addons')
+            )
+        )
         positions.sort(key=lambda p: p.sort_key)
         for p in positions:
+            if not invoice.event.settings.invoice_include_free and p.price == Decimal('0.00') and not p.addon_c:
+                continue
+
             desc = str(p.item.name)
             if p.variation:
                 desc += " - " + str(p.variation.value)

@@ -86,7 +86,8 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     class Meta:
         model = OrderPosition
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_email',
-                  'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'checkins', 'downloads', 'answers')
+                  'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins', 'downloads',
+                  'answers')
 
 
 class OrderSerializer(I18nAwareModelSerializer):

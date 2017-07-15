@@ -8,6 +8,9 @@
         <form class="form-horizontal" method="post" action="">
             {% csrf_token %}
             {% bootstrap_field form.sendto layout='horizontal' %}
+            {% if form.subevent %}
+                {% bootstrap_field form.subevent layout='horizontal' %}
+            {% endif %}
             {% bootstrap_field form.subject layout='horizontal' %}
             {% bootstrap_field form.message layout='horizontal' %}
             {% if request.method == "POST" %}

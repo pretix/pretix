@@ -90,6 +90,7 @@ class EventWizard(SessionWizardView):
             event = form_dict['basics'].instance
             event.organizer = foundation_data['organizer']
             event.plugins = settings.PRETIX_PLUGINS_DEFAULT
+            event.has_subevents = foundation_data['has_subevents']
             form_dict['basics'].save()
 
             has_control_rights = self.request.user.teams.filter(
@@ -105,6 +106,17 @@ class EventWizard(SessionWizardView):
                 )
                 t.members.add(self.request.user)
                 t.limit_events.add(event)
+
+            if event.has_subevents:
+                event.subevents.create(
+                    name=event.name,
+                    date_from=event.date_from,
+                    date_to=event.date_to,
+                    presale_start=event.presale_start,
+                    presale_end=event.presale_end,
+                    location=event.location,
+                    active=True
+                )
 
             logdata = {}
             for f in form_list:

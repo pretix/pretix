@@ -186,12 +186,12 @@ class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMi
         for provider in self.request.event.get_payment_providers().values():
             provider.form = ProviderForm(
                 obj=self.request.event,
-                settingspref='payment_%s_' % provider.identifier,
+                settingspref=provider.settings.get_prefix(),
                 data=(self.request.POST if self.request.method == 'POST' else None)
             )
             provider.form.fields = OrderedDict(
                 [
-                    ('payment_%s_%s' % (provider.identifier, k), v)
+                    ('%s%s' % (provider.settings.get_prefix(), k), v)
                     for k, v in provider.settings_form_fields.items()
                 ]
             )

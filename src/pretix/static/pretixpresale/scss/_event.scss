@@ -128,3 +128,49 @@ section.front-page {
         margin-bottom: 15px;
     }
 }
+
+.subevent-list {
+    background-color: $body-bg;
+
+    form {
+        padding: 10px 0;
+    }
+
+    .row {
+        margin: 0;
+    }
+    a.subevent-row {
+        display: block;
+        color: $text-color;
+        padding: 3px 0;
+    }
+    a.subevent-row:nth-child(2n) {
+        background-color: $gray-lighter;
+    }
+    a.subevent-row:hover {
+        text-decoration: none;
+        background-color: darken($gray-lighter, 10%);
+    }
+    .subevent-row .row > div {
+        padding: 5px;
+        min-height: 35px; /* label height */
+        vertical-align: middle;
+    }
+}
+.subevent-toggle {
+    padding: 5px;
+    text-align: center;
+    background-color: darken($gray-lighter, 30%);
+    display: none;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+        color: white;
+        text-decoration: none;
+        background-color: darken($gray-lighter, 40%);
+    }
+}
+h2.subevent-head {
+    margin-top: 10px;
+}

@@ -183,10 +183,12 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                         event=self.request.event,
                         prefix='{}_{}'.format(cartpos.pk, iao.addon_category.pk),
                         category=iao.addon_category,
+                        price_included=iao.price_included,
                         initial=current_addon_products,
                         data=(self.request.POST if self.request.method == 'POST' else None),
                         quota_cache=quota_cache,
-                        item_cache=item_cache
+                        item_cache=item_cache,
+                        subevent=cartpos.subevent
                     )
                 }
 

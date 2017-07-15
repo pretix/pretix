@@ -45,3 +45,11 @@ def token_client(client, team):
     t = team.tokens.create(name='Foo')
     client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
     return client
+
+
+@pytest.fixture
+def subevent(event):
+    event.has_subevents = True
+    event.save()
+    return event.subevents.create(name="Foobar",
+                                  date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))

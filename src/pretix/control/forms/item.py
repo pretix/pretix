@@ -3,7 +3,6 @@ import copy
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Max
-from django.forms import BooleanField, ModelMultipleChoiceField
 from django.forms.formsets import DELETION_FIELD_NAME
 from django.utils.translation import ugettext as __, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
@@ -52,7 +51,6 @@ class QuestionForm(I18nModelForm):
 
 
 class QuestionOptionForm(I18nModelForm):
-
     class Meta:
         model = QuestionOption
         localized_fields = '__all__'
@@ -62,36 +60,38 @@ class QuestionOptionForm(I18nModelForm):
 
 
 class QuotaForm(I18nModelForm):
-
     def __init__(self, **kwargs):
-        items = kwargs['items']
-        del kwargs['items']
-        instance = kwargs.get('instance', None)
-        self.original_instance = copy.copy(instance) if instance else None
+        self.instance = kwargs.get('instance', None)
+        self.event = kwargs.get('event')
+        items = kwargs.pop('items', None) or self.event.items.prefetch_related('variations')
+        self.original_instance = copy.copy(self.instance) if self.instance else None
+        initial = kwargs.get('initial', {})
+        if self.instance and self.instance.pk:
+            initial['itemvars'] = [str(i.pk) for i in self.instance.items.all()] + [
+                '{}-{}'.format(v.item_id, v.pk) for v in self.instance.variations.all()
+            ]
+        kwargs['initial'] = initial
         super().__init__(**kwargs)
 
-        if hasattr(self, 'instance') and self.instance.pk:
-            active_items = set(self.instance.items.all())
-            active_variations = set(self.instance.variations.all())
-        else:
-            active_items = set()
-            active_variations = set()
-
+        choices = []
         for item in items:
             if len(item.variations.all()) > 0:
-                self.fields['item_%s' % item.id] = ModelMultipleChoiceField(
-                    label=_("Activate for"),
-                    required=False,
-                    initial=active_variations,
-                    queryset=item.variations.all(),
-                    widget=forms.CheckboxSelectMultiple
-                )
+                for v in item.variations.all():
+                    choices.append(('{}-{}'.format(item.pk, v.pk), '{} – {}'.format(item.name, v.value)))
             else:
-                self.fields['item_%s' % item.id] = BooleanField(
-                    label=_("Activate"),
-                    required=False,
-                    initial=(item in active_items)
-                )
+                choices.append(('{}'.format(item.pk), item.name))
+
+        self.fields['itemvars'] = forms.MultipleChoiceField(
+            label=_('Products'),
+            required=False,
+            choices=choices,
+            widget=forms.CheckboxSelectMultiple
+        )
+
+        if self.event.has_subevents:
+            self.fields['subevent'].queryset = self.event.subevents.all()
+        else:
+            del self.fields['subevent']
 
     class Meta:
         model = Quota
@@ -99,7 +99,28 @@ class QuotaForm(I18nModelForm):
         fields = [
             'name',
             'size',
+            'subevent'
         ]
+
+    def save(self, *args, **kwargs):
+        creating = not self.instance.pk
+        inst = super().save(*args, **kwargs)
+
+        selected_items = set(list(self.event.items.filter(id__in=[
+            i.split('-')[0] for i in self.cleaned_data['itemvars']
+        ])))
+        selected_variations = list(ItemVariation.objects.filter(item__event=self.event, id__in=[
+            i.split('-')[1] for i in self.cleaned_data['itemvars'] if '-' in i
+        ]))
+
+        current_items = [] if creating else self.instance.items.all()
+        current_variations = [] if creating else self.instance.variations.all()
+
+        self.instance.items.remove(*[i for i in current_items if i not in selected_items])
+        self.instance.items.add(*[i for i in selected_items if i not in current_items])
+        self.instance.variations.remove(*[i for i in current_variations if i not in selected_variations])
+        self.instance.variations.add(*[i for i in selected_variations if i not in current_variations])
+        return inst
 
 
 class ItemCreateForm(I18nModelForm):
@@ -197,7 +218,6 @@ class ItemUpdateForm(I18nModelForm):
 
 
 class ItemVariationsFormSet(I18nFormSet):
-
     def clean(self):
         super().clean()
         for f in self.forms:
@@ -282,6 +302,7 @@ class ItemAddOnForm(I18nModelForm):
             'addon_category',
             'min_count',
             'max_count',
+            'price_included'
         ]
         help_texts = {
             'min_count': _('Be aware that setting a minimal number makes it impossible to buy this product if all '

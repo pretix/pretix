@@ -114,7 +114,7 @@ METRICS_PASSPHRASE = config.get('metrics', 'passphrase', fallback="")
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        'BACKEND': 'pretix.helpers.cache.CustomDummyCache',
     }
 }
 REAL_CACHE_USED = False
@@ -257,9 +257,9 @@ REST_FRAMEWORK = {
 
 
 CORE_MODULES = {
-    ("pretix", "base"),
-    ("pretix", "presale"),
-    ("pretix", "control")
+    "pretix.base",
+    "pretix.presale",
+    "pretix.control"
 }
 
 MIDDLEWARE = [

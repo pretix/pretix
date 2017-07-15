@@ -66,12 +66,25 @@ event_patterns = [
     url(r'^ical/?$',
         pretix.presale.views.event.EventIcalDownload.as_view(),
         name='event.ical.download'),
+    url(r'^ical/(?P<subevent>[0-9]+)/$',
+        pretix.presale.views.event.EventIcalDownload.as_view(),
+        name='event.ical.download'),
     url(r'^auth/$', pretix.presale.views.event.EventAuth.as_view(), name='event.auth'),
+    url(r'^(?P<subevent>[0-9]+)/$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
     url(r'^$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
 ]
 
 organizer_patterns = [
     url(r'^$', pretix.presale.views.organizer.OrganizerIndex.as_view(), name='organizer.index'),
+    url(r'^events/$',
+        pretix.presale.views.organizer.CalendarView.as_view(),
+        name='organizer.calendar'),
+    url(r'^events/ical/$',
+        pretix.presale.views.organizer.OrganizerIcalDownload.as_view(),
+        name='organizer.ical'),
+    url(r'^events/(?P<year>[0-9]{4})/(?P<month>[0-9]{1,2})/$',
+        pretix.presale.views.organizer.CalendarView.as_view(),
+        name='organizer.calendar'),
 ]
 
 locale_patterns = [

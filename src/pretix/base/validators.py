@@ -31,6 +31,7 @@ class EventSlugBlacklistValidator(BlacklistValidator):
         '_global',
         '__debug__',
         'api',
+        'events',
     ]
 
 

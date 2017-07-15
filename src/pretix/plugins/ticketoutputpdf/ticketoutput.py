@@ -63,6 +63,7 @@ class PdfTicketOutput(BaseTicketOutput):
         renderPDF.draw(d, canvas, qr_x, qr_y)
 
     def _get_text_content(self, op: OrderPosition, order: Order, o: dict):
+        ev = op.subevent or order.event
         if o['content'] == 'other':
             return o['text'].replace("\n", "<br/>\n")
         elif o['content'] == 'order':
@@ -80,25 +81,25 @@ class PdfTicketOutput(BaseTicketOutput):
         elif o['content'] == 'attendee_name':
             return op.attendee_name or (op.addon_to.attendee_name if op.addon_to else '')
         elif o['content'] == 'event_name':
-            return str(order.event)
+            return str(ev.name)
         elif o['content'] == 'event_location':
-            return str(order.event.location).replace("\n", "<br/>\n")
+            return str(ev.location).replace("\n", "<br/>\n")
         elif o['content'] == 'event_date':
-            return order.event.get_date_from_display(show_times=False)
+            return ev.get_date_from_display(show_times=False)
         elif o['content'] == 'event_date_range':
-            return order.event.get_date_range_display()
+            return ev.get_date_range_display()
         elif o['content'] == 'event_begin':
-            return order.event.get_date_from_display(show_times=True)
+            return ev.get_date_from_display(show_times=True)
         elif o['content'] == 'event_begin_time':
-            return order.event.get_time_from_display()
+            return ev.get_time_from_display()
         elif o['content'] == 'event_admission':
-            if order.event.date_admission:
+            if ev.date_admission:
                 tz = timezone(order.event.settings.timezone)
-                return date_format(order.event.date_admission.astimezone(tz), "SHORT_DATETIME_FORMAT")
+                return date_format(ev.date_admission.astimezone(tz), "SHORT_DATETIME_FORMAT")
         elif o['content'] == 'event_admission_time':
-            if order.event.date_admission:
+            if ev.date_admission:
                 tz = timezone(order.event.settings.timezone)
-                return date_format(order.event.date_admission.astimezone(tz), "TIME_FORMAT")
+                return date_format(ev.date_admission.astimezone(tz), "TIME_FORMAT")
         elif o['content'] == 'addons':
             return "<br/>".join([
                 '{} - {}'.format(p.item, p.variation) if p.variation else str(p.item)
