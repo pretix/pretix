@@ -6,6 +6,7 @@
 @import "_event.scss";
 @import "_cart.scss";
 @import "_forms.scss";
+@import "_calendar.scss";
 @import "../../pretixbase/scss/webfont.scss";
 
 footer {
@@ -170,4 +171,8 @@ body.loading .container {
     .checkout-button-row > div {
         margin-bottom: 15px;
     }
+}
+
+.dl-horizontal dt  {
+    white-space: normal;
 }

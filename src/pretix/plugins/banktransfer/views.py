@@ -415,7 +415,7 @@ class ImportView(ListView):
 
         if 'event' in self.kwargs:
             ctx['basetpl'] = 'pretixplugins/banktransfer/import_base.html'
-            if self.request.event.settings.get('payment_term_last'):
+            if not self.request.event.has_subevents and self.request.event.settings.get('payment_term_last'):
                 if now() > self.request.event.payment_term_last:
                     ctx['no_more_payments'] = True
         else:
@@ -428,7 +428,7 @@ class OrganizerBanktransferView:
     def dispatch(self, request, *args, **kwargs):
         if len(request.organizer.events.order_by('currency').values_list('currency', flat=True).distinct()) > 1:
             messages.error(request, _('Please perform per-event bank imports as this organizer has events with '
-                                      'multuple currencies.'))
+                                      'multiple currencies.'))
             return redirect('control:organizer', organizer=request.organizer.slug)
         return super().dispatch(request, *args, **kwargs)
 

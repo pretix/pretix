@@ -5,7 +5,7 @@ from django.core.files import File
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
 from django.db.models import Count, F, Q
-from django.forms.models import ModelMultipleChoiceField, inlineformset_factory
+from django.forms.models import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
@@ -21,6 +21,7 @@ from pretix.base.models import (
     CachedTicket, Item, ItemCategory, ItemVariation, Order, Question,
     QuestionAnswer, QuestionOption, Quota, Voucher,
 )
+from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn
 from pretix.control.forms.item import (
     CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemCreateForm,
@@ -414,7 +415,14 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             i = self.request.GET.get("item", "")
             qs = qs.filter(orderposition__item_id__in=(i,))
 
-        if self.object.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+        if self.object.type == Question.TYPE_FILE:
+            qs = [
+                {
+                    'answer': ugettext('File uploaded'),
+                    'count': qs.filter(file__isnull=False).count()
+                }
+            ]
+        elif self.object.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
             qs = qs.order_by('options').values('options', 'options__answer')\
                    .annotate(count=Count('id')).order_by('-count')
             for a in qs:
@@ -542,54 +550,16 @@ class QuotaList(ListView):
     template_name = 'pretixcontrol/items/quotas.html'
 
     def get_queryset(self):
-        return Quota.objects.filter(
+        qs = Quota.objects.filter(
             event=self.request.event
         ).prefetch_related("items")
+        if self.request.GET.get("subevent", "") != "":
+            s = self.request.GET.get("subevent", "")
+            qs = qs.filter(subevent_id=s)
+        return qs
 
 
-class QuotaEditorMixin:
-    @cached_property
-    def items(self) -> "List[Item]":
-        return list(self.request.event.items.all().prefetch_related("variations"))
-
-    def get_form(self, form_class=QuotaForm):
-        if not hasattr(self, '_form'):
-            kwargs = self.get_form_kwargs()
-            kwargs['items'] = self.items
-            self._form = form_class(**kwargs)
-        return self._form
-
-    def get_context_data(self, *args, **kwargs) -> dict:
-        context = super().get_context_data(*args, **kwargs)
-        context['items'] = self.items
-        for item in context['items']:
-            item.field = self.get_form(QuotaForm)['item_%s' % item.id]
-        return context
-
-    @transaction.atomic
-    def form_valid(self, form):
-        res = super().form_valid(form)
-        items = self.object.items.all()
-        variations = self.object.variations.all()
-        selected_variations = []
-        self.object = form.instance
-        for item in self.items:
-            field = form.fields['item_%s' % item.id]
-            data = form.cleaned_data['item_%s' % item.id]
-            if isinstance(field, ModelMultipleChoiceField):
-                for v in data:
-                    selected_variations.append(v)
-            if data and item not in items:
-                self.object.items.add(item)
-            elif not data and item in items:
-                self.object.items.remove(item)
-
-        self.object.variations.add(*[v for v in selected_variations if v not in variations])
-        self.object.variations.remove(*[v for v in variations if v not in selected_variations])
-        return res
-
-
-class QuotaCreate(EventPermissionRequiredMixin, QuotaEditorMixin, CreateView):
+class QuotaCreate(EventPermissionRequiredMixin, CreateView):
     model = Quota
     form_class = QuotaForm
     template_name = 'pretixcontrol/items/quota_edit.html'
@@ -684,7 +654,7 @@ class QuotaView(ChartContainingView, DetailView):
             raise Http404(_("The requested quota does not exist."))
 
 
-class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
+class QuotaUpdate(EventPermissionRequiredMixin, UpdateView):
     model = Quota
     form_class = QuotaForm
     template_name = 'pretixcontrol/items/quota_edit.html'
@@ -712,6 +682,22 @@ class QuotaUpdate(EventPermissionRequiredMixin, QuotaEditorMixin, UpdateView):
                     k: form.cleaned_data.get(k) for k in form.changed_data
                 }
             )
+            if ((form.initial.get('subevent') and not form.instance.subevent)
+                    or (form.instance.subevent and form.initial.get('subevent') != form.instance.subevent.pk)):
+
+                if form.initial.get('subevent'):
+                    se = SubEvent.objects.get(event=self.request.event, pk=form.initial.get('subevent'))
+                    se.log_action(
+                        'pretix.subevent.quota.deleted', user=self.request.user, data={
+                            'id': form.instance.pk
+                        }
+                    )
+                if form.instance.subevent:
+                    form.instance.subevent.log_action(
+                        'pretix.subevent.quota.added', user=self.request.user, data={
+                            'id': form.instance.pk
+                        }
+                    )
         return super().form_valid(form)
 
     def get_success_url(self) -> str:

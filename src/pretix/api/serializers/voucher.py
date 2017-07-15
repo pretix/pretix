@@ -7,4 +7,4 @@ class VoucherSerializer(I18nAwareModelSerializer):
         model = Voucher
         fields = ('id', 'code', 'max_usages', 'redeemed', 'valid_until', 'block_quota',
                   'allow_ignore_quota', 'price_mode', 'value', 'item', 'variation', 'quota',
-                  'tag', 'comment')
+                  'tag', 'comment', 'subevent')

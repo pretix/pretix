@@ -184,6 +184,9 @@
                                         {{ line.voucher.code }}
                                     </a>
                                 {% endif %}
+                                {% if line.subevent %}
+                                    <br /><span class="fa fa-calendar"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
+                                {% endif %}
                                 {% if line.has_questions %}
                                     <dl>
                                         {% if line.item.admission and event.settings.attendee_names_asked %}
@@ -197,6 +200,20 @@
                                                 <em>{% trans "not answered" %}</em>{% endif %}</dd>
                                         {% endif %}
                                         {% for q in line.questions %}
+                                            <dt>{{ q.question }}</dt>
+                                            <dd>
+                                                {% if q.answer %}
+                                                    {% if q.answer.file %}
+                                                        <span class="fa fa-file"></span> {{ q.answer.file_link }}
+                                                    {% else %}
+                                                        {{ q.answer|linebreaksbr }}
+                                                    {% endif %}
+                                                {% else %}
+                                                    <em>{% trans "not answered" %}</em>
+                                                {% endif %}
+                                            </dd>
+                                        {% endfor %}
+                                        {% for q in line.additional_fields %}
                                             <dt>{{ q.question }}</dt>
                                             <dd>{% if q.answer %}{{ q.answer|linebreaksbr }}{% else %}
                                                 <em>{% trans "not answered" %}</em>{% endif %}</dd>

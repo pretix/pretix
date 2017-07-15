@@ -11,8 +11,8 @@ from pretix.urls import common_patterns
 
 presale_patterns = [
     url(r'', include((locale_patterns + [
+        url(r'', include(organizer_patterns)),
         url(r'^(?P<event>[^/]+)/', include(event_patterns)),
-        url(r'', include(organizer_patterns))
     ], 'presale')))
 ]
 

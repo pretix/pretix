@@ -58,6 +58,8 @@ The output class
 
    .. autoattribute:: is_enabled
 
+   .. autoattribute:: multi_download_enabled
+
    .. autoattribute:: settings_form_fields
 
    .. automethod:: settings_content_render

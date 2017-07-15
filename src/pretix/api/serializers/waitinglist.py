@@ -6,4 +6,4 @@ class WaitingListSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = WaitingListEntry
-        fields = ('id', 'created', 'email', 'voucher', 'item', 'variation', 'locale')
+        fields = ('id', 'created', 'email', 'voucher', 'item', 'variation', 'locale', 'subevent')

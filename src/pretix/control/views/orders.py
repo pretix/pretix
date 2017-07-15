@@ -16,6 +16,7 @@ from pretix.base.models import (
     CachedFile, CachedTicket, Invoice, InvoiceAddress, Item, ItemVariation,
     Order, Quota, generate_position_secret, generate_secret,
 )
+from pretix.base.models.event import SubEvent
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
@@ -36,6 +37,7 @@ from pretix.control.forms.orders import (
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.presale.signals import question_form_fields
 
 
 class OrderList(EventPermissionRequiredMixin, ListView):
@@ -51,13 +53,6 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         ).annotate(pcnt=Count('positions')).select_related('invoice_address')
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
-
-        if self.request.GET.get("ordering", "") != "":
-            p = self.request.GET.get("ordering", "")
-            p_admissable = ('-code', 'code', '-email', 'email', '-total', 'total', '-datetime', 'datetime',
-                            '-status', 'status', 'pcnt', '-pcnt')
-            if p in p_admissable:
-                qs = qs.order_by(p)
 
         return qs.distinct()
 
@@ -97,8 +92,7 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
-            self.request.event.settings.invoice_generate == 'admin' or
-            self.request.event.settings.invoice_generate == 'user'
+            self.request.event.settings.invoice_generate in ('admin', 'user', 'paid')
         )
         return ctx
 
@@ -141,12 +135,24 @@ class OrderDetail(OrderView):
 
         positions = []
         for p in cartpos:
+            responses = question_form_fields.send(sender=self.request.event, position=p)
+            p.additional_fields = []
+            data = p.meta_info_data
+            for r, response in sorted(responses, key=lambda r: str(r[0])):
+                for key, value in response.items():
+                    p.additional_fields.append({
+                        'answer': data.get('question_form_data', {}).get(key),
+                        'question': value.label
+                    })
+
             p.has_questions = (
+                p.additional_fields or
                 (p.item.admission and self.request.event.settings.attendee_names_asked) or
                 (p.item.admission and self.request.event.settings.attendee_emails_asked) or
                 p.item.questions.all()
             )
             p.cache_answers()
+
             positions.append(p)
 
         positions.sort(key=lambda p: p.sort_key)
@@ -169,7 +175,9 @@ class OrderComment(OrderView):
         if form.is_valid():
             self.order.comment = form.cleaned_data.get('comment')
             self.order.save()
-            self.order.log_action('pretix.event.order.comment', user=self.request.user)
+            self.order.log_action('pretix.event.order.comment', user=self.request.user, data={
+                'new_comment': form.cleaned_data.get('comment')
+            })
             messages.success(self.request, _('The comment has been updated.'))
         else:
             messages.error(self.request, _('Could not update the comment.'))
@@ -194,7 +202,7 @@ class OrderTransition(OrderView):
             else:
                 messages.success(self.request, _('The order has been marked as paid.'))
         elif self.order.status == Order.STATUS_PENDING and to == 'c':
-            cancel_order(self.order, user=self.request.user)
+            cancel_order(self.order, user=self.request.user, send_mail=self.request.POST.get("send_email") == "on")
             messages.success(self.request, _('The order has been canceled.'))
         elif self.order.status == Order.STATUS_PAID and to == 'n':
             self.order.status = Order.STATUS_PENDING
@@ -232,8 +240,7 @@ class OrderInvoiceCreate(OrderView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user') or not invoice_qualified(
-                self.order):
+        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid') or not invoice_qualified(self.order):
             messages.error(self.request, _('You cannot generate an invoice for this order.'))
         elif self.order.invoices.exists():
             messages.error(self.request, _('An invoice for this order already exists.'))
@@ -467,7 +474,8 @@ class OrderChange(OrderView):
                 try:
                     ocm.add_position(item, variation,
                                      self.add_form.cleaned_data['price'],
-                                     self.add_form.cleaned_data.get('addon_to'))
+                                     self.add_form.cleaned_data.get('addon_to'),
+                                     self.add_form.cleaned_data.get('subevent'))
                 except OrderError as e:
                     self.add_form.custom_error = str(e)
                     return False
@@ -493,6 +501,8 @@ class OrderChange(OrderView):
                     ocm.change_item(p, item, variation)
                 elif p.form.cleaned_data['operation'] == 'price':
                     ocm.change_price(p, p.form.cleaned_data['price'])
+                elif p.form.cleaned_data['operation'] == 'subevent':
+                    ocm.change_subevent(p, p.form.cleaned_data['subevent'])
                 elif p.form.cleaned_data['operation'] == 'cancel':
                     ocm.cancel(p)
 
@@ -600,7 +610,19 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
-        ctx['items_by_category'], ctx['total'] = order_overview(self.request.event)
+
+        subevent = None
+        if self.request.GET.get("subevent", "") != "" and self.request.event.has_subevents:
+            i = self.request.GET.get("subevent", "")
+            try:
+                subevent = self.request.event.subevents.get(pk=i)
+            except SubEvent.DoesNotExist:
+                pass
+
+        ctx['items_by_category'], ctx['total'] = order_overview(self.request.event, subevent=subevent)
+        ctx['subevent_warning'] = self.request.event.has_subevents and subevent and (
+            self.request.event.orders.filter(payment_fee__gt=0).exists()
+        )
         return ctx
 
 

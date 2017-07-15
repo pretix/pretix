@@ -10,6 +10,7 @@ from pytz import common_timezones, timezone
 
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer
+from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.control.forms import ExtFileField
 
 
@@ -19,6 +20,15 @@ class EventWizardFoundationForm(forms.Form):
         label=_("Use languages"),
         widget=forms.CheckboxSelectMultiple,
         help_text=_('Choose all languages that your event should be available in.')
+    )
+    has_subevents = forms.BooleanField(
+        label=_("This is an event series"),
+        help_text=_('Only recommended for advanced users. If this feature is enabled, this will not only be a '
+                    'single event but a series of very similar events that are handled within a single shop. '
+                    'The single events inside the series can only differ in date, time, location, prices and '
+                    'quotas, but not in other settings, and buying tickets across multiple of these events at '
+                    'the same time is possible. You cannot change this setting for this event later.'),
+        required=False,
     )
 
     def __init__(self, *args, **kwargs):
@@ -72,10 +82,15 @@ class EventWizardBasicsForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         self.organizer = kwargs.pop('organizer')
         self.locales = kwargs.get('locales')
+        self.has_subevents = kwargs.pop('has_subevents')
         kwargs.pop('user')
         super().__init__(*args, **kwargs)
         self.initial['timezone'] = get_current_timezone_name()
         self.fields['locale'].choices = [(a, b) for a, b in settings.LANGUAGES if a in self.locales]
+        self.fields['location'].widget.attrs['rows'] = '3'
+        if self.has_subevents:
+            del self.fields['presale_start']
+            del self.fields['presale_end']
 
     def clean(self):
         data = super().clean()
@@ -125,6 +140,7 @@ class EventWizardCopyForm(forms.Form):
     def __init__(self, *args, **kwargs):
         kwargs.pop('organizer')
         kwargs.pop('locales')
+        kwargs.pop('has_subevents')
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
         self.fields['copy_from_event'] = forms.ModelChoiceField(
@@ -163,7 +179,8 @@ class EventUpdateForm(I18nModelForm):
         widgets = {
             'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
             'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker', 'data-date-after': '#id_date_from'}),
-            'date_admission': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'date_admission': forms.DateTimeInput(attrs={'class': 'datetimepicker',
+                                                         'data-date-default': '#id_date_from'}),
             'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
             'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker',
                                                       'data-date-after': '#id_presale_start'}),
@@ -195,15 +212,15 @@ class EventSettingsForm(SettingsForm):
     presale_start_show_date = forms.BooleanField(
         label=_("Show start date"),
         help_text=_("Show the presale start date before presale has started."),
-        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_presale_start'}),
+        widget=forms.CheckboxInput,
         required=False
     )
-    last_order_modification_date = forms.DateTimeField(
+    last_order_modification_date = RelativeDateTimeField(
         label=_('Last date of modifications'),
         help_text=_("The last date users can modify details of their orders, such as attendee names or "
-                    "answers to questions."),
+                    "answers to questions. If you use the event series feature and an order contains tickest for "
+                    "multiple event dates, the earliest date will be used."),
         required=False,
-        widget=forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
     )
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
@@ -288,7 +305,7 @@ class EventSettingsForm(SettingsForm):
     reservation_time = forms.IntegerField(
         min_value=0,
         label=_("Reservation period"),
-        help_text=_("The number of minutes the items in a user's card are reserved for this user."),
+        help_text=_("The number of minutes the items in a user's cart are reserved for this user."),
     )
     imprint_url = forms.URLField(
         label=_("Imprint URL"),
@@ -327,12 +344,12 @@ class PaymentSettingsForm(SettingsForm):
         label=_('Payment term in days'),
         help_text=_("The number of days after placing an order the user has to pay to preserve his reservation."),
     )
-    payment_term_last = forms.DateField(
+    payment_term_last = RelativeDateField(
         label=_('Last date of payments'),
         help_text=_("The last date any payments are accepted. This has precedence over the number of "
-                    "days configured above."),
+                    "days configured above. If you use the event series feature and an order contains tickets for "
+                    "multiple dates, the earliest date will be used."),
         required=False,
-        widget=forms.DateInput(attrs={'class': 'datepickerfield'})
     )
     payment_term_weekdays = forms.BooleanField(
         label=_('Only end payment terms on weekdays'),
@@ -364,8 +381,10 @@ class PaymentSettingsForm(SettingsForm):
     def clean(self):
         cleaned_data = super().clean()
         payment_term_last = cleaned_data.get('payment_term_last')
+        print(payment_term_last)
         if payment_term_last and self.obj.presale_end:
-            if payment_term_last < self.obj.presale_end.date():
+            print(payment_term_last, payment_term_last.datetime(self.obj), self.obj.presale_end.date())
+            if payment_term_last.datetime(self.obj) < self.obj.presale_end.date():
                 self.add_error(
                     'payment_term_last',
                     _('The last payment date cannot be before the end of presale.'),
@@ -392,6 +411,8 @@ class ProviderForm(SettingsForm):
                 v._required = v.one_required
                 v.one_required = False
                 v.widget.enabled_locales = self.locales
+            elif isinstance(v, (RelativeDateTimeField, RelativeDateField)):
+                v.set_event(self.obj)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -420,6 +441,12 @@ class InvoiceSettingsForm(SettingsForm):
         widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
         required=False
     )
+    invoice_include_free = forms.BooleanField(
+        label=_("Show free products on invoices"),
+        help_text=_("Note that invoices will never be generated for orders that contain only free "
+                    "products."),
+        required=False
+    )
     invoice_numbers_consecutive = forms.BooleanField(
         label=_("Generate invoices with consecutive numbers"),
         help_text=_("If deactivated, the order code will be used in the invoice number."),
@@ -435,6 +462,11 @@ class InvoiceSettingsForm(SettingsForm):
             ('True', _('Automatically for all created orders')),
             ('paid', _('Automatically on payment')),
         )
+    )
+    invoice_renderer = forms.ChoiceField(
+        label=_("Invoice style"),
+        required=True,
+        choices=[]
     )
     invoice_address_from = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 5}), required=False,
@@ -471,6 +503,13 @@ class InvoiceSettingsForm(SettingsForm):
         required=False,
         help_text=_('We will show your logo with a maximal height and width of 2.5 cm.')
     )
+
+    def __init__(self, *args, **kwargs):
+        event = kwargs.get('obj')
+        super().__init__(*args, **kwargs)
+        self.fields['invoice_renderer'].choices = [
+            (r.identifier, r.verbose_name) for r in event.get_invoice_renderers().values()
+        ]
 
 
 class MailSettingsForm(SettingsForm):
@@ -558,6 +597,13 @@ class MailSettingsForm(SettingsForm):
         help_text=_("Available placeholders: {event}, {url}, {product}, {hours}, {code}"),
         validators=[PlaceholderValidator(['{event}', '{url}', '{product}', '{hours}', '{code}'])]
     )
+    mail_text_order_canceled = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {code}, {url}"),
+        validators=[PlaceholderValidator(['{event}', '{code}', '{url}'])]
+    )
     smtp_use_custom = forms.BooleanField(
         label=_("Use custom SMTP server"),
         help_text=_("All mail related to your event will be sent over the smtp server specified by you."),
@@ -639,12 +685,12 @@ class TicketSettingsForm(SettingsForm):
         help_text=_("Use pretix to generate tickets for the user to download and print out."),
         required=False
     )
-    ticket_download_date = forms.DateTimeField(
+    ticket_download_date = RelativeDateTimeField(
         label=_("Download date"),
-        help_text=_("Ticket download will be offered after this date."),
-        required=True,
-        widget=forms.DateTimeInput(attrs={'class': 'datetimepicker',
-                                          'data-display-dependency': '#id_ticket_download'}),
+        help_text=_("Ticket download will be offered after this date. If you use the event series feature and an order "
+                    "contains tickets for multiple event dates, download of all tickets will be available if at least "
+                    "one of the event dates allows it."),
+        required=False,
     )
     ticket_download_addons = forms.BooleanField(
         label=_("Offer to download tickets separately for add-on products"),
@@ -678,3 +724,15 @@ class TicketSettingsForm(SettingsForm):
             val = cleaned_data.get(k)
             if v._required and (val is None or val == ""):
                 self.add_error(k, _('This field is required.'))
+
+
+class CommentForm(I18nModelForm):
+    class Meta:
+        model = Event
+        fields = ['comment']
+        widgets = {
+            'comment': forms.Textarea(attrs={
+                'rows': 3,
+                'class': 'helper-width-100',
+            }),
+        }

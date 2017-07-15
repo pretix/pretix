@@ -1,9 +1,11 @@
 import datetime
+import os
 from datetime import timedelta
 from decimal import Decimal
 
 from bs4 import BeautifulSoup
 from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
 
@@ -11,7 +13,7 @@ from pretix.base.models import (
     CartPosition, Event, Item, ItemCategory, Order, OrderPosition, Organizer,
     Question, Quota, Voucher,
 )
-from pretix.base.models.items import ItemAddOn, ItemVariation
+from pretix.base.models.items import ItemAddOn, ItemVariation, SubEventItem
 
 
 class CheckoutTestCase(TestCase):
@@ -109,6 +111,43 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(cr2.answers.filter(question=q1).count(), 1)
         self.assertEqual(cr1.answers.filter(question=q2).count(), 1)
         self.assertFalse(cr2.answers.filter(question=q2).exists())
+
+    def test_question_file_upload(self):
+        q1 = Question.objects.create(
+            event=self.event, question='Student ID', type=Question.TYPE_FILE,
+            required=False
+        )
+        self.ticket.questions.add(q1)
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+
+        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr1.id, q1.id))), 1)
+
+        f = SimpleUploadedFile("testfile.txt", b"file_content")
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-question_%s' % (cr1.id, q1.id): f,
+            'email': 'admin@localhost'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        cr1 = CartPosition.objects.get(id=cr1.id)
+        a = cr1.answers.get(question=q1)
+        assert a.file
+        assert a.file.read() == b"file_content"
+        assert os.path.exists(os.path.join(settings.MEDIA_ROOT, a.file.name))
+
+        # Delete
+        self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-question_%s-clear' % (cr1.id, q1.id): 'on',
+            'email': 'admin@localhost'
+        }, follow=True)
+        assert not cr1.answers.exists()
+        assert not os.path.exists(os.path.join(settings.MEDIA_ROOT, a.file.name))
 
     def test_attendee_email_required(self):
         self.event.settings.set('attendee_emails_asked', True)
@@ -261,6 +300,26 @@ class CheckoutTestCase(TestCase):
         session[key] = value
         session.save()
 
+    def test_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        q = se.quotas.create(name="foo", size=None, event=self.event)
+        q.items.add(self.ticket)
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10), subevent=se
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.first().subevent, se)
+
     def test_free_price(self):
         self.ticket.free_price = True
         self.ticket.save()
@@ -292,6 +351,29 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.count(), 1)
 
+    def test_subevent_confirm_expired_available(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        se2 = self.event.subevents.create(name='Foo', date_from=now())
+        self.quota_tickets.size = 0
+        self.quota_tickets.subevent = se2
+        self.quota_tickets.save()
+        q2 = se.quotas.create(event=self.event, size=1, name='Bar')
+        q2.items.add(self.ticket)
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10), subevent=se
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.count(), 1)
+
     def test_confirm_expired_available(self):
         cr1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -305,6 +387,44 @@ class CheckoutTestCase(TestCase):
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.count(), 1)
+
+    def test_subevent_confirm_price_changed(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        q = se.quotas.create(name="foo", size=None, event=self.event)
+        q.items.add(self.ticket)
+        SubEventItem.objects.create(subevent=se, item=self.ticket, price=24)
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10), subevent=se
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        cr1 = CartPosition.objects.get(id=cr1.id)
+        self.assertEqual(cr1.price, 24)
+
+    def test_addon_price_included(self):
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1,
+                                 price_included=True)
+        cp1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.workshop1,
+            price=0, expires=now() - timedelta(minutes=10),
+            addon_to=cp1
+        )
+
+        self._set_session('payment', 'banktransfer')
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertEqual(OrderPosition.objects.filter(item=self.workshop1).last().price, 0)
 
     def test_confirm_price_changed(self):
         self.ticket.default_price = 24
@@ -624,6 +744,35 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.count(), 1)
 
+    def test_subevent_confirm_expired_partial(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        se2 = self.event.subevents.create(name='Foo', date_from=now())
+        self.quota_tickets.size = 10
+        self.quota_tickets.subevent = se2
+        self.quota_tickets.save()
+        q2 = se.quotas.create(event=self.event, size=1, name='Bar')
+        q2.items.add(self.ticket)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10), subevent=se
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10), subevent=se
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10), subevent=se2
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key).count(), 2)
+
     def test_confirm_expired_partial(self):
         self.quota_tickets.size = 1
         self.quota_tickets.save()
@@ -823,3 +972,100 @@ class CheckoutTestCase(TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug))
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
+        response = self.client.get('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug))
+        assert 'Workshop 1' in response.rendered_content
+        assert 'EUR 12.00' in response.rendered_content
+
+    def test_set_addons_included(self):
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1,
+                                 price_included=True)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'Workshop 1' in response.rendered_content
+        assert 'EUR 12.00' not in response.rendered_content
+
+    def test_set_addons_subevent(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        self.workshopquota.size = 1
+        self.workshopquota.subevent = se
+        self.workshopquota.save()
+        SubEventItem.objects.create(subevent=se, item=self.workshop1, price=42)
+
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10), subevent=se
+        )
+
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'Workshop 1 (+ EUR 42.00)' in response.rendered_content
+
+    def test_set_addons_subevent_net_prices(self):
+        self.event.has_subevents = True
+        self.event.settings.display_net_prices = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now())
+        self.workshopquota.size = 1
+        self.workshopquota.subevent = se
+        self.workshopquota.save()
+        self.workshop1.tax_rate = 19
+        self.workshop1.save()
+        self.workshop2.tax_rate = 19
+        self.workshop2.save()
+        SubEventItem.objects.create(subevent=se, item=self.workshop1, price=42)
+
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10), subevent=se
+        )
+
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'Workshop 1 (+ EUR 35.29 plus 19.00% taxes)' in response.rendered_content
+        assert 'A (+ EUR 10.08 plus 19.00% taxes)' in response.rendered_content
+
+    def test_confirm_subevent_presale_not_yet(self):
+        self.event.has_subevents = True
+        self.event.settings.display_net_prices = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), presale_start=now() + datetime.timedelta(days=1))
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10), subevent=se
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+        assert 'presale period for one of the events in your cart has not yet started.' in response.rendered_content
+        assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
+
+    def test_confirm_subevent_presale_over(self):
+        self.event.has_subevents = True
+        self.event.settings.display_net_prices = True
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), presale_end=now() - datetime.timedelta(days=1))
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10), subevent=se
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+        assert 'presale period for one of the events in your cart has ended.' in response.rendered_content
+        assert not CartPosition.objects.filter(cart_id=self.session_key).exists()

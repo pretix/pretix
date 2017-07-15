@@ -1,7 +1,8 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 import pytest
 from django.utils.timezone import now
+from pytz import UTC
 
 from pretix.base.models import Event, Organizer
 
@@ -95,3 +96,54 @@ def test_different_organizer_not_shown(env, client):
     )
     r = client.get('/mrmcd/')
     assert '32C3' not in r.rendered_content
+
+
+@pytest.mark.django_db
+def test_calendar(env, client):
+    env[0].settings.event_list_type = 'calendar'
+    e = Event.objects.create(
+        organizer=env[0], name='MRMCD2017', slug='2017',
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
+        live=True
+    )
+    r = client.get('/mrmcd/')
+    assert 'MRMCD2017' not in r.rendered_content
+    e.is_public = True
+    e.save()
+    r = client.get('/mrmcd/')
+    assert 'MRMCD2017' in r.rendered_content
+    assert 'September %d' % (now().year + 1) in r.rendered_content
+    r = client.get('/mrmcd/events/2017/10/')
+    assert 'MRMCD2017' not in r.rendered_content
+    assert 'October 2017' in r.rendered_content
+    r = client.get('/mrmcd/events/?month=10&year=2017')
+    assert 'MRMCD2017' not in r.rendered_content
+    assert 'October 2017' in r.rendered_content
+
+
+@pytest.mark.django_db
+def test_ics(env, client):
+    e = Event.objects.create(
+        organizer=env[0], name='MRMCD2017', slug='2017',
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
+        live=True
+    )
+    r = client.get('/mrmcd/events/ical/')
+    assert b'MRMCD2017' not in r.content
+    e.is_public = True
+    e.save()
+    r = client.get('/mrmcd/events/ical/')
+    assert b'MRMCD2017' in r.content
+
+
+@pytest.mark.django_db
+def test_ics_subevents(env, client):
+    e = Event.objects.create(
+        organizer=env[0], name='MRMCD2017', slug='2017',
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
+        live=True, is_public=True, has_subevents=True
+    )
+    e.subevents.create(date_from=now(), name='SE1', active=True)
+    r = client.get('/mrmcd/events/ical/')
+    assert b'MRMCD2017' not in r.content
+    assert b'SE1' in r.content

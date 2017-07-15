@@ -1,0 +1,21 @@
+{% load i18n %}
+<div class="reldatetime">
+    {% for group_name, group_choices, group-index in widget.subwidgets.0.optgroups %}
+        {% for selopt in group_choices %}
+            <div class="radio">
+                <label>
+                    <input type="radio" name="{{ widget.subwidgets.0.name }}" value="{{ selopt.value }}"
+                            {% include "django/forms/widgets/attrs.html" with widget=selopt %} />
+                    {{ selopt.label }}
+                </label>
+                {% if selopt.value == "absolute" %}
+                    {% include widget.subwidgets.1.template_name with widget=widget.subwidgets.1 %}
+                {% elif selopt.value == "relative" %}
+                    {% include widget.subwidgets.2.template_name with widget=widget.subwidgets.2 %}
+                    {% trans "days before" %}
+                    {% include widget.subwidgets.3.template_name with widget=widget.subwidgets.3 %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>

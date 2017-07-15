@@ -48,6 +48,7 @@
             <thead>
             <tr>
                 <th>{% trans "Event name" %}</th>
+                <th>{% trans "Short form" %}</th>
                 <th>{% trans "Organizer" %}</th>
                 <th>{% trans "Start date" %}</th>
                 <th>{% trans "End date" %}</th>
@@ -60,6 +61,7 @@
                     <td>
                         <strong><a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong>
                     </td>
+                    <td>{{ e.slug }}</td>
                     <td>{{ e.organizer }}</td>
                     <td>{{ e.get_date_from_display }}</td>
                     <td>{{ e.get_date_to_display }}</td>

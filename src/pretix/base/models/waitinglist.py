@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.i18n import language
 from pretix.base.models import Voucher
@@ -11,7 +11,7 @@ from pretix.base.services.mail import mail
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 from .base import LoggedModel
-from .event import Event
+from .event import Event, SubEvent
 from .items import Item, ItemVariation
 
 
@@ -25,6 +25,12 @@ class WaitingListEntry(LoggedModel):
         on_delete=models.CASCADE,
         related_name="waitinglistentries",
         verbose_name=_("Event"),
+    )
+    subevent = models.ForeignKey(
+        SubEvent,
+        null=True, blank=True,
+        on_delete=models.CASCADE,
+        verbose_name=pgettext_lazy("subevent", "Date"),
     )
     created = models.DateTimeField(
         verbose_name=_("On waiting list since"),
@@ -77,9 +83,9 @@ class WaitingListEntry(LoggedModel):
 
     def send_voucher(self, quota_cache=None, user=None):
         availability = (
-            self.variation.check_quotas(count_waitinglist=False, _cache=quota_cache)
+            self.variation.check_quotas(count_waitinglist=False, subevent=self.subevent, _cache=quota_cache)
             if self.variation
-            else self.item.check_quotas(count_waitinglist=False, _cache=quota_cache)
+            else self.item.check_quotas(count_waitinglist=False, subevent=self.subevent, _cache=quota_cache)
         )
         if availability[1] < 1:
             raise WaitingListException(_('This product is currently not available.'))
@@ -98,6 +104,7 @@ class WaitingListEntry(LoggedModel):
                     email=self.email
                 ),
                 block_quota=True,
+                subevent=self.subevent,
             )
             v.log_action('pretix.voucher.added.waitinglist', {
                 'item': self.item.pk,
@@ -107,7 +114,8 @@ class WaitingListEntry(LoggedModel):
                 'valid_until': v.valid_until.isoformat(),
                 'max_usages': 1,
                 'email': self.email,
-                'waitinglistentry': self.pk
+                'waitinglistentry': self.pk,
+                'subevent': self.subevent.pk if self.subevent else None,
             }, user=user)
             self.log_action('pretix.waitinglist.voucher', user=user)
             self.voucher = v

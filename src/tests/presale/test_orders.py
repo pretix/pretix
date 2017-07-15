@@ -9,6 +9,7 @@ from pretix.base.models import (
     Event, Item, ItemCategory, ItemVariation, Order, OrderPosition, Organizer,
     Question, Quota,
 )
+from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 
 
@@ -340,6 +341,21 @@ class OrdersTest(TestCase):
         assert response.status_code == 200
 
         self.event.settings.set('ticket_download_date', now() + datetime.timedelta(days=1))
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.order.secret, self.ticket_pos.pk),
+            follow=True
+        )
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+
+        self.event.date_from = now() + datetime.timedelta(days=3)
+        self.event.save()
+        self.event.settings.set('ticket_download_date', RelativeDateWrapper(RelativeDate(
+            base_date_name='date_from', days_before=2, time=None
+        )))
         response = self.client.get(
             '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
                                                           self.order.secret, self.ticket_pos.pk),

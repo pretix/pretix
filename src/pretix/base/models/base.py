@@ -6,7 +6,8 @@ from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
-from i18nfield.utils import I18nJSONEncoder
+
+from pretix.helpers.json import CustomJSONEncoder
 
 
 def cachedfile_name(instance, filename: str) -> str:
@@ -16,7 +17,7 @@ def cachedfile_name(instance, filename: str) -> str:
 
 class CachedFile(models.Model):
     """
-    A cached file (e.g. pre-generated ticket PDF)
+    An uploaded file, with an optional expiry date.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     expires = models.DateTimeField(null=True, blank=True)
@@ -54,7 +55,7 @@ class LoggingMixin:
             event = self.event
         l = LogEntry(content_object=self, user=user, action_type=action, event=event)
         if data:
-            l.data = json.dumps(data, cls=I18nJSONEncoder)
+            l.data = json.dumps(data, cls=CustomJSONEncoder)
         l.save()
 
 

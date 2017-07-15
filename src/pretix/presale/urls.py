@@ -16,6 +16,9 @@ event_patterns = [
     url(r'^cart/add$', pretix.presale.views.cart.CartAdd.as_view(), name='event.cart.add'),
     url(r'^cart/remove$', pretix.presale.views.cart.CartRemove.as_view(), name='event.cart.remove'),
     url(r'^cart/clear$', pretix.presale.views.cart.CartClear.as_view(), name='event.cart.clear'),
+    url(r'^cart/answer/(?P<answer>[^/]+)/$',
+        pretix.presale.views.cart.AnswerDownload.as_view(),
+        name='event.cart.download.answer'),
     url(r'^waitinglist', pretix.presale.views.waiting.WaitingView.as_view(), name='event.waitinglist'),
     url(r'^checkout/start$', pretix.presale.views.checkout.CheckoutView.as_view(), name='event.checkout.start'),
     url(r'^redeem/?$', pretix.presale.views.cart.RedeemView.as_view(),
@@ -48,6 +51,9 @@ event_patterns = [
     url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/pay/change',
         pretix.presale.views.order.OrderPayChangeMethod.as_view(),
         name='event.order.pay.change'),
+    url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/answer/(?P<answer>[^/]+)/$',
+        pretix.presale.views.order.AnswerDownload.as_view(),
+        name='event.order.download.answer'),
     url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<output>[^/]+)$',
         pretix.presale.views.order.OrderDownload.as_view(),
         name='event.order.download.combined'),
@@ -60,12 +66,25 @@ event_patterns = [
     url(r'^ical/?$',
         pretix.presale.views.event.EventIcalDownload.as_view(),
         name='event.ical.download'),
+    url(r'^ical/(?P<subevent>[0-9]+)/$',
+        pretix.presale.views.event.EventIcalDownload.as_view(),
+        name='event.ical.download'),
     url(r'^auth/$', pretix.presale.views.event.EventAuth.as_view(), name='event.auth'),
+    url(r'^(?P<subevent>[0-9]+)/$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
     url(r'^$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
 ]
 
 organizer_patterns = [
     url(r'^$', pretix.presale.views.organizer.OrganizerIndex.as_view(), name='organizer.index'),
+    url(r'^events/$',
+        pretix.presale.views.organizer.CalendarView.as_view(),
+        name='organizer.calendar'),
+    url(r'^events/ical/$',
+        pretix.presale.views.organizer.OrganizerIcalDownload.as_view(),
+        name='organizer.ical'),
+    url(r'^events/(?P<year>[0-9]{4})/(?P<month>[0-9]{1,2})/$',
+        pretix.presale.views.organizer.CalendarView.as_view(),
+        name='organizer.calendar'),
 ]
 
 locale_patterns = [

@@ -74,8 +74,18 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
   margin-bottom: 0;
 }
 
-.container ul.nav-pills {
-  margin: 20px 0;
+.preview-panel .nav-tabs {
+  border-bottom: 0px solid #ddd;
+}
+
+.tab-content {
+    border: 1px solid #ddd;
+    border-radius: 0px 5px 5px 5px;
+    padding: 5px 5px 0px 5px;
+}
+
+.mail-preview-group {
+  margin-bottom: -15px;
 }
 
 .variation-matrix {
@@ -153,4 +163,15 @@ pre.mail-preview {
 }
 .input-group-btn .btn {
   padding-bottom: 7px;
+}
+.reldatetime {
+  input[type=text], select {
+    display: inline-block;
+    max-width: 200px;
+  }
+  input[type=number] {
+    display: inline-block;
+    width: 80px;
+  }
+
 }

@@ -13,6 +13,7 @@ from django.views.generic import FormView, ListView
 
 from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import InvoiceAddress, LogEntry, Order
+from pretix.base.models.event import SubEvent
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -43,6 +44,13 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     'subject': LazyI18nString(logentry.parsed_data['subject']),
                     'sendto': logentry.parsed_data['sendto'],
                 }
+                if logentry.parsed_data.get('subevent'):
+                    try:
+                        kwargs['initial']['subevent'] = self.request.event.subevents.get(
+                            pk=logentry.parsed_data['subevent']['id']
+                        )
+                    except SubEvent.DoesNotExist:
+                        pass
             except LogEntry.DoesNotExist:
                 raise Http404(_('You supplied an invalid log entry ID'))
         return kwargs
@@ -57,6 +65,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         if 'overdue' in form.cleaned_data['sendto']:
             statusq |= Q(status=Order.STATUS_PENDING, expires__lt=now())
         orders = qs.filter(statusq)
+        if form.cleaned_data.get('subevent'):
+            orders = orders.filter(positions__subevent__in=(form.cleaned_data.get('subevent'),)).distinct()
 
         tz = pytz.timezone(self.request.event.settings.timezone)
 
@@ -119,7 +129,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                         data={
                             'subject': form.cleaned_data['subject'],
                             'message': form.cleaned_data['message'],
-                            'recipient': o.email
+                            'recipient': o.email,
                         }
                     )
             except SendMailException:
@@ -175,5 +185,10 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
             log.pdata['sendto'] = [
                 status[s] for s in log.pdata['sendto']
             ]
+            if log.pdata.get('subevent'):
+                try:
+                    log.pdata['subevent_obj'] = self.request.event.subevents.get(pk=log.pdata['subevent']['id'])
+                except SubEvent.DoesNotExist:
+                    pass
 
         return ctx

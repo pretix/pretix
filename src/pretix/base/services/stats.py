@@ -5,6 +5,7 @@ from django.db.models import Count, Sum
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Event, Item, ItemCategory, Order, OrderPosition
+from pretix.base.models.event import SubEvent
 
 
 class DummyObject:
@@ -67,14 +68,18 @@ def dictsum(*dicts) -> dict:
     return res
 
 
-def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]], Dict[str, Tuple[Decimal, Decimal]]]:
+def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
+                                                                   Dict[str, Tuple[Decimal, Decimal]]]:
     items = event.items.all().select_related(
         'category',  # for re-grouping
     ).prefetch_related(
         'variations'
-    ).order_by('category__position', 'category_id', 'name')
+    ).order_by('category__position', 'category_id', 'position', 'name')
 
-    counters = OrderPosition.objects.filter(
+    qs = OrderPosition.objects
+    if subevent:
+        qs = qs.filter(subevent=subevent)
+    counters = qs.filter(
         order__event=event
     ).values(
         'item', 'variation', 'order__status'
@@ -155,71 +160,72 @@ def order_overview(event: Event) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
     payment_cat_obj.name = _('Payment method fees')
     payment_items = []
 
-    counters = event.orders.values('payment_provider', 'status').annotate(
-        cnt=Count('id'), payment_fee=Sum('payment_fee'), tax_value=Sum('payment_fee_tax_value')
-    ).order_by()
+    if not subevent:
+        counters = event.orders.values('payment_provider', 'status').annotate(
+            cnt=Count('id'), payment_fee=Sum('payment_fee'), tax_value=Sum('payment_fee_tax_value')
+        ).order_by()
 
-    num_canceled = {
-        o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
-        for o in counters if o['status'] == Order.STATUS_CANCELED
-    }
-    num_refunded = {
-        o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
-        for o in counters if o['status'] == Order.STATUS_REFUNDED
-    }
-    num_pending = {
-        o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
-        for o in counters if o['status'] == Order.STATUS_PENDING
-    }
-    num_expired = {
-        o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
-        for o in counters if o['status'] == Order.STATUS_EXPIRED
-    }
-    num_paid = {
-        o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
-        for o in counters if o['status'] == Order.STATUS_PAID
-    }
-    num_total = dictsum(num_pending, num_paid)
+        num_canceled = {
+            o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
+            for o in counters if o['status'] == Order.STATUS_CANCELED
+        }
+        num_refunded = {
+            o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
+            for o in counters if o['status'] == Order.STATUS_REFUNDED
+        }
+        num_pending = {
+            o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
+            for o in counters if o['status'] == Order.STATUS_PENDING
+        }
+        num_expired = {
+            o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
+            for o in counters if o['status'] == Order.STATUS_EXPIRED
+        }
+        num_paid = {
+            o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
+            for o in counters if o['status'] == Order.STATUS_PAID
+        }
+        num_total = dictsum(num_pending, num_paid)
 
-    provider_names = {
-        k: v.verbose_name
-        for k, v in event.get_payment_providers().items()
-    }
+        provider_names = {
+            k: v.verbose_name
+            for k, v in event.get_payment_providers().items()
+        }
 
-    for pprov, total in num_total.items():
-        ppobj = DummyObject()
-        ppobj.name = provider_names.get(pprov, pprov)
-        ppobj.provider = pprov
-        ppobj.has_variations = False
-        ppobj.num_total = total
-        ppobj.num_canceled = num_canceled.get(pprov, (0, 0, 0))
-        ppobj.num_refunded = num_refunded.get(pprov, (0, 0, 0))
-        ppobj.num_expired = num_expired.get(pprov, (0, 0, 0))
-        ppobj.num_pending = num_pending.get(pprov, (0, 0, 0))
-        ppobj.num_paid = num_paid.get(pprov, (0, 0, 0))
-        payment_items.append(ppobj)
+        for pprov, total in num_total.items():
+            ppobj = DummyObject()
+            ppobj.name = provider_names.get(pprov, pprov)
+            ppobj.provider = pprov
+            ppobj.has_variations = False
+            ppobj.num_total = total
+            ppobj.num_canceled = num_canceled.get(pprov, (0, 0, 0))
+            ppobj.num_refunded = num_refunded.get(pprov, (0, 0, 0))
+            ppobj.num_expired = num_expired.get(pprov, (0, 0, 0))
+            ppobj.num_pending = num_pending.get(pprov, (0, 0, 0))
+            ppobj.num_paid = num_paid.get(pprov, (0, 0, 0))
+            payment_items.append(ppobj)
 
-    payment_cat_obj.num_total = (
-        Dontsum(''), sum(i.num_total[1] for i in payment_items), sum(i.num_total[2] for i in payment_items)
-    )
-    payment_cat_obj.num_canceled = (
-        Dontsum(''), sum(i.num_canceled[1] for i in payment_items), sum(i.num_canceled[2] for i in payment_items)
-    )
-    payment_cat_obj.num_refunded = (
-        Dontsum(''), sum(i.num_refunded[1] for i in payment_items), sum(i.num_refunded[2] for i in payment_items)
-    )
-    payment_cat_obj.num_expired = (
-        Dontsum(''), sum(i.num_expired[1] for i in payment_items), sum(i.num_expired[2] for i in payment_items)
-    )
-    payment_cat_obj.num_pending = (
-        Dontsum(''), sum(i.num_pending[1] for i in payment_items), sum(i.num_pending[2] for i in payment_items)
-    )
-    payment_cat_obj.num_paid = (
-        Dontsum(''), sum(i.num_paid[1] for i in payment_items), sum(i.num_paid[2] for i in payment_items)
-    )
-    payment_cat = (payment_cat_obj, payment_items)
+        payment_cat_obj.num_total = (
+            Dontsum(''), sum(i.num_total[1] for i in payment_items), sum(i.num_total[2] for i in payment_items)
+        )
+        payment_cat_obj.num_canceled = (
+            Dontsum(''), sum(i.num_canceled[1] for i in payment_items), sum(i.num_canceled[2] for i in payment_items)
+        )
+        payment_cat_obj.num_refunded = (
+            Dontsum(''), sum(i.num_refunded[1] for i in payment_items), sum(i.num_refunded[2] for i in payment_items)
+        )
+        payment_cat_obj.num_expired = (
+            Dontsum(''), sum(i.num_expired[1] for i in payment_items), sum(i.num_expired[2] for i in payment_items)
+        )
+        payment_cat_obj.num_pending = (
+            Dontsum(''), sum(i.num_pending[1] for i in payment_items), sum(i.num_pending[2] for i in payment_items)
+        )
+        payment_cat_obj.num_paid = (
+            Dontsum(''), sum(i.num_paid[1] for i in payment_items), sum(i.num_paid[2] for i in payment_items)
+        )
+        payment_cat = (payment_cat_obj, payment_items)
 
-    items_by_category.append(payment_cat)
+        items_by_category.append(payment_cat)
 
     total = {
         'num_total': tuplesum(c.num_total for c, i in items_by_category),

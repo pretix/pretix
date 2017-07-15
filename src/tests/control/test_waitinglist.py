@@ -75,6 +75,16 @@ def test_assign_single(client, env):
 
 
 @pytest.mark.django_db
+def test_delete_single(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    wle = WaitingListEntry.objects.first()
+
+    client.post('/control/event/dummy/dummy/waitinglist/%s/delete' % (wle.id))
+    with pytest.raises(WaitingListEntry.DoesNotExist):
+        WaitingListEntry.objects.get(id=wle.id)
+
+
+@pytest.mark.django_db
 def test_dashboard(client, env):
     quota = Quota.objects.create(name="Test", size=2, event=env[0])
     quota.items.add(env[3])

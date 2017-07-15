@@ -10,6 +10,8 @@ from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.strings import LazyI18nString
 from typing import Any
 
+from pretix.base.reldate import RelativeDateWrapper
+
 DEFAULTS = {
     'max_items_per_order': {
         'default': '10',
@@ -51,9 +53,17 @@ DEFAULTS = {
         'default': 'False',
         'type': bool,
     },
+    'invoice_include_free': {
+        'default': 'True',
+        'type': bool,
+    },
     'invoice_numbers_consecutive': {
         'default': 'True',
         'type': bool,
+    },
+    'invoice_renderer': {
+        'default': 'classic',
+        'type': str,
     },
     'reservation_time': {
         'default': '30',
@@ -65,7 +75,7 @@ DEFAULTS = {
     },
     'payment_term_last': {
         'default': None,
-        'type': datetime,
+        'type': RelativeDateWrapper,
     },
     'payment_term_weekdays': {
         'default': 'True',
@@ -161,7 +171,7 @@ DEFAULTS = {
     },
     'ticket_download_date': {
         'default': None,
-        'type': datetime
+        'type': RelativeDateWrapper
     },
     'ticket_download_addons': {
         'default': 'False',
@@ -171,9 +181,13 @@ DEFAULTS = {
         'default': 'True',
         'type': bool
     },
+    'event_list_type': {
+        'default': 'list',
+        'type': str
+    },
     'last_order_modification_date': {
         'default': None,
-        'type': datetime
+        'type': RelativeDateWrapper
     },
     'cancel_allow_user': {
         'default': 'True',
@@ -319,6 +333,18 @@ redeem the voucher within that timeframe.
 Best regards,
 Your {event} team"""))
     },
+    'mail_text_order_canceled': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+your order {code} for {event} has been canceled.
+
+You can view the details of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
     'smtp_use_custom': {
         'default': 'False',
         'type': bool
@@ -417,6 +443,9 @@ def i18n_uns(v):
 settings_hierarkey.add_type(LazyI18nString,
                             serialize=lambda s: json.dumps(s.data),
                             unserialize=i18n_uns)
+settings_hierarkey.add_type(RelativeDateWrapper,
+                            serialize=lambda rdw: rdw.to_string(),
+                            unserialize=lambda s: RelativeDateWrapper.from_string(s))
 
 
 @settings_hierarkey.set_global(cache_namespace='global')
@@ -437,6 +466,9 @@ class SettingsSandbox:
         self._event = obj
         self._type = typestr
         self._key = key
+
+    def get_prefix(self):
+        return '%s_%s_' % (self._type, self._key)
 
     def _convert_key(self, key: str) -> str:
         return '%s_%s_%s' % (self._type, self._key, key)

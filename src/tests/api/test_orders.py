@@ -56,7 +56,9 @@ TEST_ORDERPOSITION_RES = {
     "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
     "addon_to": None,
     "checkins": [],
-    "downloads": []
+    "downloads": [],
+    "answers": [],
+    "subevent": None
 }
 TEST_ORDER_RES = {
     "code": "FOO",
@@ -141,7 +143,7 @@ def test_order_detail(token_client, organizer, event, order, item):
 
 
 @pytest.mark.django_db
-def test_orderposition_list(token_client, organizer, event, order, item):
+def test_orderposition_list(token_client, organizer, event, order, item, subevent):
     var = item.variations.create(value="Children")
     res = dict(TEST_ORDERPOSITION_RES)
     op = order.positions.first()
@@ -205,11 +207,23 @@ def test_orderposition_list(token_client, organizer, event, order, item):
         '/api/v1/organizers/{}/events/{}/orderpositions/?has_checkin=true'.format(organizer.slug, event.slug))
     assert [] == resp.data['results']
 
-    order.positions.first().checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=UTC))
+    op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=UTC))
     res['checkins'] = [{'datetime': '2017-12-26T10:00:00Z'}]
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/orderpositions/?has_checkin=true'.format(organizer.slug, event.slug))
     assert [res] == resp.data['results']
+
+    op.subevent = subevent
+    op.save()
+    res['subevent'] = subevent.pk
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/orderpositions/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
+    assert [res] == resp.data['results']
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/orderpositions/?subevent={}'.format(organizer.slug, event.slug,
+                                                                             subevent.pk + 1))
+    assert [] == resp.data['results']
 
 
 @pytest.mark.django_db

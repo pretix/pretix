@@ -10,5 +10,6 @@ Contents:
    exporter
    ticketoutput
    payment
+   invoice
    customview
    general

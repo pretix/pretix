@@ -13,6 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.base.models import (
     Item, Order, OrderPosition, Voucher, WaitingListEntry,
 )
+from pretix.control.forms.event import CommentForm
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,
 )
@@ -97,9 +98,9 @@ def waitinglist_widgets(sender, **kwargs):
         for wle in wles:
             if (wle.item, wle.variation) not in itemvar_cache:
                 itemvar_cache[(wle.item, wle.variation)] = (
-                    wle.variation.check_quotas(count_waitinglist=False, _cache=quota_cache)
+                    wle.variation.check_quotas(subevent=wle.subevent, count_waitinglist=False, _cache=quota_cache)
                     if wle.variation
-                    else wle.item.check_quotas(count_waitinglist=False, _cache=quota_cache)
+                    else wle.item.check_quotas(subevent=wle.subevent, count_waitinglist=False, _cache=quota_cache)
                 )
             row = itemvar_cache.get((wle.item, wle.variation))
             if row[1] > 0:
@@ -239,6 +240,7 @@ def event_index(request, organizer, event):
         'widgets': rearrange(widgets),
         'logs': qs[:5],
         'actions': a_qs[:5] if can_change_orders else [],
+        'comment_form': CommentForm(initial={'comment': request.event.comment})
     }
 
     for a in ctx['actions']:

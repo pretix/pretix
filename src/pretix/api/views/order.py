@@ -36,7 +36,7 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return self.request.event.orders.prefetch_related(
-            'positions', 'positions__checkins', 'positions__item',
+            'positions', 'positions__checkins', 'positions__item', 'positions__answers', 'positions__answers__options'
         ).select_related(
             'invoice_address'
         )
@@ -84,7 +84,7 @@ class OrderPositionFilter(FilterSet):
     class Meta:
         model = OrderPosition
         fields = ['item', 'variation', 'attendee_name', 'secret', 'order', 'order__status', 'has_checkin',
-                  'addon_to']
+                  'addon_to', 'subevent']
 
 
 class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -98,7 +98,7 @@ class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return OrderPosition.objects.filter(order__event=self.request.event).prefetch_related(
-            'checkins',
+            'checkins', 'answers', 'answers__options'
         ).select_related(
             'item', 'order', 'order__event', 'order__event__organizer'
         )

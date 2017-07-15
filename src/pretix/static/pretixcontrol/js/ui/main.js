@@ -180,6 +180,29 @@ $(function () {
         $(this).datetimepicker(opts);
     });
 
+    $(".timepickerfield").each(function() {
+        var opts = {
+            format: $("body").attr("data-timeformat"),
+            locale: $("body").attr("data-datetimelocale"),
+            useCurrent: false,
+            showClear: !$(this).prop("required"),
+            icons: {
+                time: 'fa fa-clock-o',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        };
+        if ($(this).is('[data-is-payment-date]'))
+            opts["daysOfWeekDisabled"] = JSON.parse($("body").attr("data-payment-weekdays-disabled"));
+        $(this).datetimepicker(opts);
+    });
+
     $(".datetimepicker[data-date-after], .datepickerfield[data-date-after]").each(function() {
         var later_field = $(this),
             earlier_field = $($(this).attr("data-date-after")),
@@ -195,6 +218,19 @@ $(function () {
             };
         update();
         earlier_field.on("dp.change", update);
+    });
+
+    $(".datetimepicker[data-date-default]").each(function() {
+        var fill_field = $(this),
+            default_field = $($(this).attr("data-date-default")),
+            show = function () {
+                var fill_date = fill_field.data('DateTimePicker').date(),
+                    default_date = default_field.data('DateTimePicker').date();
+                if (fill_date === null) {
+                    fill_field.data("DateTimePicker").defaultDate(default_date);
+                }
+            };
+        fill_field.on("dp.show", show);
     });
 
     $(".colorpickerfield").colorpicker({

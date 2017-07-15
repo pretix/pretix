@@ -4,7 +4,9 @@ from collections import OrderedDict
 
 from django import forms
 from django.db.models.functions import Coalesce
-from django.utils.translation import ugettext as _, ugettext_lazy
+from django.utils.translation import (
+    pgettext, pgettext_lazy, ugettext as _, ugettext_lazy,
+)
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Order, OrderPosition, Question
@@ -21,7 +23,7 @@ class CSVCheckinList(BaseCheckinList):
 
     @property
     def export_form_fields(self):
-        return OrderedDict(
+        d = OrderedDict(
             [
                 ('items',
                  forms.ModelMultipleChoiceField(
@@ -61,6 +63,14 @@ class CSVCheckinList(BaseCheckinList):
                  )),
             ]
         )
+        if self.event.has_subevents:
+            d['subevent'] = forms.ModelChoiceField(
+                self.event.subevents.all(),
+                label=pgettext_lazy('subevent', 'Date'),
+                required=False,
+                empty_label=pgettext_lazy('subevent', 'All dates')
+            )
+        return d
 
     def render(self, form_data: dict):
         output = io.StringIO()
@@ -81,6 +91,8 @@ class CSVCheckinList(BaseCheckinList):
         headers = [
             _('Order code'), _('Attendee name'), _('Product'), _('Price')
         ]
+        if form_data.get('subevent'):
+            qs = qs.filter(subevent=form_data.get('subevent'))
         if form_data['paid_only']:
             qs = qs.filter(order__status=Order.STATUS_PAID)
         else:
@@ -92,6 +104,9 @@ class CSVCheckinList(BaseCheckinList):
 
         if self.event.settings.attendee_emails_asked:
             headers.append(_('E-mail'))
+
+        if self.event.has_subevents:
+            headers.append(pgettext('subevent', 'Date'))
 
         for q in questions:
             headers.append(str(q.question))
@@ -111,6 +126,8 @@ class CSVCheckinList(BaseCheckinList):
                 row.append(op.secret)
             if self.event.settings.attendee_emails_asked:
                 row.append(op.attendee_email or (op.addon_to.attendee_email if op.addon_to else ''))
+            if self.event.has_subevents:
+                row.append(str(op.subevent))
             acache = {}
             for a in op.answers.all():
                 acache[a.question_id] = str(a)

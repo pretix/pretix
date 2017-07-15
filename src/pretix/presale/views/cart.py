@@ -1,14 +1,19 @@
+import mimetypes
+import os
+
 from django.contrib import messages
-from django.db.models import Count, Q
-from django.http import JsonResponse
-from django.shortcuts import redirect
+from django.db.models import Count, Prefetch, Q
+from django.http import FileResponse, Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView, View
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models import CartPosition, Quota, Voucher
+from pretix.base.models import (
+    CartPosition, ItemVariation, QuestionAnswer, Quota, SubEvent, Voucher,
+)
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, clear_cart, remove_cart_position,
 )
@@ -57,7 +62,8 @@ class CartActionMixin:
                     'variation': None,
                     'count': amount,
                     'price': price,
-                    'voucher': voucher
+                    'voucher': voucher,
+                    'subevent': self.request.POST.get("subevent")
                 }
             except ValueError:
                 raise CartError(_('Please enter numbers only.'))
@@ -68,7 +74,8 @@ class CartActionMixin:
                     'variation': int(parts[2]),
                     'count': amount,
                     'price': price,
-                    'voucher': voucher
+                    'voucher': voucher,
+                    'subevent': self.request.POST.get("subevent")
                 }
             except ValueError:
                 raise CartError(_('Please enter numbers only.'))
@@ -185,10 +192,29 @@ class RedeemView(EventViewMixin, TemplateView):
         items = items.filter(vouchq).select_related(
             'category',  # for re-grouping
         ).prefetch_related(
-            'quotas', 'variations__quotas', 'quotas__event'  # for .availability()
-        ).annotate(quotac=Count('quotas')).filter(
+            Prefetch('quotas',
+                     to_attr='_subevent_quotas',
+                     queryset=self.request.event.quotas.filter(subevent=self.subevent)),
+            Prefetch('variations', to_attr='avail_variations',
+                     queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).prefetch_related(
+                         Prefetch('quotas',
+                                  to_attr='_subevent_quotas',
+                                  queryset=self.request.event.quotas.filter(subevent=self.subevent))
+                     ).distinct()),
+        ).annotate(
+            quotac=Count('quotas'),
+            has_variations=Count('variations')
+        ).filter(
             quotac__gt=0
         ).distinct().order_by('category__position', 'category_id', 'position', 'name')
+        quota_cache = {}
+
+        if self.subevent:
+            item_price_override = self.subevent.item_price_overrides
+            var_price_override = self.subevent.var_price_overrides
+        else:
+            item_price_override = {}
+            var_price_override = {}
 
         for item in items:
             item.available_variations = list(item.variations.filter(active=True, quotas__isnull=False).distinct())
@@ -199,33 +225,48 @@ class RedeemView(EventViewMixin, TemplateView):
 
             item.has_variations = item.variations.exists()
             if not item.has_variations:
+                item._remove = not bool(item._subevent_quotas)
                 if self.voucher.allow_ignore_quota or self.voucher.block_quota:
                     item.cached_availability = (Quota.AVAILABILITY_OK, 1)
                 else:
-                    item.cached_availability = item.check_quotas()
-                item.price = self.voucher.calculate_price(item.default_price)
+                    item.cached_availability = item.check_quotas(subevent=self.subevent, _cache=quota_cache)
+
+                item.price = item_price_override.get(item.pk, item.default_price)
+                item.price = self.voucher.calculate_price(item.price)
                 if self.request.event.settings.display_net_prices:
                     item.price -= round_decimal(item.price * (1 - 100 / (100 + item.tax_rate)))
             else:
-                for var in item.available_variations:
+                item._remove = False
+                for var in item.avail_variations:
                     if self.voucher.allow_ignore_quota or self.voucher.block_quota:
                         var.cached_availability = (Quota.AVAILABILITY_OK, 1)
                     else:
-                        var.cached_availability = list(var.check_quotas())
-                    var.display_price = self.voucher.calculate_price(var.price)
+                        var.cached_availability = list(var.check_quotas(subevent=self.subevent, _cache=quota_cache))
+
+                    var.display_price = var_price_override.get(var.pk, var.price)
+                    var.display_price = self.voucher.calculate_price(var.display_price)
                     if self.request.event.settings.display_net_prices:
                         var.display_price -= round_decimal(var.display_price * (1 - 100 / (100 + item.tax_rate)))
 
+                item.available_variations = [
+                    v for v in item.avail_variations if v._subevent_quotas
+                ]
+                if self.voucher.variation_id:
+                    item.available_variations = [v for v in item.available_variations
+                                                 if v.pk == self.voucher.variation_id]
                 if len(item.available_variations) > 0:
-                    item.min_price = min([v.display_price for v in item.available_variations])
-                    item.max_price = max([v.display_price for v in item.available_variations])
+                    item.min_price = min([v.display_price for v in item.avail_variations])
+                    item.max_price = max([v.display_price for v in item.avail_variations])
 
-        items = [item for item in items if len(item.available_variations) > 0 or not item.has_variations]
+        items = [item for item in items
+                 if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove]
         context['options'] = sum([(len(item.available_variations) if item.has_variations else 1)
                                   for item in items])
 
         # Regroup those by category
         context['items_by_category'] = item_group_by_category(items)
+
+        context['subevent'] = self.subevent
 
         return context
 
@@ -261,8 +302,39 @@ class RedeemView(EventViewMixin, TemplateView):
         if request.event.presale_end and now() > request.event.presale_end:
             err = error_messages['ended']
 
+        self.subevent = None
+        if request.event.has_subevents:
+            if 'subevent' in request.GET:
+                self.subevent = get_object_or_404(SubEvent, event=request.event, pk=request.GET.get('subevent'),
+                                                  active=True)
+
+            if self.voucher.subevent:
+                self.subevent = self.voucher.subevent
+        else:
+            pass
+
         if err:
             messages.error(request, _(err))
             return redirect(eventreverse(request.event, 'presale:event.index'))
 
         return super().dispatch(request, *args, **kwargs)
+
+
+class AnswerDownload(EventViewMixin, View):
+    def get(self, request, *args, **kwargs):
+        answid = kwargs.get('answer')
+        answer = get_object_or_404(
+            QuestionAnswer,
+            cartposition__cart_id=self.request.session.session_key,
+            id=answid
+        )
+        if not answer.file:
+            return Http404()
+
+        ftype, _ = mimetypes.guess_type(answer.file.name)
+        resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
+        resp['Content-Disposition'] = 'attachment; filename="{}-cart-{}"'.format(
+            self.request.event.slug.upper(),
+            os.path.basename(answer.file.name).split('.', 1)[1]
+        )
+        return resp

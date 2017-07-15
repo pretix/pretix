@@ -9,6 +9,9 @@
 
 {% block content %}
     <h2>{% trans "Voucher redemption" %}</h2>
+    {% if subevent %}
+        <h3>{{ subevent.name }}</h3>
+    {% endif %}
     <p>
         {% blocktrans trimmed %}
             You entered a voucher code that allows you to buy one of the following products at the specified price:
@@ -18,6 +21,7 @@
         <form method="post" data-asynctask
                 action="{% eventurl request.event "presale:event.cart.add" %}?next={{ request.path|urlencode }}">
             {% csrf_token %}
+            <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />
             <input type="hidden" name="_voucher_code" value="{{ voucher.code }}">
             {% for tup in items_by_category %}
                 <section>

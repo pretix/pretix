@@ -31,6 +31,7 @@ superuser_urls = [
 
 event_urls = [
     "",
+    "comment/",
     "settings/",
     "settings/plugins",
     "settings/payment",
@@ -63,6 +64,10 @@ event_urls = [
     "vouchers/add",
     "vouchers/bulk_add",
     "vouchers/rng",
+    "subevents/",
+    "subevents/add",
+    "subevents/2/delete",
+    "subevents/2/",
     "quotas/",
     "quotas/2/delete",
     "quotas/2/change",
@@ -157,6 +162,7 @@ event_permission_urls = [
     ("can_change_event_settings", "settings/display", 200),
     ("can_change_event_settings", "settings/invoice", 200),
     ("can_change_event_settings", "settings/invoice/preview", 200),
+    ("can_change_event_settings", "comment/", 405),
     # Lists are currently not access-controlled
     # ("can_change_items", "items/", 200),
     ("can_change_items", "items/add", 200),
@@ -180,6 +186,10 @@ event_permission_urls = [
     ("can_change_items", "quotas/2/change", 404),
     ("can_change_items", "quotas/2/delete", 404),
     ("can_change_items", "quotas/add", 200),
+    ("can_change_event_settings", "subevents/", 200),
+    ("can_change_event_settings", "subevents/2/", 404),
+    ("can_change_event_settings", "subevents/2/delete", 404),
+    ("can_change_event_settings", "subevents/add", 200),
     ("can_view_orders", "orders/overview/", 200),
     ("can_view_orders", "orders/export/", 200),
     ("can_view_orders", "orders/", 200),

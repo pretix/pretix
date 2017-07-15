@@ -45,7 +45,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
 	</head>
-	<body data-datetimeformat="{{ js_datetime_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}" data-payment-weekdays-disabled="{{ js_payment_weekdays_disabled }}">
+	<body data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}" data-payment-weekdays-disabled="{{ js_payment_weekdays_disabled }}">
         <div id="wrapper">
             <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
                 <div class="navbar-header">
@@ -60,6 +60,22 @@
                             data-toggle="collapse" data-target=".navbar-events-collapse">
                         <i class="fa fa-calendar"></i><span class="caret"></span>
                     </button>
+                    {% if request.event %}
+                        {% if has_domain and not request.event.live %}
+                            <form action="{% eventurl request.event "presale:event.auth" %}" method="post"
+                                    target="_blank" class="mobile-navbar-view-form visible-xs-block">
+                                <input type="hidden" value="{{ new_session }}" name="session">
+                                <button type="submit" class="btn btn-link navbar-toggle">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </form>
+                        {% else %}
+                            <a href="{% eventurl request.event "presale:event.index" %}" title="{% trans "Go to Shop" %}"
+                                    target="_blank" class="navbar-toggle mobile-navbar-view-link">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        {% endif %}
+                    {% endif %}
                     <a class="navbar-brand" href="{% url "control:index" %}">
                         <img src="{% static "pretixbase/img/pretix-icon.svg" %}" />
                         {{ settings.PRETIX_INSTANCE_NAME }}

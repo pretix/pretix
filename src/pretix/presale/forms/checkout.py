@@ -1,3 +1,4 @@
+import os
 from decimal import Decimal
 from itertools import chain
 
@@ -9,10 +10,12 @@ from django.utils.formats import number_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import ItemVariation, Question
-from pretix.base.models.orders import InvoiceAddress
+from pretix.base.models.orders import InvoiceAddress, OrderPosition
 from pretix.base.templatetags.rich_text import rich_text
-from pretix.presale.signals import contact_form_fields
+from pretix.multidomain.urlreverse import eventreverse
+from pretix.presale.signals import contact_form_fields, question_form_fields
 
 
 class ContactForm(forms.Form):
@@ -73,6 +76,42 @@ class InvoiceAddressForm(forms.ModelForm):
             raise ValidationError(_('You need to provide either a company name or your name.'))
 
 
+class UploadedFileWidget(forms.ClearableFileInput):
+
+    def __init__(self, *args, **kwargs):
+        self.position = kwargs.pop('position')
+        self.event = kwargs.pop('event')
+        self.answer = kwargs.pop('answer')
+        super().__init__(*args, **kwargs)
+
+    class FakeFile:
+        def __init__(self, file, position, event, answer):
+            self.file = file
+            self.position = position
+            self.event = event
+            self.answer = answer
+
+        def __str__(self):
+            return os.path.basename(self.file.name).split('.', 1)[-1]
+
+        @property
+        def url(self):
+            if isinstance(self.position, OrderPosition):
+                return eventreverse(self.event, 'presale:event.order.download.answer', kwargs={
+                    'order': self.position.order.code,
+                    'secret': self.position.order.secret,
+                    'answer': self.answer.pk,
+                })
+            else:
+                return eventreverse(self.event, 'presale:event.cart.download.answer', kwargs={
+                    'answer': self.answer.pk,
+                })
+
+    def format_value(self, value):
+        if self.is_initial(value):
+            return self.FakeFile(value, self.position, self.event, self.answer)
+
+
 class QuestionsForm(forms.Form):
     """
     This form class is responsible for asking order-related questions. This includes
@@ -89,7 +128,8 @@ class QuestionsForm(forms.Form):
         """
         cartpos = self.cartpos = kwargs.pop('cartpos', None)
         orderpos = self.orderpos = kwargs.pop('orderpos', None)
-        item = cartpos.item if cartpos else orderpos.item
+        pos = cartpos or orderpos
+        item = pos.item
         questions = list(item.questions.all())
         event = kwargs.pop('event')
 
@@ -168,11 +208,25 @@ class QuestionsForm(forms.Form):
                     widget=forms.CheckboxSelectMultiple,
                     initial=initial.options.all() if initial else None,
                 )
+            elif q.type == Question.TYPE_FILE:
+                field = forms.FileField(
+                    label=q.question, required=q.required,
+                    initial=initial.file if initial else None,
+                    widget=UploadedFileWidget(position=pos, event=event, answer=initial)
+                )
             field.question = q
             if answers:
                 # Cache the answer object for later use
                 field.answer = answers[0]
             self.fields['question_%s' % q.id] = field
+
+        responses = question_form_fields.send(sender=event, position=pos)
+        data = pos.meta_info_data
+        for r, response in sorted(responses, key=lambda r: str(r[0])):
+            for key, value in response.items():
+                # We need to be this explicit, since OrderedDict.update does not retain ordering
+                self.fields[key] = value
+                value.initial = data.get('question_form_data', {}).get(key)
 
 
 class AddOnRadioSelect(forms.RadioSelect):
@@ -221,7 +275,7 @@ class AddOnsForm(forms.Form):
     This form class is responsible for selecting add-ons to a product in the cart.
     """
 
-    def _label(self, event, item_or_variation, avail):
+    def _label(self, event, item_or_variation, avail, override_price=None):
         if isinstance(item_or_variation, ItemVariation):
             variation = item_or_variation
             item = item_or_variation.item
@@ -233,6 +287,14 @@ class AddOnsForm(forms.Form):
             price = item.default_price
             price_net = item.default_price_net
             label = item.name
+
+        if override_price:
+            price = override_price
+            tax_value = round_decimal(price * (1 - 100 / (100 + item.tax_rate)))
+            price_net = price - tax_value
+
+        if self.price_included:
+            price = Decimal('0.00')
 
         if not price:
             n = '{name}'.format(
@@ -266,19 +328,30 @@ class AddOnsForm(forms.Form):
 
         :param category: The category to choose from
         :param event: The event this belongs to
+        :param subevent: The event the parent cart position belongs to
         :param initial: The current set of add-ons
         :param quota_cache: A shared dictionary for quota caching
         :param item_cache: A shared dictionary for item/category caching
         """
         category = kwargs.pop('category')
         event = kwargs.pop('event')
+        subevent = kwargs.pop('subevent')
         current_addons = kwargs.pop('initial')
         quota_cache = kwargs.pop('quota_cache')
         item_cache = kwargs.pop('item_cache')
+        self.price_included = kwargs.pop('price_included')
 
         super().__init__(*args, **kwargs)
 
-        if category.pk not in item_cache:
+        if subevent:
+            item_price_override = subevent.item_price_overrides
+            var_price_override = subevent.var_price_overrides
+        else:
+            item_price_override = {}
+            var_price_override = {}
+
+        ckey = '{}-{}'.format(subevent.pk if subevent else 0, category.pk)
+        if ckey not in item_cache:
             # Get all items to possibly show
             items = category.items.filter(
                 Q(active=True)
@@ -286,26 +359,37 @@ class AddOnsForm(forms.Form):
                 & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
                 & Q(hide_without_voucher=False)
             ).prefetch_related(
-                'variations__quotas',  # for .availability()
-                Prefetch('quotas', queryset=event.quotas.all()),
+                Prefetch('quotas',
+                         to_attr='_subevent_quotas',
+                         queryset=event.quotas.filter(subevent=subevent)),
                 Prefetch('variations', to_attr='available_variations',
-                         queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).distinct()),
+                         queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).prefetch_related(
+                             Prefetch('quotas',
+                                      to_attr='_subevent_quotas',
+                                      queryset=event.quotas.filter(subevent=subevent))
+                         ).distinct()),
             ).annotate(
                 quotac=Count('quotas'),
                 has_variations=Count('variations')
             ).filter(
                 quotac__gt=0
             ).order_by('category__position', 'category_id', 'position', 'name')
-            item_cache[category.pk] = items
+            item_cache[ckey] = items
         else:
-            items = item_cache[category.pk]
+            items = item_cache[ckey]
 
         for i in items:
             if i.has_variations:
                 choices = [('', _('no selection'), '')]
                 for v in i.available_variations:
-                    cached_availability = v.check_quotas(_cache=quota_cache)
-                    choices.append((v.pk, self._label(event, v, cached_availability), v.description))
+                    cached_availability = v.check_quotas(subevent=subevent, _cache=quota_cache)
+                    if v._subevent_quotas:
+                        choices.append(
+                            (v.pk,
+                             self._label(event, v, cached_availability,
+                                         override_price=var_price_override.get(v.pk)),
+                             v.description)
+                        )
 
                 field = AddOnVariationField(
                     choices=choices,
@@ -315,13 +399,17 @@ class AddOnsForm(forms.Form):
                     help_text=rich_text(str(i.description)),
                     initial=current_addons.get(i.pk),
                 )
+                if len(choices) > 1:
+                    self.fields['item_%s' % i.pk] = field
             else:
-                cached_availability = i.check_quotas(_cache=quota_cache)
+                if not i._subevent_quotas:
+                    continue
+                cached_availability = i.check_quotas(subevent=subevent, _cache=quota_cache)
                 field = forms.BooleanField(
-                    label=self._label(event, i, cached_availability),
+                    label=self._label(event, i, cached_availability,
+                                      override_price=item_price_override.get(i.pk)),
                     required=False,
                     initial=i.pk in current_addons,
                     help_text=rich_text(str(i.description)),
                 )
-
-            self.fields['item_%s' % i.pk] = field
+                self.fields['item_%s' % i.pk] = field

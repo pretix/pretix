@@ -13,19 +13,36 @@
             {% if line.voucher %}
                 <br /><span class="fa fa-tags"></span> {% trans "Voucher code used:" %} {{ line.voucher.code }}
             {% endif %}
+            {% if line.subevent %}
+                <br /><span class="fa fa-calendar"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
+            {% endif %}
 
 
             {% if line.has_questions %}
                 <dl>
-                    {% if line.item.admission and event.settings.attendee_names_asked%}
+                    {% if line.item.admission and event.settings.attendee_names_asked %}
                         <dt>{% trans "Attendee name" %}</dt>
                         <dd>{% if line.attendee_name %}{{ line.attendee_name }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
                     {% endif %}
-                    {% if line.item.admission and event.settings.attendee_emails_asked%}
+                    {% if line.item.admission and event.settings.attendee_emails_asked %}
                         <dt>{% trans "Attendee email" %}</dt>
                         <dd>{% if line.attendee_email %}{{ line.attendee_email }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
                     {% endif %}
                     {% for q in line.questions %}
+                        <dt>{{ q.question }}</dt>
+                        <dd>
+                            {% if q.answer %}
+                                {% if q.answer.file %}
+                                    <span class="fa fa-file"></span> {{ q.answer.file_link }}
+                                {% else %}
+                                    {{ q.answer|linebreaksbr }}
+                                {% endif %}
+                            {% else %}
+                                <em>{% trans "not answered" %}</em>
+                            {% endif %}
+                        </dd>
+                    {% endfor %}
+                    {% for q in line.additional_answers %}
                         <dt>{{ q.question }}</dt>
                         <dd>{% if q.answer %}{{ q.answer|linebreaksbr }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
                     {% endfor %}
@@ -69,6 +86,7 @@
                 {% if editable %}
                 <form action="{% eventurl event "presale:event.cart.add" %}"
                     method="post" data-asynctask>
+                    <input type="hidden" name="subevent" value="{{ line.subevent_id|default_if_none:"" }}" />
                     {% csrf_token %}
                     {% if line.variation %}
                         <input type="hidden" name="variation_{{ line.item.id }}_{{ line.variation.id }}"

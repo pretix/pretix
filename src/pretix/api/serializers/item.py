@@ -61,4 +61,4 @@ class QuotaSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Quota
-        fields = ('id', 'name', 'size', 'items', 'variations')
+        fields = ('id', 'name', 'size', 'items', 'variations', 'subevent')

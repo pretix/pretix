@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.db.models import Count, Q, Sum
+from django.db.models import Q, Sum
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
     JsonResponse,
@@ -46,6 +46,9 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
                 qs = qs.filter(redeemed__gt=0)
             elif s == 'e':
                 qs = qs.filter(Q(valid_until__isnull=False) & Q(valid_until__lt=now())).filter(redeemed=0)
+        if self.request.GET.get("subevent", "") != "":
+            s = self.request.GET.get("subevent", "")
+            qs = qs.filter(subevent_id=s)
         return qs
 
     def get(self, request, *args, **kwargs):
@@ -98,7 +101,7 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
 
         tags = self.request.event.vouchers.order_by('tag').filter(tag__isnull=False).values('tag').annotate(
-            total=Count('id'),
+            total=Sum('max_usages'),
             redeemed=Sum('redeemed')
         )
         for t in tags:

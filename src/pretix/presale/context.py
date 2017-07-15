@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.files.storage import default_storage
+from django.utils.translation import get_language_info
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.settings import GlobalSettingsObject
@@ -53,6 +54,7 @@ def contextprocessor(request):
             ctx['css_file'] = default_storage.url(request.event.settings.presale_css_file)
         ctx['event_logo'] = request.event.settings.get('logo_image', as_type=str, default='')[7:]
         ctx['event'] = request.event
+        ctx['languages'] = [get_language_info(code) for code in request.event.settings.locales]
 
     if hasattr(request, 'organizer'):
         ctx['organizer_logo'] = request.organizer.settings.get('organizer_logo_image', as_type=str, default='')[7:]
