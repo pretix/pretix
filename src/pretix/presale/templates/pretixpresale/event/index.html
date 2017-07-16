@@ -8,6 +8,12 @@
 {% block title %}{% trans "Presale" %}{% endblock %}
 
 {% block content %}
+
+    {% autoescape off %}
+        <script type="application/ld+json">
+            {{ ev.event_microdata }}
+        </script>
+    {% endautoescape %}
     {% if show_cart %}
         <div class="panel panel-primary cart">
             <div class="panel-heading">

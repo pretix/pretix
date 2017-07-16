@@ -9,3 +9,7 @@ class CustomJSONEncoder(I18nJSONEncoder):
             return obj.to_string()
         else:
             return super().default(obj)
+
+
+def safe_string(original):
+    return original.replace("<", "\\u003C").replace(">", "\\u003E")
