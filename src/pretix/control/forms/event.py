@@ -381,9 +381,8 @@ class PaymentSettingsForm(SettingsForm):
     def clean(self):
         cleaned_data = super().clean()
         payment_term_last = cleaned_data.get('payment_term_last')
-        print(payment_term_last)
         if payment_term_last and self.obj.presale_end:
-            if payment_term_last.datetime(self.obj).date() < self.obj.presale_end.date():
+            if payment_term_last.date(self.obj) < self.obj.presale_end.date():
                 self.add_error(
                     'payment_term_last',
                     _('The last payment date cannot be before the end of presale.'),

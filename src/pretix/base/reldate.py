@@ -33,6 +33,27 @@ class RelativeDateWrapper:
     def __init__(self, data: Union[datetime.datetime, RelativeDate]):
         self.data = data
 
+    def date(self, event) -> datetime.datetime:
+        from .models import SubEvent
+
+        if isinstance(self.data, datetime.date):
+            return self.data
+        elif isinstance(self.data, datetime.datetime):
+            return self.data.date()
+        else:
+            tz = pytz.timezone(event.settings.timezone)
+            if isinstance(event, SubEvent):
+                base_date = (
+                    getattr(event, self.data.base_date_name)
+                    or getattr(event.event, self.data.base_date_name)
+                    or event.date_from
+                )
+            else:
+                base_date = getattr(event, self.data.base_date_name) or event.date_from
+
+            new_date = base_date.astimezone(tz) - datetime.timedelta(days=self.data.days_before)
+            return new_date.date()
+
     def datetime(self, event) -> datetime.datetime:
         from .models import SubEvent
 
