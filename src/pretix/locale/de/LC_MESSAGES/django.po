@@ -8208,7 +8208,7 @@ msgstr "E-Mail wurde verschickt"
 
 #: pretix/plugins/sendmail/signals.py:49
 msgid "The order received a mass email."
-msgstr "Die Bestellung hat eine Rundmail erhalten.
+msgstr "Die Bestellung hat eine Rundmail erhalten."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:19
 msgid "Sent to orders:"
