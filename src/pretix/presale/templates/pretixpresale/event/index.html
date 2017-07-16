@@ -117,6 +117,12 @@
                         {% blocktrans trimmed with time=ev.date_from|date:"TIME_FORMAT" %}
                             Begin: {{ time }}
                         {% endblocktrans %}
+                        {% if event.settings.show_end_date %}
+                            <br>
+                            {% blocktrans trimmed with time=ev.date_to|date:"TIME_FORMAT" %}
+                                End: {{ time }}
+                            {% endblocktrans %}
+                        {% endif %}
                     {% endif %}
                     {% if ev.date_admission %}
                         <br>
