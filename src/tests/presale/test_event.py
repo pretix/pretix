@@ -1,6 +1,7 @@
 import datetime
 import re
 from decimal import Decimal
+from json import loads
 
 from django.conf import settings
 from django.core import mail
@@ -937,6 +938,49 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.assertIn('DTEND;VALUE=DATE:20141228', ical, 'incorrect end date')
         self.assertIn('SUMMARY:%s' % se1.name, ical, 'incorrect correct summary')
         self.assertIn('LOCATION:Heeeeeere', ical, 'incorrect location')
+
+
+class EventMicrodataTest(EventTestMixin, SoupTest):
+    def setUp(self):
+        super().setUp()
+        self.event.settings.show_date_to = True
+        self.event.settings.show_times = True
+        self.event.location = 'DUMMY ARENA'
+        self.event.date_from = datetime.datetime(2013, 12, 26, 21, 57, 58, tzinfo=datetime.timezone.utc)
+        self.event.date_to = self.event.date_from + datetime.timedelta(days=2)
+        self.event.settings.timezone = 'UTC'
+        self.event.save()
+
+    def _get_json(self):
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        microdata = loads(doc.find(type="application/ld+json").string)
+        return microdata
+
+    def test_name(self):
+        md = self._get_json()
+        self.assertEqual(self.event.name, md['name'], msg='Name not present')
+
+    def test_location(self):
+        md = self._get_json()
+        self.assertEqual(self.event.location, md['location']['address'], msg='Location not present')
+
+    def test_date_to(self):
+        md = self._get_json()
+        self.assertEqual(self.event.date_to.isoformat(), md['endDate'], msg='Date To not present')
+        self.event.settings.show_date_to = False
+        md = self._get_json()
+        self.assertNotIn(self.event.date_to.isoformat(), md,
+                         msg='Date To present when show date to setting is false')
+
+    def test_no_times(self):
+        self.event.settings.show_times = False
+        md = self._get_json()
+        self.assertNotEqual(self.event.date_from.isoformat(), md['startDate'], msg='Date including time present')
+        self.assertEqual(self.event.date_from.date().isoformat(), md['startDate'], msg='Date not present at all')
+
+    def test_date_from(self):
+        md = self._get_json()
+        self.assertEqual(self.event.date_from.isoformat(), md['startDate'], msg='Date From not present')
 
 
 class EventSlugBlacklistValidatorTest(EventTestMixin, SoupTest):

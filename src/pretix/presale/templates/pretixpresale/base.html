@@ -30,6 +30,13 @@
         <script type="text/javascript" src="{% static "pretixpresale/js/ui/typocheck.js" %}"></script>
         <script type="text/javascript" src="{% static "lightbox/js/lightbox.min.js" %}"></script>
     {% endcompress %}
+    {% if event %}
+        {% autoescape off %}
+        <script type="application/ld+json">
+            {{ event.event_microdata }}
+        </script>
+        {% endautoescape %}
+    {% endif %}
     <meta name="referrer" content="origin">
     {{ html_head|safe }}
     <meta name="viewport" content="width=device-width, initial-scale=1">
