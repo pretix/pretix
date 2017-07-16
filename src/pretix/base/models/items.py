@@ -1,7 +1,6 @@
 import sys
 import uuid
 from datetime import datetime
-from decimal import Decimal
 from typing import Tuple
 
 from django.conf import settings
@@ -202,10 +201,10 @@ class Item(LoggedModel):
                     "additional donations for your event. This is currently not supported for products that are "
                     "bought as an add-on to other products.")
     )
-    tax_rate = models.DecimalField(
-        verbose_name=_("Taxes included in percent"),
-        max_digits=7, decimal_places=2,
-        default=Decimal('0.00')
+    tax_rule = models.ForeignKey(
+        'TaxRule',
+        verbose_name=_('Sales tax'),
+        null=True, blank=True
     )
     admission = models.BooleanField(
         verbose_name=_("Is an admission ticket"),

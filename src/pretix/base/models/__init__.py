@@ -19,5 +19,6 @@ from .orders import (
     generate_secret,
 )
 from .organizer import Organizer, Organizer_SettingsStore, Team, TeamInvite
+from .tax import TaxRule
 from .vouchers import Voucher
 from .waitinglist import WaitingListEntry

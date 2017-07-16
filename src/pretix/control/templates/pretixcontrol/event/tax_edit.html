@@ -1,0 +1,26 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}
+    {% if question %}
+        {% blocktrans with name=taxrule.name %}Tax rule: {{ name }}{% endblocktrans %}
+    {% else %}
+        {% trans "Tax rule" %}
+    {% endif %}
+{% endblock %}
+{% block inside %}
+    {% if question %}
+        <legend>{% blocktrans with name=taxrule.name %}Tax rule: {{ name }}{% endblocktrans %}</legend>
+    {% else %}
+        <legend>{% trans "Tax rule" %}</legend>
+    {% endif %}
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form form layout="horizontal" %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

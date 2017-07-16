@@ -1,3 +1,4 @@
+import django_filters
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
@@ -12,6 +13,8 @@ from pretix.base.models import Item, ItemCategory, Question, Quota
 
 
 class ItemFilter(FilterSet):
+    tax_rate = django_filters.CharFilter(name='tax_rule', lookup_expr='rate')
+
     class Meta:
         model = Item
         fields = ['active', 'category', 'admission', 'tax_rate', 'free_price']

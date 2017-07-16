@@ -24,6 +24,7 @@ class InlineItemAddOnSerializer(serializers.ModelSerializer):
 class ItemSerializer(I18nAwareModelSerializer):
     addons = InlineItemAddOnSerializer(many=True)
     variations = InlineItemVariationSerializer(many=True)
+    tax_rate = serializers.SlugRelatedField(slug_field='rate', source='tax_rule', read_only=True)
 
     class Meta:
         model = Item

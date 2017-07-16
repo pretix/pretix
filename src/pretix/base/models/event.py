@@ -304,6 +304,13 @@ class Event(EventMixin, LoggedModel):
         self.is_public = other.is_public
         self.save()
 
+        tax_map = {}
+        for t in other.tax_rules.all():
+            tax_map[t.pk] = t
+            t.pk = None
+            t.event = self
+            t.save()
+
         category_map = {}
         for c in ItemCategory.objects.filter(event=other):
             category_map[c.pk] = c
@@ -322,6 +329,8 @@ class Event(EventMixin, LoggedModel):
                 i.picture.save(i.picture.name, i.picture)
             if i.category_id:
                 i.category = category_map[i.category_id]
+            if i.tax_rule_id:
+                i.tax_rule = tax_map[i.tax_rule_id]
             i.save()
             for v in vars:
                 variation_map[v.pk] = v
@@ -371,7 +380,18 @@ class Event(EventMixin, LoggedModel):
                 )
                 newname = default_storage.save(fname, fi)
                 s.value = 'file://' + newname
-            s.save()
+                s.save()
+            elif s.key == 'tax_rate_default':
+                try:
+                    if int(s.value) in tax_map:
+                        s.value = tax_map.get(s.value)
+                        s.save()
+                    else:
+                        s.delete()
+                except ValueError:
+                    s.delete()
+            else:
+                s.save()
 
         event_copy_data.send(sender=self, other=other)
 

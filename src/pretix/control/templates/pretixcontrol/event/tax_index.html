@@ -1,0 +1,51 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Tax rules" %}{% endblock %}
+{% block inside %}
+    <legend>{% trans "Tax rules" %}</legend>
+    {% if taxrules|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't created any tax rules yet.
+                {% endblocktrans %}
+            </p>
+
+            <a href="{% url "control:event.settings.tax.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new tax rule" %}</a>
+        </div>
+    {% else %}
+        <p>
+            <a href="{% url "control:event.settings.tax.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new tax rule" %}
+            </a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-hover table-quotas">
+                <thead>
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Rate" %}</th>
+                    <th class="action-col-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for tr in taxrules %}
+                    <tr>
+                        <td>
+                            <strong><a href="{% url "control:event.settings.tax.edit" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}">
+                                {{ tr.name }}
+                            </a></strong>
+                        </td>
+                        <td>{{ tr.rate }}</td>
+                        <td class="text-right">
+                            <a href="{% url "control:event.settings.tax.edit" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                            <a href="{% url "control:event.settings.tax.delete" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

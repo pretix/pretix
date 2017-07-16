@@ -1,0 +1,20 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Delete tax rule" %}{% endblock %}
+{% block inside %}
+	<legend>{% trans "Delete tax rule" %}</legend>
+	<form action="" method="post" class="form-horizontal">
+		{% csrf_token %}
+		<p>{% blocktrans %}Are you sure you want to delete the tax rule <strong>{{ taxrule }}</strong>?{% endblocktrans %}</p>
+		<div class="form-group submit-group">
+            <a href="{% url "control:event.settings.tax" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn
+btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-danger btn-save">
+                {% trans "Delete" %}
+            </button>
+		</div>
+	</form>
+{% endblock %}

@@ -9,7 +9,7 @@ from i18nfield.forms import I18nFormField, I18nTextarea
 from pytz import common_timezones, timezone
 
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
-from pretix.base.models import Event, Organizer
+from pretix.base.models import Event, Organizer, TaxRule
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.control.forms import ExtFileField, SlugWidget
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -375,10 +375,12 @@ class PaymentSettingsForm(SettingsForm):
                     "configured above."),
         required=False
     )
-    tax_rate_default = forms.DecimalField(
-        label=_('Tax rate for payment fees'),
-        help_text=_("The tax rate that applies for additional fees you configured for single payment methods "
-                    "(in percent)."),
+    tax_rate_default = forms.ModelChoiceField(
+        queryset=TaxRule.objects.none(),
+        label=_('Tax rule for payment fees'),
+        required=False,
+        help_text=_("The tax rule that applies for additional fees you configured for single payment methods. We "
+                    "strongly recommend using a rule that includes tax.")
     )
 
     def clean(self):
@@ -391,6 +393,10 @@ class PaymentSettingsForm(SettingsForm):
                     _('The last payment date cannot be before the end of presale.'),
                 )
         return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['tax_rate_default'].queryset = self.obj.tax_rules.all()
 
 
 class ProviderForm(SettingsForm):
@@ -777,3 +783,9 @@ class CommentForm(I18nModelForm):
                 'class': 'helper-width-100',
             }),
         }
+
+
+class TaxRuleForm(I18nModelForm):
+    class Meta:
+        model = TaxRule
+        fields = ['name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country']
