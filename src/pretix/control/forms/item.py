@@ -190,11 +190,12 @@ class ItemCreateForm(I18nModelForm):
         instance = super().save(*args, **kwargs)
 
         if not self.cleaned_data.get('quota_option') == '0':
-            if self.cleaned_data.get('quota_add_existing'):
+            if self.cleaned_data.get('quota_option') == '1' and self.cleaned_data.get('quota_add_existing') is not None:
+                print("here for some reason")
                 quotaName = self.cleaned_data.get('quota_add_existing').name
                 quota = self.instance.event.quotas.filter(name=quotaName).get()
                 quota.items.add(self.instance)
-            else:
+            elif self.cleaned_data.get('quota_option') == '2':
                 quotaName = self.cleaned_data.get('quota_add_new_name')
                 quotaSize = self.cleaned_data.get('quota_add_new_size')
 
