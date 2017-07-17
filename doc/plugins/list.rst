@@ -36,10 +36,12 @@ pretix installation:
 * Integration with MailChimp
 
 The following plugins are from independent third-party authors, so we can make
-no statements about their stability or compatibility:
+no statements about their functionality, security, stability or compatibility:
 
 * `esPass ticket output`_
 * `IcePay integration`_
+* `Average price chart`_
+* `Pay in cash upon arrival`_
 
 .. _SEPA direct debit: https://github.com/pretix/pretix-sepadebit
 .. _Passbook/Wallet ticket output: https://github.com/pretix/pretix-passbook
@@ -50,3 +52,5 @@ no statements about their stability or compatibility:
 .. _Fontpack Free fonts: https://github.com/pretix/pretix-fontpack-free
 .. _Wirecard payment: https://github.com/pretix/pretix-wirecard
 .. _Mailing list subscription: https://github.com/pretix/pretix-newsletter-ml
+.. _Average price chart: https://github.com/rixx/pretix-avgchart
+.. _Pay in cash upon arrival: https://github.com/pc-coholic/pretix-cashpayment
