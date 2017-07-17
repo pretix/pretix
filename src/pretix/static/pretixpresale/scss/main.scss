@@ -176,3 +176,31 @@ body.loading .container {
 .dl-horizontal dt  {
     white-space: normal;
 }
+
+.collapse-indicator {
+    -moz-transition: all 150ms ease-in 0s;
+    -webkit-transition: all 150ms ease-in 0s;
+    -o-transition: all 150ms ease-in 0s;
+    transition: all 150ms ease-in 0s;
+}
+
+.panel-title a:not(.collapsed) .collapse-indicator {
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.panel-title a[data-toggle="collapse"] {
+    display: flex;
+    padding: 10px 15px;
+    margin: -10px -15px;
+    align-items: center;
+    justify-content: space-between;
+    outline: 0;
+    text-decoration: none;
+}
+
+.panel-title a[data-toggle="collapse"]:hover {
+    background-color: #eeeeee;
+}

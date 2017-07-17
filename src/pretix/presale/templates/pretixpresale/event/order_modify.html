@@ -22,10 +22,10 @@
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" href="#invoice" data-parent="#questions_accordion">
-                                <strong>{% trans "Invoice information" %}</strong>
-                                {% if not event.settings.invoice_address_required %}
+                                <strong>{% trans "Invoice information" %}{% if not event.settings.invoice_address_required %}
                                     {% trans "(optional)" %}
-                                {% endif %}
+                                {% endif %}</strong>
+                                <i class="fa fa-angle-down collapse-indicator"></i>
                             </a>
                         </h4>
                     </div>
@@ -41,10 +41,10 @@
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" href="#cp{{ pos.id }}">
-                                <strong>{{ pos.item.name }}</strong>
-                                {% if pos.variation %}
+                                <strong>{{ pos.item.name }}{% if pos.variation %}
                                     – {{ pos.variation }}
-                                {% endif %}
+                                {% endif %}</strong>
+                                <i class="fa fa-angle-down collapse-indicator"></i>
                             </a>
                         </h4>
                     </div>
