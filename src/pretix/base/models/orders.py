@@ -25,7 +25,6 @@ from pretix.base.i18n import language
 from pretix.base.models import User
 from pretix.base.reldate import RelativeDateWrapper
 
-from ..decimal import round_decimal
 from .base import LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation, Question, QuestionOption, Quota
@@ -229,11 +228,12 @@ class Order(LoggedModel):
         Calculates the taxes on the payment fees and sets the parameters payment_fee_tax_rate
         and payment_fee_tax_value accordingly.
         """
-        self.payment_fee_tax_rate = self.event.settings.get('tax_rate_default')
-        if self.payment_fee_tax_rate:
-            self.payment_fee_tax_value = round_decimal(
-                self.payment_fee * (1 - 100 / (100 + self.payment_fee_tax_rate)))
+        if self.event.settings.tax_rate_default:
+            tax = self.event.settings.tax_rate_default.tax(self.payment_fee, base_price_is='gross')
+            self.payment_fee_tax_rate = tax.rate
+            self.payment_fee_tax_value = tax.tax
         else:
+            self.payment_fee_tax_rate = Decimal('0.00')
             self.payment_fee_tax_value = Decimal('0.00')
 
     @property
@@ -730,11 +730,14 @@ class OrderPosition(AbstractPosition):
         )
 
     def _calculate_tax(self):
-        self.tax_rate = self.item.tax_rate
-        if self.tax_rate:
-            self.tax_value = round_decimal(self.price * (1 - 100 / (100 + self.item.tax_rate)))
+        tax_rule = self.item.tax_rule
+        if tax_rule:
+            tax = tax_rule.tax(self.price, base_price_is='gross')
+            self.tax_rate = tax.rate
+            self.tax_value = tax.tax
         else:
             self.tax_value = Decimal('0.00')
+            self.tax_rate = Decimal('0.00')
 
     def save(self, *args, **kwargs):
         if self.tax_rate is None:

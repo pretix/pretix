@@ -52,7 +52,7 @@ def get_grouped_items(event, subevent=None):
         & Q(hide_without_voucher=False)
         & ~Q(category__is_addon=True)
     ).select_related(
-        'category',  # for re-grouping
+        'category', 'tax_rule',  # for re-grouping
     ).prefetch_related(
         Prefetch('quotas',
                  to_attr='_subevent_quotas',

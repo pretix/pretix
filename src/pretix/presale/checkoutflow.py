@@ -163,7 +163,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         quota_cache = {}
         item_cache = {}
         for cartpos in get_cart(self.request).filter(addon_to__isnull=True).prefetch_related(
-            'item__addons', 'item__addons__addon_category', 'addons', 'addons__variation'
+            'item__addons', 'item__addons__addon_category', 'addons', 'addons__variation',
         ):
             current_addon_products = {
                 a.item_id: a.variation_id for a in cartpos.addons.all()

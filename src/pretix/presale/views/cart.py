@@ -189,12 +189,12 @@ class RedeemView(EventViewMixin, TemplateView):
             items = items.filter(quotas__in=[self.voucher.quota_id])
 
         items = items.filter(vouchq).select_related(
-            'category',  # for re-grouping
+            'category', 'tax_rule',  # for re-grouping
         ).prefetch_related(
             Prefetch('quotas',
                      to_attr='_subevent_quotas',
                      queryset=self.request.event.quotas.filter(subevent=self.subevent)),
-            Prefetch('variations', to_attr='avail_variations',
+            Prefetch('variations', to_attr='available_variations',
                      queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).prefetch_related(
                          Prefetch('quotas',
                                   to_attr='_subevent_quotas',
@@ -216,13 +216,11 @@ class RedeemView(EventViewMixin, TemplateView):
             var_price_override = {}
 
         for item in items:
-            item.available_variations = list(item.variations.filter(active=True, quotas__isnull=False).distinct())
             if self.voucher.item_id and self.voucher.variation_id:
                 item.available_variations = [v for v in item.available_variations if v.pk == self.voucher.variation_id]
 
             item.order_max = item.max_per_order or int(self.request.event.settings.max_items_per_order)
 
-            item.has_variations = item.variations.exists()
             if not item.has_variations:
                 item._remove = not bool(item._subevent_quotas)
                 if self.voucher.allow_ignore_quota or self.voucher.block_quota:
@@ -235,7 +233,7 @@ class RedeemView(EventViewMixin, TemplateView):
                 item.display_price = item.tax(price)
             else:
                 item._remove = False
-                for var in item.avail_variations:
+                for var in item.available_variations:
                     if self.voucher.allow_ignore_quota or self.voucher.block_quota:
                         var.cached_availability = (Quota.AVAILABILITY_OK, 1)
                     else:
@@ -246,7 +244,7 @@ class RedeemView(EventViewMixin, TemplateView):
                     var.display_price = item.tax(price)
 
                 item.available_variations = [
-                    v for v in item.avail_variations if v._subevent_quotas
+                    v for v in item.available_variations if v._subevent_quotas
                 ]
                 if self.voucher.variation_id:
                     item.available_variations = [v for v in item.available_variations

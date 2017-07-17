@@ -403,7 +403,7 @@ class AddOnsForm(forms.Form):
                 & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
                 & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
                 & Q(hide_without_voucher=False)
-            ).prefetch_related(
+            ).select_related('tax_rule').prefetch_related(
                 Prefetch('quotas',
                          to_attr='_subevent_quotas',
                          queryset=event.quotas.filter(subevent=subevent)),
