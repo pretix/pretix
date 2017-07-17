@@ -145,7 +145,7 @@ class ItemCreateForm(I18nModelForm):
             label=_("Quota options"),
             widget=forms.Select,
             choices=(
-                (0, 'None'), 
+                (0, 'None'),
                 (1, "Add this to existing quota"),
                 (2, "Add this to new quota")
             ),
@@ -162,17 +162,16 @@ class ItemCreateForm(I18nModelForm):
         self.fields['quota_add_new_name'] = forms.CharField(
             label=_("Name"),
             max_length=200,
-            widget=forms.TextInput(attrs={'placeholder':'New quota name'}),
+            widget=forms.TextInput(attrs={'placeholder': 'New quota name'}),
             required=False
         )
 
         self.fields['quota_add_new_size'] = forms.IntegerField(
             min_value=0,
             label=_("Size"),
-            widget=forms.TextInput(attrs={'placeholder':'New quota size'}),
+            widget=forms.TextInput(attrs={'placeholder': 'New quota size'}),
             required=False
         )
-        
 
     def save(self, *args, **kwargs):
         if self.cleaned_data.get('copy_from'):
@@ -191,15 +190,15 @@ class ItemCreateForm(I18nModelForm):
 
         if not self.cleaned_data.get('quota_option') == '0':
             if self.cleaned_data.get('quota_option') == '1' and self.cleaned_data.get('quota_add_existing') is not None:
-                quotaName = self.cleaned_data.get('quota_add_existing').name
-                quota = self.instance.event.quotas.filter(name=quotaName).get()
+                quota_name = self.cleaned_data.get('quota_add_existing').name
+                quota = self.instance.event.quotas.filter(name=quota_name).get()
                 quota.items.add(self.instance)
             elif self.cleaned_data.get('quota_option') == '2':
-                quotaName = self.cleaned_data.get('quota_add_new_name')
-                quotaSize = self.cleaned_data.get('quota_add_new_size')
+                quota_name = self.cleaned_data.get('quota_add_new_name')
+                quota_size = self.cleaned_data.get('quota_add_new_size')
 
                 quota = Quota.objects.create(
-                    event=self.event, name=quotaName, size=quotaSize
+                    event=self.event, name=quota_name, size=quota_size
                 )
                 quota.items.add(self.instance)
 
@@ -225,7 +224,7 @@ class ItemCreateForm(I18nModelForm):
         if self.cleaned_data.get('quota_option') == '2':
             if not self.cleaned_data.get('quota_add_new_name'):
                 raise forms.ValidationError(
-                    {'quota_add_new_name' : ['Quota name is required.']}
+                    {'quota_add_new_name': ['Quota name is required.']}
                 )
 
         return cleaned_data
