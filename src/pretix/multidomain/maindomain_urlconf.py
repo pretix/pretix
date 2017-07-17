@@ -49,3 +49,4 @@ plugin_patterns = [
 urlpatterns = common_patterns + plugin_patterns + presale_patterns_main
 
 handler404 = 'pretix.base.views.errors.page_not_found'
+handler500 = 'pretix.base.views.errors.server_error'

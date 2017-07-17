@@ -226,18 +226,6 @@ for entry_point in iter_entry_points(group='pretix.plugin', name=None):
     PLUGINS.append(entry_point.module_name)
     INSTALLED_APPS.append(entry_point.module_name)
 
-if config.has_option('sentry', 'dsn'):
-    INSTALLED_APPS += [
-        'raven.contrib.django.raven_compat',
-    ]
-    DISABLE_SENTRY_INSTRUMENTATION = True  # see celery.py for more, we use this differently
-    RAVEN_CONFIG = {
-        'dsn': config.get('sentry', 'dsn'),
-        'transport': 'raven.transport.threaded_requests.ThreadedRequestsHTTPTransport',
-        'release': __version__,
-        'environment': SITE_URL,
-    }
-
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -486,6 +474,17 @@ LOGGING = {
         }
     },
 }
+
+if config.has_option('sentry', 'dsn'):
+    INSTALLED_APPS += [
+        'pretix.sentry.App',
+    ]
+    RAVEN_CONFIG = {
+        'dsn': config.get('sentry', 'dsn'),
+        'transport': 'raven.transport.threaded_requests.ThreadedRequestsHTTPTransport',
+        'release': __version__,
+        'environment': SITE_URL,
+    }
 
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
