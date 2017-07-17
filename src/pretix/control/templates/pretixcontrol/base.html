@@ -44,6 +44,7 @@
         {{ html_head|safe }}
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
+        {% block custom_header %}{% endblock %}
 	</head>
 	<body data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}" data-payment-weekdays-disabled="{{ js_payment_weekdays_disabled }}">
         <div id="wrapper">
