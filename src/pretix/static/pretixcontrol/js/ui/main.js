@@ -83,6 +83,9 @@ $(function () {
     });
 
     $('.collapsible').collapse();
+    $(".has-error").each(function () {
+        $(this).closest("div.panel-collapse").collapse("show");
+    });
 
     $('[data-toggle="tooltip"]').tooltip();
 
