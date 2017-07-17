@@ -7,8 +7,8 @@ from django.db.models import Sum
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
-from pretix.base.decimal import round_decimal
 from pretix.base.models import CartPosition, OrderPosition
+from pretix.base.models.tax import TaxRule
 from pretix.presale.signals import question_form_fields
 
 
@@ -20,7 +20,7 @@ class CartMixin:
         """
         return list(get_cart(self.request))
 
-    def get_cart(self, answers=False, queryset=None, payment_fee=None, payment_fee_tax_rate=None, downloads=False):
+    def get_cart(self, answers=False, queryset=None, payment_fee=None, payment_fee_tax_rule=None, downloads=False):
         if queryset:
             prefetch = []
             if answers:
@@ -100,13 +100,9 @@ class CartMixin:
         tax_total = sum(p.total - p.net_total for p in positions)
 
         payment_fee = payment_fee if payment_fee is not None else self.get_payment_fee(total)
-        payment_fee_tax_rate = round_decimal(payment_fee_tax_rate
-                                             if payment_fee_tax_rate is not None
-                                             else self.request.event.settings.tax_rate_default)
-        payment_fee_tax_value = round_decimal(payment_fee * (1 - 100 / (100 + payment_fee_tax_rate)))
-        payment_fee_net = payment_fee - payment_fee_tax_value
-        tax_total += payment_fee_tax_value
-        net_total += payment_fee_net
+        payment_fee_tax = (payment_fee_tax_rule or TaxRule.zero()).tax(payment_fee, base_price_is='included')
+        tax_total += payment_fee_tax.tax
+        net_total += payment_fee_tax.net
 
         try:
             first_expiry = min(p.expires for p in positions) if positions else now()
@@ -122,8 +118,8 @@ class CartMixin:
             'net_total': net_total,
             'tax_total': tax_total,
             'payment_fee': payment_fee,
-            'payment_fee_net': payment_fee_net,
-            'payment_fee_tax_rate': payment_fee_tax_rate,
+            'payment_fee_net': payment_fee_tax.net,
+            'payment_fee_tax_rate': payment_fee_tax.rate,
             'answers': answers,
             'minutes_left': minutes_left,
             'first_expiry': first_expiry,

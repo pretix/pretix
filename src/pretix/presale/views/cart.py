@@ -10,7 +10,6 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView, View
 
-from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     CartPosition, ItemVariation, QuestionAnswer, Quota, SubEvent, Voucher,
 )
@@ -231,10 +230,9 @@ class RedeemView(EventViewMixin, TemplateView):
                 else:
                     item.cached_availability = item.check_quotas(subevent=self.subevent, _cache=quota_cache)
 
-                item.price = item_price_override.get(item.pk, item.default_price)
-                item.price = self.voucher.calculate_price(item.price)
-                if self.request.event.settings.display_net_prices:
-                    item.price -= round_decimal(item.price * (1 - 100 / (100 + item.tax_rate)))
+                price = item_price_override.get(item.pk, item.default_price)
+                price = self.voucher.calculate_price(price)
+                item.display_price = item.tax(price)
             else:
                 item._remove = False
                 for var in item.avail_variations:
@@ -243,10 +241,9 @@ class RedeemView(EventViewMixin, TemplateView):
                     else:
                         var.cached_availability = list(var.check_quotas(subevent=self.subevent, _cache=quota_cache))
 
-                    var.display_price = var_price_override.get(var.pk, var.price)
-                    var.display_price = self.voucher.calculate_price(var.display_price)
-                    if self.request.event.settings.display_net_prices:
-                        var.display_price -= round_decimal(var.display_price * (1 - 100 / (100 + item.tax_rate)))
+                    price = var_price_override.get(var.pk, var.price)
+                    price = self.voucher.calculate_price(price)
+                    var.display_price = item.tax(price)
 
                 item.available_variations = [
                     v for v in item.avail_variations if v._subevent_quotas
@@ -255,8 +252,10 @@ class RedeemView(EventViewMixin, TemplateView):
                     item.available_variations = [v for v in item.available_variations
                                                  if v.pk == self.voucher.variation_id]
                 if len(item.available_variations) > 0:
-                    item.min_price = min([v.display_price for v in item.avail_variations])
-                    item.max_price = max([v.display_price for v in item.avail_variations])
+                    item.min_price = min([v.display_price.net if self.request.event.settings.display_net_prices else
+                                          v.display_price.gross for v in item.available_variations])
+                    item.max_price = max([v.display_price.net if self.request.event.settings.display_net_prices else
+                                          v.display_price.gross for v in item.available_variations])
 
         items = [item for item in items
                  if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove]

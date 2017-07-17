@@ -14,6 +14,7 @@ from pretix.base.models import (
     CartPosition, Event, Item, ItemVariation, Voucher,
 )
 from pretix.base.models.event import SubEvent
+from pretix.base.models.tax import TAXED_ZERO
 from pretix.base.services.async import ProfiledTask
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.pricing import get_price
@@ -395,7 +396,7 @@ class CartManager:
                     quota_diff[quota] += 1
 
                 if price_included[cp.pk].get(item.category_id):
-                    price = Decimal('0.00')
+                    price = TAXED_ZERO
                 else:
                     price = self._get_price(item, variation, None, None, cp.subevent)
 
@@ -557,15 +558,14 @@ class CartManager:
                     for k in range(available_count):
                         new_cart_positions.append(CartPosition(
                             event=self.event, item=op.item, variation=op.variation,
-                            price=op.price, expires=self._expiry,
-                            cart_id=self.cart_id, voucher=op.voucher,
-                            addon_to=op.addon_to if op.addon_to else None,
+                            price=op.price.gross, expires=self._expiry, cart_id=self.cart_id,
+                            voucher=op.voucher, addon_to=op.addon_to if op.addon_to else None,
                             subevent=op.subevent
                         ))
                 elif isinstance(op, self.ExtendOperation):
                     if available_count == 1:
                         op.position.expires = self._expiry
-                        op.position.price = op.price
+                        op.position.price = op.price.gross
                         op.position.save()
                     elif available_count == 0:
                         op.position.delete()

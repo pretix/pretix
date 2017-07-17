@@ -787,13 +787,11 @@ class CartPosition(AbstractPosition):
 
     @property
     def tax_rate(self):
-        return self.item.tax_rate
+        return self.item.tax(self.price, base_price_is='gross').rate
 
     @property
     def tax_value(self):
-        if not self.tax_rate:
-            return Decimal('0.00')
-        return round_decimal(self.price * (1 - 100 / (100 + self.item.tax_rate)))
+        return self.item.tax(self.price, base_price_is='gross').tax
 
 
 class InvoiceAddress(models.Model):

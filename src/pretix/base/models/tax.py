@@ -1,8 +1,34 @@
+from decimal import Decimal
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.fields import I18nCharField
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
+
+
+class TaxedPrice:
+    def __init__(self, *, gross: Decimal, net: Decimal, tax: Decimal, rate: Decimal, name: str):
+        if net + tax != gross:
+            raise ValueError('Net value and tax value need to add to the gross value')
+        self.gross = gross
+        self.net = net
+        self.tax = tax
+        self.rate = rate
+        self.name = name
+
+    def __repr__(self):
+        return '{} + {}% = {}'.format(self.net, self.rate, self.gross)
+
+
+TAXED_ZERO = TaxedPrice(
+    gross=Decimal('0.00'),
+    net=Decimal('0.00'),
+    tax=Decimal('0.00'),
+    rate=Decimal('0.00'),
+    name=''
+)
 
 
 class TaxRule(LoggedModel):
@@ -66,6 +92,16 @@ class TaxRule(LoggedModel):
         )
     )
 
+    @classmethod
+    def zero(cls):
+        return cls(
+            event=None,
+            name='',
+            rate=Decimal('0.00'),
+            price_includes_tax=True,
+            eu_reverse_charge=False
+        )
+
     def clean(self):
         if self.eu_reverse_charge and not self.home_country:
             raise ValueError(_('You need to set your home country to use the reverse charge feature.'))
@@ -78,3 +114,30 @@ class TaxRule(LoggedModel):
         if self.eu_reverse_charge:
             s += ' ({})'.format(_('reverse charge enabled'))
         return str(s)
+
+    def tax(self, base_price, base_price_is='auto'):
+        if self.rate == Decimal('0.00'):
+            return TaxedPrice(
+                net=base_price, gross=base_price, tax=Decimal('0.00'),
+                rate=self.rate, name=self.name
+            )
+
+        if base_price_is == 'auto':
+            if self.price_includes_tax:
+                base_price_is = 'gross'
+            else:
+                base_price_is = 'net'
+
+        if base_price_is == 'gross':
+            gross = base_price
+            net = gross - round_decimal(base_price * (1 - 100 / (100 + self.rate)))
+        elif base_price_is == 'net':
+            net = base_price
+            gross = round_decimal(net * (1 + self.rate / 100))
+        else:
+            raise ValueError('Unknown base price type: {}'.format(base_price_is))
+
+        return TaxedPrice(
+            net=net, gross=gross, tax=gross - net,
+            rate=self.rate, name=self.name
+        )

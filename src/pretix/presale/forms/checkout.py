@@ -10,7 +10,6 @@ from django.utils.formats import number_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.decimal import round_decimal
 from pretix.base.models import ItemVariation, Question
 from pretix.base.models.orders import InvoiceAddress, OrderPosition
 from pretix.base.templatetags.rich_text import rich_text
@@ -328,39 +327,37 @@ class AddOnsForm(forms.Form):
             variation = item_or_variation
             item = item_or_variation.item
             price = variation.price
-            price_net = variation.net_price
             label = variation.value
         else:
             item = item_or_variation
             price = item.default_price
-            price_net = item.default_price_net
             label = item.name
 
         if override_price:
             price = override_price
-            tax_value = round_decimal(price * (1 - 100 / (100 + item.tax_rate)))
-            price_net = price - tax_value
 
         if self.price_included:
             price = Decimal('0.00')
 
-        if not price:
+        price = item.tax(price)
+
+        if not price.gross:
             n = '{name}'.format(
                 name=label
             )
-        elif not item.tax_rate:
+        elif not price.rate:
             n = _('{name} (+ {currency} {price})').format(
-                name=label, currency=event.currency, price=number_format(price)
+                name=label, currency=event.currency, price=number_format(price.gross)
             )
         elif event.settings.display_net_prices:
-            n = _('{name} (+ {currency} {price} plus {taxes}% taxes)').format(
-                name=label, currency=event.currency, price=number_format(price_net),
-                taxes=number_format(item.tax_rate)
+            n = _('{name} (+ {currency} {price} plus {taxes}% {taxname})').format(
+                name=label, currency=event.currency, price=number_format(price.net),
+                taxes=number_format(price.rate), taxname=price.name
             )
         else:
-            n = _('{name} (+ {currency} {price} incl. {taxes}% taxes)').format(
-                name=label, currency=event.currency, price=number_format(price),
-                taxes=number_format(item.tax_rate)
+            n = _('{name} (+ {currency} {price} incl. {taxes}% {taxname})').format(
+                name=label, currency=event.currency, price=number_format(price.gross),
+                taxes=number_format(price.rate), taxname=price.name
             )
 
         if avail[0] < 20:
