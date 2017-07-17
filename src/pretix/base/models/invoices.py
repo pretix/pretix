@@ -29,6 +29,8 @@ class Invoice(models.Model):
     :type order: Order
     :param event: The event this belongs to (for convenience)
     :type event: Event
+    :param organizer: The organizer this belongs to (redundant, for enforcing uniqueness)
+    :type organizer: Organizer
     :param invoice_no: The human-readable, event-unique invoice number
     :type invoice_no: int
     :param is_cancellation: Whether or not this is a cancellation instead of an invoice
@@ -55,7 +57,9 @@ class Invoice(models.Model):
     :type file: File
     """
     order = models.ForeignKey('Order', related_name='invoices', db_index=True)
+    organizer = models.ForeignKey('Organizer', related_name='invoices', db_index=True, on_delete=models.PROTECT)
     event = models.ForeignKey('Event', related_name='invoices', db_index=True)
+    prefix = models.CharField(max_length=160, db_index=True)
     invoice_no = models.CharField(max_length=19, db_index=True)
     is_cancellation = models.BooleanField(default=False)
     refers = models.ForeignKey('Invoice', related_name='refered', null=True, blank=True)
@@ -74,7 +78,10 @@ class Invoice(models.Model):
         return '{:05d}'.format(int(number))
 
     def _get_numeric_invoice_number(self):
-        numeric_invoices = Invoice.objects.filter(event=self.event).exclude(invoice_no__contains='-')
+        numeric_invoices = Invoice.objects.filter(
+            event__organizer=self.event.organizer,
+            prefix=self.prefix,
+        ).exclude(invoice_no__contains='-')
         return self._to_numeric_invoice_number(numeric_invoices.count() + 1)
 
     def _get_invoice_number_from_order(self):
@@ -88,6 +95,10 @@ class Invoice(models.Model):
             raise ValueError('Every invoice needs to be connected to an order')
         if not self.event:
             self.event = self.order.event
+        if not self.organizer:
+            self.organizer = self.order.event.organizer
+        if not self.prefix:
+            self.prefix = self.event.settings.invoice_numbers_prefix or (self.event.slug.upper() + '-')
         if not self.invoice_no:
             for i in range(10):
                 if self.event.settings.get('invoice_numbers_consecutive'):
@@ -116,8 +127,8 @@ class Invoice(models.Model):
         """
         Returns the invoice number in a human-readable string with the event slug prepended.
         """
-        return '{event}-{code}'.format(
-            event=self.event.slug.upper(),
+        return '{prefix}{code}'.format(
+            prefix=self.prefix,
             code=self.invoice_no
         )
 
@@ -126,7 +137,7 @@ class Invoice(models.Model):
         return self.refered.filter(is_cancellation=True).exists()
 
     class Meta:
-        unique_together = ('event', 'invoice_no')
+        unique_together = ('organizer', 'prefix', 'invoice_no')
         ordering = ('invoice_no',)
 
 

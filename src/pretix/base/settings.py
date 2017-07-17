@@ -61,6 +61,10 @@ DEFAULTS = {
         'default': 'True',
         'type': bool,
     },
+    'invoice_numbers_prefix': {
+        'default': '',
+        'type': str,
+    },
     'invoice_renderer': {
         'default': 'classic',
         'type': str,

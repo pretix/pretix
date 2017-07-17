@@ -453,6 +453,14 @@ class InvoiceSettingsForm(SettingsForm):
         help_text=_("If deactivated, the order code will be used in the invoice number."),
         required=False
     )
+    invoice_numbers_prefix = forms.CharField(
+        label=_("Invoice number prefix"),
+        help_text=_("This will be prepended to invoice numbers. If you leave this field empty, your event slug will "
+                    "be used followed by a dash. Attention: If multiple events within the same organization use the "
+                    "same value in this field, they will share their number range, i.e. every full number will be "
+                    "used at most once over all of your events. This setting only affects future invoices."),
+        required=False,
+    )
     invoice_generate = forms.ChoiceField(
         label=_("Generate invoices"),
         required=False,
@@ -511,6 +519,7 @@ class InvoiceSettingsForm(SettingsForm):
         self.fields['invoice_renderer'].choices = [
             (r.identifier, r.verbose_name) for r in event.get_invoice_renderers().values()
         ]
+        self.fields['invoice_numbers_prefix'].widget.attrs['placeholder'] = event.slug.upper() + '-'
 
 
 class MailSettingsForm(SettingsForm):
