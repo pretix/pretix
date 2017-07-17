@@ -191,7 +191,6 @@ class ItemCreateForm(I18nModelForm):
 
         if not self.cleaned_data.get('quota_option') == '0':
             if self.cleaned_data.get('quota_option') == '1' and self.cleaned_data.get('quota_add_existing') is not None:
-                print("here for some reason")
                 quotaName = self.cleaned_data.get('quota_add_existing').name
                 quota = self.instance.event.quotas.filter(name=quotaName).get()
                 quota.items.add(self.instance)
@@ -225,7 +224,9 @@ class ItemCreateForm(I18nModelForm):
 
         if self.cleaned_data.get('quota_option') == '2':
             if not self.cleaned_data.get('quota_add_new_name'):
-                raise forms.ValidationError({'quota_add_new_name' : ['Quota name is required.']})
+                raise forms.ValidationError(
+                    {'quota_add_new_name' : ['Quota name is required.']}
+                )
 
         return cleaned_data
 
