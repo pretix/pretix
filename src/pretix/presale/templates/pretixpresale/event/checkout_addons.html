@@ -15,10 +15,10 @@
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" href="#cp{{ form.cartpos.pk }}">
-                                <strong>{{ form.item.name }}</strong>
-                                {% if form.variation %}
+                                <strong>{{ form.item.name }}{% if form.variation %}
                                     – {{ form.variation }}
-                                {% endif %}
+                                {% endif %}</strong>
+                                <i class="fa fa-angle-down collapse-indicator"></i>
                             </a>
                         </h4>
                     </div>
