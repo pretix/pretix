@@ -16,6 +16,10 @@
   pointer-events: none;
 }
 
+.js-copy-answers {
+  margin-right: 10px;
+}
+
 .form-control.is-focused {
   @extend .form-control:focus;
 }

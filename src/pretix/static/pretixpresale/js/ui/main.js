@@ -51,8 +51,10 @@ $(function () {
     // Copy answers
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();
+        e.stopPropagation();
         var idx = $(this).data('id');
         copy_answers(idx);
+        return false;
     });
 
     // Subevent choice
@@ -98,31 +100,33 @@ function copy_answers(idx) {
     elements.each(function(index){
         var input = $(this),
             tagName = input.prop('tagName').toLowerCase(),
-            attributeType = input.attr('type');
+            attributeType = input.attr('type'),
+            suffix = input.attr('name').split('-')[1];
+
 
         switch (tagName) {
-            case "textarea":            
-                input.val(firstAnswers.eq(index).val());
+            case "textarea":
+                input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
                 break;
             case "select":
-                input.val(firstAnswers.eq(index).find(":selected").val()).change();
+                input.val(firstAnswers.filter("[name$=" + suffix + "]").find(":selected").val()).change();
                 break;
             case "input":
                 switch (attributeType) {
                     case "text":
                     case "number":
-                        input.val(firstAnswers.eq(index).val());
+                        input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
                         break;
                     case "checkbox":
                     case "radio":
-                        input.prop("checked", firstAnswers.eq(index).prop("checked"));
+                        input.prop("checked", firstAnswers.filter("[name$=" + suffix + "]").prop("checked"));
                         break;
                     default:
-                        input.val(firstAnswers.eq(index).val());
+                        input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
                 } 
                 break;
             default:
-                input.val(firstAnswers.eq(index).val());
+                input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
         } 
     });
 }
