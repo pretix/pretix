@@ -11,7 +11,8 @@ from pytz import common_timezones, timezone
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
-from pretix.control.forms import ExtFileField
+from pretix.control.forms import ExtFileField, SlugWidget
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 
 class EventWizardFoundationForm(forms.Form):
@@ -77,6 +78,7 @@ class EventWizardBasicsForm(I18nModelForm):
             'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
             'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker',
                                                       'data-date-after': '#id_basics-presale_start'}),
+            'slug': SlugWidget
         }
 
     def __init__(self, *args, **kwargs):
@@ -88,6 +90,7 @@ class EventWizardBasicsForm(I18nModelForm):
         self.initial['timezone'] = get_current_timezone_name()
         self.fields['locale'].choices = [(a, b) for a, b in settings.LANGUAGES if a in self.locales]
         self.fields['location'].widget.attrs['rows'] = '3'
+        self.fields['slug'].widget.prefix = build_absolute_uri(self.organizer, 'presale:organizer.index')
         if self.has_subevents:
             del self.fields['presale_start']
             del self.fields['presale_end']

@@ -83,6 +83,9 @@ PRETIX_REGISTRATION = config.getboolean('pretix', 'registration', fallback=True)
 PRETIX_PASSWORD_RESET = config.getboolean('pretix', 'password_reset', fallback=True)
 
 SITE_URL = config.get('pretix', 'url', fallback='http://localhost')
+if SITE_URL.endswith('/'):
+    SITE_URL = SITE_URL[:-1]
+
 CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).hostname]
 
 PRETIX_PLUGINS_DEFAULT = config.get('pretix', 'plugins_default',

@@ -5,9 +5,30 @@
     <fieldset>
         <legend>{% trans "General information" %}</legend>
         {% bootstrap_field form.name layout="horizontal" %}
-        {% trans "Random" as rndlabel %}
-        {% url "control:events.add.slugrng" organizer=organizer.slug as rngurl %}
-        {% bootstrap_field form.slug layout="horizontal" addon_after='<button class="btn btn-default" type="button" id="event-slug-random-generate" data-rng-url="'|add:rngurl|add:'">'|add:rndlabel|add:'</button>' addon_after_class='input-group-btn' %}
+        <div class="form-group">
+            <label class="col-md-3 control-label" for="{{ form.slug.id_for_label }}">{{ form.slug.label }}</label>
+            <div class="col-md-9 form-inline">
+                <button class="btn btn-default pull-right" type="button" id="event-slug-random-generate"
+                        data-rng-url="{% url "control:events.add.slugrng" organizer=organizer.slug %}">
+                    {% trans "Set to random" %}
+                </button>
+                {% bootstrap_field form.slug form_group_class="helper-display-inline" show_label=False layout="inline" %}
+                <div class="help-block">
+                    {% blocktrans trimmed %}
+                        This is the address users can buy your tickets at. Should be short, only contain lowercase
+                        letters and numbers, and must be unique among your events. We recommend some kind of
+                        abbreviation or a date with less than 10 characters that can be easily remembered, but you
+                        can also choose to use a random value.
+                    {% endblocktrans %}
+                </div>
+                <div class="help-block">
+                    {% blocktrans trimmed %}
+                        We will also use this in some places like order codes, invoice numbers or bank transfer
+                        references as an abbreviation to reference this event.
+                    {% endblocktrans %}
+                </div>
+            </div>
+        </div>
         {% bootstrap_field form.date_from layout="horizontal" %}
         {% bootstrap_field form.date_to layout="horizontal" %}
         {% bootstrap_field form.location layout="horizontal" %}

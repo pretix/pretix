@@ -88,3 +88,13 @@ class ExtFileField(forms.FileField):
             if ext not in self.ext_whitelist:
                 raise forms.ValidationError(_("Filetype not allowed!"))
         return data
+
+
+class SlugWidget(forms.TextInput):
+    template_name = 'pretixcontrol/slug_widget.html'
+    prefix = ''
+
+    def get_context(self, name, value, attrs):
+        ctx = super().get_context(name, value, attrs)
+        ctx['pre'] = self.prefix
+        return ctx
