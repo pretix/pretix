@@ -26,6 +26,7 @@ $(function () {
         $(this).parent().parent().parent().find(".variations").slideToggle();
         e.preventDefault();
     });
+     $("div.collapsed").removeClass("collapsed").addClass("collapse");
 
     $("#voucher-box").hide();
     $("#voucher-toggle").show();
