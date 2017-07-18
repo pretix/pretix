@@ -118,6 +118,7 @@ class QuestionsForm(forms.Form):
     the attendee name for admission tickets, if the corresponding setting is enabled,
     as well as additional questions defined by the organizer.
     """
+    required_css_class = 'required'
 
     def __init__(self, *args, **kwargs):
         """

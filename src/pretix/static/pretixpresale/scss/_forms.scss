@@ -33,3 +33,8 @@
     @include box-shadow($shadow);
   }
 }
+
+.form-group.required .control-label:after {
+  content: '*';
+  color: $brand-primary
+}
