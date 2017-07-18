@@ -1,5 +1,6 @@
 from django import forms
 from django.db.models import Q
+from django.db.models.functions import Concat
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
@@ -46,11 +47,13 @@ class OrderFilterForm(FilterForm):
 
         if fdata.get('query'):
             u = fdata.get('query')
+
             if "-" in u:
                 code = (Q(event__slug__icontains=u.split("-")[0])
                         & Q(code__icontains=Order.normalize_code(u.split("-")[1])))
             else:
                 code = Q(code__icontains=Order.normalize_code(u))
+            qs = qs.annotate(inr=Concat('invoices__prefix', 'invoices__invoice_no'))
             qs = qs.filter(
                 code
                 | Q(email__icontains=u)
@@ -58,6 +61,9 @@ class OrderFilterForm(FilterForm):
                 | Q(positions__attendee_email__icontains=u)
                 | Q(invoice_address__name__icontains=u)
                 | Q(invoice_address__company__icontains=u)
+                | Q(invoices__invoice_no=u)
+                | Q(invoices__invoice_no=u.zfill(5))
+                | Q(inr=u)
             )
 
         if fdata.get('status'):

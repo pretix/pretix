@@ -5,7 +5,8 @@ from datetime import timedelta
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.db.models import Q
+from django.db.models import Count, Q
+from django.db.models.functions import Concat
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.functional import cached_property
@@ -145,11 +146,30 @@ class ActionView(View):
     def get(self, request, *args, **kwargs):
         from django.utils.formats import localize
 
-        query = request.GET.get('query', '')
-        if len(query) < 2:
+        u = request.GET.get('query', '')
+        if len(u) < 2:
             return JsonResponse({'results': []})
 
-        qs = self.order_qs().filter(Q(code__icontains=query) | Q(code__icontains=Order.normalize_code(query))).select_related('event')
+        if "-" in u:
+            code = (Q(event__slug__icontains=u.split("-")[0])
+                    & Q(code__icontains=Order.normalize_code(u.split("-")[1])))
+        else:
+            code = Q(code__icontains=Order.normalize_code(u))
+        qs = self.order_qs().order_by('pk').annotate(inr=Concat('invoices__prefix', 'invoices__invoice_no')).filter(
+            code
+            | Q(email__icontains=u)
+            | Q(positions__attendee_name__icontains=u)
+            | Q(positions__attendee_email__icontains=u)
+            | Q(invoice_address__name__icontains=u)
+            | Q(invoice_address__company__icontains=u)
+            | Q(invoices__invoice_no=u)
+            | Q(invoices__invoice_no=u.zfill(5))
+            | Q(inr=u)
+        ).select_related('event').annotate(pcnt=Count('invoices')).distinct()
+        # Yep, we wouldn't need to count the invoices here. However, having this Count() statement in there
+        # tricks Django into generating a GROUP BY clause that it otherwise wouldn't and that is required to
+        # avoid duplicate results. Yay?
+
         return JsonResponse({
             'results': [
                 {
