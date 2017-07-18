@@ -11,6 +11,12 @@
         {% blocktrans trimmed with code=order.code %}
             Change order: {{ code }}
         {% endblocktrans %}
+        <a class="btn btn-link btn-lg"
+                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+            {% blocktrans trimmed with order=order.code %}
+                Back to order {{ order }}
+            {% endblocktrans %}
+        </a>
     </h1>
     <p>
         {% blocktrans trimmed %}

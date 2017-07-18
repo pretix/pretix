@@ -609,7 +609,27 @@ class OrderLocaleChange(OrderView):
         return self.get(*args, **kwargs)
 
 
-class OrderSendMail(EventPermissionRequiredMixin, FormView):
+class OrderViewMixin:
+    def get_object(self, queryset=None):
+        try:
+            return Order.objects.get(
+                event=self.request.event,
+                code=self.kwargs['code'].upper()
+            )
+        except Order.DoesNotExist:
+            raise Http404()
+
+    @cached_property
+    def order(self):
+        return self.get_object()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['order'] = self.order
+        return ctx
+
+
+class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
     template_name = 'pretixcontrol/order/sendmail.html'
     permission = 'can_change_orders'
     form_class = OrderMailForm
@@ -700,7 +720,7 @@ class OrderSendMail(EventPermissionRequiredMixin, FormView):
         return ctx
 
 
-class OrderEmailHistory(EventPermissionRequiredMixin, ListView):
+class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
     template_name = 'pretixcontrol/order/mail_history.html'
     permission = 'can_view_orders'
     model = LogEntry
@@ -713,7 +733,10 @@ class OrderEmailHistory(EventPermissionRequiredMixin, ListView):
             code=self.kwargs['code'].upper()
         ).first()
         qs = order.all_logentries()
-        qs = qs.filter(Q(action_type="pretix.plugins.sendmail.order.email.sent") | Q(action_type="pretix.event.order.mail_sent"))
+        qs = qs.filter(
+            Q(action_type="pretix.plugins.sendmail.order.email.sent")
+            | Q(action_type="pretix.event.order.mail_sent")
+        )
         return qs
 
 

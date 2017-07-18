@@ -3,7 +3,15 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Send email" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Send email" %}</h1>
+    <h1>
+        {% trans "Send email" %}
+        <a class="btn btn-link btn-lg"
+                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+            {% blocktrans trimmed with order=order.code %}
+                Back to order {{ order }}
+            {% endblocktrans %}
+        </a>
+    </h1>
     {% block inner %}
         <form class="form-horizontal" method="post" action="">
             {% csrf_token %}
