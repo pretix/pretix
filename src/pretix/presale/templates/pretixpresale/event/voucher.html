@@ -25,7 +25,12 @@
             <input type="hidden" name="_voucher_code" value="{{ voucher.code }}">
             {% for tup in items_by_category %}
                 <section>
-                    {% if tup.0 %}<h3>{{ tup.0.name }}</h3>{% endif %}
+                    {% if tup.0 %}
+                        <h3>{{ tup.0.name }}</h3>
+                        {% if tup.0.description %}
+                            <p>{{ tup.0.description|localize|rich_text }}</p>
+                        {% endif %}
+                    {% endif %}
                     {% for item in tup.1 %}
                         {% if item.has_variations %}
                             <div class="item-with-variations">
