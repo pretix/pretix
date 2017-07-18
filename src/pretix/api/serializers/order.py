@@ -115,5 +115,5 @@ class InvoiceSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Invoice
-        fields = ('order', 'invoice_no', 'is_cancellation', 'invoice_from', 'invoice_to', 'date', 'refers', 'locale',
+        fields = ('order', 'number', 'is_cancellation', 'invoice_from', 'invoice_to', 'date', 'refers', 'locale',
                   'introductory_text', 'additional_text', 'payment_provider_text', 'footer_text', 'lines')

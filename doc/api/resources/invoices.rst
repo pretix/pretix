@@ -11,7 +11,7 @@ The invoice resource contains the following public fields:
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
-invoice_no                            string                     Invoice number (without prefix)
+number                                string                     Invoice number (with prefix)
 order                                 string                     Order code of the order this invoice belongs to
 is_cancellation                       boolean                    ``True``, if this invoice is the cancellation of a
                                                                  different invoice.
@@ -33,6 +33,13 @@ lines                                 list of objects            The actual invo
 ├ tax_value                           money (string)             VAT amount
 └ tax_rate                            decimal (string)           Used VAT rate
 ===================================== ========================== =======================================================
+
+
+.. versionchanged:: 1.6
+
+   The attribute ``invoice_no`` has been dropped in favor of ``number`` which includes the number including the prefix,
+   since the prefix can now vary. Also, invoices now need to be identified by their ``number`` instead of the raw
+   number.
 
 
 Endpoints
@@ -64,7 +71,7 @@ Endpoints
         "previous": null,
         "results": [
           {
-            "invoice_no": "00001",
+            "number": "SAMPLECONF-00001",
             "order": "ABC12",
             "is_cancellation": false,
             "invoice_from": "Big Events LLC\nDemo street 12\nDemo town",
@@ -95,14 +102,14 @@ Endpoints
    :query string refers: If set, only invoices refering to the given invoice will be returned.
    :query string locale: If set, only invoices with the given locale will be returned.
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``date`` and
-                           ``invoice_no``. Default: ``invoice_no``
+                           ``nr`` (equals to ``number``). Default: ``nr``
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
-.. http:get:: /api/v1/organizers/(organizer)/events/(event)/invoices/(invoice_no)/
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/invoices/(number)/
 
    Returns information on one invoice, identified by its invoice number.
 
@@ -110,7 +117,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/sampleconf/invoices/00001/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/events/sampleconf/invoices/SAMPLECONF-00001/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -123,7 +130,7 @@ Endpoints
       Content-Type: text/javascript
 
       {
-        "invoice_no": "00001",
+        "number": "SAMPLECONF-00001",
         "order": "ABC12",
         "is_cancellation": false,
         "invoice_from": "Big Events LLC\nDemo street 12\nDemo town",

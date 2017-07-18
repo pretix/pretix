@@ -1,5 +1,6 @@
 import django_filters
 from django.db.models import Q
+from django.db.models.functions import Concat
 from django.http import FileResponse
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
@@ -137,12 +138,21 @@ class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class InvoiceFilter(FilterSet):
-    refers = django_filters.CharFilter(name='refers', lookup_expr='invoice_no__iexact')
+    refers = django_filters.CharFilter(method='refers_qs')
+    number = django_filters.CharFilter(method='nr_qs')
     order = django_filters.CharFilter(name='order', lookup_expr='code__iexact')
+
+    def refers_qs(self, queryset, name, value):
+        return queryset.annotate(
+            refers_nr=Concat('refers__prefix', 'refers__invoice_no')
+        ).filter(refers_nr__iexact=value)
+
+    def nr_qs(self, queryset, name, value):
+        return queryset.filter(nr__iexact=value)
 
     class Meta:
         model = Invoice
-        fields = ['order', 'invoice_no', 'is_cancellation', 'refers', 'locale']
+        fields = ['order', 'number', 'is_cancellation', 'refers', 'locale']
 
 
 class RetryException(APIException):
@@ -155,15 +165,17 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = InvoiceSerializer
     queryset = Invoice.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
-    ordering = ('invoice_no',)
-    ordering_fields = ('invoice_no', 'date')
+    ordering = ('nr',)
+    ordering_fields = ('nr', 'date')
     filter_class = InvoiceFilter
-    lookup_field = 'invoice_no'
-    lookup_url_kwarg = 'invoice_no'
     permission = 'can_view_orders'
+    lookup_url_kwarg = 'number'
+    lookup_field = 'nr'
 
     def get_queryset(self):
-        return self.request.event.invoices.prefetch_related('lines').select_related('order')
+        return self.request.event.invoices.prefetch_related('lines').select_related('order', 'refers').annotate(
+            nr=Concat('prefix', 'invoice_no')
+        )
 
     @detail_route()
     def download(self, request, **kwargs):
