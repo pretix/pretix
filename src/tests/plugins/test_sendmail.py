@@ -39,7 +39,7 @@ def order(item):
     o = Order.objects.create(event=item.event, status=Order.STATUS_PENDING,
                              expires=now() + datetime.timedelta(hours=1),
                              total=13, code='DUMMY', email='dummy@dummy.test',
-                             datetime=now(), payment_provider='banktransfer')
+                             datetime=now(), payment_provider='banktransfer', locale='en')
     OrderPosition.objects.create(order=o, item=item, price=13)
     return o
 

@@ -349,6 +349,16 @@ You can view the details of your order at
 Best regards,
 Your {event} team"""))
     },
+    'mail_text_order_custom_mail': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+You can change your order details and view the status of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
     'smtp_use_custom': {
         'default': 'False',
         'type': bool

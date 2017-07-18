@@ -443,6 +443,8 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             'mail_text_order_expire_warning': ['event', 'url', 'expire_date', 'invoice_name', 'invoice_company'],
             'mail_text_waiting_list': ['event', 'url', 'product', 'hours', 'code'],
             'mail_text_order_canceled': ['code', 'event', 'url'],
+            'mail_text_order_custom_mail': ['expire_date', 'event', 'code', 'date', 'url',
+                                            'invoice_name', 'invoice_company']
         }
 
     @cached_property

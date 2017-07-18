@@ -452,6 +452,100 @@ def test_order_go_not_found(client, env):
     assert response['Location'].endswith('/control/event/dummy/dummy/orders/')
 
 
+@pytest.fixture
+def order_url(env):
+    event = env[0]
+    order = env[2]
+    url = '/control/event/{orga}/{event}/orders/{code}'.format(
+        event=event.slug, orga=event.organizer.slug, code=order.code
+    )
+    return url
+
+
+@pytest.mark.django_db
+def test_order_sendmail_view(client, order_url):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    sendmail_url = order_url + '/sendmail'
+    response = client.get(sendmail_url)
+
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_order_sendmail_simple_case(client, order_url, env):
+    order = env[2]
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    sendmail_url = order_url + '/sendmail'
+    mail.outbox = []
+    response = client.post(
+        sendmail_url,
+        {
+            'sendto': order.email,
+            'subject': 'Test subject',
+            'message': 'This is a test file for sending mails.'
+        },
+        follow=True)
+
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].to == [order.email]
+    assert mail.outbox[0].subject == 'Test subject'
+    assert 'This is a test file for sending mails.' in mail.outbox[0].body
+
+    mail_history_url = order_url + '/mail_history'
+    response = client.get(mail_history_url)
+
+    assert response.status_code == 200
+    assert 'Test subject' in response.rendered_content
+
+
+@pytest.mark.django_db
+def test_order_sendmail_preview(client, order_url, env):
+    order = env[2]
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    sendmail_url = order_url + '/sendmail'
+    mail.outbox = []
+    response = client.post(
+        sendmail_url,
+        {
+            'sendto': order.email,
+            'subject': 'Test subject',
+            'message': 'This is a test file for sending mails.',
+            'action': 'preview'
+        },
+        follow=True)
+
+    assert response.status_code == 200
+    assert 'E-mail preview' in response.rendered_content
+    assert len(mail.outbox) == 0
+
+
+@pytest.mark.django_db
+def test_order_sendmail_invalid_data(client, order_url, env):
+    order = env[2]
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    sendmail_url = order_url + '/sendmail'
+    mail.outbox = []
+    response = client.post(
+        sendmail_url,
+        {
+            'sendto': order.email,
+            'subject': 'Test invalid mail',
+        },
+        follow=True)
+
+    assert 'has-error' in response.rendered_content
+    assert len(mail.outbox) == 0
+
+    mail_history_url = order_url + '/mail_history'
+    response = client.get(mail_history_url)
+
+    assert response.status_code == 200
+    assert 'Test invalid mail' not in response.rendered_content
+
+
 class OrderChangeTests(SoupTest):
     def setUp(self):
         super().setUp()

@@ -42,6 +42,9 @@
                                 class="btn btn-default" target="_blank">
                             {% trans "View order as user" %}
                         </a>
+                        <a href="{% url "control:event.order.mail_history" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                            {% trans "View email history" %}
+                        </a>
                     </div>
                 </div>
             </form>
@@ -92,6 +95,9 @@
                             {{ order.email }}&nbsp;&nbsp;
                             <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
                                 <span class="fa fa-edit"></span>
+                            </a>
+                            <a href="{% url "control:event.order.sendmail" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
+                                <span class="fa fa-envelope-o"></span>
                             </a>
                             {% if order.status != "c" %}
                                 <form class="form-inline helper-display-inline" method="post"
