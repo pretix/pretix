@@ -44,7 +44,10 @@ else:
         SECRET_KEY = get_random_string(50, chars)
         with open(SECRET_FILE, 'w') as f:
             os.chmod(SECRET_FILE, 0o600)
-            os.chown(SECRET_FILE, os.getuid(), os.getgid())
+            try:
+                os.chown(SECRET_FILE, os.getuid(), os.getgid())
+            except AttributeError:
+                pass  # os.chown is not available on Windows
             f.write(SECRET_KEY)
 
 # Adjustable settings
