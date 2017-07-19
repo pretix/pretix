@@ -9,7 +9,17 @@ from pretix.base.models import (
 from pretix.base.signals import register_ticket_outputs
 
 
+class CompatibleCountryField(serializers.Field):
+    def to_representation(self, instance: InvoiceAddress):
+        if instance.country:
+            return str(instance.country)
+        else:
+            return instance.country_old
+
+
 class InvoiceAdddressSerializer(I18nAwareModelSerializer):
+    country = CompatibleCountryField(source='*')
+
     class Meta:
         model = InvoiceAddress
         fields = ('last_modified', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id')

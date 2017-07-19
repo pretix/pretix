@@ -19,6 +19,7 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django_countries.fields import CountryField
 
 from pretix.base.reldate import RelativeDateWrapper
 
@@ -727,13 +728,15 @@ class CartPosition(AbstractPosition):
 
 class InvoiceAddress(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
+    is_business = models.BooleanField(default=False, verbose_name=_('Business customer'))
     order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address')
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
     name = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
     street = models.TextField(verbose_name=_('Address'), blank=False)
     zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=False)
     city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)
-    country = models.CharField(max_length=255, verbose_name=_('Country'), blank=False)
+    country_old = models.CharField(max_length=255, verbose_name=_('Country'), blank=False)
+    country = CountryField(verbose_name=_('Country'), blank=False, blank_label=_('Select country'))
     vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'))
 
 

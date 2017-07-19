@@ -83,7 +83,7 @@
                                 <dt>{% trans "ZIP code and city" %}</dt>
                                 <dd>{{ addr.zipcode }} {{ addr.city }}</dd>
                                 <dt>{% trans "Country" %}</dt>
-                                <dd>{{ addr.country }}</dd>
+                                <dd>{{ addr.country.name }}</dd>
                                 {% if request.event.settings.invoice_address_vatid %}
                                     <dt>{% trans "VAT ID" %}</dt>
                                     <dd>{{ addr.vat_id }}</dd>

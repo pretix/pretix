@@ -37,8 +37,11 @@ def build_invoice(invoice: Invoice) -> Invoice:
 {i.name}
 {i.street}
 {i.zipcode} {i.city}
-{i.country}""")
-            invoice.invoice_to = addr_template.format(i=invoice.order.invoice_address).strip()
+{country}""")
+            invoice.invoice_to = addr_template.format(
+                i=invoice.order.invoice_address,
+                country=invoice.order.invoice_address.country.name if invoice.order.invoice_address.country else invoice.order.invoice_address.country_old
+            ).strip()
             if invoice.order.invoice_address.vat_id:
                 invoice.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % invoice.order.invoice_address.vat_id
         except InvoiceAddress.DoesNotExist:

@@ -4,6 +4,7 @@ from decimal import Decimal
 import pytest
 from django.db import DatabaseError
 from django.utils.timezone import now
+from django_countries.fields import Country
 
 from pretix.base.models import (
     Event, Invoice, InvoiceAddress, Item, ItemVariation, Order, OrderPosition,
@@ -72,14 +73,25 @@ def test_locale_user(env):
 
 
 @pytest.mark.django_db
+def test_address_old_country(env):
+    event, order = env
+    event.settings.set('invoice_language', 'en')
+    InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
+                                  zipcode='12345', city='London', country_old='England', country='',
+                                  order=order)
+    inv = generate_invoice(order)
+    assert inv.invoice_to == "Acme Company\n\n221B Baker Street\n12345 London\nEngland"
+
+
+@pytest.mark.django_db
 def test_address(env):
     event, order = env
     event.settings.set('invoice_language', 'en')
     InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
-                                  zipcode='12345', city='London', country='UK',
+                                  zipcode='12345', city='London', country=Country('GB'),
                                   order=order)
     inv = generate_invoice(order)
-    assert inv.invoice_to == "Acme Company\n\n221B Baker Street\n12345 London\nUK"
+    assert inv.invoice_to == "Acme Company\n\n221B Baker Street\n12345 London\nUnited Kingdom"
 
 
 @pytest.mark.django_db
@@ -87,8 +99,8 @@ def test_address_vat_id(env):
     event, order = env
     event.settings.set('invoice_language', 'en')
     InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
-                                  name='Sherlock Holmes', zipcode='12345', city='London', country='UK',
-                                  vat_id='UK1234567', order=order)
+                                  name='Sherlock Holmes', zipcode='12345', city='London', country_old='UK',
+                                  country='', vat_id='UK1234567', order=order)
     inv = generate_invoice(order)
     assert inv.invoice_to == "Acme Company\nSherlock Holmes\n221B Baker Street\n12345 London\nUK\nVAT-ID: UK1234567"
 

@@ -100,7 +100,7 @@ class OrderListExporter(BaseExporter):
                     order.invoice_address.street,
                     order.invoice_address.zipcode,
                     order.invoice_address.city,
-                    order.invoice_address.country,
+                    order.invoice_address.country if order.invoice_address.country else order.invoice_address.country_old,
                     order.invoice_address.vat_id,
                 ]
             except InvoiceAddress.DoesNotExist:

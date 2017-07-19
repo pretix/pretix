@@ -3,6 +3,7 @@ from decimal import Decimal
 from unittest import mock
 
 import pytest
+from django_countries.fields import Country
 from pytz import UTC
 
 from pretix.base.models import InvoiceAddress, Order, OrderPosition
@@ -29,7 +30,7 @@ def order(event, item):
             expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
             total=23, payment_provider='banktransfer', locale='en'
         )
-        InvoiceAddress.objects.create(order=o, company="Sample company")
+        InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
         OrderPosition.objects.create(
             order=o,
             item=item,
@@ -82,7 +83,7 @@ TEST_ORDER_RES = {
         "street": "",
         "zipcode": "",
         "city": "",
-        "country": "",
+        "country": "NZ",
         "vat_id": ""
     },
     "positions": [TEST_ORDERPOSITION_RES],
@@ -259,7 +260,7 @@ TEST_INVOICE_RES = {
     "number": "DUMMY-00001",
     "is_cancellation": False,
     "invoice_from": "",
-    "invoice_to": "Sample company",
+    "invoice_to": "Sample company\n\n\n \nNew Zealand",
     "date": "2017-12-10",
     "refers": None,
     "locale": "en",

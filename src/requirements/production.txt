@@ -41,3 +41,5 @@ chardet<3.1.0,>=3.0.2
 mt-940==3.2
 vobject==0.9.*
 pycountry
+django-countries
+pyuca  # for better sorting of country names in django-countries

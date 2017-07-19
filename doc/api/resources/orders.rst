@@ -50,6 +50,13 @@ downloads                             list of objects            List of ticket 
 └ url                                 string                     Download URL
 ===================================== ========================== =======================================================
 
+
+.. versionchanged:: 1.6
+
+   The ``invoice_address.country`` attribute contains a two-letter country code for all new orders. For old orders,
+   a custom text might still be returned.
+
+
 Order position resource
 -----------------------
 
