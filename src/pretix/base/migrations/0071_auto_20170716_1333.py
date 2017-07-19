@@ -12,34 +12,48 @@ def tax_rate_converter(app, schema_editor):
     EventSettingsStore = app.get_model('pretixbase', 'Event_SettingsStore')
     Item = app.get_model('pretixbase', 'Item')
     TaxRule = app.get_model('pretixbase', 'TaxRule')
+    Order = app.get_model('pretixbase', 'Order')
+    OrderPosition = app.get_model('pretixbase', 'OrderPosition')
+    n = LazyI18nString({
+        'en': 'VAT',
+        'de': 'MwSt.',
+        'de-informal': 'MwSt.'
+    })
 
     for i in Item.objects.select_related('event').exclude(tax_rate=0):
         try:
             i.tax_rule = i.event.tax_rules.get(rate=i.tax_rate)
         except TaxRule.DoesNotExist:
-            tr = i.event.tax_rules.create(rate=i.tax_rate, name=LazyI18nString({
-                'en': 'VAT',
-                'de': 'MwSt.',
-                'de-informal': 'MwSt.'
-            }))
+            tr = i.event.tax_rules.create(rate=i.tax_rate, name=n)
             i.tax_rule = tr
         i.save()
+
+    for o in Order.objects.select_related('event').exclude(payment_fee_tax_rate=0):
+        try:
+            o.payment_fee_tax_rule = o.event.tax_rules.get(rate=o.payment_fee_tax_rate)
+        except TaxRule.DoesNotExist:
+            tr = o.event.tax_rules.create(rate=o.payment_fee_tax_rate, name=n)
+            o.tax_rule = tr
+        o.save()
+
+    for op in OrderPosition.objects.select_related('order', 'order__event').exclude(tax_rate=0):
+        try:
+            op.tax_rule = op.order.event.tax_rules.get(rate=op.tax_rate)
+        except TaxRule.DoesNotExist:
+            tr = op.order.event.tax_rules.create(rate=op.tax_rate, name=n)
+            op.tax_rule = tr
+        op.save()
 
     for setting in EventSettingsStore.objects.filter(key='tax_rate_default'):
         try:
             tr = i.event.tax_rules.get(rate=setting.value)
         except TaxRule.DoesNotExist:
-            tr = i.event.tax_rules.create(rate=setting.value, name=LazyI18nString({
-                'en': 'VAT',
-                'de': 'MwSt.',
-                'de-informal': 'MwSt.'
-            }))
+            tr = i.event.tax_rules.create(rate=setting.value, name=n)
         setting.value = tr.pk
         setting.save()
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('pretixbase', '0070_auto_20170719_0910'),
     ]
@@ -49,22 +63,58 @@ class Migration(migrations.Migration):
             name='TaxRule',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', i18nfield.fields.I18nCharField(help_text='Should be short, e.g. "VAT"', max_length=190, verbose_name='Name')),
+                ('name', i18nfield.fields.I18nCharField(help_text='Should be short, e.g. "VAT"', max_length=190,
+                                                        verbose_name='Name')),
                 ('rate', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Tax rate')),
-                ('price_includes_tax', models.BooleanField(default=True, verbose_name='The configured product prices includes the tax amount')),
-                ('eu_reverse_charge', models.BooleanField(default=False, help_text='Not recommended. Most events will NOT be '
-                                                                     'qualified for reverse charge since the place of taxation is the location of the event. This option only enables reverse charge for business customers who entered a valid EU VAT ID. Only enable this option after consulting a tax counsel. No warranty given for correct tax calculation.', verbose_name='Use EU reverse charge taxation')),
-                ('home_country', models.CharField(blank=True, choices=[('AT', 'Austria'), ('BE', 'Belgium'), ('BG', 'Bulgaria'), ('HR', 'Croatia'), ('CY', 'Cyprus'), ('CZ', 'Czech Republic'), ('DK', 'Denmark'), ('EE', 'Estonia'), ('FI', 'Finland'), ('FR', 'France'), ('DE', 'Germany'), ('GR', 'Greece'), ('HU', 'Hungary'), ('IE', 'Ireland'), ('IT', 'Italy'), ('LV', 'Latvia'), ('LT', 'Lithuania'), ('LU', 'Luxembourg'), ('MT', 'Malta'), ('NL', 'Netherlands'), ('PL', 'Poland'), ('PT', 'Portugal'), ('RO', 'Romania'), ('SK', 'Slovakia'), ('SI', 'Slovenia'), ('ES', 'Spain'), ('SE', 'Sweden'), ('UJ', 'United Kingdom')], help_text='Your country. Only relevant for EU reverse charge.', max_length=2, verbose_name='Merchant country')),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='tax_rules', to='pretixbase.Event')),
+                ('price_includes_tax', models.BooleanField(default=True,
+                                                           verbose_name='The configured product prices includes the '
+                                                                        'tax amount')),
+                ('eu_reverse_charge',
+                 models.BooleanField(default=False, help_text='Not recommended. Most events will NOT be '
+                                                              'qualified for reverse charge since the place of '
+                                                              'taxation is the location of the event. This option '
+                                                              'only enables reverse charge for business customers who '
+                                                              'entered a valid EU VAT ID. Only enable this option '
+                                                              'after consulting a tax counsel. No warranty given for '
+                                                              'correct tax calculation.',
+                                     verbose_name='Use EU reverse charge taxation')),
+                ('home_country', models.CharField(blank=True,
+                                                  choices=[('AT', 'Austria'), ('BE', 'Belgium'), ('BG', 'Bulgaria'),
+                                                           ('HR', 'Croatia'), ('CY', 'Cyprus'),
+                                                           ('CZ', 'Czech Republic'), ('DK', 'Denmark'),
+                                                           ('EE', 'Estonia'), ('FI', 'Finland'), ('FR', 'France'),
+                                                           ('DE', 'Germany'), ('GR', 'Greece'), ('HU', 'Hungary'),
+                                                           ('IE', 'Ireland'), ('IT', 'Italy'), ('LV', 'Latvia'),
+                                                           ('LT', 'Lithuania'), ('LU', 'Luxembourg'), ('MT', 'Malta'),
+                                                           ('NL', 'Netherlands'), ('PL', 'Poland'), ('PT', 'Portugal'),
+                                                           ('RO', 'Romania'), ('SK', 'Slovakia'), ('SI', 'Slovenia'),
+                                                           ('ES', 'Spain'), ('SE', 'Sweden'), ('UJ', 'United Kingdom')],
+                                                  help_text='Your country. Only relevant for EU reverse charge.',
+                                                  max_length=2, verbose_name='Merchant country')),
+                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='tax_rules',
+                                            to='pretixbase.Event')),
             ],
         ),
         migrations.AddField(
             model_name='item',
             name='tax_rule',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='pretixbase.TaxRule', verbose_name='Sales tax'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT,
+                                    to='pretixbase.TaxRule', verbose_name='Sales tax'),
+        ),
+        migrations.AddField(
+            model_name='order',
+            name='payment_fee_tax_rule',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT,
+                                    to='pretixbase.TaxRule'),
+        ),
+        migrations.AddField(
+            model_name='orderposition',
+            name='tax_rule',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT,
+                                    to='pretixbase.TaxRule'),
         ),
         migrations.RunPython(
-            tax_rate_converter,
+            tax_rate_converter, migrations.RunPython.noop
         ),
         migrations.RemoveField(
             model_name='item',

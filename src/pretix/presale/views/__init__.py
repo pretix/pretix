@@ -20,7 +20,7 @@ class CartMixin:
         """
         return list(get_cart(self.request))
 
-    def get_cart(self, answers=False, queryset=None, payment_fee=None, payment_fee_tax_rule=None, downloads=False):
+    def get_cart(self, answers=False, queryset=None, order=None, downloads=False):
         if queryset:
             prefetch = []
             if answers:
@@ -99,10 +99,21 @@ class CartMixin:
         net_total = sum(p.net_total for p in positions)
         tax_total = sum(p.total - p.net_total for p in positions)
 
-        payment_fee = payment_fee if payment_fee is not None else self.get_payment_fee(total)
-        payment_fee_tax = (payment_fee_tax_rule or TaxRule.zero()).tax(payment_fee, base_price_is='included')
-        tax_total += payment_fee_tax.tax
-        net_total += payment_fee_tax.net
+        if order:
+            payment_fee = order.payment_fee
+            tax_total += order.payment_fee_tax_value
+            payment_fee_net = order.payment_fee - order.payment_fee_tax_value
+            net_total += payment_fee_net
+            payment_fee_tax_rule = order.payment_fee_tax_rule
+            payment_fee_tax_rate = order.payment_fee_tax_rate
+        else:
+            payment_fee = self.get_payment_fee(total)
+            payment_fee_tax_rule = self.request.event.settings.tax_rate_default
+            payment_fee_tax = (payment_fee_tax_rule or TaxRule.zero()).tax(payment_fee, base_price_is='gross')
+            tax_total += payment_fee_tax.tax
+            net_total += payment_fee_tax.net
+            payment_fee_net = payment_fee_tax.net
+            payment_fee_tax_rate = payment_fee_tax.rate
 
         try:
             first_expiry = min(p.expires for p in positions) if positions else now()
@@ -118,8 +129,9 @@ class CartMixin:
             'net_total': net_total,
             'tax_total': tax_total,
             'payment_fee': payment_fee,
-            'payment_fee_net': payment_fee_tax.net,
-            'payment_fee_tax_rate': payment_fee_tax.rate,
+            'payment_fee_net': payment_fee_net,
+            'payment_fee_tax_rate': payment_fee_tax_rate,
+            'payment_fee_tax_rule': payment_fee_tax_rule,
             'answers': answers,
             'minutes_left': minutes_left,
             'first_expiry': first_expiry,

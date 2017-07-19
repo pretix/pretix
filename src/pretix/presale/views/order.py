@@ -98,7 +98,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         ctx['cart'] = self.get_cart(
             answers=True, downloads=ctx['can_download'],
             queryset=self.order.positions.all(),
-            payment_fee=self.order.payment_fee, payment_fee_tax_rate=self.order.payment_fee_tax_rate
+            order=self.order
         )
         ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
             self.request.event.settings.ticket_download_nonadm or

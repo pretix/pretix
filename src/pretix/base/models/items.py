@@ -205,6 +205,7 @@ class Item(LoggedModel):
     tax_rule = models.ForeignKey(
         'TaxRule',
         verbose_name=_('Sales tax'),
+        on_delete=models.PROTECT,
         null=True, blank=True
     )
     admission = models.BooleanField(

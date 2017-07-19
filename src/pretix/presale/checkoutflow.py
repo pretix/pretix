@@ -387,7 +387,9 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             if p['provider'].identifier == request.POST.get('payment', ''):
                 request.session['payment'] = p['provider'].identifier
                 resp = p['provider'].checkout_prepare(
-                    request, self.get_cart(payment_fee=p['provider'].calculate_fee(self._total_order_value)))
+                    request,
+                    self.get_cart()
+                )
                 if isinstance(resp, str):
                     return redirect(resp)
                 elif resp is True:
