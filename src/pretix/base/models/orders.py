@@ -737,7 +737,8 @@ class InvoiceAddress(models.Model):
     city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)
     country_old = models.CharField(max_length=255, verbose_name=_('Country'), blank=False)
     country = CountryField(verbose_name=_('Country'), blank=False, blank_label=_('Select country'))
-    vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'))
+    vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'),
+                              help_text=_('Only for business customers within the EU.'))
 
 
 def cachedticket_name(instance, filename: str) -> str:

@@ -48,22 +48,54 @@ class ContactForm(forms.Form):
                 raise ValidationError(_('Please enter the same email address twice.'))
 
 
+class BusinessBooleanRadio(forms.RadioSelect):
+    def __init__(self, attrs=None):
+        choices = (
+            ('individual', _('Individual customer')),
+            ('business', _('Business customer')),
+        )
+        super().__init__(attrs, choices)
+
+    def format_value(self, value):
+        try:
+            return {True: 'business', False: 'individual'}[value]
+        except KeyError:
+            return 'individual'
+
+    def value_from_datadict(self, data, files, name):
+        value = data.get(name)
+        return {
+            'business': True,
+            True: True,
+            'True': True,
+            'individual': False,
+            'False': False,
+            False: False,
+        }.get(value)
+
+
 class InvoiceAddressForm(forms.ModelForm):
     required_css_class = 'required'
 
     class Meta:
         model = InvoiceAddress
-        fields = ('company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id')
+        fields = ('is_business', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id')
         widgets = {
+            'is_business': BusinessBooleanRadio,
             'street': forms.Textarea(attrs={'rows': 2, 'placeholder': _('Street and Number')}),
-            'company': forms.TextInput(attrs={'data-typocheck-source': '1'}),
-            'name': forms.TextInput(attrs={'data-typocheck-source': '1'}),
+            'company': forms.TextInput(attrs={'data-typocheck-source': '1',
+                                              'data-display-dependency': '#id_is_business_1',
+                                              'data-required-if': '#id_is_business_1'}),
+            'name': forms.TextInput(attrs={'data-typocheck-source': '1', 'data-required-if': '#id_is_business_0'}),
+            'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
+        }
+        labels = {
+            'is_business': ''
         }
 
     def __init__(self, *args, **kwargs):
         self.event = event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
-        self.fields['name'].form_group_class = 'required'
         if not event.settings.invoice_address_vatid:
             del self.fields['vat_id']
         if not event.settings.invoice_address_required:
