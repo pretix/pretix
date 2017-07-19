@@ -525,8 +525,8 @@ class InvoiceSettingsForm(SettingsForm):
 class MailSettingsForm(SettingsForm):
     mail_prefix = forms.CharField(
         label=_("Subject prefix"),
-        help_text=_("This will be prepended to the subject of all outgoing emails. This could be a short form of "
-                    "your event name."),
+        help_text=_("This will be prepended to the subject of all outgoing emails, formatted as [prefix]. "
+                    "Choose, for example, a short form of your event name."),
         required=False
     )
     mail_from = forms.EmailField(
