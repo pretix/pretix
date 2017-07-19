@@ -19,6 +19,7 @@ from pretix.presale.signals import contact_form_fields, question_form_fields
 
 
 class ContactForm(forms.Form):
+    required_css_class = 'required'
     email = forms.EmailField(label=_('E-mail'),
                              help_text=_('Make sure to enter a valid email address. We will send you an order '
                                          'confirmation including a link that you need in case you want to make '
@@ -48,6 +49,7 @@ class ContactForm(forms.Form):
 
 
 class InvoiceAddressForm(forms.ModelForm):
+    required_css_class = 'required'
 
     class Meta:
         model = InvoiceAddress
@@ -61,6 +63,7 @@ class InvoiceAddressForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.event = event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
+        self.fields['name'].form_group_class = 'required'
         if not event.settings.invoice_address_vatid:
             del self.fields['vat_id']
         if not event.settings.invoice_address_required:
@@ -118,6 +121,7 @@ class QuestionsForm(forms.Form):
     the attendee name for admission tickets, if the corresponding setting is enabled,
     as well as additional questions defined by the organizer.
     """
+    required_css_class = 'required'
 
     def __init__(self, *args, **kwargs):
         """
