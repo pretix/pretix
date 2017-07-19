@@ -45,6 +45,10 @@ DEFAULTS = {
         'default': 'True',
         'type': bool,
     },
+    'invoice_name_required': {
+        'default': 'False',
+        'type': bool,
+    },
     'invoice_address_required': {
         'default': 'False',
         'type': bool,

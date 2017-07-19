@@ -84,9 +84,8 @@ class InvoiceAddressForm(forms.ModelForm):
             'is_business': BusinessBooleanRadio,
             'street': forms.Textarea(attrs={'rows': 2, 'placeholder': _('Street and Number')}),
             'company': forms.TextInput(attrs={'data-typocheck-source': '1',
-                                              'data-display-dependency': '#id_is_business_1',
-                                              'data-required-if': '#id_is_business_1'}),
-            'name': forms.TextInput(attrs={'data-typocheck-source': '1', 'data-required-if': '#id_is_business_0'}),
+                                              'data-display-dependency': '#id_is_business_1'}),
+            'name': forms.TextInput(attrs={'data-typocheck-source': '1'}),
             'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
         }
         labels = {
@@ -104,6 +103,12 @@ class InvoiceAddressForm(forms.ModelForm):
                 f.widget.is_required = False
                 if 'required' in f.widget.attrs:
                     del f.widget.attrs['required']
+
+            if event.settings.invoice_name_required:
+                self.fields['name'].required = True
+        else:
+            self.fields['company'].widget.attrs['data-required-if'] = '#id_is_business_1'
+            self.fields['name'].widget.attrs['data-required-if'] = '#id_is_business_0'
 
     def clean(self):
         data = self.cleaned_data

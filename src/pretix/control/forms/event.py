@@ -436,6 +436,14 @@ class InvoiceSettingsForm(SettingsForm):
         required=False,
         widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
     )
+    invoice_name_required = forms.BooleanField(
+        label=_("Require customer name"),
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={'data-checkbox-dependency': '#id_invoice_address_asked',
+                   'data-inverse-dependency': '#id_invoice_address_required'}
+        ),
+    )
     invoice_address_vatid = forms.BooleanField(
         label=_("Ask for VAT ID"),
         help_text=_("Does only work if an invoice address is asked for. VAT ID is not required."),

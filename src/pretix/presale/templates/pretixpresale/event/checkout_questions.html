@@ -32,8 +32,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a class="{% if not event.settings.invoice_address_required %} collapsed {% endif %}" data-toggle="collapse" href="#invoice">
-                                <strong>{% trans "Invoice information" %}{% if not event.settings.invoice_address_required %}
+                            <a class="{% if not event.settings.invoice_address_required and not event.settings.invoice_name_required %} collapsed{% endif %}" data-toggle="collapse" href="#invoice">
+                                <strong>{% trans "Invoice information" %}{% if not event.settings.invoice_address_required and not event.settings.invoice_name_required %}
                                     {% trans "(optional)" %}
                                 {% endif %}</strong>
                                 
@@ -41,7 +41,7 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="invoice" class="panel-collapse collapse {% if event.settings.invoice_address_required %} in {% endif %}">
+                    <div id="invoice" class="panel-collapse collapse{% if event.settings.invoice_address_required or event.settings.invoice_name_required %} in {% endif %}">
                         <div class="panel-body">
                             {% bootstrap_form invoice_form layout="horizontal" %}
                         </div>
