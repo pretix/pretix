@@ -144,7 +144,7 @@ class OrderDetail(OrderView):
         cartpos = queryset.order_by(
             'item', 'variation'
         ).select_related(
-            'item', 'variation', 'addon_to'
+            'item', 'variation', 'addon_to', 'tax_rule'
         ).prefetch_related(
             'item__questions', 'answers', 'answers__question', 'checkins'
         ).order_by('positionid')
