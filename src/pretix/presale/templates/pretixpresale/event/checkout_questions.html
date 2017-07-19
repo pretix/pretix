@@ -5,6 +5,11 @@
 {% block content %}
     <h2>{% trans "Checkout" %}</h2>
     <p>{% trans "Before we continue, we need you to answer some questions." %}</p>
+    <p class="required-legend">
+        {% blocktrans trimmed %}
+            You need to fill all fields that are marked with <span>*</span> to continue.
+        {% endblocktrans %}
+    </p>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="panel-group" id="questions_group">
