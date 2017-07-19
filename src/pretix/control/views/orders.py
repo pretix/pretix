@@ -55,7 +55,7 @@ class OrderList(EventPermissionRequiredMixin, ListView):
     def get_queryset(self):
         qs = Order.objects.filter(
             event=self.request.event
-        ).annotate(pcnt=Count('positions')).select_related('invoice_address')
+        ).annotate(pcnt=Count('positions', distinct=True)).select_related('invoice_address')
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 
