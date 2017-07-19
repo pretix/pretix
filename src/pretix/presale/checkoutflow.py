@@ -313,6 +313,14 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 messages.warning(request, _('Please enter a valid email address.'))
             return False
 
+        if request.event.settings.invoice_address_required and (not self.invoice_address or not self.invoice_address.street):
+            messages.warning(request, _('Please enter your invoicing address.'))
+            return False
+
+        if request.event.settings.invoice_name_required and (not self.invoice_address or not self.invoice_address.name):
+            messages.warning(request, _('Please enter your name.'))
+            return False
+
         for cp in self.positions:
             answ = {
                 aw.question_id: aw.answer for aw in cp.answers.all()
