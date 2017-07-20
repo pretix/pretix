@@ -3,31 +3,22 @@ $(document).ready(function() {
 });
 
 function hideDeselected() {
-  var index = $("select[name='quota_option'] option:selected").index();
-  if (index == 1) {
+  var v = $("#id_quota_option").val();
+
+  if (v === "existing") {
     hideAll();
-    $('label[for="id_quota_add_existing"]').show();
-    $('#id_quota_add_existing').show();
-  } else if (index == 2) {
+    $("#existing-quota-group").children().show();
+  } else if (v === "new") {
     hideAll();
-    $('#id_quota_add_new_name').show();
-    $('label[for="id_quota_add_new_name"]').show();
-    $('#id_quota_add_new_size').show();
-    $('label[for="id_quota_add_new_size"]').show();
+    $("#new-quota-group").children().show();
   } else {
     hideAll();
   }
 };
 
 function hideAll() {
-  $('#id_quota_add_new_name').hide();
-  $('label[for="id_quota_add_new_name"]').hide();
-
-  $('#id_quota_add_new_size').hide();
-  $('label[for="id_quota_add_new_size"]').hide();
-
-  $('#id_quota_add_existing').hide();
-  $('label[for="id_quota_add_existing"]').hide();
+  $("#new-quota-group").children().hide();
+  $("#existing-quota-group").children().hide();
 };
 
 $(function () {
