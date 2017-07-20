@@ -14,7 +14,7 @@ from pretix.base.models import (
     CartPosition, Event, InvoiceAddress, Item, ItemVariation, Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.tax import TAXED_ZERO
+from pretix.base.models.tax import TAXED_ZERO, TaxedPrice
 from pretix.base.services.async import ProfiledTask
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.pricing import get_price
@@ -69,7 +69,7 @@ error_messages = {
 
 class CartManager:
     AddOperation = namedtuple('AddOperation', ('count', 'item', 'variation', 'price', 'voucher', 'quotas',
-                                               'addon_to', 'subevent'))
+                                               'addon_to', 'subevent', 'includes_tax'))
     RemoveOperation = namedtuple('RemoveOperation', ('position',))
     ExtendOperation = namedtuple('ExtendOperation', ('position', 'count', 'item', 'variation', 'price', 'voucher',
                                                      'quotas', 'subevent'))
@@ -79,7 +79,7 @@ class CartManager:
         AddOperation: 30
     }
 
-    def __init__(self, event: Event, cart_id: str):
+    def __init__(self, event: Event, cart_id: str, invoice_address: InvoiceAddress=None):
         self.event = event
         self.cart_id = cart_id
         self.now_dt = now()
@@ -90,6 +90,7 @@ class CartManager:
         self._subevents_cache = {}
         self._variations_cache = {}
         self._expiry = None
+        self.invoice_address = invoice_address
 
     @property
     def positions(self):
@@ -214,8 +215,12 @@ class CartManager:
 
     def _get_price(self, item: Item, variation: Optional[ItemVariation],
                    voucher: Optional[Voucher], custom_price: Optional[Decimal],
-                   subevent: Optional[SubEvent]):
-        return get_price(item, variation, voucher, custom_price, subevent, self.event.settings.display_net_prices)
+                   subevent: Optional[SubEvent], cp_is_net: bool=None):
+        return get_price(
+            item, variation, voucher, custom_price, subevent,
+            custom_price_is_net=cp_is_net if cp_is_net is not None else self.event.settings.display_net_prices,
+            invoice_address=self.invoice_address
+        )
 
     def extend_expired_positions(self):
         expired = self.positions.filter(expires__lte=self.now_dt).select_related(
@@ -223,7 +228,12 @@ class CartManager:
         ).prefetch_related('item__quotas', 'variation__quotas')
         err = None
         for cp in expired:
-            price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent)
+            if not cp.includes_tax:
+                price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent,
+                                        cp_is_net=True)
+                price = TaxedPrice(net=price.net, gross=price.net, rate=0, tax=0, name='')
+            else:
+                price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent)
 
             quotas = list(cp.quotas)
             if not quotas:
@@ -297,7 +307,7 @@ class CartManager:
             price = self._get_price(item, variation, voucher, i.get('price'), subevent)
             op = self.AddOperation(
                 count=i['count'], item=item, variation=variation, price=price, voucher=voucher, quotas=quotas,
-                addon_to=False, subevent=subevent
+                addon_to=False, subevent=subevent, includes_tax=bool(price.rate)
             )
             self._check_item_constraints(op)
             operations.append(op)
@@ -402,7 +412,7 @@ class CartManager:
 
                 op = self.AddOperation(
                     count=1, item=item, variation=variation, price=price, voucher=None, quotas=quotas,
-                    addon_to=cp, subevent=cp.subevent
+                    addon_to=cp, subevent=cp.subevent, includes_tax=bool(price.rate)
                 )
                 self._check_item_constraints(op)
                 operations.append(op)
@@ -560,7 +570,7 @@ class CartManager:
                             event=self.event, item=op.item, variation=op.variation,
                             price=op.price.gross, expires=self._expiry, cart_id=self.cart_id,
                             voucher=op.voucher, addon_to=op.addon_to if op.addon_to else None,
-                            subevent=op.subevent
+                            subevent=op.subevent, includes_tax=op.includes_tax
                         ))
                 elif isinstance(op, self.ExtendOperation):
                     if available_count == 1:
@@ -610,7 +620,8 @@ def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, locale='en') -> None:
+def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, locale='en',
+                      invoice_address: int=None) -> None:
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
@@ -620,9 +631,17 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
     """
     with language(locale):
         event = Event.objects.get(id=event)
+
+        ia = False
+        if invoice_address:
+            try:
+                ia = InvoiceAddress.objects.get(pk=invoice_address)
+            except InvoiceAddress.DoesNotExist:
+                pass
+
         try:
             try:
-                cm = CartManager(event=event, cart_id=cart_id)
+                cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia)
                 cm.add_new_items(items)
                 cm.commit()
             except LockTimeoutException:
@@ -673,7 +692,8 @@ def clear_cart(self, event: int, cart_id: str=None, locale='en') -> None:
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def set_cart_addons(self, event: int, addons: List[dict], cart_id: str=None, locale='en') -> None:
+def set_cart_addons(self, event: int, addons: List[dict], cart_id: str=None, locale='en',
+                    invoice_address: int=None) -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
@@ -682,9 +702,16 @@ def set_cart_addons(self, event: int, addons: List[dict], cart_id: str=None, loc
     """
     with language(locale):
         event = Event.objects.get(id=event)
+
+        ia = False
+        if invoice_address:
+            try:
+                ia = InvoiceAddress.objects.get(pk=invoice_address)
+            except InvoiceAddress.DoesNotExist:
+                pass
         try:
             try:
-                cm = CartManager(event=event, cart_id=cart_id)
+                cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia)
                 cm.set_addons(addons)
                 cm.commit()
             except LockTimeoutException:

@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from pretix.base.models import (
-    AbstractPosition, Item, ItemAddOn, ItemVariation, Voucher,
+    AbstractPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
@@ -10,7 +10,7 @@ from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
 def get_price(item: Item, variation: ItemVariation = None,
               voucher: Voucher = None, custom_price: Decimal = None,
               subevent: SubEvent = None, custom_price_is_net: bool = False,
-              addon_to: AbstractPosition = None) -> TaxedPrice:
+              addon_to: AbstractPosition = None, invoice_address: InvoiceAddress = None) -> TaxedPrice:
     if addon_to:
         try:
             iao = addon_to.item.addons.get(addon_category_id=item.category_id)
@@ -52,5 +52,11 @@ def get_price(item: Item, variation: ItemVariation = None,
             price = tax_rule.tax(max(custom_price, price.net), base_price_is='net')
         else:
             price = tax_rule.tax(max(custom_price, price.gross), base_price_is='gross')
+
+    if invoice_address and not tax_rule.tax_applicable(invoice_address):
+        price.tax = Decimal('0.00')
+        price.rate = Decimal('0.00')
+        price.gross = price.net
+        price.name = ''
 
     return price

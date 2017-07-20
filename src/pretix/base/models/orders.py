@@ -833,8 +833,8 @@ class CartPosition(AbstractPosition):
 
 class InvoiceAddress(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
-    is_business = models.BooleanField(default=False, verbose_name=_('Business customer'))
     order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address')
+    is_business = models.BooleanField(default=False, verbose_name=_('Business customer'))
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
     name = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
     street = models.TextField(verbose_name=_('Address'), blank=False)

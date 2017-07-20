@@ -6,12 +6,14 @@ from django.db.models import Count, Prefetch, Q
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import (
-    CartPosition, ItemVariation, QuestionAnswer, Quota, SubEvent, Voucher,
+    CartPosition, InvoiceAddress, ItemVariation, QuestionAnswer, Quota,
+    SubEvent, Voucher,
 )
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, clear_cart, remove_cart_position,
@@ -35,6 +37,17 @@ class CartActionMixin:
 
     def get_error_url(self):
         return self.get_next_url()
+
+    @cached_property
+    def invoice_address(self):
+        iapk = self.request.session.get('invoice_address_{}'.format(self.request.event.pk))
+        if not iapk:
+            return InvoiceAddress()
+
+        try:
+            return InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+        except InvoiceAddress.DoesNotExist:
+            return InvoiceAddress()
 
     def _item_from_post_value(self, key, value, voucher=None):
         if value.strip() == '' or '_' not in key:
@@ -153,7 +166,8 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
         if items:
-            return self.do(self.request.event.id, items, self.request.session.session_key, translation.get_language())
+            return self.do(self.request.event.id, items, self.request.session.session_key, translation.get_language(),
+                           self.invoice_address.pk)
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({

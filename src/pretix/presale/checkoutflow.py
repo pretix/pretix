@@ -80,6 +80,17 @@ class BaseCheckoutFlowStep:
         if n:
             return n.get_step_url()
 
+    @cached_property
+    def invoice_address(self):
+        iapk = self.request.session.get('invoice_address_{}'.format(self.request.event.pk))
+        if not iapk:
+            return InvoiceAddress()
+
+        try:
+            return InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+        except InvoiceAddress.DoesNotExist:
+            return InvoiceAddress()
+
 
 def get_checkout_flow(event):
     flow = list([step(event) for step in DEFAULT_FLOW])
@@ -244,7 +255,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         if not is_valid:
             return self.get(request, *args, **kwargs)
 
-        return self.do(self.request.event.id, data, self.request.session.session_key)
+        return self.do(self.request.event.id, data, self.request.session.session_key,
+                       invoice_address=self.invoice_address.pk)
 
 
 class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
@@ -270,17 +282,6 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         return any([p.item.tax_rule.eu_reverse_charge for p in self.positions])
 
     @cached_property
-    def invoice_address(self):
-        iapk = self.request.session.get('invoice_address')
-        if not iapk:
-            return InvoiceAddress()
-
-        try:
-            return InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
-        except InvoiceAddress.DoesNotExist:
-            return InvoiceAddress()
-
-    @cached_property
     def invoice_form(self):
         return InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
                                   event=self.request.event,
@@ -299,7 +300,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         request.session['email'] = self.contact_form.cleaned_data['email']
         if request.event.settings.invoice_address_asked:
             addr = self.invoice_form.save()
-            request.session['invoice_address'] = addr.pk
+            request.session['invoice_address_{}'.format(request.event.pk)] = addr.pk
             request.session['contact_form_data'] = self.contact_form.cleaned_data
 
             update_tax_rates(
@@ -489,16 +490,6 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
     @cached_property
     def payment_provider(self):
         return self.request.event.get_payment_providers().get(self.request.session['payment'])
-
-    @cached_property
-    def invoice_address(self):
-        try:
-            return InvoiceAddress.objects.get(
-                pk=self.request.session.get('invoice_address'),
-                order__isnull=True
-            )
-        except InvoiceAddress.DoesNotExist:
-            return InvoiceAddress()
 
     def get(self, request):
         self.request = request
