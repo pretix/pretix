@@ -132,8 +132,8 @@ def get_language_from_request(request: HttpRequest) -> str:
     return (
         get_language_from_user_settings(request)
         or get_language_from_session_or_cookie(request)
-        or get_language_from_event(request)
         or get_language_from_browser(request)
+        or get_language_from_event(request)
         or get_default_language()
     )
 
