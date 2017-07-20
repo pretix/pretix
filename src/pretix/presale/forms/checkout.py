@@ -2,6 +2,8 @@ import os
 from decimal import Decimal
 from itertools import chain
 
+import vat_moss.errors
+import vat_moss.id
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Count, Prefetch, Q
@@ -12,6 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import ItemVariation, Question
 from pretix.base.models.orders import InvoiceAddress, OrderPosition
+from pretix.base.models.tax import EU_COUNTRIES
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import contact_form_fields, question_form_fields
@@ -93,6 +96,7 @@ class InvoiceAddressForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.event = event = kwargs.pop('event')
+        self.validate_vat_id = kwargs.pop('validate_vat_id')
         super().__init__(*args, **kwargs)
         if not event.settings.invoice_address_vatid:
             del self.fields['vat_id']
@@ -113,6 +117,32 @@ class InvoiceAddressForm(forms.ModelForm):
         data = self.cleaned_data
         if not data.get('name') and not data.get('company') and self.event.settings.invoice_address_required:
             raise ValidationError(_('You need to provide either a company name or your name.'))
+
+        if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
+            pass
+        elif self.validate_vat_id and data.get('is_business') and data.get('country') in EU_COUNTRIES and data.get('vat_id'):
+            if data.get('vat_id')[:2] != str(data.get('country')):
+                raise ValidationError(_('Your VAT ID does not match the selected country.'))
+            try:
+                result = vat_moss.id.validate(data.get('vat_id'))
+                if result:
+                    country_code, normalized_id, company_name = result
+                    self.instance.vat_id_validated = True
+                    self.instance.vat_id = normalized_id
+            except vat_moss.errors.InvalidError:
+                raise ValidationError(_('This VAT ID is not valid. Please re-check your input.'))
+            except vat_moss.errors.WebServiceUnavailableError:
+                raise ValidationError(_('Your VAT ID could not be checked, as the VAT checking service of your '
+                                        'country is currently not available. Please re-check your input.'))
+                # There was an error processing the request within the VIES service.
+                #
+                # Unfortunately this tends to happen a lot with EU countries because the
+                # VIES service is a proxy for 28 separate member-state APIs.
+                #
+                # Tell your customer they have to pay VAT and can recover it
+                # through appropriate accounting practices.
+        else:
+            self.instance.vat_id_validated = False
 
 
 class UploadedFileWidget(forms.ClearableFileInput):

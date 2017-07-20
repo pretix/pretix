@@ -105,7 +105,8 @@ setup(
         'pycountry',
         'django-countries',
         'pyuca',
-        'defusedcsv'
+        'defusedcsv',
+        'vat_moss==0.11.0',
     ],
     extras_require={
         'dev': [

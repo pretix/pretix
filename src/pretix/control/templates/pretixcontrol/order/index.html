@@ -369,7 +369,12 @@
                                     <dd>{{ order.invoice_address.country.name|default:order.invoice_address.country_old }}</dd>
                                     {% if request.event.settings.invoice_address_vatid %}
                                         <dt>{% trans "VAT ID" %}</dt>
-                                        <dd>{{ order.invoice_address.vat_id }}</dd>
+                                        <dd>
+                                            {{ order.invoice_address.vat_id }}
+                                            {% if order.invoice_address.vat_id_validated %}
+                                                <span class="fa fa-check" data-toggle="tooltip" title="{% blocktrans trimmed %}Valid EU VAT ID{% endblocktrans %}"></span>
+                                            {% endif %}
+                                        </dd>
                                     {% endif %}
                                 </dl>
                             </div>

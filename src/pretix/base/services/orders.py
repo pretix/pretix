@@ -389,7 +389,6 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             payment_provider=payment_provider.identifier,
             meta_info=json.dumps(meta_info or {}),
         )
-        OrderPosition.transform_cart_positions(positions, order)
 
         if address is not None:
             try:
@@ -403,6 +402,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             except InvoiceAddress.DoesNotExist:
                 pass
 
+        OrderPosition.transform_cart_positions(positions, order)
         order.log_action('pretix.event.order.placed')
 
     order_placed.send(event, order=order)

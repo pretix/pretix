@@ -60,7 +60,7 @@ class TaxRule(LoggedModel):
                     "taxation is the location of the event. This option disables charging VAT for all customers "
                     "outside the EU and for business customers in different EU countries that do not "
                     "customers who entered a valid EU VAT ID. Only enable this option after consulting a tax counsel. "
-                    "No warranty given for correct tax calculation.")
+                    "No warranty given for correct tax calculation. USE AT YOUR OWN RISK.")
     )
     home_country = CountryField(
         verbose_name=_('Merchant country'),
@@ -118,3 +118,27 @@ class TaxRule(LoggedModel):
             net=net, gross=gross, tax=gross - net,
             rate=self.rate, name=self.name
         )
+
+    def tax_applicable(self, invoice_address):
+        if not self.eu_reverse_charge:
+            # No reverse charge rules? Always apply VAT!
+            return True
+
+        if not invoice_address or not invoice_address.country:
+            # No country specified? Always apply VAT!
+            return True
+
+        if str(invoice_address.country) not in EU_COUNTRIES:
+            # Non-EU country? Never apply VAT!
+            return False
+
+        if invoice_address.country == self.home_country:
+            # Within same EU country? Always apply VAT!
+            return True
+
+        if invoice_address.is_business and invoice_address.vat_id and invoice_address.vat_id_validated:
+            # Reverse charge case
+            return False
+
+        # Consumer in different EU country / invalid VAT
+        return True

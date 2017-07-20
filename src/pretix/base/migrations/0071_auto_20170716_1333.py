@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import django.db.models.deletion
+import django_countries.fields
 import i18nfield.fields
 from django.db import migrations, models
 from i18nfield.strings import LazyI18nString
@@ -119,5 +120,30 @@ class Migration(migrations.Migration):
         migrations.RemoveField(
             model_name='item',
             name='tax_rate',
+        ),
+        migrations.AddField(
+            model_name='invoiceaddress',
+            name='vat_id_validated',
+            field=models.BooleanField(default=False),
+        ),
+        migrations.AlterField(
+            model_name='invoiceaddress',
+            name='vat_id',
+            field=models.CharField(blank=True, help_text='Only for business customers within the EU.', max_length=255, verbose_name='VAT ID'),
+        ),
+        migrations.AlterField(
+            model_name='taxrule',
+            name='eu_reverse_charge',
+            field=models.BooleanField(default=False, help_text='Not recommended. Most events will NOT be qualified for reverse charge since the place of taxation is the location of the event. This option disables charging VAT for all customers outside the EU and for business customers in different EU countries that do not customers who entered a valid EU VAT ID. Only enable this option after consulting a tax counsel. No warranty given for correct tax calculation.', verbose_name='Use EU reverse charge taxation rules'),
+        ),
+        migrations.AlterField(
+            model_name='taxrule',
+            name='home_country',
+            field=django_countries.fields.CountryField(blank=True, help_text='Your country of residence. This is the country the EU reverse charge rule will not apply in, if configured above.', max_length=2, verbose_name='Merchant country'),
+        ),
+        migrations.AddField(
+            model_name='cartposition',
+            name='includes_tax',
+            field=models.BooleanField(default=True),
         ),
     ]

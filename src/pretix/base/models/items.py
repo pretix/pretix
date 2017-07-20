@@ -292,7 +292,7 @@ class Item(LoggedModel):
         if not self.tax_rule:
             return TaxedPrice(gross=price, net=price, tax=Decimal('0.00'),
                               rate=Decimal('0.00'), name='')
-        return self.tax_rule.tax(price, base_price_is='auto')
+        return self.tax_rule.tax(price, base_price_is=base_price_is)
 
     def is_available(self, now_dt: datetime=None) -> bool:
         """

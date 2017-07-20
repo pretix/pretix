@@ -11,7 +11,7 @@ from django.views.generic.base import TemplateResponseMixin
 
 from pretix.base.models import Order
 from pretix.base.models.orders import InvoiceAddress
-from pretix.base.services.cart import set_cart_addons
+from pretix.base.services.cart import set_cart_addons, update_tax_rates
 from pretix.base.services.orders import perform_order
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
@@ -266,6 +266,10 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                            initial=initial)
 
     @cached_property
+    def eu_reverse_charge_relevant(self):
+        return any([p.item.tax_rule.eu_reverse_charge for p in self.positions])
+
+    @cached_property
     def invoice_address(self):
         iapk = self.request.session.get('invoice_address')
         if not iapk:
@@ -280,7 +284,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     def invoice_form(self):
         return InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
                                   event=self.request.event,
-                                  instance=self.invoice_address)
+                                  instance=self.invoice_address,
+                                  validate_vat_id=self.eu_reverse_charge_relevant)
 
     def post(self, request):
         self.request = request
@@ -296,6 +301,12 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             addr = self.invoice_form.save()
             request.session['invoice_address'] = addr.pk
             request.session['contact_form_data'] = self.contact_form.cleaned_data
+
+            update_tax_rates(
+                event=request.event,
+                cart_id=request.session.session_key,
+                invoice_address=self.invoice_form.instance
+            )
 
         return redirect(self.get_next_url(request))
 
@@ -354,6 +365,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['formgroups'] = self.formdict.items()
         ctx['contact_form'] = self.contact_form
         ctx['invoice_form'] = self.invoice_form
+        ctx['reverse_charge_relevant'] = self.eu_reverse_charge_relevant
         return ctx
 
 

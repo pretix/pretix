@@ -11,7 +11,7 @@ from django.utils.translation import pgettext_lazy, ugettext as _
 
 from pretix.base.i18n import LazyLocaleException, language
 from pretix.base.models import (
-    CartPosition, Event, Item, ItemVariation, Voucher,
+    CartPosition, Event, InvoiceAddress, Item, ItemVariation, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.tax import TAXED_ZERO
@@ -589,6 +589,24 @@ class CartManager:
                 err = self._perform_operations() or err
             if err:
                 raise CartError(err)
+
+
+def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress):
+    positions = CartPosition.objects.select_for_update().filter(
+        cart_id=cart_id, event=event
+    ).select_related('item', 'item__tax_rule')
+    for pos in positions:
+        if not pos.item.tax_rule:
+            continue
+        charge_tax = pos.item.tax_rule.tax_applicable(invoice_address)
+        if pos.includes_tax and not charge_tax:
+            pos.price = pos.item.tax(pos.price, base_price_is='gross').net
+            pos.includes_tax = False
+            pos.save(update_fields=['price', 'includes_tax'])
+        elif charge_tax and not pos.includes_tax:
+            pos.price = pos.item.tax(pos.price, base_price_is='net').gross
+            pos.includes_tax = True
+            pos.save(update_fields=['price', 'includes_tax'])
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))

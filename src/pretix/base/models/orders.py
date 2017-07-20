@@ -748,10 +748,18 @@ class OrderPosition(AbstractPosition):
 
     def _calculate_tax(self):
         self.tax_rule = self.item.tax_rule
+        try:
+            ia = self.order.invoice_address
+        except InvoiceAddress.DoesNotExist:
+            ia = None
         if self.tax_rule:
-            tax = self.tax_rule.tax(self.price, base_price_is='gross')
-            self.tax_rate = tax.rate
-            self.tax_value = tax.tax
+            if ia and self.tax_rule.tax_applicable(ia):
+                tax = self.tax_rule.tax(self.price, base_price_is='gross')
+                self.tax_rate = tax.rate
+                self.tax_value = tax.tax
+            else:
+                self.tax_value = Decimal('0.00')
+                self.tax_rate = Decimal('0.00')
         else:
             self.tax_value = Decimal('0.00')
             self.tax_rate = Decimal('0.00')
@@ -795,6 +803,9 @@ class CartPosition(AbstractPosition):
         verbose_name=_("Expiration date"),
         db_index=True
     )
+    includes_tax = models.BooleanField(
+        default=True
+    )
 
     class Meta:
         verbose_name = _("Cart position")
@@ -807,11 +818,17 @@ class CartPosition(AbstractPosition):
 
     @property
     def tax_rate(self):
-        return self.item.tax(self.price, base_price_is='gross').rate
+        if self.includes_tax:
+            return self.item.tax(self.price, base_price_is='gross').rate
+        else:
+            return Decimal('0.00')
 
     @property
     def tax_value(self):
-        return self.item.tax(self.price, base_price_is='gross').tax
+        if self.includes_tax:
+            return self.item.tax(self.price, base_price_is='gross').tax
+        else:
+            return Decimal('0.00')
 
 
 class InvoiceAddress(models.Model):
@@ -827,6 +844,7 @@ class InvoiceAddress(models.Model):
     country = CountryField(verbose_name=_('Country'), blank=False, blank_label=_('Select country'))
     vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'),
                               help_text=_('Only for business customers within the EU.'))
+    vat_id_validated = models.BooleanField(default=False)
 
 
 def cachedticket_name(instance, filename: str) -> str:
