@@ -132,6 +132,11 @@ class ItemCreateForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         self.event = kwargs['event']
         super().__init__(*args, **kwargs)
+
+        self.NONE = 'none'
+        self.EXISTING = 'existing'
+        self.NEW = 'new'
+
         self.fields['category'].queryset = self.instance.event.categories.all()
         self.fields['copy_from'] = forms.ModelChoiceField(
             label=_("Copy product information"),
@@ -145,9 +150,9 @@ class ItemCreateForm(I18nModelForm):
             label=_("Quota options"),
             widget=forms.Select,
             choices=(
-                (0, 'None'),
-                (1, "Add this to existing quota"),
-                (2, "Add this to new quota")
+                (self.NONE, _("Do not add to a quota now")),
+                (self.EXISTING, _("Add product to an existing quota")),
+                (self.NEW, _("Create a new quota for this product"))
             ),
             required=False
         )
@@ -162,14 +167,15 @@ class ItemCreateForm(I18nModelForm):
         self.fields['quota_add_new_name'] = forms.CharField(
             label=_("Name"),
             max_length=200,
-            widget=forms.TextInput(attrs={'placeholder': 'New quota name'}),
+            widget=forms.TextInput(attrs={'placeholder': _("New quota name")}),
             required=False
         )
 
         self.fields['quota_add_new_size'] = forms.IntegerField(
             min_value=0,
             label=_("Size"),
-            widget=forms.TextInput(attrs={'placeholder': 'New quota size'}),
+            widget=forms.TextInput(attrs={'placeholder': _("New quota size")}),
+            help_text=_("Leave empty for an unlimited number of tickets."),
             required=False
         )
 
@@ -188,19 +194,17 @@ class ItemCreateForm(I18nModelForm):
 
         instance = super().save(*args, **kwargs)
 
-        if not self.cleaned_data.get('quota_option') == '0':
-            if self.cleaned_data.get('quota_option') == '1' and self.cleaned_data.get('quota_add_existing') is not None:
-                quota_name = self.cleaned_data.get('quota_add_existing').name
-                quota = self.instance.event.quotas.filter(name=quota_name).get()
-                quota.items.add(self.instance)
-            elif self.cleaned_data.get('quota_option') == '2':
-                quota_name = self.cleaned_data.get('quota_add_new_name')
-                quota_size = self.cleaned_data.get('quota_add_new_size')
+        if self.cleaned_data.get('quota_option') == self.EXISTING and self.cleaned_data.get('quota_add_existing') is not None:
+            quota = self.cleaned_data.get('quota_add_existing')
+            quota.items.add(self.instance)
+        elif self.cleaned_data.get('quota_option') == self.NEW:
+            quota_name = self.cleaned_data.get('quota_add_new_name')
+            quota_size = self.cleaned_data.get('quota_add_new_size')
 
-                quota = Quota.objects.create(
-                    event=self.event, name=quota_name, size=quota_size
-                )
-                quota.items.add(self.instance)
+            quota = Quota.objects.create(
+                event=self.event, name=quota_name, size=quota_size
+            )
+            quota.items.add(self.instance)
 
         if self.cleaned_data.get('has_variations'):
             if self.cleaned_data.get('copy_from') and self.cleaned_data.get('copy_from').has_variations:
@@ -221,10 +225,15 @@ class ItemCreateForm(I18nModelForm):
     def clean(self):
         cleaned_data = super().clean()
 
-        if self.cleaned_data.get('quota_option') == '2':
+        if cleaned_data.get('quota_option') == self.NEW:
             if not self.cleaned_data.get('quota_add_new_name'):
                 raise forms.ValidationError(
-                    {'quota_add_new_name': ['Quota name is required.']}
+                    {'quota_add_new_name': [_("Quota name is required.")]}
+                )
+        elif cleaned_data.get('quota_option') == self.EXISTING:
+            if not self.cleaned_data.get('quota_add_existing'):
+                raise forms.ValidationError(
+                    {'quota_add_existing': [_("Please select a quota.")]}
                 )
 
         return cleaned_data
