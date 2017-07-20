@@ -1018,9 +1018,9 @@ class CheckoutTestCase(TestCase):
         self.workshopquota.size = 1
         self.workshopquota.subevent = se
         self.workshopquota.save()
-        self.workshop1.tax_rate = 19
+        self.workshop1.tax_rule = self.event.tax_rules.get_or_create(rate=Decimal('19.00'))[0]
         self.workshop1.save()
-        self.workshop2.tax_rate = 19
+        self.workshop2.tax_rule = self.event.tax_rules.get_or_create(rate=Decimal('19.00'))[0]
         self.workshop2.save()
         SubEventItem.objects.create(subevent=se, item=self.workshop1, price=42)
 
@@ -1033,8 +1033,8 @@ class CheckoutTestCase(TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert 'Workshop 1 (+ EUR 35.29 plus 19.00% taxes)' in response.rendered_content
-        assert 'A (+ EUR 10.08 plus 19.00% taxes)' in response.rendered_content
+        assert 'Workshop 1 (+ EUR 35.29 plus 19.00% VAT)' in response.rendered_content
+        assert 'A (+ EUR 10.08 plus 19.00% VAT)' in response.rendered_content
 
     def test_confirm_subevent_presale_not_yet(self):
         self.event.has_subevents = True

@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import ItemVariation, Question
 from pretix.base.models.orders import InvoiceAddress, OrderPosition
-from pretix.base.models.tax import EU_COUNTRIES
+from pretix.base.models.tax import EU_COUNTRIES, TAXED_ZERO
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import contact_form_fields, question_form_fields
@@ -117,6 +117,9 @@ class InvoiceAddressForm(forms.ModelForm):
         data = self.cleaned_data
         if not data.get('name') and not data.get('company') and self.event.settings.invoice_address_required:
             raise ValidationError(_('You need to provide either a company name or your name.'))
+
+        if 'vat_id' in self.changed_data or not data.get('vat_id'):
+            self.instance.vat_id_validated = False
 
         if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
             pass
@@ -367,9 +370,9 @@ class AddOnsForm(forms.Form):
             price = override_price
 
         if self.price_included:
-            price = Decimal('0.00')
-
-        price = item.tax(price)
+            price = TAXED_ZERO
+        else:
+            price = item.tax(price)
 
         if not price.gross:
             n = '{name}'.format(

@@ -1,4 +1,5 @@
 import django_filters
+from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
@@ -13,7 +14,13 @@ from pretix.base.models import Item, ItemCategory, Question, Quota
 
 
 class ItemFilter(FilterSet):
-    tax_rate = django_filters.CharFilter(name='tax_rule', lookup_expr='rate')
+    tax_rate = django_filters.CharFilter(method='tax_rate_qs')
+
+    def tax_rate_qs(self, queryset, name, value):
+        if value in ("0", "None", "0.00"):
+            return queryset.filter(Q(tax_rule__isnull=True) | Q(tax_rule__rate=0))
+        else:
+            return queryset.filter(tax_rule__rate=value)
 
     class Meta:
         model = Item
@@ -29,7 +36,7 @@ class ItemViewSet(viewsets.ReadOnlyModelViewSet):
     filter_class = ItemFilter
 
     def get_queryset(self):
-        return self.request.event.items.prefetch_related('variations', 'addons').all()
+        return self.request.event.items.select_related('tax_rule').prefetch_related('variations', 'addons').all()
 
 
 class ItemCategoryFilter(FilterSet):

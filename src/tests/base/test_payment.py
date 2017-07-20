@@ -108,7 +108,8 @@ def test_availability_date_cart_relative_subevents(event):
     event.date_from = now() + datetime.timedelta(days=5)
     event.has_subevents = True
     event.save()
-    ticket = Item.objects.create(event=event, name='Early-bird ticket', tax_rate=Decimal('7.00'),
+    tr7 = event.tax_rules.create(rate=Decimal('7.00'))
+    ticket = Item.objects.create(event=event, name='Early-bird ticket', tax_rule=tr7,
                                  default_price=Decimal('23.00'), admission=True)
 
     se1 = event.subevents.create(name="SE1", date_from=now() + datetime.timedelta(days=10))
@@ -138,7 +139,8 @@ def test_availability_date_order_relative_subevents(event):
     event.date_from = now() + datetime.timedelta(days=5)
     event.has_subevents = True
     event.save()
-    ticket = Item.objects.create(event=event, name='Early-bird ticket', tax_rate=Decimal('7.00'),
+    tr7 = event.tax_rules.create(rate=Decimal('7.00'))
+    ticket = Item.objects.create(event=event, name='Early-bird ticket', tax_rule=tr7,
                                  default_price=Decimal('23.00'), admission=True)
 
     se1 = event.subevents.create(name="SE1", date_from=now() + datetime.timedelta(days=10))

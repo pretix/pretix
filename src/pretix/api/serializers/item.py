@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from rest_framework import serializers
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
@@ -21,10 +23,18 @@ class InlineItemAddOnSerializer(serializers.ModelSerializer):
                   'position')
 
 
+class ItemTaxRateField(serializers.Field):
+    def to_representation(self, i):
+        if i.tax_rule:
+            return str(Decimal(i.tax_rule.rate))
+        else:
+            return str(Decimal('0.00'))
+
+
 class ItemSerializer(I18nAwareModelSerializer):
     addons = InlineItemAddOnSerializer(many=True)
     variations = InlineItemVariationSerializer(many=True)
-    tax_rate = serializers.SlugRelatedField(slug_field='rate', source='tax_rule', read_only=True)
+    tax_rate = ItemTaxRateField(source='*', read_only=True)
 
     class Meta:
         model = Item

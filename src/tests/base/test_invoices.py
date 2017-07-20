@@ -2,7 +2,7 @@ from datetime import timedelta
 from decimal import Decimal
 
 import pytest
-from django.db import DatabaseError
+from django.db import DatabaseError, transaction
 from django.utils.timezone import now
 from django_countries.fields import Country
 
@@ -279,11 +279,12 @@ def test_invoice_number_prefixes(env):
 
     # Test database uniqueness check
     with pytest.raises(DatabaseError):
-        Invoice.objects.create(
-            order=order,
-            event=order.event,
-            organizer=order.event.organizer,
-            date=now().date(),
-            locale='en',
-            invoice_no='00001',
-        )
+        with transaction.atomic():
+            Invoice.objects.create(
+                order=order,
+                event=order.event,
+                organizer=order.event.organizer,
+                date=now().date(),
+                locale='en',
+                invoice_no='00001',
+            )

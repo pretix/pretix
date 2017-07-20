@@ -102,7 +102,8 @@ def test_expiry_last_relative_subevents(event):
     event.date_from = now() + timedelta(days=5)
     event.has_subevents = True
     event.save()
-    ticket = Item.objects.create(event=event, name='Early-bird ticket', tax_rate=Decimal('7.00'),
+    tr7 = event.tax_rules.create(rate=Decimal('17.00'))
+    ticket = Item.objects.create(event=event, name='Early-bird ticket', tax_rule=tr7,
                                  default_price=Decimal('23.00'), admission=True)
 
     se1 = event.subevents.create(name="SE1", date_from=now() + timedelta(days=10))
@@ -240,11 +241,13 @@ class OrderChangeManagerTests(TestCase):
             datetime=now(), expires=now() + timedelta(days=10),
             total=Decimal('46.00'), payment_provider='banktransfer'
         )
-        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket', tax_rate=Decimal('7.00'),
+        tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
+        tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
+        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket', tax_rule=tr7,
                                           default_price=Decimal('23.00'), admission=True)
-        self.ticket2 = Item.objects.create(event=self.event, name='Other ticket', tax_rate=Decimal('7.00'),
+        self.ticket2 = Item.objects.create(event=self.event, name='Other ticket', tax_rule=tr7,
                                            default_price=Decimal('23.00'), admission=True)
-        self.shirt = Item.objects.create(event=self.event, name='T-Shirt', tax_rate=Decimal('19.00'),
+        self.shirt = Item.objects.create(event=self.event, name='T-Shirt', tax_rule=tr19,
                                          default_price=Decimal('12.00'))
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,

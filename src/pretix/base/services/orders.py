@@ -306,9 +306,10 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 cp.delete()
                 continue
 
-        if price != cp.price and not (cp.item.free_price and cp.price > price):
+        if price.gross != cp.price and not (cp.item.free_price and cp.price > price.gross):
             positions[i] = cp
-            cp.price = price
+            cp.price = price.gross
+            cp.includes_tax = bool(price.rate)
             cp.save()
             err = err or error_messages['price_changed']
             continue
@@ -610,7 +611,7 @@ class OrderChangeManager:
         if self.order.event.settings.invoice_include_free or price != Decimal('0.00') or position.price != Decimal('0.00'):
             self._invoice_dirty = True
 
-        self._totaldiff = price - position.price
+        self._totaldiff = price.gross - position.price
         self._quotadiff.update(new_quotas)
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.ItemOperation(position, item, variation, price))
@@ -629,7 +630,7 @@ class OrderChangeManager:
         if self.order.event.settings.invoice_include_free or price != Decimal('0.00') or position.price != Decimal('0.00'):
             self._invoice_dirty = True
 
-        self._totaldiff = price - position.price
+        self._totaldiff = price.gross - position.price
         self._quotadiff.update(new_quotas)
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.SubeventOperation(position, subevent, price))
@@ -712,7 +713,7 @@ class OrderChangeManager:
                     'new_variation': op.variation.pk if op.variation else None,
                     'old_price': op.position.price,
                     'addon_to': op.position.addon_to_id,
-                    'new_price': op.price
+                    'new_price': op.price.gross
                 })
                 op.position.item = op.item
                 op.position.variation = op.variation
@@ -738,7 +739,7 @@ class OrderChangeManager:
                     'positionid': op.position.positionid,
                     'old_price': op.position.price,
                     'addon_to': op.position.addon_to_id,
-                    'new_price': op.price
+                    'new_price': op.price.gross
                 })
                 op.position.price = op.price
                 op.position._calculate_tax()

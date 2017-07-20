@@ -279,7 +279,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     @cached_property
     def eu_reverse_charge_relevant(self):
-        return any([p.item.tax_rule.eu_reverse_charge for p in self.positions])
+        return any([p.item.tax_rule and p.item.tax_rule.eu_reverse_charge
+                    for p in self.positions])
 
     @cached_property
     def invoice_form(self):

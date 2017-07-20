@@ -412,7 +412,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
     def invoice_form(self):
         return InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
                                   event=self.request.event,
-                                  instance=self.invoice_address)
+                                  instance=self.invoice_address, validate_vat_id=False)
 
     def post(self, request, *args, **kwargs):
         failed = not self.save() or not self.invoice_form.is_valid()
