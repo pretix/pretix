@@ -18,9 +18,13 @@
         <fieldset>
             <legend>{% trans "Quota settings" %}</legend>
             {% bootstrap_field form.quota_option layout="horizontal" %}
-            {% bootstrap_field form.quota_add_existing layout="horizontal" %}
-            {% bootstrap_field form.quota_add_new_name layout="horizontal" %}
-            {% bootstrap_field form.quota_add_new_size layout="horizontal" %}
+            <div id="existing-quota-group">
+                {% bootstrap_field form.quota_add_existing layout="horizontal" %}
+            </div>
+            <div id="new-quota-group">
+                {% bootstrap_field form.quota_add_new_name layout="horizontal" %}
+                {% bootstrap_field form.quota_add_new_size layout="horizontal" %}
+            </div>
         </fieldset>
         <fieldset>
             <legend>{% trans "Price settings" %}</legend>
