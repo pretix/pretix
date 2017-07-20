@@ -59,6 +59,13 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 
+        if self.request.GET.get("ordering", "") != "":
+            p = self.request.GET.get("ordering", "")
+            p_admissable = ('-code', 'code', '-email', 'email', '-total', 'total', '-datetime',
+                            'datetime', '-status', 'status', 'pcnt', '-pcnt')
+            if p in p_admissable:
+                qs = qs.order_by(p)
+
         return qs.distinct()
 
     def get_context_data(self, **kwargs):
