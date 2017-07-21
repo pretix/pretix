@@ -454,7 +454,7 @@ class ItemsTest(ItemFormTest):
         form_data['name_0'] = 'Existing'
         form_data['default_price'] = '2.00'
         form_data['quota_option'] = 'existing'
-        form_data['quota_add_existing'] = '1'
+        form_data['quota_add_existing'] = str(q.pk)
         doc = self.post_doc('/control/event/%s/%s/items/add' % (self.orga1.slug, self.event1.slug), form_data)
 
         i = Item.objects.get(name__icontains='Existing')
