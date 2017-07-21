@@ -124,6 +124,9 @@ class QuotaForm(I18nModelForm):
 
 
 class ItemCreateForm(I18nModelForm):
+    NONE = 'none'
+    EXISTING = 'existing'
+    NEW = 'new'
     has_variations = forms.BooleanField(label=_('The product should exist in multiple variations'),
                                         help_text=_('Select this option e.g. for t-shirts that come in multiple sizes. '
                                                     'You can select the variations in the next step.'),
@@ -132,10 +135,6 @@ class ItemCreateForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         self.event = kwargs['event']
         super().__init__(*args, **kwargs)
-
-        self.NONE = 'none'
-        self.EXISTING = 'existing'
-        self.NEW = 'new'
 
         self.fields['category'].queryset = self.instance.event.categories.all()
         self.fields['copy_from'] = forms.ModelChoiceField(
@@ -148,12 +147,13 @@ class ItemCreateForm(I18nModelForm):
 
         self.fields['quota_option'] = forms.ChoiceField(
             label=_("Quota options"),
-            widget=forms.Select,
+            widget=forms.RadioSelect,
             choices=(
                 (self.NONE, _("Do not add to a quota now")),
                 (self.EXISTING, _("Add product to an existing quota")),
                 (self.NEW, _("Create a new quota for this product"))
             ),
+            initial=self.NONE,
             required=False
         )
 
