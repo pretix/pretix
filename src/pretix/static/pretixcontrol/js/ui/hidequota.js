@@ -3,27 +3,27 @@ $(document).ready(function() {
 });
 
 function hideDeselected() {
-  var v = $("#id_quota_option").val();
+  var v = $("input[name='quota_option']:checked").val();
 
   if (v === "existing") {
     hideAll();
-    $("#existing-quota-group").children().show();
+    $("#existing-quota-group").children().slideDown();
   } else if (v === "new") {
     hideAll();
-    $("#new-quota-group").children().show();
+    $("#new-quota-group").children().slideDown();
   } else {
     hideAll();
   }
 };
 
 function hideAll() {
-  $("#new-quota-group").children().hide();
-  $("#existing-quota-group").children().hide();
+  $("#new-quota-group").children().slideUp();
+  $("#existing-quota-group").children().slideUp();
 };
 
 $(function () {
-  $('#id_quota_option').on('change',
-    function(e) {
+  $("input[name='quota_option']").on('change',
+    function() {
       hideDeselected();
     }
   );
