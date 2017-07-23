@@ -8,6 +8,7 @@ from django.utils.timezone import now
 from pretix.base.models import (
     Event, Order, Organizer, RequiredAction, Team, User,
 )
+from pretix.plugins.stripe.models import ReferencedStripeObject
 
 
 @pytest.fixture
@@ -181,6 +182,46 @@ def test_webhook_all_good(env, client, monkeypatch):
     ), content_type='application_json')
 
     order = env[1]
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_webhook_global(env, client, monkeypatch):
+    order = env[1]
+    order.status = Order.STATUS_PENDING
+    order.save()
+
+    charge = get_test_charge(env[1])
+    monkeypatch.setattr("paypalrestsdk.Sale.find", lambda *args: charge)
+    monkeypatch.setattr("pretix.plugins.paypal.payment.Paypal.init_api", lambda *args: None)
+    ReferencedStripeObject.objects.create(order=order, reference="PAY-5YK922393D847794YKER7MUI")
+
+    client.post('/_paypal/webhook/', json.dumps(
+        {
+            "id": "WH-2WR32451HC0233532-67976317FL4543714",
+            "create_time": "2014-10-23T17:23:52Z",
+            "resource_type": "sale",
+            "event_type": "PAYMENT.SALE.COMPLETED",
+            "summary": "A successful sale payment was made for $ 0.48 USD",
+            "resource": {
+                "amount": {
+                    "total": "-0.01",
+                    "currency": "USD"
+                },
+                "id": "36C38912MN9658832",
+                "parent_payment": "PAY-5YK922393D847794YKER7MUI",
+                "update_time": "2014-10-31T15:41:51Z",
+                "state": "completed",
+                "create_time": "2014-10-31T15:41:51Z",
+                "links": [],
+                "sale_id": "9T0916710M1105906"
+            },
+            "links": [],
+            "event_version": "1.0"
+        }
+    ), content_type='application_json')
+
     order.refresh_from_db()
     assert order.status == Order.STATUS_PAID
 

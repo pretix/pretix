@@ -219,7 +219,7 @@ def test_webhook_partial_refund(env, client, monkeypatch):
 
 
 @pytest.mark.django_db
-def test_webhook_organizer_level(env, client, monkeypatch):
+def test_webhook_global(env, client, monkeypatch):
     order = env[1]
     order.status = Order.STATUS_PENDING
     order.save()

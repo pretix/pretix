@@ -16,6 +16,7 @@ from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal.payment import Paypal
+from pretix.plugins.stripe.models import ReferencedStripeObject
 from pretix.presale.utils import event_view
 
 logger = logging.getLogger('pretix.plugins.paypal')
@@ -74,28 +75,44 @@ def abort(request, *args, **kwargs):
 
 @csrf_exempt
 @require_POST
-@event_view(require_live=False)
 def webhook(request, *args, **kwargs):
     event_body = request.body.decode('utf-8').strip()
     event_json = json.loads(event_body)
-
-    prov = Paypal(request.event)
-    prov.init_api()
 
     # We do not check the signature, we just use it as a trigger to look the charge up.
     if event_json['resource_type'] not in ('sale', 'refund'):
         return HttpResponse("Not interested in this resource type", status=200)
 
+    if event_json['resource_type'] == 'sale':
+        saleid = event_json['resource']['id']
+    else:
+        saleid = event_json['resource']['sale_id']
+
     try:
-        if event_json['resource_type'] == 'sale':
-            sale = paypalrestsdk.Sale.find(event_json['resource']['id'])
+        refs = [saleid]
+        if event_json['resource'].get('parent_payment'):
+            refs.append(event_json['resource'].get('parent_payment'))
+
+        rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(
+            reference__in=refs
+        )
+        event = rso.order.event
+    except ReferencedStripeObject.DoesNotExist:
+        if hasattr(request, 'event'):
+            event = request.event
         else:
-            sale = paypalrestsdk.Sale.find(event_json['resource']['sale_id'])
+            return HttpResponse("Unable to detect event", status=200)
+
+    prov = Paypal(event)
+    prov.init_api()
+
+    try:
+        sale = paypalrestsdk.Sale.find(saleid)
     except:
         logger.exception('PayPal error on webhook. Event data: %s' % str(event_json))
         return HttpResponse('Sale not found', status=500)
 
-    orders = Order.objects.filter(event=request.event, payment_provider='paypal',
+    orders = Order.objects.filter(event=event, payment_provider='paypal',
                                   payment_info__icontains=sale['id'])
     order = None
     for o in orders:
@@ -113,7 +130,7 @@ def webhook(request, *args, **kwargs):
 
     if order.status == Order.STATUS_PAID and sale['state'] in ('partially_refunded', 'refunded'):
         RequiredAction.objects.create(
-            event=request.event, action_type='pretix.plugins.paypal.refund', data=json.dumps({
+            event=event, action_type='pretix.plugins.paypal.refund', data=json.dumps({
                 'order': order.code,
                 'sale': sale['id']
             })
@@ -122,16 +139,19 @@ def webhook(request, *args, **kwargs):
         try:
             mark_order_paid(order, user=None)
         except Quota.QuotaExceededException:
-            if not RequiredAction.objects.filter(event=request.event, action_type='pretix.plugins.paypal.overpaid',
+            if not RequiredAction.objects.filter(event=event, action_type='pretix.plugins.paypal.overpaid',
                                                  data__icontains=order.code).exists():
                 RequiredAction.objects.create(
-                    event=request.event, action_type='pretix.plugins.paypal.overpaid', data=json.dumps({
+                    event=event, action_type='pretix.plugins.paypal.overpaid', data=json.dumps({
                         'order': order.code,
                         'payment': sale['parent_payment']
                     })
                 )
 
     return HttpResponse(status=200)
+
+
+event_webbook = csrf_exempt(event_view(require_live=False)(webhook))
 
 
 @event_permission_required('can_view_orders')
