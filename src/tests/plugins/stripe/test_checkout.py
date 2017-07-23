@@ -13,6 +13,7 @@ class MockedCharge():
     def __init__(self):
         self.status = ''
         self.paid = False
+        self.id = 'ch_123345345'
 
     def refresh(self):
         pass
