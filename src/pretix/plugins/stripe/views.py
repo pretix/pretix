@@ -20,6 +20,7 @@ from pretix.base.payment import PaymentException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
+from pretix.plugins.stripe.models import ReferencedStripeObject
 from pretix.plugins.stripe.payment import StripeCC
 from pretix.presale.utils import event_view
 
@@ -28,7 +29,6 @@ logger = logging.getLogger('pretix.plugins.stripe')
 
 @csrf_exempt
 @require_POST
-@event_view(require_live=False)
 def webhook(request, *args, **kwargs):
     event_json = json.loads(request.body.decode('utf-8'))
 
@@ -38,17 +38,32 @@ def webhook(request, *args, **kwargs):
     # come from anywhere.
 
     if event_json['data']['object']['object'] == "charge":
-        return charge_webhook(request, event_json, event_json['data']['object']['id'])
+        func = charge_webhook
+        objid = event_json['data']['object']['id']
     elif event_json['data']['object']['object'] == "dispute":
-        return charge_webhook(request, event_json, event_json['data']['object']['charge'])
+        func = charge_webhook
+        objid = event_json['data']['object']['charge']
     elif event_json['data']['object']['object'] == "source":
-        return source_webhook(request, event_json, event_json['data']['object']['id'])
+        func = source_webhook
+        objid = event_json['data']['object']['id']
     else:
         return HttpResponse("Not interested in this data type", status=200)
 
+    try:
+        rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(reference=objid)
+        return func(rso.order.event, event_json, objid)
+    except ReferencedStripeObject.DoesNotExist:
+        if hasattr(request, 'event'):
+            return func(request.event, event_json, objid)
+        else:
+            return HttpResponse("Unable to detect event", status=200)
 
-def charge_webhook(request, event_json, charge_id):
-    prov = StripeCC(request.event)
+
+event_webbook = csrf_exempt(event_view(require_live=False)(webhook))
+
+
+def charge_webhook(event, event_json, charge_id):
+    prov = StripeCC(event)
     prov._init_api()
     try:
         charge = stripe.Charge.retrieve(charge_id)
@@ -60,16 +75,16 @@ def charge_webhook(request, event_json, charge_id):
     if 'event' not in metadata:
         return HttpResponse('Event not given in charge metadata', status=200)
 
-    if int(metadata['event']) != request.event.pk:
+    if int(metadata['event']) != event.pk:
         return HttpResponse('Not interested in this event', status=200)
 
     try:
-        order = request.event.orders.get(id=metadata['order'], payment_provider__startswith='stripe')
+        order = event.orders.get(id=metadata['order'], payment_provider__startswith='stripe')
     except Order.DoesNotExist:
         return HttpResponse('Order not found', status=200)
 
     if order.payment_provider != prov.identifier:
-        prov = request.event.get_payment_providers()[order.payment_provider]
+        prov = event.get_payment_providers()[order.payment_provider]
         prov._init_api()
 
     order.log_action('pretix.plugins.stripe.event', data=event_json)
@@ -77,7 +92,7 @@ def charge_webhook(request, event_json, charge_id):
     is_refund = charge['refunds']['total_count'] or charge['dispute']
     if order.status == Order.STATUS_PAID and is_refund:
         RequiredAction.objects.create(
-            event=request.event, action_type='pretix.plugins.stripe.refund', data=json.dumps({
+            event=event, action_type='pretix.plugins.stripe.refund', data=json.dumps({
                 'order': order.code,
                 'charge': charge_id
             })
@@ -86,10 +101,10 @@ def charge_webhook(request, event_json, charge_id):
         try:
             mark_order_paid(order, user=None)
         except Quota.QuotaExceededException:
-            if not RequiredAction.objects.filter(event=request.event, action_type='pretix.plugins.stripe.overpaid',
+            if not RequiredAction.objects.filter(event=event, action_type='pretix.plugins.stripe.overpaid',
                                                  data__icontains=order.code).exists():
                 RequiredAction.objects.create(
-                    event=request.event,
+                    event=event,
                     action_type='pretix.plugins.stripe.overpaid',
                     data=json.dumps({
                         'order': order.code,
@@ -100,8 +115,8 @@ def charge_webhook(request, event_json, charge_id):
     return HttpResponse(status=200)
 
 
-def source_webhook(request, event_json, source_id):
-    prov = StripeCC(request.event)
+def source_webhook(event, event_json, source_id):
+    prov = StripeCC(event)
     prov._init_api()
     try:
         src = stripe.Source.retrieve(source_id)
@@ -113,17 +128,17 @@ def source_webhook(request, event_json, source_id):
     if 'event' not in metadata:
         return HttpResponse('Event not given in charge metadata', status=200)
 
-    if int(metadata['event']) != request.event.pk:
+    if int(metadata['event']) != event.pk:
         return HttpResponse('Not interested in this event', status=200)
 
     with transaction.atomic():
         try:
-            order = request.event.orders.get(id=metadata['order'], payment_provider__startswith='stripe')
+            order = event.orders.get(id=metadata['order'], payment_provider__startswith='stripe')
         except Order.DoesNotExist:
             return HttpResponse('Order not found', status=200)
 
         if order.payment_provider != prov.identifier:
-            prov = request.event.get_payment_providers()[order.payment_provider]
+            prov = event.get_payment_providers()[order.payment_provider]
             prov._init_api()
 
         order.log_action('pretix.plugins.stripe.event', data=event_json)
@@ -131,7 +146,7 @@ def source_webhook(request, event_json, source_id):
               src.status == 'chargeable')
         if go:
             try:
-                prov._charge_source(request, source_id, order)
+                prov._charge_source(None, source_id, order)
             except PaymentException:
                 logger.exception('Webhook error')
 
@@ -189,6 +204,7 @@ class ReturnView(StripeOrderView, View):
         prov = self.pprov
         prov._init_api()
         src = stripe.Source.retrieve(request.GET.get('source'))
+        print(src.client_secret, request.GET.get('client_secret'))
         if src.client_secret != request.GET.get('client_secret'):
             messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
                                            'in your emails to continue.'))
@@ -197,7 +213,8 @@ class ReturnView(StripeOrderView, View):
         with transaction.atomic():
             self.order.refresh_from_db()
             if self.order.status == Order.STATUS_PAID:
-                del request.session['payment_stripe_token']
+                if 'payment_stripe_token' in request.session:
+                    del request.session['payment_stripe_token']
                 return self._redirect_to_order()
 
             if src.status == 'chargeable':
@@ -215,6 +232,7 @@ class ReturnView(StripeOrderView, View):
         return self._redirect_to_order()
 
     def _redirect_to_order(self):
+        print(self.request.session.get('payment_stripe_order_secret'), self.order.secret)
         if self.request.session.get('payment_stripe_order_secret') != self.order.secret:
             messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
                                            'in your emails to continue.'))

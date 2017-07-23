@@ -14,7 +14,9 @@ from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.base.settings import SettingsSandbox
+from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.plugins.stripe.models import ReferencedStripeObject
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
@@ -33,7 +35,7 @@ class StripeSettingsHolder(BasePaymentProvider):
             _('Please configure a <a href="https://dashboard.stripe.com/account/webhooks">Stripe Webhook</a> to '
               'the following endpoint in order to automatically cancel orders when charges are refunded externally '
               'and to process asynchronous payment methods like SOFORT.'),
-            build_absolute_uri(self.event, 'plugins:stripe:webhook')
+            build_global_uri('plugins:stripe:webhook')
         )
 
     @property
@@ -182,6 +184,7 @@ class StripeMethod(BasePaymentProvider):
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
         else:
+            ReferencedStripeObject.objects.get_or_create(order=order, reference=charge.id)
             if charge.status == 'succeeded' and charge.paid:
                 try:
                     mark_order_paid(order, self.identifier, str(charge))
@@ -197,8 +200,9 @@ class StripeMethod(BasePaymentProvider):
                 except SendMailException:
                     raise PaymentException(_('There was an error sending the confirmation mail.'))
             elif charge.status == 'pending':
-                messages.warning(request, _('Your payment is pending completion. We will inform you as soon as the '
-                                            'payment completed.'))
+                if request:
+                    messages.warning(request, _('Your payment is pending completion. We will inform you as soon as the '
+                                                'payment completed.'))
                 order.payment_info = str(charge)
                 order.save(update_fields=['payment_info'])
                 return
@@ -303,6 +307,7 @@ class StripeMethod(BasePaymentProvider):
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
 
+        ReferencedStripeObject.objects.get_or_create(order=order, reference=source.id)
         order.payment_info = str(source)
         order.save(update_fields=['payment_info'])
         request.session['payment_stripe_order_secret'] = order.secret
