@@ -4,7 +4,7 @@ import pytz
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Q
+from django.db.models import Count
 from django.http import FileResponse, Http404, HttpResponseNotAllowed
 from django.shortcuts import redirect, render
 from django.utils.formats import date_format
@@ -28,7 +28,7 @@ from pretix.base.services.invoices import (
     regenerate_invoice,
 )
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.services.mail import SendMailException, mail
+from pretix.base.services.mail import SendMailException, render_mail
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, cancel_order, mark_order_paid,
 )
@@ -327,26 +327,26 @@ class OrderResendLink(OrderView):
                 except InvoiceAddress.DoesNotExist:
                     invoice_name = ""
                     invoice_company = ""
-                mail(
-                    self.order.email, _('Your order: %(code)s') % {'code': self.order.code},
-                    self.order.event.settings.mail_text_resend_link,
-                    {
-                        'event': self.order.event.name,
-                        'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
-                            'order': self.order.code,
-                            'secret': self.order.secret
-                        }),
-                        'invoice_name': invoice_name,
-                        'invoice_company': invoice_company,
-                    },
-                    self.order.event, locale=self.order.locale
+                email_template = self.order.event.settings.mail_text_resend_link
+                email_context = {
+                    'event': self.order.event.name,
+                    'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
+                        'order': self.order.code,
+                        'secret': self.order.secret
+                    }),
+                    'invoice_name': invoice_name,
+                    'invoice_company': invoice_company,
+                }
+                email_subject = _('Your order: %(code)s') % {'code': self.order.code}
+                self.order.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.resend', user=self.request.user
                 )
             except SendMailException:
                 messages.error(self.request, _('There was an error sending the mail. Please try again later.'))
                 return redirect(self.get_order_url())
 
         messages.success(self.request, _('The email has been queued to be sent.'))
-        self.order.log_action('pretix.event.order.resend', user=self.request.user)
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):
@@ -679,8 +679,8 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
                 'invoice_name': invoice_name,
                 'invoice_company': invoice_company,
             }
-
-        email_content = form.cleaned_data['message'].format_map(email_context)
+        email_template = LazyI18nString(form.cleaned_data['message'])
+        email_content = render_mail(email_template, email_context)[0]
         if self.request.POST.get('action') == 'preview':
             self.preview_output = []
             self.preview_output.append(
@@ -689,22 +689,10 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
             return self.get(self.request, *self.args, **self.kwargs)
         else:
             try:
-                with language(order.locale):
-                    email_template = LazyI18nString(form.cleaned_data['message'])
-                    mail(
-                        order.email, form.cleaned_data['subject'],
-                        email_template, email_context,
-                        self.request.event, locale=order.locale,
-                        order=order
-                    )
-                order.log_action(
-                    'pretix.event.order.mail_sent',
-                    user=self.request.user,
-                    data={
-                        'subject': form.cleaned_data['subject'],
-                        'message': email_content,
-                        'recipient': form.cleaned_data['sendto'],
-                    }
+                order.send_mail(
+                    form.cleaned_data['subject'], email_template,
+                    email_context, 'pretix.event.order.email.custom_sent',
+                    self.request.user
                 )
                 messages.success(self.request, _('Your message has been queued and will be sent to {}.'.format(order.email)))
             except SendMailException:
@@ -741,8 +729,7 @@ class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
         ).first()
         qs = order.all_logentries()
         qs = qs.filter(
-            Q(action_type="pretix.plugins.sendmail.order.email.sent")
-            | Q(action_type="pretix.event.order.mail_sent")
+            action_type__contains="order.email"
         )
         return qs
 

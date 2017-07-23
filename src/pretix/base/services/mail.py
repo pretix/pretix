@@ -81,18 +81,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
                     'invoice_name': '',
                     'invoice_company': ''
                 })
-        if isinstance(template, LazyI18nString):
-            body = str(template)
-            if context:
-                body = body.format_map(TolerantDict(context))
-            body_md = bleach.linkify(bleach.clean(markdown.markdown(body), tags=bleach.ALLOWED_TAGS + [
-                'p',
-            ]))
-        else:
-            tpl = get_template(template)
-            body = tpl.render(context)
-            body_md = bleach.linkify(markdown.markdown(body))
-
+        body, body_md = render_mail(template, context)
         sender = sender or (event.settings.get('mail_from') if event else settings.MAIL_FROM)
 
         subject = str(subject)
@@ -170,3 +159,18 @@ def mail_send_task(to: List[str], subject: str, body: str, html: str, sender: st
 
 def mail_send(*args, **kwargs):
     mail_send_task.apply_async(args=args, kwargs=kwargs)
+
+
+def render_mail(template, context):
+    if isinstance(template, LazyI18nString):
+        body = str(template)
+        if context:
+            body = body.format_map(TolerantDict(context))
+        body_md = bleach.linkify(bleach.clean(markdown.markdown(body), tags=bleach.ALLOWED_TAGS + [
+            'p',
+        ]))
+    else:
+        tpl = get_template(template)
+        body = tpl.render(context)
+        body_md = bleach.linkify(markdown.markdown(body))
+    return body, body_md
