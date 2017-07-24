@@ -753,7 +753,7 @@ class OrderPosition(AbstractPosition):
         except InvoiceAddress.DoesNotExist:
             ia = None
         if self.tax_rule:
-            if ia and self.tax_rule.tax_applicable(ia):
+            if self.tax_rule.tax_applicable(ia):
                 tax = self.tax_rule.tax(self.price, base_price_is='gross')
                 self.tax_rate = tax.rate
                 self.tax_value = tax.tax

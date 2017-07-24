@@ -235,7 +235,8 @@ class OrderChangeManagerTests(TestCase):
     def setUp(self):
         super().setUp()
         o = Organizer.objects.create(name='Dummy', slug='dummy')
-        self.event = Event.objects.create(organizer=o, name='Dummy', slug='dummy', date_from=now(), plugins='pretix.plugins.banktransfer')
+        self.event = Event.objects.create(organizer=o, name='Dummy', slug='dummy', date_from=now(),
+                                          plugins='pretix.plugins.banktransfer')
         self.order = Order.objects.create(
             code='FOO', event=self.event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, locale='en',
@@ -271,7 +272,7 @@ class OrderChangeManagerTests(TestCase):
         self.tr19.eu_reverse_charge = True
         self.tr19.home_country = Country('DE')
         self.tr19.save()
-        InvoiceAddress.objects.create(
+        return InvoiceAddress.objects.create(
             order=self.order, is_business=True, vat_id='ATU1234567', vat_id_validated=True,
             country=Country('AT')
         )
@@ -540,7 +541,8 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.total == Decimal('47.30')
         assert self.order.payment_fee == prov.calculate_fee(self.order.total)
         assert self.order.payment_fee_tax_rate == Decimal('19.00')
-        assert round_decimal(self.order.payment_fee * (1 - 100 / (100 + self.order.payment_fee_tax_rate))) == self.order.payment_fee_tax_value
+        assert round_decimal(self.order.payment_fee * (
+            1 - 100 / (100 + self.order.payment_fee_tax_rate))) == self.order.payment_fee_tax_value
 
     def test_require_pending(self):
         self.order.status = Order.STATUS_PAID
@@ -715,3 +717,24 @@ class OrderChangeManagerTests(TestCase):
         self.ocm.add_position(self.ticket, None, Decimal('0.00'))
         self.ocm.commit()
         assert self.order.invoices.count() == 1
+
+    def test_recalculate_reverse_charge(self):
+        ia = self._enable_reverse_charge()
+        self.ocm.recalculate_taxes()
+        self.ocm.commit()
+        ops = list(self.order.positions.all())
+        for op in ops:
+            assert op.price == Decimal('21.50')
+            assert op.tax_value == Decimal('0.00')
+            assert op.tax_rate == Decimal('0.00')
+
+        ia.vat_id_validated = False
+        ia.save()
+
+        self.ocm.recalculate_taxes()
+        self.ocm.commit()
+        ops = list(self.order.positions.all())
+        for op in ops:
+            assert op.price == Decimal('23.00')
+            assert op.tax_value == Decimal('1.50')
+            assert op.tax_rate == Decimal('7.00')

@@ -648,6 +648,26 @@ class OrderChangeManager:
 
         self._operations.append(self.PriceOperation(position, price))
 
+    def recalculate_taxes(self):
+        positions = self.order.positions.select_related('item', 'item__tax_rule')
+        ia = self._invoice_address
+        for pos in positions:
+            if not pos.item.tax_rule:
+                continue
+            if not pos.price:
+                continue
+
+            charge_tax = pos.item.tax_rule.tax_applicable(ia)
+            if pos.tax_value and not charge_tax:
+                net_price = pos.price - pos.tax_value
+                price = TaxedPrice(gross=net_price, net=net_price, tax=Decimal('0.00'), rate=Decimal('0.00'), name='')
+                self._totaldiff = price.gross - pos.price
+                self._operations.append(self.PriceOperation(pos, price))
+            elif charge_tax and not pos.tax_value:
+                price = pos.item.tax(pos.price, base_price_is='net')
+                self._totaldiff = price.gross - pos.price
+                self._operations.append(self.PriceOperation(pos, price))
+
     def cancel(self, position: OrderPosition):
         self._totaldiff = -position.price
         self._quotadiff.subtract(position.quotas)
