@@ -602,7 +602,7 @@ class CartManager:
 
 
 def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress):
-    positions = CartPosition.objects.select_for_update().filter(
+    positions = CartPosition.objects.filter(
         cart_id=cart_id, event=event
     ).select_related('item', 'item__tax_rule')
     for pos in positions:
