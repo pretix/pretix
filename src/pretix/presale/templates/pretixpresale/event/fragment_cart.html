@@ -130,7 +130,7 @@
                 {% endif %}
             {% endif %}
         </div>
-        {% if download %}
+        {% if download and line.item.admission|default:event.settings.ticket_download_nonadm %}
             <div class="download-mobile">
                 {% if not line.addon_to or event.settings.ticket_download_addons %}
                     {% for b in download_buttons %}

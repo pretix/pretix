@@ -94,11 +94,14 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
             ) and self.order.status == Order.STATUS_PAID
         )
         ctx['download_buttons'] = self.download_buttons
-        ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons])
         ctx['cart'] = self.get_cart(
             answers=True, downloads=ctx['can_download'],
             queryset=self.order.positions.all(),
             payment_fee=self.order.payment_fee, payment_fee_tax_rate=self.order.payment_fee_tax_rate
+        )
+        ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
+            self.request.event.settings.ticket_download_nonadm or
+            any([p.item.admission for p in ctx['cart']['positions']])
         )
         ctx['invoices'] = list(self.order.invoices.all())
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
