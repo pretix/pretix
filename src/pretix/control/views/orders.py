@@ -469,6 +469,11 @@ class OrderChange(OrderView):
         for p in positions:
             p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p,
                                              data=self.request.POST if self.request.method == "POST" else None)
+            try:
+                ia = self.order.invoice_address
+            except InvoiceAddress.DoesNotExist:
+                ia = None
+            p.apply_tax = p.item.tax_rule and p.item.tax_rule.tax_applicable(invoice_address=ia)
         return positions
 
     def get_context_data(self, **kwargs):

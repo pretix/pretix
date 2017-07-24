@@ -47,14 +47,15 @@ question = Question.objects.create(
     event=event, question='Age',
     type=Question.TYPE_NUMBER, required=False
 )
+tr19 = event.tax_rules.create(rate=19)
 item_ticket = Item.objects.create(
     event=event, category=cat_tickets, name='Ticket',
-    default_price=23, tax_rate=19, admission=True
+    default_price=23, tax_rule=tr19, admission=True
 )
 item_ticket.questions.add(question)
 item_shirt = Item.objects.create(
     event=event, category=cat_merch, name='T-Shirt',
-    default_price=15, tax_rate=19
+    default_price=15, tax_rule=tr19
 )
 var_s = ItemVariation.objects.create(item=item_shirt, value='S')
 var_m = ItemVariation.objects.create(item=item_shirt, value='M')

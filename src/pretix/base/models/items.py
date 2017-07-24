@@ -288,7 +288,7 @@ class Item(LoggedModel):
             self.event.get_cache().clear()
 
     def tax(self, price=None, base_price_is='auto'):
-        price = price or self.default_price
+        price = price if price is not None else self.default_price
         if not self.tax_rule:
             return TaxedPrice(gross=price, net=price, tax=Decimal('0.00'),
                               rate=Decimal('0.00'), name='')

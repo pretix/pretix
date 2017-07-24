@@ -103,8 +103,18 @@
                                         {% if position.form.operation.value == "price" %}checked="checked"{% endif %}>
                                 {% trans "Change price to" %}
                                 {% bootstrap_field position.form.price layout='inline' %}
-                                {% if request.event.settings.display_net_prices %}
-                                    <em>{% trans "Enter a gross price including taxes." %}</em>
+                                {% if position.apply_tax %}
+                                    {% if position.item.tax_rule and not position.item.tax_rule.price_includes_tax %}
+                                        {% blocktrans trimmed with rate=position.item.tax_rule.rate name=position.item.tax_rule.name %}
+                                            <strong>plus</strong> {{ rate }}% {{ name }}
+                                        {% endblocktrans %}
+                                    {% elif position.item.tax_rule %}
+                                        {% blocktrans trimmed with rate=position.item.tax_rule.rate name=position.item.tax_rule.name %}
+                                            <strong>incl.</strong> {{ rate }}% {{ name }}
+                                        {% endblocktrans %}
+                                    {% endif %}
+                                {% else %}
+                                    {% trans "no taxes apply" %}
                                 {% endif %}
                             </label>
                         </div>

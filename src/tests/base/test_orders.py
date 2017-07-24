@@ -6,10 +6,11 @@ import pytz
 from django.core import mail as djmail
 from django.test import TestCase
 from django.utils.timezone import make_aware, now
+from django_countries.fields import Country
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    CartPosition, Event, Item, Order, OrderPosition, Organizer,
+    CartPosition, Event, InvoiceAddress, Item, Order, OrderPosition, Organizer,
 )
 from pretix.base.models.items import SubEventItem
 from pretix.base.payment import FreeOrderProvider
@@ -241,13 +242,13 @@ class OrderChangeManagerTests(TestCase):
             datetime=now(), expires=now() + timedelta(days=10),
             total=Decimal('46.00'), payment_provider='banktransfer'
         )
-        tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
-        tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
-        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket', tax_rule=tr7,
+        self.tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
+        self.tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
+        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket', tax_rule=self.tr7,
                                           default_price=Decimal('23.00'), admission=True)
-        self.ticket2 = Item.objects.create(event=self.event, name='Other ticket', tax_rule=tr7,
+        self.ticket2 = Item.objects.create(event=self.event, name='Other ticket', tax_rule=self.tr7,
                                            default_price=Decimal('23.00'), admission=True)
-        self.shirt = Item.objects.create(event=self.event, name='T-Shirt', tax_rule=tr19,
+        self.shirt = Item.objects.create(event=self.event, name='T-Shirt', tax_rule=self.tr19,
                                          default_price=Decimal('12.00'))
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
@@ -262,6 +263,18 @@ class OrderChangeManagerTests(TestCase):
         self.quota.items.add(self.ticket)
         self.quota.items.add(self.ticket2)
         self.quota.items.add(self.shirt)
+
+    def _enable_reverse_charge(self):
+        self.tr7.eu_reverse_charge = True
+        self.tr7.home_country = Country('DE')
+        self.tr7.save()
+        self.tr19.eu_reverse_charge = True
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        InvoiceAddress.objects.create(
+            order=self.order, is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
 
     def test_change_subevent_quota_required(self):
         self.event.has_subevents = True
@@ -294,6 +307,48 @@ class OrderChangeManagerTests(TestCase):
         assert self.op1.price == 12
         assert self.order.total == self.op1.price + self.op2.price
 
+    def test_change_subevent_reverse_charge(self):
+        self._enable_reverse_charge()
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="Foo", date_from=now())
+        se2 = self.event.subevents.create(name="Bar", date_from=now())
+        SubEventItem.objects.create(subevent=se2, item=self.ticket, price=10.7)
+        self.op1.subevent = se1
+        self.op1.save()
+        self.quota.subevent = se2
+        self.quota.save()
+
+        self.ocm.change_subevent(self.op1, se2)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.subevent == se2
+        assert self.op1.price == Decimal('10.00')
+        assert self.op1.tax_value == Decimal('0.00')
+        assert self.order.total == self.op1.price + self.op2.price
+
+    def test_change_subevent_net_price(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="Foo", date_from=now())
+        se2 = self.event.subevents.create(name="Bar", date_from=now())
+        self.tr7.price_includes_tax = False
+        self.tr7.save()
+        SubEventItem.objects.create(subevent=se2, item=self.ticket, price=10)
+        self.op1.subevent = se1
+        self.op1.save()
+        self.quota.subevent = se2
+        self.quota.save()
+
+        self.ocm.change_subevent(self.op1, se2)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.subevent == se2
+        assert self.op1.price == Decimal('10.70')
+        assert self.order.total == self.op1.price + self.op2.price
+
     def test_change_subevent_sold_out(self):
         self.event.has_subevents = True
         self.event.save()
@@ -323,8 +378,33 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.op1.item == self.shirt
         assert self.op1.price == self.shirt.default_price
-        assert self.op1.tax_rate == self.shirt.tax_rate
+        assert self.op1.tax_rate == self.shirt.tax_rule.rate
         assert round_decimal(self.op1.price * (1 - 100 / (100 + self.op1.tax_rate))) == self.op1.tax_value
+        assert self.order.total == self.op1.price + self.op2.price
+
+    def test_change_item_net_price_success(self):
+        self.tr19.price_includes_tax = False
+        self.tr19.save()
+        self.ocm.change_item(self.op1, self.shirt, None)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.item == self.shirt
+        assert self.op1.price == Decimal('14.28')
+        assert self.op1.tax_rate == self.shirt.tax_rule.rate
+        assert round_decimal(self.op1.price * (1 - 100 / (100 + self.op1.tax_rate))) == self.op1.tax_value
+        assert self.order.total == self.op1.price + self.op2.price
+
+    def test_change_item_reverse_charge(self):
+        self._enable_reverse_charge()
+        self.ocm.change_item(self.op1, self.shirt, None)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.item == self.shirt
+        assert self.op1.price == Decimal('10.08')
+        assert self.op1.tax_rate == Decimal('0.00')
+        assert self.op1.tax_value == Decimal('0.00')
         assert self.order.total == self.op1.price + self.op2.price
 
     def test_change_price_success(self):
@@ -334,6 +414,18 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.op1.item == self.ticket
         assert self.op1.price == Decimal('24.00')
+        assert round_decimal(self.op1.price * (1 - 100 / (100 + self.op1.tax_rate))) == self.op1.tax_value
+        assert self.order.total == self.op1.price + self.op2.price
+
+    def test_change_price_net_success(self):
+        self.tr7.price_includes_tax = False
+        self.tr7.save()
+        self.ocm.change_price(self.op1, Decimal('10.00'))
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.item == self.ticket
+        assert self.op1.price == Decimal('10.70')
         assert round_decimal(self.op1.price * (1 - 100 / (100 + self.op1.tax_rate))) == self.op1.tax_value
         assert self.order.total == self.op1.price + self.op2.price
 
@@ -439,7 +531,7 @@ class OrderChangeManagerTests(TestCase):
         assert self.op2.item == self.ticket
 
     def test_payment_fee_calculation(self):
-        self.event.settings.set('tax_rate_default', Decimal('19.00'))
+        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
         self.ocm.change_price(self.op1, Decimal('24.00'))
@@ -500,8 +592,37 @@ class OrderChangeManagerTests(TestCase):
         nop = self.order.positions.last()
         assert nop.item == self.shirt
         assert nop.price == self.shirt.default_price
-        assert nop.tax_rate == self.shirt.tax_rate
-        assert round_decimal(nop.price * (1 - 100 / (100 + self.shirt.tax_rate))) == nop.tax_value
+        assert nop.tax_rate == self.shirt.tax_rule.rate
+        assert round_decimal(nop.price * (1 - 100 / (100 + self.shirt.tax_rule.rate))) == nop.tax_value
+        assert self.order.total == self.op1.price + self.op2.price + nop.price
+        assert nop.positionid == 3
+
+    def test_add_item_net_price_success(self):
+        self.tr19.price_includes_tax = False
+        self.tr19.save()
+        self.ocm.add_position(self.shirt, None, None, None)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 3
+        nop = self.order.positions.last()
+        assert nop.item == self.shirt
+        assert nop.price == Decimal('14.28')
+        assert nop.tax_rate == self.shirt.tax_rule.rate
+        assert round_decimal(nop.price * (1 - 100 / (100 + self.shirt.tax_rule.rate))) == nop.tax_value
+        assert self.order.total == self.op1.price + self.op2.price + nop.price
+        assert nop.positionid == 3
+
+    def test_add_item_reverse_charge(self):
+        self._enable_reverse_charge()
+        self.ocm.add_position(self.shirt, None, None, None)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 3
+        nop = self.order.positions.last()
+        assert nop.item == self.shirt
+        assert nop.price == Decimal('10.08')
+        assert nop.tax_rate == Decimal('0.00')
+        assert nop.tax_value == Decimal('0.00')
         assert self.order.total == self.op1.price + self.op2.price + nop.price
         assert nop.positionid == 3
 
@@ -513,8 +634,22 @@ class OrderChangeManagerTests(TestCase):
         nop = self.order.positions.last()
         assert nop.item == self.shirt
         assert nop.price == Decimal('13.00')
-        assert nop.tax_rate == self.shirt.tax_rate
-        assert round_decimal(nop.price * (1 - 100 / (100 + self.shirt.tax_rate))) == nop.tax_value
+        assert nop.tax_rate == self.shirt.tax_rule.rate
+        assert round_decimal(nop.price * (1 - 100 / (100 + self.shirt.tax_rule.rate))) == nop.tax_value
+        assert self.order.total == self.op1.price + self.op2.price + nop.price
+
+    def test_add_item_custom_price_tax_always_included(self):
+        self.tr19.price_includes_tax = False
+        self.tr19.save()
+        self.ocm.add_position(self.shirt, None, Decimal('11.90'), None)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 3
+        nop = self.order.positions.last()
+        assert nop.item == self.shirt
+        assert nop.price == Decimal('11.90')
+        assert nop.tax_rate == self.shirt.tax_rule.rate
+        assert round_decimal(nop.price * (1 - 100 / (100 + self.shirt.tax_rule.rate))) == nop.tax_value
         assert self.order.total == self.op1.price + self.op2.price + nop.price
 
     def test_add_item_quota_full(self):

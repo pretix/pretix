@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.db import models
+from django.utils.formats import localize
 from django.utils.translation import ugettext_lazy as _, ugettext_noop
 from django_countries.fields import CountryField
 from i18nfield.fields import I18nCharField
@@ -21,7 +22,7 @@ class TaxedPrice:
         self.name = name
 
     def __repr__(self):
-        return '{} + {}% = {}'.format(self.net, self.rate, self.gross)
+        return '{} + {}% = {}'.format(localize(self.net), localize(self.rate), localize(self.gross))
 
 
 TAXED_ZERO = TaxedPrice(
