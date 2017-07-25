@@ -170,7 +170,7 @@ def test_refund_success(env, factory, monkeypatch):
     })
     order.save()
     prov = StripeCC(event)
-    req = factory.get('/')
+    req = factory.post('/', data={'auto_refund': 'auto'})
     req.user = None
     prov.order_control_refund_perform(req, order)
     order.refresh_from_db()
