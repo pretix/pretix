@@ -36,6 +36,17 @@ EU_COUNTRIES = {
     'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT',
     'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB'
 }
+EU_CURRENCIES = {
+    'BG': 'BGN',
+    'GB': 'GBP',
+    'HR': 'HRK',
+    'CZ': 'CZK',
+    'DK': 'DKK',
+    'HU': 'HUF',
+    'PL': 'PLN',
+    'RO': 'RON',
+    'SE': 'SEK'
+}
 
 
 class TaxRule(LoggedModel):

@@ -53,6 +53,12 @@ class Invoice(models.Model):
     :type payment_provider_text: str
     :param footer_text: A footer text, displayed smaller and centered on every page
     :type footer_text: str
+    :param foreign_currency_display: A different currency that taxes should also be displayed in.
+    :type foreign_currency_display: str
+    :param foreign_currency_rate: The rate of a forein currency that the taxes should be displayed in.
+    :type foreign_currency_rate: Decimal
+    :param foreign_currency_rate_date: The date of the forein currency exchange rates.
+    :type foreign_currency_rate_date: date
     :param file: The filename of the rendered invoice
     :type file: File
     """
@@ -71,6 +77,9 @@ class Invoice(models.Model):
     additional_text = models.TextField(blank=True)
     payment_provider_text = models.TextField(blank=True)
     footer_text = models.TextField(blank=True)
+    foreign_currency_display = models.CharField(max_length=50, null=True, blank=True)
+    foreign_currency_rate = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
+    foreign_currency_rate_date = models.DateField(null=True, blank=True)
     file = models.FileField(null=True, blank=True, upload_to=invoice_filename)
 
     @staticmethod

@@ -1,18 +1,32 @@
 import copy
-from decimal import Decimal
+import json
+import logging
+import urllib.error
+from datetime import date, timedelta
+from decimal import ROUND_HALF_UP, Decimal
 
+import vat_moss.exchange_rates
+from django.conf import settings
 from django.core.files.base import ContentFile
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import transaction
 from django.db.models import Count
+from django.dispatch import receiver
 from django.utils import timezone
+from django.utils.timezone import now
 from django.utils.translation import pgettext, ugettext as _
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
 from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
+from pretix.base.models.tax import EU_CURRENCIES
 from pretix.base.services.async import TransactionAwareTask
+from pretix.base.settings import GlobalSettingsObject
+from pretix.base.signals import periodic_task
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
+
+logger = logging.getLogger(__name__)
 
 
 @transaction.atomic
@@ -44,6 +58,29 @@ def build_invoice(invoice: Invoice) -> Invoice:
             ).strip()
             if invoice.order.invoice_address.vat_id:
                 invoice.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % invoice.order.invoice_address.vat_id
+
+            cc = str(invoice.order.invoice_address.country)
+
+            if cc in EU_CURRENCIES and EU_CURRENCIES[cc] != invoice.event.currency:
+                invoice.foreign_currency_display = EU_CURRENCIES[cc]
+
+                if settings.FETCH_ECB_RATES:
+                    gs = GlobalSettingsObject()
+                    rates_date = gs.settings.get('ecb_rates_date', as_type=date)
+                    rates_dict = gs.settings.get('ecb_rates_dict', as_type=dict)
+                    convert = (
+                        rates_date and rates_dict and
+                        rates_date > (now() - timedelta(days=7)).date() and
+                        invoice.event.currency in rates_dict and
+                        invoice.foreign_currency_display in rates_dict
+                    )
+                    if convert:
+                        invoice.foreign_currency_rate = (
+                            Decimal(rates_dict[invoice.foreign_currency_display])
+                            / Decimal(rates_dict[invoice.event.currency])
+                        ).quantize(Decimal('0.0001'), ROUND_HALF_UP)
+                        invoice.foreign_currency_rate_date = rates_date
+
         except InvoiceAddress.DoesNotExist:
             invoice.invoice_to = ""
 
@@ -201,3 +238,20 @@ def build_preview_invoice_pdf(event):
             tax_rate=19
         )
         return event.invoice_renderer.generate(invoice)
+
+
+@receiver(signal=periodic_task)
+def expire_orders(sender, **kwargs):
+    if not settings.FETCH_ECB_RATES:
+        return
+
+    gs = GlobalSettingsObject()
+    if gs.settings.ecb_rates_date == now().strftime("%Y-%m-%d"):
+        return
+
+    try:
+        date, rates = vat_moss.exchange_rates.fetch()
+        gs.settings.ecb_rates_date = date
+        gs.settings.ecb_rates_dict = json.dumps(rates, cls=DjangoJSONEncoder)
+    except urllib.error.URLError:
+        logger.exception('Could not retrieve rates from ECB')

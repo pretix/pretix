@@ -3,6 +3,7 @@ from decimal import Decimal
 from io import BytesIO
 from typing import Tuple
 
+import vat_moss.exchange_rates
 from django.contrib.staticfiles import finders
 from django.dispatch import receiver
 from django.utils.formats import date_format, localize
@@ -16,10 +17,11 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import (
-    BaseDocTemplate, Frame, NextPageTemplate, PageTemplate, Paragraph, Spacer,
-    Table, TableStyle,
+    BaseDocTemplate, Frame, KeepTogether, NextPageTemplate, PageTemplate,
+    Paragraph, Spacer, Table, TableStyle,
 )
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, Invoice
 from pretix.base.signals import register_invoice_renderers
 
@@ -88,6 +90,7 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         stylesheet.add(ParagraphStyle(name='Normal', fontName='OpenSans', fontSize=10, leading=12))
         stylesheet.add(ParagraphStyle(name='Heading1', fontName='OpenSansBd', fontSize=15, leading=15 * 1.2))
         stylesheet.add(ParagraphStyle(name='FineprintHeading', fontName='OpenSansBd', fontSize=8, leading=12))
+        stylesheet.add(ParagraphStyle(name='Fineprint', fontName='OpenSans', fontSize=8, leading=10))
         return stylesheet
 
     def _register_fonts(self):
@@ -385,13 +388,14 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             ('FONTSIZE', (0, 0), (-1, -1), 8),
             ('FONTNAME', (0, 0), (-1, -1), 'OpenSans'),
         ]
-        tdata = [[
+        thead = [
             pgettext('invoice', 'Tax rate'),
             pgettext('invoice', 'Net value'),
             pgettext('invoice', 'Gross value'),
             pgettext('invoice', 'Tax'),
             ''
-        ]]
+        ]
+        tdata = [thead]
 
         for idx, gross in grossvalue_map.items():
             rate, name = idx
@@ -406,12 +410,66 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 ''
             ])
 
-        if len(tdata) > 2:
-            story.append(Paragraph(pgettext('invoice', 'Included taxes'), self.stylesheet['FineprintHeading']))
+        def fmt(val):
+            try:
+                return vat_moss.exchange_rates.format(val, self.invoice.foreign_currency_display)
+            except ValueError:
+                return localize(val) + ' ' + self.invoice.foreign_currency_display
+
+        if len(tdata) > 1:
             colwidths = [a * doc.width for a in (.25, .15, .15, .15, .3)]
             table = Table(tdata, colWidths=colwidths, repeatRows=2, hAlign=TA_LEFT)
             table.setStyle(TableStyle(tstyledata))
-            story.append(table)
+            story.append(KeepTogether([
+                Paragraph(pgettext('invoice', 'Included taxes'), self.stylesheet['FineprintHeading']),
+                table
+            ]))
+
+            if self.invoice.foreign_currency_display and self.invoice.foreign_currency_rate:
+                tdata = [thead]
+
+                for idx, gross in grossvalue_map.items():
+                    rate, name = idx
+                    if rate == 0:
+                        continue
+                    tax = taxvalue_map[idx]
+                    gross = round_decimal(gross * self.invoice.foreign_currency_rate)
+                    tax = round_decimal(tax * self.invoice.foreign_currency_rate)
+                    net = gross - tax
+
+                    tdata.append([
+                        localize(rate) + " % " + name,
+                        fmt(net), fmt(gross), fmt(tax), ''
+                    ])
+
+                table = Table(tdata, colWidths=colwidths, repeatRows=2, hAlign=TA_LEFT)
+                table.setStyle(TableStyle(tstyledata))
+
+                story.append(KeepTogether([
+                    Spacer(1, height=2 * mm),
+                    Paragraph(
+                        pgettext(
+                            'invoice', 'Using the conversion rate of 1:{rate} as published by the European Central Bank on '
+                                       '{date}, this corresponds to:'
+                        ).format(rate=localize(self.invoice.foreign_currency_rate),
+                                 date=date_format(self.invoice.foreign_currency_rate_date, "SHORT_DATE_FORMAT")),
+                        self.stylesheet['Fineprint']
+                    ),
+                    Spacer(1, height=3 * mm),
+                    table
+                ]))
+        elif self.invoice.foreign_currency_display and self.invoice.foreign_currency_rate:
+            story.append(Spacer(1, 5 * mm))
+            story.append(Paragraph(
+                pgettext(
+                    'invoice', 'Using the conversion rate of 1:{rate} as published by the European Central Bank on '
+                               '{date}, the invoice total corresponds to {total}.'
+                ).format(rate=localize(self.invoice.foreign_currency_rate),
+                         date=date_format(self.invoice.foreign_currency_rate_date, "SHORT_DATE_FORMAT"),
+                         total=fmt(total)),
+                self.stylesheet['Fineprint']
+            ))
+
         return story
 
 
