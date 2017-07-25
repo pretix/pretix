@@ -100,7 +100,7 @@ class InvoiceAddressForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.event = event = kwargs.pop('event')
-        self.request = kwargs.pop('request')
+        self.request = kwargs.pop('request', None)
         self.validate_vat_id = kwargs.pop('validate_vat_id')
         super().__init__(*args, **kwargs)
         if not event.settings.invoice_address_vatid:

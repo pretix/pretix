@@ -558,8 +558,8 @@ class OrderChangeTests(SoupTest):
             datetime=now(), expires=now() + timedelta(days=10),
             total=Decimal('46.00'), payment_provider='banktransfer'
         )
-        tr7 = self.event.tax_rules.create(rate=7)
-        tr19 = self.event.tax_rules.create(rate=19)
+        tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
+        tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket', tax_rule=tr7,
                                           default_price=Decimal('23.00'), admission=True)
         self.shirt = Item.objects.create(event=self.event, name='T-Shirt', tax_rule=tr19,
