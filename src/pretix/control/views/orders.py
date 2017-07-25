@@ -240,9 +240,14 @@ class OrderTransition(OrderView):
                 'order': self.order,
             })
         elif self.order.status == Order.STATUS_PAID and to == 'r':
+            try:
+                cr = self.payment_provider.order_control_refund_render(self.order, self.request)
+            except TypeError:
+                cr = self.payment_provider.order_control_refund_render(self.order)
+
             return render(self.request, 'pretixcontrol/order/refund.html', {
                 'order': self.order,
-                'payment': self.payment_provider.order_control_refund_render(self.order),
+                'payment': cr,
             })
         else:
             return HttpResponseNotAllowed(['POST'])

@@ -484,7 +484,7 @@ class BasePaymentProvider:
         """
         return _('Payment provider: %s' % self.verbose_name)
 
-    def order_control_refund_render(self, order: Order) -> str:
+    def order_control_refund_render(self, order: Order, request: HttpRequest=None) -> str:
         """
         Will be called if the event administrator clicks an order's 'refund' button.
         This can be used to display information *before* the order is being refunded.
@@ -494,6 +494,11 @@ class BasePaymentProvider:
         automatically.
 
         :param order: The order object
+        :param request: The HTTP request
+
+        .. versionchanged:: 1.6
+
+           The parameter ``request`` has been added.
         """
         return '<div class="alert alert-warning">%s</div>' % _('The money can not be automatically refunded, '
                                                                'please transfer the money back manually.')

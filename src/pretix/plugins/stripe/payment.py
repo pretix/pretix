@@ -21,6 +21,18 @@ from pretix.plugins.stripe.models import ReferencedStripeObject
 logger = logging.getLogger('pretix.plugins.stripe')
 
 
+class RefundForm(forms.Form):
+    auto_refund = forms.ChoiceField(
+        initial='auto',
+        label=_('Refund automatically?'),
+        choices=(
+            ('auto', _('Automatically refund charge with Stripe')),
+            ('manual', _('Do not send refund instruction to Stripe, only mark as refunded in pretix'))
+        ),
+        widget=forms.RadioSelect,
+    )
+
+
 class StripeSettingsHolder(BasePaymentProvider):
     identifier = 'stripe_settings'
     verbose_name = _('Stripe')
@@ -247,11 +259,29 @@ class StripeMethod(BasePaymentProvider):
         }
         return template.render(ctx)
 
-    def order_control_refund_render(self, order) -> str:
-        return '<div class="alert alert-info">%s</div>' % _('The money will be automatically refunded.')
+    def _refund_form(self, request):
+        return RefundForm(data=request.POST if request.method == "POST" else None)
+
+    def order_control_refund_render(self, order, request) -> str:
+        template = get_template('pretixplugins/stripe/control_refund.html')
+        ctx = {
+            'request': request,
+            'form': self._refund_form(request),
+        }
+        return template.render(ctx)
 
     def order_control_refund_perform(self, request, order) -> "bool|str":
         self._init_api()
+
+        f = self._refund_form(request)
+        if not f.is_valid():
+            messages.error(request, _('Your input was invalid, please try again.'))
+            return
+        elif f.cleaned_data.get('auto_refund') == 'manual':
+            order = mark_order_refunded(order, user=request.user)
+            order.payment_manual = True
+            order.save()
+            return
 
         if order.payment_info:
             payment_info = json.loads(order.payment_info)

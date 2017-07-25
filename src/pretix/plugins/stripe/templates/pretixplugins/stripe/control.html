@@ -14,7 +14,7 @@
             This order has been planned to be paid with {{ method }}, but the payment has not yet been completed.
         {% endblocktrans %}</p>
     {% endif %}
-    {% if order.status == "p" %}
+    {% if "source" in payment_info %}
         <dl class="dl-horizontal">
             <dt>{% trans "Charge ID" %}</dt>
             <dd>{{ payment_info.id }}</dd>
