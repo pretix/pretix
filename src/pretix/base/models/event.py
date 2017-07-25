@@ -384,7 +384,7 @@ class Event(EventMixin, LoggedModel):
             elif s.key == 'tax_rate_default':
                 try:
                     if int(s.value) in tax_map:
-                        s.value = tax_map.get(s.value)
+                        s.value = tax_map.get(int(s.value)).pk
                         s.save()
                     else:
                         s.delete()
