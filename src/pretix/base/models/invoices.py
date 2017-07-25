@@ -155,12 +155,15 @@ class InvoiceLine(models.Model):
     :type tax_value: decimal.Decimal
     :param tax_rate: The applied tax rate in percent
     :type tax_rate: decimal.Decimal
+    :param tax_name: The name of the applied tax rate
+    :type tax_name: str
     """
     invoice = models.ForeignKey('Invoice', related_name='lines')
     description = models.TextField()
     gross_value = models.DecimalField(max_digits=10, decimal_places=2)
     tax_value = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     tax_rate = models.DecimalField(max_digits=7, decimal_places=2, default=Decimal('0.00'))
+    tax_name = models.CharField(max_length=190)
 
     @property
     def net_value(self):

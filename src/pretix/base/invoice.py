@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from django.utils.formats import date_format, localize
 from django.utils.translation import pgettext
 from reportlab.lib import pagesizes
+from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.styles import ParagraphStyle, StyleSheet1
 from reportlab.lib.units import mm
 from reportlab.lib.utils import ImageReader
@@ -86,6 +87,7 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         stylesheet = StyleSheet1()
         stylesheet.add(ParagraphStyle(name='Normal', fontName='OpenSans', fontSize=10, leading=12))
         stylesheet.add(ParagraphStyle(name='Heading1', fontName='OpenSansBd', fontSize=15, leading=15 * 1.2))
+        stylesheet.add(ParagraphStyle(name='FineprintHeading', fontName='OpenSansBd', fontSize=8, leading=12))
         return stylesheet
 
     def _register_fonts(self):
@@ -355,12 +357,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 localize(line.net_value) + " " + self.invoice.event.currency,
                 localize(line.gross_value) + " " + self.invoice.event.currency,
             ))
-            taxvalue_map[line.tax_rate] += line.tax_value
-            grossvalue_map[line.tax_rate] += line.gross_value
+            taxvalue_map[line.tax_rate, line.tax_name] += line.tax_value
+            grossvalue_map[line.tax_rate, line.tax_name] += line.gross_value
             total += line.gross_value
 
-        tdata.append(
-            [pgettext('invoice', 'Invoice total'), '', '', localize(total) + " " + self.invoice.event.currency])
+        tdata.append([
+            pgettext('invoice', 'Invoice total'), '', '', localize(total) + " " + self.invoice.event.currency
+        ])
         colwidths = [a * doc.width for a in (.55, .15, .15, .15)]
         table = Table(tdata, colWidths=colwidths, repeatRows=1)
         table.setStyle(TableStyle(tstyledata))
@@ -376,31 +379,37 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             story.append(Spacer(1, 15 * mm))
 
         tstyledata = [
-            ('SPAN', (1, 0), (-1, 0)),
-            ('ALIGN', (2, 1), (-1, -1), 'RIGHT'),
+            ('ALIGN', (1, 0), (-1, -1), 'RIGHT'),
             ('LEFTPADDING', (0, 0), (0, -1), 0),
             ('RIGHTPADDING', (-1, 0), (-1, -1), 0),
             ('FONTSIZE', (0, 0), (-1, -1), 8),
+            ('FONTNAME', (0, 0), (-1, -1), 'OpenSans'),
         ]
-        tdata = [('', pgettext('invoice', 'Included taxes'), '', '', ''),
-                 ('', pgettext('invoice', 'Tax rate'),
-                  pgettext('invoice', 'Net value'), pgettext('invoice', 'Gross value'), pgettext('invoice', 'Tax'))]
+        tdata = [[
+            pgettext('invoice', 'Tax rate'),
+            pgettext('invoice', 'Net value'),
+            pgettext('invoice', 'Gross value'),
+            pgettext('invoice', 'Tax'),
+            ''
+        ]]
 
-        for rate, gross in grossvalue_map.items():
+        for idx, gross in grossvalue_map.items():
+            rate, name = idx
             if rate == 0:
                 continue
-            tax = taxvalue_map[rate]
-            tdata.append((
-                '',
-                localize(rate) + " %",
-                localize((gross - tax)) + " " + self.invoice.event.currency,
+            tax = taxvalue_map[idx]
+            tdata.append([
+                localize(rate) + " % " + name,
+                localize(gross - tax) + " " + self.invoice.event.currency,
                 localize(gross) + " " + self.invoice.event.currency,
                 localize(tax) + " " + self.invoice.event.currency,
-            ))
+                ''
+            ])
 
         if len(tdata) > 2:
-            colwidths = [a * doc.width for a in (.45, .10, .15, .15, .15)]
-            table = Table(tdata, colWidths=colwidths, repeatRows=2)
+            story.append(Paragraph(pgettext('invoice', 'Included taxes'), self.stylesheet['FineprintHeading']))
+            colwidths = [a * doc.width for a in (.25, .15, .15, .15, .3)]
+            table = Table(tdata, colWidths=colwidths, repeatRows=2, hAlign=TA_LEFT)
             table.setStyle(TableStyle(tstyledata))
             story.append(table)
         return story

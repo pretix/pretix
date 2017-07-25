@@ -2,10 +2,9 @@ from decimal import Decimal
 
 from django.db import models
 from django.utils.formats import localize
-from django.utils.translation import ugettext_lazy as _, ugettext_noop
+from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
 from i18nfield.fields import I18nCharField
-from i18nfield.strings import LazyI18nString
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
@@ -45,7 +44,6 @@ class TaxRule(LoggedModel):
         verbose_name=_('Name'),
         help_text=_('Should be short, e.g. "VAT"'),
         max_length=190,
-        default=LazyI18nString.from_gettext(ugettext_noop('VAT'))
     )
     rate = models.DecimalField(
         max_digits=10,

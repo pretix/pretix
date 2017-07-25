@@ -69,7 +69,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
             InvoiceLine.objects.create(
                 invoice=invoice, description=desc,
                 gross_value=p.price, tax_value=p.tax_value,
-                tax_rate=p.tax_rate
+                tax_rate=p.tax_rate, tax_name=p.tax_rule.name if p.tax_rule else ''
             )
 
         if invoice.order.payment_fee:
@@ -77,7 +77,8 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 invoice=invoice,
                 description=_('Payment via {method}').format(method=str(payment_provider.verbose_name)),
                 gross_value=invoice.order.payment_fee, tax_value=invoice.order.payment_fee_tax_value,
-                tax_rate=invoice.order.payment_fee_tax_rate
+                tax_rate=invoice.order.payment_fee_tax_rate,
+                tax_name=invoice.order.payment_fee_tax_rule.name if invoice.order.payment_fee_tax_rule else ''
             )
 
         return invoice

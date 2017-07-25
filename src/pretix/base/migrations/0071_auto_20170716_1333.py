@@ -15,6 +15,7 @@ def tax_rate_converter(app, schema_editor):
     TaxRule = app.get_model('pretixbase', 'TaxRule')
     Order = app.get_model('pretixbase', 'Order')
     OrderPosition = app.get_model('pretixbase', 'OrderPosition')
+    InvoiceLine = app.get_model('pretixbase', 'InvoiceLine')
     n = LazyI18nString({
         'en': 'VAT',
         'de': 'MwSt.',
@@ -44,6 +45,14 @@ def tax_rate_converter(app, schema_editor):
             tr = op.order.event.tax_rules.create(rate=op.tax_rate, name=n)
             op.tax_rule = tr
         op.save()
+
+    for il in InvoiceLine.objects.select_related('invoice', 'invoice__event').exclude(tax_rate=0):
+        try:
+            il.tax_name = il.invoice.event.tax_rules.get(rate=op.tax_rate).name
+        except TaxRule.DoesNotExist:
+            tr = il.invoice.event.tax_rules.create(rate=op.tax_rate, name=n)
+            il.tax_name = tr.name
+        il.save()
 
     for setting in EventSettingsStore.objects.filter(key='tax_rate_default'):
         try:
@@ -133,11 +142,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='taxrule',
-            name='eu_reverse_charge',
-            field=models.BooleanField(default=False, help_text='Not recommended. Most events will NOT be qualified for reverse charge since the place of taxation is the location of the event. This option disables charging VAT for all customers outside the EU and for business customers in different EU countries that do not customers who entered a valid EU VAT ID. Only enable this option after consulting a tax counsel. No warranty given for correct tax calculation.', verbose_name='Use EU reverse charge taxation rules'),
-        ),
-        migrations.AlterField(
-            model_name='taxrule',
             name='home_country',
             field=django_countries.fields.CountryField(blank=True, help_text='Your country of residence. This is the country the EU reverse charge rule will not apply in, if configured above.', max_length=2, verbose_name='Merchant country'),
         ),
@@ -145,5 +149,16 @@ class Migration(migrations.Migration):
             model_name='cartposition',
             name='includes_tax',
             field=models.BooleanField(default=True),
+        ),
+        migrations.AddField(
+            model_name='invoiceline',
+            name='tax_name',
+            field=models.CharField(default='', max_length=190),
+            preserve_default=False,
+        ),
+        migrations.AlterField(
+            model_name='taxrule',
+            name='eu_reverse_charge',
+            field=models.BooleanField(default=False, help_text='Not recommended. Most events will NOT be qualified for reverse charge since the place of taxation is the location of the event. This option disables charging VAT for all customers outside the EU and for business customers in different EU countries that do not customers who entered a valid EU VAT ID. Only enable this option after consulting a tax counsel. No warranty given for correct tax calculation. USE AT YOUR OWN RISK.', verbose_name='Use EU reverse charge taxation rules'),
         ),
     ]
