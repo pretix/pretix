@@ -1,3 +1,4 @@
+import logging
 import os
 from decimal import Decimal
 from itertools import chain
@@ -5,6 +6,7 @@ from itertools import chain
 import vat_moss.errors
 import vat_moss.id
 from django import forms
+from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db.models import Count, Prefetch, Q
 from django.utils.encoding import force_text
@@ -18,6 +20,8 @@ from pretix.base.models.tax import EU_COUNTRIES, TAXED_ZERO
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import contact_form_fields, question_form_fields
+
+logger = logging.getLogger(__name__)
 
 
 class ContactForm(forms.Form):
@@ -96,6 +100,7 @@ class InvoiceAddressForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.event = event = kwargs.pop('event')
+        self.request = kwargs.pop('request')
         self.validate_vat_id = kwargs.pop('validate_vat_id')
         super().__init__(*args, **kwargs)
         if not event.settings.invoice_address_vatid:
@@ -135,21 +140,18 @@ class InvoiceAddressForm(forms.ModelForm):
             except vat_moss.errors.InvalidError:
                 raise ValidationError(_('This VAT ID is not valid. Please re-check your input.'))
             except vat_moss.errors.WebServiceUnavailableError:
-                raise ValidationError(_('Your VAT ID could not be checked, as the VAT checking service of your '
-                                        'country is currently not available. Please re-check your input.'))
-                # There was an error processing the request within the VIES service.
-                #
-                # Unfortunately this tends to happen a lot with EU countries because the
-                # VIES service is a proxy for 28 separate member-state APIs.
-                #
-                # Tell your customer they have to pay VAT and can recover it
-                # through appropriate accounting practices.
+                logger.exception('VAT ID checking failed for country {}'.format(data.get('country')))
+                self.instance.vat_id_validated = False
+                if self.request:
+                    messages.warning(self.request, _('Your VAT ID could not be checked, as the VAT checking service of '
+                                                     'your country is currently not available. We will therefore '
+                                                     'need to charge VAT on your invoice. You can get the tax amount '
+                                                     'back via the VAT reimbursement process.'))
         else:
             self.instance.vat_id_validated = False
 
 
 class UploadedFileWidget(forms.ClearableFileInput):
-
     def __init__(self, *args, **kwargs):
         self.position = kwargs.pop('position')
         self.event = kwargs.pop('event')
@@ -341,7 +343,6 @@ class AddOnRadioSelect(forms.RadioSelect):
 
 
 class AddOnVariationField(forms.ChoiceField):
-
     def valid_value(self, value):
         text_value = force_text(value)
         for k, v, d in self.choices:

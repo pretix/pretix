@@ -735,6 +735,6 @@ class OrderChangeManagerTests(TestCase):
         self.ocm.commit()
         ops = list(self.order.positions.all())
         for op in ops:
-            assert op.price == Decimal('23.00')
-            assert op.tax_value == Decimal('1.50')
+            assert op.price == Decimal('23.01')   # sic. we can't really avoid it.
+            assert op.tax_value == Decimal('1.51')
             assert op.tax_rate == Decimal('7.00')

@@ -286,6 +286,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     def invoice_form(self):
         return InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
                                   event=self.request.event,
+                                  request=self.request,
                                   instance=self.invoice_address,
                                   validate_vat_id=self.eu_reverse_charge_relevant)
 
