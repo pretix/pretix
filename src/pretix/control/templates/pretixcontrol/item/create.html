@@ -2,6 +2,9 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inside %}
+{% load static %}
+<script type="text/javascript" src="{% static "pretixcontrol/js/ui/hidequota.js" %}"></script>
+
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         <fieldset>
@@ -11,6 +14,17 @@
             {% bootstrap_field form.has_variations layout="horizontal" %}
             {% bootstrap_field form.category layout="horizontal" %}
             {% bootstrap_field form.admission layout="horizontal" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Quota settings" %}</legend>
+            {% bootstrap_field form.quota_option layout="horizontal" %}
+            <div id="existing-quota-group">
+                {% bootstrap_field form.quota_add_existing layout="horizontal" %}
+            </div>
+            <div id="new-quota-group">
+                {% bootstrap_field form.quota_add_new_name layout="horizontal" %}
+                {% bootstrap_field form.quota_add_new_size layout="horizontal" %}
+            </div>
         </fieldset>
         <fieldset>
             <legend>{% trans "Price settings" %}</legend>
