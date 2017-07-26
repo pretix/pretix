@@ -1,30 +1,29 @@
-$(document).ready(function() {
-  hideDeselected();
-});
+$(document).ready(function () {
+  hideDeselected(false);
 
-function hideDeselected() {
-  var v = $("input[name='quota_option']:checked").val();
-
-  if (v === "existing") {
-    hideAll();
-    $("#existing-quota-group").children().slideDown();
-  } else if (v === "new") {
-    hideAll();
-    $("#new-quota-group").children().slideDown();
-  } else {
-    hideAll();
+  function hideDeselected(animate) {
+    var v = $("input[name='quota_option']:checked").val(),
+      fn = animate ? 'slideDown' : 'show';
+    if (v === "existing") {
+      hideAll(animate);
+      $("#existing-quota-group").children()[fn]();
+    } else if (v === "new") {
+      hideAll(animate);
+      $("#new-quota-group").children()[fn]();
+    } else {
+      hideAll(animate);
+    }
   }
-};
 
-function hideAll() {
-  $("#new-quota-group").children().slideUp();
-  $("#existing-quota-group").children().slideUp();
-};
+  function hideAll(animate) {
+    var fn = animate ? 'slideUp' : 'hide';
+    $("#new-quota-group").children()[fn]();
+    $("#existing-quota-group").children()[fn]();
+  }
 
-$(function () {
   $("input[name='quota_option']").on('change',
-    function() {
-      hideDeselected();
+    function () {
+      hideDeselected(true);
     }
   );
 });
