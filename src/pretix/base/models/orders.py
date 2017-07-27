@@ -4,7 +4,7 @@ import os
 import string
 from datetime import datetime, time
 from decimal import Decimal
-from typing import List, Union
+from typing import Any, Dict, List, Union
 
 import pytz
 from django.conf import settings
@@ -20,7 +20,10 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_countries.fields import CountryField
+from i18nfield.strings import LazyI18nString
 
+from pretix.base.i18n import language
+from pretix.base.models import User
 from pretix.base.reldate import RelativeDateWrapper
 
 from ..decimal import round_decimal
@@ -387,6 +390,32 @@ class Order(LoggedModel):
         except Quota.QuotaExceededException as e:
             return str(e)
         return True
+
+    def send_mail(self, subject: str, template: Union[str, LazyI18nString],
+                  context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
+                  user: User=None, headers: dict=None, sender: str=None):
+        from pretix.base.services.mail import SendMailException, mail, render_mail
+
+        recipient = self.email
+        email_content = render_mail(template, context)[0]
+        try:
+            with language(self.locale):
+                mail(
+                    recipient, subject, template, context,
+                    self.event, self.locale, self, headers, sender
+                )
+        except SendMailException:
+            raise
+        else:
+            self.log_action(
+                log_entry_type,
+                user=user,
+                data={
+                    'subject': subject,
+                    'message': email_content,
+                    'recipient': recipient
+                }
+            )
 
 
 def answerfile_name(instance, filename: str) -> str:

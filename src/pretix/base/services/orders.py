@@ -31,7 +31,7 @@ from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
 )
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.services.mail import SendMailException, mail
+from pretix.base.services.mail import SendMailException
 from pretix.base.services.pricing import get_price
 from pretix.base.signals import order_paid, order_placed, periodic_task
 from pretix.celery_app import app
@@ -129,22 +129,27 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
             except InvoiceAddress.DoesNotExist:
                 invoice_name = ""
                 invoice_company = ""
-            mail(
-                order.email, _('Payment received for your order: %(code)s') % {'code': order.code},
-                order.event.settings.mail_text_order_paid,
-                {
-                    'event': order.event.name,
-                    'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
-                        'order': order.code,
-                        'secret': order.secret
-                    }),
-                    'downloads': order.event.settings.get('ticket_download', as_type=bool),
-                    'invoice_name': invoice_name,
-                    'invoice_company': invoice_company,
-                    'payment_info': mail_text
-                },
-                order.event, locale=order.locale
-            )
+            email_template = order.event.settings.mail_text_order_paid
+            email_context = {
+                'event': order.event.name,
+                'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
+                    'order': order.code,
+                    'secret': order.secret
+                }),
+                'downloads': order.event.settings.get('ticket_download', as_type=bool),
+                'invoice_name': invoice_name,
+                'invoice_company': invoice_company,
+                'payment_info': mail_text
+            }
+            email_subject = _('Payment received for your order: %(code)s') % {'code': order.code}
+            try:
+                order.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.order_paid', user
+                )
+            except SendMailException:
+                logger.exception('Order paid email could not be sent')
+
     return order
 
 
@@ -198,20 +203,25 @@ def _cancel_order(order, user=None, send_mail: bool=True):
             Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=F('redeemed') - 1)
 
     if send_mail:
+        email_template = order.event.settings.mail_text_order_canceled
+        email_context = {
+            'event': order.event.name,
+            'code': order.code,
+            'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
+                'order': order.code,
+                'secret': order.secret
+            })
+        }
+        email_subject = _('Order canceled: %(code)s') % {'code': order.code}
         with language(order.locale):
-            mail(
-                order.email, _('Order canceled: %(code)s') % {'code': order.code},
-                order.event.settings.mail_text_order_canceled,
-                {
-                    'event': order.event.name,
-                    'code': order.code,
-                    'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
-                        'order': order.code,
-                        'secret': order.secret
-                    })
-                },
-                order.event, locale=order.locale
-            )
+            try:
+                order.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.order_canceled', user
+                )
+            except SendMailException:
+                logger.exception('Order canceled email could not be sent')
+
     return order.pk
 
 
@@ -423,9 +433,11 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             generate_invoice(order)
 
     if order.total == Decimal('0.00'):
-        mailtext = event.settings.mail_text_order_free
+        email_template = event.settings.mail_text_order_free
+        log_entry = 'pretix.event.order.email.order_free'
     else:
-        mailtext = event.settings.mail_text_order_placed
+        email_template = event.settings.mail_text_order_placed
+        log_entry = 'pretix.event.order.email.order_placed'
 
     try:
         invoice_name = order.invoice_address.name
@@ -433,25 +445,27 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
     except InvoiceAddress.DoesNotExist:
         invoice_name = ""
         invoice_company = ""
-
-    mail(
-        order.email, _('Your order: %(code)s') % {'code': order.code},
-        mailtext,
-        {
-            'total': LazyNumber(order.total),
-            'currency': event.currency,
-            'date': LazyDate(order.expires),
-            'event': event.name,
-            'url': build_absolute_uri(event, 'presale:event.order', kwargs={
-                'order': order.code,
-                'secret': order.secret
-            }),
-            'payment_info': str(pprov.order_pending_mail_render(order)),
-            'invoice_name': invoice_name,
-            'invoice_company': invoice_company,
-        },
-        event, locale=order.locale
-    )
+    email_context = {
+        'total': LazyNumber(order.total),
+        'currency': event.currency,
+        'date': LazyDate(order.expires),
+        'event': event.name,
+        'url': build_absolute_uri(event, 'presale:event.order', kwargs={
+            'order': order.code,
+            'secret': order.secret
+        }),
+        'payment_info': str(pprov.order_pending_mail_render(order)),
+        'invoice_name': invoice_name,
+        'invoice_company': invoice_company,
+    }
+    email_subject = _('Your order: %(code)s') % {'code': order.code}
+    try:
+        order.send_mail(
+            email_subject, email_template, email_context,
+            log_entry
+        )
+    except SendMailException:
+        logger.exception('Order received email could not be sent')
 
     return order.id
 
@@ -493,27 +507,25 @@ def send_expiry_warnings(sender, **kwargs):
             except InvoiceAddress.DoesNotExist:
                 invoice_name = ""
                 invoice_company = ""
+            email_template = eventsettings.mail_text_order_expire_warning
+            email_context = {
+                'event': o.event.name,
+                'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                    'order': o.code,
+                    'secret': o.secret
+                }),
+                'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
+                'invoice_name': invoice_name,
+                'invoice_company': invoice_company,
+            }
+            email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
             try:
-                with language(o.locale):
-                    mail(
-                        o.email, _('Your order is about to expire: %(code)s') % {'code': o.code},
-                        eventsettings.mail_text_order_expire_warning,
-                        {
-                            'event': o.event.name,
-                            'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                                'order': o.code,
-                                'secret': o.secret
-                            }),
-                            'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
-                            'invoice_name': invoice_name,
-                            'invoice_company': invoice_company,
-                        },
-                        o.event, locale=o.locale
-                    )
+                o.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.expire_warning_sent'
+                )
             except SendMailException:
                 logger.exception('Reminder email could not be sent')
-            else:
-                o.log_action('pretix.event.order.expire_warning_sent')
 
 
 class OrderChangeManager:
@@ -764,20 +776,24 @@ class OrderChangeManager:
             except InvoiceAddress.DoesNotExist:
                 invoice_name = ""
                 invoice_company = ""
-            mail(
-                self.order.email, _('Your order has been changed: %(code)s') % {'code': self.order.code},
-                self.order.event.settings.mail_text_order_changed,
-                {
-                    'event': self.order.event.name,
-                    'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
-                        'order': self.order.code,
-                        'secret': self.order.secret
-                    }),
-                    'invoice_name': invoice_name,
-                    'invoice_company': invoice_company,
-                },
-                self.order.event, locale=self.order.locale
-            )
+            email_template = self.order.event.settings.mail_text_order_changed
+            email_context = {
+                'event': self.order.event.name,
+                'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
+                    'order': self.order.code,
+                    'secret': self.order.secret
+                }),
+                'invoice_name': invoice_name,
+                'invoice_company': invoice_company,
+            }
+            email_subject = _('Your order has been changed: %(code)s') % {'code': self.order.code}
+            try:
+                self.order.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.order_changed', self.user
+                )
+            except SendMailException:
+                logger.exception('Order changed email could not be sent')
 
     def commit(self):
         if not self._operations:
