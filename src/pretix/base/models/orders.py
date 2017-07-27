@@ -297,6 +297,9 @@ class Order(LoggedModel):
 
     @property
     def can_user_cancel(self) -> bool:
+        """
+        Returns whether or not this order can be canceled by the user.
+        """
         positions = self.positions.all().select_related('item')
         cancelable = all([op.item.allow_cancel for op in positions])
         return self.event.settings.cancel_allow_user and cancelable
@@ -310,6 +313,10 @@ class Order(LoggedModel):
 
     @property
     def ticket_download_date(self):
+        """
+        Returns the first date the tickets for this order can be downloaded or ``None`` if there is no
+        restriction.
+        """
         dl_date = self.event.settings.get('ticket_download_date', as_type=RelativeDateWrapper)
         if dl_date:
             if self.event.has_subevents:
@@ -394,6 +401,22 @@ class Order(LoggedModel):
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
                   user: User=None, headers: dict=None, sender: str=None):
+        """
+        Sends an email to the user that placed this order. Basically, this method does two things:
+
+        * Call ``pretix.base.services.mail.mail`` with useful values for the ``event``, ``locale``, ``recipient`` and
+          ``order`` parameters.
+
+        * Create a ``LogEntry`` with the email contents.
+
+        :param subject: Subject of the email
+        :param template: LazyI18nString or template filename, see ``pretix.base.services.mail.mail`` for more details
+        :param context: Dictionary to use for rendering the template
+        :param log_entry_type: Key to be used for the log entry
+        :param user: Administrative user who triggered this mail to be sent
+        :param headers: Dictionary with additional mail headers
+        :param sender: Custom email sender.
+        """
         from pretix.base.services.mail import SendMailException, mail, render_mail
 
         recipient = self.email
