@@ -1,5 +1,6 @@
 import string
 import uuid
+from collections import OrderedDict
 from datetime import datetime, time
 
 import pytz
@@ -388,7 +389,8 @@ class Event(EventMixin, LoggedModel):
             for p in response:
                 pp = p(self)
                 providers[pp.identifier] = pp
-        return providers
+
+        return OrderedDict(sorted(providers.items(), key=lambda v: str(v[1].verbose_name)))
 
     def get_invoice_renderers(self) -> dict:
         """
