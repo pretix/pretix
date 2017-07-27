@@ -1,23 +1,29 @@
 from decimal import Decimal
 
+import pytz
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
-from django.db.models import Sum
+from django.db.models import (
+    Count, Exists, IntegerField, Max, Min, OuterRef, Q, Subquery, Sum,
+)
+from django.db.models.functions import Coalesce, Greatest
 from django.dispatch import receiver
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ungettext
 
 from pretix.base.models import (
-    Item, Order, OrderPosition, Voucher, WaitingListEntry,
+    Event, Item, Order, OrderPosition, RequiredAction, Voucher,
+    WaitingListEntry,
 )
 from pretix.control.forms.event import CommentForm
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,
 )
+from pretix.helpers.daterange import daterange
 
 from ..logdisplay import OVERVIEW_BLACKLIST
 
@@ -255,21 +261,118 @@ def user_event_widgets(**kwargs):
     user = kwargs.pop('user')
     widgets = []
 
-    events = user.get_events_with_any_permission().order_by('-date_from', 'name').select_related('organizer')[:100]
+    tpl = """
+        <a href="{url}" class="event">
+            <div class="name">{event}</div>
+            <div class="daterange">{daterange}</div>
+            <div class="times">{times}</div>
+        </a>
+        <div class="bottomrow">
+            {orders}
+            <a href="{url}" class="status-{statusclass}">
+                {status}
+            </a>
+        </div>
+    """
+
+    active_orders = Order.objects.filter(
+        event=OuterRef('pk'),
+        status__in=[Order.STATUS_PENDING, Order.STATUS_PAID]
+    ).order_by().values('event').annotate(
+        c=Count('*')
+    ).values(
+        'c'
+    )
+
+    required_actions = RequiredAction.objects.filter(
+        event=OuterRef('pk'),
+        done=False
+    )
+
+    # Get set of events where we have the permission to show the # of orders
+    events_with_orders = set(Event.objects.filter(
+        Q(organizer_id__in=user.teams.filter(all_events=True, can_view_orders=True).values_list('organizer', flat=True))
+        | Q(id__in=user.teams.filter(can_view_orders=True).values_list('limit_events__id', flat=True))
+    ).values_list('id', flat=True))
+
+    events = user.get_events_with_any_permission().annotate(
+        order_count=Subquery(active_orders, output_field=IntegerField()),
+        has_ra=Exists(required_actions)
+    ).annotate(
+        min_from=Min('subevents__date_from'),
+        max_from=Max('subevents__date_from'),
+        max_to=Max('subevents__date_to'),
+        max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from'))
+    ).annotate(
+        order_from=Coalesce('min_from', 'date_from'),
+        order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to'),
+    ).order_by(
+        '-order_from', 'name'
+    ).prefetch_related(
+        '_settings_objects', 'organizer___settings_objects'
+    ).select_related('organizer')[:100]
     for event in events:
+        dr = event.get_date_range_display()
+        if event.has_subevents:
+            tz = pytz.timezone(event.settings.timezone)
+            dr = daterange(
+                (event.min_from).astimezone(tz),
+                (event.max_fromto or event.max_to or event.max_from).astimezone(tz)
+            )
+
+        if event.has_ra:
+            status = ('danger', _('Action required'))
+        elif not event.live:
+            status = ('warning', _('Shop disabled'))
+        elif event.presale_has_ended:
+            status = ('default', _('Sale over'))
+        elif not event.presale_is_running:
+            status = ('default', _('Soon'))
+        else:
+            status = ('success', _('On sale'))
+
         widgets.append({
-            'content': '<div class="event">{event}<span class="from">{df}</span><span class="to">{dt}</span></div>'.format(
+            'content': tpl.format(
                 event=escape(event.name),
-                df=date_format(event.date_from, 'SHORT_DATE_FORMAT') if event.date_from else '',
-                dt=date_format(event.date_to, 'SHORT_DATE_FORMAT') if event.date_to else ''
+                times=_('Event series') if event.has_subevents else (
+                    ((date_format(event.date_admission, 'TIME_FORMAT') + ' / ')
+                     if event.date_admission and event.date_admission != event.date_from else '')
+                    + (date_format(event.date_from, 'TIME_FORMAT') if event.date_from else '')
+                ),
+                url=reverse('control:event.index', kwargs={
+                    'event': event.slug,
+                    'organizer': event.organizer.slug
+                }),
+                orders=(
+                    '<a href="{orders_url}" class="orders">{orders_text}</a>'.format(
+                        orders_url=reverse('control:event.orders', kwargs={
+                            'event': event.slug,
+                            'organizer': event.organizer.slug
+                        }),
+                        orders_text=ungettext('{num} order', '{num} orders', event.order_count or 0).format(
+                            num=event.order_count or 0
+                        )
+                    ) if user.is_superuser or event.pk in events_with_orders else ''
+                ),
+                daterange=dr,
+                status=status[1],
+                statusclass=status[0],
             ),
             'display_size': 'small',
             'priority': 100,
-            'url': reverse('control:event.index', kwargs={
-                'event': event.slug,
-                'organizer': event.organizer.slug
-            })
+            'container_class': 'widget-container widget-container-event',
         })
+        """
+            {% if not e.live %}
+                <span class="label label-danger">{% trans "Shop disabled" %}</span>
+            {% elif e.presale_has_ended %}
+                <span class="label label-warning">{% trans "Presale over" %}</span>
+            {% elif not e.presale_is_running %}
+                <span class="label label-warning">{% trans "Presale not started" %}</span>
+            {% else %}
+                <span class="label label-success">{% trans "On sale" %}</span>
+            {% endif %}
+        """
     return widgets
 
 
