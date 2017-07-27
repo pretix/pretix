@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-19 12:13+0000\n"
+"POT-Creation-Date: 2017-07-27 09:45+0000\n"
 "PO-Revision-Date: 2017-06-01 12:56+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
@@ -63,46 +63,60 @@ msgid "Sample product – sample variation"
 msgstr "Beispielprodukt – Beispielvariante"
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:167
+#, fuzzy
+#| msgid "Sample product – sample variation"
+msgid "Sample product description"
+msgstr "Beispielprodukt – Beispielvariante"
+
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:168
 msgid "123.45 EUR"
 msgstr "123,45 EUR"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:168
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:169
 msgid "John Doe"
 msgstr "Max Mustermann"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:169
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:170
 msgid "Sample event name"
 msgstr "Beispielevent"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:170
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:171
 msgid "May 31st, 2017"
 msgstr "31. Mai 2017"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:171
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:172
 msgid "May 31st – June 4th, 2017"
 msgstr "31. Mai – 4. Juni 2017"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:172
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:173
 msgid "20:00"
 msgstr "20:00"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:173
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:174
 msgid "19:00"
 msgstr "19:00"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:174
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:175
 msgid "2017-05-31 20:00"
 msgstr "31.05.2016 20:00"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:175
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:176
 msgid "2017-05-31 19:00"
 msgstr "31.05.2016 19:00"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:176
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:177
 msgid "Random City"
 msgstr "Musterstadt"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:177
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:178
+msgid "Event organizer company"
+msgstr ""
+
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:179
+msgid "Event organizer info text"
+msgstr ""
+
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:180
 msgid ""
 "Addon 1\n"
 "Addon 2"
@@ -110,40 +124,40 @@ msgstr ""
 "Workshop 1\n"
 "Workshop 2"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:222
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:225
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Die Hintergrund-PDF-Datei konnte nicht geladen werden:"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:371
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:374
 msgid "Group of objects"
 msgstr "Gruppe von Objekten"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:377
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:380
 msgid "Text object"
 msgstr "Text-Objekt"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:379
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:382
 msgid "Barcode area"
 msgstr "QR-Code-Bereich"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:381
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:384
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:385
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:388
 msgid "Ticket design"
 msgstr "Ticket-Design"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:621
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:624
 msgid "Saving failed."
 msgstr "Speichern fehlgeschlagen."
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:667
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:670
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Möchten Sie den Editor wirklich schließen ohne Ihre Änderungen zu speichern?"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:681
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:684
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Es gab ein Problem beim Hochladen der PDF-Datei, bitte erneut versuchen."
@@ -255,11 +269,11 @@ msgstr "Sonstige"
 msgid "Count"
 msgstr "Anzahl"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:10
+#: pretix/static/pretixpresale/js/ui/cart.js:16
 msgid "The items in your cart are no longer reserved for you."
 msgstr "Die Produkte in Ihrem Warenkorb sind nicht mehr für Sie reserviert."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:14
+#: pretix/static/pretixpresale/js/ui/cart.js:20
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
