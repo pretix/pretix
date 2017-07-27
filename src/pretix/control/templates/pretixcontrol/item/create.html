@@ -15,17 +15,19 @@
             {% bootstrap_field form.category layout="horizontal" %}
             {% bootstrap_field form.admission layout="horizontal" %}
         </fieldset>
-        <fieldset>
-            <legend>{% trans "Quota settings" %}</legend>
-            {% bootstrap_field form.quota_option layout="horizontal" %}
-            <div id="existing-quota-group">
-                {% bootstrap_field form.quota_add_existing layout="horizontal" %}
-            </div>
-            <div id="new-quota-group">
-                {% bootstrap_field form.quota_add_new_name layout="horizontal" %}
-                {% bootstrap_field form.quota_add_new_size layout="horizontal" %}
-            </div>
-        </fieldset>
+        {% if form.quota_option %}
+            <fieldset>
+                <legend>{% trans "Quota settings" %}</legend>
+                {% bootstrap_field form.quota_option layout="horizontal" %}
+                <div id="existing-quota-group">
+                    {% bootstrap_field form.quota_add_existing layout="horizontal" %}
+                </div>
+                <div id="new-quota-group">
+                    {% bootstrap_field form.quota_add_new_name layout="horizontal" %}
+                    {% bootstrap_field form.quota_add_new_size layout="horizontal" %}
+                </div>
+            </fieldset>
+        {% endif %}
         <fieldset>
             <legend>{% trans "Price settings" %}</legend>
             {% bootstrap_field form.default_price layout="horizontal" %}

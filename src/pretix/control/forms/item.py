@@ -145,39 +145,40 @@ class ItemCreateForm(I18nModelForm):
             required=False
         )
 
-        self.fields['quota_option'] = forms.ChoiceField(
-            label=_("Quota options"),
-            widget=forms.RadioSelect,
-            choices=(
-                (self.NONE, _("Do not add to a quota now")),
-                (self.EXISTING, _("Add product to an existing quota")),
-                (self.NEW, _("Create a new quota for this product"))
-            ),
-            initial=self.NONE,
-            required=False
-        )
+        if not self.event.has_subevents:
+            self.fields['quota_option'] = forms.ChoiceField(
+                label=_("Quota options"),
+                widget=forms.RadioSelect,
+                choices=(
+                    (self.NONE, _("Do not add to a quota now")),
+                    (self.EXISTING, _("Add product to an existing quota")),
+                    (self.NEW, _("Create a new quota for this product"))
+                ),
+                initial=self.NONE,
+                required=False
+            )
 
-        self.fields['quota_add_existing'] = forms.ModelChoiceField(
-            label=_("Add to existing quota"),
-            widget=forms.Select(),
-            queryset=self.instance.event.quotas.all(),
-            required=False
-        )
+            self.fields['quota_add_existing'] = forms.ModelChoiceField(
+                label=_("Add to existing quota"),
+                widget=forms.Select(),
+                queryset=self.instance.event.quotas.all(),
+                required=False
+            )
 
-        self.fields['quota_add_new_name'] = forms.CharField(
-            label=_("Name"),
-            max_length=200,
-            widget=forms.TextInput(attrs={'placeholder': _("New quota name")}),
-            required=False
-        )
+            self.fields['quota_add_new_name'] = forms.CharField(
+                label=_("Name"),
+                max_length=200,
+                widget=forms.TextInput(attrs={'placeholder': _("New quota name")}),
+                required=False
+            )
 
-        self.fields['quota_add_new_size'] = forms.IntegerField(
-            min_value=0,
-            label=_("Size"),
-            widget=forms.TextInput(attrs={'placeholder': _("New quota size")}),
-            help_text=_("Leave empty for an unlimited number of tickets."),
-            required=False
-        )
+            self.fields['quota_add_new_size'] = forms.IntegerField(
+                min_value=0,
+                label=_("Size"),
+                widget=forms.TextInput(attrs={'placeholder': _("New quota size")}),
+                help_text=_("Leave empty for an unlimited number of tickets."),
+                required=False
+            )
 
     def save(self, *args, **kwargs):
         if self.cleaned_data.get('copy_from'):
@@ -194,17 +195,18 @@ class ItemCreateForm(I18nModelForm):
 
         instance = super().save(*args, **kwargs)
 
-        if self.cleaned_data.get('quota_option') == self.EXISTING and self.cleaned_data.get('quota_add_existing') is not None:
-            quota = self.cleaned_data.get('quota_add_existing')
-            quota.items.add(self.instance)
-        elif self.cleaned_data.get('quota_option') == self.NEW:
-            quota_name = self.cleaned_data.get('quota_add_new_name')
-            quota_size = self.cleaned_data.get('quota_add_new_size')
+        if not self.event.has_subevents:
+            if self.cleaned_data.get('quota_option') == self.EXISTING and self.cleaned_data.get('quota_add_existing') is not None:
+                quota = self.cleaned_data.get('quota_add_existing')
+                quota.items.add(self.instance)
+            elif self.cleaned_data.get('quota_option') == self.NEW:
+                quota_name = self.cleaned_data.get('quota_add_new_name')
+                quota_size = self.cleaned_data.get('quota_add_new_size')
 
-            quota = Quota.objects.create(
-                event=self.event, name=quota_name, size=quota_size
-            )
-            quota.items.add(self.instance)
+                quota = Quota.objects.create(
+                    event=self.event, name=quota_name, size=quota_size
+                )
+                quota.items.add(self.instance)
 
         if self.cleaned_data.get('has_variations'):
             if self.cleaned_data.get('copy_from') and self.cleaned_data.get('copy_from').has_variations:
@@ -225,16 +227,17 @@ class ItemCreateForm(I18nModelForm):
     def clean(self):
         cleaned_data = super().clean()
 
-        if cleaned_data.get('quota_option') == self.NEW:
-            if not self.cleaned_data.get('quota_add_new_name'):
-                raise forms.ValidationError(
-                    {'quota_add_new_name': [_("Quota name is required.")]}
-                )
-        elif cleaned_data.get('quota_option') == self.EXISTING:
-            if not self.cleaned_data.get('quota_add_existing'):
-                raise forms.ValidationError(
-                    {'quota_add_existing': [_("Please select a quota.")]}
-                )
+        if not self.event.has_subevents:
+            if cleaned_data.get('quota_option') == self.NEW:
+                if not self.cleaned_data.get('quota_add_new_name'):
+                    raise forms.ValidationError(
+                        {'quota_add_new_name': [_("Quota name is required.")]}
+                    )
+            elif cleaned_data.get('quota_option') == self.EXISTING:
+                if not self.cleaned_data.get('quota_add_existing'):
+                    raise forms.ValidationError(
+                        {'quota_add_existing': [_("Please select a quota.")]}
+                    )
 
         return cleaned_data
 
