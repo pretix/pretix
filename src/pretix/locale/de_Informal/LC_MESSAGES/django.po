@@ -8117,7 +8117,7 @@ msgid ""
 "payment details. You will then be redirected back here to review and confirm "
 "your order."
 msgstr ""
-"Nach dem Klick auf „Weiter“ werden wir dich zu PayPal weiterleiten, um deine "
+"Nach dem Klick auf „Fortfahren“ werden wir dich zu PayPal weiterleiten, um deine "
 "Zahlungsdaten einzugeben. Du wirst danach wieder hierher zurückgeleitet, um "
 "deine Bestellung zu bestätigen."
 
@@ -8736,7 +8736,7 @@ msgid ""
 "provider to complete your payment. You will then be redirected back here to "
 "get your tickets."
 msgstr ""
-"Nach dem Klick auf „Weiter“ wirst du zum Zahlungsdienstleister "
+"Nach dem Klick auf „Fortfahren“ wirst du zum Zahlungsdienstleister "
 "weitergeleitet, um deine Zahlungsdaten einzugeben. Du wirst danach wieder "
 "hierher zurückgeleitet, um deine Bestellung zu bestätigen."
 
@@ -9190,7 +9190,7 @@ msgstr ""
 
 #: pretix/presale/forms/checkout.py:35
 msgid "E-mail address (repeated)"
-msgstr "E-Mail-Adresse (nochmal)"
+msgstr "E-Mail-Adresse wiederholen"
 
 #: pretix/presale/forms/checkout.py:36
 msgid ""
