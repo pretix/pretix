@@ -101,14 +101,7 @@
                 <fieldset>
                     <legend>{% trans "Item prices" %}</legend>
                     {% for f in itemvar_forms %}
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                {{ f.item }}{% if f.variation %} – {{ f.variation }}{% endif %}
-                            </div>
-                            <div class="col-xs-12 col-md-6">
-                                {% bootstrap_field f.price layout="inline" %}
-                            </div>
-                        </div>
+                        {% bootstrap_field f.price layout='horizontal' %}
                     {% endfor %}
                 </fieldset>
             </div>

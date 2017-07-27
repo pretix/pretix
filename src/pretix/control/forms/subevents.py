@@ -50,6 +50,7 @@ class SubEventItemForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
         self.fields['price'].widget.attrs['placeholder'] = '{} {}'.format(
             self.item.default_price, self.item.event.currency
         )
+        self.fields['price'].label = str(self.item.name)
 
     class Meta:
         model = SubEventItem
@@ -62,6 +63,7 @@ class SubEventItemVariationForm(SubEventItemOrVariationFormMixin, forms.ModelFor
         self.fields['price'].widget.attrs['placeholder'] = '{} {}'.format(
             self.variation.price, self.item.event.currency
         )
+        self.fields['price'].label = '{} – {}'.format(str(self.item.name), self.variation.value)
 
     class Meta:
         model = SubEventItem
