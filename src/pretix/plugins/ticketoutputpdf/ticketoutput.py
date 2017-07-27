@@ -70,6 +70,8 @@ class PdfTicketOutput(BaseTicketOutput):
             return order.code
         elif o['content'] == 'item':
             return str(op.item)
+        elif o['content'] == 'item_description':
+            return str(op.item.description)
         elif o['content'] == 'secret':
             return op.secret
         elif o['content'] == 'variation':

@@ -164,6 +164,7 @@ var editor = {
         "item": gettext("Sample product"),
         "variation": gettext("Sample variation"),
         "itemvar": gettext("Sample product – sample variation"),
+        "item_description": gettext("Sample product description"),
         "price": gettext("123.45 EUR"),
         "attendee_name": gettext("John Doe"),
         "event_name": gettext("Sample event name"),

@@ -85,7 +85,8 @@ class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView
 
         if "preview" in request.POST:
             with rolledback_transaction(), language(request.event.settings.locale):
-                item = request.event.items.create(name=_("Sample product"), default_price=42.23)
+                item = request.event.items.create(name=_("Sample product"), default_price=42.23,
+                                                  description=_("Sample product description"))
                 item2 = request.event.items.create(name=_("Sample workshop"), default_price=23.40)
 
                 from pretix.base.models import Order
