@@ -23,6 +23,11 @@
             {% bootstrap_field sform.organizer_homepage_text layout="horizontal" %}
             {% bootstrap_field sform.event_list_type layout="horizontal" %}
         </fieldset>
+        <fieldset>
+            <legend>{% trans "Other" %}</legend>
+            {% bootstrap_form_errors sform %}
+            {% bootstrap_field sform.organizer_info_text layout="horizontal" %}
+        </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}

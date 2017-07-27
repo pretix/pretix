@@ -119,6 +119,13 @@ class OrganizerSettingsForm(SettingsForm):
         help_text=_('This will be displayed on the organizer homepage.')
     )
 
+    organizer_info_text = I18nFormField(
+        label=_('Info text'),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_('Not displayed anywhere by default, but if you want to, you can use this e.g. in ticket templates.')
+    )
+
     organizer_logo_image = ExtFileField(
         label=_('Logo image'),
         ext_whitelist=(".png", ".jpg", ".svg", ".gif", ".jpeg"),

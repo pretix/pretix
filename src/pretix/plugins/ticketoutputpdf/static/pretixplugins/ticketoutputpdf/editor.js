@@ -175,6 +175,8 @@ var editor = {
         "event_begin": gettext("2017-05-31 20:00"),
         "event_admission": gettext("2017-05-31 19:00"),
         "event_location": gettext("Random City"),
+        "organizer": gettext("Event organizer company"),
+        "organizer_info_text": gettext("Event organizer info text"),
         "addons": gettext("Addon 1\nAddon 2"),
     },
 

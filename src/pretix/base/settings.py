@@ -415,6 +415,10 @@ Your {event} team"""))
         'default': '',
         'type': LazyI18nString
     },
+    'organizer_info_text': {
+        'default': '',
+        'type': LazyI18nString
+    },
     'update_check_ack': {
         'default': 'False',
         'type': bool
