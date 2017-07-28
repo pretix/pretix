@@ -4,6 +4,7 @@ import warnings
 from django.apps import apps
 from django.conf.urls import include, url
 
+from pretix.multidomain.plugin_handler import plugin_event_urls
 from pretix.presale.urls import (
     event_patterns, locale_patterns, organizer_patterns,
 )
@@ -22,9 +23,11 @@ for app in apps.get_app_configs():
         if importlib.util.find_spec(app.name + '.urls'):
             urlmod = importlib.import_module(app.name + '.urls')
             if hasattr(urlmod, 'event_patterns'):
+                patterns = plugin_event_urls(urlmod.event_patterns, plugin=app.name)
                 raw_plugin_patterns.append(
-                    url(r'^(?P<event>[^/]+)/', include((urlmod.event_patterns, app.label)))
+                    url(r'^(?P<event>[^/]+)/', include((patterns, app.label)))
                 )
+
         elif importlib.util.find_spec(app.name + '.subdomain_urls'):  # noqa
             warnings.warn('Please put your config in an \'urls\' module using the event_patterns '
                           'attribute. Support for subdomain_urls in plugins will be dropped in the future.',
