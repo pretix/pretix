@@ -57,6 +57,8 @@ def contextprocessor(request):
         ctx['languages'] = [get_language_info(code) for code in request.event.settings.locales]
 
     if hasattr(request, 'organizer'):
+        if request.organizer.settings.presale_css_file and not hasattr(request, 'event'):
+            ctx['css_file'] = default_storage.url(request.organizer.settings.presale_css_file)
         ctx['organizer_logo'] = request.organizer.settings.get('organizer_logo_image', as_type=str, default='')[7:]
         ctx['organizer_homepage_text'] = request.organizer.settings.get('organizer_homepage_text', as_type=LazyI18nString)
         ctx['organizer'] = request.organizer

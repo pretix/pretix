@@ -1,6 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 
@@ -118,6 +119,16 @@ class OrganizerSettingsForm(SettingsForm):
         label=_("Use languages"),
         widget=forms.CheckboxSelectMultiple,
         help_text=_('Choose all languages that your organizer homepage should be available in.')
+    )
+
+    organizer_primary_color = forms.CharField(
+        label=_("Primary color"),
+        required=False,
+        validators=[
+            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.'))
+        ],
+        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
     )
 
     organizer_homepage_text = I18nFormField(

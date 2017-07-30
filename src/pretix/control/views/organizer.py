@@ -24,6 +24,7 @@ from pretix.control.forms.organizer import (
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
 from pretix.control.signals import nav_organizer
 from pretix.helpers.urls import build_absolute_uri
+from pretix.presale.style import regenerate_organizer_css
 
 
 class OrganizerList(ListView):
@@ -135,6 +136,7 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
                 user=self.request.user,
                 data={k: form.cleaned_data.get(k) for k in form.changed_data}
             )
+        regenerate_organizer_css.apply_async(args=(self.request.organizer.pk,))
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
