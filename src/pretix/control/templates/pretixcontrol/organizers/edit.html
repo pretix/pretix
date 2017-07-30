@@ -20,6 +20,7 @@
             <legend>{% trans "Display settings" %}</legend>
             {% bootstrap_form_errors sform %}
             {% bootstrap_field sform.locales layout="horizontal" %}
+            {% bootstrap_field sform.organizer_primary_color layout="horizontal" %}
             {% bootstrap_field sform.organizer_logo_image layout="horizontal" %}
             {% bootstrap_field sform.organizer_homepage_text layout="horizontal" %}
             {% bootstrap_field sform.event_list_type layout="horizontal" %}
