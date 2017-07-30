@@ -1,5 +1,5 @@
 # Functional requirements
-Django>=1.11.*
+Django==1.11.*
 djangorestframework==3.6.*
 python-dateutil
 pytz
