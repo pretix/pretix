@@ -195,7 +195,7 @@ class ItemCreateForm(I18nModelForm):
 
         instance = super().save(*args, **kwargs)
 
-        if not self.event.has_subevents:
+        if not self.event.has_subevents and not self.cleaned_data.get('has_variations'):
             if self.cleaned_data.get('quota_option') == self.EXISTING and self.cleaned_data.get('quota_add_existing') is not None:
                 quota = self.cleaned_data.get('quota_add_existing')
                 quota.items.add(self.instance)

@@ -26,4 +26,11 @@ $(document).ready(function () {
       hideDeselected(true);
     }
   );
+
+  function toggleblock() {
+    $("#new-quota-group").closest('fieldset').toggle(!$("#id_has_variations").prop('checked'));
+  }
+
+  $("#id_has_variations").change(toggleblock);
+  toggleblock();
 });
