@@ -164,13 +164,8 @@ Django settings
 Example::
 
     [django]
-    hosts=localhost
     secret=j1kjps5a5&4ilpn912s7a1!e2h!duz^i3&idu@_907s$wrz@x-
     debug=off
-
-``hosts``
-    Comma-separated list of allowed host names for this installation.
-    Default: ``localhost``
 
 ``secret``
     The secret to be used by Django for signing and verification purposes. If this
