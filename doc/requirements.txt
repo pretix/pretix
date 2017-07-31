@@ -2,3 +2,4 @@
 sphinx
 sphinx-rtd-theme
 sphinxcontrib-httpdomain
+sphinxcontrib-images
