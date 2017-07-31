@@ -4,7 +4,8 @@ import tempfile
 
 tmpdir = tempfile.TemporaryDirectory()
 os.environ.setdefault('DATA_DIR', tmpdir.name)
-os.environ.setdefault('PRETIX_CONFIG_FILE', 'test/sqlite.cfg')
+if os.path.exists('test/sqlite.cfg'):
+    os.environ.setdefault('PRETIX_CONFIG_FILE', 'test/sqlite.cfg')
 
 from pretix.settings import *  # NOQA
 
