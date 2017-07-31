@@ -17,6 +17,7 @@ The easiest way to import payment data is to download a CSV file from your onlin
 export of some sort. You can go to "Import bank data" in pretix to upload a new file:
 
 .. image:: img/bank1.png
+   :class: screenshot
 
 If you upload a file for the first time, pretix will not know what information is contained in which column as every
 bank builds completely different CSV files. Therefore, pretix will ask you for that information. It will show you the

@@ -9,6 +9,7 @@ Dashboard. As you can see in the following screenshot, you will be presented wit
 and one for live payments. In each set, there is a secret and a publishable keys.
 
 .. image:: img/stripe1.png
+   :class: screenshot
 
 Choose one of the two sets and copy the two keys to the appropriate fields in pretix' settings. To perform actual
 payments, you will need to use the live keys, but you can use the test keys to test the payment flow before you go live.
@@ -21,6 +22,7 @@ that you are currently on. Then, click "Add endpoint" and enter the URL that you
 configuration in pretix' settings.
 
 .. image:: img/stripe2.png
+   :class: screenshot
 
 Again, you can choose between live mode and test mode here.
 

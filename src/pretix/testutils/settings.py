@@ -18,6 +18,7 @@ EMAIL_BACKEND = 'django.core.mail.outbox'
 
 COMPRESS_ENABLED = COMPRESS_OFFLINE = False
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+PRETIX_INSTANCE_NAME = 'pretix.eu'
 
 DEBUG = True
 DEBUG_PROPAGATE_EXCEPTIONS = True
