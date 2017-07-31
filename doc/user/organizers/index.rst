@@ -83,7 +83,27 @@ Permissions separate into two areas:
    * Can change organizer settings – This permission is required to perform changes to the settings of the organizer
      account, e.g. its name or display settings.
 
-* **Event permissions** allow actions on the level of an event. You can give the team access to all events
+* **Event permissions** allow actions on the level of an event. You can give the team access to all events of the
+  organizer (including future ones that are not yet created) or just a selected set of events. The specific permissions to choose from are:
+
+   * Can change event settings – This permission gives access to most areas of the control panel that are not controlled
+     by one of the other event permissions, especially those that are related to setting up and configuring the event.
+
+   * Can change product settings – This permission allows to create and modify products and objects that are closely
+     related to products, such as product categories, quotas, and questions.
+
+   * Can view orders – This permission allows viewing the list of orders and allindividual order details, but not
+     changing anything about it. This also includes the various exports offered.
+
+   * Can change orders – This permission allows all actions that involve changing an order, such as changing the products
+     in an order, marking an order as paid or refunden, importing banking data, etc. This only works properly if the
+     same users also have the "Can view orders" permission.
+
+   * Can view vouchers – This permission allows viewing the list of vouchers including the voucher codes themselves and
+     their redemption status.
+
+   * Can change vouchers – This permission allows to create and modify vouchers in all their details. It only works
+     properly if the same users also have the "Can view vouchers" permission.
 
 .. thumbnail:: ../../screens/organizer/team_edit.png
    :align: center
