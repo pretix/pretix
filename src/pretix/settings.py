@@ -14,7 +14,7 @@ from . import __version__
 
 config = configparser.RawConfigParser()
 if 'PRETIX_CONFIG_FILE' in os.environ:
-    config.read([os.environ.get('PRETIX_CONFIG_FILE')], encoding='utf-8')
+    config.read_file(open(os.environ.get('PRETIX_CONFIG_FILE'), encoding='utf-8'))
 else:
     config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
                 encoding='utf-8')
