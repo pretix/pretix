@@ -545,6 +545,11 @@ class Question(LoggedModel):
     question = I18nTextField(
         verbose_name=_("Question")
     )
+    help_text = I18nTextField(
+        verbose_name=_("Help text"),
+        help_text=_("If the question needs to be explained or clarified, do it here!"),
+        null=True, blank=True,
+    )
     type = models.CharField(
         max_length=5,
         choices=TYPE_CHOICES,

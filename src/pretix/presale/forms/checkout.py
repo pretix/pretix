@@ -216,22 +216,26 @@ class QuestionsForm(forms.Form):
 
                 field = forms.BooleanField(
                     label=q.question, required=q.required,
-                    initial=initialbool, widget=widget
+                    help_text=q.help_text,
+                    initial=initialbool, widget=widget,
                 )
             elif q.type == Question.TYPE_NUMBER:
                 field = forms.DecimalField(
                     label=q.question, required=q.required,
+                    help_text=q.help_text,
                     initial=initial.answer if initial else None,
                     min_value=Decimal('0.00')
                 )
             elif q.type == Question.TYPE_STRING:
                 field = forms.CharField(
                     label=q.question, required=q.required,
+                    help_text=q.help_text,
                     initial=initial.answer if initial else None,
                 )
             elif q.type == Question.TYPE_TEXT:
                 field = forms.CharField(
                     label=q.question, required=q.required,
+                    help_text=q.help_text,
                     widget=forms.Textarea,
                     initial=initial.answer if initial else None,
                 )
@@ -239,6 +243,7 @@ class QuestionsForm(forms.Form):
                 field = forms.ModelChoiceField(
                     queryset=q.options.all(),
                     label=q.question, required=q.required,
+                    help_text=q.help_text,
                     widget=forms.RadioSelect,
                     initial=initial.options.first() if initial else None,
                 )
@@ -246,12 +251,14 @@ class QuestionsForm(forms.Form):
                 field = forms.ModelMultipleChoiceField(
                     queryset=q.options.all(),
                     label=q.question, required=q.required,
+                    help_text=q.help_text,
                     widget=forms.CheckboxSelectMultiple,
                     initial=initial.options.all() if initial else None,
                 )
             elif q.type == Question.TYPE_FILE:
                 field = forms.FileField(
                     label=q.question, required=q.required,
+                    help_text=q.help_text,
                     initial=initial.file if initial else None,
                     widget=UploadedFileWidget(position=pos, event=event, answer=initial)
                 )

@@ -41,6 +41,7 @@ class QuestionForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'question',
+            'help_text',
             'type',
             'required',
             'items'
