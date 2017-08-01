@@ -7757,7 +7757,7 @@ msgstr "Verwendungszweck"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:18
 msgid "This order has been marked as paid via bank transfer manually."
-msgstr "Diese Bezahlung wurde manuell als per Banküberweisung bezahltmarkiert."
+msgstr "Diese Bezahlung wurde manuell als per Banküberweisung bezahlt markiert."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:22
 msgid ""
