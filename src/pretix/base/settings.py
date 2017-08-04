@@ -173,6 +173,10 @@ DEFAULTS = {
         'default': '48',
         'type': int
     },
+    'waiting_list_default_priority': {
+        'default': '10',
+        'type': int
+    },
     'ticket_download': {
         'default': 'False',
         'type': bool

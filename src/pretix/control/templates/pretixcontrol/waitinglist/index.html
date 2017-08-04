@@ -107,12 +107,18 @@
         <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
     </form>
     </p>
+    <p>
+        <a href="{% url "control:event.orders.reorder_priority" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default">
+            {% trans "Reorder Priority" %}
+        </a>
+    </p>
     <form method="post" action="">
         {% csrf_token %}
         <div class="table-responsive">
             <table class="table table-condensed table-hover">
                 <thead>
                 <tr>
+                    <th>{% trans "Priority" %}</th>    
                     <th>{% trans "User" %}</th>
                     <th>{% trans "Product" %}</th>
                     {% if request.event.has_subevents %}
@@ -127,6 +133,13 @@
                 <tbody>
                 {% for e in entries %}
                     <tr>
+                        <td>
+                            {% if e.priority is not None %}
+                                {{ e.priority }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
                         <td>{{ e.email }}</td>
                         <td>
                             {{ e.item }}

@@ -23,7 +23,7 @@ def env():
 
     for i in range(5):
         WaitingListEntry.objects.create(
-            event=event, item=item1, email='foo{}@bar.com'.format(i)
+            event=event, item=item1, email='foo{}@bar.com'.format(i), priority=i * 10,
         )
     v = Voucher.objects.create(item=item1, event=event, block_quota=True, redeemed=1)
     WaitingListEntry.objects.create(
@@ -91,3 +91,15 @@ def test_dashboard(client, env):
     w = waitinglist_widgets(env[0])
     assert '3' in w[0]['content']
     assert '6' in w[1]['content']
+
+
+@pytest.mark.django_db
+def test_list_priority(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+
+    response = client.get('/control/event/dummy/dummy/waitinglist/?status=w')
+    result = response.context['entries']
+    for wle in result:
+        assert wle.priority is not None
+    result_sorted_priority = sorted(result, key=lambda x: x.priority, reverse=True)
+    assert list(result) == result_sorted_priority

@@ -1,0 +1,70 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Reorder Priority" %}{% endblock %}
+
+{% block content %}
+	<h1>{% trans "Reorder Priority" %}</h1>
+	<div class="alert alert-info">
+		<ul>
+			<li>{% trans "Priority must be positive (>= 0)." %}</li>
+			<li>{% trans "Current default initial priority value:" %} <strong>{{ default_priority }}</strong>, {% trans "modify at" %} <a href="{% url "control:event.settings" organizer=request.event.organizer.slug event=request.event.slug %}">event setting page</a>.</li>
+		</ul>
+	</div>
+	<form method="post" action="">
+	{% csrf_token %}
+	    {{ formset.management_form }}
+	    {% include "pretixcontrol/pagination.html" %}
+	    <div class="table-responsive">
+	    	<table class="table table-condensed table-hover">
+	    		<thead>
+	    			<tr>
+	    				<th>{% trans "Priority" %}</th>    
+	                    <th>{% trans "User" %}</th>
+	                    <th>{% trans "Product" %}</th>
+	                    {% if request.event.has_subevents %}
+	                        <th>{% trans "Date" context "subevent" %}</th>
+	                    {% endif %}
+	                    <th>{% trans "On the list since" %}</th>
+	    			</tr>
+	    		</thead>
+	    		<tbody>
+	    			{% for entry, form in form_list %}
+				    	{{ form.id }}
+				    	<tr>
+				    		<td>
+				    			{{ form.priority }}
+				    		</td>
+				    		<td>
+				    			{{ entry.email }}
+				    		</td>
+				    		<td>
+				    			{{ entry.item }}
+				    			{% if entry.variation %}
+				    				- {{ entry.variation }}
+			    				{% endif %}
+				    		</td>
+				    		{% if request.event.has_subevents %}
+	                            <td>
+	                            	{{ entry.subevent.name }} – {{ entry.subevent.get_date_range_display }}
+	                            </td>
+	                        {% endif %}
+	                        <td>
+	                        	{{ entry.created|date:"SHORT_DATETIME_FORMAT" }}
+	                        </td>
+				    	</tr>
+					{% endfor %}
+	    		</tbody>
+	    	</table>
+	    </div>
+	    {% include "pretixcontrol/pagination.html" %}
+	    <div class="form-group submit-group">
+		    <a href="{% url "control:event.orders.waitinglist" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+	            {% trans "Cancel" %}
+	        </a>
+	        <button type="submit" class="btn btn-primary btn-save">
+	            {% trans "Save" %}
+	        </button>
+        </div>
+	</form>
+{% endblock %}
