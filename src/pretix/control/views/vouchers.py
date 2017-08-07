@@ -1,6 +1,6 @@
-import csv
 import io
 
+from defusedcsv import csv
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
