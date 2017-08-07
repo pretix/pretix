@@ -1,10 +1,10 @@
 from django import forms
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 from django.db.models.functions import Concat
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
-from pretix.base.models import Item, Order, Organizer, SubEvent
+from pretix.base.models import Invoice, Item, Order, Organizer, SubEvent
 from pretix.base.signals import register_payment_providers
 from pretix.control.utils.i18n import i18ncomp
 
@@ -53,7 +53,18 @@ class OrderFilterForm(FilterForm):
                         & Q(code__icontains=Order.normalize_code(u.split("-")[1])))
             else:
                 code = Q(code__icontains=Order.normalize_code(u))
-            qs = qs.annotate(inr=Concat('invoices__prefix', 'invoices__invoice_no'))
+
+            matching_invoice = Invoice.objects.filter(
+                order=OuterRef('pk'),
+            ).annotate(
+                inr=Concat('prefix', 'invoice_no')
+            ).filter(
+                Q(invoice_no__iexact=u)
+                | Q(invoice_no__iexact=u.zfill(5))
+                | Q(inr=u)
+            )
+
+            qs = qs.annotate(has_inv=Exists(matching_invoice))
             qs = qs.filter(
                 code
                 | Q(email__icontains=u)
@@ -61,9 +72,7 @@ class OrderFilterForm(FilterForm):
                 | Q(positions__attendee_email__icontains=u)
                 | Q(invoice_address__name__icontains=u)
                 | Q(invoice_address__company__icontains=u)
-                | Q(invoices__invoice_no=u)
-                | Q(invoices__invoice_no=u.zfill(5))
-                | Q(inr=u)
+                | Q(has_inv=True)
             )
 
         if fdata.get('status'):
