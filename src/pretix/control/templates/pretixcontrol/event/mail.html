@@ -42,6 +42,8 @@
                 {% blocktrans asvar title_order_custom_mail %}Order custom mail{% endblocktrans %}
                 {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="custom_mail" title=title_order_custom_mail items="mail_text_order_custom_mail" %}
 
+                {% blocktrans asvar title_download_tickets_reminder %}Reminder to download tickets{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="ticket_reminder" title=title_download_tickets_reminder items="mail_text_download_reminder" %}
             </div>
         </fieldset>
         <fieldset>

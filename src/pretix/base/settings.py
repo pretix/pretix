@@ -363,6 +363,21 @@ You can change your order details and view the status of your order at
 Best regards,
 Your {event} team"""))
     },
+    'mail_days_download_reminder': {
+        'type': int,
+        'default': None
+    },
+    'mail_text_download_reminder': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+you bought a ticket for {event}.
+
+This is to remind you that your ticket is ready for downloading!
+
+Best regards,
+Your {event} team"""))
+    },
     'smtp_use_custom': {
         'default': 'False',
         'type': bool
