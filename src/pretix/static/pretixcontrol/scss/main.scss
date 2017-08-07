@@ -395,3 +395,7 @@ body.loading #wrapper {
 .panel-title a[data-toggle="collapse"]:hover {
     background-color: #eeeeee;
 }
+
+.fa.disabled {
+    color: $text-muted;
+}
