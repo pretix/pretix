@@ -178,7 +178,7 @@ class VoucherForm(I18nModelForm):
                 return
             else:
                 avail = self.instance.quota.availability()
-        elif self.instance.item.has_variations and not self.instance.variation:
+        elif self.instance.item and self.instance.item.has_variations and not self.instance.variation:
             raise ValidationError(_('You can only block quota if you specify a specific product variation. '
                                     'Otherwise it might be unclear which quotas to block.'))
         elif self.instance.item and self.instance.variation:
