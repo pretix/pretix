@@ -41,3 +41,4 @@ chardet<3.1.0,>=3.0.2
 mt-940==3.2
 vobject==0.9.*
 pycountry
+defusedcsv>=1.0.1

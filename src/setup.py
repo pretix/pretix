@@ -102,7 +102,8 @@ setup(
         'mt-940==4.7',
         'django-i18nfield>=1.0.1',
         'vobject==0.9.*',
-        'pycountry'
+        'pycountry',
+        'defusedcsv'
     ],
     extras_require={
         'dev': [
