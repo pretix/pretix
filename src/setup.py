@@ -104,7 +104,8 @@ setup(
         'vobject==0.9.*',
         'pycountry',
         'django-countries',
-        'pyuca'
+        'pyuca',
+        'defusedcsv'
     ],
     extras_require={
         'dev': [

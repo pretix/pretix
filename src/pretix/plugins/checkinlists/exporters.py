@@ -1,7 +1,7 @@
-import csv
 import io
 from collections import OrderedDict
 
+from defusedcsv import csv
 from django import forms
 from django.db.models.functions import Coalesce
 from django.utils.translation import (

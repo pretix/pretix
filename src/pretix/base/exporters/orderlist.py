@@ -1,9 +1,9 @@
-import csv
 import io
 from collections import OrderedDict
 from decimal import Decimal
 
 import pytz
+from defusedcsv import csv
 from django import forms
 from django.db.models import Sum
 from django.dispatch import receiver

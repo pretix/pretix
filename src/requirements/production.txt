@@ -43,3 +43,4 @@ vobject==0.9.*
 pycountry
 django-countries
 pyuca  # for better sorting of country names in django-countries
+defusedcsv>=1.0.1
