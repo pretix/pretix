@@ -304,7 +304,7 @@ class RedeemView(EventViewMixin, TemplateView):
 
         self.subevent = None
         if request.event.has_subevents:
-            if 'subevent' in request.GET:
+            if request.GET.get('subevent'):
                 self.subevent = get_object_or_404(SubEvent, event=request.event, pk=request.GET.get('subevent'),
                                                   active=True)
 
