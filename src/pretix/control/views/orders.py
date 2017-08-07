@@ -20,7 +20,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, CachedTicket, Invoice, InvoiceAddress, Item, ItemVariation,
     LogEntry, Order, Quota, generate_position_secret, generate_secret,
-)
+    CachedCombinedTicket)
 from pretix.base.models.event import SubEvent
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
@@ -579,6 +579,7 @@ class OrderContactChange(OrderView):
                     op.secret = generate_position_secret()
                     op.save()
                 CachedTicket.objects.filter(order_position__order=self.order).delete()
+                CachedCombinedTicket.objects.filter(order=self.order).delete()
                 self.order.log_action('pretix.event.order.secret.changed', user=self.request.user)
 
             self.form.save()
