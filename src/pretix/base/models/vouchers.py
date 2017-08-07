@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import MinLengthValidator
 from django.db import models
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
@@ -92,6 +93,7 @@ class Voucher(LoggedModel):
         verbose_name=_("Voucher code"),
         max_length=255, default=generate_code,
         db_index=True,
+        validators=[MinLengthValidator(5)]
     )
     max_usages = models.PositiveIntegerField(
         verbose_name=_("Maximum usages"),

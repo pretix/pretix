@@ -205,6 +205,12 @@ class VoucherFormTest(SoupTest):
         v = Voucher.objects.latest('pk')
         assert v.block_quota
 
+    def test_create_short_code(self):
+        self._create_voucher({
+            'itemvar': '%d-%d' % (self.shirt.pk, self.shirt_red.pk),
+            'code': 'ABC'
+        }, expected_failure=True)
+
     def test_create_blocking_variation_voucher_quota_full(self):
         self.quota_shirts.size = 0
         self.quota_shirts.save()
