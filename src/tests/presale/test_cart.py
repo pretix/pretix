@@ -944,6 +944,18 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, Decimal('12.00'))
 
+    def test_voucher_price_negative(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('1337.00'), event=self.event, price_mode='subtract')
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, Decimal('0.00'))
+
     def test_voucher_price_percent(self):
         v = Voucher.objects.create(item=self.ticket, value=Decimal('10.00'), price_mode='percent', event=self.event)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {

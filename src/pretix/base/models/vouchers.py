@@ -251,7 +251,7 @@ class Voucher(LoggedModel):
             if self.price_mode == 'set':
                 return self.value
             elif self.price_mode == 'subtract':
-                return original_price - self.value
+                return max(original_price - self.value, Decimal('0.00'))
             elif self.price_mode == 'percent':
                 return round_decimal(original_price * (Decimal('100.00') - self.value) / Decimal('100.00'))
         return original_price
