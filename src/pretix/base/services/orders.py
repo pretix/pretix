@@ -530,27 +530,21 @@ def send_expiry_warnings(sender, **kwargs):
 
 @receiver(signal=periodic_task)
 def send_download_reminders(sender, **kwargs):
-    eventcache = {}
-    today = now().replace(hour=0, minute=0, second=0)
+    today = now().replace(hour=0, minute=0, second=0, microsecond=0)
 
     for e in Event.objects.filter(date_from__gte=today):
-        eventsettings = eventcache.get(e.pk, None)
-        if eventsettings is None:
-            eventsettings = e.settings
-            eventcache[e.pk] = eventsettings
-
-        days = eventsettings.get('mail_days_download_reminder', as_type=int)
-        if days is not None:
+        days = e.settings.get('mail_days_download_reminder', as_type=int)
+        if days is None:
             continue
 
-        reminder_date = (e.date_from - timedelta(days=days)).replace(hour=0, minute=0, second=0)
+        reminder_date = (e.date_from - timedelta(days=days)).replace(hour=0, minute=0, second=0, microsecond=0)
 
-        if (today > reminder_date):
+        if now() < reminder_date:
             continue
-        for o in e.orders.filter(status="paid", download_reminder_sent=False):
+        for o in e.orders.filter(status=Order.STATUS_PAID, download_reminder_sent=False):
             o.download_reminder_sent = True
             o.save()
-            email_template = eventsettings.mail_text_download_reminder
+            email_template = e.settings.mail_text_download_reminder
             email_context = {
                 'event': o.event.name,
                 'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={

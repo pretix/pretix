@@ -638,6 +638,13 @@ class MailSettingsForm(SettingsForm):
         help_text=_("Available placeholders: {event}, {url}"),
         validators=[PlaceholderValidator(['{event}', '{url}'])]
     )
+    mail_days_download_reminder = forms.IntegerField(
+        label=_("Number of days"),
+        required=False,
+        min_value=0,
+        help_text=_("This email will be sent out this many days before the order event starts. If the "
+                    "field is empty, the mail will never be sent.")
+    )
     smtp_use_custom = forms.BooleanField(
         label=_("Use custom SMTP server"),
         help_text=_("All mail related to your event will be sent over the smtp server specified by you."),

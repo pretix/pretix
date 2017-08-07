@@ -3,6 +3,7 @@ from decimal import Decimal
 
 import pytest
 import pytz
+from django.core import mail as djmail
 from django.test import TestCase
 from django.utils.timezone import make_aware, now
 
@@ -16,6 +17,7 @@ from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, expire_orders,
+    send_download_reminders,
 )
 
 
@@ -176,6 +178,55 @@ def test_expiring_auto_disabled(event):
     assert o1.status == Order.STATUS_PENDING
     o2 = Order.objects.get(id=o2.id)
     assert o2.status == Order.STATUS_PENDING
+
+
+class DownloadReminderTests(TestCase):
+    def setUp(self):
+        super().setUp()
+        o = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.event = Event.objects.create(
+            organizer=o, name='Dummy', slug='dummy',
+            date_from=now() + timedelta(days=2),
+            plugins='pretix.plugins.banktransfer'
+        )
+        self.order = Order.objects.create(
+            code='FOO', event=self.event, email='dummy@dummy.test',
+            status=Order.STATUS_PAID, locale='en',
+            datetime=now(),
+            expires=now() + timedelta(days=10),
+            total=Decimal('46.00'), payment_provider='banktransfer'
+        )
+        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket', tax_rate=Decimal('7.00'),
+                                          default_price=Decimal('23.00'), admission=True)
+        self.op1 = OrderPosition.objects.create(
+            order=self.order, item=self.ticket, variation=None,
+            price=Decimal("23.00"), attendee_name="Peter", positionid=1
+        )
+        djmail.outbox = []
+
+    def test_disabled(self):
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 0
+
+    def test_sent_once(self):
+        self.event.settings.mail_days_download_reminder = 2
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 1
+        assert djmail.outbox[0].to == ['dummy@dummy.test']
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 1
+
+    def test_sent_paid_only(self):
+        self.event.settings.mail_days_download_reminder = 2
+        self.order.status = Order.STATUS_PENDING
+        self.order.save()
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 0
+
+    def test_not_sent_too_early(self):
+        self.event.settings.mail_days_download_reminder = 1
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 0
 
 
 class OrderChangeManagerTests(TestCase):

@@ -373,7 +373,8 @@ Your {event} team"""))
 
 you bought a ticket for {event}.
 
-This is to remind you that your ticket is ready for downloading!
+If you did not do so already, you can download your ticket here:
+{url}
 
 Best regards,
 Your {event} team"""))
