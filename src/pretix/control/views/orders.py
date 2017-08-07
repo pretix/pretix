@@ -18,9 +18,10 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, CachedTicket, Invoice, InvoiceAddress, Item, ItemVariation,
-    LogEntry, Order, Quota, generate_position_secret, generate_secret,
-    CachedCombinedTicket)
+    CachedCombinedTicket, CachedFile, CachedTicket, Invoice, InvoiceAddress,
+    Item, ItemVariation, LogEntry, Order, Quota, generate_position_secret,
+    generate_secret,
+)
 from pretix.base.models.event import SubEvent
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
