@@ -1018,9 +1018,9 @@ class CheckoutTestCase(TestCase):
         self.workshopquota.size = 1
         self.workshopquota.subevent = se
         self.workshopquota.save()
-        self.workshop1.tax_rule = self.event.tax_rules.get_or_create(rate=Decimal('19.00'))[0]
+        self.workshop1.tax_rule = self.event.tax_rules.get_or_create(rate=Decimal('19.00'), name="VAT")[0]
         self.workshop1.save()
-        self.workshop2.tax_rule = self.event.tax_rules.get_or_create(rate=Decimal('19.00'))[0]
+        self.workshop2.tax_rule = self.event.tax_rules.get_or_create(rate=Decimal('19.00'), name="VAT")[0]
         self.workshop2.save()
         SubEventItem.objects.create(subevent=se, item=self.workshop1, price=42)
 

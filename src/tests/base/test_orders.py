@@ -198,7 +198,7 @@ class DownloadReminderTests(TestCase):
             expires=now() + timedelta(days=10),
             total=Decimal('46.00'), payment_provider='banktransfer'
         )
-        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket', tax_rate=Decimal('7.00'),
+        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                           default_price=Decimal('23.00'), admission=True)
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
