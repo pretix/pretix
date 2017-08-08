@@ -65,7 +65,7 @@ def tax_rate_converter(app, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('pretixbase', '0070_auto_20170719_0910'),
+        ('pretixbase', '0072_order_download_reminder_sent'),
     ]
 
     operations = [
