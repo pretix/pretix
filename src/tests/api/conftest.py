@@ -53,3 +53,8 @@ def subevent(event):
     event.save()
     return event.subevents.create(name="Foobar",
                                   date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+
+
+@pytest.fixture
+def taxrule(event):
+    return event.tax_rules.create(name="VAT", rate=19)

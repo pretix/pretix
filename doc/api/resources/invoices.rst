@@ -29,9 +29,18 @@ payment_provider_text                 string                     Text to be prin
 footer_text                           string                     Text to be printed in the page footer area
 lines                                 list of objects            The actual invoice contents
 ├ description                         string                     Text representing the invoice line (e.g. product name)
-├ gross_value                         money (string)             Price including VAT
-├ tax_value                           money (string)             VAT amount
-└ tax_rate                            decimal (string)           Used VAT rate
+├ gross_value                         money (string)             Price including taxes
+├ tax_value                           money (string)             Tax amount included
+├ tax_name                            string                     Name of used tax rate (e.g. "VAT")
+└ tax_rate                            decimal (string)           Used tax rate
+foreign_currency_display              string                     If the invoice should also show the total and tax
+                                                                 amount in a different currency, this contains the
+                                                                 currency code (``null`` otherwise).
+foreign_currency_rate                 decimal (string)           If ``foreign_currency_rate`` is set and the system
+                                                                 knows the exchange rate to the event currency at
+                                                                 invoicing time, it is stored here.
+foreign_currency_rate_date            date                       If ``foreign_currency_rate`` is set, this signifies the
+                                                                 date at which the currency rate was obtained.
 ===================================== ========================== =======================================================
 
 
@@ -40,6 +49,12 @@ lines                                 list of objects            The actual invo
    The attribute ``invoice_no`` has been dropped in favor of ``number`` which includes the number including the prefix,
    since the prefix can now vary. Also, invoices now need to be identified by their ``number`` instead of the raw
    number.
+
+
+.. versionchanged:: 1.7
+
+   The attributes ``lines.tax_name``, ``foreign_currency_display``, ``foreign_currency_rate``, and
+   ``foreign_currency_rate_date`` have been added.
 
 
 Endpoints
@@ -88,9 +103,13 @@ Endpoints
                 "description": "Budget Ticket",
                 "gross_value": "23.00",
                 "tax_value": "0.00",
+                "tax_name": "VAT",
                 "tax_rate": "0.00"
               }
-            ]
+            ],
+            "foreign_currency_display": "PLN",
+            "foreign_currency_rate": "4.2408",
+            "foreign_currency_rate_date": "2017-07-24"
           }
         ]
       }
@@ -147,9 +166,13 @@ Endpoints
             "description": "Budget Ticket",
             "gross_value": "23.00",
             "tax_value": "0.00",
+            "tax_name": "VAT",
             "tax_rate": "0.00"
           }
-        ]
+        ],
+        "foreign_currency_display": "PLN",
+        "foreign_currency_rate": "4.2408",
+        "foreign_currency_rate_date": "2017-07-24"
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch

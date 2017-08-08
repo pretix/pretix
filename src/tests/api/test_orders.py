@@ -54,6 +54,7 @@ TEST_ORDERPOSITION_RES = {
     "voucher": None,
     "tax_rate": "0.00",
     "tax_value": "0.00",
+    "tax_rule": None,
     "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
     "addon_to": None,
     "checkins": [],
@@ -74,17 +75,20 @@ TEST_ORDER_RES = {
     "payment_fee": "0.00",
     "payment_fee_tax_rate": "0.00",
     "payment_fee_tax_value": "0.00",
+    "payment_fee_tax_rule": None,
     "total": "23.00",
     "comment": "",
     "invoice_address": {
         "last_modified": "2017-12-01T10:00:00Z",
+        "is_business": False,
         "company": "Sample company",
         "name": "",
         "street": "",
         "zipcode": "",
         "city": "",
         "country": "NZ",
-        "vat_id": ""
+        "vat_id": "",
+        "vat_id_validated": False
     },
     "positions": [TEST_ORDERPOSITION_RES],
     "downloads": []
@@ -268,11 +272,15 @@ TEST_INVOICE_RES = {
     "additional_text": "",
     "payment_provider_text": "",
     "footer_text": "",
+    "foreign_currency_display": None,
+    "foreign_currency_rate": None,
+    "foreign_currency_rate_date": None,
     "lines": [
         {
             "description": "Budget Ticket",
             "gross_value": "23.00",
             "tax_value": "0.00",
+            "tax_name": "",
             "tax_rate": "0.00"
         }
     ]

@@ -27,19 +27,26 @@ expires                               datetime                   The order will 
 payment_date                          date                       Date of payment receival
 payment_provider                      string                     Payment provider used for this order
 payment_fee                           money (string)             Payment fee included in this order's total
-payment_fee_tax_rate                  decimal (string)           VAT rate applied to the payment fee
-payment_fee_tax_value                 money (string)             VAT value included in the payment fee
+payment_fee_tax_rate                  decimal (string)           Tax rate applied to the payment fee
+payment_fee_tax_value                 money (string)             Tax value included in the payment fee
+payment_fee_tax_rule                  integer                    The ID of the used tax rule (or ``null``)
 total                                 money (string)             Total value of this order
 comment                               string                     Internal comment on this order
 invoice_address                       object                     Invoice address information (can be ``null``)
 ├ last_modified                       datetime                   Last modification date of the address
 ├ company                             string                     Customer company name
+├ is_business                         boolean                    Business or individual customers (always ``False``
+                                                                 for orders created before pretix 1.7, do not rely on
+                                                                 it).
 ├ name                                string                     Customer name
 ├ street                              string                     Customer street
 ├ zipcode                             string                     Customer ZIP code
 ├ city                                string                     Customer city
 ├ country                             string                     Customer country
-└ vat_id                              string                     Customer VAT ID
+├ vat_id                              string                     Customer VAT ID
+└ vat_id_validated                    string                     ``True``, if the VAT ID has been validated against the
+                                                                 EU VAT service and validation was successful. This only
+                                                                 happens in rare cases.
 position                              list of objects            List of order positions (see below)
 downloads                             list of objects            List of ticket download options for order-wise ticket
                                                                  downloading. This might be a multi-page PDF or a ZIP
@@ -55,6 +62,11 @@ downloads                             list of objects            List of ticket 
 
    The ``invoice_address.country`` attribute contains a two-letter country code for all new orders. For old orders,
    a custom text might still be returned.
+
+.. versionchanged:: 1.7
+
+   The attributes ``payment_fee_tax_rule``, ``invoice_address.vat_id_validated`` and ``invoice_address.is_business``
+   have been added.
 
 
 Order position resource
@@ -76,6 +88,7 @@ attendee_email                        string                     Specified atten
 voucher                               integer                    Internal ID of the voucher used for this position (or ``null``)
 tax_rate                              decimal (string)           VAT rate applied for this position
 tax_value                             money (string)             VAT included in this position
+tax_rule                              integer                    The ID of the used tax rule (or ``null``)
 secret                                string                     Secret code printed on the tickets for validation
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
 subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``).
@@ -89,6 +102,10 @@ answers                               list of objects            Answers to user
 ├ answer                              string                     Text representation of the answer
 └ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
 ===================================== ========================== =======================================================
+
+.. versionchanged:: 1.7
+
+   The attribute ``tax_rule`` has been added.
 
 
 Order endpoints
@@ -132,17 +149,20 @@ Order endpoints
             "payment_fee": "0.00",
             "payment_fee_tax_rate": "0.00",
             "payment_fee_tax_value": "0.00",
+            "payment_fee_tax_rule": null,
             "total": "23.00",
             "comment": "",
             "invoice_address": {
                 "last_modified": "2017-12-01T10:00:00Z",
+                "is_business": True,
                 "company": "Sample company",
                 "name": "John Doe",
                 "street": "Test street 12",
                 "zipcode": "12345",
                 "city": "Testington",
                 "country": "Testikistan",
-                "vat_id": "EU123456789"
+                "vat_id": "EU123456789",
+                "vat_id_validated": False
             },
             "positions": [
               {
@@ -157,6 +177,7 @@ Order endpoints
                 "voucher": null,
                 "tax_rate": "0.00",
                 "tax_value": "0.00",
+                "tax_rule": null,
                 "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
                 "addon_to": null,
                 "subevent": null,
@@ -236,17 +257,20 @@ Order endpoints
         "payment_fee": "0.00",
         "payment_fee_tax_rate": "0.00",
         "payment_fee_tax_value": "0.00",
+        "payment_fee_tax_rule": null,
         "total": "23.00",
         "comment": "",
         "invoice_address": {
             "last_modified": "2017-12-01T10:00:00Z",
             "company": "Sample company",
+            "is_business": True,
             "name": "John Doe",
             "street": "Test street 12",
             "zipcode": "12345",
             "city": "Testington",
             "country": "Testikistan",
-            "vat_id": "EU123456789"
+            "vat_id": "EU123456789",
+            "vat_id_validated": False
         },
         "positions": [
           {
@@ -260,6 +284,7 @@ Order endpoints
             "attendee_email": null,
             "voucher": null,
             "tax_rate": "0.00",
+            "tax_rule": null,
             "tax_value": "0.00",
             "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             "addon_to": null,
@@ -379,6 +404,7 @@ Order position endpoints
             "attendee_email": null,
             "voucher": null,
             "tax_rate": "0.00",
+            "tax_rule": null,
             "tax_value": "0.00",
             "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             "addon_to": null,
@@ -457,6 +483,7 @@ Order position endpoints
         "attendee_email": null,
         "voucher": null,
         "tax_rate": "0.00",
+        "tax_rule": null,
         "tax_value": "0.00",
         "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
         "addon_to": null,

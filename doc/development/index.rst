@@ -10,6 +10,3 @@ Developer documentation
    implementation/index
    api/index
    structure
-
-.. TODO::
-   Document settings objects, ItemVariation objects, form fields.
