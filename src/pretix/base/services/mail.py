@@ -168,7 +168,7 @@ def render_mail(template, context):
         if context:
             body = body.format_map(TolerantDict(context))
         body_md = bleach.linkify(bleach.clean(markdown.markdown(body), tags=bleach.ALLOWED_TAGS + [
-            'p',
+            'p', 'pre'
         ]))
     else:
         tpl = get_template(template)

@@ -1,5 +1,5 @@
 import json
-import re
+import textwrap
 from collections import OrderedDict
 
 from django.template.loader import get_template
@@ -47,7 +47,7 @@ class BankTransfer(BasePaymentProvider):
         ctx = {
             'event': self.event,
             'order': order,
-            'details': re.sub('^', '    ', self.settings.get('bank_details', as_type=LazyI18nString), flags=re.MULTILINE),
+            'details': textwrap.indent(str(self.settings.get('bank_details', as_type=LazyI18nString)), '    '),
         }
         return template.render(ctx)
 
