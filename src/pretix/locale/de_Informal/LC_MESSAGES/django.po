@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-08 18:38+0000\n"
-"PO-Revision-Date: 2017-08-08 21:06+0200\n"
+"POT-Creation-Date: 2017-08-08 20:23+0000\n"
+"PO-Revision-Date: 2017-08-08 22:24+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -7731,7 +7731,7 @@ msgstr "Bekannte Domains"
 
 #: pretix/plugins/banktransfer/__init__.py:10
 #: pretix/plugins/banktransfer/__init__.py:13
-#: pretix/plugins/banktransfer/payment.py:14
+#: pretix/plugins/banktransfer/payment.py:15
 msgid "Bank transfer"
 msgstr "Banküberweisung"
 
@@ -7755,7 +7755,7 @@ msgid ""
 "Install the python package 'chardet' for better CSV import capabilities."
 msgstr "Installiere das Python-Paket 'chardet' für verbesserten CSV-Import."
 
-#: pretix/plugins/banktransfer/payment.py:19
+#: pretix/plugins/banktransfer/payment.py:20
 msgid "Bank account details"
 msgstr "Bankverbindung"
 
@@ -7842,20 +7842,16 @@ msgid ""
 "\n"
 "Please transfer the full amount to the following bank account.\n"
 "\n"
-"```\n"
-"Reference: %(code)s\n"
-"Amount: %(total)s %(currency)s\n"
+"    Reference: %(code)s\n"
+"    Amount: %(total)s %(currency)s\n"
 "%(bank)s\n"
-"```"
 msgstr ""
 "\n"
 "Bitte überweise den vollen Betrag auf das folgende Bankkonto:\n"
 "\n"
-"```\n"
-"Verwendungszweck: %(code)s\n"
-"Betrag: %(total)s %(currency)s\n"
+"    Verwendungszweck: %(code)s\n"
+"    Betrag: %(total)s %(currency)s\n"
 "%(bank)s\n"
-"```"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:4
 msgid ""
