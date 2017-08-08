@@ -17,10 +17,11 @@ from django.utils import translation
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views.generic import DeleteView, FormView, ListView
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
+from i18nfield.strings import LazyI18nString
 from pytz import timezone
 
 from pretix.base.models import (
@@ -813,6 +814,11 @@ class TaxCreate(EventPermissionRequiredMixin, CreateView):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
         })
+
+    def get_initial(self):
+        return {
+            'name': LazyI18nString.from_gettext(ugettext('VAT'))
+        }
 
     @transaction.atomic
     def form_valid(self, form):
