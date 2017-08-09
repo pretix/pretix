@@ -135,6 +135,8 @@ urlpatterns = [
         url(r'^orders/(?P<code>[0-9A-Z]+)/answer/(?P<answer>[^/]+)/$',
             orders.AnswerDownload.as_view(),
             name='event.order.download.answer'),
+        url(r'^orders/(?P<code>[0-9A-Z]+)/checkvatid', orders.OrderCheckVATID.as_view(),
+            name='event.order.checkvatid'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/extend$', orders.OrderExtend.as_view(),
             name='event.order.extend'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/contact$', orders.OrderContactChange.as_view(),

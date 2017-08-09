@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 import mimetypes
 import os
+=======
+import logging
+>>>>>>> 52404dae... Manually check VAT IDs
 from datetime import timedelta
 
 import pytz
+import vat_moss.id
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -25,6 +30,7 @@ from pretix.base.models import (
     generate_position_secret, generate_secret,
 )
 from pretix.base.models.event import SubEvent
+from pretix.base.models.tax import EU_COUNTRIES
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
@@ -47,6 +53,8 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.signals import question_form_fields
+
+logger = logging.getLogger(__name__)
 
 
 class OrderList(EventPermissionRequiredMixin, ListView):
@@ -274,6 +282,54 @@ class OrderInvoiceCreate(OrderView):
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])
+
+
+class OrderCheckVATID(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        try:
+            ia = self.order.invoice_address
+        except InvoiceAddress.DoesNotExist:
+            messages.error(self.request, _('No VAT ID specified.'))
+            return redirect(self.get_order_url())
+        else:
+            if not ia.vat_id:
+                messages.error(self.request, _('No VAT ID specified.'))
+                return redirect(self.get_order_url())
+
+            if not ia.country:
+                messages.error(self.request, _('No country specified.'))
+                return redirect(self.get_order_url())
+
+            if str(ia.country) not in EU_COUNTRIES:
+                messages.error(self.request, _('VAT ID could not be checked since a non-EU country has been '
+                                               'specified.'))
+                return redirect(self.get_order_url())
+
+            if ia.vat_id[:2] != str(ia.country):
+                messages.error(self.request, _('Your VAT ID does not match the selected country.'))
+                return redirect(self.get_order_url())
+
+            try:
+                result = vat_moss.id.validate(ia.vat_id)
+                if result:
+                    country_code, normalized_id, company_name = result
+                    ia.vat_id_validated = True
+                    ia.vat_id = normalized_id
+                    ia.save()
+            except vat_moss.errors.InvalidError:
+                messages.error(self.request, _('This VAT ID is not valid.'))
+            except vat_moss.errors.WebServiceUnavailableError:
+                logger.exception('VAT ID checking failed for country {}'.format(ia.country))
+                messages.error(self.request, _('The VAT ID could not be checked, as the VAT checking service of '
+                                               'the country is currently not available.'))
+            else:
+                messages.success(self.request, _('This VAT ID is valid.'))
+            return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):  # NOQA
         return HttpResponseNotAllowed(['POST'])
 
 

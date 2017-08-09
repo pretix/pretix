@@ -26,7 +26,7 @@ from pytz import timezone
 
 from pretix.base.models import (
     CachedTicket, Event, Item, ItemVariation, LogEntry, Order, OrderPosition,
-    Quota, RequiredAction, TaxRule, Voucher,
+    RequiredAction, TaxRule, Voucher,
 )
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
@@ -838,14 +838,14 @@ class TaxUpdate(EventPermissionRequiredMixin, UpdateView):
     form_class = TaxRuleForm
     template_name = 'pretixcontrol/event/tax_edit.html'
     permission = 'can_change_event_settings'
-    context_object_name = 'quota'
+    context_object_name = 'rule'
 
-    def get_object(self, queryset=None) -> Quota:
+    def get_object(self, queryset=None) -> TaxRule:
         try:
             return self.request.event.tax_rules.get(
                 id=self.kwargs['rule']
             )
-        except Quota.DoesNotExist:
+        except TaxRule.DoesNotExist:
             raise Http404(_("The requested tax rule does not exist."))
 
     @transaction.atomic
@@ -876,12 +876,12 @@ class TaxDelete(EventPermissionRequiredMixin, DeleteView):
     permission = 'can_change_event_settings'
     context_object_name = 'taxrule'
 
-    def get_object(self, queryset=None) -> Quota:
+    def get_object(self, queryset=None) -> TaxRule:
         try:
             return self.request.event.tax_rules.get(
                 id=self.kwargs['rule']
             )
-        except Quota.DoesNotExist:
+        except TaxRule.DoesNotExist:
             raise Http404(_("The requested tax rule does not exist."))
 
     @transaction.atomic

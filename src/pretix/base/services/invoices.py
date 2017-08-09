@@ -114,7 +114,6 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 tax_rate=p.tax_rate, tax_name=p.tax_rule.name if p.tax_rule else ''
             )
 
-            print(p.tax_rule, p.tax_rule.is_reverse_charge(ia), p.price, p.tax_value)
             if p.tax_rule and p.tax_rule.is_reverse_charge(ia) and p.price and not p.tax_value:
                 reverse_charge = True
 
