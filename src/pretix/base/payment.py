@@ -215,7 +215,7 @@ class BasePaymentProvider:
         required fields for you.
         """
         form = PaymentProviderForm(
-            data=(request.POST if request.method == 'POST' else None),
+            data=(request.POST if request.method == 'POST' and request.POST.get("payment") == self.identifier else None),
             prefix='payment_%s' % self.identifier,
             initial={
                 k.replace('payment_%s_' % self.identifier, ''): v
