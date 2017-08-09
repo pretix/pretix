@@ -131,6 +131,24 @@ class TaxRule(LoggedModel):
             rate=self.rate, name=self.name
         )
 
+    def is_reverse_charge(self, invoice_address):
+        if not self.eu_reverse_charge:
+            return False
+
+        if not invoice_address or not invoice_address.country:
+            return False
+
+        if str(invoice_address.country) not in EU_COUNTRIES:
+            return False
+
+        if invoice_address.country == self.home_country:
+            return False
+
+        if invoice_address.is_business and invoice_address.vat_id and invoice_address.vat_id_validated:
+            return True
+
+        return False
+
     def tax_applicable(self, invoice_address):
         if not self.eu_reverse_charge:
             # No reverse charge rules? Always apply VAT!

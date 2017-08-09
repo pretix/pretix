@@ -25,8 +25,8 @@ from i18nfield.strings import LazyI18nString
 from pytz import timezone
 
 from pretix.base.models import (
-    CachedTicket, Event, Item, ItemVariation, LogEntry, Order, Quota,
-    RequiredAction, TaxRule, Voucher,
+    CachedTicket, Event, Item, ItemVariation, LogEntry, Order, OrderPosition,
+    Quota, RequiredAction, TaxRule, Voucher,
 )
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
@@ -888,9 +888,12 @@ class TaxDelete(EventPermissionRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
-        self.object.log_action(action='pretix.event.taxrule.deleted', user=request.user)
-        self.object.delete()
-        messages.success(self.request, _('The selected tax rule has been deleted.'))
+        if self.is_allowed():
+            self.object.log_action(action='pretix.event.taxrule.deleted', user=request.user)
+            self.object.delete()
+            messages.success(self.request, _('The selected tax rule has been deleted.'))
+        else:
+            messages.error(self.request, _('The selected tax rule can not be deleted.'))
         return redirect(success_url)
 
     def get_success_url(self) -> str:
@@ -898,3 +901,16 @@ class TaxDelete(EventPermissionRequiredMixin, DeleteView):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
         })
+
+    def is_allowed(self) -> bool:
+        o = self.object
+        return (
+            not self.request.event.orders.filter(payment_fee_tax_rule=o).exists()
+            and not OrderPosition.objects.filter(tax_rule=0, order__event=self.request.event).exists()
+            and not self.request.event.items.filter(tax_rule=o).exists()
+        )
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        context['possible'] = self.is_allowed()
+        return context

@@ -47,6 +47,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
         invoice.payment_provider_text = str(payment).replace('\n', '<br />')
 
         try:
+            ia = invoice.order.invoice_address
             addr_template = pgettext("invoice", """{i.company}
 {i.name}
 {i.street}
@@ -82,6 +83,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
                         invoice.foreign_currency_rate_date = rates_date
 
         except InvoiceAddress.DoesNotExist:
+            ia = None
             invoice.invoice_to = ""
 
         invoice.file = None
@@ -89,10 +91,13 @@ def build_invoice(invoice: Invoice) -> Invoice:
         invoice.lines.all().delete()
 
         positions = list(
-            invoice.order.positions.select_related('addon_to', 'item', 'variation').annotate(
+            invoice.order.positions.select_related('addon_to', 'item', 'tax_rule', 'variation').annotate(
                 addon_c=Count('addons')
             )
         )
+
+        reverse_charge = False
+
         positions.sort(key=lambda p: p.sort_key)
         for p in positions:
             if not invoice.event.settings.invoice_include_free and p.price == Decimal('0.00') and not p.addon_c:
@@ -108,6 +113,20 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 gross_value=p.price, tax_value=p.tax_value,
                 tax_rate=p.tax_rate, tax_name=p.tax_rule.name if p.tax_rule else ''
             )
+
+            print(p.tax_rule, p.tax_rule.is_reverse_charge(ia), p.price, p.tax_value)
+            if p.tax_rule and p.tax_rule.is_reverse_charge(ia) and p.price and not p.tax_value:
+                reverse_charge = True
+
+        if reverse_charge:
+            if invoice.additional_text:
+                invoice.additional_text += "<br /><br />"
+            invoice.additional_text += pgettext(
+                "invoice",
+                "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/EEC, VAT liability "
+                "rests with the service recipient."
+            )
+            invoice.save()
 
         if invoice.order.payment_fee:
             InvoiceLine.objects.create(
