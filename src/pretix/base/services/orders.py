@@ -613,7 +613,7 @@ class OrderChangeManager:
         if self.order.event.settings.invoice_include_free or price.gross != Decimal('0.00') or position.price != Decimal('0.00'):
             self._invoice_dirty = True
 
-        self._totaldiff = price.gross - position.price
+        self._totaldiff += price.gross - position.price
         self._quotadiff.update(new_quotas)
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.ItemOperation(position, item, variation, price))
@@ -633,7 +633,7 @@ class OrderChangeManager:
         if self.order.event.settings.invoice_include_free or price.gross != Decimal('0.00') or position.price != Decimal('0.00'):
             self._invoice_dirty = True
 
-        self._totaldiff = price.gross - position.price
+        self._totaldiff += price.gross - position.price
         self._quotadiff.update(new_quotas)
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.SubeventOperation(position, subevent, price))
@@ -641,7 +641,7 @@ class OrderChangeManager:
     def change_price(self, position: OrderPosition, price: Decimal):
         price = position.item.tax(price)
 
-        self._totaldiff = price.gross - position.price
+        self._totaldiff += price.gross - position.price
 
         if self.order.event.settings.invoice_include_free or price.gross != Decimal('0.00') or position.price != Decimal('0.00'):
             self._invoice_dirty = True
@@ -661,15 +661,17 @@ class OrderChangeManager:
             if pos.tax_value and not charge_tax:
                 net_price = pos.price - pos.tax_value
                 price = TaxedPrice(gross=net_price, net=net_price, tax=Decimal('0.00'), rate=Decimal('0.00'), name='')
-                self._totaldiff = price.gross - pos.price
-                self._operations.append(self.PriceOperation(pos, price))
+                if price.gross != pos.price:
+                    self._totaldiff += price.gross - pos.price
+                    self._operations.append(self.PriceOperation(pos, price))
             elif charge_tax and not pos.tax_value:
                 price = pos.item.tax(pos.price, base_price_is='net')
-                self._totaldiff = price.gross - pos.price
-                self._operations.append(self.PriceOperation(pos, price))
+                if price.gross != pos.price:
+                    self._totaldiff += price.gross - pos.price
+                    self._operations.append(self.PriceOperation(pos, price))
 
     def cancel(self, position: OrderPosition):
-        self._totaldiff = -position.price
+        self._totaldiff += -position.price
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.CancelOperation(position))
 
@@ -704,7 +706,7 @@ class OrderChangeManager:
         if self.order.event.settings.invoice_include_free or price.gross != Decimal('0.00'):
             self._invoice_dirty = True
 
-        self._totaldiff = price.gross
+        self._totaldiff += price.gross
         self._quotadiff.update(new_quotas)
         self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent))
 

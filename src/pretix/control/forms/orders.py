@@ -68,6 +68,22 @@ class SubEventChoiceField(forms.ModelChoiceField):
                                         p, self.instance.order.event.currency)
 
 
+class OtherOperationsForm(forms.Form):
+    recalculate_taxes = forms.BooleanField(
+        label=_('Re-calculate taxes'),
+        required=False,
+        help_text=_(
+            'This operation re-checks if taxes should be paid to the items due to e.g. configured reverse charge rules '
+            'and changes the prices and tax values accordingly. This is useful e.g. after an invoice address change. '
+            'Use with care and only if you need to. Note that rounding differences might occur in this procedure.'
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('order')
+        super().__init__(*args, **kwargs)
+
+
 class OrderPositionAddForm(forms.Form):
     do = forms.BooleanField(
         label=_('Add a new product to the order'),

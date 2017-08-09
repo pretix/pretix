@@ -48,6 +48,7 @@ from pretix.control.forms.filter import EventOrderFilterForm
 from pretix.control.forms.orders import (
     CommentForm, ExporterForm, ExtendForm, OrderContactForm, OrderLocaleForm,
     OrderMailForm, OrderPositionAddForm, OrderPositionChangeForm,
+    OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.safedownload import check_token
@@ -515,6 +516,11 @@ class OrderChange(OrderView):
         return super().dispatch(request, *args, **kwargs)
 
     @cached_property
+    def other_form(self):
+        return OtherOperationsForm(prefix='other', order=self.order,
+                                   data=self.request.POST if self.request.method == "POST" else None)
+
+    @cached_property
     def add_form(self):
         return OrderPositionAddForm(prefix='add', order=self.order,
                                     data=self.request.POST if self.request.method == "POST" else None)
@@ -536,7 +542,16 @@ class OrderChange(OrderView):
         ctx = super().get_context_data(**kwargs)
         ctx['positions'] = self.positions
         ctx['add_form'] = self.add_form
+        ctx['other_form'] = self.other_form
         return ctx
+
+    def _process_other(self, ocm):
+        if not self.other_form.is_valid():
+            return False
+        else:
+            if self.other_form.cleaned_data['recalculate_taxes']:
+                ocm.recalculate_taxes()
+            return True
 
     def _process_add(self, ocm):
         if not self.add_form.is_valid():
@@ -595,7 +610,7 @@ class OrderChange(OrderView):
 
     def post(self, *args, **kwargs):
         ocm = OrderChangeManager(self.order, self.request.user)
-        form_valid = self._process_add(ocm) and self._process_change(ocm)
+        form_valid = self._process_add(ocm) and self._process_change(ocm) and self._process_other(ocm)
 
         if not form_valid:
             messages.error(self.request, _('An error occured. Please see the details below.'))
