@@ -28,6 +28,7 @@ var pretixstripe = {
         });
     },
     'load': function () {
+      $('.stripe-container').closest("form").find(".btn-primary").prop("disabled", true);
         $.ajax(
             {
                 url: 'https://js.stripe.com/v3/',
@@ -59,11 +60,13 @@ var pretixstripe = {
                         });
                         pretixstripe.card.mount("#stripe-card");
                     }
+                    $('.stripe-container').closest("form").find(".btn-primary").prop("disabled", false);
                 }
             }
         );
     },
     'load_checkout': function () {
+      $('.stripe-container').closest("form").find(".btn-primary").prop("disabled", true);
         $.ajax(
             {
                 url: 'https://checkout.stripe.com/checkout.js',
@@ -85,6 +88,7 @@ var pretixstripe = {
                         allowRememberMe: false,
                         billingAddress: false
                     });
+                    $('.stripe-container').closest("form").find(".btn-primary").prop("disabled", false);
                 }
             }
         );
@@ -106,21 +110,23 @@ var pretixstripe = {
     'checkout_handler': null
 };
 $(function () {
-    if (!$(".stripe-container").length) // Not on the checkout page
+    if (!$(".stripe-container, #stripe-checkout").length) // Not on the checkout page
         return;
 
     if ($("input[name=payment][value=stripe]").is(':checked') || $(".payment-redo-form").length) {
         if ($("#stripe-checkout").length) {
             pretixstripe.load_checkout();
+        } else {
+          pretixstripe.load();
         }
-        pretixstripe.load();
     } else {
         $("input[name=payment]").change(function () {
             if ($(this).val() === 'stripe') {
                 if ($("#stripe-checkout").length) {
                     pretixstripe.load_checkout();
+                } else {
+                    pretixstripe.load();
                 }
-                pretixstripe.load();
             }
         })
     }
