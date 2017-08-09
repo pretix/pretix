@@ -141,8 +141,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
 
 @app.task
 def mail_send_task(to: List[str], subject: str, body: str, html: str, sender: str,
-                   event: int=None, headers: dict=None) -> bool:
-    email = EmailMultiAlternatives(subject, body, sender, to=to, headers=headers)
+                   event: int=None, headers: dict=None, bcc: List[str]=None) -> bool:
+    email = EmailMultiAlternatives(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
         email.attach_alternative(inline_css(html), "text/html")
     if event:
