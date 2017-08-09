@@ -44,7 +44,7 @@ class ContactForm(forms.Form):
 
     def clean(self):
         if self.event.settings.order_email_asked_twice:
-            if self.cleaned_data['email'] != self.cleaned_data['email_repeat']:
+            if self.cleaned_data.get('email') != self.cleaned_data.get('email_repeat'):
                 raise ValidationError(_('Please enter the same email address twice.'))
 
 
@@ -112,7 +112,7 @@ class InvoiceAddressForm(forms.ModelForm):
 
     def clean(self):
         data = self.cleaned_data
-        if not data['name'] and not data['company'] and self.event.settings.invoice_address_required:
+        if not data.get('name') and not data.get('company') and self.event.settings.invoice_address_required:
             raise ValidationError(_('You need to provide either a company name or your name.'))
 
 
