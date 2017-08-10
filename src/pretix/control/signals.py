@@ -133,6 +133,17 @@ You will receive the default form class (or the class set by a previous plugin) 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+voucher_form_validation = EventPluginSignal(
+    providing_args=['form']
+)
+"""
+This signal allows you to add additional validation to the form that is used for
+creating and modifying vouchers. You will receive the form instance in the ``form``
+argument and the current data state in the ``data`` argument.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 quota_detail_html = EventPluginSignal(
     providing_args=['quota']
 )
