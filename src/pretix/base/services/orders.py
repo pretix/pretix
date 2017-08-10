@@ -237,7 +237,7 @@ def _check_date(event: Event, now_dt: datetime):
         raise OrderError(error_messages['ended'])
 
 
-def _check_positions(event: Event, now_dt: datetime, positions: List[CartPosition]):
+def _check_positions(event: Event, now_dt: datetime, positions: List[CartPosition], address: InvoiceAddress=None):
     err = None
     errargs = None
     _check_date(event, now_dt)
@@ -294,7 +294,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             continue
 
         price = get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent, custom_price_is_net=False,
-                          addon_to=cp.addon_to)
+                          addon_to=cp.addon_to, invoice_address=address)
 
         if price is False or len(quotas) == 0:
             err = err or error_messages['unavailable']
@@ -392,17 +392,14 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             meta_info=json.dumps(meta_info or {}),
         )
 
-        if address is not None:
-            try:
-                addr = InvoiceAddress.objects.get(
-                    pk=address
-                )
-                if addr.order is not None:
-                    addr.pk = None
-                addr.order = order
-                addr.save()
-            except InvoiceAddress.DoesNotExist:
-                pass
+        if address:
+            if address.order is not None:
+                address.pk = None
+            address.order = order
+            address.save()
+
+            order._calculate_tax()  # Might have changed due to new invoice address
+            order.save()
 
         OrderPosition.transform_cart_positions(positions, order)
         order.log_action('pretix.event.order.placed')
@@ -419,6 +416,13 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
     if not pprov:
         raise OrderError(error_messages['internal'])
 
+    addr = None
+    if address is not None:
+        try:
+            addr = InvoiceAddress.objects.get(pk=address)
+        except InvoiceAddress.DoesNotExist:
+            pass
+
     with event.lock() as now_dt:
         positions = list(CartPosition.objects.filter(
             id__in=position_ids).select_related('item', 'variation', 'subevent'))
@@ -426,9 +430,9 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
-        _check_positions(event, now_dt, positions)
+        _check_positions(event, now_dt, positions, address=addr)
         order = _create_order(event, email, positions, now_dt, pprov,
-                              locale=locale, address=address, meta_info=meta_info)
+                              locale=locale, address=addr, meta_info=meta_info)
 
     if event.settings.get('invoice_generate') == 'True' and invoice_qualified(order):
         if not order.invoices.exists():
@@ -594,6 +598,7 @@ class OrderChangeManager:
         self._quotadiff = Counter()
         self._operations = []
         self._invoice_dirty = False
+        self.keep_payment_fee_tax_status = True
 
     def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation]):
         if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
@@ -651,6 +656,7 @@ class OrderChangeManager:
     def recalculate_taxes(self):
         positions = self.order.positions.select_related('item', 'item__tax_rule')
         ia = self._invoice_address
+        self.keep_payment_fee_tax_status = False
         for pos in positions:
             if not pos.item.tax_rule:
                 continue
@@ -829,7 +835,7 @@ class OrderChangeManager:
                 payment_fee = prov.calculate_fee(self.order.total)
         self.order.payment_fee = payment_fee
         self.order.total += payment_fee
-        self.order._calculate_tax()
+        self.order._calculate_tax(keep_tax_status=self.keep_payment_fee_tax_status)
         self.order.save()
 
     def _reissue_invoice(self):

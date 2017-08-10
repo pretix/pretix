@@ -7,7 +7,7 @@ from django.db.models import Sum
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
-from pretix.base.models import CartPosition, OrderPosition
+from pretix.base.models import CartPosition, InvoiceAddress, OrderPosition
 from pretix.base.models.tax import TaxRule
 from pretix.presale.signals import question_form_fields
 
@@ -90,6 +90,7 @@ class CartMixin:
             group.total = group.count * group.price
             group.net_total = group.count * group.net_price
             group.has_questions = answers and k[0] != ""
+            group.tax_rule = group.item.tax_rule
             if answers:
                 group.cache_answers()
                 group.additional_answers = pos_additional_fields.get(group.pk)
@@ -108,12 +109,26 @@ class CartMixin:
             payment_fee_tax_rate = order.payment_fee_tax_rate
         else:
             payment_fee = self.get_payment_fee(total)
-            payment_fee_tax_rule = self.request.event.settings.tax_rate_default
-            payment_fee_tax = (payment_fee_tax_rule or TaxRule.zero()).tax(payment_fee, base_price_is='gross')
-            tax_total += payment_fee_tax.tax
-            net_total += payment_fee_tax.net
-            payment_fee_net = payment_fee_tax.net
-            payment_fee_tax_rate = payment_fee_tax.rate
+            payment_fee_tax_rule = self.request.event.settings.tax_rate_default or TaxRule.zero()
+
+            iapk = self.request.session.get('invoice_address_{}'.format(self.request.event.pk))
+            ia = None
+            if payment_fee_tax_rule.eu_reverse_charge and iapk:
+                try:
+                    ia = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                except InvoiceAddress.DoesNotExist:
+                    pass
+
+            if payment_fee_tax_rule.tax_applicable(ia):
+                payment_fee_tax = payment_fee_tax_rule.tax(payment_fee, base_price_is='gross')
+                tax_total += payment_fee_tax.tax
+                net_total += payment_fee_tax.net
+                payment_fee_net = payment_fee_tax.net
+                payment_fee_tax_rate = payment_fee_tax.rate
+            else:
+                net_total += payment_fee
+                payment_fee_net = payment_fee
+                payment_fee_tax_rate = Decimal('0.00')
 
         try:
             first_expiry = min(p.expires for p in positions) if positions else now()

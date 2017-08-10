@@ -228,7 +228,7 @@ class Order(LoggedModel):
             self._calculate_tax()
         super().save(*args, **kwargs)
 
-    def _calculate_tax(self):
+    def _calculate_tax(self, keep_tax_status=False):
         """
         Calculates the taxes on the payment fees and sets the parameters payment_fee_tax_rate
         and payment_fee_tax_value accordingly.
@@ -236,8 +236,23 @@ class Order(LoggedModel):
         if self.event.settings.tax_rate_default:
             tr = self.event.settings.tax_rate_default
             tax = tr.tax(self.payment_fee, base_price_is='gross')
-            self.payment_fee_tax_rate = tax.rate
-            self.payment_fee_tax_value = tax.tax
+            rate, tax = tax.rate, tax.tax
+
+            if keep_tax_status:
+                if not self.payment_fee_tax_value:
+                    rate = 0
+                    tax = 0
+            else:
+                try:
+                    ia = self.invoice_address
+                except InvoiceAddress.DoesNotExist:
+                    ia = None
+                if not tr.tax_applicable(ia):
+                    rate = 0
+                    tax = 0
+
+            self.payment_fee_tax_rate = rate
+            self.payment_fee_tax_value = tax
             self.payment_fee_tax_rule = tr
         else:
             self.payment_fee_tax_rate = Decimal('0.00')
