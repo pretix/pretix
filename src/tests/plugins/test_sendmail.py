@@ -213,3 +213,20 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order):
 
     assert response.status_code == 200
     assert 'Subevent FOO' in response.rendered_content
+
+
+@pytest.mark.django_db
+def test_sendmail_placeholder(logged_in_client, sendmail_url, event, order):
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'subject_0': '{code} Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      'action': 'preview'
+                                      },
+                                     follow=True)
+
+    assert response.status_code == 200
+    assert 'ORDER1234' in response.rendered_content
+
+    assert len(djmail.outbox) == 0
