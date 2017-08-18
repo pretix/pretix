@@ -14,7 +14,7 @@ Implementing a task
 A common pattern for implementing asynchronous tasks can be seen a lot in ``pretix.base.services``
 and looks like this::
 
-    from pretix.celery import app
+    from pretix.celery_app import app
 
     @app.task
     def my_task(argument1, argument2):
