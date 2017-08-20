@@ -98,7 +98,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             htmlctx['event'] = event
             htmlctx['color'] = event.settings.primary_color
 
-            if event.settings.mail_from == settings.DEFAULT_FROM_EMAIL and event.settings.contact_mail:
+            if event.settings.mail_from == settings.DEFAULT_FROM_EMAIL and event.settings.contact_mail and not headers.get('Reply-To'):
                 headers['Reply-To'] = event.settings.contact_mail
 
             prefix = event.settings.get('mail_prefix')
