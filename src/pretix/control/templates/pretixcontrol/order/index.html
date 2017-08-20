@@ -215,6 +215,10 @@
                                                         <a href="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}">
                                                             {{ q.answer.file_name }}
                                                         </a>
+                                                        <span class="label label-danger" data-toggle="tooltip"
+                                                            title="{% trans "This file has been uploaded by a user and could contain viruses or other malicious content." %}">
+                                                            {% trans "UNSAFE" %}
+                                                        </span>
                                                     {% else %}
                                                         {{ q.answer|linebreaksbr }}
                                                     {% endif %}
