@@ -612,7 +612,7 @@ class DisplaySettingsForm(SettingsForm):
     )
     logo_image = ExtFileField(
         label=_('Logo image'),
-        ext_whitelist=(".png", ".jpg", ".svg", ".gif", ".jpeg"),
+        ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
         required=False,
         help_text=_('If you provide a logo image, we will by default not show your events name and date '
                     'in the page header. We will show your logo with a maximal height of 120 pixels.')
