@@ -1,7 +1,9 @@
 import datetime
+import re
 from decimal import Decimal
 
 from bs4 import BeautifulSoup
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
 
@@ -418,3 +420,39 @@ class OrdersTest(TestCase):
         assert self.order.payment_fee == Decimal('12.00')
         assert self.order.total == Decimal('23.00') + self.order.payment_fee
         assert self.order.invoices.count() == 3
+
+    def test_answer_download_token(self):
+        q = self.event.questions.create(question="Foo", type="F")
+        q.items.add(self.ticket)
+        a = self.ticket_pos.answers.create(question=q, answer="file")
+        val = SimpleUploadedFile("testfile.txt", b"file_content")
+        a.file.save("testfile.txt", val)
+        a.save()
+
+        self.event.settings.set('ticket_download', True)
+        del self.event.settings['ticket_download_date']
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/answer/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                               self.order.secret, a.pk)
+        )
+        assert response.status_code == 404
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        match = re.search(r"\?token=([^'\"&]+)", response.rendered_content)
+        assert match
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/answer/%s/?token=%s' % (self.orga.slug, self.event.slug, self.order.code,
+                                                        self.order.secret, a.pk, match.group(1))
+        )
+        assert response.status_code == 200
+
+        client2 = self.client_class()
+        response = client2.get(
+            '/%s/%s/order/%s/%s/answer/%s/?token=%s' % (self.orga.slug, self.event.slug, self.order.code,
+                                                        self.order.secret, a.pk, match.group(1))
+        )
+        assert response.status_code == 404
