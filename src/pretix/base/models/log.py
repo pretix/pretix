@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -66,7 +67,7 @@ class LogEntry(models.Model):
                     'organizer': self.event.organizer.slug,
                     'code': co.code
                 }),
-                'val': co.code,
+                'val': escape(co.code),
             }
         elif isinstance(co, Voucher):
             a_text = _('Voucher {val}…')
@@ -76,7 +77,7 @@ class LogEntry(models.Model):
                     'organizer': self.event.organizer.slug,
                     'voucher': co.id
                 }),
-                'val': co.code[:6],
+                'val': escape(co.code[:6]),
             }
         elif isinstance(co, Item):
             a_text = _('Product {val}')
@@ -86,7 +87,7 @@ class LogEntry(models.Model):
                     'organizer': self.event.organizer.slug,
                     'item': co.id
                 }),
-                'val': co.name,
+                'val': escape(co.name),
             }
         elif isinstance(co, Quota):
             a_text = _('Quota {val}')
@@ -96,7 +97,7 @@ class LogEntry(models.Model):
                     'organizer': self.event.organizer.slug,
                     'quota': co.id
                 }),
-                'val': co.name,
+                'val': escape(co.name),
             }
         elif isinstance(co, ItemCategory):
             a_text = _('Category {val}')
@@ -106,7 +107,7 @@ class LogEntry(models.Model):
                     'organizer': self.event.organizer.slug,
                     'category': co.id
                 }),
-                'val': co.name,
+                'val': escape(co.name),
             }
         elif isinstance(co, Question):
             a_text = _('Question {val}')
@@ -116,7 +117,7 @@ class LogEntry(models.Model):
                     'organizer': self.event.organizer.slug,
                     'question': co.id
                 }),
-                'val': co.question,
+                'val': escape(co.question),
             }
 
         if a_text and a_map:
