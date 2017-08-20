@@ -1,3 +1,5 @@
+import mimetypes
+import os
 from datetime import timedelta
 
 import pytz
@@ -6,7 +8,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.http import FileResponse, Http404, HttpResponseNotAllowed
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -19,7 +21,8 @@ from i18nfield.strings import LazyI18nString
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, CachedTicket, Invoice, InvoiceAddress, Item, ItemVariation,
-    LogEntry, Order, Quota, generate_position_secret, generate_secret,
+    LogEntry, Order, QuestionAnswer, Quota, generate_position_secret,
+    generate_secret,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.services.export import export
@@ -41,6 +44,7 @@ from pretix.control.forms.orders import (
     OrderMailForm, OrderPositionAddForm, OrderPositionChangeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.signals import question_form_fields
 
@@ -737,6 +741,29 @@ class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
             action_type__contains="order.email"
         )
         return qs
+
+
+class AnswerDownload(EventPermissionRequiredMixin, OrderViewMixin, ListView):
+    permission = 'can_view_orders'
+
+    def get(self, request, *args, **kwargs):
+        answid = kwargs.get('answer')
+        token = request.GET.get('token', '')
+
+        answer = get_object_or_404(QuestionAnswer, orderposition__order=self.order, id=answid)
+        if not answer.file:
+            raise Http404()
+        if not check_token(request, answer, token):
+            raise Http404(_("This link is no longer valid. Please go back, refresh the page, and try again."))
+
+        ftype, ignored = mimetypes.guess_type(answer.file.name)
+        resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
+        resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}"'.format(
+            self.request.event.slug.upper(), self.order.code,
+            answer.orderposition.positionid,
+            os.path.basename(answer.file.name).split('.', 1)[1]
+        )
+        return resp
 
 
 class OverView(EventPermissionRequiredMixin, TemplateView):

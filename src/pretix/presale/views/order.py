@@ -22,6 +22,7 @@ from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,
 )
 from pretix.base.signals import register_ticket_outputs
+from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm
 from pretix.presale.views import CartMixin, EventViewMixin
@@ -502,11 +503,15 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
 class AnswerDownload(EventViewMixin, OrderDetailMixin, View):
     def get(self, request, *args, **kwargs):
         answid = kwargs.get('answer')
+        token = request.GET.get('token', '')
+
         answer = get_object_or_404(QuestionAnswer, orderposition__order=self.order, id=answid)
         if not answer.file:
-            return Http404()
+            raise Http404()
+        if not check_token(request, answer, token):
+            raise Http404(_("This link is no longer valid. Please go back, refresh the page, and try again."))
 
-        ftype, _ = mimetypes.guess_type(answer.file.name)
+        ftype, ignored = mimetypes.guess_type(answer.file.name)
         resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
         resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}"'.format(
             self.request.event.slug.upper(), self.order.code,

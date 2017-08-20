@@ -12,11 +12,10 @@ from django.db import models
 from django.db.models import F, Sum
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.encoding import escape_uri_path
 from django.utils.functional import cached_property
-from django.utils.html import escape
-from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_countries.fields import CountryField
@@ -487,7 +486,19 @@ class QuestionAnswer(models.Model):
     )
 
     @property
-    def file_link(self):
+    def backend_file_url(self):
+        if self.file:
+            if self.orderposition:
+                return reverse('control:event.order.download.answer', kwargs={
+                    'code': self.orderposition.order.code,
+                    'event': self.orderposition.order.event.slug,
+                    'organizer': self.orderposition.order.event.organizer.slug,
+                    'answer': self.pk,
+                })
+        return ""
+
+    @property
+    def frontend_file_url(self):
         from pretix.multidomain.urlreverse import eventreverse
 
         if self.file:
@@ -502,11 +513,12 @@ class QuestionAnswer(models.Model):
                     'answer': self.pk,
                 })
 
-            return mark_safe("<a href='{}'>{}</a>".format(
-                url,
-                escape(self.file.name.split('.', 1)[-1])
-            ))
+            return url
         return ""
+
+    @property
+    def file_name(self):
+        return self.file.name.split('.', 1)[-1]
 
     def __str__(self):
         if self.question.type == Question.TYPE_BOOLEAN and self.answer == "True":

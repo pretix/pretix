@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load eventurl %}
+{% load safelink %}
 {% block title %}
     {% blocktrans trimmed with code=order.code %}
         Order details: {{ code }}
@@ -210,7 +211,10 @@
                                             <dd>
                                                 {% if q.answer %}
                                                     {% if q.answer.file %}
-                                                        <span class="fa fa-file"></span> {{ q.answer.file_link }}
+                                                        <span class="fa fa-file"></span>
+                                                        <a href="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}">
+                                                            {{ q.answer.file_name }}
+                                                        </a>
                                                     {% else %}
                                                         {{ q.answer|linebreaksbr }}
                                                     {% endif %}
