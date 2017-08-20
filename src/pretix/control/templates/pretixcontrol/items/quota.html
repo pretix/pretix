@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load escapejson %}
 {% load eventsignal %}
 {% block title %}{% blocktrans with name=quota.name %}Quota: {{ name }}{% endblocktrans %}{% endblock %}
 {% block inside %}
@@ -20,7 +21,7 @@
             <div class="chart" id="quota_chart">
 
             </div>
-            <script type="application/json" id="quota-chart-data">{{ quota_chart_data|safe }}</script>
+            <script type="application/json" id="quota-chart-data">{{ quota_chart_data|escapejson }}</script>
         </div>
         <div class="col-md-5 col-xs-12">
             <legend>{% trans "Availability calculation" %}</legend>
