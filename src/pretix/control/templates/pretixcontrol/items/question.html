@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load escapejson %}
 {% load formset_tags %}
 {% block title %}{% blocktrans with name=question.question %}Question: {{ name }}{% endblocktrans %}{% endblock %}
 {% block inside %}
@@ -58,7 +59,7 @@
                 <div class="chart" id="question_chart" data-type="{{ question.type }}">
 
                 </div>
-                <script type="application/json" id="question-chart-data">{{ stats_json|safe }}</script>
+                <script type="application/json" id="question-chart-data">{{ stats_json|escapejson }}</script>
             </div>
             <div class="col-md-5 col-xs-12">
                 <table class="table table-bordered table-hover">

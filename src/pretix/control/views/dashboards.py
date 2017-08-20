@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.template.loader import get_template
 from django.utils import formats
 from django.utils.formats import date_format
+from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import (
@@ -136,7 +137,7 @@ def quota_widgets(sender, **kwargs):
         status, left = q.availability()
         widgets.append({
             'content': NUM_WIDGET.format(num='{}/{}'.format(left, q.size) if q.size is not None else '\u221e',
-                                         text=_('{quota} left').format(quota=q.name)),
+                                         text=_('{quota} left').format(quota=escape(q.name))),
             'display_size': 'small',
             'priority': 50,
             'url': reverse('control:event.items.quotas.show', kwargs={
@@ -258,7 +259,8 @@ def user_event_widgets(**kwargs):
     for event in events:
         widgets.append({
             'content': '<div class="event">{event}<span class="from">{df}</span><span class="to">{dt}</span></div>'.format(
-                event=event.name, df=date_format(event.date_from, 'SHORT_DATE_FORMAT') if event.date_from else '',
+                event=escape(event.name),
+                df=date_format(event.date_from, 'SHORT_DATE_FORMAT') if event.date_from else '',
                 dt=date_format(event.date_to, 'SHORT_DATE_FORMAT') if event.date_to else ''
             ),
             'display_size': 'small',
