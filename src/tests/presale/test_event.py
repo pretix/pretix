@@ -66,6 +66,18 @@ class EventMiddlewareTest(EventTestMixin, SoupTest):
 
 
 class ItemDisplayTest(EventTestMixin, SoupTest):
+    def test_link_rewrite(self):
+        q = Quota.objects.create(event=self.event, name='Quota', size=2)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                   description="http://example.org [Sample](http://example.net)")
+        q.items.add(item)
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
+
+        self.assertNotIn('href="http://example.org', html)
+        self.assertNotIn('href="http://example.net', html)
+        self.assertIn('href="/redirect/?url=http%3A//example.org%3A', html)
+        self.assertIn('href="/redirect/?url=http%3A//example.net%3A', html)
+
     def test_not_active(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=False)

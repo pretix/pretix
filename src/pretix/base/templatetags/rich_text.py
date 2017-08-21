@@ -1,6 +1,12 @@
+import urllib.parse
+
 import bleach
 import markdown
+from bleach import DEFAULT_CALLBACKS
 from django import template
+from django.core import signing
+from django.urls import reverse
+from django.utils.http import is_safe_url
 from django.utils.safestring import mark_safe
 
 register = template.Library()
@@ -42,6 +48,15 @@ ALLOWED_ATTRIBUTES = {
 }
 
 
+def safelink_callback(attrs, new=False):
+    url = attrs.get((None, 'href'), '/')
+    if not is_safe_url(url):
+        signer = signing.Signer(salt='safe-redirect')
+        attrs[None, 'href'] = reverse('redirect') + '?url=' + urllib.parse.quote(signer.sign(url))
+        attrs[None, 'target'] = '_blank'
+    return attrs
+
+
 @register.filter
 def rich_text(text: str, **kwargs):
     """
@@ -52,5 +67,5 @@ def rich_text(text: str, **kwargs):
         markdown.markdown(text),
         tags=ALLOWED_TAGS,
         attributes=ALLOWED_ATTRIBUTES,
-    ))
+    ), callbacks=DEFAULT_CALLBACKS + [safelink_callback])
     return mark_safe(body_md)
