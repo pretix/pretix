@@ -1,16 +1,19 @@
 import hashlib
 import logging
 import os
+from urllib.parse import urljoin, urlsplit
 
 import django_libsass
 import sass
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.templatetags.static import static as _static
 
 from pretix.base.models import Event
 from pretix.base.services.async import ProfiledTask
 from pretix.celery_app import app
+from pretix.multidomain.urlreverse import get_domain
 
 logger = logging.getLogger('pretix.presale.style')
 
@@ -25,10 +28,25 @@ def regenerate_css(event_id: int):
         sassrules.append('$brand-primary: {};'.format(event.settings.get('primary_color')))
     sassrules.append('@import "main.scss";')
 
+    def static(path):
+        sp = _static(path)
+        if not settings.MEDIA_URL.startswith("/") and sp.startswith("/"):
+            domain = get_domain(event.organizer)
+            if domain:
+                siteurlsplit = urlsplit(settings.SITE_URL)
+                if siteurlsplit.port and siteurlsplit.port not in (80, 443):
+                    domain = '%s:%d' % (domain, siteurlsplit.port)
+                sp = urljoin('%s://%s' % (siteurlsplit.scheme, domain), sp)
+            else:
+                sp = urljoin(settings.SITE_URL, sp)
+        return '"{}"'.format(sp)
+
+    cf = dict(django_libsass.CUSTOM_FUNCTIONS)
+    cf['static'] = static
     css = sass.compile(
         string="\n".join(sassrules),
         include_paths=[sassdir], output_style='compressed',
-        custom_functions=django_libsass.CUSTOM_FUNCTIONS
+        custom_functions=cf
     )
     checksum = hashlib.sha1(css.encode('utf-8')).hexdigest()
     fname = '{}/{}/presale.{}.css'.format(

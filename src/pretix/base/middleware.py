@@ -7,6 +7,7 @@ from django.core.urlresolvers import get_script_prefix
 from django.http import HttpRequest, HttpResponse
 from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
+from django.utils.crypto import get_random_string
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.utils.translation.trans_real import (
@@ -165,6 +166,9 @@ class SecurityMiddleware(MiddlewareMixin):
         '/api/v1/docs/',
     )
 
+    def process_request(self, request):
+        request.csp_nonce = get_random_string(length=32)
+
     def process_response(self, request, resp):
         if settings.DEBUG and resp.status_code >= 400:
             # Don't use CSP on debug error page as it breaks of Django's fancy error
@@ -179,9 +183,9 @@ class SecurityMiddleware(MiddlewareMixin):
             # frame-src is deprecated but kept for compatibility with CSP 1.0 browsers, e.g. Safari 9
             'frame-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
             'child-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
-            'style-src': ["{static}"],
+            'style-src': ["{static}", "'nonce-{nonce}'"],
             'connect-src': ["{dynamic}", "https://checkout.stripe.com"],
-            'img-src': ["{static}", "data:", "https://*.stripe.com"],
+            'img-src': ["{static}", "{media}", "data:", "https://*.stripe.com"],
             # form-action is not only used to match on form actions, but also on URLs
             # form-actions redirect to. In the context of e.g. payment providers or
             # single-sign-on this can be nearly anything so we cannot really restrict
@@ -193,6 +197,9 @@ class SecurityMiddleware(MiddlewareMixin):
 
         staticdomain = "'self'"
         dynamicdomain = "'self'"
+        mediadomain = "'self'"
+        if settings.MEDIA_URL.startswith('http'):
+            mediadomain += " " + settings.MEDIA_URL[:settings.MEDIA_URL.find('/', 9)]
         if settings.STATIC_URL.startswith('http'):
             staticdomain += " " + settings.STATIC_URL[:settings.STATIC_URL.find('/', 9)]
         if settings.SITE_URL.startswith('http'):
@@ -212,5 +219,6 @@ class SecurityMiddleware(MiddlewareMixin):
                 dynamicdomain += " " + domain
 
         if request.path not in self.CSP_EXEMPT:
-            resp['Content-Security-Policy'] = _render_csp(h).format(static=staticdomain, dynamic=dynamicdomain)
+            resp['Content-Security-Policy'] = _render_csp(h).format(static=staticdomain, dynamic=dynamicdomain,
+                                                                    media=mediadomain, nonce=request.csp_nonce)
         return resp
