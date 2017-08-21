@@ -22,11 +22,11 @@ $(function () {
                             $("<li>").append(
                                 $("<a>").attr("href", res.url).append(
                                     $("<div>").append(
-                                        $("<span>").addClass("event-name-full").append(res.name)
+                                        $("<span>").addClass("event-name-full").append($("<div>").text(res.name).html())
                                     ).append(
                                         $("<span>").addClass("event-organizer").append(
                                             $("<span>").addClass("fa fa-users fa-fw")
-                                        ).append(" ").append(res.organizer)
+                                        ).append(" ").append($("<div>").text(res.organizer).html())
                                     ).append(
                                         $("<span>").addClass("event-daterange").append(
                                             $("<span>").addClass("fa fa-calendar fa-fw")
