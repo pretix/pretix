@@ -775,6 +775,13 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
             'item': self.object.id,
         })
 
+    def get_initial(self):
+        initial = super().get_initial()
+        trs = list(self.request.event.tax_rules.all())
+        if len(trs) == 1:
+            initial['tax_rule'] = trs[0]
+        return initial
+
     @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))

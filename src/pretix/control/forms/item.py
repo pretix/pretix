@@ -139,6 +139,7 @@ class ItemCreateForm(I18nModelForm):
 
         self.fields['category'].queryset = self.instance.event.categories.all()
         self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
+        self.fields['tax_rule'].empty_label = _('No taxation')
         self.fields['copy_from'] = forms.ModelChoiceField(
             label=_("Copy product information"),
             queryset=self.event.items.all(),

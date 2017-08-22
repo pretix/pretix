@@ -58,6 +58,12 @@ class EventWizardBasicsForm(I18nModelForm):
         choices=settings.LANGUAGES,
         label=_("Default language"),
     )
+    tax_rate = forms.DecimalField(
+        label=_("Sales tax rate"),
+        help_text=_("Do you need to pay sales tax on your tickets? In this case, please enter the applicable tax rate "
+                    "here in percent. If you have a more complicated tax situation, you can add more tax rates and "
+                    "detailled configuration later.")
+    )
 
     class Meta:
         model = Event

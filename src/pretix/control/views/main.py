@@ -6,10 +6,11 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views import View
 from django.views.generic import ListView
 from formtools.wizard.views import SessionWizardView
+from i18nfield.strings import LazyI18nString
 
 from pretix.base.models import Event, Team
 from pretix.control.forms.event import (
@@ -116,6 +117,12 @@ class EventWizard(SessionWizardView):
                     presale_end=event.presale_end,
                     location=event.location,
                     active=True
+                )
+
+            if basics_data['tax_rate']:
+                event.settings.tax_rate_default = event.tax_rules.create(
+                    name=LazyI18nString.from_gettext(ugettext('VAT')),
+                    rate=basics_data['tax_rate']
                 )
 
             logdata = {}
