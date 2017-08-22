@@ -598,7 +598,6 @@ class OrderChangeManager:
         self._quotadiff = Counter()
         self._operations = []
         self._invoice_dirty = False
-        self.keep_payment_fee_tax_status = True
 
     def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation]):
         if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
@@ -656,7 +655,6 @@ class OrderChangeManager:
     def recalculate_taxes(self):
         positions = self.order.positions.select_related('item', 'item__tax_rule')
         ia = self._invoice_address
-        self.keep_payment_fee_tax_status = False
         for pos in positions:
             if not pos.item.tax_rule:
                 continue
@@ -835,7 +833,7 @@ class OrderChangeManager:
                 payment_fee = prov.calculate_fee(self.order.total)
         self.order.payment_fee = payment_fee
         self.order.total += payment_fee
-        self.order._calculate_tax(keep_tax_status=self.keep_payment_fee_tax_status)
+        self.order._calculate_tax()
         self.order.save()
 
     def _reissue_invoice(self):

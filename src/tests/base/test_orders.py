@@ -719,6 +719,16 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.invoices.count() == 1
 
     def test_recalculate_reverse_charge(self):
+        self.event.settings.set('tax_rate_default', self.tr19.pk)
+        prov = self.ocm._get_payment_provider()
+        prov.settings.set('_fee_abs', Decimal('0.30'))
+        self.ocm._recalculate_total_and_payment_fee()
+
+        assert self.order.total == Decimal('46.30')
+        assert self.order.payment_fee == prov.calculate_fee(self.order.total)
+        assert self.order.payment_fee_tax_rate == Decimal('19.00')
+        assert self.order.payment_fee_tax_value == Decimal('0.05')
+
         ia = self._enable_reverse_charge()
         self.ocm.recalculate_taxes()
         self.ocm.commit()
@@ -727,6 +737,11 @@ class OrderChangeManagerTests(TestCase):
             assert op.price == Decimal('21.50')
             assert op.tax_value == Decimal('0.00')
             assert op.tax_rate == Decimal('0.00')
+
+        assert self.order.total == Decimal('43.30')
+        assert self.order.payment_fee == prov.calculate_fee(self.order.total)
+        assert self.order.payment_fee_tax_rate == Decimal('0.00')
+        assert self.order.payment_fee_tax_value == Decimal('0.00')
 
         ia.vat_id_validated = False
         ia.save()
@@ -738,3 +753,8 @@ class OrderChangeManagerTests(TestCase):
             assert op.price == Decimal('23.01')   # sic. we can't really avoid it.
             assert op.tax_value == Decimal('1.51')
             assert op.tax_rate == Decimal('7.00')
+
+        assert self.order.total == Decimal('46.32')
+        assert self.order.payment_fee == prov.calculate_fee(self.order.total)
+        assert self.order.payment_fee_tax_rate == Decimal('19.00')
+        assert self.order.payment_fee_tax_value == Decimal('0.05')
