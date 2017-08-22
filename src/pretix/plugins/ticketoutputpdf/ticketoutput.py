@@ -49,9 +49,12 @@ class PdfTicketOutput(BaseTicketOutput):
 
         for family, styles in get_fonts().items():
             pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
-            pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
-            pdfmetrics.registerFont(TTFont(family + ' B', finders.find(styles['bold']['truetype'])))
-            pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
+            if 'italic' in styles:
+                pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
+            if 'bold' in styles:
+                pdfmetrics.registerFont(TTFont(family + ' B', finders.find(styles['bold']['truetype'])))
+            if 'bolditalic' in styles:
+                pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
 
     def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, o: dict):
         reqs = float(o['size']) * mm
