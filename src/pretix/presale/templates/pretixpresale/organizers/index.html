@@ -34,8 +34,7 @@
                 <tr>
                     <td><a href="{{ url }}">{{ e.name }}</a></td>
                     <td>
-                        {{ e.date_from|date:"DATE_FORMAT" }}
-                        {% if e.settings.show_date_to %} – {{ e.date_to|date:"DATE_FORMAT" }}{% endif %}
+                        {{ e.get_date_range_display }}
                     </td>
                     <td class="text-right">
                         <a class="btn btn-primary" href="{{ url }}">
