@@ -2976,10 +2976,10 @@ msgid ""
 "email address, not to the per-attendee addresses."
 msgstr ""
 "Üblicherweise fragt pretix nach einer E-Mail-Adresse pro Bestellung und "
-"sendet die Bestellbestätigung an diese Adresse. Wenn Sie diese Option "
-"aktivieren, fragt das System zusätzlich nach einzelnen E-Mail-Adressen für "
+"sendet die Bestellbestätigung an diese Adresse. Wenn du diese Option "
+"aktivierst, fragt das System zusätzlich nach einzelnen E-Mail-Adressen für "
 "jedes Zutritts-Ticket in der Bestellung. Dies könnte z.B. nützlich sein, "
-"wenn Sie auch im Falle von Gruppenbestellungen individuelle Adressen von "
+"wenn du auch im Falle von Gruppenbestellungen individuelle Adressen von "
 "jedem Teilnehmer benötigen. pretix sendet die Bestellbestätigung trotzdem "
 "nach wie vor nur an die primäre Adresse."
 
@@ -3778,7 +3778,7 @@ msgstr "Kontingentname ist erforderlich."
 
 #: pretix/control/forms/item.py:240
 msgid "Please select a quota."
-msgstr "Bitte wählen Sie ein Kontingent aus."
+msgstr "Bitte wähle ein Kontingent aus."
 
 #: pretix/control/forms/item.py:298
 #, python-format
@@ -5080,10 +5080,10 @@ msgstr ""
 "für übliche Zahlungsmethoden innerhalb der Europäischen Union verboten. "
 "Abhängig von der Zahlungsmethode kann dies nur für den Handel mit "
 "Verbrauchen oder auch für gewerbliche Kunden gelten. Abhängig von dem Staat, "
-"in dem Sie operieren, kann diese Gesetzgebung bereits in Kraft sein oder bis "
+"in dem du operierst, kann diese Gesetzgebung bereits in Kraft sein oder bis "
 "spätestens Januar 2018 in Kraft treten. Dieser Hinweis stellt keine "
-"Rechtsberatung dar. Im Zweifel kontaktieren Sie bitte einen Anwalt oder "
-"verzichten auf die Erhebung von Zahlungsmittelgebühren."
+"Rechtsberatung dar. Im Zweifel kontaktiere bitte einen Anwalt oder "
+"verzichte auf die Erhebung von Zahlungsmittelgebühren."
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:49
 msgid ""
@@ -5716,8 +5716,8 @@ msgid ""
 "dietary requirements."
 msgstr ""
 "Fragen erlauben deinen Besuchern, zusätzliche Informationen zu ihrem Ticket "
-"auszufüllen. Wenn deine  Veranstaltung Verpflegung beinhaltet, könntest du z."
-"B. nach Allergien Ihrer Teilnehmer fragen."
+"auszufüllen. Wenn deine Veranstaltung Verpflegung beinhaltet, könntest du z."
+"B. nach Allergien deiner Teilnehmer fragen."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:15
 msgid "You haven't created any questions yet."
@@ -6718,7 +6718,7 @@ msgid ""
 "Please confirm your password to continue with this operation. We'll remember "
 "your password for an hour or until you log out."
 msgstr ""
-"Bitte bestätige dein Ihr Passwort, um fortzufahren. Wir werden uns das "
+"Bitte bestätige dein dein Passwort, um fortzufahren. Wir werden uns das "
 "Passwort für eine Stunde oder bis zum nächsten Logout merken."
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:4
@@ -6946,7 +6946,7 @@ msgid ""
 msgstr ""
 "Du hast eingestellt, dass Gutscheine <strong>nicht</strong> an die Personen "
 "auf dieser Liste verschickt werden. Du kannst die Gutscheine entweder "
-"einzeln in der Reihenfolge Ihrer Wahl verschicken, indem du unten in der "
+"einzeln in der Reihenfolge deiner Wahl verschicken, indem du unten in der "
 "Tabelle die Buttons rechts in den Zeilen verwendest (wenn ausreichend "
 "Kontingent vorhanden ist) oder du kannst mit dem großen Button unter diesem "
 "Text so viele Gutscheine wie möglich an die Personen auf der Liste "
@@ -6967,7 +6967,7 @@ msgid ""
 "waiting list in, you could sell tickets worth an additional <strong>"
 "%(amount)s %(currency)s</strong>."
 msgstr ""
-"Wenn du Ihre Veranstaltung so vergrößern kannst, dass du allen Personen auf "
+"Wenn du deine Veranstaltung so vergrößern kannst, dass du allen Personen auf "
 "dieser Liste Tickets verkaufen könntest, würdest du zusätzliche <strong>"
 "%(amount)s %(currency)s</strong> einnehmen."
 
@@ -7616,7 +7616,7 @@ msgid ""
 "into your accont."
 msgstr ""
 "Bitte beachte, dass du die Zwei-Faktor-Authentifizierung noch mit dem unten "
-"verfügbaren Knopf für Ihr Konto aktiviert musst, damit der zweite Faktor für "
+"verfügbaren Knopf für dein Konto aktivieren musst, damit der zweite Faktor für "
 "den Login erforderlich ist."
 
 #: pretix/control/views/user.py:244 pretix/control/views/user.py:293
@@ -7657,8 +7657,8 @@ msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices."
 msgstr ""
-"Ihre Notfall-Tokens wurden neu generiert. Denken daran, diese an einem "
-"sicheren Ort aufzubewahlen, falls du Zugriff auf Ihre Geräte verlierst."
+"Deine Notfall-Tokens wurden neu generiert. Denken daran, diese an einem "
+"sicheren Ort aufzubewahlen, falls du Zugriff auf deine Geräte verlierst."
 
 #: pretix/control/views/vouchers.py:64
 msgid "Reserve quota"
@@ -8730,7 +8730,7 @@ msgid ""
 "Your payment is pending completion. We will inform you as soon as the "
 "payment completed."
 msgstr ""
-"Die Zahlung wurde noch nicht bestätigt. Wir informieren Sie, sobald die "
+"Die Zahlung wurde noch nicht bestätigt. Wir informieren dich, sobald die "
 "Bezahlung abgeschlossen ist."
 
 #: pretix/plugins/stripe/payment.py:225
@@ -9132,7 +9132,7 @@ msgid ""
 "You can upload a background PDF and then use this tool to place texts and a "
 "QR code on the ticket."
 msgstr ""
-"Dieser Editor erlaubt dir, ein Design für die PDF-Tickets zu Ihrer "
+"Dieser Editor erlaubt dir, ein Design für die PDF-Tickets zu deiner "
 "Veranstaltung zu erstellen. Du kannst eine PDF-Datei als Hintergrund "
 "hochladen und dann mit diesem Werkzeug Texte und einen QR-Code auf dem "
 "Hintergrund platzieren."
@@ -9158,7 +9158,7 @@ msgid ""
 msgstr ""
 "Dieser Editor wurde mit aktuellen Versionen von Google Chrome, Mozilla "
 "Firefox und Opera getestet. Andere Browser, besonders Internet Explorer oder "
-"Microsoft Edge, haben möglicherweise Probleme Ihr Hintergrund-PDF korrekt "
+"Microsoft Edge, haben möglicherweise Probleme dein Hintergrund-PDF korrekt "
 "darzustellen oder die richtigen Schriftarten zu laden."
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:120
@@ -9613,7 +9613,7 @@ msgstr "Antworten von oben kopieren"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:88
 msgid "Are you sure your email address is correct?"
-msgstr "Sind Sie sicher, dass Ihre E-Mail-Adresse korrekt ist?"
+msgstr "Bist du sicher, dass deine E-Mail-Adresse korrekt ist?"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:89
 #, python-format
@@ -9681,7 +9681,7 @@ msgstr "Zu anderem Termin wechseln"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:64
 msgid "Choose date to buy a ticket"
-msgstr "Wählen Sie einen Termin aus"
+msgstr "Wähle einen Termin aus"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:88
 msgid "The presale period for this event is over."
