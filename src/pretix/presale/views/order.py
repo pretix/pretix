@@ -102,7 +102,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         )
         ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
             self.request.event.settings.ticket_download_nonadm or
-            any([p.item.admission for p in ctx['cart']['positions']])
+            [p.item.admission for p in ctx['cart']['positions']].count(True) > 1
         )
         ctx['invoices'] = list(self.order.invoices.all())
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
