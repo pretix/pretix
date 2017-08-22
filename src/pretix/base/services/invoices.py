@@ -259,7 +259,7 @@ def build_preview_invoice_pdf(event):
 
 
 @receiver(signal=periodic_task)
-def expire_orders(sender, **kwargs):
+def fetch_ecb_rates(sender, **kwargs):
     if not settings.FETCH_ECB_RATES:
         return
 

@@ -2,16 +2,19 @@ import datetime
 import os
 from datetime import timedelta
 from decimal import Decimal
+from unittest import mock
 
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
+from django_countries.fields import Country
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    CartPosition, Event, Item, ItemCategory, Order, OrderPosition, Organizer,
-    Question, Quota, Voucher,
+    CartPosition, Event, InvoiceAddress, Item, ItemCategory, Order,
+    OrderPosition, Organizer, Question, Quota, Voucher,
 )
 from pretix.base.models.items import ItemAddOn, ItemVariation, SubEventItem
 
@@ -26,10 +29,12 @@ class CheckoutTestCase(TestCase):
             plugins='pretix.plugins.stripe,pretix.plugins.banktransfer',
             live=True
         )
+        self.tr19 = self.event.tax_rules.create(rate=19)
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=5)
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
-                                          category=self.category, default_price=23, admission=True)
+                                          category=self.category, default_price=23, admission=True,
+                                          tax_rule=self.tr19)
         self.quota_tickets.items.add(self.ticket)
         self.event.settings.set('attendee_names_asked', False)
         self.event.settings.set('payment_banktransfer__enabled', True)
@@ -50,6 +55,17 @@ class CheckoutTestCase(TestCase):
         self.workshopquota.items.add(self.workshop2)
         self.workshopquota.variations.add(self.workshop2a)
         self.workshopquota.variations.add(self.workshop2b)
+
+    def _enable_reverse_charge(self):
+        self.tr19.eu_reverse_charge = True
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        self._set_session('invoice_address_{}'.format(self.event.pk), ia.pk)
+        return ia
 
     def test_empty_cart(self):
         response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
@@ -111,6 +127,218 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(cr2.answers.filter(question=q1).count(), 1)
         self.assertEqual(cr1.answers.filter(question=q2).count(), 1)
         self.assertFalse(cr2.answers.filter(question=q2).exists())
+
+    def test_reverse_charge(self):
+        self.tr19.eu_reverse_charge = True
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        self.event.settings.invoice_address_vatid = True
+
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'AT',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost'
+            }, follow=True)
+
+        cr1.refresh_from_db()
+        assert cr1.price == round_decimal(Decimal('23.00') / Decimal('1.19'))
+
+        ia = InvoiceAddress.objects.get(pk=self.client.session.get('invoice_address_{}'.format(self.event.pk)))
+        assert ia.vat_id_validated
+
+    def test_reverse_charge_enable_then_disable(self):
+        self.test_reverse_charge()
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'individual',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'AT',
+                'vat_id': '',
+                'email': 'admin@localhost'
+            }, follow=True)
+
+        cr = CartPosition.objects.get(cart_id=self.session_key)
+        assert cr.price == Decimal('23.00')
+
+        ia = InvoiceAddress.objects.get(pk=self.client.session.get('invoice_address_{}'.format(self.event.pk)))
+        assert not ia.vat_id_validated
+
+    def test_reverse_charge_invalid_vatid(self):
+        self.tr19.eu_reverse_charge = True
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        self.event.settings.invoice_address_vatid = True
+
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            def raiser(*args, **kwargs):
+                import vat_moss.errors
+                raise vat_moss.errors.InvalidError()
+
+            mock_validate.side_effect = raiser
+            resp = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'AT',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost'
+            }, follow=True)
+            assert 'alert-danger' in resp.rendered_content
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('23.00')
+
+    def test_reverse_charge_vatid_non_eu(self):
+        self.tr19.eu_reverse_charge = True
+        self.tr19.home_country = Country('NO')
+        self.tr19.save()
+        self.event.settings.invoice_address_vatid = True
+
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            mock_validate.return_value = ('AU', 'AU123456', 'Foo')
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'AU',
+                'vat_id': 'AU123456',
+                'email': 'admin@localhost'
+            }, follow=True)
+
+        cr1.refresh_from_db()
+        assert cr1.price == round_decimal(Decimal('23.00') / Decimal('1.19'))
+
+        ia = InvoiceAddress.objects.get(pk=self.client.session.get('invoice_address_{}'.format(self.event.pk)))
+        assert not ia.vat_id_validated
+
+    def test_reverse_charge_vatid_same_country(self):
+        self.tr19.eu_reverse_charge = True
+        self.tr19.home_country = Country('AT')
+        self.tr19.save()
+        self.event.settings.invoice_address_vatid = True
+
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'AT',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost'
+            }, follow=True)
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('23.00')
+
+        ia = InvoiceAddress.objects.get(pk=self.client.session.get('invoice_address_{}'.format(self.event.pk)))
+        assert ia.vat_id_validated
+
+    def test_reverse_charge_vatid_check_invalid_country(self):
+        self.tr19.eu_reverse_charge = True
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        self.event.settings.invoice_address_vatid = True
+
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+            resp = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'FR',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost'
+            }, follow=True)
+            assert 'alert-danger' in resp.rendered_content
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('23.00')
+
+    def test_reverse_charge_vatid_check_unavailable(self):
+        self.tr19.eu_reverse_charge = True
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        self.event.settings.invoice_address_vatid = True
+
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            def raiser(*args, **kwargs):
+                import vat_moss.errors
+                raise vat_moss.errors.WebServiceUnavailableError('Fail')
+
+            mock_validate.side_effect = raiser
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'AT',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost'
+            }, follow=True)
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('23.00')
+
+        ia = InvoiceAddress.objects.get(pk=self.client.session.get('invoice_address_{}'.format(self.event.pk)))
+        assert not ia.vat_id_validated
 
     def test_question_file_upload(self):
         q1 = Question.objects.create(
@@ -425,6 +653,22 @@ class CheckoutTestCase(TestCase):
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
         self.assertEqual(OrderPosition.objects.filter(item=self.workshop1).last().price, 0)
+
+    def test_confirm_price_changed_reverse_charge(self):
+        self._enable_reverse_charge()
+        self.ticket.default_price = 24
+        self.ticket.save()
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        cr1 = CartPosition.objects.get(id=cr1.id)
+        self.assertEqual(cr1.price, round_decimal(Decimal('24.00') / Decimal('1.19')))
 
     def test_confirm_price_changed(self):
         self.ticket.default_price = 24

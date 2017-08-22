@@ -897,7 +897,7 @@ class TaxDelete(EventPermissionRequiredMixin, DeleteView):
         return redirect(success_url)
 
     def get_success_url(self) -> str:
-        return reverse('control:event.items.quotas', kwargs={
+        return reverse('control:event.settings.tax', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
         })
@@ -906,8 +906,9 @@ class TaxDelete(EventPermissionRequiredMixin, DeleteView):
         o = self.object
         return (
             not self.request.event.orders.filter(payment_fee_tax_rule=o).exists()
-            and not OrderPosition.objects.filter(tax_rule=0, order__event=self.request.event).exists()
+            and not OrderPosition.objects.filter(tax_rule=o, order__event=self.request.event).exists()
             and not self.request.event.items.filter(tax_rule=o).exists()
+            and self.request.event.settings.tax_rate_default != o
         )
 
     def get_context_data(self, *args, **kwargs) -> dict:

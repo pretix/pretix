@@ -236,6 +236,7 @@ def test_tax_reverse_charge_valid(item):
         is_business=True, vat_id="EU1234", vat_id_validated=True,
         country=Country('BE')
     )
+    assert item.tax_rule.is_reverse_charge(ia)
     assert get_price(item, invoice_address=ia).gross == Decimal('100.00')
 
 
@@ -250,6 +251,7 @@ def test_tax_reverse_charge_disabled(item):
         is_business=True, vat_id="EU1234", vat_id_validated=True,
         country=Country('BE')
     )
+    assert not item.tax_rule.is_reverse_charge(ia)
     assert get_price(item, invoice_address=ia).gross == Decimal('119.00')
 
 
@@ -263,6 +265,7 @@ def test_tax_reverse_charge_no_country(item):
     ia = InvoiceAddress(
         is_business=True, vat_id="EU1234", vat_id_validated=True,
     )
+    assert not item.tax_rule.is_reverse_charge(ia)
     assert get_price(item, invoice_address=ia).gross == Decimal('119.00')
 
 
@@ -276,6 +279,7 @@ def test_tax_reverse_charge_non_eu_country(item):
     ia = InvoiceAddress(
         country=Country('US')
     )
+    assert not item.tax_rule.is_reverse_charge(ia)
     assert get_price(item, invoice_address=ia).gross == Decimal('100.00')
 
 
@@ -290,6 +294,7 @@ def test_tax_reverse_charge_same_country(item):
         is_business=True, vat_id="EU1234", vat_id_validated=True,
         country=Country('DE')
     )
+    assert not item.tax_rule.is_reverse_charge(ia)
     assert get_price(item, invoice_address=ia).gross == Decimal('119.00')
 
 
@@ -303,6 +308,7 @@ def test_tax_reverse_charge_consumer(item):
     ia = InvoiceAddress(
         is_business=False, country=Country('BE')
     )
+    assert not item.tax_rule.is_reverse_charge(ia)
     assert get_price(item, invoice_address=ia).gross == Decimal('119.00')
 
 
@@ -317,4 +323,5 @@ def test_tax_reverse_charge_invalid_vat_id(item):
         is_business=True, vat_id="EU1234", vat_id_validated=False,
         country=Country('BE')
     )
+    assert not item.tax_rule.is_reverse_charge(ia)
     assert get_price(item, invoice_address=ia).gross == Decimal('119.00')
