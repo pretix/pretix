@@ -1,9 +1,6 @@
-<<<<<<< HEAD
+import logging
 import mimetypes
 import os
-=======
-import logging
->>>>>>> 52404dae... Manually check VAT IDs
 from datetime import timedelta
 
 import pytz
