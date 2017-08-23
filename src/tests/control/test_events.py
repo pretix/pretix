@@ -273,6 +273,7 @@ class EventsTest(SoupTest):
             'basics-location_0': 'Hamburg',
             'basics-location_1': 'Hamburg',
             'basics-currency': 'EUR',
+            'basics-tax_rate': '',
             'basics-locale': 'en',
             'basics-timezone': 'Europe/Berlin',
             'basics-presale_start': '2016-11-01 10:00:00',
@@ -297,6 +298,7 @@ class EventsTest(SoupTest):
             'basics-location_0': 'Hamburg',
             'basics-location_1': 'Hamburg',
             'basics-currency': 'EUR',
+            'basics-tax_rate': '',
             'basics-locale': 'en',
             'basics-timezone': 'Europe/Berlin',
             'basics-presale_start': '2016-11-01 10:00:00',
@@ -328,6 +330,7 @@ class EventsTest(SoupTest):
             'basics-location_0': 'Hamburg',
             'basics-location_1': 'Hamburg',
             'basics-currency': 'EUR',
+            'basics-tax_rate': '19.00',
             'basics-locale': 'en',
             'basics-timezone': 'Europe/Berlin',
             'basics-presale_start': '2016-11-01 10:00:00',
@@ -357,6 +360,8 @@ class EventsTest(SoupTest):
         assert ev.presale_start == berlin_tz.localize(datetime.datetime(2016, 11, 1, 10, 0, 0)).astimezone(pytz.utc)
         assert ev.presale_end == berlin_tz.localize(datetime.datetime(2016, 11, 30, 18, 0, 0)).astimezone(pytz.utc)
 
+        assert ev.tax_rules.filter(rate=Decimal('19.00')).exists()
+
     def test_create_event_with_subevents_success(self):
         doc = self.get_doc('/control/events/add')
         tabletext = doc.select("form")[0].text
@@ -379,6 +384,7 @@ class EventsTest(SoupTest):
             'basics-location_0': 'Hamburg',
             'basics-location_1': 'Hamburg',
             'basics-currency': 'EUR',
+            'basics-tax_rate': '',
             'basics-locale': 'en',
             'basics-timezone': 'Europe/Berlin',
             'basics-presale_start': '2016-11-01 10:00:00',
@@ -407,6 +413,7 @@ class EventsTest(SoupTest):
             'basics-date_to': '',
             'basics-location_0': 'Hamburg',
             'basics-currency': 'EUR',
+            'basics-tax_rate': '',
             'basics-locale': 'en',
             'basics-timezone': 'UTC',
             'basics-presale_start': '',
@@ -446,6 +453,7 @@ class EventsTest(SoupTest):
             'basics-date_to': '2016-12-30 19:00:00',
             'basics-location_0': 'Hamburg',
             'basics-currency': 'EUR',
+            'basics-tax_rate': '',
             'basics-locale': 'en',
             'basics-timezone': 'Europe/Berlin',
             'basics-presale_start': '2016-11-20 11:00:00',
@@ -468,6 +476,7 @@ class EventsTest(SoupTest):
             'basics-date_to': '2016-12-30 19:00:00',
             'basics-location_0': 'Hamburg',
             'basics-currency': '$',
+            'basics-tax_rate': '',
             'basics-locale': 'en',
             'basics-timezone': 'Europe/Berlin',
             'basics-presale_start': '2016-11-01 10:00:00',
@@ -490,6 +499,7 @@ class EventsTest(SoupTest):
             'basics-date_to': '2016-12-30 19:00:00',
             'basics-location_0': 'Hamburg',
             'basics-currency': 'ASD',
+            'basics-tax_rate': '',
             'basics-locale': 'en',
             'basics-timezone': 'Europe/Berlin',
             'basics-presale_start': '2016-11-01 10:00:00',
