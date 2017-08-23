@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import django.db.models.deletion
 import django_countries.fields
 import i18nfield.fields
+from django.core.cache import cache
 from django.db import migrations, models
 from i18nfield.strings import LazyI18nString
 
@@ -61,6 +62,7 @@ def tax_rate_converter(app, schema_editor):
             tr = setting.object.tax_rules.create(rate=setting.value, name=n)
         setting.value = tr.pk
         setting.save()
+        cache.delete('hierarkey_{}_{}'.format('event', setting.object.pk))
 
 
 class Migration(migrations.Migration):
