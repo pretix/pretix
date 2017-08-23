@@ -56,9 +56,9 @@ def tax_rate_converter(app, schema_editor):
 
     for setting in EventSettingsStore.objects.filter(key='tax_rate_default'):
         try:
-            tr = i.event.tax_rules.get(rate=setting.value)
+            tr = setting.object.tax_rules.get(rate=setting.value)
         except TaxRule.DoesNotExist:
-            tr = i.event.tax_rules.create(rate=setting.value, name=n)
+            tr = setting.object.tax_rules.create(rate=setting.value, name=n)
         setting.value = tr.pk
         setting.save()
 
