@@ -189,7 +189,7 @@ class Event(EventMixin, LoggedModel):
     )
     live = models.BooleanField(default=False, verbose_name=_("Shop is live"))
     currency = models.CharField(max_length=10,
-                                verbose_name=_("Default currency"),
+                                verbose_name=_("Event currency"),
                                 choices=CURRENCY_CHOICES,
                                 default=settings.DEFAULT_CURRENCY)
     date_from = models.DateTimeField(verbose_name=_("Event start time"))
