@@ -215,8 +215,9 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.event.settings.display_net_prices = True
         se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        tr = self.event.tax_rules.get_or_create(rate=Decimal('19.00'))[0]
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=15,
-                                   tax_rate=19)
+                                   tax_rule=tr)
         q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
         q.items.add(item)
         q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se2)
@@ -463,7 +464,7 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         self.event.settings.display_net_prices = True
         self.event.has_subevents = True
         self.event.save()
-        self.item.tax_rate = 19
+        self.item.tax_rule = self.event.tax_rules.get_or_create(rate=Decimal('19.00'))[0]
         self.item.save()
         se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
         q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)

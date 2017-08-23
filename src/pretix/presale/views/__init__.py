@@ -7,8 +7,8 @@ from django.db.models import Sum
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
-from pretix.base.decimal import round_decimal
-from pretix.base.models import CartPosition, OrderPosition
+from pretix.base.models import CartPosition, InvoiceAddress, OrderPosition
+from pretix.base.models.tax import TaxRule
 from pretix.presale.signals import question_form_fields
 
 
@@ -20,7 +20,7 @@ class CartMixin:
         """
         return list(get_cart(self.request))
 
-    def get_cart(self, answers=False, queryset=None, payment_fee=None, payment_fee_tax_rate=None, downloads=False):
+    def get_cart(self, answers=False, queryset=None, order=None, downloads=False):
         if queryset:
             prefetch = []
             if answers:
@@ -90,6 +90,7 @@ class CartMixin:
             group.total = group.count * group.price
             group.net_total = group.count * group.net_price
             group.has_questions = answers and k[0] != ""
+            group.tax_rule = group.item.tax_rule
             if answers:
                 group.cache_answers()
                 group.additional_answers = pos_additional_fields.get(group.pk)
@@ -99,14 +100,35 @@ class CartMixin:
         net_total = sum(p.net_total for p in positions)
         tax_total = sum(p.total - p.net_total for p in positions)
 
-        payment_fee = payment_fee if payment_fee is not None else self.get_payment_fee(total)
-        payment_fee_tax_rate = round_decimal(payment_fee_tax_rate
-                                             if payment_fee_tax_rate is not None
-                                             else self.request.event.settings.tax_rate_default)
-        payment_fee_tax_value = round_decimal(payment_fee * (1 - 100 / (100 + payment_fee_tax_rate)))
-        payment_fee_net = payment_fee - payment_fee_tax_value
-        tax_total += payment_fee_tax_value
-        net_total += payment_fee_net
+        if order:
+            payment_fee = order.payment_fee
+            tax_total += order.payment_fee_tax_value
+            payment_fee_net = order.payment_fee - order.payment_fee_tax_value
+            net_total += payment_fee_net
+            payment_fee_tax_rule = order.payment_fee_tax_rule
+            payment_fee_tax_rate = order.payment_fee_tax_rate
+        else:
+            payment_fee = self.get_payment_fee(total)
+            payment_fee_tax_rule = self.request.event.settings.tax_rate_default or TaxRule.zero()
+
+            iapk = self.request.session.get('invoice_address_{}'.format(self.request.event.pk))
+            ia = None
+            if payment_fee_tax_rule.eu_reverse_charge and iapk:
+                try:
+                    ia = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                except InvoiceAddress.DoesNotExist:
+                    pass
+
+            if payment_fee_tax_rule.tax_applicable(ia):
+                payment_fee_tax = payment_fee_tax_rule.tax(payment_fee, base_price_is='gross')
+                tax_total += payment_fee_tax.tax
+                net_total += payment_fee_tax.net
+                payment_fee_net = payment_fee_tax.net
+                payment_fee_tax_rate = payment_fee_tax.rate
+            else:
+                net_total += payment_fee
+                payment_fee_net = payment_fee
+                payment_fee_tax_rate = Decimal('0.00')
 
         try:
             first_expiry = min(p.expires for p in positions) if positions else now()
@@ -124,6 +146,7 @@ class CartMixin:
             'payment_fee': payment_fee,
             'payment_fee_net': payment_fee_net,
             'payment_fee_tax_rate': payment_fee_tax_rate,
+            'payment_fee_tax_rule': payment_fee_tax_rule,
             'answers': answers,
             'minutes_left': minutes_left,
             'first_expiry': first_expiry,
@@ -147,7 +170,8 @@ def get_cart(request):
         ).order_by(
             'item', 'variation'
         ).select_related(
-            'item', 'variation', 'subevent', 'subevent__event', 'subevent__event__organizer'
+            'item', 'variation', 'subevent', 'subevent__event', 'subevent__event__organizer',
+            'item__tax_rule'
         ).prefetch_related(
             'item__questions', 'answers'
         )

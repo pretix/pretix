@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load eventurl %}
 {% load safelink %}
+{% blocktrans asvar s_taxes %}taxes{% endblocktrans %}
 {% for line in cart.positions %}
     <div class="row cart-row {% if download and line.item.admission|default:event.settings.ticket_download_nonadm %}has-downloads{% endif %}">
         <div class="product">
@@ -121,16 +122,22 @@
             {% if event.settings.display_net_prices %}
                 <strong>{{ event.currency }} {{ line.net_total|floatformat:2 }}</strong>
                 {% if line.tax_rate %}
-                    <br /><small>{% blocktrans trimmed with rate=line.tax_rate %}
-                    <strong>plus</strong> {{ rate }}% taxes
-                    {% endblocktrans %}</small>
+                    <br />
+                    <small>
+                        {% blocktrans trimmed with rate=line.tax_rate taxname=line.tax_rule.name|default:s_taxes %}
+                            <strong>plus</strong> {{ rate }}% {{ taxname }}
+                        {% endblocktrans %}
+                    </small>
                 {% endif %}
             {% else %}
                 <strong>{{ event.currency }} {{ line.total|floatformat:2 }}</strong>
                 {% if line.tax_rate %}
-                    <br /><small>{% blocktrans trimmed with rate=line.tax_rate %}
-                    incl. {{ rate }}% taxes
-                    {% endblocktrans %}</small>
+                    <br />
+                    <small>
+                        {% blocktrans trimmed with rate=line.tax_rate taxname=line.tax_rule.name|default:s_taxes %}
+                            incl. {{ rate }}% {{ taxname }}
+                        {% endblocktrans %}
+                    </small>
                 {% endif %}
             {% endif %}
         </div>
@@ -158,18 +165,22 @@
             {% if event.settings.display_net_prices %}
                 <strong>{{ event.currency }} {{ cart.payment_fee_net|floatformat:2 }}</strong>
                 {% if cart.payment_fee_tax_rate %}
-                    <br/>
-                    <small>{% blocktrans trimmed with rate=cart.payment_fee_tax_rate %}
-                        <strong>plus</strong> {{ rate }}% taxes
-                    {% endblocktrans %}</small>
+                    <br />
+                    <small>
+                        {% blocktrans trimmed with rate=cart.payment_fee_tax_rate taxname=cart.payment_fee_tax_rule.name|default:s_taxes %}
+                            <strong>plus</strong> {{ rate }}% {{ taxname }}
+                        {% endblocktrans %}
+                    </small>
                 {% endif %}
             {% else %}
                 <strong>{{ event.currency }} {{ cart.payment_fee|floatformat:2 }}</strong>
                 {% if cart.payment_fee_tax_rate %}
-                    <br/>
-                    <small>{% blocktrans trimmed with rate=cart.payment_fee_tax_rate %}
-                        incl. {{ rate }}% taxes
-                    {% endblocktrans %}</small>
+                    <br />
+                    <small>
+                        {% blocktrans trimmed with rate=cart.payment_fee_tax_rate taxname=cart.payment_fee_tax_rule.name|default:s_taxes %}
+                            incl. {{ rate }}% {{ taxname }}
+                        {% endblocktrans %}
+                    </small>
                 {% endif %}
             {% endif %}
         </div>

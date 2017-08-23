@@ -53,6 +53,12 @@ class Invoice(models.Model):
     :type payment_provider_text: str
     :param footer_text: A footer text, displayed smaller and centered on every page
     :type footer_text: str
+    :param foreign_currency_display: A different currency that taxes should also be displayed in.
+    :type foreign_currency_display: str
+    :param foreign_currency_rate: The rate of a forein currency that the taxes should be displayed in.
+    :type foreign_currency_rate: Decimal
+    :param foreign_currency_rate_date: The date of the forein currency exchange rates.
+    :type foreign_currency_rate_date: date
     :param file: The filename of the rendered invoice
     :type file: File
     """
@@ -71,6 +77,9 @@ class Invoice(models.Model):
     additional_text = models.TextField(blank=True)
     payment_provider_text = models.TextField(blank=True)
     footer_text = models.TextField(blank=True)
+    foreign_currency_display = models.CharField(max_length=50, null=True, blank=True)
+    foreign_currency_rate = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
+    foreign_currency_rate_date = models.DateField(null=True, blank=True)
     file = models.FileField(null=True, blank=True, upload_to=invoice_filename)
 
     @staticmethod
@@ -155,12 +164,15 @@ class InvoiceLine(models.Model):
     :type tax_value: decimal.Decimal
     :param tax_rate: The applied tax rate in percent
     :type tax_rate: decimal.Decimal
+    :param tax_name: The name of the applied tax rate
+    :type tax_name: str
     """
     invoice = models.ForeignKey('Invoice', related_name='lines')
     description = models.TextField()
     gross_value = models.DecimalField(max_digits=10, decimal_places=2)
     tax_value = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     tax_rate = models.DecimalField(max_digits=7, decimal_places=2, default=Decimal('0.00'))
+    tax_name = models.CharField(max_length=190)
 
     @property
     def net_value(self):

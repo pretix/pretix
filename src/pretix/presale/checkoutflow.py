@@ -11,7 +11,7 @@ from django.views.generic.base import TemplateResponseMixin
 
 from pretix.base.models import Order
 from pretix.base.models.orders import InvoiceAddress
-from pretix.base.services.cart import set_cart_addons
+from pretix.base.services.cart import set_cart_addons, update_tax_rates
 from pretix.base.services.orders import perform_order
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
@@ -79,6 +79,17 @@ class BaseCheckoutFlowStep:
         n = self.get_next_applicable(request)
         if n:
             return n.get_step_url()
+
+    @cached_property
+    def invoice_address(self):
+        iapk = self.request.session.get('invoice_address_{}'.format(self.request.event.pk))
+        if not iapk:
+            return InvoiceAddress()
+
+        try:
+            return InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+        except InvoiceAddress.DoesNotExist:
+            return InvoiceAddress()
 
 
 def get_checkout_flow(event):
@@ -163,7 +174,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         quota_cache = {}
         item_cache = {}
         for cartpos in get_cart(self.request).filter(addon_to__isnull=True).prefetch_related(
-            'item__addons', 'item__addons__addon_category', 'addons', 'addons__variation'
+            'item__addons', 'item__addons__addon_category', 'addons', 'addons__variation',
         ):
             current_addon_products = {
                 a.item_id: a.variation_id for a in cartpos.addons.all()
@@ -244,7 +255,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         if not is_valid:
             return self.get(request, *args, **kwargs)
 
-        return self.do(self.request.event.id, data, self.request.session.session_key)
+        return self.do(self.request.event.id, data, self.request.session.session_key,
+                       invoice_address=self.invoice_address.pk)
 
 
 class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
@@ -266,21 +278,17 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                            initial=initial)
 
     @cached_property
-    def invoice_address(self):
-        iapk = self.request.session.get('invoice_address')
-        if not iapk:
-            return InvoiceAddress()
-
-        try:
-            return InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
-        except InvoiceAddress.DoesNotExist:
-            return InvoiceAddress()
+    def eu_reverse_charge_relevant(self):
+        return any([p.item.tax_rule and p.item.tax_rule.eu_reverse_charge
+                    for p in self.positions])
 
     @cached_property
     def invoice_form(self):
         return InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
                                   event=self.request.event,
-                                  instance=self.invoice_address)
+                                  request=self.request,
+                                  instance=self.invoice_address,
+                                  validate_vat_id=self.eu_reverse_charge_relevant)
 
     def post(self, request):
         self.request = request
@@ -294,8 +302,14 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         request.session['email'] = self.contact_form.cleaned_data['email']
         if request.event.settings.invoice_address_asked:
             addr = self.invoice_form.save()
-            request.session['invoice_address'] = addr.pk
+            request.session['invoice_address_{}'.format(request.event.pk)] = addr.pk
             request.session['contact_form_data'] = self.contact_form.cleaned_data
+
+            update_tax_rates(
+                event=request.event,
+                cart_id=request.session.session_key,
+                invoice_address=self.invoice_form.instance
+            )
 
         return redirect(self.get_next_url(request))
 
@@ -354,6 +368,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['formgroups'] = self.formdict.items()
         ctx['contact_form'] = self.contact_form
         ctx['invoice_form'] = self.invoice_form
+        ctx['reverse_charge_relevant'] = self.eu_reverse_charge_relevant
         return ctx
 
 
@@ -387,7 +402,9 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             if p['provider'].identifier == request.POST.get('payment', ''):
                 request.session['payment'] = p['provider'].identifier
                 resp = p['provider'].checkout_prepare(
-                    request, self.get_cart(payment_fee=p['provider'].calculate_fee(self._total_order_value)))
+                    request,
+                    self.get_cart()
+                )
                 if isinstance(resp, str):
                     return redirect(resp)
                 elif resp is True:
@@ -475,16 +492,6 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
     @cached_property
     def payment_provider(self):
         return self.request.event.get_payment_providers().get(self.request.session['payment'])
-
-    @cached_property
-    def invoice_address(self):
-        try:
-            return InvoiceAddress.objects.get(
-                pk=self.request.session.get('invoice_address'),
-                order__isnull=True
-            )
-        except InvoiceAddress.DoesNotExist:
-            return InvoiceAddress()
 
     def get(self, request):
         self.request = request

@@ -63,6 +63,7 @@ TEST_ITEM_RES = {
     "description": None,
     "free_price": False,
     "tax_rate": "0.00",
+    "tax_rule": None,
     "admission": False,
     "position": 0,
     "picture": None,

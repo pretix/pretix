@@ -19,11 +19,11 @@ class AsyncAction:
     error_url = None
     known_errortypes = []
 
-    def do(self, *args):
+    def do(self, *args, **kwargs):
         if not isinstance(self.task, app.Task):
             raise TypeError('Method has no task attached')
 
-        res = self.task.apply_async(args=args)
+        res = self.task.apply_async(args=args, kwargs=kwargs)
 
         if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
             data = self._return_ajax_result(res)

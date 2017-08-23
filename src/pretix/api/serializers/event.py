@@ -1,5 +1,7 @@
+from django_countries.serializers import CountryFieldMixin
+
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
-from pretix.base.models import Event
+from pretix.base.models import Event, TaxRule
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
 
@@ -33,3 +35,9 @@ class SubEventSerializer(I18nAwareModelSerializer):
         fields = ('id', 'name', 'date_from', 'date_to', 'active', 'date_admission',
                   'presale_start', 'presale_end', 'location',
                   'item_price_overrides', 'variation_price_overrides')
+
+
+class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
+    class Meta:
+        model = TaxRule
+        fields = ('id', 'name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country')

@@ -6,13 +6,14 @@ from django.db.models import Count, Prefetch, Q
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView, View
 
-from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    CartPosition, ItemVariation, QuestionAnswer, Quota, SubEvent, Voucher,
+    CartPosition, InvoiceAddress, ItemVariation, QuestionAnswer, Quota,
+    SubEvent, Voucher,
 )
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, clear_cart, remove_cart_position,
@@ -36,6 +37,17 @@ class CartActionMixin:
 
     def get_error_url(self):
         return self.get_next_url()
+
+    @cached_property
+    def invoice_address(self):
+        iapk = self.request.session.get('invoice_address_{}'.format(self.request.event.pk))
+        if not iapk:
+            return InvoiceAddress()
+
+        try:
+            return InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+        except InvoiceAddress.DoesNotExist:
+            return InvoiceAddress()
 
     def _item_from_post_value(self, key, value, voucher=None):
         if value.strip() == '' or '_' not in key:
@@ -154,7 +166,8 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
         if items:
-            return self.do(self.request.event.id, items, self.request.session.session_key, translation.get_language())
+            return self.do(self.request.event.id, items, self.request.session.session_key, translation.get_language(),
+                           self.invoice_address.pk)
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
@@ -190,12 +203,12 @@ class RedeemView(EventViewMixin, TemplateView):
             items = items.filter(quotas__in=[self.voucher.quota_id])
 
         items = items.filter(vouchq).select_related(
-            'category',  # for re-grouping
+            'category', 'tax_rule',  # for re-grouping
         ).prefetch_related(
             Prefetch('quotas',
                      to_attr='_subevent_quotas',
                      queryset=self.request.event.quotas.filter(subevent=self.subevent)),
-            Prefetch('variations', to_attr='avail_variations',
+            Prefetch('variations', to_attr='available_variations',
                      queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).prefetch_related(
                          Prefetch('quotas',
                                   to_attr='_subevent_quotas',
@@ -217,13 +230,11 @@ class RedeemView(EventViewMixin, TemplateView):
             var_price_override = {}
 
         for item in items:
-            item.available_variations = list(item.variations.filter(active=True, quotas__isnull=False).distinct())
             if self.voucher.item_id and self.voucher.variation_id:
                 item.available_variations = [v for v in item.available_variations if v.pk == self.voucher.variation_id]
 
             item.order_max = item.max_per_order or int(self.request.event.settings.max_items_per_order)
 
-            item.has_variations = item.variations.exists()
             if not item.has_variations:
                 item._remove = not bool(item._subevent_quotas)
                 if self.voucher.allow_ignore_quota or self.voucher.block_quota:
@@ -231,32 +242,32 @@ class RedeemView(EventViewMixin, TemplateView):
                 else:
                     item.cached_availability = item.check_quotas(subevent=self.subevent, _cache=quota_cache)
 
-                item.price = item_price_override.get(item.pk, item.default_price)
-                item.price = self.voucher.calculate_price(item.price)
-                if self.request.event.settings.display_net_prices:
-                    item.price -= round_decimal(item.price * (1 - 100 / (100 + item.tax_rate)))
+                price = item_price_override.get(item.pk, item.default_price)
+                price = self.voucher.calculate_price(price)
+                item.display_price = item.tax(price)
             else:
                 item._remove = False
-                for var in item.avail_variations:
+                for var in item.available_variations:
                     if self.voucher.allow_ignore_quota or self.voucher.block_quota:
                         var.cached_availability = (Quota.AVAILABILITY_OK, 1)
                     else:
                         var.cached_availability = list(var.check_quotas(subevent=self.subevent, _cache=quota_cache))
 
-                    var.display_price = var_price_override.get(var.pk, var.price)
-                    var.display_price = self.voucher.calculate_price(var.display_price)
-                    if self.request.event.settings.display_net_prices:
-                        var.display_price -= round_decimal(var.display_price * (1 - 100 / (100 + item.tax_rate)))
+                    price = var_price_override.get(var.pk, var.price)
+                    price = self.voucher.calculate_price(price)
+                    var.display_price = item.tax(price)
 
                 item.available_variations = [
-                    v for v in item.avail_variations if v._subevent_quotas
+                    v for v in item.available_variations if v._subevent_quotas
                 ]
                 if self.voucher.variation_id:
                     item.available_variations = [v for v in item.available_variations
                                                  if v.pk == self.voucher.variation_id]
                 if len(item.available_variations) > 0:
-                    item.min_price = min([v.display_price for v in item.avail_variations])
-                    item.max_price = max([v.display_price for v in item.avail_variations])
+                    item.min_price = min([v.display_price.net if self.request.event.settings.display_net_prices else
+                                          v.display_price.gross for v in item.available_variations])
+                    item.max_price = max([v.display_price.net if self.request.event.settings.display_net_prices else
+                                          v.display_price.gross for v in item.available_variations])
 
         items = [item for item in items
                  if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove]

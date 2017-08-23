@@ -9,22 +9,24 @@ from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http import (
-    HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse,
+    Http404, HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed,
+    JsonResponse,
 )
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
-from django.views.generic import FormView, ListView
+from django.utils.translation import ugettext, ugettext_lazy as _
+from django.views.generic import DeleteView, FormView, ListView
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
+from i18nfield.strings import LazyI18nString
 from pytz import timezone
 
 from pretix.base.models import (
-    CachedTicket, Event, Item, ItemVariation, LogEntry, Order, RequiredAction,
-    Voucher,
+    CachedTicket, Event, Item, ItemVariation, LogEntry, Order, OrderPosition,
+    RequiredAction, TaxRule, Voucher,
 )
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
@@ -32,13 +34,13 @@ from pretix.base.signals import event_live_issues, register_ticket_outputs
 from pretix.control.forms.event import (
     CommentForm, DisplaySettingsForm, EventSettingsForm, EventUpdateForm,
     InvoiceSettingsForm, MailSettingsForm, PaymentSettingsForm, ProviderForm,
-    TicketSettingsForm,
+    TaxRuleForm, TicketSettingsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.urls import build_absolute_uri
 from pretix.presale.style import regenerate_css
 
-from . import UpdateView
+from . import CreateView, UpdateView
 from ..logdisplay import OVERVIEW_BLACKLIST
 
 
@@ -787,3 +789,129 @@ class EventComment(EventPermissionRequiredMixin, View):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug
         })
+
+
+class TaxList(EventPermissionRequiredMixin, ListView):
+    model = TaxRule
+    context_object_name = 'taxrules'
+    paginate_by = 30
+    template_name = 'pretixcontrol/event/tax_index.html'
+    permission = 'can_change_event_settings'
+
+    def get_queryset(self):
+        return self.request.event.tax_rules.all()
+
+
+class TaxCreate(EventPermissionRequiredMixin, CreateView):
+    model = TaxRule
+    form_class = TaxRuleForm
+    template_name = 'pretixcontrol/event/tax_edit.html'
+    permission = 'can_change_event_settings'
+    context_object_name = 'taxrule'
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.tax', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_initial(self):
+        return {
+            'name': LazyI18nString.from_gettext(ugettext('VAT'))
+        }
+
+    @transaction.atomic
+    def form_valid(self, form):
+        form.instance.event = self.request.event
+        messages.success(self.request, _('The new tax rule has been created.'))
+        ret = super().form_valid(form)
+        form.instance.log_action('pretix.event.taxrule.added', user=self.request.user, data=dict(form.cleaned_data))
+        return ret
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
+
+class TaxUpdate(EventPermissionRequiredMixin, UpdateView):
+    model = TaxRule
+    form_class = TaxRuleForm
+    template_name = 'pretixcontrol/event/tax_edit.html'
+    permission = 'can_change_event_settings'
+    context_object_name = 'rule'
+
+    def get_object(self, queryset=None) -> TaxRule:
+        try:
+            return self.request.event.tax_rules.get(
+                id=self.kwargs['rule']
+            )
+        except TaxRule.DoesNotExist:
+            raise Http404(_("The requested tax rule does not exist."))
+
+    @transaction.atomic
+    def form_valid(self, form):
+        messages.success(self.request, _('Your changes have been saved.'))
+        if form.has_changed():
+            self.object.log_action(
+                'pretix.event.taxrule.changed', user=self.request.user, data={
+                    k: form.cleaned_data.get(k) for k in form.changed_data
+                }
+            )
+        return super().form_valid(form)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.tax', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
+
+class TaxDelete(EventPermissionRequiredMixin, DeleteView):
+    model = TaxRule
+    template_name = 'pretixcontrol/event/tax_delete.html'
+    permission = 'can_change_event_settings'
+    context_object_name = 'taxrule'
+
+    def get_object(self, queryset=None) -> TaxRule:
+        try:
+            return self.request.event.tax_rules.get(
+                id=self.kwargs['rule']
+            )
+        except TaxRule.DoesNotExist:
+            raise Http404(_("The requested tax rule does not exist."))
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        if self.is_allowed():
+            self.object.log_action(action='pretix.event.taxrule.deleted', user=request.user)
+            self.object.delete()
+            messages.success(self.request, _('The selected tax rule has been deleted.'))
+        else:
+            messages.error(self.request, _('The selected tax rule can not be deleted.'))
+        return redirect(success_url)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.tax', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def is_allowed(self) -> bool:
+        o = self.object
+        return (
+            not self.request.event.orders.filter(payment_fee_tax_rule=o).exists()
+            and not OrderPosition.objects.filter(tax_rule=o, order__event=self.request.event).exists()
+            and not self.request.event.items.filter(tax_rule=o).exists()
+            and self.request.event.settings.tax_rate_default != o
+        )
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        context['possible'] = self.is_allowed()
+        return context

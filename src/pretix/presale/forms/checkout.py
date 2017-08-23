@@ -1,8 +1,12 @@
+import logging
 import os
 from decimal import Decimal
 from itertools import chain
 
+import vat_moss.errors
+import vat_moss.id
 from django import forms
+from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db.models import Count, Prefetch, Q
 from django.utils.encoding import force_text
@@ -10,12 +14,14 @@ from django.utils.formats import number_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.decimal import round_decimal
 from pretix.base.models import ItemVariation, Question
 from pretix.base.models.orders import InvoiceAddress, OrderPosition
+from pretix.base.models.tax import EU_COUNTRIES, TAXED_ZERO
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import contact_form_fields, question_form_fields
+
+logger = logging.getLogger(__name__)
 
 
 class ContactForm(forms.Form):
@@ -94,6 +100,8 @@ class InvoiceAddressForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.event = event = kwargs.pop('event')
+        self.request = kwargs.pop('request', None)
+        self.validate_vat_id = kwargs.pop('validate_vat_id')
         super().__init__(*args, **kwargs)
         if not event.settings.invoice_address_vatid:
             del self.fields['vat_id']
@@ -115,9 +123,35 @@ class InvoiceAddressForm(forms.ModelForm):
         if not data.get('name') and not data.get('company') and self.event.settings.invoice_address_required:
             raise ValidationError(_('You need to provide either a company name or your name.'))
 
+        if 'vat_id' in self.changed_data or not data.get('vat_id'):
+            self.instance.vat_id_validated = False
+
+        if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
+            pass
+        elif self.validate_vat_id and data.get('is_business') and data.get('country') in EU_COUNTRIES and data.get('vat_id'):
+            if data.get('vat_id')[:2] != str(data.get('country')):
+                raise ValidationError(_('Your VAT ID does not match the selected country.'))
+            try:
+                result = vat_moss.id.validate(data.get('vat_id'))
+                if result:
+                    country_code, normalized_id, company_name = result
+                    self.instance.vat_id_validated = True
+                    self.instance.vat_id = normalized_id
+            except vat_moss.errors.InvalidError:
+                raise ValidationError(_('This VAT ID is not valid. Please re-check your input.'))
+            except vat_moss.errors.WebServiceUnavailableError:
+                logger.exception('VAT ID checking failed for country {}'.format(data.get('country')))
+                self.instance.vat_id_validated = False
+                if self.request:
+                    messages.warning(self.request, _('Your VAT ID could not be checked, as the VAT checking service of '
+                                                     'your country is currently not available. We will therefore '
+                                                     'need to charge VAT on your invoice. You can get the tax amount '
+                                                     'back via the VAT reimbursement process.'))
+        else:
+            self.instance.vat_id_validated = False
+
 
 class UploadedFileWidget(forms.ClearableFileInput):
-
     def __init__(self, *args, **kwargs):
         self.position = kwargs.pop('position')
         self.event = kwargs.pop('event')
@@ -309,7 +343,6 @@ class AddOnRadioSelect(forms.RadioSelect):
 
 
 class AddOnVariationField(forms.ChoiceField):
-
     def valid_value(self, value):
         text_value = force_text(value)
         for k, v, d in self.choices:
@@ -328,39 +361,37 @@ class AddOnsForm(forms.Form):
             variation = item_or_variation
             item = item_or_variation.item
             price = variation.price
-            price_net = variation.net_price
             label = variation.value
         else:
             item = item_or_variation
             price = item.default_price
-            price_net = item.default_price_net
             label = item.name
 
         if override_price:
             price = override_price
-            tax_value = round_decimal(price * (1 - 100 / (100 + item.tax_rate)))
-            price_net = price - tax_value
 
         if self.price_included:
-            price = Decimal('0.00')
+            price = TAXED_ZERO
+        else:
+            price = item.tax(price)
 
-        if not price:
+        if not price.gross:
             n = '{name}'.format(
                 name=label
             )
-        elif not item.tax_rate:
+        elif not price.rate:
             n = _('{name} (+ {currency} {price})').format(
-                name=label, currency=event.currency, price=number_format(price)
+                name=label, currency=event.currency, price=number_format(price.gross)
             )
         elif event.settings.display_net_prices:
-            n = _('{name} (+ {currency} {price} plus {taxes}% taxes)').format(
-                name=label, currency=event.currency, price=number_format(price_net),
-                taxes=number_format(item.tax_rate)
+            n = _('{name} (+ {currency} {price} plus {taxes}% {taxname})').format(
+                name=label, currency=event.currency, price=number_format(price.net),
+                taxes=number_format(price.rate), taxname=price.name
             )
         else:
-            n = _('{name} (+ {currency} {price} incl. {taxes}% taxes)').format(
-                name=label, currency=event.currency, price=number_format(price),
-                taxes=number_format(item.tax_rate)
+            n = _('{name} (+ {currency} {price} incl. {taxes}% {taxname})').format(
+                name=label, currency=event.currency, price=number_format(price.gross),
+                taxes=number_format(price.rate), taxname=price.name
             )
 
         if avail[0] < 20:
@@ -406,7 +437,7 @@ class AddOnsForm(forms.Form):
                 & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
                 & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
                 & Q(hide_without_voucher=False)
-            ).prefetch_related(
+            ).select_related('tax_rule').prefetch_related(
                 Prefetch('quotas',
                          to_attr='_subevent_quotas',
                          queryset=event.quotas.filter(subevent=subevent)),

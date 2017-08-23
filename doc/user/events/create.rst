@@ -62,6 +62,11 @@ Location
 Event currency
    This is the currency all prices and payments in your shop will be handled in.
 
+Sales tax rate
+   If you need to pay a form of sales tax (also known as VAT in many countries) on your products, you can set a tax rate
+   in percent here that will be used as a default later. After creating your event, you can also create multiple tax
+   rates or fine-tune the tax settings.
+
 Default language
    If you selected multiple supported languages in the previous step, you can now decide which one should be
    displayed by default.

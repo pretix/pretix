@@ -138,6 +138,8 @@ class ItemCreateForm(I18nModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields['category'].queryset = self.instance.event.categories.all()
+        self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
+        self.fields['tax_rule'].empty_label = _('No taxation')
         self.fields['copy_from'] = forms.ModelChoiceField(
             label=_("Copy product information"),
             queryset=self.event.items.all(),
@@ -250,7 +252,7 @@ class ItemCreateForm(I18nModelForm):
             'category',
             'admission',
             'default_price',
-            'tax_rate',
+            'tax_rule',
             'allow_cancel'
         ]
 
@@ -259,6 +261,7 @@ class ItemUpdateForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = self.instance.event.categories.all()
+        self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
 
     class Meta:
         model = Item
@@ -272,7 +275,7 @@ class ItemUpdateForm(I18nModelForm):
             'picture',
             'default_price',
             'free_price',
-            'tax_rate',
+            'tax_rule',
             'available_from',
             'available_until',
             'require_voucher',

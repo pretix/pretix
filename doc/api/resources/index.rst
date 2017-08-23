@@ -7,6 +7,7 @@ Resources and endpoints
    organizers
    events
    subevents
+   taxrules
    categories
    items
    questions

@@ -13,8 +13,8 @@ from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.fields import I18nCharField, I18nTextField
 
-from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
+from pretix.base.models.tax import TaxedPrice
 
 from .event import Event, SubEvent
 
@@ -202,10 +202,11 @@ class Item(LoggedModel):
                     "additional donations for your event. This is currently not supported for products that are "
                     "bought as an add-on to other products.")
     )
-    tax_rate = models.DecimalField(
-        verbose_name=_("Taxes included in percent"),
-        max_digits=7, decimal_places=2,
-        default=Decimal('0.00')
+    tax_rule = models.ForeignKey(
+        'TaxRule',
+        verbose_name=_('Sales tax'),
+        on_delete=models.PROTECT,
+        null=True, blank=True
     )
     admission = models.BooleanField(
         verbose_name=_("Is an admission ticket"),
@@ -286,10 +287,12 @@ class Item(LoggedModel):
         if self.event:
             self.event.get_cache().clear()
 
-    @property
-    def default_price_net(self):
-        tax_value = round_decimal(self.default_price * (1 - 100 / (100 + self.tax_rate)))
-        return self.default_price - tax_value
+    def tax(self, price=None, base_price_is='auto'):
+        price = price if price is not None else self.default_price
+        if not self.tax_rule:
+            return TaxedPrice(gross=price, net=price, tax=Decimal('0.00'),
+                              rate=Decimal('0.00'), name='')
+        return self.tax_rule.tax(price, base_price_is=base_price_is)
 
     def is_available(self, now_dt: datetime=None) -> bool:
         """
@@ -396,10 +399,11 @@ class ItemVariation(models.Model):
     def price(self):
         return self.default_price if self.default_price is not None else self.item.default_price
 
-    @property
-    def net_price(self):
-        tax_value = round_decimal(self.price * (1 - 100 / (100 + self.item.tax_rate)))
-        return self.price - tax_value
+    def tax(self, price=None):
+        price = price or self.price
+        if not self.item.tax_rule:
+            return TaxedPrice(gross=price, net=price, tax=Decimal('0.00'), rate=Decimal('0.00'), name='')
+        return self.item.tax_rule.tax(price)
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)

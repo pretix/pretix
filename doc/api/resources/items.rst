@@ -27,6 +27,7 @@ free_price                            boolean                    If ``True``, cu
                                                                  lower than the price defined by ``default_price`` or
                                                                  otherwise).
 tax_rate                              decimal (string)           The VAT rate to be applied for this item.
+tax_rule                              integer                    The internal ID of the applied tax rule (or ``null``).
 admission                             boolean                    ``True`` for items that grant admission to the event
                                                                  (such as primary tickets) and ``False`` for others
                                                                  (such as add-ons or merchandise).
@@ -70,6 +71,10 @@ addons                                list of objects            Definition of a
 └ position                            integer                    An integer, used for sorting
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 1.7
+
+   The attribute ``tax_rule`` has been added. ``tax_rate`` is kept for compatibility.
+
 
 Endpoints
 ---------
@@ -108,6 +113,7 @@ Endpoints
             "description": null,
             "free_price": false,
             "tax_rate": "0.00",
+            "tax_rule": 1,
             "admission": false,
             "position": 0,
             "picture": null,
@@ -188,6 +194,7 @@ Endpoints
         "description": null,
         "free_price": false,
         "tax_rate": "0.00",
+        "tax_rule": 1,
         "admission": false,
         "position": 0,
         "picture": null,

@@ -8,8 +8,6 @@ from django.utils.functional import cached_property
 from django.utils.html import escape
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
-from pretix.base.models.event import SubEvent
-
 
 class LogEntry(models.Model):
     """
@@ -52,7 +50,7 @@ class LogEntry(models.Model):
 
     @cached_property
     def display_object(self):
-        from . import Order, Voucher, Quota, Item, ItemCategory, Question, Event
+        from . import Order, Voucher, Quota, Item, ItemCategory, Question, Event, TaxRule, SubEvent
 
         if self.content_type.model_class() is Event:
             return ''
@@ -130,6 +128,16 @@ class LogEntry(models.Model):
                     'question': co.id
                 }),
                 'val': escape(co.question),
+            }
+        elif isinstance(co, TaxRule):
+            a_text = _('Tax rule {val}')
+            a_map = {
+                'href': reverse('control:event.settings.tax.edit', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                    'rule': co.id
+                }),
+                'val': escape(co.name),
             }
 
         if a_text and a_map:

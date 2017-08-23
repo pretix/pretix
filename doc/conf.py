@@ -42,7 +42,6 @@ django.setup()
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
-    'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinxcontrib.httpdomain',
     'sphinxcontrib.images',

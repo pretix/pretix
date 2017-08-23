@@ -1,4 +1,3 @@
-import decimal
 import json
 from datetime import datetime
 
@@ -10,6 +9,7 @@ from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.strings import LazyI18nString
 from typing import Any
 
+from pretix.base.models.tax import TaxRule
 from pretix.base.reldate import RelativeDateWrapper
 
 DEFAULTS = {
@@ -102,8 +102,8 @@ DEFAULTS = {
         'type': bool
     },
     'tax_rate_default': {
-        'default': '0.00',
-        'type': decimal.Decimal
+        'default': None,
+        'type': TaxRule
     },
     'invoice_generate': {
         'default': 'False',

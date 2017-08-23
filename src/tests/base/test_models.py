@@ -935,6 +935,56 @@ class EventTest(TestCase):
 
         self.assertIn('slug', str(context.exception))
 
+    def test_copy(self):
+        event1 = Event.objects.create(
+            organizer=self.organizer, name='Download', slug='ab1234',
+            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+            is_public=True,
+        )
+        tr7 = event1.tax_rules.create(rate=Decimal('7.00'))
+        c1 = event1.categories.create(name='Tickets')
+        c2 = event1.categories.create(name='Workshops')
+        i1 = event1.items.create(name='Foo', default_price=Decimal('13.00'), tax_rule=tr7,
+                                 category=c1)
+        v1 = i1.variations.create(value='Bar')
+        i1.addons.create(addon_category=c2)
+        q1 = event1.quotas.create(name='Quota 1', size=50)
+        q1.items.add(i1)
+        q1.variations.add(v1)
+        que1 = event1.questions.create(question="Age", type="N")
+        que1.items.add(i1)
+        event1.settings.foo_setting = 23
+        event1.settings.tax_rate_default = tr7
+
+        event2 = Event.objects.create(
+            organizer=self.organizer, name='Download', slug='ab1234',
+            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc)
+        )
+        event2.copy_data_from(event1)
+
+        for a in (tr7, c1, c2, i1, q1, que1):
+            a.refresh_from_db()
+            assert a.event == event1
+
+        trnew = event2.tax_rules.first()
+        assert trnew.rate == tr7.rate
+        c1new = event2.categories.get(name='Tickets')
+        c2new = event2.categories.get(name='Workshops')
+        i1new = event2.items.first()
+        assert i1new.name == i1.name
+        assert i1new.category == c1new
+        assert i1new.tax_rule == trnew
+        assert i1new.variations.count() == 1
+        assert i1new.addons.get(addon_category=c2new)
+        q1new = event2.quotas.first()
+        assert q1new.size == q1.size
+        assert q1new.items.get(pk=i1new.pk)
+        que1new = event2.questions.first()
+        assert que1new.type == que1.type
+        assert que1new.items.get(pk=i1new.pk)
+        assert event2.settings.foo_setting == '23'
+        assert event2.settings.tax_rate_default == trnew
+
 
 class SubEventTest(TestCase):
     @classmethod

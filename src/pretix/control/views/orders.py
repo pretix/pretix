@@ -1,8 +1,10 @@
+import logging
 import mimetypes
 import os
 from datetime import timedelta
 
 import pytz
+import vat_moss.id
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -25,6 +27,7 @@ from pretix.base.models import (
     generate_position_secret, generate_secret,
 )
 from pretix.base.models.event import SubEvent
+from pretix.base.models.tax import EU_COUNTRIES
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
@@ -42,11 +45,14 @@ from pretix.control.forms.filter import EventOrderFilterForm
 from pretix.control.forms.orders import (
     CommentForm, ExporterForm, ExtendForm, OrderContactForm, OrderLocaleForm,
     OrderMailForm, OrderPositionAddForm, OrderPositionChangeForm,
+    OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.signals import question_form_fields
+
+logger = logging.getLogger(__name__)
 
 
 class OrderList(EventPermissionRequiredMixin, ListView):
@@ -144,7 +150,7 @@ class OrderDetail(OrderView):
         cartpos = queryset.order_by(
             'item', 'variation'
         ).select_related(
-            'item', 'variation', 'addon_to'
+            'item', 'variation', 'addon_to', 'tax_rule'
         ).prefetch_related(
             'item__questions', 'answers', 'answers__question', 'checkins'
         ).order_by('positionid')
@@ -274,6 +280,54 @@ class OrderInvoiceCreate(OrderView):
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])
+
+
+class OrderCheckVATID(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        try:
+            ia = self.order.invoice_address
+        except InvoiceAddress.DoesNotExist:
+            messages.error(self.request, _('No VAT ID specified.'))
+            return redirect(self.get_order_url())
+        else:
+            if not ia.vat_id:
+                messages.error(self.request, _('No VAT ID specified.'))
+                return redirect(self.get_order_url())
+
+            if not ia.country:
+                messages.error(self.request, _('No country specified.'))
+                return redirect(self.get_order_url())
+
+            if str(ia.country) not in EU_COUNTRIES:
+                messages.error(self.request, _('VAT ID could not be checked since a non-EU country has been '
+                                               'specified.'))
+                return redirect(self.get_order_url())
+
+            if ia.vat_id[:2] != str(ia.country):
+                messages.error(self.request, _('Your VAT ID does not match the selected country.'))
+                return redirect(self.get_order_url())
+
+            try:
+                result = vat_moss.id.validate(ia.vat_id)
+                if result:
+                    country_code, normalized_id, company_name = result
+                    ia.vat_id_validated = True
+                    ia.vat_id = normalized_id
+                    ia.save()
+            except vat_moss.errors.InvalidError:
+                messages.error(self.request, _('This VAT ID is not valid.'))
+            except vat_moss.errors.WebServiceUnavailableError:
+                logger.exception('VAT ID checking failed for country {}'.format(ia.country))
+                messages.error(self.request, _('The VAT ID could not be checked, as the VAT checking service of '
+                                               'the country is currently not available.'))
+            else:
+                messages.success(self.request, _('This VAT ID is valid.'))
+            return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):  # NOQA
         return HttpResponseNotAllowed(['POST'])
 
 
@@ -459,6 +513,11 @@ class OrderChange(OrderView):
         return super().dispatch(request, *args, **kwargs)
 
     @cached_property
+    def other_form(self):
+        return OtherOperationsForm(prefix='other', order=self.order,
+                                   data=self.request.POST if self.request.method == "POST" else None)
+
+    @cached_property
     def add_form(self):
         return OrderPositionAddForm(prefix='add', order=self.order,
                                     data=self.request.POST if self.request.method == "POST" else None)
@@ -469,13 +528,27 @@ class OrderChange(OrderView):
         for p in positions:
             p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p,
                                              data=self.request.POST if self.request.method == "POST" else None)
+            try:
+                ia = self.order.invoice_address
+            except InvoiceAddress.DoesNotExist:
+                ia = None
+            p.apply_tax = p.item.tax_rule and p.item.tax_rule.tax_applicable(invoice_address=ia)
         return positions
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['positions'] = self.positions
         ctx['add_form'] = self.add_form
+        ctx['other_form'] = self.other_form
         return ctx
+
+    def _process_other(self, ocm):
+        if not self.other_form.is_valid():
+            return False
+        else:
+            if self.other_form.cleaned_data['recalculate_taxes']:
+                ocm.recalculate_taxes()
+            return True
 
     def _process_add(self, ocm):
         if not self.add_form.is_valid():
@@ -534,7 +607,7 @@ class OrderChange(OrderView):
 
     def post(self, *args, **kwargs):
         ocm = OrderChangeManager(self.order, self.request.user)
-        form_valid = self._process_add(ocm) and self._process_change(ocm)
+        form_valid = self._process_add(ocm) and self._process_change(ocm) and self._process_other(ocm)
 
         if not form_valid:
             messages.error(self.request, _('An error occured. Please see the details below.'))

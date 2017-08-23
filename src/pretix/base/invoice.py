@@ -3,11 +3,13 @@ from decimal import Decimal
 from io import BytesIO
 from typing import Tuple
 
+import vat_moss.exchange_rates
 from django.contrib.staticfiles import finders
 from django.dispatch import receiver
 from django.utils.formats import date_format, localize
 from django.utils.translation import pgettext
 from reportlab.lib import pagesizes
+from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.styles import ParagraphStyle, StyleSheet1
 from reportlab.lib.units import mm
 from reportlab.lib.utils import ImageReader
@@ -15,10 +17,11 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import (
-    BaseDocTemplate, Frame, NextPageTemplate, PageTemplate, Paragraph, Spacer,
-    Table, TableStyle,
+    BaseDocTemplate, Frame, KeepTogether, NextPageTemplate, PageTemplate,
+    Paragraph, Spacer, Table, TableStyle,
 )
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, Invoice
 from pretix.base.signals import register_invoice_renderers
 
@@ -86,6 +89,8 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         stylesheet = StyleSheet1()
         stylesheet.add(ParagraphStyle(name='Normal', fontName='OpenSans', fontSize=10, leading=12))
         stylesheet.add(ParagraphStyle(name='Heading1', fontName='OpenSansBd', fontSize=15, leading=15 * 1.2))
+        stylesheet.add(ParagraphStyle(name='FineprintHeading', fontName='OpenSansBd', fontSize=8, leading=12))
+        stylesheet.add(ParagraphStyle(name='Fineprint', fontName='OpenSans', fontSize=8, leading=10))
         return stylesheet
 
     def _register_fonts(self):
@@ -355,12 +360,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 localize(line.net_value) + " " + self.invoice.event.currency,
                 localize(line.gross_value) + " " + self.invoice.event.currency,
             ))
-            taxvalue_map[line.tax_rate] += line.tax_value
-            grossvalue_map[line.tax_rate] += line.gross_value
+            taxvalue_map[line.tax_rate, line.tax_name] += line.tax_value
+            grossvalue_map[line.tax_rate, line.tax_name] += line.gross_value
             total += line.gross_value
 
-        tdata.append(
-            [pgettext('invoice', 'Invoice total'), '', '', localize(total) + " " + self.invoice.event.currency])
+        tdata.append([
+            pgettext('invoice', 'Invoice total'), '', '', localize(total) + " " + self.invoice.event.currency
+        ])
         colwidths = [a * doc.width for a in (.55, .15, .15, .15)]
         table = Table(tdata, colWidths=colwidths, repeatRows=1)
         table.setStyle(TableStyle(tstyledata))
@@ -376,33 +382,94 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             story.append(Spacer(1, 15 * mm))
 
         tstyledata = [
-            ('SPAN', (1, 0), (-1, 0)),
-            ('ALIGN', (2, 1), (-1, -1), 'RIGHT'),
+            ('ALIGN', (1, 0), (-1, -1), 'RIGHT'),
             ('LEFTPADDING', (0, 0), (0, -1), 0),
             ('RIGHTPADDING', (-1, 0), (-1, -1), 0),
             ('FONTSIZE', (0, 0), (-1, -1), 8),
+            ('FONTNAME', (0, 0), (-1, -1), 'OpenSans'),
         ]
-        tdata = [('', pgettext('invoice', 'Included taxes'), '', '', ''),
-                 ('', pgettext('invoice', 'Tax rate'),
-                  pgettext('invoice', 'Net value'), pgettext('invoice', 'Gross value'), pgettext('invoice', 'Tax'))]
+        thead = [
+            pgettext('invoice', 'Tax rate'),
+            pgettext('invoice', 'Net value'),
+            pgettext('invoice', 'Gross value'),
+            pgettext('invoice', 'Tax'),
+            ''
+        ]
+        tdata = [thead]
 
-        for rate, gross in grossvalue_map.items():
+        for idx, gross in grossvalue_map.items():
+            rate, name = idx
             if rate == 0:
                 continue
-            tax = taxvalue_map[rate]
-            tdata.append((
-                '',
-                localize(rate) + " %",
-                localize((gross - tax)) + " " + self.invoice.event.currency,
+            tax = taxvalue_map[idx]
+            tdata.append([
+                localize(rate) + " % " + name,
+                localize(gross - tax) + " " + self.invoice.event.currency,
                 localize(gross) + " " + self.invoice.event.currency,
                 localize(tax) + " " + self.invoice.event.currency,
+                ''
+            ])
+
+        def fmt(val):
+            try:
+                return vat_moss.exchange_rates.format(val, self.invoice.foreign_currency_display)
+            except ValueError:
+                return localize(val) + ' ' + self.invoice.foreign_currency_display
+
+        if len(tdata) > 1:
+            colwidths = [a * doc.width for a in (.25, .15, .15, .15, .3)]
+            table = Table(tdata, colWidths=colwidths, repeatRows=2, hAlign=TA_LEFT)
+            table.setStyle(TableStyle(tstyledata))
+            story.append(KeepTogether([
+                Paragraph(pgettext('invoice', 'Included taxes'), self.stylesheet['FineprintHeading']),
+                table
+            ]))
+
+            if self.invoice.foreign_currency_display and self.invoice.foreign_currency_rate:
+                tdata = [thead]
+
+                for idx, gross in grossvalue_map.items():
+                    rate, name = idx
+                    if rate == 0:
+                        continue
+                    tax = taxvalue_map[idx]
+                    gross = round_decimal(gross * self.invoice.foreign_currency_rate)
+                    tax = round_decimal(tax * self.invoice.foreign_currency_rate)
+                    net = gross - tax
+
+                    tdata.append([
+                        localize(rate) + " % " + name,
+                        fmt(net), fmt(gross), fmt(tax), ''
+                    ])
+
+                table = Table(tdata, colWidths=colwidths, repeatRows=2, hAlign=TA_LEFT)
+                table.setStyle(TableStyle(tstyledata))
+
+                story.append(KeepTogether([
+                    Spacer(1, height=2 * mm),
+                    Paragraph(
+                        pgettext(
+                            'invoice', 'Using the conversion rate of 1:{rate} as published by the European Central Bank on '
+                                       '{date}, this corresponds to:'
+                        ).format(rate=localize(self.invoice.foreign_currency_rate),
+                                 date=date_format(self.invoice.foreign_currency_rate_date, "SHORT_DATE_FORMAT")),
+                        self.stylesheet['Fineprint']
+                    ),
+                    Spacer(1, height=3 * mm),
+                    table
+                ]))
+        elif self.invoice.foreign_currency_display and self.invoice.foreign_currency_rate:
+            story.append(Spacer(1, 5 * mm))
+            story.append(Paragraph(
+                pgettext(
+                    'invoice', 'Using the conversion rate of 1:{rate} as published by the European Central Bank on '
+                               '{date}, the invoice total corresponds to {total}.'
+                ).format(rate=localize(self.invoice.foreign_currency_rate),
+                         date=date_format(self.invoice.foreign_currency_rate_date, "SHORT_DATE_FORMAT"),
+                         total=fmt(total)),
+                self.stylesheet['Fineprint']
             ))
 
-        if len(tdata) > 2:
-            colwidths = [a * doc.width for a in (.45, .10, .15, .15, .15)]
-            table = Table(tdata, colWidths=colwidths, repeatRows=2)
-            table.setStyle(TableStyle(tstyledata))
-            story.append(table)
         return story
 
 

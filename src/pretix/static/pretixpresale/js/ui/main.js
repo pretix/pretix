@@ -27,7 +27,7 @@ $(function () {
         e.preventDefault();
     });
     $("div.collapsed").removeClass("collapsed").addClass("collapse");
-    $(".has-error").each(function () {
+    $(".has-error, .alert-danger").each(function () {
         $(this).closest("div.panel-collapse").collapse("show");
     });
 
