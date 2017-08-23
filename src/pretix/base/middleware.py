@@ -183,7 +183,7 @@ class SecurityMiddleware(MiddlewareMixin):
             # frame-src is deprecated but kept for compatibility with CSP 1.0 browsers, e.g. Safari 9
             'frame-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
             'child-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
-            'style-src': ["{static}", "'nonce-{nonce}'"],
+            'style-src': ["{static}", "{media}", "'nonce-{nonce}'"],
             'connect-src': ["{dynamic}", "https://checkout.stripe.com"],
             'img-src': ["{static}", "{media}", "data:", "https://*.stripe.com"],
             # form-action is not only used to match on form actions, but also on URLs
