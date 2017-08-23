@@ -62,7 +62,7 @@ class TaxRule(LoggedModel):
         verbose_name=_("Tax rate")
     )
     price_includes_tax = models.BooleanField(
-        verbose_name=_("The configured product prices includes the tax amount"),
+        verbose_name=_("The configured product prices include the tax amount"),
         default=True,
     )
     eu_reverse_charge = models.BooleanField(
