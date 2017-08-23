@@ -411,6 +411,10 @@ Your {event} team"""))
         'default': '#8E44B3',
         'type': str
     },
+    'primary_font': {
+        'default': 'Open Sans',
+        'type': str
+    },
     'presale_css_file': {
         'default': None,
         'type': str

@@ -13,6 +13,7 @@ from pretix.base.models import Event, Organizer, TaxRule
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.control.forms import ExtFileField, SlugWidget
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.presale.style import get_fonts
 
 
 class EventWizardFoundationForm(forms.Form):
@@ -722,6 +723,13 @@ class DisplaySettingsForm(SettingsForm):
         help_text=_('If you provide a logo image, we will by default not show your events name and date '
                     'in the page header. We will show your logo with a maximal height of 120 pixels.')
     )
+    primary_font = forms.ChoiceField(
+        label=_('Font'),
+        choices=[
+            ('Open Sans', 'Open Sans')
+        ],
+        help_text=_('Only respected by modern browsers.')
+    )
     frontpage_text = I18nFormField(
         label=_("Frontpage text"),
         required=False,
@@ -731,6 +739,12 @@ class DisplaySettingsForm(SettingsForm):
         label=_("Show variations of a product expanded by default"),
         required=False
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['primary_font'].choices += [
+            (a, a) for a in get_fonts()
+        ]
 
 
 class TicketSettingsForm(SettingsForm):
