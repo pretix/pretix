@@ -50,14 +50,16 @@ setup(
     author_email='mail@raphaelmichel.de',
     license='Apache License 2.0',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Intended Audience :: Other Audience',
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+        'Environment :: Web Environment',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-        'Framework :: Django :: 1.10'
+        'Framework :: Django :: 1.11'
     ],
 
     keywords='tickets web shop ecommerce',
