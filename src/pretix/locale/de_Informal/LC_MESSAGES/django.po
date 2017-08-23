@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-23 11:39+0000\n"
-"PO-Revision-Date: 2017-08-23 14:20+0200\n"
+"POT-Creation-Date: 2017-08-23 13:06+0000\n"
+"PO-Revision-Date: 2017-08-23 15:06+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -1453,13 +1453,13 @@ msgstr "Du musst ein Sitz-Land eingeben, um Reverse Charge zu nutzen."
 
 #: pretix/base/models/tax.py:100
 #, python-brace-format
-msgid "incl. {rate} {name}"
-msgstr "inkl. {rate} {name}"
+msgid "incl. {rate}% {name}"
+msgstr "inkl. {rate}% {name}"
 
 #: pretix/base/models/tax.py:102
 #, python-brace-format
-msgid "plus {rate} {name}"
-msgstr "zzgl. {rate} {name}"
+msgid "plus {rate}% {name}"
+msgstr "zzgl. {rate}% {name}"
 
 #: pretix/base/models/tax.py:104
 msgid "reverse charge enabled"

@@ -97,9 +97,9 @@ class TaxRule(LoggedModel):
 
     def __str__(self):
         if self.price_includes_tax:
-            s = _('incl. {rate} {name}').format(rate=self.rate, name=self.name)
+            s = _('incl. {rate}% {name}').format(rate=self.rate, name=self.name)
         else:
-            s = _('plus {rate} {name}').format(rate=self.rate, name=self.name)
+            s = _('plus {rate}% {name}').format(rate=self.rate, name=self.name)
         if self.eu_reverse_charge:
             s += ' ({})'.format(_('reverse charge enabled'))
         return str(s)
