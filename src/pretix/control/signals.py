@@ -94,6 +94,7 @@ should return a list of dictionaries, where each dictionary can have the keys:
 * link (str, optional, if the full widget should be a link)
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
+An additional keyword argument ``subevent`` *can* contain a sub-event.
 """
 
 user_dashboard_widgets = Signal(

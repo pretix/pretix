@@ -16,7 +16,7 @@ from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _, ungettext
 
 from pretix.base.models import (
-    Event, Item, Order, OrderPosition, RequiredAction, Voucher,
+    Event, Item, Order, OrderPosition, RequiredAction, SubEvent, Voucher,
     WaitingListEntry,
 )
 from pretix.control.forms.event import CommentForm
@@ -31,25 +31,37 @@ NUM_WIDGET = '<div class="numwidget"><span class="num">{num}</span><span class="
 
 
 @receiver(signal=event_dashboard_widgets)
-def base_widgets(sender, **kwargs):
+def base_widgets(sender, subevent=None, **kwargs):
     prodc = Item.objects.filter(
         event=sender, active=True,
     ).count()
 
-    tickc = OrderPosition.objects.filter(
+    if subevent:
+        opqs = OrderPosition.objects.filter(subevent=subevent)
+    else:
+        opqs = OrderPosition.objects
+
+    tickc = opqs.filter(
         order__event=sender, item__admission=True,
-        order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING)
+        order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING),
     ).count()
 
-    paidc = OrderPosition.objects.filter(
+    paidc = opqs.filter(
         order__event=sender, item__admission=True,
         order__status=Order.STATUS_PAID,
     ).count()
 
-    rev = Order.objects.filter(
-        event=sender,
-        status=Order.STATUS_PAID
-    ).aggregate(sum=Sum('total'))['sum'] or Decimal('0.00')
+    if subevent:
+        rev = opqs.filter(
+            order__event=sender, order__status=Order.STATUS_PAID
+        ).aggregate(
+            sum=Sum('price')
+        )['sum'] or Decimal('0.00')
+    else:
+        rev = Order.objects.filter(
+            event=sender,
+            status=Order.STATUS_PAID
+        ).aggregate(sum=Sum('total'))['sum'] or Decimal('0.00')
 
     return [
         {
@@ -93,10 +105,10 @@ def base_widgets(sender, **kwargs):
 
 
 @receiver(signal=event_dashboard_widgets)
-def waitinglist_widgets(sender, **kwargs):
+def waitinglist_widgets(sender, subevent=None, **kwargs):
     widgets = []
 
-    wles = WaitingListEntry.objects.filter(event=sender, voucher__isnull=True)
+    wles = WaitingListEntry.objects.filter(event=sender, subevent=subevent, voucher__isnull=True)
     if wles.count():
         quota_cache = {}
         itemvar_cache = {}
@@ -136,10 +148,10 @@ def waitinglist_widgets(sender, **kwargs):
 
 
 @receiver(signal=event_dashboard_widgets)
-def quota_widgets(sender, **kwargs):
+def quota_widgets(sender, subevent=None, **kwargs):
     widgets = []
 
-    for q in sender.quotas.all():
+    for q in sender.quotas.filter(subevent=subevent):
         status, left = q.availability()
         widgets.append({
             'content': NUM_WIDGET.format(num='{}/{}'.format(left, q.size) if q.size is not None else '\u221e',
@@ -229,8 +241,16 @@ def welcome_wizard_widget(sender, **kwargs):
 
 
 def event_index(request, organizer, event):
+    subevent = None
+    if request.GET.get("subevent", "") != "" and request.event.has_subevents:
+        i = request.GET.get("subevent", "")
+        try:
+            subevent = request.event.subevents.get(pk=i)
+        except SubEvent.DoesNotExist:
+            pass
+
     widgets = []
-    for r, result in event_dashboard_widgets.send(sender=request.event, request=request):
+    for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent):
         widgets.extend(result)
 
     can_change_orders = request.user.has_event_permission(request.organizer, request.event, 'can_change_orders')
