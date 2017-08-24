@@ -50,7 +50,7 @@ class ContactForm(forms.Form):
 
     def clean(self):
         if self.event.settings.order_email_asked_twice:
-            if self.cleaned_data.get('email') != self.cleaned_data.get('email_repeat'):
+            if self.cleaned_data.get('email').lower() != self.cleaned_data.get('email_repeat').lower():
                 raise ValidationError(_('Please enter the same email address twice.'))
 
 
