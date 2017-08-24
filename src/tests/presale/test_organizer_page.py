@@ -113,7 +113,7 @@ def test_calendar(env, client):
     r = client.get('/mrmcd/?style=calendar')
     assert 'MRMCD2017' in r.rendered_content
     assert 'September %d' % (now().year + 1) in r.rendered_content
-    r = client.get('/mrmcd/events/?style=calendar&month=10&year=2017')
+    r = client.get('/mrmcd/?style=calendar&month=10&year=2017')
     assert 'MRMCD2017' not in r.rendered_content
     assert 'October 2017' in r.rendered_content
 
