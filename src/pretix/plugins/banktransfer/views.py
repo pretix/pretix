@@ -284,12 +284,15 @@ class ImportView(ListView):
             self.discard_all()
             return self.redirect_back()
 
-        elif ('file' in self.request.FILES and 'csv' in self.request.FILES.get('file').name.lower()) \
+        elif ('file' in self.request.FILES and '.csv' in self.request.FILES.get('file').name.lower()) \
                 or 'amount' in self.request.POST:
             # Process CSV
             return self.process_csv()
 
-        elif 'file' in self.request.FILES and 'txt' in self.request.FILES.get('file').name.lower():
+        elif 'file' in self.request.FILES and (
+            '.txt' in self.request.FILES.get('file').name.lower()
+            or '.sta' in self.request.FILES.get('file').name.lower()
+        ):
             return self.process_mt940()
 
         elif self.request.FILES.get('file') is None:
