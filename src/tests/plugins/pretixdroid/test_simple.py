@@ -5,8 +5,8 @@ import pytest
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Checkin, Event, Item, ItemVariation, Order, OrderPosition, Organizer, Team,
-    User,
+    Checkin, Event, InvoiceAddress, Item, ItemVariation, Order, OrderPosition,
+    Organizer, Team, User,
 )
 from pretix.plugins.pretixdroid.views import API_VERSION
 
@@ -164,6 +164,17 @@ def test_search(client, env):
     jdata = json.loads(resp.content.decode("utf-8"))
     assert len(jdata['results']) == 1
     assert jdata['results'][0]['secret'] == '5678910'
+
+
+@pytest.mark.django_db
+def test_search_invoice_name(client, env):
+    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    InvoiceAddress.objects.create(order=env[2], name="John")
+    resp = client.get('/pretixdroid/api/%s/%s/search/?key=%s&query=%s' % (
+        env[0].organizer.slug, env[0].slug, 'abcdefg', 'John'))
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert len(jdata['results']) == 2
+    assert set([r['attendee_name'] for r in jdata['results']]) == {'John', 'Peter'}
 
 
 @pytest.mark.django_db

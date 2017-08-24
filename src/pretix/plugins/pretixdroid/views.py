@@ -162,12 +162,20 @@ class ApiRedeemView(ApiView):
 
 
 def serialize_op(op):
+    name = op.attendee_name
+    if not name and op.addon_to:
+        name = op.addon_to.attendee_name
+    if not name:
+        try:
+            name = op.order.invoice_address.name
+        except:
+            pass
     return {
         'secret': op.secret,
         'order': op.order.code,
         'item': str(op.item),
         'variation': str(op.variation) if op.variation else None,
-        'attendee_name': op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
+        'attendee_name': name,
         'redeemed': bool(op.checkin_cnt),
         'paid': op.order.status == Order.STATUS_PAID,
     }
@@ -181,10 +189,11 @@ class ApiSearchView(ApiView):
         }
 
         if len(query) >= 4:
-            ops = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').filter(
+            ops = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address').filter(
                 Q(order__event=self.event)
                 & Q(
                     Q(secret__istartswith=query) | Q(attendee_name__icontains=query) | Q(order__code__istartswith=query)
+                    | Q(order__invoice_address__name__icontains=query)
                 )
                 & Q(subevent=self.subevent)
             ).annotate(checkin_cnt=Count('checkins'))[:25]
