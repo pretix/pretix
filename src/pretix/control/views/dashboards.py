@@ -230,7 +230,7 @@ def welcome_wizard_widget(sender, **kwargs):
 
 def event_index(request, organizer, event):
     widgets = []
-    for r, result in event_dashboard_widgets.send(sender=request.event):
+    for r, result in event_dashboard_widgets.send(sender=request.event, request=request):
         widgets.extend(result)
 
     can_change_orders = request.user.has_event_permission(request.organizer, request.event, 'can_change_orders')

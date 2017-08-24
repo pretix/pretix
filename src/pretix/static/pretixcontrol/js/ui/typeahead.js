@@ -13,6 +13,11 @@ $(function () {
         $container.find("li:not(.query-holder)").remove();
 
         $query.on("change", function () {
+            if ($container.attr("data-typeahead-field") && $query.val() === "") {
+                $container.removeClass('focused');
+                $container.find("li:not(.query-holder)").remove();
+                return;
+            }
             $.getJSON(
                 $container.attr("data-source") + "?query=" + encodeURIComponent($query.val()),
                 function (data) {

@@ -156,6 +156,10 @@
 
   .focused.dropdown-menu {
     display: block;
+    overflow: hidden;
+  }
+  .event-dropdown .event-name-full, .mobile-event-dropdown .event-name-full {
+    white-space: normal;
   }
 }
 
