@@ -27,7 +27,8 @@ class OrganizerIndex(OrganizerViewMixin, ListView):
     paginate_by = 30
 
     def get(self, request, *args, **kwargs):
-        if request.organizer.settings.event_list_type == 'calendar':
+        style = request.GET.get("style", request.organizer.settings.event_list_type)
+        if style == "calendar":
             cv = CalendarView()
             cv.request = request
             return cv.get(request, *args, **kwargs)

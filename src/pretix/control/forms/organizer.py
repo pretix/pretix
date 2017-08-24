@@ -135,7 +135,7 @@ class OrganizerSettingsForm(SettingsForm):
     )
 
     event_list_type = forms.ChoiceField(
-        label=_('Event overview stile'),
+        label=_('Default overview style'),
         choices=(
             ('list', _('List')),
             ('calendar', _('Calendar'))

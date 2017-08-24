@@ -9,14 +9,27 @@
             {{ organizer_homepage_text | rich_text }}
         {% endif %}
     </div>
-    <h3 class="text-center">{{ date|date:"F Y" }}</h3>
-    <form class="form-inline" method="get" id="monthselform" action="{% eventurl request.organizer "presale:organizer.calendar" %}">
+    <div class="clearfix"></div>
+    <h3>{{ date|date:"F Y" }}</h3>
+    <form class="form-inline" method="get" id="monthselform" action="{% eventurl request.organizer "presale:organizer.index" %}">
+        <input type="hidden" name="style" value="calendar">
         <div class="row">
-            <div class="col-sm-4 hidden-xs">
-                <a href="{% eventurl request.organizer "presale:organizer.calendar" year=before.year month=before.month %}"
+            <div class="col-sm-4 col-xs-12">
+                <div class="btn-group" role="group">
+                    <a href="{% eventurl request.organizer "presale:organizer.index" %}?style=list" type="button" class="btn btn-default">
+                        <span class="fa fa-list"></span>
+                        {% trans "List" %}
+                    </a>
+                    <a href="{% eventurl request.organizer "presale:organizer.index" %}?style=calendar" type="button"
+                            class="btn btn-default active">
+                        <span class="fa fa-calendar"></span>
+                        {% trans "Calendar" %}
+                    </a>
+                </div>
+                <a href="{% eventurl request.organizer "presale:organizer.ical" %}?locale={{ request.LANGUAGE_CODE }}"
                         class="btn btn-default">
-                    <span class="fa fa-arrow-left"></span>
-                    {{ before|date:"F Y" }}
+                    <span class="fa fa-calendar-plus-o"></span>
+                    {% trans "iCal" %}
                 </a>
             </div>
             <div class="col-sm-4 col-xs-12 text-center">
@@ -35,7 +48,12 @@
                 </button>
             </div>
             <div class="col-sm-4 hidden-xs text-right">
-                <a href="{% eventurl request.organizer "presale:organizer.calendar" year=after.year month=after.month %}"
+                <a href="{% eventurl request.organizer "presale:organizer.index" %}?style=calendar&year={{ before.year }}&month={{ before.month }}"
+                        class="btn btn-default">
+                    <span class="fa fa-arrow-left"></span>
+                    {{ before|date:"F Y" }}
+                </a>
+                <a href="{% eventurl request.organizer "presale:organizer.index" %}?style=calendar&year={{ after.year }}&month={{ after.month }}"
                         class="btn btn-default">
                     <span class="fa fa-arrow-right"></span>
                     {{ after|date:"F Y" }}
@@ -43,8 +61,8 @@
             </div>
         </div>
     </form>
-
     {% include "pretixpresale/fragment_calendar.html" %}
+
     {% if multiple_timezones %}
         <div class="alert alert-info">
             {% blocktrans trimmed %}
@@ -52,13 +70,4 @@
             {% endblocktrans %}
         </div>
     {% endif %}
-    <p class="text-center">
-        <a href="{% eventurl request.organizer "presale:organizer.ical" %}?locale={{ request.LANGUAGE_CODE }}"
-            class="btn btn-default">
-            <span class="fa fa-calendar"></span>
-           {% trans "Download calendar as iCal file" %}
-        </a>
-    </p>
-
-    {% include "pretixpresale/pagination.html" %}
 {% endblock %}
