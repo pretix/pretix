@@ -109,6 +109,16 @@ class PdfTicketOutput(BaseTicketOutput):
             if ev.date_admission:
                 tz = timezone(order.event.settings.timezone)
                 return date_format(ev.date_admission.astimezone(tz), "TIME_FORMAT")
+        elif o['content'] == 'invoice_name':
+            try:
+                return order.invoice_address.name
+            except:
+                return ""
+        elif o['content'] == 'invoice_company':
+            try:
+                return order.invoice_address.company
+            except:
+                return ""
         elif o['content'] == 'addons':
             return "<br/>".join([
                 '{} - {}'.format(p.item, p.variation) if p.variation else str(p.item)

@@ -167,6 +167,8 @@ var editor = {
         "item_description": gettext("Sample product description"),
         "price": gettext("123.45 EUR"),
         "attendee_name": gettext("John Doe"),
+        "invoice_name": gettext("John Doe"),
+        "invoice_company": gettext("Sample company"),
         "event_name": gettext("Sample event name"),
         "event_date": gettext("May 31st, 2017"),
         "event_date_range": gettext("May 31st – June 4th, 2017"),
