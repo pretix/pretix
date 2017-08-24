@@ -246,8 +246,8 @@ class EventFilterForm(FilterForm):
     orders = {
         'slug': 'slug',
         'organizer': 'organizer__name',
-        'date_from': 'date_from',
-        'date_to': 'date_to',
+        'date_from': 'order_from',
+        'date_to': 'order_to',
         'live': 'live'
     }
     status = forms.ChoiceField(

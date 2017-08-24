@@ -85,11 +85,26 @@
                 <tr>
                     <td>
                         <strong><a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong>
+                        {% if e.has_subevents %}
+                           <span class="label label-default">{% trans "Series" %}</span>
+                        {% endif %}
                     </td>
                     <td>{{ e.slug }}</td>
                     {% if not hide_orga %}<td>{{ e.organizer }}</td>{% endif %}
-                    <td>{{ e.get_date_from_display }}</td>
-                    <td>{{ e.get_date_to_display }}</td>
+                    <td>
+                        {% if e.has_subevents %}
+                            {{ e.min_from|default_if_none:"" }}
+                        {% else %}
+                            {{ e.get_date_from_display }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if e.has_subevents %}
+                            {{ e.max_fromto|default_if_none:e.max_from|default_if_none:e.max_to|default_if_none:"" }}
+                        {% else %}
+                            {{ e.get_date_from_display }}
+                        {% endif %}
+                    </td>
                     <td class="text-right">
                         {% if not e.live %}
                             <span class="label label-danger">{% trans "Shop disabled" %}</span>

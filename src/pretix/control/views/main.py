@@ -2,6 +2,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.db.models import Max, Min
+from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.utils.crypto import get_random_string
@@ -30,6 +32,17 @@ class EventList(ListView):
         qs = self.request.user.get_events_with_any_permission().select_related('organizer').prefetch_related(
             '_settings_objects', 'organizer___settings_objects'
         ).order_by('-date_from')
+
+        qs = qs.annotate(
+            min_from=Min('subevents__date_from'),
+            max_from=Max('subevents__date_from'),
+            max_to=Max('subevents__date_to'),
+            max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from'))
+        ).annotate(
+            order_from=Coalesce('min_from', 'date_from'),
+            order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to'),
+        )
+
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
         return qs
