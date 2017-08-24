@@ -12,7 +12,7 @@ from django.views.generic import ListView
 from formtools.wizard.views import SessionWizardView
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.models import Event, Team
+from pretix.base.models import Event, Organizer, Team
 from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
 )
@@ -37,6 +37,10 @@ class EventList(ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['filter_form'] = self.filter_form
+        orga_c = Organizer.objects.filter(
+            pk__in=self.request.user.teams.values_list('organizer', flat=True)
+        ).count()
+        ctx['hide_orga'] = orga_c <= 1
         return ctx
 
     @cached_property

@@ -10,12 +10,21 @@ from pretix.control.utils.i18n import i18ncomp
 
 
 class FilterForm(forms.Form):
+    orders = {}
+
     def filter_qs(self, qs):
         return qs
 
     @property
     def filtered(self):
         return self.is_valid() and any(self.cleaned_data.values())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['ordering'] = forms.ChoiceField(
+            choices=sum([[(a, b), ('-' + a, '-' + b)] for a, b in self.orders.items()], []),
+            required=False
+        )
 
 
 class OrderFilterForm(FilterForm):
@@ -176,6 +185,10 @@ class OrderSearchFilterForm(OrderFilterForm):
 
 
 class SubEventFilterForm(FilterForm):
+    orders = {
+        'date_from': 'date_from',
+        'active': 'active'
+    }
     status = forms.ChoiceField(
         label=_('Status'),
         choices=(
@@ -223,10 +236,20 @@ class SubEventFilterForm(FilterForm):
                 Q(name__icontains=i18ncomp(query)) | Q(location__icontains=query)
             )
 
+        if fdata.get('ordering'):
+            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
+
         return qs
 
 
 class EventFilterForm(FilterForm):
+    orders = {
+        'slug': 'slug',
+        'organizer': 'organizer__name',
+        'date_from': 'date_from',
+        'date_to': 'date_to',
+        'live': 'live'
+    }
     status = forms.ChoiceField(
         label=_('Status'),
         choices=(
@@ -292,5 +315,8 @@ class EventFilterForm(FilterForm):
             qs = qs.filter(
                 Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query)
             )
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
 
         return qs
