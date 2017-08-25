@@ -146,7 +146,7 @@ class ApiRedeemView(ApiView):
                         'datetime': dt,
                     })
 
-            response['data'] = serialize_op(op)
+            response['data'] = serialize_op(op, redeemed=op.order.status == Order.STATUS_PAID or force)
 
         except OrderPosition.DoesNotExist:
             response['status'] = 'error'
@@ -155,7 +155,7 @@ class ApiRedeemView(ApiView):
         return JsonResponse(response)
 
 
-def serialize_op(op):
+def serialize_op(op, redeemed):
     name = op.attendee_name
     if not name and op.addon_to:
         name = op.addon_to.attendee_name
@@ -173,7 +173,7 @@ def serialize_op(op):
         'variation_id': op.variation_id,
         'attendee_name': name,
         'attention': op.item.checkin_attention,
-        'redeemed': bool(op.checkin_cnt),
+        'redeemed': redeemed,
         'paid': op.order.status == Order.STATUS_PAID,
     }
 
@@ -195,7 +195,7 @@ class ApiSearchView(ApiView):
                 & Q(subevent=self.subevent)
             ).annotate(checkin_cnt=Count('checkins'))[:25]
 
-            response['results'] = [serialize_op(op) for op in ops]
+            response['results'] = [serialize_op(op, bool(op.checkin_cnt)) for op in ops]
         else:
             response['results'] = []
 
@@ -211,7 +211,7 @@ class ApiDownloadView(ApiView):
         ops = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').filter(
             Q(order__event=self.event) & Q(subevent=self.subevent)
         ).annotate(checkin_cnt=Count('checkins'))
-        response['results'] = [serialize_op(op) for op in ops]
+        response['results'] = [serialize_op(op, bool(op.checkin_cnt)) for op in ops]
 
         return JsonResponse(response)
 
