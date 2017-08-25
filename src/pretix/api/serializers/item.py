@@ -42,7 +42,7 @@ class ItemSerializer(I18nAwareModelSerializer):
                   'default_price', 'free_price', 'tax_rate', 'tax_rule', 'admission',
                   'position', 'picture', 'available_from', 'available_until',
                   'require_voucher', 'hide_without_voucher', 'allow_cancel',
-                  'min_per_order', 'max_per_order', 'has_variations',
+                  'min_per_order', 'max_per_order', 'checkin_attention', 'has_variations',
                   'variations', 'addons')
 
 

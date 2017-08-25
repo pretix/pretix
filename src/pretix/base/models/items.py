@@ -159,6 +159,8 @@ class Item(LoggedModel):
     :type max_per_order: int
     :param min_per_order: Minimum number of times this item needs to be in an order if bought at all. None for unlimited.
     :type min_per_order: int
+    :param checkin_attention: Requires special attention at checkin
+    :type checkin_attention: bool
     """
 
     event = models.ForeignKey(
@@ -265,6 +267,13 @@ class Item(LoggedModel):
         help_text=_('This product can only be bought at most this many times within one order. If you keep the field '
                     'empty or set it to 0, there is no special limit for this product. The limit for the maximum '
                     'number of items in the whole order applies regardless.')
+    )
+    checkin_attention = models.BooleanField(
+        verbose_name=_('Requires special attention'),
+        default=False,
+        help_text=_('If you set this, the check-in app will show a visible warning that this ticket requires special '
+                    'attention. You can use this for example for student tickets to indicate to the person at '
+                    'check-in that the student ID card still needs to be checked.')
     )
     # !!! Attention: If you add new fields here, also add them to the copying code in
     # pretix/control/views/item.py if applicable.

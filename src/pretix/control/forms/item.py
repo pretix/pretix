@@ -194,6 +194,7 @@ class ItemCreateForm(I18nModelForm):
             self.instance.allow_cancel = self.cleaned_data['copy_from'].allow_cancel
             self.instance.min_per_order = self.cleaned_data['copy_from'].min_per_order
             self.instance.max_per_order = self.cleaned_data['copy_from'].max_per_order
+            self.instance.checkin_attention = self.cleaned_data['copy_from'].checkin_attention
             self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
 
         instance = super().save(*args, **kwargs)
@@ -283,6 +284,7 @@ class ItemUpdateForm(I18nModelForm):
             'allow_cancel',
             'max_per_order',
             'min_per_order',
+            'checkin_attention'
         ]
         widgets = {
             'available_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),

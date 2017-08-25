@@ -178,6 +178,7 @@ def serialize_op(op):
         'variation': str(op.variation) if op.variation else None,
         'variation_id': op.variation_id,
         'attendee_name': name,
+        'attention': op.item.checkin_attention,
         'redeemed': bool(op.checkin_cnt),
         'paid': op.order.status == Order.STATUS_PAID,
     }

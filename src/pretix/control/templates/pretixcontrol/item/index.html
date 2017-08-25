@@ -31,6 +31,10 @@
                     {% bootstrap_field form.hide_without_voucher layout="horizontal" %}
                     {% bootstrap_field form.allow_cancel layout="horizontal" %}
                 </fieldset>
+                <fieldset>
+                    <legend>{% trans "Check-in" %}</legend>
+                    {% bootstrap_field form.checkin_attention layout="horizontal" %}
+                </fieldset>
             </div>
             <div class="col-xs-12 col-lg-2">
                 <div class="panel panel-default">
