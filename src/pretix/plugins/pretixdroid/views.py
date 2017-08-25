@@ -146,13 +146,7 @@ class ApiRedeemView(ApiView):
                         'datetime': dt,
                     })
 
-            response['data'] = {
-                'secret': op.secret,
-                'order': op.order.code,
-                'item': str(op.item),
-                'variation': str(op.variation) if op.variation else None,
-                'attendee_name': op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
-            }
+            response['data'] = serialize_op(op)
 
         except OrderPosition.DoesNotExist:
             response['status'] = 'error'
