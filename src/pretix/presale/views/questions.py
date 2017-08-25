@@ -1,5 +1,5 @@
 import json
-from collections import defaultdict
+from collections import OrderedDict
 
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
@@ -49,12 +49,16 @@ class QuestionsViewMixin:
 
     @cached_property
     def formdict(self):
-        storage = defaultdict(list)
+        storage = OrderedDict()
         for f in self.forms:
             pos = f.cartpos or f.orderpos
             if pos.addon_to_id:
+                if pos.addon_to not in storage:
+                    storage[pos.addon_to] = []
                 storage[pos.addon_to].append(f)
             else:
+                if pos not in storage:
+                    storage[pos] = []
                 storage[pos].append(f)
         return storage
 
