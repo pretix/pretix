@@ -3,7 +3,7 @@
 Bank transfer
 =============
 
-To accept payments with bank transfer, you only need to fill one important field in pretix' settings: In "Bank
+To accept payments with bank transfer, you only need to fill out one important field in pretix' settings: In "Bank
 account details" you should specify everything one needs to know to transfer money to you, e.g. your IBAN and BIC,
 the name of your bank and for international transfers, preferably also your address and the bank's address.
 
