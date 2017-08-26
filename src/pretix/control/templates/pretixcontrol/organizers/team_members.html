@@ -1,0 +1,133 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inner %}
+    <h2>
+        {% trans "Team:" %} {{ team.name }}
+        <a href="{% url "control:organizer.team.edit" organizer=organizer.slug team=team.pk %}"
+           class="btn btn-default">
+            <span class="fa fa-edit"></span>
+            {% trans "Edit" %}
+        </a>
+    </h2>
+    <h3>{% trans "Team members" %}</h3>
+    <form action="" method="post">
+        {% csrf_token %}
+        <!-- Trick browsers into taking this as a default -->
+        <button type="submit" class="btn btn-primary btn-sm btn-block nearly-gone"></button>
+        <table class="table table-condensed table-hover">
+            <thead>
+            <tr>
+                <th>{% trans "Member" %}</th>
+                <th width="150"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for u in team.members.all %}
+                <tr>
+                    <td>
+                        {{ u.email }}
+                        {% if u.require_2fa %}
+                            <span class="fa fa-shield text-success" data-toggle="tooltip"
+                                    title="{% trans "Two-factor authentication enabled" %}">
+                            </span>
+                        {% else %}
+                            <span class="fa fa-shield disabled" data-toggle="tooltip"
+                                    title="{% trans "Two-factor authentication disabled" %}">
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td class="text-right">
+                        <button type="submit" name="remove-member" value="{{ u.id }}"
+                                class="btn btn-danger btn-sm btn-block">
+                            <i class="fa fa-times"></i> {% trans "Remove" %}
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for i in team.invites.all %}
+                <tr>
+                    <td>
+                        {{ i.email }}
+                        <span class="fa fa-envelope-o" data-toggle="tooltip"
+                              title="{% trans "invited, pending response" %}"></span>
+                    </td>
+                    <td class="text-right">
+                        <button type="submit" name="remove-invite" value="{{ i.id }}"
+                                class="btn btn-danger btn-sm btn-block">
+                            <i class="fa fa-times"></i> {% trans "Remove" %}
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>
+                    {% bootstrap_field add_form.user layout='inline' %}<br>
+                    {% blocktrans trimmed %}
+                        To add a new user, you can enter their email address here. If they already have a
+                        pretix account, they will immediately be added to the event. Otherwise, they will
+                        be sent an email with an invitation.
+                    {% endblocktrans %}
+                </td>
+                <td class="text-right">
+                    <button type="submit" class="btn btn-primary btn-sm btn-block">
+                        <i class="fa fa-plus"></i> {% trans "Add" %}
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <h3>{% trans "API tokens" %}</h3>
+    <form action="" method="post">
+        {% csrf_token %}
+        <!-- Trick browsers into taking this as a default -->
+        <button type="submit" class="btn btn-primary btn-sm btn-block nearly-gone"></button>
+        <table class="table table-condensed table-hover">
+            <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th width="150"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for t in team.active_tokens %}
+                <tr>
+                    <td>
+                        {{ t.name }}
+                    </td>
+                    <td class="text-right">
+                        <button type="submit" name="remove-token" value="{{ t.id }}"
+                                class="btn btn-danger btn-sm btn-block">
+                            <i class="fa fa-times"></i> {% trans "Remove" %}
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>
+                    {% bootstrap_field add_token_form.name layout='inline' %}<br>
+                </td>
+                <td class="text-right">
+                    <button type="submit" class="btn btn-primary btn-sm btn-block">
+                        <i class="fa fa-plus"></i> {% trans "Add" %}
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Team history" %}
+            </h3>
+        </div>
+        {% include "pretixcontrol/includes/logs.html" with obj=team %}
+    </div>
+
+{% endblock %}

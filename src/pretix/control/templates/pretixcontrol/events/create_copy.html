@@ -1,0 +1,20 @@
+{% extends "pretixcontrol/events/create_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block form %}
+    <p>
+        {% blocktrans trimmed %}
+            Do you want to copy over your configuration from a different event? We will copy all
+			products, categories, quotas, and questions as well as general event settings.
+        {% endblocktrans %}
+    </p>
+    <div class="alert alert-info">
+        <strong>
+            {% blocktrans trimmed %}
+                Please make sure to review all settings extensively. You will probably still need to change some
+                settings manually, e.g. date and time settings and texts that contain the event name.
+            {% endblocktrans %}
+        </strong>
+    </div>
+    {% bootstrap_field form.copy_from_event layout="horizontal" %}
+{% endblock %}

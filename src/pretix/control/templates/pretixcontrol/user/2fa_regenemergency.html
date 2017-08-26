@@ -1,0 +1,24 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Regenerate emergency codes" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Regenerate emergency codes" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <p>
+            {% trans "Do you really want to regenerate your emergency codes?" %}
+        </p>
+        <p>
+            {% trans "The old codes will no longer work." %}
+        </p>
+        <div class="form-group submit-group">
+            <a href="{% url "control:user.settings.2fa" %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-danger btn-save">
+                {% trans "Regenerate" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

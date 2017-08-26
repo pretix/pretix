@@ -1,0 +1,60 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Questions" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Questions" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            Questions allow your attendees to fill in additional data about their ticket. If you provide food, one
+            example might be to ask your users about dietary requirements.
+        {% endblocktrans %}
+    </p>
+    {% if questions|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't created any questions yet.
+                {% endblocktrans %}
+            </p>
+
+            <a href="{% url "control:event.items.questions.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new question" %}</a>
+        </div>
+    {% else %}
+        <p>
+            <a href="{% url "control:event.items.questions.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new question" %}
+            </a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans "Question" %}</th>
+                    <th>{% trans "Type" %}</th>
+                    <th class="action-col-2"></th>
+                    <th class="action-col-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for q in questions %}
+                    <tr>
+                        <td><strong><a href="
+                    {% url "control:event.items.questions.show" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}">{{ q.question }}</a></strong>
+                        </td>
+                        <td>{{ q.get_type_display }}</td>
+                        <td>
+                            <a href="{% url "control:event.items.questions.up" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
+                            <a href="{% url "control:event.items.questions.down" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
+                        </td>
+                        <td class="text-right">
+                            <a href="{% url "control:event.items.questions.edit" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                            <a href="{% url "control:event.items.questions.delete" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,55 @@
+.table-calendar {
+  td, th {
+    width: 14.29%;
+  }
+  h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+  a.event {
+    display: block;
+    background: $brand-primary;
+    color: white;
+    border-radius: 5px;
+    padding: 3px 5px;
+    margin-top: 3px;
+    font-size: 12px;
+
+    &.continued {
+      background: #888888;
+      opacity: 0.8;
+    }
+
+    .event-name {
+      font-weight: bold;
+      display: block;
+    }
+    .event-time, .event-status {
+      display: block;
+    }
+
+    &:hover {
+      text-decoration: none;
+      background: darken($brand-primary, 15%);
+    }
+  }
+  .selected-day {
+    display: none;
+  }
+}
+@media (max-width: $screen-xs-max) {
+  .table-calendar .day .events {
+    display: none;
+  }
+  .table-calendar td.day.has-events {
+    background: $brand-primary;
+    cursor: pointer;
+    color: white;
+  }
+  .table-calendar td.day.has-events:hover {
+    background: darken($brand-primary, 15%);
+  }
+}
+#monthselform .row > div {
+  margin-bottom: 15px;
+}

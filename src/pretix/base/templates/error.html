@@ -1,0 +1,20 @@
+{% load compress %}
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixbase/scss/error.scss" %}" />
+    {% endcompress %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
+</head>
+<body>
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+</body>
+<script src="{% static "pretixbase/js/errors.js" %}"></script>
+</html>

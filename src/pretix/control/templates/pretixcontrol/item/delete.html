@@ -1,0 +1,33 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Delete product" %}{% endblock %}
+{% block inside %}
+	<h1>{% trans "Delete product" %}</h1>
+	{% if not possible and not item.active %}
+		<p>{% blocktrans %}You cannot delete the product <strong>{{ item }}</strong> because it already has been ordered.{% endblocktrans %}</p>
+        <div class="form-group submit-group">
+            <a href="{% url "control:event.items" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <div class="clearfix"></div>
+        </div>
+	{% else %}
+		<form action="" method="post" class="form-horizontal">
+			{% csrf_token %}
+            {% if possible %}
+    			<p>{% blocktrans %}Are you sure you want to delete the product <strong>{{ item }}</strong>?{% endblocktrans %}</p>
+            {% else %}
+                <p>{% blocktrans %}You cannot delete the product <strong>{{ item }}</strong> because it already has been ordered, but you can deactive it.{% endblocktrans %}</p>
+            {% endif %}
+            <div class="form-group submit-group">
+                <a href="{% url "control:event.items" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+                    {% trans "Cancel" %}
+                </a>
+                <button type="submit" class="btn btn-danger btn-save">
+                    {% if possible %}{% trans "Delete" %}{% else %}{% trans "Deactivate" %}{% endif %}
+                </button>
+            </div>
+		</form>
+	{% endif %}
+{% endblock %}

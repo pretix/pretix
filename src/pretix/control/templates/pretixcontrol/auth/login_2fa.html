@@ -1,0 +1,42 @@
+{% extends "pretixcontrol/auth/base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+{% load staticfiles %}
+{% load compress %}
+{% block content %}
+    <form class="form-signin" action="" method="post" id="u2f-form">
+        {% csrf_token %}
+        <h3>{% trans "Welcome back!" %}</h3>
+        <p>
+            {% trans "You configured your account two require authentification with a second medium, e.g. your phone. Please enter your verification code here:" %}
+        </p>
+        <div class="form-group">
+            <input class="form-control" name="token" placeholder="{% trans "Token" %}"
+                    type="text" required="required" autofocus="autofocus" id="u2f-response">
+        </div>
+        <div class="sr-only alert alert-danger" id="u2f-error">
+            {% trans "U2F failed. Check that the correct authentication device is correctly plugged in." %}
+        </div>
+        {% if jsondata %}
+            <p><small>
+                {% trans "Alternatively, connect your U2F device. If it has a button, touch it now. You might have to unplug the device and plug it back in again." %}
+            </small></p>
+        {% endif %}
+        <div class="form-group buttons">
+            <button type="submit" class="btn btn-primary">
+                {% trans "Continue" %}
+            </button>
+        </div>
+    </form>
+    {% if jsondata %}
+        <script type="text/json" id="u2f-login">
+            {{ jsondata|safe }}
+
+        </script>
+    {% endif %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/u2f-api.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/u2f.js" %}"></script>
+    {% endcompress %}
+{% endblock %}

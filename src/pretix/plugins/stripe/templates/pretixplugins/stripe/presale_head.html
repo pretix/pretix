@@ -1,0 +1,9 @@
+{% load staticfiles %}
+{% load compress %}
+{% load i18n %}
+
+{% compress js %}
+    <script type="text/javascript" src="{% static "pretixplugins/stripe/pretix-stripe.js" %}"></script>
+{% endcompress %}
+<script type="text/plain" id="stripe_pubkey">{{ settings.publishable_key }}</script>
+

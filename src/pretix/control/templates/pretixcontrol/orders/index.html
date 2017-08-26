@@ -1,0 +1,125 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Orders" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Orders" %}</h1>
+    {% if not filter_form.filtered and orders|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    Nobody ordered a ticket yet.
+                {% endblocktrans %}
+            </p>
+
+            {% if not request.event.live %}
+                <a href="{% url "control:event.live" event=request.event.slug organizer=request.event.organizer.slug %}"
+                        class="btn btn-primary btn-lg">
+                    {% trans "Take your shop live" %}
+                </a>
+            {% else %}
+                <a href="{% eventurl request.event "presale:event.index" %}" class="btn btn-primary btn-lg">
+                    {% trans "Go to the ticket shop" %}
+                </a>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="row filter-form">
+            <form class="col-md-2 col-xs-12"
+                    action="{% url "control:event.orders.go" event=request.event.slug organizer=request.event.organizer.slug %}">
+                <div class="input-group">
+                    <input type="text" name="code" class="form-control" placeholder="{% trans "Order code" %}" autofocus>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit">{% trans "Go!" %}</button>
+                    </span>
+                </div>
+            </form>
+            <form class="" action="" method="get">
+                <div class="col-md-2 col-xs-6">
+                    {% bootstrap_field filter_form.status layout='inline' %}
+                </div>
+                {% if request.event.has_subevents %}
+                    <div class="col-md-1 col-xs-6">
+                        {% bootstrap_field filter_form.item layout='inline' %}
+                    </div>
+                    <div class="col-md-1 col-xs-6">
+                        {% bootstrap_field filter_form.subevent layout='inline' %}
+                    </div>
+                {% else %}
+                    <div class="col-md-2 col-xs-6">
+                        {% bootstrap_field filter_form.item layout='inline' %}
+                    </div>
+                {% endif %}
+                <div class="col-md-2 col-xs-6">
+                    {% bootstrap_field filter_form.provider layout='inline' %}
+                </div>
+                <div class="col-md-2 col-xs-6">
+                    {% bootstrap_field filter_form.query layout='inline' %}
+                </div>
+                <div class="col-md-2 col-xs-6">
+                    <button class="btn btn-primary btn-block" type="submit">
+                        <span class="fa fa-filter"></span>
+                        <span class="hidden-md">
+                            {% trans "Filter" %}
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans "Order code" %}
+                        <a href="?{% url_replace request 'ordering' '-code' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'code' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "User" %}
+                        <a href="?{% url_replace request 'ordering' '-email' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'email' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Order date" %}
+                        <a href="?{% url_replace request 'ordering' '-datetime' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'datetime' %}"><i class="fa fa-caret-up"></i></a>
+                    </th>
+                    <th class="text-right">{% trans "Order total" %}
+                        <a href="?{% url_replace request 'ordering' '-total' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'total' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th class="text-right">{% trans "Positions" %}
+                        <a href="?{% url_replace request 'ordering' '-pcnt' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'pcnt' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th class="text-right">{% trans "Status" %}
+                        <a href="?{% url_replace request 'ordering' '-status' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'status' %}"><i class="fa fa-caret-up"></i></a></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for o in orders %}
+                    <tr>
+                        <td>
+                            <strong>
+                                <a
+                                        href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code %}">
+                                    {{ o.code }}
+                                </a>
+                            </strong>
+                        </td>
+                        <td>
+                            {{ o.email }}
+                            {% if o.invoice_address.name %}
+                                <br>{{ o.invoice_address.name }}
+                            {% endif %}
+                        </td>
+                        <td>{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        <td class="text-right">{{ o.total|floatformat:2 }} {{ request.event.currency }}</td>
+                        <td class="text-right">{{ o.pcnt }}</td>
+                        <td class="text-right">{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}

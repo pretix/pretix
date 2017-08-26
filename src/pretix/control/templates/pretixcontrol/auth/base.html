@@ -1,0 +1,36 @@
+{% load compress %}
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ settings.PRETIX_INSTANCE_NAME }}</title>
+    {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixcontrol/scss/auth.scss" %}"/>
+    {% endcompress %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="container">
+    <a href="{% url "control:auth.login" %}">
+        <img src="{% static "pretixbase/img/pretix-logo.svg" %}" class="logo"/>
+    </a>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+    <footer>
+        {% with "href='http://pretix.eu'" as a_attr %}
+            {% blocktrans trimmed %}
+                powered by <a {{ a_attr }}>pretix</a>
+            {% endblocktrans %}
+        {% endwith %}
+    </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <fieldset>
+            <legend>{% trans "Display settings" %}</legend>
+            {% bootstrap_field form.primary_color layout="horizontal" %}
+            {% bootstrap_field form.primary_font layout="horizontal" %}
+            {% bootstrap_field form.logo_image layout="horizontal" %}
+            {% bootstrap_field form.frontpage_text layout="horizontal" %}
+            {% bootstrap_field form.show_variations_expanded layout="horizontal" %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

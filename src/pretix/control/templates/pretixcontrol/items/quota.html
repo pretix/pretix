@@ -1,0 +1,80 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load escapejson %}
+{% load eventsignal %}
+{% block title %}{% blocktrans with name=quota.name %}Quota: {{ name }}{% endblocktrans %}{% endblock %}
+{% block inside %}
+    <h1>
+        {% blocktrans with name=quota.name %}Quota: {{ name }}{% endblocktrans %}
+        {% if 'can_change_items' in request.eventpermset %}
+            <a href="{% url "control:event.items.quotas.edit" event=request.event.slug organizer=request.event.organizer.slug quota=quota.pk %}"
+                    class="btn btn-default">
+                <span class="fa fa-edit"></span>
+                {% trans "Edit quota" %}
+            </a>
+        {% endif %}
+    </h1>
+    {% if quota.subevent %}
+        <p>
+            <span class="fa fa-calendar"></span> {{ quota.subevent.name }} – {{ quota.subevent.get_date_range_display }}
+        </p>
+    {% endif %}
+    <div class="row" id="quota-stats">
+        <div class="col-md-5 col-xs-12">
+            <legend>{% trans "Usage overview" %}</legend>
+            <div class="chart" id="quota_chart">
+
+            </div>
+            <script type="application/json" id="quota-chart-data">{{ quota_chart_data|escapejson }}</script>
+        </div>
+        <div class="col-md-5 col-xs-12">
+            <legend>{% trans "Availability calculation" %}</legend>
+
+            <div class="row">
+                <div class="col-xs-9">{% trans "Total quota" %}</div>
+                <div class="col-xs-3 text-right">
+                    {% if quota.size == None %}{% trans "Infinite" %}{% else %}{{ quota.size }}{% endif %}
+                </div>
+            </div>
+            {% for row in quota_table_rows %}
+                <div class="row">
+                    <div class="col-xs-9">{{ row.label }}</div>
+                    <div class="col-xs-3 text-right"> – {{ row.value }}</div>
+                </div>
+            {% endfor %}
+            <div class="row">
+                <div class="col-xs-9"><strong>{% trans "Current availability" %}</strong></div>
+                <div class="col-xs-3 text-right">
+                    {% if quota.size == None %}{% trans "Infinite" %}{% else %}{{ avail.1 }}{% endif %}
+                </div>
+            </div>
+            {% if quota_overbooked > 0 %}
+                <div class="alert alert-warning">
+                    {% blocktrans trimmed with num=quota_overbooked %}
+                        This quota is currently overbooked by {{ num }} tickets.
+                    {% endblocktrans %}
+                </div>
+            {% endif %}
+            {% if has_ignore_vouchers %}
+                <div class="alert alert-warning">
+                    {% blocktrans trimmed %}
+                        Your event contains vouchers that affect products covered by this quota and that
+                        allow a user to buy products even if this quota is sold out.
+                    {% endblocktrans %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-2 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Quota history" %}
+                    </h3>
+                </div>
+                {% include "pretixcontrol/includes/logs.html" with obj=quota %}
+            </div>
+        </div>
+    </div>
+    {% eventsignal request.event "pretix.control.signals.quota_detail_html" quota=quota %}
+{% endblock %}

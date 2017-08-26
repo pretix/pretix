@@ -1,0 +1,44 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}
+    {% if question %}
+        {% blocktrans with name=quota.name %}Quota: {{ name }}{% endblocktrans %}
+    {% else %}
+        {% trans "Quota" %}
+    {% endif %}
+{% endblock %}
+{% block inside %}
+    {% if question %}
+        <h1>{% blocktrans with name=quota.name %}Quota: {{ name }}{% endblocktrans %}</h1>
+    {% else %}
+        <h1>{% trans "Quota" %}</h1>
+    {% endif %}
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <fieldset>
+            <legend>{% trans "General information" %}</legend>
+            {% bootstrap_field form.name layout="horizontal" %}
+            {% bootstrap_field form.size layout="horizontal" %}
+            {% if form.subevent %}
+                {% bootstrap_field form.subevent layout="horizontal" %}
+            {% endif %}
+            <legend>{% trans "Items" %}</legend>
+            <p>
+                {% blocktrans trimmed %}
+                    Please select the products or product variations this quota should be applied to. If you apply two
+                    quotas to the same product, it will only be available if
+                    <strong>both</strong> quotas have capacity
+                    left.
+                {% endblocktrans %}
+            </p>
+            {% bootstrap_field form.itemvars layout="horizontal" %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

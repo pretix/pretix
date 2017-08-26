@@ -1,0 +1,83 @@
+.cart-row {
+    /* Cart grid */
+    padding: 10px 0;
+
+    .count form {
+        display: inline;
+    }
+    .price, .count, .download-desktop {
+        text-align: right;
+    }
+    .price small,
+    .availability-box small {
+        display: block;
+        line-height: 1;
+    }
+
+    &.total {
+        border-top: 1px solid $table-border-color;
+    }
+
+    dl {
+        padding-left: 20px;
+        margin-bottom: 0;
+
+        dd {
+            padding-left: 20px;
+        }
+    }
+
+    margin-left: 0;
+    margin-right: 0;
+
+    &>div {
+        position: relative;
+        min-height: 1px;
+        padding-left:  ceil(($grid-gutter-width / 2));
+        padding-right: floor(($grid-gutter-width / 2));
+        float: left;
+    }
+    .download-mobile {
+        display: none;
+        width: 100%;
+        clear: both;
+    }
+    .download-desktop {
+        display: block;
+        width: percentage((4 / $grid-columns));
+    }
+    .product {
+        width: percentage((4 / $grid-columns));
+    }
+    .count {
+        width: percentage((2 / $grid-columns));
+    }
+    .singleprice, .totalprice {
+        width: percentage((3 / $grid-columns));
+    }
+    &.has-downloads .product {
+        width: percentage((5 / $grid-columns));
+    }
+    .addon-signifier {
+        display: inline-block;
+        padding-left: 10px;
+        font-weight: bold;
+    }
+}
+
+@media(max-width: $screen-sm-max) {
+    .cart-row {
+        .download-mobile {
+            display: block;
+        }
+        .download-desktop {
+            display: none;
+        }
+        &.has-downloads .product, .product, .count, .singleprice, .totalprice {
+            width: 50%;
+        }
+        .singleprice {
+            clear: both;
+        }
+    }
+}

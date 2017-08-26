@@ -1,0 +1,65 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% block title %}{% trans "Event logs" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Event logs" %}</h1>
+    <form class="form-inline helper-display-inline" action="" method="get">
+        <p>
+            <select name="user" class="form-control">
+                <option value="">{% trans "All actions" %}</option>
+                <option value="yes" {% if request.GET.user == "yes" %}selected="selected"{% endif %}>
+                    {% trans "Team actions" %}
+                </option>
+                <option value="no" {% if request.GET.user == "no" %}selected="selected"{% endif %}>
+                    {% trans "Customer actions" %}
+                </option>
+                {% for up in userlist %}
+                    {% if up.user__id %}
+                        <option value="{{ up.user__id }}" {% if request.GET.user == up.user__id %}selected="selected"{% endif %}>
+                            {{ up.user__email }}
+                        </option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+        </p>
+    </form>
+    <ul class="list-group">
+        {% for log in logs %}
+            <li class="list-group-item logentry">
+                <div class="row">
+                    <div class="col-lg-2 col-sm-6 col-xs-12">
+                        <span class="fa fa-clock-o"></span> {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                    </div>
+                    <div class="col-lg-2 col-sm-6 col-xs-12">
+                        {% if log.user %}
+                            {% if log.user.is_superuser %}
+                                <span class="fa fa-id-card fa-danger fa-fw"
+                                     data-toggle="tooltip"
+                                     title="{% trans "This change was performed by a pretix administrator." %}">
+                                </span>
+                            {% else %}
+                                <span class="fa fa-user fa-fw"></span>
+                            {% endif %}
+                            {{ log.user.get_full_name }}
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-2 col-sm-12 col-xs-12">
+                        {% if log.display_object %}
+                            <span class="fa fa-flag"></span> {{ log.display_object|safe }}
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-xs-12">
+                        {{ log.display }}
+                    </div>
+                </div>
+            </li>
+        {% empty %}
+            <div class="list-group-item">
+                <em>{% trans "No results" %}</em>
+            </div>
+        {% endfor %}
+    </ul>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Email history" %}{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Email history" %}
+        <a class="btn btn-link btn-lg"
+                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+            {% blocktrans trimmed with order=order.code %}
+                Back to order {{ order }}
+            {% endblocktrans %}
+        </a>
+    </h1>
+    <div>
+        <ul class="list-group">
+            {% for log in logs %}
+                <li class="list-group-item logentry">
+                    <p class="meta">
+                        <span class="fa fa-fw fa-clock-o"></span> {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                        {% if log.user %}
+                            <br/><span class="fa fa-fw fa-user"></span> {{ log.user.get_full_name }}
+                        {% endif %}
+                        {% if log.display %}
+                            <br/><span class="fa fa-fw fa-comment-o"></span> {{ log.display }}
+                        {% endif %}
+                    </p>
+                    {% if log.parsed_data.subject.items %}
+                        <div class="alert alert-info">
+                            {% blocktrans trimmed %}
+                                This email has been sent with an older version of pretix. We are therefore not able to
+                                display it here accurately.
+                            {% endblocktrans %}
+                        </div>
+                        <p>
+                            <strong>{% trans "Subject:" %}
+                                {% for k, v in log.parsed_data.subject.items %}
+                                    {% if k == order.locale %}
+                                        {{ v }}
+                                    {% endif %}
+                                {% endfor %}
+                            </strong>
+                        </p>
+                        <pre>{% for k, v in log.parsed_data.message.items %}{% if k == order.locale %}{{ v }}{% endif %}{% endfor %}</pre>
+                    {% else %}
+                        <p>
+                            <strong>{% trans "Subject:" %}
+                                {{ log.parsed_data.subject }}</strong>
+                        </p>
+                        <pre>{{ log.parsed_data.message }}</pre>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

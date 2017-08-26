@@ -1,0 +1,162 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load eventurl %}
+{% block title %}{% trans "Confirm order" %}{% endblock %}
+{% block content %}
+    <h2>{% trans "Confirm order" %}</h2>
+    <p>{% trans "Please review the details below and confirm your order." %}</p>
+    <form method="post" data-asynctask>
+        {% csrf_token %}
+        <div class="panel panel-primary cart">
+            <div class="panel-heading">
+                <div class="pull-right">
+                    <a href="
+                    {% eventurl request.event "presale:event.index" %}">
+                        <span class="fa fa-edit"></span>
+                        {% trans "Modify" %}
+                    </a>
+                </div>
+                <h3 class="panel-title">
+                    {% trans "Your cart" %}
+                </h3>
+            </div>
+            <div class="panel-body">
+                {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=False %}
+                <div class="cart-row row">
+                    <div class="col-md-6 col-xs-12">
+                        <em id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
+                            {% if cart.minutes_left > 0 %}
+                                {% blocktrans trimmed with minutes=cart.minutes_left %}
+                                    The items in your cart are reserved for you for {{ minutes }} minutes.
+                                {% endblocktrans %}
+                            {% else %}
+                                {% trans "The items in your cart are no longer reserved for you." %}
+                            {% endif %}
+                        </em>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                {% if payment_provider.identifier != "free" %}
+                    <div class="pull-right">
+                        <a href="{% eventurl request.event "presale:event.checkout" step="payment" %}">
+                            <span class="fa fa-edit"></span>
+                            {% trans "Modify" %}
+                        </a>
+                    </div>
+                {% endif %}
+                <h3 class="panel-title">
+                    {% trans "Payment" %}
+                </h3>
+            </div>
+            <div class="panel-body">
+                {{ payment }}
+            </div>
+        </div>
+        <div class="row">
+            {% if request.event.settings.invoice_address_asked %}
+                <div class="col-md-6 col-xs-12">
+                    <div class="panel panel-primary panel-contact">
+                        <div class="panel-heading">
+                            <div class="pull-right">
+                                <a href="{% eventurl request.event "presale:event.checkout" step="questions" %}">
+                                    <span class="fa fa-edit"></span>
+                                    {% trans "Modify" %}
+                                </a>
+                            </div>
+                            <h3 class="panel-title">
+                                {% trans "Invoice information" %}
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <dl class="dl-horizontal">
+                                <dt>{% trans "Company" %}</dt>
+                                <dd>{{ addr.company }}</dd>
+                                <dt>{% trans "Name" %}</dt>
+                                <dd>{{ addr.name }}</dd>
+                                <dt>{% trans "Address" %}</dt>
+                                <dd>{{ addr.street|linebreaksbr }}</dd>
+                                <dt>{% trans "ZIP code and city" %}</dt>
+                                <dd>{{ addr.zipcode }} {{ addr.city }}</dd>
+                                <dt>{% trans "Country" %}</dt>
+                                <dd>{{ addr.country.name }}</dd>
+                                {% if request.event.settings.invoice_address_vatid %}
+                                    <dt>{% trans "VAT ID" %}</dt>
+                                    <dd>{{ addr.vat_id }}</dd>
+                                {% endif %}
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="{% if request.event.settings.invoice_address_asked %}col-md-6{% endif %} col-xs-12">
+                <div class="panel panel-primary panel-contact">
+                    <div class="panel-heading">
+                        <div class="pull-right">
+                            <a href="{% eventurl request.event "presale:event.checkout" step="questions" %}">
+                                <span class="fa fa-edit"></span>
+                                {% trans "Modify" %}
+                            </a>
+                        </div>
+                        <h3 class="panel-title">
+                            {% trans "Contact information" %}
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <dl class="dl-horizontal">
+                            <dt>{% trans "E-mail address" %}</dt>
+                            <dd>{{ request.session.email }}</dd>
+                        </dl>
+                        {% for l, v in contact_info %}
+                            <dl class="dl-horizontal">
+                                <dt>{{ l }}</dt>
+                                <dd>{{ v }}</dd>
+                            </dl>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if confirm_messages %}
+            <div class="panel panel-primary panel-contact">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Confirmations" %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    {% for key, desc in confirm_messages.items %}
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" class="checkbox" value="yes" name="confirm_{{ key }}" required>
+                                {{ desc|safe }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        <div class="row checkout-button-row clearfix">
+            <div class="col-md-4">
+                <a class="btn btn-block btn-default btn-lg"
+                        href="{{ prev_url }}">
+                    {% trans "Go back" %}
+                </a>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
+                <button class="btn btn-block btn-primary btn-lg" type="submit">
+                    {% if cart.total > 0 %}
+                        {% trans "Place binding order" %}
+                    {% else %}
+                        {% trans "Submit registration" %}
+                    {% endif %}
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}

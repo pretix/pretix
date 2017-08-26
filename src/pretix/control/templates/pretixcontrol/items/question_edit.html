@@ -1,0 +1,97 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load formset_tags %}
+{% block title %}
+    {% if question %}
+        {% blocktrans with name=question.question %}Question: {{ name }}{% endblocktrans %}
+    {% else %}
+        {% trans "Question" %}
+    {% endif %}
+{% endblock %}
+{% block inside %}
+    {% if question %}
+        <h1>{% blocktrans with name=question.question %}Question: {{ name }}{% endblocktrans %}</h1>
+    {% else %}
+        <h1>{% trans "Question" %}</h1>
+    {% endif %}
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <fieldset>
+            <legend>{% trans "General information" %}</legend>
+            {% bootstrap_field form.question layout="horizontal" %}
+            {% bootstrap_field form.help_text layout="horizontal" %}
+            {% bootstrap_field form.type layout="horizontal" %}
+            {% bootstrap_field form.required layout="horizontal" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Apply to products" %}</legend>
+            {% bootstrap_field form.items layout="horizontal" %}
+        </fieldset>
+        <div class="alert alert-info alert-required-boolean">
+            {% blocktrans trimmed %}
+                If you mark a Yes/No question as required, it means that the user has to select Yes and No is not
+                accepted. If you want to allow both options, do not make this field required.
+            {% endblocktrans %}
+        </div>
+        <fieldset id="answer-options">
+            <legend>{% trans "Answer options" %}</legend>
+            <noscript>
+                <p>{% trans "Only applicable if you choose 'Choose one/multiple from a list' above." %}</p>
+            </noscript>
+            <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+                {{ formset.management_form }}
+                {% bootstrap_formset_errors formset %}
+                <div data-formset-body>
+                    {% for form in formset %}
+                        <div data-formset-form>
+                            <div class="sr-only">
+                                {{ form.id }}
+                                {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                            </div>
+                            <div class="row question-option-row">
+                                <div class="col-xs-10">
+                                    {% bootstrap_form_errors form %}
+                                    {% bootstrap_field form.answer layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-xs-2 text-right">
+                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                        <i class="fa fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <script type="form-template" data-formset-empty-form>
+                    {% escapescript %}
+                        <div data-formset-form>
+                            <div class="sr-only">
+                                {{ formset.empty_form.id }}
+                                {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                            </div>
+                            <div class="row question-option-row">
+                                <div class="col-xs-10">
+                                    {% bootstrap_field formset.empty_form.answer layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-xs-2 text-right">
+                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                        <i class="fa fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endescapescript %}
+                </script>
+                <p>
+                    <button type="button" class="btn btn-default" data-formset-add>
+                        <i class="fa fa-plus"></i> {% trans "Add a new option" %}</button>
+                </p>
+            </div>
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

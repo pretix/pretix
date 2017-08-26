@@ -1,0 +1,65 @@
+{% load i18n %}
+
+{% if payment_info %}
+    {% if order.status == "p" %}
+        <p>{% blocktrans trimmed with method=provider.verbose_name %}
+            This order has been paid with {{ method }}.
+        {% endblocktrans %}</p>
+    {% elif order.status == "r" %}
+        <p>{% blocktrans trimmed with method=provider.verbose_name %}
+            This order has been planned to be paid with {{ method }} and has been marked as refunded.
+        {% endblocktrans %}</p>
+    {% else %}
+        <p>{% blocktrans trimmed with method=provider.verbose_name %}
+            This order has been planned to be paid with {{ method }}, but the payment has not yet been completed.
+        {% endblocktrans %}</p>
+    {% endif %}
+    {% if "source" in payment_info %}
+        <dl class="dl-horizontal">
+            <dt>{% trans "Charge ID" %}</dt>
+            <dd>{{ payment_info.id }}</dd>
+            {% if payment_info.source.type == "card" or payment_info.source.type == "three_d_secure" %}
+                <dt>{% trans "Card type" %}</dt>
+                <dd>{{ payment_info.source.brand }}</dd>
+                <dt>{% trans "Card number" %}</dt>
+                <dd>**** **** **** {{ payment_info.source.last4 }}</dd>
+                <dt>{% trans "Payer name" %}</dt>
+                <dd>{{ payment_info.source.name }}</dd>
+            {% endif %}
+            {% if payment_info.source.type == "giropay" %}
+                <dt>{% trans "Bank" %}</dt>
+                <dd>{{ payment_info.source.giropay.bank_name }} ({{ payment_info.source.giropay.bic }})</dd>
+                <dt>{% trans "Payer name" %}</dt>
+                <dd>{{ payment_info.source.owner.verified_name|default:payment_info.source.owner.name }}</dd>
+            {% endif %}
+            {% if payment_info.source.type == "bancontact" %}
+                <dt>{% trans "Bank" %}</dt>
+                <dd>{{ payment_info.source.bancontact.bank_name }} ({{ payment_info.source.bancontact.bic }})</dd>
+                <dt>{% trans "Payer name" %}</dt>
+                <dd>{{ payment_info.source.owner.verified_name|default:payment_info.source.owner.name }}</dd>
+            {% endif %}
+            {% if payment_info.source.type == "ideal" %}
+                <dt>{% trans "Bank" %}</dt>
+                <dd>{{ payment_info.source.ideal.bank }} ({{ payment_info.source.ideal.bic }})</dd>
+                <dt>{% trans "Payer name" %}</dt>
+                <dd>{{ payment_info.source.owner.verified_name|default:payment_info.source.owner.name }}</dd>
+            {% endif %}
+            <dt>{% trans "Total value" %}</dt>
+            <dd>{{ payment_info.amount|floatformat:2 }}</dd>
+            <dt>{% trans "Currency" %}</dt>
+            <dd>{{ payment_info.currency|upper }}</dd>
+            <dt>{% trans "Status" %}</dt>
+            <dd>{{ payment_info.status }}</dd>
+        </dl>
+    {% endif %}
+    {% if "message" in payment_info %}
+        <dl class="dl-horizontal">
+            <dt>{% trans "Error message" %}</dt>
+            <dd>{{ payment_info.message }}</dd>
+        </dl>
+    {% endif %}
+{% else %}
+    <p>{% blocktrans trimmed %}
+        This order has been planned to be paid via Stripe, but the payment has not yet been completed.
+    {% endblocktrans %}</p>
+{% endif %}

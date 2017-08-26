@@ -1,0 +1,84 @@
+{% extends "pretixpresale/organizers/base.html" %}
+{% load i18n %}
+{% load rich_text %}
+{% load eventurl %}
+{% block title %}{% trans "Event list" %}{% endblock %}
+{% block content %}
+    <div>
+	{% if organizer_homepage_text %}
+                {{ organizer_homepage_text | rich_text }}
+	{% endif %}
+    </div>
+    {% if "old" in request.GET %}
+        <h3>{% trans "Past events" %}</h3>
+    {% else %}
+        <h3>{% trans "Upcoming events" %}</h3>
+    {% endif %}
+    <div>
+        <div class="btn-group" role="group">
+            <a href="{% eventurl request.organizer "presale:organizer.index" %}?style=list" type="button"
+                    class="btn btn-default active">
+                <span class="fa fa-list"></span>
+                {% trans "List" %}
+            </a>
+            <a href="{% eventurl request.organizer "presale:organizer.index" %}?style=calendar" type="button"
+                    class="btn btn-default">
+                <span class="fa fa-calendar"></span>
+                {% trans "Calendar" %}
+            </a>
+        </div>
+        <a href="{% eventurl request.organizer "presale:organizer.ical" %}?locale={{ request.LANGUAGE_CODE }}"
+                class="btn btn-default">
+            <span class="fa fa-calendar-plus-o"></span>
+            {% trans "iCal" %}
+        </a>
+        {% if "old" in request.GET %}
+            <a href="?style=list" class="btn btn-link">{% trans "Show upcoming" %}</a>
+        {% else %}
+            <a href="?style=list&old=1" class="btn btn-link">{% trans "Show past events" %}</a>
+        {% endif %}
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Date" %}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for e in events %}{% eventurl e "presale:event.index" as url %}
+                <tr>
+                    <td><a href="{{ url }}">{{ e.name }}</a></td>
+                    <td>
+                        {{ e.get_date_range_display }}
+                    </td>
+                    <td class="text-right">
+                        <a class="btn btn-primary" href="{{ url }}">
+                            {% if e.presale_is_running %}{% trans "Buy tickets" %}
+                                {% else %}{% trans "More info" %}
+                            {% endif %}
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                {% if "old" in request.GET %}
+                    <tr>
+                        <td colspan="3">
+                            <em>{% trans "No archived events found." %}</em>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3">
+                            <em>{% trans "No public upcoming events found." %}</em>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include "pretixpresale/pagination.html" %}
+{% endblock %}

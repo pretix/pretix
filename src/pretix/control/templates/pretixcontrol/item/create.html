@@ -1,0 +1,42 @@
+{% extends "pretixcontrol/item/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+{% load static %}
+<script type="text/javascript" src="{% static "pretixcontrol/js/ui/hidequota.js" %}"></script>
+
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            <legend>{% trans "General information" %}</legend>
+            {% bootstrap_field form.name layout="horizontal" %}
+            {% bootstrap_field form.copy_from layout="horizontal" %}
+            {% bootstrap_field form.has_variations layout="horizontal" %}
+            {% bootstrap_field form.category layout="horizontal" %}
+            {% bootstrap_field form.admission layout="horizontal" %}
+        </fieldset>
+        {% if form.quota_option %}
+            <fieldset>
+                <legend>{% trans "Quota settings" %}</legend>
+                {% bootstrap_field form.quota_option layout="horizontal" %}
+                <div id="existing-quota-group">
+                    {% bootstrap_field form.quota_add_existing layout="horizontal" %}
+                </div>
+                <div id="new-quota-group">
+                    {% bootstrap_field form.quota_add_new_name layout="horizontal" %}
+                    {% bootstrap_field form.quota_add_new_size layout="horizontal" %}
+                </div>
+            </fieldset>
+        {% endif %}
+        <fieldset>
+            <legend>{% trans "Price settings" %}</legend>
+            {% bootstrap_field form.default_price layout="horizontal" %}
+            {% bootstrap_field form.tax_rule layout="horizontal" %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save and continue with more settings" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

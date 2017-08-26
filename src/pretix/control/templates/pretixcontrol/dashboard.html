@@ -1,0 +1,30 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Dashboard" %}{% endblock %}
+{% block content %}
+	<h1>{% trans "Dashboard" %}</h1>
+
+    <div class="dropdown-container">
+        <input type="text" class="form-control" id="dashboard_query"
+                placeholder="{% trans "Go to event" %}"
+                data-typeahead-query autofocus>
+        <ul data-event-typeahead data-source="{% url "control:events.typeahead" %}" data-typeahead-field="#dashboard_query"
+            class="event-dropdown dropdown-menu">
+        </ul>
+    </div>
+    <div class="dashboard">
+        {% for w in widgets %}
+            <div class="widget-{{ w.display_size|default:"small" }} {{ w.container_class|default:"widget-container" }}">
+                {% if w.url %}
+                    <a href="{{ w.url }}" class="widget">
+                        {{ w.content|safe }}
+                    </a>
+                {% else %}
+                    <div class="widget">
+                        {{ w.content|safe }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

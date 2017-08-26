@@ -1,0 +1,34 @@
+{% load i18n %}
+{% load eventurl %}
+{% for subev in event.active_future_subevents %}
+    <a href="{% eventurl event "presale:event.index" subevent=subev.id %}" class="subevent-row">
+        <div class="row">
+            <div class="col-md-6">
+                <strong>{{ subev.name }}</strong>
+            </div>
+            <div class="col-md-4">
+                <span class="fa fa-calendar"></span>
+                {{ subev.get_date_range_display }}
+                {% if event.settings.show_times %}
+                    <span class="fa fa-clock-o"></span>
+                    {{ subev.date_from|date:"TIME_FORMAT" }}
+                {% endif %}
+            </div>
+            <div class="col-md-2 text-right">
+                {% if subev.presale_is_running %}
+                    <span class="label label-success">{% trans "Tickets on sale" %}</span>
+                {% elif subev.presale_has_ended %}
+                    <span class="label label-danger">{% trans "Sale over" %}</span>
+                {% elif event.settings.presale_start_show_date %}
+                    <span class="label label-warning">
+                                    {% blocktrans trimmed with date=subev.presale_start|date:"SHORT_DATE_FORMAT" %}
+                                        Sale starts {{ date }}
+                                    {% endblocktrans %}
+                                </span>
+                {% else %}
+                    <span class="label label-warning">{% trans "Not yet on sale" %}</span>
+                {% endif %}
+            </div>
+        </div>
+    </a>
+{% endfor %}

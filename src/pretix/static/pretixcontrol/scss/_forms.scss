@@ -1,0 +1,177 @@
+td > .form-group {
+  margin-bottom: 0;
+}
+
+td > .errorlist {
+  color: #a94442;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+td > .form-group > .checkbox {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.static-form-row {
+  padding-top: 7px;
+}
+
+.has-success .form-control {
+  border-color: #cccccc;
+}
+
+.panel-body div.alert:last-child {
+  margin-bottom: 0;
+}
+
+.form-group.disabled {
+  opacity: 0.5;
+}
+
+.form-horizontal [data-formset] .form-group {
+  width: 100%;
+}
+
+[data-formset] .form-group:not([data-formset-form-deleted]):last-of-type [data-formset-move-down-button],
+[data-formset] .form-group:not([data-formset-form-deleted]):first-of-type [data-formset-move-up-button] {
+  cursor: not-allowed;
+  pointer-events: none; // Future-proof disabling of clicks
+  @include opacity(.65);
+  @include box-shadow(none);
+}
+
+div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], div[data-nested-formset-body] {
+  width: 100%;
+}
+
+.form-plugins .panel-title {
+  line-height: 34px;
+}
+
+.restriction-formset .variations label {
+  margin: 0;
+}
+
+.submit-group {
+  margin: 15px 0 0 0 !important;
+  padding: 15px;
+  background: #eeeeee;
+  text-align: right;
+  .btn-save {
+    // btn-lg
+    @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $btn-border-radius-large);
+  }
+  .btn-cancel {
+    float: left !important;
+    // btn-lg
+    @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $btn-border-radius-large);
+  }
+}
+
+.panel .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.preview-panel .nav-tabs {
+  border-bottom: 0px solid #ddd;
+}
+
+.tab-content {
+    border: 1px solid #ddd;
+    border-radius: 0px 5px 5px 5px;
+    padding: 5px 5px 0px 5px;
+}
+
+.mail-preview-group {
+  margin-bottom: -15px;
+}
+
+.variation-matrix {
+  td .form-group, .checkbox {
+    margin: 0;
+  }
+}
+
+.table-quotas td ul {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.question-option-row {
+  padding: 5px 0;
+}
+
+.i18n-form-group input,
+.i18n-form-group textarea {
+  @include border-top-radius(0px);
+  @include border-bottom-radius(0px);
+  border-top-width: 0;
+
+  &:first-child {
+    @include border-top-radius($input-border-radius);
+    border-top-width: 1px;
+  }
+  &:last-child {
+    @include border-bottom-radius($input-border-radius);
+  }
+}
+
+@media (min-width: $screen-sm-min) {
+  .variation-matrix > tbody > tr > td {
+    line-height: 34px;
+
+    input[type=checkbox] {
+      margin-top: 10px;
+    }
+  }
+}
+.ticketoutput-panel .panel-title {
+  line-height: 30px;
+}
+
+pre.mail-preview {
+  white-space: pre-line;       /* Since CSS 2.1 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+.mail-preview-group pre[lang] {
+  @include border-top-radius(0px);
+  @include border-bottom-radius(0px);
+  border-top-width: 0;
+  margin-bottom: 0;
+
+  &:first-child {
+    @include border-top-radius($input-border-radius);
+    border-top-width: 1px;
+  }
+  &:last-child {
+    @include border-bottom-radius($input-border-radius);
+    margin-bottom: 20px;
+  }
+}
+
+.search-line {
+  width: 100%;
+  margin-bottom: 20px;
+
+  .input-group-btn {
+    width: 1% !important;
+  }
+}
+.input-group-btn .btn {
+  padding-bottom: 7px;
+}
+.reldatetime {
+  input[type=text], select {
+    display: inline-block;
+    max-width: 200px;
+  }
+  input[type=number] {
+    display: inline-block;
+    width: 80px;
+  }
+
+}

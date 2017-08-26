@@ -1,0 +1,20 @@
+{% load i18n %}
+
+<p>
+    {% url "control:event.order" organizer=event.organizer.slug event=event.slug code=data.order as ourl %}
+    {% blocktrans trimmed with charge=data.charge stripe_href="href='https://dashboard.stripe.com/payments/"|add:data.charge|add:"' target='_blank'"|safe order="<a href='"|add:ourl|add:"'>"|add:data.order|add:"</a>"|safe %}
+        Stripe reported that the transaction <a {{ stripe_href }}>{{ charge }}</a> has been refunded.
+        Do you want to refund mark the matching order ({{ order }}) as refunded?
+    {% endblocktrans %}
+</p>
+<form class="form-inline" method="post" action="{% url "plugins:stripe:refund"  event=event.slug organizer=event.organizer.slug id=action.id %}">
+    {% csrf_token %}
+    <a href="{% url "control:event.requiredaction.discard" event=event.slug organizer=event.organizer.slug id=action.id %}"
+            class="btn btn-default">
+        {% trans "No" %}
+    </a>
+    <button type="submit" class="btn btn-default btn-danger">
+        {% trans "Yes, mark order as refunded" %}
+    </button>&nbsp;
+    {% trans "This action cannot be undone." %}
+</form>

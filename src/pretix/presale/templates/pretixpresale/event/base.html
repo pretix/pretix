@@ -1,0 +1,70 @@
+{% extends "pretixpresale/base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load eventurl %}
+{% load safelink %}
+{% block thetitle %}
+    {% block title %}{% endblock %}{% if url_name != "event.index" %} :: {% endif %}{{ event.name }}
+{% endblock %}
+{% block above %}
+    {% if not event.live %}
+        <div class="offline-banner">
+            <div class="container">
+                <span class="fa fa-user-secret"></span>
+                {% trans "This shop is currently only visible to you and your team." %}
+                <a href="{{ site_url }}{% url "control:event.live" event=event.slug organizer=event.organizer.slug %}">
+                    {% trans "Take it live now" %}
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block page %}
+    <div class="page-header">
+        <div class="pull-left">
+            {% if event_logo %}
+                <a href="{% eventurl event "presale:event.index" %}" title="{{ event.name }}">
+                    <img src="{{ event_logo|thumbnail_url:'logo' }}" alt="{{ event.name }}" class="event-logo" />
+                </a>
+            {% else %}
+                <h1>
+                    <a href="{% eventurl event "presale:event.index" %}">{{ event.name }}</a>
+                    {% if not event.has_subevents %}
+                        <small>{{ event.get_date_range_display }}</small>
+                    {% endif %}
+                </h1>
+            {% endif %}
+        </div>
+        <div class="pull-right loginbox">
+            {% if request.event.settings.locales|length > 1 %}
+                <div class="locales">
+                    {% for l in languages %}
+                        <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}">
+                            {{ l.name_local }}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+{% endblock %}
+{% block footer %}
+    {% if request.event.settings.contact_mail %}
+        <a href="mailto:{{ request.event.settings.contact_mail }}">{% trans "Contact event organizer" %}</a> &middot;
+    {% endif %}
+    {% if request.event.settings.imprint_url %}
+        <a href="{% safelink request.event.settings.imprint_url %}" target="_blank">{% trans "Imprint" %}</a>
+        &middot;
+    {% endif %}
+{% endblock %}

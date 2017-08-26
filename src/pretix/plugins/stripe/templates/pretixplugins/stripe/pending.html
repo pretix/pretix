@@ -1,0 +1,19 @@
+{% load i18n %}
+
+{% if provider.method == "sofort" %}
+    <p>{% blocktrans trimmed %}
+        We're waiting for an answer from the payment provider regarding your payment. Please contact us if this
+        takes more than a few days.
+    {% endblocktrans %}</p>
+{% else %}
+    <p>{% blocktrans trimmed %}
+        The payment transaction could not be completed for the following reason:
+    {% endblocktrans %}
+        <br/>
+        {% if payment_info and payment_info.error %}
+            {{ payment_info.message }}
+        {% else %}
+            {% trans "Unknown reason" %}
+        {% endif %}
+    </p>
+{% endif %}

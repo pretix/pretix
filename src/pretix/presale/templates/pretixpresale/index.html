@@ -1,0 +1,30 @@
+{% load i18n %}
+{% load compress %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ settings.PRETIX_INSTANCE_NAME }}</title>
+    {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/index.scss" %}"/>
+    {% endcompress %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="container">
+        <img src="{% static "pretixbase/img/pretix-logo.svg" %}" class="logo"/>
+
+        <h1>{% trans "Hello!" %}</h1>
+        <p>
+            {% with "href='http://pretix.eu'" as a_attr %}
+                {% blocktrans trimmed %}
+                    This is a ticket presale system powered by <a {{ a_attr }}>pretix</a>.
+                {% endblocktrans %}
+            {% endwith %}
+        </p>
+        <p>
+            {% trans "There is nothing to see here yet." %}
+        </p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,176 @@
+.product-row {
+    border-top: 1px solid $table-border-color;
+
+    &:last-child {
+    }
+    p  {
+        margin-bottom: 0;
+    }
+
+    .input-item-count {
+        text-align: center;
+    }
+    .input-group-price {
+        margin-bottom: 3px;
+    }
+    .input-item-price {
+        text-align: right;
+    }
+    .availability-box {
+        text-align: center;
+
+        &.gone {
+            color: $alert-danger-text;
+        }
+        &.unavailable {
+            color: $alert-warning-text;
+        }
+    }
+    .item-checkbox-label {
+        display: block;
+    }
+
+    .productpicture {
+        float: left;
+        margin-right: 10px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .radio-box {
+        text-align: center;
+        label {
+            display: block;
+            width: 100%;
+            line-height: 19px;
+            margin: 0;
+        }
+    }
+}
+.radio .variation-description {
+    padding-left: 20px;
+}
+.variation-description {
+    color: lighten($text-color, 25%);
+}
+.voucher-row {
+    margin-top: 10px;
+}
+.toggle-variation-description {
+    cursor: pointer;
+}
+#voucher-toggle {
+    display: none;
+}
+.item-with-variations .product-row.headline, .product-row.simple {
+    border-top: 2px solid $table-border-color;
+}
+.item-with-variations:last-child {
+    border-bottom: 2px solid $table-border-color;
+}
+
+.panel-body address:last-child {
+    margin-bottom: 0;
+}
+
+.product-row {
+    padding: 10px 0;
+
+    .count form {
+        display: inline;
+    }
+    .price, .count {
+        text-align: right;
+    }
+    .price small,
+    .availability-box small {
+        display: block;
+        line-height: 1;
+    }
+
+    &.total {
+        border-top: 1px solid $table-border-color;
+    }
+}
+.panel-contact dl {
+    margin-bottom: 0;
+}
+.panel-primary .panel-heading a {
+    color: white;
+}
+.checkout-button-row {
+    padding-top: 15px;
+}
+section.front-page {
+    margin-top: 30px;
+}
+.offline-banner {
+    background: $brand-danger;
+    color: white;
+    width: 100%;
+    padding: 5px;
+    text-align: center;
+
+    a {
+        text-decoration: underline;
+        color: white;
+    }
+}
+#questions_group .panel-title a {
+    line-height: 22px;
+}
+@media (max-width: $screen-sm-max) {
+    .page-header h1 small {
+        display: block;
+        white-space: normal;
+    }
+    .row-voucher > div:first-child {
+        margin-bottom: 15px;
+    }
+}
+
+.subevent-list {
+    background-color: $body-bg;
+
+    form {
+        padding: 10px 0;
+    }
+
+    .row {
+        margin: 0;
+    }
+    a.subevent-row {
+        display: block;
+        color: $text-color;
+        padding: 3px 0;
+    }
+    a.subevent-row:nth-child(2n) {
+        background-color: $gray-lighter;
+    }
+    a.subevent-row:hover {
+        text-decoration: none;
+        background-color: darken($gray-lighter, 10%);
+    }
+    .subevent-row .row > div {
+        padding: 5px;
+        min-height: 35px; /* label height */
+        vertical-align: middle;
+    }
+}
+.subevent-toggle {
+    padding: 5px;
+    text-align: center;
+    background-color: darken($gray-lighter, 30%);
+    display: none;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+        color: white;
+        text-decoration: none;
+        background-color: darken($gray-lighter, 40%);
+    }
+}
+h2.subevent-head {
+    margin-top: 10px;
+}

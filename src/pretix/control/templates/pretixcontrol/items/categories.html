@@ -1,0 +1,57 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Product categories" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Product categories" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            You can use categories to group multiple products together in an organized way.
+        {% endblocktrans %}
+    </p>
+    {% if categories|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't created any categories yet.
+                {% endblocktrans %}
+            </p>
+
+            <a href="{% url "control:event.items.categories.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new category" %}</a>
+        </div>
+    {% else %}
+        <p>
+            <a href="{% url "control:event.items.categories.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new category" %}
+            </a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans "Product categories" %}</th>
+                    <th class="action-col-2"></th>
+                    <th class="action-col-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for c in categories %}
+                    <tr>
+                        <td>
+                            <strong><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}">{{ c.name }}</a></strong>
+                        </td>
+                        <td>
+                            <a href="{% url "control:event.items.categories.up" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
+                            <a href="{% url "control:event.items.categories.down" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
+                        </td>
+                        <td class="text-right">
+                            <a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                            <a href="{% url "control:event.items.categories.delete" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}

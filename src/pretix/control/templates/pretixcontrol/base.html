@@ -1,0 +1,302 @@
+{% load compress %}
+{% load staticfiles %}
+{% load i18n %}
+{% load statici18n %}
+{% load eventurl %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{% block title %}{% endblock %}{% if url_name != "index" %} :: {% endif %}
+            {{ settings.PRETIX_INSTANCE_NAME }}</title>
+		{% compress css %}
+    		<link rel="stylesheet" type="text/x-scss" href="{% static "pretixcontrol/scss/main.scss" %}" />
+		{% endcompress %}
+        {% if DEBUG %}
+            <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}" async></script>
+        {% else %}
+            <script src="{% statici18n LANGUAGE_CODE %}" async></script>
+        {% endif %}
+		{% compress js %}
+            <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+            <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
+            <script type="text/javascript" src="{% static "typeahead/typeahead.bundle.js" %}"></script>
+            <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.js" %}"></script>
+            <script type="text/javascript" src="{% static "moment/moment-with-locales.js" %}"></script>
+            <script type="text/javascript" src="{% static "datetimepicker/bootstrap-datetimepicker.js" %}"></script>
+            <script type="text/javascript" src="{% static "charts/raphael-min.js" %}"></script>
+            <script type="text/javascript" src="{% static "charts/morris.js" %}"></script>
+            <script type="text/javascript" src="{% static "clipboard/clipboard.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/jquery.qrcode.min.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/clipboard.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/menu.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/sb-admin-2.js" %}"></script>
+		    <script type="text/javascript" src="{% static "pretixcontrol/js/ui/main.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/ui/quota.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/ui/question.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/ui/mail.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/ui/typeahead.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixbase/js/asynctask.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixbase/js/asyncdownload.js" %}"></script>
+            <script type="text/javascript" src="{% static "colorpicker/bootstrap-colorpicker.js" %}"></script>
+            <script type="text/javascript" src="{% static "fileupload/jquery.ui.widget.js" %}"></script>
+            <script type="text/javascript" src="{% static "fileupload/jquery.fileupload.js" %}"></script>
+		{% endcompress %}
+        {{ html_head|safe }}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
+        {% block custom_header %}{% endblock %}
+	</head>
+	<body data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}" data-payment-weekdays-disabled="{{ js_payment_weekdays_disabled }}">
+        <div id="wrapper">
+            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle"
+                            data-toggle="collapse" data-target=".navbar-nav-collapse">
+                        <span class="sr-only">{% trans "Toggle navigation" %}</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <button type="button" class="navbar-toggle navbar-events"
+                            data-toggle="collapse" data-target=".navbar-events-collapse">
+                        <i class="fa fa-calendar"></i><span class="caret"></span>
+                    </button>
+                    {% if request.event %}
+                        {% if has_domain and not request.event.live %}
+                            <form action="{% eventurl request.event "presale:event.auth" %}" method="post"
+                                    target="_blank" class="mobile-navbar-view-form visible-xs-block">
+                                <input type="hidden" value="{{ new_session }}" name="session">
+                                <button type="submit" class="btn btn-link navbar-toggle">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </form>
+                        {% else %}
+                            <a href="{% eventurl request.event "presale:event.index" %}" title="{% trans "Go to Shop" %}"
+                                    target="_blank" class="navbar-toggle mobile-navbar-view-link">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                    <a class="navbar-brand" href="{% url "control:index" %}">
+                        <img src="{% static "pretixbase/img/pretix-icon.svg" %}" />
+                        {{ settings.PRETIX_INSTANCE_NAME }}
+                    </a>
+                </div>
+                <ul class="nav navbar-nav navbar-top-links navbar-left hidden-xs">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i>
+                            <span class="event-name">{{ request.event }}</span>
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu event-dropdown" role="menu" data-event-typeahead
+                            data-source="{% url "control:events.typeahead" %}">
+                            <li class="query-holder">
+                                <div class="form-box">
+                                    <input type="text" class="form-control"
+                                            placeholder="{% trans "Search for events" %}"
+                                            data-typeahead-query>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    {% if request.event %}
+                        <li>
+                            {% if has_domain and not request.event.live %}
+                                <form action="{% eventurl request.event "presale:event.auth" %}" method="post" target="_blank">
+                                    <input type="hidden" value="{{ new_session }}" name="session">
+                                    <button type="submit" class="btn btn-link" id="button-shop">
+                                       <i class="fa fa-eye"></i> {% trans "Go to shop" %}
+                                    </button>
+                                </form>
+                            {% else %}
+                                <a href="{% eventurl request.event "presale:event.index" %}" title="{% trans "Go to Shop" %}"  target="_blank">
+                                    <i class="fa fa-eye"></i> {% trans "Go to shop" %}
+                                </a>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                </ul>
+                <ul class="nav navbar-nav navbar-top-links navbar-right">
+                    {% for nav in nav_topbar %}
+                        <li {% if nav.children %}class="dropdown"{% endif %}>
+                            <a href="{{ nav.url }}" title="{{ nav.title }}" {% if nav.active %}class="active"{% endif %}
+                                    {% if nav.children %}class="dropdown-toggle" data-toggle="dropdown"{% endif %}>
+                                {% if nav.icon %}
+                                    <span class="fa fa-{{ nav.icon }}"></span>
+                                    <span class="visible-xs-inline">{{ nav.label }}</span>
+                                {% else %}
+                                    {{ nav.label }}
+                                {% endif %}
+                            </a>
+                            {% if nav.children %}
+                                <ul class="dropdown-menu" role="menu">
+                                    {% for item in nav.children %}
+                                        <li>
+                                            <a href="{{ item.url }}"
+                                                    {% if item.active %}class="active"{% endif %}>
+                                                {% if item.icon %}
+                                                    <span class="fa fa-{{ item.icon }}"></span>
+                                                {% endif %}
+                                                {{ item.label|safe }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+
+                    {% if warning_update_available %}
+                        <li>
+                            <a href="{% url 'control:global.update' %}" class="danger">
+                                <i class="fa fa-bell"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a href="{% url 'control:user.settings' %}" title="{% trans "Account Settings" %}" >
+                            <i class="fa fa-user"></i> {{ request.user.get_full_name }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}">
+                            <i class="fa fa-sign-out"></i>
+                            <span class="visible-xs-inline">{% trans "Log out" %}</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="navbar-default sidebar" role="navigation">
+                    <div class="sidebar-nav navbar-events-collapse navbar-collapse hidden-sm hidden-md hidden-lg mobile-event-dropdown">
+                        <ul class="nav" data-event-typeahead data-source="{% url "control:events.typeahead" %}">
+                            <li>
+                                <div class="form-box">
+                                    <input type="text" class="form-control"
+                                            placeholder="{% trans "Search for events" %}"
+                                            data-typeahead-query>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="sidebar-nav navbar-nav-collapse navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            {% block nav %}
+                                <li>
+                                    <a href="{% url 'control:index' %}" {% if url_name == "index" %}class="active"{% endif %}>
+                                        <i class="fa fa-dashboard fa-fw"></i>
+                                        {% trans "Dashboard" %}
+                                    </a>
+                                </li>
+                                {% if request.user.is_superuser %}
+                                    <li>
+                                        <a href="{% url 'control:global.settings' %}"
+                                                {% if "global.settings" in url_name %}class="active"{% endif %}>
+                                            <i class="fa fa-wrench fa-fw"></i>
+                                            {% trans "Global settings" %}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <a href="{% url 'control:events' %}" {% if "events" in url_name %}class="active"{% endif %}>
+                                        <i class="fa fa-calendar fa-fw"></i>
+                                        {% trans "Events" %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'control:organizers' %}" {% if "organizer" in url_name %}class="active"{% endif %}>
+                                        <i class="fa fa-users fa-fw"></i>
+                                        {% trans "Organizers" %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'control:search.orders' %}"
+                                            {% if url_name == "search.orders" %}class="active"{% endif %}>
+                                        <i class="fa fa-search fa-fw"></i>
+                                        {% trans "Order search" %}
+                                    </a>
+                                </li>
+                                {% for nav in nav_global %}
+                                    <li>
+                                        <a href="{{ nav.url }}" {% if nav.active %}class="active"{% endif %}
+                                                {% if nav.children %}class="has-children"{% endif %}>
+                                            {% if nav.icon %}
+                                                <i class="fa fa-{{ nav.icon }} fa-fw"></i>
+                                            {% endif %}
+                                            {{ nav.label }}
+                                        </a>
+                                        {% if nav.children %}
+                                            <a href="#" class="arrow">
+                                                <span class="fa arrow"></span>
+                                            </a>
+                                            <ul class="nav nav-second-level">
+                                                {% for item in nav.children %}
+                                                    <li>
+                                                        <a href="{{ item.url }}"
+                                                                {% if item.active %}class="active"{% endif %}>
+                                                            {{ item.label }}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            {% endblock %}
+                        </ul>
+                        {% include "pretixcontrol/base_after_nav.html" %}
+                    </div>
+                </div>
+            </nav>
+            <div id="page-wrapper">
+                <div class="container-fluid">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {{ message.tags }}">
+                                {{ message|linebreaksbr }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if warning_update_check_active %}
+                        <div class="alert alert-info">
+                            <a href="{% url "control:global.update" %}">
+                                {% blocktrans trimmed %}
+                                    Starting with version 1.2.0, pretix automatically checks for updates in the background.
+                                    During this check, anonymous data is transmitted to servers operated by pretix'
+                                    developers. Click on this message to find out more, disable this feature or enter your
+                                    email address to get notified via email if a new update arrives. This message will
+                                    disappear once you clicked it.
+                                {% endblocktrans %}
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {% if debug_warning %}
+                        <div class="alert alert-danger">
+                            {% trans "pretix is running in debug mode. For security reasons, please never run debug mode on a production instance." %}
+                        </div>
+                    {% endif %}
+
+                    {% block content %}
+                    {% endblock %}
+                    <footer>
+                        {% with "href='http://pretix.eu'" as a_attr %}
+                            {% blocktrans trimmed %}
+                                powered by <a {{ a_attr }}>pretix</a>
+                            {% endblocktrans %}
+                        {% endwith %}
+                        {% if development_warning %}
+                            <span class="text-warning">&middot; {% trans "running in development mode" %}</span>
+                        {% endif %}
+                    </footer>
+                </div>
+            </div>
+        </div>
+        <div id="ajaxerr">
+        </div>
+        <div id="loadingmodal">
+            <i class="fa fa-cog big-rotating-icon"></i>
+            <h1>{% trans "We are processing your request …" %}</h1>
+            <p>
+                {% trans "If this takes longer than a few minutes, please contact us." %}
+            </p>
+        </div>
+	</body>
+</html>

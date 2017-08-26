@@ -1,0 +1,33 @@
+{% extends "pretixpresale/base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load eventurl %}
+{% block thetitle %}
+    {% block title %}{% endblock %}{% if url_name != "organizer.index" %} :: {% endif %}{{ organizer.name }}
+{% endblock %}
+{% block page %}
+    <div class="page-header">
+        <div class="pull-left">
+            {% if organizer_logo %}
+                <a href="{% eventurl organizer "presale:organizer.index" %}" title="{{ organizer.name }}">
+                    <img src="{{ organizer_logo|thumbnail_url:'logo' }}" alt="{{ organizer.name }}" class="organizer-logo" />
+                </a>
+            {% else %}
+                <h1><a href="{% eventurl organizer "presale:organizer.index" %}">{{ organizer.name }}</a></h1>
+            {% endif %}
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+{% endblock %}
+{% block footer %}
+{% endblock %}

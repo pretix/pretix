@@ -1,0 +1,177 @@
+.dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+.dashboard .widget-container {
+  flex: 1 0 auto;
+  align-self: stretch;
+  padding: 15px 5px;
+  border: 5px solid white;
+  min-height: 160px;
+  background: #F8F8F8;
+}
+
+.dashboard .widget-container.widget-full {
+  width: 100%;
+}
+
+.dashboard .widget-container.widget-big {
+  width: 50%;
+}
+
+.dashboard .widget-container.widget-small {
+  width: 25%;
+}
+
+.dashboard-panels .panel-heading .fa {
+  opacity: 0.5;
+}
+
+.dashboard .widget-container:hover, .dashboard .widget-container:focus {
+  background: #EEEEEE;
+}
+
+.dashboard .widget:hover, .dashboard .widget:focus, .dashboard a:hover {
+  text-decoration: none;
+}
+
+.dashboard .numwidget {
+  .num {
+    display: block;
+    padding: 10px 0 10px;
+    text-align: center;
+    font-size: 40px;
+  }
+  .text {
+    display: block;
+    text-align: center;
+    font-size: 20px;
+  }
+}
+
+.dashboard .shopstate {
+  text-align: center;
+  padding: 18px 0;
+
+  span.live, span.off {
+    display: block;
+    font-size: 20px;
+    padding: 10px 0;
+  }
+  span.live {
+    color: $brand-success;
+  }
+  span.off {
+    color: $brand-danger;
+  }
+}
+
+.widget-container.widget-container-event {
+  padding: 0;
+  cursor: pointer;
+
+  .widget {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .event {
+    text-align: center;
+    font-size: 20px;
+    padding: 15px 30px;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+  }
+  .bottomrow {
+    display: flex;
+    flex-direction: row;
+
+    a {
+      flex-grow: 1;
+      flex-basis: 50%;
+      font-size: 14px;
+      padding: 10px;
+      text-align: center;
+      color: white;
+    }
+    a.orders {
+      background: $navbar-inverse-bg;
+    }
+    a.status-success {
+      background: $brand-success;
+    }
+    a.status-warning {
+      background: $brand-warning;
+    }
+    a.status-default {
+      background: $gray-light;
+    }
+    a.status-danger {
+      background: $brand-danger;
+    }
+  }
+  .daterange, .times {
+    display: block;
+    font-size: 17px;
+  }
+}
+
+.dashboard .newevent {
+  text-align: center;
+  padding: 30px;
+  font-size: 20px;
+
+  span.fa {
+    display: block;
+    font-size: 60px;
+    padding-bottom: 15px;
+  }
+}
+
+.dashboard .welcome-wizard {
+  padding: 5px 15px;
+  h3 {
+    margin: 0 0 10px 0;
+  }
+  .attentionline {
+    font-size: 18px;
+    margin: 0 0 10px 0;
+  }
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.dropdown-container {
+  position: relative;
+  margin: 15px 0;
+
+  .focused.dropdown-menu {
+    display: block;
+    overflow: hidden;
+  }
+  .event-dropdown .event-name-full, .mobile-event-dropdown .event-name-full {
+    white-space: normal;
+  }
+}
+
+@media (max-width: $screen-sm-max) {
+  .dashboard .widget-container.widget-small {
+    width: 50%;
+  }
+}
+
+@media (max-width: $screen-xs-max) {
+  .dashboard .widget-container.widget-small,
+  .dashboard .widget-container.widget-big {
+    width: 100%;
+  }
+}

@@ -1,0 +1,68 @@
+{% extends basetpl %}
+{% load i18n %}
+{% block inner %}
+    <p>{% blocktrans trimmed %}
+        We've been unable to automatically determine how the columns in your file are aligned. Please help us
+        by selecting which column contain what kind of data.
+    {% endblocktrans %}</p>
+    <form method="post" action="">
+        {% csrf_token %}
+        <button class="btn btn-primary pull-right helper-space-below" type="submit">
+            <span class="icon icon-upload"></span> {% trans "Continue" %}
+        </button>
+        <div class="flipped-scroll-wrapper clearfix">
+            <table class="table table-condensed flipped-scroll-inner">
+                <thead>
+                    <tr>
+                        <th>{% trans "Date" %}</th>
+                        {% for col in rows.0 %}
+                            <th>
+                                <input type="radio" name="date" value="{{ forloop.counter0 }}" />
+                            </th>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <th>{% trans "Amount" %}</th>
+                        {% for col in rows.0 %}
+                            <th>
+                                <input type="radio" name="amount" value="{{ forloop.counter0 }}" required="required" />
+                            </th>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <th>{% trans "Reference" %}</th>
+                        {% for col in rows.0 %}
+                            <th>
+                                <input type="checkbox" name="reference" value="{{ forloop.counter0 }}" />
+                            </th>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <th>{% trans "Payer" %}</th>
+                        {% for col in rows.0 %}
+                            <th>
+                                <input type="checkbox" name="payer" value="{{ forloop.counter0 }}" />
+                            </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        {% with forloop.counter0 as rowid %}
+                            <tr>
+                                <td></td>
+                                {% for col in row %}
+                                    <td>{{ col }}<input type="hidden" name="col[{{ rowid }}][{{ forloop.counter0 }}]"
+                                            value="{{ col }}" /></td>
+                                {% endfor %}
+                            </tr>
+                        {% endwith %}
+                    {% endfor %}
+                </tbody>
+                <input type="hidden" name="cols" value="{{ rows.0|length }}" />
+                <input type="hidden" name="rows" value="{{ rows|length }}" />
+
+            </table>
+        </div>
+    </form>
+{% endblock %}

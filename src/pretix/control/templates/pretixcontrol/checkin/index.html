@@ -1,0 +1,112 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+{% block title %}{% trans "Check-ins" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Check-ins" %}</h1>
+    <p>
+        <form class="form-inline helper-display-inline" action="" method="get">
+            <select name="status" class="form-control">
+                <option value="">{% trans "All status" %}</option>
+                <option value="1" {% if request.GET.status == "1" %}selected="selected"{% endif %}>{% trans "Checked in" %}</option>
+                <option value="0" {% if request.GET.status == "0" %}selected="selected"{% endif %}>{% trans "Not checked in" %}</option>
+            </select>
+            <select name="item" class="form-control">
+                <option value="">{% trans "All products" %}</option>
+                {% for item in items %}
+                    <option value="{{ item.id }}"
+                            {% if request.GET.item|add:0 == item.id %}selected="selected"{% endif %}>
+                        {{ item.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            {% if request.event.has_subevents %}
+                <select name="subevent" class="form-control">
+                    <option value="">{% trans "All dates" context "subevent" %}</option>
+                    {% for se in request.event.subevents.all %}
+                        <option value="{{ se.id }}"
+                                {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
+                            {{ se.name }} – {{ se.get_date_range_display }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+            <input type="text" name="user" class="form-control" placeholder="{% trans "Search user" %}" value="{{ request.GET.user }}">
+            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+        </form>
+    </p>
+    {% if entries|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    No check-in record was found.
+                {% endblocktrans %}
+            </p>
+        </div>
+    {% else %}
+        {% include "pretixcontrol/pagination.html" %}
+        <form method="post" action="">
+           {% csrf_token %}
+            <div class="table-responsive">
+                <table class="table table-condensed table-hover">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Order code" %} <a href="?{% url_replace request 'ordering' '-code'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'code'%}"><i class="fa fa-caret-up"></i></a></th>
+                        <th>{% trans "Item" %} <a href="?{% url_replace request 'ordering' '-item'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'item'%}"><i class="fa fa-caret-up"></i></a></th>
+                      {% if request.event.has_subevents %}
+                          <th>{% trans "Date" context "subevent" %} <a href="?{% url_replace request 'ordering' '-subevent'%}"><i class="fa fa-caret-down"></i></a>
+                              <a href="?{% url_replace request 'ordering' 'subevent'%}"><i class="fa fa-caret-up"></i></a></th>
+                      {% endif %}
+                        <th>{% trans "Email" %} <a href="?{% url_replace request 'ordering' '-email'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'email'%}"><i class="fa fa-caret-up"></i></a></th>
+                        <th>{% trans "Name" %} <a href="?{% url_replace request 'ordering' '-name'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'name'%}"><i class="fa fa-caret-up"></i></a></th>
+                        <th>{% trans "Status" %} <a href="?{% url_replace request 'ordering' '-status'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'status'%}"><i class="fa fa-caret-up"></i></a></th>
+                        <th>{% trans "Timestamp" %} <a href="?{% url_replace request 'ordering' '-timestamp'%}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'timestamp'%}"><i class="fa fa-caret-up"></i></a></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for e in entries %}
+                        {% with e.checkins.first as checkin %}
+                        <tr>
+                            <td>
+                                <strong><a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=e.order.code %}">{{ e.order.code }}</a></strong>
+                            </td>
+                            <td>{{ e.item.name }}{% if e.variation %} – {{ e.variation }}{% endif %}</td>
+                            {% if request.event.has_subevents %}
+                                <td>{{ e.subevent.name }} – {{ e.subevent.get_date_range_display }}</td>
+                            {% endif %}
+                            <td>{{ e.order.email }}</td>
+                            <td>
+                                {% if e.addon_to %}
+                                    {{ e.addon_to.attendee_name }}
+                                {% elif e.attendee_name %}
+                                    {{ e.attendee_name }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if not checkin %}
+                                    <span class="label label-danger">{% trans "Not checked in" %}</span>
+                                {% else %}
+                                    <span class="label label-success">{% trans "Checked in" %}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if checkin %}
+                                    {{ checkin.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endwith %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}

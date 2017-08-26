@@ -1,0 +1,54 @@
+{% load i18n %}
+{% load bootstrap3 %}
+{% load mail_settings_preview %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a class="collapsed" data-toggle="collapse" href="#{{ pid }}">
+                <strong>{% trans title %}</strong>
+                <i class="fa fa-angle-down collapse-indicator"></i>
+            </a>
+        </h4>
+    </div>
+    <div id="{{ pid }}" class="panel-collapse collapse">
+        <div class="panel-body">
+            {% with exclude|split as exclusion %}
+            {% with items|split as item_list %}
+            {% for item in item_list %}
+                {% if item in exclusion %}
+                    {% with form|getattr:item as field %}
+                        {% bootstrap_field field layout="horizontal" %}
+                    {% endwith %}
+                {% else %}
+                    <div id="{{ item }}_panel" class="preview-panel form-group" for="{{ item }}">
+                        {% with form|getattr:item as field %}
+                        <label class="col-md-3 control-label">{{ field.label }}</label>
+                        <div class="col-md-9">
+                            <ul class="nav nav-tabs">
+                                <li role="presentation" class="active">
+                                    <a data-toggle="tab" type="edit" href="#{{ item }}_edit"><i class="fa fa-pencil-square-o fa-fw"></i> {% trans "Edit" %}</a>
+                                </li>
+                                <li role="presentation">
+                                    <a data-toggle="tab" type="preview" href="#{{ item }}_preview"><i class="fa fa-tv fa-fw"></i> {% trans "Preview" %}</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="{{ item }}_edit" class="tab-pane fade in active">
+                                    {% bootstrap_field field show_label=False form_group_class="" %}
+                                </div>
+                                <div id="{{ item }}_preview" class="tab-pane mail-preview-group">
+                                    {% for l in request.event.settings.locales %}
+                                        <pre lang="{{ l }}" for="{{ item }}" class="mail-preview"></pre>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endwith %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+    </div>
+</div>

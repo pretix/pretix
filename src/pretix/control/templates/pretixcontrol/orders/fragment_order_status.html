@@ -1,0 +1,13 @@
+{% load i18n %}
+{% load bootstrap3 %}
+{% if order.status == "n" %}
+    <span class="label label-warning {{ class }}">{% trans "Pending" %}</span>
+{% elif order.status == "p" %}
+    <span class="label label-success {{ class }}">{% trans "Paid" %}</span>
+{% elif order.status == "e" %} {# expired #}
+    <span class="label label-danger {{ class }}">{% trans "Expired" %}</span>
+{% elif order.status == "c" %}
+    <span class="label label-danger {{ class }}">{% trans "Canceled" %}</span>
+{% elif order.status == "r" %}
+    <span class="label label-danger {{ class }}">{% trans "Refunded" %}</span>
+{% endif %}

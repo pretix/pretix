@@ -1,0 +1,31 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% block title %}{% trans "Organizers" %}{% endblock %}
+{% block content %}
+	<h1>{% trans "Organizers" %}</h1>
+	<p>{% trans "The list below shows all organizer accounts you have administrative access to." %}</p>
+    {% if request.user.is_superuser %}
+        <a href="{% url "control:organizers.add" %}" class="btn btn-default">
+            <span class="fa fa-plus"></span>
+            {% trans "Create a new organizer" %}
+        </a>
+    {% endif %}
+	<table class="table table-condensed table-hover">
+		<thead>
+			<tr>
+				<th>{% trans "Organizer name" %}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for o in organizers %}
+			<tr>
+				<td><strong>
+                    <a href="{% url "control:organizer" organizer=o.slug %}">{{ o.name }}</a>
+                </strong></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Delete product category" %}{% endblock %}
+{% block inside %}
+	<h1>{% trans "Delete product category" %}</h1>
+	<form action="" method="post" class="form-horizontal">
+		{% csrf_token %}
+		<p>{% blocktrans trimmed with name=category.name %}
+            Are you sure you want to delete the category <strong>{{ name }}</strong>?
+        {% endblocktrans %}</p>
+		<div class="form-group submit-group">
+            <a href="{% url "control:event.items.categories" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-danger btn-save">
+                {% trans "Delete" %}
+            </button>
+		</div>
+	</form>
+{% endblock %}

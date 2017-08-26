@@ -1,0 +1,11 @@
+Umsatzauskunft - gebuchte Umsätze
+Name;Fiktive Veranstaltungsgesellschaft mbH
+BLZ;12345679
+Kontonummer;00123456789
+IBAN;DE12500105170648489890
+Aktueller Kontostand;1.337,42 €
+Summe vorgemerkter Umsätze;0,00 €
+
+"Buchungstag";"Wertstellung";"Umsatzart";"Buchungsdetails";"Auftraggeber";"Empfänger";"Betrag (€)";"Saldo (€)"
+"07.08.2016";"01.08.2016";"Gutschrift";"Verwendungszweck 2015ABCDE";"Karla Kundin";"Fiktive Veranstaltungsgesellschaft mbH";"¤ 42,00";"¤ 1.337,42"
+"29.07.2016";"29.07.2016";"Gutschrift";"Referenz NOTPROVIDED";"Lars Lieferant";"Fiktive Veranstaltungsgesellschaft mbH";"¤ 56,76";"¤ 1.337,42"

@@ -1,0 +1,45 @@
+@import "../../bootstrap/scss/_bootstrap.scss";
+
+body {
+	background: #eee;
+}
+
+footer {
+	text-align: center;
+	padding: 10px 0;
+	font-size: 11px;
+}
+
+.logo {
+    width: 330px;
+    margin: auto;
+    display: block;
+    margin-top: 10%;
+    height: auto;
+    max-width: 100%;
+}
+.form-signin {
+	@extend .well;
+
+	max-width: 330px;
+	margin: auto;
+	padding-bottom: 0;
+	
+	.control-label {
+		display: none;
+	}
+
+	.buttons {
+		text-align: right;
+	}
+
+    h3 {
+        margin-top: 0;
+    }
+}
+
+.container > .alert {
+    max-width: 330px;
+    margin: auto;
+    margin-bottom: 20px;
+}

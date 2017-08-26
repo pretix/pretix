@@ -1,0 +1,192 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}
+    {% blocktrans trimmed with code=order.code %}
+        Change order: {{ code }}
+    {% endblocktrans %}
+{% endblock %}
+{% block content %}
+    <h1>
+        {% blocktrans trimmed with code=order.code %}
+            Change order: {{ code }}
+        {% endblocktrans %}
+        <a class="btn btn-link btn-lg"
+                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+            {% blocktrans trimmed with order=order.code %}
+                Back to order {{ order }}
+            {% endblocktrans %}
+        </a>
+    </h1>
+    <p>
+        {% blocktrans trimmed %}
+            You can use this tool to change the ordered products or to partially cancel the order. Please keep
+            in mind that changing an order can have several implications, e.g. the payment method fee might change or
+            additional questions can be added to the order that need to be answered by the user.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed %}
+            The user will receive a notification about the change but in the case of new required questions, the user
+            will not be forced to answer them.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed %}
+            If an invoice is attached to the order, a cancellation will be created together with a new invoice.
+        {% endblocktrans %}
+    </p>
+    <div class="alert alert-warning"><strong>
+        {% blocktrans trimmed %}
+            Please use this tool carefully. Changes you make here are not reversible. Also, if you change an order
+            manually, not all constraints (e.g. on required add-ons) will be checked. Therefore, you might construct
+            an order that would not be able to exist otherwise.
+            In most cases it is easier to cancel the order completely and create a new one.
+        {% endblocktrans %}
+    </strong></div>
+    <form method="post" href="">
+        {% csrf_token %}
+        {% for position in positions %}
+            <div class="panel panel-default items">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        #{{ position.positionid }} –
+                        <strong>{{ position.item.name }}</strong>
+                        {% if position.variation %}
+                            – {{ position.variation }}
+                        {% endif %}
+                        {% if position.addon_to %}
+                            – <em>
+                                {% blocktrans trimmed with posid=position.addon_to.positionid %}
+                                    Add-On to position #{{ posid }}
+                                {% endblocktrans %}
+                            </em>
+                        {% endif %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-inline form-order-change">
+                        {% bootstrap_form_errors position.form %}
+                        {% if position.custom_error %}
+                            <div class="alert alert-danger">
+                                {{ position.custom_error }}
+                            </div>
+                        {% endif %}
+                        <div class="radio">
+                            <label>
+                                <input name="{{ position.form.prefix }}-operation" type="radio" value=""
+                                        {% if not position.form.operation.value %}checked="checked"{% endif %}>
+                                {% trans "Keep unchanged" %}
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input name="{{ position.form.prefix }}-operation" type="radio" value="product"
+                                        {% if position.form.operation.value == "product" %}checked="checked"{% endif %}>
+                                {% trans "Change product to" %}
+                                {% bootstrap_field position.form.itemvar layout='inline' %}
+                            </label>
+                        </div>
+                        {% if request.event.has_subevents %}
+                            <div class="radio">
+                                <label>
+                                    <input name="{{ position.form.prefix }}-operation" type="radio" value="subevent"
+                                            {% if position.form.operation.value == "subevent" %}checked="checked"{% endif %}>
+                                    {% trans "Change date to" context "subevent" %}
+                                    {% bootstrap_field position.form.subevent layout='inline' %}
+                                </label>
+                            </div>
+                        {% endif %}
+                        <div class="radio">
+                            <label>
+                                <input name="{{ position.form.prefix }}-operation" type="radio" value="price"
+                                        {% if position.form.operation.value == "price" %}checked="checked"{% endif %}>
+                                {% trans "Change price to" %}
+                                {% bootstrap_field position.form.price layout='inline' %}
+                                {% if position.apply_tax %}
+                                    {% if position.item.tax_rule and not position.item.tax_rule.price_includes_tax %}
+                                        {% blocktrans trimmed with rate=position.item.tax_rule.rate name=position.item.tax_rule.name %}
+                                            <strong>plus</strong> {{ rate }}% {{ name }}
+                                        {% endblocktrans %}
+                                    {% elif position.item.tax_rule %}
+                                        {% blocktrans trimmed with rate=position.item.tax_rule.rate name=position.item.tax_rule.name %}
+                                            <strong>incl.</strong> {{ rate }}% {{ name }}
+                                        {% endblocktrans %}
+                                    {% endif %}
+                                {% else %}
+                                    {% trans "no taxes apply" %}
+                                {% endif %}
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input name="{{ position.form.prefix }}-operation" type="radio" value="cancel"
+                                        {% if position.form.operation.value == "cancel" %}checked="checked"{% endif %}>
+                                {% trans "Remove from order" %}
+                                {% if position.addons.exists %}
+                                    <em class="text-danger">
+                                        {% trans "Removing this position will also remove all add-ons to this position." %}
+                                    </em>
+                                {% endif %}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="panel panel-default items">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Add product
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    {% bootstrap_form_errors add_form %}
+                    {% if add_form.custom_error %}
+                        <div class="alert alert-danger">
+                            {{ add_form.custom_error }}
+                        </div>
+                    {% endif %}
+                    {% bootstrap_field add_form.do layout='horizontal' %}
+                    {% bootstrap_field add_form.itemvar layout='horizontal' %}
+                    {% bootstrap_field add_form.price layout='horizontal' %}
+                    {% if add_form.addon_to %}
+                        {% bootstrap_field add_form.addon_to layout='horizontal' %}
+                    {% endif %}
+                    {% if add_form.subevent %}
+                        {% bootstrap_field add_form.subevent layout='horizontal' %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default items">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Other operations
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    {% bootstrap_form_errors other_form %}
+                    {% if other_form.custom_error %}
+                        <div class="alert alert-danger">
+                            {{ other_form.custom_error }}
+                        </div>
+                    {% endif %}
+                    {% bootstrap_field other_form.recalculate_taxes layout='horizontal' %}
+                </div>
+            </div>
+        </div>
+        <div class="form-group submit-group">
+            <a class="btn btn-default btn-lg"
+                    href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                {% trans "Cancel" %}
+            </a>
+            <button class="btn btn-primary btn-save btn-lg" type="submit">
+                {% trans "Perform changes" %}
+            </button>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}

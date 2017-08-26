@@ -1,0 +1,47 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inner %}
+    {% if team %}
+        <h2>{% trans "Team:" %} {{ team.name }}</h2>
+    {% else %}
+        <h2>{% trans "Create a new team" %}</h2>
+        <p>
+            {% blocktrans trimmed %}
+                You will be able to add team members in the next step.
+            {% endblocktrans %}
+        </p>
+    {% endif %}
+    <form class="form-horizontal" action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <fieldset>
+            <legend>{% trans "General information" %}</legend>
+            {% bootstrap_field form.name layout="horizontal" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Organizer permissions" %}</legend>
+            {% bootstrap_field form.can_create_events layout="horizontal" %}
+            {% bootstrap_field form.can_change_teams layout="horizontal" %}
+            {% bootstrap_field form.can_change_organizer_settings layout="horizontal" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Event permissions" %}</legend>
+
+            {% bootstrap_field form.all_events layout="horizontal" %}
+            {% bootstrap_field form.limit_events layout="horizontal" %}
+            {% bootstrap_field form.can_change_event_settings layout="horizontal" %}
+            {% bootstrap_field form.can_change_items layout="horizontal" %}
+            {% bootstrap_field form.can_view_orders layout="horizontal" %}
+            {% bootstrap_field form.can_change_orders layout="horizontal" %}
+            {% bootstrap_field form.can_view_vouchers layout="horizontal" %}
+            {% bootstrap_field form.can_change_vouchers layout="horizontal" %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+
+    </form>
+{% endblock %}

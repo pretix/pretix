@@ -1,0 +1,40 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Refund order" %}
+{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Refund order" %}
+        <a class="btn btn-link btn-lg"
+                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+            {% blocktrans trimmed with order=order.code %}
+                Back to order {{ order }}
+            {% endblocktrans %}
+        </a>
+    </h1>
+    <form method="post" href="">
+        <p>{% blocktrans trimmed %}
+            Do you really want to refund this order? You cannot revert this action.
+        {% endblocktrans %}</p>
+
+        {{ payment|safe }}
+
+        {% csrf_token %}
+        <input type="hidden" name="status" value="r" />
+        <div class="row checkout-button-row">
+            <div class="col-md-4">
+                <a class="btn btn-block btn-default btn-lg"
+                        href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                    {% trans "No, take me back" %}
+                </a>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
+                <button class="btn btn-block btn-danger btn-lg" type="submit">
+                    {% trans "Yes, refund order" %}
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}

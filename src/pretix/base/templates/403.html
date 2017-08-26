@@ -1,0 +1,13 @@
+{% extends "error.html" %}
+{% load i18n %}
+{% block title %}{% trans "Permission denied" %}{% endblock %}
+{% block content %}
+    <i class="fa fa-lock big-icon"></i>
+    <h1>{% trans "Permission denied" %}</h1>
+    <p>{% trans "You do not have access to this page." %}</p>
+    <p>{{ exception }}</p>
+    <p class="links">
+        <a id='goback' href='#'>{% trans "Take a step back" %}</a>
+        &middot; <a id='reload' href='#'>{% trans "Try again" %}</a>
+    </p>
+{% endblock %}

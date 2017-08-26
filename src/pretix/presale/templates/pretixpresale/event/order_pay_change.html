@@ -1,0 +1,65 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% block title %}{% trans "Change payment method" %}{% endblock %}
+{% block content %}
+    <h2>
+        {% blocktrans trimmed with code=order.code %}
+            Change payment method: {{ code }}
+        {% endblocktrans %}
+    </h2>
+    <p>
+        {% blocktrans trimmed %}
+            Please note: If you change your payment method, your order total will change by the
+            amount displayed to the right of each method.
+        {% endblocktrans %}
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="panel-group" id="payment_accordion">
+            {% for p in providers %}
+                <div class="panel panel-default" data-total="{{ p.total|floatformat:2 }}">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <label class="radio">
+                                <strong class="pull-right">{% if p.fee_diff >= 0 %}+{% else %}-{% endif %} {{ p.fee_diff_abs|floatformat:2 }} {{ event.currency }}</strong>
+                                <input type="radio" name="payment" value="{{ p.provider.identifier }}"
+                                        data-parent="#payment_accordion"
+                                        {% if selected == p.provider.identifier %}checked="checked"{% endif %}
+                                        data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}" />
+                                <strong>{{ p.provider.public_name }}</strong>
+                            </label>
+                        </h4>
+                    </div>
+                    <div id="payment_{{ p.provider.identifier }}"
+                         class="panel-collapse collapsed {% if selected == p.provider.identifier %}in{% endif %}">
+                        <div class="panel-body form-horizontal">
+                            {{ p.form }}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-info">
+                    {% trans "There are no alternative payment providers available for this order." %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row checkout-button-row">
+            <div class="col-md-4">
+                <a class="btn btn-block btn-default btn-lg"
+                   href="{% eventurl request.event "presale:event.order" secret=order.secret order=order.code %}">
+                    {% trans "Cancel" %}
+                </a>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
+                {% if providers %}
+                <button class="btn btn-block btn-primary btn-lg" type="submit">
+                    {% trans "Continue" %}
+                </button>
+                {% endif %}
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+
+{% endblock %}

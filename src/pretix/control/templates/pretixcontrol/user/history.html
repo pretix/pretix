@@ -1,0 +1,15 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Account history" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Account history" %}</h1>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Account history" %}
+            </h3>
+        </div>
+        {% include "pretixcontrol/includes/logs.html" with obj=user %}
+    </div>
+{% endblock %}

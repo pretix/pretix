@@ -1,0 +1,40 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n eventurl thumbnail bootstrap3 %}
+{% block title %}{% trans "Waiting list" %}{% endblock %}
+{% block content %}
+    <h2>{% trans "Add me to the waiting list" %}</h2>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="id_email">{% trans "Product" %}</label>
+                <div class="col-md-9">
+                    <input class="form-control" readonly="readonly"
+                           value="{{ item.name }}{% if variation %} – {{ variation.value }}{% endif %}">
+                </div>
+            </div>
+            {% if subevent %}
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="id_email">{% trans "Event" %}</label>
+                    <div class="col-md-9">
+                        <input class="form-control" readonly="readonly"
+                                value="{{ subevent.name }} – {{ subevent.get_date_range_display }}">
+                    </div>
+                </div>
+            {% endif %}
+            {% bootstrap_form form layout='horizontal' %}
+            <div class="form-group">
+                <div class="col-md-9 col-md-offset-3">
+                    <div class="help-block">
+                        {% blocktrans trimmed with hours=event.settings.waiting_list_hours %}
+                            If tickets become available again, we will inform the first persons on the waiting list. If we notify you, you'll have {{ hours }} hours time to buy a ticket until we assign it to the next person on the list.
+                        {% endblocktrans %}
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        {% trans "Add me to the list" %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

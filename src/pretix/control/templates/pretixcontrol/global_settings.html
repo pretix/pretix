@@ -1,0 +1,16 @@
+{% extends "pretixcontrol/global_settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block inner %}
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        {% bootstrap_form form layout='horizontal' %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

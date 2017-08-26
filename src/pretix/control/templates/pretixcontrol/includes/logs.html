@@ -1,0 +1,26 @@
+{% load staticfiles %}
+{% load i18n %}
+<ul class="list-group">
+    {% for log in obj.all_logentries %}
+        <li class="list-group-item logentry">
+            <p class="meta">
+                <span class="fa fa-clock-o"></span> {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                {% if log.user %}
+                    {% if log.user.is_superuser %}
+                        <span class="fa fa-id-card fa-danger fa-fw"
+                                data-toggle="tooltip"
+                                title="{% trans "This change was performed by a pretix administrator." %}">
+                            </span>
+                    {% else %}
+                        <span class="fa fa-user fa-fw"></span>
+                    {% endif %}
+                    {{ log.user.get_full_name }}
+                {% endif %}
+            </p>
+
+            <p>
+                {{ log.display }}
+            </p>
+        </li>
+    {% endfor %}
+</ul>

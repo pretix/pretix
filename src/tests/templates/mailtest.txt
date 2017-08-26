@@ -1,0 +1,4 @@
+{% load i18n %}
+This is a test file for sending mails.
+{% get_current_language as LANGUAGE_CODE %}
+The language code used for rendering this e-mail is {{ LANGUAGE_CODE }}.

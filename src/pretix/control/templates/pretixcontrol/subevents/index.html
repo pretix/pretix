@@ -1,0 +1,93 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load urlreplace %}
+{% block title %}{% trans "Dates" context "subevent" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Dates" context "subevent" %}</h1>
+    {% if subevents|length == 0 and not filter_form.filtered %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't created any dates for this event series yet.
+                {% endblocktrans %}
+            </p>
+
+            <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i>
+                {% trans "Create a new date" context "subevent" %}</a>
+        </div>
+    {% else %}
+        <form class="row filter-form" action="" method="get">
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.query layout='inline' %}
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.status layout='inline' %}
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-12">
+                <button class="btn btn-primary btn-block" type="submit">
+                    <span class="fa fa-filter"></span>
+                    <span class="hidden-md">
+                    {% trans "Filter" %}
+                </span>
+                </button>
+            </div>
+        </form>
+        <p>
+            <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-default"><i class="fa fa-plus"></i>
+                {% trans "Create a new date" context "subevent" %}</a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-hover table-quotas">
+                <thead>
+                <tr>
+                    <th>
+                        {% trans "Name" %}
+                    </th>
+                    <th>
+                        {% trans "Begin" %}
+                        <a href="?{% url_replace request 'ordering' '-date_from' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
+                    </th>
+                    <th>
+                        {% trans "Status" %}
+                        <a href="?{% url_replace request 'ordering' '-active' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'active' %}"><i class="fa fa-caret-up"></i></a>
+                    </th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for s in subevents %}
+                    <tr>
+                        <td>
+                            <strong><a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}">
+                                {{ s.name }}</a></strong>
+                        </td>
+                        <td>{{ s.get_date_from_display }}</td>
+                        <td>
+                            {% if not s.active %}
+                                <span class="label label-danger">{% trans "Disabled" %}</span>
+                            {% elif s.presale_has_ended %}
+                                <span class="label label-warning">{% trans "Presale over" %}</span>
+                            {% elif not s.presale_is_running %}
+                                <span class="label label-warning">{% trans "Presale not started" %}</span>
+                            {% else %}
+                                <span class="label label-success">{% trans "On sale" %}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-right">
+                            <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                            <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ s.id }}" class="btn btn-default btn-sm"><i class="fa fa-copy"></i></a>
+                            <a href="{% url "control:event.subevent.delete" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}

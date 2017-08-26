@@ -1,0 +1,58 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+    <form action="" method="post" class="form-horizontal form-plugins">
+        {% csrf_token %}
+        <fieldset>
+            <legend>{% trans "Payment settings" %}</legend>
+            {% bootstrap_field sform.payment_term_days layout="horizontal" %}
+            {% bootstrap_field sform.payment_term_last layout="horizontal" %}
+            {% bootstrap_field sform.payment_term_weekdays layout="horizontal" %}
+            {% bootstrap_field sform.payment_term_expire_automatically layout="horizontal" %}
+            {% bootstrap_field sform.payment_term_accept_late layout="horizontal" %}
+            {% bootstrap_field sform.tax_rate_default layout="horizontal" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Payment providers" %}</legend>
+            <div class="alert alert-warning">
+                <span class="fa fa-w fa-legal fa-4x pull-left"></span>
+                <strong>{% trans "Warning:" %}</strong>
+                {% blocktrans trimmed %}
+                    Please note that EU Directive 2015/2366 bans surcharging payment fees for most common payment
+                    methods within the European Union. Depending on the payment method, this might affect
+                    selling to consumers only or to business customers as well. Depending on your country, this
+                    legislation might already be in effect or become relevant from January 2018 at the latest. This
+                    is not legal advice. If in doubt, consult a lawyer or refrain from charging payment fees.
+                {% endblocktrans %}
+            </div>
+            {% for provider in providers %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" href="#{{ provider.identifier }}">
+                                {{ provider.verbose_name }}  
+                                <i class="fa fa-angle-down collapse-indicator"></i>
+                            </a>
+                        </h3>
+                    </div>
+                    <div id="{{ provider.identifier }}" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            {% bootstrap_form provider.form layout='horizontal' %}
+                            {% with c=provider.settings_content %}
+                                {% if c %}{{ c|safe }}{% endif %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <em>{% trans "There are no payment providers available. Please go to the plugin settings and activate one or more payment plugins." %}</em>
+            {% endfor %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

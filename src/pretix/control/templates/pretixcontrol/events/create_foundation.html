@@ -1,0 +1,8 @@
+{% extends "pretixcontrol/events/create_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block form %}
+    {% bootstrap_field form.organizer layout="horizontal" %}
+    {% bootstrap_field form.locales layout="horizontal" %}
+    {% bootstrap_field form.has_subevents layout="horizontal" %}
+{% endblock %}

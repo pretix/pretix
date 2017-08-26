@@ -1,0 +1,30 @@
+{% load i18n %}
+
+{% if payment_info and order.status == "p" %}
+    <p>{% blocktrans trimmed %}
+        This order has been paid via bank transfer.
+    {% endblocktrans %}</p>
+
+    <dl class="dl-horizontal">
+        <dt>{% trans "Payer" %}</dt>
+        <dd>{{ payment_info.payer }}</dd>
+        <dt>{% trans "Payment date" %}</dt>
+        <dd>{{ payment_info.date }}</dd>
+        <dt>{% trans "Reference" %}</dt>
+        <dd>{{ payment_info.reference }}</dd>
+    </dl>
+{% else %}
+    {% if order.status == "p" %}
+        <p>{% blocktrans trimmed %}
+            This order has been marked as paid via bank transfer manually.
+        {% endblocktrans %}</p>
+    {% else %}
+        <p>{% blocktrans trimmed %}
+            This order has been planned to be paid via bank transfer, but no payment has been received yet.
+        {% endblocktrans %}</p>
+    {% endif %}
+    <dl class="dl-horizontal">
+        <dt>{% trans "Reference code" %}</dt>
+        <dd>{{ order.full_code }}</dd>
+    </dl>
+{% endif %}

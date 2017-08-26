@@ -1,0 +1,108 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Checkout" %}{% endblock %}
+{% block content %}
+    <h2>{% trans "Checkout" %}</h2>
+    <p>{% trans "Before we continue, we need you to answer some questions." %}</p>
+    <p class="required-legend">
+        {% blocktrans trimmed %}
+            You need to fill all fields that are marked with <span>*</span> to continue.
+        {% endblocktrans %}
+    </p>
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="panel-group" id="questions_group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#contact">
+                            <strong>{% trans "Contact information" %}</strong>
+                            <i class="fa fa-angle-down collapse-indicator"></i>
+                        </a>
+                    </h4>
+                </div>
+                <div id="contact" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        {% bootstrap_form contact_form layout="horizontal" %}
+                    </div>
+                </div>
+            </div>
+            {% if event.settings.invoice_address_asked %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="{% if not event.settings.invoice_address_required and not event.settings.invoice_name_required %} collapsed{% endif %}" data-toggle="collapse" href="#invoice">
+                                <strong>{% trans "Invoice information" %}{% if not event.settings.invoice_address_required and not event.settings.invoice_name_required %}
+                                    {% trans "(optional)" %}
+                                {% endif %}</strong>
+                                
+                                <i class="fa fa-angle-down collapse-indicator"></i>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="invoice" class="panel-collapse collapse{% if event.settings.invoice_address_required or event.settings.invoice_name_required %} in {% endif %}">
+                        <div class="panel-body">
+                            {% bootstrap_form invoice_form layout="horizontal" %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% for pos, forms in formgroups %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#cp{{ pos.id }}">
+                                <strong>{{ pos.item.name }}</strong>
+                                {% if pos.variation %}
+                                    – {{ pos.variation }}
+                                {% endif %}
+                                {% if forloop.counter > 1 %}
+                                    <span class="text-right">
+                                        <input type="button" data-id="{{ forloop.counter0 }}" name="copy" class="js-copy-answers btn btn-default btn-xs" value='{% trans "Copy answers from above" %}'>
+                                        <i class="fa fa-angle-down collapse-indicator"></i>
+                                    </span>
+                                {% else %}
+                                    <i class="fa fa-angle-down collapse-indicator"></i>
+                                {% endif %}
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="cp{{ pos.id }}"
+                            class="panel-collapse collapse in">
+                        <div class="panel-body" data-idx="{{ forloop.counter0 }}">
+                            {% for form in forms %}
+                                {% if form.pos.item != pos.item %}
+                                    {# Add-Ons #}
+                                    <legend>+ {{ form.pos.item }}</legend>
+                                {% endif %}
+                                {% bootstrap_form form layout="horizontal" %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="alert alert-warning typo-alert">
+            <strong>{% trans "Are you sure your email address is correct?" %}</strong><br>
+            {% blocktrans trimmed with entered="<span data-typodisplay></span>" suggestion="<span data-typosuggest></span>" %}
+                You entered "{{ entered }}". Did you mean "{{ suggestion }}"?
+            {% endblocktrans %}
+        </div>
+        <div class="row checkout-button-row">
+            <div class="col-md-4">
+                <a class="btn btn-block btn-default btn-lg"
+                        href="{{ prev_url }}">
+                    {% trans "Go back" %}
+                </a>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
+                <button class="btn btn-block btn-primary btn-lg" type="submit">
+                    {% trans "Continue" %}
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}

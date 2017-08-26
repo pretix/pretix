@@ -1,0 +1,206 @@
+@import "_variables.scss";
+@import "../../pretixbase/scss/colors.scss";
+@import "../../bootstrap/scss/_bootstrap.scss";
+@import "../../fontawesome/scss/font-awesome.scss";
+
+@import "_event.scss";
+@import "_cart.scss";
+@import "_forms.scss";
+@import "_calendar.scss";
+@import "../../pretixbase/scss/webfont.scss";
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 11px;
+}
+.page-header {
+    position: relative;
+    padding-bottom: 9px;
+
+    h1 {
+        margin: 0;
+    }
+    h1 small {
+        white-space: nowrap;
+    }
+    .loginbox {
+        padding-top: 15px;
+    }
+    .event-logo, .organizer-logo {
+        max-width: 100%;
+        height: auto;
+    }
+}
+.js-only {
+    display: none;
+}
+.locales {
+    display: inline;
+    a {
+        text-decoration: none;
+    }
+    a:hover {
+        border-bottom: 2px solid $gray-light;
+    }
+    a.active {
+        border-bottom: 2px solid $brand-primary;
+    }
+    img {
+        vertical-align: baseline;
+    }
+}
+.huge {
+    font-size: 40px;
+}
+a:hover .panel-primary > .panel-heading {
+    background-color: darken($btn-primary-bg, 10%);
+    border-color: darken($btn-primary-border, 12%);
+}
+
+.thank-you {
+    margin-bottom: 25px;
+
+    .fa {
+        font-size: 150px;
+        line-height: 170px;
+        display: block;
+        color: $brand-success;
+    }
+
+    h2 {
+        color: $brand-success;
+    }
+}
+
+body.loading .container {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -ms-filter: blur(2px);
+    -o-filter: blur(2px);
+    filter: blur(2px);
+}
+
+#loadingmodal, #ajaxerr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, .7);
+    opacity: 0;
+    text-align: center;
+    z-index: 900000;
+    visibility: hidden;
+    padding: 10px;
+
+    .big-icon {
+        margin-top: 50px;
+        font-size: 200px;
+        color: $brand-primary;
+    }
+
+    .big-rotating-icon {
+        -webkit-animation: fa-spin 8s infinite linear;
+        animation: fa-spin 8s infinite linear;
+        margin-top: 50px;
+        font-size: 200px;
+        color: $brand-primary;
+    }
+}
+#ajaxerr {
+    background: rgba(236, 236, 236, .9);
+}
+
+.loading #loadingmodal, .ajaxerr #ajaxerr {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .5s ease-in-out;
+    -moz-transition: opacity .5s ease-in-out;
+    -webkit-transition: opacity .5s ease-in-out;
+}
+
+.typo-alert span[data-typosuggest] {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.info-row {
+    & > .fa {
+        font-size: 26px;
+        color: $brand-primary;
+        float: left;
+        margin-top: 3px;
+    }
+    p {
+        min-height: 30px;
+        margin-left: 40px;
+    }
+    p:first-child {
+        margin-top: 0;
+    }
+}
+
+@media (min-width: $screen-md-min) {
+    .thank-you {
+        min-height: 170px;
+        width: 70%;
+        margin: auto;
+
+        .fa {
+            float: left;
+            margin-right: 30px;
+        }
+
+        h2 {
+            padding-top: 35px;
+        }
+
+        p {
+            margin-left: 158px;
+        }
+    }
+}
+@media (max-width: $screen-sm-max) {
+    .thank-you {
+        text-align: center;
+    }
+    h2 {
+        margin-top: 0;
+    }
+    .checkout-button-row > div {
+        margin-bottom: 15px;
+    }
+}
+
+.dl-horizontal dt  {
+    white-space: normal;
+}
+
+.collapse-indicator {
+    -moz-transition: all 150ms ease-in 0s;
+    -webkit-transition: all 150ms ease-in 0s;
+    -o-transition: all 150ms ease-in 0s;
+    transition: all 150ms ease-in 0s;
+}
+
+.panel-title a:not(.collapsed) .collapse-indicator {
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.panel-title a[data-toggle="collapse"] {
+    display: flex;
+    padding: 10px 15px;
+    margin: -10px -15px;
+    align-items: center;
+    justify-content: space-between;
+    outline: 0;
+    text-decoration: none;
+}
+
+.panel-title a[data-toggle="collapse"]:hover {
+    background-color: #eeeeee;
+}

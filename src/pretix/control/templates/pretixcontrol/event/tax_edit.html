@@ -1,0 +1,41 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}
+    {% if rule %}
+        {% blocktrans with name=rule.name %}Tax rule: {{ name }}{% endblocktrans %}
+    {% else %}
+        {% trans "Tax rule" %}
+    {% endif %}
+{% endblock %}
+{% block inside %}
+    {% if rule %}
+        <legend>{% blocktrans with name=rule.name %}Tax rule: {{ name }}{% endblocktrans %}</legend>
+    {% else %}
+        <legend>{% trans "Tax rule" %}</legend>
+    {% endif %}
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        {% bootstrap_field form.name layout="horizontal" %}
+        {% bootstrap_field form.rate layout="horizontal" %}
+        <legend>{% trans "Advanced settings" %}</legend>
+        <div class="alert alert-warning">
+            <span class="fa fa-w fa-legal fa-4x pull-left"></span>
+            {% blocktrans trimmed with docs="https://docs.pretix.eu/en/latest/user/events/taxes.html" %}
+                These settings are intended for advanced users. See the <a href="{{ docs }}">documentation</a>
+                for more information. Note that we are not responsible for the correct handling
+                of taxes in your ticket shop. If in doubt, please contact a lawyer or tax consultant.
+            {% endblocktrans %}
+            <div class="clearfix"></div>
+        </div>
+        {% bootstrap_field form.price_includes_tax layout="horizontal" %}
+        {% bootstrap_field form.eu_reverse_charge layout="horizontal" %}
+        {% bootstrap_field form.home_country layout="horizontal" %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

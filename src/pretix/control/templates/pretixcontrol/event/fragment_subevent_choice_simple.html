@@ -1,0 +1,13 @@
+{% load i18n %}
+<p>
+    <select name="subevent" class="form-control">
+        <option value="">{% trans "All dates" context "subevent" %}</option>
+        {% for se in request.event.subevents.all %}
+            <option value="{{ se.id }}"
+                    {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
+                {{ se.name }} – {{ se.get_date_range_display }}
+            </option>
+        {% endfor %}
+    </select>
+    <button class="btn btn-primary" type="submit">{% trans "Show" %}</button>
+</p>

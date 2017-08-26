@@ -1,0 +1,12 @@
+{% extends "error.html" %}
+{% load i18n %}
+{% block title %}{% trans "Not found" %}{% endblock %}
+{% block content %}
+    <i class="fa fa-meh-o big-icon"></i>
+    <h1>{% trans "Not found" %}</h1>
+    <p>{% trans "I'm afraid we could not find the the resource you requested." %}</p>
+    <p>{{ exception }}</p>
+    <p class="links">
+        <a id='goback' href='#'>{% trans "Take a step back" %}</a>
+    </p>
+{% endblock %}

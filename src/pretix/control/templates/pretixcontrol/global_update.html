@@ -1,0 +1,90 @@
+{% extends "pretixcontrol/global_settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block inner %}
+    <fieldset>
+        <legend>{% trans "Update check results" %}</legend>
+        {% if not gs.settings.update_check_perform %}
+            <div class="alert alert-warning">
+                {% trans "Update checks are disabled." %}
+            </div>
+        {% elif not gs.settings.update_check_last %}
+            <div class="alert alert-info">
+                {% trans "No update check has been performed yet since the last update of this installation. Update checks are performed on a daily basis if your cronjob is set up properly." %}
+            </div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <p>
+                    <button type="submit" name="trigger" value="1" class="btn btn-default">
+                        {% trans "Check for updates now" %}
+                    </button>
+                </p>
+            </form>
+        {% elif "error" in gs.settings.update_check_result %}
+            <div class="alert alert-danger">
+                {% trans "The last update check was not successful." %}
+                {% if gs.settings.update_check_result.error == "http_error" %}
+                    {% trans "The pretix.eu server returned an error code." %}
+                {% elif gs.settings.update_check_result.error == "unavailable" %}
+                    {% trans "The pretix.eu server could not be reached." %}
+                {% elif gs.settings.update_check_result.error == "development" %}
+                    {% trans "This installation appears to be a development installation." %}
+                {% endif %}
+            </div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <p>
+                    <button type="submit" name="trigger" value="1" class="btn btn-default">
+                        {% trans "Check for updates now" %}
+                    </button>
+                </p>
+            </form>
+        {% else %}
+            <form action="" method="post">
+                {% csrf_token %}
+                <p>
+                    {% blocktrans trimmed with date=gs.settings.update_check_last|date:"SHORT_DATETIME_FORMAT" %}
+                        Last updated: {{ date }}
+                    {% endblocktrans %}
+                    <button type="submit" name="trigger" value="1" class="btn btn-default btn-xs">
+                        {% trans "Check for updates now" %}
+                    </button>
+                </p>
+            </form>
+            <div class="table-responsive">
+                <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Component" %}</th>
+                        <th>{% trans "Installed version" %}</th>
+                        <th>{% trans "Latest version" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in tbl %}
+                    <tr class="{% if row.3 %}danger{% elif row.2 == "?" %}warning{% else %}success{% endif %}">
+                        <td>{{ row.0 }}</td>
+                        <td>{{ row.1 }}</td>
+                        <td>{{ row.2 }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </fieldset>
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            <legend>{% trans "Update check settings" %}</legend>
+            {% bootstrap_form_errors form %}
+            {% bootstrap_form form layout='horizontal' %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

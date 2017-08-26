@@ -1,0 +1,115 @@
+{% extends "pretixcontrol/vouchers/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Vouchers" %}{% endblock %}
+{% block inside %}
+    <p>
+        {% blocktrans trimmed %}
+            Vouchers allow you to assign tickets to specific persons for a lower price. They also enable you to
+            reserve some quota for your very special guests.
+        {% endblocktrans %}
+    </p>
+    <form class="form-inline helper-display-inline" action="" method="get">
+        <p>
+            <input type="text" name="search" class="form-control" placeholder="{% trans "Search voucher" %}"
+                   value="{{ request.GET.search }}" autofocus>
+            <input type="text" name="tag" class="form-control" placeholder="{% trans "Filter by tag" %}"
+                   value="{{ request.GET.tag }}">
+            <select name="status" class="form-control">
+                <option value="">{% trans "All vouchers" %}</option>
+                <option value="v" {% if request.GET.status == "v" %}selected="selected"{% endif %}>{% trans "Valid" %}</option>
+                <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Redeemed" %}</option>
+                <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
+            </select>
+            {% if request.event.has_subevents %}
+                <select name="subevent" class="form-control">
+                    <option value="">{% trans "All dates" context "subevent" %}</option>
+                    {% for se in request.event.subevents.all %}
+                        <option value="{{ se.id }}"
+                                {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
+                            {{ se.name }} – {{ se.get_date_range_display }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+            <button class="btn btn-default" type="submit" name="download" value="yes">{% trans "Download list" %}</button>
+        </p>
+    </form>
+    {% if vouchers|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% if request.GET.search or request.GET.tag or request.GET.status or request.GET.subevent %}
+                    {% trans "Your search did not match any vouchers." %}
+                {% else %}
+                    {% blocktrans trimmed %}
+                        You haven't created any vouchers yet.
+                    {% endblocktrans %}
+                {% endif %}
+            </p>
+
+            <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
+            <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create multiple new vouchers" %}</a>
+        </div>
+    {% else %}
+        <p>
+            <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
+            <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-default"><i class="fa fa-plus"></i>
+                {% trans "Create multiple new vouchers" %}</a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-hover table-quotas">
+                <thead>
+                <tr>
+                    <th>{% trans "Voucher code" %}</th>
+                    <th>{% trans "Redemptions" %}</th>
+                    <th>{% trans "Expiry" %}</th>
+                    <th>{% trans "Tag" %}</th>
+                    <th>{% trans "Product" %}</th>
+                    {% if request.event.has_subevents %}
+                        <th>{% trans "Date" context "subevent" %}</th>
+                    {% endif %}
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for v in vouchers %}
+                    <tr>
+                        <td>
+                            <strong><a href="
+                        {% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}">{{ v.code }}</a></strong>
+                        </td>
+                        <td>{{ v.redeemed }} / {{ v.max_usages }}</td>
+                        <td>{{ v.valid_until|date }}</td>
+                        <td>
+                            {{ v.tag }}
+                        </td>
+                        <td>
+                            {% if v.item %}
+                                {{ v.item }}
+                                {% if v.variation %}
+                                    – {{ v.variation }}
+                                {% endif %}
+                            {% else %}
+                                {% blocktrans trimmed with quota=v.quota.name %}
+                                    Any product in quota "{{ quota }}"
+                                {% endblocktrans %}
+                            {% endif %}
+                        </td>
+                        {% if request.event.has_subevents %}
+                            <td>{{ v.subevent.name }} – {{ v.subevent.get_date_range_display }}</td>
+                        {% endif %}
+                        <td class="text-right">
+                            <a href="{% url "control:event.voucher.delete" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}

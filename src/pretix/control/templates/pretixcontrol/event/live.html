@@ -1,0 +1,51 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block content %}
+    <h1>{% trans "Shop status" %}</h1>
+    {% if request.event.live %}
+        <p>
+            {% trans "Your shop is currently live. If you take it down, it will only be visible to you and your team." %}
+        </p>
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="live" value="false">
+
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-primary btn-save">
+                    {% trans "Go offline" %}
+                </button>
+            </div>
+        </form>
+    {% else %}
+        <p>
+            {% trans "Your ticket shop is currently not live. It is thus only visible to you and your team, not to any visitors." %}
+        </p>
+        {% if issues|length > 0 %}
+            <div class="alert alert-warning">
+                <p>
+                    {% trans "To publish your ticket shop, you first need to resolve the following issues:" %}
+                </p>
+                <ul>
+                    {% for issue in issues %}
+                        <li>{{ issue|safe }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <p>
+                {% trans "If you want to, you can publish your ticket shop now." %}
+            </p>
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="live" value="true">
+
+                <div class="form-group submit-group">
+                    <button type="submit" class="btn btn-primary btn-save">
+                        {% trans "Go live" %}
+                    </button>
+                </div>
+            </form>
+        {% endif %}
+    {% endif %}
+{% endblock %}

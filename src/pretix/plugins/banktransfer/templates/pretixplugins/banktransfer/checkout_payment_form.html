@@ -1,0 +1,13 @@
+{% load i18n %}
+
+<p>{% blocktrans trimmed %}
+    After completing your purchase, we will ask you to transfer the money to the following
+    bank account, using a personal reference code:
+{% endblocktrans %}</p>
+
+<address>
+    {{ details|linebreaksbr }}<br>
+    <strong>
+        {% trans "We will assign you a personal reference code to use after you completed the order." %}
+    </strong>
+</address>

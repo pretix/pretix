@@ -1,0 +1,44 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            <legend>{% trans "Ticket download" %}</legend>
+            {% bootstrap_form_errors form %}
+            {% bootstrap_field form.ticket_download layout="horizontal" %}
+            {% bootstrap_field form.ticket_download_date layout="horizontal" %}
+            {% bootstrap_field form.ticket_download_addons layout="horizontal" %}
+            {% bootstrap_field form.ticket_download_nonadm layout="horizontal" %}
+            {% for provider in providers %}
+                <div class="panel panel-default ticketoutput-panel">
+                    <div class="panel-heading">
+                        <a href="{% url "control:event.settings.tickets.preview" event=request.event.slug organizer=request.organizer.slug output=provider.identifier %}"
+                                class="btn btn-default btn-sm pull-right {% if not provider.preview_allowed %}disabled{% endif %}"
+                                target="_blank">
+                            {% trans "Preview" %}
+                        </a>
+                        <h3 class="panel-title">{{ provider.verbose_name }}</h3>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="panel-body">
+                        {% bootstrap_form provider.form layout='horizontal' %}
+                        {% with c=provider.settings_content %}
+                            {% if c %}{{ c|safe }}{% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-warning">
+                    {% trans "There are no ticket outputs available. Please go to the plugin settings and activate one or more ticket output plugins." %}</em>
+                </div>
+            {% endfor %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

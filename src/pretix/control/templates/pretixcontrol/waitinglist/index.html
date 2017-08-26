@@ -1,0 +1,181 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+{% block title %}{% trans "Waiting list" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Waiting list" %}</h1>
+    {% if not request.event.settings.waiting_list_enabled %}
+        <div class="alert alert-danger">
+            {% trans "The waiting list is disabled, so if the event is sold out, people cannot add themselves to this list. If you want to enable it, go to the event settings." %}
+        </div>
+    {% endif %}
+    <div class="row">
+        {% if 'can_change_orders' in request.eventpermset %}
+            <form method="post" class="col-md-6"
+                    action="{% url "control:event.orders.waitinglist.auto" event=request.event.slug organizer=request.organizer.slug %}"
+                    data-asynctask>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {% trans "Send vouchers" %}
+                    </div>
+                    <div class="panel-body form-inline">
+                        {% csrf_token %}
+                        {% if request.event.settings.waiting_list_auto %}
+                            <p>
+                                {% blocktrans trimmed %}
+                                    You have configured that vouchers will automatically be sent to the persons on this list who waited
+                                    the longest as soon as capacity becomes available. It might take up to half an hour for the
+                                    vouchers to be sent after the capacity is available, so don't worry if entries do not disappear
+                                    here immediately. If you want, you can also send them out manually right now.
+                                {% endblocktrans %}
+                            </p>
+                        {% else %}
+                            <p>
+                                {% blocktrans trimmed %}
+                                    You have configured that vouchers will <strong>not</strong> be sent automatically.
+                                    You can either send them one-by-one in an order of your choice by clicking the
+                                    buttons next to a line in this table (if sufficient quota is available) or you can
+                                    press the big button below this text to send out as many vouchers as currently
+                                    possible to the persons who waitet longest.
+                                {% endblocktrans %}
+                            </p>
+                        {% endif %}
+                        {% if request.event.has_subevents %}
+                            <select name="subevent" class="form-control">
+                                <option value="">{% trans "All dates" context "subevent" %}</option>
+                                {% for se in request.event.subevents.all %}
+                                    <option value="{{ se.id }}"
+                                            {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
+                                        {{ se.name }} – {{ se.get_date_range_display }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                        <button class="btn btn-large btn-primary" type="submit">
+                            {% trans "Send as many vouchers as possible" %}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+        <div class="{% if 'can_change_orders' in request.eventpermset %}col-md-6{% else %}col-md-12{% endif %}">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {% trans "Sales estimate" %}
+                </div>
+                <div class="panel-body">
+                    {% blocktrans trimmed with amount=estimate|default:0|floatformat:2 currency=request.event.currency %}
+                        If you can make enough room at your event to fit all the persons on the waiting list in, you
+                        could sell tickets worth an additional <strong>{{ amount }} {{ currency }}</strong>.
+                    {% endblocktrans %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p>
+    <form class="form-inline helper-display-inline" action="" method="get">
+        <select name="status" class="form-control">
+            <option value="a"
+                    {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "All entries" %}</option>
+            <option value="w"
+                    {% if request.GET.status == "w" or not request.GET.status %}selected="selected"{% endif %}>{% trans "Waiting" %}</option>
+            <option value="s"
+                    {% if request.GET.status == "s" %}selected="selected"{% endif %}>{% trans "Voucher assigned" %}</option>
+        </select>
+        <select name="item" class="form-control">
+            <option value="">{% trans "All products" %}</option>
+            {% for item in items %}
+                <option value="{{ item.id }}"
+                        {% if request.GET.item|add:0 == item.id %}selected="selected"{% endif %}>
+                    {{ item.name }}
+                </option>
+            {% endfor %}
+        </select>
+        {% if request.event.has_subevents %}
+            <select name="subevent" class="form-control">
+                <option value="">{% trans "All dates" context "subevent" %}</option>
+                {% for se in request.event.subevents.all %}
+                    <option value="{{ se.id }}"
+                            {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
+                        {{ se.name }} – {{ se.get_date_range_display }}
+                    </option>
+                {% endfor %}
+            </select>
+        {% endif %}
+        <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+    </form>
+    </p>
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans "User" %}</th>
+                    <th>{% trans "Product" %}</th>
+                    {% if request.event.has_subevents %}
+                        <th>{% trans "Date" context "subevent" %}</th>
+                    {% endif %}
+                    <th>{% trans "On the list since" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Voucher" %}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for e in entries %}
+                    <tr>
+                        <td>{{ e.email }}</td>
+                        <td>
+                            {{ e.item }}
+                            {% if e.variation %}
+                                – {{ e.variation }}
+                            {% endif %}
+                        </td>
+                        {% if request.event.has_subevents %}
+                            <td>{{ e.subevent.name }} – {{ e.subevent.get_date_range_display }}</td>
+                        {% endif %}
+                        <td>{{ e.created|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        <td>
+                            {% if e.voucher %}
+                                <span class="label label-success">{% trans "Voucher assigned" %}</span>
+                            {% elif e.availability.0 == 100 %}
+                                <span class="label label-warning">
+                                {% blocktrans with num=e.availability.1 %}
+                                    Waiting, product {{ num }}x available
+                                {% endblocktrans %}
+                            </span>
+                            {% else %}
+                                <span class="label label-danger">{% trans "Waiting, product unavailable" %}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if e.voucher %}
+                                <a href="{% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=e.voucher.pk %}">
+                                    {{ e.voucher }}
+                                </a>
+                            {% elif not e.voucher and e.availability.0 == 100 %}
+                                <button name="assign" value="{{ e.pk }}" class="btn btn-default btn-xs">
+                                    {% trans "Send a voucher" %}
+                                </button>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not e.voucher %}
+                                <a href="{% url "control:event.orders.waitinglist.delete" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                            {% else %}
+                                <span class="btn btn-danger btn-sm disabled"><i class="fa fa-trash"></i></span>
+                            {% endif %}
+                        </td>
+                        <td class="text-right">
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

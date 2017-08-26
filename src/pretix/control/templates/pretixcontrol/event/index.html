@@ -1,0 +1,135 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% block title %}{{ request.event.name }}{% endblock %}
+{% block content %}
+    <h1>
+        {{ request.event.name }}
+    </h1>
+    {% if actions|length > 0 %}
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    {% trans "Your attention is required to resolve the following issues" %}
+                </h3>
+            </div>
+            <ul class="list-group">
+                {% for action in actions %}
+                    <li class="list-group-item logentry">
+                        <p>
+                            <a href="{% url "control:event.requiredaction.discard" event=request.event.slug organizer=request.event.organizer.slug id=action.id %}"
+                               class="btn btn-default btn-xs pull-right">
+                                {% trans "Hide message" %}
+                            </a>
+                            <small><span
+                                    class="fa fa-clock-o"></span> {{ action.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                            </small>
+                        </p>
+                        {{ action.display|safe }}
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="panel-footer">
+                <a href="{% url "control:event.requiredactions" event=request.event.slug organizer=request.event.organizer.slug %}">
+                    {% trans "Show more" %}
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if request.event.has_subevents %}
+        <form class="form-inline helper-display-inline" action="" method="get">
+            {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
+        </form>
+    {% endif %}
+    <div class="dashboard">
+        {% for w in widgets %}
+            <div class="widget-container widget-{{ w.display_size|default:"small" }}">
+                {% if w.url %}{# backwards compatibility #}
+                    <a href="{{ w.url }}" class="widget">
+                        {{ w.content|safe }}
+                    </a>
+                {% elif w.link %}
+                    <a href="{{ w.link }}" class="widget">
+                        {{ w.content|safe }}
+                    </a>
+                {% else %}
+                    <div class="widget">
+                        {{ w.content|safe }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <p>&nbsp;</p>
+    <div class="panel panel-default items">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Internal comment" %}
+            </h3>
+        </div>
+        <div class="panel-body">
+            <form class="form" method="post"
+                  action="{% url "control:event.comment" event=request.event.slug organizer=request.event.organizer.slug %}">
+                {% csrf_token %}
+                <div class="row">
+                    {% bootstrap_field comment_form.comment layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
+                </div>
+                <p class="text-right">
+                    <br>
+                    <button class="btn btn-default">
+                        {% trans "Update comment" %}
+                    </button>
+                </p>
+            </form>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Event logs" %}
+            </h3>
+        </div>
+        <ul class="list-group">
+            {% for log in logs %}
+                <li class="list-group-item logentry">
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-6 col-xs-12">
+                            <span class="fa fa-clock-o"></span> {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                        </div>
+                        <div class="col-lg-2 col-sm-6 col-xs-12">
+                            {% if log.user %}
+                                {% if log.user.is_superuser %}
+                                    <span class="fa fa-id-card fa-danger fa-fw"
+                                          data-toggle="tooltip"
+                                          title="{% trans "This change was performed by a pretix administrator." %}">
+                                </span>
+                                {% else %}
+                                    <span class="fa fa-user fa-fw"></span>
+                                {% endif %}
+                                {{ log.user.get_full_name }}
+                            {% endif %}
+                        </div>
+                        <div class="col-lg-2 col-sm-12 col-xs-12">
+                            {% if log.display_object %}
+                                <span class="fa fa-flag"></span> {{ log.display_object|safe }}
+                            {% endif %}
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-xs-12">
+                            {{ log.display }}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="panel-footer">
+            <a href="{% url "control:event.log" event=request.event.slug organizer=request.event.organizer.slug %}">
+                {% trans "Show more logs" %}
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

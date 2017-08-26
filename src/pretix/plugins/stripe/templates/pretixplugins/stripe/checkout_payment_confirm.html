@@ -1,0 +1,29 @@
+{% load i18n %}
+
+{% if provider.method == "cc" %}
+    <p>{% blocktrans trimmed %}
+        The total amount will be withdrawn from your credit card.
+    {% endblocktrans %}</p>
+    <dl class="dl-horizontal">
+        <dt>{% trans "Card type" %}</dt>
+        <dd>{{ request.session.payment_stripe_brand }}</dd>
+        <dt>{% trans "Card number" %}</dt>
+        <dd>**** **** **** {{ request.session.payment_stripe_last4 }}</dd>
+    </dl>
+{% else %}
+    <p>{% blocktrans trimmed %}
+        After you submitted your order, we will redirect you to the payment service provider to complete your payment.
+        You will then be redirected back here to get your tickets.
+    {% endblocktrans %}</p>
+    <dl class="dl-horizontal">
+        <dt>{% trans "Payment method" %}</dt>
+        <dd>{{ provider.public_name }}</dd>
+        {% if provider.method == "giropay" %}
+            <dt>{% trans "Account holder" %}</dt>
+            <dd>{{ request.session.payment_stripe_giropay_account }}</dd>
+        {% elif provider.method == "bancontact" %}
+            <dt>{% trans "Account holder" %}</dt>
+            <dd>{{ request.session.payment_stripe_bancontact_account }}</dd>
+        {% endif %}
+    </dl>
+{% endif %}

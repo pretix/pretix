@@ -1,0 +1,5 @@
+<div class="alert alert-danger">
+    {% for error in errors %}
+        {{ error }}{% if not forloop.last %}<br>{% endif %}
+    {% endfor %}
+</div>

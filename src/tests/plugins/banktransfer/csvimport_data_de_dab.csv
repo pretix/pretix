@@ -1,0 +1,4 @@
+﻿;
+Buchungstag;Valuta;Buchungstext;Auftraggeber / Empfänger;Verwendungszweck;Betrag in EUR;
+09.04.2015;09.04.2015;SEPA-Überweisung;Karl Kunde;Bestellung 2015ABCDE;23,00;
+09.04.2015;09.04.2015;SEPA-Überweisung;Karla Kundin;Bestellung 2015FGHIJ;42,00;

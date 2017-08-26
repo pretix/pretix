@@ -1,0 +1,20 @@
+include LICENSE
+include README.rst
+recursive-include pretix/static *
+recursive-include pretix/static.dist *
+recursive-include pretix/locale *
+recursive-include pretix/base/templates *
+recursive-include pretix/control/templates *
+recursive-include pretix/presale/templates *
+recursive-include pretix/plugins/banktransfer/templates *
+recursive-include pretix/plugins/banktransfer/static *
+recursive-include pretix/plugins/paypal/templates *
+recursive-include pretix/plugins/pretixdroid/templates *
+recursive-include pretix/plugins/pretixdroid/static *
+recursive-include pretix/plugins/sendmail/templates *
+recursive-include pretix/plugins/statistics/templates *
+recursive-include pretix/plugins/statistics/static *
+recursive-include pretix/plugins/stripe/templates *
+recursive-include pretix/plugins/stripe/static *
+recursive-include pretix/plugins/ticketoutputpdf/templates *
+recursive-include pretix/plugins/ticketoutputpdf/static *

@@ -1,0 +1,401 @@
+@import "_variables.scss";
+@import "../../bootstrap/scss/_bootstrap.scss";
+@import "../../fontawesome/scss/font-awesome.scss";
+@import "../../typeahead/typeahead.css";
+@import "../../charts/morris.css";
+@import "../../datetimepicker/_bootstrap-datetimepicker.scss";
+@import "_sb-admin-2.scss";
+@import "_forms.scss";
+@import "_flags.scss";
+@import "_orders.scss";
+@import "_dashboard.scss";
+@import "../../pretixbase/scss/webfont.scss";
+@import "../../fileupload/jquery.fileupload.scss";
+@import "../../colorpicker/bootstrap-colorpicker.scss";
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 11px;
+}
+
+nav.navbar {
+    margin: 0;
+}
+.navbar-brand img {
+    height: 100%;
+    width: auto;
+    display: inline;
+}
+
+#side-menu img.fa-img {
+    height: auto;
+    width: 1.28571em;
+}
+
+nav.navbar .danger, nav.navbar .danger:hover, nav.navbar .danger:active {
+    background: $brand-danger !important;
+}
+
+.navbar-header .navbar-events {
+    color: white;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+.nav-pills {
+    margin-bottom: 10px;
+}
+
+#button-shop {
+    padding: 15px;
+    min-height: 50px;
+    border: none;
+    &:hover, &:active {
+        text-decoration: none;
+    }
+}
+
+.product-row {
+    padding: 10px 0;
+
+    .count form {
+        display: inline;
+    }
+    .price, .count {
+        text-align: right;
+    }
+    .price small,
+    .availability-box small {
+        display: block;
+        line-height: 1;
+    }
+
+    &.total {
+        border-top: 1px solid $table-border-color;
+    }
+
+    dl {
+        padding-left: 20px;
+        margin-bottom: 0;
+
+        dd {
+            padding-left: 20px;
+        }
+    }
+
+    .addon-signifier {
+        display: inline-block;
+        padding-left: 10px;
+        font-weight: bold;
+    }
+}
+
+h1 .btn-sm {
+    margin-top: -5px;
+}
+
+.btn-toolbar {
+    margin-bottom: 20px;
+}
+.container-fluid > .alert:first-child {
+    margin-top: 20px;
+}
+
+.flipped-scroll-wrapper {
+    overflow-y: auto;
+}
+.flipped-scroll-wrapper, .flipped-scroll-inner {
+    /* This nasty hack puts the scroll bar at the top, so the user really
+       notices that there is one */
+    transform: rotateX(180deg);
+    -ms-transform: rotateX(180deg); /* IE 9 */
+    -webkit-transform: rotateX(180deg); /* Safari and Chrome */
+}
+@media (max-width: $screen-sm-max) {
+    .navbar-nav {
+        margin-left: 0;
+    }
+}
+
+.organizer-tabs .tab-inner {
+    padding-top: 20px;
+}
+
+.helper-display-inline {
+    display: inline !important;
+}
+.helper-width-auto {
+    width: auto;
+}
+.helper-width-100 {
+    width: 100%;
+}
+.helper-space-below {
+    margin-bottom: 10px;
+}
+
+.section-moved {
+    margin: 20px 0;
+    text-align: center;
+
+    p {
+        font-size: 18px;
+        margin: 20px auto;
+        max-width: 800px;
+    }
+
+    .img-moved {
+        height: 200px;
+        width: auto;
+    }
+}
+.empty-collection {
+    margin: 20px 0;
+    text-align: center;
+
+    p {
+        font-size: 24px;
+    }
+
+    .big-grey-icon {
+        font-size: 200px;
+        color: #ccc;
+    }
+}
+.table .progress {
+    margin-bottom: 0;
+}
+
+@for $i from 0 through 100 {
+  .progress-bar-#{$i} { width: 1% * $i; }
+}
+
+.form-order-change .radio {
+    display: block;
+}
+.form-order-change .form-group {
+    margin: 0;
+}
+
+.multi-step-tutorial {
+    &> li {
+        margin-bottom: 15px;
+    }
+}
+
+body.loading #wrapper {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -ms-filter: blur(2px);
+    -o-filter: blur(2px);
+    filter: blur(2px);
+}
+
+#loadingmodal, #ajaxerr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, .7);
+    opacity: 0;
+    text-align: center;
+    z-index: 900000;
+    visibility: hidden;
+    padding: 10px;
+
+    .big-icon {
+        margin-top: 50px;
+        font-size: 200px;
+        color: $brand-primary;
+    }
+
+    .big-rotating-icon {
+        -webkit-animation: fa-spin 8s infinite linear;
+        animation: fa-spin 8s infinite linear;
+        margin-top: 50px;
+        font-size: 200px;
+        color: $brand-primary;
+    }
+}
+#ajaxerr {
+    background: rgba(236, 236, 236, .9);
+}
+
+.loading #loadingmodal, .ajaxerr #ajaxerr {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .5s ease-in-out;
+    -moz-transition: opacity .5s ease-in-out;
+    -webkit-transition: opacity .5s ease-in-out;
+}
+
+.big-rotating-icon {
+    margin-top: 50px;
+    -webkit-animation: fa-spin 8s infinite linear;
+    animation: fa-spin 8s infinite linear;
+    font-size: 200px;
+    color: $brand-primary;
+}
+
+.user-admin-icon {
+    width: 16px;
+    height: 16px;
+    margin-top: -2px;
+}
+
+.meta .user-admin-icon {
+    width: 12px;
+    height: 12px;
+    margin-top: -2px;
+}
+
+.btn .fa {
+    @extend .fa-fw;
+}
+
+.action-col-2 {
+    min-width: 95px;
+}
+
+.fa-danger {
+    color: $brand-danger;
+}
+
+.nearly-gone {
+    overflow: visible !important;
+    height: 0 !important;
+    width: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+}
+
+.colorpicker-2x .colorpicker-saturation {
+    width: 200px;
+    height: 200px;
+}
+
+.colorpicker-2x .colorpicker-hue,
+.colorpicker-2x .colorpicker-alpha {
+    width: 30px;
+    height: 200px;
+}
+
+.colorpicker-2x .colorpicker-color,
+.colorpicker-2x .colorpicker-color div {
+    height: 30px;
+}
+
+.event-name {
+    display: inline-block;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+}
+
+.dropdown-menu .form-box {
+    padding: 3px 10px;
+}
+
+.event-dropdown {
+    width: 300px;
+}
+.event-dropdown, .mobile-event-dropdown {
+    .event-name-full {
+        display: block;
+    }
+    .event-daterange, .event-organizer {
+        display: block;
+        font-size: $font-size-small;
+        color: $text-muted;
+    }
+    .active .event-daterange, .active .event-organizer, .active a {
+        color: white;
+    }
+    .active {
+        background: $brand-primary;
+        color: white;
+    }
+}
+
+.sidebar-content {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 12px;
+
+    img {
+        max-width: 80%;
+    }
+}
+
+.mobile-navbar-view-form {
+    float: right;
+    button {
+        position: relative;
+        margin-right: 15px;
+        padding: 6px 10px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        background-color: transparent;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+}
+.mobile-navbar-view-link {
+    padding: 6px 10px;
+    color: white !important;
+}
+
+@media (min-width: $screen-md-min) {
+    .row-plugins {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .row-plugins > [class*=col] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .row-plugins > [class*=col] > .panel {
+        height: 100%
+    }
+}
+
+.dl-horizontal dt  {
+    white-space: normal;
+}
+
+.collapse-indicator {
+    -webkit-transition: all 150ms ease-in 0s;
+    transition: all 150ms ease-in 0s;
+}
+
+.panel-title a:not(.collapsed) .collapse-indicator {
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.panel-title a[data-toggle="collapse"] {
+    display: flex;
+    padding: 10px 15px;
+    margin: -10px -15px;
+    align-items: center;
+    justify-content: space-between;
+    outline: 0;
+    text-decoration: none;
+}
+
+.panel-title a[data-toggle="collapse"]:hover {
+    background-color: #eeeeee;
+}
+
+.fa.disabled {
+    color: $text-muted;
+}

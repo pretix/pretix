@@ -1,0 +1,44 @@
+.panel-title .radio {
+  margin-left: 20px;
+}
+
+.form-control + .form-control-feedback {
+  /* Fix for https://github.com/FortAwesome/Font-Awesome/issues/4313 */
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2; // Ensure icon is above input groups
+  display: block;
+  width: $input-height-base;
+  height: $input-height-base;
+  line-height: $input-height-base;
+  text-align: center;
+  pointer-events: none;
+}
+
+.js-copy-answers {
+  margin-right: 10px;
+}
+
+.form-control.is-focused {
+  @extend .form-control:focus;
+}
+
+.form-control.has-error {
+  border-color: $state-danger-text;
+  @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075)); // Redeclare so transitions work
+  &:focus, &.is-focused {
+    border-color: darken($state-danger-text, 10%);
+    $shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px lighten($state-danger-text, 20%);
+    @include box-shadow($shadow);
+  }
+}
+
+.required-legend span {
+  color: $brand-primary;
+  font-weight: bold;
+}
+.form-group.required .control-label:after {
+  content: '*';
+  color: $brand-primary
+}

@@ -1,0 +1,45 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Send email" %}{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Send email" %}
+        <a class="btn btn-link btn-lg"
+                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+            {% blocktrans trimmed with order=order.code %}
+                Back to order {{ order }}
+            {% endblocktrans %}
+        </a>
+    </h1>
+    {% block inner %}
+        <form class="form-horizontal" method="post" action="">
+            {% csrf_token %}
+            {% bootstrap_field form.sendto layout='horizontal' %}
+            {% bootstrap_field form.subject layout='horizontal' %}
+            {% bootstrap_field form.message layout='horizontal' %}
+            {% if request.method == "POST" %}
+                <fieldset>
+                    <legend>{% trans "E-mail preview" %}</legend>
+                    <div class="tab-pane mail-preview-group">
+                        <pre lang="" class="mail-preview">
+                            {% for segment in preview_output %}
+                                {% spaceless %}
+                                    {{ segment|linebreaksbr }}
+                                {% endspaceless %}
+                            {% endfor %}
+                        </pre>
+                    </div>
+                </fieldset>
+            {% endif %}
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-default btn-save pull-left" name="action" value="preview">
+                {% trans "Preview email" %}
+                </button>
+                <button type="submit" class="btn btn-primary btn-save">
+                    {% trans "Send" %}
+                </button>
+            </div>
+        </form>
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Add a two-factor authentication device" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Add a two-factor authentication device" %}</h1>
+    <p>
+        {% trans "To set up this device, please follow the following steps:" %}
+    </p>
+    <ol class="multi-step-tutorial">
+        <li>
+            {% trans "Download the Google Authenticator application to your phone:" %}
+            <ul>
+                <li>
+                    <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&"
+                            target="_blank">
+                        {% trans "Android (Google Play)" %}
+                    </a>
+                </li>
+                <li>
+                    <a href="https://f-droid.org/repository/browse/?fdfilter=authenticator&fdid=com.google.android.apps.authenticator2"
+                            target="_blank">
+                        {% trans "Android (F-Droid)" %}
+                    </a>
+                </li>
+                <li>
+                    <a href="https://itunes.apple.com/en/app/google-authenticator/id388497605?mt=8">
+                        {% trans "iOS (iTunes)" %}
+                    </a>
+                </li>
+                <li>
+                    <a href="https://m.google.com/authenticator">
+                        {% trans "Blackberry (Link via Google)" %}
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            {% trans "Add a new account to the app by scanning the following barcode:" %}
+            <div class="qrcode-canvas" data-qrdata="#qrdata"></div>
+            <p>
+                <a data-toggle="collapse" href="#no_scan">
+                    {% trans "Can't scan the barcode?" %}
+                </a>
+            </p>
+            <div class="collapse" id="no_scan">
+                <ol class="multi-step-tutorial">
+                    <li>
+                        {% trans 'Use the "provide a key" option of your authenticator app.' %}
+                    </li>
+                    <li>
+                        {% trans 'In "Account name", type your login name for pretix.' %}
+                    </li>
+                    <li>
+                        {% trans 'In "Secret"/"Account Key", enter the following code:' %}
+                        <div>
+                            <code id="otp_secret" style="white-space: pre">{{ secretGrouped }}</code>
+                            <button type="button" class="btn btn-default btn-xs btn-clipboard" data-clipboard-target="#otp_secret">
+                                <span class="fa fa-clipboard" aria-hidden="true"></span>
+                                {% trans "copy" %}
+                            </button>
+                        </div>
+                        <div>
+                            <small>Spaces don't matter.</small>
+                        </div>
+                    </li>
+                <li>
+                        {% trans 'If present, make sure "Time-based"/"TOTP" and 6 digit codes are selected.' %}
+                </li>
+                </ol>
+            </div>
+        </li>
+        <li>
+            {% trans "Enter the displayed code here:" %}
+            <form class="form form-inline" method="post" action="">
+                {% csrf_token %}
+                <input type="number" name="token" class="form-control" required="required">
+                <button class="btn btn-primary" type="submit">
+                    {% trans "Continue" %}
+                </button>
+            </form>
+        </li>
+    </ol>
+
+    <script type="text/json" id="qrdata">
+        {{ qrdata|safe }}
+
+
+    </script>
+{% endblock %}

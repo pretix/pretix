@@ -1,0 +1,15 @@
+/* FONT PATH
+ * -------------------------- */
+
+@font-face {
+  font-family: 'FontAwesome';
+  src: url(static('fontawesome/fonts/fontawesome-webfont.eot'));
+  src: url(static('fontawesome/fonts/fontawesome-webfont.eot')) format('embedded-opentype'),
+    url(static('fontawesome/fonts/fontawesome-webfont.woff2')) format('woff2'),
+    url(static('fontawesome/fonts/fontawesome-webfont.woff')) format('woff'),
+    url(static('fontawesome/fonts/fontawesome-webfont.ttf')) format('truetype'),
+    url(static('fontawesome/fonts/fontawesome-webfont.svg')) format('svg');
+//  src: url('fontawesome/fonts/FontAwesome.otf') format('opentype'); // used when developing fonts
+  font-weight: normal;
+  font-style: normal;
+}

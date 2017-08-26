@@ -1,0 +1,96 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load escapejson %}
+{% load formset_tags %}
+{% block title %}{% blocktrans with name=question.question %}Question: {{ name }}{% endblocktrans %}{% endblock %}
+{% block inside %}
+    <h1>
+        {% blocktrans with name=question.question %}Question: {{ name }}{% endblocktrans %}
+        <a href="{% url "control:event.items.questions.edit" event=request.event.slug organizer=request.event.organizer.slug question=question.pk %}"
+                class="btn btn-default">
+            <span class="fa fa-edit"></span>
+            {% trans "Edit question" %}
+        </a>
+    </h1>
+    <form class="form-inline helper-display-inline" action="" method="get">
+        <p>
+            <select name="status" class="form-control">
+                <option value="">{% trans "All orders" %}</option>
+                <option value="p" {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "Paid" %}</option>
+                <option value="n" {% if request.GET.status == "n" %}selected="selected"{% endif %}>{% trans "Pending" %}</option>
+                <option value="o" {% if request.GET.status == "o" %}selected="selected"{% endif %}>{% trans "Pending (overdue)" %}</option>
+                <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
+                <option value="ne" {% if request.GET.status == "ne" %}selected="selected"{% endif %}>{% trans "Pending or expired" %}</option>
+                <option value="c" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Canceled" %}</option>
+                <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Refunded" %}</option>
+            </select>
+            <select name="item" class="form-control">
+                <option value="">{% trans "All products" %}</option>
+                {% for item in items %}
+                    <option value="{{ item.id }}"
+                            {% if request.GET.item|add:0 == item.id %}selected="selected"{% endif %}>
+                        {{ item.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+        </p>
+    </form>
+    <div class="row" id="question-stats">
+        {% if not stats %}
+            <div class="empty-collection col-md-10 col-xs-12">
+                <p>
+                    {% blocktrans trimmed %}
+                        No matching answers found.
+                    {% endblocktrans %}
+                </p>
+                {% if not items %}
+                    <p>
+                        {% trans "You need to assign the question to a product to collect answers." %}
+                    </p>
+
+                    <a href="{% url "control:event.items.questions.edit" event=request.event.slug organizer=request.event.organizer.slug question=question.pk %}"
+                            class="btn btn-primary btn-lg"><i class="fa fa-edit"></i> {% trans "Edit question" %}</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="col-md-5 col-xs-12">
+                <div class="chart" id="question_chart" data-type="{{ question.type }}">
+
+                </div>
+                <script type="application/json" id="question-chart-data">{{ stats_json|escapejson }}</script>
+            </div>
+            <div class="col-md-5 col-xs-12">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Answer" %}</th>
+                        <th>{% trans "Count" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for stat in stats %}
+                        <tr>
+                            <td>
+                                {{ stat.answer }}
+                            </td>
+                            <td>{{ stat.count }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+        <div class="col-xs-12 col-lg-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Question history" %}
+                    </h3>
+                </div>
+                {% include "pretixcontrol/includes/logs.html" with obj=question %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

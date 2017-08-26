@@ -1,0 +1,122 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load order_overview %}
+{% block title %}{% trans "Sales overview" %}{% endblock %}
+{% block content %}
+    {% url "control:event.orders" organizer=request.event.organizer.slug event=request.event.slug as listurl %}
+    <div class="pull-right">
+        <div class="btn-group" role="group" id="sumtoggle">
+            <button type="button" data-target=".count" class="btn btn-default active">{% trans "Sales" %}</button>
+            <button type="button" data-target=".sum-gross" class="btn btn-default">{% trans "Revenue (gross)" %}</button>
+            <button type="button" data-target=".sum-net" class="btn btn-default">{% trans "Revenue (net)" %}</button>
+        </div>
+    </div>
+	<h1>{% trans "Order overview" %}</h1>
+    {% if request.event.has_subevents %}
+        <form class="form-inline helper-display-inline" action="" method="get">
+            {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
+        </form>
+    {% endif %}
+    {% if subevent_warning %}
+        <div class="alert alert-info">
+            {% blocktrans trimmed context "subevent" %}
+                If you select a single date, payment method fees will not be listed here as it might not be clear which
+                date they belong to.
+            {% endblocktrans %}
+        </div>
+    {% endif %}
+    <div class="table-responsive">
+        <table class="table table-condensed table-hover table-product-overview">
+            <thead>
+                <tr>
+                    <th>{% trans "Product" %}</th>
+                    <th>{% trans "Canceled" %}</th>
+                    <th>{% trans "Refunded" %}</th>
+                    <th>{% trans "Expired" %}</th>
+                    <th colspan="3">{% trans "Purchased" %}</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>{% trans "Pending" %}</th>
+                    <th>{% trans "Paid" %}</th>
+                    <th>{% trans "Total" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tup in items_by_category %}
+                    {% if tup.0 %}
+                        <tr class="category">
+                            <th>{{ tup.0.name }}</th>
+                            <th>{{ tup.0.num_canceled|togglesum }}</th>
+                            <th>{{ tup.0.num_refunded|togglesum }}</th>
+                            <th>{{ tup.0.num_expired|togglesum }}</th>
+                            <th>{{ tup.0.num_pending|togglesum }}</th>
+                            <th>{{ tup.0.num_paid|togglesum }}</th>
+                            <th>{{ tup.0.num_total|togglesum }}</th>
+                        </tr>
+                    {% endif %}
+                    {% for item in tup.1 %}
+                        <tr class="item {% if tup.0 %}categorized{% endif %}">
+                            <td>{{ item.name }}</td>
+                            <td>
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=c&amp;provider={{ item.provider }}">
+                                    {{ item.num_canceled|togglesum }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=r&amp;provider={{ item.provider }}">
+                                    {{ item.num_refunded|togglesum }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=e&amp;provider={{ item.provider }}">
+                                    {{ item.num_expired|togglesum }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=n&amp;provider={{ item.provider }}">
+                                    {{ item.num_pending|togglesum }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=p&amp;provider={{ item.provider }}">
+                                    {{ item.num_paid|togglesum }}
+                                </a>
+                            </td>
+                            <td>
+                                {{ item.num_total|togglesum }}
+                            </td>
+                        </tr>
+                        {% if item.has_variations %}
+                            {% for var in item.all_variations %}
+                                <tr class="variation {% if tup.0 %}categorized{% endif %}">
+                                    <td>{{ var }}</td>
+                                    <td>{{ var.num_canceled|togglesum }}</td>
+                                    <td>{{ var.num_refunded|togglesum }}</td>
+                                    <td>{{ var.num_expired|togglesum }}</td>
+                                    <td>{{ var.num_pending|togglesum }}</td>
+                                    <td>{{ var.num_paid|togglesum }}</td>
+                                    <td>{{ var.num_total|togglesum }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="total">
+                    <th>{% trans "Total" %}</th>
+                    <th>{{ total.num_canceled|togglesum }}</th>
+                    <th>{{ total.num_refunded|togglesum }}</th>
+                    <th>{{ total.num_expired|togglesum }}</th>
+                    <th>{{ total.num_pending|togglesum }}</th>
+                    <th>{{ total.num_paid|togglesum }}</th>
+                    <th>{{ total.num_total|togglesum }}</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock %}

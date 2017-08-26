@@ -1,0 +1,13 @@
+{% extends "error.html" %}
+{% load i18n %}
+{% block title %}{% trans "Bad Request" %}{% endblock %}
+{% block content %}
+    <i class="fa fa-frown-o big-icon"></i>
+    <h1>{% trans "Bad Request" %}</h1>
+    <p>{% trans "We were unable to parse your request." %}</p>
+    <p>{{ exception }}</p>
+    <p class="links">
+        <a id='goback' href='#'>{% trans "Take a step back" %}</a>
+        &middot; <a id='reload' href='#'>{% trans "Try again" %}</a>
+    </p>
+{% endblock %}

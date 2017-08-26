@@ -1,0 +1,31 @@
+{% extends "pretixcontrol/auth/base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+{% load staticfiles %}
+{% block content %}
+    <form class="form-signin" action="" method="post">
+        {% bootstrap_form_errors form type='all' layout='inline' %}
+        {% csrf_token %}
+        {% bootstrap_field form.email %}
+        {% bootstrap_field form.password %}
+        <div class="form-group buttons">
+            {% if can_reset %}
+                <a href="{% url "control:auth.forgot" %}" class="btn btn-link">
+                    {% trans "Lost password?" %}
+                </a>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary">
+                {% trans "Log in" %}
+            </button>
+        </div>
+
+        {% if can_register %}
+            <div class="form-group buttons">
+                <a href="{% url "control:auth.register" %}" class="btn btn-link">
+                    {% trans "Register" %}
+                </a>
+            </div>
+        {% endif %}
+    </form>
+{% endblock %}

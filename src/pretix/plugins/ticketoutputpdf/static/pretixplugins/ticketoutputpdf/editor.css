@@ -1,0 +1,54 @@
+#fabric-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#editor-canvas-area {
+    position: relative;
+    min-height: 500px;
+}
+body {
+    overflow-y: scroll;
+}
+#toolbox .control-group {
+    margin-bottom: 5px;
+}
+#toolbox .position, #toolbox .squaresize, #toolbox[data-type] .pdf-info, #toolbox .text, #toolbox .object-buttons {
+    display: none;
+}
+#toolbox[data-type] .position, #toolbox[data-type=barcodearea] .squaresize, #toolbox[data-type=text] .text, #toolbox[data-type=textarea] .text,
+#toolbox[data-type] .object-buttons {
+    display: block;
+}
+#loading-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: white;
+    width: 100%;
+    text-align: center;
+}
+#loading-container > div {
+    max-width: 600px;
+    margin: auto;
+}
+#loading-upload {
+    display: none;
+}
+.preload-font {
+    visibility: hidden;
+}
+#source-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: white;
+    width: 100%;
+    text-align: center;
+}
+#source-container textarea {
+    width: 100%;
+    height: 250px;
+}

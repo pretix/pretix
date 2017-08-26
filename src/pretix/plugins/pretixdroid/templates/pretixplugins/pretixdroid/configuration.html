@@ -1,0 +1,60 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% block title %}{% trans "pretixdroid configuration" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "pretixdroid configuration" %}</h1>
+    <p>{% blocktrans trimmed %}
+        pretixdroid is an Android app that you can use to control tickets at the entrance of your event.
+    {% endblocktrans %}</p>
+    <h2>{% trans "App download" %}</h2>
+    <p>
+        <a href="http://play.google.com/store/apps/details?id=eu.pretix.pretixdroid">
+            <img src="{% static "pretixplugins/pretixdroid/play_store_en.png" %}" alt="
+{% trans "Download the app from the Google Play Store" %}" height="70">
+        </a>
+    </p>
+    <p>
+        <small>
+            {% blocktrans trimmed %}
+                Android, Google Play and the Google Play logo are trademarks of Google Inc.
+            {% endblocktrans %}
+        </small>
+    </p>
+    <h2>{% trans "App configuration" %}</h2>
+    <p>
+        {% blocktrans trimmed %}
+            If you start the app for the first time, it will request that you scan the following code.
+            The code tells the app all it needs about your event.
+        {% endblocktrans %}
+    </p>
+    {% if request.event.has_subevents %}
+        <form class="form-inline helper-display-inline" action="" method="get">
+            <p>
+                {% if request.event.has_subevents %}
+                    <select name="subevent" class="form-control">
+                        <option value="">{% trans "Choose date" context "subevent" %}</option>
+                        {% for se in request.event.subevents.all %}
+                            <option value="{{ se.id }}"
+                                    {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
+                                {{ se.name }} – {{ se.get_date_range_display }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+                <button class="btn btn-primary" type="submit">{% trans "Show configuration" %}</button>
+            </p>
+        </form>
+    {% endif %}
+    {% if not request.event.has_subevents or subevent %}
+        <div id="qrcodeCanvas"></div>
+        <a href="?flush_key=1" class="btn btn-default">{% trans "Reset authentication token" %}</a>
+        <script type="text/json" id="qrdata">
+            {{ qrdata|safe }}
+
+        </script>
+    {% endif %}
+    <script type="text/javascript" src="{% static "pretixplugins/pretixdroid/pretixdroid.js" %}"></script>
+{% endblock %}
+

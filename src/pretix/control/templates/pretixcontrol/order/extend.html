@@ -1,0 +1,33 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}
+    {% trans "Extend payment term" %}
+{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Extend payment term" %}
+        <a class="btn btn-link btn-lg"
+                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+            {% blocktrans trimmed with order=order.code %}
+                Back to order {{ order }}
+            {% endblocktrans %}
+        </a>
+    </h1>
+
+    <form method="post" class="form-horizontal" href="">
+        {% csrf_token %}
+        <input type="hidden" name="status" value="c" />
+        {% bootstrap_form form layout='horizontal' %}
+        <div class="form-group submit-group">
+            <a class="btn btn-default btn-lg"
+                    href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                {% trans "Cancel" %}
+            </a>
+            <button class="btn btn-danger btn-save btn-lg" type="submit">
+                {% trans "Save" %}
+            </button>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}

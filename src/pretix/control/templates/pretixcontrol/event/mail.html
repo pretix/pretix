@@ -1,0 +1,68 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data"
+          mail-preview-url="{% url "control:event.settings.mail.preview" event=request.event.slug organizer=request.event.organizer.slug %}">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <fieldset>
+            <legend>{% trans "E-mail settings" %}</legend>
+            {% bootstrap_field form.mail_prefix layout="horizontal" %}
+            {% bootstrap_field form.mail_from layout="horizontal" %}
+            {% bootstrap_field form.mail_text_signature layout="horizontal" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "E-mail content" %}</legend>
+            <div class="panel-group" id="questions_group">
+                {% blocktrans asvar title_placed_order %}Placed order{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_placed" title=title_placed_order items="mail_text_order_placed" %}
+
+                {% blocktrans asvar title_paid_order %}Paid order{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_paid" title=title_paid_order items="mail_text_order_paid" %}
+
+                {% blocktrans asvar title_free_order %}Free order{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_free" title=title_free_order items="mail_text_order_free" %}
+
+                {% blocktrans asvar title_resend_link %}Resend link{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="resend_link" title=title_resend_link items="mail_text_resend_link,mail_text_resend_all_links" %}
+
+                {% blocktrans asvar title_order_changed %}Order changed{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_changed" title=title_order_changed items="mail_text_order_changed" %}
+
+                {% blocktrans asvar title_payment_reminder %}Payment reminder{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_expirew" title=title_payment_reminder items="mail_days_order_expire_warning,mail_text_order_expire_warning" exclude="mail_days_order_expire_warning" %}
+
+                {% blocktrans asvar title_waiting_list_notification %}Waiting list notification{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="waiting_list" title=title_waiting_list_notification items="mail_text_waiting_list" %}
+
+                {% blocktrans asvar title_order_canceled %}Order canceled{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_canceled" title=title_order_canceled items="mail_text_order_canceled" %}
+
+                {% blocktrans asvar title_order_custom_mail %}Order custom mail{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="custom_mail" title=title_order_custom_mail items="mail_text_order_custom_mail" %}
+
+                {% blocktrans asvar title_download_tickets_reminder %}Reminder to download tickets{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="ticket_reminder" title=title_download_tickets_reminder items="mail_days_download_reminder,mail_text_download_reminder" exclude="mail_days_download_reminder" %}
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "SMTP settings" %}</legend>
+            {% bootstrap_field form.smtp_use_custom layout="horizontal" %}
+            {% bootstrap_field form.smtp_host layout="horizontal" %}
+            {% bootstrap_field form.smtp_port layout="horizontal" %}
+            {% bootstrap_field form.smtp_username layout="horizontal" %}
+            {% bootstrap_field form.smtp_password layout="horizontal" %}
+            {% bootstrap_field form.smtp_use_tls layout="horizontal" %}
+            {% bootstrap_field form.smtp_use_ssl layout="horizontal" %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+            <button type="submit" class="btn btn-default btn-save pull-left" name="test" value="1">
+                {% trans "Save and test custom SMTP connection" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

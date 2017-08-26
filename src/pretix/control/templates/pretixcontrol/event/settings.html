@@ -1,0 +1,62 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <fieldset>
+            <legend>{% trans "General information" %}</legend>
+            {% bootstrap_field form.name layout="horizontal" %}
+            {% bootstrap_field form.slug layout="horizontal" %}
+            {% bootstrap_field form.date_from layout="horizontal" %}
+            {% bootstrap_field form.date_to layout="horizontal" %}
+            {% bootstrap_field form.location layout="horizontal" %}
+            {% bootstrap_field form.date_admission layout="horizontal" %}
+            {% bootstrap_field form.currency layout="horizontal" %}
+            {% bootstrap_field form.is_public layout="horizontal" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Display settings" %}</legend>
+            {% bootstrap_field sform.locales layout="horizontal" %}
+            {% bootstrap_field sform.locale layout="horizontal" %}
+            {% bootstrap_field sform.timezone layout="horizontal" %}
+            {% bootstrap_field sform.show_date_to layout="horizontal" %}
+            {% bootstrap_field sform.show_times layout="horizontal" %}
+            {% bootstrap_field sform.contact_mail layout="horizontal" %}
+            {% bootstrap_field sform.imprint_url layout="horizontal" %}
+            {% bootstrap_field sform.show_quota_left layout="horizontal" %}
+            {% bootstrap_field sform.display_net_prices layout="horizontal" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Timeline" %}</legend>
+            {% bootstrap_field form.presale_start layout="horizontal" %}
+            {% bootstrap_field sform.presale_start_show_date layout="horizontal" %}
+            {% bootstrap_field form.presale_end layout="horizontal" %}
+            {% bootstrap_field sform.show_items_outside_presale_period layout="horizontal" %}
+            {% bootstrap_field sform.last_order_modification_date layout="horizontal" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Orders" %}</legend>
+            {% bootstrap_field sform.reservation_time layout="horizontal" %}
+            {% bootstrap_field sform.max_items_per_order layout="horizontal" %}
+            {% bootstrap_field sform.attendee_names_asked layout="horizontal" %}
+            {% bootstrap_field sform.attendee_names_required layout="horizontal" %}
+            {% bootstrap_field sform.order_email_asked_twice layout="horizontal" %}
+            {% bootstrap_field sform.attendee_emails_asked layout="horizontal" %}
+            {% bootstrap_field sform.attendee_emails_required layout="horizontal" %}
+            {% bootstrap_field sform.cancel_allow_user layout="horizontal" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Waiting list" %}</legend>
+            {% bootstrap_field sform.waiting_list_enabled layout="horizontal" %}
+            {% bootstrap_field sform.waiting_list_auto layout="horizontal" %}
+            {% bootstrap_field sform.waiting_list_hours layout="horizontal" %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

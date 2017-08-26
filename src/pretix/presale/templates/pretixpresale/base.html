@@ -1,0 +1,75 @@
+{% load compress %}
+{% load staticfiles %}
+{% load i18n %}
+{% load safelink %}
+{% load statici18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block thetitle %}{% endblock %}</title>
+    {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="{% static "lightbox/css/lightbox.scss" %}" />
+    {% endcompress %}
+    {% if css_file %}
+        <link rel="stylesheet" type="text/css" href="{{ css_file }}" nonce="{{ request.csp_nonce }}" />
+    {% else %}
+        {% compress css %}
+            <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}"/>
+        {% endcompress %}
+    {% endif %}
+
+    {% compress js %}
+        <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "moment/moment-with-locales.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
+        <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixpresale/js/ui/main.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixbase/js/asynctask.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixbase/js/asyncdownload.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixpresale/js/ui/cart.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixpresale/js/ui/typocheck.js" %}"></script>
+        <script type="text/javascript" src="{% static "lightbox/js/lightbox.min.js" %}"></script>
+    {% endcompress %}
+    <meta name="referrer" content="origin">
+    {{ html_head|safe }}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
+    {% block custom_header %}{% endblock %}
+</head>
+<body data-locale="{{ request.LANGUAGE_CODE }}">
+{% block above %}
+{% endblock %}
+<div class="container">
+    {% block page %}
+    {% endblock %}
+</div>
+<footer>
+    {% block footer %}
+    {% endblock %}
+    {% if footer_text %}
+        {{ footer_text }}
+        &middot;
+    {% endif %}
+    {% for f in footer %}
+        <a href="{% safelink f.url %}" target="_blank">{{ f.label }}</a>
+        &middot;
+    {% endfor %}
+    {% include "pretixpresale/base_footer.html" %}
+</footer>
+<div id="ajaxerr">
+</div>
+<div id="loadingmodal">
+    <i class="fa fa-cog big-rotating-icon"></i>
+    <h1>{% trans "We are processing your request …" %}</h1>
+    <p>
+        {% trans "If this takes longer than a few minutes, please contact us." %}
+    </p>
+</div>
+{% if DEBUG %}
+    <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}" async></script>
+{% else %}
+    <script src="{% statici18n LANGUAGE_CODE %}" async></script>
+{% endif %}
+{{ html_foot|safe }}
+</body>
+</html>

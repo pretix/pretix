@@ -1,0 +1,10 @@
+data/
+pretix.cfg
+*.sqlite
+.cache
+static.dist/
+build/
+dist/
+*.egg-info/
+*.bak
+pretix/static/jsi18n/

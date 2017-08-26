@@ -1,0 +1,27 @@
+{% load i18n %}
+{% load urlreplace %}
+{% if is_paginated %}
+    <nav class="text-center">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li>
+                    <a href="?{% url_replace request 'page' page_obj.previous_page_number %}">
+                        <span>&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            <li class="page-current"><a>
+                {% blocktrans trimmed with page=page_obj.number of=page_obj.paginator.num_pages %}
+                    Page {{ page }} of {{ of }}
+                {% endblocktrans %}
+            </a></li>
+            {% if page_obj.has_next %}
+                <li>
+                        <a href="?{% url_replace request 'page' page_obj.next_page_number %}">
+                        <span>&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}

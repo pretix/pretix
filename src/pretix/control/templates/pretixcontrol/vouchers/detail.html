@@ -1,0 +1,80 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load eventsignal %}
+{% block title %}{% trans "Voucher" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Voucher" %}</h1>
+    {% if voucher.redeemed %}
+        <div class="alert alert-warning">
+            {% trans "This voucher already has been used. It is not recommended to modify it." %}
+            <ul>
+            {% for op in voucher.orderposition_set.all %}
+                <li><a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=op.order.code %}">
+                    {% blocktrans with code=op.order.code %}Order {{ code }}{% endblocktrans %}
+                </a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <div class="row">
+            <div class="col-xs-12 col-lg-10">
+                <fieldset>
+                    <legend>{% trans "Voucher details" %}</legend>
+                    {% bootstrap_field form.code layout="horizontal" %}
+                    {% bootstrap_field form.max_usages layout="horizontal" %}
+                    {% bootstrap_field form.valid_until layout="horizontal" %}
+                    {% bootstrap_field form.block_quota layout="horizontal" %}
+                    {% bootstrap_field form.allow_ignore_quota layout="horizontal" %}
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="id_tag">{% trans "Price effect" %}</label>
+                        <div class="col-md-5">
+                            {% bootstrap_field form.price_mode show_label=False form_group_class="" %}
+                        </div>
+                        <div class="col-md-4">
+                            {% bootstrap_field form.value show_label=False form_group_class="" %}
+                        </div>
+                    </div>
+                    {% bootstrap_field form.itemvar layout="horizontal" %}
+                    <div class="form-group">
+                        <div class="col-md-9 col-md-offset-3">
+                            <div class="controls">
+                                <div class="alert alert-info">
+                                    {% blocktrans trimmed %}
+                                        If you choose "any product" for a specific quota and choose to reserve quota for this
+                                        voucher above, the product can still be unavailable to the voucher holder if another quota
+                                        associated with the product is sold out!
+                                    {% endblocktrans %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if form.subevent %}
+                        {% bootstrap_field form.subevent layout="horizontal" %}
+                    {% endif %}
+                    {% bootstrap_field form.tag layout="horizontal" %}
+                    {% bootstrap_field form.comment layout="horizontal" %}
+                </fieldset>
+                {% eventsignal request.event "pretix.control.signals.voucher_form_html" form=form %}
+            </div>
+            <div class="col-xs-12 col-lg-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            {% trans "Voucher history" %}
+                        </h3>
+                    </div>
+                    {% include "pretixcontrol/includes/logs.html" with obj=voucher %}
+                </div>
+            </div>
+        </div>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

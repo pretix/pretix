@@ -1,0 +1,35 @@
+{% load i18n %}
+{% load urlreplace %}
+<nav class="text-center">
+    <ul class="pagination">
+        {% if is_paginated %}
+            {% if page_obj.has_previous %}
+                <li>
+                    <a href="?{% url_replace request 'page' page_obj.previous_page_number %}">
+                        <span>&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            <li class="page-current"><a>
+                {% blocktrans trimmed with page=page_obj.number of=page_obj.paginator.num_pages count=page_obj.paginator.count %}
+                    Page {{ page }} of {{ of }} ({{ count }} elements)
+                {% endblocktrans %}
+            </a></li>
+            {% if page_obj.has_next %}
+                <li>
+                        <a href="?{% url_replace request 'page' page_obj.next_page_number %}">
+                        <span>&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        {% else %}
+        {% if page_obj.paginator.count > 1 %}
+                <li class="page-current"><a>
+                    {% blocktrans trimmed with count=page_obj.paginator.count %}
+                        {{ count }} elements
+                    {% endblocktrans %}
+                </a></li>
+            {% endif %}
+        {% endif %}
+    </ul>
+</nav>

@@ -1,0 +1,47 @@
+{% extends "pretixcontrol/vouchers/base.html" %}
+{% load i18n %}
+{% block inside %}
+    <p>
+        {% blocktrans trimmed %}
+            If you add a "tag" to a voucher, you can here see statistics on their usage.
+        {% endblocktrans %}
+    </p>
+    {% if tags|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't added any tags to vouchers yet.
+                {% endblocktrans %}
+            </p>
+        </div>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-hover table-condensed">
+                <thead>
+                <tr>
+                    <th>{% trans "Tag" %}</th>
+                    <th>{% trans "Redeemed vouchers" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for t in tags %}
+                    <tr>
+                        <td>
+                            <strong><a
+                                    href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}?tag={{ t.tag|urlencode }}">
+                                {{ t.tag }}
+                            </a></strong> <small>({{ t.redeemed }} / {{ t.total }})</small>
+                        </td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-{{ t.percentage }}">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}
