@@ -61,7 +61,13 @@ class JSONExporter(BaseExporter):
                         'status': order.status,
                         'user': order.email,
                         'datetime': order.datetime,
-                        'payment_fee': order.payment_fee,
+                        'fees': [
+                            {
+                                'type': fee.fee_type,
+                                'description': fee.description,
+                                'value': fee.value,
+                            } for fee in order.fees.all()
+                        ],
                         'total': order.total,
                         'positions': [
                             {
@@ -82,7 +88,7 @@ class JSONExporter(BaseExporter):
                             } for position in order.positions.all()
                         ]
                     } for order in
-                    self.event.orders.all().prefetch_related('positions', 'positions__answers')
+                    self.event.orders.all().prefetch_related('positions', 'positions__answers', 'fees')
                 ],
                 'quotas': [
                     {

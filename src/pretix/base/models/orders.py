@@ -78,12 +78,6 @@ class Order(LoggedModel):
     :type payment_date: datetime
     :param payment_provider: The payment provider selected by the user
     :type payment_provider: str
-    :param payment_fee: The payment fee calculated at checkout time
-    :type payment_fee: decimal.Decimal
-    :param payment_fee_tax_value: The absolute amount of tax included in the payment fee
-    :type payment_fee_tax_value: decimal.Decimal
-    :param payment_fee_tax_rate: The tax rate applied to the payment fee (in percent)
-    :type payment_fee_tax_rate: decimal.Decimal
     :param payment_info: Arbitrary information stored by the payment provider
     :type payment_info: str
     :param total: The total amount of the order, including the payment fee
@@ -149,23 +143,6 @@ class Order(LoggedModel):
         max_length=255,
         verbose_name=_("Payment provider")
     )
-    payment_fee = models.DecimalField(
-        decimal_places=2, max_digits=10,
-        default=0, verbose_name=_("Payment method fee")
-    )
-    payment_fee_tax_rate = models.DecimalField(
-        decimal_places=2, max_digits=10,
-        verbose_name=_("Payment method fee tax rate")
-    )
-    payment_fee_tax_value = models.DecimalField(
-        decimal_places=2, max_digits=10,
-        default=0, verbose_name=_("Payment method fee tax")
-    )
-    payment_fee_tax_rule = models.ForeignKey(
-        'TaxRule',
-        on_delete=models.PROTECT,
-        null=True, blank=True
-    )
     payment_info = models.TextField(
         verbose_name=_("Payment information"),
         null=True, blank=True
@@ -224,43 +201,11 @@ class Order(LoggedModel):
             self.assign_code()
         if not self.datetime:
             self.datetime = now()
-        if self.payment_fee_tax_rate is None:
-            self._calculate_tax()
         super().save(*args, **kwargs)
-
-    def _calculate_tax(self):
-        """
-        Calculates the taxes on the payment fees and sets the parameters payment_fee_tax_rate
-        and payment_fee_tax_value accordingly.
-        """
-        if self.event.settings.tax_rate_default:
-            tr = self.event.settings.tax_rate_default
-            tax = tr.tax(self.payment_fee, base_price_is='gross')
-            rate, tax = tax.rate, tax.tax
-
-            try:
-                ia = self.invoice_address
-            except InvoiceAddress.DoesNotExist:
-                ia = None
-            if not tr.tax_applicable(ia):
-                rate = 0
-                tax = 0
-
-            self.payment_fee_tax_rate = rate
-            self.payment_fee_tax_value = tax
-            self.payment_fee_tax_rule = tr
-        else:
-            self.payment_fee_tax_rate = Decimal('0.00')
-            self.payment_fee_tax_value = Decimal('0.00')
-            self.payment_fee_tax_rule = None
-
-    @property
-    def payment_fee_net(self):
-        return self.payment_fee - self.payment_fee_tax_value
 
     @cached_property
     def tax_total(self):
-        return (self.positions.aggregate(s=Sum('tax_value'))['s'] or 0) + self.payment_fee_tax_value
+        return (self.positions.aggregate(s=Sum('tax_value'))['s'] or 0) + (self.fees.aggregate(s=Sum('tax_value'))['s'] or 0)
 
     @property
     def net_total(self):
@@ -667,6 +612,82 @@ class AbstractPosition(models.Model):
         return (self.item.quotas.filter(subevent=self.subevent)
                 if self.variation is None
                 else self.variation.quotas.filter(subevent=self.subevent))
+
+
+class OrderFee(models.Model):
+    """
+    An OrderFee objet represents a fee that is added to the order total independently of
+    the actual positions. This might for example be a payment or a shipping fee.
+    """
+    FEE_TYPE_PAYMENT = "payment"
+    FEE_TYPE_SHIPPING = "shipping"
+    FEE_TYPES = (
+        (FEE_TYPE_PAYMENT, _("Payment method fee")),
+        (FEE_TYPE_SHIPPING, _("Shipping fee")),
+    )
+
+    value = models.DecimalField(
+        decimal_places=2, max_digits=10,
+        verbose_name=_("Value")
+    )
+    order = models.ForeignKey(
+        Order,
+        verbose_name=_("Order"),
+        related_name='fees',
+        on_delete=models.PROTECT
+    )
+    fee_type = models.CharField(
+        max_length=100, choices=FEE_TYPES
+    )
+    description = models.CharField(max_length=190, blank=True)
+    tax_rate = models.DecimalField(
+        max_digits=7, decimal_places=2,
+        verbose_name=_('Tax rate')
+    )
+    tax_rule = models.ForeignKey(
+        'TaxRule',
+        on_delete=models.PROTECT,
+        null=True, blank=True
+    )
+    tax_value = models.DecimalField(
+        max_digits=10, decimal_places=2,
+        verbose_name=_('Tax value')
+    )
+
+    @property
+    def net_value(self):
+        return self.value - self.tax_value
+
+    def __repr__(self):
+        return '<OrderFee: type %s, value %d>' % (
+            self.fee_type, self.value
+        )
+
+    def _calculate_tax(self):
+        try:
+            ia = self.order.invoice_address
+        except InvoiceAddress.DoesNotExist:
+            ia = None
+
+        if not self.tax_rule and self.fee_type == "payment" and self.order.event.settings.tax_rate_default:
+            self.tax_rule = self.order.event.settings.tax_rate_default
+
+        if self.tax_rule:
+            if self.tax_rule.tax_applicable(ia):
+                tax = self.tax_rule.tax(self.value, base_price_is='gross')
+                self.tax_rate = tax.rate
+                self.tax_value = tax.tax
+            else:
+                self.tax_value = Decimal('0.00')
+                self.tax_rate = Decimal('0.00')
+        else:
+            self.tax_value = Decimal('0.00')
+            self.tax_rate = Decimal('0.00')
+
+    def save(self, *args, **kwargs):
+        if self.tax_rate is None:
+            self._calculate_tax()
+        return super().save(*args, **kwargs)
 
 
 class OrderPosition(AbstractPosition):

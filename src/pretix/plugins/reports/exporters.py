@@ -14,6 +14,7 @@ from django.utils.translation import pgettext, pgettext_lazy, ugettext as _
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Order, OrderPosition
 from pretix.base.models.event import SubEvent
+from pretix.base.models.orders import OrderFee
 from pretix.base.services.stats import order_overview
 
 
@@ -299,9 +300,10 @@ class OrderTaxListReport(Report):
         tz = pytz.timezone(self.event.settings.timezone)
 
         tax_rates = set(
-            self.event.orders.exclude(payment_fee=0).values_list('payment_fee_tax_rate', flat=True)
-                .filter(status__in=self.form_data['status'])
-                .distinct().order_by()
+            a for a
+            in OrderFee.objects.filter(
+                order__event=self.event
+            ).values_list('tax_rate', flat=True).distinct().order_by()
         )
         tax_rates |= set(
             a for a

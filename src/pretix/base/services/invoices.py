@@ -127,13 +127,17 @@ def build_invoice(invoice: Invoice) -> Invoice:
             )
             invoice.save()
 
-        if invoice.order.payment_fee:
+        for fee in invoice.order.fees.all():
+            fee_title = _(fee.get_fee_type_display())
+            if fee.description:
+                fee_title += " - " + fee.description
             InvoiceLine.objects.create(
                 invoice=invoice,
-                description=_('Payment via {method}').format(method=str(payment_provider.verbose_name)),
-                gross_value=invoice.order.payment_fee, tax_value=invoice.order.payment_fee_tax_value,
-                tax_rate=invoice.order.payment_fee_tax_rate,
-                tax_name=invoice.order.payment_fee_tax_rule.name if invoice.order.payment_fee_tax_rule else ''
+                description=fee_title,
+                gross_value=fee.value,
+                tax_value=fee.tax_value,
+                tax_rate=fee.tax_rate,
+                tax_name=fee.tax_rule.name if fee.tax_rule else ''
             )
 
         return invoice
