@@ -13,6 +13,7 @@ TEST_EVENT_RES = {
     "location": None,
     "slug": "dummy",
     "has_subevents": False,
+    "meta_data": {"type": "Conference"}
 }
 
 

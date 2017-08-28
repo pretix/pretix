@@ -3,7 +3,7 @@ from django.utils.functional import cached_property
 from i18nfield.forms import I18nInlineFormSet
 
 from pretix.base.forms import I18nModelForm
-from pretix.base.models.event import SubEvent
+from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import SubEventItem
 
 
@@ -99,3 +99,20 @@ class QuotaFormSet(I18nInlineFormSet):
         )
         self.add_fields(form, None)
         return form
+
+
+class SubEventMetaValueForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.property = kwargs.pop('property')
+        self.default = kwargs.pop('default', None)
+        super().__init__(*args, **kwargs)
+        self.fields['value'].required = False
+        self.fields['value'].widget.attrs['placeholder'] = self.default or self.property.default
+
+    class Meta:
+        model = SubEventMetaValue
+        fields = ['value']
+        widgets = {
+            'value': forms.TextInput
+        }

@@ -31,7 +31,12 @@ variation_price_overrides             list of objects            List of variati
                                                                  the default price
 ├ variation                           integer                    The internal variation ID
 └ price                               money (string)             The price or ``null`` for the default price
+meta_data                             dict                       Values set for organizer-specific meta data parameters.
 ===================================== ========================== =======================================================
+
+.. versionchanged:: 1.7
+
+   The ``meta_data`` field has been added.
 
 
 Endpoints
@@ -78,7 +83,8 @@ Endpoints
                 "price": "12.00"
               }
             ],
-            "variation_price_overrides": []
+            "variation_price_overrides": [],
+            "meta_data": {}
           }
         ]
       }
@@ -126,7 +132,8 @@ Endpoints
             "price": "12.00"
           }
         ],
-        "variation_price_overrides": []
+        "variation_price_overrides": [],
+        "meta_data": {}
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch

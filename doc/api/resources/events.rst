@@ -26,8 +26,12 @@ presale_end                           datetime                   The date at whi
 location                              multi-lingual string       The event location (or ``null``)
 has_subevents                         boolean                    ``True`` if the event series feature is active for this
                                                                  event
+meta_data                             dict                       Values set for organizer-specific meta data parameters.
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 1.7
+
+   The ``meta_data`` field has been added.
 
 Endpoints
 ---------
@@ -69,7 +73,8 @@ Endpoints
             "presale_start": null,
             "presale_end": null,
             "location": null,
-            "has_subevents": false
+            "has_subevents": false,
+            "meta_data": {}
           }
         ]
       }
@@ -112,7 +117,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
-        "has_subevents": false
+        "has_subevents": false,
+        "meta_data": {}
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch

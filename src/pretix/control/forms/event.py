@@ -10,6 +10,7 @@ from pytz import common_timezones, timezone
 
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer, TaxRule
+from pretix.base.models.event import EventMetaValue
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.control.forms import ExtFileField, SlugWidget
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -161,6 +162,22 @@ class EventWizardCopyForm(forms.Form):
             empty_label=_('Do not copy'),
             required=False
         )
+
+
+class EventMetaValueForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.property = kwargs.pop('property')
+        super().__init__(*args, **kwargs)
+        self.fields['value'].required = False
+        self.fields['value'].widget.attrs['placeholder'] = self.property.default
+
+    class Meta:
+        model = EventMetaValue
+        fields = ['value']
+        widgets = {
+            'value': forms.TextInput
+        }
 
 
 class EventUpdateForm(I18nModelForm):

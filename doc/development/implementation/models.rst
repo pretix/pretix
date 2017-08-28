@@ -32,6 +32,15 @@ Organizers and events
 .. autoclass:: pretix.base.models.RequiredAction
    :members:
 
+.. autoclass:: pretix.base.models.EventMetaProperty
+   :members:
+
+.. autoclass:: pretix.base.models.EventMetaValue
+   :members:
+
+.. autoclass:: pretix.base.models.SubEventMetaValue
+   :members:
+
 
 Items
 -----

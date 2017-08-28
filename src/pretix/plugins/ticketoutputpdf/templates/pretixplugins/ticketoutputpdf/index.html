@@ -304,6 +304,11 @@
                                 <option value="addons">{% trans "List of Add-Ons" %}</option>
                                 <option value="organizer">{% trans "Organizer name" %}</option>
                                 <option value="organizer_info_text">{% trans "Organizer info text" %}</option>
+                                {% for p in request.organizer.meta_properties.all %}
+                                    <option value="meta:{{ p.name }}">
+                                        {% trans "Event attribute:" %} {{ p.name }}
+                                    </option>
+                                {% endfor %}
                                 <option value="other">{% trans "Other…" %}</option>
                             </select>
                             <textarea type="text" value="" class="input-block-level form-control"

@@ -18,12 +18,19 @@ def organizer():
 
 
 @pytest.fixture
-def event(organizer):
-    return Event.objects.create(
+def meta_prop(organizer):
+    return organizer.meta_properties.create(name="type", default="Concert")
+
+
+@pytest.fixture
+def event(organizer, meta_prop):
+    e = Event.objects.create(
         organizer=organizer, name='Dummy', slug='dummy',
         date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC),
         plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf'
     )
+    e.meta_values.create(property=meta_prop, value="Conference")
+    return e
 
 
 @pytest.fixture
@@ -48,11 +55,14 @@ def token_client(client, team):
 
 
 @pytest.fixture
-def subevent(event):
+def subevent(event, meta_prop):
     event.has_subevents = True
     event.save()
-    return event.subevents.create(name="Foobar",
-                                  date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+    se = event.subevents.create(name="Foobar",
+                                date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+
+    se.meta_values.create(property=meta_prop, value="Workshop")
+    return se
 
 
 @pytest.fixture

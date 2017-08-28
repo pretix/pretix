@@ -71,6 +71,14 @@ class OrganizerUpdateForm(OrganizerForm):
         return instance
 
 
+class EventMetaPropertyForm(forms.ModelForm):
+    class Meta:
+        fields = ['name', 'default']
+        widgets = {
+            'default': forms.TextInput()
+        }
+
+
 class TeamForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):

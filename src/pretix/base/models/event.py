@@ -452,6 +452,12 @@ class Event(EventMixin, LoggedModel):
             )
         ).order_by('date_from', 'name')
 
+    @property
+    def meta_data(self):
+        data = {p.name: p.default for p in self.organizer.meta_properties.all()}
+        data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
+        return data
+
 
 class SubEvent(EventMixin, LoggedModel):
     """
@@ -541,6 +547,12 @@ class SubEvent(EventMixin, LoggedModel):
             for si in SubEventItemVariation.objects.filter(subevent=self, price__isnull=False)
         }
 
+    @property
+    def meta_data(self):
+        data = self.event.meta_data
+        data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
+        return data
+
 
 def generate_invite_token():
     return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)
@@ -589,3 +601,74 @@ class RequiredAction(models.Model):
             if response:
                 return response
         return self.action_type
+
+
+class EventMetaProperty(LoggedModel):
+    """
+    An organizer account can have EventMetaProperty objects attached to define meta information fields
+    for its events. This information can be re-used for example in ticket layouts.
+
+    :param organizer: The organizer this property is defined for.
+    :type organizer: Organizer
+    :param name: Name
+    :type name: Name of the property, used in various places
+    :param default: Default value
+    :type default: str
+    """
+    organizer = models.ForeignKey(Organizer, related_name="meta_properties", on_delete=models.CASCADE)
+    name = models.CharField(
+        max_length=50, db_index=True,
+        help_text=_(
+            "Can not contain spaces or special characters execpt underscores"
+        ),
+        validators=[
+            RegexValidator(
+                regex="^[a-zA-Z0-9_]+$",
+                message=_("The property name may only contain letters, numbers and underscores."),
+            ),
+        ],
+        verbose_name=_("Name"),
+    )
+    default = models.TextField(blank=True)
+
+
+class EventMetaValue(LoggedModel):
+    """
+    A meta-data value assigned to an event.
+
+    :param event: The event this metadata is valid for
+    :type event: Event
+    :param property: The property this value belongs to
+    :type property: EventMetaProperty
+    :param value: The actual value
+    :type value: str
+    """
+    event = models.ForeignKey('Event', on_delete=models.CASCADE,
+                              related_name='meta_values')
+    property = models.ForeignKey('EventMetaProperty', on_delete=models.CASCADE,
+                                 related_name='event_values')
+    value = models.TextField()
+
+    class Meta:
+        unique_together = ('event', 'property')
+
+
+class SubEventMetaValue(LoggedModel):
+    """
+    A meta-data value assigned to a sub-event.
+
+    :param event: The event this metadata is valid for
+    :type event: Event
+    :param property: The property this value belongs to
+    :type property: EventMetaProperty
+    :param value: The actual value
+    :type value: str
+    """
+    subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE,
+                                 related_name='meta_values')
+    property = models.ForeignKey('EventMetaProperty', on_delete=models.CASCADE,
+                                 related_name='subevent_values')
+    value = models.TextField()
+
+    class Meta:
+        unique_together = ('subevent', 'property')

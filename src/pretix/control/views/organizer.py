@@ -5,6 +5,7 @@ from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Count
+from django.forms import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -13,10 +14,12 @@ from django.views.generic import (
 )
 
 from pretix.base.models import Organizer, Team, TeamInvite, User
+from pretix.base.models.event import EventMetaProperty
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.organizer import (
-    OrganizerForm, OrganizerSettingsForm, OrganizerUpdateForm, TeamForm,
+    EventMetaPropertyForm, OrganizerForm, OrganizerSettingsForm,
+    OrganizerUpdateForm, TeamForm,
 )
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
 from pretix.control.signals import nav_organizer
@@ -108,10 +111,12 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
         context['sform'] = self.sform
+        context['formset'] = self.formset
         return context
 
     @transaction.atomic
     def form_valid(self, form):
+        self.save_formset(self.object)
         self.sform.save()
         if self.sform.has_changed():
             self.request.organizer.log_action(
@@ -145,11 +150,39 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
         })
 
     def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
         form = self.get_form()
-        if form.is_valid() and self.sform.is_valid():
+        if form.is_valid() and self.sform.is_valid() and self.formset.is_valid():
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+    @cached_property
+    def formset(self):
+        formsetclass = inlineformset_factory(
+            Organizer, EventMetaProperty,
+            form=EventMetaPropertyForm, can_order=False, can_delete=True, extra=0
+        )
+        return formsetclass(self.request.POST if self.request.method == "POST" else None,
+                            instance=self.object, queryset=self.object.meta_properties.all())
+
+    def save_formset(self, obj):
+        for form in self.formset.initial_forms:
+            if form in self.formset.deleted_forms:
+                if not form.instance.pk:
+                    continue
+                form.instance.delete()
+                form.instance.pk = None
+            elif form.has_changed():
+                form.save()
+
+        for form in self.formset.extra_forms:
+            if not form.has_changed():
+                continue
+            if self.formset._should_delete_form(form):
+                continue
+            form.instance.organizer = obj
+            form.save()
 
 
 class OrganizerCreate(CreateView):

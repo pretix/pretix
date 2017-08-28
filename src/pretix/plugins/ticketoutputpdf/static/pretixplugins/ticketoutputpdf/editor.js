@@ -137,7 +137,7 @@ var editor = {
             if (d.content === "other") {
                 o.setText(d.text);
             } else {
-                o.setText(editor.text_samples[d.content]);
+                o.setText(editor._get_text_sample(d.content));
             }
         }
 
@@ -180,6 +180,13 @@ var editor = {
         "organizer": gettext("Event organizer company"),
         "organizer_info_text": gettext("Event organizer info text"),
         "addons": gettext("Addon 1\nAddon 2"),
+    },
+
+    _get_text_sample: function (key) {
+        if (key.startsWith('meta:')) {
+            return key.substr(5);
+        }
+        return editor.text_samples[key];
     },
 
     _load_pdf: function (dump) {
@@ -362,7 +369,7 @@ var editor = {
             if ($("#toolbox-content").val() === "other") {
                 o.setText($("#toolbox-content-other").val());
             } else {
-                o.setText(editor.text_samples[$("#toolbox-content").val()]);
+                o.setText(editor._get_text_sample($("#toolbox-content").val()));
             }
         }
 

@@ -9,14 +9,16 @@ from django.utils.functional import cached_property
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-from pretix.base.models.event import SubEvent
+from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import Quota, SubEventItem, SubEventItemVariation
 from pretix.control.forms.filter import SubEventFilterForm
 from pretix.control.forms.item import QuotaForm
 from pretix.control.forms.subevents import (
     QuotaFormSet, SubEventForm, SubEventItemForm, SubEventItemVariationForm,
+    SubEventMetaValueForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views.event import MetaDataEditorMixin
 
 
 class SubEventList(EventPermissionRequiredMixin, ListView):
@@ -85,7 +87,22 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
         })
 
 
-class SubEventEditorMixin:
+class SubEventEditorMixin(MetaDataEditorMixin):
+    meta_form = SubEventMetaValueForm
+    meta_model = SubEventMetaValue
+
+    def _make_meta_form(self, p, val_instances):
+        if not hasattr(self, '_default_meta'):
+            self._default_meta = self.request.event.meta_data
+
+        return self.meta_form(
+            prefix='prop-{}'.format(p.pk),
+            property=p,
+            default=self._default_meta.get(p.name, ''),
+            instance=val_instances.get(p.pk, self.meta_model(property=p, subevent=self.object)),
+            data=(self.request.POST if self.request.method == "POST" else None)
+        )
+
     @cached_property
     def formset(self):
         extra = 0
@@ -159,6 +176,7 @@ class SubEventEditorMixin:
         ctx = super().get_context_data(**kwargs)
         ctx['formset'] = self.formset
         ctx['itemvar_forms'] = self.itemvar_forms
+        ctx['meta_forms'] = self.meta_forms
         return ctx
 
     @cached_property
@@ -210,7 +228,9 @@ class SubEventEditorMixin:
         return formlist
 
     def is_valid(self, form):
-        return form.is_valid() and all([f.is_valid() for f in self.itemvar_forms]) and self.formset.is_valid()
+        return form.is_valid() and all([f.is_valid() for f in self.itemvar_forms]) and self.formset.is_valid() and (
+            all([f.is_valid() for f in self.meta_forms])
+        )
 
 
 class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateView):
@@ -239,6 +259,7 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
     @transaction.atomic
     def form_valid(self, form):
         self.save_formset(self.object)
+        self.save_meta()
 
         for f in self.itemvar_forms:
             f.save()
@@ -308,5 +329,6 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         for f in self.itemvar_forms:
             f.instance.subevent = form.instance
             f.save()
-
+        self.object = form.instance
+        self.save_meta()
         return ret

@@ -15,7 +15,7 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_url_kwarg = 'event'
 
     def get_queryset(self):
-        return self.request.organizer.events.all()
+        return self.request.organizer.events.prefetch_related('meta_values', 'meta_values__property')
 
 
 class SubEventFilter(FilterSet):

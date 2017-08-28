@@ -28,13 +28,14 @@ from pretix.base.models import (
     CachedTicket, Event, Item, ItemVariation, LogEntry, Order, OrderPosition,
     RequiredAction, TaxRule, Voucher,
 )
+from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import event_live_issues, register_ticket_outputs
 from pretix.control.forms.event import (
-    CommentForm, DisplaySettingsForm, EventSettingsForm, EventUpdateForm,
-    InvoiceSettingsForm, MailSettingsForm, PaymentSettingsForm, ProviderForm,
-    TaxRuleForm, TicketSettingsForm,
+    CommentForm, DisplaySettingsForm, EventMetaValueForm, EventSettingsForm,
+    EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
+    PaymentSettingsForm, ProviderForm, TaxRuleForm, TicketSettingsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.urls import build_absolute_uri
@@ -44,7 +45,39 @@ from . import CreateView, UpdateView
 from ..logdisplay import OVERVIEW_BLACKLIST
 
 
-class EventUpdate(EventPermissionRequiredMixin, UpdateView):
+class MetaDataEditorMixin:
+    meta_form = EventMetaValueForm
+    meta_model = EventMetaValue
+
+    @cached_property
+    def meta_forms(self):
+        val_instances = {
+            v.property_id: v for v in self.object.meta_values.all()
+        }
+
+        formlist = []
+
+        for p in self.request.organizer.meta_properties.all():
+            formlist.append(self._make_meta_form(p, val_instances))
+        return formlist
+
+    def _make_meta_form(self, p, val_instances):
+        return self.meta_form(
+            prefix='prop-{}'.format(p.pk),
+            property=p,
+            instance=val_instances.get(p.pk, self.meta_model(property=p, event=self.object)),
+            data=(self.request.POST if self.request.method == "POST" else None)
+        )
+
+    def save_meta(self):
+        for f in self.meta_forms:
+            if f.cleaned_data.get('value'):
+                f.save()
+            elif f.instance and f.instance.pk:
+                f.delete()
+
+
+class EventUpdate(EventPermissionRequiredMixin, MetaDataEditorMixin, UpdateView):
     model = Event
     form_class = EventUpdateForm
     template_name = 'pretixcontrol/event/settings.html'
@@ -68,11 +101,14 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
         context['sform'] = self.sform
+        context['meta_forms'] = self.meta_forms
         return context
 
     @transaction.atomic
     def form_valid(self, form):
         self.sform.save()
+        self.save_meta()
+
         if self.sform.has_changed():
             self.request.event.log_action('pretix.event.settings', user=self.request.user, data={
                 k: self.request.event.settings.get(k) for k in self.sform.changed_data
@@ -92,7 +128,7 @@ class EventUpdate(EventPermissionRequiredMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        if form.is_valid() and self.sform.is_valid():
+        if form.is_valid() and self.sform.is_valid() and all([f.is_valid() for f in self.meta_forms]):
             # reset timezone
             zone = timezone(self.sform.cleaned_data['timezone'])
             event = form.instance
