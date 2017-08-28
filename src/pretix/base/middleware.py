@@ -184,7 +184,7 @@ class SecurityMiddleware(MiddlewareMixin):
             'frame-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
             'child-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
             'style-src': ["{static}", "{media}", "'nonce-{nonce}'"],
-            'connect-src': ["{dynamic}", "https://checkout.stripe.com"],
+            'connect-src': ["{dynamic}", "{media}", "https://checkout.stripe.com"],
             'img-src': ["{static}", "{media}", "data:", "https://*.stripe.com"],
             # form-action is not only used to match on form actions, but also on URLs
             # form-actions redirect to. In the context of e.g. payment providers or
