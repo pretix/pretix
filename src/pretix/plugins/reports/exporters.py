@@ -349,13 +349,20 @@ class OrderTaxListReport(Report):
             order__status__in=self.form_data['status'],
             order__event=self.event,
         ).values(
-            'order__code', 'order__datetime', 'order__payment_date', 'order__total', 'order__payment_fee',
-            'order__payment_fee_tax_rate', 'order__payment_fee_tax_value', 'tax_rate', 'order__status'
+            'order__code', 'order__datetime', 'order__payment_date', 'order__total', 'tax_rate', 'order__status',
+            'order__id'
         ).annotate(prices=Sum('price'), tax_values=Sum('tax_value')).order_by(
             'order__datetime' if self.form_data['sort'] == 'datetime' else 'order__payment_date',
             'order__datetime',
             'order__code'
         )
+        fee_sum_cache = {
+            (o['order__id'], o['tax_rate']): o for o in
+            OrderFee.objects.values('tax_rate', 'order__id').order_by().annotate(
+                taxsum=Sum('tax_value'), grosssum=Sum('value')
+            )
+        }
+
         last_order_code = None
         tax_sums = defaultdict(Decimal)
         price_sums = defaultdict(Decimal)
@@ -372,11 +379,13 @@ class OrderTaxListReport(Report):
                     ] + sum((['', ''] for t in tax_rates), []),
                 )
                 last_order_code = op['order__code']
-                if op['order__payment_fee_tax_value']:
-                    tdata[-1][5 + 2 * tax_rates.index(op['order__payment_fee_tax_rate'])] = str(op['order__payment_fee'])
-                    tdata[-1][6 + 2 * tax_rates.index(op['order__payment_fee_tax_rate'])] = str(op['order__payment_fee_tax_value'])
-                    tax_sums[op['order__payment_fee_tax_rate']] += op['order__payment_fee_tax_value']
-                    price_sums[op['order__payment_fee_tax_rate']] += op['order__payment_fee']
+                for i, rate in enumerate(tax_rates):
+                    odata = fee_sum_cache.get((op['order__id'], rate))
+                    if odata:
+                        tdata[-1][5 + 2 * i] = str(odata['grosssum'] or '0.00')
+                        tdata[-1][6 + 2 * i] = str(odata['taxsum'] or '0.00')
+                        tax_sums[op['order__payment_fee_tax_rate']] += odata['taxsum'] or 0
+                        price_sums[op['order__payment_fee_tax_rate']] += odata['grosssum'] or 0
 
                 i = tax_rates.index(op['tax_rate'])
                 tdata[-1][5 + 2 * i] = str(Decimal(tdata[-1][5 + 2 * i] or '0') + op['prices'])

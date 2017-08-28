@@ -20,7 +20,8 @@ def fee_converter(app, schema_editor):
             fee_type='payment',
             tax_rate=o.payment_fee_tax_rate,
             tax_rule=o.payment_fee_tax_rule,
-            tax_value=o.payment_fee_tax_value
+            tax_value=o.payment_fee_tax_value,
+            internal_type=o.payment_provider
         ))
         if len(of) > 900:
             OrderFee.objects.bulk_create(of)
@@ -41,6 +42,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('value', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Value')),
                 ('description', models.CharField(blank=True, max_length=190)),
+                ('internal_type', models.CharField(blank=True, max_length=255)),
                 ('fee_type', models.CharField(choices=[('payment', 'Payment method fee'), ('shipping', 'Shipping fee')], max_length=100)),
                 ('tax_rate', models.DecimalField(decimal_places=2, max_digits=7, verbose_name='Tax rate')),
                 ('tax_value', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Tax value')),

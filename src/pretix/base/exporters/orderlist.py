@@ -63,7 +63,7 @@ class OrderListExporter(BaseExporter):
         headers = [
             _('Order code'), _('Order total'), _('Status'), _('Email'), _('Order date'),
             _('Company'), _('Name'), _('Address'), _('ZIP code'), _('City'), _('Country'), _('VAT ID'),
-            _('Payment date'), _('Payment type'), _('Payment method fee'),
+            _('Payment date'), _('Payment type'), _('Fees'),
         ]
 
         for tr in tax_rates:
@@ -82,10 +82,14 @@ class OrderListExporter(BaseExporter):
             for k, v in self.event.get_payment_providers().items()
         }
 
+        full_fee_sum_cache = {
+            o['order__id']: o['grossum'] for o in
+            OrderFee.objects.values('tax_rate', 'order__id').order_by().annotate(grosssum=Sum('price'))
+        }
         fee_sum_cache = {
             (o['order__id'], o['tax_rate']): o for o in
             OrderFee.objects.values('tax_rate', 'order__id').order_by().annotate(
-                taxsum=Sum('tax_value'), grosssum=Sum('price')
+                taxsum=Sum('tax_value'), grosssum=Sum('value')
             )
         }
         sum_cache = {
@@ -119,7 +123,7 @@ class OrderListExporter(BaseExporter):
             row += [
                 order.payment_date.astimezone(tz).strftime('%Y-%m-%d') if order.payment_date else '',
                 provider_names.get(order.payment_provider, order.payment_provider),
-                localize(order.payment_fee)
+                localize(full_fee_sum_cache.get(order.id) or Decimal('0.00'))
             ]
 
             for tr in tax_rates:

@@ -622,7 +622,7 @@ class OrderFee(models.Model):
     FEE_TYPE_PAYMENT = "payment"
     FEE_TYPE_SHIPPING = "shipping"
     FEE_TYPES = (
-        (FEE_TYPE_PAYMENT, _("Payment method fee")),
+        (FEE_TYPE_PAYMENT, _("Payment fee")),
         (FEE_TYPE_SHIPPING, _("Shipping fee")),
     )
 
@@ -640,6 +640,7 @@ class OrderFee(models.Model):
         max_length=100, choices=FEE_TYPES
     )
     description = models.CharField(max_length=190, blank=True)
+    internal_type = models.CharField(max_length=255, blank=True)
     tax_rate = models.DecimalField(
         max_digits=7, decimal_places=2,
         verbose_name=_('Tax rate')
@@ -657,6 +658,12 @@ class OrderFee(models.Model):
     @property
     def net_value(self):
         return self.value - self.tax_value
+
+    def __str__(self):
+        if self.description:
+            return '{} - {}'.format(self.get_fee_type_display(), self.description)
+        else:
+            return self.get_fee_type_display()
 
     def __repr__(self):
         return '<OrderFee: type %s, value %d>' % (
