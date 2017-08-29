@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
@@ -6,6 +8,7 @@ from pretix.base.models import (
     Checkin, Invoice, InvoiceAddress, InvoiceLine, Order, OrderPosition,
     QuestionAnswer,
 )
+from pretix.base.models.orders import OrderFee
 from pretix.base.signals import register_ticket_outputs
 
 
@@ -101,15 +104,38 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
                   'answers', 'tax_rule')
 
 
+class OrderFeeSerializer(I18nAwareModelSerializer):
+    class Meta:
+        model = OrderFee
+        fields = ('fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule')
+
+
+class PaymentFeeLegacyField(serializers.Field):
+    def __init__(self, *args, **kwargs):
+        self.attr = kwargs.pop('attribute')
+        super().__init__(*args, **kwargs)
+
+    def to_representation(self, instance: Order):
+        return str(
+            sum([getattr(f, self.attr) for f in instance.fees.all() if f.fee_type == OrderFee.FEE_TYPE_PAYMENT],
+                Decimal('0.00'))
+        )
+
+
 class OrderSerializer(I18nAwareModelSerializer):
     invoice_address = InvoiceAdddressSerializer()
     positions = OrderPositionSerializer(many=True)
+    fees = OrderFeeSerializer(many=True)
     downloads = OrderDownloadsField(source='*')
+    payment_fee = PaymentFeeLegacyField(source='*', attribute='value')  # TODO: Remove in 1.9
+    payment_fee_tax_rate = PaymentFeeLegacyField(source='*', attribute='tax_rate')  # TODO: Remove in 1.9
+    payment_fee_tax_value = PaymentFeeLegacyField(source='*', attribute='tax_value')  # TODO: Remove in 1.9
 
     class Meta:
         model = Order
         fields = ('code', 'status', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
-                  'payment_provider', 'total', 'comment', 'invoice_address', 'positions', 'downloads')
+                  'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
+                  'payment_fee', 'payment_fee_tax_rate', 'payment_fee_tax_value')
 
 
 class InlineInvoiceLineSerializer(I18nAwareModelSerializer):

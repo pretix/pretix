@@ -6067,3 +6067,35 @@ url('../opensans_regular_macroman/OpenSans-Regular-webfont.svg#open_sansregular'
 img.screenshot, a.screenshot img {
     box-shadow: 0 4px 18px 0 rgba(0,0,0,0.1), 0 6px 20px 0 rgba(0,0,0,0.09);
 }
+
+/* Changes */
+.versionchanged {
+    background: #e7f2fa;
+    padding: 12px;
+    line-height: 24px;
+    margin-bottom: 24px;
+    -webkit-font-smoothing: antialiased;
+}
+.versionmodified {
+    background: #6ab0de;
+    font-weight: bold;
+    display: block;
+    color: #fff;
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    font-family: inherit;
+}
+.versionmodified:before {
+    font-family: "FontAwesome";
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    text-decoration: inherit;
+    content: "";
+    margin-right: 4px;
+}
+.versionchanged p:last-child {
+    margin-bottom: 0;
+}

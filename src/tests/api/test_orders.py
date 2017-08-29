@@ -1,12 +1,15 @@
 import datetime
 from decimal import Decimal
+from distutils.version import LooseVersion
 from unittest import mock
 
 import pytest
 from django_countries.fields import Country
 from pytz import UTC
 
+from pretix import __version__
 from pretix.base.models import InvoiceAddress, Order, OrderPosition
+from pretix.base.models.orders import OrderFee
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice,
 )
@@ -18,7 +21,12 @@ def item(event):
 
 
 @pytest.fixture
-def order(event, item):
+def taxrule(event):
+    return event.tax_rules.create(rate=Decimal('19.00'))
+
+
+@pytest.fixture
+def order(event, item, taxrule):
     testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
@@ -30,6 +38,8 @@ def order(event, item):
             expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
             total=23, payment_provider='banktransfer', locale='en'
         )
+        o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
+                      tax_value=Decimal('0.05'), tax_rule=taxrule)
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
         OrderPosition.objects.create(
             order=o,
@@ -71,7 +81,20 @@ TEST_ORDER_RES = {
     "datetime": "2017-12-01T10:00:00Z",
     "expires": "2017-12-10T10:00:00Z",
     "payment_date": None,
+    "fees": [
+        {
+            "fee_type": "payment",
+            "value": "0.25",
+            "description": "",
+            "internal_type": "",
+            "tax_rate": "19.00",
+            "tax_value": "0.05"
+        }
+    ],
     "payment_provider": "banktransfer",
+    "payment_fee": "0.25",
+    "payment_fee_tax_rate": "19.00",
+    "payment_fee_tax_value": "0.05",
     "total": "23.00",
     "comment": "",
     "invoice_address": {
@@ -92,10 +115,15 @@ TEST_ORDER_RES = {
 
 
 @pytest.mark.django_db
-def test_order_list(token_client, organizer, event, order, item):
+@pytest.mark.xfail(
+    LooseVersion(__version__) >= LooseVersion("1.9.0.dev0"),
+    reason="Deprecated attributes payment_fee_* should be removed by now",
+)
+def test_order_list(token_client, organizer, event, order, item, taxrule):
     res = dict(TEST_ORDER_RES)
     res["positions"][0]["id"] = order.positions.first().pk
     res["positions"][0]["item"] = item.pk
+    res["fees"][0]["tax_rule"] = taxrule.pk
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
@@ -125,10 +153,11 @@ def test_order_list(token_client, organizer, event, order, item):
 
 
 @pytest.mark.django_db
-def test_order_detail(token_client, organizer, event, order, item):
+def test_order_detail(token_client, organizer, event, order, item, taxrule):
     res = dict(TEST_ORDER_RES)
     res["positions"][0]["id"] = order.positions.first().pk
     res["positions"][0]["item"] = item.pk
+    res["fees"][0]["tax_rule"] = taxrule.pk
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/'.format(organizer.slug, event.slug,
                                                                                 order.code))
     assert resp.status_code == 200
@@ -278,6 +307,13 @@ TEST_INVOICE_RES = {
             "tax_value": "0.00",
             "tax_name": "",
             "tax_rate": "0.00"
+        },
+        {
+            "description": "Payment fee",
+            "gross_value": "0.25",
+            "tax_value": "0.05",
+            "tax_name": "",
+            "tax_rate": "19.00"
         }
     ]
 }

@@ -28,13 +28,13 @@ def env():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    tr = event.tax_rules.create(rate=Decimal('19.00'))
     o = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=0, payment_provider='banktransfer', locale='en'
     )
+    tr = event.tax_rules.create(rate=Decimal('19.00'))
     o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
                   tax_value=Decimal('0.05'), tax_rule=tr)
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
