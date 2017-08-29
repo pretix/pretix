@@ -8,53 +8,81 @@
     <p>{% blocktrans trimmed %}
         pretixdroid is an Android app that you can use to control tickets at the entrance of your event.
     {% endblocktrans %}</p>
-    <h2>{% trans "App download" %}</h2>
-    <p>
-        <a href="http://play.google.com/store/apps/details?id=eu.pretix.pretixdroid">
-            <img src="{% static "pretixplugins/pretixdroid/play_store_en.png" %}" alt="
-{% trans "Download the app from the Google Play Store" %}" height="70">
-        </a>
-    </p>
-    <p>
-        <small>
-            {% blocktrans trimmed %}
-                Android, Google Play and the Google Play logo are trademarks of Google Inc.
-            {% endblocktrans %}
-        </small>
-    </p>
-    <h2>{% trans "App configuration" %}</h2>
+    <h2>{% trans "Create app configuration" %}</h2>
     <p>
         {% blocktrans trimmed %}
-            If you start the app for the first time, it will request that you scan the following code.
-            The code tells the app all it needs about your event.
+            To start scanning tickets with our Android app, first create a configuration code here:
         {% endblocktrans %}
     </p>
-    {% if request.event.has_subevents %}
-        <form class="form-inline helper-display-inline" action="" method="get">
-            <p>
-                {% if request.event.has_subevents %}
-                    <select name="subevent" class="form-control">
-                        <option value="">{% trans "Choose date" context "subevent" %}</option>
-                        {% for se in request.event.subevents.all %}
-                            <option value="{{ se.id }}"
-                                    {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
-                                {{ se.name }} – {{ se.get_date_range_display }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                {% endif %}
-                <button class="btn btn-primary" type="submit">{% trans "Show configuration" %}</button>
-            </p>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors add_form %}
+        {% bootstrap_field add_form.all_items layout="horizontal" %}
+        {% bootstrap_field add_form.items layout="horizontal" %}
+        {% bootstrap_field add_form.show_info layout="horizontal" %}
+        {% bootstrap_field add_form.allow_search layout="horizontal" %}
+        {% if add_form.subevent %}
+            {% bootstrap_field add_form.subevent layout="horizontal" %}
+        {% endif %}
+        <div class="form-group">
+            <div class="col-md-offset-3 col-md-9">
+                <button type="submit" class="btn btn-primary btn-save" name="add" value="1">
+                    {% trans "Create" %}
+                </button>
+            </div>
+        </div>
+    </form>
+
+
+    {% if configs %}
+        <h2>{% trans "Existing app configurations" %}</h2>
+        <form action="" method="post" class="form-horizontal">
+            {% csrf_token %}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>{% trans "ID" %}</th>
+                    {% if request.event.has_subevents %}
+                        <th>{% trans "Date" context "subevent" %}</th>
+                    {% endif %}
+                    <th>{% trans "Items" %}</th>
+                    <th>{% trans "Show info" %}</th>
+                    <th>{% trans "Allow search" %}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ac in configs %}
+                    <tr>
+                        <td>{{ ac.key|slice:"0:8" }}…</td>
+                        {% if request.event.has_subevents %}
+                            <td>{% if ac.subevent %}{{ ac.subevent }}{% else %}{% trans "All" %}{% endif %}</td>
+                        {% endif %}
+                        <td>
+                            {% if ac.all_items %}
+                                {% trans "All" %}
+                            {% else %}
+                                {% for item in ac.items.all %}
+                                    <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item.name }}</a>
+                                    {% if loop.revindex0 > 0 %}<br>{% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        <td>{% if ac.show_info %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
+                        <td>{% if ac.allow_search %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
+                        <td class="text-right">
+                            <a href="{% url "plugins:pretixdroid:config.code" organizer=request.event.organizer.slug event=request.event.slug config=ac.pk %}" class="btn btn-default">
+                                <span class="fa fa-qrcode"></span> {% trans "Show QR code" %}
+                            </a>
+                            <button class="btn btn-danger" name="delete" value="{{ ac.pk }}">
+                                <span class="fa fa-trash"></span>
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </form>
     {% endif %}
-    {% if not request.event.has_subevents or subevent %}
-        <div id="qrcodeCanvas"></div>
-        <a href="?flush_key=1" class="btn btn-default">{% trans "Reset authentication token" %}</a>
-        <script type="text/json" id="qrdata">
-            {{ qrdata|safe }}
-
-        </script>
-    {% endif %}
-    <script type="text/javascript" src="{% static "pretixplugins/pretixdroid/pretixdroid.js" %}"></script>
 {% endblock %}
 

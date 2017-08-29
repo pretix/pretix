@@ -8,6 +8,7 @@ from pretix.base.models import (
     Checkin, Event, InvoiceAddress, Item, ItemVariation, Order, OrderPosition,
     Organizer, Team, User,
 )
+from pretix.plugins.pretixdroid.models import AppConfiguration
 from pretix.plugins.pretixdroid.views import API_VERSION
 
 
@@ -45,22 +46,8 @@ def env():
 
 
 @pytest.mark.django_db
-def test_flush_key(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
-    client.login(email='dummy@dummy.dummy', password='dummy')
-
-    client.get('/control/event/%s/%s/pretixdroid/' % (env[0].organizer.slug, env[0].slug))
-    env[0].settings.flush()
-    assert env[0].settings.get('pretixdroid_key') == 'abcdefg'
-
-    client.get('/control/event/%s/%s/pretixdroid/?flush_key=1' % (env[0].organizer.slug, env[0].slug))
-    env[0].settings.flush()
-    assert env[0].settings.get('pretixdroid_key') != 'abcdefg'
-
-
-@pytest.mark.django_db
 def test_custom_datetime(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    AppConfiguration.objects.create(event=env[0], key='abcdefg')
     dt = now() - timedelta(days=1)
     dt = dt.replace(microsecond=0)
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
@@ -73,7 +60,7 @@ def test_custom_datetime(client, env):
 
 @pytest.mark.django_db
 def test_only_once(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    AppConfiguration.objects.create(event=env[0], key='abcdefg')
 
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '1234'})
@@ -88,8 +75,25 @@ def test_only_once(client, env):
 
 
 @pytest.mark.django_db
+def test_item_scope(client, env):
+    ac = AppConfiguration.objects.create(event=env[0], key='abcdefg', all_items=False)
+    ac.items.add(env[4].item)
+
+    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
+                       data={'secret': env[4].secret})
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert jdata['version'] == API_VERSION
+    assert jdata['status'] == 'ok'
+    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
+                       data={'secret': env[3].secret})
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert jdata['status'] == 'error'
+    assert jdata['reason'] == 'product'
+
+
+@pytest.mark.django_db
 def test_reupload_same_nonce(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    AppConfiguration.objects.create(event=env[0], key='abcdefg')
 
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '1234', 'nonce': 'fooobar'})
@@ -105,7 +109,7 @@ def test_reupload_same_nonce(client, env):
 
 @pytest.mark.django_db
 def test_forced_multiple(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    AppConfiguration.objects.create(event=env[0], key='abcdefg')
 
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '1234'})
@@ -120,7 +124,7 @@ def test_forced_multiple(client, env):
 
 @pytest.mark.django_db
 def test_require_paid(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    AppConfiguration.objects.create(event=env[0], key='abcdefg')
     env[2].status = Order.STATUS_PENDING
     env[2].save()
 
@@ -133,7 +137,7 @@ def test_require_paid(client, env):
 
 @pytest.mark.django_db
 def test_unknown(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    AppConfiguration.objects.create(event=env[0], key='abcdefg')
 
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
                        data={'secret': '4321'})
@@ -158,17 +162,36 @@ def test_unknown_event(client, env):
 
 @pytest.mark.django_db
 def test_search(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    AppConfiguration.objects.create(event=env[0], key='abcdefg')
     resp = client.get('/pretixdroid/api/%s/%s/search/?key=%s&query=%s' % (
         env[0].organizer.slug, env[0].slug, 'abcdefg', '567891'))
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert len(jdata['results']) == 1
+    assert jdata['results'][0]['secret'] == '5678910'
+    resp = client.get('/pretixdroid/api/%s/%s/search/?key=%s&query=%s' % (
+        env[0].organizer.slug, env[0].slug, 'abcdefg', 'Peter'))
     jdata = json.loads(resp.content.decode("utf-8"))
     assert len(jdata['results']) == 1
     assert jdata['results'][0]['secret'] == '5678910'
 
 
 @pytest.mark.django_db
+def test_search_restricted(client, env):
+    AppConfiguration.objects.create(event=env[0], key='abcdefg', allow_search=False)
+    resp = client.get('/pretixdroid/api/%s/%s/search/?key=%s&query=%s' % (
+        env[0].organizer.slug, env[0].slug, 'abcdefg', '567891'))
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert len(jdata['results']) == 1
+    assert jdata['results'][0]['secret'] == '5678910'
+    resp = client.get('/pretixdroid/api/%s/%s/search/?key=%s&query=%s' % (
+        env[0].organizer.slug, env[0].slug, 'abcdefg', 'Peter'))
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert len(jdata['results']) == 0
+
+
+@pytest.mark.django_db
 def test_search_invoice_name(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    AppConfiguration.objects.create(event=env[0], key='abcdefg')
     InvoiceAddress.objects.create(order=env[2], name="John")
     resp = client.get('/pretixdroid/api/%s/%s/search/?key=%s&query=%s' % (
         env[0].organizer.slug, env[0].slug, 'abcdefg', 'John'))
@@ -179,7 +202,7 @@ def test_search_invoice_name(client, env):
 
 @pytest.mark.django_db
 def test_download_all_data(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    AppConfiguration.objects.create(event=env[0], key='abcdefg')
     resp = client.get('/pretixdroid/api/%s/%s/download/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'))
     jdata = json.loads(resp.content.decode("utf-8"))
     assert len(jdata['results']) == 2
@@ -188,8 +211,18 @@ def test_download_all_data(client, env):
 
 
 @pytest.mark.django_db
+def test_download_item_restriction(client, env):
+    ac = AppConfiguration.objects.create(event=env[0], key='abcdefg', all_items=False)
+    ac.items.add(env[4].item)
+    resp = client.get('/pretixdroid/api/%s/%s/download/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'))
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert len(jdata['results']) == 1
+    assert jdata['results'][0]['secret'] == env[4].secret
+
+
+@pytest.mark.django_db
 def test_status(client, env):
-    env[0].settings.set('pretixdroid_key', 'abcdefg')
+    AppConfiguration.objects.create(event=env[0], key='abcdefg')
     Checkin.objects.create(position=env[3])
     resp = client.get('/pretixdroid/api/%s/%s/status/?key=%s' % (
         env[0].organizer.slug, env[0].slug, 'abcdefg'))

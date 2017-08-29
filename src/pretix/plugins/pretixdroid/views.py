@@ -1,17 +1,19 @@
 import json
 import logging
-import string
 
 import dateutil.parser
+from django.contrib import messages
 from django.db import transaction
 from django.db.models import Count, Q
 from django.http import (
     HttpResponseForbidden, HttpResponseNotFound, JsonResponse,
 )
-from django.shortcuts import get_object_or_404
-from django.utils.crypto import get_random_string
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.utils.functional import cached_property
 from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
 
@@ -22,44 +24,93 @@ from pretix.helpers.urls import build_absolute_uri
 from pretix.multidomain.urlreverse import (
     build_absolute_uri as event_absolute_uri,
 )
+from pretix.plugins.pretixdroid.forms import AppConfigurationForm
+from pretix.plugins.pretixdroid.models import AppConfiguration
 
 logger = logging.getLogger('pretix.plugins.pretixdroid')
 API_VERSION = 3
+
+
+class ConfigCodeView(EventPermissionRequiredMixin, TemplateView):
+    template_name = 'pretixplugins/pretixdroid/configuration_code.html'
+    permission = 'can_change_orders'
+
+    def get(self, request, **kwargs):
+        try:
+            self.object = self.request.event.appconfiguration_set.get(pk=kwargs.get("config"))
+        except AppConfiguration.DoesNotExist:
+            messages.error(request, _('The selected configuration does not exist.'))
+            return redirect(reverse('plugins:pretixdroid:config', kwargs={
+                'organizer': self.request.event.organizer.slug,
+                'event': self.request.event.slug,
+            }))
+        return super().get(request, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        url = build_absolute_uri('plugins:pretixdroid:api.redeem', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })
+        if self.object.subevent:
+            url = build_absolute_uri('plugins:pretixdroid:api.redeem', kwargs={
+                'organizer': self.request.event.organizer.slug,
+                'event': self.request.event.slug,
+                'subevent': self.object.subevent.pk
+            })
+
+        ctx['qrdata'] = json.dumps({
+            'version': API_VERSION,
+            'url': url[:-7],  # the slice removes the redeem/ part at the end
+            'key': self.object.key,
+            'allow_search': self.object.allow_search,
+            'show_info': self.object.show_info
+        })
+        return ctx
 
 
 class ConfigView(EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixplugins/pretixdroid/configuration.html'
     permission = 'can_change_orders'
 
+    @cached_property
+    def add_form(self):
+        return AppConfigurationForm(
+            event=self.request.event,
+            instance=AppConfiguration(event=self.request.event),
+            data=self.request.POST if self.request.method == "POST" and "add" in self.request.POST else None
+        )
+
+    def post(self, request, *args, **kwargs):
+        if "add" in self.request.POST and self.add_form.is_valid():
+            self.add_form.save()
+            self.request.event.log_action('pretix.plugins.pretixdroid.config.added', user=self.request.user,
+                                          data=dict(self.add_form.cleaned_data))
+            return redirect(reverse('plugins:pretixdroid:config.code', kwargs={
+                'organizer': self.request.event.organizer.slug,
+                'event': self.request.event.slug,
+                'config': self.add_form.instance.pk
+            }))
+        elif "delete" in self.request.POST:
+            try:
+                ac = self.request.event.appconfiguration_set.get(pk=request.POST.get("delete"))
+                self.request.event.log_action('pretix.plugins.pretixdroid.config.deleted', user=self.request.user,
+                                              data={'id': ac.pk})
+                ac.delete()
+                messages.success(request, _('The selected configuration has been deleted.'))
+            except AppConfiguration.DoesNotExist:
+                messages.error(request, _('The selected configuration does not exist.'))
+            return redirect(reverse('plugins:pretixdroid:config', kwargs={
+                'organizer': self.request.event.organizer.slug,
+                'event': self.request.event.slug,
+            }))
+        else:
+            return self.get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
-        key = self.request.event.settings.get('pretixdroid_key')
-        if not key or 'flush_key' in self.request.GET:
-            key = get_random_string(length=32,
-                                    allowed_chars=string.ascii_uppercase + string.ascii_lowercase + string.digits)
-            self.request.event.settings.set('pretixdroid_key', key)
-
-        subevent = None
-        url = build_absolute_uri('plugins:pretixdroid:api.redeem', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug
-        })
-        if self.request.event.has_subevents:
-            if self.request.GET.get('subevent'):
-                subevent = get_object_or_404(SubEvent, event=self.request.event, pk=self.request.GET['subevent'])
-                url = build_absolute_uri('plugins:pretixdroid:api.redeem', kwargs={
-                    'organizer': self.request.event.organizer.slug,
-                    'event': self.request.event.slug,
-                    'subevent': subevent.pk
-                })
-
-        ctx['subevent'] = subevent
-
-        ctx['qrdata'] = json.dumps({
-            'version': API_VERSION,
-            'url': url[:-7],  # the slice removes the redeem/ part at the end
-            'key': key,
-        })
+        ctx['add_form'] = self.add_form
+        ctx['configs'] = self.request.event.appconfiguration_set.prefetch_related('items')
         return ctx
 
 
@@ -75,13 +126,16 @@ class ApiView(View):
         except Event.DoesNotExist:
             return HttpResponseNotFound('Unknown event')
 
-        if (not self.event.settings.get('pretixdroid_key')
-                or self.event.settings.get('pretixdroid_key') != request.GET.get('key', '-unset-')):
+        try:
+            self.config = self.event.appconfiguration_set.get(key=request.GET.get("key", "-unset-"))
+        except AppConfiguration.DoesNotExist:
             return HttpResponseForbidden('Invalid key')
 
         self.subevent = None
         if self.event.has_subevents:
-            if 'subevent' in kwargs:
+            if self.config.subevent:
+                self.subevent = self.config.subevent
+            elif 'subevent' in kwargs:
                 self.subevent = get_object_or_404(SubEvent, event=self.event, pk=kwargs['subevent'])
             else:
                 return HttpResponseForbidden('No subevent selected.')
@@ -112,7 +166,10 @@ class ApiRedeemView(ApiView):
                 op = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').get(
                     order__event=self.event, secret=secret, subevent=self.subevent
                 )
-                if op.order.status == Order.STATUS_PAID or force:
+                if not self.config.all_items and op.item_id not in [i.pk for i in self.config.items.all()]:
+                    response['status'] = 'error'
+                    response['reason'] = 'product'
+                elif op.order.status == Order.STATUS_PAID or force:
                     ci, created = Checkin.objects.get_or_create(position=op, defaults={
                         'datetime': dt,
                         'nonce': nonce,
@@ -186,14 +243,20 @@ class ApiSearchView(ApiView):
         }
 
         if len(query) >= 4:
-            ops = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address').filter(
-                Q(order__event=self.event)
-                & Q(
-                    Q(secret__istartswith=query) | Q(attendee_name__icontains=query) | Q(order__code__istartswith=query)
-                    | Q(order__invoice_address__name__icontains=query)
-                )
-                & Q(subevent=self.subevent)
-            ).annotate(checkin_cnt=Count('checkins'))[:25]
+            qs = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address')
+            if not self.config.allow_search:
+                ops = qs.filter(
+                    Q(order__event=self.event) & Q(secret__istartswith=query) & Q(subevent=self.subevent)
+                ).annotate(checkin_cnt=Count('checkins'))[:25]
+            else:
+                ops = qs.filter(
+                    Q(order__event=self.event)
+                    & Q(
+                        Q(secret__istartswith=query) | Q(attendee_name__icontains=query) | Q(order__code__istartswith=query)
+                        | Q(order__invoice_address__name__icontains=query)
+                    )
+                    & Q(subevent=self.subevent)
+                ).annotate(checkin_cnt=Count('checkins'))[:25]
 
             response['results'] = [serialize_op(op, bool(op.checkin_cnt)) for op in ops]
         else:
@@ -210,7 +273,11 @@ class ApiDownloadView(ApiView):
 
         ops = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').filter(
             Q(order__event=self.event) & Q(subevent=self.subevent)
-        ).annotate(checkin_cnt=Count('checkins'))
+        )
+        if not self.config.all_items:
+            ops = ops.filter(item__in=self.config.items.all())
+
+        ops = ops.annotate(checkin_cnt=Count('checkins'))
         response['results'] = [serialize_op(op, bool(op.checkin_cnt)) for op in ops]
 
         return JsonResponse(response)

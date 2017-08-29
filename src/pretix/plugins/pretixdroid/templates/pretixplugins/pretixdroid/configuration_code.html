@@ -1,0 +1,36 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% block title %}{% trans "pretixdroid configuration" %}{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "pretixdroid configuration" %}
+        <a href="{% url "plugins:pretixdroid:config" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default">
+            {% trans "Back to overview" %}
+        </a>
+    </h1>
+    <h2>{% trans "1. Download app" %}</h2>
+    <p>
+        <a href="http://play.google.com/store/apps/details?id=eu.pretix.pretixdroid">
+            <img src="{% static "pretixplugins/pretixdroid/play_store_en.png" %}" alt="
+{% trans "Download the app from the Google Play Store" %}" height="70">
+        </a>
+    </p>
+    <p>
+        <small>
+            {% blocktrans trimmed %}
+                Android, Google Play and the Google Play logo are trademarks of Google Inc.
+            {% endblocktrans %}
+        </small>
+    </p>
+    <h2>{% trans "2. Scan code" %}</h2>
+    <div id="qrcodeCanvas"></div>
+    <script type="text/json" id="qrdata">
+        {{ qrdata|safe }}
+
+    </script>
+    <h2>{% trans "3. Start scanning tickets" %}</h2>
+    <script type="text/javascript" src="{% static "pretixplugins/pretixdroid/pretixdroid.js" %}"></script>
+{% endblock %}
+
