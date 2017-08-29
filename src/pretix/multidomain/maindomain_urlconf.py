@@ -5,6 +5,7 @@ from django.apps import apps
 from django.conf.urls import include, url
 from django.views.generic import TemplateView
 
+from pretix.multidomain.plugin_handler import plugin_event_urls
 from pretix.presale.urls import (
     event_patterns, locale_patterns, organizer_patterns,
 )
@@ -27,8 +28,9 @@ for app in apps.get_app_configs():
             if hasattr(urlmod, 'urlpatterns'):
                 single_plugin_patterns += urlmod.urlpatterns
             if hasattr(urlmod, 'event_patterns'):
+                patterns = plugin_event_urls(urlmod.event_patterns, plugin=app.name)
                 single_plugin_patterns.append(url(r'^(?P<organizer>[^/]+)/(?P<event>[^/]+)/',
-                                                  include(urlmod.event_patterns)))
+                                                  include(patterns)))
             raw_plugin_patterns.append(
                 url(r'', include((single_plugin_patterns, app.label)))
             )

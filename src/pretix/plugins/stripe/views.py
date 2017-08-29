@@ -8,7 +8,6 @@ from django.db import transaction
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
-from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
@@ -22,7 +21,6 @@ from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.stripe.models import ReferencedStripeObject
 from pretix.plugins.stripe.payment import StripeCC
-from pretix.presale.utils import event_view
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
@@ -57,9 +55,6 @@ def webhook(request, *args, **kwargs):
             return func(request.event, event_json, objid)
         else:
             return HttpResponse("Unable to detect event", status=200)
-
-
-event_webbook = csrf_exempt(event_view(require_live=False)(webhook))
 
 
 def charge_webhook(event, event_json, charge_id):
@@ -198,7 +193,6 @@ class StripeOrderView:
         return self.request.event.get_payment_providers()[self.order.payment_provider]
 
 
-@method_decorator(event_view, name='dispatch')
 class ReturnView(StripeOrderView, View):
     def get(self, request, *args, **kwargs):
         prov = self.pprov

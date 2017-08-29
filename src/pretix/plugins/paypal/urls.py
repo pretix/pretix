@@ -1,12 +1,14 @@
 from django.conf.urls import include, url
 
-from .views import abort, event_webbook, refund, success, webhook
+from pretix.multidomain import event_url
+
+from .views import abort, refund, success, webhook
 
 event_patterns = [
     url(r'^paypal/', include([
         url(r'^abort/$', abort, name='abort'),
         url(r'^return/$', success, name='return'),
-        url(r'^webhook/$', event_webbook, name='webhook'),
+        event_url(r'^webhook/$', webhook, name='webhook', require_live=False),
     ])),
 ]
 

@@ -1,10 +1,12 @@
 from django.conf.urls import include, url
 
-from .views import ReturnView, event_webbook, refund, webhook
+from pretix.multidomain import event_url
+
+from .views import ReturnView, refund, webhook
 
 event_patterns = [
     url(r'^stripe/', include([
-        url(r'^webhook/$', event_webbook, name='webhook'),
+        event_url(r'^webhook/$', webhook, name='webhook', require_live=False),
         url(r'^return/(?P<order>[^/]+)/(?P<hash>[^/]+)/$', ReturnView.as_view(), name='return'),
     ])),
 ]

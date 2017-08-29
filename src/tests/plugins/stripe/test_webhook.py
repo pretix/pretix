@@ -16,7 +16,7 @@ def env():
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
-        organizer=o, name='Dummy', slug='dummy',
+        organizer=o, name='Dummy', slug='dummy', plugins='pretix.plugins.stripe',
         date_from=now(), live=True
     )
     t = Team.objects.create(organizer=event.organizer, can_view_orders=True, can_change_orders=True)

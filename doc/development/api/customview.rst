@@ -68,34 +68,33 @@ Frontend views
 Including a custom view into the participant-facing frontend is a little bit different as there is
 no path prefix like ``control/``.
 
-First, define your URL in your ``urls.py``, but this time in the ``event_patterns`` section::
+First, define your URL in your ``urls.py``, but this time in the ``event_patterns`` section and wrapped by
+``event_url``::
 
-    from django.conf.urls import url
+    from pretix.multidomain import event_url
 
     from . import views
 
     event_patterns = [
-        url(r'^mypluginname/', views.frontend_view, name='frontend'),
+        event_url(r'^mypluginname/', views.frontend_view, name='frontend'),
     ]
 
-You can then implement a view as you would normally do, but you need to apply a decorator to your
-view if you want pretix's default behavior::
-
-    from pretix.presale.utils import event_view
-
-    @event_view
-    def some_event_view(request, *args, **kwargs):
-        ...
-
-This decorator will check the URL arguments for their ``event`` and ``organizer`` parameters and
-correctly ensure that:
+You can then implement a view as you would normally do. It will be automatically ensured that:
 
 * The requested event exists
-* The requested event is activated (can be overridden by decorating with ``@event_view(require_live=False)``)
+* The requested event is active (you can disable this check using ``event_url(…, require_live=True)``)
 * The event is accessed via the domain it should be accessed
 * The ``request.event`` attribute contains the correct ``Event`` object
 * The ``request.organizer`` attribute contains the correct ``Organizer`` object
+* Your plugin is enabled
 * The locale is set correctly
+
+.. versionchanged:: 1.7
+
+   The ``event_url()`` wrapper has been added in 1.7 to replace the former ``@event_view`` decorator. The
+   ``event_url()`` wrapper is optional and using ``url()`` still works, but you will not be able to set the
+   ``require_live`` setting any more via the decorator. The ``@event_view`` decorator is now deprecated and
+   does nothing.
 
 REST API viewsets
 -----------------

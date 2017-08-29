@@ -55,7 +55,6 @@ def success(request, *args, **kwargs):
         return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs={'step': 'confirm'}))
 
 
-@event_view(require_live=False)
 def abort(request, *args, **kwargs):
     messages.error(request, _('It looks like you canceled the PayPal payment'))
 
@@ -149,9 +148,6 @@ def webhook(request, *args, **kwargs):
                 )
 
     return HttpResponse(status=200)
-
-
-event_webbook = csrf_exempt(event_view(require_live=False)(webhook))
 
 
 @event_permission_required('can_view_orders')

@@ -50,6 +50,7 @@ class MultiDomainMiddleware(MiddlewareMixin):
                 cache.set('pretix_multidomain_organizer_{}'.format(domain), orga.pk if orga else False, 3600)
 
             if orga:
+                request.organizer_domain = True
                 request.organizer = orga if isinstance(orga, Organizer) else Organizer.objects.get(pk=orga)
                 request.urlconf = "pretix.multidomain.subdomain_urlconf"
             else:
