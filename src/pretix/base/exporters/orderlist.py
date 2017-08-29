@@ -83,8 +83,8 @@ class OrderListExporter(BaseExporter):
         }
 
         full_fee_sum_cache = {
-            o['order__id']: o['grossum'] for o in
-            OrderFee.objects.values('tax_rate', 'order__id').order_by().annotate(grosssum=Sum('price'))
+            o['order__id']: o['grosssum'] for o in
+            OrderFee.objects.values('tax_rate', 'order__id').order_by().annotate(grosssum=Sum('value'))
         }
         fee_sum_cache = {
             (o['order__id'], o['tax_rate']): o for o in

@@ -202,7 +202,7 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
                 ppobj.name = '{} - {}'.format(names[OrderFee.FEE_TYPE_PAYMENT], provider_names.get(pprov[1], pprov[1]))
             else:
                 ppobj.name = '{} - {}'.format(names[OrderFee.FEE_TYPE_PAYMENT], pprov[1])
-            ppobj.provider = pprov
+            ppobj.provider = pprov[1]
             ppobj.has_variations = False
             ppobj.num_total = total
             ppobj.num_canceled = num_canceled.get(pprov, (0, 0, 0))
