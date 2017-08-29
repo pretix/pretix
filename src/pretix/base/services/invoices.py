@@ -99,7 +99,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
         reverse_charge = False
 
         positions.sort(key=lambda p: p.sort_key)
-        for p in positions:
+        for i, p in enumerate(positions):
             if not invoice.event.settings.invoice_include_free and p.price == Decimal('0.00') and not p.addon_c:
                 continue
 
@@ -109,7 +109,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
             if p.addon_to_id:
                 desc = "  + " + desc
             InvoiceLine.objects.create(
-                invoice=invoice, description=desc,
+                position=i, invoice=invoice, description=desc,
                 gross_value=p.price, tax_value=p.tax_value,
                 tax_rate=p.tax_rate, tax_name=p.tax_rule.name if p.tax_rule else ''
             )
@@ -127,11 +127,13 @@ def build_invoice(invoice: Invoice) -> Invoice:
             )
             invoice.save()
 
-        for fee in invoice.order.fees.all():
+        offset = len(positions)
+        for i, fee in enumerate(invoice.order.fees.all()):
             fee_title = _(fee.get_fee_type_display())
             if fee.description:
                 fee_title += " - " + fee.description
             InvoiceLine.objects.create(
+                position=i + offset,
                 invoice=invoice,
                 description=fee_title,
                 gross_value=fee.value,
