@@ -12,6 +12,7 @@ from pretix.base.models import (
     Event, Invoice, InvoiceAddress, Item, ItemVariation, Order, OrderPosition,
     Organizer,
 )
+from pretix.base.models.orders import OrderFee
 from pretix.base.services.invoices import (
     build_preview_invoice_pdf, generate_cancellation, generate_invoice,
     invoice_pdf_task, regenerate_invoice,
@@ -32,10 +33,10 @@ def env():
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=0, payment_provider='banktransfer',
-        payment_fee=Decimal('0.25'), payment_fee_tax_rate=Decimal('19.00'),
-        payment_fee_tax_value=Decimal('0.04'), locale='en', payment_fee_tax_rule=tr
+        total=0, payment_provider='banktransfer', locale='en'
     )
+    o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
+                  tax_value=Decimal('0.05'), tax_rule=tr)
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
                                  category=None, default_price=23, tax_rule=tr,
                                  admission=True)
@@ -206,9 +207,10 @@ def test_positions(env):
 
     last = inv.lines.last()
     assert 'Payment' in last.description
-    assert last.gross_value == order.payment_fee
-    assert last.tax_rate == order.payment_fee_tax_rate
-    assert last.tax_value == order.payment_fee_tax_value
+    fee = order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
+    assert last.gross_value == fee.value
+    assert last.tax_rate == fee.tax_rate
+    assert last.tax_value == fee.tax_value
     assert inv.invoice_to == ""
 
 
@@ -274,9 +276,10 @@ def test_invoice_numbers(env):
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=0, payment_provider='banktransfer',
-        payment_fee=Decimal('0.25'), payment_fee_tax_rate=0,
-        payment_fee_tax_value=0, locale='en'
+        locale='en'
     )
+    order2.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('0.00'),
+                       tax_value=Decimal('0.00'))
     inv1 = generate_invoice(order)
     inv2 = generate_invoice(order)
 
@@ -320,9 +323,10 @@ def test_invoice_number_prefixes(env):
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=0, payment_provider='banktransfer',
-        payment_fee=Decimal('0.25'), payment_fee_tax_rate=0,
-        payment_fee_tax_value=0, locale='en'
+        locale='en'
     )
+    order2.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('0.00'),
+                       tax_value=Decimal('0.00'))
     event.settings.set('invoice_numbers_consecutive', False)
     event2.settings.set('invoice_numbers_consecutive', False)
     assert generate_invoice(order).number == 'DUMMY-{}-1'.format(order.code)

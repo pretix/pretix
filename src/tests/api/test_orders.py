@@ -72,10 +72,6 @@ TEST_ORDER_RES = {
     "expires": "2017-12-10T10:00:00Z",
     "payment_date": None,
     "payment_provider": "banktransfer",
-    "payment_fee": "0.00",
-    "payment_fee_tax_rate": "0.00",
-    "payment_fee_tax_value": "0.00",
-    "payment_fee_tax_rule": None,
     "total": "23.00",
     "comment": "",
     "invoice_address": {

@@ -109,8 +109,7 @@ class OrderSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Order
         fields = ('code', 'status', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
-                  'payment_provider', 'payment_fee', 'payment_fee_tax_rate', 'payment_fee_tax_value',
-                  'payment_fee_tax_rule', 'total', 'comment', 'invoice_address', 'positions', 'downloads')
+                  'payment_provider', 'total', 'comment', 'invoice_address', 'positions', 'downloads')
 
 
 class InlineInvoiceLineSerializer(I18nAwareModelSerializer):

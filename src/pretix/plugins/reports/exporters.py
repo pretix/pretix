@@ -384,8 +384,8 @@ class OrderTaxListReport(Report):
                     if odata:
                         tdata[-1][5 + 2 * i] = str(odata['grosssum'] or '0.00')
                         tdata[-1][6 + 2 * i] = str(odata['taxsum'] or '0.00')
-                        tax_sums[op['order__payment_fee_tax_rate']] += odata['taxsum'] or 0
-                        price_sums[op['order__payment_fee_tax_rate']] += odata['grosssum'] or 0
+                        tax_sums[rate] += odata['taxsum'] or 0
+                        price_sums[rate] += odata['grosssum'] or 0
 
                 i = tax_rates.index(op['tax_rate'])
                 tdata[-1][5 + 2 * i] = str(Decimal(tdata[-1][5 + 2 * i] or '0') + op['prices'])

@@ -399,9 +399,6 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             payment_provider=payment_provider.identifier,
             meta_info=json.dumps(meta_info or {}),
         )
-        for fee in fees:
-            fee.order = order
-            fee.save()
 
         if address:
             if address.order is not None:
@@ -409,8 +406,12 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             address.order = order
             address.save()
 
-            order._calculate_tax()  # Might have changed due to new invoice address
             order.save()
+
+        for fee in fees:
+            fee.order = order
+            fee._calculate_tax()
+            fee.save()
 
         OrderPosition.transform_cart_positions(positions, order)
         order.log_action('pretix.event.order.placed')
@@ -842,9 +843,13 @@ class OrderChangeManager:
             if prov:
                 payment_fee = prov.calculate_fee(self.order.total)
 
-        fee = self.order.fees.get_or_create(type=OrderFee.FEE_TYPE_PAYMENT)
-        fee.value = payment_fee
-        fee.save()
+        if payment_fee:
+            fee = self.order.fees.get_or_create(fee_type=OrderFee.FEE_TYPE_PAYMENT, defaults={'value': 0})[0]
+            fee.value = payment_fee
+            fee._calculate_tax()
+            fee.save()
+        else:
+            self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).delete()
 
         self.order.total = sum([p.price for p in self.order.positions.all()]) + sum([f.value for f in self.order.fees.all()])
         self.order.save()
