@@ -64,7 +64,7 @@
                             {% else %}
                                 {% for item in ac.items.all %}
                                     <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item.name }}</a>
-                                    {% if loop.revindex0 > 0 %}<br>{% endif %}
+                                    {% if forloop.revcounter0 > 0 %}<br>{% endif %}
                                 {% endfor %}
                             {% endif %}
                         </td>
