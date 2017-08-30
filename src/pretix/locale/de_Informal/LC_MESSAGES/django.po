@@ -7485,8 +7485,8 @@ msgstr "Bald"
 #, python-brace-format
 msgid "{num} order"
 msgid_plural "{num} orders"
-msgstr[0] "Bestellung bestätigen"
-msgstr[1] "Bestellung bestätigen"
+msgstr[0] "{num} Bestellung"
+msgstr[1] "{num} Bestellungen"
 
 #: pretix/control/views/event.py:105 pretix/control/views/event.py:251
 #: pretix/control/views/event.py:291 pretix/control/views/event.py:355
