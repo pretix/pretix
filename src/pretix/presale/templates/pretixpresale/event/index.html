@@ -177,23 +177,25 @@
                                                             alt="{{ item.name }}"/>
                                                 </a>
                                             {% endif %}
-                                            <a href="#" data-toggle="variations">
-                                                <strong>{{ item.name }}</strong>
-                                            </a>
-                                            {% if item.description %}
-                                                <div class="product-description">
-                                                    {{ item.description|localize|rich_text }}
-                                                </div>
-                                            {% endif %}
-                                            {% if item.min_per_order and item.min_per_order > 1 %}
-                                                <p>
-                                                    <small>
-                                                        {% blocktrans trimmed with num=item.min_per_order %}
-                                                            minimum amount to order: {{ num }}
-                                                        {% endblocktrans %}
-                                                    </small>
-                                                </p>
-                                            {% endif %}
+                                            <div class="product-description {% if item.picture %}with-picture{% endif %}">
+                                                <a href="#" data-toggle="variations">
+                                                    <strong>{{ item.name }}</strong>
+                                                </a>
+                                                {% if item.description %}
+                                                    <div class="product-description">
+                                                        {{ item.description|localize|rich_text }}
+                                                    </div>
+                                                {% endif %}
+                                                {% if item.min_per_order and item.min_per_order > 1 %}
+                                                    <p>
+                                                        <small>
+                                                            {% blocktrans trimmed with num=item.min_per_order %}
+                                                                minimum amount to order: {{ num }}
+                                                            {% endblocktrans %}
+                                                        </small>
+                                                    </p>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                         <div class="col-md-2 col-xs-6 price">
                                             {% if item.min_price != item.max_price or item.free_price %}
@@ -293,24 +295,26 @@
                                                         alt="{{ item.name }}"/>
                                             </a>
                                         {% endif %}
-                                        <strong>{{ item.name }}</strong>
-                                        {% if item.description %}
-                                            <div class="product-description">
-                                                {{ item.description|localize|rich_text }}
-                                            </div>
-                                        {% endif %}
-                                        {% if event.settings.show_quota_left %}
-                                            {% include "pretixpresale/event/fragment_quota_left.html" with avail=item.cached_availability %}
-                                        {% endif %}
-                                        {% if item.min_per_order and item.min_per_order > 1 %}
-                                            <p>
-                                                <small>
-                                                    {% blocktrans trimmed with num=item.min_per_order %}
-                                                        minimum amount to order: {{ num }}
-                                                    {% endblocktrans %}
-                                                </small>
-                                            </p>
-                                        {% endif %}
+                                        <div class="product-description {% if item.picture %}with-picture{% endif %}">
+                                            <strong>{{ item.name }}</strong>
+                                            {% if item.description %}
+                                                <div class="product-description">
+                                                    {{ item.description|localize|rich_text }}
+                                                </div>
+                                            {% endif %}
+                                            {% if event.settings.show_quota_left %}
+                                                {% include "pretixpresale/event/fragment_quota_left.html" with avail=item.cached_availability %}
+                                            {% endif %}
+                                            {% if item.min_per_order and item.min_per_order > 1 %}
+                                                <p>
+                                                    <small>
+                                                        {% blocktrans trimmed with num=item.min_per_order %}
+                                                            minimum amount to order: {{ num }}
+                                                        {% endblocktrans %}
+                                                    </small>
+                                                </p>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                     <div class="col-md-2 col-xs-6 price">
                                         {% if item.free_price %}
