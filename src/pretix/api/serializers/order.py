@@ -9,10 +9,21 @@ from pretix.base.models import (
 from pretix.base.signals import register_ticket_outputs
 
 
+class CompatibleCountryField(serializers.Field):
+    def to_representation(self, instance: InvoiceAddress):
+        if instance.country:
+            return str(instance.country)
+        else:
+            return instance.country_old
+
+
 class InvoiceAdddressSerializer(I18nAwareModelSerializer):
+    country = CompatibleCountryField(source='*')
+
     class Meta:
         model = InvoiceAddress
-        fields = ('last_modified', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id')
+        fields = ('last_modified', 'is_business', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id',
+                  'vat_id_validated')
 
 
 class AnswerSerializer(I18nAwareModelSerializer):
@@ -87,7 +98,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
         model = OrderPosition
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_email',
                   'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins', 'downloads',
-                  'answers')
+                  'answers', 'tax_rule')
 
 
 class OrderSerializer(I18nAwareModelSerializer):
@@ -99,13 +110,13 @@ class OrderSerializer(I18nAwareModelSerializer):
         model = Order
         fields = ('code', 'status', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
                   'payment_provider', 'payment_fee', 'payment_fee_tax_rate', 'payment_fee_tax_value',
-                  'total', 'comment', 'invoice_address', 'positions', 'downloads')
+                  'payment_fee_tax_rule', 'total', 'comment', 'invoice_address', 'positions', 'downloads')
 
 
 class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
     class Meta:
         model = InvoiceLine
-        fields = ('description', 'gross_value', 'tax_value', 'tax_rate')
+        fields = ('description', 'gross_value', 'tax_value', 'tax_rate', 'tax_name')
 
 
 class InvoiceSerializer(I18nAwareModelSerializer):
@@ -115,5 +126,6 @@ class InvoiceSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Invoice
-        fields = ('order', 'invoice_no', 'is_cancellation', 'invoice_from', 'invoice_to', 'date', 'refers', 'locale',
-                  'introductory_text', 'additional_text', 'payment_provider_text', 'footer_text', 'lines')
+        fields = ('order', 'number', 'is_cancellation', 'invoice_from', 'invoice_to', 'date', 'refers', 'locale',
+                  'introductory_text', 'additional_text', 'payment_provider_text', 'footer_text', 'lines',
+                  'foreign_currency_display', 'foreign_currency_rate', 'foreign_currency_rate_date')

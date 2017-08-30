@@ -122,6 +122,33 @@ MUELLER?34999
 :NS:01bekannt
 1812345
 :62F:C02032495000,00
+""",
+    # From a customer (N26)
+    """
+:20:STARTUMS
+:25:DE13495179316396679327
+:28C:0
+:60F:C170823EUR0,
+:61:1708230823C12,NMSCNONREF
+:86:000?32Peter Schneider?31DE13495179316396679327?30NOTABIC?20De
+mocon-Abcde (Peter Schneider?21), Kategorie: Alles - E?22innahmen - V
+eranstaltungen ?23Democon #1111
+:61:1708230823C12,NMSCNONREF
+:86:000?32Peter Schneider?31DE13495179316396679327?30NOTABIC?20De
+mocon-Abcde (Peter Schneider?21), Kategorie: Alles - E?22innahmen - V
+eranstaltungen ?23Democon #1111
+:62F:C170823EUR24,
+-
+:20:STARTUMS
+:25:DE13495179316396679327
+:28C:0
+:60F:C170824EUR24,
+:61:1708240824C12,NMSCNONREF
+:86:000?32Peter Schneider?31DE13495179316396679327?30NOTABIC?20De
+mocon-Abcde (Peter Schneider?21), Kategorie: Alles- E?22innahmen - V
+eranstaltungen ?23Democon #1111
+:62F:C170824EUR36,
+-
 """
 ]
 
@@ -164,47 +191,30 @@ EXPECTED = [
     [
         {'amount': '-800.00',
          'date': '2002-11-01',
-         'reference': '008?00DAUERAUFTRAG?100599?20Miete Novem\n'
-                      'ber?3010020030?31234567\n'
-                      '?32MUELLER?34339\n'
-                      'NONREF//55555'},
+         'payer': 'MUELLER - 234567',
+         'reference': 'Miete November'},
         {'amount': '3000.00',
          'date': '2002-11-02',
-         'reference': '051?00UEBERWEISUNG?100599?20Gehalt Oktob\n'
-                      'er\n'
-                      '?21Firma Mustermann GmbH?3050060400?31084756\n'
-                      '4700?32MUELLER?34339\n'
-                      'NONREF//55555'}
+         'payer': 'MUELLER - 0847564700',
+         'reference': 'Gehalt Oktober Firma Mustermann GmbH'},
     ],
     [
         {'amount': '-400.62',
          'date': '2012-02-02',
-         'reference': '077?00Überweisung beleglos?109310?20RECHNUNGSNR. '
-                      '1210815 ?21K\n'
-                      'UNDENNR. 01234 ?22DATUM '
-                      '01.02.2012?3020020020?2222222222?32MARTHA\n'
-                      'MUELLER?34999\n'
-                      'NONREF'},
+         'payer': 'MARTHAMUELLER -',
+         'reference': 'RECHNUNGSNR. 1210815 KUNDENNR. 01234 22222222 DATUM 01.02.2012'},
         {'amount': '-1210.00',
          'date': '2012-02-03',
-         'reference': '008?00Dauerauftrag?107000?20MIETE GOETHESTR. '
-                      '12?3030030030?31\n'
-                      '3333333333?32ABC IMMOBILIEN GMBH?34997\n'
-                      'NONREF'},
+         'reference': 'MIETE GOETHESTR. 12',
+         'payer': 'ABC IMMOBILIEN GMBH - 3333333333'},
         {'amount': '30.00',
          'date': '2012-02-03',
-         'reference': '051?00Überweisungseingang?109265?20RECHNUNG '
-                      '20120188?21STEFAN\n'
-                      ' SCHMIDT?23KUNDENR. '
-                      '4711,?3040040040?4444444444?32STEFAN SCHMIDT\n'
-                      'NONREF'},
+         'payer': 'STEFAN SCHMIDT -',
+         'reference': 'RECHNUNG 20120188 STEFAN SCHMIDTKUNDENR. 4711,'},
         {'amount': '89.97',
          'date': '2012-02-03',
-         'reference': '052?00Überweisungseingang?109265?20RECHNUNG '
-                      '20120165?21PETER\n'
-                      ' PETERSEN?3050050050?315555555555?32PETER PETERSEN\n'
-                      'NONREF//00000000\n'
-                      '0001'}
+         'payer': 'PETER PETERSEN - 5555555555',
+         'reference': 'RECHNUNG 20120165 PETER PETERSEN'}
     ],
     [
         {'amount': '5000.00', 'date': '2002-03-17', 'reference': '68790452'},
@@ -216,6 +226,14 @@ EXPECTED = [
         {'amount': '20000.00', 'date': '2002-03-22', 'reference': ''},
         {'amount': '20000.00', 'date': '2002-03-22', 'reference': ''},
         {'amount': '-50000.00', 'date': '2002-03-24', 'reference': ''}
+    ],
+    [
+        {'amount': '12.00', 'date': '2017-08-23', 'payer': 'Peter Schneider - DE13495179316396679327', 'reference':
+            'Democon-Abcde (Peter Schneider ), Kategorie: Alles - E innahmen - Veranstaltungen Democon #1111'},
+        {'amount': '12.00', 'date': '2017-08-23', 'payer': 'Peter Schneider - DE13495179316396679327', 'reference':
+            'Democon-Abcde (Peter Schneider ), Kategorie: Alles - E innahmen - Veranstaltungen Democon #1111'},
+        {'amount': '12.00', 'date': '2017-08-24', 'payer': 'Peter Schneider - DE13495179316396679327', 'reference':
+            'Democon-Abcde (Peter Schneider ), Kategorie: Alles- E innahmen - Veranstaltungen Democon #1111'},
     ]
 ]
 

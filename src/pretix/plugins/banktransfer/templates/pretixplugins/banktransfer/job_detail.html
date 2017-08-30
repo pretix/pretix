@@ -4,7 +4,7 @@
 {% block inner %}
     <h2>{% trans "Import result" %}</h2>
     {% if job.state == "running" or job.state == "pending" %}
-        <div class="empty-collection" data-job-waiting data-job-waiting-url="{% url "plugins:banktransfer:import.job" event=request.event.slug organizer=request.event.organizer.slug job=job.pk %}?ajax=1">
+        <div class="empty-collection" data-job-waiting data-job-waiting-url="{% if request.event %}{% url "plugins:banktransfer:import.job" event=request.event.slug organizer=request.event.organizer.slug job=job.pk %}{% else %}{% url "plugins:banktransfer:import.job" organizer=request.organizer.slug job=job.pk %}{% endif %}?ajax=1">
             <p>
                 <span class="fa big-grey-icon fa-cog fa big-rotating-icon"></span>
             </p>

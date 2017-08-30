@@ -445,3 +445,36 @@ class ItemsTest(ItemFormTest):
         assert i_new.allow_cancel == i_old.allow_cancel
         assert set(i_new.questions.all()) == set(i_old.questions.all())
         assert set([str(v.value) for v in i_new.variations.all()]) == set([str(v.value) for v in i_old.variations.all()])
+
+    def test_add_to_existing_quota(self):
+        q = Quota.objects.create(event=self.event1, name="New Test Quota", size=50)
+
+        doc = self.get_doc('/control/event/%s/%s/items/add' % (self.orga1.slug, self.event1.slug))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['name_0'] = 'Existing'
+        form_data['default_price'] = '2.00'
+        form_data['quota_option'] = 'existing'
+        form_data['quota_add_existing'] = str(q.pk)
+        doc = self.post_doc('/control/event/%s/%s/items/add' % (self.orga1.slug, self.event1.slug), form_data)
+
+        i = Item.objects.get(name__icontains='Existing')
+
+        assert doc.select(".alert-success")
+        assert q.items.filter(pk=i.pk).exists()
+
+    def test_add_to_new_quota(self):
+        doc = self.get_doc('/control/event/%s/%s/items/add' % (self.orga1.slug, self.event1.slug))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['name_0'] = 'New Item'
+        form_data['default_price'] = '2.00'
+        form_data['quota_option'] = 'new'
+        form_data['quota_add_new_name'] = 'New Quota'
+        form_data['quota_add_new_size'] = '200'
+        doc = self.post_doc('/control/event/%s/%s/items/add' % (self.orga1.slug, self.event1.slug), form_data)
+
+        assert doc.select(".alert-success")
+        assert Quota.objects.filter(name__icontains='New Quota').exists()
+        assert Item.objects.filter(name__icontains='New Item').exists()
+        i = Item.objects.get(name__icontains='New Item')
+        q = Quota.objects.get(name__icontains='New Quota')
+        assert q.items.filter(pk=i.pk).exists()

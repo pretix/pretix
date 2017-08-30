@@ -73,14 +73,16 @@
                     You can download your tickets using the buttons below. Please have your ticket ready when entering the event.
                 {% endblocktrans %}
             </div>
-            {% if cart.positions|length > 1 %}
+            {% if cart.positions|length > 1 and can_download_multi %}
                 <p>
                     {% trans "Download all tickets at once:" %}
                     {% for b in download_buttons %}
-                        <a href="{% eventurl event "presale:event.order.download.combined" secret=order.secret order=order.code output=b.identifier %}"
-                                class="btn btn-default btn-sm" data-asyncdownload>
-                            <span class="fa fa-download"></span> {{ b.text }}
-                        </a>
+                        {% if b.multi %}
+                            <a href="{% eventurl event "presale:event.order.download.combined" secret=order.secret order=order.code output=b.identifier %}"
+                                    class="btn btn-default btn-sm" data-asyncdownload>
+                                <span class="fa fa-download"></span> {{ b.text }}
+                            </a>
+                        {% endif %}
                     {% endfor %}
                 </p>
             {% endif %}
@@ -180,7 +182,7 @@
                             <dt>{% trans "ZIP code and city" %}</dt>
                             <dd>{{ order.invoice_address.zipcode }} {{ order.invoice_address.city }}</dd>
                             <dt>{% trans "Country" %}</dt>
-                            <dd>{{ order.invoice_address.country }}</dd>
+                            <dd>{{ order.invoice_address.country.name|default:order.invoice_address.country_old }}</dd>
                             {% if request.event.settings.invoice_address_vatid %}
                                 <dt>{% trans "VAT ID" %}</dt>
                                 <dd>{{ order.invoice_address.vat_id }}</dd>

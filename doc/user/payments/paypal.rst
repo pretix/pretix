@@ -8,41 +8,49 @@ PayPal account, you can create one on `paypal.com`_.
 If you look into pretix' settings, you are required to fill in two keys:
 
 .. image:: img/paypal_pretix.png
+   :class: screenshot
 
 Unfortunately, it is not straightforward how to get those keys from PayPal's website. In order to do so, you
 need to go to `developer.paypal.com`_ to link the account to your pretix event.
 Click on "Log In" in the top-right corner and log in with your PayPal account.
 
 .. image:: img/paypal2.png
+   :class: screenshot
 
 Then, click on "Dashboard" in the top-right corner.
 
 .. image:: img/paypal3.png
+   :class: screenshot
 
 In the dashboard, scroll down until you see the headline "REST API Apps". Click "Create App".
 
 .. image:: img/paypal4.png
+   :class: screenshot
 
 Enter any name for the application that helps you to identify it later. Then confirm with "Create App".
 
 .. image:: img/paypal5.png
+   :class: screenshot
 
 On the next page, before you do anything else, switch the mode on the right to "Live" to get the correct keys.
 Then, copy the "Client ID" and the "Secret" and enter them into the appropriate fields in the payment settings in
 pretix.
 
 .. image:: img/paypal6.png
+   :class: screenshot
 
 Finally, we need to create a webhook. The webhook tells PayPal to notify pretix e.g. if a payment gets cancelled so
 pretix can cancel the ticket as well. If you have multiple events connected to your PayPal account, you need multiple
 webhooks. To create one, scroll a bit down and click "Add Webhook".
 
 .. image:: img/paypal7.png
+   :class: screenshot
 
 Then, enter the webhook URL that you find on the pretix settings page. It should look similar to the one in the
 screenshot but contain your event name. Tick the box "All events" and save.
 
 .. image:: img/paypal8.png
+   :class: screenshot
 
 That's it, you are ready to go!
 

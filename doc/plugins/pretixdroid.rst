@@ -99,6 +99,7 @@ uses to communicate with the pretix server.
             "variation": null,
             "attendee_name": "Peter Higgs",
             "redeemed": false,
+            "attention": false,
             "paid": true
           },
           ...
@@ -107,10 +108,10 @@ uses to communicate with the pretix server.
       }
 
    :query query: Search query
-         :query key: Secret API key
-         :statuscode 200: Valid request
-         :statuscode 404: Unknown organizer or event
-         :statuscode 403: Invalid authorization key
+   :query key: Secret API key
+   :statuscode 200: Valid request
+   :statuscode 404: Unknown organizer or event
+   :statuscode 403: Invalid authorization key
 
 .. http:get:: /pretixdroid/api/(organizer)/(event)/download/
 
@@ -140,6 +141,7 @@ uses to communicate with the pretix server.
             "variation": null,
             "attendee_name": "Peter Higgs",
             "redeemed": false,
+            "attention": false,
             "paid": true
           },
           ...

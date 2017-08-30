@@ -63,6 +63,7 @@ TEST_ITEM_RES = {
     "description": None,
     "free_price": False,
     "tax_rate": "0.00",
+    "tax_rule": None,
     "admission": False,
     "position": 0,
     "picture": None,
@@ -73,6 +74,7 @@ TEST_ITEM_RES = {
     "allow_cancel": True,
     "min_per_order": None,
     "max_per_order": None,
+    "checkin_attention": False,
     "has_variations": False,
     "variations": [],
     "addons": []

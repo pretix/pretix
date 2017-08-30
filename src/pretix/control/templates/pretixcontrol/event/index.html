@@ -39,7 +39,12 @@
         </div>
     {% endif %}
 
-    <div class="row dashboard">
+    {% if request.event.has_subevents %}
+        <form class="form-inline helper-display-inline" action="" method="get">
+            {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
+        </form>
+    {% endif %}
+    <div class="dashboard">
         {% for w in widgets %}
             <div class="widget-container widget-{{ w.display_size|default:"small" }}">
                 {% if w.url %}{# backwards compatibility #}

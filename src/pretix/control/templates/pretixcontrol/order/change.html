@@ -11,6 +11,12 @@
         {% blocktrans trimmed with code=order.code %}
             Change order: {{ code }}
         {% endblocktrans %}
+        <a class="btn btn-link btn-lg"
+                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+            {% blocktrans trimmed with order=order.code %}
+                Back to order {{ order }}
+            {% endblocktrans %}
+        </a>
     </h1>
     <p>
         {% blocktrans trimmed %}
@@ -97,8 +103,18 @@
                                         {% if position.form.operation.value == "price" %}checked="checked"{% endif %}>
                                 {% trans "Change price to" %}
                                 {% bootstrap_field position.form.price layout='inline' %}
-                                {% if request.event.settings.display_net_prices %}
-                                    <em>{% trans "Enter a gross price including taxes." %}</em>
+                                {% if position.apply_tax %}
+                                    {% if position.item.tax_rule and not position.item.tax_rule.price_includes_tax %}
+                                        {% blocktrans trimmed with rate=position.item.tax_rule.rate name=position.item.tax_rule.name %}
+                                            <strong>plus</strong> {{ rate }}% {{ name }}
+                                        {% endblocktrans %}
+                                    {% elif position.item.tax_rule %}
+                                        {% blocktrans trimmed with rate=position.item.tax_rule.rate name=position.item.tax_rule.name %}
+                                            <strong>incl.</strong> {{ rate }}% {{ name }}
+                                        {% endblocktrans %}
+                                    {% endif %}
+                                {% else %}
+                                    {% trans "no taxes apply" %}
                                 {% endif %}
                             </label>
                         </div>
@@ -141,6 +157,24 @@
                     {% if add_form.subevent %}
                         {% bootstrap_field add_form.subevent layout='horizontal' %}
                     {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default items">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Other operations
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    {% bootstrap_form_errors other_form %}
+                    {% if other_form.custom_error %}
+                        <div class="alert alert-danger">
+                            {{ other_form.custom_error }}
+                        </div>
+                    {% endif %}
+                    {% bootstrap_field other_form.recalculate_taxes layout='horizontal' %}
                 </div>
             </div>
         </div>

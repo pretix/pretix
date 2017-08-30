@@ -4,7 +4,8 @@ import tempfile
 
 tmpdir = tempfile.TemporaryDirectory()
 os.environ.setdefault('DATA_DIR', tmpdir.name)
-os.environ.setdefault('PRETIX_CONFIG_FILE', 'test/sqlite.cfg')
+if os.path.exists('test/sqlite.cfg'):
+    os.environ.setdefault('PRETIX_CONFIG_FILE', 'test/sqlite.cfg')
 
 from pretix.settings import *  # NOQA
 
@@ -18,6 +19,7 @@ EMAIL_BACKEND = 'django.core.mail.outbox'
 
 COMPRESS_ENABLED = COMPRESS_OFFLINE = False
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+PRETIX_INSTANCE_NAME = 'pretix.eu'
 
 DEBUG = True
 DEBUG_PROPAGATE_EXCEPTIONS = True

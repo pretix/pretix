@@ -6,14 +6,20 @@
 {% block content %}
     <h1>
         {% trans "Refund order" %}
+        <a class="btn btn-link btn-lg"
+                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+            {% blocktrans trimmed with order=order.code %}
+                Back to order {{ order }}
+            {% endblocktrans %}
+        </a>
     </h1>
-    <p>{% blocktrans trimmed %}
-        Do you really want to refund this order? You cannot revert this action.
-    {% endblocktrans %}</p>
-
-    {{ payment|safe }}
-
     <form method="post" href="">
+        <p>{% blocktrans trimmed %}
+            Do you really want to refund this order? You cannot revert this action.
+        {% endblocktrans %}</p>
+
+        {{ payment|safe }}
+
         {% csrf_token %}
         <input type="hidden" name="status" value="r" />
         <div class="row checkout-button-row">

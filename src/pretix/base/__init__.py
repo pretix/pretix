@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.conf import settings
 
 
 class PretixBaseConfig(AppConfig):
@@ -10,12 +11,16 @@ class PretixBaseConfig(AppConfig):
         from . import payment  # NOQA
         from . import exporters  # NOQA
         from . import invoice  # NOQA
-        from .services import export, mail, tickets, cart, orders, cleanup, update_check  # NOQA
+        from .services import export, mail, tickets, cart, orders, invoices, cleanup, update_check  # NOQA
 
         try:
             from .celery_app import app as celery_app  # NOQA
         except ImportError:
             pass
+
+        if hasattr(settings, 'RAVEN_CONFIG'):
+            from ..sentry import initialize
+            initialize()
 
 
 default_app_config = 'pretix.base.PretixBaseConfig'

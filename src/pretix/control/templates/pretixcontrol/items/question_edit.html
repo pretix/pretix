@@ -21,6 +21,7 @@
         <fieldset>
             <legend>{% trans "General information" %}</legend>
             {% bootstrap_field form.question layout="horizontal" %}
+            {% bootstrap_field form.help_text layout="horizontal" %}
             {% bootstrap_field form.type layout="horizontal" %}
             {% bootstrap_field form.required layout="horizontal" %}
         </fieldset>

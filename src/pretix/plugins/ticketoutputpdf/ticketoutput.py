@@ -49,9 +49,12 @@ class PdfTicketOutput(BaseTicketOutput):
 
         for family, styles in get_fonts().items():
             pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
-            pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
-            pdfmetrics.registerFont(TTFont(family + ' B', finders.find(styles['bold']['truetype'])))
-            pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
+            if 'italic' in styles:
+                pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
+            if 'bold' in styles:
+                pdfmetrics.registerFont(TTFont(family + ' B', finders.find(styles['bold']['truetype'])))
+            if 'bolditalic' in styles:
+                pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
 
     def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, o: dict):
         reqs = float(o['size']) * mm
@@ -63,12 +66,19 @@ class PdfTicketOutput(BaseTicketOutput):
         renderPDF.draw(d, canvas, qr_x, qr_y)
 
     def _get_text_content(self, op: OrderPosition, order: Order, o: dict):
+        ev = op.subevent or order.event
         if o['content'] == 'other':
             return o['text'].replace("\n", "<br/>\n")
         elif o['content'] == 'order':
             return order.code
         elif o['content'] == 'item':
             return str(op.item)
+        elif o['content'] == 'item_description':
+            return str(op.item.description)
+        elif o['content'] == 'organizer':
+            return str(order.event.organizer.name)
+        elif o['content'] == 'organizer_info_text':
+            return str(order.event.settings.organizer_info_text)
         elif o['content'] == 'secret':
             return op.secret
         elif o['content'] == 'variation':
@@ -80,25 +90,35 @@ class PdfTicketOutput(BaseTicketOutput):
         elif o['content'] == 'attendee_name':
             return op.attendee_name or (op.addon_to.attendee_name if op.addon_to else '')
         elif o['content'] == 'event_name':
-            return str(order.event)
+            return str(ev.name)
         elif o['content'] == 'event_location':
-            return str(order.event.location).replace("\n", "<br/>\n")
+            return str(ev.location).replace("\n", "<br/>\n")
         elif o['content'] == 'event_date':
-            return order.event.get_date_from_display(show_times=False)
+            return ev.get_date_from_display(show_times=False)
         elif o['content'] == 'event_date_range':
-            return order.event.get_date_range_display()
+            return ev.get_date_range_display()
         elif o['content'] == 'event_begin':
-            return order.event.get_date_from_display(show_times=True)
+            return ev.get_date_from_display(show_times=True)
         elif o['content'] == 'event_begin_time':
-            return order.event.get_time_from_display()
+            return ev.get_time_from_display()
         elif o['content'] == 'event_admission':
-            if order.event.date_admission:
+            if ev.date_admission:
                 tz = timezone(order.event.settings.timezone)
-                return date_format(order.event.date_admission.astimezone(tz), "SHORT_DATETIME_FORMAT")
+                return date_format(ev.date_admission.astimezone(tz), "SHORT_DATETIME_FORMAT")
         elif o['content'] == 'event_admission_time':
-            if order.event.date_admission:
+            if ev.date_admission:
                 tz = timezone(order.event.settings.timezone)
-                return date_format(order.event.date_admission.astimezone(tz), "TIME_FORMAT")
+                return date_format(ev.date_admission.astimezone(tz), "TIME_FORMAT")
+        elif o['content'] == 'invoice_name':
+            try:
+                return order.invoice_address.name
+            except:
+                return ""
+        elif o['content'] == 'invoice_company':
+            try:
+                return order.invoice_address.company
+            except:
+                return ""
         elif o['content'] == 'addons':
             return "<br/>".join([
                 '{} - {}'.format(p.item, p.variation) if p.variation else str(p.item)

@@ -36,6 +36,11 @@
                     {% trans "Email" %}
                 </a>
             </li>
+            <li {% if "event.settings.tax" in url_name %}class="active"{% endif %}>
+                <a href="{% url 'control:event.settings.tax' organizer=request.event.organizer.slug event=request.event.slug %}">
+                    {% trans "Tax rules" %}
+                </a>
+            </li>
             <li {% if "event.settings.invoice" == url_name %}class="active"{% endif %}>
                 <a href="{% url 'control:event.settings.invoice' organizer=request.event.organizer.slug event=request.event.slug %}">
                     {% trans "Invoicing" %}

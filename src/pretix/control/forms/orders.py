@@ -6,8 +6,10 @@ from django.utils.formats import localize
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
-from pretix.base.forms import I18nModelForm
-from pretix.base.models import Item, ItemAddOn, Order, OrderPosition
+from pretix.base.forms import I18nModelForm, PlaceholderValidator
+from pretix.base.models import (
+    InvoiceAddress, Item, ItemAddOn, Order, OrderPosition,
+)
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
 
@@ -66,6 +68,22 @@ class SubEventChoiceField(forms.ModelChoiceField):
                                         p, self.instance.order.event.currency)
 
 
+class OtherOperationsForm(forms.Form):
+    recalculate_taxes = forms.BooleanField(
+        label=_('Re-calculate taxes'),
+        required=False,
+        help_text=_(
+            'This operation re-checks if taxes should be paid to the items due to e.g. configured reverse charge rules '
+            'and changes the prices and tax values accordingly. This is useful e.g. after an invoice address change. '
+            'Use with care and only if you need to. Note that rounding differences might occur in this procedure.'
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('order')
+        super().__init__(*args, **kwargs)
+
+
 class OrderPositionAddForm(forms.Form):
     do = forms.BooleanField(
         label=_('Add a new product to the order'),
@@ -83,7 +101,7 @@ class OrderPositionAddForm(forms.Form):
         required=False,
         max_digits=10, decimal_places=2,
         label=_('Gross price'),
-        help_text=_("Keep empty for the product's default price")
+        help_text=_("Including taxes, if any. Keep empty for the product's default price")
     )
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
@@ -95,6 +113,12 @@ class OrderPositionAddForm(forms.Form):
     def __init__(self, *args, **kwargs):
         order = kwargs.pop('order')
         super().__init__(*args, **kwargs)
+
+        try:
+            ia = order.invoice_address
+        except InvoiceAddress.DoesNotExist:
+            ia = None
+
         choices = []
         for i in order.event.items.prefetch_related('variations').all():
             pname = str(i.name)
@@ -103,12 +127,12 @@ class OrderPositionAddForm(forms.Form):
             variations = list(i.variations.all())
             if variations:
                 for v in variations:
+                    p = get_price(i, v, invoice_address=ia)
                     choices.append(('%d-%d' % (i.pk, v.pk),
-                                    '%s – %s (%s %s)' % (pname, v.value, localize(v.price),
-                                                         order.event.currency)))
+                                    '%s – %s (%s %s)' % (pname, v.value, p, order.event.currency)))
             else:
-                choices.append((str(i.pk), '%s (%s %s)' % (pname, localize(i.default_price),
-                                                           order.event.currency)))
+                p = get_price(i, invoice_address=ia)
+                choices.append((str(i.pk), '%s (%s %s)' % (pname, p, order.event.currency)))
         self.fields['itemvar'].choices = choices
         if ItemAddOn.objects.filter(base_item__event=order.event).exists():
             self.fields['addon_to'].queryset = order.positions.filter(addon_to__isnull=True).select_related(
@@ -150,6 +174,12 @@ class OrderPositionChangeForm(forms.Form):
     def __init__(self, *args, **kwargs):
         instance = kwargs.pop('instance')
         initial = kwargs.get('initial', {})
+
+        try:
+            ia = instance.order.invoice_address
+        except InvoiceAddress.DoesNotExist:
+            ia = None
+
         if instance:
             try:
                 if instance.variation:
@@ -159,7 +189,10 @@ class OrderPositionChangeForm(forms.Form):
             except Item.DoesNotExist:
                 pass
 
-            initial['price'] = instance.price
+            if instance.item.tax_rule and not instance.item.tax_rule.price_includes_tax:
+                initial['price'] = instance.price - instance.tax_value
+            else:
+                initial['price'] = instance.price
         initial['subevent'] = instance.subevent
 
         kwargs['initial'] = initial
@@ -169,20 +202,24 @@ class OrderPositionChangeForm(forms.Form):
             self.fields['subevent'].queryset = instance.order.event.subevents.all()
         else:
             del self.fields['subevent']
+
         choices = []
         for i in instance.order.event.items.prefetch_related('variations').all():
             pname = str(i.name)
             if not i.is_available():
                 pname += ' ({})'.format(_('inactive'))
             variations = list(i.variations.all())
+
             if variations:
                 for v in variations:
-                    p = get_price(i, v, voucher=instance.voucher, subevent=instance.subevent)
+                    p = get_price(i, v, voucher=instance.voucher, subevent=instance.subevent,
+                                  invoice_address=ia)
                     choices.append(('%d-%d' % (i.pk, v.pk),
                                     '%s – %s (%s %s)' % (pname, v.value, localize(p),
                                                          instance.order.event.currency)))
             else:
-                p = get_price(i, None, voucher=instance.voucher, subevent=instance.subevent)
+                p = get_price(i, None, voucher=instance.voucher, subevent=instance.subevent,
+                              invoice_address=ia)
                 choices.append((str(i.pk), '%s (%s %s)' % (pname, localize(p),
                                                            instance.order.event.currency)))
         self.fields['itemvar'].choices = choices
@@ -215,3 +252,30 @@ class OrderLocaleForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         locale_names = dict(settings.LANGUAGES)
         self.fields['locale'].choices = [(a, locale_names[a]) for a in self.instance.event.settings.locales]
+
+
+class OrderMailForm(forms.Form):
+    subject = forms.CharField(
+        label=_("Subject"),
+        required=True
+    )
+
+    def __init__(self, *args, **kwargs):
+        order = kwargs.pop('order')
+        super().__init__(*args, **kwargs)
+        self.fields['sendto'] = forms.EmailField(
+            label=_("Recipient"),
+            required=True,
+            initial=order.email
+        )
+        self.fields['sendto'].widget.attrs['readonly'] = 'readonly'
+        self.fields['message'] = forms.CharField(
+            label=_("Message"),
+            required=True,
+            widget=forms.Textarea,
+            initial=order.event.settings.mail_text_order_custom_mail.localize(order.locale),
+            help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
+                        "{invoice_name}, {invoice_company}"),
+            validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
+                                              '{invoice_name}', '{invoice_company}'])]
+        )

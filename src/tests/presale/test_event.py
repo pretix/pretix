@@ -1,6 +1,7 @@
 import datetime
 import re
 from decimal import Decimal
+from json import loads
 
 from django.conf import settings
 from django.core import mail
@@ -67,6 +68,18 @@ class EventMiddlewareTest(EventTestMixin, SoupTest):
 
 
 class ItemDisplayTest(EventTestMixin, SoupTest):
+    def test_link_rewrite(self):
+        q = Quota.objects.create(event=self.event, name='Quota', size=2)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                   description="http://example.org [Sample](http://example.net)")
+        q.items.add(item)
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
+
+        self.assertNotIn('href="http://example.org', html)
+        self.assertNotIn('href="http://example.net', html)
+        self.assertIn('href="/redirect/?url=http%3A//example.org%3A', html)
+        self.assertIn('href="/redirect/?url=http%3A//example.net%3A', html)
+
     def test_not_active(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=False)
@@ -202,8 +215,9 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.event.settings.display_net_prices = True
         se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        tr = self.event.tax_rules.get_or_create(rate=Decimal('19.00'))[0]
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=15,
-                                   tax_rate=19)
+                                   tax_rule=tr)
         q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
         q.items.add(item)
         q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se2)
@@ -450,7 +464,7 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         self.event.settings.display_net_prices = True
         self.event.has_subevents = True
         self.event.save()
-        self.item.tax_rate = 19
+        self.item.tax_rule = self.event.tax_rules.get_or_create(rate=Decimal('19.00'))[0]
         self.item.save()
         se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
         q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
@@ -852,7 +866,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.assertIn('LOCATION:DUMMY ARENA', ical, 'incorrect location')
         self.assertIn('ORGANIZER:%s' % self.event.organizer.name, ical, 'incorrect organizer')
         self.assertTrue(re.search(r'DTSTAMP:\d{8}T\d{6}Z', ical), 'incorrect timestamp')
-        self.assertTrue(re.search(r'UID:\w*-\w*-0-\d{20}', ical), 'missing UID key')
+        self.assertTrue(re.search(r'UID:pretix-\w*-\w*-0@', ical), 'missing UID key')
 
     def test_utc_timezone(self):
         ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
@@ -937,6 +951,49 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.assertIn('DTEND;VALUE=DATE:20141228', ical, 'incorrect end date')
         self.assertIn('SUMMARY:%s' % se1.name, ical, 'incorrect correct summary')
         self.assertIn('LOCATION:Heeeeeere', ical, 'incorrect location')
+
+
+class EventMicrodataTest(EventTestMixin, SoupTest):
+    def setUp(self):
+        super().setUp()
+        self.event.settings.show_date_to = True
+        self.event.settings.show_times = True
+        self.event.location = 'DUMMY ARENA'
+        self.event.date_from = datetime.datetime(2013, 12, 26, 21, 57, 58, tzinfo=datetime.timezone.utc)
+        self.event.date_to = self.event.date_from + datetime.timedelta(days=2)
+        self.event.settings.timezone = 'UTC'
+        self.event.save()
+
+    def _get_json(self):
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        microdata = loads(doc.find(type="application/ld+json").string)
+        return microdata
+
+    def test_name(self):
+        md = self._get_json()
+        self.assertEqual(self.event.name, md['name'], msg='Name not present')
+
+    def test_location(self):
+        md = self._get_json()
+        self.assertEqual(self.event.location, md['location']['address'], msg='Location not present')
+
+    def test_date_to(self):
+        md = self._get_json()
+        self.assertEqual(self.event.date_to.isoformat(), md['endDate'], msg='Date To not present')
+        self.event.settings.show_date_to = False
+        md = self._get_json()
+        self.assertNotIn(self.event.date_to.isoformat(), md,
+                         msg='Date To present when show date to setting is false')
+
+    def test_no_times(self):
+        self.event.settings.show_times = False
+        md = self._get_json()
+        self.assertNotEqual(self.event.date_from.isoformat(), md['startDate'], msg='Date including time present')
+        self.assertEqual(self.event.date_from.date().isoformat(), md['startDate'], msg='Date not present at all')
+
+    def test_date_from(self):
+        md = self._get_json()
+        self.assertEqual(self.event.date_from.isoformat(), md['startDate'], msg='Date From not present')
 
 
 class EventSlugBlacklistValidatorTest(EventTestMixin, SoupTest):

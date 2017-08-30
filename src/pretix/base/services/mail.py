@@ -81,18 +81,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
                     'invoice_name': '',
                     'invoice_company': ''
                 })
-        if isinstance(template, LazyI18nString):
-            body = str(template)
-            if context:
-                body = body.format_map(TolerantDict(context))
-            body_md = bleach.linkify(bleach.clean(markdown.markdown(body), tags=bleach.ALLOWED_TAGS + [
-                'p',
-            ]))
-        else:
-            tpl = get_template(template)
-            body = tpl.render(context)
-            body_md = bleach.linkify(markdown.markdown(body))
-
+        body, body_md = render_mail(template, context)
         sender = sender or (event.settings.get('mail_from') if event else settings.MAIL_FROM)
 
         subject = str(subject)
@@ -109,7 +98,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             htmlctx['event'] = event
             htmlctx['color'] = event.settings.primary_color
 
-            if event.settings.mail_from == settings.DEFAULT_FROM_EMAIL and event.settings.contact_mail:
+            if event.settings.mail_from == settings.DEFAULT_FROM_EMAIL and event.settings.contact_mail and not headers.get('Reply-To'):
                 headers['Reply-To'] = event.settings.contact_mail
 
             prefix = event.settings.get('mail_prefix')
@@ -127,10 +116,10 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
                 body_plain += signature
                 body_plain += "\r\n\r\n-- \r\n"
 
-            body_plain += _(
-                "You are receiving this email because you placed an order for {event}."
-            ).format(event=event.name)
             if order:
+                body_plain += _(
+                    "You are receiving this email because you placed an order for {event}."
+                ).format(event=event.name)
                 htmlctx['order'] = order
                 body_plain += "\r\n"
                 body_plain += _(
@@ -152,9 +141,10 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
 
 @app.task
 def mail_send_task(to: List[str], subject: str, body: str, html: str, sender: str,
-                   event: int=None, headers: dict=None) -> bool:
-    email = EmailMultiAlternatives(subject, body, sender, to=to, headers=headers)
-    email.attach_alternative(inline_css(html), "text/html")
+                   event: int=None, headers: dict=None, bcc: List[str]=None) -> bool:
+    email = EmailMultiAlternatives(subject, body, sender, to=to, bcc=bcc, headers=headers)
+    if html is not None:
+        email.attach_alternative(inline_css(html), "text/html")
     if event:
         event = Event.objects.get(id=event)
         backend = event.get_mail_backend()
@@ -170,3 +160,18 @@ def mail_send_task(to: List[str], subject: str, body: str, html: str, sender: st
 
 def mail_send(*args, **kwargs):
     mail_send_task.apply_async(args=args, kwargs=kwargs)
+
+
+def render_mail(template, context):
+    if isinstance(template, LazyI18nString):
+        body = str(template)
+        if context:
+            body = body.format_map(TolerantDict(context))
+        body_md = bleach.linkify(bleach.clean(markdown.markdown(body), tags=bleach.ALLOWED_TAGS + [
+            'p', 'pre'
+        ]))
+    else:
+        tpl = get_template(template)
+        body = tpl.render(context)
+        body_md = bleach.linkify(markdown.markdown(body))
+    return body, body_md

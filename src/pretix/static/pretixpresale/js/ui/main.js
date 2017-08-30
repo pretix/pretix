@@ -26,7 +26,10 @@ $(function () {
         $(this).parent().parent().parent().find(".variations").slideToggle();
         e.preventDefault();
     });
-    $(".collapsed").removeClass("collapsed").addClass("collapse");
+    $("div.collapsed").removeClass("collapsed").addClass("collapse");
+    $(".has-error, .alert-danger").each(function () {
+        $(this).closest("div.panel-collapse").collapse("show");
+    });
 
     $("#voucher-box").hide();
     $("#voucher-toggle").show();
@@ -48,8 +51,10 @@ $(function () {
     // Copy answers
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();
+        e.stopPropagation();
         var idx = $(this).data('id');
         copy_answers(idx);
+        return false;
     });
 
     // Subevent choice
@@ -64,11 +69,54 @@ $(function () {
         $(this).closest("form").get(0).submit();
     });
 
+    var update_cart_form = function () {
+        var is_enabled = $(".product-row input[type=checkbox]:checked, .variations input[type=checkbox]:checked, .product-row input[type=radio]:checked, .variations input[type=radio]:checked").length;
+        if (!is_enabled) {
+            $(".input-item-count").each(function() {
+                if ($(this).val() && $(this).val() !== "0") {
+                    is_enabled = true;
+                }
+            });
+        }
+        $("#btn-add-to-cart").prop("disabled", !is_enabled);
+    };
+    update_cart_form();
+    $(".product-row input[type=checkbox], .variations input[type=checkbox], .product-row input[type=radio], .variations input[type=radio], .input-item-count").on("change mouseup keyup", update_cart_form);
+
     $(".table-calendar td.has-events").click(function () {
         var $tr = $(this).closest(".table-calendar").find(".selected-day");
         $tr.find("td").html($(this).find(".events").html());
         $tr.find("td").prepend($("<h3>").text($(this).attr("data-date")));
         $tr.show();
+    });
+
+    // Invoice address form
+    $("input[data-required-if]").each(function () {
+      var dependent = $(this),
+        dependency = $($(this).attr("data-required-if")),
+        update = function (ev) {
+          var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+          dependent.prop('required', enabled).closest('.form-group').toggleClass('required', enabled);
+        };
+      update();
+      dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+      dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+    });
+
+    $("input[data-display-dependency]").each(function () {
+        var dependent = $(this),
+            dependency = $($(this).attr("data-display-dependency")),
+            update = function (ev) {
+                var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                if (ev) {
+                    dependent.closest('.form-group').slideToggle(enabled);
+                } else {
+                    dependent.closest('.form-group').toggle(enabled);
+                }
+            };
+        update();
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
     // Lightbox
@@ -81,31 +129,33 @@ function copy_answers(idx) {
     elements.each(function(index){
         var input = $(this),
             tagName = input.prop('tagName').toLowerCase(),
-            attributeType = input.attr('type');
+            attributeType = input.attr('type'),
+            suffix = input.attr('name').split('-')[1];
+
 
         switch (tagName) {
-            case "textarea":            
-                input.val(firstAnswers.eq(index).val());
+            case "textarea":
+                input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
                 break;
             case "select":
-                input.val(firstAnswers.eq(index).find(":selected").val()).change();
+                input.val(firstAnswers.filter("[name$=" + suffix + "]").find(":selected").val()).change();
                 break;
             case "input":
                 switch (attributeType) {
                     case "text":
                     case "number":
-                        input.val(firstAnswers.eq(index).val());
+                        input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
                         break;
                     case "checkbox":
                     case "radio":
-                        input.prop("checked", firstAnswers.eq(index).prop("checked"));
+                        input.prop("checked", firstAnswers.filter("[name$=" + suffix + "]").prop("checked"));
                         break;
                     default:
-                        input.val(firstAnswers.eq(index).val());
+                        input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
                 } 
                 break;
             default:
-                input.val(firstAnswers.eq(index).val());
+                input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
         } 
     });
 }

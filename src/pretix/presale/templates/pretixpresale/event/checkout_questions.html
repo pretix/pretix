@@ -5,6 +5,11 @@
 {% block content %}
     <h2>{% trans "Checkout" %}</h2>
     <p>{% trans "Before we continue, we need you to answer some questions." %}</p>
+    <p class="required-legend">
+        {% blocktrans trimmed %}
+            You need to fill all fields that are marked with <span>*</span> to continue.
+        {% endblocktrans %}
+    </p>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="panel-group" id="questions_group">
@@ -13,10 +18,11 @@
                     <h4 class="panel-title">
                         <a data-toggle="collapse" href="#contact">
                             <strong>{% trans "Contact information" %}</strong>
+                            <i class="fa fa-angle-down collapse-indicator"></i>
                         </a>
                     </h4>
                 </div>
-                <div id="contact" class="panel-collapse collapsed in">
+                <div id="contact" class="panel-collapse collapse in">
                     <div class="panel-body">
                         {% bootstrap_form contact_form layout="horizontal" %}
                     </div>
@@ -26,15 +32,16 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#invoice">
-                                <strong>{% trans "Invoice information" %}</strong>
-                                {% if not event.settings.invoice_address_required %}
+                            <a class="{% if not event.settings.invoice_address_required and not event.settings.invoice_name_required %} collapsed{% endif %}" data-toggle="collapse" href="#invoice">
+                                <strong>{% trans "Invoice information" %}{% if not event.settings.invoice_address_required and not event.settings.invoice_name_required %}
                                     {% trans "(optional)" %}
-                                {% endif %}
+                                {% endif %}</strong>
+                                
+                                <i class="fa fa-angle-down collapse-indicator"></i>
                             </a>
                         </h4>
                     </div>
-                    <div id="invoice" class="panel-collapse collapsed {% if event.settings.invoice_address_required %} in {% endif %}">
+                    <div id="invoice" class="panel-collapse collapse{% if event.settings.invoice_address_required or event.settings.invoice_name_required %} in {% endif %}">
                         <div class="panel-body">
                             {% bootstrap_form invoice_form layout="horizontal" %}
                         </div>
@@ -51,16 +58,19 @@
                                 {% if pos.variation %}
                                     – {{ pos.variation }}
                                 {% endif %}
+                                {% if forloop.counter > 1 %}
+                                    <span class="text-right">
+                                        <input type="button" data-id="{{ forloop.counter0 }}" name="copy" class="js-copy-answers btn btn-default btn-xs" value='{% trans "Copy answers from above" %}'>
+                                        <i class="fa fa-angle-down collapse-indicator"></i>
+                                    </span>
+                                {% else %}
+                                    <i class="fa fa-angle-down collapse-indicator"></i>
+                                {% endif %}
                             </a>
-                            {% if forloop.counter > 1 %}
-                                <span class="text-right pull-right">
-                                     <input type="button" data-id="{{ forloop.counter0 }}" name="copy" class="js-copy-answers btn btn-default btn-xs" value='{% trans "Copy answers from above" %}'>
-                                </span>
-                            {% endif %}
                         </h4>
                     </div>
                     <div id="cp{{ pos.id }}"
-                            class="panel-collapse collapsed in">
+                            class="panel-collapse collapse in">
                         <div class="panel-body" data-idx="{{ forloop.counter0 }}">
                             {% for form in forms %}
                                 {% if form.pos.item != pos.item %}

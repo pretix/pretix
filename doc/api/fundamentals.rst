@@ -4,6 +4,8 @@ Basic concepts
 This page describes basic concepts and definition that you need to know to interact
 with pretix' REST API, such as authentication, pagination and similar definitions.
 
+.. _`rest-auth`:
+
 Obtaining an API token
 ----------------------
 
@@ -13,12 +15,14 @@ or choose an existing team that has the level of permissions the token should ha
 create a new token using the form below the list of team members:
 
 .. image:: img/token_form.png
+   :class: screenshot
 
 You can enter a description for the token to distinguish from other tokens later on.
 Once you click "Add", you will be provided with an API token in the success message.
 Copy this token, as you won't be able to retrieve it again.
 
 .. image:: img/token_success.png
+   :class: screenshot
 
 Authentication
 --------------

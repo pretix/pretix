@@ -22,6 +22,7 @@ from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,
 )
 from pretix.base.signals import register_ticket_outputs
+from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm
 from pretix.presale.views import CartMixin, EventViewMixin
@@ -76,6 +77,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
             buttons.append({
                 'text': provider.download_button_text or 'Download',
                 'identifier': provider.identifier,
+                'multi': provider.multi_download_enabled
             })
         return buttons
 
@@ -95,8 +97,12 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         ctx['download_buttons'] = self.download_buttons
         ctx['cart'] = self.get_cart(
             answers=True, downloads=ctx['can_download'],
-            queryset=self.order.positions.all(),
-            payment_fee=self.order.payment_fee, payment_fee_tax_rate=self.order.payment_fee_tax_rate
+            queryset=self.order.positions.select_related('tax_rule'),
+            order=self.order
+        )
+        ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
+            self.request.event.settings.ticket_download_nonadm or
+            [p.item.admission for p in ctx['cart']['positions']].count(True) > 1
         )
         ctx['invoices'] = list(self.order.invoices.all())
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
@@ -406,7 +412,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
     def invoice_form(self):
         return InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
                                   event=self.request.event,
-                                  instance=self.invoice_address)
+                                  instance=self.invoice_address, validate_vat_id=False)
 
     def post(self, request, *args, **kwargs):
         failed = not self.save() or not self.invoice_form.is_valid()
@@ -497,11 +503,15 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
 class AnswerDownload(EventViewMixin, OrderDetailMixin, View):
     def get(self, request, *args, **kwargs):
         answid = kwargs.get('answer')
+        token = request.GET.get('token', '')
+
         answer = get_object_or_404(QuestionAnswer, orderposition__order=self.order, id=answid)
         if not answer.file:
-            return Http404()
+            raise Http404()
+        if not check_token(request, answer, token):
+            raise Http404(_("This link is no longer valid. Please go back, refresh the page, and try again."))
 
-        ftype, _ = mimetypes.guess_type(answer.file.name)
+        ftype, ignored = mimetypes.guess_type(answer.file.name)
         resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
         resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}"'.format(
             self.request.event.slug.upper(), self.order.code,

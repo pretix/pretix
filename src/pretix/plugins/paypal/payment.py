@@ -12,9 +12,23 @@ from pretix.base.models import Order, Quota, RequiredAction
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
+from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.plugins.paypal.models import ReferencedPayPalObject
 
 logger = logging.getLogger('pretix.plugins.paypal')
+
+
+class RefundForm(forms.Form):
+    auto_refund = forms.ChoiceField(
+        initial='auto',
+        label=_('Refund automatically?'),
+        choices=(
+            ('auto', _('Automatically refund charge with PayPal')),
+            ('manual', _('Do not send refund instruction to PayPal, only mark as refunded in pretix'))
+        ),
+        widget=forms.RadioSelect,
+    )
 
 
 class Paypal(BasePaymentProvider):
@@ -55,7 +69,7 @@ class Paypal(BasePaymentProvider):
         return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
             _('Please configure a PayPal Webhook to the following endpoint in order to automatically cancel orders '
               'when payments are refunded externally.'),
-            build_absolute_uri(self.event, 'plugins:paypal:webhook')
+            build_global_uri('plugins:paypal:webhook')
         )
 
     def init_api(self):
@@ -154,6 +168,7 @@ class Paypal(BasePaymentProvider):
 
         self.init_api()
         payment = paypalrestsdk.Payment.find(request.session.get('payment_paypal_id'))
+        ReferencedPayPalObject.objects.get_or_create(order=order, reference=payment.id)
         if str(payment.transactions[0].amount.total) != str(order.total) or payment.transactions[0].amount.currency != \
                 self.event.currency:
             logger.error('Value mismatch: Order %s vs payment %s' % (order.id, str(payment)))
@@ -245,10 +260,28 @@ class Paypal(BasePaymentProvider):
                'payment_info': payment_info, 'order': order}
         return template.render(ctx)
 
-    def order_control_refund_render(self, order) -> str:
-        return '<div class="alert alert-info">%s</div>' % _('The money will be automatically refunded.')
+    def _refund_form(self, request):
+        return RefundForm(data=request.POST if request.method == "POST" else None)
+
+    def order_control_refund_render(self, order, request) -> str:
+        template = get_template('pretixplugins/paypal/control_refund.html')
+        ctx = {
+            'request': request,
+            'form': self._refund_form(request),
+        }
+        return template.render(ctx)
 
     def order_control_refund_perform(self, request, order) -> "bool|str":
+        f = self._refund_form(request)
+        if not f.is_valid():
+            messages.error(request, _('Your input was invalid, please try again.'))
+            return
+        elif f.cleaned_data.get('auto_refund') == 'manual':
+            order = mark_order_refunded(order, user=request.user)
+            order.payment_manual = True
+            order.save()
+            return
+
         self.init_api()
 
         if order.payment_info:

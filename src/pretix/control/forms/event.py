@@ -9,9 +9,11 @@ from i18nfield.forms import I18nFormField, I18nTextarea
 from pytz import common_timezones, timezone
 
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
-from pretix.base.models import Event, Organizer
+from pretix.base.models import Event, Organizer, TaxRule
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
-from pretix.control.forms import ExtFileField
+from pretix.control.forms import ExtFileField, SlugWidget
+from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.presale.style import get_fonts
 
 
 class EventWizardFoundationForm(forms.Form):
@@ -57,6 +59,13 @@ class EventWizardBasicsForm(I18nModelForm):
         choices=settings.LANGUAGES,
         label=_("Default language"),
     )
+    tax_rate = forms.DecimalField(
+        label=_("Sales tax rate"),
+        help_text=_("Do you need to pay sales tax on your tickets? In this case, please enter the applicable tax rate "
+                    "here in percent. If you have a more complicated tax situation, you can add more tax rates and "
+                    "detailled configuration later."),
+        required=False
+    )
 
     class Meta:
         model = Event
@@ -77,6 +86,7 @@ class EventWizardBasicsForm(I18nModelForm):
             'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
             'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker',
                                                       'data-date-after': '#id_basics-presale_start'}),
+            'slug': SlugWidget
         }
 
     def __init__(self, *args, **kwargs):
@@ -88,6 +98,7 @@ class EventWizardBasicsForm(I18nModelForm):
         self.initial['timezone'] = get_current_timezone_name()
         self.fields['locale'].choices = [(a, b) for a, b in settings.LANGUAGES if a in self.locales]
         self.fields['location'].widget.attrs['rows'] = '3'
+        self.fields['slug'].widget.prefix = build_absolute_uri(self.organizer, 'presale:organizer.index')
         if self.has_subevents:
             del self.fields['presale_start']
             del self.fields['presale_end']
@@ -179,7 +190,8 @@ class EventUpdateForm(I18nModelForm):
         widgets = {
             'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
             'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker', 'data-date-after': '#id_date_from'}),
-            'date_admission': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'date_admission': forms.DateTimeInput(attrs={'class': 'datetimepicker',
+                                                         'data-date-default': '#id_date_from'}),
             'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
             'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker',
                                                       'data-date-after': '#id_presale_start'}),
@@ -371,24 +383,28 @@ class PaymentSettingsForm(SettingsForm):
                     "configured above."),
         required=False
     )
-    tax_rate_default = forms.DecimalField(
-        label=_('Tax rate for payment fees'),
-        help_text=_("The tax rate that applies for additional fees you configured for single payment methods "
-                    "(in percent)."),
+    tax_rate_default = forms.ModelChoiceField(
+        queryset=TaxRule.objects.none(),
+        label=_('Tax rule for payment fees'),
+        required=False,
+        help_text=_("The tax rule that applies for additional fees you configured for single payment methods. This "
+                    "will set the tax rate and reverse charge rules, other settings of the tax rule are ignored.")
     )
 
     def clean(self):
         cleaned_data = super().clean()
         payment_term_last = cleaned_data.get('payment_term_last')
-        print(payment_term_last)
         if payment_term_last and self.obj.presale_end:
-            print(payment_term_last, payment_term_last.datetime(self.obj), self.obj.presale_end.date())
-            if payment_term_last.datetime(self.obj) < self.obj.presale_end.date():
+            if payment_term_last.date(self.obj) < self.obj.presale_end.date():
                 self.add_error(
                     'payment_term_last',
                     _('The last payment date cannot be before the end of presale.'),
                 )
         return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['tax_rate_default'].queryset = self.obj.tax_rules.all()
 
 
 class ProviderForm(SettingsForm):
@@ -434,16 +450,38 @@ class InvoiceSettingsForm(SettingsForm):
         required=False,
         widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
     )
+    invoice_name_required = forms.BooleanField(
+        label=_("Require customer name"),
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={'data-checkbox-dependency': '#id_invoice_address_asked',
+                   'data-inverse-dependency': '#id_invoice_address_required'}
+        ),
+    )
     invoice_address_vatid = forms.BooleanField(
         label=_("Ask for VAT ID"),
         help_text=_("Does only work if an invoice address is asked for. VAT ID is not required."),
         widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
         required=False
     )
+    invoice_include_free = forms.BooleanField(
+        label=_("Show free products on invoices"),
+        help_text=_("Note that invoices will never be generated for orders that contain only free "
+                    "products."),
+        required=False
+    )
     invoice_numbers_consecutive = forms.BooleanField(
         label=_("Generate invoices with consecutive numbers"),
         help_text=_("If deactivated, the order code will be used in the invoice number."),
         required=False
+    )
+    invoice_numbers_prefix = forms.CharField(
+        label=_("Invoice number prefix"),
+        help_text=_("This will be prepended to invoice numbers. If you leave this field empty, your event slug will "
+                    "be used followed by a dash. Attention: If multiple events within the same organization use the "
+                    "same value in this field, they will share their number range, i.e. every full number will be "
+                    "used at most once over all of your events. This setting only affects future invoices."),
+        required=False,
     )
     invoice_generate = forms.ChoiceField(
         label=_("Generate invoices"),
@@ -503,13 +541,14 @@ class InvoiceSettingsForm(SettingsForm):
         self.fields['invoice_renderer'].choices = [
             (r.identifier, r.verbose_name) for r in event.get_invoice_renderers().values()
         ]
+        self.fields['invoice_numbers_prefix'].widget.attrs['placeholder'] = event.slug.upper() + '-'
 
 
 class MailSettingsForm(SettingsForm):
     mail_prefix = forms.CharField(
         label=_("Subject prefix"),
-        help_text=_("This will be prepended to the subject of all outgoing emails. This could be a short form of "
-                    "your event name."),
+        help_text=_("This will be prepended to the subject of all outgoing emails, formatted as [prefix]. "
+                    "Choose, for example, a short form of your event name."),
         required=False
     )
     mail_from = forms.EmailField(
@@ -597,6 +636,29 @@ class MailSettingsForm(SettingsForm):
         help_text=_("Available placeholders: {event}, {code}, {url}"),
         validators=[PlaceholderValidator(['{event}', '{code}', '{url}'])]
     )
+    mail_text_order_custom_mail = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
+                    "{invoice_name}, {invoice_company}"),
+        validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
+                                          '{invoice_name}', '{invoice_company}'])]
+    )
+    mail_text_download_reminder = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {url}"),
+        validators=[PlaceholderValidator(['{event}', '{url}'])]
+    )
+    mail_days_download_reminder = forms.IntegerField(
+        label=_("Number of days"),
+        required=False,
+        min_value=0,
+        help_text=_("This email will be sent out this many days before the order event starts. If the "
+                    "field is empty, the mail will never be sent.")
+    )
     smtp_use_custom = forms.BooleanField(
         label=_("Use custom SMTP server"),
         help_text=_("All mail related to your event will be sent over the smtp server specified by you."),
@@ -656,10 +718,17 @@ class DisplaySettingsForm(SettingsForm):
     )
     logo_image = ExtFileField(
         label=_('Logo image'),
-        ext_whitelist=(".png", ".jpg", ".svg", ".gif", ".jpeg"),
+        ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
         required=False,
         help_text=_('If you provide a logo image, we will by default not show your events name and date '
                     'in the page header. We will show your logo with a maximal height of 120 pixels.')
+    )
+    primary_font = forms.ChoiceField(
+        label=_('Font'),
+        choices=[
+            ('Open Sans', 'Open Sans')
+        ],
+        help_text=_('Only respected by modern browsers.')
     )
     frontpage_text = I18nFormField(
         label=_("Frontpage text"),
@@ -670,6 +739,12 @@ class DisplaySettingsForm(SettingsForm):
         label=_("Show variations of a product expanded by default"),
         required=False
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['primary_font'].choices += [
+            (a, a) for a in get_fonts()
+        ]
 
 
 class TicketSettingsForm(SettingsForm):
@@ -729,3 +804,9 @@ class CommentForm(I18nModelForm):
                 'class': 'helper-width-100',
             }),
         }
+
+
+class TaxRuleForm(I18nModelForm):
+    class Meta:
+        model = TaxRule
+        fields = ['name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country']

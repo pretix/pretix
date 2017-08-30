@@ -32,11 +32,26 @@ class BaseTicketOutput:
         """
         return self.settings.get('_enabled', as_type=bool)
 
+    @property
+    def multi_download_enabled(self) -> bool:
+        """
+        Returns whether or not the ``generate_order`` method may be called. Returns
+        ``True`` by default.
+        """
+        return True
+
     def generate(self, position: OrderPosition) -> Tuple[str, str, str]:
         """
         This method should generate the download file and return a tuple consisting of a
         filename, a file type and file content. The extension will be taken from the filename
         which is otherwise ignored.
+
+        .. note:: If the event uses the event series feature (internally called subevents)
+                  and your generated ticket contains information like the event name or date,
+                  you probably want to display the properties of the subevent. A common pattern
+                  to do this would be a declaration ``ev = position.subevent or position.order.event``
+                  and then access properties that are present on both classes like ``ev.name`` or
+                  ``ev.date_from``.
         """
         raise NotImplementedError()
 

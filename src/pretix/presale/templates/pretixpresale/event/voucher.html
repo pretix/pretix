@@ -25,7 +25,12 @@
             <input type="hidden" name="_voucher_code" value="{{ voucher.code }}">
             {% for tup in items_by_category %}
                 <section>
-                    {% if tup.0 %}<h3>{{ tup.0.name }}</h3>{% endif %}
+                    {% if tup.0 %}
+                        <h3>{{ tup.0.name }}</h3>
+                        {% if tup.0.description %}
+                            <p>{{ tup.0.description|localize|rich_text }}</p>
+                        {% endif %}
+                    {% endif %}
                     {% for item in tup.1 %}
                         {% if item.has_variations %}
                             <div class="item-with-variations">
@@ -33,7 +38,8 @@
                                     <div class="col-md-8 col-xs-12">
                                         {% if item.picture %}
                                             <a href="{{ item.picture.url }}" class="productpicture"
-                                                    data-title="{{ item.name }}"
+                                                    data-title="{{ item.name|force_escape|force_escape }}"
+                                                    {# Yes, double-escape to prevent XSS in lightbox #}
                                                     data-lightbox="{{ item.id }}">
                                                 <img src="{{ item.picture|thumbnail_url:'productlist' }}"
                                                         alt="{{ item.name }}"/>
@@ -76,20 +82,22 @@
                                                         <span class="input-group-addon">{{ event.currency }}</span>
                                                         <input type="number" class="form-control input-item-price"
                                                                 placeholder="0"
-                                                                min="{{ var.price|stringformat:"0.2f" }}"
+                                                                min="{% if event.settings.display_net_prices %}{{ var.display_price.net|stringformat:"0.2f" }}{% else %}{{ var.display_price.gross|stringformat:"0.2f" }}{% endif %}"
                                                                 name="price_{{ item.id }}_{{ var.id }}"
-                                                                step="any"
-                                                                value="{{ var.display_price|stringformat:"0.2f" }}">
+                                                                value="{% if event.settings.display_net_prices %}{{var.display_price.net|stringformat:"0.2f" }}{% else %}{{ var.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                                step="any">
                                                     </div>
+                                                {% elif event.settings.display_net_prices %}
+                                                    {{ event.currency }} {{ var.display_price.net|floatformat:2 }}
                                                 {% else %}
-                                                    {{ event.currency }} {{ var.display_price|floatformat:2 }}
+                                                    {{ event.currency }} {{ var.display_price.gross|floatformat:2 }}
                                                 {% endif %}
-                                                {% if item.tax_rate and event.settings.display_net_prices %}
-                                                    <small>{% blocktrans trimmed with rate=item.tax_rate %}
+                                                {% if var.display_price.rate and event.settings.display_net_prices %}
+                                                    <small>{% blocktrans trimmed with rate=var.display_price.rate name=var.display_price.name %}
                                                         <strong>plus</strong> {{ rate }}% taxes
                                                     {% endblocktrans %}</small>
-                                                {% elif item.tax_rate %}
-                                                    <small>{% blocktrans trimmed with rate=item.tax_rate %}
+                                                {% elif var.display_price.rate %}
+                                                    <small>{% blocktrans trimmed with rate=var.display_price.rate name=var.display_price.name %}
                                                         incl. {{ rate }}% taxes
                                                     {% endblocktrans %}</small>
                                                 {% endif %}
@@ -120,7 +128,8 @@
                                 <div class="col-md-8 col-xs-12">
                                     {% if item.picture %}
                                         <a href="{{ item.picture.url }}" class="productpicture"
-                                                data-title="{{ item.name }}"
+                                                data-title="{{ item.name|force_escape|force_escape }}"
+                                                {# Yes, double-escape to prevent XSS in lightbox #}
                                                 data-lightbox="{{ item.id }}">
                                             <img src="{{ item.picture|thumbnail_url:'productlist' }}"
                                                     alt="{{ item.name }}"/>
@@ -138,20 +147,23 @@
                                         <div class="input-group input-group-price">
                                             <span class="input-group-addon">{{ event.currency }}</span>
                                             <input type="number" class="form-control input-item-price" placeholder="0"
-                                                    min="{{ item.price|stringformat:"0.2f" }}"
+                                                    min="{% if event.settings.display_net_prices %}{{ item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
                                                     name="price_{{ item.id }}"
-                                                    step="any" value="{{ item.price|stringformat:"0.2f" }}">
+                                                    value="{% if event.settings.display_net_prices %}{{ item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                    step="any">
                                         </div>
+                                    {% elif event.settings.display_net_prices %}
+                                        {{ event.currency }} {{ item.display_price.net|floatformat:2 }}
                                     {% else %}
-                                        {{ event.currency }} {{ item.price|floatformat:2 }}
+                                        {{ event.currency }} {{ item.display_price.gross|floatformat:2 }}
                                     {% endif %}
-                                    {% if item.tax_rate and event.settings.display_net_prices %}
-                                        <small>{% blocktrans trimmed with rate=item.tax_rate %}
-                                            <strong>plus</strong> {{ rate }}% taxes
+                                    {% if item.display_price.rate and event.settings.display_net_prices %}
+                                        <small>{% blocktrans trimmed with rate=item.display_price.rate name=item.display_price.name %}
+                                            <strong>plus</strong> {{ rate }}% {{ name }}
                                         {% endblocktrans %}</small>
-                                    {% elif item.tax_rate %}
-                                        <small>{% blocktrans trimmed with rate=item.tax_rate %}
-                                            incl. {{ rate }}% taxes
+                                    {% elif item.display_price.rate %}
+                                        <small>{% blocktrans trimmed with rate=item.display_price.rate name=item.display_price.name %}
+                                            incl. {{ rate }}% {{ name }}
                                         {% endblocktrans %}</small>
                                     {% endif %}
                                 </div>

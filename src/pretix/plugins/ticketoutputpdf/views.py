@@ -16,7 +16,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
 
 from pretix.base.i18n import language
-from pretix.base.models import CachedFile
+from pretix.base.models import CachedFile, InvoiceAddress
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import ChartContainingView
 from pretix.helpers.database import rolledback_transaction
@@ -85,7 +85,8 @@ class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView
 
         if "preview" in request.POST:
             with rolledback_transaction(), language(request.event.settings.locale):
-                item = request.event.items.create(name=_("Sample product"), default_price=42.23)
+                item = request.event.items.create(name=_("Sample product"), default_price=42.23,
+                                                  description=_("Sample product description"))
                 item2 = request.event.items.create(name=_("Sample workshop"), default_price=23.40)
 
                 from pretix.base.models import Order
@@ -96,6 +97,8 @@ class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView
                 p = order.positions.create(item=item, attendee_name=_("John Doe"), price=item.default_price)
                 order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
                 order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
+
+                InvoiceAddress.objects.create(order=order, name=_("John Doe"), company=_("Sample company"))
 
                 prov = PdfTicketOutput(request.event,
                                        override_layout=(json.loads(request.POST.get("data"))

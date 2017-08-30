@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/base.html" %}
 {% load i18n %}
+{% load urlreplace %}
 {% load bootstrap3 %}
 {% block title %}{% trans "Events" %}{% endblock %}
 {% block content %}
@@ -47,12 +48,36 @@
         <table class="table table-condensed table-hover">
             <thead>
             <tr>
-                <th>{% trans "Event name" %}</th>
-                <th>{% trans "Short form" %}</th>
-                <th>{% trans "Organizer" %}</th>
-                <th>{% trans "Start date" %}</th>
-                <th>{% trans "End date" %}</th>
-                <th class="text-right">{% trans "Status" %}</th>
+                <th>
+                    {% trans "Event name" %}
+                </th>
+                <th>
+                    {% trans "Short form" %}
+                    <a href="?{% url_replace request 'ordering' '-slug' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'slug' %}"><i class="fa fa-caret-up"></i></a>
+                </th>
+                {% if not hide_orga %}
+                    <th>
+                        {% trans "Organizer" %}
+                        <a href="?{% url_replace request 'ordering' '-organizer' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'organizer' %}"><i class="fa fa-caret-up"></i></a>
+                    </th>
+                {% endif %}
+                <th>
+                    {% trans "Start date" %}
+                    <a href="?{% url_replace request 'ordering' '-date_from' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
+                </th>
+                <th>
+                    {% trans "End date" %}
+                    <a href="?{% url_replace request 'ordering' '-date_to' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'date_to' %}"><i class="fa fa-caret-up"></i></a>
+                </th>
+                <th class="text-right">
+                    {% trans "Status" %}
+                    <a href="?{% url_replace request 'ordering' '-live' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'live' %}"><i class="fa fa-caret-up"></i></a>
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -60,11 +85,26 @@
                 <tr>
                     <td>
                         <strong><a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong>
+                        {% if e.has_subevents %}
+                           <span class="label label-default">{% trans "Series" %}</span>
+                        {% endif %}
                     </td>
                     <td>{{ e.slug }}</td>
-                    <td>{{ e.organizer }}</td>
-                    <td>{{ e.get_date_from_display }}</td>
-                    <td>{{ e.get_date_to_display }}</td>
+                    {% if not hide_orga %}<td>{{ e.organizer }}</td>{% endif %}
+                    <td>
+                        {% if e.has_subevents %}
+                            {{ e.min_from|default_if_none:"" }}
+                        {% else %}
+                            {{ e.get_date_from_display }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if e.has_subevents %}
+                            {{ e.max_fromto|default_if_none:e.max_from|default_if_none:e.max_to|default_if_none:"" }}
+                        {% else %}
+                            {{ e.get_date_from_display }}
+                        {% endif %}
+                    </td>
                     <td class="text-right">
                         {% if not e.live %}
                             <span class="label label-danger">{% trans "Shop disabled" %}</span>

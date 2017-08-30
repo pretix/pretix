@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load urlreplace %}
 {% block title %}{% trans "Dates" context "subevent" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Dates" context "subevent" %}</h1>
@@ -42,9 +43,19 @@
             <table class="table table-hover table-quotas">
                 <thead>
                 <tr>
-                    <th>{% trans "Name" %}</th>
-                    <th>{% trans "Begin" %}</th>
-                    <th>{% trans "Status" %}</th>
+                    <th>
+                        {% trans "Name" %}
+                    </th>
+                    <th>
+                        {% trans "Begin" %}
+                        <a href="?{% url_replace request 'ordering' '-date_from' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
+                    </th>
+                    <th>
+                        {% trans "Status" %}
+                        <a href="?{% url_replace request 'ordering' '-active' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'active' %}"><i class="fa fa-caret-up"></i></a>
+                    </th>
                     <th></th>
                 </tr>
                 </thead>

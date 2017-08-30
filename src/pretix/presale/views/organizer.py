@@ -3,13 +3,20 @@ from collections import defaultdict
 from datetime import date, datetime, timedelta
 
 import pytz
+from django.conf import settings
 from django.db.models import Q
+from django.http import HttpResponse
+from django.utils.decorators import method_decorator
 from django.utils.timezone import now
+from django.views import View
+from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, TemplateView
 from pytz import UTC
 
+from pretix.base.i18n import language
 from pretix.base.models import Event, SubEvent
 from pretix.multidomain.urlreverse import eventreverse
+from pretix.presale.ical import get_ical
 from pretix.presale.views import OrganizerViewMixin
 
 
@@ -20,7 +27,8 @@ class OrganizerIndex(OrganizerViewMixin, ListView):
     paginate_by = 30
 
     def get(self, request, *args, **kwargs):
-        if request.organizer.settings.event_list_type == 'calendar':
+        style = request.GET.get("style", request.organizer.settings.event_list_type)
+        if style == "calendar":
             cv = CalendarView()
             cv.request = request
             return cv.get(request, *args, **kwargs)
@@ -215,3 +223,39 @@ class CalendarView(OrganizerViewMixin, TemplateView):
         ), before, after, ebd, timezones)
         self._multiple_timezones = len(timezones) > 1
         return ebd
+
+
+@method_decorator(cache_page(300), name='dispatch')
+class OrganizerIcalDownload(OrganizerViewMixin, View):
+    def get(self, request, *args, **kwargs):
+        events = list(
+            self.request.organizer.events.filter(is_public=True, live=True, has_subevents=False).order_by(
+                'date_from'
+            ).prefetch_related(
+                '_settings_objects', 'organizer___settings_objects'
+            )
+        )
+        events += list(
+            SubEvent.objects.filter(
+                event__organizer=self.request.organizer,
+                event__is_public=True,
+                event__live=True,
+                active=True
+            ).prefetch_related(
+                'event___settings_objects', 'event__organizer___settings_objects'
+            ).order_by(
+                'date_from'
+            )
+        )
+
+        if 'locale' in request.GET and request.GET.get('locale') in dict(settings.LANGUAGES):
+            with language(request.GET.get('locale')):
+                cal = get_ical(events)
+        else:
+            cal = get_ical(events)
+
+        resp = HttpResponse(cal.serialize(), content_type='text/calendar')
+        resp['Content-Disposition'] = 'attachment; filename="{}.ics"'.format(
+            request.organizer.slug
+        )
+        return resp

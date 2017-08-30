@@ -1,11 +1,11 @@
-import csv
 import io
 
+from defusedcsv import csv
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.db.models import Count, Q, Sum
+from django.db.models import Q, Sum
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
     JsonResponse,

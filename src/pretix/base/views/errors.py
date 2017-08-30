@@ -1,5 +1,8 @@
-from django.http import HttpResponseForbidden, HttpResponseNotFound
+from django.http import (
+    HttpResponseForbidden, HttpResponseNotFound, HttpResponseServerError,
+)
 from django.middleware.csrf import REASON_NO_CSRF_COOKIE, REASON_NO_REFERER
+from django.template import TemplateDoesNotExist, loader
 from django.template.loader import get_template
 from django.utils.functional import Promise
 from django.utils.translation import ugettext as _
@@ -53,3 +56,14 @@ def page_not_found(request, exception):
     template = get_template('404.html')
     body = template.render(context, request)
     return HttpResponseNotFound(body)
+
+
+@requires_csrf_token
+def server_error(request):
+    try:
+        template = loader.get_template('500.html')
+    except TemplateDoesNotExist:
+        return HttpResponseServerError('<h1>Server Error (500)</h1>', content_type='text/html')
+    return HttpResponseServerError(template.render({
+        'request': request
+    }))

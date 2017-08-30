@@ -76,12 +76,9 @@ event_patterns = [
 
 organizer_patterns = [
     url(r'^$', pretix.presale.views.organizer.OrganizerIndex.as_view(), name='organizer.index'),
-    url(r'^events/$',
-        pretix.presale.views.organizer.CalendarView.as_view(),
-        name='organizer.calendar'),
-    url(r'^events/(?P<year>[0-9]{4})/(?P<month>[0-9]{1,2})/$',
-        pretix.presale.views.organizer.CalendarView.as_view(),
-        name='organizer.calendar'),
+    url(r'^events/ical/$',
+        pretix.presale.views.organizer.OrganizerIcalDownload.as_view(),
+        name='organizer.ical'),
 ]
 
 locale_patterns = [

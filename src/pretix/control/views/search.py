@@ -22,7 +22,7 @@ class OrderSearch(ListView):
         return ctx
 
     def get_queryset(self):
-        qs = Order.objects.all().annotate(pcnt=Count('positions')).select_related('invoice_address')
+        qs = Order.objects.all().annotate(pcnt=Count('positions', distinct=True)).select_related('invoice_address')
         if not self.request.user.is_superuser:
             qs = qs.filter(
                 Q(event__organizer_id__in=self.request.user.teams.filter(

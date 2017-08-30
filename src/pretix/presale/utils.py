@@ -1,3 +1,4 @@
+import warnings
 from importlib import import_module
 from urllib.parse import urljoin
 
@@ -16,10 +17,13 @@ from pretix.presale.signals import process_request, process_response
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 
-def _detect_event(request, require_live=True):
+def _detect_event(request, require_live=True, require_plugin=None):
+    if hasattr(request, '_event_detected'):
+        return
+
     url = resolve(request.path_info)
     try:
-        if hasattr(request, 'organizer'):
+        if hasattr(request, 'organizer_domain'):
             # We are on an organizer's custom domain
             if 'organizer' in url.kwargs and url.kwargs['organizer']:
                 if url.kwargs['organizer'] != request.organizer.slug:
@@ -83,6 +87,10 @@ def _detect_event(request, require_live=True):
                 if not can_access:
                     raise PermissionDenied(_('The selected ticket shop is currently not available.'))
 
+            if require_plugin:
+                if require_plugin not in request.event.get_plugins():
+                    raise Http404(_('This feature is not enabled.'))
+
             for receiver, response in process_request.send(request.event, request=request):
                 if response:
                     return response
@@ -92,11 +100,13 @@ def _detect_event(request, require_live=True):
     except Organizer.DoesNotExist:
         raise Http404(_('The selected organizer was not found.'))
 
+    request._event_detected = True
 
-def event_view(function=None, require_live=True):
+
+def _event_view(function=None, require_live=True, require_plugin=None):
     def event_view_wrapper(func, require_live=require_live):
         def wrap(request, *args, **kwargs):
-            ret = _detect_event(request, require_live=require_live)
+            ret = _detect_event(request, require_live=require_live, require_plugin=require_plugin)
             if ret:
                 return ret
             else:
@@ -104,8 +114,24 @@ def event_view(function=None, require_live=True):
                 for receiver, r in process_response.send(request.event, request=request, response=response):
                     response = r
                 return response
+
+        for attrname in dir(func):
+            # Preserve flags like csrf_exempt
+            if not attrname.startswith('__'):
+                setattr(wrap, attrname, getattr(func, attrname))
         return wrap
 
     if function:
         return event_view_wrapper(function, require_live=require_live)
     return event_view_wrapper
+
+
+def event_view(function=None, require_live=True):
+    warnings.warn('The event_view decorator is deprecated since it will be automatically applied by the URL routing '
+                  'layer when you use event_urls.',
+                  DeprecationWarning)
+
+    def noop(fn):
+        return fn
+
+    return function or noop

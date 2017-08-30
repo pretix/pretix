@@ -1,4 +1,5 @@
 import json
+from decimal import Decimal
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.dispatch import receiver
@@ -32,7 +33,8 @@ class JSONExporter(BaseExporter):
                         'name': str(item.name),
                         'category': item.category_id,
                         'price': item.default_price,
-                        'tax_rate': item.tax_rate,
+                        'tax_rate': item.tax_rule.rate if item.tax_rule else Decimal('0.00'),
+                        'tax_name': str(item.tax_rule.name) if item.tax_rule else None,
                         'admission': item.admission,
                         'active': item.active,
                         'variations': [
@@ -44,7 +46,7 @@ class JSONExporter(BaseExporter):
                                 'name': str(variation)
                             } for variation in item.variations.all()
                         ]
-                    } for item in self.event.items.all().prefetch_related('variations')
+                    } for item in self.event.items.select_related('tax_rule').prefetch_related('variations')
                 ],
                 'questions': [
                     {

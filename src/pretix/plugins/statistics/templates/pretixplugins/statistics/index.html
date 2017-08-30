@@ -2,9 +2,15 @@
 {% load i18n %}
 {% load compress %}
 {% load staticfiles %}
+{% load escapejson %}
 {% block title %}{% trans "Statistics" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Statistics" %}</h1>
+    {% if request.event.has_subevents %}
+        <form class="form-inline helper-display-inline" action="" method="get">
+            {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
+        </form>
+    {% endif %}
     {% if has_orders %}
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -20,6 +26,14 @@
             </div>
             <div class="panel-body">
                 <div id="rev_chart" class="chart"></div>
+                {% if request.GET.subevent %}
+                    <div class="alert alert-info">
+                        {% blocktrans trimmed context "subevent" %}
+                            If you select a single date, payment method fees will not be listed here as it might not be clear which
+                            date they belong to.
+                        {% endblocktrans %}
+                    </div>
+                {% endif %}
             </div>
         </div>
         <div class="panel panel-default">
@@ -30,9 +44,9 @@
                 <div id="obp_chart" class="chart"></div>
             </div>
         </div>
-        <script type="application/json" id="obd-data">{{ obd_data|safe }}</script>
-        <script type="application/json" id="rev-data">{{ rev_data|safe }}</script>
-        <script type="application/json" id="obp-data">{{ obp_data|safe }}</script>
+        <script type="application/json" id="obd-data">{{ obd_data|escapejson }}</script>
+        <script type="application/json" id="rev-data">{{ rev_data|escapejson }}</script>
+        <script type="application/json" id="obp-data">{{ obp_data|escapejson }}</script>
         <script type="application/text" id="currency">{{ request.event.currency }}</script>
         <script type="application/javascript" src="{% static "pretixplugins/statistics/statistics.js" %}"></script>
     {% else %}

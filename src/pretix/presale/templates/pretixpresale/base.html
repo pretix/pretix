@@ -11,7 +11,7 @@
         <link rel="stylesheet" type="text/x-scss" href="{% static "lightbox/css/lightbox.scss" %}" />
     {% endcompress %}
     {% if css_file %}
-        <link rel="stylesheet" type="text/css" href="{{ css_file }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ css_file }}" nonce="{{ request.csp_nonce }}" />
     {% else %}
         {% compress css %}
             <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}"/>
@@ -34,6 +34,7 @@
     {{ html_head|safe }}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
+    {% block custom_header %}{% endblock %}
 </head>
 <body data-locale="{{ request.LANGUAGE_CODE }}">
 {% block above %}

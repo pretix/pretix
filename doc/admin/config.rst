@@ -60,6 +60,11 @@ Example::
 ``password_reset``
     Enables or disables password reset. Defaults to ``on``.
 
+``ecb_rates``
+    By default, pretix periodically downloads a XML file from the European Central Bank to retrieve exchange rates
+    that are used to print tax amounts in the customer currency on invoices for some currencies. Set to ``off`` to
+    disable this feature. Defaults to ``on``.
+
 
 Locale settings
 ---------------
@@ -164,13 +169,8 @@ Django settings
 Example::
 
     [django]
-    hosts=localhost
     secret=j1kjps5a5&4ilpn912s7a1!e2h!duz^i3&idu@_907s$wrz@x-
     debug=off
-
-``hosts``
-    Comma-separated list of allowed host names for this installation.
-    Default: ``localhost``
 
 ``secret``
     The secret to be used by Django for signing and verification purposes. If this

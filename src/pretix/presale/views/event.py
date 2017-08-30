@@ -5,26 +5,22 @@ from datetime import date, datetime, timedelta
 from importlib import import_module
 
 import pytz
-import vobject
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Prefetch, Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
-from django.utils.formats import date_format
-from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
-from pytz import timezone
 
-from pretix.base.decimal import round_decimal
 from pretix.base.models import ItemVariation
 from pretix.base.models.event import SubEvent
 from pretix.multidomain.urlreverse import eventreverse
+from pretix.presale.ical import get_ical
 from pretix.presale.views.organizer import (
     add_subevents_for_days, weeks_for_template,
 )
@@ -56,7 +52,7 @@ def get_grouped_items(event, subevent=None):
         & Q(hide_without_voucher=False)
         & ~Q(category__is_addon=True)
     ).select_related(
-        'category',  # for re-grouping
+        'category', 'tax_rule',  # for re-grouping
     ).prefetch_related(
         Prefetch('quotas',
                  to_attr='_subevent_quotas',
@@ -91,17 +87,9 @@ def get_grouped_items(event, subevent=None):
             item.order_max = min(item.cached_availability[1]
                                  if item.cached_availability[1] is not None else sys.maxsize,
                                  max_per_order)
-            item.price = item.default_price
+            price = item.default_price
+            item.display_price = item.tax(item_price_override.get(item.pk, price))
 
-            if event.settings.display_net_prices:
-                if item_price_override.get(item.pk):
-                    _p = item_price_override.get(item.pk)
-                    tax_value = round_decimal(_p * (1 - 100 / (100 + item.tax_rate)))
-                    item.display_price = _p - tax_value
-                else:
-                    item.display_price = item.default_price_net
-            else:
-                item.display_price = item_price_override.get(item.pk, item.price)
             display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
             for var in item.available_variations:
@@ -110,15 +98,7 @@ def get_grouped_items(event, subevent=None):
                                     if var.cached_availability[1] is not None else sys.maxsize,
                                     max_per_order)
 
-                if event.settings.display_net_prices:
-                    if var_price_override.get(var.pk):
-                        _p = var_price_override.get(var.pk)
-                        tax_value = round_decimal(_p * (1 - 100 / (100 + item.tax_rate)))
-                        var.display_price = _p - tax_value
-                    else:
-                        var.display_price = var.net_price
-                else:
-                    var.display_price = var_price_override.get(var.pk, var.price)
+                var.display_price = var.tax(var_price_override.get(var.pk, var.price))
 
                 display_add_to_cart = display_add_to_cart or var.order_max > 0
 
@@ -126,8 +106,10 @@ def get_grouped_items(event, subevent=None):
                 v for v in item.available_variations if v._subevent_quotas
             ]
             if len(item.available_variations) > 0:
-                item.min_price = min([v.display_price for v in item.available_variations])
-                item.max_price = max([v.display_price for v in item.available_variations])
+                item.min_price = min([v.display_price.net if event.settings.display_net_prices else
+                                      v.display_price.gross for v in item.available_variations])
+                item.max_price = max([v.display_price.net if event.settings.display_net_prices else
+                                      v.display_price.gross for v in item.available_variations])
             item._remove = not bool(item.available_variations)
 
     items = [item for item in items
@@ -199,7 +181,10 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
             self.request.event.get_cache().set('vouchers_exist', vouchers_exist)
         context['vouchers_exist'] = vouchers_exist
         context['ev'] = self.subevent or self.request.event
-        context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
+        if self.subevent:
+            context['frontpage_text'] = str(self.subevent.frontpage_text)
+        else:
+            context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
 
         if self.request.event.settings.event_list_type == "calendar":
             self._set_month_year()
@@ -230,10 +215,6 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
 
 class EventIcalDownload(EventViewMixin, View):
 
-    @cached_property
-    def event_timezone(self):
-        return timezone(self.request.event.settings.timezone)
-
     def get(self, request, *args, **kwargs):
         if not self.request.event:
             raise Http404(_('Unknown event code or not authorized to access this event.'))
@@ -249,37 +230,7 @@ class EventIcalDownload(EventViewMixin, View):
                 raise Http404(pgettext_lazy('subevent', 'Unknown date selected.'))
 
         event = self.request.event
-        ev = subevent or event
-        creation_time = datetime.now(pytz.utc)
-        cal = vobject.iCalendar()
-        cal.add('prodid').value = '-//pretix//{}//'.format(settings.PRETIX_INSTANCE_NAME)
-
-        vevent = cal.add('vevent')
-        vevent.add('summary').value = str(ev.name)
-        vevent.add('dtstamp').value = creation_time
-        vevent.add('location').value = str(ev.location)
-        vevent.add('organizer').value = event.organizer.name
-        vevent.add('uid').value = '{}-{}-{}-{}'.format(
-            event.organizer.slug, event.slug,
-            subevent.pk if subevent else '0',
-            creation_time.strftime('%Y%m%d%H%M%S%f')
-        )
-
-        if event.settings.show_times:
-            vevent.add('dtstart').value = ev.date_from.astimezone(self.event_timezone)
-        else:
-            vevent.add('dtstart').value = ev.date_from.astimezone(self.event_timezone).date()
-
-        if event.settings.show_date_to and ev.date_to:
-            if event.settings.show_times:
-                vevent.add('dtend').value = ev.date_to.astimezone(self.event_timezone)
-            else:
-                vevent.add('dtend').value = ev.date_to.astimezone(self.event_timezone).date()
-
-        if event.date_admission:
-            vevent.add('description').value = str(_('Admission: {datetime}')).format(
-                datetime=date_format(ev.date_admission.astimezone(self.event_timezone), 'SHORT_DATETIME_FORMAT')
-            )
+        cal = get_ical([subevent or event])
 
         resp = HttpResponse(cal.serialize(), content_type='text/calendar')
         resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}.ics"'.format(

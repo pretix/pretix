@@ -119,16 +119,23 @@ class OrganizerSettingsForm(SettingsForm):
         help_text=_('This will be displayed on the organizer homepage.')
     )
 
+    organizer_info_text = I18nFormField(
+        label=_('Info text'),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_('Not displayed anywhere by default, but if you want to, you can use this e.g. in ticket templates.')
+    )
+
     organizer_logo_image = ExtFileField(
         label=_('Logo image'),
-        ext_whitelist=(".png", ".jpg", ".svg", ".gif", ".jpeg"),
+        ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
         required=False,
         help_text=_('If you provide a logo image, we will by default not show your organization name '
                     'in the page header. We will show your logo with a maximal height of 120 pixels.')
     )
 
     event_list_type = forms.ChoiceField(
-        label=_('Event overview stile'),
+        label=_('Default overview style'),
         choices=(
             ('list', _('List')),
             ('calendar', _('Calendar'))

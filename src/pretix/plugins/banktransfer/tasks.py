@@ -142,7 +142,7 @@ def process_banktransfers(self, job: int, data: list) -> None:
                 pattern = re.compile("(%s)[ \-_]*([A-Z0-9]{%s})" % ("|".join(prefixes), code_len))
 
             for trans in transactions:
-                match = pattern.search(trans.reference.replace(" ", "").upper())
+                match = pattern.search(trans.reference.replace(" ", "").replace("\n", "").upper())
 
                 if match:
                     if job.event:

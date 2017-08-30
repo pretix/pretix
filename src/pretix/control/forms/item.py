@@ -41,6 +41,7 @@ class QuestionForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'question',
+            'help_text',
             'type',
             'required',
             'items'
@@ -124,6 +125,9 @@ class QuotaForm(I18nModelForm):
 
 
 class ItemCreateForm(I18nModelForm):
+    NONE = 'none'
+    EXISTING = 'existing'
+    NEW = 'new'
     has_variations = forms.BooleanField(label=_('The product should exist in multiple variations'),
                                         help_text=_('Select this option e.g. for t-shirts that come in multiple sizes. '
                                                     'You can select the variations in the next step.'),
@@ -132,7 +136,10 @@ class ItemCreateForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         self.event = kwargs['event']
         super().__init__(*args, **kwargs)
+
         self.fields['category'].queryset = self.instance.event.categories.all()
+        self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
+        self.fields['tax_rule'].empty_label = _('No taxation')
         self.fields['copy_from'] = forms.ModelChoiceField(
             label=_("Copy product information"),
             queryset=self.event.items.all(),
@@ -140,6 +147,41 @@ class ItemCreateForm(I18nModelForm):
             empty_label=_('Do not copy'),
             required=False
         )
+
+        if not self.event.has_subevents:
+            self.fields['quota_option'] = forms.ChoiceField(
+                label=_("Quota options"),
+                widget=forms.RadioSelect,
+                choices=(
+                    (self.NONE, _("Do not add to a quota now")),
+                    (self.EXISTING, _("Add product to an existing quota")),
+                    (self.NEW, _("Create a new quota for this product"))
+                ),
+                initial=self.NONE,
+                required=False
+            )
+
+            self.fields['quota_add_existing'] = forms.ModelChoiceField(
+                label=_("Add to existing quota"),
+                widget=forms.Select(),
+                queryset=self.instance.event.quotas.all(),
+                required=False
+            )
+
+            self.fields['quota_add_new_name'] = forms.CharField(
+                label=_("Name"),
+                max_length=200,
+                widget=forms.TextInput(attrs={'placeholder': _("New quota name")}),
+                required=False
+            )
+
+            self.fields['quota_add_new_size'] = forms.IntegerField(
+                min_value=0,
+                label=_("Size"),
+                widget=forms.TextInput(attrs={'placeholder': _("New quota size")}),
+                help_text=_("Leave empty for an unlimited number of tickets."),
+                required=False
+            )
 
     def save(self, *args, **kwargs):
         if self.cleaned_data.get('copy_from'):
@@ -152,9 +194,23 @@ class ItemCreateForm(I18nModelForm):
             self.instance.allow_cancel = self.cleaned_data['copy_from'].allow_cancel
             self.instance.min_per_order = self.cleaned_data['copy_from'].min_per_order
             self.instance.max_per_order = self.cleaned_data['copy_from'].max_per_order
+            self.instance.checkin_attention = self.cleaned_data['copy_from'].checkin_attention
             self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
 
         instance = super().save(*args, **kwargs)
+
+        if not self.event.has_subevents and not self.cleaned_data.get('has_variations'):
+            if self.cleaned_data.get('quota_option') == self.EXISTING and self.cleaned_data.get('quota_add_existing') is not None:
+                quota = self.cleaned_data.get('quota_add_existing')
+                quota.items.add(self.instance)
+            elif self.cleaned_data.get('quota_option') == self.NEW:
+                quota_name = self.cleaned_data.get('quota_add_new_name')
+                quota_size = self.cleaned_data.get('quota_add_new_size')
+
+                quota = Quota.objects.create(
+                    event=self.event, name=quota_name, size=quota_size
+                )
+                quota.items.add(self.instance)
 
         if self.cleaned_data.get('has_variations'):
             if self.cleaned_data.get('copy_from') and self.cleaned_data.get('copy_from').has_variations:
@@ -172,6 +228,23 @@ class ItemCreateForm(I18nModelForm):
 
         return instance
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if not self.event.has_subevents:
+            if cleaned_data.get('quota_option') == self.NEW:
+                if not self.cleaned_data.get('quota_add_new_name'):
+                    raise forms.ValidationError(
+                        {'quota_add_new_name': [_("Quota name is required.")]}
+                    )
+            elif cleaned_data.get('quota_option') == self.EXISTING:
+                if not self.cleaned_data.get('quota_add_existing'):
+                    raise forms.ValidationError(
+                        {'quota_add_existing': [_("Please select a quota.")]}
+                    )
+
+        return cleaned_data
+
     class Meta:
         model = Item
         localized_fields = '__all__'
@@ -180,7 +253,7 @@ class ItemCreateForm(I18nModelForm):
             'category',
             'admission',
             'default_price',
-            'tax_rate',
+            'tax_rule',
             'allow_cancel'
         ]
 
@@ -189,6 +262,7 @@ class ItemUpdateForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = self.instance.event.categories.all()
+        self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
 
     class Meta:
         model = Item
@@ -202,7 +276,7 @@ class ItemUpdateForm(I18nModelForm):
             'picture',
             'default_price',
             'free_price',
-            'tax_rate',
+            'tax_rule',
             'available_from',
             'available_until',
             'require_voucher',
@@ -210,6 +284,7 @@ class ItemUpdateForm(I18nModelForm):
             'allow_cancel',
             'max_per_order',
             'min_per_order',
+            'checkin_attention'
         ]
         widgets = {
             'available_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),

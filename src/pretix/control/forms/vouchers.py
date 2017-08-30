@@ -8,6 +8,7 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import Item, ItemVariation, Quota, Voucher
+from pretix.control.signals import voucher_form_validation
 
 
 class VoucherForm(I18nModelForm):
@@ -121,6 +122,8 @@ class VoucherForm(I18nModelForm):
         if 'code' in data and Voucher.objects.filter(Q(code=data['code']) & Q(event=self.instance.event) & ~Q(pk=self.instance.pk)).exists():
             raise ValidationError(_('A voucher with this code already exists.'))
 
+        voucher_form_validation.send(sender=self.instance.event, form=self, data=data)
+
         return data
 
     def _clean_quota_needs_checking(self, data):
@@ -178,7 +181,7 @@ class VoucherForm(I18nModelForm):
                 return
             else:
                 avail = self.instance.quota.availability()
-        elif self.instance.item.has_variations and not self.instance.variation:
+        elif self.instance.item and self.instance.item.has_variations and not self.instance.variation:
             raise ValidationError(_('You can only block quota if you specify a specific product variation. '
                                     'Otherwise it might be unclear which quotas to block.'))
         elif self.instance.item and self.instance.variation:

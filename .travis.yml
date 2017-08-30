@@ -13,11 +13,11 @@ services:
 matrix:
   include:
     - python: 3.4
-      env: JOB=tests PRETIX_CONFIG_FILE=tests/sqlite.cfg
+      env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_sqlite.cfg
     - python: 3.5
-      env: JOB=tests PRETIX_CONFIG_FILE=tests/sqlite.cfg
+      env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_sqlite.cfg
     - python: 3.6
-      env: JOB=tests PRETIX_CONFIG_FILE=tests/sqlite.cfg
+      env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_sqlite.cfg
     - python: 3.4
       env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_mysql.cfg
     - python: 3.5

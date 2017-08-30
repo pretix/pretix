@@ -22,6 +22,7 @@ event_router.register(r'vouchers', voucher.VoucherViewSet)
 event_router.register(r'orders', order.OrderViewSet)
 event_router.register(r'orderpositions', order.OrderPositionViewSet)
 event_router.register(r'invoices', order.InvoiceViewSet)
+event_router.register(r'taxrules', event.TaxRuleViewSet)
 event_router.register(r'waitinglistentries', waitinglist.WaitingListViewSet)
 
 # Force import of all plugins to give them a chance to register URLs with the router

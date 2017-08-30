@@ -1,20 +1,30 @@
 from django import forms
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
+from django.db.models.functions import Concat
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
-from pretix.base.models import Item, Order, Organizer, SubEvent
+from pretix.base.models import Invoice, Item, Order, Organizer, SubEvent
 from pretix.base.signals import register_payment_providers
 from pretix.control.utils.i18n import i18ncomp
 
 
 class FilterForm(forms.Form):
+    orders = {}
+
     def filter_qs(self, qs):
         return qs
 
     @property
     def filtered(self):
         return self.is_valid() and any(self.cleaned_data.values())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['ordering'] = forms.ChoiceField(
+            choices=sum([[(a, b), ('-' + a, '-' + b)] for a, b in self.orders.items()], []),
+            required=False
+        )
 
 
 class OrderFilterForm(FilterForm):
@@ -46,11 +56,24 @@ class OrderFilterForm(FilterForm):
 
         if fdata.get('query'):
             u = fdata.get('query')
+
             if "-" in u:
                 code = (Q(event__slug__icontains=u.split("-")[0])
                         & Q(code__icontains=Order.normalize_code(u.split("-")[1])))
             else:
                 code = Q(code__icontains=Order.normalize_code(u))
+
+            matching_invoice = Invoice.objects.filter(
+                order=OuterRef('pk'),
+            ).annotate(
+                inr=Concat('prefix', 'invoice_no')
+            ).filter(
+                Q(invoice_no__iexact=u)
+                | Q(invoice_no__iexact=u.zfill(5))
+                | Q(inr=u)
+            )
+
+            qs = qs.annotate(has_inv=Exists(matching_invoice))
             qs = qs.filter(
                 code
                 | Q(email__icontains=u)
@@ -58,6 +81,7 @@ class OrderFilterForm(FilterForm):
                 | Q(positions__attendee_email__icontains=u)
                 | Q(invoice_address__name__icontains=u)
                 | Q(invoice_address__company__icontains=u)
+                | Q(has_inv=True)
             )
 
         if fdata.get('status'):
@@ -161,6 +185,10 @@ class OrderSearchFilterForm(OrderFilterForm):
 
 
 class SubEventFilterForm(FilterForm):
+    orders = {
+        'date_from': 'date_from',
+        'active': 'active'
+    }
     status = forms.ChoiceField(
         label=_('Status'),
         choices=(
@@ -208,10 +236,20 @@ class SubEventFilterForm(FilterForm):
                 Q(name__icontains=i18ncomp(query)) | Q(location__icontains=query)
             )
 
+        if fdata.get('ordering'):
+            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
+
         return qs
 
 
 class EventFilterForm(FilterForm):
+    orders = {
+        'slug': 'slug',
+        'organizer': 'organizer__name',
+        'date_from': 'order_from',
+        'date_to': 'order_to',
+        'live': 'live'
+    }
     status = forms.ChoiceField(
         label=_('Status'),
         choices=(
@@ -277,5 +315,8 @@ class EventFilterForm(FilterForm):
             qs = qs.filter(
                 Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query)
             )
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
 
         return qs

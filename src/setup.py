@@ -50,14 +50,16 @@ setup(
     author_email='mail@raphaelmichel.de',
     license='Apache License 2.0',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Intended Audience :: Other Audience',
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+        'Environment :: Web Environment',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-        'Framework :: Django :: 1.10'
+        'Framework :: Django :: 1.11'
     ],
 
     keywords='tickets web shop ecommerce',
@@ -97,12 +99,16 @@ setup(
         'pycparser==2.13',
         'django-redis==4.7.*',
         'redis==2.10.5',
-        'stripe==1.22.*',
+        'stripe==1.62.*',
         'chardet<3.1.0,>=3.0.2',
         'mt-940==4.7',
         'django-i18nfield>=1.0.1',
         'vobject==0.9.*',
-        'pycountry'
+        'pycountry',
+        'django-countries',
+        'pyuca',
+        'defusedcsv',
+        'vat_moss==0.11.0',
     ],
     extras_require={
         'dev': [

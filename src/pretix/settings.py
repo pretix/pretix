@@ -14,7 +14,7 @@ from . import __version__
 
 config = configparser.RawConfigParser()
 if 'PRETIX_CONFIG_FILE' in os.environ:
-    config.read([os.environ.get('PRETIX_CONFIG_FILE')], encoding='utf-8')
+    config.read_file(open(os.environ.get('PRETIX_CONFIG_FILE'), encoding='utf-8'))
 else:
     config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
                 encoding='utf-8')
@@ -44,7 +44,10 @@ else:
         SECRET_KEY = get_random_string(50, chars)
         with open(SECRET_FILE, 'w') as f:
             os.chmod(SECRET_FILE, 0o600)
-            os.chown(SECRET_FILE, os.getuid(), os.getgid())
+            try:
+                os.chown(SECRET_FILE, os.getuid(), os.getgid())
+            except AttributeError:
+                pass  # os.chown is not available on Windows
             f.write(SECRET_KEY)
 
 # Adjustable settings
@@ -83,10 +86,15 @@ PRETIX_REGISTRATION = config.getboolean('pretix', 'registration', fallback=True)
 PRETIX_PASSWORD_RESET = config.getboolean('pretix', 'password_reset', fallback=True)
 
 SITE_URL = config.get('pretix', 'url', fallback='http://localhost')
+if SITE_URL.endswith('/'):
+    SITE_URL = SITE_URL[:-1]
+
 CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).hostname]
 
 PRETIX_PLUGINS_DEFAULT = config.get('pretix', 'plugins_default',
                                     fallback='pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists')
+
+FETCH_ECB_RATES = config.getboolean('pretix', 'ecb_rates', fallback=True)
 
 DEFAULT_CURRENCY = config.get('pretix', 'currency', fallback='EUR')
 CURRENCIES = list(currencies)
@@ -213,6 +221,7 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_totp',
     'django_otp.plugins.otp_static',
     'statici18n',
+    'django_countries'
 ]
 
 try:
@@ -225,18 +234,6 @@ PLUGINS = []
 for entry_point in iter_entry_points(group='pretix.plugin', name=None):
     PLUGINS.append(entry_point.module_name)
     INSTALLED_APPS.append(entry_point.module_name)
-
-if config.has_option('sentry', 'dsn'):
-    INSTALLED_APPS += [
-        'raven.contrib.django.raven_compat',
-    ]
-    DISABLE_SENTRY_INSTRUMENTATION = True  # see celery.py for more, we use this differently
-    RAVEN_CONFIG = {
-        'dsn': config.get('sentry', 'dsn'),
-        'transport': 'raven.transport.threaded_requests.ThreadedRequestsHTTPTransport',
-        'release': __version__,
-        'environment': SITE_URL,
-    }
 
 
 REST_FRAMEWORK = {
@@ -486,6 +483,17 @@ LOGGING = {
         }
     },
 }
+
+if config.has_option('sentry', 'dsn'):
+    INSTALLED_APPS += [
+        'pretix.sentry.App',
+    ]
+    RAVEN_CONFIG = {
+        'dsn': config.get('sentry', 'dsn'),
+        'transport': 'raven.transport.threaded_requests.ThreadedRequestsHTTPTransport',
+        'release': __version__,
+        'environment': SITE_URL,
+    }
 
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

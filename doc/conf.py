@@ -13,6 +13,10 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+from docutils.parsers.rst.directives.admonitions import BaseAdmonition
+from sphinx.util import compat
+compat.make_admonition = BaseAdmonition  # See https://github.com/spinus/sphinxcontrib-images/issues/41
+
 import sys
 import os
 
@@ -38,9 +42,9 @@ django.setup()
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
-    'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinxcontrib.httpdomain',
+    'sphinxcontrib.images',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -281,3 +285,8 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+
+images_config = {
+    'default_image_width': '250px'
+}

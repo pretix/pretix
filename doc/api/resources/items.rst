@@ -27,6 +27,7 @@ free_price                            boolean                    If ``True``, cu
                                                                  lower than the price defined by ``default_price`` or
                                                                  otherwise).
 tax_rate                              decimal (string)           The VAT rate to be applied for this item.
+tax_rule                              integer                    The internal ID of the applied tax rule (or ``null``).
 admission                             boolean                    ``True`` for items that grant admission to the event
                                                                  (such as primary tickets) and ``False`` for others
                                                                  (such as add-ons or merchandise).
@@ -49,6 +50,9 @@ min_per_order                         integer                    This product ca
 max_per_order                         integer                    This product can only be bought if it is included at
                                                                  most this many times in the order (or ``null`` for no
                                                                  limitation).
+checkin_attention                     boolean                    If ``True``, the check-in app should show a warning
+                                                                 that this ticket requires special attention if such
+                                                                 a product is being scanned.
 has_variations                        boolean                    Shows whether or not this item has variations
                                                                  (read-only).
 variations                            list of objects            A list with one object for each variation of this item.
@@ -69,6 +73,11 @@ addons                                list of objects            Definition of a
 ├ max_count                           integer                    The maxima number of add-ons that can be chosen.
 └ position                            integer                    An integer, used for sorting
 ===================================== ========================== =======================================================
+
+.. versionchanged:: 1.7
+
+   The attribute ``tax_rule`` has been added. ``tax_rate`` is kept for compatibility. The attribute
+   ``checkin_attention`` has been added.
 
 
 Endpoints
@@ -108,6 +117,7 @@ Endpoints
             "description": null,
             "free_price": false,
             "tax_rate": "0.00",
+            "tax_rule": 1,
             "admission": false,
             "position": 0,
             "picture": null,
@@ -118,6 +128,7 @@ Endpoints
             "allow_cancel": true,
             "min_per_order": null,
             "max_per_order": null,
+            "checkin_attention": false,
             "has_variations": false,
             "variations": [
               {
@@ -188,6 +199,7 @@ Endpoints
         "description": null,
         "free_price": false,
         "tax_rate": "0.00",
+        "tax_rule": 1,
         "admission": false,
         "position": 0,
         "picture": null,
@@ -198,6 +210,7 @@ Endpoints
         "allow_cancel": true,
         "min_per_order": null,
         "max_per_order": null,
+        "checkin_attention": false,
         "has_variations": false,
         "variations": [
           {

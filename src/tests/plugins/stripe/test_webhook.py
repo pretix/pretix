@@ -8,6 +8,7 @@ from django.utils.timezone import now
 from pretix.base.models import (
     Event, Order, Organizer, RequiredAction, Team, User,
 )
+from pretix.plugins.stripe.models import ReferencedStripeObject
 
 
 @pytest.fixture
@@ -15,7 +16,7 @@ def env():
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
-        organizer=o, name='Dummy', slug='dummy',
+        organizer=o, name='Dummy', slug='dummy', plugins='pretix.plugins.stripe',
         date_from=now(), live=True
     )
     t = Team.objects.create(organizer=event.organizer, can_view_orders=True, can_change_orders=True)
@@ -215,3 +216,38 @@ def test_webhook_partial_refund(env, client, monkeypatch):
     order = env[1]
     order.refresh_from_db()
     assert order.status == Order.STATUS_REFUNDED
+
+
+@pytest.mark.django_db
+def test_webhook_global(env, client, monkeypatch):
+    order = env[1]
+    order.status = Order.STATUS_PENDING
+    order.save()
+
+    charge = get_test_charge(env[1])
+    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args: charge)
+
+    ReferencedStripeObject.objects.create(order=order, reference="ch_18TY6GGGWE2Ias8TZHanef25")
+
+    client.post('/_stripe/webhook/', json.dumps(
+        {
+            "id": "evt_18otImGGWE2Ias8TUyVRDB1G",
+            "object": "event",
+            "api_version": "2016-03-07",
+            "created": 1472729052,
+            "data": {
+                "object": {
+                    "id": "ch_18TY6GGGWE2Ias8TZHanef25",
+                    "object": "charge",
+                    # Rest of object is ignored anway
+                }
+            },
+            "livemode": True,
+            "pending_webhooks": 1,
+            "request": "req_977XOWC8zk51Z9",
+            "type": "charge.succeeded"
+        }
+    ), content_type='application_json')
+
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID

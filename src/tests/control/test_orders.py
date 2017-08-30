@@ -1,9 +1,11 @@
 from datetime import timedelta
 from decimal import Decimal
+from unittest import mock
 
 import pytest
 from django.core import mail
 from django.utils.timezone import now
+from django_countries.fields import Country
 from tests.base import SoupTest
 
 from pretix.base.models import (
@@ -452,6 +454,100 @@ def test_order_go_not_found(client, env):
     assert response['Location'].endswith('/control/event/dummy/dummy/orders/')
 
 
+@pytest.fixture
+def order_url(env):
+    event = env[0]
+    order = env[2]
+    url = '/control/event/{orga}/{event}/orders/{code}'.format(
+        event=event.slug, orga=event.organizer.slug, code=order.code
+    )
+    return url
+
+
+@pytest.mark.django_db
+def test_order_sendmail_view(client, order_url):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    sendmail_url = order_url + '/sendmail'
+    response = client.get(sendmail_url)
+
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_order_sendmail_simple_case(client, order_url, env):
+    order = env[2]
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    sendmail_url = order_url + '/sendmail'
+    mail.outbox = []
+    response = client.post(
+        sendmail_url,
+        {
+            'sendto': order.email,
+            'subject': 'Test subject',
+            'message': 'This is a test file for sending mails.'
+        },
+        follow=True)
+
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].to == [order.email]
+    assert mail.outbox[0].subject == 'Test subject'
+    assert 'This is a test file for sending mails.' in mail.outbox[0].body
+
+    mail_history_url = order_url + '/mail_history'
+    response = client.get(mail_history_url)
+
+    assert response.status_code == 200
+    assert 'Test subject' in response.rendered_content
+
+
+@pytest.mark.django_db
+def test_order_sendmail_preview(client, order_url, env):
+    order = env[2]
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    sendmail_url = order_url + '/sendmail'
+    mail.outbox = []
+    response = client.post(
+        sendmail_url,
+        {
+            'sendto': order.email,
+            'subject': 'Test subject',
+            'message': 'This is a test file for sending mails.',
+            'action': 'preview'
+        },
+        follow=True)
+
+    assert response.status_code == 200
+    assert 'E-mail preview' in response.rendered_content
+    assert len(mail.outbox) == 0
+
+
+@pytest.mark.django_db
+def test_order_sendmail_invalid_data(client, order_url, env):
+    order = env[2]
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    sendmail_url = order_url + '/sendmail'
+    mail.outbox = []
+    response = client.post(
+        sendmail_url,
+        {
+            'sendto': order.email,
+            'subject': 'Test invalid mail',
+        },
+        follow=True)
+
+    assert 'has-error' in response.rendered_content
+    assert len(mail.outbox) == 0
+
+    mail_history_url = order_url + '/mail_history'
+    response = client.get(mail_history_url)
+
+    assert response.status_code == 200
+    assert 'Test invalid mail' not in response.rendered_content
+
+
 class OrderChangeTests(SoupTest):
     def setUp(self):
         super().setUp()
@@ -464,9 +560,11 @@ class OrderChangeTests(SoupTest):
             datetime=now(), expires=now() + timedelta(days=10),
             total=Decimal('46.00'), payment_provider='banktransfer'
         )
-        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket', tax_rate=Decimal('7.00'),
+        self.tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
+        self.tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
+        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket', tax_rule=self.tr7,
                                           default_price=Decimal('23.00'), admission=True)
-        self.shirt = Item.objects.create(event=self.event, name='T-Shirt', tax_rate=Decimal('19.00'),
+        self.shirt = Item.objects.create(event=self.event, name='T-Shirt', tax_rule=self.tr19,
                                          default_price=Decimal('12.00'))
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
@@ -499,7 +597,7 @@ class OrderChangeTests(SoupTest):
         self.order.refresh_from_db()
         assert self.op1.item == self.shirt
         assert self.op1.price == self.shirt.default_price
-        assert self.op1.tax_rate == self.shirt.tax_rate
+        assert self.op1.tax_rate == self.shirt.tax_rule.rate
         assert self.order.total == self.op1.price + self.op2.price
 
     def test_change_subevent_success(self):
@@ -584,3 +682,135 @@ class OrderChangeTests(SoupTest):
         assert self.order.positions.count() == 3
         assert self.order.positions.last().item == self.shirt
         assert self.order.positions.last().price == 14
+
+    def test_recalculate_reverse_charge(self):
+        self.tr7.eu_reverse_charge = True
+        self.tr7.home_country = Country('DE')
+        self.tr7.save()
+        self.tr19.eu_reverse_charge = True
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        InvoiceAddress.objects.create(
+            order=self.order, is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+
+        self.client.post('/control/event/{}/{}/orders/{}/change'.format(
+            self.event.organizer.slug, self.event.slug, self.order.code
+        ), {
+            'other-recalculate_taxes': 'on',
+            'add-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+            'op-{}-operation'.format(self.op1.pk): '',
+            'op-{}-operation'.format(self.op2.pk): '',
+            'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+            'op-{}-price'.format(self.op2.pk): str(self.op2.price),
+            'op-{}-itemvar'.format(self.op1.pk): str(self.ticket.pk),
+            'op-{}-price'.format(self.op1.pk): str(self.op1.price),
+        })
+
+        ops = list(self.order.positions.all())
+        for op in ops:
+            assert op.price == Decimal('21.50')
+            assert op.tax_value == Decimal('0.00')
+            assert op.tax_rate == Decimal('0.00')
+
+
+@pytest.mark.django_db
+def test_check_vatid(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    ia = InvoiceAddress.objects.create(order=env[2], is_business=True, vat_id='ATU1234567', country=Country('AT'))
+    with mock.patch('vat_moss.id.validate') as mock_validate:
+        mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        assert 'alert-success' in response.rendered_content
+        ia.refresh_from_db()
+        assert ia.vat_id_validated
+
+
+@pytest.mark.django_db
+def test_check_vatid_no_entered(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    ia = InvoiceAddress.objects.create(order=env[2], is_business=True, country=Country('AT'))
+    with mock.patch('vat_moss.id.validate') as mock_validate:
+        mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        assert 'alert-danger' in response.rendered_content
+        ia.refresh_from_db()
+        assert not ia.vat_id_validated
+
+
+@pytest.mark.django_db
+def test_check_vatid_invalid_country(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    ia = InvoiceAddress.objects.create(order=env[2], is_business=True, vat_id='ATU1234567', country=Country('FR'))
+    with mock.patch('vat_moss.id.validate') as mock_validate:
+        mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        assert 'alert-danger' in response.rendered_content
+        ia.refresh_from_db()
+        assert not ia.vat_id_validated
+
+
+@pytest.mark.django_db
+def test_check_vatid_noneu_country(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    ia = InvoiceAddress.objects.create(order=env[2], is_business=True, vat_id='CHU1234567', country=Country('CH'))
+    with mock.patch('vat_moss.id.validate') as mock_validate:
+        mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        assert 'alert-danger' in response.rendered_content
+        ia.refresh_from_db()
+        assert not ia.vat_id_validated
+
+
+@pytest.mark.django_db
+def test_check_vatid_no_country(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    ia = InvoiceAddress.objects.create(order=env[2], is_business=True, vat_id='ATU1234567')
+    with mock.patch('vat_moss.id.validate') as mock_validate:
+        mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        assert 'alert-danger' in response.rendered_content
+        ia.refresh_from_db()
+        assert not ia.vat_id_validated
+
+
+@pytest.mark.django_db
+def test_check_vatid_no_invoiceaddress(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with mock.patch('vat_moss.id.validate') as mock_validate:
+        mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        assert 'alert-danger' in response.rendered_content
+
+
+@pytest.mark.django_db
+def test_check_vatid_invalid(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    ia = InvoiceAddress.objects.create(order=env[2], is_business=True, vat_id='ATU1234567', country=Country('AT'))
+    with mock.patch('vat_moss.id.validate') as mock_validate:
+        def raiser(*args, **kwargs):
+            import vat_moss.errors
+            raise vat_moss.errors.InvalidError('Fail')
+
+        mock_validate.side_effect = raiser
+        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        assert 'alert-danger' in response.rendered_content
+        ia.refresh_from_db()
+        assert not ia.vat_id_validated
+
+
+@pytest.mark.django_db
+def test_check_vatid_unavailable(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    ia = InvoiceAddress.objects.create(order=env[2], is_business=True, vat_id='ATU1234567', country=Country('AT'))
+    with mock.patch('vat_moss.id.validate') as mock_validate:
+        def raiser(*args, **kwargs):
+            import vat_moss.errors
+            raise vat_moss.errors.WebServiceUnavailableError('Fail')
+
+        mock_validate.side_effect = raiser
+        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        assert 'alert-danger' in response.rendered_content
+        ia.refresh_from_db()
+        assert not ia.vat_id_validated

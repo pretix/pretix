@@ -14,9 +14,23 @@ from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.base.settings import SettingsSandbox
+from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.plugins.stripe.models import ReferencedStripeObject
 
 logger = logging.getLogger('pretix.plugins.stripe')
+
+
+class RefundForm(forms.Form):
+    auto_refund = forms.ChoiceField(
+        initial='auto',
+        label=_('Refund automatically?'),
+        choices=(
+            ('auto', _('Automatically refund charge with Stripe')),
+            ('manual', _('Do not send refund instruction to Stripe, only mark as refunded in pretix'))
+        ),
+        widget=forms.RadioSelect,
+    )
 
 
 class StripeSettingsHolder(BasePaymentProvider):
@@ -33,7 +47,7 @@ class StripeSettingsHolder(BasePaymentProvider):
             _('Please configure a <a href="https://dashboard.stripe.com/account/webhooks">Stripe Webhook</a> to '
               'the following endpoint in order to automatically cancel orders when charges are refunded externally '
               'and to process asynchronous payment methods like SOFORT.'),
-            build_absolute_uri(self.event, 'plugins:stripe:webhook')
+            build_global_uri('plugins:stripe:webhook')
         )
 
     @property
@@ -182,6 +196,7 @@ class StripeMethod(BasePaymentProvider):
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
         else:
+            ReferencedStripeObject.objects.get_or_create(order=order, reference=charge.id)
             if charge.status == 'succeeded' and charge.paid:
                 try:
                     mark_order_paid(order, self.identifier, str(charge))
@@ -197,8 +212,9 @@ class StripeMethod(BasePaymentProvider):
                 except SendMailException:
                     raise PaymentException(_('There was an error sending the confirmation mail.'))
             elif charge.status == 'pending':
-                messages.warning(request, _('Your payment is pending completion. We will inform you as soon as the '
-                                            'payment completed.'))
+                if request:
+                    messages.warning(request, _('Your payment is pending completion. We will inform you as soon as the '
+                                                'payment completed.'))
                 order.payment_info = str(charge)
                 order.save(update_fields=['payment_info'])
                 return
@@ -243,11 +259,29 @@ class StripeMethod(BasePaymentProvider):
         }
         return template.render(ctx)
 
-    def order_control_refund_render(self, order) -> str:
-        return '<div class="alert alert-info">%s</div>' % _('The money will be automatically refunded.')
+    def _refund_form(self, request):
+        return RefundForm(data=request.POST if request.method == "POST" else None)
+
+    def order_control_refund_render(self, order, request) -> str:
+        template = get_template('pretixplugins/stripe/control_refund.html')
+        ctx = {
+            'request': request,
+            'form': self._refund_form(request),
+        }
+        return template.render(ctx)
 
     def order_control_refund_perform(self, request, order) -> "bool|str":
         self._init_api()
+
+        f = self._refund_form(request)
+        if not f.is_valid():
+            messages.error(request, _('Your input was invalid, please try again.'))
+            return
+        elif f.cleaned_data.get('auto_refund') == 'manual':
+            order = mark_order_refunded(order, user=request.user)
+            order.payment_manual = True
+            order.save()
+            return
 
         if order.payment_info:
             payment_info = json.loads(order.payment_info)
@@ -303,6 +337,7 @@ class StripeMethod(BasePaymentProvider):
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
 
+        ReferencedStripeObject.objects.get_or_create(order=order, reference=source.id)
         order.payment_info = str(source)
         order.save(update_fields=['payment_info'])
         request.session['payment_stripe_order_secret'] = order.secret

@@ -1,5 +1,6 @@
 import string
 import uuid
+from collections import OrderedDict
 from datetime import datetime, time
 
 import pytz
@@ -22,6 +23,7 @@ from pretix.base.models.base import LoggedModel
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.validators import EventSlugBlacklistValidator
 from pretix.helpers.daterange import daterange
+from pretix.helpers.json import safe_string
 
 from ..settings import settings_hierarkey
 from .organizer import Organizer
@@ -103,6 +105,30 @@ class EventMixin:
             return False
         return True
 
+    @property
+    def event_microdata(self):
+        import json
+
+        eventdict = {
+            "@context": "http://schema.org",
+            "@type": "Event", "location": {
+                "@type": "Place",
+                "address": str(self.location)
+            },
+            "name": str(self.name)
+        }
+
+        if self.settings.show_times:
+            eventdict["startDate"] = self.date_from.isoformat()
+            if self.settings.show_date_to and self.date_to is not None:
+                eventdict["endDate"] = self.date_to.isoformat()
+        else:
+            eventdict["startDate"] = self.date_from.date().isoformat()
+            if self.settings.show_date_to and self.date_to is not None:
+                eventdict["endDate"] = self.date_to.date().isoformat()
+
+        return safe_string(json.dumps(eventdict))
+
 
 @settings_hierarkey.add(parent_field='organizer', cache_namespace='event')
 class Event(EventMixin, LoggedModel):
@@ -163,7 +189,7 @@ class Event(EventMixin, LoggedModel):
     )
     live = models.BooleanField(default=False, verbose_name=_("Shop is live"))
     currency = models.CharField(max_length=10,
-                                verbose_name=_("Default currency"),
+                                verbose_name=_("Event currency"),
                                 choices=CURRENCY_CHOICES,
                                 default=settings.DEFAULT_CURRENCY)
     date_from = models.DateTimeField(verbose_name=_("Event start time"))
@@ -275,7 +301,15 @@ class Event(EventMixin, LoggedModel):
         from ..signals import event_copy_data
 
         self.plugins = other.plugins
+        self.is_public = other.is_public
         self.save()
+
+        tax_map = {}
+        for t in other.tax_rules.all():
+            tax_map[t.pk] = t
+            t.pk = None
+            t.event = self
+            t.save()
 
         category_map = {}
         for c in ItemCategory.objects.filter(event=other):
@@ -295,6 +329,8 @@ class Event(EventMixin, LoggedModel):
                 i.picture.save(i.picture.name, i.picture)
             if i.category_id:
                 i.category = category_map[i.category_id]
+            if i.tax_rule_id:
+                i.tax_rule = tax_map[i.tax_rule_id]
             i.save()
             for v in vars:
                 variation_map[v.pk] = v
@@ -344,7 +380,18 @@ class Event(EventMixin, LoggedModel):
                 )
                 newname = default_storage.save(fname, fi)
                 s.value = 'file://' + newname
-            s.save()
+                s.save()
+            elif s.key == 'tax_rate_default':
+                try:
+                    if int(s.value) in tax_map:
+                        s.value = tax_map.get(int(s.value)).pk
+                        s.save()
+                    else:
+                        s.delete()
+                except ValueError:
+                    s.delete()
+            else:
+                s.save()
 
         event_copy_data.send(sender=self, other=other)
 
@@ -362,7 +409,8 @@ class Event(EventMixin, LoggedModel):
             for p in response:
                 pp = p(self)
                 providers[pp.identifier] = pp
-        return providers
+
+        return OrderedDict(sorted(providers.items(), key=lambda v: str(v[1].verbose_name)))
 
     def get_invoice_renderers(self) -> dict:
         """
@@ -454,6 +502,10 @@ class SubEvent(EventMixin, LoggedModel):
         null=True, blank=True,
         max_length=200,
         verbose_name=_("Location"),
+    )
+    frontpage_text = I18nTextField(
+        null=True, blank=True,
+        verbose_name=_("Frontpage text")
     )
 
     items = models.ManyToManyField('Item', through='SubEventItem')

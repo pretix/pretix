@@ -98,7 +98,7 @@ class BasePaymentProvider:
         """
         A short and unique identifier for this payment provider.
         This should only contain lowercase letters and in most
-        cases will be the same as your packagename.
+        cases will be the same as your package name.
         """
         raise NotImplementedError()  # NOQA
 
@@ -161,9 +161,9 @@ class BasePaymentProvider:
             ('_fee_reverse_calc',
              forms.BooleanField(
                  label=_('Calculate the fee from the total value including the fee.'),
-                 help_text=_('We recommend you to enable this if you want your users to pay the payment fees of your '
+                 help_text=_('We recommend to enable this if you want your users to pay the payment fees of your '
                              'payment provider. <a href="{docs_url}" target="_blank">Click here '
-                             'for detailled information on what this does.</a> Don\'t forget to set the correct fees '
+                             'for detailed information on what this does.</a> Don\'t forget to set the correct fees '
                              'above!').format(docs_url='https://docs.pretix.eu/en/latest/user/payments/fees.html'),
                  required=False
              )),
@@ -215,7 +215,7 @@ class BasePaymentProvider:
         required fields for you.
         """
         form = PaymentProviderForm(
-            data=(request.POST if request.method == 'POST' else None),
+            data=(request.POST if request.method == 'POST' and request.POST.get("payment") == self.identifier else None),
             prefix='payment_%s' % self.identifier,
             initial={
                 k.replace('payment_%s_' % self.identifier, ''): v
@@ -277,7 +277,7 @@ class BasePaymentProvider:
 
     def payment_form_render(self, request: HttpRequest) -> str:
         """
-        When the user selects this provider as his prefered payment method,
+        When the user selects this provider as his preferred payment method,
         they will be shown the HTML you return from this method.
 
         The default implementation will call :py:meth:`checkout_form`
@@ -484,7 +484,7 @@ class BasePaymentProvider:
         """
         return _('Payment provider: %s' % self.verbose_name)
 
-    def order_control_refund_render(self, order: Order) -> str:
+    def order_control_refund_render(self, order: Order, request: HttpRequest=None) -> str:
         """
         Will be called if the event administrator clicks an order's 'refund' button.
         This can be used to display information *before* the order is being refunded.
@@ -494,6 +494,11 @@ class BasePaymentProvider:
         automatically.
 
         :param order: The order object
+        :param request: The HTTP request
+
+        .. versionchanged:: 1.6
+
+           The parameter ``request`` has been added.
         """
         return '<div class="alert alert-warning">%s</div>' % _('The money can not be automatically refunded, '
                                                                'please transfer the money back manually.')

@@ -27,6 +27,15 @@
                 <tr>
                     <td>
                         {{ u.email }}
+                        {% if u.require_2fa %}
+                            <span class="fa fa-shield text-success" data-toggle="tooltip"
+                                    title="{% trans "Two-factor authentication enabled" %}">
+                            </span>
+                        {% else %}
+                            <span class="fa fa-shield disabled" data-toggle="tooltip"
+                                    title="{% trans "Two-factor authentication disabled" %}">
+                            </span>
+                        {% endif %}
                     </td>
                     <td class="text-right">
                         <button type="submit" name="remove-member" value="{{ u.id }}"

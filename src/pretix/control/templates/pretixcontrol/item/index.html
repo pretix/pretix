@@ -18,7 +18,7 @@
                 <fieldset>
                     <legend>{% trans "Price settings" %}</legend>
                     {% bootstrap_field form.default_price layout="horizontal" %}
-                    {% bootstrap_field form.tax_rate layout="horizontal" %}
+                    {% bootstrap_field form.tax_rule layout="horizontal" %}
                     {% bootstrap_field form.free_price layout="horizontal" %}
                 </fieldset>
                 <fieldset>
@@ -30,6 +30,10 @@
                     {% bootstrap_field form.require_voucher layout="horizontal" %}
                     {% bootstrap_field form.hide_without_voucher layout="horizontal" %}
                     {% bootstrap_field form.allow_cancel layout="horizontal" %}
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Check-in" %}</legend>
+                    {% bootstrap_field form.checkin_attention layout="horizontal" %}
                 </fieldset>
             </div>
             <div class="col-xs-12 col-lg-2">

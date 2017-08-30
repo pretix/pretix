@@ -3,6 +3,7 @@ from decimal import Decimal
 from unittest import mock
 
 import pytest
+from django_countries.fields import Country
 from pytz import UTC
 
 from pretix.base.models import InvoiceAddress, Order, OrderPosition
@@ -29,7 +30,7 @@ def order(event, item):
             expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
             total=23, payment_provider='banktransfer', locale='en'
         )
-        InvoiceAddress.objects.create(order=o, company="Sample company")
+        InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
         OrderPosition.objects.create(
             order=o,
             item=item,
@@ -53,6 +54,7 @@ TEST_ORDERPOSITION_RES = {
     "voucher": None,
     "tax_rate": "0.00",
     "tax_value": "0.00",
+    "tax_rule": None,
     "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
     "addon_to": None,
     "checkins": [],
@@ -73,17 +75,20 @@ TEST_ORDER_RES = {
     "payment_fee": "0.00",
     "payment_fee_tax_rate": "0.00",
     "payment_fee_tax_value": "0.00",
+    "payment_fee_tax_rule": None,
     "total": "23.00",
     "comment": "",
     "invoice_address": {
         "last_modified": "2017-12-01T10:00:00Z",
+        "is_business": False,
         "company": "Sample company",
         "name": "",
         "street": "",
         "zipcode": "",
         "city": "",
-        "country": "",
-        "vat_id": ""
+        "country": "NZ",
+        "vat_id": "",
+        "vat_id_validated": False
     },
     "positions": [TEST_ORDERPOSITION_RES],
     "downloads": []
@@ -256,10 +261,10 @@ def invoice(order):
 
 TEST_INVOICE_RES = {
     "order": "FOO",
-    "invoice_no": "00001",
+    "number": "DUMMY-00001",
     "is_cancellation": False,
     "invoice_from": "",
-    "invoice_to": "Sample company",
+    "invoice_to": "Sample company\n\n\n \nNew Zealand",
     "date": "2017-12-10",
     "refers": None,
     "locale": "en",
@@ -267,11 +272,15 @@ TEST_INVOICE_RES = {
     "additional_text": "",
     "payment_provider_text": "",
     "footer_text": "",
+    "foreign_currency_display": None,
+    "foreign_currency_rate": None,
+    "foreign_currency_rate_date": None,
     "lines": [
         {
             "description": "Budget Ticket",
             "gross_value": "23.00",
             "tax_value": "0.00",
+            "tax_name": "",
             "tax_rate": "0.00"
         }
     ]
@@ -291,10 +300,10 @@ def test_invoice_list(token_client, organizer, event, order, invoice):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?order=BAR'.format(organizer.slug, event.slug))
     assert [] == resp.data['results']
 
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?invoice_no={}'.format(
-        organizer.slug, event.slug, invoice.invoice_no))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?number={}'.format(
+        organizer.slug, event.slug, invoice.number))
     assert [res] == resp.data['results']
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?invoice_no=XXX'.format(
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?number=XXX'.format(
         organizer.slug, event.slug))
     assert [] == resp.data['results']
 
@@ -313,15 +322,15 @@ def test_invoice_list(token_client, organizer, event, order, invoice):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?is_cancellation=true'.format(
         organizer.slug, event.slug))
     assert len(resp.data['results']) == 1
-    assert resp.data['results'][0]['invoice_no'] == ic.invoice_no
+    assert resp.data['results'][0]['number'] == ic.number
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?refers={}'.format(
-        organizer.slug, event.slug, invoice.invoice_no))
+        organizer.slug, event.slug, invoice.number))
     assert len(resp.data['results']) == 1
-    assert resp.data['results'][0]['invoice_no'] == ic.invoice_no
+    assert resp.data['results'][0]['number'] == ic.number
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?refers={}'.format(
-        organizer.slug, event.slug, ic.invoice_no))
+        organizer.slug, event.slug, ic.number))
     assert [] == resp.data['results']
 
 
@@ -330,6 +339,6 @@ def test_invoice_detail(token_client, organizer, event, invoice):
     res = dict(TEST_INVOICE_RES)
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/{}/'.format(organizer.slug, event.slug,
-                                                                                  invoice.invoice_no))
+                                                                                  invoice.number))
     assert resp.status_code == 200
     assert res == resp.data

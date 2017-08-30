@@ -94,6 +94,7 @@ should return a list of dictionaries, where each dictionary can have the keys:
 * link (str, optional, if the full widget should be a link)
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
+An additional keyword argument ``subevent`` *can* contain a sub-event.
 """
 
 user_dashboard_widgets = Signal(
@@ -129,6 +130,17 @@ voucher_form_class = EventPluginSignal(
 This signal allows you to replace the form class that is used for modifying vouchers.
 You will receive the default form class (or the class set by a previous plugin) in the
 ``cls`` argument so that you can inherit from it.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+voucher_form_validation = EventPluginSignal(
+    providing_args=['form']
+)
+"""
+This signal allows you to add additional validation to the form that is used for
+creating and modifying vouchers. You will receive the form instance in the ``form``
+argument and the current data state in the ``data`` argument.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """

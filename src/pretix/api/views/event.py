@@ -1,8 +1,10 @@
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import filters, viewsets
 
-from pretix.api.serializers.event import EventSerializer, SubEventSerializer
-from pretix.base.models import Event, ItemCategory
+from pretix.api.serializers.event import (
+    EventSerializer, SubEventSerializer, TaxRuleSerializer,
+)
+from pretix.base.models import Event, ItemCategory, TaxRule
 from pretix.base.models.event import SubEvent
 
 
@@ -32,3 +34,11 @@ class SubEventViewSet(viewsets.ReadOnlyModelViewSet):
         return self.request.event.subevents.prefetch_related(
             'subeventitem_set', 'subeventitemvariation_set'
         )
+
+
+class TaxRuleViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = TaxRuleSerializer
+    queryset = TaxRule.objects.none()
+
+    def get_queryset(self):
+        return self.request.event.tax_rules.all()

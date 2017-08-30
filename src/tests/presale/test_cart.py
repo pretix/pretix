@@ -6,10 +6,12 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 from django.test import TestCase
 from django.utils.timezone import now
+from django_countries.fields import Country
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    CartPosition, Event, Item, ItemCategory, ItemVariation, Organizer,
-    Question, QuestionAnswer, Quota, Voucher,
+    CartPosition, Event, InvoiceAddress, Item, ItemCategory, ItemVariation,
+    Organizer, Question, QuestionAnswer, Quota, Voucher,
 )
 from pretix.base.models.items import (
     ItemAddOn, SubEventItem, SubEventItemVariation,
@@ -26,9 +28,11 @@ class CartTestMixin:
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
             live=True
         )
+        self.tr19 = self.event.tax_rules.create(rate=19)
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
         self.quota_shirts = Quota.objects.create(event=self.event, name='Shirts', size=2)
-        self.shirt = Item.objects.create(event=self.event, name='T-Shirt', category=self.category, default_price=12)
+        self.shirt = Item.objects.create(event=self.event, name='T-Shirt', category=self.category, default_price=12,
+                                         tax_rule=self.tr19)
         self.quota_shirts.items.add(self.shirt)
         self.shirt_red = ItemVariation.objects.create(item=self.shirt, default_price=14, value='Red')
         self.shirt_blue = ItemVariation.objects.create(item=self.shirt, value='Blue')
@@ -36,7 +40,8 @@ class CartTestMixin:
         self.quota_shirts.variations.add(self.shirt_blue)
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=5)
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
-                                          category=self.category, default_price=23)
+                                          category=self.category, default_price=23,
+                                          tax_rule=self.tr19)
         self.quota_tickets.items.add(self.ticket)
 
         self.quota_all = Quota.objects.create(event=self.event, name='All', size=None)
@@ -89,6 +94,35 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 23)
+
+    def _set_session(self, key, value):
+        session = self.client.session
+        session[key] = value
+        session.save()
+
+    def _enable_reverse_charge(self):
+        self.tr19.eu_reverse_charge = True
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        self._set_session('invoice_address_{}'.format(self.event.pk), ia.pk)
+        return ia
+
+    def test_reverse_charge(self):
+        self._enable_reverse_charge()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].price, round_decimal(Decimal('23.00') / Decimal('1.19')))
 
     def test_subevent_missing(self):
         self.event.has_subevents = True
@@ -943,6 +977,18 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, Decimal('12.00'))
+
+    def test_voucher_price_negative(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('1337.00'), event=self.event, price_mode='subtract')
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, Decimal('0.00'))
 
     def test_voucher_price_percent(self):
         v = Voucher.objects.create(item=self.ticket, value=Decimal('10.00'), price_mode='percent', event=self.event)

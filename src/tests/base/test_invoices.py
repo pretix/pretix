@@ -1,8 +1,12 @@
-from datetime import timedelta
+import json
+from datetime import date, timedelta
 from decimal import Decimal
 
 import pytest
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db import DatabaseError, transaction
 from django.utils.timezone import now
+from django_countries.fields import Country
 
 from pretix.base.models import (
     Event, Invoice, InvoiceAddress, Item, ItemVariation, Order, OrderPosition,
@@ -12,6 +16,8 @@ from pretix.base.services.invoices import (
     build_preview_invoice_pdf, generate_cancellation, generate_invoice,
     invoice_pdf_task, regenerate_invoice,
 )
+from pretix.base.services.orders import OrderChangeManager
+from pretix.base.settings import GlobalSettingsObject
 
 
 @pytest.fixture
@@ -21,19 +27,20 @@ def env():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
+    tr = event.tax_rules.create(rate=Decimal('19.00'))
     o = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=0, payment_provider='banktransfer',
-        payment_fee=Decimal('0.25'), payment_fee_tax_rate=0,
-        payment_fee_tax_value=0, locale='en'
+        payment_fee=Decimal('0.25'), payment_fee_tax_rate=Decimal('19.00'),
+        payment_fee_tax_value=Decimal('0.04'), locale='en', payment_fee_tax_rule=tr
     )
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
-                                 category=None, default_price=23,
+                                 category=None, default_price=23, tax_rule=tr,
                                  admission=True)
     t_shirt = Item.objects.create(event=event, name='T-Shirt',
-                                  category=None, default_price=42,
+                                  category=None, default_price=42, tax_rule=tr,
                                   admission=True)
     variation = ItemVariation.objects.create(value='M', item=t_shirt)
     OrderPosition.objects.create(
@@ -50,6 +57,22 @@ def env():
         price=Decimal("42.00"),
         positionid=2,
     )
+    gs = GlobalSettingsObject()
+    gs.settings.ecb_rates_date = date.today()
+    gs.settings.ecb_rates_dict = json.dumps({
+        "USD": "1.1648",
+        "RON": "4.5638",
+        "CZK": "26.024",
+        "BGN": "1.9558",
+        "HRK": "7.4098",
+        "EUR": "1.0000",
+        "NOK": "9.3525",
+        "HUF": "305.15",
+        "DKK": "7.4361",
+        "PLN": "4.2408",
+        "GBP": "0.89350",
+        "SEK": "9.5883"
+    }, cls=DjangoJSONEncoder)
     return event, o
 
 
@@ -71,14 +94,25 @@ def test_locale_user(env):
 
 
 @pytest.mark.django_db
+def test_address_old_country(env):
+    event, order = env
+    event.settings.set('invoice_language', 'en')
+    InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
+                                  zipcode='12345', city='London', country_old='England', country='',
+                                  order=order)
+    inv = generate_invoice(order)
+    assert inv.invoice_to == "Acme Company\n\n221B Baker Street\n12345 London\nEngland"
+
+
+@pytest.mark.django_db
 def test_address(env):
     event, order = env
     event.settings.set('invoice_language', 'en')
     InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
-                                  zipcode='12345', city='London', country='UK',
+                                  zipcode='12345', city='London', country=Country('GB'),
                                   order=order)
     inv = generate_invoice(order)
-    assert inv.invoice_to == "Acme Company\n\n221B Baker Street\n12345 London\nUK"
+    assert inv.invoice_to == "Acme Company\n\n221B Baker Street\n12345 London\nUnited Kingdom"
 
 
 @pytest.mark.django_db
@@ -86,10 +120,74 @@ def test_address_vat_id(env):
     event, order = env
     event.settings.set('invoice_language', 'en')
     InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
-                                  name='Sherlock Holmes', zipcode='12345', city='London', country='UK',
-                                  vat_id='UK1234567', order=order)
+                                  name='Sherlock Holmes', zipcode='12345', city='London', country_old='UK',
+                                  country='', vat_id='UK1234567', order=order)
     inv = generate_invoice(order)
     assert inv.invoice_to == "Acme Company\nSherlock Holmes\n221B Baker Street\n12345 London\nUK\nVAT-ID: UK1234567"
+
+
+@pytest.mark.django_db
+def test_positions_skip_free(env):
+    event, order = env
+    event.settings.invoice_include_free = False
+    op1 = order.positions.first()
+    op1.price = Decimal('0.00')
+    op1.save()
+    inv = generate_invoice(order)
+    assert inv.lines.count() == 2
+
+
+@pytest.mark.django_db
+def test_reverse_charge_note(env):
+    event, order = env
+
+    tr = event.tax_rules.first()
+    tr.eu_reverse_charge = True
+    tr.home_country = Country('DE')
+    tr.save()
+
+    event.settings.set('invoice_language', 'en')
+    InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street', zipcode='12345', city='Warsaw',
+                                  country=Country('PL'), vat_id='PL123456780', vat_id_validated=True, order=order,
+                                  is_business=True)
+
+    ocm = OrderChangeManager(order, None)
+    ocm.recalculate_taxes()
+    ocm.commit()
+    assert not order.positions.filter(tax_value__gt=0).exists()
+
+    inv = generate_invoice(order)
+    assert "reverse charge" in inv.additional_text.lower()
+    assert inv.foreign_currency_display == "PLN"
+    assert inv.foreign_currency_rate == Decimal("4.2408")
+    assert inv.foreign_currency_rate_date == date.today()
+
+
+@pytest.mark.django_db
+def test_reverse_charge_foreign_currency_data_too_old(env):
+    event, order = env
+    gs = GlobalSettingsObject()
+    gs.settings.ecb_rates_date = date.today() - timedelta(days=14)
+
+    tr = event.tax_rules.first()
+    tr.eu_reverse_charge = True
+    tr.home_country = Country('DE')
+    tr.save()
+
+    event.settings.set('invoice_language', 'en')
+    InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street', zipcode='12345', city='Warsaw',
+                                  country=Country('PL'), vat_id='PL123456780', vat_id_validated=True, order=order,
+                                  is_business=True)
+
+    ocm = OrderChangeManager(order, None)
+    ocm.recalculate_taxes()
+    ocm.commit()
+    assert not order.positions.filter(tax_value__gt=0).exists()
+
+    inv = generate_invoice(order)
+    assert "reverse charge" in inv.additional_text.lower()
+    assert inv.foreign_currency_rate is None
+    assert inv.foreign_currency_rate_date is None
 
 
 @pytest.mark.django_db
@@ -208,3 +306,59 @@ def test_invoice_numbers(env):
     # test Invoice.number, too
     assert inv1.number == '{}-00001'.format(event.slug.upper())
     assert inv3.number == '{}-{}-3'.format(event.slug.upper(), order.code)
+
+
+@pytest.mark.django_db
+def test_invoice_number_prefixes(env):
+    event, order = env
+    event2 = Event.objects.create(
+        organizer=event.organizer, name='Dummy', slug='dummy2',
+        date_from=now(), plugins='pretix.plugins.banktransfer'
+    )
+    order2 = Order.objects.create(
+        event=event2, email='dummy2@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() + timedelta(days=10),
+        total=0, payment_provider='banktransfer',
+        payment_fee=Decimal('0.25'), payment_fee_tax_rate=0,
+        payment_fee_tax_value=0, locale='en'
+    )
+    event.settings.set('invoice_numbers_consecutive', False)
+    event2.settings.set('invoice_numbers_consecutive', False)
+    assert generate_invoice(order).number == 'DUMMY-{}-1'.format(order.code)
+    assert generate_invoice(order2).number == 'DUMMY2-{}-1'.format(order2.code)
+
+    event.settings.set('invoice_numbers_consecutive', True)
+    event2.settings.set('invoice_numbers_consecutive', True)
+    event.settings.set('invoice_numbers_prefix', '')
+    event2.settings.set('invoice_numbers_prefix', '')
+
+    assert generate_invoice(order).number == 'DUMMY-00001'
+    assert generate_invoice(order).number == 'DUMMY-00002'
+    assert generate_invoice(order2).number == 'DUMMY2-00001'
+    assert generate_invoice(order2).number == 'DUMMY2-00002'
+
+    event.settings.set('invoice_numbers_prefix', 'shared_')
+    event2.settings.set('invoice_numbers_prefix', 'shared_')
+
+    assert generate_invoice(order).number == 'shared_00001'
+    assert generate_invoice(order2).number == 'shared_00002'
+    assert generate_invoice(order).number == 'shared_00003'
+    assert generate_invoice(order2).number == 'shared_00004'
+
+    event.settings.set('invoice_numbers_consecutive', False)
+    event2.settings.set('invoice_numbers_consecutive', False)
+    assert generate_invoice(order).number == 'shared_{}-6'.format(order.code)
+    assert generate_invoice(order2).number == 'shared_{}-6'.format(order2.code)
+
+    # Test database uniqueness check
+    with pytest.raises(DatabaseError):
+        with transaction.atomic():
+            Invoice.objects.create(
+                order=order,
+                event=order.event,
+                organizer=order.event.organizer,
+                date=now().date(),
+                locale='en',
+                invoice_no='00001',
+            )

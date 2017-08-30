@@ -3,8 +3,14 @@
 var cart = {
     _deadline: null,
     _deadline_interval: null,
+    _deadline_call: 0,
 
     draw_deadline: function () {
+        cart._deadline_call++;
+        if ((typeof django === 'undefined' || typeof django.gettext === 'undefined') && cart._deadline_call < 5) {
+            // Language files are not loaded yet, don't run during the first seconds
+            return;
+        }
         var diff = Math.floor(cart._deadline.diff(moment()) / 1000 / 60);
         if (diff < 0) {
             $("#cart-deadline").text(gettext("The items in your cart are no longer reserved for you."));

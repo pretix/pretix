@@ -1,9 +1,9 @@
-import csv
 import io
 from collections import OrderedDict
 from decimal import Decimal
 
 import pytz
+from defusedcsv import csv
 from django import forms
 from django.db.models import Sum
 from django.dispatch import receiver
@@ -100,7 +100,7 @@ class OrderListExporter(BaseExporter):
                     order.invoice_address.street,
                     order.invoice_address.zipcode,
                     order.invoice_address.city,
-                    order.invoice_address.country,
+                    order.invoice_address.country if order.invoice_address.country else order.invoice_address.country_old,
                     order.invoice_address.vat_id,
                 ]
             except InvoiceAddress.DoesNotExist:
