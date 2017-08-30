@@ -70,9 +70,9 @@ class TaxRule(LoggedModel):
         default=False,
         help_text=_("Not recommended. Most events will NOT be qualified for reverse charge since the place of "
                     "taxation is the location of the event. This option disables charging VAT for all customers "
-                    "outside the EU and for business customers in different EU countries that do not "
-                    "customers who entered a valid EU VAT ID. Only enable this option after consulting a tax counsel. "
-                    "No warranty given for correct tax calculation. USE AT YOUR OWN RISK.")
+                    "outside the EU and for business customers in different EU countries who entered a valid EU VAT "
+                    "ID. Only enable this option after consulting a tax counsel. No warranty given for correct tax "
+                    "calculation. USE AT YOUR OWN RISK.")
     )
     home_country = CountryField(
         verbose_name=_('Merchant country'),
