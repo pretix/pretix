@@ -121,7 +121,7 @@
         <div class="totalprice price">
             {% if event.settings.display_net_prices %}
                 <strong>{{ event.currency }} {{ line.net_total|floatformat:2 }}</strong>
-                {% if line.tax_rate %}
+                {% if line.tax_rate and line.total %}
                     <br />
                     <small>
                         {% blocktrans trimmed with rate=line.tax_rate taxname=line.tax_rule.name|default:s_taxes %}
@@ -131,7 +131,7 @@
                 {% endif %}
             {% else %}
                 <strong>{{ event.currency }} {{ line.total|floatformat:2 }}</strong>
-                {% if line.tax_rate %}
+                {% if line.tax_rate and line.total %}
                     <br />
                     <small>
                         {% blocktrans trimmed with rate=line.tax_rate taxname=line.tax_rule.name|default:s_taxes %}
@@ -187,7 +187,7 @@
         <div class="clearfix"></div>
     </div>
 {% endif %}
-{% if event.settings.display_net_prices %}
+{% if event.settings.display_net_prices and cart.tax_total %}
     <div class="row cart-row total">
         <div class="col-md-4 col-xs-6">
             <strong>{% trans "Net total" %}</strong>

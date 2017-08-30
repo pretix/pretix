@@ -59,6 +59,8 @@
                                             {% blocktrans trimmed with minprice=item.min_price|floatformat:2 currency=event.currency %}
                                                 from {{ currency }} {{ minprice }}
                                             {% endblocktrans %}
+                                        {% elif not item.min_price and not item.max_price %}
+                                            {% trans "FREE" context "price" %}
                                         {% else %}
                                             {{ event.currency }} {{ item.min_price|floatformat:2 }}
                                         {% endif %}
@@ -89,16 +91,18 @@
                                                                 value="{% if event.settings.display_net_prices %}{{var.display_price.net|stringformat:"0.2f" }}{% else %}{{ var.display_price.gross|stringformat:"0.2f" }}{% endif %}"
                                                                 step="any">
                                                     </div>
+                                                {% elif not var.display_price.gross %}
+                                                    {% trans "FREE" context "price" %}
                                                 {% elif event.settings.display_net_prices %}
                                                     {{ event.currency }} {{ var.display_price.net|floatformat:2 }}
                                                 {% else %}
                                                     {{ event.currency }} {{ var.display_price.gross|floatformat:2 }}
                                                 {% endif %}
-                                                {% if var.display_price.rate and event.settings.display_net_prices %}
+                                                {% if var.display_price.rate and var.display_price.gross and event.settings.display_net_prices %}
                                                     <small>{% blocktrans trimmed with rate=var.display_price.rate name=var.display_price.name %}
                                                         <strong>plus</strong> {{ rate }}% taxes
                                                     {% endblocktrans %}</small>
-                                                {% elif var.display_price.rate %}
+                                                {% elif var.display_price.rate and var.display_price.gross %}
                                                     <small>{% blocktrans trimmed with rate=var.display_price.rate name=var.display_price.name %}
                                                         incl. {{ rate }}% taxes
                                                     {% endblocktrans %}</small>
@@ -156,16 +160,18 @@
                                                     value="{% if event.settings.display_net_prices %}{{ item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
                                                     step="any">
                                         </div>
+                                    {% elif not item.display_price.gross %}
+                                        {% trans "FREE" context "price" %}
                                     {% elif event.settings.display_net_prices %}
                                         {{ event.currency }} {{ item.display_price.net|floatformat:2 }}
                                     {% else %}
                                         {{ event.currency }} {{ item.display_price.gross|floatformat:2 }}
                                     {% endif %}
-                                    {% if item.display_price.rate and event.settings.display_net_prices %}
+                                    {% if item.display_price.rate and item.display_price.gross and event.settings.display_net_prices %}
                                         <small>{% blocktrans trimmed with rate=item.display_price.rate name=item.display_price.name %}
                                             <strong>plus</strong> {{ rate }}% {{ name }}
                                         {% endblocktrans %}</small>
-                                    {% elif item.display_price.rate %}
+                                    {% elif item.display_price.rate and item.display_price.gross%}
                                         <small>{% blocktrans trimmed with rate=item.display_price.rate name=item.display_price.name %}
                                             incl. {{ rate }}% {{ name }}
                                         {% endblocktrans %}</small>
