@@ -8803,7 +8803,7 @@ msgstr ""
 
 #: pretix/plugins/pretixdroid/models.py:19
 msgid "Search allowed"
-msgstr "Sucher erlaubt"
+msgstr "Suche erlaubt"
 
 #: pretix/plugins/pretixdroid/models.py:20
 msgid ""
