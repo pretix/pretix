@@ -17,7 +17,7 @@ def assign_positions(app, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0075_orderfee'),
+        ('pretixbase', '0076_orderfee'),
     ]
 
     operations = [

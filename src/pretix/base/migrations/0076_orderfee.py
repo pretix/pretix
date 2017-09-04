@@ -32,7 +32,7 @@ def fee_converter(app, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0074_auto_20170825_1258'),
+        ('pretixbase', '0075_auto_20170828_0901'),
     ]
 
     operations = [
