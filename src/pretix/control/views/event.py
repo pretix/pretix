@@ -25,8 +25,8 @@ from i18nfield.strings import LazyI18nString
 from pytz import timezone
 
 from pretix.base.models import (
-    CachedTicket, Event, Item, ItemVariation, LogEntry, Order, OrderPosition,
-    RequiredAction, TaxRule, Voucher,
+    CachedCombinedTicket, CachedTicket, Event, Item, ItemVariation, LogEntry,
+    Order, OrderPosition, RequiredAction, TaxRule, Voucher,
 )
 from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
@@ -634,6 +634,9 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
                     CachedTicket.objects.filter(
                         order_position__order__event=self.request.event, provider=provider.identifier
                     ).delete()
+                    CachedCombinedTicket.objects.filter(
+                        order__event=self.request.event, provider=provider.identifier
+                    ).delete()
             else:
                 success = False
         form = self.get_form(self.get_form_class())
@@ -645,6 +648,7 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
                         k: form.cleaned_data.get(k) for k in form.changed_data
                     }
                 )
+
             messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:

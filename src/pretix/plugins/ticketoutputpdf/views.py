@@ -16,7 +16,9 @@ from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
 
 from pretix.base.i18n import language
-from pretix.base.models import CachedFile, InvoiceAddress
+from pretix.base.models import (
+    CachedCombinedTicket, CachedFile, CachedTicket, InvoiceAddress,
+)
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import ChartContainingView
 from pretix.helpers.database import rolledback_transaction
@@ -128,6 +130,14 @@ class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView
                 request.event.settings.set('ticketoutput_pdf_background', 'file://' + newname)
 
             request.event.settings.set('ticketoutput_pdf_layout', request.POST.get("data"))
+
+            CachedTicket.objects.filter(
+                order_position__order__event=self.request.event, provider='pdf'
+            ).delete()
+            CachedCombinedTicket.objects.filter(
+                order__event=self.request.event, provider='pdf'
+            ).delete()
+
             return JsonResponse({'status': 'ok'})
         return HttpResponseBadRequest()
 
