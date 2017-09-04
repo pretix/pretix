@@ -64,8 +64,8 @@ class PermissionMiddleware(MiddlewareMixin):
             return self._login_redirect(request)
 
         if not settings.PRETIX_LONG_SESSIONS or not request.session.get('pretix_auth_long_session', False):
-            last_used = request.session.get('pretix_auth_last_used', 0) or time.time()
-            if time.time() - request.session.get('pretix_auth_login_time', 0) > settings.PRETIX_SESSION_TIMEOUT_ABSOLUTE:
+            last_used = request.session.get('pretix_auth_last_used', time.time())
+            if time.time() - request.session.get('pretix_auth_login_time', time.time()) > settings.PRETIX_SESSION_TIMEOUT_ABSOLUTE:
                 logout(request)
                 request.session['pretix_auth_login_time'] = 0
                 return self._login_redirect(request)

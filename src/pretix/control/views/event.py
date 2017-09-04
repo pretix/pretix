@@ -51,9 +51,12 @@ class MetaDataEditorMixin:
 
     @cached_property
     def meta_forms(self):
-        val_instances = {
-            v.property_id: v for v in self.object.meta_values.all()
-        }
+        if hasattr(self, 'object') and self.object:
+            val_instances = {
+                v.property_id: v for v in self.object.meta_values.all()
+            }
+        else:
+            val_instances = {}
 
         formlist = []
 
