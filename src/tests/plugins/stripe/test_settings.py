@@ -21,12 +21,13 @@ def env(client):
     t.members.add(user)
     t.limit_events.add(event)
     client.force_login(user)
-    return client, event
+    url = '/control/event/%s/%s/settings/payment' % (event.organizer.slug, event.slug)
+    return client, event, url
 
 
 @pytest.mark.django_db
 def test_settings(env):
-    client, event = env
-    response = client.get('/control/event/%s/%s/settings/payment' % (event.organizer.slug, event.slug), follow=True)
+    client, event, url = env
+    response = client.get(url, follow=True)
     assert response.status_code == 200
     assert 'stripe__enabled' in response.rendered_content
