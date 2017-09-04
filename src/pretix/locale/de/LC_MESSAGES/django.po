@@ -3002,7 +3002,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:230
 msgid "Last date of modifications"
-msgstr "Letzes Änderungsdatum"
+msgstr "Letztes Änderungsdatum"
 
 #: pretix/control/forms/event.py:231
 msgid ""
