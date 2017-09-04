@@ -33,6 +33,24 @@ class RefundForm(forms.Form):
     )
 
 
+class StripeKeyValidator():
+    def __init__(self, prefix):
+        assert isinstance(prefix, str)
+        assert len(prefix) > 0
+        self._prefix = prefix
+
+    def __call__(self, value):
+        if not value.startswith(self._prefix):
+            raise forms.ValidationError(
+                _('The provided key "%(value)s" does not look valid. It should start with "%(prefix)s".'),
+                code='invalid-stripe-secret-key',
+                params={
+                    'value': value,
+                    'prefix': self._prefix,
+                },
+            )
+
+
 class StripeSettingsHolder(BasePaymentProvider):
     identifier = 'stripe_settings'
     verbose_name = _('Stripe')
@@ -60,11 +78,17 @@ class StripeSettingsHolder(BasePaymentProvider):
                      help_text=_('<a target="_blank" href="{docs_url}">{text}</a>').format(
                          text=_('Click here for a tutorial on how to obtain the required keys'),
                          docs_url='https://docs.pretix.eu/en/latest/user/payments/stripe.html'
-                     )
+                     ),
+                     validators=(
+                         StripeKeyValidator('sk_'),
+                     ),
                  )),
                 ('publishable_key',
                  forms.CharField(
                      label=_('Publishable key'),
+                     validators=(
+                         StripeKeyValidator('pk_'),
+                     ),
                  )),
                 ('ui',
                  forms.ChoiceField(
