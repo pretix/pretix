@@ -191,6 +191,10 @@ def generate_invoice(order: Order):
     )
     invoice = build_invoice(invoice)
     invoice_pdf(invoice.pk)
+
+    if order.status in (Order.STATUS_CANCELED, Order.STATUS_REFUNDED):
+        generate_cancellation(invoice)
+
     return invoice
 
 

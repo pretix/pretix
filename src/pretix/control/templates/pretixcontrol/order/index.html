@@ -131,7 +131,11 @@
                                                     action="{% url "control:event.order.reissueinvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
                                                 {% csrf_token %}
                                                 <button class="btn btn-default btn-xs">
-                                                    {% trans "Cancel and reissue" %}
+                                                    {% if order.status == "r" or order.status == "c" %}
+                                                        {% trans "Generate cancellation" %}
+                                                    {% else %}
+                                                        {% trans "Cancel and reissue" %}
+                                                    {% endif %}
                                                 </button>
                                             </form>
                                         {% endif %}

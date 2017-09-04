@@ -366,8 +366,11 @@ class OrderInvoiceReissue(OrderView):
             if inv.canceled:
                 messages.error(self.request, _('The invoice has already been canceled.'))
             else:
-                generate_cancellation(inv)
-                inv = generate_invoice(self.order)
+                c = generate_cancellation(inv)
+                if self.order.status not in (Order.STATUS_CANCELED, Order.STATUS_REFUNDED):
+                    inv = generate_invoice(self.order)
+                else:
+                    inv = c
                 self.order.log_action('pretix.event.order.invoice.reissued', user=self.request.user, data={
                     'invoice': inv.pk
                 })
