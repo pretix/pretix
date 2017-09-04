@@ -8,6 +8,6 @@ wanting to use pretix to sell tickets.
    :maxdepth: 2
 
    organizers/index
-   payments/index
    events/create
    events/taxes
+   payments/index
