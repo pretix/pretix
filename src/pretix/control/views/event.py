@@ -585,6 +585,15 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
         context['providers'] = self.provider_forms
+
+        context['any_enabled'] = False
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if provider.is_enabled:
+                context['any_enabled'] = True
+                break
+
         return context
 
     def get_success_url(self) -> str:

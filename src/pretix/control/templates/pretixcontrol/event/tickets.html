@@ -6,6 +6,14 @@
         {% csrf_token %}
         <fieldset>
             <legend>{% trans "Ticket download" %}</legend>
+            {% if request.event.settings.ticket_download and not any_enabled %}
+                <div class="alert alert-warning">
+                    {% blocktrans trimmed %}
+                        You activated ticket downloads but no output provider is enabled. Be sure to enable a plugin and
+                        activate an output provider.
+                    {% endblocktrans %}
+                </div>
+            {% endif %}
             {% bootstrap_form_errors form %}
             {% bootstrap_field form.ticket_download layout="horizontal" %}
             {% bootstrap_field form.ticket_download_date layout="horizontal" %}
