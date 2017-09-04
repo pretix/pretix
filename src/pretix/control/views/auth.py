@@ -42,6 +42,9 @@ def login(request):
     if request.method == 'POST':
         form = LoginForm(data=request.POST)
         if form.is_valid() and form.user_cache:
+            request.session['pretix_auth_long_session'] = (
+                settings.PRETIX_LONG_SESSIONS and form.cleaned_data.get('keep_logged_in', False)
+            )
             if form.user_cache.require_2fa:
                 request.session['pretix_auth_2fa_user'] = form.user_cache.pk
                 request.session['pretix_auth_2fa_time'] = str(int(time.time()))
@@ -93,6 +96,9 @@ def register(request):
             user.log_action('pretix.control.auth.user.created', user=user)
             auth_login(request, user)
             request.session['pretix_auth_login_time'] = int(time.time())
+            request.session['pretix_auth_long_session'] = (
+                settings.PRETIX_LONG_SESSIONS and form.cleaned_data.get('keep_logged_in', False)
+            )
             return redirect('control:index')
     else:
         form = RegistrationForm()
@@ -144,6 +150,9 @@ def invite(request, token):
             user.log_action('pretix.control.auth.user.created', user=user)
             auth_login(request, user)
             request.session['pretix_auth_login_time'] = int(time.time())
+            request.session['pretix_auth_long_session'] = (
+                settings.PRETIX_LONG_SESSIONS and form.cleaned_data.get('keep_logged_in', False)
+            )
 
             with transaction.atomic():
                 inv.team.members.add(request.user)

@@ -7,7 +7,7 @@ from django.contrib.auth.tokens import (
     PasswordResetTokenGenerator, default_token_generator,
 )
 from django.core import mail as djmail
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django_otp.oath import TOTP
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from u2flib_server.jsapi import JSONDict
@@ -33,6 +33,17 @@ class LoginFormTest(TestCase):
             'password': 'dummy',
         })
         self.assertEqual(response.status_code, 302)
+        assert time.time() - self.client.session['pretix_auth_login_time'] < 60
+        assert not self.client.session['pretix_auth_long_session']
+
+    def test_set_long_session(self):
+        response = self.client.post('/control/login', {
+            'email': 'dummy@dummy.dummy',
+            'password': 'dummy',
+            'keep_logged_in': 'on'
+        })
+        self.assertEqual(response.status_code, 302)
+        assert self.client.session['pretix_auth_long_session']
 
     def test_inactive_account(self):
         self.user.is_active = False
@@ -187,6 +198,8 @@ class RegistrationFormTest(TestCase):
             'password_repeat': 'foobarbar'
         })
         self.assertEqual(response.status_code, 302)
+        assert time.time() - self.client.session['pretix_auth_login_time'] < 60
+        assert not self.client.session['pretix_auth_long_session']
 
 
 @pytest.fixture
@@ -202,6 +215,7 @@ class Login2FAFormTest(TestCase):
         session = self.client.session
         session['pretix_auth_2fa_user'] = self.user.pk
         session['pretix_auth_2fa_time'] = str(int(time.time()))
+        session['pretix_auth_long_session'] = False
         session.save()
 
     def test_invalid_session(self):
@@ -245,6 +259,8 @@ class Login2FAFormTest(TestCase):
         })
         self.assertEqual(response.status_code, 302)
         self.assertIn('/control/events/', response['Location'])
+        assert time.time() - self.client.session['pretix_auth_login_time'] < 60
+        assert not self.client.session['pretix_auth_long_session']
 
     def test_u2f_invalid(self):
         def fail(*args, **kwargs):
@@ -475,3 +491,90 @@ class PasswordRecoveryFormTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.user = User.objects.get(id=self.user.id)
         self.assertTrue(self.user.check_password('demo'))
+
+
+class SessionTimeOutTest(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create_user('demo@demo.dummy', 'demo')
+        self.client.login(email='demo@demo.dummy', password='demo')
+
+    def test_log_out_after_absolute_timeout(self):
+        session = self.client.session
+        session['pretix_auth_long_session'] = False
+        session['pretix_auth_login_time'] = int(time.time()) - 3600 * 12 - 60
+        session.save()
+
+        response = self.client.get('/control/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_dont_logout_before_absolute_timeout(self):
+        session = self.client.session
+        session['pretix_auth_long_session'] = True
+        session['pretix_auth_login_time'] = int(time.time()) - 3600 * 12 + 60
+        session.save()
+
+        response = self.client.get('/control/')
+        self.assertEqual(response.status_code, 200)
+
+    @override_settings(PRETIX_LONG_SESSIONS=False)
+    def test_ignore_long_session_if_disabled_in_config(self):
+        session = self.client.session
+        session['pretix_auth_long_session'] = True
+        session['pretix_auth_login_time'] = int(time.time()) - 3600 * 12 - 60
+        session.save()
+
+        response = self.client.get('/control/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_dont_logout_in_long_session(self):
+        session = self.client.session
+        session['pretix_auth_long_session'] = True
+        session['pretix_auth_login_time'] = int(time.time()) - 3600 * 12 - 60
+        session.save()
+
+        response = self.client.get('/control/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_log_out_after_relative_timeout(self):
+        session = self.client.session
+        session['pretix_auth_long_session'] = False
+        session['pretix_auth_login_time'] = int(time.time()) - 3600 * 6
+        session['pretix_auth_last_used'] = int(time.time()) - 3600 * 3 - 60
+        session.save()
+
+        response = self.client.get('/control/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_dont_logout_before_relative_timeout(self):
+        session = self.client.session
+        session['pretix_auth_long_session'] = True
+        session['pretix_auth_login_time'] = int(time.time()) - 3600 * 6
+        session['pretix_auth_last_used'] = int(time.time()) - 3600 * 3 + 60
+        session.save()
+
+        response = self.client.get('/control/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_dont_logout_by_relative_in_long_session(self):
+        session = self.client.session
+        session['pretix_auth_long_session'] = True
+        session['pretix_auth_login_time'] = int(time.time()) - 3600 * 5
+        session['pretix_auth_last_used'] = int(time.time()) - 3600 * 3 - 60
+        session.save()
+
+        response = self.client.get('/control/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_session_activity(self):
+        t1 = int(time.time()) - 5
+        session = self.client.session
+        session['pretix_auth_long_session'] = False
+        session['pretix_auth_login_time'] = int(time.time()) - 3600 * 5
+        session['pretix_auth_last_used'] = t1
+        session.save()
+
+        response = self.client.get('/control/')
+        self.assertEqual(response.status_code, 200)
+
+        assert self.client.session['pretix_auth_last_used'] > t1

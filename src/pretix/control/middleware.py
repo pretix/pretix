@@ -1,8 +1,9 @@
-from urllib.parse import urljoin, urlparse
+import time
+from urllib.parse import quote, urljoin, urlparse
 
 from django.conf import settings
-from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.core.urlresolvers import get_script_prefix, resolve
+from django.contrib.auth import REDIRECT_FIELD_NAME, logout
+from django.core.urlresolvers import get_script_prefix, resolve, reverse
 from django.http import Http404
 from django.shortcuts import redirect, resolve_url
 from django.utils.deprecation import MiddlewareMixin
@@ -28,6 +29,24 @@ class PermissionMiddleware(MiddlewareMixin):
         "auth.invite",
     )
 
+    def _login_redirect(self, request):
+        # Taken from django/contrib/auth/decorators.py
+        path = request.build_absolute_uri()
+        # urlparse chokes on lazy objects in Python 3, force to str
+        resolved_login_url = force_str(
+            resolve_url(settings.LOGIN_URL_CONTROL))
+        # If the login url is the same scheme and net location then just
+        # use the path as the "next" url.
+        login_scheme, login_netloc = urlparse(resolved_login_url)[:2]
+        current_scheme, current_netloc = urlparse(path)[:2]
+        if ((not login_scheme or login_scheme == current_scheme) and
+                (not login_netloc or login_netloc == current_netloc)):
+            path = request.get_full_path()
+        from django.contrib.auth.views import redirect_to_login
+
+        return redirect_to_login(
+            path, resolved_login_url, REDIRECT_FIELD_NAME)
+
     def process_request(self, request):
         url = resolve(request.path_info)
         url_name = url.url_name
@@ -42,22 +61,18 @@ class PermissionMiddleware(MiddlewareMixin):
         if url_name in self.EXCEPTIONS:
             return
         if not request.user.is_authenticated:
-            # Taken from django/contrib/auth/decorators.py
-            path = request.build_absolute_uri()
-            # urlparse chokes on lazy objects in Python 3, force to str
-            resolved_login_url = force_str(
-                resolve_url(settings.LOGIN_URL_CONTROL))
-            # If the login url is the same scheme and net location then just
-            # use the path as the "next" url.
-            login_scheme, login_netloc = urlparse(resolved_login_url)[:2]
-            current_scheme, current_netloc = urlparse(path)[:2]
-            if ((not login_scheme or login_scheme == current_scheme) and
-                    (not login_netloc or login_netloc == current_netloc)):
-                path = request.get_full_path()
-            from django.contrib.auth.views import redirect_to_login
+            return self._login_redirect(request)
 
-            return redirect_to_login(
-                path, resolved_login_url, REDIRECT_FIELD_NAME)
+        if not settings.PRETIX_LONG_SESSIONS or not request.session.get('pretix_auth_long_session', False):
+            last_used = request.session.get('pretix_auth_last_used', 0) or time.time()
+            if time.time() - request.session.get('pretix_auth_login_time', 0) > settings.PRETIX_SESSION_TIMEOUT_ABSOLUTE:
+                logout(request)
+                request.session['pretix_auth_login_time'] = 0
+                return self._login_redirect(request)
+            if time.time() - last_used > settings.PRETIX_SESSION_TIMEOUT_RELATIVE and url_name != 'user.reauth':
+                return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
+
+            request.session['pretix_auth_last_used'] = int(time.time())
 
         if 'event' in url.kwargs and 'organizer' in url.kwargs:
             request.event = Event.objects.filter(

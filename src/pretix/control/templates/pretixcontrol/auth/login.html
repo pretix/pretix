@@ -8,24 +8,23 @@
         {% csrf_token %}
         {% bootstrap_field form.email %}
         {% bootstrap_field form.password %}
+        {% if form.keep_logged_in %}
+            {% bootstrap_field form.keep_logged_in %}
+        {% endif %}
         <div class="form-group buttons">
+            <button type="submit" class="btn btn-primary btn-block">
+                {% trans "Log in" %}
+            </button>
             {% if can_reset %}
-                <a href="{% url "control:auth.forgot" %}" class="btn btn-link">
+                <a href="{% url "control:auth.forgot" %}" class="btn btn-link btn-block">
                     {% trans "Lost password?" %}
                 </a>
             {% endif %}
-
-            <button type="submit" class="btn btn-primary">
-                {% trans "Log in" %}
-            </button>
-        </div>
-
-        {% if can_register %}
-            <div class="form-group buttons">
-                <a href="{% url "control:auth.register" %}" class="btn btn-link">
+            {% if can_register %}
+                <a href="{% url "control:auth.register" %}" class="btn btn-link btn-block">
                     {% trans "Register" %}
                 </a>
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
     </form>
 {% endblock %}

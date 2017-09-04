@@ -42,7 +42,9 @@ class ReauthView(TemplateView):
     def post(self, request, *args, **kwargs):
         password = request.POST.get("password", "")
         if request.user.check_password(password):
-            request.session['pretix_auth_login_time'] = int(time.time())
+            t = int(time.time())
+            request.session['pretix_auth_login_time'] = t
+            request.session['pretix_auth_last_used'] = t
             if "next" in request.GET and is_safe_url(request.GET.get("next")):
                 return redirect(request.GET.get("next"))
             return redirect(reverse('control:index'))

@@ -1,26 +1,30 @@
-{% extends "pretixcontrol/base.html" %}
+{% extends "pretixcontrol/auth/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
 {% block content %}
-    <div class="row">
-        <div class="col-xs-12 col-md-4 col-md-offset-4">
-            <form action="" method="post">
-                {% csrf_token %}
-                <h2><span class="fa fa-shield"></span> {% trans "Confirm password" %}</h2>
-                <p>
-                    {% trans "Please confirm your password to continue with this operation. We'll remember your password for an hour or until you log out." %}
-                </p>
-                <div class="form-group">
-                    <input class="form-control" id="id_password" name="password" placeholder="{% trans "Password" %}"
-                            title="" type="password" required="">
-                </div>
-                <div class="form-group text-right">
-                    <button type="submit" class="btn btn-primary">
-                        {% trans "Continue" %}
-                    </button>
-                </div>
-
-            </form>
+    <form class="form-signin" action="" method="post">
+    <form action="" method="post">
+        {% csrf_token %}
+        <h3>{% trans "Welcome back!" %}</h3>
+        <p>
+            {% trans "We just want to make sure it's really you. Please re-enter your password to continue." %}
+        </p>
+        <div class="form-group">
+            <input class="form-control"
+                    value="{{ request.user.get_full_name }}" disabled>
         </div>
-    </div>
+        <div class="form-group">
+            <input class="form-control" id="id_password" name="password" placeholder="{% trans "Password" %}"
+                    title="" type="password" required="" autofocus>
+        </div>
+        <div class="form-group text-right">
+            <button type="submit" class="btn btn-primary btn-block">
+                {% trans "Continue" %}
+            </button>
+            <a href={% url "control:auth.logout" %}"" class="btn btn-link btn-block">
+            {% trans "Log in as someone else" %}
+            </a>
+        </div>
+
+    </form>
 {% endblock %}

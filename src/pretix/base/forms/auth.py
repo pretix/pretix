@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import (
     password_validators_help_texts, validate_password,
@@ -15,6 +16,7 @@ class LoginForm(forms.Form):
     """
     email = forms.EmailField(label=_("E-mail"), max_length=254)
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
+    keep_logged_in = forms.BooleanField(label=_("Keep me logged in"), required=False)
 
     error_messages = {
         'invalid_login': _("Please enter a correct email address and password."),
@@ -29,6 +31,8 @@ class LoginForm(forms.Form):
         self.request = request
         self.user_cache = None
         super().__init__(*args, **kwargs)
+        if not settings.PRETIX_LONG_SESSIONS:
+            del self.fields['keep_logged_in']
 
     def clean(self):
         email = self.cleaned_data.get('email')
@@ -90,6 +94,12 @@ class RegistrationForm(forms.Form):
         }),
         required=True
     )
+    keep_logged_in = forms.BooleanField(label=_("Keep me logged in"), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not settings.PRETIX_LONG_SESSIONS:
+            del self.fields['keep_logged_in']
 
     def clean(self):
         password1 = self.cleaned_data.get('password', '')

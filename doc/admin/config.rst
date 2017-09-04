@@ -60,6 +60,9 @@ Example::
 ``password_reset``
     Enables or disables password reset. Defaults to ``on``.
 
+``long_sessions``
+    Enables or disables the "keep me logged in" button. Defaults to ``on``.
+
 ``ecb_rates``
     By default, pretix periodically downloads a XML file from the European Central Bank to retrieve exchange rates
     that are used to print tax amounts in the customer currency on invoices for some currencies. Set to ``off`` to

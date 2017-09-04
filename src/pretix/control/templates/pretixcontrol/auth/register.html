@@ -10,6 +10,9 @@
 		{% bootstrap_field form.email %}
 		{% bootstrap_field form.password %}
         {% bootstrap_field form.password_repeat %}
+        {% if form.keep_logged_in %}
+            {% bootstrap_field form.keep_logged_in %}
+        {% endif %}
 		<div class="form-group buttons">
             <a href="{% url "control:auth.login" %}" class="btn btn-link">
                 &laquo; {% trans "Login" %}

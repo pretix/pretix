@@ -84,6 +84,9 @@ MEDIA_URL = config.get('urls', 'media', fallback='/media/')
 PRETIX_INSTANCE_NAME = config.get('pretix', 'instance_name', fallback='pretix.de')
 PRETIX_REGISTRATION = config.getboolean('pretix', 'registration', fallback=True)
 PRETIX_PASSWORD_RESET = config.getboolean('pretix', 'password_reset', fallback=True)
+PRETIX_LONG_SESSIONS = config.getboolean('pretix', 'long_sessions', fallback=True)
+PRETIX_SESSION_TIMEOUT_RELATIVE = 3600 * 3
+PRETIX_SESSION_TIMEOUT_ABSOLUTE = 3600 * 12
 
 SITE_URL = config.get('pretix', 'url', fallback='http://localhost')
 if SITE_URL.endswith('/'):
