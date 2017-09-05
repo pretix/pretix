@@ -14,7 +14,8 @@ from pretix.base.models import (
     CartPosition, Event, InvoiceAddress, Item, ItemVariation, Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.tax import TAXED_ZERO, TaxedPrice
+from pretix.base.models.orders import OrderFee
+from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
 from pretix.base.services.async import ProfiledTask
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.pricing import get_price
@@ -624,6 +625,40 @@ def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress
             pos.save(update_fields=['price', 'includes_tax'])
 
     return totaldiff
+
+
+def get_fees(event, total, invoice_address, provider):
+    fees = []
+
+    if total == 0:
+        return fees
+
+    if provider:
+        provider = event.get_payment_providers().get(provider)
+        if provider:
+            payment_fee = provider.calculate_fee(total)
+
+            if payment_fee:
+                payment_fee_tax_rule = event.settings.tax_rate_default or TaxRule.zero()
+                if payment_fee_tax_rule.tax_applicable(invoice_address):
+                    payment_fee_tax = payment_fee_tax_rule.tax(payment_fee, base_price_is='gross')
+                    fees.append(OrderFee(
+                        fee_type="PAYMENT",
+                        value=payment_fee,
+                        tax_rate=payment_fee_tax.rate,
+                        tax_value=payment_fee_tax.tax,
+                        tax_rule=payment_fee_tax_rule
+                    ))
+                else:
+                    fees.append(OrderFee(
+                        fee_type="PAYMENT",
+                        value=payment_fee,
+                        tax_rate=Decimal('0.00'),
+                        tax_value=Decimal('0.00'),
+                        tax_rule=payment_fee_tax_rule
+                    ))
+
+    return fees
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))

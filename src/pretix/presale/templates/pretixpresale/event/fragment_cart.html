@@ -156,28 +156,28 @@
         <div class="clearfix"></div>
     </div>
 {% endfor %}
-{% if cart.payment_fee %}
+{% for fee in cart.fees %}
     <div class="row cart-row">
         <div class="col-md-4 col-xs-6">
             <strong>{% trans "Payment method fee" %}</strong>
         </div>
         <div class="col-md-3 col-xs-6 col-md-offset-5 price">
             {% if event.settings.display_net_prices %}
-                <strong>{{ event.currency }} {{ cart.payment_fee_net|floatformat:2 }}</strong>
-                {% if cart.payment_fee_tax_rate %}
+                <strong>{{ event.currency }} {{ fee.net_value|floatformat:2 }}</strong>
+                {% if fee.tax_rate %}
                     <br />
                     <small>
-                        {% blocktrans trimmed with rate=cart.payment_fee_tax_rate taxname=cart.payment_fee_tax_rule.name|default:s_taxes %}
+                        {% blocktrans trimmed with rate=fee.tax_rate taxname=fee.tax_rule.name|default:s_taxes %}
                             <strong>plus</strong> {{ rate }}% {{ taxname }}
                         {% endblocktrans %}
                     </small>
                 {% endif %}
             {% else %}
-                <strong>{{ event.currency }} {{ cart.payment_fee|floatformat:2 }}</strong>
-                {% if cart.payment_fee_tax_rate %}
+                <strong>{{ event.currency }} {{ fee.value|floatformat:2 }}</strong>
+                {% if fee.tax_rate %}
                     <br />
                     <small>
-                        {% blocktrans trimmed with rate=cart.payment_fee_tax_rate taxname=cart.payment_fee_tax_rule.name|default:s_taxes %}
+                        {% blocktrans trimmed with rate=fee.tax_rate taxname=fee.tax_rule.name|default:s_taxes %}
                             incl. {{ rate }}% {{ taxname }}
                         {% endblocktrans %}
                     </small>
@@ -186,7 +186,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-{% endif %}
+{% endfor %}
 {% if event.settings.display_net_prices and cart.tax_total %}
     <div class="row cart-row total">
         <div class="col-md-4 col-xs-6">

@@ -29,6 +29,7 @@ from pretix.base.models import (
     Order, OrderPosition, RequiredAction, TaxRule, Voucher,
 )
 from pretix.base.models.event import EventMetaValue
+from pretix.base.models.orders import OrderFee
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import event_live_issues, register_ticket_outputs
@@ -957,7 +958,7 @@ class TaxDelete(EventPermissionRequiredMixin, DeleteView):
     def is_allowed(self) -> bool:
         o = self.object
         return (
-            not self.request.event.orders.filter(payment_fee_tax_rule=o).exists()
+            not OrderFee.objects.filter(tax_rule=o, order__event=self.request.event).exists()
             and not OrderPosition.objects.filter(tax_rule=o, order__event=self.request.event).exists()
             and not self.request.event.items.filter(tax_rule=o).exists()
             and self.request.event.settings.tax_rate_default != o

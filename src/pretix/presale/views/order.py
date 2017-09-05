@@ -1,5 +1,6 @@
 import mimetypes
 import os
+from decimal import Decimal
 
 from django.contrib import messages
 from django.db import transaction
@@ -12,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
-from pretix.base.models.orders import InvoiceAddress, QuestionAnswer
+from pretix.base.models.orders import InvoiceAddress, OrderFee, QuestionAnswer
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
@@ -305,11 +306,12 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
             if not provider.is_enabled or not provider.order_change_allowed(self.order):
                 continue
             fee = provider.calculate_fee(self._total_order_value)
+            current_fee = self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).aggregate(s=Sum('value'))['s'] or Decimal('0.00')
             providers.append({
                 'provider': provider,
                 'fee': fee,
-                'fee_diff': fee - self.order.payment_fee,
-                'fee_diff_abs': abs(fee - self.order.payment_fee),
+                'fee_diff': fee - current_fee,
+                'fee_diff_abs': abs(fee - current_fee),
                 'total': abs(self._total_order_value + fee),
                 'form': provider.payment_form_render(self.request)
             })
@@ -323,16 +325,29 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 request.session['payment_change_{}'.format(self.order.pk)] = '1'
 
                 new_fee = p['provider'].calculate_fee(self._total_order_value)
+                if new_fee:
+                    fee = self.order.fees.get_or_create(fee_type=OrderFee.FEE_TYPE_PAYMENT, defaults={'value': 0})[0]
+                    old_fee = fee.value
+                    fee.value = new_fee
+                    fee.internal_type = p['provider'].identifier
+                    fee._calculate_tax()
+                    fee.save()
+                else:
+                    try:
+                        fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
+                        old_fee = fee.value
+                        fee.delete()
+                    except OrderFee.DoesNotExist:
+                        old_fee = Decimal('0.00')
+
                 self.order.payment_provider = p['provider'].identifier
-                self.order.payment_fee = new_fee
-                self.order.total = self._total_order_value + new_fee
-                self.order._calculate_tax()
+                self.order.total = self._total_order_value + (self.order.fees.aggregate(sum=Sum('value'))['sum'] or 0)
 
                 resp = p['provider'].order_prepare(request, self.order)
                 if resp:
                     with transaction.atomic():
                         self.order.log_action('pretix.event.order.payment.changed', {
-                            'old_fee': self.order.payment_fee,
+                            'old_fee': old_fee,
                             'new_fee': new_fee,
                             'old_provider': self.order.payment_provider,
                             'new_provider': p['provider'].identifier

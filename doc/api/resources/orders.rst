@@ -48,6 +48,17 @@ invoice_address                       object                     Invoice address
                                                                  EU VAT service and validation was successful. This only
                                                                  happens in rare cases.
 position                              list of objects            List of order positions (see below)
+fees                                  list of objects            List of fees included in the order total (i.e.
+                                                                 payment fees)
+├ fee_type                            string                     Type of fee (currently ``payment``, ``passbook``,
+                                                                 ``other``)
+├ value                               money (string)             Fee amount
+├ description                         string                     Human-readable string with more details (can be empty)
+├ internal_type                       string                     Internal string (i.e. ID of the payment provider),
+                                                                 can be empty
+├ tax_rate                            decimal (string)           VAT rate applied for this fee
+├ tax_value                           money (string)             VAT included in this fee
+└ tax_rule                            integer                    The ID of the used tax rule (or ``null``)
 downloads                             list of objects            List of ticket download options for order-wise ticket
                                                                  downloading. This might be a multi-page PDF or a ZIP
                                                                  file of tickets for outputs that do not support
@@ -65,8 +76,9 @@ downloads                             list of objects            List of ticket 
 
 .. versionchanged:: 1.7
 
-   The attributes ``payment_fee_tax_rule``, ``invoice_address.vat_id_validated`` and ``invoice_address.is_business``
-   have been added.
+   The attributes ``invoice_address.vat_id_validated`` and ``invoice_address.is_business`` have been added.
+   The attributes ``order.payment_fee``, ``order.payment_fee_tax_rate`` and ``order.payment_fee_tax_value`` have been
+   deprecated in favour of the new ``fees`` attribute but will still be served and removed in 1.9.
 
 
 Order position resource
@@ -146,10 +158,7 @@ Order endpoints
             "expires": "2017-12-10T10:00:00Z",
             "payment_date": "2017-12-05",
             "payment_provider": "banktransfer",
-            "payment_fee": "0.00",
-            "payment_fee_tax_rate": "0.00",
-            "payment_fee_tax_value": "0.00",
-            "payment_fee_tax_rule": null,
+            "fees": [],
             "total": "23.00",
             "comment": "",
             "invoice_address": {
@@ -254,10 +263,7 @@ Order endpoints
         "expires": "2017-12-10T10:00:00Z",
         "payment_date": "2017-12-05",
         "payment_provider": "banktransfer",
-        "payment_fee": "0.00",
-        "payment_fee_tax_rate": "0.00",
-        "payment_fee_tax_value": "0.00",
-        "payment_fee_tax_rule": null,
+        "fees": [],
         "total": "23.00",
         "comment": "",
         "invoice_address": {

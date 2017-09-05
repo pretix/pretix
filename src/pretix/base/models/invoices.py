@@ -168,6 +168,7 @@ class InvoiceLine(models.Model):
     :type tax_name: str
     """
     invoice = models.ForeignKey('Invoice', related_name='lines')
+    position = models.PositiveIntegerField(default=0)
     description = models.TextField()
     gross_value = models.DecimalField(max_digits=10, decimal_places=2)
     tax_value = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
@@ -177,3 +178,6 @@ class InvoiceLine(models.Model):
     @property
     def net_value(self):
         return self.gross_value - self.tax_value
+
+    class Meta:
+        ordering = ('position', 'pk')

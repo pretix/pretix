@@ -1,6 +1,5 @@
 from collections import defaultdict
 from datetime import timedelta
-from decimal import Decimal
 from itertools import groupby
 
 from django.db.models import Sum
@@ -8,7 +7,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 
 from pretix.base.models import CartPosition, InvoiceAddress, OrderPosition
-from pretix.base.models.tax import TaxRule
+from pretix.base.services.cart import get_fees
 from pretix.presale.signals import question_form_fields
 
 
@@ -101,34 +100,21 @@ class CartMixin:
         tax_total = sum(p.total - p.net_total for p in positions)
 
         if order:
-            payment_fee = order.payment_fee
-            tax_total += order.payment_fee_tax_value
-            payment_fee_net = order.payment_fee - order.payment_fee_tax_value
-            net_total += payment_fee_net
-            payment_fee_tax_rule = order.payment_fee_tax_rule
-            payment_fee_tax_rate = order.payment_fee_tax_rate
+            fees = order.fees.all()
         else:
-            payment_fee = self.get_payment_fee(total)
-            payment_fee_tax_rule = self.request.event.settings.tax_rate_default or TaxRule.zero()
-
             iapk = self.request.session.get('invoice_address_{}'.format(self.request.event.pk))
             ia = None
-            if payment_fee_tax_rule.eu_reverse_charge and iapk:
+            if iapk:
                 try:
                     ia = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
                 except InvoiceAddress.DoesNotExist:
                     pass
 
-            if payment_fee_tax_rule.tax_applicable(ia):
-                payment_fee_tax = payment_fee_tax_rule.tax(payment_fee, base_price_is='gross')
-                tax_total += payment_fee_tax.tax
-                net_total += payment_fee_tax.net
-                payment_fee_net = payment_fee_tax.net
-                payment_fee_tax_rate = payment_fee_tax.rate
-            else:
-                net_total += payment_fee
-                payment_fee_net = payment_fee
-                payment_fee_tax_rate = Decimal('0.00')
+            fees = get_fees(self.request.event, total, ia, self.request.session.get('payment'))
+
+        total += sum([f.value for f in fees])
+        net_total += sum([f.net_value for f in fees])
+        tax_total += sum([f.tax_value for f in fees])
 
         try:
             first_expiry = min(p.expires for p in positions) if positions else now()
@@ -140,27 +126,14 @@ class CartMixin:
         return {
             'positions': positions,
             'raw': cartpos,
-            'total': total + payment_fee,
+            'total': total,
             'net_total': net_total,
             'tax_total': tax_total,
-            'payment_fee': payment_fee,
-            'payment_fee_net': payment_fee_net,
-            'payment_fee_tax_rate': payment_fee_tax_rate,
-            'payment_fee_tax_rule': payment_fee_tax_rule,
+            'fees': fees,
             'answers': answers,
             'minutes_left': minutes_left,
             'first_expiry': first_expiry,
         }
-
-    def get_payment_fee(self, total):
-        if total == 0:
-            return Decimal('0.00')
-        payment_fee = 0
-        if 'payment' in self.request.session:
-            provider = self.request.event.get_payment_providers().get(self.request.session['payment'])
-            if provider:
-                payment_fee = provider.calculate_fee(total)
-        return payment_fee
 
 
 def get_cart(request):

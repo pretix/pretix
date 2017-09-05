@@ -27,6 +27,7 @@ from pretix.base.models import (
     generate_position_secret, generate_secret,
 )
 from pretix.base.models.event import SubEvent
+from pretix.base.models.orders import OrderFee
 from pretix.base.models.tax import EU_COUNTRIES
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
@@ -183,7 +184,7 @@ class OrderDetail(OrderView):
             'positions': positions,
             'raw': cartpos,
             'total': self.object.total,
-            'payment_fee': self.object.payment_fee,
+            'fees': self.object.fees.all(),
             'net_total': self.object.net_total,
             'tax_total': self.object.tax_total,
         }
@@ -860,7 +861,7 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
 
         ctx['items_by_category'], ctx['total'] = order_overview(self.request.event, subevent=subevent)
         ctx['subevent_warning'] = self.request.event.has_subevents and subevent and (
-            self.request.event.orders.filter(payment_fee__gt=0).exists()
+            OrderFee.objects.filter(order__event=self.request.event).exclude(value=0).exists()
         )
         return ctx
 

@@ -23,7 +23,7 @@ from pretix.base.models import (
     User, Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.orders import CachedTicket, InvoiceAddress
+from pretix.base.models.orders import CachedTicket, InvoiceAddress, OrderFee
 from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.reldate import RelativeDateWrapper
@@ -342,14 +342,23 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         raise OrderError(err, errargs)
 
 
+def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvider):
+    fees = []
+    total = sum([c.price for c in positions])
+    payment_fee = payment_provider.calculate_fee(total)
+    if payment_fee:
+        fees.append(OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=payment_fee))
+
+    return fees
+
+
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None, address: int=None,
                   meta_info: dict=None):
     from datetime import time
 
-    total = sum([c.price for c in positions])
-    payment_fee = payment_provider.calculate_fee(total)
-    total += payment_fee
+    fees = _get_fees(positions, payment_provider)
+    total = sum([c.price for c in positions]) + sum([c.value for c in fees])
 
     tz = pytz.timezone(event.settings.timezone)
     exp_by_date = now_dt.astimezone(tz) + timedelta(days=event.settings.get('payment_term_days', as_type=int))
@@ -387,7 +396,6 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             expires=expires,
             locale=locale,
             total=total,
-            payment_fee=payment_fee,
             payment_provider=payment_provider.identifier,
             meta_info=json.dumps(meta_info or {}),
         )
@@ -398,8 +406,12 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             address.order = order
             address.save()
 
-            order._calculate_tax()  # Might have changed due to new invoice address
             order.save()
+
+        for fee in fees:
+            fee.order = order
+            fee._calculate_tax()
+            fee.save()
 
         OrderPosition.transform_cart_positions(positions, order)
         order.log_action('pretix.event.order.placed')
@@ -825,15 +837,21 @@ class OrderChangeManager:
                 })
 
     def _recalculate_total_and_payment_fee(self):
-        self.order.total = sum([p.price for p in self.order.positions.all()])
         payment_fee = Decimal('0.00')
         if self.order.total != 0:
             prov = self._get_payment_provider()
             if prov:
                 payment_fee = prov.calculate_fee(self.order.total)
-        self.order.payment_fee = payment_fee
-        self.order.total += payment_fee
-        self.order._calculate_tax()
+
+        if payment_fee:
+            fee = self.order.fees.get_or_create(fee_type=OrderFee.FEE_TYPE_PAYMENT, defaults={'value': 0})[0]
+            fee.value = payment_fee
+            fee._calculate_tax()
+            fee.save()
+        else:
+            self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).delete()
+
+        self.order.total = sum([p.price for p in self.order.positions.all()]) + sum([f.value for f in self.order.fees.all()])
         self.order.save()
 
     def _reissue_invoice(self):

@@ -14,6 +14,7 @@ from django.utils.translation import pgettext, pgettext_lazy, ugettext as _
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Order, OrderPosition
 from pretix.base.models.event import SubEvent
+from pretix.base.models.orders import OrderFee
 from pretix.base.services.stats import order_overview
 
 
@@ -299,9 +300,10 @@ class OrderTaxListReport(Report):
         tz = pytz.timezone(self.event.settings.timezone)
 
         tax_rates = set(
-            self.event.orders.exclude(payment_fee=0).values_list('payment_fee_tax_rate', flat=True)
-                .filter(status__in=self.form_data['status'])
-                .distinct().order_by()
+            a for a
+            in OrderFee.objects.filter(
+                order__event=self.event
+            ).values_list('tax_rate', flat=True).distinct().order_by()
         )
         tax_rates |= set(
             a for a
@@ -347,13 +349,20 @@ class OrderTaxListReport(Report):
             order__status__in=self.form_data['status'],
             order__event=self.event,
         ).values(
-            'order__code', 'order__datetime', 'order__payment_date', 'order__total', 'order__payment_fee',
-            'order__payment_fee_tax_rate', 'order__payment_fee_tax_value', 'tax_rate', 'order__status'
+            'order__code', 'order__datetime', 'order__payment_date', 'order__total', 'tax_rate', 'order__status',
+            'order__id'
         ).annotate(prices=Sum('price'), tax_values=Sum('tax_value')).order_by(
             'order__datetime' if self.form_data['sort'] == 'datetime' else 'order__payment_date',
             'order__datetime',
             'order__code'
         )
+        fee_sum_cache = {
+            (o['order__id'], o['tax_rate']): o for o in
+            OrderFee.objects.values('tax_rate', 'order__id').order_by().annotate(
+                taxsum=Sum('tax_value'), grosssum=Sum('value')
+            )
+        }
+
         last_order_code = None
         tax_sums = defaultdict(Decimal)
         price_sums = defaultdict(Decimal)
@@ -370,11 +379,13 @@ class OrderTaxListReport(Report):
                     ] + sum((['', ''] for t in tax_rates), []),
                 )
                 last_order_code = op['order__code']
-                if op['order__payment_fee_tax_value']:
-                    tdata[-1][5 + 2 * tax_rates.index(op['order__payment_fee_tax_rate'])] = str(op['order__payment_fee'])
-                    tdata[-1][6 + 2 * tax_rates.index(op['order__payment_fee_tax_rate'])] = str(op['order__payment_fee_tax_value'])
-                    tax_sums[op['order__payment_fee_tax_rate']] += op['order__payment_fee_tax_value']
-                    price_sums[op['order__payment_fee_tax_rate']] += op['order__payment_fee']
+                for i, rate in enumerate(tax_rates):
+                    odata = fee_sum_cache.get((op['order__id'], rate))
+                    if odata:
+                        tdata[-1][5 + 2 * i] = str(odata['grosssum'] or '0.00')
+                        tdata[-1][6 + 2 * i] = str(odata['taxsum'] or '0.00')
+                        tax_sums[rate] += odata['taxsum'] or 0
+                        price_sums[rate] += odata['grosssum'] or 0
 
                 i = tax_rates.index(op['tax_rate'])
                 tdata[-1][5 + 2 * i] = str(Decimal(tdata[-1][5 + 2 * i] or '0') + op['prices'])

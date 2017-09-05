@@ -266,28 +266,31 @@
                             <div class="clearfix"></div>
                         </div>
                     {% endfor %}
-                    {% if items.payment_fee %}
+                    {% for fee in items.fees %}
                         <div class="row-fluid product-row">
                             <div class="col-md-4 col-xs-6">
-                                <strong>{% trans "Payment method fee" %}</strong>
+                                <strong>{{ fee.get_fee_type_display }}</strong>
+                                {% if fee.description %}
+                                    – {{ fee.description }}
+                                {% endif %}
                             </div>
                             <div class="col-md-3 col-xs-6 col-md-offset-5 price">
                                 {% if event.settings.display_net_prices %}
-                                    <strong>{{ event.currency }} {{ order.payment_fee_net|floatformat:2 }}</strong>
-                                    {% if order.payment_fee_tax_rate %}
+                                    <strong>{{ event.currency }} {{ fee.net_value|floatformat:2 }}</strong>
+                                    {% if fee.tax_rate %}
                                         <br/>
                                         <small>
-                                            {% blocktrans trimmed with rate=order.payment_fee_tax_rate taxname=order.payment_fee_tax_rule.name|default:s_taxes %}
+                                            {% blocktrans trimmed with rate=fee.tax_rate taxname=fee.tax_rule.name|default:s_taxes %}
                                                 <strong>plus</strong> {{ rate }}% {{ taxname }}
                                             {% endblocktrans %}
                                         </small>
                                     {% endif %}
                                 {% else %}
-                                    <strong>{{ event.currency }} {{ items.payment_fee|floatformat:2 }}</strong>
-                                    {% if order.payment_fee_tax_rate %}
+                                    <strong>{{ event.currency }} {{ fee.value|floatformat:2 }}</strong>
+                                    {% if fee.tax_rate %}
                                         <br/>
                                         <small>
-                                            {% blocktrans trimmed with rate=order.payment_fee_tax_rate taxname=order.payment_fee_tax_rule.name|default:s_taxes %}
+                                            {% blocktrans trimmed with rate=fee.tax_rate taxname=fee.tax_rule.name|default:s_taxes %}
                                                 incl. {{ rate }}% {{ taxname }}
                                             {% endblocktrans %}
                                         </small>
@@ -296,7 +299,7 @@
                             </div>
                             <div class="clearfix"></div>
                         </div>
-                    {% endif %}
+                    {% endfor %}
                     {% if event.settings.display_net_prices and items.net_total %}
                         <div class="row-fluid product-row total">
                             <div class="col-md-4 col-xs-6">

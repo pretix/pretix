@@ -5,6 +5,7 @@ from django.utils.timezone import now
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import Event, Order, Organizer, Team, User
+from pretix.base.models.orders import OrderFee
 
 
 class TaxRateFormTest(SoupTest):
@@ -76,18 +77,16 @@ class TaxRateFormTest(SoupTest):
         self.assertIn("VAT", doc.select("#page-wrapper")[0].text)
         assert self.event1.tax_rules.exists()
 
-    def test_delete_order_existing(self):
+    def test_delete_fee_existing(self):
         tr = self.event1.tax_rules.create(rate=19, name="VAT")
-        self.event1.orders.create(
+        o = self.event1.orders.create(
             code='FOO', event=self.event1, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + datetime.timedelta(days=10),
             total=14, payment_provider='banktransfer', locale='en',
-            payment_fee=0.3,
-            payment_fee_tax_rate=19,
-            payment_fee_tax_value=0.05,
-            payment_fee_tax_rule=tr
         )
+        o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
+                      tax_value=Decimal('0.05'), tax_rule=tr)
         doc = self.get_doc('/control/event/%s/%s/settings/tax/%s/delete' % (self.orga1.slug, self.event1.slug, tr.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         doc = self.post_doc('/control/event/%s/%s/settings/tax/%s/delete' % (self.orga1.slug, self.event1.slug, tr.id),

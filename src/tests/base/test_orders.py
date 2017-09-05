@@ -13,6 +13,7 @@ from pretix.base.models import (
     CartPosition, Event, InvoiceAddress, Item, Order, OrderPosition, Organizer,
 )
 from pretix.base.models.items import SubEventItem
+from pretix.base.models.orders import OrderFee
 from pretix.base.payment import FreeOrderProvider
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
@@ -539,10 +540,10 @@ class OrderChangeManagerTests(TestCase):
         self.ocm.commit()
         self.order.refresh_from_db()
         assert self.order.total == Decimal('47.30')
-        assert self.order.payment_fee == prov.calculate_fee(self.order.total)
-        assert self.order.payment_fee_tax_rate == Decimal('19.00')
-        assert round_decimal(self.order.payment_fee * (
-            1 - 100 / (100 + self.order.payment_fee_tax_rate))) == self.order.payment_fee_tax_value
+        fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
+        assert fee.value == prov.calculate_fee(self.order.total)
+        assert fee.tax_rate == Decimal('19.00')
+        assert round_decimal(fee.value * (1 - 100 / (100 + fee.tax_rate))) == fee.tax_value
 
     def test_require_pending(self):
         self.order.status = Order.STATUS_PAID
@@ -725,9 +726,10 @@ class OrderChangeManagerTests(TestCase):
         self.ocm._recalculate_total_and_payment_fee()
 
         assert self.order.total == Decimal('46.30')
-        assert self.order.payment_fee == prov.calculate_fee(self.order.total)
-        assert self.order.payment_fee_tax_rate == Decimal('19.00')
-        assert self.order.payment_fee_tax_value == Decimal('0.05')
+        fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
+        assert fee.value == prov.calculate_fee(self.order.total)
+        assert fee.tax_rate == Decimal('19.00')
+        assert fee.tax_value == Decimal('0.05')
 
         ia = self._enable_reverse_charge()
         self.ocm.recalculate_taxes()
@@ -739,9 +741,10 @@ class OrderChangeManagerTests(TestCase):
             assert op.tax_rate == Decimal('0.00')
 
         assert self.order.total == Decimal('43.30')
-        assert self.order.payment_fee == prov.calculate_fee(self.order.total)
-        assert self.order.payment_fee_tax_rate == Decimal('0.00')
-        assert self.order.payment_fee_tax_value == Decimal('0.00')
+        fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
+        assert fee.value == prov.calculate_fee(self.order.total)
+        assert fee.tax_rate == Decimal('0.00')
+        assert fee.tax_value == Decimal('0.00')
 
         ia.vat_id_validated = False
         ia.save()
@@ -755,6 +758,7 @@ class OrderChangeManagerTests(TestCase):
             assert op.tax_rate == Decimal('7.00')
 
         assert self.order.total == Decimal('46.32')
-        assert self.order.payment_fee == prov.calculate_fee(self.order.total)
-        assert self.order.payment_fee_tax_rate == Decimal('19.00')
-        assert self.order.payment_fee_tax_value == Decimal('0.05')
+        fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
+        assert fee.value == prov.calculate_fee(self.order.total)
+        assert fee.tax_rate == Decimal('19.00')
+        assert fee.tax_value == Decimal('0.05')

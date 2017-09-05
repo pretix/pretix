@@ -11,6 +11,7 @@ from django.utils.formats import localize
 from django.utils.translation import ugettext as _, ugettext_lazy
 
 from pretix.base.models import InvoiceAddress, Order, OrderPosition
+from pretix.base.models.orders import OrderFee
 
 from ..exporter import BaseExporter
 from ..signals import register_data_exporters
@@ -35,7 +36,10 @@ class OrderListExporter(BaseExporter):
 
     def _get_all_tax_rates(self, qs):
         tax_rates = set(
-            qs.exclude(payment_fee=0).values_list('payment_fee_tax_rate', flat=True).distinct().order_by()
+            a for a
+            in OrderFee.objects.filter(
+                order__event=self.event
+            ).values_list('tax_rate', flat=True).distinct().order_by()
         )
         tax_rates |= set(
             a for a
@@ -59,7 +63,7 @@ class OrderListExporter(BaseExporter):
         headers = [
             _('Order code'), _('Order total'), _('Status'), _('Email'), _('Order date'),
             _('Company'), _('Name'), _('Address'), _('ZIP code'), _('City'), _('Country'), _('VAT ID'),
-            _('Payment date'), _('Payment type'), _('Payment method fee'),
+            _('Payment date'), _('Payment type'), _('Fees'),
         ]
 
         for tr in tax_rates:
@@ -78,6 +82,16 @@ class OrderListExporter(BaseExporter):
             for k, v in self.event.get_payment_providers().items()
         }
 
+        full_fee_sum_cache = {
+            o['order__id']: o['grosssum'] for o in
+            OrderFee.objects.values('tax_rate', 'order__id').order_by().annotate(grosssum=Sum('value'))
+        }
+        fee_sum_cache = {
+            (o['order__id'], o['tax_rate']): o for o in
+            OrderFee.objects.values('tax_rate', 'order__id').order_by().annotate(
+                taxsum=Sum('tax_value'), grosssum=Sum('value')
+            )
+        }
         sum_cache = {
             (o['order__id'], o['tax_rate']): o for o in
             OrderPosition.objects.values('tax_rate', 'order__id').order_by().annotate(
@@ -109,19 +123,18 @@ class OrderListExporter(BaseExporter):
             row += [
                 order.payment_date.astimezone(tz).strftime('%Y-%m-%d') if order.payment_date else '',
                 provider_names.get(order.payment_provider, order.payment_provider),
-                localize(order.payment_fee)
+                localize(full_fee_sum_cache.get(order.id) or Decimal('0.00'))
             ]
 
             for tr in tax_rates:
                 taxrate_values = sum_cache.get((order.id, tr), {'grosssum': Decimal('0.00'), 'taxsum': Decimal('0.00')})
-                if tr == order.payment_fee_tax_rate and order.payment_fee_tax_value:
-                    taxrate_values['grosssum'] += order.payment_fee
-                    taxrate_values['taxsum'] += order.payment_fee_tax_value
+                fee_taxrate_values = fee_sum_cache.get((order.id, tr), {'grosssum': Decimal('0.00'), 'taxsum': Decimal('0.00')})
 
                 row += [
-                    localize(taxrate_values['grosssum']),
-                    localize(taxrate_values['grosssum'] - taxrate_values['taxsum']),
-                    localize(taxrate_values['taxsum']),
+                    localize(taxrate_values['grosssum'] + fee_taxrate_values['grosssum']),
+                    localize(taxrate_values['grosssum'] - taxrate_values['taxsum']
+                             + fee_taxrate_values['grosssum'] - fee_taxrate_values['taxsum']),
+                    localize(taxrate_values['taxsum'] + fee_taxrate_values['taxsum']),
                 ]
 
             row.append(', '.join([i.number for i in order.invoices.all()]))

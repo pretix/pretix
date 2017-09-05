@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Event, Item, ItemCategory, Order, OrderPosition
 from pretix.base.models.event import SubEvent
+from pretix.base.models.orders import OrderFee
 
 
 class DummyObject:
@@ -157,33 +158,35 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
 
     # Payment fees
     payment_cat_obj = DummyObject()
-    payment_cat_obj.name = _('Payment method fees')
+    payment_cat_obj.name = _('Fees')
     payment_items = []
 
     if not subevent:
-        counters = event.orders.values('payment_provider', 'status').annotate(
-            cnt=Count('id'), payment_fee=Sum('payment_fee'), tax_value=Sum('payment_fee_tax_value')
-        ).order_by()
+        counters = OrderFee.objects.filter(
+            order__event=event
+        ).values(
+            'fee_type', 'internal_type', 'order__status'
+        ).annotate(cnt=Count('id'), value=Sum('value'), tax_value=Sum('tax_value')).order_by()
 
         num_canceled = {
-            o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
-            for o in counters if o['status'] == Order.STATUS_CANCELED
+            (o['fee_type'], o['internal_type']): (o['cnt'], o['value'], o['value'] - o['tax_value'])
+            for o in counters if o['order__status'] == Order.STATUS_CANCELED
         }
         num_refunded = {
-            o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
-            for o in counters if o['status'] == Order.STATUS_REFUNDED
+            (o['fee_type'], o['internal_type']): (o['cnt'], o['value'], o['value'] - o['tax_value'])
+            for o in counters if o['order__status'] == Order.STATUS_REFUNDED
         }
         num_pending = {
-            o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
-            for o in counters if o['status'] == Order.STATUS_PENDING
+            (o['fee_type'], o['internal_type']): (o['cnt'], o['value'], o['value'] - o['tax_value'])
+            for o in counters if o['order__status'] == Order.STATUS_PENDING
         }
         num_expired = {
-            o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
-            for o in counters if o['status'] == Order.STATUS_EXPIRED
+            (o['fee_type'], o['internal_type']): (o['cnt'], o['value'], o['value'] - o['tax_value'])
+            for o in counters if o['order__status'] == Order.STATUS_EXPIRED
         }
         num_paid = {
-            o['payment_provider']: (o['cnt'], o['payment_fee'], o['payment_fee'] - o['tax_value'])
-            for o in counters if o['status'] == Order.STATUS_PAID
+            (o['fee_type'], o['internal_type']): (o['cnt'], o['value'], o['value'] - o['tax_value'])
+            for o in counters if o['order__status'] == Order.STATUS_PAID
         }
         num_total = dictsum(num_pending, num_paid)
 
@@ -191,11 +194,15 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
             k: v.verbose_name
             for k, v in event.get_payment_providers().items()
         }
+        names = dict(OrderFee.FEE_TYPES)
 
         for pprov, total in num_total.items():
             ppobj = DummyObject()
-            ppobj.name = provider_names.get(pprov, pprov)
-            ppobj.provider = pprov
+            if pprov[0] == OrderFee.FEE_TYPE_PAYMENT:
+                ppobj.name = '{} - {}'.format(names[OrderFee.FEE_TYPE_PAYMENT], provider_names.get(pprov[1], pprov[1]))
+            else:
+                ppobj.name = '{} - {}'.format(names[OrderFee.FEE_TYPE_PAYMENT], pprov[1])
+            ppobj.provider = pprov[1]
             ppobj.has_variations = False
             ppobj.num_total = total
             ppobj.num_canceled = num_canceled.get(pprov, (0, 0, 0))

@@ -11,6 +11,7 @@ from pretix.base.models import (
     Event, Item, ItemCategory, ItemVariation, Order, OrderPosition, Organizer,
     Question, Quota,
 )
+from pretix.base.models.orders import OrderFee
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 
@@ -417,8 +418,9 @@ class OrdersTest(TestCase):
         )
         self.order.refresh_from_db()
         assert self.order.payment_provider == 'testdummy'
-        assert self.order.payment_fee == Decimal('12.00')
-        assert self.order.total == Decimal('23.00') + self.order.payment_fee
+        fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
+        assert fee.value == Decimal('12.00')
+        assert self.order.total == Decimal('23.00') + fee.value
         assert self.order.invoices.count() == 3
 
     def test_answer_download_token(self):
