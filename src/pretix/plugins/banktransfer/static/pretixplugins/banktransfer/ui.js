@@ -31,6 +31,9 @@ var bankimport_transactionlist = {
             "success": function (data) {
                 if (data.status == "ok") {
                     $("tr[data-id=" + id + "]").removeClass("has-error");
+                    if (data.comment) {
+                        bankimport_transactionlist.comment_reset_to_text(id, data.comment, data.plain);
+                    }
                     success();
                 } else {
                     $("tr[data-id=" + id + "] button").prop("disabled", false);
@@ -66,12 +69,13 @@ var bankimport_transactionlist = {
         });
     },
 
-    comment_reset_to_text: function (id, text) {
+    comment_reset_to_text: function (id, text, plain) {
         var $box = $("tr[data-id=" + id + "] .comment-box");
+        $box[0].dataset["plain"] = plain;
         $box.html("")
             .append($("<strong>").text(gettext("Comment:")))
             .append(" ")
-            .append($("<span>").addClass("comment").text(text))
+            .append($("<span>").addClass("comment").append(" ").append(text))
             .append(" ")
             .append($("<a>").addClass("comment-modify btn btn-default btn-xs")
                         .append("<span class='fa fa-edit'></span>"));
@@ -81,7 +85,8 @@ var bankimport_transactionlist = {
         var $box = $(e.target).closest("div");
         var id = $box.closest("tr").attr("data-id");
         var $inp = $("<textarea>").addClass("form-control");
-        var orig_text = $box.find(".comment").text();
+        var orig_rendered = $box.find(".comment");
+        var orig_text = $box[0].dataset.plain;
         $inp.val(orig_text);
 
         var $btngrp = $("<div>");
@@ -99,11 +104,10 @@ var bankimport_transactionlist = {
             var text = $box.find("textarea").val();
             $box.find("input, textarea, button").prop("disabled", true);
             bankimport_transactionlist._action(id, "comment:" + text, function () {
-                bankimport_transactionlist.comment_reset_to_text(id, text);
             });
         });
         $btn2.click(function () {
-            bankimport_transactionlist.comment_reset_to_text(id, orig_text);
+            bankimport_transactionlist.comment_reset_to_text(id, orig_rendered, orig_text);
         });
 
         e.preventDefault();
