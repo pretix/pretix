@@ -4,6 +4,28 @@ import pytest
 
 from pretix.base.models import Event, Organizer, Team, User
 
+valid_secret_key_values = [
+    'sk_',
+    'sk_foo',
+]
+
+valid_publishable_key_values = [
+    'pk_',
+    'pk_foo',
+]
+
+invalid_secret_key_values = [
+    'skihaspartialprefix',
+    'ihasnoprefix',
+    'ihaspostfixsk_',
+]
+
+invalid_publishable_key_values = [
+    'pkihaspartialprefix',
+    'ihasnoprefix',
+    'ihaspostfixpk_',
+]
+
 
 @pytest.fixture
 def env(client):
@@ -21,12 +43,48 @@ def env(client):
     t.members.add(user)
     t.limit_events.add(event)
     client.force_login(user)
-    return client, event
+    url = '/control/event/%s/%s/settings/payment' % (event.organizer.slug, event.slug)
+    return client, event, url
 
 
 @pytest.mark.django_db
 def test_settings(env):
-    client, event = env
-    response = client.get('/control/event/%s/%s/settings/payment' % (event.organizer.slug, event.slug), follow=True)
+    client, event, url = env
+    response = client.get(url, follow=True)
     assert response.status_code == 200
     assert 'stripe__enabled' in response.rendered_content
+
+
+def _stripe_key_test(env, field, value, is_valid):
+    client, event, url = env
+    data = {'payment_stripe_' + field: value}
+    response = client.post(url, data)
+
+    if not is_valid:
+        assert 'does not look valid' in response.rendered_content
+    else:
+        assert 'does not look valid' not in response.rendered_content
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("value", invalid_secret_key_values)
+def test_settings_secret_key_invalid(env, value):
+    _stripe_key_test(env, 'secret_key', value, False)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("value", invalid_publishable_key_values)
+def test_settings_publishable_key_invalid(env, value):
+    _stripe_key_test(env, 'publishable_key', value, False)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("value", valid_secret_key_values)
+def test_settings_secret_key_valid(env, value):
+    _stripe_key_test(env, 'secret_key', value, True)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("value", valid_publishable_key_values)
+def test_settings_publishable_key_valid(env, value):
+    _stripe_key_test(env, 'publishable_key', value, True)
