@@ -196,7 +196,7 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
         }
         names = dict(OrderFee.FEE_TYPES)
 
-        for pprov, total in num_total.items():
+        for pprov, total in sorted(num_total.items(), key=lambda i: i[0]):
             ppobj = DummyObject()
             if pprov[0] == OrderFee.FEE_TYPE_PAYMENT:
                 ppobj.name = '{} - {}'.format(names[OrderFee.FEE_TYPE_PAYMENT], provider_names.get(pprov[1], pprov[1]))
