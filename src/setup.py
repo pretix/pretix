@@ -102,7 +102,7 @@ setup(
         'stripe==1.62.*',
         'chardet<3.1.0,>=3.0.2',
         'mt-940==4.7',
-        'django-i18nfield>=1.0.1',
+        'django-i18nfield>=1.2.1',
         'vobject==0.9.*',
         'pycountry',
         'django-countries',

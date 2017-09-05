@@ -30,7 +30,7 @@ django-markup
 markdown
 bleach==2.*
 raven
-django-i18nfield>=1.0.1
+django-i18nfield>=1.2.1
 # Stripe
 stripe==1.62.*
 # PayPal
