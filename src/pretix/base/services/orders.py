@@ -347,7 +347,8 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
     if payment_fee:
-        fees.append(OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=payment_fee))
+        fees.append(OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=payment_fee,
+                             internal_type=payment_provider.identifier))
 
     return fees
 
