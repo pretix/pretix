@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-05 08:57+0000\n"
-"PO-Revision-Date: 2017-09-05 11:15+0200\n"
+"POT-Creation-Date: 2017-09-05 09:55+0000\n"
+"PO-Revision-Date: 2017-09-05 12:10+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
 "Language: de\n"
@@ -1049,7 +1049,7 @@ msgstr "Antwort"
 #: pretix/plugins/checkinlists/exporters.py:69
 #: pretix/plugins/checkinlists/exporters.py:109
 #: pretix/plugins/pretixdroid/models.py:14
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:46
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:52
 #: pretix/plugins/reports/exporters.py:249
 msgctxt "subevent"
 msgid "Date"
@@ -1236,8 +1236,8 @@ msgstr "Das Produkt \"{item}\" ist nicht mehr verfügbar."
 #: pretix/base/models/orders.py:494 pretix/control/views/item.py:436
 #: pretix/control/views/vouchers.py:81 pretix/control/views/vouchers.py:82
 #: pretix/plugins/checkinlists/exporters.py:124
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:71
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:72
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:77
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:78
 #: pretix/presale/checkoutflow.py:477
 msgid "Yes"
 msgstr "Ja"
@@ -1247,8 +1247,8 @@ msgstr "Ja"
 #: pretix/control/views/vouchers.py:82
 #: pretix/plugins/checkinlists/exporters.py:124
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_refund.html:14
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:71
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:72
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:77
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:78
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_refund.html:14
 #: pretix/presale/checkoutflow.py:479
 msgid "No"
@@ -3786,8 +3786,8 @@ msgstr "Alle Veranstalter"
 
 #: pretix/control/forms/filter.py:195
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:39
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:59
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:63
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:65
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:69
 msgid "All"
 msgstr "Alle"
 
@@ -6088,7 +6088,7 @@ msgid "The following products might be no longer available for sale:"
 msgstr "Die folgenden Produkte stehen möglicherweise nicht mehr zum Verkauf:"
 
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:27
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:48
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:54
 msgid "Items"
 msgstr "Produkte"
 
@@ -8902,11 +8902,11 @@ msgstr ""
 "pretixdroid ist eine Android-App, mit der du am Eingang deiner Veranstaltung "
 "die Tickets scannen und überprüfen kannst."
 
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:11
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:13
 msgid "Create app configuration"
 msgstr "App-Konfiguration erstellen"
 
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:13
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:15
 msgid ""
 "To start scanning tickets with our Android app, first create a configuration "
 "code here:"
@@ -8914,27 +8914,31 @@ msgstr ""
 "Um mit unserer Android-App Tickets zu scannen, erstelle hier erst einen "
 "Konfigurations-Code:"
 
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:30
-msgid "Create"
-msgstr "Erstellen"
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:32
+msgid "Create configuration"
+msgstr "App-Konfiguration erstellen"
 
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:38
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:41
 msgid "Existing app configurations"
 msgstr "Bestehende App-Konfigurationen"
 
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:44
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:43
+msgid "Create a new configuration"
+msgstr "Neue App-Konfiguration erstellen"
+
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:50
 msgid "ID"
 msgstr "ID"
 
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:49
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:55
 msgid "Show info"
 msgstr "Infos anzeigen"
 
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:50
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:56
 msgid "Allow search"
 msgstr "Suche erlauben"
 
-#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:75
+#: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:81
 msgid "Show QR code"
 msgstr "QR-Code anzeigen"
 
@@ -10794,6 +10798,9 @@ msgstr "Deutsch"
 #: pretix/settings.py:324
 msgid "German (informal)"
 msgstr "Deutsch (Du)"
+
+#~ msgid "Create"
+#~ msgstr "Erstellen"
 
 #~ msgid "Payment method fee tax rate"
 #~ msgstr "Steuersatz auf Gebühr für gewählte Zahlungsmethode"

@@ -8,35 +8,41 @@
     <p>{% blocktrans trimmed %}
         pretixdroid is an Android app that you can use to control tickets at the entrance of your event.
     {% endblocktrans %}</p>
-    <h2>{% trans "Create app configuration" %}</h2>
-    <p>
-        {% blocktrans trimmed %}
-            To start scanning tickets with our Android app, first create a configuration code here:
-        {% endblocktrans %}
-    </p>
-    <form action="" method="post" class="form-horizontal">
-        {% csrf_token %}
-        {% bootstrap_form_errors add_form %}
-        {% bootstrap_field add_form.all_items layout="horizontal" %}
-        {% bootstrap_field add_form.items layout="horizontal" %}
-        {% bootstrap_field add_form.show_info layout="horizontal" %}
-        {% bootstrap_field add_form.allow_search layout="horizontal" %}
-        {% if add_form.subevent %}
-            {% bootstrap_field add_form.subevent layout="horizontal" %}
-        {% endif %}
-        <div class="form-group">
-            <div class="col-md-offset-3 col-md-9">
-                <button type="submit" class="btn btn-primary btn-save" name="add" value="1">
-                    {% trans "Create" %}
-                </button>
+
+    {% if not configs or "create" in request.GET %}
+        <h2>{% trans "Create app configuration" %}</h2>
+        <p>
+            {% blocktrans trimmed %}
+                To start scanning tickets with our Android app, first create a configuration code here:
+            {% endblocktrans %}
+        </p>
+        <form action="?add" method="post" class="form-horizontal">
+            {% csrf_token %}
+            {% bootstrap_form_errors add_form %}
+            {% bootstrap_field add_form.all_items layout="horizontal" %}
+            {% bootstrap_field add_form.items layout="horizontal" %}
+            {% bootstrap_field add_form.show_info layout="horizontal" %}
+            {% bootstrap_field add_form.allow_search layout="horizontal" %}
+            {% if add_form.subevent %}
+                {% bootstrap_field add_form.subevent layout="horizontal" %}
+            {% endif %}
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+                    <button type="submit" class="btn btn-primary btn-save" name="add" value="1">
+                        {% trans "Create configuration" %}
+                    </button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    {% endif %}
 
 
-    {% if configs %}
+    {% if configs and "create" not in request.GET %}
         <h2>{% trans "Existing app configurations" %}</h2>
-        <form action="" method="post" class="form-horizontal">
+        <a href="?create=1" class="btn btn-default">
+            {% trans "Create a new configuration" %}
+        </a>
+        <form action="?" method="post" class="form-horizontal">
             {% csrf_token %}
             <table class="table">
                 <thead>
