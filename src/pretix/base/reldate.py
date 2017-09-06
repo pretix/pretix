@@ -6,6 +6,7 @@ import pytz
 from dateutil import parser
 from django import forms
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 BASE_CHOICES = (
@@ -107,6 +108,9 @@ class RelativeDateWrapper:
             data = parser.parse(input)
         return RelativeDateWrapper(data)
 
+    def __len__(self):
+        return len(self.to_string())
+
 
 class RelativeDateTimeWidget(forms.MultiWidget):
     template_name = 'pretixbase/forms/widgets/reldatetime.html'
@@ -168,6 +172,8 @@ class RelativeDateTimeField(forms.MultiValueField):
         )
         if 'widget' not in kwargs:
             kwargs['widget'] = RelativeDateTimeWidget(status_choices=status_choices, base_choices=BASE_CHOICES)
+        kwargs.pop('max_length', 0)
+        kwargs.pop('empty_value', 0)
         super().__init__(
             fields=fields, require_all_fields=False, *args, **kwargs
         )
@@ -277,3 +283,32 @@ class RelativeDateField(RelativeDateTimeField):
             raise ValidationError(self.error_messages['incomplete'])
 
         return super().clean(value)
+
+
+class ModelRelativeDateTimeField(models.CharField):
+    form_class = RelativeDateTimeField
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event', None)
+        kwargs.setdefault('max_length', 255)
+        super().__init__(*args, **kwargs)
+
+    def to_python(self, value):
+        if isinstance(value, RelativeDateWrapper):
+            return value
+        if value is None:
+            return None
+        return RelativeDateWrapper.from_string(value)
+
+    def get_prep_value(self, value):
+        if isinstance(value, RelativeDateWrapper):
+            return value.to_string()
+        return value
+
+    def from_db_value(self, value, expression, connection, context):
+        return RelativeDateWrapper.from_string(value)
+
+    def formfield(self, **kwargs):
+        defaults = {'form_class': self.form_class}
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
