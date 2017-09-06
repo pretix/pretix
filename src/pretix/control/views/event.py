@@ -39,11 +39,24 @@ from pretix.control.forms.event import (
     PaymentSettingsForm, ProviderForm, TaxRuleForm, TicketSettingsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.signals import nav_event_settings
 from pretix.helpers.urls import build_absolute_uri
 from pretix.presale.style import regenerate_css
 
 from . import CreateView, UpdateView
 from ..logdisplay import OVERVIEW_BLACKLIST
+
+
+class EventSettingsViewMixin:
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['nav_event_settings'] = []
+        ctx['is_event_settings'] = True
+
+        for recv, retv in nav_event_settings.send(sender=self.request.event, request=self.request):
+            ctx['nav_event_settings'] += retv
+        ctx['nav_event_settings'].sort(key=lambda n: n['label'])
+        return ctx
 
 
 class MetaDataEditorMixin:
@@ -81,7 +94,7 @@ class MetaDataEditorMixin:
                 f.delete()
 
 
-class EventUpdate(EventPermissionRequiredMixin, MetaDataEditorMixin, UpdateView):
+class EventUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, MetaDataEditorMixin, UpdateView):
     model = Event
     form_class = EventUpdateForm
     template_name = 'pretixcontrol/event/settings.html'
@@ -150,7 +163,7 @@ class EventUpdate(EventPermissionRequiredMixin, MetaDataEditorMixin, UpdateView)
         return tz.localize(dt.replace(tzinfo=None)) if dt is not None else None
 
 
-class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
+class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
     model = Event
     context_object_name = 'event'
     permission = 'can_change_event_settings'
@@ -213,7 +226,7 @@ class EventPlugins(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin
         })
 
 
-class PaymentSettings(EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
+class PaymentSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
     model = Event
     context_object_name = 'event'
     permission = 'can_change_event_settings'
@@ -332,7 +345,7 @@ class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
             return self.get(request)
 
 
-class InvoiceSettings(EventSettingsFormView):
+class InvoiceSettings(EventSettingsViewMixin, EventSettingsFormView):
     model = Event
     form_class = InvoiceSettingsForm
     template_name = 'pretixcontrol/event/invoicing.html'
@@ -360,7 +373,7 @@ class InvoicePreview(EventPermissionRequiredMixin, View):
         return resp
 
 
-class DisplaySettings(EventSettingsFormView):
+class DisplaySettings(EventSettingsViewMixin, EventSettingsFormView):
     model = Event
     form_class = DisplaySettingsForm
     template_name = 'pretixcontrol/event/display.html'
@@ -396,7 +409,7 @@ class DisplaySettings(EventSettingsFormView):
             return self.get(request)
 
 
-class MailSettings(EventSettingsFormView):
+class MailSettings(EventSettingsViewMixin, EventSettingsFormView):
     model = Event
     form_class = MailSettingsForm
     template_name = 'pretixcontrol/event/mail.html'
@@ -580,7 +593,7 @@ class TicketSettingsPreview(EventPermissionRequiredMixin, View):
         })
 
 
-class TicketSettings(EventPermissionRequiredMixin, FormView):
+class TicketSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormView):
     model = Event
     form_class = TicketSettingsForm
     template_name = 'pretixcontrol/event/tickets.html'
@@ -689,7 +702,7 @@ class TicketSettings(EventPermissionRequiredMixin, FormView):
         return providers
 
 
-class EventPermissions(EventPermissionRequiredMixin, TemplateView):
+class EventPermissions(EventSettingsViewMixin, EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/event/permissions.html'
 
 
@@ -844,7 +857,7 @@ class EventComment(EventPermissionRequiredMixin, View):
         })
 
 
-class TaxList(EventPermissionRequiredMixin, ListView):
+class TaxList(EventSettingsViewMixin, EventPermissionRequiredMixin, ListView):
     model = TaxRule
     context_object_name = 'taxrules'
     paginate_by = 30
@@ -855,7 +868,7 @@ class TaxList(EventPermissionRequiredMixin, ListView):
         return self.request.event.tax_rules.all()
 
 
-class TaxCreate(EventPermissionRequiredMixin, CreateView):
+class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView):
     model = TaxRule
     form_class = TaxRuleForm
     template_name = 'pretixcontrol/event/tax_edit.html'
@@ -886,7 +899,7 @@ class TaxCreate(EventPermissionRequiredMixin, CreateView):
         return super().form_invalid(form)
 
 
-class TaxUpdate(EventPermissionRequiredMixin, UpdateView):
+class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView):
     model = TaxRule
     form_class = TaxRuleForm
     template_name = 'pretixcontrol/event/tax_edit.html'
@@ -923,7 +936,7 @@ class TaxUpdate(EventPermissionRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class TaxDelete(EventPermissionRequiredMixin, DeleteView):
+class TaxDelete(EventSettingsViewMixin, EventPermissionRequiredMixin, DeleteView):
     model = TaxRule
     template_name = 'pretixcontrol/event/tax_delete.html'
     permission = 'can_change_event_settings'

@@ -52,6 +52,13 @@
                 </a>
             </li>
         {% endif %}
+        {% for nav in nav_event_settings %}
+            <li {% if nav.active %}class="active"{% endif %}>
+                <a href="{{ nav.url }}">
+                    {{ nav.label }}
+                </a>
+            </li>
+        {% endfor %}
     </ul>
     {% block inside %}
     {% endblock %}

@@ -60,7 +60,85 @@ your views::
     def admin_view(request, organizer, event):
         ...
 
-Similarly, there is ``organizer_permission_required`` and ``OrganizerPermissionRequiredMixin``.
+Similarly, there is ``organizer_permission_required`` and ``OrganizerPermissionRequiredMixin``. In case of
+event-related views, there is also a signal that allows you to add the view to the event navigation like this::
+
+
+    from django.core.urlresolvers import resolve, reverse
+    from django.dispatch import receiver
+    from django.utils.translation import ugettext_lazy as _
+    from pretix.control.signals import nav_event
+
+
+    @receiver(nav_event, dispatch_uid='friends_tickets_nav')
+    def navbar_info(sender, request, **kwargs):
+        url = resolve(request.path_info)
+        if not request.user.has_event_permission(request.organizer, request.event, 'can_change_vouchers'):
+            return []
+        return [{
+            'label': _('My plugin view'),
+            'icon': 'heart',
+            'url': reverse('plugins:myplugin:index', kwargs={
+                'event': request.event.slug,
+                'organizer': request.organizer.slug,
+            }),
+            'active': url.namespace == 'plugins:myplugin' and url.url_name == 'review',
+        }]
+
+
+Event settings view
+-------------------
+
+A special case of a control panel view is a view hooked into the event settings page. For this case, there is a
+special navigation signal::
+
+    @receiver(nav_event_settings, dispatch_uid='friends_tickets_nav_settings')
+    def navbar_settings(sender, request, **kwargs):
+        url = resolve(request.path_info)
+        return [{
+            'label': _('My settings'),
+            'url': reverse('plugins:myplugin:settings', kwargs={
+                'event': request.event.slug,
+                'organizer': request.organizer.slug,
+            }),
+            'active': url.namespace == 'plugins:myplugin' and url.url_name == 'settings',
+        }]
+
+Also, your view should inherit from ``EventSettingsViewMixin`` and your template from ``pretixcontrol/event/settings_base.html``
+for good integration. If you just want to display a form, you could do it like the following::
+
+    class MySettingsView(EventSettingsViewMixin, EventSettingsFormView):
+        model = Event
+        permission = 'can_change_settings'
+        form_class = MySettingsForm
+        template_name = 'my_plugin/settings.html'
+
+        def get_success_url(self, **kwargs):
+            return reverse('plugins:myplugin:settings', kwargs={
+                'organizer': self.request.event.organizer.slug,
+                'event': self.request.event.slug,
+            })
+
+With this template::
+
+    {% extends "pretixcontrol/event/settings_base.html" %}
+    {% load i18n %}
+    {% load bootstrap3 %}
+    {% block title %} {% trans "Friends Tickets Settings" %} {% endblock %}
+    {% block inside %}
+        <form action="" method="post" class="form-horizontal">
+            {% csrf_token %}
+            <fieldset>
+                <legend>{% trans "Friends Tickets Settings" %}</legend>
+                {% bootstrap_form form layout="horizontal" %}
+            </fieldset>
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-primary btn-save">
+                    {% trans "Save" %}
+                </button>
+            </div>
+        </form>
+    {% endblock %}
 
 Frontend views
 --------------

@@ -181,3 +181,22 @@ and your tempalte inherits from ``pretixcontrol/organizers/base.html``.
 This is a regular django signal (no pretix event signal). Receivers will be passed
 the keyword arguments ``organizer`` and ``request``.
 """
+
+
+nav_event_settings = Signal(
+    providing_args=['request']
+)
+"""
+This signal is sent out to include tab links on the settings page of an event.
+Receivers are expected to return a list of dictionaries. The dictionaries
+should contain at least the keys ``label`` and ``url``. You should also return
+an ``active`` key with a boolean set to ``True``, when this item should be marked
+as active.
+
+If your linked view should stay in the tab-like context of this page, we recommend
+that you use ``pretix.control.views.event.EventSettingsViewMixin`` for your view
+and your tempalte inherits from ``pretixcontrol/event/settings_base.html``.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+A second keyword argument ``request`` will contain the request object.
+"""
