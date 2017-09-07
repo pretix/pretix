@@ -209,3 +209,16 @@ register_global_settings = django.dispatch.Signal()
 All plugins that are installed may send fields for the global settings form, as
 an OrderedDict of (setting name, form field).
 """
+
+order_fee_calculation = EventPluginSignal(
+    providing_args=['request']
+)
+"""
+This signals allows you to add fees to an order while it is being created. You are expected to
+return a list of ``OrderFee`` objects that are not yet saved to the database
+(because there is no order yet).
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``positions``
+argument will contain the cart positions and ``invoice_address`` the invoice address (useful for
+tax calculation). The argument ``meta_info`` contains the order's meta dictionary.
+"""

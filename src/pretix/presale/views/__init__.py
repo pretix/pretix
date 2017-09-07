@@ -110,7 +110,7 @@ class CartMixin:
                 except InvoiceAddress.DoesNotExist:
                     pass
 
-            fees = get_fees(self.request.event, total, ia, self.request.session.get('payment'))
+            fees = get_fees(self.request.event, self.request, total, ia, self.request.session.get('payment'))
 
         total += sum([f.value for f in fees])
         net_total += sum([f.net_value for f in fees])

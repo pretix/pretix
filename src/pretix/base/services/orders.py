@@ -34,7 +34,9 @@ from pretix.base.services.invoices import (
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.pricing import get_price
-from pretix.base.signals import order_paid, order_placed, periodic_task
+from pretix.base.signals import (
+    order_fee_calculation, order_paid, order_placed, periodic_task,
+)
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -342,7 +344,8 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         raise OrderError(err, errargs)
 
 
-def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvider):
+def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvider, address: InvoiceAddress,
+              meta_info: dict, event: Event):
     fees = []
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
@@ -350,15 +353,18 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
         fees.append(OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=payment_fee,
                              internal_type=payment_provider.identifier))
 
+    for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address,
+                                                 meta_info=meta_info, posiitons=positions):
+        fees += resp
     return fees
 
 
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
-                  payment_provider: BasePaymentProvider, locale: str=None, address: int=None,
+                  payment_provider: BasePaymentProvider, locale: str=None, address: InvoiceAddress=None,
                   meta_info: dict=None):
     from datetime import time
 
-    fees = _get_fees(positions, payment_provider)
+    fees = _get_fees(positions, payment_provider, address, meta_info, event)
     total = sum([c.price for c in positions]) + sum([c.value for c in fees])
 
     tz = pytz.timezone(event.settings.timezone)

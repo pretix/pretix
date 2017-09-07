@@ -159,7 +159,7 @@
 {% for fee in cart.fees %}
     <div class="row cart-row">
         <div class="col-md-4 col-xs-6">
-            <strong>{% trans "Payment method fee" %}</strong>
+            <strong>{{ fee.get_fee_type_display }}</strong>
         </div>
         <div class="col-md-3 col-xs-6 col-md-offset-5 price">
             {% if event.settings.display_net_prices %}
