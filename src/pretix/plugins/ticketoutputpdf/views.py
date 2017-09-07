@@ -20,7 +20,6 @@ from pretix.base.models import (
     CachedCombinedTicket, CachedFile, CachedTicket, InvoiceAddress,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
-from pretix.control.views import ChartContainingView
 from pretix.helpers.database import rolledback_transaction
 from pretix.plugins.ticketoutputpdf.signals import get_fonts
 
@@ -29,7 +28,7 @@ from .ticketoutput import PdfTicketOutput
 logger = logging.getLogger(__name__)
 
 
-class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView):
+class EditorView(EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixplugins/ticketoutputpdf/index.html'
     permission = 'can_change_settings'
     accepted_formats = (
@@ -37,6 +36,11 @@ class EditorView(EventPermissionRequiredMixin, ChartContainingView, TemplateView
     )
     maxfilesize = 1024 * 1024 * 10
     minfilesize = 10
+
+    def get(self, request, *args, **kwargs):
+        resp = super().get(request, *args, **kwargs)
+        resp['Content-Security-Policy'] = "script-src 'unsafe-eval'; style-src 'unsafe-inline'; img-src blob:; font-src data: blob:"
+        return resp
 
     def process_upload(self):
         f = self.request.FILES.get('background')
