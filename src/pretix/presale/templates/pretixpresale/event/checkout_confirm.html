@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load eventurl %}
+{% load eventsignal %}
 {% block title %}{% trans "Confirm order" %}{% endblock %}
 {% block content %}
     <h2>{% trans "Confirm order" %}</h2>
@@ -57,6 +58,7 @@
                 {{ payment }}
             </div>
         </div>
+        {% eventsignal event "pretix.presale.signals.checkout_confirm_page_content" request=request %}
         <div class="row">
             {% if request.event.settings.invoice_address_asked %}
                 <div class="col-md-6 col-xs-12">
