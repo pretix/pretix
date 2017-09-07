@@ -41,7 +41,7 @@ class AnswerFilesExporter(BaseExporter):
             with ZipFile(os.path.join(d, 'tmp.zip'), 'w') as zipf:
                 for i in qs:
                     if i.file:
-                        i.file.open('r')
+                        i.file.open('rb')
                         fname = '{}-{}-{}-q{}-{}'.format(
                             self.event.slug.upper(),
                             i.orderposition.order.code,
