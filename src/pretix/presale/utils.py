@@ -88,7 +88,8 @@ def _detect_event(request, require_live=True, require_plugin=None):
                     raise PermissionDenied(_('The selected ticket shop is currently not available.'))
 
             if require_plugin:
-                if require_plugin not in request.event.get_plugins():
+                is_core = any(require_plugin.startswith(m) for m in settings.CORE_MODULES)
+                if require_plugin not in request.event.get_plugins() and not is_core:
                     raise Http404(_('This feature is not enabled.'))
 
             for receiver, response in process_request.send(request.event, request=request):
