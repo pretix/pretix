@@ -23,7 +23,7 @@ $(function () {
     $(".js-hidden").hide();
     $(".variations-collapsed").hide();
     $("a[data-toggle=variations]").click(function (e) {
-        $(this).parent().parent().parent().find(".variations").slideToggle();
+        $(this).closest(".item-with-variations").find(".variations").slideToggle();
         e.preventDefault();
     });
     $("div.collapsed").removeClass("collapsed").addClass("collapse");
