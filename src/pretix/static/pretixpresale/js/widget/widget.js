@@ -101,22 +101,35 @@ Vue.component('availbox', {
 });
 Vue.component('pricebox', {
     template: ('<div class="pretix-widget-pricebox">'
-        + '{{ priceline }}'
+        + '<span v-if="!free_price">{{ priceline }}</span>'
+        + '<span v-if="free_price">'
+        + '{{ $root.currency }} '
+        + '<input type="number" class="pretix-widget-pricebox-price-input" placeholder="0" '
+        + '       :min="display_price" :value="display_price" :name="field_name"'
+        + '       step="any">'
+        + '</span>'
         + '<small class="pretix-widget-pricebox-tax" v-if="price.rate != \'0.00\' && price.gross != \'0.00\'">'
         + '{{ taxline }}'
         + '</small>'
         + '</div>'),
     props: {
-        price: Object
+        price: Object,
+        free_price: Boolean,
+        field_name: String
     },
     computed: {
+        display_price: function () {
+            if (this.$root.display_net_prices) {
+                return this.price.net;
+            } else {
+                return this.price.gross;
+            }
+        },
         priceline: function () {
             if (this.price.gross === "0.00") {
                 return strings.free;
-            } else if (this.$root.display_net_prices) {
-                return this.$root.currency + " " + this.price.net;
             } else {
-                return this.$root.currency + " " + this.price.gross;
+                return this.$root.currency + " " + this.display_price;
             }
         },
         taxline: function () {
@@ -144,7 +157,9 @@ Vue.component('variation', {
         + '</div>'
 
         + '<div class="pretix-widget-item-price-col">'
-        + '<pricebox :price="variation.price"></pricebox>'
+        + '<pricebox :price="variation.price" :free_price="item.free_price"'
+        + '          :field_name="\'price_\' + item.id + \'_\' + variation.id">'
+        + '</pricebox>'
         + '</div>'
         + '<div class="pretix-widget-item-availability-col">'
         + '<availbox :item="item" :variation="variation"></availbox>'
@@ -183,7 +198,9 @@ Vue.component('item', {
         + '</div>'
 
         + '<div class="pretix-widget-item-price-col">'
-        + '<pricebox :price="item.price" v-if="!item.has_variations"></pricebox>'
+        + '<pricebox :price="item.price" :free_price="item.free_price" v-if="!item.has_variations"'
+        + '          :field_name="\'price_\' + item.id">'
+        + '</pricebox>'
         + '<div class="pretix-widget-pricebox" v-if="item.has_variations">{{ pricerange }}</div>'
         + '</div>'
         + '<div class="pretix-widget-item-availability-col">'
