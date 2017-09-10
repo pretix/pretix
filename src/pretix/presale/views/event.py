@@ -17,7 +17,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
-from pretix.base.models import ItemVariation
+from pretix.base.models import ItemVariation, Quota
 from pretix.base.models.event import SubEvent
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
@@ -44,14 +44,23 @@ def item_group_by_category(items):
     )
 
 
-def get_grouped_items(event, subevent=None):
+def get_grouped_items(event, subevent=None, voucher=None):
     items = event.items.all().filter(
         Q(active=True)
         & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
         & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
-        & Q(hide_without_voucher=False)
         & ~Q(category__is_addon=True)
-    ).select_related(
+    )
+
+    vouchq = Q(hide_without_voucher=False)
+    if voucher:
+        if voucher.item_id:
+            vouchq |= Q(pk=voucher.item_id)
+            items = items.filter(pk=voucher.item_id)
+        elif voucher.quota_id:
+            items = items.filter(quotas__in=[voucher.quota_id])
+
+    items = items.filter(vouchq).select_related(
         'category', 'tax_rule',  # for re-grouping
     ).prefetch_related(
         Prefetch('quotas',
@@ -81,36 +90,74 @@ def get_grouped_items(event, subevent=None):
         var_price_override = {}
 
     for item in items:
+        if voucher and voucher.item_id and voucher.variation_id:
+            # Restrict variations if the voucher only allows one
+            item.available_variations = [v for v in item.available_variations
+                                         if v.pk == voucher.variation_id]
+
         max_per_order = item.max_per_order or int(event.settings.max_items_per_order)
+
         if not item.has_variations:
             item._remove = not bool(item._subevent_quotas)
-            item.cached_availability = list(item.check_quotas(subevent=subevent, _cache=quota_cache))
-            item.order_max = min(item.cached_availability[1]
-                                 if item.cached_availability[1] is not None else sys.maxsize,
-                                 max_per_order)
-            price = item.default_price
-            item.display_price = item.tax(item_price_override.get(item.pk, price))
+
+            if voucher and (voucher.allow_ignore_quota or voucher.block_quota):
+                item.cached_availability = (
+                    Quota.AVAILABILITY_OK, voucher.max_usages - voucher.redeemed
+                )
+            else:
+                item.cached_availability = list(
+                    item.check_quotas(subevent=subevent, _cache=quota_cache)
+                )
+
+            item.order_max = min(
+                item.cached_availability[1]
+                if item.cached_availability[1] is not None else sys.maxsize,
+                max_per_order
+            )
+
+            price = item_price_override.get(item.pk, item.default_price)
+            if voucher:
+                price = voucher.calculate_price(price)
+            item.display_price = item.tax(price)
 
             display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
             for var in item.available_variations:
-                var.cached_availability = list(var.check_quotas(subevent=subevent, _cache=quota_cache))
-                var.order_max = min(var.cached_availability[1]
-                                    if var.cached_availability[1] is not None else sys.maxsize,
-                                    max_per_order)
+                if voucher and (voucher.allow_ignore_quota or voucher.block_quota):
+                    var.cached_availability = (
+                        Quota.AVAILABILITY_OK, voucher.max_usages - voucher.redeemed
+                    )
+                else:
+                    var.cached_availability = list(
+                        var.check_quotas(subevent=subevent, _cache=quota_cache)
+                    )
 
-                var.display_price = var.tax(var_price_override.get(var.pk, var.price))
+                var.order_max = min(
+                    var.cached_availability[1]
+                    if var.cached_availability[1] is not None else sys.maxsize,
+                    max_per_order
+                )
+
+                price = var_price_override.get(var.pk, var.price)
+                if voucher:
+                    price = voucher.calculate_price(price)
+                var.display_price = var.tax(price)
 
                 display_add_to_cart = display_add_to_cart or var.order_max > 0
 
             item.available_variations = [
                 v for v in item.available_variations if v._subevent_quotas
             ]
+            if voucher and voucher.variation_id:
+                item.available_variations = [v for v in item.available_variations
+                                             if v.pk == voucher.variation_id]
+
             if len(item.available_variations) > 0:
                 item.min_price = min([v.display_price.net if event.settings.display_net_prices else
                                       v.display_price.gross for v in item.available_variations])
                 item.max_price = max([v.display_price.net if event.settings.display_net_prices else
                                       v.display_price.gross for v in item.available_variations])
+
             item._remove = not bool(item.available_variations)
 
     if not external_quota_cache:

@@ -2,7 +2,7 @@ import mimetypes
 import os
 
 from django.contrib import messages
-from django.db.models import Count, Prefetch, Q
+from django.db.models import Q
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
@@ -13,8 +13,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import (
-    CartPosition, InvoiceAddress, ItemVariation, QuestionAnswer, Quota,
-    SubEvent, Voucher,
+    CartPosition, InvoiceAddress, QuestionAnswer, SubEvent, Voucher,
 )
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, clear_cart, remove_cart_position,
@@ -22,8 +21,10 @@ from pretix.base.services.cart import (
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import EventViewMixin
 from pretix.presale.views.async import AsyncAction
-from pretix.presale.views.event import item_group_by_category
 from pretix.presale.views.robots import NoSearchIndexViewMixin
+from pretix.presale.views.event import (
+    get_grouped_items, item_group_by_category,
+)
 
 
 class CartActionMixin:
@@ -240,90 +241,11 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
         context['max_times'] = self.voucher.max_usages - self.voucher.redeemed
 
         # Fetch all items
-        items = self.request.event.items.all().filter(
-            Q(active=True)
-            & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
-            & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
-            & ~Q(category__is_addon=True)
-        )
+        items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent,
+                                                       voucher=self.voucher)
 
-        vouchq = Q(hide_without_voucher=False)
-
-        if self.voucher.item_id:
-            vouchq |= Q(pk=self.voucher.item_id)
-            items = items.filter(pk=self.voucher.item_id)
-        elif self.voucher.quota_id:
-            items = items.filter(quotas__in=[self.voucher.quota_id])
-
-        items = items.filter(vouchq).select_related(
-            'category', 'tax_rule',  # for re-grouping
-        ).prefetch_related(
-            Prefetch('quotas',
-                     to_attr='_subevent_quotas',
-                     queryset=self.request.event.quotas.filter(subevent=self.subevent)),
-            Prefetch('variations', to_attr='available_variations',
-                     queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).prefetch_related(
-                         Prefetch('quotas',
-                                  to_attr='_subevent_quotas',
-                                  queryset=self.request.event.quotas.filter(subevent=self.subevent))
-                     ).distinct()),
-        ).annotate(
-            quotac=Count('quotas'),
-            has_variations=Count('variations')
-        ).filter(
-            quotac__gt=0
-        ).distinct().order_by('category__position', 'category_id', 'position', 'name')
-        quota_cache = {}
-
-        if self.subevent:
-            item_price_override = self.subevent.item_price_overrides
-            var_price_override = self.subevent.var_price_overrides
-        else:
-            item_price_override = {}
-            var_price_override = {}
-
-        for item in items:
-            if self.voucher.item_id and self.voucher.variation_id:
-                item.available_variations = [v for v in item.available_variations if v.pk == self.voucher.variation_id]
-
-            item.order_max = item.max_per_order or int(self.request.event.settings.max_items_per_order)
-
-            if not item.has_variations:
-                item._remove = not bool(item._subevent_quotas)
-                if self.voucher.allow_ignore_quota or self.voucher.block_quota:
-                    item.cached_availability = (Quota.AVAILABILITY_OK, 1)
-                else:
-                    item.cached_availability = item.check_quotas(subevent=self.subevent, _cache=quota_cache)
-
-                price = item_price_override.get(item.pk, item.default_price)
-                price = self.voucher.calculate_price(price)
-                item.display_price = item.tax(price)
-            else:
-                item._remove = False
-                for var in item.available_variations:
-                    if self.voucher.allow_ignore_quota or self.voucher.block_quota:
-                        var.cached_availability = (Quota.AVAILABILITY_OK, 1)
-                    else:
-                        var.cached_availability = list(var.check_quotas(subevent=self.subevent, _cache=quota_cache))
-
-                    price = var_price_override.get(var.pk, var.price)
-                    price = self.voucher.calculate_price(price)
-                    var.display_price = item.tax(price)
-
-                item.available_variations = [
-                    v for v in item.available_variations if v._subevent_quotas
-                ]
-                if self.voucher.variation_id:
-                    item.available_variations = [v for v in item.available_variations
-                                                 if v.pk == self.voucher.variation_id]
-                if len(item.available_variations) > 0:
-                    item.min_price = min([v.display_price.net if self.request.event.settings.display_net_prices else
-                                          v.display_price.gross for v in item.available_variations])
-                    item.max_price = max([v.display_price.net if self.request.event.settings.display_net_prices else
-                                          v.display_price.gross for v in item.available_variations])
-
-        items = [item for item in items
-                 if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove]
+        # Calculate how many options the user still has. If there is only one option, we can
+        # check the box right away ;)
         context['options'] = sum([(len(item.available_variations) if item.has_variations else 1)
                                   for item in items])
 
