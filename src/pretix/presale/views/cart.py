@@ -3,13 +3,16 @@ import os
 
 from django.contrib import messages
 from django.db.models import Q
-from django.http import FileResponse, Http404, JsonResponse
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
 from django.utils.crypto import get_random_string
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
+from django.utils.http import is_safe_url
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import (
@@ -30,7 +33,7 @@ from pretix.presale.views.event import (
 class CartActionMixin:
 
     def get_next_url(self):
-        if "next" in self.request.GET and '://' not in self.request.GET.get('next'):
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next")):
             return self.request.GET.get('next')
         else:
             return eventreverse(self.request.event, 'presale:event.index')
@@ -208,6 +211,32 @@ class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
 
     def post(self, request, *args, **kwargs):
         return self.do(self.request.event.id, get_or_create_cart_id(self.request), translation.get_language())
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class CartCreate(EventViewMixin, CartActionMixin, AsyncAction, View):
+    task = add_items_to_cart
+    known_errortypes = ['CartError']
+
+    def get_success_message(self, value):
+        return _('The products have been successfully added to your cart.')
+
+    def post(self, request, *args, **kwargs):
+        items = self._items_from_post_data()
+        if items:
+            return self.do(self.request.event.id, items, self.request.session.session_key, translation.get_language(),
+                           self.invoice_address.pk)
+        else:
+            if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
+                return JsonResponse({
+                    'redirect': self.get_error_url()
+                })
+            else:
+                return redirect(self.get_error_url())
+
+    def get(self, request, *args, **kwargs):
+        # TODO: Show nice loading message for iframes
+        return HttpResponse()
 
 
 class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):

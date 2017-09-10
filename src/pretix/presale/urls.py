@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.views.decorators.csrf import csrf_exempt
 
 import pretix.presale.views.cart
 import pretix.presale.views.checkout
@@ -16,6 +17,8 @@ import pretix.presale.views.widget
 
 event_patterns = [
     url(r'^cart/add$', pretix.presale.views.cart.CartAdd.as_view(), name='event.cart.add'),
+    url(r'^cart/create', csrf_exempt(pretix.presale.views.cart.CartCreate.as_view()),
+        name='event.cart.create'),
     url(r'^cart/remove$', pretix.presale.views.cart.CartRemove.as_view(), name='event.cart.remove'),
     url(r'^cart/clear$', pretix.presale.views.cart.CartClear.as_view(), name='event.cart.clear'),
     url(r'^cart/answer/(?P<answer>[^/]+)/$',

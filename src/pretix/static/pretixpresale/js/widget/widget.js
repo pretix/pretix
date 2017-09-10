@@ -8,6 +8,7 @@ var Vue = module.exports;
 var I18N_STRINGS = {  // TODO: Translate
     'en': {
         'sold_out': 'Sold out',
+        'buy': 'Buy',
         'reserved': 'Reserved',
         'free': 'FREE',
         'price_from': 'from $1 $2',
@@ -16,6 +17,7 @@ var I18N_STRINGS = {  // TODO: Translate
         'quota_left': 'currently available: $1',
         'voucher_required': 'Only available with a voucher',
         'order_min': 'minimum amount to order: %s',
+        'exit': 'Close ticket shop',
         'poweredby': 'ticketing powered by <a href="https://pretix.eu" target="_blank">pretix</a>'
     }
 };
@@ -52,27 +54,23 @@ var api = {
     }
 };
 
-/* URL helpers */
-var absolute = function(base, relative) {
-    var stack = base.split("/"),
-        parts = relative.split("/");
-    stack.pop(); // remove current file name (or empty string)
-                 // (omit if "base" is the current folder without trailing slash)
-    for (var i=0; i<parts.length; i++) {
-        if (parts[i] == ".")
-            continue;
-        if (parts[i] == "..")
-            stack.pop();
-        else
-            stack.push(parts[i]);
+var makeid = function (length) {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
-    return stack.join("/");
+
+    return text;
 }
 
 var site_is_secure = function () {
     // TODO: Forbid iframe on insecure pages
     return /https.*/.test(document.location.protocol)
 };
+
+var widget_id = makeid(16);
 
 /* Vue Components */
 Vue.component('availbox', {
@@ -103,7 +101,7 @@ Vue.component('availbox', {
     computed: {
         input_name: function () {
             if (this.item.has_variations) {
-                return 'variation_' + this.item.id + '_' + this.variation.avail;
+                return 'variation_' + this.item.id + '_' + this.variation.id;
             } else {
                 return 'item_' + this.item.id;
             }
@@ -221,7 +219,7 @@ Vue.component('item', {
         + '<div class="pretix-widget-pricebox" v-if="item.has_variations">{{ pricerange }}</div>'
         + '</div>'
         + '<div class="pretix-widget-item-availability-col">'
-        + '<a v-if="show_toggle" href="#" @click="expand">See variations</a>'
+        + '<a v-if="show_toggle" href="#" @click.prevent="expand">See variations</a>'
         + '<availbox v-if="!item.has_variations" :item="item"></availbox>'
         + '</div>'
 
@@ -295,18 +293,50 @@ Vue.component('category', {
     }
 });
 Vue.component('pretix-widget', {
-    template: ('<div class="pretix-widget">'
+    template: ('<div>'
+        + '<div class="pretix-widget">'
         + '<div class="pretix-widget-loading" v-show="$root.loading > 0">'
         + '<svg width="128" height="128" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
         + '</div>'
-        + '<form>'
+        + '<form method="post" :action="$root.formTarget" :target="$root.widget_id">'
         + '<category v-for="category in this.$root.categories" :category="category" :key="category.id"></category>'
+        + '<div class="pretix-widget-action">'
+        + '<button @click="buy">' + strings.buy + '</button>'
+        + '</div>'
         + '<div class="pretix-widget-clear"></div>'
         + '<div class="pretix-widget-attribution">'
         + strings.poweredby
         + '</div>'
         + '</form>'
-        + '</div>'),
+        + '</div>'
+        + '<div :class="frameClasses">'
+        + '<div class="pretix-widget-frame-inner" ref="frame-container">'
+        + '<iframe frameborder="0" width="650px" height="650px" '
+        + '        :name="$root.widget_id" :src="$root.formTarget">'
+        + 'Please enable frames in your browser!'
+        + '</iframe>'
+        + '</div>'
+        + '</div>'
+        + '</div>'
+    ),
+    data: function () {
+        return {
+            frame_shown: false,
+        }
+    },
+    methods: {
+        buy: function () {
+            this.frame_shown = true;
+        }
+    },
+    computed: {
+        frameClasses: function () {
+            return {
+                'pretix-widget-frame-holder': true,
+                'pretix-widget-frame-shown': this.frame_shown,
+            };
+        },
+    }
 });
 
 /* Function to create the actual Vue instances */
@@ -326,6 +356,7 @@ var create_widget = function (element) {
                 display_net_prices: false,
                 show_variations_expanded: false,
                 loading: 1,
+                widget_id: 'pretix-widget-' + widget_id
             }
         },
         created: function () {
@@ -337,6 +368,12 @@ var create_widget = function (element) {
                 app.loading--;
             })
         },
+        computed: {
+            formTarget: function () {
+                var checkout_url = "/" + this.$root.event_url.replace(/^[^\/]+:\/\/([^\/]+)\//, "") + "checkout/start";
+                return this.$root.event_url + 'cart/create?next=' + checkout_url;
+            }
+        }
     });
     return app;
 };
