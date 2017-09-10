@@ -19,6 +19,11 @@ class CartMixin:
         """
         return list(get_cart(self.request))
 
+    @cached_property
+    def cart_session(self):
+        from pretix.presale.views.cart import cart_session
+        return cart_session(self.request)
+
     def get_cart(self, answers=False, queryset=None, order=None, downloads=False):
         if queryset:
             prefetch = []
@@ -102,7 +107,7 @@ class CartMixin:
         if order:
             fees = order.fees.all()
         else:
-            iapk = self.request.session.get('invoice_address_{}'.format(self.request.event.pk))
+            iapk = self.cart_session.get('invoice_address')
             ia = None
             if iapk:
                 try:
@@ -110,7 +115,7 @@ class CartMixin:
                 except InvoiceAddress.DoesNotExist:
                     pass
 
-            fees = get_fees(self.request.event, self.request, total, ia, self.request.session.get('payment'))
+            fees = get_fees(self.request.event, self.request, total, ia, self.cart_session.get('payment'))
 
         total += sum([f.value for f in fees])
         net_total += sum([f.net_value for f in fees])
@@ -137,9 +142,11 @@ class CartMixin:
 
 
 def get_cart(request):
+    from pretix.presale.views.cart import get_or_create_cart_id
+
     if not hasattr(request, '_cart_cache'):
         request._cart_cache = CartPosition.objects.filter(
-            cart_id=request.session.session_key, event=request.event
+            cart_id=get_or_create_cart_id(request), event=request.event
         ).order_by(
             'item', 'variation'
         ).select_related(
@@ -152,12 +159,14 @@ def get_cart(request):
 
 
 def get_cart_total(request):
+    from pretix.presale.views.cart import get_or_create_cart_id
+
     if not hasattr(request, '_cart_total_cache'):
         if hasattr(request, '_cart_cache'):
             request._cart_total_cache = sum(i.price for i in request._cart_cache)
         else:
             request._cart_total_cache = CartPosition.objects.filter(
-                cart_id=request.session.session_key, event=request.event
+                cart_id=get_or_create_cart_id(request), event=request.event
             ).aggregate(sum=Sum('price'))['sum'] or 0
     return request._cart_total_cache
 

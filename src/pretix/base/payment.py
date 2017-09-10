@@ -21,6 +21,7 @@ from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
 from pretix.presale.views import get_cart_total
+from pretix.presale.views.cart import get_or_create_cart_id
 
 logger = logging.getLogger(__name__)
 
@@ -275,7 +276,7 @@ class BasePaymentProvider:
 
         The default implementation checks for the _availability_date setting to be either unset or in the future.
         """
-        return self._is_still_available(cart_id=request.session.session_key)
+        return self._is_still_available(cart_id=get_or_create_cart_id(request))
 
     def payment_form_render(self, request: HttpRequest) -> str:
         """

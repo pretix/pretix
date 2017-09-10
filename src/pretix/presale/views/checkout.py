@@ -9,13 +9,15 @@ from pretix.base.services.cart import CartError
 from pretix.base.signals import validate_cart
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.checkoutflow import get_checkout_flow
+from pretix.presale.views.cart import get_or_create_cart_id
 
 
 class CheckoutView(View):
     def dispatch(self, request, *args, **kwargs):
+
         self.request = request
         cart_pos = CartPosition.objects.filter(
-            cart_id=self.request.session.session_key, event=self.request.event
+            cart_id=get_or_create_cart_id(request), event=self.request.event
         )
 
         if not cart_pos.exists() and "async_id" not in request.GET:

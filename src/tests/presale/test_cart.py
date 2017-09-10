@@ -3,7 +3,6 @@ from datetime import timedelta
 from decimal import Decimal
 
 from bs4 import BeautifulSoup
-from django.conf import settings
 from django.test import TestCase
 from django.utils.timezone import now
 from django_countries.fields import Country
@@ -17,6 +16,7 @@ from pretix.base.models.items import (
     ItemAddOn, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.services.cart import CartError, CartManager
+from pretix.testutils.sessions import get_cart_session_key
 
 
 class CartTestMixin:
@@ -51,7 +51,7 @@ class CartTestMixin:
         self.quota_all.variations.add(self.shirt_red)
 
         self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
-        self.session_key = self.client.cookies.get(settings.SESSION_COOKIE_NAME).value
+        self.session_key = get_cart_session_key(self.client, self.event)
 
 
 class CartTest(CartTestMixin, TestCase):
@@ -97,7 +97,7 @@ class CartTest(CartTestMixin, TestCase):
 
     def _set_session(self, key, value):
         session = self.client.session
-        session[key] = value
+        session['carts'][get_cart_session_key(self.client, self.event)][key] = value
         session.save()
 
     def _enable_reverse_charge(self):
@@ -108,7 +108,7 @@ class CartTest(CartTestMixin, TestCase):
             is_business=True, vat_id='ATU1234567', vat_id_validated=True,
             country=Country('AT')
         )
-        self._set_session('invoice_address_{}'.format(self.event.pk), ia.pk)
+        self._set_session('invoice_address', ia.pk)
         return ia
 
     def test_reverse_charge(self):
