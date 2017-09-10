@@ -1,7 +1,10 @@
+from urllib.parse import urljoin
+
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.http import HttpResponse, JsonResponse
 from django.views import View
+from easy_thumbnails.files import get_thumbnailer
 
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.presale.views.event import (
@@ -38,7 +41,8 @@ class WidgetAPIProductList(View):
     def get(self, request, **kwargs):
         data = {
             'currency': request.event.currency,
-            'display_net_prices': request.event.settings.display_net_prices
+            'display_net_prices': request.event.settings.display_net_prices,
+            'show_variations_expanded': request.event.settings.show_variations_expanded,
         }
 
         def price_dict(price):
@@ -49,6 +53,10 @@ class WidgetAPIProductList(View):
                 'rate': price.rate,
                 'name': str(price.name)
             }
+
+        def get_picture(picture):
+            thumb = get_thumbnailer(picture)['productlist']
+            return urljoin(settings.SITE_URL, thumb.url)
 
         items, display_add_to_cart = get_grouped_items(self.request.event)
         grps = []
@@ -62,7 +70,7 @@ class WidgetAPIProductList(View):
                     {
                         'id': item.pk,
                         'name': str(item.name),
-                        'picture': item.picture.url if item.picture else None,
+                        'picture': get_picture(item.picture) if item.picture else None,
                         'description': str(rich_text(item.description)) if item.description else None,
                         'has_variations': item.has_variations,
                         'require_voucher': item.require_voucher,

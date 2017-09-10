@@ -52,6 +52,23 @@ var api = {
     }
 };
 
+/* URL helpers */
+var absolute = function(base, relative) {
+    var stack = base.split("/"),
+        parts = relative.split("/");
+    stack.pop(); // remove current file name (or empty string)
+                 // (omit if "base" is the current folder without trailing slash)
+    for (var i=0; i<parts.length; i++) {
+        if (parts[i] == ".")
+            continue;
+        if (parts[i] == "..")
+            stack.pop();
+        else
+            stack.push(parts[i]);
+    }
+    return stack.join("/");
+}
+
 var site_is_secure = function () {
     // TODO: Forbid iframe on insecure pages
     return /https.*/.test(document.location.protocol)
@@ -180,10 +197,10 @@ Vue.component('variation', {
 });
 Vue.component('item', {
     template: ('<div v-bind:class="classObject">'
-        + '<div class="pretix-widget-item-row">'
+        + '<div class="pretix-widget-item-row pretix-widget-main-item-row">'
 
         + '<div class="pretix-widget-item-info-col">'
-        // TODO: Picture
+        + '<img :src="item.picture" v-if="item.picture" class="pretix-widget-item-picture">'
         + '<div class="pretix-widget-item-title-and-description">'
         + '<strong class="pretix-widget-item-title">{{ item.name }}</strong>'
         + '<div class="pretix-widget-item-description" v-if="item.description" v-html="item.description"></div>'
@@ -204,27 +221,44 @@ Vue.component('item', {
         + '<div class="pretix-widget-pricebox" v-if="item.has_variations">{{ pricerange }}</div>'
         + '</div>'
         + '<div class="pretix-widget-item-availability-col">'
-        + '<span v-if="item.has_variations">See variations</span>'
+        + '<a v-if="show_toggle" href="#" @click="expand">See variations</a>'
         + '<availbox v-if="!item.has_variations" :item="item"></availbox>'
         + '</div>'
 
         + '<div class="pretix-widget-clear"></div>'
         + '</div>'
 
-        + '<div class="pretix-widget-item-variations" v-if="item.has_variations">'
+        + '<div :class="varClasses" v-if="item.has_variations">'
         + '<variation v-for="variation in item.variations" :variation="variation" :item="item" :key="variation.id">'
         + '</variation>'
         + '</div>'
 
         + '</div>'),
     props: {
-        item: Object
+        item: Object,
+    },
+    data: function () {
+        return {
+            expanded: this.$root.show_variations_expanded
+        };
+    },
+    methods: {
+        expand: function () {
+            this.expanded = !this.expanded;
+        }
     },
     computed: {
         classObject: function () {
             return {
                 'pretix-widget-item': true,
+                'pretix-widget-item-with-picture': !!this.item.picture,
                 'pretix-widget-item-with-variations': this.item.has_variations
+            }
+        },
+        varClasses: function () {
+            return {
+                'pretix-widget-item-variations': true,
+                'pretix-widget-item-variations-expanded': this.expanded,
             }
         },
         min_order_str: function () {
@@ -232,6 +266,9 @@ Vue.component('item', {
         },
         quota_left_str: function () {
             return strings["quota_left"].replace("$1", this.item.avail[1]);
+        },
+        show_toggle: function () {
+            return this.item.has_variations && !this.$root.show_variations_expanded;
         },
         pricerange: function () {
             if (this.item.min_price !== this.item.max_price || this.item.free_price) {
@@ -259,6 +296,9 @@ Vue.component('category', {
 });
 Vue.component('pretix-widget', {
     template: ('<div class="pretix-widget">'
+        + '<div class="pretix-widget-loading" v-show="$root.loading > 0">'
+        + '<svg width="128" height="128" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
+        + '</div>'
         + '<form>'
         + '<category v-for="category in this.$root.categories" :category="category" :key="category.id"></category>'
         + '<div class="pretix-widget-clear"></div>'
@@ -284,6 +324,8 @@ var create_widget = function (element) {
                 categories: null,
                 currency: null,
                 display_net_prices: false,
+                show_variations_expanded: false,
+                loading: 1,
             }
         },
         created: function () {
@@ -291,6 +333,8 @@ var create_widget = function (element) {
                 app.categories = data.items_by_category;
                 app.currency = data.currency;
                 app.display_net_prices = data.display_net_prices;
+                app.show_variations_expanded = data.show_variations_expanded;
+                app.loading--;
             })
         },
     });
