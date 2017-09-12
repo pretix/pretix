@@ -79,7 +79,8 @@
                     {% for b in download_buttons %}
                         {% if b.multi %}
                             <a href="{% eventurl event "presale:event.order.download.combined" secret=order.secret order=order.code output=b.identifier %}"
-                                    class="btn btn-default btn-sm" data-asyncdownload>
+                                    class="btn btn-default btn-sm {% if b.identifier == "pdf" %}btn-primary{% endif %}"
+                                    data-asyncdownload>
                                 <span class="fa fa-download"></span> {{ b.text }}
                             </a>
                         {% endif %}
