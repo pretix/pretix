@@ -333,7 +333,7 @@ class Order(LoggedModel):
 
         return self._is_still_available()
 
-    def _is_still_available(self, now_dt: datetime=None) -> Union[bool, str]:
+    def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True) -> Union[bool, str]:
         error_messages = {
             'unavailable': _('The ordered product "{item}" is no longer available.'),
         }
@@ -351,7 +351,7 @@ class Order(LoggedModel):
                 for quota in quotas:
                     if quota.id not in quota_cache:
                         quota_cache[quota.id] = quota
-                        quota.cached_availability = quota.availability(now_dt)[1]
+                        quota.cached_availability = quota.availability(now_dt, count_waitinglist=count_waitinglist)[1]
                     else:
                         # Use cached version
                         quota = quota_cache[quota.id]

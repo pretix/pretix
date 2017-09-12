@@ -469,7 +469,7 @@ class OrderExtend(OrderView):
             else:
                 try:
                     with self.order.event.lock() as now_dt:
-                        is_available = self.order._is_still_available(now_dt)
+                        is_available = self.order._is_still_available(now_dt, count_waitinglist=False)
                         if is_available is True:
                             self.form.save()
                             self.order.status = Order.STATUS_PENDING
