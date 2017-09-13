@@ -158,7 +158,7 @@ def get_cart_total(request):
         else:
             request._cart_total_cache = CartPosition.objects.filter(
                 cart_id=request.session.session_key, event=request.event
-            ).aggregate(sum=Sum('price'))['sum']
+            ).aggregate(sum=Sum('price'))['sum'] or 0
     return request._cart_total_cache
 
 
