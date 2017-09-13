@@ -11,7 +11,9 @@ from django.views.generic.base import TemplateResponseMixin
 
 from pretix.base.models import Order
 from pretix.base.models.orders import InvoiceAddress
-from pretix.base.services.cart import set_cart_addons, update_tax_rates
+from pretix.base.services.cart import (
+    get_fees, set_cart_addons, update_tax_rates,
+)
 from pretix.base.services.orders import perform_order
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
@@ -379,7 +381,9 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     @cached_property
     def _total_order_value(self):
-        return get_cart_total(self.request)
+        total = get_cart_total(self.request)
+        total += sum([f.value for f in get_fees(self.request.event, self.request, total, self.invoice_address, None)])
+        return total
 
     @cached_property
     def provider_forms(self):

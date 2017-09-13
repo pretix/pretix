@@ -591,7 +591,11 @@ class FreeOrderProvider(BasePaymentProvider):
         messages.success(request, _('The order has been marked as refunded.'))
 
     def is_allowed(self, request: HttpRequest) -> bool:
-        return get_cart_total(request) == 0
+        from .services.cart import get_fees
+
+        total = get_cart_total(request)
+        total += sum([f.value for f in get_fees(self.event, request, total, None, None)])
+        return total == 0
 
     def order_change_allowed(self, order: Order) -> bool:
         return False

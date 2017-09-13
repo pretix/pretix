@@ -631,10 +631,7 @@ def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress
 def get_fees(event, request, total, invoice_address, provider):
     fees = []
 
-    if total == 0:
-        return fees
-
-    if provider:
+    if provider and total != 0:
         provider = event.get_payment_providers().get(provider)
         if provider:
             payment_fee = provider.calculate_fee(total)
