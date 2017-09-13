@@ -114,6 +114,19 @@ method to make your receivers available::
         def ready(self):
             from . import signals  # NOQA
 
+You can optionally specify code that is executed when your plugin is activated for an event
+in the ``installed`` method::
+
+    class PaypalApp(AppConfig):
+        …
+
+        def installed(self, event):
+            pass  # Your code here
+
+
+Note that ``installed`` will *not* be called if the plugin in indirectly activated for an event
+because the event is created with settings copied from another event.
+
 Views
 -----
 

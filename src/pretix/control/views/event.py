@@ -205,6 +205,10 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                         if getattr(plugins_available[module], 'restricted', False):
                             if not request.user.is_superuser:
                                 continue
+
+                        if hasattr(plugins_available[module].app, 'installed'):
+                            getattr(plugins_available[module].app, 'installed')(self.request.event)
+
                         self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                                       data={'plugin': module})
                         if module not in plugins_active:

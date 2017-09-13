@@ -166,6 +166,34 @@ to the user. The receivers are expected to return plain text.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+logentry_object_link = EventPluginSignal(
+    providing_args=["logentry"]
+)
+"""
+To display the relationship of an instance of the ``LogEntry`` model to another model
+to a human user, ``pretix.base.signals.logentry_object_link`` will be sent out with a
+``logentry`` argument.
+
+The first received response that is not ``None`` will be used to display the related object
+to the user. The receivers are expected to return a HTML link. The internal implementation
+builds the links like this::
+
+    a_text = _('Tax rule {val}')
+    a_map = {
+        'href': reverse('control:event.settings.tax.edit', kwargs={
+            'event': sender.slug,
+            'organizer': sender.organizer.slug,
+            'rule': logentry.content_object.id
+        }),
+        'val': escape(logentry.content_object.name),
+    }
+    a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
+    return a_text.format_map(a_map)
+
+Make sure that any user content in the HTML code you return is properly escaped!
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 requiredaction_display = EventPluginSignal(
     providing_args=["action", "request"]
 )

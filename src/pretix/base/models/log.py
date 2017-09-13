@@ -8,6 +8,8 @@ from django.utils.functional import cached_property
 from django.utils.html import escape
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
+from pretix.base.signals import logentry_object_link
+
 
 class LogEntry(models.Model):
     """
@@ -146,6 +148,9 @@ class LogEntry(models.Model):
         elif a_text:
             return a_text
         else:
+            for receiver, response in logentry_object_link.send(self.event, logentry=self):
+                if response:
+                    return response
             return ''
 
     @cached_property
