@@ -306,6 +306,8 @@ class ModelRelativeDateTimeField(models.CharField):
         return value
 
     def from_db_value(self, value, expression, connection, context):
+        if value is None:
+            return None
         return RelativeDateWrapper.from_string(value)
 
     def formfield(self, **kwargs):
