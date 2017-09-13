@@ -183,7 +183,7 @@ the keyword arguments ``organizer`` and ``request``.
 """
 
 
-nav_event_settings = Signal(
+nav_event_settings = EventPluginSignal(
     providing_args=['request']
 )
 """
