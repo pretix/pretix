@@ -150,7 +150,7 @@ class PdfTicketOutput(BaseTicketOutput):
             alignment=align_map[o['align']]
         )
 
-        p = Paragraph(self._get_text_content(op, order, o), style=style)
+        p = Paragraph(self._get_text_content(op, order, o) or "", style=style)
         p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
         # p_size = p.wrap(float(o['width']) * mm, 1000 * mm)
         ad = getAscentDescent(font, float(o['fontsize']))
