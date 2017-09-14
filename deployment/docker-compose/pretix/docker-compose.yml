@@ -1,0 +1,51 @@
+version: '3'
+services:
+  db:
+    image: mariadb:latest
+    env_file:
+      - .dbenv
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - internal
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    networks:
+      - internal
+
+  pretix:
+    build: .
+    volumes:
+      - ./data:/data
+      - ./static:/pretix/src/pretix/static.dist
+    depends_on:
+      - db
+      - redis
+    command: ./pretix-entrypoint.sh
+    user: www-data
+    networks:
+      - internal
+      - external
+    ports:
+      - "0.0.0.0:8000:8000"
+
+  task:
+    build: .
+    volumes:
+      - ./data:/data
+    depends_on:
+      - pretix
+    command: ./task-entrypoint.sh
+    user: www-data
+    networks:
+      - internal
+
+
+volumes:
+  db-data:
+
+networks:
+  internal:
+  external:

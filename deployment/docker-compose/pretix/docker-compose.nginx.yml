@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  pretix:
+    volumes:
+      - pretix-data:/data
+      - static-data:/pretix/src/pretix/static.dist
+
+  task:
+    volumes:
+      - pretix-data:/data
+      - static-data:/static
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "0.0.0.0:80:80"
+    volumes:
+      - static-data:/static
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - pretix
+    networks:
+      - external
+
+volumes:
+  pretix-data:
+  db-data:
+  static-data:
