@@ -1,0 +1,37 @@
+version: '2'
+services:
+  db:
+    image: mariadb:latest
+    container_name: pretix_db
+    environment:
+      - MYSQL_DATABASE=pretix
+      - MYSQL_USER=pretix
+      - MYSQL_PASSWORD=pretix
+      - MYSQL_RANDOM_ROOT_PASSWORD=1
+    volumes:
+      - db-data:/var/lib/mysql
+
+  redis:
+    build: ./redis
+    container_name: pretix_redis
+    volumes:
+      - tmp-data:/tmp
+  
+  pretix:
+    build: .
+    container_name: pretix
+    volumes:
+      - pretix-data:/data
+      - ${PWD}/etc/pretix:/etc/pretix
+      - ${PWD}/etc/pretix/pretix.cfg:/etc/pretix/pretix.cfg
+      - tmp-data:/tmp
+    ports:
+      - "0.0.0.0:80:80"
+    depends_on:
+      - db
+      - redis
+
+volumes:
+  pretix-data:
+  db-data:
+  tmp-data:
