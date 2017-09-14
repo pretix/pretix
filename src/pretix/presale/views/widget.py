@@ -3,6 +3,7 @@ from urllib.parse import urljoin
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.http import HttpResponse, JsonResponse
+from django.utils.formats import date_format
 from django.views import View
 from easy_thumbnails.files import get_thumbnailer
 
@@ -37,31 +38,27 @@ def widget_js(request, **kwargs):
     return resp
 
 
+def price_dict(price):
+    return {
+        'gross': price.gross,
+        'net': price.net,
+        'tax': price.tax,
+        'rate': price.rate,
+        'name': str(price.name)
+    }
+
+
+def get_picture(picture):
+    thumb = get_thumbnailer(picture)['productlist']
+    return urljoin(settings.SITE_URL, thumb.url)
+
+
 class WidgetAPIProductList(View):
-    def get(self, request, **kwargs):
-        data = {
-            'currency': request.event.currency,
-            'display_net_prices': request.event.settings.display_net_prices,
-            'show_variations_expanded': request.event.settings.show_variations_expanded,
-        }
 
-        def price_dict(price):
-            return {
-                'gross': price.gross,
-                'net': price.net,
-                'tax': price.tax,
-                'rate': price.rate,
-                'name': str(price.name)
-            }
-
-        def get_picture(picture):
-            thumb = get_thumbnailer(picture)['productlist']
-            return urljoin(settings.SITE_URL, thumb.url)
-
+    def _get_items(self):
         items, display_add_to_cart = get_grouped_items(self.request.event)
         grps = []
         for cat, g in item_group_by_category(items):
-
             grps.append({
                 'id': cat.pk if cat else None,
                 'name': str(cat.name) if cat else None,
@@ -82,7 +79,7 @@ class WidgetAPIProductList(View):
                         'free_price': item.free_price,
                         'avail': [
                             item.cached_availability[0],
-                            item.cached_availability[1] if request.event.settings.show_quota_left else None
+                            item.cached_availability[1] if self.request.event.settings.show_quota_left else None
                         ] if not item.has_variations else None,
                         'variations': [
                             {
@@ -93,7 +90,7 @@ class WidgetAPIProductList(View):
                                 'price': price_dict(var.display_price),
                                 'avail': [
                                     var.cached_availability[0],
-                                    var.cached_availability[1] if request.event.settings.show_quota_left else None
+                                    var.cached_availability[1] if self.request.event.settings.show_quota_left else None
                                 ],
                             } for var in item.available_variations
                         ]
@@ -101,9 +98,34 @@ class WidgetAPIProductList(View):
                     } for item in g
                 ]
             })
+        return grps, display_add_to_cart
 
-        data['items_by_category'] = grps
-        data['display_add_to_cart'] = display_add_to_cart
+    def get(self, request, **kwargs):
+        data = {
+            'currency': request.event.currency,
+            'display_net_prices': request.event.settings.display_net_prices,
+            'show_variations_expanded': request.event.settings.show_variations_expanded,
+            'error': None
+        }
+        ev = request.event
+
+        if not ev.presale_is_running:
+            if ev.presale_has_ended:
+                data['error'] = 'The presale period for this event is over.'
+            elif request.event.settings.presale_start_show_date:
+                data['error'] = 'The presale for this event will start on %(date)s at %(time)s.' % {
+                    'date': date_format(ev.presale_start, "SHORT_DATE_FORMAT"),
+                    'time': date_format(ev.presale_start, "TIME_FORMAT"),
+                }
+            else:
+                data['error'] = 'The presale for this event has not yet started.'
+
+        if ev.presale_is_running or request.event.settings.show_items_outside_presale_period:
+            data['items_by_category'], data['display_add_to_cart'] = self._get_items()
+            data['display_add_to_cart'] = data['display_add_to_cart'] and ev.presale_is_running
+        else:
+            data['items_by_category'] = []
+            data['display_add_to_cart'] = False
 
         vouchers_exist = self.request.event.get_cache().get('vouchers_exist')
         if vouchers_exist is None:
