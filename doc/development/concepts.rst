@@ -59,7 +59,7 @@ If an item is assigned to multiple quotas, it can only be bought if *all of them
 If multiple items are assigned to the same quota, the quota will be counted as sold out as soon as the
 *sum* of the two items exceeds the quota limit.
 
-The availability of a quota is currently calculated by substracting the following numbers from the quota
+The availability of a quota is currently calculated by subtracting the following numbers from the quota
 limit:
 
 * The number of orders placed for an item that are either already paid or within their granted payment period
