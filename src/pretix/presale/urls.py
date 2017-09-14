@@ -80,6 +80,8 @@ event_patterns = [
 
     url(r'^widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
         name='event.widget.productlist'),
+    url(r'^(?P<subevent>\d+)/widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
+        name='event.widget.productlist'),
 ]
 
 organizer_patterns = [

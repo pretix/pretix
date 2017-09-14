@@ -202,7 +202,11 @@ Vue.component('item', {
         + '<div class="pretix-widget-item-info-col">'
         + '<img :src="item.picture" v-if="item.picture" class="pretix-widget-item-picture">'
         + '<div class="pretix-widget-item-title-and-description">'
-        + '<strong class="pretix-widget-item-title">{{ item.name }}</strong>'
+        + '<a v-if="item.has_variations && show_toggle" class="pretix-widget-item-title" href="#"'
+        + '   @click.prevent="expand">'
+        +  '{{ item.name }}'
+        + '</a>'
+        + '<strong v-else class="pretix-widget-item-title">{{ item.name }}</strong>'
         + '<div class="pretix-widget-item-description" v-if="item.description" v-html="item.description"></div>'
         + '<p class="pretix-widget-item-meta" v-if="item.order_min && item.order_min > 1">'
         + '<small>{{ min_order_str }}</small>'
@@ -318,6 +322,7 @@ Vue.component('pretix-widget', {
         + '        :name="$root.widget_id" :src="$root.formTarget">'
         + 'Please enable frames in your browser!'
         + '</iframe>'
+        + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent="close">X</a></div>'
         + '</div>'
         + '</div>'
         + '</div>'
@@ -330,7 +335,10 @@ Vue.component('pretix-widget', {
     methods: {
         buy: function () {
             this.frame_shown = true;
-        }
+        },
+        close: function () {
+            this.frame_shown = false;
+        },
     },
     computed: {
         frameClasses: function () {
@@ -361,11 +369,13 @@ var create_widget = function (element) {
                 error: null,
                 display_add_to_cart: false,
                 loading: 1,
+                language: element.attributes.event.lang,
                 widget_id: 'pretix-widget-' + widget_id
             }
         },
         created: function () {
-            api._getJSON(event_url + 'widget/product_list', function (data) {
+            var url = event_url + 'widget/product_list?lang=' + this.language;
+            api._getJSON(url, function (data) {
                 app.categories = data.items_by_category;
                 app.currency = data.currency;
                 app.display_net_prices = data.display_net_prices;
