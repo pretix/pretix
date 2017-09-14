@@ -18,11 +18,13 @@ services:
       - tmp-data:/tmp
   
   pretix:
-    build: .
+    image: pretix/standalone
     container_name: pretix
     volumes:
       - pretix-data:/data
       - ${PWD}/etc/pretix:/etc/pretix
+      - ${PWD}/etc/cron.py:/etc/cron.py
+      - ${PWD}/etc/supervisord.conf:/etc/supervisord.conf
       - ${PWD}/etc/pretix/pretix.cfg:/etc/pretix/pretix.cfg
       - tmp-data:/tmp
     ports:
