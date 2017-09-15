@@ -1,29 +1,26 @@
-/*global siteglobals, module*/
+/*global siteglobals, module, lang, django*/
 /* PRETIX WIDGET BEGINS HERE */
 /* This is embedded in an isolation wrapper that exposes siteglobals as the global
    scope. */
 
 var Vue = module.exports;
 
-var I18N_STRINGS = {  // TODO: Translate
-    'en': {
-        'sold_out': 'Sold out',
-        'buy': 'Buy',
-        'reserved': 'Reserved',
-        'free': 'FREE',
-        'price_from': 'from $1 $2',
-        'tax_incl': 'incl. $1% $2',
-        'tax_plus': 'plus $1% $2',
-        'quota_left': 'currently available: $1',
-        'voucher_required': 'Only available with a voucher',
-        'order_min': 'minimum amount to order: %s',
-        'exit': 'Close ticket shop',
-        'loading_error': 'The ticket shop could not be loaded.',
-        'poweredby': 'ticketing powered by <a href="https://pretix.eu" target="_blank">pretix</a>'
-    }
+var strings = {
+    'sold_out': django.pgettext('widget', 'Sold out'),
+    'buy': django.pgettext('widget', 'Buy'),
+    'reserved': django.pgettext('widget', 'Reserved'),
+    'free': django.pgettext('widget', 'FREE'),
+    'price_from': django.pgettext('widget', 'from %(currency)s %(price)s'),
+    'tax_incl': django.pgettext('widget', 'incl. %(rate)s% %(taxname)s'),
+    'tax_plus': django.pgettext('widget', 'plus %(rate)s% %(taxname)s'),
+    'quota_left': django.pgettext('widget', 'currently available: %s'),
+    'voucher_required': django.pgettext('widget', 'Only available with a voucher'),
+    'order_min': django.pgettext('widget', 'minimum amount to order: %s'),
+    'exit': django.pgettext('widget', 'Close ticket shop'),
+    'loading_error': django.pgettext('widget', 'The ticket shop could not be loaded.'),
+    'poweredby': django.pgettext('widget', 'ticketing powered by <a href="https://pretix.eu" target="_blank">pretix</a>')
 };
 
-var strings = I18N_STRINGS['en'];
 
 /* HTTP API Call helpers */
 var api = {
@@ -137,23 +134,29 @@ Vue.component('pricebox', {
     computed: {
         display_price: function () {
             if (this.$root.display_net_prices) {
-                return this.price.net;
+                return floatformat(this.price.net, 2);
             } else {
-                return this.price.gross;
+                return floatformat(this.price.gross, 2);
             }
         },
         priceline: function () {
             if (this.price.gross === "0.00") {
                 return strings.free;
             } else {
-                return this.$root.currency + " " + this.display_price;
+                return this.$root.currency + " " + floatformat(this.display_price, 2);
             }
         },
         taxline: function () {
             if (this.$root.display_net_prices) {
-                return strings.tax_plus.replace(/\$1/, this.price.rate).replace(/\$2/, this.price.name);
+                return django.interpolate(strings.tax_plus, {
+                    'rate': floatformat(this.price.rate, 2),
+                    'taxname': this.price.name
+                }, true);
             } else {
-                return strings.tax_incl.replace(/\$1/, this.price.rate).replace(/\$2/, this.price.name);
+                return django.interpolate(strings.tax_incl, {
+                    'rate': floatformat(this.price.rate, 2),
+                    'taxname': this.price.name
+                }, true);
             }
         }
     }
@@ -191,7 +194,7 @@ Vue.component('variation', {
     },
     computed: {
         quota_left_str: function () {
-            return strings["quota_left"].replace("$1", this.variation.avail[1]);
+            return django.interpolate(strings["quota_left"], [this.variation.avail[1]]);
         },
     }
 });
@@ -204,7 +207,7 @@ Vue.component('item', {
         + '<div class="pretix-widget-item-title-and-description">'
         + '<a v-if="item.has_variations && show_toggle" class="pretix-widget-item-title" href="#"'
         + '   @click.prevent="expand">'
-        +  '{{ item.name }}'
+        + '{{ item.name }}'
         + '</a>'
         + '<strong v-else class="pretix-widget-item-title">{{ item.name }}</strong>'
         + '<div class="pretix-widget-item-description" v-if="item.description" v-html="item.description"></div>'
@@ -266,21 +269,24 @@ Vue.component('item', {
             }
         },
         min_order_str: function () {
-            return strings["order_min"].replace("%s", this.item.order_min);
+            return django.interpolate(strings["order_min"], [this.item.order_min]);
         },
         quota_left_str: function () {
-            return strings["quota_left"].replace("$1", this.item.avail[1]);
+            return django.interpolate(strings["quota_left"], [this.item.avail[1]]);
         },
         show_toggle: function () {
             return this.item.has_variations && !this.$root.show_variations_expanded;
         },
         pricerange: function () {
             if (this.item.min_price !== this.item.max_price || this.item.free_price) {
-                return strings.price_from.replace(/\$1/, this.$root.currency).replace(/\$2/, this.item.min_price)
+                return django.interpolate(strings.price_from, {
+                    'currency': this.$root.currency,
+                    'price': floatformat(this.$root.price, 2)
+                }, true);
             } else if (this.item.min_price === "0.00" && this.item.max_price === "0.00") {
                 return strings.free;
             } else {
-                return this.$root.currency + " " + this.item.min_price;
+                return this.$root.currency + " " + floatformat(this.item.min_price, 2);
             }
         },
     }
@@ -369,12 +375,11 @@ var create_widget = function (element) {
                 error: null,
                 display_add_to_cart: false,
                 loading: 1,
-                language: element.attributes.event.lang,
                 widget_id: 'pretix-widget-' + widget_id
             }
         },
         created: function () {
-            var url = event_url + 'widget/product_list?lang=' + this.language;
+            var url = event_url + 'widget/product_list?lang=' + lang;
             api._getJSON(url, function (data) {
                 app.categories = data.items_by_category;
                 app.currency = data.currency;

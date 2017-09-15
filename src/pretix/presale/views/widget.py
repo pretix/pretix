@@ -1,10 +1,15 @@
+import json
 from urllib.parse import urljoin
 
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.http import Http404, HttpResponse, JsonResponse
+from django.template import Context, Engine
 from django.utils.formats import date_format
 from django.views import View
+from django.views.i18n import (
+    get_formats, get_javascript_catalog, js_catalog_template,
+)
 from easy_thumbnails.files import get_thumbnailer
 
 from pretix.base.i18n import language
@@ -14,15 +19,36 @@ from pretix.presale.views.event import (
 )
 
 
-def widget_js(request, **kwargs):
+def indent(s):
+    return s.replace('\n', '\n  ')
+
+
+def widget_js(request, lang, **kwargs):
+    if lang not in [lc for lc, ll in settings.LANGUAGES]:
+        raise Http404()
+
     resp = HttpResponse(content_type='text/javascript')
     # Provide isolation
     resp.write('(function (siteglobals) {\n')
     resp.write('var module = {}, exports = {};\n')
+    resp.write('var lang = "%s";\n' % lang)
+
+    catalog, plural = get_javascript_catalog(lang, 'djangojs', ['pretix'])
+    catalog = dict((k, v) for k, v in catalog.items() if k.startswith('widget\u0004'))
+    template = Engine().from_string(js_catalog_template)
+    context = Context({
+        'catalog_str': indent(json.dumps(
+            catalog, sort_keys=True, indent=2)) if catalog else None,
+        'formats_str': indent(json.dumps(
+            get_formats(), sort_keys=True, indent=2)),
+        'plural': plural,
+    })
+    resp.write(template.render(context))
 
     files = [
         'vuejs/vue.js' if settings.DEBUG else 'vuejs/vuejs.min.js',
         'pretixpresale/js/widget/docready.js',
+        'pretixpresale/js/widget/floatformat.js',
         'pretixpresale/js/widget/widget.js',
     ]
     for fname in files:

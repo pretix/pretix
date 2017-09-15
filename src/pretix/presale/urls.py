@@ -94,5 +94,5 @@ organizer_patterns = [
 locale_patterns = [
     url(r'^locale/set$', pretix.presale.views.locale.LocaleSet.as_view(), name='locale.set'),
     url(r'^robots.txt$', pretix.presale.views.robots.robots_txt, name='robots.txt'),
-    url(r'^widget/v1.js$', pretix.presale.views.widget.widget_js, name='event.widget.js'),
+    url(r'^widget/v1\.(?P<lang>[a-zA-Z0-9_\-]+)\.js$', pretix.presale.views.widget.widget_js, name='event.widget.js'),
 ]
