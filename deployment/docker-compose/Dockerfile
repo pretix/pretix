@@ -11,8 +11,6 @@ RUN rm -rf /var/lib/apt/lists/* && \
 	locale-gen C.UTF-8 && \
 	/usr/sbin/update-locale LANG=C.UTF-8
 
-RUN useradd -ms /bin/bash -d /pretix -u 15371 pretixuser
-
 RUN mkdir /etc/pretix
 RUN mkdir /data
 RUN mkdir /static
@@ -32,7 +30,5 @@ RUN pip3 install -U pip wheel setuptools uwsgi
 RUN pip3 install -r requirements.txt -r requirements/mysql.txt -r requirements/redis.txt
 
 RUN mkdir -p data
-RUN chown -R pretixuser:pretixuser /pretix /data data
 
-USER pretixuser
 COPY ./pretix/etc/pretix.cfg /etc/pretix/pretix.cfg
