@@ -1,7 +1,5 @@
-echo "Due to racecondition on database initial setup we will only build the database first ..."
-docker-compose up --force-recreate --build -d db
-echo "Waiting for initial db setup"
-sleep 10
-echo "Starting now ... get ready :)"
-sleep 1
+#!/usr/bin/env bash
+
+echo "Copy src from ../../src. Due to security reasons Docker cant build from parent directories."
+cp -r ../../src src_tmp
 docker-compose up --force-recreate --build
