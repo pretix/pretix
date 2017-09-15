@@ -17,10 +17,8 @@ services:
     command: memcached -m 1024m
 
   redis:
-    build: ./redis
+    image: redis:latest
     container_name: pretix_redis
-    volumes:
-      - tmp-data:/tmp
   
   pretix:
     image: pretix/standalone
@@ -31,7 +29,6 @@ services:
       - ${PWD}/etc/cron.py:/etc/cron.py
       - ${PWD}/etc/supervisord.conf:/etc/supervisord.conf
       - ${PWD}/etc/pretix/pretix.cfg:/etc/pretix/pretix.cfg
-      - tmp-data:/tmp
     ports:
       - "0.0.0.0:80:80"
     depends_on:
@@ -42,4 +39,3 @@ services:
 volumes:
   pretix-data:
   db-data:
-  tmp-data:
