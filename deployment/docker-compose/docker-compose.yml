@@ -10,6 +10,11 @@ services:
       - MYSQL_RANDOM_ROOT_PASSWORD=1
     volumes:
       - db-data:/var/lib/mysql
+      
+  memcached:
+    image: memcached
+    container_name: pretix_memcached
+    command: memcached -m 1024m
 
   redis:
     build: ./redis
@@ -32,6 +37,7 @@ services:
     depends_on:
       - db
       - redis
+      - memcached
 
 volumes:
   pretix-data:
