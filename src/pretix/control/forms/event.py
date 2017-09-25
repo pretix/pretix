@@ -344,6 +344,7 @@ class EventSettingsForm(SettingsForm):
         help_text=_('This text needs to be confirmed by the user before a purchase is possible. You could for example '
                     'link your terms of service here. If you use the Pages feature to publish your terms of service, '
                     'you don\'t need this setting since you can configure it there.'),
+        required=False,
         widget=forms.Textarea(attrs={"rows": 3})
     )
     contact_mail = forms.EmailField(
