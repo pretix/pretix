@@ -22,6 +22,7 @@ from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import EventViewMixin
 from pretix.presale.views.async import AsyncAction
 from pretix.presale.views.event import item_group_by_category
+from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 
 class CartActionMixin:
@@ -177,7 +178,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
                 return redirect(self.get_error_url())
 
 
-class RedeemView(EventViewMixin, TemplateView):
+class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
     template_name = "pretixpresale/event/voucher.html"
 
     def get_context_data(self, **kwargs):

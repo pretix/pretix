@@ -29,9 +29,10 @@ from pretix.presale.forms.checkout import InvoiceAddressForm
 from pretix.presale.views import CartMixin, EventViewMixin
 from pretix.presale.views.async import AsyncAction
 from pretix.presale.views.questions import QuestionsViewMixin
+from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 
-class OrderDetailMixin:
+class OrderDetailMixin(NoSearchIndexViewMixin):
     @cached_property
     def order(self):
         order = self.request.event.orders.filter(code=self.kwargs['order']).select_related('event').first()
