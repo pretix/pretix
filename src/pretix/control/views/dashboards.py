@@ -333,8 +333,8 @@ def user_event_widgets(**kwargs):
     ).select_related('organizer')[:100]
     for event in events:
         dr = event.get_date_range_display()
+        tz = pytz.timezone(event.settings.timezone)
         if event.has_subevents:
-            tz = pytz.timezone(event.settings.timezone)
             dr = daterange(
                 (event.min_from).astimezone(tz),
                 (event.max_fromto or event.max_to or event.max_from).astimezone(tz)
@@ -355,9 +355,9 @@ def user_event_widgets(**kwargs):
             'content': tpl.format(
                 event=escape(event.name),
                 times=_('Event series') if event.has_subevents else (
-                    ((date_format(event.date_admission, 'TIME_FORMAT') + ' / ')
+                    ((date_format(event.date_admission.astimezone(tz), 'TIME_FORMAT') + ' / ')
                      if event.date_admission and event.date_admission != event.date_from else '')
-                    + (date_format(event.date_from, 'TIME_FORMAT') if event.date_from else '')
+                    + (date_format(event.date_from.astimezone(tz), 'TIME_FORMAT') if event.date_from else '')
                 ),
                 url=reverse('control:event.index', kwargs={
                     'event': event.slug,
