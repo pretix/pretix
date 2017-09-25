@@ -6,6 +6,7 @@ from typing import List, Optional
 from celery.exceptions import MaxRetriesExceededError
 from django.db import transaction
 from django.db.models import Q
+from django.dispatch import receiver
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext as _
 
@@ -19,8 +20,11 @@ from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
 from pretix.base.services.async import ProfiledTask
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.pricing import get_price
+from pretix.base.templatetags.rich_text import rich_text
 from pretix.celery_app import app
-from pretix.presale.signals import fee_calculation_for_cart
+from pretix.presale.signals import (
+    checkout_confirm_messages, fee_calculation_for_cart,
+)
 
 
 class CartError(LazyLocaleException):
@@ -761,3 +765,13 @@ def set_cart_addons(self, event: int, addons: List[dict], cart_id: str=None, loc
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
             raise CartError(error_messages['busy'])
+
+
+@receiver(checkout_confirm_messages, dispatch_uid="cart_confirm_messages")
+def confirm_messages(sender, *args, **kwargs):
+    if not sender.settings.confirm_text:
+        return {}
+
+    return {
+        'confirm_text': rich_text(str(sender.settings.confirm_text))
+    }
