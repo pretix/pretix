@@ -26,7 +26,7 @@ def register_data(sender, **kwargs):
 @receiver(html_head, dispatch_uid="ticketoutputpdf_html_head")
 def html_head_presale(sender, request=None, **kwargs):
     url = resolve(request.path_info)
-    if url.namespace == 'plugins:ticketoutputpdf':
+    if url.namespace == 'plugins:ticketoutputpdf' and getattr(request, 'organizer', None):
         template = get_template('pretixplugins/ticketoutputpdf/control_head.html')
         return template.render({
             'request': request
