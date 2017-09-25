@@ -56,7 +56,7 @@ ALLOWED_ATTRIBUTES = {
 
 def safelink_callback(attrs, new=False):
     url = attrs.get((None, 'href'), '/')
-    if not is_safe_url(url):
+    if not is_safe_url(url) and not url.startswith('mailto:'):
         signer = signing.Signer(salt='safe-redirect')
         attrs[None, 'href'] = reverse('redirect') + '?url=' + urllib.parse.quote(signer.sign(url))
         attrs[None, 'target'] = '_blank'
