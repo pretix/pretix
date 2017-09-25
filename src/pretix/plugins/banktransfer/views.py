@@ -106,10 +106,13 @@ class ActionView(View):
             return self._retry(trans)
 
     def _comment(self, trans, comment):
+        from pretix.base.templatetags.rich_text import rich_text
         trans.comment = comment
         trans.save()
         return JsonResponse({
-            'status': 'ok'
+            'status': 'ok',
+            'comment': rich_text(comment),
+            'plain': comment,
         })
 
     def post(self, request, *args, **kwargs):

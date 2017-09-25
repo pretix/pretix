@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load rich_text %}
 {% load staticfiles %}
 <div class="table-responsive">
     {% csrf_token %}
@@ -57,9 +58,9 @@
                 <td>
                     {{ trans.payer }}<br/>
                     {{ trans.reference }}
-                    <div class="comment-box">
+                    <div class="comment-box" data-plain="{{ trans.comment }}">
                         <strong>{% trans "Comment:" %}</strong>
-                        <span class="comment">{{ trans.comment }}</span>
+                        <span class="comment">{{ trans.comment|rich_text }}</span>
                         <a href="#" class="comment-modify btn btn-default btn-xs">
                             <span class="fa fa-edit"></span>
                         </a>
