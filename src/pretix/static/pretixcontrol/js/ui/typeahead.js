@@ -37,7 +37,14 @@ $(function () {
                                             $("<span>").addClass("fa fa-calendar fa-fw")
                                         ).append(" ").append(res.date_range)
                                     )
-                                )
+                                ).on("mousedown", function (event) {
+                                    if ($(this).length) {
+                                        location.href = $(this).attr("href");
+                                    }
+                                    $(this).parent().addClass("active");
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                })
                             )
                         );
                     });
