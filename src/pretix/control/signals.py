@@ -182,6 +182,15 @@ This is a regular django signal (no pretix event signal). Receivers will be pass
 the keyword arguments ``organizer`` and ``request``.
 """
 
+order_info = EventPluginSignal(
+    providing_args=["order"]
+)
+"""
+This signal is sent out to display additional information on the order detail page
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 
 nav_event_settings = EventPluginSignal(
     providing_args=['request']
