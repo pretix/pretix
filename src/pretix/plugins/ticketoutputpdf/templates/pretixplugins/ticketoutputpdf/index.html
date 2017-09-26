@@ -37,11 +37,7 @@
                 <div class="panel-body">
                     <div id="editor-canvas-area">
                         <canvas id="pdf-canvas"
-                                {% if request.event.settings.ticketoutput_pdf_background %}
-                                    data-pdf-url="{{ request.event.settings.ticketoutput_pdf_background.url }}"
-                                {% else %}
-                                    data-pdf-url="{% static "pretixpresale/pdf/ticket_default_a4.pdf" %}"
-                                {% endif %}
+                                data-pdf-url="{{ pdf }}"
                                 data-worker-url="{% static "pretixplugins/ticketoutputpdf/pdf.worker.js" %}">
 
                         </canvas>

@@ -3,6 +3,7 @@ import logging
 import mimetypes
 from datetime import timedelta
 
+from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.http import (
@@ -36,6 +37,7 @@ class EditorView(EventPermissionRequiredMixin, TemplateView):
     )
     maxfilesize = 1024 * 1024 * 10
     minfilesize = 10
+    identifier = 'pdf'
 
     def get(self, request, *args, **kwargs):
         resp = super().get(request, *args, **kwargs)
@@ -118,7 +120,7 @@ class EditorView(EventPermissionRequiredMixin, TemplateView):
             return resp
         elif "data" in request.POST:
             if cf:
-                fexisting = request.event.settings.get('ticketoutput_pdf_layout', as_type=File)
+                fexisting = request.event.settings.get('ticketoutput_{}_layout'.format(self.identifier), as_type=File)
                 if fexisting:
                     try:
                         default_storage.delete(fexisting.name)
@@ -128,18 +130,18 @@ class EditorView(EventPermissionRequiredMixin, TemplateView):
                 # Create new file
                 nonce = get_random_string(length=8)
                 fname = '%s-%s/%s/%s.%s.%s' % (
-                    'event', 'settings', self.request.event.pk, 'ticketoutput_pdf_layout', nonce, 'pdf'
+                    'event', 'settings', self.request.event.pk, 'ticketoutput_{}_layout'.format(self.identifier), nonce, 'pdf'
                 )
                 newname = default_storage.save(fname, cf.file)
-                request.event.settings.set('ticketoutput_pdf_background', 'file://' + newname)
+                request.event.settings.set('ticketoutput_{}_background'.format(self.identifier), 'file://' + newname)
 
-            request.event.settings.set('ticketoutput_pdf_layout', request.POST.get("data"))
+            request.event.settings.set('ticketoutput_{}_layout'.format(self.identifier), request.POST.get("data"))
 
             CachedTicket.objects.filter(
-                order_position__order__event=self.request.event, provider='pdf'
+                order_position__order__event=self.request.event, provider=self.identifier
             ).delete()
             CachedCombinedTicket.objects.filter(
-                order__event=self.request.event, provider='pdf'
+                order__event=self.request.event, provider=self.identifier
             ).delete()
 
             return JsonResponse({'status': 'ok'})
@@ -149,8 +151,13 @@ class EditorView(EventPermissionRequiredMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
         prov = PdfTicketOutput(self.request.event)
         ctx['fonts'] = get_fonts()
+        ctx['pdf'] = (
+            self.request.event.settings.get('ticketoutput_{}_background'.format(self.identifier)).url
+            if self.request.event.settings.get('ticketoutput_{}_background'.format(self.identifier))
+            else static('pretixpresale/pdf/ticket_default_a4.pdf')
+        )
         ctx['layout'] = json.dumps(
-            self.request.event.settings.get('ticketoutput_pdf_layout', as_type=list)
+            self.request.event.settings.get('ticketoutput_{}_layout'.format(self.identifier), as_type=list)
             or prov._default_layout()
         )
         return ctx
