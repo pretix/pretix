@@ -332,7 +332,7 @@
                     </div>
                 </div>
             </div>
-            {% eventsignal event "pretix.control.signals.order_info" order=order %}
+            {% eventsignal event "pretix.control.signals.order_info" order=order request=request %}
             <div class="row">
                 <div class="{% if request.event.settings.invoice_address_asked %}col-md-6{% else %}col-md-12{% endif %}">
                     <div class="panel panel-default items">
