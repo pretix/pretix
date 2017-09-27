@@ -205,7 +205,7 @@ class PdfTicketOutput(BaseTicketOutput):
             return ev.meta_data.get(o['content'][5:]) or ''
         elif o['content'] in self.variables:
             try:
-                self.variables[o['content']]['evaluate'](op, order, ev)
+                return self.variables[o['content']]['evaluate'](op, order, ev)
             except:
                 logger.exception('Failed to process variable.')
                 return '(error)'
