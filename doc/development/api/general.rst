@@ -64,3 +64,9 @@ Dashboards
 
 .. automodule:: pretix.control.signals
    :members: event_dashboard_widgets, user_dashboard_widgets
+
+Ticket designs
+""""""""""""""
+
+.. automodule:: pretix.plugins.ticketoutputpdf.signals
+   :members: layout_text_variables

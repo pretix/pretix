@@ -279,27 +279,9 @@
                         <div class="col-sm-12">
                             <label>{% trans "Text content" %}</label><br>
                             <select class="input-block-level form-control" id="toolbox-content">
-                                <option value="secret">{% trans "Ticket code (barcode content)" %}</option>
-                                <option value="order">{% trans "Order code" %}</option>
-                                <option value="item">{% trans "Product name" %}</option>
-                                <option value="variation">{% trans "Variation name" %}</option>
-                                <option value="item_description">{% trans "Product description" %}</option>
-                                <option value="itemvar">{% trans "Product name and variation" %}</option>
-                                <option value="price">{% trans "Price" %}</option>
-                                <option value="attendee_name">{% trans "Attendee name" %}</option>
-                                <option value="event_name">{% trans "Event name" %}</option>
-                                <option value="event_date">{% trans "Event date" %}</option>
-                                <option value="event_date_range">{% trans "Event date range" %}</option>
-                                <option value="event_begin">{% trans "Event begin date and time" %}</option>
-                                <option value="event_begin_time">{% trans "Event begin time" %}</option>
-                                <option value="event_admission">{% trans "Event admission date and time" %}</option>
-                                <option value="event_admission_time">{% trans "Event admission time" %}</option>
-                                <option value="event_location">{% trans "Event location" %}</option>
-                                <option value="invoice_name">{% trans "Invoice address: name" %}</option>
-                                <option value="invoice_company">{% trans "Invoice address: company" %}</option>
-                                <option value="addons">{% trans "List of Add-Ons" %}</option>
-                                <option value="organizer">{% trans "Organizer name" %}</option>
-                                <option value="organizer_info_text">{% trans "Organizer info text" %}</option>
+                                {% for varname, var in variables.items %}
+                                    <option data-sample="{{ var.editor_sample }}" value="{{ varname }}">{{ var.label }}</option>
+                                {% endfor %}
                                 {% for p in request.organizer.meta_properties.all %}
                                     <option value="meta:{{ p.name }}">
                                         {% trans "Event attribute:" %} {{ p.name }}

@@ -24,7 +24,7 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.database import rolledback_transaction
 from pretix.plugins.ticketoutputpdf.signals import get_fonts
 
-from .ticketoutput import PdfTicketOutput
+from .ticketoutput import PdfTicketOutput, get_variables
 
 logger = logging.getLogger(__name__)
 
@@ -156,6 +156,7 @@ class EditorView(EventPermissionRequiredMixin, TemplateView):
             if self.request.event.settings.get('ticketoutput_{}_background'.format(self.identifier))
             else static('pretixpresale/pdf/ticket_default_a4.pdf')
         )
+        ctx['variables'] = get_variables(self.request.event)
         ctx['layout'] = json.dumps(
             self.request.event.settings.get('ticketoutput_{}_layout'.format(self.identifier), as_type=list)
             or prov._default_layout()

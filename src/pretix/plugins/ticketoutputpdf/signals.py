@@ -3,7 +3,7 @@ from django.template.loader import get_template
 from django.urls import resolve
 
 from pretix.base.signals import (
-    register_data_exporters, register_ticket_outputs,
+    EventPluginSignal, register_data_exporters, register_ticket_outputs,
 )
 from pretix.control.signals import html_head
 from pretix.presale.style import (  # NOQA: legacy import
@@ -33,3 +33,22 @@ def html_head_presale(sender, request=None, **kwargs):
         })
     else:
         return ""
+
+
+layout_text_variables = EventPluginSignal()
+"""
+This signal is sent out to collect variables that can be used to display text in PDF ticket layouts.
+Receivers are expected to return a dictionary with globally unique identifiers as keys and more
+dictionaries as values that contain keys like in the following example::
+
+    return {
+        "product": {
+            "label": _("Product name"),
+            "editor_sample": _("Sample product"),
+            "evaluate": lambda orderposition, order, event: str(orderposition.item)
+        }
+    }
+
+The evaluate member will be called with the order position, order and event as arguments. The event might
+also be a subevent, if applicable.
+"""

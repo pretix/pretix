@@ -183,3 +183,10 @@ pre.mail-preview {
     padding-top: 7px;
   }
 }
+.inline-multiple-choice {
+  .checkbox {
+    display: inline-block;
+    margin-top: 0;
+    margin-right: 10px;
+  }
+}

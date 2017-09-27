@@ -158,35 +158,11 @@ var editor = {
         editor._update_toolbox_values();
     },
 
-    text_samples: {
-        "secret": "tdmruoekvkpbv1o2mv8xccvqcikvr58u",
-        "order": "A1B2C",
-        "item": gettext("Sample product"),
-        "variation": gettext("Sample variation"),
-        "itemvar": gettext("Sample product – sample variation"),
-        "item_description": gettext("Sample product description"),
-        "price": gettext("123.45 EUR"),
-        "attendee_name": gettext("John Doe"),
-        "invoice_name": gettext("John Doe"),
-        "invoice_company": gettext("Sample company"),
-        "event_name": gettext("Sample event name"),
-        "event_date": gettext("May 31st, 2017"),
-        "event_date_range": gettext("May 31st – June 4th, 2017"),
-        "event_begin_time": gettext("20:00"),
-        "event_admission_time": gettext("19:00"),
-        "event_begin": gettext("2017-05-31 20:00"),
-        "event_admission": gettext("2017-05-31 19:00"),
-        "event_location": gettext("Random City"),
-        "organizer": gettext("Event organizer company"),
-        "organizer_info_text": gettext("Event organizer info text"),
-        "addons": gettext("Addon 1\nAddon 2"),
-    },
-
     _get_text_sample: function (key) {
         if (key.startsWith('meta:')) {
             return key.substr(5);
         }
-        return editor.text_samples[key];
+        return $('#toolbox-content option[value='+key+']').attr('data-sample');
     },
 
     _load_pdf: function (dump) {
@@ -406,7 +382,7 @@ var editor = {
     },
 
     _add_text: function () {
-        var text = new fabric.Textarea(editor.text_samples['item'], {
+        var text = new fabric.Textarea(editor._get_text_sample('item'), {
             left: 100,
             top: 100,
             width: editor._mm2px(50),
