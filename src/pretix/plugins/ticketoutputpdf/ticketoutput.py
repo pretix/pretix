@@ -281,6 +281,9 @@ class PdfTicketOutput(BaseTicketOutput):
         self._register_fonts()
         return canvas.Canvas(buffer, pagesize=pagesize)
 
+    def _get_default_background(self):
+        return open(finders.find('pretixpresale/pdf/ticket_default_a4.pdf'), "rb")
+
     def _render_with_background(self, buffer, title=_('Ticket')):
         from PyPDF2 import PdfFileWriter, PdfFileReader
         buffer.seek(0)
@@ -292,7 +295,7 @@ class PdfTicketOutput(BaseTicketOutput):
         elif isinstance(bg_file, File):
             bgf = default_storage.open(bg_file.name, "rb")
         else:
-            bgf = open(finders.find('pretixpresale/pdf/ticket_default_a4.pdf'), "rb")
+            bgf = self._get_default_background()
         bg_pdf = PdfFileReader(bgf)
 
         for page in new_pdf.pages:

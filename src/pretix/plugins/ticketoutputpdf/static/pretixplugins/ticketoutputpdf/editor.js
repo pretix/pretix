@@ -162,7 +162,7 @@ var editor = {
         if (key.startsWith('meta:')) {
             return key.substr(5);
         }
-        return $('#toolbox-content option[value='+key+']').attr('data-sample');
+        return $('#toolbox-content option[value='+key+']').attr('data-sample') || '';
     },
 
     _load_pdf: function (dump) {

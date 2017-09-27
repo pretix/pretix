@@ -39,6 +39,9 @@ class EditorView(EventPermissionRequiredMixin, TemplateView):
     minfilesize = 10
     identifier = 'pdf'
 
+    def get_output(self, *args, **kwargs):
+        return PdfTicketOutput(self.request.event, *args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         resp = super().get(request, *args, **kwargs)
         resp['Content-Security-Policy'] = "script-src 'unsafe-eval'; style-src 'unsafe-inline'; img-src blob:; font-src data: blob:"
@@ -57,6 +60,23 @@ class EditorView(EventPermissionRequiredMixin, TemplateView):
         if error:
             return error, None
         return None, f
+
+    def _get_preview_position(self):
+        item = self.request.event.items.create(name=_("Sample product"), default_price=42.23,
+                                               description=_("Sample product description"))
+        item2 = self.request.event.items.create(name=_("Sample workshop"), default_price=23.40)
+
+        from pretix.base.models import Order
+        order = self.request.event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
+                                                 email='sample@pretix.eu',
+                                                 expires=now(), code="PREVIEW1234", total=119)
+
+        p = order.positions.create(item=item, attendee_name=_("John Doe"), price=item.default_price)
+        order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
+        order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
+
+        InvoiceAddress.objects.create(order=order, name=_("John Doe"), company=_("Sample company"))
+        return p
 
     def post(self, request, *args, **kwargs):
         if "background" in request.FILES:
@@ -93,25 +113,13 @@ class EditorView(EventPermissionRequiredMixin, TemplateView):
 
         if "preview" in request.POST:
             with rolledback_transaction(), language(request.event.settings.locale):
-                item = request.event.items.create(name=_("Sample product"), default_price=42.23,
-                                                  description=_("Sample product description"))
-                item2 = request.event.items.create(name=_("Sample workshop"), default_price=23.40)
+                p = self._get_preview_position()
 
-                from pretix.base.models import Order
-                order = request.event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
-                                                    email='sample@pretix.eu',
-                                                    expires=now(), code="PREVIEW1234", total=119)
-
-                p = order.positions.create(item=item, attendee_name=_("John Doe"), price=item.default_price)
-                order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
-                order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
-
-                InvoiceAddress.objects.create(order=order, name=_("John Doe"), company=_("Sample company"))
-
-                prov = PdfTicketOutput(request.event,
-                                       override_layout=(json.loads(request.POST.get("data"))
-                                                        if request.POST.get("data") else None),
-                                       override_background=cf.file if cf else None)
+                prov = self.get_output(
+                    override_layout=(json.loads(request.POST.get("data"))
+                                     if request.POST.get("data") else None),
+                    override_background=cf.file if cf else None
+                )
                 fname, mimet, data = prov.generate(p)
 
             resp = HttpResponse(data, content_type=mimet)
@@ -149,7 +157,7 @@ class EditorView(EventPermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        prov = PdfTicketOutput(self.request.event)
+        prov = self.get_output()
         ctx['fonts'] = get_fonts()
         ctx['pdf'] = (
             self.request.event.settings.get('ticketoutput_{}_background'.format(self.identifier)).url
