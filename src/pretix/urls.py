@@ -5,7 +5,7 @@ from django.views.generic import RedirectView
 import pretix.control.urls
 import pretix.presale.urls
 
-from .base.views import cachedfiles, health, js_catalog, metrics, redirect
+from .base.views import cachedfiles, health, js_catalog, metrics, redirect, csp
 
 base_patterns = [
     url(r'^download/(?P<id>[^/]+)/$', cachedfiles.DownloadView.as_view(),
@@ -16,6 +16,7 @@ base_patterns = [
     url(r'^jsi18n/(?P<lang>[a-zA-Z-_]+)/$', js_catalog.js_catalog, name='javascript-catalog'),
     url(r'^metrics$', metrics.serve_metrics,
         name='metrics'),
+    url(r'^csp_report/$', csp.csp_report, name='csp.report'),
     url(r'^api/v1/', include('pretix.api.urls', namespace='api-v1')),
     url(r'^api/$', RedirectView.as_view(url='/api/v1/'), name='redirect-api-version')
 ]
