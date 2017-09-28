@@ -1,8 +1,7 @@
 import json
 import logging
 
-from django.http import (
-    HttpResponseBadRequest, HttpResponse)
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 
 logger = logging.getLogger('pretix.security.csp')

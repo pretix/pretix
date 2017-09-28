@@ -220,7 +220,14 @@ class SecurityMiddleware(MiddlewareMixin):
                     domain = '%s:%d' % (domain, siteurlsplit.port)
                 dynamicdomain += " " + domain
 
-        if request.path not in self.CSP_EXEMPT:
+        if request.path not in self.CSP_EXEMPT and not getattr(resp, '_csp_ignore', False):
             resp['Content-Security-Policy'] = _render_csp(h).format(static=staticdomain, dynamic=dynamicdomain,
                                                                     media=mediadomain, nonce=request.csp_nonce)
+            for k, v in h.items():
+                h[k] = ' '.join(v).format(static=staticdomain, dynamic=dynamicdomain, media=mediadomain,
+                                          nonce=request.csp_nonce).split(' ')
+            resp['Content-Security-Policy'] = _render_csp(h)
+        elif 'Content-Security-Policy' in resp:
+            del resp['Content-Security-Policy']
+
         return resp

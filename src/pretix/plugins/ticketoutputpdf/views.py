@@ -44,7 +44,7 @@ class EditorView(EventPermissionRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         resp = super().get(request, *args, **kwargs)
-        resp['Content-Security-Policy'] = "script-src 'unsafe-eval'; style-src 'unsafe-inline'; img-src blob:; font-src data: blob:"
+        resp._csp_ignore = True
         return resp
 
     def process_upload(self):

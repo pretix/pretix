@@ -5,7 +5,7 @@ from django.views.generic import RedirectView
 import pretix.control.urls
 import pretix.presale.urls
 
-from .base.views import cachedfiles, health, js_catalog, metrics, redirect, csp
+from .base.views import cachedfiles, csp, health, js_catalog, metrics, redirect
 
 base_patterns = [
     url(r'^download/(?P<id>[^/]+)/$', cachedfiles.DownloadView.as_view(),
