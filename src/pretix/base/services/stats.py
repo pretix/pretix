@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.base.models import Event, Item, ItemCategory, Order, OrderPosition
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import OrderFee
+from pretix.base.signals import order_fee_type_name
 
 
 class DummyObject:
@@ -199,9 +200,15 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
         for pprov, total in sorted(num_total.items(), key=lambda i: i[0]):
             ppobj = DummyObject()
             if pprov[0] == OrderFee.FEE_TYPE_PAYMENT:
-                ppobj.name = '{} - {}'.format(names[OrderFee.FEE_TYPE_PAYMENT], provider_names.get(pprov[1], pprov[1]))
+                ppobj.name = '{} - {}'.format(names[pprov[0]], provider_names.get(pprov[1], pprov[1]))
             else:
-                ppobj.name = '{} - {}'.format(names[OrderFee.FEE_TYPE_PAYMENT], pprov[1])
+                name = pprov[1]
+                for r, resp in order_fee_type_name.send(sender=event, fee_type=pprov[0], internal_type=pprov[1]):
+                    if resp:
+                        name = resp
+                        break
+
+                ppobj.name = '{} - {}'.format(names[pprov[0]], name)
             ppobj.provider = pprov[1]
             ppobj.has_variations = False
             ppobj.num_total = total
