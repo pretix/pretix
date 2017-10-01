@@ -19,6 +19,6 @@ def csp_report(request):
             'Original polity: {r[original-policy]}'.format(r=body['csp-report'])
         )
     except (ValueError, KeyError) as e:
-        logger.exception('CSP report failed')
+        logger.exception('CSP report failed ' + str(e))
         return HttpResponseBadRequest()
     return HttpResponse()
