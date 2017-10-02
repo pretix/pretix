@@ -35,7 +35,8 @@ from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.pricing import get_price
 from pretix.base.signals import (
-    order_fee_calculation, order_paid, order_placed, periodic_task,
+    allow_ticket_download, order_fee_calculation, order_paid, order_placed,
+    periodic_task,
 )
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -567,6 +568,9 @@ def send_download_reminders(sender, **kwargs):
         if now() < reminder_date:
             continue
         for o in e.orders.filter(status=Order.STATUS_PAID, download_reminder_sent=False):
+            if not all([r for rr, r in allow_ticket_download.send(e, order=o)]):
+                continue
+
             o.download_reminder_sent = True
             o.save()
             email_template = e.settings.mail_text_download_reminder

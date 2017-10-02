@@ -261,3 +261,13 @@ expected to return a string or None, if you don't know about this fee.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
+
+allow_ticket_download = EventPluginSignal(
+    providing_args=['order']
+)
+"""
+This signal is sent out to check if tickets for an order can be downloaded. If any receiver returns false,
+a download will not be offered.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
