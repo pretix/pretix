@@ -7,7 +7,7 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 class AppConfiguration(models.Model):
     event = models.ForeignKey('pretixbase.Event')
-    key = models.CharField(max_length=190, unique=True, db_index=True)
+    key = models.CharField(max_length=190, db_index=True)
     all_items = models.BooleanField(default=True, verbose_name=_('Can scan all products'))
     items = models.ManyToManyField('pretixbase.Item', blank=True, verbose_name=_('Can scan these products'))
     subevent = models.ForeignKey('pretixbase.SubEvent', null=True, blank=True,
