@@ -10,7 +10,8 @@ from pretix.control.utils.i18n import i18ncomp
 
 
 class FilterForm(forms.Form):
-    orders = {}
+    orders = {'code': 'code', 'email': 'email', 'total': 'total', 'datetime':
+            'datetime', 'status': 'status', 'pcnt': 'pcnt'}
 
     def filter_qs(self, qs):
         return qs
@@ -93,6 +94,9 @@ class OrderFilterForm(FilterForm):
             else:
                 qs = qs.filter(status=s)
 
+        if fdata.get('ordering'):
+            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
+
         return qs
 
 
@@ -153,6 +157,9 @@ class EventOrderFilterForm(OrderFilterForm):
         if fdata.get('provider'):
             qs = qs.filter(payment_provider=fdata.get('provider'))
 
+        if fdata.get('ordering'):
+            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
+
         return qs
 
 
@@ -180,6 +187,9 @@ class OrderSearchFilterForm(OrderFilterForm):
 
         if fdata.get('organizer'):
             qs = qs.filter(event__organizer=fdata.get('organizer'))
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
 
         return qs
 
