@@ -10,8 +10,7 @@ from pretix.control.utils.i18n import i18ncomp
 
 
 class FilterForm(forms.Form):
-    orders = {'code': 'code', 'email': 'email', 'total': 'total', 'datetime':
-            'datetime', 'status': 'status', 'pcnt': 'pcnt'}
+    orders = {}
 
     def filter_qs(self, qs):
         return qs
@@ -101,6 +100,9 @@ class OrderFilterForm(FilterForm):
 
 
 class EventOrderFilterForm(OrderFilterForm):
+    orders = {'code': 'code', 'email': 'email', 'total': 'total',
+              'datetime': 'datetime', 'status': 'status', 'pcnt': 'pcnt'}
+
     item = forms.ModelChoiceField(
         label=_('Products'),
         queryset=Item.objects.none(),
@@ -157,13 +159,14 @@ class EventOrderFilterForm(OrderFilterForm):
         if fdata.get('provider'):
             qs = qs.filter(payment_provider=fdata.get('provider'))
 
-        if fdata.get('ordering'):
-            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
-
         return qs
 
 
 class OrderSearchFilterForm(OrderFilterForm):
+    orders = {'code': 'code', 'email': 'email', 'total': 'total',
+              'datetime': 'datetime', 'status': 'status', 'pcnt': 'pcnt',
+              'event': 'event'}
+
     organizer = forms.ModelChoiceField(
         label=_('Organizer'),
         queryset=Organizer.objects.none(),
@@ -187,9 +190,6 @@ class OrderSearchFilterForm(OrderFilterForm):
 
         if fdata.get('organizer'):
             qs = qs.filter(event__organizer=fdata.get('organizer'))
-
-        if fdata.get('ordering'):
-            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
 
         return qs
 
