@@ -93,10 +93,16 @@ class OrderFilterForm(FilterForm):
             else:
                 qs = qs.filter(status=s)
 
+        if fdata.get('ordering'):
+            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
+
         return qs
 
 
 class EventOrderFilterForm(OrderFilterForm):
+    orders = {'code': 'code', 'email': 'email', 'total': 'total',
+              'datetime': 'datetime', 'status': 'status', 'pcnt': 'pcnt'}
+
     item = forms.ModelChoiceField(
         label=_('Products'),
         queryset=Item.objects.none(),
@@ -157,6 +163,10 @@ class EventOrderFilterForm(OrderFilterForm):
 
 
 class OrderSearchFilterForm(OrderFilterForm):
+    orders = {'code': 'code', 'email': 'email', 'total': 'total',
+              'datetime': 'datetime', 'status': 'status', 'pcnt': 'pcnt',
+              'event': 'event'}
+
     organizer = forms.ModelChoiceField(
         label=_('Organizer'),
         queryset=Organizer.objects.none(),
