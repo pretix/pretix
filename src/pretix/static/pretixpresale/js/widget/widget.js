@@ -344,7 +344,7 @@ Vue.component('pretix-widget', {
         + '</div>'
         + '<div class="pretix-widget-frame-inner" ref="frame-container" v-show="$root.frame_shown">'
         + '<iframe frameborder="0" width="650px" height="650px" @load="iframeLoaded" '
-        + '        :name="$root.widget_id" :src="$root.formTarget" v-once>'
+        + '        :name="$root.widget_id" src="about:blank" v-once>'
         + 'Please enable frames in your browser!'
         + '</iframe>'
         + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent="close">X</a></div>'

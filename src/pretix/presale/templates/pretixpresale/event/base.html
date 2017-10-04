@@ -8,6 +8,7 @@
     {% block title %}{% endblock %}{% if url_name != "event.index" %} :: {% endif %}{{ event.name }}
 {% endblock %}
 {% block above %}
+    <script type="text/javascript" src="{% static "pretixpresale/js/ui/iframe.js" %}"></script>
     {% if not event.live %}
         <div class="offline-banner">
             <div class="container">

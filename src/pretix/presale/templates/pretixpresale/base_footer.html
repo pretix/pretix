@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load safelink %}
 {% safelink "https://pretix.eu" as pretixurl %}
-{% with 'href="'|add:pretixurl|add:'"'|safe as a_attr %}
+{% with 'target="_blank" href="'|add:pretixurl|add:'"'|safe as a_attr %}
     {% blocktrans trimmed %}
         powered by <a {{ a_attr }}>pretix</a>
     {% endblocktrans %}
