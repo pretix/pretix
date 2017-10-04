@@ -1,5 +1,6 @@
 import mimetypes
 import os
+from functools import wraps
 
 from django.contrib import messages
 from django.db.models import Q
@@ -7,7 +8,7 @@ from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
 from django.utils.crypto import get_random_string
-from django.utils.decorators import method_decorator
+from django.utils.decorators import available_attrs, method_decorator
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
 from django.utils.timezone import now
@@ -133,25 +134,45 @@ class CartActionMixin:
         return items
 
 
-def create_empty_cart_id(request):
-    current_id = request.session.get('current_cart_event_{}'.format(request.event.pk))
-    if current_id and current_id in request.session.get('carts', {}):
-        del request.session['carts'][current_id]
-        del request.session['current_cart_event_{}'.format(request.event.pk)]
-    return get_or_create_cart_id(request)
+def generate_cart_id():
+    while True:
+        new_id = get_random_string(length=32)
+        if not CartPosition.objects.filter(cart_id=new_id).exists():
+            return new_id
+
+
+def create_empty_cart_id(request, replace_current=True):
+    session_keyname = 'current_cart_event_{}'.format(request.event.pk)
+    if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
+        session_keyname += '_' + request.resolver_match.kwargs.get('cart_namespace')
+
+    if 'carts' not in request.session:
+        request.session['carts'] = {}
+
+    new_id = generate_cart_id()
+    request.session['carts'][new_id] = {}
+
+    if replace_current:
+        current_id = request.session.get(session_keyname)
+        if current_id and current_id in request.session.get('carts', {}):
+            del request.session['carts'][current_id]
+            del request.session[session_keyname]
+        request.session[session_keyname] = new_id
+    return new_id
 
 
 def get_or_create_cart_id(request):
-    current_id = request.session.get('current_cart_event_{}'.format(request.event.pk))
+    session_keyname = 'current_cart_event_{}'.format(request.event.pk)
+    if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
+        session_keyname += '_' + request.resolver_match.kwargs.get('cart_namespace')
+
+    current_id = request.session.get(session_keyname)
     if current_id and current_id in request.session.get('carts', {}):
         return current_id
     else:
         cart_data = {}
 
-        while True:
-            new_id = get_random_string(length=32)
-            if not CartPosition.objects.filter(cart_id=new_id).exists():
-                break
+        new_id = generate_cart_id()
 
         # Migrate legacy data
         # TODO: This is for the upgrade 1.7→1.8. We should remove this around April 2018
@@ -170,7 +191,7 @@ def get_or_create_cart_id(request):
         if 'carts' not in request.session:
             request.session['carts'] = {}
         request.session['carts'][new_id] = cart_data
-        request.session['current_cart_event_{}'.format(request.event.pk)] = new_id
+        request.session[session_keyname] = new_id
         return new_id
 
 
@@ -178,6 +199,15 @@ def cart_session(request):
     request.session.modified = True
     cart_id = get_or_create_cart_id(request)
     return request.session['carts'][cart_id]
+
+
+def allow_frame_if_namespaced(view_func):
+    def wrapped_view(request, *args, **kwargs):
+        resp = view_func(request, *args, **kwargs)
+        if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
+            resp.xframe_options_exempt = True
+        return resp
+    return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)
 
 
 class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):

@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import include, url
 from django.views.decorators.csrf import csrf_exempt
 
 import pretix.presale.views.cart
@@ -15,21 +15,25 @@ import pretix.presale.views.widget
 # This is not a valid Django URL configuration, as the final
 # configuration is done by the pretix.multidomain package.
 
-event_patterns = [
+frame_wrapped_urls = [
     url(r'^cart/add$', pretix.presale.views.cart.CartAdd.as_view(), name='event.cart.add'),
-    url(r'^cart/create', csrf_exempt(pretix.presale.views.cart.CartCreate.as_view()),
-        name='event.cart.create'),
     url(r'^cart/remove$', pretix.presale.views.cart.CartRemove.as_view(), name='event.cart.remove'),
     url(r'^cart/clear$', pretix.presale.views.cart.CartClear.as_view(), name='event.cart.clear'),
     url(r'^cart/answer/(?P<answer>[^/]+)/$',
         pretix.presale.views.cart.AnswerDownload.as_view(),
         name='event.cart.download.answer'),
-    url(r'^waitinglist', pretix.presale.views.waiting.WaitingView.as_view(), name='event.waitinglist'),
     url(r'^checkout/start$', pretix.presale.views.checkout.CheckoutView.as_view(), name='event.checkout.start'),
     url(r'^redeem/?$', pretix.presale.views.cart.RedeemView.as_view(),
         name='event.redeem'),
     url(r'^checkout/(?P<step>[^/]+)/$', pretix.presale.views.checkout.CheckoutView.as_view(),
         name='event.checkout'),
+    url(r'^(?P<subevent>[0-9]+)/$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
+    url(r'^$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
+]
+event_patterns = [
+    url(r'^cart/create', csrf_exempt(pretix.presale.views.cart.CartCreate.as_view()),
+        name='event.cart.create'),
+    url(r'^waitinglist', pretix.presale.views.waiting.WaitingView.as_view(), name='event.waitinglist'),
     url(r'resend/$', pretix.presale.views.user.ResendLinkView.as_view(), name='event.resend_link'),
     url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/$', pretix.presale.views.order.OrderDetails.as_view(),
         name='event.order'),
@@ -75,8 +79,9 @@ event_patterns = [
         pretix.presale.views.event.EventIcalDownload.as_view(),
         name='event.ical.download'),
     url(r'^auth/$', pretix.presale.views.event.EventAuth.as_view(), name='event.auth'),
-    url(r'^(?P<subevent>[0-9]+)/$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
-    url(r'^$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
+
+    url(r'', include(frame_wrapped_urls)),
+    url(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/', include(frame_wrapped_urls)),
 
     url(r'^widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
         name='event.widget.productlist'),
