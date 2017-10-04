@@ -24,10 +24,10 @@ from pretix.base.services.cart import (
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import EventViewMixin
 from pretix.presale.views.async import AsyncAction
-from pretix.presale.views.robots import NoSearchIndexViewMixin
 from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
 )
+from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 
 class CartActionMixin:
