@@ -197,7 +197,8 @@ class OrderSearchFilterForm(OrderFilterForm):
 class SubEventFilterForm(FilterForm):
     orders = {
         'date_from': 'date_from',
-        'active': 'active'
+        'active': 'active',
+        'sum_quota_available': 'sum_quota_available'
     }
     status = forms.ChoiceField(
         label=_('Status'),
@@ -258,7 +259,8 @@ class EventFilterForm(FilterForm):
         'organizer': 'organizer__name',
         'date_from': 'order_from',
         'date_to': 'order_to',
-        'live': 'live'
+        'live': 'live',
+        'sum_quota_available': 'sum_quota_available'
     }
     status = forms.ChoiceField(
         label=_('Status'),

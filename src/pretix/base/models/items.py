@@ -726,6 +726,12 @@ class Quota(LoggedModel):
         if self.event and clear_cache:
             self.event.get_cache().clear()
 
+    def rebuild_cache(self, now_dt=None):
+        self.cached_availability_time = None
+        self.cached_availability_number = None
+        self.cached_availability_state = None
+        self.availability(now_dt=now_dt)
+
     def cache_is_hot(self, now_dt=None):
         now_dt = now_dt or now()
         return self.cached_availability_time and (now_dt - self.cached_availability_time).total_seconds() < 120

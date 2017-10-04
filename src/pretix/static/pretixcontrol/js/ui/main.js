@@ -88,6 +88,9 @@ $(function () {
     });
 
     $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip_html"]').tooltip({
+        'html': true
+    });
 
     var url = document.location.toString();
     if (url.match('#')) {

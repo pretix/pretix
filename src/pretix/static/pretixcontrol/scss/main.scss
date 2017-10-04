@@ -403,3 +403,32 @@ body.loading #wrapper {
 .event-name-col {
     width: 30%;
 }
+
+.quotabox {
+    display: inline-block;
+    vertical-align: top;
+    width: 50px;
+    .progress {
+        height: 7px;
+        margin-bottom: 2px;
+    }
+    .numbers {
+        font-size: 10px;
+        color: $text-muted;
+        display: block;
+        text-align: center;
+    }
+    .progress-bar-success {
+        background: lighten($brand-success, 20%);
+    }
+}
+.quotabox-more {
+    font-weight: bold;
+    display: inline-block;
+    vertical-align: top;
+    line-height: 20px;
+    margin-top: -6px;
+    &:hover {
+        text-decoration: none;
+    }
+}

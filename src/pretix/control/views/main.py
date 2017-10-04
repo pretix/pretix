@@ -2,7 +2,9 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.db.models import Max, Min
+from django.db.models import (
+    F, IntegerField, Max, Min, OuterRef, Prefetch, Subquery, Sum,
+)
 from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -14,7 +16,7 @@ from django.views.generic import ListView
 from formtools.wizard.views import SessionWizardView
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.models import Event, Organizer, Team
+from pretix.base.models import Event, Organizer, Quota, Team
 from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
 )
@@ -43,6 +45,22 @@ class EventList(ListView):
             order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to'),
         )
 
+        sum_quota_available = Quota.objects.filter(
+            event=OuterRef('pk'), subevent__isnull=True
+        ).order_by().values('event').annotate(
+            s=Sum('cached_availability_number')
+        ).values(
+            's'
+        )
+
+        qs = qs.annotate(
+            sum_quota_available=Subquery(sum_quota_available, output_field=IntegerField())
+        ).prefetch_related(
+            Prefetch('quotas',
+                     queryset=Quota.objects.filter(subevent__isnull=True).annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
+                     to_attr='first_quotas')
+        )
+
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
         return qs
@@ -54,6 +72,18 @@ class EventList(ListView):
             pk__in=self.request.user.teams.values_list('organizer', flat=True)
         ).count()
         ctx['hide_orga'] = orga_c <= 1
+
+        for s in ctx['events']:
+            s.first_quotas = s.first_quotas[:4]
+            for q in s.first_quotas:
+                q.cached_avail = (
+                    (q.cached_availability_state, q.cached_availability_number)
+                    if q.cached_availability_time is not None
+                    else q.availability(allow_cache=True)
+                )
+                if q.cached_avail[1] is not None:
+                    q.percent = round(q.cached_avail[1] / q.size * 100) if q.size > 0 else 0
+                    q.inv_percent = 100 - q.percent
         return ctx
 
     @cached_property

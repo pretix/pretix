@@ -698,6 +698,7 @@ class QuotaUpdate(EventPermissionRequiredMixin, UpdateView):
                             'id': form.instance.pk
                         }
                     )
+            form.instance.rebuild_cache()
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
