@@ -156,7 +156,8 @@ def get_or_create_cart_id(request):
 
 def cart_session(request):
     request.session.modified = True
-    return request.session['carts'][get_or_create_cart_id(request)]
+    cart_id = get_or_create_cart_id(request)
+    return request.session['carts'][cart_id]
 
 
 class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
