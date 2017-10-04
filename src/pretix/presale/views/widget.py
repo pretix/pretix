@@ -3,9 +3,11 @@ from urllib.parse import urljoin
 
 from django.conf import settings
 from django.contrib.staticfiles import finders
+from django.db.models import Q
 from django.http import Http404, HttpResponse, JsonResponse
 from django.template import Context, Engine
 from django.utils.formats import date_format
+from django.utils.timezone import now
 from django.views import View
 from django.views.i18n import (
     get_formats, get_javascript_catalog, js_catalog_template,
@@ -13,7 +15,10 @@ from django.views.i18n import (
 from easy_thumbnails.files import get_thumbnailer
 
 from pretix.base.i18n import language
+from pretix.base.models import CartPosition, Voucher
+from pretix.base.services.cart import error_messages
 from pretix.base.templatetags.rich_text import rich_text
+from pretix.presale.views.cart import get_or_create_cart_id
 from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
 )
@@ -83,7 +88,9 @@ def get_picture(picture):
 class WidgetAPIProductList(View):
 
     def _get_items(self):
-        items, display_add_to_cart = get_grouped_items(self.request.event, subevent=self.subevent)
+        items, display_add_to_cart = get_grouped_items(
+            self.request.event, subevent=self.subevent, voucher=self.voucher
+        )
         grps = []
         for cat, g in item_group_by_category(items):
             grps.append({
@@ -149,9 +156,11 @@ class WidgetAPIProductList(View):
             'currency': request.event.currency,
             'display_net_prices': request.event.settings.display_net_prices,
             'show_variations_expanded': request.event.settings.show_variations_expanded,
+            'waiting_list_enabled': request.event.settings.waiting_list_enabled,
             'error': None
         }
         ev = self.subevent or request.event
+        fail = False
 
         if not ev.presale_is_running:
             if ev.presale_has_ended:
@@ -164,7 +173,31 @@ class WidgetAPIProductList(View):
             else:
                 data['error'] = 'The presale for this event has not yet started.'
 
-        if ev.presale_is_running or request.event.settings.show_items_outside_presale_period:
+        self.voucher = None
+        if 'voucher' in request.GET:
+            try:
+                self.voucher = request.event.vouchers.get(code=request.GET.get('voucher').strip())
+                if self.voucher.redeemed >= self.voucher.max_usages:
+                    data['error'] = error_messages['voucher_redeemed']
+                    fail = True
+                if self.voucher.valid_until is not None and self.voucher.valid_until < now():
+                    data['error'] = error_messages['voucher_expired']
+                    fail = True
+
+                redeemed_in_carts = CartPosition.objects.filter(
+                    Q(voucher=self.voucher) & Q(event=request.event) &
+                    (Q(expires__gte=now()) | Q(cart_id=get_or_create_cart_id(request)))
+                )
+                v_avail = self.voucher.max_usages - self.voucher.redeemed - redeemed_in_carts.count()
+
+                if v_avail < 1:
+                    data['error'] = error_messages['voucher_redeemed']
+                    fail = True
+            except Voucher.DoesNotExist:
+                data['error'] = error_messages['voucher_invalid']
+                fail = True
+
+        if not fail and (ev.presale_is_running or request.event.settings.show_items_outside_presale_period):
             data['items_by_category'], data['display_add_to_cart'] = self._get_items()
             data['display_add_to_cart'] = data['display_add_to_cart'] and ev.presale_is_running
         else:

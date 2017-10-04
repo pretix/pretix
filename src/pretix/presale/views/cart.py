@@ -224,7 +224,7 @@ class CartCreate(EventViewMixin, CartActionMixin, AsyncAction, View):
     def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
         if items:
-            return self.do(self.request.event.id, items, self.request.session.session_key, translation.get_language(),
+            return self.do(self.request.event.id, items, get_or_create_cart_id(self.request), translation.get_language(),
                            self.invoice_address.pk)
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:

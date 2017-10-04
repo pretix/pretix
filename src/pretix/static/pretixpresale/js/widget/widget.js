@@ -18,6 +18,7 @@ var strings = {
     'order_min': django.pgettext('widget', 'minimum amount to order: %s'),
     'exit': django.pgettext('widget', 'Close ticket shop'),
     'loading_error': django.pgettext('widget', 'The ticket shop could not be loaded.'),
+    'waiting_list': django.pgettext('widget', 'Waiting list'),
     'poweredby': django.pgettext('widget', 'ticketing powered by <a href="https://pretix.eu" target="_blank">pretix</a>')
 };
 
@@ -77,13 +78,17 @@ Vue.component('availbox', {
         + '<div class="pretix-widget-availability-unavailable" v-if="item.require_voucher">'
         + strings.voucher_required
         + '</div>'
-        + '<div class="pretix-widget-availability-unavailable"' +
-        '       v-if="!item.require_voucher && avail[0] < 100 && avail[0] > 10">'
+        + '<div class="pretix-widget-availability-unavailable"'
+        + '       v-if="!item.require_voucher && avail[0] < 100 && avail[0] > 10">'
         + strings.reserved
         + '</div>'
-        + '<div class="pretix-widget-availability-gone" ' +
-        '       v-if="!item.require_voucher && avail[0] <= 10">'
+        + '<div class="pretix-widget-availability-gone" '
+        + '       v-if="!item.require_voucher && avail[0] <= 10">'
         + strings.sold_out
+        + '</div>'
+        + '<div class="pretix-widget-waiting-list-link"'
+        + '     v-if="waiting_list_show">'
+        + '<a :href="waiting_list_url" @click.prevent="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!item.require_voucher && avail[0] === 100">'
         + '<label class="pretix-widget-item-count-single-label" v-if="order_max === 1">'
@@ -111,6 +116,16 @@ Vue.component('availbox', {
         avail: function () {
             return this.item.has_variations ? this.variation.avail : this.item.avail;
         },
+        waiting_list_show: function () {
+            return this.avail[0] < 100 && this.$root.waiting_list_enabled;
+        },
+        waiting_list_url: function () {
+            if (this.item.has_variations) {
+                return this.$root.event_url + 'waitinglist/?item=' + this.item.id + '&var=' + this.variation.id;
+            } else {
+                return this.$root.event_url + 'waitinglist/?item=' + this.item.id;
+            }
+        }
     }
 });
 Vue.component('pricebox', {
@@ -307,10 +322,11 @@ Vue.component('category', {
 Vue.component('pretix-widget', {
     template: ('<div>'
         + '<div class="pretix-widget">'
-        + '<div class="pretix-widget-loading" v-show="$root.loading > 0">'
-        + '<svg width="128" height="128" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
-        + '</div>'
+    + '<div class="pretix-widget-loading" v-show="$root.loading > 0">'
+    + '<svg width="128" height="128" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
+    + '</div>'
         + '<form method="post" :action="$root.formTarget" :target="$root.widget_id">'
+        + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<div class="pretix-widget-error-message" v-if="$root.error">{{ $root.error }}</div>'
         + '<category v-for="category in this.$root.categories" :category="category" :key="category.id"></category>'
         + '<div class="pretix-widget-action" v-if="$root.display_add_to_cart">'
@@ -323,9 +339,12 @@ Vue.component('pretix-widget', {
         + '</form>'
         + '</div>'
         + '<div :class="frameClasses">'
-        + '<div class="pretix-widget-frame-inner" ref="frame-container" v-once>'
-        + '<iframe frameborder="0" width="650px" height="650px" '
-        + '        :name="$root.widget_id" :src="$root.formTarget">'
+        + '<div class="pretix-widget-frame-loading" v-show="$root.frame_loading">'
+        + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
+        + '</div>'
+        + '<div class="pretix-widget-frame-inner" ref="frame-container" v-show="$root.frame_shown">'
+        + '<iframe frameborder="0" width="650px" height="650px" @load="iframeLoaded" '
+        + '        :name="$root.widget_id" :src="$root.formTarget" v-once>'
         + 'Please enable frames in your browser!'
         + '</iframe>'
         + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent="close">X</a></div>'
@@ -335,22 +354,27 @@ Vue.component('pretix-widget', {
     ),
     data: function () {
         return {
-            frame_shown: false,
         }
     },
     methods: {
         buy: function () {
-            this.frame_shown = true;
+            this.$root.frame_shown = true;
         },
         close: function () {
-            this.frame_shown = false;
+            this.$root.frame_shown = false;
         },
+        iframeLoaded: function () {
+            if (this.$root.frame_loading) {
+                this.$root.frame_loading = false;
+                this.$root.frame_shown = true;
+            }
+        }
     },
     computed: {
         frameClasses: function () {
             return {
                 'pretix-widget-frame-holder': true,
-                'pretix-widget-frame-shown': this.frame_shown,
+                'pretix-widget-frame-shown': this.$root.frame_shown || this.$root.frame_loading,
             };
         },
     }
@@ -362,6 +386,7 @@ var create_widget = function (element) {
     if (!event_url.match(/\/$/)) {
         event_url += "/";
     }
+    var voucher = element.attributes.voucher ? element.attributes.voucher.value : null;
 
     var app = new Vue({
         el: element,
@@ -370,22 +395,29 @@ var create_widget = function (element) {
                 event_url: event_url,
                 categories: null,
                 currency: null,
+                voucher_code: voucher,
                 display_net_prices: false,
                 show_variations_expanded: false,
                 error: null,
                 display_add_to_cart: false,
                 loading: 1,
-                widget_id: 'pretix-widget-' + widget_id
+                widget_id: 'pretix-widget-' + widget_id,
+                frame_loading: false,
+                frame_shown: false,
             }
         },
         created: function () {
             var url = event_url + 'widget/product_list?lang=' + lang;
+            if (voucher) {
+                url += '&voucher=' + escape(voucher);
+            }
             api._getJSON(url, function (data) {
                 app.categories = data.items_by_category;
                 app.currency = data.currency;
                 app.display_net_prices = data.display_net_prices;
                 app.error = data.error;
                 app.display_add_to_cart = data.display_add_to_cart;
+                app.waiting_list_enabled = data.waiting_list_enabled;
                 app.show_variations_expanded = data.show_variations_expanded;
                 app.loading--;
             }, function (error) {
@@ -399,6 +431,13 @@ var create_widget = function (element) {
             formTarget: function () {
                 var checkout_url = "/" + this.$root.event_url.replace(/^[^\/]+:\/\/([^\/]+)\//, "") + "checkout/start";
                 return this.$root.event_url + 'cart/create?next=' + checkout_url;
+            }
+        },
+        methods: {
+            open_link_in_frame: function (event) {
+                var url = event.target.attributes.href.value;
+                this.$children[0].$refs['frame-container'].children[0].src = url;
+                this.frame_loading = true;
             }
         }
     });

@@ -1,8 +1,10 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import FormView
 
 from pretix.base.models.event import SubEvent
@@ -12,6 +14,7 @@ from ...multidomain.urlreverse import eventreverse
 from ..forms.waitinglist import WaitingListForm
 
 
+@method_decorator(xframe_options_exempt, 'dispatch')
 class WaitingView(FormView):
     template_name = 'pretixpresale/event/waitinglist.html'
     form_class = WaitingListForm
