@@ -704,6 +704,9 @@ class Quota(LoggedModel):
         blank=True,
         verbose_name=_("Variations")
     )
+    cached_availability_state = models.PositiveIntegerField(null=True, blank=True)
+    cached_availability_number = models.PositiveIntegerField(null=True, blank=True)
+    cached_availability_time = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         verbose_name = _("Quota")
@@ -718,11 +721,18 @@ class Quota(LoggedModel):
             self.event.get_cache().clear()
 
     def save(self, *args, **kwargs):
+        clear_cache = kwargs.pop('clear_cache', True)
         super().save(*args, **kwargs)
-        if self.event:
+        if self.event and clear_cache:
             self.event.get_cache().clear()
 
-    def availability(self, now_dt: datetime=None, count_waitinglist=True, _cache=None) -> Tuple[int, int]:
+    def cache_is_hot(self, now_dt=None):
+        now_dt = now_dt or now()
+        return self.cached_availability_time and (now_dt - self.cached_availability_time).total_seconds() < 120
+
+    def availability(
+            self, now_dt: datetime=None, count_waitinglist=True, _cache=None, allow_cache=False
+    ) -> Tuple[int, int]:
         """
         This method is used to determine whether Items or ItemVariations belonging
         to this quota should currently be available for sale.
@@ -730,12 +740,26 @@ class Quota(LoggedModel):
         :returns: a tuple where the first entry is one of the ``Quota.AVAILABILITY_`` constants
                   and the second is the number of available tickets.
         """
+        if allow_cache and self.cache_is_hot() and count_waitinglist:
+            return self.cached_availability_state, self.cached_availability_number
+
         if _cache and count_waitinglist is not _cache.get('_count_waitinglist', True):
             _cache.clear()
 
         if _cache is not None and self.pk in _cache:
             return _cache[self.pk]
+        now_dt = now_dt or now()
         res = self._availability(now_dt, count_waitinglist)
+
+        if count_waitinglist and not self.cache_is_hot(now_dt):
+            self.cached_availability_state = res[0]
+            self.cached_availability_number = res[1]
+            self.cached_availability_time = now_dt
+            self.save(
+                update_fields=['cached_availability_state', 'cached_availability_number', 'cached_availability_time'],
+                clear_cache=False
+            )
+
         if _cache is not None:
             _cache[self.pk] = res
             _cache['_count_waitinglist'] = count_waitinglist

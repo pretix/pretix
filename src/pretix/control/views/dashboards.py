@@ -152,7 +152,7 @@ def quota_widgets(sender, subevent=None, **kwargs):
     widgets = []
 
     for q in sender.quotas.filter(subevent=subevent):
-        status, left = q.availability()
+        status, left = q.availability(allow_cache=True)
         widgets.append({
             'content': NUM_WIDGET.format(num='{}/{}'.format(left, q.size) if q.size is not None else '\u221e',
                                          text=_('{quota} left').format(quota=escape(q.name))),
