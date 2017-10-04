@@ -38,6 +38,31 @@ class EventMixin:
             raise ValidationError({'date_to': _('The end of the event has to be later than its start.')})
         super().clean()
 
+    def get_short_date_from_display(self, tz=None, show_times=True) -> str:
+        """
+        Returns a shorter formatted string containing the start date of the event with respect
+        to the current locale and to the ``show_times`` setting.
+        """
+        tz = tz or pytz.timezone(self.settings.timezone)
+        return _date(
+            self.date_from.astimezone(tz),
+            "SHORT_DATETIME_FORMAT" if self.settings.show_times and show_times else "DATE_FORMAT"
+        )
+
+    def get_short_date_to_display(self, tz=None) -> str:
+        """
+        Returns a shorter formatted string containing the start date of the event with respect
+        to the current locale and to the ``show_times`` setting. Returns an empty string
+        if ``show_date_to`` is ``False``.
+        """
+        tz = tz or pytz.timezone(self.settings.timezone)
+        if not self.settings.show_date_to or not self.date_to:
+            return ""
+        return _date(
+            self.date_to.astimezone(tz),
+            "SHORT_DATETIME_FORMAT" if self.settings.show_times else "DATE_FORMAT"
+        )
+
     def get_date_from_display(self, tz=None, show_times=True) -> str:
         """
         Returns a formatted string containing the start date of the event with respect
