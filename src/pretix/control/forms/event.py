@@ -12,7 +12,9 @@ from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer, TaxRule
 from pretix.base.models.event import EventMetaValue
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
-from pretix.control.forms import ExtFileField, SlugWidget
+from pretix.control.forms import (
+    ExtFileField, SlugWidget, SplitDateTimePickerWidget,
+)
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.style import get_fonts
 
@@ -82,14 +84,18 @@ class EventWizardBasicsForm(I18nModelForm):
             'presale_end',
             'location',
         ]
+        field_classes = {
+            'date_from': forms.SplitDateTimeField,
+            'date_to': forms.SplitDateTimeField,
+            'presale_start': forms.SplitDateTimeField,
+            'presale_end': forms.SplitDateTimeField,
+        }
         widgets = {
-            'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker',
-                                                  'data-date-after': '#id_basics-date_from'}),
-            'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker',
-                                                      'data-date-after': '#id_basics-presale_start'}),
-            'slug': SlugWidget
+            'date_from': SplitDateTimePickerWidget(),
+            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_basics-date_from_0'}),
+            'presale_start': SplitDateTimePickerWidget(),
+            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_basics-presale_start_0'}),
+            'slug': SlugWidget,
         }
 
     def __init__(self, *args, **kwargs):
@@ -206,14 +212,19 @@ class EventUpdateForm(I18nModelForm):
             'presale_end',
             'location',
         ]
+        field_classes = {
+            'date_from': forms.SplitDateTimeField,
+            'date_to': forms.SplitDateTimeField,
+            'date_admission': forms.SplitDateTimeField,
+            'presale_start': forms.SplitDateTimeField,
+            'presale_end': forms.SplitDateTimeField,
+        }
         widgets = {
-            'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker', 'data-date-after': '#id_date_from'}),
-            'date_admission': forms.DateTimeInput(attrs={'class': 'datetimepicker',
-                                                         'data-date-default': '#id_date_from'}),
-            'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker',
-                                                      'data-date-after': '#id_presale_start'}),
+            'date_from': SplitDateTimePickerWidget(),
+            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}),
+            'date_admission': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}),
+            'presale_start': SplitDateTimePickerWidget(),
+            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}),
         }
 
 

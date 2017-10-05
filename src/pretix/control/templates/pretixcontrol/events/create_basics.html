@@ -29,8 +29,8 @@
                 </div>
             </div>
         </div>
-        {% bootstrap_field form.date_from layout="horizontal" %}
-        {% bootstrap_field form.date_to layout="horizontal" %}
+        {% bootstrap_field form.date_from layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
+        {% bootstrap_field form.date_to layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
         {% bootstrap_field form.location layout="horizontal" %}
         {% bootstrap_field form.currency layout="horizontal" %}
         {% bootstrap_field form.tax_rate layout="horizontal" %}
@@ -43,8 +43,8 @@
     {% if form.presale_start %}
         <fieldset>
             <legend>{% trans "Timeline" %}</legend>
-            {% bootstrap_field form.presale_start layout="horizontal" %}
-            {% bootstrap_field form.presale_end layout="horizontal" %}
+            {% bootstrap_field form.presale_start layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
+            {% bootstrap_field form.presale_end layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
         </fieldset>
     {% endif %}
 {% endblock %}

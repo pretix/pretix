@@ -9,10 +9,10 @@
             <legend>{% trans "General information" %}</legend>
             {% bootstrap_field form.name layout="horizontal" %}
             {% bootstrap_field form.slug layout="horizontal" %}
-            {% bootstrap_field form.date_from layout="horizontal" %}
-            {% bootstrap_field form.date_to layout="horizontal" %}
+            {% bootstrap_field form.date_from layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
+            {% bootstrap_field form.date_to layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
             {% bootstrap_field form.location layout="horizontal" %}
-            {% bootstrap_field form.date_admission layout="horizontal" %}
+            {% bootstrap_field form.date_admission layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
             {% bootstrap_field form.currency layout="horizontal" %}
             {% bootstrap_field form.is_public layout="horizontal" %}
 
@@ -51,9 +51,9 @@
         </fieldset>
         <fieldset>
             <legend>{% trans "Timeline" %}</legend>
-            {% bootstrap_field form.presale_start layout="horizontal" %}
+            {% bootstrap_field form.presale_start layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
             {% bootstrap_field sform.presale_start_show_date layout="horizontal" %}
-            {% bootstrap_field form.presale_end layout="horizontal" %}
+            {% bootstrap_field form.presale_end layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
             {% bootstrap_field sform.show_items_outside_presale_period layout="horizontal" %}
             {% bootstrap_field sform.last_order_modification_date layout="horizontal" %}
         </fieldset>

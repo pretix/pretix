@@ -179,11 +179,22 @@ $(function () {
                 today: 'fa fa-screenshot',
                 clear: 'fa fa-trash',
                 close: 'fa fa-remove'
-            }
+            },
         };
         if ($(this).is('[data-is-payment-date]'))
             opts["daysOfWeekDisabled"] = JSON.parse($("body").attr("data-payment-weekdays-disabled"));
         $(this).datetimepicker(opts);
+        if ($(this).parent().is('.splitdatetimerow')) {
+            $(this).on("dp.change", function (ev) {
+                var $timepicker = $(this).closest(".splitdatetimerow").find(".timepickerfield");
+                var date = $(this).data('DateTimePicker').date();
+                if (date === null) {
+                    return;
+                }
+                date.set({'hour': 0, 'minute': 0, 'second': 0});
+                $timepicker.data('DateTimePicker').date(date);
+            });
+        }
     });
 
     $(".timepickerfield").each(function() {

@@ -12,6 +12,7 @@ from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
 )
 from pretix.base.models.items import ItemAddOn
+from pretix.control.forms import SplitDateTimePickerWidget
 
 
 class CategoryForm(I18nModelForm):
@@ -286,9 +287,13 @@ class ItemUpdateForm(I18nModelForm):
             'min_per_order',
             'checkin_attention'
         ]
+        field_classes = {
+            'available_from': forms.SplitDateTimeField,
+            'available_until': forms.SplitDateTimeField,
+        }
         widgets = {
-            'available_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'available_until': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'available_from': SplitDateTimePickerWidget(),
+            'available_until': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_available_from_0'}),
         }
 
 

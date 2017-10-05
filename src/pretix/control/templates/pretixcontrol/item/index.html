@@ -23,8 +23,8 @@
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Availability" %}</legend>
-                    {% bootstrap_field form.available_from layout="horizontal" %}
-                    {% bootstrap_field form.available_until layout="horizontal" %}
+                    {% bootstrap_field form.available_from layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
+                    {% bootstrap_field form.available_until layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
                     {% bootstrap_field form.max_per_order layout="horizontal" %}
                     {% bootstrap_field form.min_per_order layout="horizontal" %}
                     {% bootstrap_field form.require_voucher layout="horizontal" %}

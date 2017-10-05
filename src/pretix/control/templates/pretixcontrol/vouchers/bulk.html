@@ -38,7 +38,7 @@
         </fieldset>
         <fieldset>
             <legend>{% trans "Voucher details" %}</legend>
-            {% bootstrap_field form.valid_until layout="horizontal" %}
+            {% bootstrap_field form.valid_until layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
             {% bootstrap_field form.block_quota layout="horizontal" %}
             {% bootstrap_field form.allow_ignore_quota layout="horizontal" %}
             <div class="form-group">

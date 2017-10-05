@@ -190,3 +190,26 @@ pre.mail-preview {
     margin-right: 10px;
   }
 }
+.splitdatetimerow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .help-block {
+    width: 100%;
+  }
+}
+.splitdatetimepart {
+  width: 50%;
+  display: inline-block;
+
+  &.datepickerfield {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
+  &.timepickerfield {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    border-left: 0;
+  }
+}

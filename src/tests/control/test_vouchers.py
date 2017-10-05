@@ -194,7 +194,8 @@ class VoucherFormTest(SoupTest):
         self._create_voucher({
             'itemvar': '%d-%d' % (self.shirt.pk, self.shirt_red.pk),
             'block_quota': 'on',
-            'valid_until': (now() - datetime.timedelta(days=3)).strftime('%Y-%m-%d %H:%M:%S')
+            'valid_until_0': (now() - datetime.timedelta(days=3)).strftime('%Y-%m-%d'),
+            'valid_until_1': (now() - datetime.timedelta(days=3)).strftime('%H:%M:%S')
         })
 
     def test_create_blocking_variation_voucher_quota_free(self):
@@ -276,7 +277,8 @@ class VoucherFormTest(SoupTest):
         v = self.event.vouchers.create(item=self.ticket, valid_until=now() - datetime.timedelta(days=3),
                                        block_quota=True)
         self._change_voucher(v, {
-            'valid_until': (now() + datetime.timedelta(days=3)).strftime('%Y-%m-%d %H:%M:%S')
+            'valid_until_0': (now() + datetime.timedelta(days=3)).strftime('%Y-%m-%d'),
+            'valid_until_1': (now() + datetime.timedelta(days=3)).strftime('%H:%M:%S')
         }, expected_failure=True)
         v.refresh_from_db()
         assert v.valid_until < now()
@@ -285,7 +287,8 @@ class VoucherFormTest(SoupTest):
         v = self.event.vouchers.create(item=self.ticket, valid_until=now() - datetime.timedelta(days=3),
                                        block_quota=True)
         self._change_voucher(v, {
-            'valid_until': (now() + datetime.timedelta(days=3)).strftime('%Y-%m-%d %H:%M:%S')
+            'valid_until_0': (now() + datetime.timedelta(days=3)).strftime('%Y-%m-%d'),
+            'valid_until_1': (now() + datetime.timedelta(days=3)).strftime('%H:%M:%S')
         })
         v.refresh_from_db()
         assert v.valid_until > now()
