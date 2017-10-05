@@ -19,13 +19,13 @@ Order events
 There are multiple signals that will be sent out in the ordering cycle:
 
 .. automodule:: pretix.base.signals
-   :members: validate_cart, fee_calculation_for_cart, order_fee_calculation, order_paid, order_placed, order_fee_type_name, allow_ticket_download
+   :members: validate_cart, order_fee_calculation, order_paid, order_placed, order_fee_type_name, allow_ticket_download
 
 Frontend
 --------
 
 .. automodule:: pretix.presale.signals
-   :members: html_head, html_footer, footer_links, front_page_top, front_page_bottom, contact_form_fields, question_form_fields, checkout_confirm_messages, checkout_confirm_page_content
+   :members: html_head, html_footer, footer_links, front_page_top, front_page_bottom, fee_calculation_for_cart, contact_form_fields, question_form_fields, checkout_confirm_messages, checkout_confirm_page_content
 
 
 .. automodule:: pretix.presale.signals
