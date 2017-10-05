@@ -194,7 +194,7 @@ class Event(EventMixin, LoggedModel):
     organizer = models.ForeignKey(Organizer, related_name="events", on_delete=models.PROTECT)
     name = I18nCharField(
         max_length=200,
-        verbose_name=_("Name"),
+        verbose_name=_("Event name"),
     )
     slug = models.SlugField(
         max_length=50, db_index=True,
