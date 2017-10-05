@@ -20,7 +20,6 @@ Your should install the following on your system:
 
 * Python 3.4 or newer
 * ``pip`` for Python 3 (Debian package: ``python3-pip``)
-* ``pyvenv`` for Python 3 (Debian package: ``python3-venv``)
 * ``python-dev`` for Python 3 (Debian package: ``python3-dev``)
 * ``libffi`` (Debian package: ``libffi-dev``)
 * ``libssl`` (Debian package: ``libssl-dev``)
@@ -37,7 +36,7 @@ Please execute ``python -V`` or ``python3 -V`` to make sure you have Python 3.4
 execute ``pip3 -V`` to check. Then use Python's internal tools to create a virtual
 environment and activate it for your current session::
 
-    pyvenv env
+    python3 -m venv env
     source env/bin/activate
 
 You should now see a ``(env)`` prepended to your shell prompt. You have to do this
