@@ -102,7 +102,7 @@
                                 <input name="{{ position.form.prefix }}-operation" type="radio" value="price"
                                         {% if position.form.operation.value == "price" %}checked="checked"{% endif %}>
                                 {% trans "Change price to" %}
-                                {% bootstrap_field position.form.price layout='inline' %}
+                                {% bootstrap_field position.form.price addon_after=request.event.currency layout='inline' %}
                                 {% if position.apply_tax %}
                                     {% if position.item.tax_rule and not position.item.tax_rule.price_includes_tax %}
                                         {% blocktrans trimmed with rate=position.item.tax_rule.rate name=position.item.tax_rule.name %}
@@ -150,7 +150,7 @@
                     {% endif %}
                     {% bootstrap_field add_form.do layout='horizontal' %}
                     {% bootstrap_field add_form.itemvar layout='horizontal' %}
-                    {% bootstrap_field add_form.price layout='horizontal' %}
+                    {% bootstrap_field add_form.price addon_after=request.event.currency layout='horizontal' %}
                     {% if add_form.addon_to %}
                         {% bootstrap_field add_form.addon_to layout='horizontal' %}
                     {% endif %}

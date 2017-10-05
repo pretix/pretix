@@ -18,7 +18,7 @@
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         {% bootstrap_field form.name layout="horizontal" %}
-        {% bootstrap_field form.rate layout="horizontal" %}
+        {% bootstrap_field form.rate addon_after="%" layout="horizontal" %}
         <legend>{% trans "Advanced settings" %}</legend>
         <div class="alert alert-warning">
             <span class="fa fa-w fa-legal fa-4x pull-left"></span>
