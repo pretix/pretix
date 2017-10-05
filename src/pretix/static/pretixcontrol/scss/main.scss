@@ -432,3 +432,46 @@ body.loading #wrapper {
         text-decoration: none;
     }
 }
+
+.thank-you {
+    margin-bottom: 25px;
+
+    .fa {
+        font-size: 150px;
+        line-height: 170px;
+        display: block;
+        color: $brand-success;
+    }
+
+    h2 {
+        color: $brand-success;
+    }
+}
+@media (min-width: $screen-md-min) {
+    .thank-you {
+        min-height: 170px;
+        width: 70%;
+        margin: auto;
+
+        .fa {
+            float: left;
+            margin-right: 30px;
+        }
+
+        h2 {
+            padding-top: 25px;
+        }
+
+        p {
+            margin-left: 158px;
+        }
+    }
+}
+@media (max-width: $screen-sm-max) {
+    .thank-you {
+        text-align: center;
+    }
+    h2 {
+        margin-top: 0;
+    }
+}

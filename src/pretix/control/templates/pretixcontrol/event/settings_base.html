@@ -3,6 +3,30 @@
 {% load bootstrap3 %}
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
+    {% if "congratulations" in request.GET %}
+        <div class="thank-you">
+            <span class="fa fa-check-circle"></span>
+
+            <h2>{% trans "Congratulations!" %}</h2>
+            <p>
+                <strong>{% trans "You just created an event!" %}</strong>
+            </p>
+            <p>
+                {% blocktrans trimmed %}
+                    You can now scroll down and modify the settings in more detail, if you want, or you can create your
+                    first product to start selling tickets right away!
+                {% endblocktrans %}
+            </p>
+            <p>
+                <a href="{% url "control:event.items.add" organizer=request.organizer.slug event=request.event.slug %}"
+                    class="btn btn-default">
+                    {% trans "Create a first product" %}
+                </a>
+            </p>
+            <div class="clearfix"></div>
+        </div>
+    {% endif %}
+
     <h1>{% trans "Settings" %}</h1>
     <ul class="nav nav-pills">
         {% if 'can_change_event_settings' in request.eventpermset %}

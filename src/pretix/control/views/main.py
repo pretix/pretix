@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import (
@@ -187,12 +186,10 @@ class EventWizard(SessionWizardView):
             event.settings.set('locale', basics_data['locale'])
             event.settings.set('locales', foundation_data['locales'])
 
-        messages.success(self.request, _('The new event has been created. You can now adjust the event settings in '
-                                         'detail.'))
         return redirect(reverse('control:event.settings', kwargs={
             'organizer': event.organizer.slug,
             'event': event.slug,
-        }))
+        }) + '?congratulations=1')
 
 
 class SlugRNG(OrganizerPermissionRequiredMixin, View):
