@@ -150,14 +150,18 @@ class ItemCreateForm(I18nModelForm):
         )
 
         if not self.event.has_subevents:
+            choices = [
+                (self.NONE, _("Do not add to a quota now")),
+                (self.EXISTING, _("Add product to an existing quota")),
+                (self.NEW, _("Create a new quota for this product"))
+            ]
+            if not self.event.quotas.exists():
+                choices.remove(choices[1])
+
             self.fields['quota_option'] = forms.ChoiceField(
                 label=_("Quota options"),
                 widget=forms.RadioSelect,
-                choices=(
-                    (self.NONE, _("Do not add to a quota now")),
-                    (self.EXISTING, _("Add product to an existing quota")),
-                    (self.NEW, _("Create a new quota for this product"))
-                ),
+                choices=choices,
                 initial=self.NONE,
                 required=False
             )
@@ -179,7 +183,7 @@ class ItemCreateForm(I18nModelForm):
             self.fields['quota_add_new_size'] = forms.IntegerField(
                 min_value=0,
                 label=_("Size"),
-                widget=forms.TextInput(attrs={'placeholder': _("New quota size")}),
+                widget=forms.TextInput(attrs={'placeholder': _("Number of tickets")}),
                 help_text=_("Leave empty for an unlimited number of tickets."),
                 required=False
             )

@@ -175,6 +175,7 @@ class Item(LoggedModel):
         related_name="items",
         blank=True, null=True,
         verbose_name=_("Category"),
+        help_text=_("If you have many products, you can optionally sort them into categories to keep things organized.")
     )
     name = I18nCharField(
         max_length=255,
