@@ -46,6 +46,8 @@ class EventWizardFoundationForm(forms.Form):
             empty_label=None,
             required=True
         )
+        if len(self.fields['organizer'].choices) == 1:
+            self.fields['organizer'].initial = self.fields['organizer'].queryset.first()
 
 
 class EventWizardBasicsForm(I18nModelForm):
