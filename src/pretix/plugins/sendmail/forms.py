@@ -39,7 +39,8 @@ class MailForm(forms.Form):
                 ('overdue', _('pending with payment overdue'))
             )
         self.fields['sendto'] = forms.MultipleChoiceField(
-            label=_("Send to"), widget=forms.CheckboxSelectMultiple,
+            label=_("Send to customers with order status"),
+            widget=forms.CheckboxSelectMultiple,
             choices=choices
         )
         if event.has_subevents:
