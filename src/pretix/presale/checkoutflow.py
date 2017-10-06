@@ -430,6 +430,8 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['providers'] = self.provider_forms
         ctx['show_fees'] = any(p['fee'] for p in self.provider_forms)
         ctx['selected'] = self.request.POST.get('payment', self.cart_session.get('payment', ''))
+        if len(self.provider_forms) == 1:
+            ctx['selected'] = self.provider_forms[0]['provider'].identifier
         return ctx
 
     @cached_property
