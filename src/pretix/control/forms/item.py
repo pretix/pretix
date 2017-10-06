@@ -268,6 +268,11 @@ class ItemUpdateForm(I18nModelForm):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = self.instance.event.categories.all()
         self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
+        self.fields['description'].widget.attrs['placeholder'] = _(
+            'e.g. This reduced price is available for full-time students, jobless and people '
+            'over 65. This ticket includes access to all parts of the event, except the VIP '
+            'area.'
+        )
 
     class Meta:
         model = Item

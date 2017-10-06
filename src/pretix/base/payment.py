@@ -176,6 +176,7 @@ class BasePaymentProvider:
                  help_text=_('Will be printed just below the payment figures and above the closing text on invoices.'),
                  required=False,
                  widget=I18nTextarea,
+                 widget_kwargs={'attrs': {'rows': '2'}}
              )),
         ])
 
