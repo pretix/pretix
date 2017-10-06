@@ -91,8 +91,8 @@ def regenerate_organizer_css(organizer_id: int):
         organizer.settings.set('presale_css_checksum', checksum)
 
     non_inherited_events = set(Event_SettingsStore.objects.filter(
-        event__organizer=organizer, key__in=affected_keys
-    ).values_list('event_id', flat=True))
+        object__organizer=organizer, key__in=affected_keys
+    ).values_list('object_id', flat=True))
     for event in organizer.events.all():
         if event.pk not in non_inherited_events:
             regenerate_css.apply_async(args=(event.pk,))
