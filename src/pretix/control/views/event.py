@@ -328,11 +328,23 @@ class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
         kwargs['obj'] = self.request.event
         return kwargs
 
+    def _save_decoupled(self, form):
+        # Save fields that are currently only set via the organizer but should be decoupled
+        fields = set()
+        for f in self.request.POST.getlist("decouple"):
+            fields |= set(f.split(","))
+        for f in fields:
+            if f not in form.fields:
+                continue
+            if f not in self.request.event.settings._cache():
+                self.request.event.settings.set(f, self.request.event.settings.get(f))
+
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
             form.save()
+            self._save_decoupled(form)
             if form.has_changed():
                 self.request.event.log_action(
                     'pretix.event.settings', user=self.request.user, data={
@@ -394,6 +406,7 @@ class DisplaySettings(EventSettingsViewMixin, EventSettingsFormView):
         form = self.get_form()
         if form.is_valid():
             form.save()
+            self._save_decoupled(form)
             if form.has_changed():
                 self.request.event.log_action(
                     'pretix.event.settings', user=self.request.user, data={

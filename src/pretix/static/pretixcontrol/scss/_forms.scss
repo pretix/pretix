@@ -213,3 +213,30 @@ pre.mail-preview {
     border-left: 0;
   }
 }
+
+.propagated-settings-box {
+  position: relative;
+
+  .propagated-settings-overlay {
+    background: rgba(255, 255, 255, 0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+  }
+
+  .propagated-settings-form.blurred {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -ms-filter: blur(2px);
+    -o-filter: blur(2px);
+    filter: blur(2px);
+  }
+}
+@media (max-width: $screen-sm-max) {
+  .propagated-settings-box {
+    min-height: 250px;
+  }
+}
