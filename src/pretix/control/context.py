@@ -29,14 +29,14 @@ def contextprocessor(request):
         'DEBUG': settings.DEBUG,
     }
     _html_head = []
-    if hasattr(request, 'event'):
+    if hasattr(request, 'event') and request.user.is_authenticated:
         for receiver, response in html_head.send(request.event, request=request):
             _html_head.append(response)
     ctx['html_head'] = "".join(_html_head)
 
     _js_payment_weekdays_disabled = '[]'
     _nav_event = []
-    if getattr(request, 'event', None) and hasattr(request, 'organizer'):
+    if getattr(request, 'event', None) and hasattr(request, 'organizer') and request.user.is_authenticated:
         for receiver, response in nav_event.send(request.event, request=request):
             _nav_event += response
         if request.event.settings.get('payment_term_weekdays'):
@@ -61,15 +61,16 @@ def contextprocessor(request):
     ctx['js_payment_weekdays_disabled'] = _js_payment_weekdays_disabled
 
     _nav_global = []
-    if not hasattr(request, 'event'):
+    if not hasattr(request, 'event') and request.user.is_authenticated:
         for receiver, response in nav_global.send(request, request=request):
             _nav_global += response
 
     ctx['nav_global'] = sorted(_nav_global, key=lambda n: n['label'])
 
     _nav_topbar = []
-    for receiver, response in nav_topbar.send(request, request=request):
-        _nav_topbar += response
+    if request.user.is_authenticated:
+        for receiver, response in nav_topbar.send(request, request=request):
+            _nav_topbar += response
     ctx['nav_topbar'] = sorted(_nav_topbar, key=lambda n: n['label'])
 
     ctx['js_datetime_format'] = get_javascript_format('DATETIME_INPUT_FORMATS')
