@@ -35,6 +35,8 @@ urlpatterns = [
     url(r'^organizers/add$', organizer.OrganizerCreate.as_view(), name='organizers.add'),
     url(r'^organizer/(?P<organizer>[^/]+)/$', organizer.OrganizerDetail.as_view(), name='organizer'),
     url(r'^organizer/(?P<organizer>[^/]+)/edit$', organizer.OrganizerUpdate.as_view(), name='organizer.edit'),
+    url(r'^organizer/(?P<organizer>[^/]+)/settings/display$', organizer.OrganizerDisplaySettings.as_view(),
+        name='organizer.display'),
     url(r'^organizer/(?P<organizer>[^/]+)/teams$', organizer.TeamListView.as_view(), name='organizer.teams'),
     url(r'^organizer/(?P<organizer>[^/]+)/team/add$', organizer.TeamCreateView.as_view(), name='organizer.team.add'),
     url(r'^organizer/(?P<organizer>[^/]+)/team/(?P<team>[^/]+)/$', organizer.TeamMemberView.as_view(),
