@@ -312,4 +312,13 @@ $(function () {
             }
         );
     });
+
+    $(".propagated-settings-box button[data-action=unlink]").click(function(ev) {
+        var $box = $(this).closest(".propagated-settings-box");
+        $box.find(".propagated-settings-overlay").fadeOut();
+        $box.find("input[name=_settings_ignore]").attr("name", "decouple");
+        $box.find(".propagated-settings-form").removeClass("blurred");
+        ev.preventDefault();
+        return true;
+    })
 });
