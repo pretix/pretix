@@ -82,6 +82,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
                     'invoice_company': ''
                 })
         body, body_md = render_mail(template, context)
+        subject = str(subject).format_map(context)
         sender = sender or (event.settings.get('mail_from') if event else settings.MAIL_FROM)
 
         subject = str(subject)

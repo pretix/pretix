@@ -78,24 +78,33 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
         if self.request.POST.get("action") == "preview":
             for l in self.request.event.settings.locales:
+
                 with language(l):
-                    self.output[l] = []
-                    self.output[l].append(
-                        _('Subject: {subject}').format(subject=form.cleaned_data['subject'].localize(l)))
-                    message = form.cleaned_data['message'].localize(l)
-                    preview_text = message.format(
-                        code='ORDER1234',
-                        event=self.request.event.name,
-                        date=date_format(now(), 'SHORT_DATE_FORMAT'),
-                        expire_date=date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
-                        url=build_absolute_uri(self.request.event, 'presale:event.order', kwargs={
+
+                    context_dict = {
+                        'code': 'ORDER1234',
+                        'event': self.request.event.name,
+                        'date': date_format(now(), 'SHORT_DATE_FORMAT'),
+                        'expire_date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
+                        'url': build_absolute_uri(self.request.event, 'presale:event.order', kwargs={
                             'order': 'ORDER1234',
                             'secret': 'longrandomsecretabcdef123456'
                         }),
-                        invoice_name=_('John Doe'),
-                        invoice_company=_('Sample Company LLC'),
-                    )
+                        'invoice_name': _('John Doe'),
+                        'invoice_company': _('Sample Company LLC')
+                    }
+
+                    self.output[l] = []
+
+                    subject = form.cleaned_data['subject'].localize(l)
+                    preview_subject = subject.format_map(context_dict)
+                    self.output[l].append(
+                        _('Subject: {subject}').format(subject=preview_subject))
+
+                    message = form.cleaned_data['message'].localize(l)
+                    preview_text = message.format_map(context_dict)
                     self.output[l].append(preview_text)
+
             return self.get(self.request, *self.args, **self.kwargs)
 
         for o in orders:
