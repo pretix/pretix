@@ -150,6 +150,7 @@ def get_or_create_cart_id(request):
                 break
 
         # Migrate legacy data
+        # TODO: This is for the upgrade 1.7→1.8. We should remove this around April 2018
         legacy_pos = CartPosition.objects.filter(cart_id=request.session.session_key, event=request.event)
         if legacy_pos.exists():
             legacy_pos.update(cart_id=new_id)
