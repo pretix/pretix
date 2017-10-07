@@ -90,6 +90,7 @@ def test_send_mail_with_user_locale(env):
     assert djmail.outbox[0].subject == 'Benutzer'
     assert 'The language code used for rendering this e-mail is de.' in djmail.outbox[0].body
 
+
 @pytest.mark.django_db
 def test_sendmail_placeholder(env):
     djmail.outbox = []
