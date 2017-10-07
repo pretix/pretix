@@ -142,14 +142,29 @@ def get_or_create_cart_id(request):
     if current_id and current_id in request.session.get('carts', {}):
         return current_id
     else:
+        cart_data = {}
+
         while True:
             new_id = get_random_string(length=32)
             if not CartPosition.objects.filter(cart_id=new_id).exists():
                 break
 
+        # Migrate legacy data
+        legacy_pos = CartPosition.objects.filter(cart_id=request.session.session_key, event=request.event)
+        if legacy_pos.exists():
+            legacy_pos.update(cart_id=new_id)
+            if 'invoice_address_{}'.format(request.event.pk) in request.session:
+                cart_data['invoice_address'] = request.session['invoice_address_{}'.format(request.event.pk)]
+            if 'email' in request.session:
+                cart_data['email'] = request.session['email']
+            if 'contact_form_data' in request.session:
+                cart_data['contact_form_data'] = request.session['contact_form_data']
+            if 'payment' in request.session:
+                cart_data['payment'] = request.session['payment']
+
         if 'carts' not in request.session:
             request.session['carts'] = {}
-        request.session['carts'][new_id] = {}
+        request.session['carts'][new_id] = cart_data
         request.session['current_cart_event_{}'.format(request.event.pk)] = new_id
         return new_id
 
