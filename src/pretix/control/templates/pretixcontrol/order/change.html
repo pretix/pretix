@@ -148,14 +148,14 @@
                             {{ add_form.custom_error }}
                         </div>
                     {% endif %}
-                    {% bootstrap_field add_form.do layout='horizontal' %}
-                    {% bootstrap_field add_form.itemvar layout='horizontal' %}
-                    {% bootstrap_field add_form.price addon_after=request.event.currency layout='horizontal' %}
+                    {% bootstrap_field add_form.do layout="control" %}
+                    {% bootstrap_field add_form.itemvar layout="control" %}
+                    {% bootstrap_field add_form.price addon_after=request.event.currency layout="control" %}
                     {% if add_form.addon_to %}
-                        {% bootstrap_field add_form.addon_to layout='horizontal' %}
+                        {% bootstrap_field add_form.addon_to layout="control" %}
                     {% endif %}
                     {% if add_form.subevent %}
-                        {% bootstrap_field add_form.subevent layout='horizontal' %}
+                        {% bootstrap_field add_form.subevent layout="control" %}
                     {% endif %}
                 </div>
             </div>
@@ -174,7 +174,7 @@
                             {{ other_form.custom_error }}
                         </div>
                     {% endif %}
-                    {% bootstrap_field other_form.recalculate_taxes layout='horizontal' %}
+                    {% bootstrap_field other_form.recalculate_taxes layout="control" %}
                 </div>
             </div>
         </div>

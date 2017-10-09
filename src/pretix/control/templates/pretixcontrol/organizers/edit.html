@@ -10,16 +10,16 @@
         <fieldset>
             <legend>{% trans "General information" %}</legend>
             {% bootstrap_form_errors form %}
-            {% bootstrap_field form.name layout="horizontal" %}
-            {% bootstrap_field form.slug layout="horizontal" %}
+            {% bootstrap_field form.name layout="control" %}
+            {% bootstrap_field form.slug layout="control" %}
             {% if form.domain %}
-                {% bootstrap_field form.domain layout="horizontal" %}
+                {% bootstrap_field form.domain layout="control" %}
             {% endif %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Other" %}</legend>
             {% bootstrap_form_errors sform %}
-            {% bootstrap_field sform.organizer_info_text layout="horizontal" %}
+            {% bootstrap_field sform.organizer_info_text layout="control" %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Event metadata (advanced)" %}</legend>

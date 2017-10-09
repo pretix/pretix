@@ -9,29 +9,29 @@
         {% csrf_token %}
         <fieldset>
             <legend>{% trans "General information" %}</legend>
-            {% bootstrap_field form.name layout="horizontal" %}
-            {% bootstrap_field form.copy_from layout="horizontal" %}
-            {% bootstrap_field form.has_variations layout="horizontal" %}
-            {% bootstrap_field form.category layout="horizontal" %}
-            {% bootstrap_field form.admission layout="horizontal" %}
+            {% bootstrap_field form.name layout="control" %}
+            {% bootstrap_field form.copy_from layout="control" %}
+            {% bootstrap_field form.has_variations layout="control" %}
+            {% bootstrap_field form.category layout="control" %}
+            {% bootstrap_field form.admission layout="control" %}
         </fieldset>
         {% if form.quota_option %}
             <fieldset>
                 <legend>{% trans "Quota settings" %}</legend>
-                {% bootstrap_field form.quota_option layout="horizontal" %}
+                {% bootstrap_field form.quota_option layout="control" %}
                 <div id="existing-quota-group">
-                    {% bootstrap_field form.quota_add_existing layout="horizontal" %}
+                    {% bootstrap_field form.quota_add_existing layout="control" %}
                 </div>
                 <div id="new-quota-group">
-                    {% bootstrap_field form.quota_add_new_name layout="horizontal" %}
-                    {% bootstrap_field form.quota_add_new_size layout="horizontal" %}
+                    {% bootstrap_field form.quota_add_new_name layout="control" %}
+                    {% bootstrap_field form.quota_add_new_size layout="control" %}
                 </div>
             </fieldset>
         {% endif %}
         <fieldset>
             <legend>{% trans "Price settings" %}</legend>
-            {% bootstrap_field form.default_price layout="horizontal" %}
-            {% bootstrap_field form.tax_rule layout="horizontal" %}
+            {% bootstrap_field form.default_price layout="control" %}
+            {% bootstrap_field form.tax_rule layout="control" %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

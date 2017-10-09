@@ -8,16 +8,16 @@
         {% bootstrap_form_errors form %}
         <fieldset>
             <legend>{% trans "Event page" %}</legend>
-            {% bootstrap_field form.logo_image layout="horizontal" %}
-            {% bootstrap_field form.frontpage_text layout="horizontal" %}
-            {% bootstrap_field form.show_variations_expanded layout="horizontal" %}
+            {% bootstrap_field form.logo_image layout="control" %}
+            {% bootstrap_field form.frontpage_text layout="control" %}
+            {% bootstrap_field form.show_variations_expanded layout="control" %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Shop design" %}</legend>
             {% url "control:organizer.display" organizer=request.organizer.slug as org_url %}
             {% propagated request.event org_url "primary_color" "primary_font" %}
-                {% bootstrap_field form.primary_color layout="horizontal" %}
-                {% bootstrap_field form.primary_font layout="horizontal" %}
+                {% bootstrap_field form.primary_color layout="control" %}
+                {% bootstrap_field form.primary_font layout="control" %}
             {% endpropagated %}
         </fieldset>
         <div class="form-group submit-group">

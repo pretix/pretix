@@ -7,21 +7,21 @@
         {% bootstrap_form_errors form %}
         <fieldset>
             <legend>{% trans "Invoicing" %}</legend>
-            {% bootstrap_field form.invoice_address_asked layout="horizontal" %}
-            {% bootstrap_field form.invoice_address_required layout="horizontal" %}
-            {% bootstrap_field form.invoice_name_required layout="horizontal" %}
-            {% bootstrap_field form.invoice_generate layout="horizontal" %}
-            {% bootstrap_field form.invoice_address_vatid layout="horizontal" %}
-            {% bootstrap_field form.invoice_numbers_consecutive layout="horizontal" %}
-            {% bootstrap_field form.invoice_numbers_prefix layout="horizontal" %}
-            {% bootstrap_field form.invoice_renderer layout="horizontal" %}
-            {% bootstrap_field form.invoice_language layout="horizontal" %}
-            {% bootstrap_field form.invoice_include_free layout="horizontal" %}
-            {% bootstrap_field form.invoice_address_from layout="horizontal" %}
-            {% bootstrap_field form.invoice_introductory_text layout="horizontal" %}
-            {% bootstrap_field form.invoice_additional_text layout="horizontal" %}
-            {% bootstrap_field form.invoice_footer_text layout="horizontal" %}
-            {% bootstrap_field form.invoice_logo_image layout="horizontal" %}
+            {% bootstrap_field form.invoice_address_asked layout="control" %}
+            {% bootstrap_field form.invoice_address_required layout="control" %}
+            {% bootstrap_field form.invoice_name_required layout="control" %}
+            {% bootstrap_field form.invoice_generate layout="control" %}
+            {% bootstrap_field form.invoice_address_vatid layout="control" %}
+            {% bootstrap_field form.invoice_numbers_consecutive layout="control" %}
+            {% bootstrap_field form.invoice_numbers_prefix layout="control" %}
+            {% bootstrap_field form.invoice_renderer layout="control" %}
+            {% bootstrap_field form.invoice_language layout="control" %}
+            {% bootstrap_field form.invoice_include_free layout="control" %}
+            {% bootstrap_field form.invoice_address_from layout="control" %}
+            {% bootstrap_field form.invoice_introductory_text layout="control" %}
+            {% bootstrap_field form.invoice_additional_text layout="control" %}
+            {% bootstrap_field form.invoice_footer_text layout="control" %}
+            {% bootstrap_field form.invoice_logo_image layout="control" %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-default btn-lg" name="preview" value="preview" formtarget="_blank">

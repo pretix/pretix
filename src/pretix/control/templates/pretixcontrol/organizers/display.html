@@ -7,10 +7,10 @@
         <fieldset>
             <legend>{% trans "Organizer page" %}</legend>
             {% bootstrap_form_errors form %}
-            {% bootstrap_field form.locales layout="horizontal" %}
-            {% bootstrap_field form.organizer_logo_image layout="horizontal" %}
-            {% bootstrap_field form.organizer_homepage_text layout="horizontal" %}
-            {% bootstrap_field form.event_list_type layout="horizontal" %}
+            {% bootstrap_field form.locales layout="control" %}
+            {% bootstrap_field form.organizer_logo_image layout="control" %}
+            {% bootstrap_field form.organizer_homepage_text layout="control" %}
+            {% bootstrap_field form.event_list_type layout="control" %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Shop design" %}</legend>
@@ -20,8 +20,8 @@
                     for all events in this account that do not have their own design settings.
                 {% endblocktrans %}
             </p>
-            {% bootstrap_field form.primary_color layout="horizontal" %}
-            {% bootstrap_field form.primary_font layout="horizontal" %}
+            {% bootstrap_field form.primary_color layout="control" %}
+            {% bootstrap_field form.primary_font layout="control" %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

@@ -240,3 +240,8 @@ pre.mail-preview {
     min-height: 250px;
   }
 }
+
+label .optional {
+  color: $text-muted;
+  font-weight: normal;
+}

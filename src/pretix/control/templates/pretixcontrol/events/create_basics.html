@@ -4,7 +4,7 @@
 {% block form %}
     <fieldset>
         <legend>{% trans "General information" %}</legend>
-        {% bootstrap_field form.name layout="horizontal" %}
+        {% bootstrap_field form.name layout="control" %}
         <div class="form-group">
             <label class="col-md-3 control-label" for="{{ form.slug.id_for_label }}">{{ form.slug.label }}</label>
             <div class="col-md-9 form-inline">
@@ -29,22 +29,22 @@
                 </div>
             </div>
         </div>
-        {% bootstrap_field form.date_from layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
-        {% bootstrap_field form.date_to layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
-        {% bootstrap_field form.location layout="horizontal" %}
-        {% bootstrap_field form.currency layout="horizontal" %}
-        {% bootstrap_field form.tax_rate addon_after="%" layout="horizontal" %}
+        {% bootstrap_field form.date_from layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+        {% bootstrap_field form.date_to layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+        {% bootstrap_field form.location layout="control" %}
+        {% bootstrap_field form.currency layout="control" %}
+        {% bootstrap_field form.tax_rate addon_after="%" layout="control" %}
     </fieldset>
     <fieldset>
         <legend>{% trans "Display settings" %}</legend>
-        {% bootstrap_field form.locale layout="horizontal" %}
-        {% bootstrap_field form.timezone layout="horizontal" %}
+        {% bootstrap_field form.locale layout="control" %}
+        {% bootstrap_field form.timezone layout="control" %}
     </fieldset>
     {% if form.presale_start %}
         <fieldset>
             <legend>{% trans "Timeline" %}</legend>
-            {% bootstrap_field form.presale_start layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
-            {% bootstrap_field form.presale_end layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
+            {% bootstrap_field form.presale_start layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+            {% bootstrap_field form.presale_end layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
         </fieldset>
     {% endif %}
 {% endblock %}

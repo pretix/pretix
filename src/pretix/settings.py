@@ -513,7 +513,12 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 BOOTSTRAP3 = {
-    'success_css_class': ''
+    'success_css_class': '',
+    'field_renderers': {
+        'default': 'bootstrap3.renderers.FieldRenderer',
+        'inline': 'bootstrap3.renderers.InlineFieldRenderer',
+        'control': 'pretix.control.forms.renderers.ControlFieldRenderer',
+    },
 }
 
 AUTH_PASSWORD_VALIDATORS = [
