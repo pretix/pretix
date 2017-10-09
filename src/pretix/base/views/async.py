@@ -51,6 +51,9 @@ class AsyncAction:
             return self.get_result(request)
         return self.http_method_not_allowed(request)
 
+    def _ajax_response_data(self):
+        return {}
+
     def _return_ajax_result(self, res, timeout=.5):
         if not res.ready():
             try:
@@ -59,10 +62,11 @@ class AsyncAction:
                 pass
 
         ready = res.ready()
-        data = {
+        data = self._ajax_response_data()
+        data.update({
             'async_id': res.id,
             'ready': ready
-        }
+        })
         if ready:
             if res.successful() and not isinstance(res.info, Exception):
                 smes = self.get_success_message(res.info)

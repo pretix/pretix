@@ -1,19 +1,17 @@
 import mimetypes
 import os
-from functools import wraps
 
 from django.contrib import messages
 from django.db.models import Q
-from django.http import FileResponse, Http404, HttpResponse, JsonResponse
+from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
 from django.utils.crypto import get_random_string
-from django.utils.decorators import available_attrs, method_decorator
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
-from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import (
@@ -23,7 +21,9 @@ from pretix.base.services.cart import (
     CartError, add_items_to_cart, clear_cart, remove_cart_position,
 )
 from pretix.multidomain.urlreverse import eventreverse
-from pretix.presale.views import EventViewMixin
+from pretix.presale.views import (
+    EventViewMixin, allow_cors_if_namespaced, allow_frame_if_namespaced,
+)
 from pretix.presale.views.async import AsyncAction
 from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
@@ -134,22 +134,24 @@ class CartActionMixin:
         return items
 
 
-def generate_cart_id():
+def generate_cart_id(prefix=''):
     while True:
-        new_id = get_random_string(length=32)
+        new_id = prefix + get_random_string(length=32 - len(prefix))
         if not CartPosition.objects.filter(cart_id=new_id).exists():
             return new_id
 
 
 def create_empty_cart_id(request, replace_current=True):
     session_keyname = 'current_cart_event_{}'.format(request.event.pk)
+    prefix = ''
     if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
         session_keyname += '_' + request.resolver_match.kwargs.get('cart_namespace')
+        prefix = request.resolver_match.kwargs.get('cart_namespace')
 
     if 'carts' not in request.session:
         request.session['carts'] = {}
 
-    new_id = generate_cart_id()
+    new_id = generate_cart_id(prefix=prefix)
     request.session['carts'][new_id] = {}
 
     if replace_current:
@@ -163,16 +165,23 @@ def create_empty_cart_id(request, replace_current=True):
 
 def get_or_create_cart_id(request):
     session_keyname = 'current_cart_event_{}'.format(request.event.pk)
+    prefix = ''
     if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
         session_keyname += '_' + request.resolver_match.kwargs.get('cart_namespace')
+        prefix = request.resolver_match.kwargs.get('cart_namespace')
 
     current_id = request.session.get(session_keyname)
     if current_id and current_id in request.session.get('carts', {}):
         return current_id
     else:
         cart_data = {}
-
-        new_id = generate_cart_id()
+        if prefix and 'take_cart_id' in request.GET:
+            if CartPosition.objects.filter(event=request.event, cart_id=request.GET.get('take_cart_id')).exists():
+                new_id = request.GET.get('take_cart_id')
+            else:
+                new_id = generate_cart_id(prefix=prefix)
+        else:
+            new_id = generate_cart_id(prefix=prefix)
 
         # Migrate legacy data
         # TODO: This is for the upgrade 1.7→1.8. We should remove this around April 2018
@@ -190,7 +199,8 @@ def get_or_create_cart_id(request):
 
         if 'carts' not in request.session:
             request.session['carts'] = {}
-        request.session['carts'][new_id] = cart_data
+        if new_id not in request.session['carts']:
+            request.session['carts'][new_id] = cart_data
         request.session[session_keyname] = new_id
         return new_id
 
@@ -201,15 +211,7 @@ def cart_session(request):
     return request.session['carts'][cart_id]
 
 
-def allow_frame_if_namespaced(view_func):
-    def wrapped_view(request, *args, **kwargs):
-        resp = view_func(request, *args, **kwargs)
-        if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
-            resp.xframe_options_exempt = True
-        return resp
-    return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)
-
-
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
 class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = remove_cart_position
     known_errortypes = ['CartError']
@@ -232,6 +234,7 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
                 return redirect(self.get_error_url())
 
 
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
 class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = clear_cart
     known_errortypes = ['CartError']
@@ -243,32 +246,8 @@ class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
         return self.do(self.request.event.id, get_or_create_cart_id(self.request), translation.get_language())
 
 
-@method_decorator(xframe_options_exempt, 'dispatch')
-class CartCreate(EventViewMixin, CartActionMixin, AsyncAction, View):
-    task = add_items_to_cart
-    known_errortypes = ['CartError']
-
-    def get_success_message(self, value):
-        return _('The products have been successfully added to your cart.')
-
-    def post(self, request, *args, **kwargs):
-        items = self._items_from_post_data()
-        if items:
-            return self.do(self.request.event.id, items, get_or_create_cart_id(self.request), translation.get_language(),
-                           self.invoice_address.pk)
-        else:
-            if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
-                return JsonResponse({
-                    'redirect': self.get_error_url()
-                })
-            else:
-                return redirect(self.get_error_url())
-
-    def get(self, request, *args, **kwargs):
-        # TODO: Show nice loading message for iframes
-        return HttpResponse()
-
-
+@method_decorator(allow_cors_if_namespaced, 'dispatch')
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
 class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = add_items_to_cart
     known_errortypes = ['CartError']
@@ -276,6 +255,11 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     def get_success_message(self, value):
         return _('The products have been successfully added to your cart.')
 
+    def _ajax_response_data(self):
+        return {
+            'cart_id': get_or_create_cart_id(self.request)
+        }
+
     def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
         if items:
@@ -290,6 +274,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
                 return redirect(self.get_error_url())
 
 
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
 class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
     template_name = "pretixpresale/event/voucher.html"
 

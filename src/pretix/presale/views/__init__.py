@@ -1,8 +1,10 @@
 from collections import defaultdict
 from datetime import timedelta
+from functools import wraps
 from itertools import groupby
 
 from django.db.models import Sum
+from django.utils.decorators import available_attrs
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
@@ -188,3 +190,21 @@ class OrganizerViewMixin:
         context = super().get_context_data(**kwargs)
         context['organizer'] = self.request.organizer
         return context
+
+
+def allow_frame_if_namespaced(view_func):
+    def wrapped_view(request, *args, **kwargs):
+        resp = view_func(request, *args, **kwargs)
+        if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
+            resp.xframe_options_exempt = True
+        return resp
+    return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)
+
+
+def allow_cors_if_namespaced(view_func):
+    def wrapped_view(request, *args, **kwargs):
+        resp = view_func(request, *args, **kwargs)
+        if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
+            resp['Access-Control-Allow-Origin'] = '*'
+        return resp
+    return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)

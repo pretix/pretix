@@ -18,10 +18,25 @@ var strings = {
     'order_min': django.pgettext('widget', 'minimum amount to order: %s'),
     'exit': django.pgettext('widget', 'Close ticket shop'),
     'loading_error': django.pgettext('widget', 'The ticket shop could not be loaded.'),
+    'cart_error': django.pgettext('widget', 'The cart could not be created. Please try again later'),
     'waiting_list': django.pgettext('widget', 'Waiting list'),
+    'cart_exists': django.pgettext('widget', 'You currently have an active cart for this event. If you select more' +
+        ' products, they will be added to your existing cart. Click on this message to continue checkout with your' +
+        ' cart.'),
     'poweredby': django.pgettext('widget', 'ticketing powered by <a href="https://pretix.eu" target="_blank">pretix</a>')
 };
 
+var setCookie = function (cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+};
+var getCookie = function (name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+}
 
 /* HTTP API Call helpers */
 var api = {
@@ -51,6 +66,35 @@ var api = {
             err_callback(e);
         };
         xhr.send(null);
+    },
+
+    '_postFormJSON': function (endpoint, form, callback, err_callback) {
+        var params = [].filter.call(form.elements, function(el) {
+            return (el.type !== 'checkbox' && el.type !== 'radio') || el.checked;
+        })
+        .filter(function(el) { return !!el.name && !!el.value; })
+        .filter(function(el) { return !el.disabled; })
+        .map(function(el) {
+            return encodeURIComponent(el.name) + '=' + encodeURIComponent(el.value);
+        }).join('&');
+
+        var xhr = api._getXHR();
+        xhr.open("POST", endpoint, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onload = function (e) {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    callback(JSON.parse(xhr.responseText));
+                } else {
+                    console.error(xhr.statusText);
+                }
+            }
+        };
+        xhr.onerror = function (e) {
+            console.error(xhr.statusText);
+            err_callback(e);
+        };
+        xhr.send(params);
     }
 };
 
@@ -322,15 +366,19 @@ Vue.component('category', {
 Vue.component('pretix-widget', {
     template: ('<div>'
         + '<div class="pretix-widget">'
-    + '<div class="pretix-widget-loading" v-show="$root.loading > 0">'
-    + '<svg width="128" height="128" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
-    + '</div>'
-        + '<form method="post" :action="$root.formTarget" :target="$root.widget_id">'
+        + '<div class="pretix-widget-loading" v-show="$root.loading > 0">'
+        + '<svg width="128" height="128" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
+        + '</div>'
+        + '<form method="post" :action="$root.formTarget" ref="form" :target="$root.widget_id">'
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<div class="pretix-widget-error-message" v-if="$root.error">{{ $root.error }}</div>'
+        + '<div class="pretix-widget-info-message pretix-widget-clickable" @click.prevent="resume"'
+        + '     v-if="$root.cart_exists">'
+        + strings['cart_exists']
+        + '</div>'
         + '<category v-for="category in this.$root.categories" :category="category" :key="category.id"></category>'
         + '<div class="pretix-widget-action" v-if="$root.display_add_to_cart">'
-        + '<button @click="buy">' + strings.buy + '</button>'
+        + '<button @click.prevent="buy">' + strings.buy + '</button>'
         + '</div>'
         + '<div class="pretix-widget-clear"></div>'
         + '<div class="pretix-widget-attribution">'
@@ -358,7 +406,24 @@ Vue.component('pretix-widget', {
     },
     methods: {
         buy: function () {
-            this.$root.frame_shown = true;
+            var url = this.$refs.form.attributes.action.value + '&ajax=1';
+            this.$root.frame_loading = true;
+            var root = this.$root;
+            var iframe = this.$refs['frame-container'].children[0];
+            api._postFormJSON(url, this.$refs.form, function (data) {
+                root.cart_id = data.cart_id;
+                setCookie(root.cookieName, data.cart_id, 30);
+
+                iframe.src = root.event_url.replace(/^([^\/]+:\/\/[^\/]+)\/.*$/, "$1") + data.redirect + '?take_cart_id=' + root.cart_id;
+            }, function (error) {
+                root.frame_loading = false;
+                alert(strings['cart_error']);
+            });
+        },
+        resume: function () {
+            this.$root.frame_loading = true;
+            var iframe = this.$refs['frame-container'].children[0];
+            iframe.src = this.$root.event_url + 'w/' + widget_id + '/checkout/start?take_cart_id=' + this.$root.cart_id;
         },
         close: function () {
             this.$root.frame_shown = false;
@@ -404,12 +469,17 @@ var create_widget = function (element) {
                 widget_id: 'pretix-widget-' + widget_id,
                 frame_loading: false,
                 frame_shown: false,
+                cart_exists: false
             }
         },
         created: function () {
             var url = event_url + 'widget/product_list?lang=' + lang;
+            var cart_id = getCookie(this.cookieName);
             if (voucher) {
                 url += '&voucher=' + escape(voucher);
+            }
+            if (cart_id) {
+                url += "&cart_id=" + cart_id;
             }
             api._getJSON(url, function (data) {
                 app.categories = data.items_by_category;
@@ -419,6 +489,8 @@ var create_widget = function (element) {
                 app.display_add_to_cart = data.display_add_to_cart;
                 app.waiting_list_enabled = data.waiting_list_enabled;
                 app.show_variations_expanded = data.show_variations_expanded;
+                app.cart_id = cart_id;
+                app.cart_exists = data.cart_exists;
                 app.loading--;
             }, function (error) {
                 app.categories = [];
@@ -428,9 +500,16 @@ var create_widget = function (element) {
             });
         },
         computed: {
+            cookieName: function () {
+                return "pretix_widget_" + this.event_url.replace(/[^a-zA-Z0-9]+/g, "_");
+            },
             formTarget: function () {
-                var checkout_url = "/" + this.$root.event_url.replace(/^[^\/]+:\/\/([^\/]+)\//, "") + "checkout/start";
-                return this.$root.event_url + 'cart/create?next=' + checkout_url;
+                var checkout_url = "/" + this.event_url.replace(/^[^\/]+:\/\/([^\/]+)\//, "") + "w/" + widget_id + "/checkout/start";
+                var form_target = this.event_url + 'w/' + widget_id + '/cart/add?next=' + checkout_url;
+                if (getCookie(this.cookieName)) {
+                    form_target += "&take_cart_id=" + getCookie(this.cookieName);
+                }
+                return form_target;
             }
         },
         methods: {

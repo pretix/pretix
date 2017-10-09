@@ -70,20 +70,23 @@ class BaseCheckoutFlowStep:
     def post(self, request):
         return HttpResponseNotAllowed([])
 
-    def get_step_url(self):
-        return eventreverse(self.event, 'presale:event.checkout', kwargs={'step': self.identifier})
+    def get_step_url(self, request):
+        kwargs = {'step': self.identifier}
+        if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
+            kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
+        return eventreverse(self.event, 'presale:event.checkout', kwargs=kwargs)
 
     def get_prev_url(self, request):
         prev = self.get_prev_applicable(request)
         if not prev:
             return eventreverse(self.event, 'presale:event.index')
         else:
-            return prev.get_step_url()
+            return prev.get_step_url(request)
 
     def get_next_url(self, request):
         n = self.get_next_applicable(request)
         if n:
-            return n.get_step_url()
+            return n.get_step_url(request)
 
     @cached_property
     def cart_session(self):
@@ -234,7 +237,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         return self.get_next_url(self.request)
 
     def get_error_url(self):
-        return self.get_step_url()
+        return self.get_step_url(self.request)
 
     def get(self, request):
         self.request = request
@@ -557,7 +560,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         return super().get_error_message(exception)
 
     def get_error_url(self):
-        return self.get_step_url()
+        return self.get_step_url(self.request)
 
     def get_order_url(self, order):
         return eventreverse(self.request.event, 'presale:event.order.pay.complete', kwargs={

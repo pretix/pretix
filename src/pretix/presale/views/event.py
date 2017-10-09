@@ -14,7 +14,6 @@ from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views import View
-from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
@@ -26,7 +25,7 @@ from pretix.presale.views.organizer import (
     add_subevents_for_days, weeks_for_template,
 )
 
-from . import CartMixin, EventViewMixin, get_cart
+from . import CartMixin, EventViewMixin, allow_frame_if_namespaced, get_cart
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
@@ -168,7 +167,7 @@ def get_grouped_items(event, subevent=None, voucher=None):
     return items, display_add_to_cart
 
 
-@method_decorator(xframe_options_exempt, 'dispatch')
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
 class EventIndex(EventViewMixin, CartMixin, TemplateView):
     template_name = "pretixpresale/event/index.html"
 
