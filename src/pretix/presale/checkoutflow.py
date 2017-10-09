@@ -480,6 +480,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['payment_provider'] = self.payment_provider
         ctx['addr'] = self.invoice_address
         ctx['confirm_messages'] = self.confirm_messages
+        ctx['cart_session'] = self.cart_session
 
         ctx['contact_info'] = []
         responses = contact_form_fields.send(self.event)
