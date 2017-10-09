@@ -37,7 +37,10 @@ class CartActionMixin:
         if "next" in self.request.GET and is_safe_url(self.request.GET.get("next")):
             return self.request.GET.get('next')
         else:
-            return eventreverse(self.request.event, 'presale:event.index')
+            kwargs = {}
+            if 'cart_namespace' in self.kwargs:
+                kwargs['cart_namespace'] = self.kwargs['cart_namespace']
+            return eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs)
 
     def get_success_url(self, value=None):
         return self.get_next_url()
@@ -325,7 +328,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
             except Voucher.DoesNotExist:
                 err = error_messages['voucher_invalid']
         else:
-            return redirect(eventreverse(request.event, 'presale:event.index'))
+            return redirect(self.get_index_url())
 
         if request.event.presale_start and now() < request.event.presale_start:
             err = error_messages['not_started']
@@ -345,7 +348,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
 
         if err:
             messages.error(request, _(err))
-            return redirect(eventreverse(request.event, 'presale:event.index'))
+            return redirect(self.get_index_url())
 
         return super().dispatch(request, *args, **kwargs)
 

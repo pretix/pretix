@@ -183,7 +183,7 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
                 return super().get(request, *args, **kwargs)
         else:
             if 'subevent' in kwargs:
-                return redirect(eventreverse(request.event, 'presale:event.index'))
+                return redirect(self.get_index_url())
             else:
                 return super().get(request, *args, **kwargs)
 

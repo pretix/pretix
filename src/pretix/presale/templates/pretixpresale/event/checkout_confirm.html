@@ -13,7 +13,7 @@
             <div class="panel-heading">
                 <div class="pull-right">
                     <a href="
-                    {% eventurl request.event "presale:event.index" %}">
+                    {% eventurl request.event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}">
                         <span class="fa fa-edit"></span>
                         {% trans "Modify" %}
                     </a>

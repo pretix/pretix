@@ -63,7 +63,7 @@ var api = {
         };
         xhr.onerror = function (e) {
             console.error(xhr.statusText);
-            err_callback(e);
+            err_callback(xhr, e);
         };
         xhr.send(null);
     },
@@ -92,7 +92,7 @@ var api = {
         };
         xhr.onerror = function (e) {
             console.error(xhr.statusText);
-            err_callback(e);
+            err_callback(xhr, e);
         };
         xhr.send(params);
     }
@@ -165,9 +165,9 @@ Vue.component('availbox', {
         },
         waiting_list_url: function () {
             if (this.item.has_variations) {
-                return this.$root.event_url + 'waitinglist/?item=' + this.item.id + '&var=' + this.variation.id;
+                return this.$root.event_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&var=' + this.variation.id;
             } else {
-                return this.$root.event_url + 'waitinglist/?item=' + this.item.id;
+                return this.$root.event_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id;
             }
         }
     }
@@ -402,23 +402,51 @@ Vue.component('pretix-widget', {
     ),
     data: function () {
         return {
+            async_task_id: null,
+            async_task_check_url: null,
+            async_task_timeout: null,
+            async_task_interval: 100
         }
     },
     methods: {
         buy: function () {
             var url = this.$refs.form.attributes.action.value + '&ajax=1';
             this.$root.frame_loading = true;
-            var root = this.$root;
-            var iframe = this.$refs['frame-container'].children[0];
-            api._postFormJSON(url, this.$refs.form, function (data) {
-                root.cart_id = data.cart_id;
-                setCookie(root.cookieName, data.cart_id, 30);
-
-                iframe.src = root.event_url.replace(/^([^\/]+:\/\/[^\/]+)\/.*$/, "$1") + data.redirect + '?take_cart_id=' + root.cart_id;
-            }, function (error) {
+            this.async_task_interval = 100;
+            api._postFormJSON(url, this.$refs.form, this.buy_callback, this.buy_error_callback);
+        },
+        buy_error_callback: function (xhr, data) {
+            root.frame_loading = false;
+            alert(strings['cart_error']);
+        },
+        buy_check_error_callback: function (xhr, data) {
+            if (xhr.status == 200 || (xhr.status >= 400 && xhr.status < 500)) {
                 root.frame_loading = false;
                 alert(strings['cart_error']);
-            });
+            } else {
+                this.async_task_timeout = window.setTimeout(this.buy_check, 1000);
+            }
+        },
+        buy_callback: function (data) {
+            if (data.redirect) {
+                var iframe = this.$refs['frame-container'].children[0];
+                this.$root.cart_id = data.cart_id;
+                setCookie(this.$root.cookieName, data.cart_id, 30);
+                if (data.redirect.substr(0, 1) === '/') {
+                    data.redirect = this.$root.event_url.replace(/^([^\/]+:\/\/[^\/]+)\/.*$/, "$1") + data.redirect;
+                }
+                iframe.src = data.redirect + '?take_cart_id=' + this.$root.cart_id;
+            } else {
+                this.async_task_id = data.async_id;
+                if (data.check_url) {
+                    this.async_task_check_url = this.$root.event_url.replace(/^([^\/]+:\/\/[^\/]+)\/.*$/, "$1") + data.check_url;
+                }
+                this.async_task_timeout = window.setTimeout(this.buy_check, this.async_task_interval);
+                this.async_task_interval = 250;
+            }
+        },
+        buy_check: function () {
+            api._getJSON(this.async_task_check_url, this.buy_callback, this.buy_check_error_callback);
         },
         resume: function () {
             this.$root.frame_loading = true;

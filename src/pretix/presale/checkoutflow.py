@@ -79,7 +79,10 @@ class BaseCheckoutFlowStep:
     def get_prev_url(self, request):
         prev = self.get_prev_applicable(request)
         if not prev:
-            return eventreverse(self.event, 'presale:event.index')
+            kwargs = {}
+            if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
+                kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
+            return eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs)
         else:
             return prev.get_step_url(request)
 

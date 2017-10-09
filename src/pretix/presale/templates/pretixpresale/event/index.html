@@ -32,7 +32,7 @@
                 </em>
                 <div class="row checkout-button-row">
                     <div class="col-md-4 col-xs-12">
-                        <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" %}">
+                        <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
                             {% csrf_token %}
                             <button class="btn btn-block btn-default btn-lg" type="submit">
                                 <i class="fa fa-close"></i> {% trans "Empty cart" %}</button>
@@ -40,7 +40,7 @@
                     </div>
                     <div class="col-md-4 col-md-offset-4 col-xs-12">
                         <a class="btn btn-block btn-primary btn-lg"
-                                href="{% eventurl request.event "presale:event.checkout.start" %}">
+                                href="{% eventurl request.event "presale:event.checkout.start" cart_namespace=cart_namespace  %}">
                             {% if has_addon_choices %}
                                 <i class="fa fa-shopping-cart"></i> {% trans "Continue" %}
                                 </a>
@@ -55,7 +55,7 @@
         </div>
     {% endif %}
 
-    {% if event.has_subevents %}
+    {% if event.has_subevents and not cart_namespace %}
         {% if subevent %}
             <a class="subevent-toggle">
                 {% trans "View other date" %}
@@ -75,7 +75,7 @@
         {% endif %}
     {% endif %}
 
-    {% if frontpage_text %}
+    {% if frontpage_text and not cart_namespace %}
         <div>
             {{ frontpage_text|rich_text }}
         </div>
@@ -99,60 +99,63 @@
                 {% endif %}
             </div>
         {% endif %}
-        <div>
-            {% if ev.location %}
+        {% if not cart_namespace %}
+            <div>
+                {% if ev.location %}
+                    <div class="info-row">
+                        <span class="fa fa-map-marker fa-fw"></span>
+                        <p>
+                            {{ ev.location|linebreaksbr }}
+                        </p>
+                    </div>
+                {% endif %}
                 <div class="info-row">
-                    <span class="fa fa-map-marker fa-fw"></span>
+                    <span class="fa fa-clock-o fa-fw"></span>
                     <p>
-                        {{ ev.location|linebreaksbr }}
+                        {{ ev.get_date_range_display }}
+                        {% if event.settings.show_times %}
+                            <br>
+                            {% blocktrans trimmed with time=ev.date_from|date:"TIME_FORMAT" %}
+                                Begin: {{ time }}
+                            {% endblocktrans %}
+                            {% if event.settings.show_date_to %}
+                                <br>
+                                {% blocktrans trimmed with time=ev.date_to|date:"TIME_FORMAT" %}
+                                    End: {{ time }}
+                                {% endblocktrans %}
+                            {% endif %}
+                        {% endif %}
+                        {% if ev.date_admission %}
+                            <br>
+                            {% if ev.date_admission|date:"SHORT_DATE_FORMAT" == ev.date_from|date:"SHORT_DATE_FORMAT" %}
+                                {% blocktrans trimmed with time=ev.date_admission|date:"TIME_FORMAT" %}
+                                    Admission: {{ time }}
+                                {% endblocktrans %}
+                            {% else %}
+                                {% blocktrans trimmed with datetime=ev.date_admission|date:"SHORT_DATETIME_FORMAT" %}
+                                    Admission: {{ datetime }}
+                                {% endblocktrans %}
+                            {% endif %}
+                        {% endif %}
+                        <br>
+                        {% if subevent %}
+                            <a href="{% eventurl event "presale:event.ical.download" subevent=subevent.pk %}">
+                        {% else %}
+                            <a href="{% eventurl event "presale:event.ical.download" %}">
+                        {% endif %}
+                            {% trans "Add to Calendar" %}
+                        </a>
                     </p>
                 </div>
-            {% endif %}
-            <div class="info-row">
-                <span class="fa fa-clock-o fa-fw"></span>
-                <p>
-                    {{ ev.get_date_range_display }}
-                    {% if event.settings.show_times %}
-                        <br>
-                        {% blocktrans trimmed with time=ev.date_from|date:"TIME_FORMAT" %}
-                            Begin: {{ time }}
-                        {% endblocktrans %}
-                        {% if event.settings.show_date_to %}
-                            <br>
-                            {% blocktrans trimmed with time=ev.date_to|date:"TIME_FORMAT" %}
-                                End: {{ time }}
-                            {% endblocktrans %}
-                        {% endif %}
-                    {% endif %}
-                    {% if ev.date_admission %}
-                        <br>
-                        {% if ev.date_admission|date:"SHORT_DATE_FORMAT" == ev.date_from|date:"SHORT_DATE_FORMAT" %}
-                            {% blocktrans trimmed with time=ev.date_admission|date:"TIME_FORMAT" %}
-                                Admission: {{ time }}
-                            {% endblocktrans %}
-                        {% else %}
-                            {% blocktrans trimmed with datetime=ev.date_admission|date:"SHORT_DATETIME_FORMAT" %}
-                                Admission: {{ datetime }}
-                            {% endblocktrans %}
-                        {% endif %}
-                    {% endif %}
-                    <br>
-                    {% if subevent %}
-                        <a href="{% eventurl event "presale:event.ical.download" subevent=subevent.pk %}">
-                    {% else %}
-                        <a href="{% eventurl event "presale:event.ical.download" %}">
-                    {% endif %}
-                        {% trans "Add to Calendar" %}
-                    </a>
-                </p>
+
             </div>
 
-        </div>
+            {% eventsignal event "pretix.presale.signals.front_page_top" %}
+        {% endif %}
 
-        {% eventsignal event "pretix.presale.signals.front_page_top" %}
         {% if ev.presale_is_running or event.settings.show_items_outside_presale_period %}
             <form method="post" data-asynctask
-                    action="{% eventurl request.event "presale:event.cart.add" %}?next={{ request.path|urlencode }}">
+                    action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={{ request.path|urlencode }}">
                 {% csrf_token %}
                 <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />
                 {% for tup in items_by_category %}
@@ -392,7 +395,7 @@
     {% if vouchers_exist %}
         <section class="front-page">
             <h3>{% trans "Redeem a voucher" %}</h3>
-            <form method="get" action="{% eventurl event "presale:event.redeem" %}">
+            <form method="get" action="{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}">
                 <div class="row-voucher">
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         <div class="input-group">
@@ -412,25 +415,27 @@
             </form>
         </section>
     {% endif %}
-    {% eventsignal event "pretix.presale.signals.front_page_bottom" %}
-    <section class="front-page">
-        <h3>{% trans "If you already ordered a ticket" %}</h3>
-        <div>
-            <div class="col-md-8 col-xs-12">
-                <p>
-                    {% blocktrans trimmed %}
-                        If you want to see or change the status and details of your order, click on the link in one of the
-                        emails we sent you during the order process. If you cannot find the link, click on the
-                        following button to request the link to your order to be sent to you again.
-                    {% endblocktrans %}
-                </p>
+    {% if not cart_namespace %}
+        {% eventsignal event "pretix.presale.signals.front_page_bottom" %}
+        <section class="front-page">
+            <h3>{% trans "If you already ordered a ticket" %}</h3>
+            <div>
+                <div class="col-md-8 col-xs-12">
+                    <p>
+                        {% blocktrans trimmed %}
+                            If you want to see or change the status and details of your order, click on the link in one of the
+                            emails we sent you during the order process. If you cannot find the link, click on the
+                            following button to request the link to your order to be sent to you again.
+                        {% endblocktrans %}
+                    </p>
+                </div>
+                <div class="col-md-4 col-xs-12 text-right">
+                    <a class="btn btn-block btn-primary" href="{% eventurl event "presale:event.resend_link" %}">
+                        {% trans "Resend order links" %}
+                    </a>
+                </div>
+                <div class="clearfix"></div>
             </div>
-            <div class="col-md-4 col-xs-12 text-right">
-                <a class="btn btn-block btn-primary" href="{% eventurl event "presale:event.resend_link" %}">
-                    {% trans "Resend order links" %}
-                </a>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-    </section>
+        </section>
+    {% endif %}
 {% endblock %}

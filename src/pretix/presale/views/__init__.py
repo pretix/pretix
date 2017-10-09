@@ -10,6 +10,7 @@ from django.utils.timezone import now
 
 from pretix.base.models import CartPosition, InvoiceAddress, OrderPosition
 from pretix.base.services.cart import get_fees
+from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import question_form_fields
 
 
@@ -183,6 +184,12 @@ class EventViewMixin:
         context = super().get_context_data(**kwargs)
         context['event'] = self.request.event
         return context
+
+    def get_index_url(self):
+        kwargs = {}
+        if 'cart_namespace' in self.kwargs:
+            kwargs['cart_namespace'] = self.kwargs['cart_namespace']
+        return eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs)
 
 
 class OrganizerViewMixin:

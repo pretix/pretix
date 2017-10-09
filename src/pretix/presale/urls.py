@@ -27,17 +27,27 @@ frame_wrapped_urls = [
     url(r'^redeem/?$', pretix.presale.views.cart.RedeemView.as_view(),
         name='event.redeem'),
     url(r'^(?P<subevent>[0-9]+)/$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
+    url(r'^waitinglist', pretix.presale.views.waiting.WaitingView.as_view(), name='event.waitinglist'),
     url(r'^$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
 ]
 event_patterns = [
+
+    # Cart/checkout patterns are a bit more complicated, as they should have simple URLs like cart/clear in normal
+    # cases, but need to have versions with unguessable URLs like w/8l4Y83XNonjLxoBb/cart/clear to be used in widget
+    # mode. This is required to prevent all clickjacking and CSRF attacks that would otherwise be possible.
+    # First, we define the normal version
     url(r'', include(frame_wrapped_urls)),
+    # Second, the widget version
     url(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/', include(frame_wrapped_urls)),
+    # Third, a fake version that is defined like the first (and never gets called), but makes reversing URLs easier
+    url(r'(?P<cart_namespace>[_]{0})', include(frame_wrapped_urls)),
+    # CartAdd goes extra since it also gets a csrf_exempt decorator in one of the cases
     url(r'^cart/add$', pretix.presale.views.cart.CartAdd.as_view(), name='event.cart.add'),
+    url(r'^(?P<cart_namespace>[_]{0})cart/add$', pretix.presale.views.cart.CartAdd.as_view(), name='event.cart.add'),
     url(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/cart/add',
         csrf_exempt(pretix.presale.views.cart.CartAdd.as_view()),
         name='event.cart.add'),
 
-    url(r'^waitinglist', pretix.presale.views.waiting.WaitingView.as_view(), name='event.waitinglist'),
     url(r'resend/$', pretix.presale.views.user.ResendLinkView.as_view(), name='event.resend_link'),
     url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/$', pretix.presale.views.order.OrderDetails.as_view(),
         name='event.order'),

@@ -18,8 +18,8 @@ class CheckoutView(View):
 
     def get_index_url(self, request):
         kwargs = {}
-        if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
-            kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
+        if 'cart_namespace' in self.kwargs:
+            kwargs['cart_namespace'] = self.kwargs['cart_namespace']
         return eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs)
 
     def dispatch(self, request, *args, **kwargs):
