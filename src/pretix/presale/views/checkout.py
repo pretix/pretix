@@ -9,14 +9,8 @@ from pretix.base.services.cart import CartError
 from pretix.base.signals import validate_cart
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.checkoutflow import get_checkout_flow
-<<<<<<< HEAD
-from pretix.presale.views.cart import (
-    allow_frame_if_namespaced, get_cart, get_or_create_cart_id,
-)
-=======
+from pretix.presale.views.cart import get_cart, get_or_create_cart_id
 from pretix.presale.views import allow_frame_if_namespaced
-from pretix.presale.views.cart import get_or_create_cart_id
->>>>>>> c515f917... More isolation steps
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
