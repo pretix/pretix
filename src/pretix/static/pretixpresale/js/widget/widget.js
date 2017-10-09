@@ -36,7 +36,7 @@ var getCookie = function (name) {
     var value = "; " + document.cookie;
     var parts = value.split("; " + name + "=");
     if (parts.length == 2) return parts.pop().split(";").shift();
-}
+};
 
 /* HTTP API Call helpers */
 var api = {
@@ -110,11 +110,11 @@ var makeid = function (length) {
 }
 
 var site_is_secure = function () {
-    // TODO: Forbid iframe on insecure pages
     return /https.*/.test(document.location.protocol)
 };
 
 var widget_id = makeid(16);
+var use_iframe = window.innerWidth >= 800 /*&& site_is_secure()*/;
 
 /* Vue Components */
 Vue.component('availbox', {
@@ -369,7 +369,7 @@ Vue.component('pretix-widget', {
         + '<div class="pretix-widget-loading" v-show="$root.loading > 0">'
         + '<svg width="128" height="128" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
         + '</div>'
-        + '<form method="post" :action="$root.formTarget" ref="form" :target="$root.widget_id">'
+        + '<form method="post" :action="$root.formTarget" ref="form" target="_blank">'
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<div class="pretix-widget-error-message" v-if="$root.error">{{ $root.error }}</div>'
         + '<div class="pretix-widget-info-message pretix-widget-clickable" @click.prevent="resume"'
@@ -378,7 +378,7 @@ Vue.component('pretix-widget', {
         + '</div>'
         + '<category v-for="category in this.$root.categories" :category="category" :key="category.id"></category>'
         + '<div class="pretix-widget-action" v-if="$root.display_add_to_cart">'
-        + '<button @click.prevent="buy">' + strings.buy + '</button>'
+        + '<button @click="buy">' + strings.buy + '</button>'
         + '</div>'
         + '<div class="pretix-widget-clear"></div>'
         + '<div class="pretix-widget-attribution">'
@@ -409,8 +409,13 @@ Vue.component('pretix-widget', {
         }
     },
     methods: {
-        buy: function () {
-            var url = this.$refs.form.attributes.action.value + '&ajax=1';
+        buy: function (event) {
+            if (use_iframe) {
+                event.preventDefault();
+            } else {
+                return;
+            }
+            var url = this.$root.formTarget + "&ajax=1";
             this.$root.frame_loading = true;
             this.async_task_interval = 100;
             api._postFormJSON(url, this.$refs.form, this.buy_callback, this.buy_error_callback);
@@ -449,9 +454,14 @@ Vue.component('pretix-widget', {
             api._getJSON(this.async_task_check_url, this.buy_callback, this.buy_check_error_callback);
         },
         resume: function () {
-            this.$root.frame_loading = true;
-            var iframe = this.$refs['frame-container'].children[0];
-            iframe.src = this.$root.event_url + 'w/' + widget_id + '/checkout/start?take_cart_id=' + this.$root.cart_id;
+            var redirect_url = this.$root.event_url + 'w/' + widget_id + '/checkout/start?take_cart_id=' + this.$root.cart_id;
+            if (use_iframe) {
+                var iframe = this.$refs['frame-container'].children[0];
+                this.$root.frame_loading = true;
+                iframe.src = redirect_url;
+            } else {
+                window.open(redirect_url);
+            }
         },
         close: function () {
             this.$root.frame_shown = false;
@@ -538,7 +548,7 @@ var create_widget = function (element) {
                     form_target += "&take_cart_id=" + getCookie(this.cookieName);
                 }
                 return form_target;
-            }
+            },
         },
         methods: {
             open_link_in_frame: function (event) {
