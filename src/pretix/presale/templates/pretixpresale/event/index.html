@@ -17,39 +17,58 @@
     {% if show_cart %}
         <div class="panel panel-primary cart">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Your cart" %}</h3>
+                <h3 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#cart">
+                        <span>
+                            <i class="fa fa-shopping-cart"></i>
+                            <strong>{% trans "Your cart" %}</strong>
+                        </span>
+                        <span>
+                            <strong id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
+                                {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
+                                    {{ cart.minutes_left|stringformat:"02d" }}:{{ cart.seconds_left|stringformat:"02d" }}
+                                {% else %}
+                                    {% trans "Cart expired" %}
+                                {% endif %}
+                            </strong>
+                            <i class="fa fa-angle-down collapse-indicator"></i>
+                        </span>
+                    </a>
+                </h3>
             </div>
-            <div class="panel-body">
-                {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=True %}
-                <em id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
-                    {% if cart.minutes_left > 0 %}
-                        {% blocktrans trimmed with minutes=cart.minutes_left %}
-                            The items in your cart are reserved for you for {{ minutes }} minutes.
-                        {% endblocktrans %}
-                    {% else %}
-                        {% trans "The items in your cart are no longer reserved for you." %}
-                    {% endif %}
-                </em>
-                <div class="row checkout-button-row">
-                    <div class="col-md-4 col-xs-12">
-                        <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
-                            {% csrf_token %}
-                            <button class="btn btn-block btn-default btn-lg" type="submit">
-                                <i class="fa fa-close"></i> {% trans "Empty cart" %}</button>
-                        </form>
+            <div class="panel-collapse collapse in" id="cart">
+                <div class="panel-body">
+                    {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=True %}
+                    <em id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
+                        {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
+                            {% blocktrans trimmed with minutes=cart.minutes_left %}
+                                The items in your cart are reserved for you for {{ minutes }} minutes.
+                            {% endblocktrans %}
+                        {% else %}
+                            {% trans "The items in your cart are no longer reserved for you." %}
+                        {% endif %}
+                    </em>
+                    <div class="row checkout-button-row">
+                        <div class="col-md-4 col-xs-12">
+                            <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
+                                {% csrf_token %}
+                                <button class="btn btn-block btn-default btn-lg" type="submit">
+                                    <i class="fa fa-close"></i> {% trans "Empty cart" %}</button>
+                            </form>
+                        </div>
+                        <div class="col-md-4 col-md-offset-4 col-xs-12">
+                            <a class="btn btn-block btn-primary btn-lg"
+                                    href="{% eventurl request.event "presale:event.checkout.start" cart_namespace=cart_namespace  %}">
+                                {% if has_addon_choices %}
+                                    <i class="fa fa-shopping-cart"></i> {% trans "Continue" %}
+                                    </a>
+                                {% else %}
+                                    <i class="fa fa-shopping-cart"></i> {% trans "Proceed with checkout" %}
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="clearfix"></div>
                     </div>
-                    <div class="col-md-4 col-md-offset-4 col-xs-12">
-                        <a class="btn btn-block btn-primary btn-lg"
-                                href="{% eventurl request.event "presale:event.checkout.start" cart_namespace=cart_namespace  %}">
-                            {% if has_addon_choices %}
-                                <i class="fa fa-shopping-cart"></i> {% trans "Continue" %}
-                                </a>
-                            {% else %}
-                                <i class="fa fa-shopping-cart"></i> {% trans "Proceed with checkout" %}
-                            {% endif %}
-                        </a>
-                    </div>
-                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>

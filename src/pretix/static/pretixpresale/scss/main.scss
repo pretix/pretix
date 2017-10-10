@@ -201,8 +201,12 @@ body.loading .container {
     text-decoration: none;
 }
 
-.panel-title a[data-toggle="collapse"]:hover {
+.panel-default .panel-title a[data-toggle="collapse"]:hover {
     background-color: #eeeeee;
+}
+
+.panel-primary .panel-title a[data-toggle="collapse"]:hover {
+    background-color: darken($btn-primary-bg, 10%);
 }
 
 @import "_iframe.scss";

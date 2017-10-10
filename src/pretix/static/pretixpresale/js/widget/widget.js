@@ -399,13 +399,14 @@ Vue.component('pretix-widget', {
         + '</div>'
         + '</div>'
         + '</div>'
+        + '</div>'
     ),
     data: function () {
         return {
             async_task_id: null,
             async_task_check_url: null,
             async_task_timeout: null,
-            async_task_interval: 100
+            async_task_interval: 100,
         }
     },
     methods: {

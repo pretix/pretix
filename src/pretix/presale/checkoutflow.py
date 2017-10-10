@@ -231,6 +231,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['forms'] = self.forms
+        ctx['cart'] = self.get_cart()
         return ctx
 
     def get_success_message(self, value):
@@ -388,6 +389,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['contact_form'] = self.contact_form
         ctx['invoice_form'] = self.invoice_form
         ctx['reverse_charge_relevant'] = self.eu_reverse_charge_relevant
+        ctx['cart'] = self.get_cart()
         return ctx
 
 
@@ -442,6 +444,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['selected'] = self.request.POST.get('payment', self.cart_session.get('payment', ''))
         if len(self.provider_forms) == 1:
             ctx['selected'] = self.provider_forms[0]['provider'].identifier
+        ctx['cart'] = self.get_cart()
         return ctx
 
     @cached_property

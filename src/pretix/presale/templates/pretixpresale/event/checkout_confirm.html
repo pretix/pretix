@@ -11,14 +11,22 @@
         {% csrf_token %}
         <div class="panel panel-primary cart">
             <div class="panel-heading">
-                <div class="pull-right">
-                    <a href="
-                    {% eventurl request.event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}">
+                <div class="pull-right cart-modify">
+                    <a href="{% eventurl request.event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}">
                         <span class="fa fa-edit"></span>
                         {% trans "Modify" %}
                     </a>
                 </div>
+                <strong id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}"
+                    class="pull-right">
+                    {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
+                        {{ cart.minutes_left|stringformat:"02d" }}:{{ cart.seconds_left|stringformat:"02d" }}
+                    {% else %}
+                        {% trans "Cart expired" %}
+                    {% endif %}
+                </strong>
                 <h3 class="panel-title">
+                    <i class="fa fa-shopping-cart"></i>
                     {% trans "Your cart" %}
                 </h3>
             </div>
@@ -27,7 +35,7 @@
                 <div class="cart-row row">
                     <div class="col-md-6 col-xs-12">
                         <em id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
-                            {% if cart.minutes_left > 0 %}
+                            {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
                                 {% blocktrans trimmed with minutes=cart.minutes_left %}
                                     The items in your cart are reserved for you for {{ minutes }} minutes.
                                 {% endblocktrans %}
