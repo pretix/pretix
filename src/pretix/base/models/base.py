@@ -36,7 +36,7 @@ def cached_file_delete(sender, instance, **kwargs):
 
 class LoggingMixin:
 
-    def log_action(self, action, data=None, user=None):
+    def log_action(self, action, data=None, user=None, api_token=None):
         """
         Create a LogEntry object that is related to this object.
         See the LogEntry documentation for details.
@@ -53,7 +53,9 @@ class LoggingMixin:
             event = self
         elif hasattr(self, 'event'):
             event = self.event
-        l = LogEntry(content_object=self, user=user, action_type=action, event=event)
+        if not user.is_authenticated:
+            user = None
+        l = LogEntry(content_object=self, user=user, action_type=action, event=event, api_token=api_token)
         if data:
             l.data = json.dumps(data, cls=CustomJSONEncoder)
         l.save()
