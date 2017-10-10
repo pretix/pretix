@@ -463,7 +463,7 @@ class OrderExtend(OrderView):
                 try:
                     with self.order.event.lock() as now_dt:
                         is_available = self.order._is_still_available(now_dt, count_waitinglist=False)
-                        if is_available is True:
+                        if is_available is True or self.form.cleaned_data.get('quota_ignore', False) is True:
                             self.form.save()
                             self.order.status = Order.STATUS_PENDING
                             self.order.save()
@@ -474,6 +474,7 @@ class OrderExtend(OrderView):
                             messages.success(self.request, _('The payment term has been changed.'))
                         else:
                             messages.error(self.request, is_available)
+                            return self._redirect_here()
                 except LockTimeoutException:
                     messages.error(self.request, _('We were not able to process the request completely as the '
                                                    'server was too busy.'))
@@ -486,6 +487,12 @@ class OrderExtend(OrderView):
             messages.error(self.request, _('This action is only allowed for pending orders.'))
             return self._redirect_back()
         return super().dispatch(request, *kwargs, **kwargs)
+
+    def _redirect_here(self):
+        return redirect('control:event.order.extend',
+                        event=self.request.event.slug,
+                        organizer=self.request.event.organizer.slug,
+                        code=self.order.code)
 
     def get(self, *args, **kwargs):
         return render(self.request, 'pretixcontrol/order/extend.html', {
