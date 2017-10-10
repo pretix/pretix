@@ -394,7 +394,7 @@ def test_order_extend_expired_quota_left(client, env):
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
     }, follow=True)
-    assert 'alert-success' in response.rendered_content
+    assert b'alert-success' in response.content
     o = Order.objects.get(id=env[2].id)
     assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
     assert o.status == Order.STATUS_PENDING
@@ -414,7 +414,7 @@ def test_order_extend_expired_quota_empty(client, env):
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
     }, follow=True)
-    assert 'alert-danger' in response.rendered_content
+    assert b'alert-danger' in response.content
     o = Order.objects.get(id=env[2].id)
     assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == olddate.strftime("%Y-%m-%d %H:%M:%S")
     assert o.status == Order.STATUS_EXPIRED
@@ -434,7 +434,7 @@ def test_order_extend_expired_quota_empty_ignore(client, env):
         'expires': newdate,
         'quota_ignore': 'on'
     }, follow=True)
-    assert 'alert-success' in response.rendered_content
+    assert b'alert-success' in response.content
     o = Order.objects.get(id=env[2].id)
     assert o.status == Order.STATUS_PENDING
 
@@ -460,7 +460,7 @@ def test_order_extend_expired_quota_partial(client, env):
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
     }, follow=True)
-    assert 'alert-danger' in response.rendered_content
+    assert b'alert-danger' in response.content
     o = Order.objects.get(id=env[2].id)
     assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == olddate.strftime("%Y-%m-%d %H:%M:%S")
     assert o.status == Order.STATUS_EXPIRED
