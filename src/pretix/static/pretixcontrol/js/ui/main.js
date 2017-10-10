@@ -191,8 +191,10 @@ $(function () {
                 if (date === null) {
                     return;
                 }
-                date.set({'hour': 0, 'minute': 0, 'second': 0});
-                $timepicker.data('DateTimePicker').date(date);
+                if ($timepicker.val() === "") {
+                    date.set({'hour': 0, 'minute': 0, 'second': 0});
+                    $timepicker.data('DateTimePicker').date(date);
+                }
             });
         }
     });
