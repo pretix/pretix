@@ -26,10 +26,9 @@ from pytz import timezone
 
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, Item, ItemVariation, LogEntry,
-    Order, OrderPosition, RequiredAction, TaxRule, Voucher,
+    Order, RequiredAction, TaxRule, Voucher,
 )
 from pretix.base.models.event import EventMetaValue
-from pretix.base.models.orders import OrderFee
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import event_live_issues, register_ticket_outputs
@@ -972,7 +971,7 @@ class TaxDelete(EventSettingsViewMixin, EventPermissionRequiredMixin, DeleteView
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
-        if self.is_allowed():
+        if self.object.allow_delete():
             self.object.log_action(action='pretix.event.taxrule.deleted', user=request.user)
             self.object.delete()
             messages.success(self.request, _('The selected tax rule has been deleted.'))
@@ -986,16 +985,7 @@ class TaxDelete(EventSettingsViewMixin, EventPermissionRequiredMixin, DeleteView
             'event': self.request.event.slug,
         })
 
-    def is_allowed(self) -> bool:
-        o = self.object
-        return (
-            not OrderFee.objects.filter(tax_rule=o, order__event=self.request.event).exists()
-            and not OrderPosition.objects.filter(tax_rule=o, order__event=self.request.event).exists()
-            and not self.request.event.items.filter(tax_rule=o).exists()
-            and self.request.event.settings.tax_rate_default != o
-        )
-
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
-        context['possible'] = self.is_allowed()
+        context['possible'] = self.object.allow_delete()
         return context

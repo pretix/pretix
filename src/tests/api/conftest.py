@@ -38,6 +38,7 @@ def team(organizer):
     return Team.objects.create(
         organizer=organizer,
         can_change_items=True,
+        can_change_event_settings=True
     )
 
 

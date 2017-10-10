@@ -81,6 +81,16 @@ class TaxRule(LoggedModel):
                     'if configured above.'),
     )
 
+    def allow_delete(self):
+        from pretix.base.models.orders import OrderFee, OrderPosition
+
+        return (
+            not OrderFee.objects.filter(tax_rule=self, order__event=self.event).exists()
+            and not OrderPosition.objects.filter(tax_rule=self, order__event=self.event).exists()
+            and not self.event.items.filter(tax_rule=self).exists()
+            and self.event.settings.tax_rate_default != self
+        )
+
     @classmethod
     def zero(cls):
         return cls(
