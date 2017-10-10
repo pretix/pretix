@@ -35,7 +35,10 @@ def event(organizer, meta_prop):
 
 @pytest.fixture
 def team(organizer):
-    return Team.objects.create(organizer=organizer)
+    return Team.objects.create(
+        organizer=organizer,
+        can_change_items=True,
+    )
 
 
 @pytest.fixture

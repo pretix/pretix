@@ -11,6 +11,8 @@ event_urls = [
     'questions/',
     'quotas/',
     'vouchers/',
+    'subevents/',
+    'taxrules/',
     'waitinglistentries/',
 ]
 
@@ -20,6 +22,10 @@ event_permission_urls = [
     ('get', 'can_view_vouchers', 'vouchers/', 200),
     ('get', 'can_view_orders', 'invoices/', 200),
     ('get', 'can_view_orders', 'waitinglistentries/', 200),
+    ('get', 'can_change_items', 'categories/', 200),
+    ('get', 'can_change_items', 'items/', 200),
+    ('get', 'can_change_items', 'questions/', 200),
+    ('get', 'can_change_items', 'quotas/', 200),
 ]
 
 
@@ -27,6 +33,7 @@ event_permission_urls = [
 def token_client(client, team):
     team.can_view_orders = True
     team.can_view_vouchers = True
+    team.can_change_items = True
     team.save()
     t = team.tokens.create(name='Foo')
     client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)

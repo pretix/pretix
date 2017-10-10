@@ -39,6 +39,7 @@ class SubEventViewSet(viewsets.ReadOnlyModelViewSet):
 class TaxRuleViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TaxRuleSerializer
     queryset = TaxRule.objects.none()
+    write_permission = 'can_change_event_settings'
 
     def get_queryset(self):
         return self.request.event.tax_rules.all()

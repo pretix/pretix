@@ -34,6 +34,7 @@ class ItemViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
     filter_class = ItemFilter
+    permission = 'can_change_items'
 
     def get_queryset(self):
         return self.request.event.items.select_related('tax_rule').prefetch_related('variations', 'addons').all()
@@ -52,6 +53,7 @@ class ItemCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     filter_class = ItemCategoryFilter
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
+    permission = 'can_change_items'
 
     def get_queryset(self):
         return self.request.event.categories.all()
@@ -63,6 +65,7 @@ class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (OrderingFilter,)
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
+    permission = 'can_change_items'
 
     def get_queryset(self):
         return self.request.event.questions.prefetch_related('options').all()
@@ -81,6 +84,7 @@ class QuotaViewSet(viewsets.ReadOnlyModelViewSet):
     filter_class = QuotaFilter
     ordering_fields = ('id', 'size')
     ordering = ('id',)
+    permission = 'can_change_items'
 
     def get_queryset(self):
         return self.request.event.quotas.all()
