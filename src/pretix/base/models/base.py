@@ -53,7 +53,7 @@ class LoggingMixin:
             event = self
         elif hasattr(self, 'event'):
             event = self.event
-        if not user.is_authenticated:
+        if user and not user.is_authenticated:
             user = None
         l = LogEntry(content_object=self, user=user, action_type=action, event=event, api_token=api_token)
         if data:
