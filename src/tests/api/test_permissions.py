@@ -30,6 +30,10 @@ event_permission_urls = [
     ('put', 'can_change_event_settings', 'taxrules/1/', 404),
     ('patch', 'can_change_event_settings', 'taxrules/1/', 404),
     ('delete', 'can_change_event_settings', 'taxrules/1/', 404),
+    ('post', 'can_change_vouchers', 'vouchers/', 400),
+    ('put', 'can_change_vouchers', 'vouchers/1/', 404),
+    ('patch', 'can_change_vouchers', 'vouchers/1/', 404),
+    ('delete', 'can_change_vouchers', 'vouchers/1/', 404),
 ]
 
 

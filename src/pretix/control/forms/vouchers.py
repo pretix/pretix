@@ -2,9 +2,7 @@ import copy
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.db.models import Q
-from django.utils.timezone import now
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import Item, ItemVariation, Quota, Voucher
@@ -92,21 +90,10 @@ class VoucherForm(I18nModelForm):
                     self.instance.variation = None
                 self.instance.quota = None
 
-                if self.instance.item.category and self.instance.item.category.is_addon:
-                    raise ValidationError(_('It is currently not possible to create vouchers for add-on products.'))
             else:
                 self.instance.quota = Quota.objects.get(pk=quotaid, event=self.instance.event)
                 self.instance.item = None
                 self.instance.variation = None
-
-        if data.get('max_usages', 0) < self.instance.redeemed:
-            raise ValidationError(
-                _('This voucher has already been redeemed %(redeemed)s times. You cannot reduce the maximum number of '
-                  'usages below this number.'),
-                params={
-                    'redeemed': self.instance.redeemed
-                }
-            )
 
         if 'codes' in data:
             data['codes'] = [a.strip() for a in data.get('codes', '').strip().split("\n") if a]
@@ -114,90 +101,29 @@ class VoucherForm(I18nModelForm):
         else:
             cnt = data['max_usages']
 
-        if self.instance.event.has_subevents and data['block_quota'] and not data.get('subevent'):
-            raise ValidationError(pgettext_lazy(
-                'subevent',
-                'If you want this voucher to block quota, you need to select a specific date.'
-            ))
-
-        if self._clean_quota_needs_checking(data):
-            self._clean_quota_check(data, cnt)
-
-        if 'code' in data and Voucher.objects.filter(Q(code=data['code']) & Q(event=self.instance.event) & ~Q(pk=self.instance.pk)).exists():
-            raise ValidationError(_('A voucher with this code already exists.'))
+        Voucher.clean_item_properties(
+            data, self.instance.event,
+            self.instance.quota, self.instance.item, self.instance.variation
+        )
+        Voucher.clean_subevent(
+            data, self.instance.event
+        )
+        Voucher.clean_max_usages(data, self.instance.redeemed)
+        check_quota = Voucher.clean_quota_needs_checking(
+            data, self.initial_instance_data,
+            item_changed=data.get('itemvar') != self.initial.get('itemvar'),
+            creating=not self.instance.pk
+        )
+        if check_quota:
+            Voucher.clean_quota_check(
+                data, cnt, self.initial_instance_data, self.instance.event,
+                self.instance.quota, self.instance.item, self.instance.variation
+            )
+        Voucher.clean_voucher_code(data, self.instance.event, self.instance.pk)
 
         voucher_form_validation.send(sender=self.instance.event, form=self, data=data)
 
         return data
-
-    def _clean_quota_needs_checking(self, data):
-        # We only need to check for quota on vouchers that are now blocking quota and haven't
-        # before (or have blocked a different quota before)
-        if data.get('block_quota', False):
-            is_valid = data.get('valid_until') is None or data.get('valid_until') >= now()
-            if not is_valid:
-                # If the voucher is not valid, it won't block any quota
-                return False
-
-            if not self.instance.pk:
-                # This is a new voucher
-                return True
-
-            if not self.initial_instance_data.block_quota:
-                # Change from nonblocking to blocking
-                return True
-
-            if not self._clean_was_valid():
-                # This voucher has been expired and is now valid again and therefore blocks quota again
-                return True
-
-            if data.get('itemvar') != self.initial.get('itemvar'):
-                # The voucher has been reassigned to a different item, variation or quota
-                return True
-
-            if data.get('subevent') != self.initial.get('subevent'):
-                # The voucher has been reassigned to a different subevent
-                return True
-
-        return False
-
-    def _clean_was_valid(self):
-        return self.initial_instance_data.valid_until is None or self.initial_instance_data.valid_until >= now()
-
-    def _clean_quota_get_ignored(self):
-        quotas = set()
-        if self.initial_instance_data and self.initial_instance_data.block_quota and self._clean_was_valid():
-            if self.initial_instance_data.quota:
-                quotas.add(self.initial_instance_data.quota)
-            elif self.initial_instance_data.variation:
-                quotas |= set(self.initial_instance_data.variation.quotas.filter(
-                    subevent=self.initial_instance_data.subevent))
-            elif self.initial_instance_data.item:
-                quotas |= set(self.initial_instance_data.item.quotas.filter(
-                    subevent=self.initial_instance_data.subevent))
-        return quotas
-
-    def _clean_quota_check(self, data, cnt):
-        old_quotas = self._clean_quota_get_ignored()
-
-        if self.instance.quota:
-            if self.instance.quota in old_quotas:
-                return
-            else:
-                avail = self.instance.quota.availability(count_waitinglist=False)
-        elif self.instance.item and self.instance.item.has_variations and not self.instance.variation:
-            raise ValidationError(_('You can only block quota if you specify a specific product variation. '
-                                    'Otherwise it might be unclear which quotas to block.'))
-        elif self.instance.item and self.instance.variation:
-            avail = self.instance.variation.check_quotas(ignored_quotas=old_quotas, subevent=data.get('subevent'))
-        elif self.instance.item and not self.instance.item.has_variations:
-            avail = self.instance.item.check_quotas(ignored_quotas=old_quotas, subevent=data.get('subevent'))
-        else:
-            raise ValidationError(_('You need to specify either a quota or a product.'))
-
-        if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < cnt):
-            raise ValidationError(_('You cannot create a voucher that blocks quota as the selected product or '
-                                    'quota is currently sold out or completely reserved.'))
 
     def save(self, commit=True):
         super().save(commit)
