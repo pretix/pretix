@@ -74,8 +74,8 @@ def test_rule_delete(token_client, organizer, event, taxrule):
     resp = token_client.delete(
         '/api/v1/organizers/{}/events/{}/taxrules/{}/'.format(organizer.slug, event.slug, taxrule.pk),
     )
-    assert resp.status_code == 200
-    assert not event.taxrules.exists()
+    assert resp.status_code == 204
+    assert not event.tax_rules.exists()
 
 
 @pytest.mark.django_db
@@ -85,4 +85,4 @@ def test_rule_delete_forbidden(token_client, organizer, event, taxrule):
         '/api/v1/organizers/{}/events/{}/taxrules/{}/'.format(organizer.slug, event.slug, taxrule.pk),
     )
     assert resp.status_code == 403
-    assert event.taxrules.exists()
+    assert event.tax_rules.exists()
