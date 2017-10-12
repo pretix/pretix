@@ -20,13 +20,13 @@
             <div class="col-xs-12 {% if subevent.pk %}col-lg-10{% endif %}">
                 <fieldset>
                     <legend>{% trans "General information" %}</legend>
-                    {% bootstrap_field form.name layout="horizontal" %}
-                    {% bootstrap_field form.active layout="horizontal" %}
-                    {% bootstrap_field form.date_from layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
-                    {% bootstrap_field form.date_to layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
-                    {% bootstrap_field form.location layout="horizontal" %}
-                    {% bootstrap_field form.date_admission layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
-                    {% bootstrap_field form.frontpage_text layout="horizontal" %}
+                    {% bootstrap_field form.name layout="control" %}
+                    {% bootstrap_field form.active layout="control" %}
+                    {% bootstrap_field form.date_from layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+                    {% bootstrap_field form.date_to layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+                    {% bootstrap_field form.location layout="control" %}
+                    {% bootstrap_field form.date_admission layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+                    {% bootstrap_field form.frontpage_text layout="control" %}
                     {% if meta_forms %}
                         <div class="form-group metadata-group">
                             <label class="col-md-3 control-label">{% trans "Meta data" %}</label>
@@ -49,8 +49,8 @@
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Timeline" %}</legend>
-                    {% bootstrap_field form.presale_start layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
-                    {% bootstrap_field form.presale_end layout="horizontal" horizontal_field_class="col-md-9 splitdatetimerow" %}
+                    {% bootstrap_field form.presale_start layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+                    {% bootstrap_field form.presale_end layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Quotas" %}</legend>
@@ -79,8 +79,8 @@
                                     </div>
                                     <div class="panel-body form-horizontal">
                                         {% bootstrap_form_errors form %}
-                                        {% bootstrap_field form.size layout='horizontal' %}
-                                        {% bootstrap_field form.itemvars layout='horizontal' %}
+                                        {% bootstrap_field form.size layout="control" %}
+                                        {% bootstrap_field form.itemvars layout="control" %}
                                     </div>
                                 </div>
                             {% endfor %}
@@ -106,8 +106,8 @@
                                         </h4>
                                     </div>
                                     <div class="panel-body form-horizontal">
-                                        {% bootstrap_field formset.empty_form.size layout='horizontal' %}
-                                        {% bootstrap_field formset.empty_form.itemvars layout='horizontal' %}
+                                        {% bootstrap_field formset.empty_form.size layout="control" %}
+                                        {% bootstrap_field formset.empty_form.itemvars layout="control" %}
                                     </div>
                                 </div>
                             {% endescapescript %}
@@ -120,7 +120,7 @@
                 <fieldset>
                     <legend>{% trans "Item prices" %}</legend>
                     {% for f in itemvar_forms %}
-                        {% bootstrap_field f.price layout='horizontal' %}
+                        {% bootstrap_field f.price layout="control" %}
                     {% endfor %}
                 </fieldset>
             </div>

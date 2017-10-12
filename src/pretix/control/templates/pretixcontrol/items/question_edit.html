@@ -20,14 +20,14 @@
         {% bootstrap_form_errors form %}
         <fieldset>
             <legend>{% trans "General information" %}</legend>
-            {% bootstrap_field form.question layout="horizontal" %}
-            {% bootstrap_field form.help_text layout="horizontal" %}
-            {% bootstrap_field form.type layout="horizontal" %}
-            {% bootstrap_field form.required layout="horizontal" %}
+            {% bootstrap_field form.question layout="control" %}
+            {% bootstrap_field form.help_text layout="control" %}
+            {% bootstrap_field form.type layout="control" %}
+            {% bootstrap_field form.required layout="control" %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Apply to products" %}</legend>
-            {% bootstrap_field form.items layout="horizontal" %}
+            {% bootstrap_field form.items layout="control" %}
         </fieldset>
         <div class="alert alert-info alert-required-boolean">
             {% blocktrans trimmed %}
