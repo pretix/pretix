@@ -44,6 +44,10 @@ subevent                              integer                    ID of the date 
 ===================================== ========================== =======================================================
 
 
+.. versionchanged:: 1.9
+
+   The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
+
 Endpoints
 ---------
 
@@ -224,7 +228,8 @@ Endpoints
    :statuscode 201: no error
    :statuscode 400: The voucher could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
+   :statuscode 409: The server was unable to acquire a lock and could not process your request. You can try again after a short waiting period.
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/vouchers/(id)/
 
@@ -282,7 +287,8 @@ her.
    :statuscode 200: no error
    :statuscode 400: The voucher could not be modified due to invalid submitted data
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
+   :statuscode 409: The server was unable to acquire a lock and could not process your request. You can try again after a short waiting period.
 
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/vouchers/(id)/
 
@@ -308,4 +314,4 @@ her.
    :param id: The ``id`` field of the tax rule to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.

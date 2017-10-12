@@ -41,6 +41,7 @@ def team(organizer):
         can_change_event_settings=True,
         can_change_vouchers=True,
         can_view_vouchers=True,
+        can_change_orders=True,
     )
 
 

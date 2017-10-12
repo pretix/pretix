@@ -24,6 +24,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import CachedTicket, InvoiceAddress, OrderFee
+from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.reldate import RelativeDateWrapper
@@ -76,7 +77,7 @@ logger = logging.getLogger(__name__)
 
 def mark_order_paid(order: Order, provider: str=None, info: str=None, date: datetime=None, manual: bool=None,
                     force: bool=False, send_mail: bool=True, user: User=None, mail_text='',
-                    count_waitinglist=True) -> Order:
+                    count_waitinglist=True, api_token=None) -> Order:
     """
     Marks an order as paid. This sets the payment provider, info and date and returns
     the order object.
@@ -119,7 +120,7 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
         'date': date or now_dt,
         'manual': manual,
         'force': force
-    }, user=user)
+    }, user=user, api_token=api_token)
     order_paid.send(order.event, order=order)
 
     if order.event.settings.get('invoice_generate') in ('True', 'paid') and invoice_qualified(order):
@@ -182,7 +183,7 @@ def mark_order_refunded(order, user=None):
 
 
 @transaction.atomic
-def _cancel_order(order, user=None, send_mail: bool=True):
+def _cancel_order(order, user=None, send_mail: bool=True, api_token=None):
     """
     Mark this order as canceled
     :param order: The order to change
@@ -192,13 +193,15 @@ def _cancel_order(order, user=None, send_mail: bool=True):
         order = Order.objects.get(pk=order)
     if isinstance(user, int):
         user = User.objects.get(pk=user)
+    if isinstance(api_token, int):
+        api_token = TeamAPIToken.objects.get(pk=api_token)
     with order.event.lock():
         if order.status != Order.STATUS_PENDING:
             raise OrderError(_('You cannot cancel this order.'))
         order.status = Order.STATUS_CANCELED
         order.save()
 
-    order.log_action('pretix.event.order.canceled', user=user)
+    order.log_action('pretix.event.order.canceled', user=user, api_token=api_token)
     i = order.invoices.filter(is_cancellation=False).last()
     if i:
         generate_cancellation(i)
@@ -954,10 +957,10 @@ def perform_order(self, event: str, payment_provider: str, positions: List[str],
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
-def cancel_order(self, order: int, user: int=None, send_mail: bool=True):
+def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None):
     try:
         try:
-            return _cancel_order(order, user, send_mail)
+            return _cancel_order(order, user, send_mail, api_token)
         except LockTimeoutException:
             self.retry(exc=OrderError(error_messages['busy']))
     except (MaxRetriesExceededError, LockTimeoutException):
