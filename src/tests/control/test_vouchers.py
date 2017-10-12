@@ -144,6 +144,14 @@ class VoucherFormTest(SoupTest):
         assert v.code in doc.select(".alert-success")[0].text
         assert count_before + 1 == self.event.vouchers.count()
 
+    def test_create_voucher_for_addon_item(self):
+        c = self.event.categories.create(name="Foo", is_addon=True)
+        self.ticket.category = c
+        self.ticket.save()
+        self._create_voucher({
+            'itemvar': '%d' % self.ticket.pk
+        }, expected_failure=True)
+
     def test_create_non_blocking_item_voucher(self):
         self._create_voucher({
             'itemvar': '%d' % self.ticket.pk
@@ -254,6 +262,12 @@ class VoucherFormTest(SoupTest):
         })
         v.refresh_from_db()
         assert v.block_quota
+
+    def test_change_voucher_reduce_max_usages(self):
+        v = self.event.vouchers.create(item=self.ticket, max_usages=5, redeemed=3)
+        self._change_voucher(v, {
+            'max_usages': '2'
+        }, expected_failure=True)
 
     def test_change_voucher_to_blocking_quota_full(self):
         self.quota_tickets.size = 0

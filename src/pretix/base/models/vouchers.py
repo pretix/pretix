@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.db import models
+from django.db.models import Q
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -180,24 +181,136 @@ class Voucher(LoggedModel):
     def __str__(self):
         return self.code
 
+    def allow_delete(self):
+        return self.redeemed == 0
+
     def clean(self):
-        super().clean()
-        if self.quota:
-            if self.item:
+        Voucher.clean_item_properties(
+            {
+                'block_quota': self.block_quota,
+            },
+            self.event,
+            self.quota,
+            self.item,
+            self.variation
+        )
+
+    @staticmethod
+    def clean_item_properties(data, event, quota, item, variation):
+        if quota:
+            if item:
                 raise ValidationError(_('You cannot select a quota and a specific product at the same time.'))
-        elif self.item:
-            if self.variation and (not self.item or not self.item.has_variations):
+        elif item:
+            if variation and (not item or not item.has_variations):
                 raise ValidationError(_('You cannot select a variation without having selected a product that provides '
                                         'variations.'))
-            if self.variation and not self.item.variations.filter(pk=self.variation.pk).exists():
+            if variation and not item.variations.filter(pk=variation.pk).exists():
                 raise ValidationError(_('This variation does not belong to this product.'))
-            if self.item.has_variations and not self.variation and self.block_quota:
+            if item.has_variations and not variation and data.get('block_quota'):
                 raise ValidationError(_('You can only block quota if you specify a specific product variation. '
                                         'Otherwise it might be unclear which quotas to block.'))
+            if item.category and item.category.is_addon:
+                raise ValidationError(_('It is currently not possible to create vouchers for add-on products.'))
         else:
             raise ValidationError(_('You need to specify either a quota or a product.'))
-        if self.event.has_subevents and self.block_quota and not self.subevent:
+
+    @staticmethod
+    def clean_max_usages(data, redeemed):
+        if data.get('max_usages', 1) < redeemed:
+            raise ValidationError(
+                _('This voucher has already been redeemed %(redeemed)s times. You cannot reduce the maximum number of '
+                  'usages below this number.'),
+                params={
+                    'redeemed': redeemed
+                }
+            )
+
+    @staticmethod
+    def clean_subevent(data, event):
+        if event.has_subevents and data.get('block_quota') and not data.get('subevent'):
             raise ValidationError(_('If you want this voucher to block quota, you need to select a specific date.'))
+        elif data.get('subevent') and not event.has_subevents:
+            raise ValidationError(_('You can not select a subevent if your event is not an event series.'))
+
+    @staticmethod
+    def clean_quota_needs_checking(data, old_instance, item_changed, creating):
+        # We only need to check for quota on vouchers that are now blocking quota and haven't
+        # before (or have blocked a different quota before)
+        if data.get('block_quota', False):
+            is_valid = data.get('valid_until') is None or data.get('valid_until') >= now()
+            if not is_valid:
+                # If the voucher is not valid, it won't block any quota
+                return False
+
+            if creating:
+                # This is a new voucher
+                return True
+
+            if not old_instance.block_quota:
+                # Change from nonblocking to blocking
+                return True
+
+            if old_instance.valid_until is not None and old_instance.valid_until < now():
+                # This voucher has been expired and is now valid again and therefore blocks quota again
+                return True
+
+            if item_changed:
+                # The voucher has been reassigned to a different item, variation or quota
+                return True
+
+            if data.get('subevent') != old_instance.subevent:
+                # The voucher has been reassigned to a different subevent
+                return True
+
+        return False
+
+    @staticmethod
+    def clean_quota_get_ignored(old_instance):
+        quotas = set()
+        was_valid = old_instance and (
+            old_instance.valid_until is None or old_instance.valid_until >= now()
+        )
+        if old_instance and old_instance.block_quota and was_valid:
+            if old_instance.quota:
+                quotas.add(old_instance.quota)
+            elif old_instance.variation:
+                quotas |= set(old_instance.variation.quotas.filter(
+                    subevent=old_instance.subevent))
+            elif old_instance.item:
+                quotas |= set(old_instance.item.quotas.filter(
+                    subevent=old_instance.subevent))
+        return quotas
+
+    @staticmethod
+    def clean_quota_check(data, cnt, old_instance, event, quota, item, variation):
+        old_quotas = Voucher.clean_quota_get_ignored(old_instance)
+
+        if event.has_subevents and data.get('block_quota') and not data.get('subevent'):
+            raise ValidationError(_('If you want this voucher to block quota, you need to select a specific date.'))
+
+        if quota:
+            if quota in old_quotas:
+                return
+            else:
+                avail = quota.availability(count_waitinglist=False)
+        elif item and item.has_variations and not variation:
+            raise ValidationError(_('You can only block quota if you specify a specific product variation. '
+                                    'Otherwise it might be unclear which quotas to block.'))
+        elif item and variation:
+            avail = variation.check_quotas(ignored_quotas=old_quotas, subevent=data.get('subevent'))
+        elif item and not item.has_variations:
+            avail = item.check_quotas(ignored_quotas=old_quotas, subevent=data.get('subevent'))
+        else:
+            raise ValidationError(_('You need to specify either a quota or a product.'))
+
+        if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < cnt):
+            raise ValidationError(_('You cannot create a voucher that blocks quota as the selected product or '
+                                    'quota is currently sold out or completely reserved.'))
+
+    @staticmethod
+    def clean_voucher_code(data, event, pk):
+        if 'code' in data and Voucher.objects.filter(Q(code=data['code']) & Q(event=event) & ~Q(pk=pk)).exists():
+            raise ValidationError(_('A voucher with this code already exists.'))
 
     def save(self, *args, **kwargs):
         self.code = self.code.upper()

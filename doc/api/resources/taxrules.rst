@@ -153,7 +153,8 @@ Endpoints
 
    :param organizer: The ``slug`` field of the organizer to create a tax rule for
    :param event: The ``slug`` field of the event to create a tax rule for
-   :statuscode 200: no error
+   :statuscode 201: no error
+   :statuscode 400: The tax rule could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create tax rules.
 
@@ -199,6 +200,7 @@ Endpoints
    :param event: The ``slug`` field of the event to modify
    :param id: The ``id`` field of the tax rule to modify
    :statuscode 200: no error
+   :statuscode 400: The tax rule could not be modified due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event/rule does not exist **or** you have no permission to change it.
 
@@ -223,12 +225,11 @@ Endpoints
 
       HTTP/1.1 204 No Content
       Vary: Accept
-      Content-Type: text/javascript
 
    :param organizer: The ``slug`` field of the organizer to modify
    :param event: The ``slug`` field of the event to modify
    :param id: The ``id`` field of the tax rule to delete
-   :statuscode 200: no error
+   :statuscode 204: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event/rule does not exist **or** you have no permission to change it
                     **or** this tax rule cannot be deleted since it is currently in use.
