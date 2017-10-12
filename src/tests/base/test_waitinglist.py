@@ -130,3 +130,19 @@ class WaitingListTestCase(TestCase):
         process_waitinglist(None)
         assert WaitingListEntry.objects.filter(voucher__isnull=True).count() == 5
         assert Voucher.objects.count() == 0
+
+    def test_default_priority(self):
+        self.event.settings.set('waiting_list_enabled', True)
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com'
+        )
+        assert WaitingListEntry.objects.filter(priority=10, email='foo@bar.com').count() == 1
+
+    def test_default_priority_modified(self):
+        self.event.settings.set('waiting_list_enabled', True)
+        self.event.settings.set('waiting_list_default_priority', 60)
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com'
+        )
+        assert WaitingListEntry.objects.filter(priority=10, email='foo@bar.com').count() == 0
+        assert WaitingListEntry.objects.filter(priority=60, email='foo@bar.com').count() == 1

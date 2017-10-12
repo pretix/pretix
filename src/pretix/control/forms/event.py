@@ -310,6 +310,13 @@ class EventSettingsForm(SettingsForm):
         required=False,
         widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-waiting_list_enabled'}),
     )
+    waiting_list_default_priority = forms.IntegerField(
+        label=_("Default priority for new entry"),
+        min_value=0,
+        help_text=_("All new entries created will have this value as their initial priority value."),
+        required=False,
+        widget=forms.NumberInput(attrs={'data-display-dependency': '#id_settings-waiting_list_enabled'}),
+    )
     attendee_names_asked = forms.BooleanField(
         label=_("Ask for attendee names"),
         help_text=_("Ask for a name for all tickets which include admission to the event."),

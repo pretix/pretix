@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.db import transaction
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
+from django.forms import modelformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -14,6 +15,7 @@ from pretix.base.models import Item, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.async import AsyncAction
+from pretix.control.forms.waitinglist import WaitingListReorderForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 
@@ -166,3 +168,34 @@ class EntryDelete(EventPermissionRequiredMixin, DeleteView):
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug
         })
+
+
+class ReorderPriority(EventPermissionRequiredMixin, ListView):
+    model = WaitingListEntry
+    context_object_name = 'entries'
+    paginate_by = 30
+    template_name = 'pretixcontrol/waitinglist/reorder.html'
+    permission = 'can_change_orders'
+
+    def get_queryset(self):
+        qs = WaitingListEntry.objects.filter(voucher__isnull=True)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        reorder_formset = modelformset_factory(WaitingListEntry, form=WaitingListReorderForm, extra=0)
+        ctx['formset'] = reorder_formset(queryset=self.get_queryset())
+        ctx['form_list'] = zip(ctx['entries'], ctx['formset'])
+        ctx['default_priority'] = self.request.event.settings.waiting_list_default_priority
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        reorder_formset = modelformset_factory(WaitingListEntry, form=WaitingListReorderForm, extra=0)
+        formset = reorder_formset(request.POST, queryset=self.get_queryset())
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, _('Changes to waiting list priority has been applied.'))
+        return redirect(reverse('control:event.orders.waitinglist', kwargs={
+            'event': request.event.slug,
+            'organizer': request.event.organizer.slug
+        }))

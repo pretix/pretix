@@ -162,6 +162,7 @@ urlpatterns = [
         url(r'^orders/go$', orders.OrderGo.as_view(), name='event.orders.go'),
         url(r'^orders/$', orders.OrderList.as_view(), name='event.orders'),
         url(r'^waitinglist/$', waitinglist.WaitingListView.as_view(), name='event.orders.waitinglist'),
+        url(r'^waitinglist/reorder_priority/$', waitinglist.ReorderPriority.as_view(), name='event.orders.reorder_priority'),
         url(r'^waitinglist/auto_assign$', waitinglist.AutoAssign.as_view(), name='event.orders.waitinglist.auto'),
         url(r'^waitinglist/(?P<entry>\d+)/delete$', waitinglist.EntryDelete.as_view(), name='event.orders.waitinglist.delete'),
         url(r'^checkins/$', checkin.CheckInView.as_view(), name='event.orders.checkins'),

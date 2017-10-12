@@ -20,6 +20,7 @@ class WaitingListException(Exception):
 
 
 class WaitingListEntry(LoggedModel):
+
     event = models.ForeignKey(
         Event,
         on_delete=models.CASCADE,
@@ -63,11 +64,16 @@ class WaitingListEntry(LoggedModel):
         max_length=190,
         default='en'
     )
+    priority = models.PositiveIntegerField(
+        null=True,
+        verbose_name=_("Priority"),
+        help_text=_("Priority of this entry.")
+    )
 
     class Meta:
         verbose_name = _("Waiting list entry")
         verbose_name_plural = _("Waiting list entries")
-        ordering = ['created']
+        ordering = ['-priority', 'created']
 
     def __str__(self):
         return '%s waits for %s' % (str(self.email), str(self.item))
@@ -136,3 +142,10 @@ class WaitingListEntry(LoggedModel):
                 self.event,
                 locale=self.locale
             )
+
+    def save(self, *args, **kwargs):
+        if self.voucher_id is not None:
+            self.priority = None
+        elif self.priority is None:
+            self.priority = self.event.settings.waiting_list_default_priority
+        super().save(*args, **kwargs)
