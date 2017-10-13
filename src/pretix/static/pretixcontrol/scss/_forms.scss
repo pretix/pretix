@@ -245,3 +245,16 @@ label .optional {
   color: $text-muted;
   font-weight: normal;
 }
+
+.scrolling-multiple-choice {
+  height: 150px;
+  border: 1px solid $input-border;
+  border-radius: $input-border-radius;
+  padding-left: 15px;
+  overflow-y: auto;
+  padding-top: 5px;
+
+  .radio:first-of-type, .checkbox:first-of-type {
+    margin-top: 0;
+  }
+}

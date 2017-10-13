@@ -323,4 +323,22 @@ $(function () {
         ev.preventDefault();
         return true;
     })
+
+    $(".scrolling-multiple-choice").each(function () {
+        var $small = $("<small>");
+        var $a_all = $("<a>").addClass("choice-options-all").attr("href", "#").text(gettext("Alle"));
+        var $a_none = $("<a>").addClass("choice-options-none").attr("href", "#").text(gettext("Keine"));
+        $(this).prepend($small.append($a_all).append(" / ").append($a_none));
+
+        $(this).find(".choice-options-none").click(function (e) {
+            $(this).closest(".scrolling-multiple-choice").find("input[type=checkbox]").prop("checked", false);
+            e.preventDefault();
+            return false;
+        });
+        $(this).find(".choice-options-all").click(function (e) {
+            $(this).closest(".scrolling-multiple-choice").find("input[type=checkbox]").prop("checked", true);
+            e.preventDefault();
+            return false;
+        });
+    })
 });
