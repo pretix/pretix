@@ -728,10 +728,6 @@ class OrderPosition(AbstractPosition):
         max_digits=10, decimal_places=2,
         verbose_name=_('Tax value')
     )
-    tax_value = models.DecimalField(
-        max_digits=10, decimal_places=2,
-        verbose_name=_('Tax value')
-    )
     secret = models.CharField(max_length=64, default=generate_position_secret, db_index=True)
 
     class Meta:
