@@ -47,10 +47,10 @@ class LocaleMiddleware(MiddlewareMixin):
         request.LANGUAGE_CODE = translation.get_language()
 
         tzname = None
-        if request.user.is_authenticated:
-            tzname = request.user.timezone
         if hasattr(request, 'event'):
             tzname = request.event.settings.timezone
+        elif request.user.is_authenticated:
+            tzname = request.user.timezone
         if tzname:
             try:
                 timezone.activate(pytz.timezone(tzname))
