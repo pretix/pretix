@@ -839,7 +839,7 @@ class Quota(LoggedModel):
                 & Q(Q(voucher__valid_until__isnull=True) | Q(voucher__valid_until__gte=now_dt))
             ) &
             self._position_lookup
-        ).values('id').distinct().count()
+        ).count()
 
     def count_pending_orders(self) -> dict:
         from pretix.base.models import Order, OrderPosition
@@ -847,23 +847,23 @@ class Quota(LoggedModel):
         # This query has beeen benchmarked against a Count('id', distinct=True) aggregate and won by a small margin.
         return OrderPosition.objects.filter(
             self._position_lookup, order__status=Order.STATUS_PENDING, order__event=self.event, subevent=self.subevent
-        ).values('id').distinct().count()
+        ).count()
 
     def count_paid_orders(self):
         from pretix.base.models import Order, OrderPosition
 
         return OrderPosition.objects.filter(
             self._position_lookup, order__status=Order.STATUS_PAID, order__event=self.event, subevent=self.subevent
-        ).values('id').distinct().count()
+        ).count()
 
     @cached_property
     def _position_lookup(self) -> Q:
         return (
             (  # Orders for items which do not have any variations
                Q(variation__isnull=True) &
-               Q(item__quotas=self)
+               Q(item_id__in=Quota.items.through.objects.filter(quota_id=self.pk).values_list('item_id', flat=True))
             ) | (  # Orders for items which do have any variations
-                   Q(variation__quotas=self)
+                   Q(variation__in=Quota.variations.through.objects.filter(quota_id=self.pk).values_list('id', flat=True))
             )
         )
 

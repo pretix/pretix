@@ -828,7 +828,7 @@ class CartPosition(AbstractPosition):
         verbose_name=_("Event")
     )
     cart_id = models.CharField(
-        max_length=255, null=True, blank=True,
+        max_length=255, null=True, blank=True, db_index=True,
         verbose_name=_("Cart ID (e.g. session key)")
     )
     datetime = models.DateTimeField(
