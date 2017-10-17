@@ -250,7 +250,7 @@ class QuestionList(ListView):
     template_name = 'pretixcontrol/items/questions.html'
 
     def get_queryset(self):
-        return self.request.event.questions.all()
+        return self.request.event.questions.prefetch_related('items')
 
 
 def question_move(request, question, up=True):
