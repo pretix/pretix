@@ -48,7 +48,9 @@ class QuestionForm(I18nModelForm):
             'items'
         ]
         widgets = {
-            'items': forms.CheckboxSelectMultiple,
+            'items': forms.CheckboxSelectMultiple(
+                attrs={'class': 'scrolling-multiple-choice'}
+            ),
         }
 
 
