@@ -21,9 +21,11 @@ class KnownDomain(models.Model):
         if self.organizer:
             self.organizer.get_cache().clear()
         cache.delete('pretix_multidomain_organizer_{}'.format(self.domainname))
+        cache.delete('pretix_multidomain_organizer_instance_{}'.format(self.domainname))
 
     def delete(self, *args, **kwargs):
         if self.organizer:
             self.organizer.get_cache().clear()
         cache.delete('pretix_multidomain_organizer_{}'.format(self.domainname))
+        cache.delete('pretix_multidomain_organizer_instance_{}'.format(self.domainname))
         super().delete(*args, **kwargs)

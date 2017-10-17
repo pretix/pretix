@@ -40,14 +40,14 @@ class MultiDomainMiddleware(MiddlewareMixin):
             request.host = domain
             request.port = int(port) if port else None
 
-            orga = cache.get('pretix_multidomain_organizer_{}'.format(domain))
+            orga = cache.get('pretix_multidomain_organizer_instance_{}'.format(domain))
             if orga is None:
                 try:
                     kd = KnownDomain.objects.select_related('organizer').get(domainname=domain)  # noqa
                     orga = kd.organizer
                 except KnownDomain.DoesNotExist:
                     orga = False
-                cache.set('pretix_multidomain_organizer_{}'.format(domain), orga.pk if orga else False, 3600)
+                cache.set('pretix_multidomain_organizer_instance_{}'.format(domain), orga, 3600)
 
             if orga:
                 request.organizer_domain = True

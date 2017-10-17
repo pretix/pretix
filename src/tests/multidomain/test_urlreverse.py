@@ -99,7 +99,7 @@ def test_event_custom_domain_cache(env):
 })
 def test_event_custom_domain_cache_clear(env):
     kd = KnownDomain.objects.create(domainname='foobar', organizer=env[0])
-    env[0].get_cache().clear()
+    env[0].cache.clear()
     with assert_num_queries(1):
         eventreverse(env[1], 'presale:event.index')
     kd.delete()
