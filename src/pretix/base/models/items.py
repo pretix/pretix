@@ -863,7 +863,7 @@ class Quota(LoggedModel):
                Q(variation__isnull=True) &
                Q(item_id__in=Quota.items.through.objects.filter(quota_id=self.pk).values_list('item_id', flat=True))
             ) | (  # Orders for items which do have any variations
-                   Q(variation__in=Quota.variations.through.objects.filter(quota_id=self.pk).values_list('id', flat=True))
+                   Q(variation__in=Quota.variations.through.objects.filter(quota_id=self.pk).values_list('itemvariation_id', flat=True))
             )
         )
 
