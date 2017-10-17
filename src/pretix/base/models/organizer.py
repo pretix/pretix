@@ -3,6 +3,7 @@ import string
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.crypto import get_random_string
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models.base import LoggedModel
@@ -57,6 +58,19 @@ class Organizer(LoggedModel):
         return obj
 
     def get_cache(self) -> "pretix.base.cache.ObjectRelatedCache":
+        """
+        Returns an :py:class:`ObjectRelatedCache` object. This behaves equivalent to
+        Django's built-in cache backends, but puts you into an isolated environment for
+        this organizer, so you don't have to prefix your cache keys. In addition, the cache
+        is being cleared every time the organizer changes.
+
+        .. deprecated:: 1.9
+           Use the property ``cache`` instead.
+        """
+        return self.cache
+
+    @cached_property
+    def cache(self):
         """
         Returns an :py:class:`ObjectRelatedCache` object. This behaves equivalent to
         Django's built-in cache backends, but puts you into an isolated environment for

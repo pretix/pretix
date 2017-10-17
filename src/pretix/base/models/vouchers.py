@@ -315,11 +315,11 @@ class Voucher(LoggedModel):
     def save(self, *args, **kwargs):
         self.code = self.code.upper()
         super().save(*args, **kwargs)
-        self.event.get_cache().set('vouchers_exist', True)
+        self.event.cache.set('vouchers_exist', True)
 
     def delete(self, using=None, keep_parents=False):
         super().delete(using, keep_parents)
-        self.event.get_cache().delete('vouchers_exist')
+        self.event.cache.delete('vouchers_exist')
 
     def is_in_cart(self) -> bool:
         """

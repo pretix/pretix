@@ -68,7 +68,9 @@ class OrganizerUpdateForm(OrganizerForm):
                     KnownDomain.objects.create(organizer=instance, domainname=self.cleaned_data['domain'])
             elif current_domain:
                 current_domain.delete()
-            instance.get_cache().clear()
+            instance.cache.clear()
+            for ev in instance.events.all():
+                ev.cache.clear()
 
         return instance
 

@@ -182,3 +182,13 @@ class TaxRule(LoggedModel):
 
         # Consumer in different EU country / invalid VAT
         return True
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        if self.event:
+            self.event.cache.clear()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.event:
+            self.event.cache.clear()

@@ -11,17 +11,19 @@ class NamespacedCache:
     def __init__(self, prefixkey: str, cache: str='default'):
         self.cache = caches[cache]
         self.prefixkey = prefixkey
+        self._last_prefix = None
 
-    def _prefix_key(self, original_key: str) -> str:
+    def _prefix_key(self, original_key: str, known_prefix=None) -> str:
         # Race conditions can happen here, but should be very very rare.
         # We could only handle this by going _really_ lowlevel using
         # memcached's `add` keyword instead of `set`.
         # See also:
         # https://code.google.com/p/memcached/wiki/NewProgrammingTricks#Namespacing
-        prefix = self.cache.get(self.prefixkey)
+        prefix = known_prefix or self.cache.get(self.prefixkey)
         if prefix is None:
             prefix = int(time.time())
             self.cache.set(self.prefixkey, prefix)
+        self._last_prefix = prefix
         key = '%s:%d:%s' % (self.prefixkey, prefix, original_key)
         if len(key) > 200:  # Hash long keys, as memcached has a length limit
             # TODO: Use a more efficient, non-cryptographic hash algorithm
@@ -32,6 +34,7 @@ class NamespacedCache:
         return key.split(":", 2 + self.prefixkey.count(":"))[-1]
 
     def clear(self) -> None:
+        self._last_prefix = None
         try:
             prefix = self.cache.incr(self.prefixkey, 1)
         except ValueError:
@@ -42,7 +45,7 @@ class NamespacedCache:
         return self.cache.set(self._prefix_key(key), value, timeout)
 
     def get(self, key: str) -> str:
-        return self.cache.get(self._prefix_key(key))
+        return self.cache.get(self._prefix_key(key, known_prefix=self._last_prefix))
 
     def get_many(self, keys: List[str]) -> Dict[str, str]:
         values = self.cache.get_many([self._prefix_key(key) for key in keys])

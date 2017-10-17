@@ -59,7 +59,7 @@ def eventreverse(obj, name, kwargs=None):
 
     c = None
     if not kwargs:
-        c = obj.get_cache()
+        c = obj.cache
         url = c.get('urlrev_{}'.format(name))
         if url:
             return url

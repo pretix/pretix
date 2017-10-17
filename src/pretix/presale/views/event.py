@@ -175,10 +175,10 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         context['subevent'] = self.subevent
         context['cart'] = self.get_cart()
         context['has_addon_choices'] = get_cart(self.request).filter(item__addons__isnull=False).exists()
-        vouchers_exist = self.request.event.get_cache().get('vouchers_exist')
+        vouchers_exist = self.request.event.cache.get('vouchers_exist')
         if vouchers_exist is None:
             vouchers_exist = self.request.event.vouchers.exists()
-            self.request.event.get_cache().set('vouchers_exist', vouchers_exist)
+            self.request.event.cache.set('vouchers_exist', vouchers_exist)
         context['vouchers_exist'] = vouchers_exist
         context['ev'] = self.subevent or self.request.event
         if self.subevent:
