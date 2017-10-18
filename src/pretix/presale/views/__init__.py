@@ -24,6 +24,19 @@ class CartMixin:
         from pretix.presale.views.cart import cart_session
         return cart_session(self.request)
 
+    @cached_property
+    def invoice_address(self):
+        if not hasattr(self.request, '_checkout_flow_invoice_address'):
+            iapk = self.cart_session.get('invoice_address')
+            if not iapk:
+                self.request._checkout_flow_invoice_address = InvoiceAddress()
+            else:
+                try:
+                    self.request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                except InvoiceAddress.DoesNotExist:
+                    self.request._checkout_flow_invoice_address = InvoiceAddress()
+        return self.request._checkout_flow_invoice_address
+
     def get_cart(self, answers=False, queryset=None, order=None, downloads=False):
         if queryset:
             prefetch = []
@@ -107,15 +120,7 @@ class CartMixin:
         if order:
             fees = order.fees.all()
         else:
-            iapk = self.cart_session.get('invoice_address')
-            ia = None
-            if iapk:
-                try:
-                    ia = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
-                except InvoiceAddress.DoesNotExist:
-                    pass
-
-            fees = get_fees(self.request.event, self.request, total, ia, self.cart_session.get('payment'))
+            fees = get_fees(self.request.event, self.request, total, self.invoice_address, self.cart_session.get('payment'))
 
         total += sum([f.value for f in fees])
         net_total += sum([f.net_value for f in fees])
