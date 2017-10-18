@@ -103,8 +103,12 @@ def test_event_custom_domain_cache_clear(env):
     with assert_num_queries(1):
         eventreverse(env[1], 'presale:event.index')
     kd.delete()
+    with assert_num_queries(2):
+        ev = Event.objects.get(pk=env[1].pk)
+        assert ev.pk == env[1].pk
+        assert ev.organizer == env[0]
     with assert_num_queries(1):
-        eventreverse(env[1], 'presale:event.index')
+        eventreverse(ev, 'presale:event.index')
 
 
 @pytest.mark.django_db
