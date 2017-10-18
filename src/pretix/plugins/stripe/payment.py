@@ -55,6 +55,7 @@ class StripeSettingsHolder(BasePaymentProvider):
     identifier = 'stripe_settings'
     verbose_name = _('Stripe')
     is_enabled = False
+    is_meta = True
 
     def __init__(self, event: Event):
         super().__init__(event)

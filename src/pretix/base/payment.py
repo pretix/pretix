@@ -51,6 +51,17 @@ class BasePaymentProvider:
         return self.identifier
 
     @property
+    def is_meta(self) -> bool:
+        """
+        Returns whether or whether not this payment provider is a "meta" payment provider that only
+        works as a settings holder for other payment providers and should never be used directly. This
+        is a trick to implement payment gateways with multiple payment methods but unified payment settings.
+        Take a look at the built-in stripe provider to see how this might be used.
+        By default, this returns ``False``.
+        """
+        return False
+
+    @property
     def is_enabled(self) -> bool:
         """
         Returns whether or whether not this payment provider is enabled.

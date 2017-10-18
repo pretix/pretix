@@ -7,14 +7,17 @@
 {% block content %}
     <h1>{% trans "Order search" %}</h1>
     <form class="row filter-form" action="" method="get">
-        <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="col-md-3 col-sm-6 col-xs-12">
             {% bootstrap_field filter_form.query layout='inline' %}
         </div>
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-2 col-sm-6 col-xs-12">
             {% bootstrap_field filter_form.status layout='inline' %}
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
             {% bootstrap_field filter_form.organizer layout='inline' %}
+        </div>
+        <div class="col-md-2 col-xs-6">
+            {% bootstrap_field filter_form.provider layout='inline' %}
         </div>
         <div class="col-md-2 col-sm-6 col-xs-12">
             <button class="btn btn-primary btn-block" type="submit">
