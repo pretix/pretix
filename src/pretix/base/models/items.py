@@ -778,6 +778,7 @@ class Quota(LoggedModel):
         now_dt = now_dt or now()
         res = self._availability(now_dt, count_waitinglist)
 
+        self.event.cache.delete('item_quota_cache')
         if count_waitinglist and not self.cache_is_hot(now_dt):
             self.cached_availability_state = res[0]
             self.cached_availability_number = res[1]

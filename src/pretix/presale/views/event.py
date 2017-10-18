@@ -70,7 +70,8 @@ def get_grouped_items(event, subevent=None):
         quotac__gt=0
     ).order_by('category__position', 'category_id', 'position', 'name')
     display_add_to_cart = False
-    quota_cache = {}
+    external_quota_cache = event.cache.get('item_quota_cache')
+    quota_cache = external_quota_cache or {}
 
     if subevent:
         item_price_override = subevent.item_price_overrides
@@ -112,6 +113,8 @@ def get_grouped_items(event, subevent=None):
                                       v.display_price.gross for v in item.available_variations])
             item._remove = not bool(item.available_variations)
 
+    if not external_quota_cache:
+        event.cache.set('item_quota_cache', quota_cache, 5)
     items = [item for item in items
              if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove]
     return items, display_add_to_cart
