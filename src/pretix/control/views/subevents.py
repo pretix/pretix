@@ -31,16 +31,16 @@ class SubEventList(EventPermissionRequiredMixin, ListView):
     permission = 'can_change_settings'
 
     def get_queryset(self):
-        sum_quota_available = Quota.objects.filter(
+        sum_tickets_paid = Quota.objects.filter(
             subevent=OuterRef('pk')
         ).order_by().values('subevent').annotate(
-            s=Sum('cached_availability_number')
+            s=Sum('cached_availability_paid_orders')
         ).values(
             's'
         )
 
         qs = self.request.event.subevents.annotate(
-            sum_quota_available=Subquery(sum_quota_available, output_field=IntegerField())
+            sum_tickets_paid=Subquery(sum_tickets_paid, output_field=IntegerField())
         ).prefetch_related(
             Prefetch('quotas',
                      queryset=Quota.objects.annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
@@ -61,9 +61,11 @@ class SubEventList(EventPermissionRequiredMixin, ListView):
                     if q.cached_availability_time is not None
                     else q.availability(allow_cache=True)
                 )
-                if q.cached_avail[1] is not None:
-                    q.percent = round(q.cached_avail[1] / q.size * 100) if q.size > 0 else 0
-                    q.inv_percent = 100 - q.percent
+                if q.size is not None:
+                    q.percent_paid = min(
+                        100,
+                        round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
+                    )
         return ctx
 
     @cached_property

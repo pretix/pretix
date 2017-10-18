@@ -44,16 +44,16 @@ class EventList(ListView):
             order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to'),
         )
 
-        sum_quota_available = Quota.objects.filter(
+        sum_tickets_paid = Quota.objects.filter(
             event=OuterRef('pk'), subevent__isnull=True
         ).order_by().values('event').annotate(
-            s=Sum('cached_availability_number')
+            s=Sum('cached_availability_paid_orders')
         ).values(
             's'
         )
 
         qs = qs.annotate(
-            sum_quota_available=Subquery(sum_quota_available, output_field=IntegerField())
+            sum_tickets_paid=Subquery(sum_tickets_paid, output_field=IntegerField())
         ).prefetch_related(
             Prefetch('quotas',
                      queryset=Quota.objects.filter(subevent__isnull=True).annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
@@ -80,9 +80,11 @@ class EventList(ListView):
                     if q.cached_availability_time is not None
                     else q.availability(allow_cache=True)
                 )
-                if q.cached_avail[1] is not None:
-                    q.percent = round(q.cached_avail[1] / q.size * 100) if q.size > 0 else 0
-                    q.inv_percent = 100 - q.percent
+                if q.size is not None:
+                    q.percent_paid = min(
+                        100,
+                        round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
+                    )
         return ctx
 
     @cached_property

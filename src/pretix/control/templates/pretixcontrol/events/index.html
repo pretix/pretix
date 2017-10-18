@@ -68,9 +68,9 @@
                     <a href="?{% url_replace request 'ordering' 'date_to' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
                 <th>
-                    {% trans "Quota available" %}
-                    <a href="?{% url_replace request 'ordering' '-sum_quota_available' %}"><i class="fa fa-caret-down"></i></a>
-                    <a href="?{% url_replace request 'ordering' 'sum_quota_available' %}"><i class="fa fa-caret-up"></i></a>
+                    {% trans "Paid tickets per quota" %}
+                    <a href="?{% url_replace request 'ordering' '-sum_tickets_paid' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'sum_tickets_paid' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
                 <th class="text-right">
                     {% trans "Status" %}
@@ -97,7 +97,7 @@
                             <span class="label label-default">{% trans "Series" %}</span>
                         {% endif %}
                         {% if e.settings.show_date_to and e.date_to %}
-                            <br> –
+                             –<br>
                             {% if e.has_subevents %}
                                 {{ e.max_fromto|default_if_none:e.max_from|default_if_none:e.max_to|default_if_none:""|date:"SHORT_DATETIME_FORMAT" }}
                             {% else %}
@@ -107,7 +107,7 @@
                     </td>
                     <td>
                         {% for q in e.first_quotas|slice:":3" %}
-                            {% include "pretixcontrol/fragment_quota_box.html" with quota=q %}
+                            {% include "pretixcontrol/fragment_quota_box_paid.html" with quota=q %}
                         {% endfor %}
                         {% if e.first_quotas|length > 3 %}
                             <a href="{% url "control:event.items.quotas" organizer=e.organizer.slug event=e.slug %}"

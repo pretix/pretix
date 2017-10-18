@@ -727,6 +727,7 @@ class Quota(LoggedModel):
     )
     cached_availability_state = models.PositiveIntegerField(null=True, blank=True)
     cached_availability_number = models.PositiveIntegerField(null=True, blank=True)
+    cached_availability_paid_orders = models.PositiveIntegerField(null=True, blank=True)
     cached_availability_time = models.DateTimeField(null=True, blank=True)
 
     class Meta:
@@ -783,8 +784,13 @@ class Quota(LoggedModel):
             self.cached_availability_state = res[0]
             self.cached_availability_number = res[1]
             self.cached_availability_time = now_dt
+            if self.size is None:
+                self.cached_availability_paid_orders = self.count_pending_orders()
             self.save(
-                update_fields=['cached_availability_state', 'cached_availability_number', 'cached_availability_time'],
+                update_fields=[
+                    'cached_availability_state', 'cached_availability_number', 'cached_availability_time',
+                    'cached_availability_paid_orders'
+                ],
                 clear_cache=False
             )
 
@@ -799,8 +805,9 @@ class Quota(LoggedModel):
         if size_left is None:
             return Quota.AVAILABILITY_OK, None
 
-        # TODO: Test for interference with old versions of Item-Quota-relations, etc.
-        size_left -= self.count_paid_orders()
+        paid_orders = self.count_paid_orders()
+        self.cached_availability_paid_orders = paid_orders
+        size_left -= paid_orders
         if size_left <= 0:
             return Quota.AVAILABILITY_GONE, 0
 

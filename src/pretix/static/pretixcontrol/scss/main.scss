@@ -418,7 +418,7 @@ body.loading #wrapper {
         display: block;
         text-align: center;
     }
-    .progress-bar-success {
+    &.availability .progress-bar-success {
         background: lighten($brand-success, 20%);
     }
 }
