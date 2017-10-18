@@ -1,8 +1,9 @@
 from django.db.models import F, Prefetch, Q
 from django.db.models.functions import Coalesce
+from django.utils.timezone import now
 from django.views.generic import ListView
 
-from pretix.base.models import Checkin, Item, OrderPosition
+from pretix.base.models import Checkin, Item, Order, OrderPosition
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 
@@ -68,6 +69,34 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
         ctx['filtered'] = ("status" in self.request.GET or "user" in self.request.GET or "item" in self.request.GET
                            or "subevent" in self.request.GET)
         return ctx
+
+    def post(self, request, *args, **kwargs):
+        for c in request.POST.getlist('checkin'):
+            created = False
+            op = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').get(
+                order__event=self.request.event,
+                order__code=c
+            )
+            if op.order.status == Order.STATUS_PAID:
+                ci, created = Checkin.objects.get_or_create(position=op, defaults={
+                    'datetime': now(),
+                })
+            if created:
+                op.order.log_action('pretix.control.views.checkin', data={
+                    'position': op.id,
+                    'positionid': op.positionid,
+                    'first': True,
+                    'datetime': now()
+                })
+            else:
+                op.order.log_action('pretix.control.views.checkin', data={
+                    'position': op.id,
+                    'positionid': op.positionid,
+                    'first': False,
+                    'datetime': now()
+                })
+
+        return self.get(request, *args, **kwargs)
 
     @staticmethod
     def get_ordering_keys_mappings():
