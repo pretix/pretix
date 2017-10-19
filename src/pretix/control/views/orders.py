@@ -645,16 +645,21 @@ class OrderContactChange(OrderView):
 
     def post(self, *args, **kwargs):
         old_email = self.order.email
+        changed = False
         if self.form.is_valid():
-            self.order.log_action(
-                'pretix.event.order.contact.changed',
-                data={
-                    'old_email': old_email,
-                    'new_email': self.form.cleaned_data['email'],
-                },
-                user=self.request.user,
-            )
+            new_email = self.form.cleaned_data['email']
+            if new_email != old_email:
+                changed = True
+                self.order.log_action(
+                    'pretix.event.order.contact.changed',
+                    data={
+                        'old_email': old_email,
+                        'new_email': self.form.cleaned_data['email'],
+                    },
+                    user=self.request.user,
+                )
             if self.form.cleaned_data['regenerate_secrets']:
+                changed = True
                 self.order.secret = generate_secret()
                 for op in self.order.positions.all():
                     op.secret = generate_position_secret()
@@ -664,7 +669,10 @@ class OrderContactChange(OrderView):
                 self.order.log_action('pretix.event.order.secret.changed', user=self.request.user)
 
             self.form.save()
-            messages.success(self.request, _('The order has been changed.'))
+            if changed:
+                messages.success(self.request, _('The order has been changed.'))
+            else:
+                messages.success(self.request, _('Nothing about the order had to be changed.'))
             return redirect(self.get_order_url())
         return self.get(*args, **kwargs)
 
