@@ -112,7 +112,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.email.order_changed': _('An email has been sent to notify user order has been changed.'),
         'pretix.event.order.email.order_free': _('An email has been sent to notify user order has been received.'),
         'pretix.event.order.email.order_paid': _('An email has been sent to notify user payment has been received.'),
-        'pretix.event.order.email.order_placed': _('An email has been sent to notify user order has been received and require payment.'),
+        'pretix.event.order.email.order_placed': _('An email has been sent to notify the user that the order has been received and requires payment.'),
         'pretix.event.order.email.resend': _('An email has been sent with link to the order detail page has been resent to the user.'),
         'pretix.user.settings.2fa.enabled': _('Two-factor authentication has been enabled.'),
         'pretix.user.settings.2fa.disabled': _('Two-factor authentication has been disabled.'),
