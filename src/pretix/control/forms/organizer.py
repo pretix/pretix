@@ -1,6 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 
@@ -8,6 +9,7 @@ from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.models import Organizer, Team
 from pretix.control.forms import ExtFileField
 from pretix.multidomain.models import KnownDomain
+from pretix.presale.style import get_fonts
 
 
 class OrganizerForm(I18nModelForm):
@@ -66,7 +68,9 @@ class OrganizerUpdateForm(OrganizerForm):
                     KnownDomain.objects.create(organizer=instance, domainname=self.cleaned_data['domain'])
             elif current_domain:
                 current_domain.delete()
-            instance.get_cache().clear()
+            instance.cache.clear()
+            for ev in instance.events.all():
+                ev.cache.clear()
 
         return instance
 
@@ -113,20 +117,6 @@ class TeamForm(forms.ModelForm):
 
 class OrganizerSettingsForm(SettingsForm):
 
-    locales = forms.MultipleChoiceField(
-        choices=settings.LANGUAGES,
-        label=_("Use languages"),
-        widget=forms.CheckboxSelectMultiple,
-        help_text=_('Choose all languages that your organizer homepage should be available in.')
-    )
-
-    organizer_homepage_text = I18nFormField(
-        label=_('Homepage text'),
-        required=False,
-        widget=I18nTextarea,
-        help_text=_('This will be displayed on the organizer homepage.')
-    )
-
     organizer_info_text = I18nFormField(
         label=_('Info text'),
         required=False,
@@ -134,6 +124,23 @@ class OrganizerSettingsForm(SettingsForm):
         help_text=_('Not displayed anywhere by default, but if you want to, you can use this e.g. in ticket templates.')
     )
 
+
+class OrganizerDisplaySettingsForm(SettingsForm):
+    primary_color = forms.CharField(
+        label=_("Primary color"),
+        required=False,
+        validators=[
+            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.'))
+        ],
+        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
+    )
+    organizer_homepage_text = I18nFormField(
+        label=_('Homepage text'),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_('This will be displayed on the organizer homepage.')
+    )
     organizer_logo_image = ExtFileField(
         label=_('Logo image'),
         ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
@@ -141,7 +148,6 @@ class OrganizerSettingsForm(SettingsForm):
         help_text=_('If you provide a logo image, we will by default not show your organization name '
                     'in the page header. We will show your logo with a maximal height of 120 pixels.')
     )
-
     event_list_type = forms.ChoiceField(
         label=_('Default overview style'),
         choices=(
@@ -149,3 +155,22 @@ class OrganizerSettingsForm(SettingsForm):
             ('calendar', _('Calendar'))
         )
     )
+    locales = forms.MultipleChoiceField(
+        choices=settings.LANGUAGES,
+        label=_("Use languages"),
+        widget=forms.CheckboxSelectMultiple,
+        help_text=_('Choose all languages that your organizer homepage should be available in.')
+    )
+    primary_font = forms.ChoiceField(
+        label=_('Font'),
+        choices=[
+            ('Open Sans', 'Open Sans')
+        ],
+        help_text=_('Only respected by modern browsers.')
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['primary_font'].choices += [
+            (a, a) for a in get_fonts()
+        ]

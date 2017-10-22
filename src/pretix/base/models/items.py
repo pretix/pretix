@@ -66,12 +66,12 @@ class ItemCategory(LoggedModel):
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     @property
     def sortkey(self):
@@ -104,6 +104,16 @@ class SubEventItem(models.Model):
     item = models.ForeignKey('Item', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
 
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        if self.subevent:
+            self.subevent.event.cache.clear()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.subevent:
+            self.subevent.event.cache.clear()
+
 
 class SubEventItemVariation(models.Model):
     """
@@ -120,6 +130,16 @@ class SubEventItemVariation(models.Model):
     subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
     variation = models.ForeignKey('ItemVariation', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        if self.subevent:
+            self.subevent.event.cache.clear()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.subevent:
+            self.subevent.event.cache.clear()
 
 
 class Item(LoggedModel):
@@ -175,6 +195,7 @@ class Item(LoggedModel):
         related_name="items",
         blank=True, null=True,
         verbose_name=_("Category"),
+        help_text=_("If you have many products, you can optionally sort them into categories to keep things organized.")
     )
     name = I18nCharField(
         max_length=255,
@@ -289,12 +310,12 @@ class Item(LoggedModel):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     def tax(self, price=None, base_price_is='auto'):
         price = price if price is not None else self.default_price
@@ -417,12 +438,12 @@ class ItemVariation(models.Model):
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.item:
-            self.item.event.get_cache().clear()
+            self.item.event.cache.clear()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.item:
-            self.item.event.get_cache().clear()
+            self.item.event.cache.clear()
 
     def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None) -> Tuple[int, int]:
         """
@@ -594,12 +615,12 @@ class Question(LoggedModel):
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     @property
     def sortkey(self):
@@ -704,6 +725,10 @@ class Quota(LoggedModel):
         blank=True,
         verbose_name=_("Variations")
     )
+    cached_availability_state = models.PositiveIntegerField(null=True, blank=True)
+    cached_availability_number = models.PositiveIntegerField(null=True, blank=True)
+    cached_availability_paid_orders = models.PositiveIntegerField(null=True, blank=True)
+    cached_availability_time = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         verbose_name = _("Quota")
@@ -715,14 +740,27 @@ class Quota(LoggedModel):
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     def save(self, *args, **kwargs):
+        clear_cache = kwargs.pop('clear_cache', True)
         super().save(*args, **kwargs)
-        if self.event:
-            self.event.get_cache().clear()
+        if self.event and clear_cache:
+            self.event.cache.clear()
 
-    def availability(self, now_dt: datetime=None, count_waitinglist=True, _cache=None) -> Tuple[int, int]:
+    def rebuild_cache(self, now_dt=None):
+        self.cached_availability_time = None
+        self.cached_availability_number = None
+        self.cached_availability_state = None
+        self.availability(now_dt=now_dt)
+
+    def cache_is_hot(self, now_dt=None):
+        now_dt = now_dt or now()
+        return self.cached_availability_time and (now_dt - self.cached_availability_time).total_seconds() < 120
+
+    def availability(
+            self, now_dt: datetime=None, count_waitinglist=True, _cache=None, allow_cache=False
+    ) -> Tuple[int, int]:
         """
         This method is used to determine whether Items or ItemVariations belonging
         to this quota should currently be available for sale.
@@ -730,12 +768,32 @@ class Quota(LoggedModel):
         :returns: a tuple where the first entry is one of the ``Quota.AVAILABILITY_`` constants
                   and the second is the number of available tickets.
         """
+        if allow_cache and self.cache_is_hot() and count_waitinglist:
+            return self.cached_availability_state, self.cached_availability_number
+
         if _cache and count_waitinglist is not _cache.get('_count_waitinglist', True):
             _cache.clear()
 
         if _cache is not None and self.pk in _cache:
             return _cache[self.pk]
+        now_dt = now_dt or now()
         res = self._availability(now_dt, count_waitinglist)
+
+        self.event.cache.delete('item_quota_cache')
+        if count_waitinglist and not self.cache_is_hot(now_dt):
+            self.cached_availability_state = res[0]
+            self.cached_availability_number = res[1]
+            self.cached_availability_time = now_dt
+            if self.size is None:
+                self.cached_availability_paid_orders = self.count_pending_orders()
+            self.save(
+                update_fields=[
+                    'cached_availability_state', 'cached_availability_number', 'cached_availability_time',
+                    'cached_availability_paid_orders'
+                ],
+                clear_cache=False
+            )
+
         if _cache is not None:
             _cache[self.pk] = res
             _cache['_count_waitinglist'] = count_waitinglist
@@ -747,8 +805,9 @@ class Quota(LoggedModel):
         if size_left is None:
             return Quota.AVAILABILITY_OK, None
 
-        # TODO: Test for interference with old versions of Item-Quota-relations, etc.
-        size_left -= self.count_paid_orders()
+        paid_orders = self.count_paid_orders()
+        self.cached_availability_paid_orders = paid_orders
+        size_left -= paid_orders
         if size_left <= 0:
             return Quota.AVAILABILITY_GONE, 0
 
@@ -808,7 +867,7 @@ class Quota(LoggedModel):
                 & Q(Q(voucher__valid_until__isnull=True) | Q(voucher__valid_until__gte=now_dt))
             ) &
             self._position_lookup
-        ).values('id').distinct().count()
+        ).count()
 
     def count_pending_orders(self) -> dict:
         from pretix.base.models import Order, OrderPosition
@@ -816,23 +875,23 @@ class Quota(LoggedModel):
         # This query has beeen benchmarked against a Count('id', distinct=True) aggregate and won by a small margin.
         return OrderPosition.objects.filter(
             self._position_lookup, order__status=Order.STATUS_PENDING, order__event=self.event, subevent=self.subevent
-        ).values('id').distinct().count()
+        ).count()
 
     def count_paid_orders(self):
         from pretix.base.models import Order, OrderPosition
 
         return OrderPosition.objects.filter(
             self._position_lookup, order__status=Order.STATUS_PAID, order__event=self.event, subevent=self.subevent
-        ).values('id').distinct().count()
+        ).count()
 
     @cached_property
     def _position_lookup(self) -> Q:
         return (
             (  # Orders for items which do not have any variations
                Q(variation__isnull=True) &
-               Q(item__quotas=self)
+               Q(item_id__in=Quota.items.through.objects.filter(quota_id=self.pk).values_list('item_id', flat=True))
             ) | (  # Orders for items which do have any variations
-                   Q(variation__quotas=self)
+                   Q(variation__in=Quota.variations.through.objects.filter(quota_id=self.pk).values_list('itemvariation_id', flat=True))
             )
         )
 

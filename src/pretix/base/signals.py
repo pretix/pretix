@@ -250,3 +250,24 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 argument will contain the cart positions and ``invoice_address`` the invoice address (useful for
 tax calculation). The argument ``meta_info`` contains the order's meta dictionary.
 """
+
+order_fee_type_name = EventPluginSignal(
+    providing_args=['request', 'fee']
+)
+"""
+This signals allows you to return a human-readable description for a fee type based on the ``fee_type``
+and ``internal_type`` attributes of the ``OrderFee`` model that you get as keyword arguments. You are
+expected to return a string or None, if you don't know about this fee.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+allow_ticket_download = EventPluginSignal(
+    providing_args=['order']
+)
+"""
+This signal is sent out to check if tickets for an order can be downloaded. If any receiver returns false,
+a download will not be offered.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""

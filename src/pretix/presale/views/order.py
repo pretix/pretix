@@ -22,16 +22,17 @@ from pretix.base.services.orders import cancel_order
 from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,
 )
-from pretix.base.signals import register_ticket_outputs
+from pretix.base.signals import allow_ticket_download, register_ticket_outputs
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm
 from pretix.presale.views import CartMixin, EventViewMixin
 from pretix.presale.views.async import AsyncAction
 from pretix.presale.views.questions import QuestionsViewMixin
+from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 
-class OrderDetailMixin:
+class OrderDetailMixin(NoSearchIndexViewMixin):
     @cached_property
     def order(self):
         order = self.request.event.orders.filter(code=self.kwargs['order']).select_related('event').first()
@@ -70,6 +71,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
     @cached_property
     def download_buttons(self):
         buttons = []
+
         responses = register_ticket_outputs.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
@@ -86,10 +88,11 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
 
+        can_download = all([r for rr, r in allow_ticket_download.send(self.request.event, order=self.order)])
         if self.request.event.settings.ticket_download_date:
             ctx['ticket_download_date'] = self.order.ticket_download_date
         ctx['can_download'] = (
-            self.request.event.settings.ticket_download
+            can_download and self.request.event.settings.ticket_download
             and (
                 self.request.event.settings.ticket_download_date is None
                 or now() > self.order.ticket_download_date
@@ -546,6 +549,8 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
 
     @cached_property
     def output(self):
+        if not all([r for rr, r in allow_ticket_download.send(self.request.event, order=self.order)]):
+            return None
         responses = register_ticket_outputs.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)

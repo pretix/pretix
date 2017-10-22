@@ -88,6 +88,9 @@ $(function () {
     });
 
     $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip_html"]').tooltip({
+        'html': true
+    });
 
     var url = document.location.toString();
     if (url.match('#')) {
@@ -176,11 +179,24 @@ $(function () {
                 today: 'fa fa-screenshot',
                 clear: 'fa fa-trash',
                 close: 'fa fa-remove'
-            }
+            },
         };
         if ($(this).is('[data-is-payment-date]'))
             opts["daysOfWeekDisabled"] = JSON.parse($("body").attr("data-payment-weekdays-disabled"));
         $(this).datetimepicker(opts);
+        if ($(this).parent().is('.splitdatetimerow')) {
+            $(this).on("dp.change", function (ev) {
+                var $timepicker = $(this).closest(".splitdatetimerow").find(".timepickerfield");
+                var date = $(this).data('DateTimePicker').date();
+                if (date === null) {
+                    return;
+                }
+                if ($timepicker.val() === "") {
+                    date.set({'hour': 0, 'minute': 0, 'second': 0});
+                    $timepicker.data('DateTimePicker').date(date);
+                }
+            });
+        }
     });
 
     $(".timepickerfield").each(function() {
@@ -298,4 +314,31 @@ $(function () {
             }
         );
     });
+
+    $(".propagated-settings-box button[data-action=unlink]").click(function(ev) {
+        var $box = $(this).closest(".propagated-settings-box");
+        $box.find(".propagated-settings-overlay").fadeOut();
+        $box.find("input[name=_settings_ignore]").attr("name", "decouple");
+        $box.find(".propagated-settings-form").removeClass("blurred");
+        ev.preventDefault();
+        return true;
+    })
+
+    $(".scrolling-multiple-choice").each(function () {
+        var $small = $("<small>");
+        var $a_all = $("<a>").addClass("choice-options-all").attr("href", "#").text(gettext("Alle"));
+        var $a_none = $("<a>").addClass("choice-options-none").attr("href", "#").text(gettext("Keine"));
+        $(this).prepend($small.append($a_all).append(" / ").append($a_none));
+
+        $(this).find(".choice-options-none").click(function (e) {
+            $(this).closest(".scrolling-multiple-choice").find("input[type=checkbox]").prop("checked", false);
+            e.preventDefault();
+            return false;
+        });
+        $(this).find(".choice-options-all").click(function (e) {
+            $(this).closest(".scrolling-multiple-choice").find("input[type=checkbox]").prop("checked", true);
+            e.preventDefault();
+            return false;
+        });
+    })
 });

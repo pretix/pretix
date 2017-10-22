@@ -451,6 +451,12 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'default'
         },
+        'csp_file': {
+            'level': loglevel,
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'csp.log'),
+            'formatter': 'default'
+        },
         'file': {
             'level': loglevel,
             'class': 'logging.FileHandler',
@@ -473,6 +479,11 @@ LOGGING = {
             'handlers': ['file', 'console', 'mail_admins'],
             'level': loglevel,
             'propagate': True,
+        },
+        'pretix.security.csp': {
+            'handlers': ['csp_file'],
+            'level': loglevel,
+            'propagate': False,
         },
         'django.security': {
             'handlers': ['file', 'console', 'mail_admins'],
@@ -502,7 +513,12 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 BOOTSTRAP3 = {
-    'success_css_class': ''
+    'success_css_class': '',
+    'field_renderers': {
+        'default': 'bootstrap3.renderers.FieldRenderer',
+        'inline': 'bootstrap3.renderers.InlineFieldRenderer',
+        'control': 'pretix.control.forms.renderers.ControlFieldRenderer',
+    },
 }
 
 AUTH_PASSWORD_VALIDATORS = [

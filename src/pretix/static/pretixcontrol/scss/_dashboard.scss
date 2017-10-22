@@ -161,6 +161,9 @@
   .event-dropdown .event-name-full, .mobile-event-dropdown .event-name-full {
     white-space: normal;
   }
+  a {
+    cursor: pointer;
+  }
 }
 
 @media (max-width: $screen-sm-max) {

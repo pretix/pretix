@@ -6,6 +6,7 @@ import pretix.presale.views.event
 import pretix.presale.views.locale
 import pretix.presale.views.order
 import pretix.presale.views.organizer
+import pretix.presale.views.robots
 import pretix.presale.views.user
 import pretix.presale.views.waiting
 
@@ -83,4 +84,5 @@ organizer_patterns = [
 
 locale_patterns = [
     url(r'^locale/set$', pretix.presale.views.locale.LocaleSet.as_view(), name='locale.set'),
+    url(r'^robots.txt$', pretix.presale.views.robots.robots_txt, name='robots.txt'),
 ]

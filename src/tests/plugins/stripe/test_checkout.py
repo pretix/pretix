@@ -1,12 +1,12 @@
 import datetime
 
 import pytest
-from django.conf import settings
 from django.utils.timezone import now
 
 from pretix.base.models import (
     CartPosition, Event, Item, ItemCategory, Organizer, Quota,
 )
+from pretix.testutils.sessions import add_cart_session, get_cart_session_key
 
 
 class MockedCharge():
@@ -35,7 +35,7 @@ def env(client):
     quota_tickets.items.add(ticket)
     event.settings.set('attendee_names_asked', False)
     event.settings.set('payment_stripe__enabled', True)
-    client.session.email = 'admin@localhost'
+    add_cart_session(client, event, {'email': 'admin@localhost'})
     return client, ticket
 
 
@@ -53,7 +53,7 @@ def test_payment(env, monkeypatch):
     monkeypatch.setattr("stripe.Charge.create", charge_create)
 
     client, ticket = env
-    session_key = client.cookies.get(settings.SESSION_COOKIE_NAME).value
+    session_key = get_cart_session_key(client, ticket.event)
     CartPosition.objects.create(
         event=ticket.event, cart_id=session_key, item=ticket,
         price=13.37, expires=now() + datetime.timedelta(minutes=10)

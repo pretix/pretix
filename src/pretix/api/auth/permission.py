@@ -13,6 +13,13 @@ class EventPermission(BasePermission):
                 return True
             return False
 
+        if request.method not in SAFE_METHODS and hasattr(view, 'write_permission'):
+            required_permission = getattr(view, 'write_permission')
+        elif hasattr(view, 'permission'):
+            required_permission = getattr(view, 'permission')
+        else:
+            required_permission = None
+
         perm_holder = (request.auth if isinstance(request.auth, TeamAPIToken)
                        else request.user)
         if 'event' in request.resolver_match.kwargs and 'organizer' in request.resolver_match.kwargs:
@@ -25,9 +32,8 @@ class EventPermission(BasePermission):
             request.organizer = request.event.organizer
             request.eventpermset = perm_holder.get_event_permission_set(request.organizer, request.event)
 
-            if hasattr(view, 'permission'):
-                if view.permission and view.permission not in request.eventpermset:
-                    return False
+            if required_permission and required_permission not in request.eventpermset:
+                return False
 
         elif 'organizer' in request.resolver_match.kwargs:
             request.organizer = Organizer.objects.filter(
@@ -37,7 +43,6 @@ class EventPermission(BasePermission):
                 return False
             request.orgapermset = perm_holder.get_organizer_permission_set(request.organizer)
 
-            if hasattr(view, 'permission'):
-                if view.permission and view.permission not in request.orgapermset:
-                    return False
+            if required_permission and required_permission not in request.orgapermset:
+                return False
         return True

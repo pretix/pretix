@@ -23,7 +23,11 @@ class MailForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['subject'] = I18nFormField(
             widget=I18nTextInput, required=True,
-            locales=event.settings.get('locales')
+            locales=event.settings.get('locales'),
+            help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
+                        "{invoice_name}, {invoice_company}"),
+            validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
+                                              '{invoice_name}', '{invoice_company}'])]
         )
         self.fields['message'] = I18nFormField(
             widget=I18nTextarea, required=True,
@@ -39,7 +43,8 @@ class MailForm(forms.Form):
                 ('overdue', _('pending with payment overdue'))
             )
         self.fields['sendto'] = forms.MultipleChoiceField(
-            label=_("Send to"), widget=forms.CheckboxSelectMultiple,
+            label=_("Send to customers with order status"),
+            widget=forms.CheckboxSelectMultiple,
             choices=choices
         )
         if event.has_subevents:

@@ -9,6 +9,9 @@ $(document).ready(function () {
       $("#existing-quota-group").children()[fn]();
     } else if (v === "new") {
       hideAll(animate);
+      if ($("#id_quota_add_new_name").val() === "") {
+          $("#id_quota_add_new_name").val($("input[name^=name_]").first().val());
+      }
       $("#new-quota-group").children()[fn]();
     } else {
       hideAll(animate);

@@ -6,6 +6,7 @@ from django.db.models import Count, Prefetch, Q
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
+from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
@@ -22,6 +23,7 @@ from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import EventViewMixin
 from pretix.presale.views.async import AsyncAction
 from pretix.presale.views.event import item_group_by_category
+from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 
 class CartActionMixin:
@@ -39,8 +41,12 @@ class CartActionMixin:
         return self.get_next_url()
 
     @cached_property
+    def cart_session(self):
+        return cart_session(self.request)
+
+    @cached_property
     def invoice_address(self):
-        iapk = self.request.session.get('invoice_address_{}'.format(self.request.event.pk))
+        iapk = self.cart_session.get('invoice_address')
         if not iapk:
             return InvoiceAddress()
 
@@ -123,19 +129,66 @@ class CartActionMixin:
         return items
 
 
+def create_empty_cart_id(request):
+    current_id = request.session.get('current_cart_event_{}'.format(request.event.pk))
+    if current_id and current_id in request.session.get('carts', {}):
+        del request.session['carts'][current_id]
+        del request.session['current_cart_event_{}'.format(request.event.pk)]
+    return get_or_create_cart_id(request)
+
+
+def get_or_create_cart_id(request):
+    current_id = request.session.get('current_cart_event_{}'.format(request.event.pk))
+    if current_id and current_id in request.session.get('carts', {}):
+        return current_id
+    else:
+        cart_data = {}
+
+        while True:
+            new_id = get_random_string(length=32)
+            if not CartPosition.objects.filter(cart_id=new_id).exists():
+                break
+
+        # Migrate legacy data
+        # TODO: This is for the upgrade 1.7→1.8. We should remove this around April 2018
+        legacy_pos = CartPosition.objects.filter(cart_id=request.session.session_key, event=request.event)
+        if legacy_pos.exists():
+            legacy_pos.update(cart_id=new_id)
+            if 'invoice_address_{}'.format(request.event.pk) in request.session:
+                cart_data['invoice_address'] = request.session['invoice_address_{}'.format(request.event.pk)]
+            if 'email' in request.session:
+                cart_data['email'] = request.session['email']
+            if 'contact_form_data' in request.session:
+                cart_data['contact_form_data'] = request.session['contact_form_data']
+            if 'payment' in request.session:
+                cart_data['payment'] = request.session['payment']
+
+        if 'carts' not in request.session:
+            request.session['carts'] = {}
+        request.session['carts'][new_id] = cart_data
+        request.session['current_cart_event_{}'.format(request.event.pk)] = new_id
+        return new_id
+
+
+def cart_session(request):
+    request.session.modified = True
+    cart_id = get_or_create_cart_id(request)
+    return request.session['carts'][cart_id]
+
+
 class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = remove_cart_position
     known_errortypes = ['CartError']
 
     def get_success_message(self, value):
-        if CartPosition.objects.filter(cart_id=self.request.session.session_key).exists():
+        if CartPosition.objects.filter(cart_id=get_or_create_cart_id(self.request)).exists():
             return _('Your cart has been updated.')
         else:
             return _('Your cart is now empty.')
 
     def post(self, request, *args, **kwargs):
         if 'id' in request.POST:
-            return self.do(self.request.event.id, request.POST.get('id'), self.request.session.session_key, translation.get_language())
+            return self.do(self.request.event.id, request.POST.get('id'), get_or_create_cart_id(self.request), translation.get_language())
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
@@ -153,7 +206,7 @@ class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
         return _('Your cart is now empty.')
 
     def post(self, request, *args, **kwargs):
-        return self.do(self.request.event.id, self.request.session.session_key, translation.get_language())
+        return self.do(self.request.event.id, get_or_create_cart_id(self.request), translation.get_language())
 
 
 class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
@@ -166,7 +219,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     def post(self, request, *args, **kwargs):
         items = self._items_from_post_data()
         if items:
-            return self.do(self.request.event.id, items, self.request.session.session_key, translation.get_language(),
+            return self.do(self.request.event.id, items, get_or_create_cart_id(self.request), translation.get_language(),
                            self.invoice_address.pk)
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
@@ -177,7 +230,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
                 return redirect(self.get_error_url())
 
 
-class RedeemView(EventViewMixin, TemplateView):
+class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
     template_name = "pretixpresale/event/voucher.html"
 
     def get_context_data(self, **kwargs):
@@ -298,7 +351,7 @@ class RedeemView(EventViewMixin, TemplateView):
 
                 redeemed_in_carts = CartPosition.objects.filter(
                     Q(voucher=self.voucher) & Q(event=request.event) &
-                    (Q(expires__gte=now()) | Q(cart_id=request.session.session_key))
+                    (Q(expires__gte=now()) | Q(cart_id=get_or_create_cart_id(request)))
                 )
                 v_avail = self.voucher.max_usages - self.voucher.redeemed - redeemed_in_carts.count()
                 if v_avail < 1:
@@ -336,7 +389,7 @@ class AnswerDownload(EventViewMixin, View):
         answid = kwargs.get('answer')
         answer = get_object_or_404(
             QuestionAnswer,
-            cartposition__cart_id=self.request.session.session_key,
+            cartposition__cart_id=get_or_create_cart_id(self.request),
             id=answid
         )
         if not answer.file:

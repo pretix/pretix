@@ -5,8 +5,10 @@ from django.http import HttpResponseRedirect
 from django.utils.http import is_safe_url
 from django.views.generic import View
 
+from .robots import NoSearchIndexViewMixin
 
-class LocaleSet(View):
+
+class LocaleSet(NoSearchIndexViewMixin, View):
 
     def get(self, request, *args, **kwargs):
         url = request.GET.get('next', request.META.get('HTTP_REFERER', '/'))

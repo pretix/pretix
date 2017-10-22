@@ -25,6 +25,9 @@ from pretix.presale.signals import (
 )
 from pretix.presale.views import CartMixin, get_cart, get_cart_total
 from pretix.presale.views.async import AsyncAction
+from pretix.presale.views.cart import (
+    cart_session, create_empty_cart_id, get_or_create_cart_id,
+)
 from pretix.presale.views.questions import QuestionsViewMixin
 
 
@@ -83,15 +86,21 @@ class BaseCheckoutFlowStep:
             return n.get_step_url()
 
     @cached_property
-    def invoice_address(self):
-        iapk = self.request.session.get('invoice_address_{}'.format(self.request.event.pk))
-        if not iapk:
-            return InvoiceAddress()
+    def cart_session(self):
+        return cart_session(self.request)
 
-        try:
-            return InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
-        except InvoiceAddress.DoesNotExist:
-            return InvoiceAddress()
+    @cached_property
+    def invoice_address(self):
+        if not hasattr(self.request, '_checkout_flow_invoice_address'):
+            iapk = self.cart_session.get('invoice_address')
+            if not iapk:
+                self.request._checkout_flow_invoice_address = InvoiceAddress()
+            else:
+                try:
+                    self.request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                except InvoiceAddress.DoesNotExist:
+                    self.request._checkout_flow_invoice_address = InvoiceAddress()
+        return self.request._checkout_flow_invoice_address
 
 
 def get_checkout_flow(event):
@@ -153,7 +162,9 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     requires_valid_cart = False
 
     def is_applicable(self, request):
-        return get_cart(request).filter(item__addons__isnull=False).exists()
+        if not hasattr(request, '_checkoutflow_addons_applicable'):
+            request._checkoutflow_addons_applicable = get_cart(request).filter(item__addons__isnull=False).exists()
+        return request._checkoutflow_addons_applicable
 
     def is_completed(self, request, warn=False):
         for cartpos in get_cart(request).filter(addon_to__isnull=True).prefetch_related(
@@ -257,7 +268,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         if not is_valid:
             return self.get(request, *args, **kwargs)
 
-        return self.do(self.request.event.id, data, self.request.session.session_key,
+        return self.do(self.request.event.id, data, get_or_create_cart_id(self.request),
                        invoice_address=self.invoice_address.pk)
 
 
@@ -272,9 +283,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     @cached_property
     def contact_form(self):
         initial = {
-            'email': self.request.session.get('email', '')
+            'email': self.cart_session.get('email', '')
         }
-        initial.update(self.request.session.get('contact_form_data', {}))
+        initial.update(self.cart_session.get('contact_form_data', {}))
         return ContactForm(data=self.request.POST if self.request.method == "POST" else None,
                            event=self.request.event,
                            initial=initial)
@@ -301,15 +312,15 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             messages.error(request,
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.render()
-        request.session['email'] = self.contact_form.cleaned_data['email']
+        self.cart_session['email'] = self.contact_form.cleaned_data['email']
         if request.event.settings.invoice_address_asked:
             addr = self.invoice_form.save()
-            request.session['invoice_address_{}'.format(request.event.pk)] = addr.pk
-            request.session['contact_form_data'] = self.contact_form.cleaned_data
+            self.cart_session['invoice_address'] = addr.pk
+            self.cart_session['contact_form_data'] = self.contact_form.cleaned_data
 
             update_tax_rates(
                 event=request.event,
-                cart_id=request.session.session_key,
+                cart_id=get_or_create_cart_id(request),
                 invoice_address=self.invoice_form.instance
             )
 
@@ -319,11 +330,11 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         self.request = request
         try:
             emailval = EmailValidator()
-            if 'email' not in request.session:
+            if 'email' not in self.cart_session:
                 if warn:
                     messages.warning(request, _('Please enter a valid email address.'))
                 return False
-            emailval(request.session.get('email'))
+            emailval(self.cart_session.get('email'))
         except ValidationError:
             if warn:
                 messages.warning(request, _('Please enter a valid email address.'))
@@ -404,7 +415,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         self.request = request
         for p in self.provider_forms:
             if p['provider'].identifier == request.POST.get('payment', ''):
-                request.session['payment'] = p['provider'].identifier
+                self.cart_session['payment'] = p['provider'].identifier
                 resp = p['provider'].checkout_prepare(
                     request,
                     self.get_cart()
@@ -422,16 +433,18 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx = super().get_context_data(**kwargs)
         ctx['providers'] = self.provider_forms
         ctx['show_fees'] = any(p['fee'] for p in self.provider_forms)
-        ctx['selected'] = self.request.POST.get('payment', self.request.session.get('payment', ''))
+        ctx['selected'] = self.request.POST.get('payment', self.cart_session.get('payment', ''))
+        if len(self.provider_forms) == 1:
+            ctx['selected'] = self.provider_forms[0]['provider'].identifier
         return ctx
 
     @cached_property
     def payment_provider(self):
-        return self.request.event.get_payment_providers().get(self.request.session['payment'])
+        return self.request.event.get_payment_providers().get(self.cart_session['payment'])
 
     def is_completed(self, request, warn=False):
         self.request = request
-        if 'payment' not in request.session or not self.payment_provider:
+        if 'payment' not in self.cart_session or not self.payment_provider:
             if warn:
                 messages.error(request, _('The payment information you entered was incomplete.'))
             return False
@@ -446,7 +459,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     def is_applicable(self, request):
         self.request = request
         if self._total_order_value == 0:
-            request.session['payment'] = 'free'
+            self.cart_session['payment'] = 'free'
             return False
         return True
 
@@ -471,12 +484,13 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['payment_provider'] = self.payment_provider
         ctx['addr'] = self.invoice_address
         ctx['confirm_messages'] = self.confirm_messages
+        ctx['cart_session'] = self.cart_session
 
         ctx['contact_info'] = []
         responses = contact_form_fields.send(self.event)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():
-                v = self.request.session.get('contact_form_data', {}).get(key)
+                v = self.cart_session.get('contact_form_data', {}).get(key)
                 if v is True:
                     v = _('Yes')
                 elif v is False:
@@ -495,7 +509,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
     @cached_property
     def payment_provider(self):
-        return self.request.event.get_payment_providers().get(self.request.session['payment'])
+        return self.request.event.get_payment_providers().get(self.cart_session['payment'])
 
     def get(self, request):
         self.request = request
@@ -520,16 +534,17 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
                     return redirect(self.get_error_url())
 
         meta_info = {
-            'contact_form_data': self.request.session.get('contact_form_data', {})
+            'contact_form_data': self.cart_session.get('contact_form_data', {})
         }
         for receiver, response in order_meta_from_request.send(sender=request.event, request=request):
             meta_info.update(response)
 
         return self.do(self.request.event.id, self.payment_provider.identifier,
-                       [p.id for p in self.positions], request.session.get('email'),
+                       [p.id for p in self.positions], self.cart_session.get('email'),
                        translation.get_language(), self.invoice_address.pk, meta_info)
 
     def get_success_message(self, value):
+        create_empty_cart_id(self.request)
         return None
 
     def get_success_url(self, value):

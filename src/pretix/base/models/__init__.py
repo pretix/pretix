@@ -3,8 +3,8 @@ from .auth import U2FDevice, User
 from .base import CachedFile, LoggedModel, cachedfile_name
 from .checkin import Checkin
 from .event import (
-    Event, Event_SettingsStore, EventLock, RequiredAction, SubEvent,
-    generate_invite_token,
+    Event, Event_SettingsStore, EventLock, EventMetaProperty, EventMetaValue,
+    RequiredAction, SubEvent, SubEventMetaValue, generate_invite_token,
 )
 from .invoices import Invoice, InvoiceLine, invoice_filename
 from .items import (

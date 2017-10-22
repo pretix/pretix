@@ -47,10 +47,10 @@ class LocaleMiddleware(MiddlewareMixin):
         request.LANGUAGE_CODE = translation.get_language()
 
         tzname = None
-        if request.user.is_authenticated:
-            tzname = request.user.timezone
         if hasattr(request, 'event'):
             tzname = request.event.settings.timezone
+        elif request.user.is_authenticated:
+            tzname = request.user.timezone
         if tzname:
             try:
                 timezone.activate(pytz.timezone(tzname))
@@ -186,11 +186,13 @@ class SecurityMiddleware(MiddlewareMixin):
             'style-src': ["{static}", "{media}", "'nonce-{nonce}'"],
             'connect-src': ["{dynamic}", "{media}", "https://checkout.stripe.com"],
             'img-src': ["{static}", "{media}", "data:", "https://*.stripe.com"],
+            'font-src': ["{static}"],
             # form-action is not only used to match on form actions, but also on URLs
             # form-actions redirect to. In the context of e.g. payment providers or
             # single-sign-on this can be nearly anything so we cannot really restrict
             # this. However, we'll restrict it to HTTPS.
             'form-action': ["{dynamic}", "https:"],
+            'report-uri': ["/csp_report/"],
         }
         if 'Content-Security-Policy' in resp:
             _merge_csp(h, _parse_csp(resp['Content-Security-Policy']))
@@ -218,7 +220,14 @@ class SecurityMiddleware(MiddlewareMixin):
                     domain = '%s:%d' % (domain, siteurlsplit.port)
                 dynamicdomain += " " + domain
 
-        if request.path not in self.CSP_EXEMPT:
+        if request.path not in self.CSP_EXEMPT and not getattr(resp, '_csp_ignore', False):
             resp['Content-Security-Policy'] = _render_csp(h).format(static=staticdomain, dynamic=dynamicdomain,
                                                                     media=mediadomain, nonce=request.csp_nonce)
+            for k, v in h.items():
+                h[k] = ' '.join(v).format(static=staticdomain, dynamic=dynamicdomain, media=mediadomain,
+                                          nonce=request.csp_nonce).split(' ')
+            resp['Content-Security-Policy'] = _render_csp(h)
+        elif 'Content-Security-Policy' in resp:
+            del resp['Content-Security-Policy']
+
         return resp

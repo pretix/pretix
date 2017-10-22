@@ -183,3 +183,78 @@ pre.mail-preview {
     padding-top: 7px;
   }
 }
+.inline-multiple-choice {
+  .checkbox {
+    display: inline-block;
+    margin-top: 0;
+    margin-right: 10px;
+  }
+}
+.splitdatetimerow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .help-block {
+    width: 100%;
+  }
+}
+.splitdatetimepart {
+  width: 50%;
+  display: inline-block;
+
+  &.datepickerfield {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
+  &.timepickerfield {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    border-left: 0;
+  }
+}
+
+.propagated-settings-box {
+  position: relative;
+
+  .propagated-settings-overlay {
+    background: rgba(255, 255, 255, 0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+  }
+
+  .propagated-settings-form.blurred {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -ms-filter: blur(2px);
+    -o-filter: blur(2px);
+    filter: blur(2px);
+  }
+}
+@media (max-width: $screen-sm-max) {
+  .propagated-settings-box {
+    min-height: 250px;
+  }
+}
+
+label .optional {
+  color: $text-muted;
+  font-weight: normal;
+}
+
+div.scrolling-multiple-choice {
+  height: 150px;
+  border: 1px solid $input-border;
+  border-radius: $input-border-radius;
+  padding-left: 15px;
+  overflow-y: auto;
+  padding-top: 5px;
+
+  .radio:first-of-type, .checkbox:first-of-type {
+    margin-top: 0;
+  }
+}

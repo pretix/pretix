@@ -251,6 +251,24 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             | Q(id__in=self.teams.values_list('limit_events__id', flat=True))
         )
 
+    def get_events_with_permission(self, permission):
+        """
+        Returns a queryset of events the user has a specific permissions to.
+
+        :return: Iterable of Events
+        """
+        from .event import Event
+
+        if self.is_superuser:
+            return Event.objects.all()
+
+        kwargs = {permission: True}
+
+        return Event.objects.filter(
+            Q(organizer_id__in=self.teams.filter(all_events=True, **kwargs).values_list('organizer', flat=True))
+            | Q(id__in=self.teams.filter(**kwargs).values_list('limit_events__id', flat=True))
+        )
+
 
 class U2FDevice(Device):
     json_data = models.TextField()

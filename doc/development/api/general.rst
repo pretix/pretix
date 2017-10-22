@@ -19,13 +19,13 @@ Order events
 There are multiple signals that will be sent out in the ordering cycle:
 
 .. automodule:: pretix.base.signals
-   :members: validate_cart, fee_calculation_for_cart, order_fee_calculation, order_paid, order_placed
+   :members: validate_cart, order_fee_calculation, order_paid, order_placed, order_fee_type_name, allow_ticket_download
 
 Frontend
 --------
 
 .. automodule:: pretix.presale.signals
-   :members: html_head, html_footer, footer_links, front_page_top, front_page_bottom, contact_form_fields, question_form_fields, checkout_confirm_messages, checkout_confirm_page_content
+   :members: html_head, html_footer, footer_links, front_page_top, front_page_bottom, fee_calculation_for_cart, contact_form_fields, question_form_fields, checkout_confirm_messages, checkout_confirm_page_content
 
 
 .. automodule:: pretix.presale.signals
@@ -47,7 +47,7 @@ Backend
 -------
 
 .. automodule:: pretix.control.signals
-   :members: nav_event, html_head, quota_detail_html, nav_topbar, nav_global, nav_organizer, nav_event_settings
+   :members: nav_event, html_head, quota_detail_html, nav_topbar, nav_global, nav_organizer, nav_event_settings, order_info
 
 
 .. automodule:: pretix.base.signals
@@ -64,3 +64,9 @@ Dashboards
 
 .. automodule:: pretix.control.signals
    :members: event_dashboard_widgets, user_dashboard_widgets
+
+Ticket designs
+""""""""""""""
+
+.. automodule:: pretix.plugins.ticketoutputpdf.signals
+   :members: layout_text_variables

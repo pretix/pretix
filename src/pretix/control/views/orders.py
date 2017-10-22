@@ -70,13 +70,6 @@ class OrderList(EventPermissionRequiredMixin, ListView):
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 
-        if self.request.GET.get("ordering", "") != "":
-            p = self.request.GET.get("ordering", "")
-            p_admissable = ('-code', 'code', '-email', 'email', '-total', 'total', '-datetime',
-                            'datetime', '-status', 'status', 'pcnt', '-pcnt')
-            if p in p_admissable:
-                qs = qs.order_by(p)
-
         return qs.distinct()
 
     def get_context_data(self, **kwargs):
@@ -470,7 +463,7 @@ class OrderExtend(OrderView):
                 try:
                     with self.order.event.lock() as now_dt:
                         is_available = self.order._is_still_available(now_dt, count_waitinglist=False)
-                        if is_available is True:
+                        if is_available is True or self.form.cleaned_data.get('quota_ignore', False) is True:
                             self.form.save()
                             self.order.status = Order.STATUS_PENDING
                             self.order.save()
@@ -481,6 +474,7 @@ class OrderExtend(OrderView):
                             messages.success(self.request, _('The payment term has been changed.'))
                         else:
                             messages.error(self.request, is_available)
+                            return self._redirect_here()
                 except LockTimeoutException:
                     messages.error(self.request, _('We were not able to process the request completely as the '
                                                    'server was too busy.'))
@@ -493,6 +487,12 @@ class OrderExtend(OrderView):
             messages.error(self.request, _('This action is only allowed for pending orders.'))
             return self._redirect_back()
         return super().dispatch(request, *kwargs, **kwargs)
+
+    def _redirect_here(self):
+        return redirect('control:event.order.extend',
+                        event=self.request.event.slug,
+                        organizer=self.request.event.organizer.slug,
+                        code=self.order.code)
 
     def get(self, *args, **kwargs):
         return render(self.request, 'pretixcontrol/order/extend.html', {
@@ -645,16 +645,21 @@ class OrderContactChange(OrderView):
 
     def post(self, *args, **kwargs):
         old_email = self.order.email
+        changed = False
         if self.form.is_valid():
-            self.order.log_action(
-                'pretix.event.order.contact.changed',
-                data={
-                    'old_email': old_email,
-                    'new_email': self.form.cleaned_data['email'],
-                },
-                user=self.request.user,
-            )
+            new_email = self.form.cleaned_data['email']
+            if new_email != old_email:
+                changed = True
+                self.order.log_action(
+                    'pretix.event.order.contact.changed',
+                    data={
+                        'old_email': old_email,
+                        'new_email': self.form.cleaned_data['email'],
+                    },
+                    user=self.request.user,
+                )
             if self.form.cleaned_data['regenerate_secrets']:
+                changed = True
                 self.order.secret = generate_secret()
                 for op in self.order.positions.all():
                     op.secret = generate_position_secret()
@@ -664,7 +669,10 @@ class OrderContactChange(OrderView):
                 self.order.log_action('pretix.event.order.secret.changed', user=self.request.user)
 
             self.form.save()
-            messages.success(self.request, _('The order has been changed.'))
+            if changed:
+                messages.success(self.request, _('The order has been changed.'))
+            else:
+                messages.success(self.request, _('Nothing about the order had to be changed.'))
             return redirect(self.get_order_url())
         return self.get(*args, **kwargs)
 

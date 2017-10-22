@@ -29,7 +29,9 @@ class CSVCheckinList(BaseCheckinList):
                  forms.ModelMultipleChoiceField(
                      queryset=self.event.items.all(),
                      label=_('Limit to products'),
-                     widget=forms.CheckboxSelectMultiple,
+                     widget=forms.CheckboxSelectMultiple(
+                         attrs={'class': 'scrolling-multiple-choice'}
+                     ),
                      initial=self.event.items.filter(admission=True)
                  )),
                 ('secrets',
@@ -58,7 +60,9 @@ class CSVCheckinList(BaseCheckinList):
                  forms.ModelMultipleChoiceField(
                      queryset=self.event.questions.all(),
                      label=_('Include questions'),
-                     widget=forms.CheckboxSelectMultiple,
+                     widget=forms.CheckboxSelectMultiple(
+                         attrs={'class': 'scrolling-multiple-choice'}
+                     ),
                      required=False
                  )),
             ]

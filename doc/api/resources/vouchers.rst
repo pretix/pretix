@@ -65,7 +65,7 @@ Endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "count": 1,
@@ -136,7 +136,7 @@ Endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "id": 1,
@@ -160,5 +160,152 @@ Endpoints
    :param event: The ``slug`` field of the event to fetch
    :param id: The ``id`` field of the voucher to fetch
    :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/vouchers/
+
+   Create a new voucher.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/vouchers/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 408
+
+      {
+        "code": "43K6LKM37FBVR2YG",
+        "max_usages": 1,
+        "valid_until": null,
+        "block_quota": false,
+        "allow_ignore_quota": false,
+        "price_mode": "set",
+        "value": "12.00",
+        "item": 1,
+        "variation": null,
+        "quota": null,
+        "tag": "testvoucher",
+        "comment": "",
+        "subevent": null
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "code": "43K6LKM37FBVR2YG",
+        "max_usages": 1,
+        "redeemed": 0,
+        "valid_until": null,
+        "block_quota": false,
+        "allow_ignore_quota": false,
+        "price_mode": "set",
+        "value": "12.00",
+        "item": 1,
+        "variation": null,
+        "quota": null,
+        "tag": "testvoucher",
+        "comment": "",
+        "subevent": null
+      }
+
+   :param organizer: The ``slug`` field of the organizer to create a voucher for
+   :param event: The ``slug`` field of the event to create a voucher for
+   :statuscode 201: no error
+   :statuscode 400: The voucher could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/vouchers/(id)/
+
+   Update a voucher. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
+   the resource, other fields will be resetted to default. With ``PATCH``, you only need to provide the fields that you
+   want to change.
+her.
+
+   You can change all fields of the resource except the ``id`` and ``redeemed`` fields.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/vouchers/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 408
+
+      {
+        "price_mode": "set",
+        "value": "24.00",
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "code": "43K6LKM37FBVR2YG",
+        "max_usages": 1,
+        "redeemed": 0,
+        "valid_until": null,
+        "block_quota": false,
+        "allow_ignore_quota": false,
+        "price_mode": "set",
+        "value": "24.00",
+        "item": 1,
+        "variation": null,
+        "quota": null,
+        "tag": "testvoucher",
+        "comment": "",
+        "subevent": null
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param id: The ``id`` field of the tax rule to modify
+   :statuscode 200: no error
+   :statuscode 400: The voucher could not be modified due to invalid submitted data
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/vouchers/(id)/
+
+   Delete a voucher. Note that you cannot delete a voucher if it already has been redeemed.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/vouchers/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param id: The ``id`` field of the tax rule to delete
+   :statuscode 204: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.

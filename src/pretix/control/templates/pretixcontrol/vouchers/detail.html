@@ -24,11 +24,11 @@
             <div class="col-xs-12 col-lg-10">
                 <fieldset>
                     <legend>{% trans "Voucher details" %}</legend>
-                    {% bootstrap_field form.code layout="horizontal" %}
-                    {% bootstrap_field form.max_usages layout="horizontal" %}
-                    {% bootstrap_field form.valid_until layout="horizontal" %}
-                    {% bootstrap_field form.block_quota layout="horizontal" %}
-                    {% bootstrap_field form.allow_ignore_quota layout="horizontal" %}
+                    {% bootstrap_field form.code layout="control" %}
+                    {% bootstrap_field form.max_usages layout="control" %}
+                    {% bootstrap_field form.valid_until layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+                    {% bootstrap_field form.block_quota layout="control" %}
+                    {% bootstrap_field form.allow_ignore_quota layout="control" %}
                     <div class="form-group">
                         <label class="col-md-3 control-label" for="id_tag">{% trans "Price effect" %}</label>
                         <div class="col-md-5">
@@ -38,7 +38,7 @@
                             {% bootstrap_field form.value show_label=False form_group_class="" %}
                         </div>
                     </div>
-                    {% bootstrap_field form.itemvar layout="horizontal" %}
+                    {% bootstrap_field form.itemvar layout="control" %}
                     <div class="form-group">
                         <div class="col-md-9 col-md-offset-3">
                             <div class="controls">
@@ -53,10 +53,10 @@
                         </div>
                     </div>
                     {% if form.subevent %}
-                        {% bootstrap_field form.subevent layout="horizontal" %}
+                        {% bootstrap_field form.subevent layout="control" %}
                     {% endif %}
-                    {% bootstrap_field form.tag layout="horizontal" %}
-                    {% bootstrap_field form.comment layout="horizontal" %}
+                    {% bootstrap_field form.tag layout="control" %}
+                    {% bootstrap_field form.comment layout="control" %}
                 </fieldset>
                 {% eventsignal request.event "pretix.control.signals.voucher_form_html" form=form %}
             </div>

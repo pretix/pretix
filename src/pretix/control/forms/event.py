@@ -12,7 +12,9 @@ from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer, TaxRule
 from pretix.base.models.event import EventMetaValue
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
-from pretix.control.forms import ExtFileField, SlugWidget
+from pretix.control.forms import (
+    ExtFileField, SlugWidget, SplitDateTimePickerWidget,
+)
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.style import get_fonts
 
@@ -46,6 +48,8 @@ class EventWizardFoundationForm(forms.Form):
             empty_label=None,
             required=True
         )
+        if len(self.fields['organizer'].choices) == 1:
+            self.fields['organizer'].initial = self.fields['organizer'].queryset.first()
 
 
 class EventWizardBasicsForm(I18nModelForm):
@@ -54,7 +58,7 @@ class EventWizardBasicsForm(I18nModelForm):
     }
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
-        label=_("Default timezone"),
+        label=_("Event timezone"),
     )
     locale = forms.ChoiceField(
         choices=settings.LANGUAGES,
@@ -80,14 +84,18 @@ class EventWizardBasicsForm(I18nModelForm):
             'presale_end',
             'location',
         ]
+        field_classes = {
+            'date_from': forms.SplitDateTimeField,
+            'date_to': forms.SplitDateTimeField,
+            'presale_start': forms.SplitDateTimeField,
+            'presale_end': forms.SplitDateTimeField,
+        }
         widgets = {
-            'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker',
-                                                  'data-date-after': '#id_basics-date_from'}),
-            'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker',
-                                                      'data-date-after': '#id_basics-presale_start'}),
-            'slug': SlugWidget
+            'date_from': SplitDateTimePickerWidget(),
+            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_basics-date_from_0'}),
+            'presale_start': SplitDateTimePickerWidget(),
+            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_basics-presale_start_0'}),
+            'slug': SlugWidget,
         }
 
     def __init__(self, *args, **kwargs):
@@ -99,6 +107,9 @@ class EventWizardBasicsForm(I18nModelForm):
         self.initial['timezone'] = get_current_timezone_name()
         self.fields['locale'].choices = [(a, b) for a, b in settings.LANGUAGES if a in self.locales]
         self.fields['location'].widget.attrs['rows'] = '3'
+        self.fields['location'].widget.attrs['placeholder'] = _(
+            'Sample Conference Center\nHeidelberg, Germany'
+        )
         self.fields['slug'].widget.prefix = build_absolute_uri(self.organizer, 'presale:organizer.index')
         if self.has_subevents:
             del self.fields['presale_start']
@@ -188,6 +199,9 @@ class EventUpdateForm(I18nModelForm):
         super().__init__(*args, **kwargs)
         self.fields['slug'].widget.attrs['readonly'] = 'readonly'
         self.fields['location'].widget.attrs['rows'] = '3'
+        self.fields['location'].widget.attrs['placeholder'] = _(
+            'Sample Conference Center\nHeidelberg, Germany'
+        )
 
     class Meta:
         model = Event
@@ -204,14 +218,19 @@ class EventUpdateForm(I18nModelForm):
             'presale_end',
             'location',
         ]
+        field_classes = {
+            'date_from': forms.SplitDateTimeField,
+            'date_to': forms.SplitDateTimeField,
+            'date_admission': forms.SplitDateTimeField,
+            'presale_start': forms.SplitDateTimeField,
+            'presale_end': forms.SplitDateTimeField,
+        }
         widgets = {
-            'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker', 'data-date-after': '#id_date_from'}),
-            'date_admission': forms.DateTimeInput(attrs={'class': 'datetimepicker',
-                                                         'data-date-default': '#id_date_from'}),
-            'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker',
-                                                      'data-date-after': '#id_presale_start'}),
+            'date_from': SplitDateTimePickerWidget(),
+            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}),
+            'date_admission': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}),
+            'presale_start': SplitDateTimePickerWidget(),
+            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}),
         }
 
 
@@ -339,6 +358,14 @@ class EventSettingsForm(SettingsForm):
         label=_("Imprint URL"),
         required=False,
     )
+    confirm_text = I18nFormField(
+        label=_('Confirmation text'),
+        help_text=_('This text needs to be confirmed by the user before a purchase is possible. You could for example '
+                    'link your terms of service here. If you use the Pages feature to publish your terms of service, '
+                    'you don\'t need this setting since you can configure it there.'),
+        required=False,
+        widget=I18nTextarea
+    )
     contact_mail = forms.EmailField(
         label=_("Contact address"),
         required=False,
@@ -365,6 +392,14 @@ class EventSettingsForm(SettingsForm):
                 'attendee_emails_required': _('You have to ask for attendee emails if you want to make them required.')
             })
         return data
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['confirm_text'].widget.attrs['rows'] = '3'
+        self.fields['confirm_text'].widget.attrs['placeholder'] = _(
+            'e.g. I hereby confirm that I have read and agree with the event organizer\'s terms of service '
+            'and agree with them.'
+        )
 
 
 class PaymentSettingsForm(SettingsForm):
@@ -517,25 +552,51 @@ class InvoiceSettingsForm(SettingsForm):
         choices=[]
     )
     invoice_address_from = forms.CharField(
-        widget=forms.Textarea(attrs={'rows': 5}), required=False,
+        widget=forms.Textarea(attrs={
+            'rows': 5,
+            'placeholder': _(
+                'Sample Event Company\n'
+                'Albert Einstein Road 52\n'
+                '12345 Samplecity'
+            )
+        }),
+        required=False,
         label=_("Your address"),
         help_text=_("Will be printed as the sender on invoices. Be sure to include relevant details required in "
-                    "your jurisdiction (e.g. your VAT ID).")
+                    "your jurisdiction.")
     )
     invoice_introductory_text = I18nFormField(
         widget=I18nTextarea,
+        widget_kwargs={'attrs': {
+            'rows': 3,
+            'placeholder': _(
+                'e.g. With this document, we sent you the invoice for your ticket order.'
+            )
+        }},
         required=False,
         label=_("Introductory text"),
         help_text=_("Will be printed on every invoice above the invoice rows.")
     )
     invoice_additional_text = I18nFormField(
         widget=I18nTextarea,
+        widget_kwargs={'attrs': {
+            'rows': 3,
+            'placeholder': _(
+                'e.g. Thank you for your purchase! You can find more information on the event at ...'
+            )
+        }},
         required=False,
         label=_("Additional text"),
         help_text=_("Will be printed on every invoice below the invoice total.")
     )
     invoice_footer_text = I18nFormField(
         widget=I18nTextarea,
+        widget_kwargs={'attrs': {
+            'rows': 5,
+            'placeholder': _(
+                'e.g. your bank details, legal details like your VAT ID, registration numbers, etc.'
+            )
+        }},
         required=False,
         label=_("Footer"),
         help_text=_("Will be printed centered and in a smaller font at the end of every invoice page.")
@@ -578,7 +639,13 @@ class MailSettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea,
         help_text=_("This will be attached to every email. Available placeholders: {event}"),
-        validators=[PlaceholderValidator(['{event}'])]
+        validators=[PlaceholderValidator(['{event}'])],
+        widget_kwargs={'attrs': {
+            'rows': '4',
+            'placeholder': _(
+                'e.g. your contact details'
+            )
+        }}
     )
 
     mail_text_order_placed = I18nFormField(
@@ -683,14 +750,17 @@ class MailSettingsForm(SettingsForm):
     )
     smtp_host = forms.CharField(
         label=_("Hostname"),
-        required=False
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'mail.example.org'})
     )
     smtp_port = forms.IntegerField(
         label=_("Port"),
-        required=False
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'e.g. 587, 465, 25, ...'})
     )
     smtp_username = forms.CharField(
         label=_("Username"),
+        widget=forms.TextInput(attrs={'placeholder': 'myuser@example.org'}),
         required=False
     )
     smtp_password = forms.CharField(

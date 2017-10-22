@@ -6,12 +6,12 @@
         {% csrf_token %}
         <fieldset>
             <legend>{% trans "Payment settings" %}</legend>
-            {% bootstrap_field sform.payment_term_days layout="horizontal" %}
-            {% bootstrap_field sform.payment_term_last layout="horizontal" %}
-            {% bootstrap_field sform.payment_term_weekdays layout="horizontal" %}
-            {% bootstrap_field sform.payment_term_expire_automatically layout="horizontal" %}
-            {% bootstrap_field sform.payment_term_accept_late layout="horizontal" %}
-            {% bootstrap_field sform.tax_rate_default layout="horizontal" %}
+            {% bootstrap_field sform.payment_term_days layout="control" %}
+            {% bootstrap_field sform.payment_term_last layout="control" %}
+            {% bootstrap_field sform.payment_term_weekdays layout="control" %}
+            {% bootstrap_field sform.payment_term_expire_automatically layout="control" %}
+            {% bootstrap_field sform.payment_term_accept_late layout="control" %}
+            {% bootstrap_field sform.tax_rate_default layout="control" %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Payment providers" %}</legend>
@@ -38,7 +38,7 @@
                     </div>
                     <div id="{{ provider.identifier }}" class="panel-collapse collapse">
                         <div class="panel-body">
-                            {% bootstrap_form provider.form layout='horizontal' %}
+                            {% bootstrap_form provider.form layout='control' %}
                             {% with c=provider.settings_content %}
                                 {% if c %}{{ c|safe }}{% endif %}
                             {% endwith %}

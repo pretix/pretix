@@ -21,6 +21,7 @@ from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
 from pretix.presale.views import get_cart_total
+from pretix.presale.views.cart import get_or_create_cart_id
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +49,17 @@ class BasePaymentProvider:
 
     def __str__(self):
         return self.identifier
+
+    @property
+    def is_meta(self) -> bool:
+        """
+        Returns whether or whether not this payment provider is a "meta" payment provider that only
+        works as a settings holder for other payment providers and should never be used directly. This
+        is a trick to implement payment gateways with multiple payment methods but unified payment settings.
+        Take a look at the built-in stripe provider to see how this might be used.
+        By default, this returns ``False``.
+        """
+        return False
 
     @property
     def is_enabled(self) -> bool:
@@ -149,7 +161,9 @@ class BasePaymentProvider:
             ('_fee_percent',
              forms.DecimalField(
                  label=_('Additional fee'),
-                 help_text=_('Percentage'),
+                 help_text=_('Percentage of the order total. Note that this percentage will currently only '
+                             'be calculated on the summed price of sold tickets, not on other fees like e.g. shipping '
+                             'fees, if there are any.'),
                  required=False
              )),
             ('_availability_date',
@@ -173,6 +187,7 @@ class BasePaymentProvider:
                  help_text=_('Will be printed just below the payment figures and above the closing text on invoices.'),
                  required=False,
                  widget=I18nTextarea,
+                 widget_kwargs={'attrs': {'rows': '2'}}
              )),
         ])
 
@@ -273,7 +288,7 @@ class BasePaymentProvider:
 
         The default implementation checks for the _availability_date setting to be either unset or in the future.
         """
-        return self._is_still_available(cart_id=request.session.session_key)
+        return self._is_still_available(cart_id=get_or_create_cart_id(request))
 
     def payment_form_render(self, request: HttpRequest) -> str:
         """

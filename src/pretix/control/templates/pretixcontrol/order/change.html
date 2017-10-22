@@ -102,7 +102,7 @@
                                 <input name="{{ position.form.prefix }}-operation" type="radio" value="price"
                                         {% if position.form.operation.value == "price" %}checked="checked"{% endif %}>
                                 {% trans "Change price to" %}
-                                {% bootstrap_field position.form.price layout='inline' %}
+                                {% bootstrap_field position.form.price addon_after=request.event.currency layout='inline' %}
                                 {% if position.apply_tax %}
                                     {% if position.item.tax_rule and not position.item.tax_rule.price_includes_tax %}
                                         {% blocktrans trimmed with rate=position.item.tax_rule.rate name=position.item.tax_rule.name %}
@@ -148,14 +148,14 @@
                             {{ add_form.custom_error }}
                         </div>
                     {% endif %}
-                    {% bootstrap_field add_form.do layout='horizontal' %}
-                    {% bootstrap_field add_form.itemvar layout='horizontal' %}
-                    {% bootstrap_field add_form.price layout='horizontal' %}
+                    {% bootstrap_field add_form.do layout="control" %}
+                    {% bootstrap_field add_form.itemvar layout="control" %}
+                    {% bootstrap_field add_form.price addon_after=request.event.currency layout="control" %}
                     {% if add_form.addon_to %}
-                        {% bootstrap_field add_form.addon_to layout='horizontal' %}
+                        {% bootstrap_field add_form.addon_to layout="control" %}
                     {% endif %}
                     {% if add_form.subevent %}
-                        {% bootstrap_field add_form.subevent layout='horizontal' %}
+                        {% bootstrap_field add_form.subevent layout="control" %}
                     {% endif %}
                 </div>
             </div>
@@ -174,7 +174,7 @@
                             {{ other_form.custom_error }}
                         </div>
                     {% endif %}
-                    {% bootstrap_field other_form.recalculate_taxes layout='horizontal' %}
+                    {% bootstrap_field other_form.recalculate_taxes layout="control" %}
                 </div>
             </div>
         </div>

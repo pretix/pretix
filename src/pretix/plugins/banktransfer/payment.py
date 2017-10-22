@@ -19,6 +19,18 @@ class BankTransfer(BasePaymentProvider):
         form_field = I18nFormField(
             label=_('Bank account details'),
             widget=I18nTextarea,
+            help_text=_('Include everything that your customers need to send you a bank transfer payment. Within SEPA '
+                        'countries, IBAN, BIC and account owner should suffice. If you have lots of international '
+                        'customers, they might also need your full address and your bank\'s full address.'),
+            widget_kwargs={'attrs': {
+                'rows': '4',
+                'placeholder': _(
+                    'e.g. IBAN: DE12 1234 5678 8765 4321\n'
+                    'BIC: GENEXAMPLE1\n'
+                    'Account owner: John Doe\n'
+                    'Name of Bank: Professional Banking Institute Ltd., London'
+                )
+            }}
         )
         return OrderedDict(
             list(super().settings_form_fields.items()) + [('bank_details', form_field)]

@@ -3,6 +3,8 @@ import copy
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.db.models import F, IntegerField, OuterRef, Prefetch, Subquery, Sum
+from django.db.models.functions import Coalesce
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.utils.functional import cached_property
@@ -29,7 +31,21 @@ class SubEventList(EventPermissionRequiredMixin, ListView):
     permission = 'can_change_settings'
 
     def get_queryset(self):
-        qs = self.request.event.subevents.all()
+        sum_tickets_paid = Quota.objects.filter(
+            subevent=OuterRef('pk')
+        ).order_by().values('subevent').annotate(
+            s=Sum('cached_availability_paid_orders')
+        ).values(
+            's'
+        )
+
+        qs = self.request.event.subevents.annotate(
+            sum_tickets_paid=Subquery(sum_tickets_paid, output_field=IntegerField())
+        ).prefetch_related(
+            Prefetch('quotas',
+                     queryset=Quota.objects.annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
+                     to_attr='first_quotas')
+        )
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
         return qs
@@ -37,6 +53,19 @@ class SubEventList(EventPermissionRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['filter_form'] = self.filter_form
+        for s in ctx['subevents']:
+            s.first_quotas = s.first_quotas[:4]
+            for q in s.first_quotas:
+                q.cached_avail = (
+                    (q.cached_availability_state, q.cached_availability_number)
+                    if q.cached_availability_time is not None
+                    else q.availability(allow_cache=True)
+                )
+                if q.size is not None:
+                    q.percent_paid = min(
+                        100,
+                        round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
+                    )
         return ctx
 
     @cached_property

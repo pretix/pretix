@@ -19,10 +19,10 @@
         {% bootstrap_form_errors form %}
         <fieldset>
             <legend>{% trans "General information" %}</legend>
-            {% bootstrap_field form.name layout="horizontal" %}
-            {% bootstrap_field form.size layout="horizontal" %}
+            {% bootstrap_field form.name layout="control" %}
+            {% bootstrap_field form.size layout="control" %}
             {% if form.subevent %}
-                {% bootstrap_field form.subevent layout="horizontal" %}
+                {% bootstrap_field form.subevent layout="control" %}
             {% endif %}
             <legend>{% trans "Items" %}</legend>
             <p>
@@ -33,7 +33,7 @@
                     left.
                 {% endblocktrans %}
             </p>
-            {% bootstrap_field form.itemvars layout="horizontal" %}
+            {% bootstrap_field form.itemvars layout="control" %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

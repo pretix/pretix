@@ -60,7 +60,7 @@ Endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "count": 1,
@@ -114,7 +114,7 @@ Endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "id": 1,

@@ -209,6 +209,10 @@ DEFAULTS = {
         'default': None,
         'type': str
     },
+    'confirm_text': {
+        'default': None,
+        'type': LazyI18nString
+    },
     'mail_prefix': {
         'default': None,
         'type': str

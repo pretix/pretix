@@ -51,11 +51,6 @@
                 <th>
                     {% trans "Event name" %}
                 </th>
-                <th>
-                    {% trans "Short form" %}
-                    <a href="?{% url_replace request 'ordering' '-slug' %}"><i class="fa fa-caret-down"></i></a>
-                    <a href="?{% url_replace request 'ordering' 'slug' %}"><i class="fa fa-caret-up"></i></a>
-                </th>
                 {% if not hide_orga %}
                     <th>
                         {% trans "Organizer" %}
@@ -67,11 +62,15 @@
                     {% trans "Start date" %}
                     <a href="?{% url_replace request 'ordering' '-date_from' %}"><i class="fa fa-caret-down"></i></a>
                     <a href="?{% url_replace request 'ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
-                </th>
-                <th>
+                    /
                     {% trans "End date" %}
                     <a href="?{% url_replace request 'ordering' '-date_to' %}"><i class="fa fa-caret-down"></i></a>
                     <a href="?{% url_replace request 'ordering' 'date_to' %}"><i class="fa fa-caret-up"></i></a>
+                </th>
+                <th>
+                    {% trans "Paid tickets per quota" %}
+                    <a href="?{% url_replace request 'ordering' '-sum_tickets_paid' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'sum_tickets_paid' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
                 <th class="text-right">
                     {% trans "Status" %}
@@ -83,26 +82,39 @@
             <tbody>
             {% for e in events %}
                 <tr>
-                    <td>
+                    <td class="event-name-col">
                         <strong><a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong>
-                        {% if e.has_subevents %}
-                           <span class="label label-default">{% trans "Series" %}</span>
-                        {% endif %}
+                        <br><small>{{ e.slug }}</small>
                     </td>
-                    <td>{{ e.slug }}</td>
                     {% if not hide_orga %}<td>{{ e.organizer }}</td>{% endif %}
-                    <td>
+                    <td class="event-date-col">
                         {% if e.has_subevents %}
-                            {{ e.min_from|default_if_none:"" }}
+                            {{ e.min_from|default_if_none:""|date:"SHORT_DATETIME_FORMAT" }}
                         {% else %}
-                            {{ e.get_date_from_display }}
+                            {{ e.get_short_date_from_display }}
+                        {% endif %}
+                        {% if e.has_subevents %}
+                            <span class="label label-default">{% trans "Series" %}</span>
+                        {% endif %}
+                        {% if e.settings.show_date_to and e.date_to %}
+                             –<br>
+                            {% if e.has_subevents %}
+                                {{ e.max_fromto|default_if_none:e.max_from|default_if_none:e.max_to|default_if_none:""|date:"SHORT_DATETIME_FORMAT" }}
+                            {% else %}
+                                {{ e.get_short_date_to_display }}
+                            {% endif %}
                         {% endif %}
                     </td>
                     <td>
-                        {% if e.has_subevents %}
-                            {{ e.max_fromto|default_if_none:e.max_from|default_if_none:e.max_to|default_if_none:"" }}
-                        {% else %}
-                            {{ e.get_date_from_display }}
+                        {% for q in e.first_quotas|slice:":3" %}
+                            {% include "pretixcontrol/fragment_quota_box_paid.html" with quota=q %}
+                        {% endfor %}
+                        {% if e.first_quotas|length > 3 %}
+                            <a href="{% url "control:event.items.quotas" organizer=e.organizer.slug event=e.slug %}"
+                                    class="quotabox-more" data-toggle="tooltip" title="{% trans "More quotas" %}"
+                                    data-placement="top">
+                                &middot;&middot;&middot;
+                            </a>
                         {% endif %}
                     </td>
                     <td class="text-right">

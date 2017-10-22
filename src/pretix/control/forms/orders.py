@@ -15,6 +15,13 @@ from pretix.base.services.pricing import get_price
 
 
 class ExtendForm(I18nModelForm):
+    quota_ignore = forms.BooleanField(
+        label=_('Overbook quota'),
+        help_text=_('If you check this box, this operation will be performed even if it leads to an overbooked quota '
+                    'and you having sold more tickets than you planned!'),
+        required=False
+    )
+
     class Meta:
         model = Order
         fields = ['expires']
@@ -24,6 +31,11 @@ class ExtendForm(I18nModelForm):
                 'data-is-payment-date': 'true'
             })
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.status == Order.STATUS_PENDING or self.instance._is_still_available(now(), count_waitinglist=False) is True:
+            del self.fields['quota_ignore']
 
     def clean(self):
         data = super().clean()

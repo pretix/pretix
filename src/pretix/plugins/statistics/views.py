@@ -32,7 +32,7 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             except SubEvent.DoesNotExist:
                 pass
 
-        cache = self.request.event.get_cache()
+        cache = self.request.event.cache
         ckey = str(subevent.pk) if subevent else 'all'
 
         # Orders by day

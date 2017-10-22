@@ -12,6 +12,7 @@ from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
 )
 from pretix.base.models.items import ItemAddOn
+from pretix.control.forms import SplitDateTimePickerWidget
 
 
 class CategoryForm(I18nModelForm):
@@ -47,7 +48,9 @@ class QuestionForm(I18nModelForm):
             'items'
         ]
         widgets = {
-            'items': forms.CheckboxSelectMultiple,
+            'items': forms.CheckboxSelectMultiple(
+                attrs={'class': 'scrolling-multiple-choice'}
+            ),
         }
 
 
@@ -149,14 +152,18 @@ class ItemCreateForm(I18nModelForm):
         )
 
         if not self.event.has_subevents:
+            choices = [
+                (self.NONE, _("Do not add to a quota now")),
+                (self.EXISTING, _("Add product to an existing quota")),
+                (self.NEW, _("Create a new quota for this product"))
+            ]
+            if not self.event.quotas.exists():
+                choices.remove(choices[1])
+
             self.fields['quota_option'] = forms.ChoiceField(
                 label=_("Quota options"),
                 widget=forms.RadioSelect,
-                choices=(
-                    (self.NONE, _("Do not add to a quota now")),
-                    (self.EXISTING, _("Add product to an existing quota")),
-                    (self.NEW, _("Create a new quota for this product"))
-                ),
+                choices=choices,
                 initial=self.NONE,
                 required=False
             )
@@ -178,7 +185,7 @@ class ItemCreateForm(I18nModelForm):
             self.fields['quota_add_new_size'] = forms.IntegerField(
                 min_value=0,
                 label=_("Size"),
-                widget=forms.TextInput(attrs={'placeholder': _("New quota size")}),
+                widget=forms.TextInput(attrs={'placeholder': _("Number of tickets")}),
                 help_text=_("Leave empty for an unlimited number of tickets."),
                 required=False
             )
@@ -263,6 +270,11 @@ class ItemUpdateForm(I18nModelForm):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = self.instance.event.categories.all()
         self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
+        self.fields['description'].widget.attrs['placeholder'] = _(
+            'e.g. This reduced price is available for full-time students, jobless and people '
+            'over 65. This ticket includes access to all parts of the event, except the VIP '
+            'area.'
+        )
 
     class Meta:
         model = Item
@@ -286,9 +298,13 @@ class ItemUpdateForm(I18nModelForm):
             'min_per_order',
             'checkin_attention'
         ]
+        field_classes = {
+            'available_from': forms.SplitDateTimeField,
+            'available_until': forms.SplitDateTimeField,
+        }
         widgets = {
-            'available_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'available_until': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+            'available_from': SplitDateTimePickerWidget(),
+            'available_until': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_available_from_0'}),
         }
 
 

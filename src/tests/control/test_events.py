@@ -50,18 +50,21 @@ class EventsTest(SoupTest):
 
     def test_settings(self):
         doc = self.get_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug))
-        doc.select("[name=date_to]")[0]['value'] = "2013-12-30 17:00:00"
+        doc.select("[name=date_to_0]")[0]['value'] = "2013-12-30"
+        doc.select("[name=date_to_1]")[0]['value'] = "17:00:00"
         doc.select("[name=settings-max_items_per_order]")[0]['value'] = "12"
 
         doc = self.post_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug),
                             extract_form_fields(doc.select('.container-fluid form')[0]))
         assert len(doc.select(".alert-success")) > 0
-        assert doc.select("[name=date_to]")[0]['value'] == "2013-12-30 17:00:00"
+        assert doc.select("[name=date_to_0]")[0]['value'] == "2013-12-30"
+        assert doc.select("[name=date_to_1]")[0]['value'] == "17:00:00"
         assert doc.select("[name=settings-max_items_per_order]")[0]['value'] == "12"
 
     def test_settings_timezone(self):
         doc = self.get_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug))
-        doc.select("[name=date_to]")[0]['value'] = "2013-12-30 17:00:00"
+        doc.select("[name=date_to_0]")[0]['value'] = "2013-12-30"
+        doc.select("[name=date_to_1]")[0]['value'] = "17:00:00"
         doc.select("[name=settings-max_items_per_order]")[0]['value'] = "12"
         doc.select("[name=settings-timezone]")[0]['value'] = "Asia/Tokyo"
         doc.find('option', {"value": "Asia/Tokyo"})['selected'] = 'selected'
@@ -71,7 +74,8 @@ class EventsTest(SoupTest):
                             extract_form_fields(doc.select('.container-fluid form')[0]))
         assert len(doc.select(".alert-success")) > 0
         # date_to should not be changed even though the timezone is changed
-        assert doc.select("[name=date_to]")[0]['value'] == "2013-12-30 17:00:00"
+        assert doc.select("[name=date_to_0]")[0]['value'] == "2013-12-30"
+        assert doc.select("[name=date_to_1]")[0]['value'] == "17:00:00"
         assert 'selected' in doc.find('option', {"value": "Asia/Tokyo"}).attrs
         assert doc.select("[name=settings-max_items_per_order]")[0]['value'] == "12"
 
@@ -225,6 +229,37 @@ class EventsTest(SoupTest):
             assert self.event1.settings.get('primary_color') == '#FF0000'
             mocked.assert_any_call(args=(self.event1.pk,))
 
+    def test_display_settings_do_not_override_parent(self):
+        self.orga1.settings.primary_color = '#ff00ff'
+        with mocker_context() as mocker:
+            mocked = mocker.patch('pretix.presale.style.regenerate_css.apply_async')
+
+            doc = self.get_doc('/control/event/%s/%s/settings/display' % (self.orga1.slug, self.event1.slug))
+            data = extract_form_fields(doc.select("form")[0])
+            doc = self.post_doc('/control/event/%s/%s/settings/display' % (self.orga1.slug, self.event1.slug),
+                                data, follow=True)
+            assert doc.select('.alert-success')
+            self.event1.settings.flush()
+            assert 'primary_color' not in self.event1.settings._cache()
+            assert self.event1.settings.primary_color == self.orga1.settings.primary_color
+            mocked.assert_any_call(args=(self.event1.pk,))
+
+    def test_display_settings_explicitly_override_parent(self):
+        self.orga1.settings.primary_color = '#ff00ff'
+        with mocker_context() as mocker:
+            mocked = mocker.patch('pretix.presale.style.regenerate_css.apply_async')
+
+            doc = self.get_doc('/control/event/%s/%s/settings/display' % (self.orga1.slug, self.event1.slug))
+            data = extract_form_fields(doc.select("form")[0])
+            data['decouple'] = 'primary_color'
+            doc = self.post_doc('/control/event/%s/%s/settings/display' % (self.orga1.slug, self.event1.slug),
+                                data, follow=True)
+            assert doc.select('.alert-success')
+            self.event1.settings.flush()
+            assert 'primary_color' in self.event1.settings._cache()
+            assert self.event1.settings.primary_color == self.orga1.settings.primary_color
+            mocked.assert_any_call(args=(self.event1.pk,))
+
     def test_email_settings(self):
         with mocker_context() as mocker:
             mocked = mocker.patch('pretix.base.email.CustomSMTPBackend.test')
@@ -293,16 +328,20 @@ class EventsTest(SoupTest):
             'basics-name_0': '33C3',
             'basics-name_1': '33C3',
             'basics-slug': '31c3',
-            'basics-date_from': '2016-12-27 10:00:00',
-            'basics-date_to': '2016-12-30 19:00:00',
+            'basics-date_from_0': '2016-12-27',
+            'basics-date_from_1': '10:00:00',
+            'basics-date_to_0': '2016-12-30',
+            'basics-date_to_1': '19:00:00',
             'basics-location_0': 'Hamburg',
             'basics-location_1': 'Hamburg',
             'basics-currency': 'EUR',
             'basics-tax_rate': '',
             'basics-locale': 'en',
             'basics-timezone': 'Europe/Berlin',
-            'basics-presale_start': '2016-11-01 10:00:00',
-            'basics-presale_end': '2016-11-30 18:00:00',
+            'basics-presale_start_0': '2016-11-01',
+            'basics-presale_start_1': '10:00:00',
+            'basics-presale_end_0': '2016-11-30',
+            'basics-presale_end_1': '18:00:00',
         })
         assert doc.select(".alert-danger")
 
@@ -325,16 +364,20 @@ class EventsTest(SoupTest):
             'basics-name_0': '33C3',
             'basics-name_1': '33C3',
             'basics-slug': '33c3',
-            'basics-date_from': '2016-12-27 10:00:00',
-            'basics-date_to': '2016-12-30 19:00:00',
+            'basics-date_from_0': '2016-12-27',
+            'basics-date_from_1': '10:00:00',
+            'basics-date_to_0': '2016-12-30',
+            'basics-date_to_1': '19:00:00',
             'basics-location_0': 'Hamburg',
             'basics-location_1': 'Hamburg',
             'basics-currency': 'EUR',
             'basics-tax_rate': '19.00',
             'basics-locale': 'en',
             'basics-timezone': 'Europe/Berlin',
-            'basics-presale_start': '2016-11-01 10:00:00',
-            'basics-presale_end': '2016-11-30 18:00:00',
+            'basics-presale_start_0': '2016-11-01',
+            'basics-presale_start_1': '10:00:00',
+            'basics-presale_end_0': '2016-11-30',
+            'basics-presale_end_1': '18:00:00',
         })
 
         assert doc.select("#id_copy-copy_from_event_1")
@@ -379,16 +422,20 @@ class EventsTest(SoupTest):
             'basics-name_0': '33C3',
             'basics-name_1': '33C3',
             'basics-slug': '33c3',
-            'basics-date_from': '2016-12-27 10:00:00',
-            'basics-date_to': '2016-12-30 19:00:00',
+            'basics-date_from_0': '2016-12-27',
+            'basics-date_from_1': '10:00:00',
+            'basics-date_to_0': '2016-12-30',
+            'basics-date_to_1': '19:00:00',
             'basics-location_0': 'Hamburg',
             'basics-location_1': 'Hamburg',
             'basics-currency': 'EUR',
             'basics-tax_rate': '',
             'basics-locale': 'en',
             'basics-timezone': 'Europe/Berlin',
-            'basics-presale_start': '2016-11-01 10:00:00',
-            'basics-presale_end': '2016-11-30 18:00:00',
+            'basics-presale_start_0': '2016-11-01',
+            'basics-presale_start_1': '10:00:00',
+            'basics-presale_end_0': '2016-11-30',
+            'basics-presale_end_1': '18:00:00',
         })
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'copy',
@@ -409,15 +456,19 @@ class EventsTest(SoupTest):
             'event_wizard-current_step': 'basics',
             'basics-name_0': '33C3',
             'basics-slug': '33c3',
-            'basics-date_from': '2016-12-27 10:00:00',
-            'basics-date_to': '',
+            'basics-date_from_0': '2016-12-27',
+            'basics-date_from_1': '10:00:00',
+            'basics-date_to_0': '',
+            'basics-date_to_1': '',
             'basics-location_0': 'Hamburg',
             'basics-currency': 'EUR',
             'basics-tax_rate': '',
             'basics-locale': 'en',
             'basics-timezone': 'UTC',
-            'basics-presale_start': '',
-            'basics-presale_end': '',
+            'basics-presale_start_0': '',
+            'basics-presale_start_1': '',
+            'basics-presale_end_0': '',
+            'basics-presale_end_1': '',
         })
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'copy',
@@ -449,15 +500,19 @@ class EventsTest(SoupTest):
             'event_wizard-current_step': 'basics',
             'basics-name_0': '33C3',
             'basics-slug': '33c3',
-            'basics-date_from': '',
-            'basics-date_to': '2016-12-30 19:00:00',
+            'basics-date_from_0': '',
+            'basics-date_from_1': '',
+            'basics-date_to_0': '2016-12-30',
+            'basics-date_to_1': '19:00:00',
             'basics-location_0': 'Hamburg',
             'basics-currency': 'EUR',
             'basics-tax_rate': '',
             'basics-locale': 'en',
             'basics-timezone': 'Europe/Berlin',
-            'basics-presale_start': '2016-11-20 11:00:00',
-            'basics-presale_end': '2016-11-24 18:00:00',
+            'basics-presale_start_0': '2016-11-01',
+            'basics-presale_start_1': '10:00:00',
+            'basics-presale_end_0': '2016-11-30',
+            'basics-presale_end_1': '18:00:00',
         })
         assert doc.select(".alert-danger")
 
@@ -472,15 +527,19 @@ class EventsTest(SoupTest):
             'event_wizard-current_step': 'basics',
             'basics-name_0': '33C3',
             'basics-slug': '31c4',
-            'basics-date_from': '2016-12-27 10:00:00',
-            'basics-date_to': '2016-12-30 19:00:00',
+            'basics-date_from_0': '2016-12-27',
+            'basics-date_from_1': '10:00:00',
+            'basics-date_to_0': '2016-12-30',
+            'basics-date_to_1': '19:00:00',
             'basics-location_0': 'Hamburg',
             'basics-currency': '$',
             'basics-tax_rate': '',
             'basics-locale': 'en',
             'basics-timezone': 'Europe/Berlin',
-            'basics-presale_start': '2016-11-01 10:00:00',
-            'basics-presale_end': '2016-11-30 18:00:00',
+            'basics-presale_start_0': '2016-11-01',
+            'basics-presale_start_1': '10:00:00',
+            'basics-presale_end_0': '2016-11-30',
+            'basics-presale_end_1': '18:00:00',
         })
         assert doc.select(".alert-danger")
 
@@ -495,15 +554,19 @@ class EventsTest(SoupTest):
             'event_wizard-current_step': 'basics',
             'basics-name_0': '33C3',
             'basics-slug': '31c5',
-            'basics-date_from': '2016-12-27 10:00:00',
-            'basics-date_to': '2016-12-30 19:00:00',
+            'basics-date_from_0': '2016-12-27',
+            'basics-date_from_1': '10:00:00',
+            'basics-date_to_0': '2016-12-30',
+            'basics-date_to_1': '19:00:00',
             'basics-location_0': 'Hamburg',
             'basics-currency': 'ASD',
             'basics-tax_rate': '',
             'basics-locale': 'en',
             'basics-timezone': 'Europe/Berlin',
-            'basics-presale_start': '2016-11-01 10:00:00',
-            'basics-presale_end': '2016-11-30 18:00:00',
+            'basics-presale_start_0': '2016-11-01',
+            'basics-presale_start_1': '10:00:00',
+            'basics-presale_end_0': '2016-11-30',
+            'basics-presale_end_1': '18:00:00',
         })
         assert doc.select(".alert-danger")
 
@@ -543,10 +606,13 @@ class SubEventsTest(SoupTest):
         doc = self.post_doc('/control/event/ccc/30c3/subevents/add', {
             'name_0': 'SE2',
             'active': 'on',
-            'date_from': '2017-07-01 10:00:00',
-            'date_to': '2017-07-01 12:00:00',
+            'date_from_0': '2017-07-01',
+            'date_from_1': '10:00:00',
+            'date_to_0': '2017-07-01',
+            'date_to_1': '12:00:00',
             'location_0': 'Hamburg',
-            'presale_start': '2017-06-20 10:00:00',
+            'presale_start_0': '2017-06-20',
+            'presale_start_1': '10:00:00',
             'quotas-TOTAL_FORMS': '1',
             'quotas-INITIAL_FORMS': '0',
             'quotas-MIN_NUM_FORMS': '0',
@@ -579,10 +645,13 @@ class SubEventsTest(SoupTest):
         doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/' % self.subevent1.pk, {
             'name_0': 'SE2',
             'active': 'on',
-            'date_from': '2017-07-01 10:00:00',
-            'date_to': '2017-07-01 12:00:00',
+            'date_from_0': '2017-07-01',
+            'date_from_1': '10:00:00',
+            'date_to_0': '2017-07-01',
+            'date_to_1': '12:00:00',
             'location_0': 'Hamburg',
-            'presale_start': '2017-06-20 10:00:00',
+            'presale_start_0': '2017-06-20',
+            'presale_start_1': '10:00:00',
             'quotas-TOTAL_FORMS': '1',
             'quotas-INITIAL_FORMS': '0',
             'quotas-MIN_NUM_FORMS': '0',

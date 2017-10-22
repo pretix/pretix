@@ -8,32 +8,32 @@
             <div class="col-xs-12 col-lg-10">
                 <fieldset>
                     <legend>{% trans "General information" %}</legend>
-                    {% bootstrap_field form.name layout="horizontal" %}
-                    {% bootstrap_field form.active layout="horizontal" %}
-                    {% bootstrap_field form.category layout="horizontal" %}
-                    {% bootstrap_field form.admission layout="horizontal" %}
-                    {% bootstrap_field form.description layout="horizontal" %}
-                    {% bootstrap_field form.picture layout="horizontal" %}
+                    {% bootstrap_field form.name layout="control" %}
+                    {% bootstrap_field form.active layout="control" %}
+                    {% bootstrap_field form.category layout="control" %}
+                    {% bootstrap_field form.admission layout="control" %}
+                    {% bootstrap_field form.description layout="control" %}
+                    {% bootstrap_field form.picture layout="control" %}
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Price settings" %}</legend>
-                    {% bootstrap_field form.default_price layout="horizontal" %}
-                    {% bootstrap_field form.tax_rule layout="horizontal" %}
-                    {% bootstrap_field form.free_price layout="horizontal" %}
+                    {% bootstrap_field form.default_price addon_after=request.event.currency layout="control" %}
+                    {% bootstrap_field form.tax_rule layout="control" %}
+                    {% bootstrap_field form.free_price layout="control" %}
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Availability" %}</legend>
-                    {% bootstrap_field form.available_from layout="horizontal" %}
-                    {% bootstrap_field form.available_until layout="horizontal" %}
-                    {% bootstrap_field form.max_per_order layout="horizontal" %}
-                    {% bootstrap_field form.min_per_order layout="horizontal" %}
-                    {% bootstrap_field form.require_voucher layout="horizontal" %}
-                    {% bootstrap_field form.hide_without_voucher layout="horizontal" %}
-                    {% bootstrap_field form.allow_cancel layout="horizontal" %}
+                    {% bootstrap_field form.available_from layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+                    {% bootstrap_field form.available_until layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+                    {% bootstrap_field form.max_per_order layout="control" %}
+                    {% bootstrap_field form.min_per_order layout="control" %}
+                    {% bootstrap_field form.require_voucher layout="control" %}
+                    {% bootstrap_field form.hide_without_voucher layout="control" %}
+                    {% bootstrap_field form.allow_cancel layout="control" %}
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Check-in" %}</legend>
-                    {% bootstrap_field form.checkin_attention layout="horizontal" %}
+                    {% bootstrap_field form.checkin_attention layout="control" %}
                 </fieldset>
             </div>
             <div class="col-xs-12 col-lg-2">

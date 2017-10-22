@@ -250,7 +250,7 @@ class QuestionList(ListView):
     template_name = 'pretixcontrol/items/questions.html'
 
     def get_queryset(self):
-        return self.request.event.questions.all()
+        return self.request.event.questions.prefetch_related('items')
 
 
 def question_move(request, question, up=True):
@@ -698,6 +698,7 @@ class QuotaUpdate(EventPermissionRequiredMixin, UpdateView):
                             'id': form.instance.pk
                         }
                     )
+            form.instance.rebuild_cache()
         return super().form_valid(form)
 
     def get_success_url(self) -> str:

@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
-    CreateView, DeleteView, DetailView, ListView, UpdateView,
+    CreateView, DeleteView, DetailView, FormView, ListView, UpdateView,
 )
 
 from pretix.base.models import Organizer, Team, TeamInvite, User
@@ -18,12 +18,13 @@ from pretix.base.models.event import EventMetaProperty
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.organizer import (
-    EventMetaPropertyForm, OrganizerForm, OrganizerSettingsForm,
-    OrganizerUpdateForm, TeamForm,
+    EventMetaPropertyForm, OrganizerDisplaySettingsForm, OrganizerForm,
+    OrganizerSettingsForm, OrganizerUpdateForm, TeamForm,
 )
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
 from pretix.control.signals import nav_organizer
 from pretix.helpers.urls import build_absolute_uri
+from pretix.presale.style import regenerate_organizer_css
 
 
 class OrganizerList(ListView):
@@ -83,6 +84,71 @@ class OrganizerTeamView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
     template_name = 'pretixcontrol/organizers/teams.html'
     permission = 'can_change_permissions'
     context_object_name = 'organizer'
+
+
+class OrganizerSettingsFormView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, FormView):
+    model = Organizer
+    permission = 'can_change_organizer_settings'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['obj'] = self.request.organizer
+        return kwargs
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            if form.has_changed():
+                self.request.organizer.log_action(
+                    'pretix.organizer.settings', user=self.request.user, data={
+                        k: (form.cleaned_data.get(k).name
+                            if isinstance(form.cleaned_data.get(k), File)
+                            else form.cleaned_data.get(k))
+                        for k in form.changed_data
+                    }
+                )
+            messages.success(self.request, _('Your changes have been saved.'))
+            return redirect(self.get_success_url())
+        else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
+            return self.get(request)
+
+
+class OrganizerDisplaySettings(OrganizerSettingsFormView):
+    model = Organizer
+    form_class = OrganizerDisplaySettingsForm
+    template_name = 'pretixcontrol/organizers/display.html'
+    permission = 'can_change_organizer_settings'
+
+    def get_success_url(self) -> str:
+        return reverse('control:organizer.display', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            if form.has_changed():
+                self.request.organizer.log_action(
+                    'pretix.organizer.settings', user=self.request.user, data={
+                        k: (form.cleaned_data.get(k).name
+                            if isinstance(form.cleaned_data.get(k), File)
+                            else form.cleaned_data.get(k))
+                        for k in form.changed_data
+                    }
+                )
+            regenerate_organizer_css.apply_async(args=(self.request.organizer.pk,))
+            messages.success(self.request, _('Your changes have been saved. Please note that it can '
+                                             'take a short period of time until your changes become '
+                                             'active.'))
+            return redirect(self.get_success_url())
+        else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
+            return self.get(request)
 
 
 class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):

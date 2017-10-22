@@ -52,6 +52,11 @@
                         <a href="?{% url_replace request 'ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
                     </th>
                     <th>
+                        {% trans "Paid tickets per quota" %}
+                        <a href="?{% url_replace request 'ordering' '-sum_tickets_paid' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'sum_tickets_paid' %}"><i class="fa fa-caret-up"></i></a>
+                    </th>
+                    <th>
                         {% trans "Status" %}
                         <a href="?{% url_replace request 'ordering' '-active' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'active' %}"><i class="fa fa-caret-up"></i></a>
@@ -67,6 +72,18 @@
                                 {{ s.name }}</a></strong>
                         </td>
                         <td>{{ s.get_date_from_display }}</td>
+                        <td>
+                            {% for q in s.first_quotas|slice:":3" %}
+                                {% include "pretixcontrol/fragment_quota_box_paid.html" with quota=q %}
+                            {% endfor %}
+                            {% if s.first_quotas|length > 3 %}
+                                <a href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}?subevent={{ s.id }}"
+                                    class="quotabox-more" data-toggle="tooltip" title="{% trans "More quotas" %}"
+                                    data-placement="top">
+                                    &middot;&middot;&middot;
+                                </a>
+                            {% endif %}
+                        </td>
                         <td>
                             {% if not s.active %}
                                 <span class="label label-danger">{% trans "Disabled" %}</span>

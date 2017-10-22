@@ -5,6 +5,7 @@ from django.contrib.auth.password_validation import (
 )
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
+from pytz import common_timezones
 
 from pretix.base.models import User
 
@@ -31,17 +32,19 @@ class UserSettingsForm(forms.ModelForm):
                                     required=False,
                                     label=_("Repeat new password"),
                                     widget=forms.PasswordInput())
-    # timezone = forms.ChoiceField(
-    #     choices=((a, a) for a in common_timezones),
-    #     label=_("Default timezone"),
-    # )
+    timezone = forms.ChoiceField(
+        choices=((a, a) for a in common_timezones),
+        label=_("Default timezone"),
+        help_text=_('Only used for views that are not bound to an event. For all '
+                    'event views, the event timezone is used instead.')
+    )
 
     class Meta:
         model = User
         fields = [
             'fullname',
             'locale',
-            # 'timezone',
+            'timezone',
             'email'
         ]
 

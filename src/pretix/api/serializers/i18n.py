@@ -1,5 +1,7 @@
 from django.conf import settings
 from i18nfield.fields import I18nCharField, I18nTextField
+from i18nfield.strings import LazyI18nString
+from rest_framework.exceptions import ValidationError
 from rest_framework.fields import Field
 from rest_framework.serializers import ModelSerializer
 
@@ -21,6 +23,16 @@ class I18nField(Field):
             return {
                 settings.LANGUAGE_CODE: str(value.data)
             }
+
+    def to_internal_value(self, data):
+        if isinstance(data, str):
+            return LazyI18nString(data)
+        elif isinstance(data, dict):
+            if any([k not in dict(settings.LANGUAGES) for k in data.keys()]):
+                raise ValidationError('Invalid languages included.')
+            return LazyI18nString(data)
+        else:
+            raise ValidationError('Invalid data type.')
 
 
 class I18nAwareModelSerializer(ModelSerializer):

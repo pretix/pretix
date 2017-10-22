@@ -17,6 +17,7 @@ from pretix.base.models import (
     OrderPosition, Organizer, Question, Quota, Voucher,
 )
 from pretix.base.models.items import ItemAddOn, ItemVariation, SubEventItem
+from pretix.testutils.sessions import get_cart_session_key
 
 
 class CheckoutTestCase(TestCase):
@@ -40,7 +41,7 @@ class CheckoutTestCase(TestCase):
         self.event.settings.set('payment_banktransfer__enabled', True)
 
         self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
-        self.session_key = self.client.cookies.get(settings.SESSION_COOKIE_NAME).value
+        self.session_key = get_cart_session_key(self.client, self.event)
         self._set_session('email', 'admin@localhost')
 
         self.workshopcat = ItemCategory.objects.create(name="Workshops", is_addon=True, event=self.event)
@@ -64,7 +65,7 @@ class CheckoutTestCase(TestCase):
             is_business=True, vat_id='ATU1234567', vat_id_validated=True,
             country=Country('AT')
         )
-        self._set_session('invoice_address_{}'.format(self.event.pk), ia.pk)
+        self._set_session('invoice_address', ia.pk)
         return ia
 
     def test_empty_cart(self):
@@ -156,7 +157,7 @@ class CheckoutTestCase(TestCase):
         cr1.refresh_from_db()
         assert cr1.price == round_decimal(Decimal('23.00') / Decimal('1.19'))
 
-        ia = InvoiceAddress.objects.get(pk=self.client.session.get('invoice_address_{}'.format(self.event.pk)))
+        ia = InvoiceAddress.objects.get(pk=self.client.session['carts'][self.session_key].get('invoice_address'))
         assert ia.vat_id_validated
 
     def test_reverse_charge_enable_then_disable(self):
@@ -178,7 +179,7 @@ class CheckoutTestCase(TestCase):
         cr = CartPosition.objects.get(cart_id=self.session_key)
         assert cr.price == Decimal('23.00')
 
-        ia = InvoiceAddress.objects.get(pk=self.client.session.get('invoice_address_{}'.format(self.event.pk)))
+        ia = InvoiceAddress.objects.get(pk=self.client.session['carts'][self.session_key].get('invoice_address'))
         assert not ia.vat_id_validated
 
     def test_reverse_charge_invalid_vatid(self):
@@ -242,7 +243,7 @@ class CheckoutTestCase(TestCase):
         cr1.refresh_from_db()
         assert cr1.price == round_decimal(Decimal('23.00') / Decimal('1.19'))
 
-        ia = InvoiceAddress.objects.get(pk=self.client.session.get('invoice_address_{}'.format(self.event.pk)))
+        ia = InvoiceAddress.objects.get(pk=self.client.session['carts'][self.session_key].get('invoice_address'))
         assert not ia.vat_id_validated
 
     def test_reverse_charge_vatid_same_country(self):
@@ -273,7 +274,7 @@ class CheckoutTestCase(TestCase):
         cr1.refresh_from_db()
         assert cr1.price == Decimal('23.00')
 
-        ia = InvoiceAddress.objects.get(pk=self.client.session.get('invoice_address_{}'.format(self.event.pk)))
+        ia = InvoiceAddress.objects.get(pk=self.client.session['carts'][self.session_key].get('invoice_address'))
         assert ia.vat_id_validated
 
     def test_reverse_charge_vatid_check_invalid_country(self):
@@ -337,7 +338,7 @@ class CheckoutTestCase(TestCase):
         cr1.refresh_from_db()
         assert cr1.price == Decimal('23.00')
 
-        ia = InvoiceAddress.objects.get(pk=self.client.session.get('invoice_address_{}'.format(self.event.pk)))
+        ia = InvoiceAddress.objects.get(pk=self.client.session['carts'][self.session_key].get('invoice_address'))
         assert not ia.vat_id_validated
 
     def test_question_file_upload(self):
@@ -525,7 +526,7 @@ class CheckoutTestCase(TestCase):
 
     def _set_session(self, key, value):
         session = self.client.session
-        session[key] = value
+        session['carts'][get_cart_session_key(self.client, self.event)][key] = value
         session.save()
 
     def test_subevent(self):

@@ -7,14 +7,17 @@ from pretix.base.models import Event, Organizer
 
 
 def get_domain(organizer):
-    c = organizer.get_cache()
-    domain = c.get('domain')
+    domain = getattr(organizer, '_cached_domain', None) or organizer.cache.get('domain')
     if domain is None:
         domains = organizer.domains.all()
         domain = domains[0].domainname if domains else None
-        c.set('domain', domain or 'none')
+        organizer.cache.set('domain', domain or 'none')
+        organizer._cached_domain = domain or 'none'
     elif domain == 'none':
+        organizer._cached_domain = 'none'
         return None
+    else:
+        organizer._cached_domain = domain
     return domain
 
 
@@ -59,7 +62,7 @@ def eventreverse(obj, name, kwargs=None):
 
     c = None
     if not kwargs:
-        c = obj.get_cache()
+        c = obj.cache
         url = c.get('urlrev_{}'.format(name))
         if url:
             return url

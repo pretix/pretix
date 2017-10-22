@@ -24,16 +24,25 @@ def initialize():
         if _initialized:
             return
 
-        register_serializers()
-        install_middleware()
-
-        handler = CustomSentryDjangoHandler()
-        handler.install()
-
-        # instantiate client so hooks get registered
-        get_client()  # NOQA
-
         _initialized = True
+
+        try:
+            register_serializers()
+            install_middleware(
+                'raven.contrib.django.middleware.SentryMiddleware',
+                (
+                    'raven.contrib.django.middleware.SentryMiddleware',
+                    'raven.contrib.django.middleware.SentryLogMiddleware'))
+            install_middleware(
+                'raven.contrib.django.middleware.DjangoRestFrameworkCompatMiddleware')
+
+            handler = CustomSentryDjangoHandler()
+            handler.install()
+
+            # instantiate client so hooks get registered
+            get_client()  # NOQA
+        except Exception:
+            _initialized = False
 
 
 class App(RavenConfig):

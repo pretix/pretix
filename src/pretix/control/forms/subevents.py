@@ -5,6 +5,7 @@ from i18nfield.forms import I18nInlineFormSet
 from pretix.base.forms import I18nModelForm
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import SubEventItem
+from pretix.control.forms import SplitDateTimePickerWidget
 
 
 class SubEventForm(I18nModelForm):
@@ -27,13 +28,19 @@ class SubEventForm(I18nModelForm):
             'location',
             'frontpage_text'
         ]
+        field_classes = {
+            'date_from': forms.SplitDateTimeField,
+            'date_to': forms.SplitDateTimeField,
+            'date_admission': forms.SplitDateTimeField,
+            'presale_start': forms.SplitDateTimeField,
+            'presale_end': forms.SplitDateTimeField,
+        }
         widgets = {
-            'date_from': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'date_to': forms.DateTimeInput(attrs={'class': 'datetimepicker', 'data-date-after': '#id_date_from'}),
-            'date_admission': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'presale_start': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
-            'presale_end': forms.DateTimeInput(attrs={'class': 'datetimepicker',
-                                                      'data-date-after': '#id_presale_start'}),
+            'date_from': SplitDateTimePickerWidget(),
+            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}),
+            'date_admission': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}),
+            'presale_start': SplitDateTimePickerWidget(),
+            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}),
         }
 
 

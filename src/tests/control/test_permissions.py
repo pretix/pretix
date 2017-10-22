@@ -96,6 +96,7 @@ event_urls = [
 organizer_urls = [
     'organizer/abc/edit',
     'organizer/abc/',
+    'organizer/abc/settings/display',
     'organizer/abc/teams',
     'organizer/abc/team/1/',
     'organizer/abc/team/1/edit',
@@ -316,6 +317,7 @@ organizer_permission_urls = [
     ("can_change_teams", "organizer/dummy/team/1/edit", 200),
     ("can_change_teams", "organizer/dummy/team/1/delete", 200),
     ("can_change_organizer_settings", "organizer/dummy/edit", 200),
+    ("can_change_organizer_settings", "organizer/dummy/settings/display", 200),
 ]
 
 

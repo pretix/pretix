@@ -728,10 +728,6 @@ class OrderPosition(AbstractPosition):
         max_digits=10, decimal_places=2,
         verbose_name=_('Tax value')
     )
-    tax_value = models.DecimalField(
-        max_digits=10, decimal_places=2,
-        verbose_name=_('Tax value')
-    )
     secret = models.CharField(max_length=64, default=generate_position_secret, db_index=True)
 
     class Meta:
@@ -832,7 +828,7 @@ class CartPosition(AbstractPosition):
         verbose_name=_("Event")
     )
     cart_id = models.CharField(
-        max_length=255, null=True, blank=True,
+        max_length=255, null=True, blank=True, db_index=True,
         verbose_name=_("Cart ID (e.g. session key)")
     )
     datetime = models.DateTimeField(

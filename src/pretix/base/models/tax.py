@@ -81,6 +81,16 @@ class TaxRule(LoggedModel):
                     'if configured above.'),
     )
 
+    def allow_delete(self):
+        from pretix.base.models.orders import OrderFee, OrderPosition
+
+        return (
+            not OrderFee.objects.filter(tax_rule=self, order__event=self.event).exists()
+            and not OrderPosition.objects.filter(tax_rule=self, order__event=self.event).exists()
+            and not self.event.items.filter(tax_rule=self).exists()
+            and self.event.settings.tax_rate_default != self
+        )
+
     @classmethod
     def zero(cls):
         return cls(
@@ -172,3 +182,13 @@ class TaxRule(LoggedModel):
 
         # Consumer in different EU country / invalid VAT
         return True
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        if self.event:
+            self.event.cache.clear()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.event:
+            self.event.cache.clear()

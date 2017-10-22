@@ -141,7 +141,7 @@ Order endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "count": 1,
@@ -251,7 +251,7 @@ Order endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "code": "ABC12",
@@ -392,7 +392,7 @@ Order position endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "count": 1,
@@ -476,7 +476,7 @@ Order position endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "id": 23442,
