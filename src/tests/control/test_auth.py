@@ -194,8 +194,8 @@ class RegistrationFormTest(TestCase):
     def test_success(self):
         response = self.client.post('/control/register', {
             'email': 'dummy@dummy.dummy',
-            'password': 'foobarbar',
-            'password_repeat': 'foobarbar'
+            'password': 'ThisisAwesome582',
+            'password_repeat': 'ThisisAwesome582'
         })
         self.assertEqual(response.status_code, 302)
         assert time.time() - self.client.session['pretix_auth_login_time'] < 60
@@ -380,13 +380,13 @@ class PasswordRecoveryFormTest(TestCase):
         response = self.client.post(
             '/control/forgot/recover?id=%d&token=%s' % (self.user.id, token),
             {
-                'password': 'foobarbar',
-                'password_repeat': 'foobarbar'
+                'password': 'ThisisAwesome582',
+                'password_repeat': 'ThisisAwesome582'
             }
         )
         self.assertEqual(response.status_code, 302)
         self.user = User.objects.get(id=self.user.id)
-        self.assertTrue(self.user.check_password('foobarbar'))
+        self.assertTrue(self.user.check_password('ThisisAwesome582'))
 
     def test_recovery_valid_token_empty_passwords(self):
         token = default_token_generator.make_token(self.user)

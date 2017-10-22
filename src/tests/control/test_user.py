@@ -72,13 +72,13 @@ class UserSettingsTest(SoupTest):
 
     def test_change_password_success(self):
         doc = self.save({
-            'new_pw': 'foobarbar',
-            'new_pw_repeat': 'foobarbar',
+            'new_pw': 'ThisisAwesome582',
+            'new_pw_repeat': 'ThisisAwesome582',
             'old_pw': 'dummy',
         })
         assert doc.select(".alert-success")
         self.user = User.objects.get(pk=self.user.pk)
-        assert self.user.check_password("foobarbar")
+        assert self.user.check_password("ThisisAwesome582")
 
     def test_change_password_short(self):
         doc = self.save({
