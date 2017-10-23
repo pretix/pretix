@@ -441,7 +441,7 @@ Vue.component('pretix-widget', {
                 if (data.redirect.substr(0, 1) === '/') {
                     data.redirect = this.$root.event_url.replace(/^([^\/]+:\/\/[^\/]+)\/.*$/, "$1") + data.redirect;
                 }
-                iframe.src = data.redirect + '?take_cart_id=' + this.$root.cart_id;
+                iframe.src = data.redirect + '?iframe=1&take_cart_id=' + this.$root.cart_id;
             } else {
                 this.async_task_id = data.async_id;
                 if (data.check_url) {
@@ -455,7 +455,7 @@ Vue.component('pretix-widget', {
             api._getJSON(this.async_task_check_url, this.buy_callback, this.buy_check_error_callback);
         },
         resume: function () {
-            var redirect_url = this.$root.event_url + 'w/' + widget_id + '/checkout/start?take_cart_id=' + this.$root.cart_id;
+            var redirect_url = this.$root.event_url + 'w/' + widget_id + '/checkout/start?iframe=1&take_cart_id=' + this.$root.cart_id;
             if (use_iframe) {
                 var iframe = this.$refs['frame-container'].children[0];
                 this.$root.frame_loading = true;
@@ -544,7 +544,7 @@ var create_widget = function (element) {
             },
             formTarget: function () {
                 var checkout_url = "/" + this.event_url.replace(/^[^\/]+:\/\/([^\/]+)\//, "") + "w/" + widget_id + "/checkout/start";
-                var form_target = this.event_url + 'w/' + widget_id + '/cart/add?next=' + checkout_url;
+                var form_target = this.event_url + 'w/' + widget_id + '/cart/add?iframe=1&next=' + checkout_url;
                 if (getCookie(this.cookieName)) {
                     form_target += "&take_cart_id=" + getCookie(this.cookieName);
                 }

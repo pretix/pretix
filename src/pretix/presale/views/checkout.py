@@ -24,6 +24,9 @@ class CheckoutView(View):
     def dispatch(self, request, *args, **kwargs):
         self.request = request
 
+        if 'iframe' in request.GET:
+            request.session['iframe_session'] = True
+
         if not get_cart(request) and "async_id" not in request.GET:
             messages.error(request, _("Your cart is empty"))
             return redirect(self.get_index_url(self.request))
