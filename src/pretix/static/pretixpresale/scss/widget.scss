@@ -34,6 +34,7 @@
   h3 {
     font-size: $font-size-h3;
     font-weight: bold;
+    padding: 0 15px;
   }
   button, input[type="button"] {
     overflow: visible;
@@ -88,11 +89,6 @@
       outline: 5px auto -webkit-focus-ring-color;
       outline-offset: -2px;
     }
-  }
-
-  .pretix-widget-primary-color {
-    /* in SVG */
-    fill: $brand-primary;
   }
 
   .pretix-widget-clickable {
@@ -167,6 +163,14 @@
     padding: 10px 0;
   }
 
+  .pretix-widget-category {
+    margin: 10px 0;
+  }
+
+  .pretix-widget-category-description {
+    padding: 0 15px;
+  }
+
   .pretix-widget-category-name {
     margin: 10px 0 0 0;
   }
@@ -174,6 +178,8 @@
   .pretix-widget-item-info-col {
     width: 50%;
     float: left;
+    padding: 0 15px;
+    box-sizing: border-box;
   }
 
   .pretix-widget-item-price-col, .pretix-widget-item-availability-col {
@@ -225,7 +231,7 @@
   }
 
   .pretix-widget-attribution {
-    padding: 5px;
+    padding: 10px 15px;
     text-align: center;
     font-size: 12px;
   }
@@ -252,10 +258,16 @@
     margin: 10px 0 0 0;
   }
 
-  .pretix-widget-voucher input {
+  .pretix-widget-voucher-input-wrap {
+    padding: 0 15px;
     width: 75%;
     box-sizing: border-box;
     float: left;
+  }
+
+  .pretix-widget-voucher input {
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .pretix-widget-voucher-button-wrap {
@@ -401,6 +413,11 @@
   }
 }
 
+.pretix-widget-primary-color {
+  /* in SVG */
+  fill: $brand-primary;
+}
+
 @media (max-width: $screen-sm-max) {
   .pretix-widget {
     .pretix-widget-item-info-col {
@@ -414,19 +431,15 @@
     .pretix-widget-action {
       width: 100%;
       margin-left: 0;
-      padding: 0;
     }
-    .pretix-widget-voucher {
-      input {
-        width: 100%;
-        float: none;
-      }
-      .pretix-widget-voucher-button-wrap {
-        width: 100%;
-        float: none;
-        margin-top: 10px;
-        padding: 0;
-      }
+    .pretix-widget-voucher-input-wrap {
+      width: 100%;
+      float: none;
+    }
+    .pretix-widget-voucher-button-wrap {
+      width: 100%;
+      float: none;
+      margin-top: 10px;
     }
   }
 }
