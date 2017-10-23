@@ -12,6 +12,7 @@ from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import (
@@ -353,6 +354,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
 
+@method_decorator(xframe_options_exempt, 'dispatch')
 class AnswerDownload(EventViewMixin, View):
     def get(self, request, *args, **kwargs):
         answid = kwargs.get('answer')
