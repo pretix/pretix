@@ -24,6 +24,7 @@ from pretix.base.services.cart import (
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import (
     EventViewMixin, allow_cors_if_namespaced, allow_frame_if_namespaced,
+    iframe_entry_view_wrapper,
 )
 from pretix.presale.views.async import AsyncAction
 from pretix.presale.views.event import (
@@ -279,6 +280,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
+@method_decorator(iframe_entry_view_wrapper, 'dispatch')
 class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
     template_name = "pretixpresale/event/voucher.html"
 

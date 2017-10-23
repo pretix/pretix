@@ -23,7 +23,10 @@ var strings = {
     'cart_exists': django.pgettext('widget', 'You currently have an active cart for this event. If you select more' +
         ' products, they will be added to your existing cart. Click on this message to continue checkout with your' +
         ' cart.'),
-    'poweredby': django.pgettext('widget', 'ticketing powered by <a href="https://pretix.eu" target="_blank">pretix</a>')
+    'poweredby': django.pgettext('widget', 'ticketing powered by <a href="https://pretix.eu" target="_blank">pretix</a>'),
+    'redeem_voucher': django.pgettext('widget', 'Redeem a voucher'),
+    'redeem': django.pgettext('widget', 'Redeem'),
+    'voucher_code': django.pgettext('widget', 'Voucher code'),
 };
 
 var setCookie = function (cname, cvalue, exdays) {
@@ -35,7 +38,8 @@ var setCookie = function (cname, cvalue, exdays) {
 var getCookie = function (name) {
     var value = "; " + document.cookie;
     var parts = value.split("; " + name + "=");
-    if (parts.length == 2) return parts.pop().split(";").shift();
+    if (parts.length == 2) return parts.pop().split(";").shift() || null;
+    else return null;
 };
 
 /* HTTP API Call helpers */
@@ -375,6 +379,7 @@ Vue.component('pretix-widget', {
         + '</div>'
         + '<form method="post" :action="$root.formTarget" ref="form" target="_blank">'
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
+        + '<input type="hidden" name="subevent" :value="$root.subevent" />'
         + '<div class="pretix-widget-error-message" v-if="$root.error">{{ $root.error }}</div>'
         + '<div class="pretix-widget-info-message pretix-widget-clickable" @click.prevent="resume"'
         + '     v-if="$root.cart_exists">'
@@ -384,11 +389,22 @@ Vue.component('pretix-widget', {
         + '<div class="pretix-widget-action" v-if="$root.display_add_to_cart">'
         + '<button @click="buy">' + strings.buy + '</button>'
         + '</div>'
+        + '</form>'
+        + '<form method="get" :action="$root.voucherFormTarget" target="_blank" v-if="$root.vouchers_exist && !$root.voucher_code">'
+        + '<div class="pretix-widget-voucher">'
+        + '<h3 class="pretix-widget-voucher-headline">'+ strings['redeem_voucher'] +'</h3>'
+        + '<input class="pretix-widget-voucher-input" type="text" v-model="voucher" name="voucher" placeholder="'+strings.voucher_code+'">'
+        + '<input type="hidden" name="subevent" :value="$root.subevent" />'
+        + '<input type="hidden" name="locale" value="' + lang + '" />'
+        + '<div class="pretix-widget-voucher-button-wrap">'
+        + '<button @click="redeem">' + strings.redeem + '</button>'
+        + '</div>'
+        + '</div>'
+        + '</form>'
         + '<div class="pretix-widget-clear"></div>'
         + '<div class="pretix-widget-attribution">'
         + strings.poweredby
         + '</div>'
-        + '</form>'
         + '</div>'
         + '<div :class="frameClasses">'
         + '<div class="pretix-widget-frame-loading" v-show="$root.frame_loading">'
@@ -458,6 +474,17 @@ Vue.component('pretix-widget', {
         buy_check: function () {
             api._getJSON(this.async_task_check_url, this.buy_callback, this.buy_check_error_callback);
         },
+        redeem: function () {
+            if (use_iframe) {
+                event.preventDefault();
+            } else {
+                return;
+            }
+            var redirect_url = this.$root.voucherFormTarget + '&voucher=' + this.voucher + '&subevent=' + this.$root.subevent;
+            var iframe = this.$refs['frame-container'].children[0];
+            this.$root.frame_loading = true;
+            iframe.src = redirect_url;
+        },
         resume: function () {
             var redirect_url = this.$root.event_url + 'w/' + widget_id + '/checkout/start?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
             if (use_iframe) {
@@ -495,12 +522,14 @@ var create_widget = function (element) {
         event_url += "/";
     }
     var voucher = element.attributes.voucher ? element.attributes.voucher.value : null;
+    var subevent = element.attributes.subevent ? element.attributes.subevent.value : null;
 
     var app = new Vue({
         el: element,
         data: function () {
             return {
                 event_url: event_url,
+                subevent: subevent,
                 categories: null,
                 currency: null,
                 voucher_code: voucher,
@@ -512,11 +541,17 @@ var create_widget = function (element) {
                 widget_id: 'pretix-widget-' + widget_id,
                 frame_loading: false,
                 frame_shown: false,
+                vouchers_exist: false,
                 cart_exists: false
             }
         },
         created: function () {
-            var url = event_url + 'widget/product_list?lang=' + lang;
+            var url;
+            if (subevent) {
+                url = event_url + subevent + '/widget/product_list?lang=' + lang;
+            } else {
+                url = event_url + 'widget/product_list?lang=' + lang;
+            }
             var cart_id = getCookie(this.cookieName);
             if (voucher) {
                 url += '&voucher=' + escape(voucher);
@@ -534,6 +569,7 @@ var create_widget = function (element) {
                 app.show_variations_expanded = data.show_variations_expanded;
                 app.cart_id = cart_id;
                 app.cart_exists = data.cart_exists;
+                app.vouchers_exist = data.vouchers_exist;
                 app.loading--;
             }, function (error) {
                 app.categories = [];
@@ -545,6 +581,16 @@ var create_widget = function (element) {
         computed: {
             cookieName: function () {
                 return "pretix_widget_" + this.event_url.replace(/[^a-zA-Z0-9]+/g, "_");
+            },
+            voucherFormTarget: function () {
+                var form_target = this.event_url + 'w/' + widget_id + '/redeem?iframe=1&locale=' + lang;
+                if (getCookie(this.cookieName)) {
+                    form_target += "&take_cart_id=" + getCookie(this.cookieName);
+                }
+                if (this.subevent) {
+                    form_target += "&subevent=" + this.subevent;
+                }
+                return form_target;
             },
             formTarget: function () {
                 var checkout_url = "/" + this.event_url.replace(/^[^\/]+:\/\/([^\/]+)\//, "") + "w/" + widget_id + "/checkout/start";
