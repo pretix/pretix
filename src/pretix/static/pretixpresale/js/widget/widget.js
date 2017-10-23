@@ -128,7 +128,7 @@ var use_iframe = window.innerWidth >= 800 /*&& site_is_secure()*/;
 Vue.component('availbox', {
     template: ('<div class="pretix-widget-availability-box">'
         + '<div class="pretix-widget-availability-unavailable" v-if="item.require_voucher">'
-        + strings.voucher_required
+        + '<small>' + strings.voucher_required + '</small>'
         + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
         + '       v-if="!item.require_voucher && avail[0] < 100 && avail[0] > 10">'

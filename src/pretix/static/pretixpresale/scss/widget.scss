@@ -68,7 +68,7 @@
     padding: $padding-base-vertical $padding-base-horizontal;
     color: $input-color;
     background-color: $input-bg;
-    @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
+    @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075));
     @include transition(border-color ease-in-out .15s, box-shadow ease-in-out .15s);
     @include placeholder;
     $color-rgba: rgba(red($input-border-focus), green($input-border-focus), blue($input-border-focus), .6);
@@ -76,7 +76,7 @@
     &:focus {
       border-color: $input-border-focus;
       outline: 0;
-      @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px $color-rgba);
+      @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px $color-rgba);
     }
   }
   input[type="checkbox"],
@@ -106,6 +106,7 @@
     background-color: $alert-info-bg;
     border-color: $alert-info-border;
     color: $alert-info-text;
+    border-radius: $alert-border-radius;
   }
 
   .pretix-widget-error-message {
@@ -115,6 +116,7 @@
     background-color: $alert-danger-bg;
     border-color: $alert-danger-border;
     color: $alert-danger-text;
+    border-radius: $alert-border-radius;
   }
 
   .pretix-widget-loading {
@@ -396,6 +398,36 @@
   .pretix-widget-frame-inner iframe {
     width: 100% !important;
     height: 100% !important;
+  }
+}
+
+@media (max-width: $screen-sm-max) {
+  .pretix-widget {
+    .pretix-widget-item-info-col {
+      width: 100%;
+      float: none;
+      margin-bottom: 5px;
+    }
+    .pretix-widget-item-price-col, .pretix-widget-item-availability-col {
+      width: 50%;
+    }
+    .pretix-widget-action {
+      width: 100%;
+      margin-left: 0;
+      padding: 0;
+    }
+    .pretix-widget-voucher {
+      input {
+        width: 100%;
+        float: none;
+      }
+      .pretix-widget-voucher-button-wrap {
+        width: 100%;
+        float: none;
+        margin-top: 10px;
+        padding: 0;
+      }
+    }
   }
 }
 
