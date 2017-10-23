@@ -1,0 +1,414 @@
+@import "_variables.scss";
+@import "../../bootstrap/scss/bootstrap/variables";
+@import "../../bootstrap/scss/bootstrap/mixins";
+
+.pretix-widget {
+  margin: 10px 0;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  position: relative;
+  min-height: 208px;
+  border-radius: $input-border-radius;
+
+  a {
+    color: $link-color;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      color: $link-hover-color;
+      text-decoration: $link-hover-decoration;
+    }
+    &:focus {
+      outline: thin dotted;
+      outline: 5px auto -webkit-focus-ring-color;
+      outline-offset: -2px;
+    }
+  }
+  img {
+    border: 0;
+  }
+  b, strong {
+    font-weight: bold;
+  }
+  h3 {
+    font-size: $font-size-h3;
+    font-weight: bold;
+  }
+  button, input[type="button"] {
+    overflow: visible;
+    text-transform: none;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 0;
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    @include button-size($padding-base-vertical, $padding-base-horizontal, $font-size-base, $line-height-base, $btn-border-radius-base);
+    @include user-select(none);
+    @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+
+    &,
+    &:active,
+    &.active {
+      &:focus,
+      &.focus {
+        @include tab-focus;
+      }
+    }
+  }
+  input[type="text"], input[type="number"] {
+    line-height: normal;
+    border: 1px solid $input-border;
+    border-radius: $input-border-radius;
+    height: $input-height-base;
+    padding: $padding-base-vertical $padding-base-horizontal;
+    color: $input-color;
+    background-color: $input-bg;
+    @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
+    @include transition(border-color ease-in-out .15s, box-shadow ease-in-out .15s);
+    @include placeholder;
+    $color-rgba: rgba(red($input-border-focus), green($input-border-focus), blue($input-border-focus), .6);
+
+    &:focus {
+      border-color: $input-border-focus;
+      outline: 0;
+      @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px $color-rgba);
+    }
+  }
+  input[type="checkbox"],
+  input[type="radio"] {
+    box-sizing: border-box; // 1
+    padding: 0; // 2
+    &:focus {
+      outline: thin dotted;
+      outline: 5px auto -webkit-focus-ring-color;
+      outline-offset: -2px;
+    }
+  }
+
+  .pretix-widget-primary-color {
+    /* in SVG */
+    fill: $brand-primary;
+  }
+
+  .pretix-widget-clickable {
+    cursor: pointer;
+  }
+
+  .pretix-widget-info-message {
+    padding: 10px;
+    text-align: center;
+    margin: 10px 0;
+    background-color: $alert-info-bg;
+    border-color: $alert-info-border;
+    color: $alert-info-text;
+  }
+
+  .pretix-widget-error-message {
+    padding: 10px;
+    text-align: center;
+    margin: 10px 0;
+    background-color: $alert-danger-bg;
+    border-color: $alert-danger-border;
+    color: $alert-danger-text;
+  }
+
+  .pretix-widget-loading {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, .8);
+    text-align: center;
+  }
+
+  @-moz-keyframes pretix-widget-spin {
+    100% {
+      -moz-transform: rotate(360deg);
+    }
+  }
+
+  @-webkit-keyframes pretix-widget-spin {
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes pretix-widget-spin {
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+
+  .pretix-widget-loading svg {
+    margin: 40px;
+    -webkit-animation: pretix-widget-spin 6s linear infinite;
+    -moz-animation: pretix-widget-spin 6s linear infinite;
+    animation: pretix-widget-spin 6s linear infinite;
+  }
+
+  .pretix-widget-item-row, .pretix-widget-category {
+    clear: both;
+  }
+
+  .pretix-widget-item-title {
+    font-weight: bold;
+  }
+
+  .pretix-widget-item-row {
+    padding: 10px 0;
+  }
+
+  .pretix-widget-category-name {
+    margin: 10px 0 0 0;
+  }
+
+  .pretix-widget-item-info-col {
+    width: 50%;
+    float: left;
+  }
+
+  .pretix-widget-item-price-col, .pretix-widget-item-availability-col {
+    width: 25%;
+    float: left;
+    padding: 0 15px;
+    box-sizing: border-box;
+  }
+
+  .pretix-widget-item-description p, .pretix-widget-item-meta {
+    margin: 0;
+  }
+
+  .pretix-widget-item-price-col {
+    text-align: right;
+  }
+
+  .pretix-widget-clear {
+    clear: both;
+  }
+
+  .pretix-widget-category-description p {
+    margin: 0 0 10px;
+  }
+
+  .pretix-widget-pricebox-tax {
+    display: block;
+  }
+
+  .pretix-widget-item-count-multiple {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    text-align: center;
+  }
+
+  .pretix-widget-pricebox-price-input {
+    display: inline;
+    width: 100px;
+    box-sizing: border-box;
+    text-align: right;
+  }
+
+  .pretix-widget-item-count-single-label {
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
+
+  .pretix-widget-attribution {
+    padding: 5px;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .pretix-widget-item-picture {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+    float: left;
+  }
+
+  .pretix-widget-action {
+    margin-left: 75%;
+    width: 25%;
+    padding: 0 15px;
+    box-sizing: border-box;
+  }
+
+  .pretix-widget-action button {
+    width: 100%;
+  }
+
+  .pretix-widget-voucher-headline {
+    margin: 10px 0 0 0;
+  }
+
+  .pretix-widget-voucher input {
+    width: 75%;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  .pretix-widget-voucher-button-wrap {
+    padding: 0 15px;
+    width: 25%;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  .pretix-widget-voucher button {
+    width: 100%;
+  }
+
+  .pretix-widget-item-with-picture .pretix-widget-main-item-row .pretix-widget-item-title-and-description {
+    margin-left: 70px;
+  }
+
+  .pretix-widget-item-availability-col {
+    text-align: center;
+  }
+
+  .pretix-widget-availability-gone {
+    font-weight: bold;
+    color: $brand-danger;
+    text-transform: uppercase;
+  }
+
+  .pretix-widget-availability-unavailable {
+    color: $brand-danger;
+  }
+
+  .pretix-widget-item-variations {
+    overflow: hidden;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    -moz-transition-duration: 0.5s;
+    -webkit-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+    -moz-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    -o-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  }
+
+  .pretix-widget-item-variations-expanded {
+    -moz-transition-duration: 0.5s;
+    -webkit-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+    -moz-transition-timing-function: ease-in;
+    -webkit-transition-timing-function: ease-in;
+    -o-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    max-height: 1000px;
+    overflow: hidden;
+  }
+}
+
+.pretix-widget-frame-holder {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 16777271;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s, visibility 0.5s;
+
+  .pretix-widget-frame-loading {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
+
+  .pretix-widget-frame-loading svg {
+    margin: 40px;
+    -webkit-animation: pretix-widget-spin 6s linear infinite;
+    -moz-animation: pretix-widget-spin 6s linear infinite;
+    animation: pretix-widget-spin 6s linear infinite;
+  }
+
+  &.pretix-widget-frame-shown {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.5s, visibility 0.5s;
+  }
+
+  .pretix-widget-frame-inner {
+    position: fixed;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    top: 10%;
+    background: white;
+    border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    box-sizing: border-box;
+    padding: 10px;
+  }
+
+  .pretix-widget-frame-close {
+    position: fixed;
+    right: 10%;
+    top: 10%;
+    width: 24px;
+    height: 24px;
+    background: $brand-primary;
+    margin: -12px -12px 0 0;
+    border-radius: 12px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    text-align: center;
+  }
+
+  .pretix-widget-frame-close a {
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-decoration: none;
+    padding: 4px 0;
+    display: block;
+  }
+
+  .pretix-widget-frame-inner iframe {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .pretix-widget-frame-holder {
+    .pretix-widget-frame-inner {
+      left: 50%;
+      margin-left: -540px;
+      width: 1080px;
+    }
+    .pretix-widget-frame-close {
+      left: 50%;
+      margin-left: 528px;
+    }
+  }
+}

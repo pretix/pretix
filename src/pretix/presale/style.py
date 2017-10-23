@@ -20,7 +20,7 @@ logger = logging.getLogger('pretix.presale.style')
 affected_keys = ['primary_font', 'primary_color']
 
 
-def compile_scss(object):
+def compile_scss(object, file="main.scss", fonts=True):
     sassdir = os.path.join(settings.STATIC_ROOT, 'pretixpresale/scss')
 
     def static(path):
@@ -41,14 +41,14 @@ def compile_scss(object):
         sassrules.append('$brand-primary: {};'.format(object.settings.get('primary_color')))
 
     font = object.settings.get('primary_font')
-    if font != 'Open Sans':
+    if font != 'Open Sans' and fonts:
         sassrules.append(get_font_stylesheet(font))
         sassrules.append(
             '$font-family-sans-serif: "{}", "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif !default'.format(
                 font
             ))
 
-    sassrules.append('@import "main.scss";')
+    sassrules.append('@import "{}";'.format(file))
 
     cf = dict(django_libsass.CUSTOM_FUNCTIONS)
     cf['static'] = static
@@ -64,31 +64,45 @@ def compile_scss(object):
 @app.task(base=ProfiledTask)
 def regenerate_css(event_id: int):
     event = Event.objects.select_related('organizer').get(pk=event_id)
-    css, checksum = compile_scss(event)
 
-    fname = '{}/{}/presale.{}.css'.format(
-        event.organizer.slug, event.slug, checksum[:16]
-    )
+    # main.scss
+    css, checksum = compile_scss(event)
+    fname = '{}/{}/presale.{}.css'.format(event.organizer.slug, event.slug, checksum[:16])
 
     if event.settings.get('presale_css_checksum', '') != checksum:
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         event.settings.set('presale_css_file', newname)
         event.settings.set('presale_css_checksum', checksum)
 
+    # widget.scss
+    css, checksum = compile_scss(event, file='widget.scss', fonts=False)
+    fname = '{}/{}/widget.{}.css'.format(event.organizer.slug, event.slug, checksum[:16])
+
+    if event.settings.get('presale_widget_css_checksum', '') != checksum:
+        newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
+        event.settings.set('presale_widget_css_file', newname)
+        event.settings.set('presale_widget_css_checksum', checksum)
+
 
 @app.task(base=ProfiledTask)
 def regenerate_organizer_css(organizer_id: int):
     organizer = Organizer.objects.get(pk=organizer_id)
+
+    # main.scss
     css, checksum = compile_scss(organizer)
-
-    fname = '{}/presale.{}.css'.format(
-        organizer.slug, checksum[:16]
-    )
-
+    fname = '{}/presale.{}.css'.format(organizer.slug, checksum[:16])
     if organizer.settings.get('presale_css_checksum', '') != checksum:
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         organizer.settings.set('presale_css_file', newname)
         organizer.settings.set('presale_css_checksum', checksum)
+
+    # widget.scss
+    css, checksum = compile_scss(organizer)
+    fname = '{}/widget.{}.css'.format(organizer.slug, checksum[:16])
+    if organizer.settings.get('presale_widget_css_checksum', '') != checksum:
+        newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
+        organizer.settings.set('presale_widget_css_file', newname)
+        organizer.settings.set('presale_widget_css_checksum', checksum)
 
     non_inherited_events = set(Event_SettingsStore.objects.filter(
         object__organizer=organizer, key__in=affected_keys

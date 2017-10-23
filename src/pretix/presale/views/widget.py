@@ -3,16 +3,21 @@ from urllib.parse import urljoin
 
 from django.conf import settings
 from django.contrib.staticfiles import finders
+from django.core.files.storage import default_storage
 from django.db.models import Q
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.template import Context, Engine
+from django.template.loader import get_template
 from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.views import View
+from django.views.decorators.cache import cache_page
+from django.views.decorators.http import condition
 from django.views.i18n import (
     get_formats, get_javascript_catalog, js_catalog_template,
 )
 from easy_thumbnails.files import get_thumbnailer
+from lxml import etree
 
 from pretix.base.i18n import language
 from pretix.base.models import CartPosition, Voucher
@@ -26,6 +31,29 @@ from pretix.presale.views.event import (
 
 def indent(s):
     return s.replace('\n', '\n  ')
+
+
+def widget_css_etag(request, **kwargs):
+    return request.event.settings.presale_widget_css_checksum or request.organizer.settings.presale_widget_css_checksum
+
+
+@condition(etag_func=widget_css_etag)
+@cache_page(60)
+def widget_css(request, **kwargs):
+    if request.event.settings.presale_widget_css_file:
+        resp = FileResponse(default_storage.open(request.event.settings.presale_widget_css_file),
+                            content_type='text/css')
+        return resp
+    elif request.organizer.settings.presale_widget_css_file:
+        resp = FileResponse(default_storage.open(request.organizer.settings.presale_widget_css_file),
+                            content_type='text/css')
+        return resp
+    else:
+        tpl = get_template('pretixpresale/widget_dummy.html')
+        et = etree.fromstring(tpl.render({})).attrib['href'].replace(settings.STATIC_URL, '')
+        f = finders.find(et)
+        resp = FileResponse(open(f, 'rb'), content_type='text/css')
+        return resp
 
 
 def widget_js(request, lang, **kwargs):
