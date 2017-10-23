@@ -25,7 +25,10 @@ from pretix.presale.views.organizer import (
     add_subevents_for_days, weeks_for_template,
 )
 
-from . import CartMixin, EventViewMixin, allow_frame_if_namespaced, get_cart
+from . import (
+    CartMixin, EventViewMixin, allow_frame_if_namespaced, get_cart,
+    iframe_entry_view_wrapper,
+)
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
@@ -168,6 +171,7 @@ def get_grouped_items(event, subevent=None, voucher=None):
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
+@method_decorator(iframe_entry_view_wrapper, 'dispatch')
 class EventIndex(EventViewMixin, CartMixin, TemplateView):
     template_name = "pretixpresale/event/index.html"
 

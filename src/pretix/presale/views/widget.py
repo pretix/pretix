@@ -31,41 +31,42 @@ def indent(s):
 def widget_js(request, lang, **kwargs):
     if lang not in [lc for lc, ll in settings.LANGUAGES]:
         raise Http404()
+    with language(lang):
 
-    resp = HttpResponse(content_type='text/javascript')
-    # Provide isolation
-    resp.write('(function (siteglobals) {\n')
-    resp.write('var module = {}, exports = {};\n')
-    resp.write('var lang = "%s";\n' % lang)
+        resp = HttpResponse(content_type='text/javascript')
+        # Provide isolation
+        resp.write('(function (siteglobals) {\n')
+        resp.write('var module = {}, exports = {};\n')
+        resp.write('var lang = "%s";\n' % lang)
 
-    catalog, plural = get_javascript_catalog(lang, 'djangojs', ['pretix'])
-    catalog = dict((k, v) for k, v in catalog.items() if k.startswith('widget\u0004'))
-    template = Engine().from_string(js_catalog_template)
-    context = Context({
-        'catalog_str': indent(json.dumps(
-            catalog, sort_keys=True, indent=2)) if catalog else None,
-        'formats_str': indent(json.dumps(
-            get_formats(), sort_keys=True, indent=2)),
-        'plural': plural,
-    })
-    resp.write(template.render(context))
+        catalog, plural = get_javascript_catalog(lang, 'djangojs', ['pretix'])
+        catalog = dict((k, v) for k, v in catalog.items() if k.startswith('widget\u0004'))
+        template = Engine().from_string(js_catalog_template)
+        context = Context({
+            'catalog_str': indent(json.dumps(
+                catalog, sort_keys=True, indent=2)) if catalog else None,
+            'formats_str': indent(json.dumps(
+                get_formats(), sort_keys=True, indent=2)),
+            'plural': plural,
+        })
+        resp.write(template.render(context))
 
-    files = [
-        'vuejs/vue.js' if settings.DEBUG else 'vuejs/vuejs.min.js',
-        'pretixpresale/js/widget/docready.js',
-        'pretixpresale/js/widget/floatformat.js',
-        'pretixpresale/js/widget/widget.js',
-    ]
-    for fname in files:
-        f = finders.find(fname)
-        with open(f, 'r') as fp:
-            resp.write(fp.read())
+        files = [
+            'vuejs/vue.js' if settings.DEBUG else 'vuejs/vuejs.min.js',
+            'pretixpresale/js/widget/docready.js',
+            'pretixpresale/js/widget/floatformat.js',
+            'pretixpresale/js/widget/widget.js',
+        ]
+        for fname in files:
+            f = finders.find(fname)
+            with open(f, 'r') as fp:
+                resp.write(fp.read())
 
-    if settings.DEBUG:
-        resp.write('})(this);\n')
-    else:
-        # Do not expose debugging variables
-        resp.write('})({});\n')
+        if settings.DEBUG:
+            resp.write('})(this);\n')
+        else:
+            # Do not expose debugging variables
+            resp.write('})({});\n')
 
     return resp
 

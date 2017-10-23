@@ -9,10 +9,13 @@ from pretix.base.services.cart import CartError
 from pretix.base.signals import validate_cart
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.checkoutflow import get_checkout_flow
-from pretix.presale.views import allow_frame_if_namespaced, get_cart
+from pretix.presale.views import (
+    allow_frame_if_namespaced, get_cart, iframe_entry_view_wrapper,
+)
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
+@method_decorator(iframe_entry_view_wrapper, 'dispatch')
 class CheckoutView(View):
 
     def get_index_url(self, request):
@@ -23,9 +26,6 @@ class CheckoutView(View):
 
     def dispatch(self, request, *args, **kwargs):
         self.request = request
-
-        if 'iframe' in request.GET:
-            request.session['iframe_session'] = True
 
         if not get_cart(request) and "async_id" not in request.GET:
             messages.error(request, _("Your cart is empty"))

@@ -1,13 +1,15 @@
 from collections import defaultdict
-from datetime import timedelta
+from datetime import datetime, timedelta
 from functools import wraps
 from itertools import groupby
 
+from django.conf import settings
 from django.db.models import Sum
 from django.utils.decorators import available_attrs
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
+from pretix.base.i18n import language
 from pretix.base.models import CartPosition, InvoiceAddress, OrderPosition
 from pretix.base.services.cart import get_fees
 from pretix.multidomain.urlreverse import eventreverse
@@ -216,5 +218,25 @@ def allow_cors_if_namespaced(view_func):
         resp = view_func(request, *args, **kwargs)
         if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
             resp['Access-Control-Allow-Origin'] = '*'
+        return resp
+    return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)
+
+
+def iframe_entry_view_wrapper(view_func):
+    def wrapped_view(request, *args, **kwargs):
+        if 'iframe' in request.GET:
+            request.session['iframe_session'] = True
+
+        locale = request.GET.get('locale')
+        if locale and locale in [lc for lc, ll in settings.LANGUAGES]:
+            with language(locale):
+                resp = view_func(request, *args, **kwargs)
+            max_age = 10 * 365 * 24 * 60 * 60
+            resp.set_cookie(settings.LANGUAGE_COOKIE_NAME, locale, max_age=max_age,
+                            expires=(datetime.utcnow() + timedelta(seconds=max_age)).strftime('%a, %d-%b-%Y %H:%M:%S GMT'),
+                            domain=settings.SESSION_COOKIE_DOMAIN)
+            return resp
+
+        resp = view_func(request, *args, **kwargs)
         return resp
     return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)
