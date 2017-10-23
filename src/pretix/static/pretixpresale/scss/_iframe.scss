@@ -4,3 +4,10 @@
 .in-iframe .container {
   padding-top: 10px;
 }
+.iframe-only,
+.in-iframe .iframe-hidden {
+  display: none;
+}
+.in-iframe .iframe-only {
+  display: block;
+}

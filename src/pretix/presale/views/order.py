@@ -26,7 +26,7 @@ from pretix.base.services.tickets import (
 )
 from pretix.base.signals import allow_ticket_download, register_ticket_outputs
 from pretix.helpers.safedownload import check_token
-from pretix.multidomain.urlreverse import eventreverse
+from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm
 from pretix.presale.views import CartMixin, EventViewMixin
 from pretix.presale.views.async import AsyncAction
@@ -114,6 +114,12 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         ctx['invoices'] = list(self.order.invoices.all())
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
             self.request.event.settings.invoice_generate == 'user'
+        )
+        ctx['url'] = build_absolute_uri(
+            self.request.event, 'presale:event.order', kwargs={
+                'order': self.order.code,
+                'secret': self.order.secret
+            }
         )
 
         if self.order.status == Order.STATUS_PENDING:
