@@ -172,6 +172,7 @@ class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
         ctx['form'] = self.form
+        ctx['provider'] = self.payment_provider
         return ctx
 
     @cached_property

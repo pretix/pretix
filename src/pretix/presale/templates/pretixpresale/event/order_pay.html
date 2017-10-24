@@ -11,6 +11,7 @@
 
     <form method="post" class="form-horizontal" href="" data-total="{{ order.total|floatformat:2 }}">
         {% csrf_token %}
+        <input type="hidden" name="payment" value="{{ provider.identifier }}">
         <div class="form-horizontal payment-redo-form">
             {{ form }}
         </div>
