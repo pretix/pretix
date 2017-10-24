@@ -1,6 +1,10 @@
+from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.db.models import F, Prefetch, Q
 from django.db.models.functions import Coalesce
+from django.shortcuts import redirect
 from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView
 
 from pretix.base.models import Checkin, Item, Order, OrderPosition
@@ -71,32 +75,29 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
         return ctx
 
     def post(self, request, *args, **kwargs):
-        for c in request.POST.getlist('checkin'):
+        positions = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').filter(
+            order__event=self.request.event,
+            pk__in=request.POST.getlist('checkin')
+        )
+
+        for op in positions:
             created = False
-            op = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').get(
-                order__event=self.request.event,
-                order__code=c
-            )
             if op.order.status == Order.STATUS_PAID:
                 ci, created = Checkin.objects.get_or_create(position=op, defaults={
                     'datetime': now(),
                 })
-            if created:
-                op.order.log_action('pretix.control.views.checkin', data={
-                    'position': op.id,
-                    'positionid': op.positionid,
-                    'first': True,
-                    'datetime': now()
-                })
-            else:
-                op.order.log_action('pretix.control.views.checkin', data={
-                    'position': op.id,
-                    'positionid': op.positionid,
-                    'first': False,
-                    'datetime': now()
-                })
+            op.order.log_action('pretix.control.views.checkin', data={
+                'position': op.id,
+                'positionid': op.positionid,
+                'first': created,
+                'datetime': now()
+            })
 
-        return self.get(request, *args, **kwargs)
+        messages.success(request, _('The selected tickets have been marked as checked in.'))
+        return redirect(reverse('control:event.orders.checkins', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug
+        }) + '?' + request.GET.urlencode())
 
     @staticmethod
     def get_ordering_keys_mappings():

@@ -1,8 +1,11 @@
 import json
 from decimal import Decimal
 
+import dateutil.parser
+import pytz
 from django.dispatch import receiver
 from django.utils import formats
+from django.utils.formats import date_format
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.strings import LazyI18nString
 
@@ -199,6 +202,21 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if logentry.action_type.startswith('pretix.event.tickets.provider.'):
         return _('The settings of a ticket output provider have been changed.')
+
+    if logentry.action_type == 'pretix.control.views.checkin':
+        dt = dateutil.parser.parse(data.get('datetime'))
+        tz = pytz.timezone(sender.settings.timezone)
+        dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
+
+        if data.get('first'):
+            return _('Position #{posid} has been checked in manually at {datetime}.').format(
+                posid=data.get('positionid'),
+                datetime=dt_formatted
+            )
+        return _('Position #{posid} has been checked in again at {datetime}.').format(
+            posid=data.get('positionid'),
+            datetime=dt_formatted
+        )
 
     if logentry.action_type == 'pretix.team.member.added':
         return _('{user} has been added to the team.').format(user=data.get('email'))
