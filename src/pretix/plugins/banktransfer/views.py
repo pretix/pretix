@@ -71,7 +71,7 @@ class ActionView(View):
                 'date': trans.date,
                 'payer': trans.payer,
                 'trans_id': trans.pk
-            }))
+            }), count_waitinglist=False)
             trans.state = BankTransaction.STATE_VALID
             trans.save()
         except Quota.QuotaExceededException as e:

@@ -210,7 +210,8 @@ class OrderTransition(OrderView):
         to = self.request.POST.get('status', '')
         if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p':
             try:
-                mark_order_paid(self.order, manual=True, user=self.request.user)
+                mark_order_paid(self.order, manual=True, user=self.request.user,
+                                count_waitinglist=False)
             except Quota.QuotaExceededException as e:
                 messages.error(self.request, str(e))
             except SendMailException:

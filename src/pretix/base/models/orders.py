@@ -314,7 +314,7 @@ class Order(LoggedModel):
             ), tz)
         return term_last
 
-    def _can_be_paid(self) -> Union[bool, str]:
+    def _can_be_paid(self, count_waitinglist=True) -> Union[bool, str]:
         error_messages = {
             'late_lastdate': _("The payment can not be accepted as the last date of payments configured in the "
                                "payment settings is over."),
@@ -331,7 +331,7 @@ class Order(LoggedModel):
         if not self.event.settings.get('payment_term_accept_late'):
             return error_messages['late']
 
-        return self._is_still_available()
+        return self._is_still_available(count_waitinglist=count_waitinglist)
 
     def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True) -> Union[bool, str]:
         error_messages = {

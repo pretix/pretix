@@ -682,6 +682,26 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
+    def test_paid_expired_unavailable_waiting_list(self):
+        self.event.waitinglistentries.create(item=self.item1, email='foo@bar.com')
+        self.order.expires = now() - timedelta(days=2)
+        self.order.save()
+        self.quota.size = 1
+        self.quota.save()
+        mark_order_paid(self.order, force=True)
+        self.order = Order.objects.get(id=self.order.id)
+        self.assertEqual(self.order.status, Order.STATUS_EXPIRED)
+
+    def test_paid_expired_unavailable_waiting_list_ignore(self):
+        self.event.waitinglistentries.create(item=self.item1, email='foo@bar.com')
+        self.order.expires = now() - timedelta(days=2)
+        self.order.save()
+        self.quota.size = 1
+        self.quota.save()
+        mark_order_paid(self.order, force=True, count_waitinglist=False)
+        self.order = Order.objects.get(id=self.order.id)
+        self.assertEqual(self.order.status, Order.STATUS_PAID)
+
     def test_can_modify_answers(self):
         self.event.settings.set('invoice_address_asked', False)
         self.event.settings.set('attendee_names_asked', True)

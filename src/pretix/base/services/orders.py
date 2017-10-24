@@ -75,7 +75,8 @@ logger = logging.getLogger(__name__)
 
 
 def mark_order_paid(order: Order, provider: str=None, info: str=None, date: datetime=None, manual: bool=None,
-                    force: bool=False, send_mail: bool=True, user: User=None, mail_text='') -> Order:
+                    force: bool=False, send_mail: bool=True, user: User=None, mail_text='',
+                    count_waitinglist=True) -> Order:
     """
     Marks an order as paid. This sets the payment provider, info and date and returns
     the order object.
@@ -101,7 +102,7 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
         return order
 
     with order.event.lock() as now_dt:
-        can_be_paid = order._can_be_paid()
+        can_be_paid = order._can_be_paid(count_waitinglist=count_waitinglist)
         if not force and can_be_paid is not True:
             raise Quota.QuotaExceededException(can_be_paid)
         order.payment_provider = provider or order.payment_provider
@@ -756,7 +757,7 @@ class OrderChangeManager:
     def _check_paid_to_free(self):
         if self.order.total == 0:
             try:
-                mark_order_paid(self.order, 'free', send_mail=False)
+                mark_order_paid(self.order, 'free', send_mail=False, count_waitinglist=False)
             except Quota.QuotaExceededException:
                 raise OrderError(self.error_messages['paid_to_free_exceeded'])
 
