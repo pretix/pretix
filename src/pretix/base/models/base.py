@@ -55,10 +55,10 @@ class LoggingMixin:
             event = self.event
         if user and not user.is_authenticated:
             user = None
-        l = LogEntry(content_object=self, user=user, action_type=action, event=event, api_token=api_token)
+        logentry = LogEntry(content_object=self, user=user, action_type=action, event=event, api_token=api_token)
         if data:
-            l.data = json.dumps(data, cls=CustomJSONEncoder)
-        l.save()
+            logentry.data = json.dumps(data, cls=CustomJSONEncoder)
+        logentry.save()
 
 
 class LoggedModel(models.Model, LoggingMixin):
