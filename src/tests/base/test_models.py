@@ -656,6 +656,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.assertEqual(self.order.status, Order.STATUS_EXPIRED)
 
     def test_paid_expired_unavailable(self):
+        self.event.settings.payment_term_accept_late = True
         self.order.expires = now() - timedelta(days=2)
         self.order.status = Order.STATUS_EXPIRED
         self.order.save()
@@ -667,6 +668,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.assertIn(self.order.status, (Order.STATUS_PENDING, Order.STATUS_EXPIRED))
 
     def test_paid_after_deadline_but_not_expired(self):
+        self.event.settings.payment_term_accept_late = True
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
         mark_order_paid(self.order)
@@ -674,7 +676,9 @@ class OrderTestCase(BaseQuotaTestCase):
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
     def test_paid_expired_unavailable_force(self):
+        self.event.settings.payment_term_accept_late = True
         self.order.expires = now() - timedelta(days=2)
+        self.order.status = Order.STATUS_EXPIRED
         self.order.save()
         self.quota.size = 0
         self.quota.save()
@@ -683,22 +687,26 @@ class OrderTestCase(BaseQuotaTestCase):
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
     def test_paid_expired_unavailable_waiting_list(self):
+        self.event.settings.payment_term_accept_late = True
         self.event.waitinglistentries.create(item=self.item1, email='foo@bar.com')
         self.order.expires = now() - timedelta(days=2)
+        self.order.status = Order.STATUS_EXPIRED
         self.order.save()
-        self.quota.size = 1
+        self.quota.size = 2
         self.quota.save()
-        mark_order_paid(self.order, force=True)
+        with self.assertRaises(Quota.QuotaExceededException):
+            mark_order_paid(self.order)
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_EXPIRED)
 
     def test_paid_expired_unavailable_waiting_list_ignore(self):
         self.event.waitinglistentries.create(item=self.item1, email='foo@bar.com')
         self.order.expires = now() - timedelta(days=2)
+        self.order.status = Order.STATUS_EXPIRED
         self.order.save()
-        self.quota.size = 1
+        self.quota.size = 2
         self.quota.save()
-        mark_order_paid(self.order, force=True, count_waitinglist=False)
+        mark_order_paid(self.order, count_waitinglist=False)
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
