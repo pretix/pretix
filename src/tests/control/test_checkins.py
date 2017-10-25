@@ -268,6 +268,7 @@ def test_checkins_list_mixed(client, checkin_list_env, query, expected):
     item_keys = [q.order.code + str(q.item.name) for q in qs]
     assert item_keys == expected
 
+
 @pytest.mark.django_db
 @pytest.mark.parametrize("query, expected", [
     ('status=&item=&user=', ['A1Ticket', 'A1Mascot', 'A2Ticket', 'A3Ticket']),
