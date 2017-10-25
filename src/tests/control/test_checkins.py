@@ -268,6 +268,22 @@ def test_checkins_list_mixed(client, checkin_list_env, query, expected):
     item_keys = [q.order.code + str(q.item.name) for q in qs]
     assert item_keys == expected
 
+@pytest.mark.django_db
+@pytest.mark.parametrize("query, expected", [
+    ('status=&item=&user=', ['A1Ticket', 'A1Mascot', 'A2Ticket', 'A3Ticket']),
+    ('status=1&item=&user=', ['A1Ticket', 'A2Ticket', 'A3Ticket']),
+])
+def test_manual_checkins(client, checkin_list_env, query, expected):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/checkins/', {
+        'checkin': [checkin_list_env[5][3].pk]
+    })
+    response = client.get('/control/event/dummy/dummy/checkins/?' + query)
+    qs = response.context['entries']
+    item_keys = [q.order.code + str(q.item.name) for q in qs]
+    print(item_keys)
+    assert item_keys == expected
+
 
 @pytest.fixture
 def checkin_list_with_addon_env():
