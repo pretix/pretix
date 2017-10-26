@@ -326,8 +326,8 @@ $(function () {
 
     $(".scrolling-multiple-choice").each(function () {
         var $small = $("<small>");
-        var $a_all = $("<a>").addClass("choice-options-all").attr("href", "#").text(gettext("Alle"));
-        var $a_none = $("<a>").addClass("choice-options-none").attr("href", "#").text(gettext("Keine"));
+        var $a_all = $("<a>").addClass("choice-options-all").attr("href", "#").text(gettext("All"));
+        var $a_none = $("<a>").addClass("choice-options-none").attr("href", "#").text(gettext("None"));
         $(this).prepend($small.append($a_all).append(" / ").append($a_none));
 
         $(this).find(".choice-options-none").click(function (e) {

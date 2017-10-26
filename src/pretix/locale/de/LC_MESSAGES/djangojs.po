@@ -207,6 +207,14 @@ msgstr[0] ""
 msgstr[1] ""
 "Die Produkte in Ihrem Warenkorb sind noch {num} Minuten für Sie reserviert."
 
+#: pretix/static/pretixcontrol/js/ui/main.js:329
+msgid "All"
+msgstr "Alle"
+
+#: pretix/static/pretixcontrol/js/ui/main.js:330
+msgid "None"
+msgstr "Keine"
+
 #~ msgid "Sample product"
 #~ msgstr "Beispielprodukt"
 
