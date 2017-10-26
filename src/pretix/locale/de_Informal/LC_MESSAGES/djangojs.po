@@ -188,12 +188,12 @@ msgid "Unknown error."
 msgstr "Unbekannter Fehler."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:329
-msgid "Alle"
-msgstr ""
+msgid "All"
+msgstr "Alle"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:330
-msgid "Keine"
-msgstr ""
+msgid "None"
+msgstr "Keine"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41
 msgid "Others"
