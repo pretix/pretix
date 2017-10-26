@@ -85,7 +85,8 @@ class InvoiceAddressForm(forms.ModelForm):
 
     class Meta:
         model = InvoiceAddress
-        fields = ('is_business', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id')
+        fields = ('is_business', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id',
+                  'internal_reference')
         widgets = {
             'is_business': BusinessBooleanRadio,
             'street': forms.Textarea(attrs={'rows': 2, 'placeholder': _('Street and Number')}),
@@ -93,6 +94,7 @@ class InvoiceAddressForm(forms.ModelForm):
                                               'data-display-dependency': '#id_is_business_1'}),
             'name': forms.TextInput(attrs={'data-typocheck-source': '1'}),
             'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
+            'internal_reference': forms.TextInput,
         }
         labels = {
             'is_business': ''

@@ -43,6 +43,7 @@ invoice_address                       object                     Invoice address
 ├ zipcode                             string                     Customer ZIP code
 ├ city                                string                     Customer city
 ├ country                             string                     Customer country
+├ internal_reference                  string                     Customer's internal reference to be printed on the invoice
 ├ vat_id                              string                     Customer VAT ID
 └ vat_id_validated                    string                     ``True``, if the VAT ID has been validated against the
                                                                  EU VAT service and validation was successful. This only
@@ -79,6 +80,10 @@ downloads                             list of objects            List of ticket 
    The attributes ``invoice_address.vat_id_validated`` and ``invoice_address.is_business`` have been added.
    The attributes ``order.payment_fee``, ``order.payment_fee_tax_rate`` and ``order.payment_fee_tax_value`` have been
    deprecated in favour of the new ``fees`` attribute but will still be served and removed in 1.9.
+
+.. versionchanged:: 1.9
+
+   The attribute ``invoice_address.internal_reference`` has been added.
 
 
 Order position resource
@@ -170,6 +175,7 @@ Order endpoints
                 "zipcode": "12345",
                 "city": "Testington",
                 "country": "Testikistan",
+                "internal_reference": "",
                 "vat_id": "EU123456789",
                 "vat_id_validated": False
             },
@@ -275,6 +281,7 @@ Order endpoints
             "zipcode": "12345",
             "city": "Testington",
             "country": "Testikistan",
+            "internal_reference": "",
             "vat_id": "EU123456789",
             "vat_id_validated": False
         },

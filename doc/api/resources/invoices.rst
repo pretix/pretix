@@ -41,6 +41,7 @@ foreign_currency_rate                 decimal (string)           If ``foreign_cu
                                                                  invoicing time, it is stored here.
 foreign_currency_rate_date            date                       If ``foreign_currency_rate`` is set, this signifies the
                                                                  date at which the currency rate was obtained.
+internal_reference                    string                     Customer's reference to be printed on the invoice.
 ===================================== ========================== =======================================================
 
 
@@ -55,6 +56,11 @@ foreign_currency_rate_date            date                       If ``foreign_cu
 
    The attributes ``lines.tax_name``, ``foreign_currency_display``, ``foreign_currency_rate``, and
    ``foreign_currency_rate_date`` have been added.
+
+
+.. versionchanged:: 1.9
+
+   The attribute ``internal_reference`` has been added.
 
 
 Endpoints
@@ -95,6 +101,7 @@ Endpoints
             "refers": null,
             "locale": "en",
             "introductory_text": "thank you for your purchase of the following items:",
+            "internal_reference": "",
             "additional_text": "We are looking forward to see you on our conference!",
             "payment_provider_text": "Please transfer the money to our account ABC…",
             "footer_text": "Big Events LLC - Registration No. 123456 - VAT ID: EU0987654321",
@@ -158,6 +165,7 @@ Endpoints
         "refers": null,
         "locale": "en",
         "introductory_text": "thank you for your purchase of the following items:",
+        "internal_reference": "",
         "additional_text": "We are looking forward to see you on our conference!",
         "payment_provider_text": "Please transfer the money to our account ABC…",
         "footer_text": "Big Events LLC - Registration No. 123456 - VAT ID: EU0987654321",

@@ -54,13 +54,14 @@ def build_invoice(invoice: Invoice) -> Invoice:
 {i.zipcode} {i.city}
 {country}""")
             invoice.invoice_to = addr_template.format(
-                i=invoice.order.invoice_address,
-                country=invoice.order.invoice_address.country.name if invoice.order.invoice_address.country else invoice.order.invoice_address.country_old
+                i=ia,
+                country=ia.country.name if ia.country else ia.country_old
             ).strip()
-            if invoice.order.invoice_address.vat_id:
-                invoice.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % invoice.order.invoice_address.vat_id
+            invoice.internal_reference = ia.internal_reference
+            if ia.vat_id:
+                invoice.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % ia.vat_id
 
-            cc = str(invoice.order.invoice_address.country)
+            cc = str(ia.country)
 
             if cc in EU_CURRENCIES and EU_CURRENCIES[cc] != invoice.event.currency:
                 invoice.foreign_currency_display = EU_CURRENCIES[cc]

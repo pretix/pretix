@@ -331,6 +331,12 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             NextPageTemplate('OtherPages'),
         ]
 
+        if self.invoice.internal_reference:
+            story.append(Paragraph(
+                pgettext('invoice', 'Your reference: {reference}').format(reference=self.invoice.internal_reference),
+                self.stylesheet['Normal']
+            ))
+
         if self.invoice.introductory_text:
             story.append(Paragraph(self.invoice.introductory_text, self.stylesheet['Normal']))
             story.append(Spacer(1, 10 * mm))

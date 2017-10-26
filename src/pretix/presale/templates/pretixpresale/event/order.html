@@ -188,6 +188,8 @@
                                 <dt>{% trans "VAT ID" %}</dt>
                                 <dd>{{ order.invoice_address.vat_id }}</dd>
                             {% endif %}
+                            <dt>{% trans "Internal Reference" %}</dt>
+                            <dd>{{ order.invoice_address.internal_reference }}</dd>
                         </dl>
                     </div>
                 </div>

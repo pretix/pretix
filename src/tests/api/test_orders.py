@@ -106,6 +106,7 @@ TEST_ORDER_RES = {
         "zipcode": "",
         "city": "",
         "country": "NZ",
+        "internal_reference": "",
         "vat_id": "",
         "vat_id_validated": False
     },
@@ -294,6 +295,7 @@ TEST_INVOICE_RES = {
     "refers": None,
     "locale": "en",
     "introductory_text": "",
+    "internal_reference": "",
     "additional_text": "",
     "payment_provider_text": "",
     "footer_text": "",
