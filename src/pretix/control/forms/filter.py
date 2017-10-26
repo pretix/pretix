@@ -1,12 +1,47 @@
 from django import forms
+from django.apps import apps
 from django.db.models import Exists, OuterRef, Q
 from django.db.models.functions import Concat
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
-from pretix.base.models import Invoice, Item, Order, Organizer, SubEvent
+from pretix.base.models import Event, Invoice, Item, Order, Organizer, SubEvent
 from pretix.base.signals import register_payment_providers
 from pretix.control.utils.i18n import i18ncomp
+from pretix.helpers.database import rolledback_transaction
+
+PAYMENT_PROVIDERS = []
+
+
+def get_all_payment_providers():
+    global PAYMENT_PROVIDERS
+
+    if PAYMENT_PROVIDERS:
+        return PAYMENT_PROVIDERS
+
+    with rolledback_transaction():
+        event = Event.objects.create(
+            plugins=",".join([app.name for app in apps.get_app_configs()]),
+            name="INTERNAL",
+            date_from=now(),
+            organizer=Organizer.objects.create(name="INTERNAL")
+        )
+        provs = register_payment_providers.send(
+            sender=event
+        )
+        choices = []
+        for recv, prov in provs:
+            if isinstance(prov, list):
+                for p in prov:
+                    p = p(event)
+                    if not p.is_meta:
+                        choices.append((p.identifier, p.verbose_name))
+            else:
+                prov = prov(event)
+                if not prov.is_meta:
+                    choices.append((prov.identifier, prov.verbose_name))
+    PAYMENT_PROVIDERS = choices
+    return choices
 
 
 class FilterForm(forms.Form):
@@ -35,6 +70,13 @@ class OrderFilterForm(FilterForm):
             'autofocus': 'autofocus'
         }),
         required=False
+    )
+    provider = forms.ChoiceField(
+        label=_('Payment provider'),
+        choices=[
+            ('', _('All payment providers')),
+        ],
+        required=False,
     )
     status = forms.ChoiceField(
         label=_('Order status'),
@@ -96,6 +138,9 @@ class OrderFilterForm(FilterForm):
         if fdata.get('ordering'):
             qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
 
+        if fdata.get('provider'):
+            qs = qs.filter(payment_provider=fdata.get('provider'))
+
         return qs
 
 
@@ -109,30 +154,12 @@ class EventOrderFilterForm(OrderFilterForm):
         required=False,
         empty_label=_('All products')
     )
-    provider = forms.ChoiceField(
-        label=_('Payment provider'),
-        choices=[
-            ('', _('All payment providers')),
-        ],
-        required=False,
-    )
     subevent = forms.ModelChoiceField(
         label=pgettext_lazy('subevent', 'Date'),
         queryset=SubEvent.objects.none(),
         required=False,
         empty_label=pgettext_lazy('subevent', 'All dates')
     )
-
-    def get_payment_providers(self):
-        providers = []
-        responses = register_payment_providers.send(self.event)
-        for receiver, response in responses:
-            provider = response(self.event)
-            providers.append({
-                'name': provider.identifier,
-                'verbose_name': provider.verbose_name
-            })
-        return providers
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
@@ -155,9 +182,6 @@ class EventOrderFilterForm(OrderFilterForm):
 
         if fdata.get('subevent'):
             qs = qs.filter(positions__subevent=fdata.get('subevent'))
-
-        if fdata.get('provider'):
-            qs = qs.filter(payment_provider=fdata.get('provider'))
 
         return qs
 
@@ -183,6 +207,7 @@ class OrderSearchFilterForm(OrderFilterForm):
             self.fields['organizer'].queryset = Organizer.objects.filter(
                 pk__in=request.user.teams.values_list('organizer', flat=True)
             )
+        self.fields['provider'].choices += get_all_payment_providers()
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data
@@ -260,7 +285,7 @@ class EventFilterForm(FilterForm):
         'date_from': 'order_from',
         'date_to': 'order_to',
         'live': 'live',
-        'sum_quota_available': 'sum_quota_available'
+        'sum_tickets_paid': 'sum_tickets_paid'
     }
     status = forms.ChoiceField(
         label=_('Status'),

@@ -359,11 +359,11 @@ class PdfTicketOutput(BaseTicketOutput):
         ]
 
     def _migrate_from_old_settings(self):
-        l = []
+        layout = []
 
         event_s = self.settings.get('event_s', default=22, as_type=float)
         if event_s:
-            l.append({
+            layout.append({
                 'type': 'textarea',
                 'fontfamily': 'Helvetica',
                 'left': self.settings.get('event_x', default=15, as_type=float),
@@ -380,7 +380,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         order_s = self.settings.get('order_s', default=17, as_type=float)
         if order_s:
-            l.append({
+            layout.append({
                 'type': 'textarea',
                 'fontfamily': 'Helvetica',
                 'left': self.settings.get('order_x', default=15, as_type=float),
@@ -397,7 +397,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         name_s = self.settings.get('name_s', default=17, as_type=float)
         if name_s:
-            l.append({
+            layout.append({
                 'type': 'textarea',
                 'fontfamily': 'Helvetica',
                 'left': self.settings.get('name_x', default=15, as_type=float),
@@ -414,7 +414,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         price_s = self.settings.get('price_s', default=17, as_type=float)
         if price_s:
-            l.append({
+            layout.append({
                 'type': 'textarea',
                 'fontfamily': 'Helvetica',
                 'left': self.settings.get('price_x', default=15, as_type=float),
@@ -431,7 +431,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         qr_s = self.settings.get('qr_s', default=80, as_type=float)
         if qr_s:
-            l.append({
+            layout.append({
                 'type': 'barcodearea',
                 'left': self.settings.get('qr_x', default=10, as_type=float),
                 'bottom': self.settings.get('qr_y', default=120, as_type=float),
@@ -440,7 +440,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         code_s = self.settings.get('code_s', default=11, as_type=float)
         if code_s:
-            l.append({
+            layout.append({
                 'type': 'textarea',
                 'fontfamily': 'Helvetica',
                 'left': self.settings.get('code_x', default=15, as_type=float),
@@ -457,7 +457,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         attendee_s = self.settings.get('attendee_s', default=0, as_type=float)
         if attendee_s:
-            l.append({
+            layout.append({
                 'type': 'textarea',
                 'fontfamily': 'Helvetica',
                 'left': self.settings.get('attendee_x', default=15, as_type=float),
@@ -472,4 +472,4 @@ class PdfTicketOutput(BaseTicketOutput):
                 'align': 'left'
             })
 
-        return l
+        return layout

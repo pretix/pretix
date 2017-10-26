@@ -28,33 +28,34 @@ def assign_automatically(event_id: int, user_id: int=None, subevent_id: int=None
 
     sent = 0
 
-    for wle in qs:
-        if (wle.item, wle.variation) in gone:
-            continue
-
-        quotas = (wle.variation.quotas.filter(subevent=wle.subevent)
-                  if wle.variation
-                  else wle.item.quotas.filter(subevent=wle.subevent))
-        availability = (
-            wle.variation.check_quotas(count_waitinglist=False, _cache=quota_cache, subevent=wle.subevent)
-            if wle.variation
-            else wle.item.check_quotas(count_waitinglist=False, _cache=quota_cache, subevent=wle.subevent)
-        )
-        if availability[1] > 0:
-            try:
-                wle.send_voucher(quota_cache, user=user)
-                sent += 1
-            except WaitingListException:  # noqa
+    with event.lock():
+        for wle in qs:
+            if (wle.item, wle.variation) in gone:
                 continue
 
-            # Reduce affected quotas in cache
-            for q in quotas:
-                quota_cache[q.pk] = (
-                    quota_cache[q.pk][0] if quota_cache[q.pk][0] > 1 else 0,
-                    quota_cache[q.pk][1] - 1
-                )
-        else:
-            gone.add((wle.item, wle.variation))
+            quotas = (wle.variation.quotas.filter(subevent=wle.subevent)
+                      if wle.variation
+                      else wle.item.quotas.filter(subevent=wle.subevent))
+            availability = (
+                wle.variation.check_quotas(count_waitinglist=False, _cache=quota_cache, subevent=wle.subevent)
+                if wle.variation
+                else wle.item.check_quotas(count_waitinglist=False, _cache=quota_cache, subevent=wle.subevent)
+            )
+            if availability[1] > 0:
+                try:
+                    wle.send_voucher(quota_cache, user=user)
+                    sent += 1
+                except WaitingListException:  # noqa
+                    continue
+
+                # Reduce affected quotas in cache
+                for q in quotas:
+                    quota_cache[q.pk] = (
+                        quota_cache[q.pk][0] if quota_cache[q.pk][0] > 1 else 0,
+                        quota_cache[q.pk][1] - 1
+                    )
+            else:
+                gone.add((wle.item, wle.variation))
 
     return sent
 

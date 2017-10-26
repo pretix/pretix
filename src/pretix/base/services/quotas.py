@@ -10,11 +10,11 @@ from ..signals import periodic_task
 
 @receiver(signal=periodic_task)
 def build_all_quota_caches(sender, **kwargs):
-    refresh_quota_cashes.apply_async()
+    refresh_quota_caches.apply_async()
 
 
 @app.task
-def refresh_quota_cashes():
+def refresh_quota_caches():
     last_activity = LogEntry.objects.filter(
         event=OuterRef('event_id'),
     ).order_by().values('event').annotate(

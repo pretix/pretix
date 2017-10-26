@@ -25,7 +25,7 @@ def control_nav_import(sender, request=None, **kwargs):
 
 
 def clear_cache(sender, *args, **kwargs):
-    cache = sender.get_cache()
+    cache = sender.cache
     cache.delete('statistics_obd_data')
     cache.delete('statistics_obp_data')
     cache.delete('statistics_rev_data')

@@ -91,14 +91,16 @@ class BaseCheckoutFlowStep:
 
     @cached_property
     def invoice_address(self):
-        iapk = self.cart_session.get('invoice_address')
-        if not iapk:
-            return InvoiceAddress()
-
-        try:
-            return InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
-        except InvoiceAddress.DoesNotExist:
-            return InvoiceAddress()
+        if not hasattr(self.request, '_checkout_flow_invoice_address'):
+            iapk = self.cart_session.get('invoice_address')
+            if not iapk:
+                self.request._checkout_flow_invoice_address = InvoiceAddress()
+            else:
+                try:
+                    self.request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                except InvoiceAddress.DoesNotExist:
+                    self.request._checkout_flow_invoice_address = InvoiceAddress()
+        return self.request._checkout_flow_invoice_address
 
 
 def get_checkout_flow(event):
@@ -160,7 +162,9 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     requires_valid_cart = False
 
     def is_applicable(self, request):
-        return get_cart(request).filter(item__addons__isnull=False).exists()
+        if not hasattr(request, '_checkoutflow_addons_applicable'):
+            request._checkoutflow_addons_applicable = get_cart(request).filter(item__addons__isnull=False).exists()
+        return request._checkoutflow_addons_applicable
 
     def is_completed(self, request, warn=False):
         for cartpos in get_cart(request).filter(addon_to__isnull=True).prefetch_related(

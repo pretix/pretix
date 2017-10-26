@@ -66,12 +66,12 @@ class ItemCategory(LoggedModel):
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     @property
     def sortkey(self):
@@ -104,6 +104,16 @@ class SubEventItem(models.Model):
     item = models.ForeignKey('Item', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
 
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        if self.subevent:
+            self.subevent.event.cache.clear()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.subevent:
+            self.subevent.event.cache.clear()
+
 
 class SubEventItemVariation(models.Model):
     """
@@ -120,6 +130,16 @@ class SubEventItemVariation(models.Model):
     subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
     variation = models.ForeignKey('ItemVariation', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        if self.subevent:
+            self.subevent.event.cache.clear()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.subevent:
+            self.subevent.event.cache.clear()
 
 
 class Item(LoggedModel):
@@ -290,12 +310,12 @@ class Item(LoggedModel):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     def tax(self, price=None, base_price_is='auto'):
         price = price if price is not None else self.default_price
@@ -418,12 +438,12 @@ class ItemVariation(models.Model):
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.item:
-            self.item.event.get_cache().clear()
+            self.item.event.cache.clear()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.item:
-            self.item.event.get_cache().clear()
+            self.item.event.cache.clear()
 
     def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None) -> Tuple[int, int]:
         """
@@ -595,12 +615,12 @@ class Question(LoggedModel):
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     @property
     def sortkey(self):
@@ -707,6 +727,7 @@ class Quota(LoggedModel):
     )
     cached_availability_state = models.PositiveIntegerField(null=True, blank=True)
     cached_availability_number = models.PositiveIntegerField(null=True, blank=True)
+    cached_availability_paid_orders = models.PositiveIntegerField(null=True, blank=True)
     cached_availability_time = models.DateTimeField(null=True, blank=True)
 
     class Meta:
@@ -719,13 +740,13 @@ class Quota(LoggedModel):
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     def save(self, *args, **kwargs):
         clear_cache = kwargs.pop('clear_cache', True)
         super().save(*args, **kwargs)
         if self.event and clear_cache:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
 
     def rebuild_cache(self, now_dt=None):
         self.cached_availability_time = None
@@ -758,12 +779,18 @@ class Quota(LoggedModel):
         now_dt = now_dt or now()
         res = self._availability(now_dt, count_waitinglist)
 
+        self.event.cache.delete('item_quota_cache')
         if count_waitinglist and not self.cache_is_hot(now_dt):
             self.cached_availability_state = res[0]
             self.cached_availability_number = res[1]
             self.cached_availability_time = now_dt
+            if self.size is None:
+                self.cached_availability_paid_orders = self.count_pending_orders()
             self.save(
-                update_fields=['cached_availability_state', 'cached_availability_number', 'cached_availability_time'],
+                update_fields=[
+                    'cached_availability_state', 'cached_availability_number', 'cached_availability_time',
+                    'cached_availability_paid_orders'
+                ],
                 clear_cache=False
             )
 
@@ -778,8 +805,9 @@ class Quota(LoggedModel):
         if size_left is None:
             return Quota.AVAILABILITY_OK, None
 
-        # TODO: Test for interference with old versions of Item-Quota-relations, etc.
-        size_left -= self.count_paid_orders()
+        paid_orders = self.count_paid_orders()
+        self.cached_availability_paid_orders = paid_orders
+        size_left -= paid_orders
         if size_left <= 0:
             return Quota.AVAILABILITY_GONE, 0
 
