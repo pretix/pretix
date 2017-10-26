@@ -322,6 +322,7 @@ FORMAT_MODULE_PATH = [
 
 LANGUAGES = [
     ('en', _('English')),
+    ('da', _('Danish')),
     ('de', _('German')),
     ('de-informal', _('German (informal)')),
 ]
