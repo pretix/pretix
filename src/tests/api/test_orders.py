@@ -5,6 +5,7 @@ from unittest import mock
 
 import pytest
 from django.core import mail as djmail
+from django.utils.timezone import now
 from django_countries.fields import Country
 from pytz import UTC
 
@@ -550,3 +551,119 @@ def test_order_mark_paid_expired(token_client, organizer, event, order):
     assert resp.status_code == 400
     order.refresh_from_db()
     assert order.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_order_extend_paid(token_client, organizer, event, order):
+    order.status = Order.STATUS_PAID
+    order.save()
+    newdate = (now() + datetime.timedelta(days=20)).strftime("%Y-%m-%d")
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/extend/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'expires': newdate
+        }
+    )
+    assert resp.status_code == 400
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_order_extend_pending(token_client, organizer, event, order):
+    order.status = Order.STATUS_PENDING
+    order.save()
+    newdate = (now() + datetime.timedelta(days=20)).strftime("%Y-%m-%d")
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/extend/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'expires': newdate
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PENDING
+    assert order.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
+
+
+@pytest.mark.django_db
+def test_order_extend_expired_quota_empty(token_client, organizer, event, order, quota):
+    order.status = Order.STATUS_EXPIRED
+    order.save()
+    quota.size = 0
+    quota.save()
+    newdate = (now() + datetime.timedelta(days=20)).strftime("%Y-%m-%d")
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/extend/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'expires': newdate
+        }
+    )
+    assert resp.status_code == 400
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_EXPIRED
+
+
+@pytest.mark.django_db
+def test_order_extend_expired_quota_ignore(token_client, organizer, event, order, quota):
+    order.status = Order.STATUS_EXPIRED
+    order.save()
+    quota.size = 0
+    quota.save()
+    newdate = (now() + datetime.timedelta(days=20)).strftime("%Y-%m-%d")
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/extend/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'expires': newdate,
+            'force': True
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PENDING
+    assert order.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
+
+
+@pytest.mark.django_db
+def test_order_extend_expired_quota_waiting_list(token_client, organizer, event, order, item, quota):
+    order.status = Order.STATUS_EXPIRED
+    order.save()
+    quota.size = 1
+    quota.save()
+    event.waitinglistentries.create(item=item, email='foo@bar.com')
+    newdate = (now() + datetime.timedelta(days=20)).strftime("%Y-%m-%d")
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/extend/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'expires': newdate,
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PENDING
+    assert order.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
+
+
+@pytest.mark.django_db
+def test_order_extend_expired_quota_left(token_client, organizer, event, order, quota):
+    order.status = Order.STATUS_EXPIRED
+    order.save()
+    quota.size = 2
+    quota.save()
+    newdate = (now() + datetime.timedelta(days=20)).strftime("%Y-%m-%d")
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/extend/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'expires': newdate,
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PENDING
+    assert order.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"

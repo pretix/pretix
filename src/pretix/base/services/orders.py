@@ -159,6 +159,46 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     return order
 
 
+def extend_order(order: Order, new_date: datetime, force: bool=False, user: User=None, api_token=None):
+    """
+    Extends the deadline of an order. If the order is already expired, the quota will be checked to
+    see if this is actually still possible. If ``force`` is set to ``True``, the result of this check
+    will be ignored.
+    """
+    if new_date < now():
+        raise OrderError(_('The new expiry date needs to be in the future.'))
+    if order.status == Order.STATUS_PENDING:
+        order.expires = new_date
+        order.save()
+        order.log_action(
+            'pretix.event.order.expirychanged',
+            user=user,
+            api_token=api_token,
+            data={
+                'expires': order.expires,
+                'state_change': False
+            }
+        )
+    else:
+        with order.event.lock() as now_dt:
+            is_available = order._is_still_available(now_dt, count_waitinglist=False)
+            if is_available is True or force is True:
+                order.expires = new_date
+                order.status = Order.STATUS_PENDING
+                order.save()
+                order.log_action(
+                    'pretix.event.order.expirychanged',
+                    user=user,
+                    api_token=api_token,
+                    data={
+                        'expires': order.expires,
+                        'state_change': True
+                    }
+                )
+            else:
+                raise OrderError(is_available)
+
+
 @transaction.atomic
 def mark_order_refunded(order, user=None):
     """

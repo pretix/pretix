@@ -379,6 +379,202 @@ Order endpoints
    :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting vor a few
                           seconds.
 
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_paid/
+
+   Marks a pending or expired order as successfully paid.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_paid/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "code": "ABC12",
+        "status": "p",
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to modify
+   :statuscode 200: no error
+   :statuscode 400: The order cannot be marked as paid, either because the current order status does not allow it or because no quota is left to perform the operation.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+   :statuscode 409: The server was unable to acquire a lock and could not process your request. You can try again after a short waiting period.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_canceled/
+
+   Marks a pending order as canceled.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_canceled/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: text/json
+
+      {
+          "send_email": true
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "code": "ABC12",
+        "status": "c",
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to modify
+   :statuscode 200: no error
+   :statuscode 400: The order cannot be marked as canceled since the current order status does not allow it.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_pending/
+
+   Marks a paid order as unpaid.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_pending/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "code": "ABC12",
+        "status": "n",
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to modify
+   :statuscode 200: no error
+   :statuscode 400: The order cannot be marked as unpaid since the current order status does not allow it.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_expired/
+
+   Marks a unpaid order as expired.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_expired/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "code": "ABC12",
+        "status": "e",
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to modify
+   :statuscode 200: no error
+   :statuscode 400: The order cannot be marked as expired since the current order status does not allow it.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/extend/
+
+   Extends the payment deadline of a pending order. If the order is already expired and quota is still
+   available, its state will be changed to pending.
+
+   The only required parameter of this operation is ``expires``, which should contain a date in the future.
+   Note that only a date is expected, not a datetime, since pretix will always set the deadline to the end of the
+   day in the event's timezone.
+
+   You can pass the optional parameter ``force``. If it is set to ``true``, the operation will be performed even if
+   it leads to an overbooked quota because the order was expired and the tickets have been sold again.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/extend/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: text/json
+
+      {
+          "expires": "2017-10-28",
+          "force": false
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "code": "ABC12",
+        "status": "n",
+        "expires": "2017-10-28T23:59:59Z",
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to modify
+   :statuscode 200: no error
+   :statuscode 400: The order cannot be extended since the current order status does not allow it or no quota is available or the submitted date is invalid.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+
 
 Order position endpoints
 ------------------------
@@ -572,149 +768,3 @@ Order position endpoints
    :statuscode 404: The requested order position or download provider does not exist.
    :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting vor a few
                     seconds.
-
-.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_paid/
-
-   Marks a pending or expired order as successfully paid.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_paid/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "code": "ABC12",
-        "status": "p",
-        ...
-      }
-
-   :param organizer: The ``slug`` field of the organizer to modify
-   :param event: The ``slug`` field of the event to modify
-   :param code: The ``code`` field of the order to modify
-   :statuscode 200: no error
-   :statuscode 400: The order cannot be marked as paid, either because the current order status does not allow it or because no quota is left to perform the operation.
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
-   :statuscode 404: The requested order does not exist.
-   :statuscode 409: The server was unable to acquire a lock and could not process your request. You can try again after a short waiting period.
-
-.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_canceled/
-
-   Marks a pending order as canceled.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_canceled/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-      Content-Type: text/json
-
-      {
-          "send_email": true
-      }
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "code": "ABC12",
-        "status": "c",
-        ...
-      }
-
-   :param organizer: The ``slug`` field of the organizer to modify
-   :param event: The ``slug`` field of the event to modify
-   :param code: The ``code`` field of the order to modify
-   :statuscode 200: no error
-   :statuscode 400: The order cannot be marked as canceled since the current order status does not allow it.
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
-   :statuscode 404: The requested order does not exist.
-
-.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_pending/
-
-   Marks a paid order as unpaid.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_pending/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "code": "ABC12",
-        "status": "n",
-        ...
-      }
-
-   :param organizer: The ``slug`` field of the organizer to modify
-   :param event: The ``slug`` field of the event to modify
-   :param code: The ``code`` field of the order to modify
-   :statuscode 200: no error
-   :statuscode 400: The order cannot be marked as unpaid since the current order status does not allow it.
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
-   :statuscode 404: The requested order does not exist.
-
-.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_expired/
-
-   Marks a unpaid order as expired.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_expired/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "code": "ABC12",
-        "status": "e",
-        ...
-      }
-
-   :param organizer: The ``slug`` field of the organizer to modify
-   :param event: The ``slug`` field of the event to modify
-   :param code: The ``code`` field of the order to modify
-   :statuscode 200: no error
-   :statuscode 400: The order cannot be marked as expired since the current order status does not allow it.
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
-   :statuscode 404: The requested order does not exist.
