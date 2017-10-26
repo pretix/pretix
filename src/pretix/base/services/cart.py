@@ -318,7 +318,7 @@ class CartManager:
             self._check_item_constraints(op)
             operations.append(op)
 
-        self._quota_diff += quota_diff
+        self._quota_diff.update(quota_diff)
         self._voucher_use_diff += voucher_use_diff
         self._operations += operations
 
@@ -456,7 +456,7 @@ class CartManager:
             for k, v in al.items():
                 if k not in input_addons[cp.id]:
                     if v.expires > self.now_dt:
-                        quotas = list(cp.quotas)
+                        quotas = list(v.quotas)
 
                         for quota in quotas:
                             quota_diff[quota] -= 1
@@ -464,12 +464,14 @@ class CartManager:
                     op = self.RemoveOperation(position=v)
                     operations.append(op)
 
-        self._quota_diff += quota_diff
+        self._quota_diff.update(quota_diff)
         self._operations += operations
 
     def _get_quota_availability(self):
-        quotas_ok = {}
+        quotas_ok = defaultdict(int)
         for quota, count in self._quota_diff.items():
+            if count <= 0:
+                quotas_ok[quota] = 0
             avail = quota.availability(self.now_dt)
             if avail[1] is not None and avail[1] < count:
                 quotas_ok[quota] = min(count, avail[1])
@@ -541,6 +543,9 @@ class CartManager:
 
         for op in self._operations:
             if isinstance(op, self.RemoveOperation):
+                if op.position.expires > self.now_dt:
+                    for q in op.position.quotas:
+                        quotas_ok[q] += 1
                 op.position.delete()
 
             elif isinstance(op, self.AddOperation) or isinstance(op, self.ExtendOperation):

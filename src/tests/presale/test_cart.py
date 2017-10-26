@@ -1737,6 +1737,43 @@ class CartAddonTest(CartTestMixin, TestCase):
         ])
         self.cm.commit()
 
+    def test_sold_out_swap_addons(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.workshop1, price=Decimal('12.00'),
+            event=self.event, cart_id=self.session_key, addon_to=cp1
+        )
+        cp2 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.workshop2, price=Decimal('12.00'),
+            event=self.event, cart_id=self.session_key, addon_to=cp2
+        )
+        self.workshopquota.size = 0
+        self.workshopquota.save()
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop2.pk,
+                'variation': None
+            },
+            {
+                'addon_to': cp2.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            },
+        ])
+        self.cm.commit()
+        assert cp1.addons.count() == 1
+        assert cp2.addons.count() == 1
+        assert cp1.addons.first().item == self.workshop2
+        assert cp2.addons.first().item == self.workshop1
+
     def test_expand_expired(self):
         cp1 = CartPosition.objects.create(
             expires=now() - timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
