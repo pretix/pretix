@@ -72,6 +72,20 @@
                     <div id="cp{{ pos.id }}"
                             class="panel-collapse collapse in">
                         <div class="panel-body" data-idx="{{ forloop.counter0 }}">
+                            {% if pos.addons.all %}
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        {% trans "Selected add-ons" %}
+                                    </label>
+                                    <div class="col-md-9 form-control-text">
+                                        <ul class="addon-list">
+                                            {% for a in pos.addons.all %}
+                                                <li>{{ a.item.name }}{% if a.variation %} – {{ a.variation.value }}{% endif %}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endif %}
                             {% for form in forms %}
                                 {% if form.pos.item != pos.item %}
                                     {# Add-Ons #}

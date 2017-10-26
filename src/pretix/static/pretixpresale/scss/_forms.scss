@@ -40,5 +40,12 @@
 }
 .form-group.required .control-label:after {
   content: '*';
-  color: $brand-primary
+  color: $brand-primary;
+}
+.form-control-text {
+  padding-top: 7px;
+}
+.addon-list {
+  padding: 0;
+  list-style-type: none;
 }

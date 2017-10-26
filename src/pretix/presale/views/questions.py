@@ -22,8 +22,12 @@ class QuestionsViewMixin:
         addon_penalty = 1 if pos.addon_to else 0
         return i, addon_penalty, pos.pk
 
+    @cached_property
     def _positions_for_questions(self):
-        return sorted(get_cart(self.request), key=self._keyfunc)
+        cart = get_cart(self.request).select_related(
+            'addon_to'
+        ).prefetch_related('addons', 'addons__item', 'addons__variation')
+        return sorted(list(cart), key=self._keyfunc)
 
     @cached_property
     def forms(self):
@@ -33,7 +37,7 @@ class QuestionsViewMixin:
         submitted at once.
         """
         formlist = []
-        for cr in self._positions_for_questions():
+        for cr in self._positions_for_questions:
             cartpos = cr if isinstance(cr, CartPosition) else None
             orderpos = cr if isinstance(cr, OrderPosition) else None
             form = QuestionsForm(event=self.request.event,

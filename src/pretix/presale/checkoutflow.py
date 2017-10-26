@@ -348,7 +348,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             messages.warning(request, _('Please enter your name.'))
             return False
 
-        for cp in self.positions:
+        for cp in self._positions_for_questions:
             answ = {
                 aw.question_id: aw.answer for aw in cp.answers.all()
             }
