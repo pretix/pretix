@@ -144,7 +144,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                             "min_price": None,
                             "avail": [100, None],
                             "variations": [],
-                            "id": 2,
+                            "id": self.ticket.pk,
                             "free_price": False,
                             "name": "Early-bird ticket",
                             "order_max": 4
@@ -162,7 +162,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                             "variations": [
                                 {
                                     "value": "Red",
-                                    "id": 1,
+                                    "id": self.shirt_red.pk,
                                     "price": {"gross": "14.00", "net": "11.76", "tax": "2.24", "name": "",
                                               "rate": "19.00"},
                                     "description": None,
@@ -171,7 +171,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                 },
                                 {
                                     "value": "Blue",
-                                    "id": 2,
+                                    "id": self.shirt_blue.pk,
                                     "price": {"gross": "12.00", "net": "10.08", "tax": "1.92", "name": "",
                                               "rate": "19.00"},
                                     "description": None,
@@ -179,14 +179,14 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                     "order_max": 2
                                 }
                             ],
-                            "id": 1,
+                            "id": self.shirt.pk,
                             "free_price": False,
                             "name": "T-Shirt",
                             "order_max": None
                         }
                     ],
                     "description": None,
-                    "id": 1,
+                    "id": self.category.pk,
                     "name": "Everything"
                 }
             ],
@@ -220,14 +220,14 @@ class WidgetCartTest(CartTestMixin, TestCase):
                             "min_price": None,
                             "avail": [100, None],
                             "variations": [],
-                            "id": 2,
+                            "id": self.ticket.pk,
                             "free_price": False,
                             "name": "Early-bird ticket",
                             "order_max": 4
                         },
                     ],
                     "description": None,
-                    "id": 1,
+                    "id": self.category.pk,
                     "name": "Everything"
                 }
             ],
