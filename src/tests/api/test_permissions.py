@@ -38,6 +38,7 @@ event_permission_urls = [
     ('post', 'can_change_orders', 'orders/ABC12/mark_pending/', 404),
     ('post', 'can_change_orders', 'orders/ABC12/mark_expired/', 404),
     ('post', 'can_change_orders', 'orders/ABC12/mark_canceled/', 404),
+    ('post', 'can_change_orders', 'orders/ABC12/extend/', 400),
 ]
 
 
