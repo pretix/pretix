@@ -27,6 +27,8 @@ var strings = {
     'redeem_voucher': django.pgettext('widget', 'Redeem a voucher'),
     'redeem': django.pgettext('widget', 'Redeem'),
     'voucher_code': django.pgettext('widget', 'Voucher code'),
+    'close': django.pgettext('widget', 'Close'),
+    'continue': django.pgettext('widget', 'Continue'),
 };
 
 var setCookie = function (cname, cvalue, exdays) {
@@ -115,14 +117,13 @@ var makeid = function (length) {
     }
 
     return text;
-}
+};
 
 var site_is_secure = function () {
     return /https.*/.test(document.location.protocol)
 };
 
 var widget_id = makeid(16);
-var use_iframe = window.innerWidth >= 800 /*&& site_is_secure()*/;
 
 /* Vue Components */
 Vue.component('availbox', {
@@ -420,6 +421,16 @@ Vue.component('pretix-widget', {
         + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent="close">X</a></div>'
         + '</div>'
         + '</div>'
+        + '<div :class="alertClasses">'
+        + '<transition name="bounce">'
+        + '<div class="pretix-widget-alert-box" v-if="$root.error_message">'
+        + '<p>{{ $root.error_message }}</p>'
+        + '<p><button v-if="$root.error_url_after" @click.prevent="errorContinue">' + strings.continue + '</button>'
+        + '<button v-else @click.prevent="errorClose">' + strings.close + '</button></p>'
+        + '</div>'
+        + '</transition>'
+        + '<svg width="64" height="64" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" class="pretix-widget-alert-icon"><path style="fill:#ffffff;" d="M 599.86438,303.72882 H 1203.5254 V 1503.4576 H 599.86438 Z" /><path class="pretix-widget-primary-color" d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0 13 10 23t23 10h192q13 0 22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10 18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z"/></svg>'
+        + '</div>'
         + '</div>'
         + '</div>'
     ),
@@ -434,24 +445,24 @@ Vue.component('pretix-widget', {
     },
     methods: {
         buy: function (event) {
-            if (use_iframe) {
+            if (this.$root.useIframe) {
                 event.preventDefault();
             } else {
                 return;
             }
-            var url = this.$root.formTarget + "&ajax=1";
+            var url = this.$root.formTarget + "&locale=" + lang + "&ajax=1";
             this.$root.frame_loading = true;
             this.async_task_interval = 100;
             api._postFormJSON(url, this.$refs.form, this.buy_callback, this.buy_error_callback);
         },
         buy_error_callback: function (xhr, data) {
-            root.frame_loading = false;
-            alert(strings['cart_error']);
+            this.$root.error_message = strings['cart_error'];
+            this.$root.frame_loading = false;
         },
         buy_check_error_callback: function (xhr, data) {
             if (xhr.status == 200 || (xhr.status >= 400 && xhr.status < 500)) {
-                root.frame_loading = false;
-                alert(strings['cart_error']);
+                this.$root.error_message = strings['cart_error'];
+                this.$root.frame_loading = false;
             } else {
                 this.async_task_timeout = window.setTimeout(this.buy_check, 1000);
             }
@@ -464,7 +475,17 @@ Vue.component('pretix-widget', {
                 if (data.redirect.substr(0, 1) === '/') {
                     data.redirect = this.$root.event_url.replace(/^([^\/]+:\/\/[^\/]+)\/.*$/, "$1") + data.redirect;
                 }
-                iframe.src = data.redirect + '?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
+                var url = data.redirect + '?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
+                if (data.success === false) {
+                    url = url.replace(/checkout\/start/g, "");
+                    this.$root.error_message = data.message;
+                    if (data.has_cart) {
+                        this.$root.error_url_after = url;
+                    }
+                    this.$root.frame_loading = false;
+                } else {
+                    iframe.src = url;
+                }
             } else {
                 this.async_task_id = data.async_id;
                 if (data.check_url) {
@@ -477,8 +498,19 @@ Vue.component('pretix-widget', {
         buy_check: function () {
             api._getJSON(this.async_task_check_url, this.buy_callback, this.buy_check_error_callback);
         },
+        errorContinue: function () {
+            var iframe = this.$refs['frame-container'].children[0];
+            iframe.src = this.$root.error_url_after;
+            this.$root.frame_loading = true;
+            this.$root.error_message = null;
+            this.$root.error_url_after = null;
+        },
+        errorClose: function () {
+            this.$root.error_message = null;
+            this.$root.error_url_after = null;
+        },
         redeem: function () {
-            if (use_iframe) {
+            if (this.$root.useIframe) {
                 event.preventDefault();
             } else {
                 return;
@@ -490,7 +522,7 @@ Vue.component('pretix-widget', {
         },
         resume: function () {
             var redirect_url = this.$root.event_url + 'w/' + widget_id + '/checkout/start?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
-            if (use_iframe) {
+            if (this.$root.useIframe) {
                 var iframe = this.$refs['frame-container'].children[0];
                 this.$root.frame_loading = true;
                 iframe.src = redirect_url;
@@ -515,6 +547,12 @@ Vue.component('pretix-widget', {
                 'pretix-widget-frame-shown': this.$root.frame_shown || this.$root.frame_loading,
             };
         },
+        alertClasses: function () {
+            return {
+                'pretix-widget-alert-holder': true,
+                'pretix-widget-alert-shown': this.$root.error_message,
+            };
+        },
     }
 });
 
@@ -526,6 +564,7 @@ var create_widget = function (element) {
     }
     var voucher = element.attributes.voucher ? element.attributes.voucher.value : null;
     var subevent = element.attributes.subevent ? element.attributes.subevent.value : null;
+    var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
 
     var app = new Vue({
         el: element,
@@ -544,6 +583,8 @@ var create_widget = function (element) {
                 widget_id: 'pretix-widget-' + widget_id,
                 frame_loading: false,
                 frame_shown: false,
+                error_message: null,
+                error_url_after: null,
                 vouchers_exist: false,
                 cart_exists: false
             }
@@ -603,6 +644,9 @@ var create_widget = function (element) {
                 }
                 return form_target;
             },
+            useIframe: function () {
+                return window.innerWidth >= 800 && (skip_ssl || site_is_secure());
+            }
         },
         methods: {
             open_link_in_frame: function (event) {

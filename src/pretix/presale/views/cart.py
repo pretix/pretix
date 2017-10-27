@@ -253,6 +253,7 @@ class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
 
 @method_decorator(allow_cors_if_namespaced, 'dispatch')
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
+@method_decorator(iframe_entry_view_wrapper, 'dispatch')
 class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = add_items_to_cart
     known_errortypes = ['CartError']
@@ -261,8 +262,10 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
         return _('The products have been successfully added to your cart.')
 
     def _ajax_response_data(self):
+        cart_id = get_or_create_cart_id(self.request)
         return {
-            'cart_id': get_or_create_cart_id(self.request)
+            'cart_id': cart_id,
+            'has_cart': CartPosition.objects.filter(cart_id=cart_id, event=self.request.event).exists()
         }
 
     def post(self, request, *args, **kwargs):
