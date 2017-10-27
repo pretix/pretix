@@ -75,6 +75,11 @@
                     {% trans "Permissions" %}
                 </a>
             </li>
+            <li {% if "event.settings.widget" == url_name %}class="active"{% endif %}>
+                <a href="{% url 'control:event.settings.widget' organizer=request.event.organizer.slug event=request.event.slug %}">
+                    {% trans "Widget" %}
+                </a>
+            </li>
         {% endif %}
         {% for nav in nav_event_settings %}
             <li {% if nav.active %}class="active"{% endif %}>

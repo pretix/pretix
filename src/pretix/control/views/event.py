@@ -1,6 +1,7 @@
 import re
 from collections import OrderedDict
 from datetime import timedelta
+from urllib.parse import urlsplit
 
 from django.conf import settings
 from django.contrib import messages
@@ -36,10 +37,12 @@ from pretix.control.forms.event import (
     CommentForm, DisplaySettingsForm, EventMetaValueForm, EventSettingsForm,
     EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
     PaymentSettingsForm, ProviderForm, TaxRuleForm, TicketSettingsForm,
+    WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import nav_event_settings
 from pretix.helpers.urls import build_absolute_uri
+from pretix.multidomain.urlreverse import get_domain
 from pretix.presale.style import regenerate_css
 
 from . import CreateView, UpdateView
@@ -989,3 +992,31 @@ class TaxDelete(EventSettingsViewMixin, EventPermissionRequiredMixin, DeleteView
         context = super().get_context_data(*args, **kwargs)
         context['possible'] = self.object.allow_delete()
         return context
+
+
+class WidgetSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormView):
+    template_name = 'pretixcontrol/event/widget.html'
+    permission = 'can_change_event_settings'
+    form_class = WidgetCodeForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['event'] = self.request.event
+        return kwargs
+
+    def form_valid(self, form):
+        ctx = self.get_context_data()
+        ctx['form'] = form
+        ctx['valid'] = True
+        return self.render_to_response(ctx)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['urlprefix'] = settings.SITE_URL
+        domain = get_domain(self.request.organizer)
+        if domain:
+            siteurlsplit = urlsplit(settings.SITE_URL)
+            if siteurlsplit.port and siteurlsplit.port not in (80, 443):
+                domain = '%s:%d' % (domain, siteurlsplit.port)
+            ctx['urlprefix'] = '%s://%s' % (siteurlsplit.scheme, domain)
+        return ctx
