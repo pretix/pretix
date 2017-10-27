@@ -26,9 +26,10 @@ class CartTestMixin:
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
-            live=True
+            live=True,
+            plugins="pretix.plugins.banktransfer"
         )
-        self.tr19 = self.event.tax_rules.create(rate=19)
+        self.tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
         self.quota_shirts = Quota.objects.create(event=self.event, name='Shirts', size=2)
         self.shirt = Item.objects.create(event=self.event, name='T-Shirt', category=self.category, default_price=12,

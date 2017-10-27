@@ -80,7 +80,7 @@ def widget_js(request, lang, **kwargs):
         resp.write(template.render(context))
 
         files = [
-            'vuejs/vue.js' if settings.DEBUG else 'vuejs/vuejs.min.js',
+            'vuejs/vue.js' if settings.DEBUG else 'vuejs/vue.min.js',
             'pretixpresale/js/widget/docready.js',
             'pretixpresale/js/widget/floatformat.js',
             'pretixpresale/js/widget/widget.js',
