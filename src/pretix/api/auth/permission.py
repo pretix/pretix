@@ -1,3 +1,4 @@
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 from pretix.base.models import Event
@@ -46,3 +47,18 @@ class EventPermission(BasePermission):
             if required_permission and required_permission not in request.orgapermset:
                 return False
         return True
+
+
+def permission_required(required_permission):
+    def decorator(function):
+        def wrapper(self, request, *args, **kw):
+            if 'event' in request.resolver_match.kwargs and 'organizer' in request.resolver_match.kwargs:
+                if required_permission and required_permission not in request.eventpermset:
+                    raise PermissionDenied('You do not have permission to perform this operation.')
+            elif 'organizer' in request.resolver_match.kwargs:
+                if required_permission and required_permission not in request.orgapermset:
+                    raise PermissionDenied('You do not have permission to perform this operation.')
+
+            return function(self, request, *args, **kw)
+        return wrapper
+    return decorator

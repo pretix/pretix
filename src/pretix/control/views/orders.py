@@ -37,7 +37,8 @@ from pretix.base.services.invoices import (
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException, render_mail
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, cancel_order, mark_order_paid,
+    OrderChangeManager, OrderError, cancel_order, extend_order,
+    mark_order_paid,
 )
 from pretix.base.services.stats import order_overview
 from pretix.base.signals import register_data_exporters
@@ -453,32 +454,20 @@ class OrderExtend(OrderView):
 
     def post(self, *args, **kwargs):
         if self.form.is_valid():
-            if self.order.status == Order.STATUS_PENDING:
+            try:
+                extend_order(
+                    self.order,
+                    new_date=self.form.cleaned_data.get('expires'),
+                    force=self.form.cleaned_data.get('quota_ignore', False),
+                    user=self.request.user
+                )
                 messages.success(self.request, _('The payment term has been changed.'))
-                self.order.log_action('pretix.event.order.expirychanged', user=self.request.user, data={
-                    'expires': self.order.expires,
-                    'state_change': False
-                })
-                self.form.save()
-            else:
-                try:
-                    with self.order.event.lock() as now_dt:
-                        is_available = self.order._is_still_available(now_dt, count_waitinglist=False)
-                        if is_available is True or self.form.cleaned_data.get('quota_ignore', False) is True:
-                            self.form.save()
-                            self.order.status = Order.STATUS_PENDING
-                            self.order.save()
-                            self.order.log_action('pretix.event.order.expirychanged', user=self.request.user, data={
-                                'expires': self.order.expires,
-                                'state_change': True
-                            })
-                            messages.success(self.request, _('The payment term has been changed.'))
-                        else:
-                            messages.error(self.request, is_available)
-                            return self._redirect_here()
-                except LockTimeoutException:
-                    messages.error(self.request, _('We were not able to process the request completely as the '
-                                                   'server was too busy.'))
+            except OrderError as e:
+                messages.error(self.request, str(e))
+                return self._redirect_here()
+            except LockTimeoutException:
+                messages.error(self.request, _('We were not able to process the request completely as the '
+                                               'server was too busy.'))
             return self._redirect_back()
         else:
             return self.get(*args, **kwargs)

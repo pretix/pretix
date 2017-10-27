@@ -231,5 +231,4 @@ Endpoints
    :param id: The ``id`` field of the tax rule to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event/rule does not exist **or** you have no permission to change it
-                    **or** this tax rule cannot be deleted since it is currently in use.
+   :statuscode 403: The requested organizer/event/rule does not exist **or** you have no permission to change it **or** this tax rule cannot be deleted since it is currently in use.

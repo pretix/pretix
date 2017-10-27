@@ -34,6 +34,10 @@ event_permission_urls = [
     ('put', 'can_change_vouchers', 'vouchers/1/', 404),
     ('patch', 'can_change_vouchers', 'vouchers/1/', 404),
     ('delete', 'can_change_vouchers', 'vouchers/1/', 404),
+    ('post', 'can_change_orders', 'orders/ABC12/mark_paid/', 404),
+    ('post', 'can_change_orders', 'orders/ABC12/mark_pending/', 404),
+    ('post', 'can_change_orders', 'orders/ABC12/mark_expired/', 404),
+    ('post', 'can_change_orders', 'orders/ABC12/mark_canceled/', 404),
 ]
 
 
@@ -121,4 +125,7 @@ def test_token_event_permission_not_allowed(token_client, team, organizer, event
     team.save()
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/events/{}/{}'.format(
         organizer.slug, event.slug, urlset[2]))
-    assert resp.status_code in (404, 403)
+    if urlset[3] == 404:
+        assert resp.status_code == 403
+    else:
+        assert resp.status_code in (404, 403)

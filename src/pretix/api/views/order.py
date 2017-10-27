@@ -1,18 +1,28 @@
+import datetime
+
 import django_filters
+import pytz
 from django.db.models import Q
 from django.db.models.functions import Concat
 from django.http import FileResponse
+from django.utils.timezone import make_aware
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
-from rest_framework import viewsets
+from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.exceptions import APIException, NotFound, PermissionDenied
 from rest_framework.filters import OrderingFilter
+from rest_framework.response import Response
 
 from pretix.api.serializers.order import (
     InvoiceSerializer, OrderPositionSerializer, OrderSerializer,
 )
-from pretix.base.models import Invoice, Order, OrderPosition
+from pretix.base.models import Invoice, Order, OrderPosition, Quota
+from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.invoices import invoice_pdf
+from pretix.base.services.mail import SendMailException
+from pretix.base.services.orders import (
+    OrderError, cancel_order, extend_order, mark_order_paid,
+)
 from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,
 )
@@ -34,6 +44,7 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
     filter_class = OrderFilter
     lookup_field = 'code'
     permission = 'can_view_orders'
+    write_permission = 'can_change_orders'
 
     def get_queryset(self):
         return self.request.event.orders.prefetch_related(
@@ -70,6 +81,130 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
                 provider.identifier, ct.extension
             )
             return resp
+
+    @detail_route(methods=['POST'])
+    def mark_paid(self, request, **kwargs):
+        order = self.get_object()
+
+        if order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
+            try:
+                mark_order_paid(
+                    order, manual=True,
+                    user=request.user if request.user.is_authenticated else None,
+                    api_token=(request.auth if isinstance(request.auth, TeamAPIToken) else None),
+                )
+            except Quota.QuotaExceededException as e:
+                return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            except SendMailException:
+                pass
+
+            return self.retrieve(request, [], **kwargs)
+        return Response(
+            {'detail': 'The order is not pending or expired.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    @detail_route(methods=['POST'])
+    def mark_canceled(self, request, **kwargs):
+        send_mail = request.data.get('send_email', True)
+
+        order = self.get_object()
+        if order.status != Order.STATUS_PENDING:
+            return Response(
+                {'detail': 'The order is not pending.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        cancel_order(
+            order,
+            user=request.user if request.user.is_authenticated else None,
+            api_token=(request.auth if isinstance(request.auth, TeamAPIToken) else None),
+            send_mail=send_mail
+        )
+        return self.retrieve(request, [], **kwargs)
+
+    @detail_route(methods=['POST'])
+    def mark_pending(self, request, **kwargs):
+        order = self.get_object()
+
+        if order.status != Order.STATUS_PAID:
+            return Response(
+                {'detail': 'The order is not paid.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        order.status = Order.STATUS_PENDING
+        order.payment_manual = True
+        order.save()
+        order.log_action(
+            'pretix.event.order.unpaid',
+            user=request.user if request.user.is_authenticated else None,
+            api_token=(request.auth if isinstance(request.auth, TeamAPIToken) else None),
+        )
+        return self.retrieve(request, [], **kwargs)
+
+    @detail_route(methods=['POST'])
+    def mark_expired(self, request, **kwargs):
+        order = self.get_object()
+
+        if order.status != Order.STATUS_PENDING:
+            return Response(
+                {'detail': 'The order is not pending.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        order.status = Order.STATUS_EXPIRED
+        order.save()
+        order.log_action(
+            'pretix.event.order.expired',
+            user=request.user if request.user.is_authenticated else None,
+            api_token=(request.auth if isinstance(request.auth, TeamAPIToken) else None),
+        )
+        return self.retrieve(request, [], **kwargs)
+
+    # TODO: Find a way to implement mark_refunded
+
+    @detail_route(methods=['POST'])
+    def extend(self, request, **kwargs):
+        new_date = request.data.get('expires', None)
+        force = request.data.get('force', False)
+        if not new_date:
+            return Response(
+                {'detail': 'New date is missing.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        df = serializers.DateField()
+        try:
+            new_date = df.to_internal_value(new_date)
+        except:
+            return Response(
+                {'detail': 'New date is invalid.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        tz = pytz.timezone(self.request.event.settings.timezone)
+        new_date = make_aware(datetime.datetime.combine(
+            new_date,
+            datetime.time(hour=23, minute=59, second=59)
+        ), tz)
+
+        order = self.get_object()
+
+        try:
+            extend_order(
+                order,
+                new_date=new_date,
+                force=force,
+                user=request.user if request.user.is_authenticated else None,
+                api_token=(request.auth if isinstance(request.auth, TeamAPIToken) else None),
+            )
+            return self.retrieve(request, [], **kwargs)
+        except OrderError as e:
+            return Response(
+                {'detail': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class OrderPositionFilter(FilterSet):
