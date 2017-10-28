@@ -33,6 +33,7 @@ class EventSlugBlacklistValidator(BlacklistValidator):
         'api',
         'events',
         'csp_report',
+        'widget',
     ]
 
 
@@ -53,4 +54,5 @@ class OrganizerSlugBlacklistValidator(BlacklistValidator):
         'about',
         'api',
         'csp_report',
+        'widget',
     ]

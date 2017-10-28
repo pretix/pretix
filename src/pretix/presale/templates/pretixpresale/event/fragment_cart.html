@@ -79,7 +79,7 @@
         {% else %}
             <div class="count">
                 {% if editable %}
-                <form action="{% eventurl event "presale:event.cart.remove" %}"
+                <form action="{% eventurl event "presale:event.cart.remove" cart_namespace=cart_namespace|default_if_none:"" %}"
                         method="post" data-asynctask>
                     {% csrf_token %}
                     <input type="hidden" name="id" value="{{ line.id }}" />
@@ -90,7 +90,7 @@
                 {% endif %}
                 {{ line.count }}
                 {% if editable %}
-                <form action="{% eventurl event "presale:event.cart.add" %}"
+                <form action="{% eventurl event "presale:event.cart.add" cart_namespace=cart_namespace|default_if_none:"" %}"
                     method="post" data-asynctask>
                     <input type="hidden" name="subevent" value="{{ line.subevent_id|default_if_none:"" }}" />
                     {% csrf_token %}

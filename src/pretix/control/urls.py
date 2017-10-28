@@ -75,6 +75,7 @@ urlpatterns = [
         url(r'^settings/tax/(?P<rule>\d+)/$', event.TaxUpdate.as_view(), name='event.settings.tax.edit'),
         url(r'^settings/tax/add$', event.TaxCreate.as_view(), name='event.settings.tax.add'),
         url(r'^settings/tax/(?P<rule>\d+)/delete$', event.TaxDelete.as_view(), name='event.settings.tax.delete'),
+        url(r'^settings/widget$', event.WidgetSettings.as_view(), name='event.settings.widget'),
         url(r'^subevents/$', subevents.SubEventList.as_view(), name='event.subevents'),
         url(r'^subevents/(?P<subevent>\d+)/$', subevents.SubEventUpdate.as_view(), name='event.subevent'),
         url(r'^subevents/(?P<subevent>\d+)/delete$', subevents.SubEventDelete.as_view(),

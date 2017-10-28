@@ -19,7 +19,7 @@
     </p>
     {% if event.presale_is_running or event.settings.show_items_outside_presale_period %}
         <form method="post" data-asynctask
-                action="{% eventurl request.event "presale:event.cart.add" %}?next={{ request.path|urlencode }}">
+                action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={% eventurl request.event "presale:event.index" cart_namespace=cart_namespace %}">
             {% csrf_token %}
             <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />
             <input type="hidden" name="_voucher_code" value="{{ voucher.code }}">

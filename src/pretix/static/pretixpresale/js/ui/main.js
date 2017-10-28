@@ -12,9 +12,9 @@ function ngettext(singular, plural, count) {
     }
     return plural;
 }
-
 $(function () {
     "use strict";
+
     $("input[data-toggle=radiocollapse]").change(function () {
         $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
         $($(this).attr("data-target")).collapse('show');

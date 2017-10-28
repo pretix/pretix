@@ -1,9 +1,7 @@
-{% extends "pretixpresale/event/base.html" %}
+{% extends "pretixpresale/event/checkout_base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block title %}{% trans "Checkout" %}{% endblock %}
-{% block content %}
-    <h2>{% trans "Checkout" %}</h2>
+{% block inner %}
     <p>{% trans "Please select how you want to pay." %}</p>
     <form method="post">
         {% csrf_token %}

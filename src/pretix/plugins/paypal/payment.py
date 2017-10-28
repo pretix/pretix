@@ -1,10 +1,12 @@
 import json
 import logging
+import urllib.parse
 from collections import OrderedDict
 
 import paypalrestsdk
 from django import forms
 from django.contrib import messages
+from django.core import signing
 from django.template.loader import get_template
 from django.utils.translation import ugettext as __, ugettext_lazy as _
 
@@ -89,14 +91,18 @@ class Paypal(BasePaymentProvider):
 
     def checkout_prepare(self, request, cart):
         self.init_api()
+        kwargs = {}
+        if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
+            kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
+
         payment = paypalrestsdk.Payment({
             'intent': 'sale',
             'payer': {
                 "payment_method": "paypal",
             },
             "redirect_urls": {
-                "return_url": build_absolute_uri(request.event, 'plugins:paypal:return'),
-                "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort'),
+                "return_url": build_absolute_uri(request.event, 'plugins:paypal:return', kwargs=kwargs),
+                "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort', kwargs=kwargs),
             },
             "transactions": [
                 {
@@ -131,7 +137,14 @@ class Paypal(BasePaymentProvider):
                 request.session['payment_paypal_id'] = payment.id
                 for link in payment.links:
                     if link.method == "REDIRECT" and link.rel == "approval_url":
-                        return str(link.href)
+                        if request.session.get('iframe_session', False):
+                            signer = signing.Signer(salt='safe-redirect')
+                            return (
+                                build_absolute_uri(request.event, 'plugins:paypal:redirect') + '?url=' +
+                                urllib.parse.quote(signer.sign(link.href))
+                            )
+                        else:
+                            return str(link.href)
             else:
                 messages.error(request, _('We had trouble communicating with PayPal'))
                 logger.error('Error on creating payment: ' + str(payment.error))

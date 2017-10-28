@@ -4,13 +4,13 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db.models import Q
 from django.utils.timezone import get_current_timezone_name
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 from pytz import common_timezones, timezone
 
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer, TaxRule
-from pretix.base.models.event import EventMetaValue
+from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.control.forms import (
     ExtFileField, SlugWidget, SplitDateTimePickerWidget,
@@ -897,3 +897,44 @@ class TaxRuleForm(I18nModelForm):
     class Meta:
         model = TaxRule
         fields = ['name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country']
+
+
+class WidgetCodeForm(forms.Form):
+    subevent = forms.ModelChoiceField(
+        label=pgettext_lazy('subevent', "Date"),
+        required=True,
+        queryset=SubEvent.objects.none()
+    )
+    language = forms.ChoiceField(
+        label=_("Language"),
+        required=True,
+        choices=settings.LANGUAGES
+    )
+    voucher = forms.CharField(
+        label=_("Pre-selected voucher"),
+        required=False,
+        help_text=_("If set, the widget will show products as if this voucher has been entered and when a product is "
+                    "bought via the widget, this voucher will be used. This can for example be used to provide "
+                    "widgets that give discounts or unlock secret products.")
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+
+        if self.event.has_subevents:
+            self.fields['subevent'].queryset = self.event.subevents.all()
+        else:
+            del self.fields['subevent']
+
+        self.fields['language'].choices = [(l, n) for l, n in settings.LANGUAGES if l in self.event.settings.locales]
+
+    def clean_voucher(self):
+        v = self.cleaned_data.get('voucher')
+        if not v:
+            return
+
+        if not self.event.vouchers.filter(code=v).exists():
+            raise ValidationError(_('The given voucher code does not exist.'))
+
+        return v

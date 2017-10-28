@@ -427,6 +427,14 @@ Your {event} team"""))
         'default': None,
         'type': str
     },
+    'presale_widget_css_file': {
+        'default': None,
+        'type': str
+    },
+    'presale_widget_css_checksum': {
+        'default': None,
+        'type': str
+    },
     'logo_image': {
         'default': None,
         'type': File

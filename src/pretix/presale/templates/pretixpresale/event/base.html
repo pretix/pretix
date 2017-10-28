@@ -8,6 +8,7 @@
     {% block title %}{% endblock %}{% if url_name != "event.index" %} :: {% endif %}{{ event.name }}
 {% endblock %}
 {% block above %}
+    <script type="text/javascript" src="{% static "pretixpresale/js/ui/iframe.js" %}"></script>
     {% if not event.live %}
         <div class="offline-banner">
             <div class="container">
@@ -24,12 +25,13 @@
     <div class="page-header">
         <div class="pull-left">
             {% if event_logo %}
-                <a href="{% eventurl event "presale:event.index" %}" title="{{ event.name }}">
+                <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
+                        title="{{ event.name }}">
                     <img src="{{ event_logo|thumbnail_url:'logo' }}" alt="{{ event.name }}" class="event-logo" />
                 </a>
             {% else %}
                 <h1>
-                    <a href="{% eventurl event "presale:event.index" %}">{{ event.name }}</a>
+                    <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}">{{ event.name }}</a>
                     {% if not event.has_subevents %}
                         <small>{{ event.get_date_range_display }}</small>
                     {% endif %}
