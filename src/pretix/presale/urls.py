@@ -31,11 +31,10 @@ frame_wrapped_urls = [
     url(r'^$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
 ]
 event_patterns = [
-
     # Cart/checkout patterns are a bit more complicated, as they should have simple URLs like cart/clear in normal
     # cases, but need to have versions with unguessable URLs like w/8l4Y83XNonjLxoBb/cart/clear to be used in widget
     # mode. This is required to prevent all clickjacking and CSRF attacks that would otherwise be possible.
-    # First, we define the normal version
+    # First, we define the normal version. The docstring of get_or_create_cart_id() has more information on this.
     url(r'', include(frame_wrapped_urls)),
     # Second, the widget version
     url(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/', include(frame_wrapped_urls)),

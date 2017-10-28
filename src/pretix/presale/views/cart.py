@@ -140,6 +140,9 @@ class CartActionMixin:
 
 
 def generate_cart_id(prefix=''):
+    """
+    Generates a random new cart ID that is not currently in use, with an optional pretix.
+    """
     while True:
         new_id = prefix + get_random_string(length=32 - len(prefix))
         if not CartPosition.objects.filter(cart_id=new_id).exists():
@@ -147,6 +150,14 @@ def generate_cart_id(prefix=''):
 
 
 def create_empty_cart_id(request, replace_current=True):
+    """
+    Forcefully creates a new empty cart for the current session. Behaves like get_or_create_cart_id,
+    except that it ignores the current state of the session. If replace_current is active, the
+    current cart session for this event is deleted as well.
+
+    This is currently only invoked after an order has been created to make sure that all forms during
+    checkout will show empty again if the same browser starts buying tickets again.
+    """
     session_keyname = 'current_cart_event_{}'.format(request.event.pk)
     prefix = ''
     if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
@@ -169,6 +180,51 @@ def create_empty_cart_id(request, replace_current=True):
 
 
 def get_or_create_cart_id(request):
+    """
+    This method returns the cart ID in use for this request or creates a new cart ID if required.
+
+    Before pretix 1.8.0, the user's session cookie was used as the cart ID in the database.
+    With the cart session data isolation introduced in 1.8.0 (see cart_session()) this changed
+    drastically. Now, a different random cart ID is used for every event and stored to the
+    user's session with the 'current_cart_event_42' key (with 42 being the event ID).
+
+    This became even more relevant and complex with the introduction of the pretix widget in 1.9.0.
+    Since the widget operates from a different origin, it requires us to lower some security walls
+    in order to function correctly:
+
+    * The checkout and order views can no longer send X-Frame-Options: DENY headers as we include
+      those pages in an iframe. This makes our users vulnerable to clickjacking. Possible scenario: A
+      third-party website could trick you into submitting an order that you currently have in your cart.
+
+    * The cart add view needs to drop CSRF protection and set Access-Control-Allow-Origin: *. This makes
+      our users vulnerable to CSRF attacks adding unwanted products to their carts. Cross-Origin is not
+      that much of an issue since we can't set Access-Control-Allow-Credentials for origin * either way,
+      but on the other hand this also prevents us to change the current cart for legitimate reasons.
+
+    We can mitigate all of these issues at the same time with the very simple strategy on only lowering
+    these walls at unguessable URLs. This makes it impossible for an attacker to create an exploit with
+    real-world impact.
+
+    Therefore, we introduce cart namespacing in pretix 1.9.0. In addition to your default session that you
+    have at /orga/event/ as usual, you will have a different cart session with a different cart ID at
+    /orga/event/w/mysecretnonce123/. Such a namespace parameter can be passed to all views relevant to the
+    widget (e.g. /orga/event/w/mysecretnonce123/cart/add) that are not already unguessable
+    (like /orga/event/orders/ABCDE/secret123465456/).
+
+    However, we still need to work around the issue that we can't use Access-Control-Allow-Credentials
+    but want to invoke /cart/add via a cross-origin request. This leads to /cart/add creating a new
+    cart session every time it is invoked cross-origin by default. We solve this by returning the newly
+    created cart ID from /cart/add in the response and allow passing it as the take_cart_id query parameter
+    to the view in the iframe or to subsequent /cart/add requests.
+
+    As an additional precaution, take_cart_id will only be honoured on POST requests or if there is an
+    actual cart with this ID. This reduces the likelihood of strange behaviour if someone accidentally
+    shares a link that includes this parameter.
+
+    This method migrates legacy sessions created before the upgrade to 1.8.0 on a best-effort basis,
+    meaning that the migration does not respect plugin-specific data and works best if the user only
+    used the session for one event at the time of migration.
+    """
     session_keyname = 'current_cart_event_{}'.format(request.event.pk)
     prefix = ''
     if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
@@ -215,6 +271,15 @@ def get_or_create_cart_id(request):
 
 
 def cart_session(request):
+    """
+    Before pretix 1.8.0, all checkout-related information (like the entered email address) was stored
+    in the user's regular session dictionary. This led to data interference and leaks for example if a
+    user simultaneously buys tickets for two events.
+
+    Starting with 1.8.0, this information is stored in separate dictionaries in the user's session within
+    the new request.session['carts'] dictionary. This method provides convenient access to the currently
+    active cart session sub-dictionary for read and write access.
+    """
     request.session.modified = True
     cart_id = get_or_create_cart_id(request)
     return request.session['carts'][cart_id]

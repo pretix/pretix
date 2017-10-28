@@ -205,6 +205,10 @@ class OrganizerViewMixin:
 
 
 def allow_frame_if_namespaced(view_func):
+    """
+    Drop X-Frame-Options header, but only if a cart namespace is set. See get_or_create_cart_id()
+    for the reasoning.
+    """
     def wrapped_view(request, *args, **kwargs):
         resp = view_func(request, *args, **kwargs)
         if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
@@ -214,6 +218,10 @@ def allow_frame_if_namespaced(view_func):
 
 
 def allow_cors_if_namespaced(view_func):
+    """
+    Add Access-Control-Allow-Origin header, but only if a cart namespace is set.
+    See get_or_create_cart_id() for the reasoning.
+    """
     def wrapped_view(request, *args, **kwargs):
         resp = view_func(request, *args, **kwargs)
         if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
