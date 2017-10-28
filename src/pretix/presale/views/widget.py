@@ -1,8 +1,10 @@
+import hashlib
 import json
 from urllib.parse import urljoin
 
 from django.conf import settings
 from django.contrib.staticfiles import finders
+from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db.models import Q
 from django.http import FileResponse, Http404, HttpResponse, JsonResponse
@@ -22,6 +24,7 @@ from lxml import etree
 from pretix.base.i18n import language
 from pretix.base.models import CartPosition, Voucher
 from pretix.base.services.cart import error_messages
+from pretix.base.settings import GlobalSettingsObject
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.presale.views.cart import get_or_create_cart_id
 from pretix.presale.views.event import (
@@ -37,15 +40,16 @@ def widget_css_etag(request, **kwargs):
     return request.event.settings.presale_widget_css_checksum or request.organizer.settings.presale_widget_css_checksum
 
 
+def widget_js_etag(request, lang, **kwargs):
+    gs = GlobalSettingsObject()
+    return gs.settings.get('widget_checksum_{}'.format(lang))
+
+
 @condition(etag_func=widget_css_etag)
 @cache_page(60)
 def widget_css(request, **kwargs):
     if request.event.settings.presale_widget_css_file:
         resp = FileResponse(default_storage.open(request.event.settings.presale_widget_css_file),
-                            content_type='text/css')
-        return resp
-    elif request.organizer.settings.presale_widget_css_file:
-        resp = FileResponse(default_storage.open(request.organizer.settings.presale_widget_css_file),
                             content_type='text/css')
         return resp
     else:
@@ -56,16 +60,13 @@ def widget_css(request, **kwargs):
         return resp
 
 
-def widget_js(request, lang, **kwargs):
-    if lang not in [lc for lc, ll in settings.LANGUAGES]:
-        raise Http404()
+def generate_widget_js(lang):
+    code = []
     with language(lang):
-
-        resp = HttpResponse(content_type='text/javascript')
         # Provide isolation
-        resp.write('(function (siteglobals) {\n')
-        resp.write('var module = {}, exports = {};\n')
-        resp.write('var lang = "%s";\n' % lang)
+        code.append('(function (siteglobals) {\n')
+        code.append('var module = {}, exports = {};\n')
+        code.append('var lang = "%s";\n' % lang)
 
         catalog, plural = get_javascript_catalog(lang, 'djangojs', ['pretix'])
         catalog = dict((k, v) for k, v in catalog.items() if k.startswith('widget\u0004'))
@@ -77,7 +78,7 @@ def widget_js(request, lang, **kwargs):
                 get_formats(), sort_keys=True, indent=2)),
             'plural': plural,
         })
-        resp.write(template.render(context))
+        code.append(template.render(context))
 
         files = [
             'vuejs/vue.js' if settings.DEBUG else 'vuejs/vue.min.js',
@@ -88,14 +89,38 @@ def widget_js(request, lang, **kwargs):
         for fname in files:
             f = finders.find(fname)
             with open(f, 'r') as fp:
-                resp.write(fp.read())
+                code.append(fp.read())
 
         if settings.DEBUG:
-            resp.write('})(this);\n')
+            code.append('})(this);\n')
         else:
             # Do not expose debugging variables
-            resp.write('})({});\n')
+            code.append('})({});\n')
+    return ''.join(code)
 
+
+@condition(etag_func=widget_js_etag)
+@cache_page(60)
+def widget_js(request, lang, **kwargs):
+    if lang not in [lc for lc, ll in settings.LANGUAGES]:
+        raise Http404()
+
+    gs = GlobalSettingsObject()
+    fname = gs.settings.get('widget_file_{}'.format(lang))
+    print(fname, settings.DEBUG)
+    if not fname or settings.DEBUG:
+        data = generate_widget_js(lang).encode()
+        checksum = hashlib.sha1(data).hexdigest()
+        if not fname:
+            newname = default_storage.save(
+                'widget/widget.{}.{}.js'.format(lang, checksum),
+                ContentFile(data)
+            )
+            gs.settings.set('widget_file_{}'.format(lang), 'file://' + newname)
+            gs.settings.set('widget_checksum_{}'.format(lang), checksum)
+        resp = HttpResponse(data, content_type='text/javascript')
+    else:
+        resp = FileResponse(default_storage.open(fname), content_type='text/javascript')
     return resp
 
 
