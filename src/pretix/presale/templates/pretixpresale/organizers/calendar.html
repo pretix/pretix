@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load rich_text %}
 {% load eventurl %}
+{% load urlreplace %}
 {% block title %}{% trans "Event overview" %}{% endblock %}
 {% block content %}
     {% if organizer_homepage_text %}
@@ -11,21 +12,26 @@
     {% endif %}
     <h3>{{ date|date:"F Y" }}</h3>
     <form class="form-inline" method="get" id="monthselform" action="{% eventurl request.organizer "presale:organizer.index" %}">
-        <input type="hidden" name="style" value="calendar">
+        {% for f, v in request.GET.items %}
+            {% if f != "month" and f != "year" %}
+                <input type="hidden" name="{{ f }}" value="{{ v }}">
+            {% endif %}
+        {% endfor %}
         <div class="row">
             <div class="col-sm-4 col-xs-12">
                 <div class="btn-group" role="group">
-                    <a href="{% eventurl request.organizer "presale:organizer.index" %}?style=list" type="button" class="btn btn-default">
+                    <a href="?{% url_replace request "style" "list" %}" type="button" class="btn btn-default">
                         <span class="fa fa-list"></span>
                         {% trans "List" %}
                     </a>
-                    <a href="{% eventurl request.organizer "presale:organizer.index" %}?style=calendar" type="button"
+                    <a href="?{% url_replace request "style" "calendar" %}"
+                            type="button"
                             class="btn btn-default active">
                         <span class="fa fa-calendar"></span>
                         {% trans "Calendar" %}
                     </a>
                 </div>
-                <a href="{% eventurl request.organizer "presale:organizer.ical" %}?locale={{ request.LANGUAGE_CODE }}"
+                <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "style" "" "month" "" "year" "" %}"
                         class="btn btn-default">
                     <span class="fa fa-calendar-plus-o"></span>
                     {% trans "iCal" %}
@@ -47,13 +53,11 @@
                 </button>
             </div>
             <div class="col-sm-4 hidden-xs text-right">
-                <a href="{% eventurl request.organizer "presale:organizer.index" %}?style=calendar&year={{ before.year }}&month={{ before.month }}"
-                        class="btn btn-default">
+                <a href="?{% url_replace request "year" before.year "month" before.month %}" class="btn btn-default">
                     <span class="fa fa-arrow-left"></span>
                     {{ before|date:"F Y" }}
                 </a>
-                <a href="{% eventurl request.organizer "presale:organizer.index" %}?style=calendar&year={{ after.year }}&month={{ after.month }}"
-                        class="btn btn-default">
+                <a href="?{% url_replace request "year" after.year "month" after.month %}" class="btn btn-default">
                     <span class="fa fa-arrow-right"></span>
                     {{ after|date:"F Y" }}
                 </a>

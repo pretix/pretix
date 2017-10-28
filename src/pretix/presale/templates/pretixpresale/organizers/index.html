@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load rich_text %}
 {% load eventurl %}
+{% load urlreplace %}
 {% block title %}{% trans "Event list" %}{% endblock %}
 {% block content %}
     <div>
@@ -16,26 +17,26 @@
     {% endif %}
     <div>
         <div class="btn-group" role="group">
-            <a href="{% eventurl request.organizer "presale:organizer.index" %}?style=list" type="button"
+            <a href="?{% url_replace request "style" "list" %}" type="button"
                     class="btn btn-default active">
                 <span class="fa fa-list"></span>
                 {% trans "List" %}
             </a>
-            <a href="{% eventurl request.organizer "presale:organizer.index" %}?style=calendar" type="button"
+            <a href="?{% url_replace request "style" "calendar" %}" type="button"
                     class="btn btn-default">
                 <span class="fa fa-calendar"></span>
                 {% trans "Calendar" %}
             </a>
         </div>
-        <a href="{% eventurl request.organizer "presale:organizer.ical" %}?locale={{ request.LANGUAGE_CODE }}"
+        <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "style" "" "month" "" "year" "" %}"
                 class="btn btn-default">
             <span class="fa fa-calendar-plus-o"></span>
             {% trans "iCal" %}
         </a>
         {% if "old" in request.GET %}
-            <a href="?style=list" class="btn btn-link">{% trans "Show upcoming" %}</a>
+            <a href="?{% url_replace request "old" "" %}" class="btn btn-link">{% trans "Show upcoming" %}</a>
         {% else %}
-            <a href="?style=list&old=1" class="btn btn-link">{% trans "Show past events" %}</a>
+            <a href="?{% url_replace request "old" "1" %}" class="btn btn-link">{% trans "Show past events" %}</a>
         {% endif %}
     </div>
     <div class="table-responsive">

@@ -34,6 +34,25 @@ def test_public_event_on_page(env, client):
 
 
 @pytest.mark.django_db
+def test_attributes_on_page(env, client):
+    env[1].is_public = True
+    env[1].save()
+
+    prop = env[0].meta_properties.create(name='loc', default='HH')
+    propval = env[1].meta_values.create(value='HD', property=prop)
+
+    r = client.get('/mrmcd/?attr[loc]=HD')
+    assert 'MRMCD2015' in r.rendered_content
+    r = client.get('/mrmcd/?attr[loc]=MA')
+    assert 'MRMCD2015' not in r.rendered_content
+    r = client.get('/mrmcd/?attr[loc]=HH')
+    assert 'MRMCD2015' not in r.rendered_content
+    propval.delete()
+    r = client.get('/mrmcd/?attr[loc]=HH')
+    assert 'MRMCD2015' in r.rendered_content
+
+
+@pytest.mark.django_db
 def test_non_public_event_not_on_page(env, client):
     env[1].is_public = False
     env[1].save()
@@ -119,6 +138,24 @@ def test_calendar(env, client):
 
 
 @pytest.mark.django_db
+def test_attributes_in_calendar(env, client):
+    env[0].settings.event_list_type = 'calendar'
+    e = Event.objects.create(
+        organizer=env[0], name='MRMCD2017', slug='2017',
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
+        live=True, is_public=True
+    )
+    prop = env[0].meta_properties.create(name='loc')
+    e.meta_values.create(value='HD', property=prop)
+
+    r = client.get('/mrmcd/?attr[loc]=HD&style=calendar')
+    print(r.rendered_content)
+    assert 'MRMCD2017' in r.rendered_content
+    r = client.get('/mrmcd/?attr[loc]=MA&style=calendar')
+    assert 'MRMCD2017' not in r.rendered_content
+
+
+@pytest.mark.django_db
 def test_ics(env, client):
     e = Event.objects.create(
         organizer=env[0], name='MRMCD2017', slug='2017',
@@ -143,4 +180,40 @@ def test_ics_subevents(env, client):
     e.subevents.create(date_from=now(), name='SE1', active=True)
     r = client.get('/mrmcd/events/ical/')
     assert b'MRMCD2017' not in r.content
+    assert b'SE1' in r.content
+
+
+@pytest.mark.django_db
+def test_ics_subevents_attributes(env, client):
+    e0 = Event.objects.create(
+        organizer=env[0], name='DS2017', slug='DS2017',
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
+        live=True, is_public=True
+    )
+    e = Event.objects.create(
+        organizer=env[0], name='MRMCD2017', slug='2017',
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
+        live=True, is_public=True, has_subevents=True
+    )
+    se1 = e.subevents.create(date_from=now(), name='SE1', active=True)
+
+    prop = env[0].meta_properties.create(name='loc', default='HH')
+    e0.meta_values.create(value='MA', property=prop)
+    propval = se1.meta_values.create(value='HD', property=prop)
+    r = client.get('/mrmcd/events/ical/?attr[loc]=HD')
+    assert b'SE1' in r.content
+    assert b'DS2017' not in r.content
+    r = client.get('/mrmcd/events/ical/?attr[loc]=MA')
+    assert b'SE1' not in r.content
+    assert b'DS2017' in r.content
+
+    r = client.get('/mrmcd/events/ical/?attr[loc]=HH')
+    assert b'SE1' not in r.content
+    propval.delete()
+    r = client.get('/mrmcd/events/ical/?attr[loc]=HH')
+    assert b'SE1' in r.content
+    e.meta_values.create(value='B', property=prop)
+    r = client.get('/mrmcd/events/ical/?attr[loc]=HH')
+    assert b'SE1' not in r.content
+    r = client.get('/mrmcd/events/ical/?attr[loc]=B')
     assert b'SE1' in r.content

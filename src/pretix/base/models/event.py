@@ -667,7 +667,7 @@ class EventMetaProperty(LoggedModel):
     name = models.CharField(
         max_length=50, db_index=True,
         help_text=_(
-            "Can not contain spaces or special characters execpt underscores"
+            "Can not contain spaces or special characters except underscores"
         ),
         validators=[
             RegexValidator(
