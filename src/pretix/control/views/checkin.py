@@ -91,7 +91,7 @@ class CheckInView(EventPermissionRequiredMixin, ListView):
                 'positionid': op.positionid,
                 'first': created,
                 'datetime': now()
-            })
+            }, user=request.user)
 
         messages.success(request, _('The selected tickets have been marked as checked in.'))
         return redirect(reverse('control:event.orders.checkins', kwargs={
