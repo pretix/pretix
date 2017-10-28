@@ -5,8 +5,8 @@ import pytest
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Checkin, Event, Item, ItemAddOn, ItemCategory, Order, OrderPosition,
-    Organizer, Team, User,
+    Checkin, Event, Item, ItemAddOn, ItemCategory, LogEntry, Order,
+    OrderPosition, Organizer, Team, User,
 )
 from pretix.control.views.dashboards import checkin_widget
 
@@ -267,6 +267,19 @@ def test_checkins_list_mixed(client, checkin_list_env, query, expected):
     qs = response.context['entries']
     item_keys = [q.order.code + str(q.item.name) for q in qs]
     assert item_keys == expected
+
+
+@pytest.mark.django_db
+def test_manual_checkins(client, checkin_list_env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    assert not checkin_list_env[5][3].checkins.exists()
+    client.post('/control/event/dummy/dummy/checkins/', {
+        'checkin': [checkin_list_env[5][3].pk]
+    })
+    assert checkin_list_env[5][3].checkins.exists()
+    assert LogEntry.objects.filter(
+        action_type='pretix.control.views.checkin', object_id=checkin_list_env[5][3].order.pk
+    ).exists()
 
 
 @pytest.fixture

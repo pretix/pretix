@@ -52,6 +52,7 @@
                 <table class="table table-condensed table-hover">
                     <thead>
                     <tr>
+                        <th />
                         <th>{% trans "Order code" %} <a href="?{% url_replace request 'ordering' '-code'%}"><i class="fa fa-caret-down"></i></a>
                       <a href="?{% url_replace request 'ordering' 'code'%}"><i class="fa fa-caret-up"></i></a></th>
                         <th>{% trans "Item" %} <a href="?{% url_replace request 'ordering' '-item'%}"><i class="fa fa-caret-down"></i></a>
@@ -74,6 +75,11 @@
                     {% for e in entries %}
                         {% with e.checkins.first as checkin %}
                         <tr>
+                          <td> 
+                            <input type="checkbox" name="checkin"
+                                                   id="id_checkin" class=""
+                                                                   value="{{e.pk}}"/>
+                          </td>
                             <td>
                                 <strong><a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=e.order.code %}">{{ e.order.code }}</a></strong>
                             </td>
@@ -107,6 +113,10 @@
                     </tbody>
                 </table>
             </div>
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Check-In selected attendees" %}
+            </button>
         </form>
+        {% include "pretixcontrol/pagination.html" %}
     {% endif %}
 {% endblock %}
