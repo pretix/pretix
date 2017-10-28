@@ -211,6 +211,9 @@ def get_or_create_cart_id(request):
     widget (e.g. /orga/event/w/mysecretnonce123/cart/add) that are not already unguessable
     (like /orga/event/orders/ABCDE/secret123465456/).
 
+    The actual cart IDs for those namespaced carts will then be stored at
+    request.session['current_cart_event_42_mysecretnonce123'].
+
     However, we still need to work around the issue that we can't use Access-Control-Allow-Credentials
     but want to invoke /cart/add via a cross-origin request. This leads to /cart/add creating a new
     cart session every time it is invoked cross-origin by default. We solve this by returning the newly
