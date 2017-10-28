@@ -113,11 +113,10 @@
                     </tbody>
                 </table>
             </div>
-            <div class="form-group submit-group">
-              <button type="submit" class="btn btn-primary btn-save">
+            <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Check-In selected attendees" %}
-              </button>
-            </div>
+            </button>
         </form>
+        {% include "pretixcontrol/pagination.html" %}
     {% endif %}
 {% endblock %}
