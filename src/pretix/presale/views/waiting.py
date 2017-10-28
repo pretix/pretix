@@ -30,7 +30,7 @@ class WaitingView(EventViewMixin, FormView):
         return kwargs
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data()
+        ctx = super().get_context_data(**kwargs)
         ctx['event'] = self.request.event
         ctx['subevent'] = self.subevent
         ctx['item'], ctx['variation'] = self.item_and_variation

@@ -175,16 +175,20 @@ def get_or_create_cart_id(request):
         session_keyname += '_' + request.resolver_match.kwargs.get('cart_namespace')
         prefix = request.resolver_match.kwargs.get('cart_namespace')
 
-    current_id = request.session.get(session_keyname)
+    current_id = orig_current_id = request.session.get(session_keyname)
+    if prefix and 'take_cart_id' in request.GET:
+        pos = CartPosition.objects.filter(event=request.event, cart_id=request.GET.get('take_cart_id'))
+        if request.method == "POST" or pos.exists():
+            current_id = request.GET.get('take_cart_id')
+
     if current_id and current_id in request.session.get('carts', {}):
+        if current_id != orig_current_id:
+            request.session[session_keyname] = current_id
         return current_id
     else:
         cart_data = {}
-        if prefix and 'take_cart_id' in request.GET:
-            if CartPosition.objects.filter(event=request.event, cart_id=request.GET.get('take_cart_id')).exists():
-                new_id = request.GET.get('take_cart_id')
-            else:
-                new_id = generate_cart_id(prefix=prefix)
+        if prefix and 'take_cart_id' in request.GET and current_id:
+            new_id = current_id
         else:
             new_id = generate_cart_id(prefix=prefix)
 
