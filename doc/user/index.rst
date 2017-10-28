@@ -11,3 +11,4 @@ wanting to use pretix to sell tickets.
    events/create
    events/taxes
    payments/index
+   events/widget

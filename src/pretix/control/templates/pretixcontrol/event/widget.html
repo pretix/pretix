@@ -35,13 +35,19 @@
    &lt;div class="pretix-widget"&gt;
         &lt;div class="pretix-widget-info-message"&gt;
             {% blocktrans trimmed with a_attr='target="_blank" href="'|add:indexurl|add:'"'|safe %}
-                JavaScript is disabled in your browser. To access our ticket shop without javascript,
+                JavaScript is disabled in your browser. To access our ticket shop without JavaScript,
                 please &lt;a {{ a_attr }}&gt;click here&lt;/a&gt;.
             {% endblocktrans %}
         &lt;/div&gt;
     &lt;/div&gt;
 &lt;/noscript&gt;
 </pre>
+        <p>
+            <a href="https://docs.pretix.eu/en/latest/user/events/widget.html" target="_blank">
+                <span class="fa fa-question-circle"></span>
+                {% trans "Read our documentation for more information" %}
+            </a>
+        </p>
     {% else %}
         <p>
             {% blocktrans trimmed %}

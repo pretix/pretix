@@ -29,6 +29,7 @@ var strings = {
     'voucher_code': django.pgettext('widget', 'Voucher code'),
     'close': django.pgettext('widget', 'Close'),
     'continue': django.pgettext('widget', 'Continue'),
+    'variations': django.pgettext('widget', 'See variations'),
 };
 
 var setCookie = function (cname, cvalue, exdays) {
@@ -296,7 +297,7 @@ Vue.component('item', {
         + '<div class="pretix-widget-pricebox" v-if="item.has_variations">{{ pricerange }}</div>'
         + '</div>'
         + '<div class="pretix-widget-item-availability-col">'
-        + '<a v-if="show_toggle" href="#" @click.prevent="expand">See variations</a>'
+        + '<a v-if="show_toggle" href="#" @click.prevent="expand">'+ strings.variations + '</a>'
         + '<availbox v-if="!item.has_variations" :item="item"></availbox>'
         + '</div>'
 
@@ -349,7 +350,7 @@ Vue.component('item', {
             if (this.item.min_price !== this.item.max_price || this.item.free_price) {
                 return django.interpolate(strings.price_from, {
                     'currency': this.$root.currency,
-                    'price': floatformat(this.$root.price, 2)
+                    'price': floatformat(this.item.min_price, 2)
                 }, true);
             } else if (this.item.min_price === "0.00" && this.item.max_price === "0.00") {
                 return strings.free;

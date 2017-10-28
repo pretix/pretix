@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-18 11:11+0000\n"
-"PO-Revision-Date: 2017-08-27 09:35+0200\n"
+"POT-Creation-Date: 2017-10-28 20:59+0000\n"
+"PO-Revision-Date: 2017-10-28 22:59+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -188,12 +188,12 @@ msgid "Unknown error."
 msgstr "Unbekannter Fehler."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:329
-msgid "Alle"
-msgstr ""
+msgid "All"
+msgstr "Alle"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:330
-msgid "Keine"
-msgstr ""
+msgid "None"
+msgstr "Keine"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41
 msgid "Others"
@@ -203,11 +203,15 @@ msgstr "Sonstige"
 msgid "Count"
 msgstr "Anzahl"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:16
+#: pretix/static/pretixpresale/js/ui/cart.js:22
 msgid "The items in your cart are no longer reserved for you."
 msgstr "Die Produkte in Ihrem Warenkorb sind nicht mehr für Sie reserviert."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:20
+#: pretix/static/pretixpresale/js/ui/cart.js:24
+msgid "Cart expired"
+msgstr "Warenkorb abgelaufen"
+
+#: pretix/static/pretixpresale/js/ui/cart.js:29
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
@@ -215,19 +219,131 @@ msgstr[0] ""
 msgstr[1] ""
 "Die Produkte in Ihrem Warenkorb sind noch {num} Minuten für Sie reserviert."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:329
-msgid "All"
-msgstr "Alle"
+#: pretix/static/pretixpresale/js/widget/widget.js:9
+msgctxt "widget"
+msgid "Sold out"
+msgstr "Ausverkauft"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:330
-msgid "None"
-msgstr "Keine"
+#: pretix/static/pretixpresale/js/widget/widget.js:10
+msgctxt "widget"
+msgid "Buy"
+msgstr "In den Warenkorb"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:11
+msgctxt "widget"
+msgid "Reserved"
+msgstr "Reserviert"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:12
+msgctxt "widget"
+msgid "FREE"
+msgstr "GRATIS"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:13
+msgctxt "widget"
+msgid "from %(currency)s %(price)s"
+msgstr "ab %(currency)s %(price)s"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:14
+msgctxt "widget"
+msgid "incl. %(rate)s% %(taxname)s"
+msgstr "inkl. %(rate)s% %(taxname)s"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:15
+msgctxt "widget"
+msgid "plus %(rate)s% %(taxname)s"
+msgstr "zzgl. %(rate)s% %(taxname)s"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:16
+#, javascript-format
+msgctxt "widget"
+msgid "currently available: %s"
+msgstr "aktuell verfügbar: %s"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:17
+msgctxt "widget"
+msgid "Only available with a voucher"
+msgstr "Nur mit Gutschein verfügbar"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:18
+#, javascript-format
+msgctxt "widget"
+msgid "minimum amount to order: %s"
+msgstr "minimale Bestellmenge: %s"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:19
+msgctxt "widget"
+msgid "Close ticket shop"
+msgstr "Ticket-Shop schließen"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:20
+msgctxt "widget"
+msgid "The ticket shop could not be loaded."
+msgstr "Der Ticket-Shop konnte nicht geladen werden."
+
+#: pretix/static/pretixpresale/js/widget/widget.js:21
+msgctxt "widget"
+msgid "The cart could not be created. Please try again later"
+msgstr "Der Warenkorb konnte nicht erstellt werden. Bitte erneut versuchen."
+
+#: pretix/static/pretixpresale/js/widget/widget.js:22
+msgctxt "widget"
+msgid "Waiting list"
+msgstr "Warteliste"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:23
+msgctxt "widget"
+msgid ""
+"You currently have an active cart for this event. If you select more "
+"products, they will be added to your existing cart. Click on this message to "
+"continue checkout with your cart."
+msgstr ""
+"Sie haben einen aktiven Warenkorb für diese Veranstaltung. Wenn Sie mehr "
+"Produkte auswählen, werden diese zu Ihrem Warenkorb hinzugefügt. Klicken Sie "
+"auf diese Meldung um den Kauf des bestehenden Warenkorbs fortzusetzen oder "
+"den Warenkorb zu verändern."
+
+#: pretix/static/pretixpresale/js/widget/widget.js:26
+msgctxt "widget"
+msgid ""
+"ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\">pretix</"
+"a>"
+msgstr ""
+"ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\">pretix</"
+"a>"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:27
+msgctxt "widget"
+msgid "Redeem a voucher"
+msgstr "Gutschein einlösen"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:28
+msgctxt "widget"
+msgid "Redeem"
+msgstr "Einlösen"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:29
+msgctxt "widget"
+msgid "Voucher code"
+msgstr "Gutscheincode"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:30
+msgctxt "widget"
+msgid "Close"
+msgstr "Schließen"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:31
+msgctxt "widget"
+msgid "Continue"
+msgstr "Weiter"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:32
+msgctxt "widget"
+msgid "See variations"
+msgstr "Varianten zeigen"
 
 #~ msgid "Sample product"
 #~ msgstr "Beispielprodukt"
-
-#~ msgid "Sample variation"
-#~ msgstr "Beispielvariante"
 
 #~ msgid "Sample product – sample variation"
 #~ msgstr "Beispielprodukt – Beispielvariante"
