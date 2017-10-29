@@ -18,7 +18,7 @@
         {% include "pretixcontrol/orders/fragment_order_status.html" with order=order class="pull-right" %}
     </h1>
     {% if 'can_change_orders' in request.eventpermset %}
-        {% if order.status == 'n' or order.status == 'p' or order.status == 'e' %}
+        {% if order.status == 'n' or order.status == 'p' or order.status == 'e' or order.status == 'c' %}
             <form action="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
                     method="post">
                 {% csrf_token %}
