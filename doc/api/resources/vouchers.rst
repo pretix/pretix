@@ -236,7 +236,6 @@ Endpoints
    Update a voucher. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
    the resource, other fields will be resetted to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
-her.
 
    You can change all fields of the resource except the ``id`` and ``redeemed`` fields.
 
