@@ -89,8 +89,9 @@ def _display_order_changed(event: Event, logentry: LogEntry):
         old_item = str(event.items.get(pk=data['old_item']))
         if data['old_variation']:
             old_item += ' - ' + str(ItemVariation.objects.get(pk=data['old_variation']))
-        return text + ' ' + _('{old_item} ({old_price} {currency}) split into new order: {order}').format(
+        return text + ' ' + _('Position #{posid} ({old_item}, {old_price} {currency}) split into new order: {order}').format(
             old_item=old_item,
+            posid=data.get('positionid', '?'),
             order=data['new_order'],
             old_price=formats.localize(Decimal(data['old_price'])),
             currency=event.currency

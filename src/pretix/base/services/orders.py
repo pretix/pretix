@@ -937,6 +937,7 @@ class OrderChangeManager:
         for op in split_positions:
             self.order.log_action('pretix.event.order.changed.split', user=self.user, data={
                 'position': op.pk,
+                'positionid': op.positionid,
                 'old_item': op.item.pk,
                 'old_variation': op.variation.pk if op.variation else None,
                 'old_price': op.price,
