@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 import pytest
+
 from pretix.base.models import Quota
 
 
@@ -235,9 +236,8 @@ def test_quota_detail(token_client, organizer, event, quota, item):
 
 @pytest.mark.django_db
 def test_quota_create(token_client, organizer, event, item):
-    res = dict(TEST_QUOTA_RES)
-
-    resp = token_client.post('/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
         {
             "name": "Ticket Quota",
             "size": 200,
@@ -252,11 +252,11 @@ def test_quota_create(token_client, organizer, event, item):
     assert quota.name == "Ticket Quota"
     assert quota.size == 200
 
+
 @pytest.mark.django_db
 def test_quota_update(token_client, organizer, event, quota, item):
-    res = dict(TEST_QUOTA_RES)
-
-    resp = token_client.patch('/api/v1/organizers/{}/events/{}/quotas/{}/'.format(organizer.slug, event.slug, quota.pk),
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/quotas/{}/'.format(organizer.slug, event.slug, quota.pk),
         {
             "name": "Ticket Quota Update",
             "size": 111,
