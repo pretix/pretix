@@ -138,7 +138,9 @@ order_placed = EventPluginSignal(
 )
 """
 This signal is sent out every time an order is placed. The order object is given
-as the first argument.
+as the first argument. This signal is *not* sent out if an order is created through
+splitting an existing order, so you can not expect to see all orders by listening
+to this signal.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -148,7 +150,8 @@ order_paid = EventPluginSignal(
 )
 """
 This signal is sent out every time an order is paid. The order object is given
-as the first argument.
+as the first argument. This signal is *not* sent out if an order is marked as paid
+because it an already-paid order has been splitted.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """

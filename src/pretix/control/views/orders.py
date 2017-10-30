@@ -593,6 +593,8 @@ class OrderChange(OrderView):
                     ocm.change_subevent(p, p.form.cleaned_data['subevent'])
                 elif p.form.cleaned_data['operation'] == 'cancel':
                     ocm.cancel(p)
+                elif p.form.cleaned_data['operation'] == 'split':
+                    ocm.split(p)
 
             except OrderError as e:
                 p.custom_error = str(e)

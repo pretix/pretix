@@ -1,3 +1,4 @@
+import copy
 import json
 import logging
 from collections import Counter, namedtuple
@@ -23,7 +24,10 @@ from pretix.base.models import (
     User, Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.orders import CachedTicket, InvoiceAddress, OrderFee
+from pretix.base.models.orders import (
+    CachedTicket, InvoiceAddress, OrderFee, generate_position_secret,
+    generate_secret,
+)
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import BasePaymentProvider
@@ -657,10 +661,12 @@ class OrderChangeManager:
     PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
     CancelOperation = namedtuple('CancelOperation', ('position',))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent'))
+    SplitOperation = namedtuple('SplitOperation', ('position',))
 
     def __init__(self, order: Order, user, notify=True):
         self.order = order
         self.user = user
+        self.split_order = None
         self._totaldiff = 0
         self._quotadiff = Counter()
         self._operations = []
@@ -782,6 +788,12 @@ class OrderChangeManager:
         self._quotadiff.update(new_quotas)
         self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent))
 
+    def split(self, position: OrderPosition):
+        if self.order.event.settings.invoice_include_free or position.price != Decimal('0.00'):
+            self._invoice_dirty = True
+
+        self._operations.append(self.SplitOperation(position))
+
     def _check_quotas(self):
         for quota, diff in self._quotadiff.items():
             if diff <= 0:
@@ -801,12 +813,26 @@ class OrderChangeManager:
     def _check_paid_to_free(self):
         if self.order.total == 0:
             try:
-                mark_order_paid(self.order, 'free', send_mail=False, count_waitinglist=False)
+                mark_order_paid(
+                    self.order, 'free', send_mail=False, count_waitinglist=False,
+                    user=self.user
+                )
+            except Quota.QuotaExceededException:
+                raise OrderError(self.error_messages['paid_to_free_exceeded'])
+
+        if self.split_order and self.split_order.total == 0:
+            try:
+                mark_order_paid(
+                    self.split_order, 'free', send_mail=False, count_waitinglist=False,
+                    user=self.user
+                )
             except Quota.QuotaExceededException:
                 raise OrderError(self.error_messages['paid_to_free_exceeded'])
 
     def _perform_operations(self):
         nextposid = self.order.positions.aggregate(m=Max('positionid'))['m'] + 1
+        split_positions = []
+
         for op in self._operations:
             if isinstance(op, self.ItemOperation):
                 self.order.log_action('pretix.event.order.changed.item', user=self.user, data={
@@ -891,23 +917,89 @@ class OrderChangeManager:
                     'positionid': pos.positionid,
                     'subevent': op.subevent.pk if op.subevent else None,
                 })
+            elif isinstance(op, self.SplitOperation):
+                split_positions.append(op.position)
 
-    def _recalculate_total_and_payment_fee(self):
-        payment_fee = Decimal('0.00')
-        if self.order.total != 0:
-            prov = self._get_payment_provider()
-            if prov:
-                payment_fee = prov.calculate_fee(self.order.total)
+        if split_positions:
+            self.split_order = self._create_split_order(split_positions)
 
-        if payment_fee:
-            fee = self.order.fees.get_or_create(fee_type=OrderFee.FEE_TYPE_PAYMENT, defaults={'value': 0})[0]
+    def _create_split_order(self, split_positions):
+        split_order = Order.objects.get(pk=self.order.pk)
+        split_order.pk = None
+        split_order.code = None
+        split_order.datetime = now()
+        split_order.secret = generate_secret()
+        split_order.save()
+        split_order.log_action('pretix.event.order.changed.split_from', user=self.user, data={
+            'original_order': self.order.code
+        })
+
+        for op in split_positions:
+            self.order.log_action('pretix.event.order.changed.split', user=self.user, data={
+                'position': op.pk,
+                'positionid': op.positionid,
+                'old_item': op.item.pk,
+                'old_variation': op.variation.pk if op.variation else None,
+                'old_price': op.price,
+                'new_order': split_order.code,
+            })
+            op.order = split_order
+            op.secret = generate_position_secret()
+            op.save()
+
+        try:
+            ia = copy.copy(self.order.invoice_address)
+            ia.pk = None
+            ia.order = split_order
+            ia.save()
+        except InvoiceAddress.DoesNotExist:
+            pass
+
+        split_order.total = sum([p.price for p in split_positions])
+        if split_order.total != Decimal('0.00') and self.order.status != Order.STATUS_PAID:
+            payment_fee = self._get_payment_provider().calculate_fee(split_order.total)
+            fee = split_order.fees.get_or_create(fee_type=OrderFee.FEE_TYPE_PAYMENT, defaults={'value': 0})[0]
             fee.value = payment_fee
             fee._calculate_tax()
-            fee.save()
-        else:
-            self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).delete()
+            if payment_fee != 0:
+                fee.save()
+            elif fee.pk:
+                fee.delete()
+            split_order.total += fee.value
 
-        self.order.total = sum([p.price for p in self.order.positions.all()]) + sum([f.value for f in self.order.fees.all()])
+        for fee in self.order.fees.exclude(fee_type=OrderFee.FEE_TYPE_PAYMENT):
+            new_fee = copy.copy(fee)
+            new_fee.pk = None
+            new_fee.order = split_order
+            split_order.total += new_fee.value
+            new_fee.save()
+
+        split_order.save()
+
+        if split_order.total != Decimal('0.00') and self.order.invoices.filter(is_cancellation=False).last():
+            generate_invoice(split_order)
+        return split_order
+
+    def _recalculate_total_and_payment_fee(self):
+        self.order.total = sum([p.price for p in self.order.positions.all()])
+
+        if self.order.status != Order.STATUS_PAID:
+            # Do not change payment fees of paid orders
+            payment_fee = Decimal('0.00')
+            if self.order.total != 0:
+                prov = self._get_payment_provider()
+                if prov:
+                    payment_fee = prov.calculate_fee(self.order.total)
+
+            if payment_fee:
+                fee = self.order.fees.get_or_create(fee_type=OrderFee.FEE_TYPE_PAYMENT, defaults={'value': 0})[0]
+                fee.value = payment_fee
+                fee._calculate_tax()
+                fee.save()
+            else:
+                self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).delete()
+
+        self.order.total += sum([f.value for f in self.order.fees.all()])
         self.order.save()
 
     def _reissue_invoice(self):
@@ -917,7 +1009,7 @@ class OrderChangeManager:
             generate_invoice(self.order)
 
     def _check_complete_cancel(self):
-        cancels = len([o for o in self._operations if isinstance(o, self.CancelOperation)])
+        cancels = len([o for o in self._operations if isinstance(o, (self.CancelOperation, self.SplitOperation))])
         if cancels == self.order.positions.count():
             raise OrderError(self.error_messages['complete_cancel'])
 
@@ -928,27 +1020,27 @@ class OrderChangeManager:
         except InvoiceAddress.DoesNotExist:
             return None
 
-    def _notify_user(self):
-        with language(self.order.locale):
+    def _notify_user(self, order):
+        with language(order.locale):
             try:
-                invoice_name = self.order.invoice_address.name
-                invoice_company = self.order.invoice_address.company
+                invoice_name = order.invoice_address.name
+                invoice_company = order.invoice_address.company
             except InvoiceAddress.DoesNotExist:
                 invoice_name = ""
                 invoice_company = ""
-            email_template = self.order.event.settings.mail_text_order_changed
+            email_template = order.event.settings.mail_text_order_changed
             email_context = {
-                'event': self.order.event.name,
+                'event': order.event.name,
                 'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
-                    'order': self.order.code,
-                    'secret': self.order.secret
+                    'order': order.code,
+                    'secret': order.secret
                 }),
                 'invoice_name': invoice_name,
                 'invoice_company': invoice_company,
             }
-            email_subject = _('Your order has been changed: %(code)s') % {'code': self.order.code}
+            email_subject = _('Your order has been changed: %(code)s') % {'code': order.code}
             try:
-                self.order.send_mail(
+                order.send_mail(
                     email_subject, email_template, email_context,
                     'pretix.event.order.email.order_changed', self.user
                 )
@@ -973,7 +1065,9 @@ class OrderChangeManager:
             self._clear_tickets_cache()
         self._check_paid_to_free()
         if self.notify:
-            self._notify_user()
+            self._notify_user(self.order)
+            if self.split_order:
+                self._notify_user(self.split_order)
 
     def _clear_tickets_cache(self):
         CachedTicket.objects.filter(order_position__order=self.order).delete()
