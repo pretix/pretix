@@ -396,6 +396,11 @@ body.loading #wrapper {
     background-color: #eeeeee;
 }
 
+.panel-body {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
 .fa.disabled {
     color: $text-muted;
 }
