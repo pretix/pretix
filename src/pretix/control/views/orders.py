@@ -600,7 +600,12 @@ class OrderChange(OrderView):
         return True
 
     def post(self, *args, **kwargs):
-        ocm = OrderChangeManager(self.order, self.request.user)
+        notify = self.other_form.cleaned_data['notify'] if self.other_form.is_valid() else True
+        ocm = OrderChangeManager(
+            self.order,
+            user=self.request.user,
+            notify=notify
+        )
         form_valid = self._process_add(ocm) and self._process_change(ocm) and self._process_other(ocm)
 
         if not form_valid:
@@ -611,7 +616,10 @@ class OrderChange(OrderView):
             except OrderError as e:
                 messages.error(self.request, str(e))
             else:
-                messages.success(self.request, _('The order has been changed and the user has been notified.'))
+                if notify:
+                    messages.success(self.request, _('The order has been changed and the user has been notified.'))
+                else:
+                    messages.success(self.request, _('The order has been changed.'))
                 return self._redirect_back()
 
         return self.get(*args, **kwargs)

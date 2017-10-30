@@ -658,12 +658,13 @@ class OrderChangeManager:
     CancelOperation = namedtuple('CancelOperation', ('position',))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent'))
 
-    def __init__(self, order: Order, user):
+    def __init__(self, order: Order, user, notify=True):
         self.order = order
         self.user = user
         self._totaldiff = 0
         self._quotadiff = Counter()
         self._operations = []
+        self.notify = notify
         self._invoice_dirty = False
 
     def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation]):
@@ -971,7 +972,8 @@ class OrderChangeManager:
             self._reissue_invoice()
             self._clear_tickets_cache()
         self._check_paid_to_free()
-        self._notify_user()
+        if self.notify:
+            self._notify_user()
 
     def _clear_tickets_cache(self):
         CachedTicket.objects.filter(order_position__order=self.order).delete()

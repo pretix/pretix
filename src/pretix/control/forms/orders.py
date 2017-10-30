@@ -90,6 +90,14 @@ class OtherOperationsForm(forms.Form):
             'Use with care and only if you need to. Note that rounding differences might occur in this procedure.'
         )
     )
+    notify = forms.BooleanField(
+        label=_('Notify user'),
+        required=False,
+        initial=True,
+        help_text=_(
+            'Send an email to the customer notifying that their order has been changed.'
+        )
+    )
 
     def __init__(self, *args, **kwargs):
         kwargs.pop('order')
