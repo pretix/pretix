@@ -105,6 +105,9 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
             messages.error(request, pgettext_lazy('subevent', 'A date can not be deleted if orders already have been '
                                                   'placed.'))
             return HttpResponseRedirect(self.get_success_url())
+        if self.get_object().event.subevents.count() == 1: # checking if this is the last date in the event series
+            messages.error(request, pgettext_lazy('subevent', 'Last date of an event series can not be deleted'))
+            return HttpResponseRedirect(self.get_success_url())
         else:
             self.object.log_action('pretix.subevent.deleted', user=self.request.user)
             self.object.delete()
