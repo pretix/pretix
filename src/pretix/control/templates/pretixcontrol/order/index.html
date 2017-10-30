@@ -18,40 +18,38 @@
         {% include "pretixcontrol/orders/fragment_order_status.html" with order=order class="pull-right" %}
     </h1>
     {% if 'can_change_orders' in request.eventpermset %}
-        {% if order.status == 'n' or order.status == 'p' or order.status == 'e' %}
-            <form action="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
-                    method="post">
-                {% csrf_token %}
-                <div class="btn-toolbar" role="toolbar">
-                    <div class="btn-group" role="group">
-                        {% if order.status == 'n' or order.status == 'e' %}
-                            <button name="status" value="p" class="btn btn-default">{% trans "Mark as paid" %}</button>
-                            <a href="{% url "control:event.order.extend" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
-                                {% trans "Extend payment term" %}
-                            </a>
-                        {% endif %}
-                        {% if order.status == 'n' %}
-                            <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=c" class="btn btn-default">
-                                {% trans "Cancel order" %}
-                            </a>
-                        {% elif order.status == 'p' %}
-                            <button name="status" value="n" class="btn btn-default">{% trans "Mark as not paid" %}</button>
-                            <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=r" class="btn btn-default">
-                                {% trans "Refund order" %}
-                            </a>
-                        {% endif %}
+        <form action="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
+                method="post">
+            {% csrf_token %}
+            <div class="btn-toolbar" role="toolbar">
+                <div class="btn-group" role="group">
+                    {% if order.status == 'n' or order.status == 'e' %}
+                        <button name="status" value="p" class="btn btn-default">{% trans "Mark as paid" %}</button>
+                        <a href="{% url "control:event.order.extend" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                            {% trans "Extend payment term" %}
+                        </a>
+                    {% endif %}
+                    {% if order.status == 'n' %}
+                        <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=c" class="btn btn-default">
+                            {% trans "Cancel order" %}
+                        </a>
+                    {% elif order.status == 'p' %}
+                        <button name="status" value="n" class="btn btn-default">{% trans "Mark as not paid" %}</button>
+                        <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=r" class="btn btn-default">
+                            {% trans "Refund order" %}
+                        </a>
+                    {% endif %}
 
-                        <a href="{% eventurl request.event "presale:event.order" order=order.code secret=order.secret %}"
-                                class="btn btn-default" target="_blank">
-                            {% trans "View order as user" %}
-                        </a>
-                        <a href="{% url "control:event.order.mail_history" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
-                            {% trans "View email history" %}
-                        </a>
-                    </div>
+                    <a href="{% eventurl request.event "presale:event.order" order=order.code secret=order.secret %}"
+                            class="btn btn-default" target="_blank">
+                        {% trans "View order as user" %}
+                    </a>
+                    <a href="{% url "control:event.order.mail_history" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                        {% trans "View email history" %}
+                    </a>
                 </div>
-            </form>
-        {% endif %}
+            </div>
+        </form>
     {% endif %}
     {% if order.is_expired_by_time %}
         <form action="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
