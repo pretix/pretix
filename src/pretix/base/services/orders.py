@@ -1019,27 +1019,27 @@ class OrderChangeManager:
         except InvoiceAddress.DoesNotExist:
             return None
 
-    def _notify_user(self):
-        with language(self.order.locale):
+    def _notify_user(self, order):
+        with language(order.locale):
             try:
-                invoice_name = self.order.invoice_address.name
-                invoice_company = self.order.invoice_address.company
+                invoice_name = order.invoice_address.name
+                invoice_company = order.invoice_address.company
             except InvoiceAddress.DoesNotExist:
                 invoice_name = ""
                 invoice_company = ""
-            email_template = self.order.event.settings.mail_text_order_changed
+            email_template = order.event.settings.mail_text_order_changed
             email_context = {
-                'event': self.order.event.name,
+                'event': order.event.name,
                 'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
-                    'order': self.order.code,
-                    'secret': self.order.secret
+                    'order': order.code,
+                    'secret': order.secret
                 }),
                 'invoice_name': invoice_name,
                 'invoice_company': invoice_company,
             }
-            email_subject = _('Your order has been changed: %(code)s') % {'code': self.order.code}
+            email_subject = _('Your order has been changed: %(code)s') % {'code': order.code}
             try:
-                self.order.send_mail(
+                order.send_mail(
                     email_subject, email_template, email_context,
                     'pretix.event.order.email.order_changed', self.user
                 )
@@ -1064,7 +1064,9 @@ class OrderChangeManager:
             self._clear_tickets_cache()
         self._check_paid_to_free()
         if self.notify:
-            self._notify_user()
+            self._notify_user(self.order)
+            if self.split_order:
+                self._notify_user(self.split_order)
 
     def _clear_tickets_cache(self):
         CachedTicket.objects.filter(order_position__order=self.order).delete()
