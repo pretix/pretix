@@ -604,7 +604,7 @@ class OrderChange(OrderView):
         form_valid = self._process_add(ocm) and self._process_change(ocm) and self._process_other(ocm)
 
         if not form_valid:
-            messages.error(self.request, _('An error occured. Please see the details below.'))
+            messages.error(self.request, _('An error occurred. Please see the details below.'))
         else:
             try:
                 ocm.commit()

@@ -2240,7 +2240,7 @@ msgstr ""
 "geändert."
 
 #: pretix/base/services/orders.py:52
-msgid "An internal error occured, please try again."
+msgid "An internal error occurred, please try again."
 msgstr "Ein interner Fehler ist aufgetreten, bitte erneut versuchen."
 
 #: pretix/base/services/orders.py:53
@@ -2949,7 +2949,7 @@ msgid "This slug has an invalid value: %(value)s."
 msgstr "Diese Kurzform hat einen ungültigen Wert: %(value)s."
 
 #: pretix/base/views/async.py:136
-msgid "An unexpected error has occured."
+msgid "An unexpected error has occurred."
 msgstr "Ein unerwarteter Fehler ist aufgetreten."
 
 #: pretix/base/views/async.py:139
@@ -7920,7 +7920,7 @@ msgstr ""
 
 #: pretix/control/views/event.py:460
 #, python-format
-msgid "An error occured while contacting the SMTP server: %s"
+msgid "An error occurred while contacting the SMTP server: %s"
 msgstr "Ein Fehler trat auf beim Versuch, den SMTP-Server zu erreichen: %s"
 
 #: pretix/control/views/event.py:463
@@ -8213,7 +8213,7 @@ msgstr ""
 "Dieser Aktion ist nur für ausstehende und bezahlte Bestellungen möglich."
 
 #: pretix/control/views/orders.py:607
-msgid "An error occured. Please see the details below."
+msgid "An error occurred. Please see the details below."
 msgstr ""
 "Ein Fehler ist aufgetreten, bitte schauen Sie weiter unten für Details."
 
@@ -8775,7 +8775,7 @@ msgid ""
 msgstr "Der Import wird verarbeitet, bitte einen Moment Geduld …"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
-msgid "An internal error occured during processing your data."
+msgid "An internal error occurred during processing your data."
 msgstr "Beim Verarbeiten der Daten ist ein interner Fehler aufgetreten."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:22

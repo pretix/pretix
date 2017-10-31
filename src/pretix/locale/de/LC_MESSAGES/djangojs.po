@@ -103,7 +103,7 @@ msgstr ""
 #: pretix/static/pretixbase/js/asyncdownload.js:41
 #: pretix/static/pretixbase/js/asynctask.js:62
 #: pretix/static/pretixbase/js/asynctask.js:116
-msgid "An error of type {code} occured."
+msgid "An error of type {code} occurred."
 msgstr "Ein Fehler ist aufgetreten. Fehlercode: {code}"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:54

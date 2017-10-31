@@ -38,7 +38,7 @@ function async_dl_check_error(jqXHR, textStatus, errorThrown) {
     if (c.length > 0) {
         ajaxErrDialog.show(c.first().html());
     } else if (jqXHR.status >= 400) {
-        alert(gettext('An error of type {code} occured.').replace(/\{code\}/, jqXHR.status));
+        alert(gettext('An error of type {code} occurred.').replace(/\{code\}/, jqXHR.status));
     }
 }
 
