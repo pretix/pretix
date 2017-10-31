@@ -145,13 +145,12 @@ Endpoints
         "subevent": null
       }
 
-   :param organizer: The ``slug`` field of the organizer to create a voucher for
-   :param event: The ``slug`` field of the event to create a voucher for
+   :param organizer: The ``slug`` field of the organizer of the event/item to create a quota for
+   :param event: The ``slug`` field of the event to create a quota for
    :statuscode 201: no error
-   :statuscode 400: The voucher could not be created due to invalid submitted data.
+   :statuscode 400: The quota could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
-   :statuscode 409: The server was unable to acquire a lock and could not process your request. You can try again after a short waiting period.
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/quotas/(id)/
 
@@ -206,9 +205,8 @@ Endpoints
    :statuscode 400: The quota could not be modified due to invalid submitted data
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
-   :statuscode 409: The server was unable to acquire a lock and could not process your request. You can try again after a short waiting period.
 
-.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/vouchers/(id)/
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/quota/(id)/
 
    Delete a quota. Note that if you delete a quota the items the quota acts on might no longer be available for sale.
 
