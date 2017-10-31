@@ -91,10 +91,6 @@ class QuotaViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.event.quotas.all()
 
-    def create(self, request, *args, **kwargs):
-        with request.event.lock():
-            return super().create(request, *args, **kwargs)
-
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
@@ -108,10 +104,6 @@ class QuotaViewSet(viewsets.ModelViewSet):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
         return ctx
-
-    def update(self, request, *args, **kwargs):
-        with request.event.lock():
-            return super().update(request, *args, **kwargs)
 
     def perform_update(self, serializer):
         serializer.save(event=self.request.event)
