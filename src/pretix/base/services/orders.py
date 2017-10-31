@@ -53,7 +53,7 @@ error_messages = {
                  'the quantity you selected. Please see below for details.'),
     'price_changed': _('The price of some of the items in your cart has changed in the '
                        'meantime. Please see below for details.'),
-    'internal': _("An internal error occured, please try again."),
+    'internal': _("An internal error occurred, please try again."),
     'empty': _("Your cart is empty."),
     'max_items_per_product': _("You cannot select more than %(max)s items of the product %(product)s. We removed the "
                                "surplus items from your cart."),
