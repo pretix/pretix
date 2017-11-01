@@ -2872,11 +2872,11 @@ msgstr "Verstecken"
 
 #: pretix/base/templates/debug_toolbar/base.html:23
 msgid "Disable for next and successive requests"
-msgstr "Für nächsten und folgende Requests deaktiviern"
+msgstr "Für nächsten und folgende Requests deaktivieren"
 
 #: pretix/base/templates/debug_toolbar/base.html:23
 msgid "Enable for next and successive requests"
-msgstr "Für nächsten und folgende Requests aktiviern"
+msgstr "Für nächsten und folgende Requests aktivieren"
 
 #: pretix/base/templates/debug_toolbar/base.html:45
 msgid "Show toolbar"
@@ -4152,7 +4152,7 @@ msgid ""
 "by a user or currently is in a users's cart. Please set the variation as "
 "\"inactive\" instead."
 msgstr ""
-"Die Variante \"%s\" kann nicht geöscht werden, da sie bereits bestellt wurde "
+"Die Variante \"%s\" kann nicht gelöscht werden, da sie bereits bestellt wurde "
 "oder sich in einem Warenkorb befindet. Bitte setzen Sie die Variante "
 "stattdessen auf \"inaktiv\"."
 
@@ -4231,7 +4231,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:146 pretix/control/forms/orders.py:231
 msgid "inactive"
-msgstr "deakitivert"
+msgstr "deaktiviert"
 
 #: pretix/control/forms/orders.py:174
 msgctxt "subevent"
@@ -5872,7 +5872,7 @@ msgid ""
 "Using this form, you can generate a code to copy and paste to your website "
 "source."
 msgstr ""
-"Mit diesem Formular können Sie einen Code-Schnippsel zum kopieren in den "
+"Mit diesem Formular können Sie einen Code-Schnipsel zum Kopieren in den "
 "Quellcode Ihrer Website generieren."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:63
@@ -7101,7 +7101,7 @@ msgid ""
 msgstr ""
 "Um einen neuen Benutzer hinzuzufügen, können Sie hier die E-Mail-Adresse "
 "eintragen. Wenn die Person bereits ein pretix-Konto hat, erhält sie sofort "
-"Zugriff auf die Veranstaltung. Andenfalls erhält sie eine E-Mail mit einer "
+"Zugriff auf die Veranstaltung. Andernfalls erhält sie eine E-Mail mit einer "
 "Einladung."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:76
@@ -7419,7 +7419,7 @@ msgstr "Neue Notfall-Tokens erzeugen"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:10
 msgid "Do you really want to regenerate your emergency codes?"
-msgstr "Möchten Sie wirklich neue Notfall-Tokens generierien?"
+msgstr "Möchten Sie wirklich neue Notfall-Tokens generieren?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:13
 msgid "The old codes will no longer work."
@@ -7518,7 +7518,7 @@ msgid ""
 msgstr ""
 "Wenn Sie \"Beliebiges Produkt\" für ein spezielles Kontingent auswählen und "
 "dann Kontingent für diesen Gutschein reservieren, kann ein einzelnes Produkt "
-"immernoch für den Gutscheineinlöser nicht verfügbar sein, wenn es aufgrund "
+"immer noch für den Gutscheineinlöser nicht verfügbar sein, wenn es aufgrund "
 "eines anderen Kontingentes ausverkauft ist!"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:4
@@ -7918,7 +7918,7 @@ msgstr "Aktion erforderlich"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:21
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:44
 msgid "Sale over"
-msgstr "Verkauf vorrüber"
+msgstr "Verkauf vorüber"
 
 #: pretix/control/views/dashboards.py:350
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:51
@@ -8496,7 +8496,7 @@ msgid ""
 "safe place in case you lose access to your devices."
 msgstr ""
 "Ihre Notfall-Tokens wurden neu generiert. Denken Sie daran, diese an einem "
-"sicheren Ort aufzubewahlen, falls Sie Zugriff auf Ihre Geräte verlieren."
+"sicheren Ort aufzubewahren, falls Sie Zugriff auf Ihre Geräte verlieren."
 
 #: pretix/control/views/vouchers.py:64
 msgid "Reserve quota"
@@ -8681,7 +8681,7 @@ msgstr "Verwendungszweck"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:18
 msgid "This order has been marked as paid via bank transfer manually."
-msgstr "Diese Bezahlung wurde manuell als per Banküberweisung bezahltmarkiert."
+msgstr "Diese Bezahlung wurde manuell als per Banküberweisung bezahlt markiert."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:22
 msgid ""
@@ -8784,7 +8784,7 @@ msgid ""
 msgstr ""
 "Auf dieser Seite können Sie Bankdaten pro Veranstaltung importieren. Sie "
 "sehen außerdem nur unzugeordnete Transaktionen, die für diese Veranstaltung "
-"direkt imporitert wurden."
+"direkt importiert wurden."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:58
 msgid "Go to organizer-level import"
@@ -9600,7 +9600,7 @@ msgstr ""
 "Bitte konfigurieren Sie einen <a href=\"https://dashboard.stripe.com/account/"
 "webhooks\">Stripe Webhook</a> zum folgenden Endpunkt, damit Bestellungen "
 "automatisch als storniert markiert werden, wenn die Zahlung zurückerstattet "
-"wird und zur Verarbeitung asynchroner Zahlmethoden wie SOFORT."
+"wird und zur Verarbeitung asynchroner Zahlungsmethoden wie SOFORT."
 
 #: pretix/plugins/stripe/payment.py:78
 msgid "Secret key"
@@ -10201,7 +10201,7 @@ msgstr "Sonstiges…"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:300
 msgid "Add a new object"
-msgstr "Neues Objekt hinzufpgen"
+msgstr "Neues Objekt hinzufügen"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:309
 msgid "QR code area"
