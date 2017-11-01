@@ -142,7 +142,7 @@ Vue.component('availbox', {
         + '</div>'
         + '<div class="pretix-widget-waiting-list-link"'
         + '     v-if="waiting_list_show">'
-        + '<a :href="waiting_list_url" @click.prevent="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
+        + '<a :href="waiting_list_url" target="_blank" @click="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!item.require_voucher && avail[0] === 100">'
         + '<label class="pretix-widget-item-count-single-label" v-if="order_max === 1">'
@@ -651,9 +651,14 @@ var create_widget = function (element) {
         },
         methods: {
             open_link_in_frame: function (event) {
-                var url = event.target.attributes.href.value;
-                this.$children[0].$refs['frame-container'].children[0].src = url;
-                this.frame_loading = true;
+                if (this.$root.useIframe) {
+                    event.preventDefault();
+                    var url = event.target.attributes.href.value;
+                    this.$children[0].$refs['frame-container'].children[0].src = url;
+                    this.frame_loading = true;
+                } else {
+                    return;
+                }
             }
         }
     });
