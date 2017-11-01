@@ -36,7 +36,7 @@
     <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
     {% block custom_header %}{% endblock %}
 </head>
-<body data-locale="{{ request.LANGUAGE_CODE }}">
+<body data-locale="{{ request.LANGUAGE_CODE }}" data-now="{% now "U.u" %}">
 {% block above %}
 {% endblock %}
 <div class="container">
