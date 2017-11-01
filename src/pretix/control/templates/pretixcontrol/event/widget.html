@@ -3,6 +3,7 @@
 {% load staticfiles %}
 {% load bootstrap3 %}
 {% load eventurl %}
+{% load eventsignal %}
 {% block inside %}
     <legend>{% trans "Widget" %}</legend>
     <p>
@@ -66,4 +67,5 @@
             </div>
         </form>
     {% endif %}
+    {% eventsignal request.event "pretix.control.signals.event_settings_widget" request=request  %}
 {% endblock %}

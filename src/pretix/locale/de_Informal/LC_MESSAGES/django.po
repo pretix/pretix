@@ -5864,7 +5864,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:63
 msgid "Generate widget code"
-msgstr "Widget-Coder generieren"
+msgstr "Widget-Code generieren"
 
 #: pretix/control/templates/pretixcontrol/events/create_base.html:4
 #: pretix/control/templates/pretixcontrol/events/create_base.html:6
