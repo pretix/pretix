@@ -34,6 +34,17 @@ def event(organizer, meta_prop):
 
 
 @pytest.fixture
+def event2(organizer, meta_prop):
+    e = Event.objects.create(
+        organizer=organizer, name='Dummy2', slug='dummy2',
+        date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC),
+        plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf'
+    )
+    e.meta_values.create(property=meta_prop, value="Conference")
+    return e
+
+
+@pytest.fixture
 def team(organizer):
     return Team.objects.create(
         organizer=organizer,

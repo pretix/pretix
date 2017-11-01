@@ -897,3 +897,10 @@ class Quota(LoggedModel):
 
     class QuotaExceededException(Exception):
         pass
+
+    @staticmethod
+    def clean_variations(items, variations):
+        for variation in variations:
+            if variation.item not in items:
+                raise ValidationError(_('All variations must belong to an item contained in the items list'))
+                break

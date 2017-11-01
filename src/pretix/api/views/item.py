@@ -113,6 +113,7 @@ class QuotaViewSet(viewsets.ModelViewSet):
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
             data=self.request.data
         )
+        serializer.instance.rebuild_cache()
 
     def perform_destroy(self, instance):
         instance.log_action(
