@@ -904,3 +904,13 @@ class Quota(LoggedModel):
             if variation.item not in items:
                 raise ValidationError(_('All variations must belong to an item contained in the items list'))
                 break
+
+    @staticmethod
+    def clean_items(event, items, variations):
+        for item in items:
+            if event != item.event:
+                raise ValidationError(_('One or more items does not belong to this event'))
+            if item.has_variations:
+                selected_vars = set(item.variations.all()).intersection(variations)
+                if bool(selected_vars) is False:
+                    raise ValidationError(_('One or more items has variations but none of these are in the variations list'))

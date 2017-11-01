@@ -76,10 +76,12 @@ class QuotaSerializer(I18nAwareModelSerializer):
 
     def validate(self, data):
         data = super().validate(data)
+        event = self.context['event']
 
         full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
         full_data.update(data)
 
         Quota.clean_variations(full_data.get('items'), full_data.get('variations'))
+        Quota.clean_items(event, full_data.get('items'), full_data.get('variations'))
 
         return data
