@@ -15,7 +15,7 @@ from pretix.base.models import (
 from pretix.base.models.items import (
     ItemAddOn, SubEventItem, SubEventItemVariation,
 )
-from pretix.base.services.cart import CartError, CartManager
+from pretix.base.services.cart import CartError, CartManager, error_messages
 from pretix.testutils.sessions import get_cart_session_key
 
 
@@ -966,6 +966,15 @@ class CartTest(CartTestMixin, TestCase):
         }, follow=True)
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 0)
+
+    def test_voucher_item_not_available_error(self):
+        v = Voucher.objects.create(item=self.ticket, event=self.event)
+        self.ticket.available_until = now() - timedelta(days=2)
+        self.ticket.save()
+        response = self.client.get('/%s/%s/redeem' % (self.orga.slug, self.event.slug),
+                                   {'voucher': v.code},
+                                   follow=True)
+        assert error_messages['voucher_item_not_available'] in response.rendered_content
 
     def test_voucher_price(self):
         v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set')
