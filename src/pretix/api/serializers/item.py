@@ -83,5 +83,6 @@ class QuotaSerializer(I18nAwareModelSerializer):
 
         Quota.clean_variations(full_data.get('items'), full_data.get('variations'))
         Quota.clean_items(event, full_data.get('items'), full_data.get('variations'))
+        Quota.clean_subevent(event, full_data.get('subevent'))
 
         return data

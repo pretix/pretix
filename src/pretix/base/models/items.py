@@ -914,3 +914,11 @@ class Quota(LoggedModel):
                 selected_vars = set(item.variations.all()).intersection(variations)
                 if bool(selected_vars) is False:
                     raise ValidationError(_('One or more items has variations but none of these are in the variations list'))
+
+    @staticmethod
+    def clean_subevent(event, subevent):
+        if event.has_subevents:
+            if not subevent:
+                raise ValidationError(_('Subevent cannot be null for event series'))
+            if event != subevent.event:
+                raise ValidationError(_('The subevent does not belong to this event'))

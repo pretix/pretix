@@ -352,6 +352,50 @@ def test_quota_create_with_variations(token_client, organizer, event, item, vari
 
 
 @pytest.mark.django_db
+def test_quota_create_with_subevent(token_client, organizer, event, item, variations, subevent, subevent2):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [item.pk],
+            "variations": [variations[0].pk],
+            "subevent": subevent.pk
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [item.pk],
+            "variations": [variations[0].pk],
+            "subevent": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["Subevent cannot be null for event series"]}'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [item.pk],
+            "variations": [variations[0].pk],
+            "subevent": subevent2.pk
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The subevent does not belong to this event"]}'
+
+
+@pytest.mark.django_db
 def test_quota_update(token_client, organizer, event, quota, item):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/quotas/{}/'.format(organizer.slug, event.slug, quota.pk),

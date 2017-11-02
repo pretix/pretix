@@ -84,5 +84,16 @@ def subevent(event, meta_prop):
 
 
 @pytest.fixture
+def subevent2(event2, meta_prop):
+    event2.has_subevents = True
+    event2.save()
+    se = event2.subevents.create(name="Foobar",
+                                date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+
+    se.meta_values.create(property=meta_prop, value="Workshop")
+    return se
+
+
+@pytest.fixture
 def taxrule(event):
     return event.tax_rules.create(name="VAT", rate=19)
