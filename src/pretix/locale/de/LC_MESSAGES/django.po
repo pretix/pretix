@@ -964,8 +964,8 @@ msgid ""
 "needs to be checked."
 msgstr ""
 "Wenn diese Option gesetzt ist, wird die Check-In-Anwendung melden, dass "
-"dieses Ticket besondere Behandlung braucht. Das ist z.B. für Studenten "
-"nützlich, deren Studentenausweis noch geprüft werden soll."
+"dieses Ticket besondere Behandlung braucht. Das ist z.B. für Studierende "
+"nützlich, deren Studierendenausweis noch geprüft werden soll."
 
 #: pretix/base/models/items.py:303 pretix/base/models/vouchers.py:139
 #: pretix/base/models/waitinglist.py:49 pretix/control/forms/orders.py:113
@@ -9790,15 +9790,15 @@ msgstr "Zahlung ausstehend"
 
 #: pretix/plugins/stripe/signals.py:52
 msgid "Payment authorized."
-msgstr "Zahlung authorisiert."
+msgstr "Zahlung autorisiert."
 
 #: pretix/plugins/stripe/signals.py:53
 msgid "Payment authorization canceled."
-msgstr "Zahlungsauthorisierung abgebrochen."
+msgstr "Zahlungsautorisierung abgebrochen."
 
 #: pretix/plugins/stripe/signals.py:54
 msgid "Payment authorization failed."
-msgstr "Zahlungsauthorisierung fehlgeschlagen."
+msgstr "Zahlungsautorisierung fehlgeschlagen."
 
 #: pretix/plugins/stripe/signals.py:60
 msgid "Charge failed. Reason: {}"

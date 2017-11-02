@@ -966,8 +966,8 @@ msgid ""
 "needs to be checked."
 msgstr ""
 "Wenn diese Option gesetzt ist, wird die Check-In-Anwendung melden, dass "
-"dieses Ticket besondere Behandlung braucht. Das ist z.B. für Studenten "
-"nützlich, deren Studentenausweis noch geprüft werden soll."
+"dieses Ticket besondere Behandlung braucht. Das ist z.B. für Studierende "
+"nützlich, deren Studierendenausweis noch geprüft werden soll."
 
 #: pretix/base/models/items.py:303 pretix/base/models/vouchers.py:139
 #: pretix/base/models/waitinglist.py:49 pretix/control/forms/orders.py:113
@@ -1637,7 +1637,7 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist, wird dieser Gutschein von den Kontingenten "
 "des betroffenen Produktes abgezogen, sodass garantiert ist, dass der "
-"Benutzer dieses Gutscheins noch ein Ticket erthält."
+"Benutzer dieses Gutscheins noch ein Ticket erhält."
 
 #: pretix/base/models/vouchers.py:122
 msgid "Allow to bypass quota"
@@ -1991,11 +1991,11 @@ msgstr "Unbekannte Warenkorbposition."
 #: pretix/base/services/cart.py:39
 msgctxt "subevent"
 msgid "No date was specified."
-msgstr "Es wurde kein Termin asugewählt."
+msgstr "Es wurde kein Termin ausgewählt."
 
 #: pretix/base/services/cart.py:40
 msgid "You selected a product which is not available for sale."
-msgstr "Du hsat ein Produkt ausgewählt, das nicht zum Verkauf steht."
+msgstr "Du hast ein Produkt ausgewählt, das nicht zum Verkauf steht."
 
 #: pretix/base/services/cart.py:41
 msgid ""
@@ -2868,11 +2868,11 @@ msgstr "Verstecken"
 
 #: pretix/base/templates/debug_toolbar/base.html:23
 msgid "Disable for next and successive requests"
-msgstr "Für nächsten und folgende Requests deaktiviern"
+msgstr "Für nächsten und folgende Requests deaktivieren"
 
 #: pretix/base/templates/debug_toolbar/base.html:23
 msgid "Enable for next and successive requests"
-msgstr "Für nächsten und folgende Requests aktiviern"
+msgstr "Für nächsten und folgende Requests aktivieren"
 
 #: pretix/base/templates/debug_toolbar/base.html:45
 msgid "Show toolbar"
@@ -4147,7 +4147,7 @@ msgid ""
 "by a user or currently is in a users's cart. Please set the variation as "
 "\"inactive\" instead."
 msgstr ""
-"Die Variante \"%s\" kann nicht geöscht werden, da sie bereits bestellt wurde "
+"Die Variante \"%s\" kann nicht gelöscht werden, da sie bereits bestellt wurde "
 "oder sich in einem Warenkorb befindet. Bitte setze die Variante stattdessen "
 "auf \"inaktiv\"."
 
@@ -4226,7 +4226,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:146 pretix/control/forms/orders.py:231
 msgid "inactive"
-msgstr "deakitivert"
+msgstr "deaktiviert"
 
 #: pretix/control/forms/orders.py:174
 msgctxt "subevent"
@@ -4594,7 +4594,7 @@ msgstr ""
 msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
 "account."
-msgstr "Das Gerät \"{name}\" zur Zwei-Faktor-Authentifizierung wurde enternt."
+msgstr "Das Gerät \"{name}\" zur Zwei-Faktor-Authentifizierung wurde entfernt."
 
 #: pretix/control/logdisplay.py:142
 msgid "Password reset mail sent."
@@ -4650,7 +4650,7 @@ msgstr "Die Variante \"{value}\" wurde gelöscht."
 #: pretix/control/logdisplay.py:154
 #, python-brace-format
 msgid "The variation \"{value}\" has been changed."
-msgstr "Die Variante \"{value}\" wurde veräbdert."
+msgstr "Die Variante \"{value}\" wurde verändert."
 
 #: pretix/control/logdisplay.py:155
 msgid "An add-on has been added to this product."
@@ -5647,7 +5647,7 @@ msgid ""
 "You can now scroll down and modify the settings in more detail, if you want, "
 "or you can create your first product to start selling tickets right away!"
 msgstr ""
-"Du mkannst nun herunterscrollen und die Einstellungen detailliert anpassen, "
+"Du kannst nun herunterscrollen und die Einstellungen detailliert anpassen, "
 "wenn du möchtest, oder dein erstes Produkt erstellen und mit dem Ticket-"
 "Verkauf loslegen!"
 
@@ -5859,7 +5859,7 @@ msgid ""
 "Using this form, you can generate a code to copy and paste to your website "
 "source."
 msgstr ""
-"Mit diesem Formular kannst du einen Code-Schnippsel zum kopieren in den "
+"Mit diesem Formular kannst du einen Code-Schnipsel zum Kopieren in den "
 "Quellcode deiner Website generieren."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:63
@@ -7087,7 +7087,7 @@ msgid ""
 msgstr ""
 "Um einen neuen Benutzer hinzuzufügen, kannst du hier die E-Mail-Adresse "
 "eintragen. Wenn die Person bereits ein pretix-Konto hat, erhält sie sofort "
-"Zugriff auf die Veranstaltung. Andenfalls erhält sie eine E-Mail mit einer "
+"Zugriff auf die Veranstaltung. Andernfalls erhält sie eine E-Mail mit einer "
 "Einladung."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:76
@@ -7342,7 +7342,7 @@ msgid ""
 "smartphone or a hardware token generator and that changes on a regular basis."
 msgstr ""
 "Zwei-Faktor-Authentifizierung ist ein Weg, deinen Account zusätzlich "
-"abzusichern. Wenn du es aktivierest, benötigst du neben einem Passwort bei "
+"abzusichern. Wenn du es aktivierst, benötigst du neben einem Passwort bei "
 "jeder Anmeldung auch einen zusätzlichen Token, der z.B. von einer App auf "
 "deinem Smartphone oder einem Hardware-Tokengenerator erzeugt wird und sich "
 "regelmäßig ändert."
@@ -7403,7 +7403,7 @@ msgstr "Neue Notfall-Tokens erzeugen"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:10
 msgid "Do you really want to regenerate your emergency codes?"
-msgstr "Möchtest du wirklich neue Notfall-Tokens generierien?"
+msgstr "Möchtest du wirklich neue Notfall-Tokens generieren?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:13
 msgid "The old codes will no longer work."
@@ -7502,7 +7502,7 @@ msgid ""
 msgstr ""
 "Wenn du \"Beliebiges Produkt\" für ein spezielles Kontingent auswählst und "
 "dann Kontingent für diesen Gutschein reservierst, kann ein einzelnes Produkt "
-"immernoch für den Gutscheineinlöser nicht verfügbar sein, wenn es aufgrund "
+"immer noch für den Gutscheineinlöser nicht verfügbar sein, wenn es aufgrund "
 "eines anderen Kontingentes ausverkauft ist!"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:4
@@ -7900,7 +7900,7 @@ msgstr "Aktion erforderlich"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:21
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:44
 msgid "Sale over"
-msgstr "Verkauf vorrüber"
+msgstr "Verkauf vorüber"
 
 #: pretix/control/views/dashboards.py:350
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:51
@@ -8476,7 +8476,7 @@ msgid ""
 "safe place in case you lose access to your devices."
 msgstr ""
 "Deine Notfall-Tokens wurden neu generiert. Denken daran, diese an einem "
-"sicheren Ort aufzubewahlen, falls du Zugriff auf deine Geräte verlierst."
+"sicheren Ort aufzubewahren, falls du Zugriff auf deine Geräte verlierst."
 
 #: pretix/control/views/vouchers.py:64
 msgid "Reserve quota"
@@ -8764,7 +8764,7 @@ msgid ""
 msgstr ""
 "Auf dieser Seite kannst du Bankdaten pro Veranstaltung importieren. Du "
 "siehst außerdem nur unzugeordnete Transaktionen, die für diese Veranstaltung "
-"direkt imporitert wurden."
+"direkt importiert wurden."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:58
 msgid "Go to organizer-level import"
@@ -9579,7 +9579,7 @@ msgstr ""
 "Bitte konfiguriere einen <a href=\"https://dashboard.stripe.com/account/"
 "webhooks\">Stripe Webhook</a> zum folgenden Endpunkt, damit Bestellungen "
 "automatisch als storniert markiert werden, wenn die Zahlung zurückerstattet "
-"wird und zur Verarbeitung asynchroner Zahlmethoden wie SOFORT."
+"wird und zur Verarbeitung asynchroner Zahlungsmethoden wie SOFORT."
 
 #: pretix/plugins/stripe/payment.py:78
 msgid "Secret key"
@@ -9769,15 +9769,15 @@ msgstr "Zahlung ausstehend"
 
 #: pretix/plugins/stripe/signals.py:52
 msgid "Payment authorized."
-msgstr "Zahlung authorisiert."
+msgstr "Zahlung autorisiert."
 
 #: pretix/plugins/stripe/signals.py:53
 msgid "Payment authorization canceled."
-msgstr "Zahlungsauthorisierung abgebrochen."
+msgstr "Zahlungsautorisierung abgebrochen."
 
 #: pretix/plugins/stripe/signals.py:54
 msgid "Payment authorization failed."
-msgstr "Zahlungsauthorisierung fehlgeschlagen."
+msgstr "Zahlungsautorisierung fehlgeschlagen."
 
 #: pretix/plugins/stripe/signals.py:60
 msgid "Charge failed. Reason: {}"
@@ -10177,7 +10177,7 @@ msgstr "Sonstiges…"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:300
 msgid "Add a new object"
-msgstr "Neues Objekt hinzufpgen"
+msgstr "Neues Objekt hinzufügen"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:309
 msgid "QR code area"
@@ -11276,7 +11276,7 @@ msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "tickets get available again."
 msgstr ""
-"Wir haben dich zur Warteliste hinzugefügt. Du erhälst eine E-Mail, sobald "
+"Wir haben dich zur Warteliste hinzugefügt. Du erhältst eine E-Mail, sobald "
 "wieder Tickets verfügbar sind."
 
 #: pretix/settings.py:324
