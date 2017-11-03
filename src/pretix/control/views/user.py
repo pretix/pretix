@@ -242,7 +242,7 @@ class User2FADeviceConfirmU2FView(RecentAuthenticationRequiredMixin, TemplateVie
             if not self.request.user.require_2fa:
                 note = ' ' + str(_('Please note that you still need to enable two-factor authentication for your '
                                    'account using the buttons below to make a second factor required for logging '
-                                   'into your accont.'))
+                                   'into your account.'))
             messages.success(request, str(_('The device has been verified and can now be used.')) + note)
             return redirect(reverse('control:user.settings.2fa'))
         except Exception:
@@ -291,7 +291,7 @@ class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateVi
             if not self.request.user.require_2fa:
                 note = ' ' + str(_('Please note that you still need to enable two-factor authentication for your '
                                    'account using the buttons below to make a second factor required for logging '
-                                   'into your accont.'))
+                                   'into your account.'))
             messages.success(request, str(_('The device has been verified and can now be used.')) + note)
             return redirect(reverse('control:user.settings.2fa'))
         else:

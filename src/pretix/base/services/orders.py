@@ -592,7 +592,11 @@ def send_expiry_warnings(sender, **kwargs):
                 'invoice_name': invoice_name,
                 'invoice_company': invoice_company,
             }
-            email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
+            if eventsettings.payment_term_expire_automatically:
+                email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
+            else:
+                email_subject = _('Your order is pending payment: %(code)s') % {'code': o.code}
+
             try:
                 o.send_mail(
                     email_subject, email_template, email_context,

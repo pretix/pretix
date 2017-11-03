@@ -198,9 +198,13 @@ class Voucher(LoggedModel):
     @staticmethod
     def clean_item_properties(data, event, quota, item, variation):
         if quota:
+            if quota.event != event:
+                raise ValidationError(_('You cannot select a quota that belongs to a different event.'))
             if item:
                 raise ValidationError(_('You cannot select a quota and a specific product at the same time.'))
         elif item:
+            if item.event != event:
+                raise ValidationError(_('You cannot select an item that belongs to a different event.'))
             if variation and (not item or not item.has_variations):
                 raise ValidationError(_('You cannot select a variation without having selected a product that provides '
                                         'variations.'))
