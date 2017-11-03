@@ -172,13 +172,6 @@ msgstr "Ein Fehler ist aufgetreten."
 msgid "An error of type {code} occurred."
 msgstr "Ein Fehler vom Typ {code} ist aufgetreten."
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:25
-msgid ""
-"We currently cannot reach the server. Please try again. Error code: {code}"
-msgstr ""
-"Wir können den Server aktuell nicht erreichen. Bitte versuche es noch "
-"einmal. Fehlercode: {code}"
-
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
 msgid "Generating messages …"
 msgstr "Generiere Nachrichten…"
