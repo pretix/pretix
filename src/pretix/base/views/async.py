@@ -133,7 +133,7 @@ class AsyncAction:
             return str(exception)
         else:
             logger.error('Unexpected exception: %r' % exception)
-            return _('An unexpected error has occured.')
+            return _('An unexpected error has occurred.')
 
     def get_success_message(self, value):
         return _('The task has been completed.')
