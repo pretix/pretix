@@ -2238,7 +2238,7 @@ msgstr ""
 "geändert."
 
 #: pretix/base/services/orders.py:52
-msgid "An internal error occured, please try again."
+msgid "An internal error occurred, please try again."
 msgstr "Ein interner Fehler ist aufgetreten, bitte erneut versuchen."
 
 #: pretix/base/services/orders.py:53
@@ -2945,7 +2945,7 @@ msgid "This slug has an invalid value: %(value)s."
 msgstr "Diese Kurzform hat einen ungültigen Wert: %(value)s."
 
 #: pretix/base/views/async.py:136
-msgid "An unexpected error has occured."
+msgid "An unexpected error has occurred."
 msgstr "Ein unerwarteter Fehler ist aufgetreten."
 
 #: pretix/base/views/async.py:139
@@ -3047,7 +3047,7 @@ msgstr "Umsatzsteuersatz"
 msgid ""
 "Do you need to pay sales tax on your tickets? In this case, please enter the "
 "applicable tax rate here in percent. If you have a more complicated tax "
-"situation, you can add more tax rates and detailled configuration later."
+"situation, you can add more tax rates and detailed configuration later."
 msgstr ""
 "Müsst ihr Umsatzsteuern auf eure Tickets zahlen? In diesem Fall trage bitte "
 "den gültigen Steuersatz hier in Prozent ein. Wenn ihr eine kompliziertere "
@@ -3146,7 +3146,7 @@ msgstr "Letztes Änderungsdatum"
 msgid ""
 "The last date users can modify details of their orders, such as attendee "
 "names or answers to questions. If you use the event series feature and an "
-"order contains tickest for multiple event dates, the earliest date will be "
+"order contains tickets for multiple event dates, the earliest date will be "
 "used."
 msgstr ""
 "Das späteste Datum, zu dem Benutzer die Details ihrer Bestellung (z.B. Namen "
@@ -6133,7 +6133,7 @@ msgstr "Möchtest du das Produkt <strong>%(item)s</strong> wirklich löschen?"
 #, python-format
 msgid ""
 "You cannot delete the product <strong>%(item)s</strong> because it already "
-"has been ordered, but you can deactive it."
+"has been ordered, but you can deactivate it."
 msgstr ""
 "Das Produkt <strong>%(item)s</strong> kann nicht gelöscht werden, da es "
 "bereits bestellt wurde, aber du kannst es deaktivieren."
@@ -7612,7 +7612,7 @@ msgid ""
 "automatically. You can either send them one-by-one in an order of your "
 "choice by clicking the buttons next to a line in this table (if sufficient "
 "quota is available) or you can press the big button below this text to send "
-"out as many vouchers as currently possible to the persons who waitet longest."
+"out as many vouchers as currently possible to the persons who waited longest."
 msgstr ""
 "Du hast eingestellt, dass Gutscheine <strong>nicht</strong> an die Personen "
 "auf dieser Liste verschickt werden. Du kannst die Gutscheine entweder "
@@ -7902,7 +7902,7 @@ msgstr ""
 
 #: pretix/control/views/event.py:460
 #, python-format
-msgid "An error occured while contacting the SMTP server: %s"
+msgid "An error occurred while contacting the SMTP server: %s"
 msgstr "Ein Fehler trat auf beim Versuch, den SMTP-Server zu erreichen: %s"
 
 #: pretix/control/views/event.py:463
@@ -8194,8 +8194,13 @@ msgid "This action is only allowed for pending or paid orders."
 msgstr ""
 "Dieser Aktion ist nur für ausstehende und bezahlte Bestellungen möglich."
 
+<<<<<<< Updated upstream
 #: pretix/control/views/orders.py:607
 msgid "An error occured. Please see the details below."
+=======
+#: pretix/control/views/orders.py:614
+msgid "An error occurred. Please see the details below."
+>>>>>>> Stashed changes
 msgstr "Ein Fehler ist aufgetreten, bitte schaue weiter unten für Details."
 
 #: pretix/control/views/orders.py:614
@@ -8393,7 +8398,7 @@ msgstr "Ein Gerät zur Zwei-Faktor-Authentifizierung wurde hinzugefügt."
 msgid ""
 "Please note that you still need to enable two-factor authentication for your "
 "account using the buttons below to make a second factor required for logging "
-"into your accont."
+"into your account."
 msgstr ""
 "Bitte beachte, dass du die Zwei-Faktor-Authentifizierung noch mit dem unten "
 "verfügbaren Knopf für dein Konto aktivieren musst, damit der zweite Faktor "
@@ -8755,7 +8760,7 @@ msgid ""
 msgstr "Der Import wird verarbeitet, bitte einen Moment Geduld …"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
-msgid "An internal error occured during processing your data."
+msgid "An internal error occurred during processing your data."
 msgstr "Beim Verarbeiten der Daten ist ein interner Fehler aufgetreten."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:22
@@ -9049,7 +9054,7 @@ msgstr "PayPal meldete ein Ereignis: {}"
 msgid ""
 "The PayPal transaction %(payment)s has succeeded, but the order %(order)s is "
 "expired and the product was sold out in the meantime. Therefore, the payment "
-"could not be acceped. Please contact the user and refund the money via "
+"could not be accepted. Please contact the user and refund the money via "
 "PayPal's interface."
 msgstr ""
 "Die PayPal-Transaktion %(payment)s war erfolgreich, aber die Bestellung "
@@ -9079,7 +9084,7 @@ msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:3
 msgid ""
-"The total amount listed above will be withdrawn from your PayPal acocunt "
+"The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
 "Der obige Gesamtbetrag wird nach der Bestätigung deiner Bestellung von "
@@ -9766,7 +9771,7 @@ msgstr "Stripe meldete ein Ereignis: {}"
 msgid ""
 "The Stripe transaction <a %(stripe_href)s>%(charge)s</a> has succeeded, but "
 "the order %(order)s is expired and the product was sold out in the meantime. "
-"Therefore, the payment could not be acceped. Please contact the user and "
+"Therefore, the payment could not be accepted. Please contact the user and "
 "refund the money via Stripe's interface."
 msgstr ""
 "Die Stripe-Zahlung <a %(stripe_href)s>%(charge)s</a> war erfolgreich, aber "
@@ -10045,7 +10050,7 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:108
 msgid ""
-"The editor is tested with recent versions of Google Chome, Mozilla Firefox "
+"The editor is tested with recent versions of Google Chrome, Mozilla Firefox "
 "and Opera. Other browsers, especially Internet Explorer or Microsoft Edge, "
 "might have problems displaying your background PDF or loading the correct "
 "fonts."
@@ -10243,7 +10248,7 @@ msgid "Invoice address: name"
 msgstr "Rechnungsadresse: Name"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:133
-msgid "Invocie address: company"
+msgid "Invoice address: company"
 msgstr "Rechnungsadresse: Firma"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:134
