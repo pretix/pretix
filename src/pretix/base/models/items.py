@@ -922,3 +922,6 @@ class Quota(LoggedModel):
                 raise ValidationError(_('Subevent cannot be null for event series'))
             if event != subevent.event:
                 raise ValidationError(_('The subevent does not belong to this event'))
+        else:
+            if subevent:
+                raise ValidationError(_('Subevent cannot be null for event series'))

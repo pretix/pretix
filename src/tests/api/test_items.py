@@ -352,7 +352,7 @@ def test_quota_create_with_variations(token_client, organizer, event, item, vari
 
 
 @pytest.mark.django_db
-def test_quota_create_with_subevent(token_client, organizer, event, item, variations, subevent, subevent2):
+def test_quota_create_with_subevent(token_client, organizer, event, event3, item, variations, subevent, subevent2):
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
         {
@@ -393,6 +393,20 @@ def test_quota_create_with_subevent(token_client, organizer, event, item, variat
     )
     assert resp.status_code == 400
     assert resp.content.decode() == '{"non_field_errors":["The subevent does not belong to this event"]}'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event3.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [],
+            "variations": [],
+            "subevent": subevent2.pk
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["Subevent cannot be null for event series"]}'
 
 
 @pytest.mark.django_db
