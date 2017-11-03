@@ -6146,7 +6146,7 @@ msgstr "Möchten Sie das Produkt <strong>%(item)s</strong> wirklich löschen?"
 #, python-format
 msgid ""
 "You cannot delete the product <strong>%(item)s</strong> because it already "
-"has been ordered, but you can deactive it."
+"has been ordered, but you can deactivate it."
 msgstr ""
 "Das Produkt <strong>%(item)s</strong> kann nicht gelöscht werden, da es "
 "bereits bestellt wurde, aber Sie können es deaktivieren."
@@ -10267,7 +10267,7 @@ msgid "Invoice address: name"
 msgstr "Rechnungsadresse: Name"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:133
-msgid "Invocie address: company"
+msgid "Invoice address: company"
 msgstr "Rechnungsadresse: Firma"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:134

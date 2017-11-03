@@ -103,7 +103,8 @@ msgstr ""
 #: pretix/static/pretixbase/js/asyncdownload.js:41
 #: pretix/static/pretixbase/js/asynctask.js:62
 #: pretix/static/pretixbase/js/asynctask.js:116
-msgid "An error of type {code} occured."
+#: pretix/static/pretixcontrol/js/ui/mail.js:23
+msgid "An error of type {code} occurred."
 msgstr "Ein Fehler ist aufgetreten. Fehlercode: {code}"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:54
@@ -133,7 +134,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:65
 msgid ""
-"We currenctly cannot reach the server, but we keep trying. Last error code: "
+"We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
 "Wir können den Server aktuell nicht erreichen, versuchen es aber weiter. "
@@ -146,7 +147,7 @@ msgstr "Diese Anfrage hat zu lange gedauert. Bitte erneut versuchen."
 
 #: pretix/static/pretixbase/js/asynctask.js:119
 msgid ""
-"We currenctly cannot reach the server. Please try again. Error code: {code}"
+"We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "Wir können den Server aktuell nicht erreichen. Bitte versuche es noch "
 "einmal. Fehlercode: {code}"
@@ -167,10 +168,6 @@ msgstr "Drücke Strg+C zum kopieren!"
 #: pretix/static/pretixcontrol/js/ui/mail.js:18
 msgid "An error has occurred."
 msgstr "Ein Fehler ist aufgetreten."
-
-#: pretix/static/pretixcontrol/js/ui/mail.js:23
-msgid "An error of type {code} occurred."
-msgstr "Ein Fehler vom Typ {code} ist aufgetreten."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:25
 msgid ""

@@ -130,7 +130,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "evaluate": lambda op, order, ev: order.invoice_address.name if getattr(order, 'invoice_address') else ''
     }),
     ("invoice_company", {
-        "label": _("Invocie address: company"),
+        "label": _("Invoice address: company"),
         "editor_sample": _("Sample company"),
         "evaluate": lambda op, order, ev: order.invoice_address.company if getattr(order, 'invoice_address') else ''
     }),
