@@ -743,9 +743,10 @@ class StripeSofort(StripeMethod):
 
     def order_can_retry(self, order):
         try:
-            d = json.loads(order.payment_info)
+            if order.payment_info:
+                d = json.loads(order.payment_info)
+                if d.get('object') == 'charge' and d.get('status') == 'pending':
+                    return False
         except ValueError:
-            return self._is_still_available(order=order)
-        return not (
-            d.get('object') == 'charge' and d.get('status') == 'pending'
-        )
+            pass
+        return self._is_still_available(order=order)
