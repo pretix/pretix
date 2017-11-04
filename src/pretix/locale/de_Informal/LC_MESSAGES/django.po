@@ -9790,15 +9790,15 @@ msgstr "Zahlung ausstehend"
 
 #: pretix/plugins/stripe/signals.py:52
 msgid "Payment authorized."
-msgstr "Zahlung authorisiert."
+msgstr "Zahlung autorisiert."
 
 #: pretix/plugins/stripe/signals.py:53
 msgid "Payment authorization canceled."
-msgstr "Zahlungsauthorisierung abgebrochen."
+msgstr "Zahlungsautorisierung abgebrochen."
 
 #: pretix/plugins/stripe/signals.py:54
 msgid "Payment authorization failed."
-msgstr "Zahlungsauthorisierung fehlgeschlagen."
+msgstr "Zahlungsautorisierung fehlgeschlagen."
 
 #: pretix/plugins/stripe/signals.py:60
 msgid "Charge failed. Reason: {}"

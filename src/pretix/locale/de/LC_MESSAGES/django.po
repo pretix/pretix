@@ -2004,7 +2004,7 @@ msgstr "Unbekannte Warenkorbposition."
 #: pretix/base/services/cart.py:39
 msgctxt "subevent"
 msgid "No date was specified."
-msgstr "Es wurde kein Termin asugewählt."
+msgstr "Es wurde kein Termin ausgewählt."
 
 #: pretix/base/services/cart.py:40
 msgid "You selected a product which is not available for sale."
@@ -4622,7 +4622,7 @@ msgstr ""
 msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
 "account."
-msgstr "Das Gerät \"{name}\" zur Zwei-Faktor-Authentifizierung wurde enternt."
+msgstr "Das Gerät \"{name}\" zur Zwei-Faktor-Authentifizierung wurde entfernt."
 
 #: pretix/control/logdisplay.py:142
 msgid "Password reset mail sent."
@@ -4678,7 +4678,7 @@ msgstr "Die Variante \"{value}\" wurde gelöscht."
 #: pretix/control/logdisplay.py:154
 #, python-brace-format
 msgid "The variation \"{value}\" has been changed."
-msgstr "Die Variante \"{value}\" wurde veräbdert."
+msgstr "Die Variante \"{value}\" wurde verändert."
 
 #: pretix/control/logdisplay.py:155
 msgid "An add-on has been added to this product."
@@ -9812,15 +9812,15 @@ msgstr "Zahlung ausstehend"
 
 #: pretix/plugins/stripe/signals.py:52
 msgid "Payment authorized."
-msgstr "Zahlung authorisiert."
+msgstr "Zahlung autorisiert."
 
 #: pretix/plugins/stripe/signals.py:53
 msgid "Payment authorization canceled."
-msgstr "Zahlungsauthorisierung abgebrochen."
+msgstr "Zahlungsautorisierung abgebrochen."
 
 #: pretix/plugins/stripe/signals.py:54
 msgid "Payment authorization failed."
-msgstr "Zahlungsauthorisierung fehlgeschlagen."
+msgstr "Zahlungsautorisierung fehlgeschlagen."
 
 #: pretix/plugins/stripe/signals.py:60
 msgid "Charge failed. Reason: {}"
@@ -11666,7 +11666,7 @@ msgstr "Deutsch (Du)"
 #~ msgstr ""
 #~ "Um einen neuen Benutzer hinzuzufügen, können Sie hier die E-Mail-Adresse "
 #~ "eintragen. Wenn die Person bereits ein pretix-Konto hat, wird sie sofort "
-#~ "zum Team hinzugefügt. Andenfalls erhält sie eine E-Mail mit einer "
+#~ "zum Team hinzugefügt. Andernfalls erhält sie eine E-Mail mit einer "
 #~ "Einladung."
 
 #~ msgid "This user already has been invited for this event."
