@@ -966,8 +966,8 @@ msgid ""
 "needs to be checked."
 msgstr ""
 "Wenn diese Option gesetzt ist, wird die Check-In-Anwendung melden, dass "
-"dieses Ticket besondere Behandlung braucht. Das ist z.B. für Studenten "
-"nützlich, deren Studentenausweis noch geprüft werden soll."
+"dieses Ticket besondere Behandlung braucht. Das ist z.B. für Studierende "
+"nützlich, deren Studierendenausweis noch geprüft werden soll."
 
 #: pretix/base/models/items.py:303 pretix/base/models/vouchers.py:139
 #: pretix/base/models/waitinglist.py:49 pretix/control/forms/orders.py:113
@@ -1637,7 +1637,7 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist, wird dieser Gutschein von den Kontingenten "
 "des betroffenen Produktes abgezogen, sodass garantiert ist, dass der "
-"Benutzer dieses Gutscheins noch ein Ticket erthält."
+"Benutzer dieses Gutscheins noch ein Ticket erhält."
 
 #: pretix/base/models/vouchers.py:122
 msgid "Allow to bypass quota"
@@ -2002,11 +2002,11 @@ msgstr "Unbekannte Warenkorbposition."
 #: pretix/base/services/cart.py:39
 msgctxt "subevent"
 msgid "No date was specified."
-msgstr "Es wurde kein Termin asugewählt."
+msgstr "Es wurde kein Termin ausgewählt."
 
 #: pretix/base/services/cart.py:40
 msgid "You selected a product which is not available for sale."
-msgstr "Du hsat ein Produkt ausgewählt, das nicht zum Verkauf steht."
+msgstr "Du hast ein Produkt ausgewählt, das nicht zum Verkauf steht."
 
 #: pretix/base/services/cart.py:41
 msgid ""
@@ -4168,9 +4168,9 @@ msgid ""
 "by a user or currently is in a users's cart. Please set the variation as "
 "\"inactive\" instead."
 msgstr ""
-"Die Variante \"%s\" kann nicht gelöscht werden, da sie bereits bestellt "
-"wurde oder sich in einem Warenkorb befindet. Bitte setze die Variante "
-"stattdessen auf \"inaktiv\"."
+"Die Variante \"%s\" kann nicht gelöscht werden, da sie bereits bestellt wurde "
+"oder sich in einem Warenkorb befindet. Bitte setze die Variante stattdessen "
+"auf \"inaktiv\"."
 
 #: pretix/control/forms/item.py:365
 msgid "You added the same add-on category twice"
@@ -4247,7 +4247,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:146 pretix/control/forms/orders.py:231
 msgid "inactive"
-msgstr "deaktivert"
+msgstr "deaktiviert"
 
 #: pretix/control/forms/orders.py:174
 msgctxt "subevent"
@@ -4615,7 +4615,7 @@ msgstr ""
 msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
 "account."
-msgstr "Das Gerät \"{name}\" zur Zwei-Faktor-Authentifizierung wurde enternt."
+msgstr "Das Gerät \"{name}\" zur Zwei-Faktor-Authentifizierung wurde entfernt."
 
 #: pretix/control/logdisplay.py:142
 msgid "Password reset mail sent."
@@ -4671,7 +4671,7 @@ msgstr "Die Variante \"{value}\" wurde gelöscht."
 #: pretix/control/logdisplay.py:154
 #, python-brace-format
 msgid "The variation \"{value}\" has been changed."
-msgstr "Die Variante \"{value}\" wurde veräbdert."
+msgstr "Die Variante \"{value}\" wurde verändert."
 
 #: pretix/control/logdisplay.py:155
 msgid "An add-on has been added to this product."
@@ -5668,7 +5668,7 @@ msgid ""
 "You can now scroll down and modify the settings in more detail, if you want, "
 "or you can create your first product to start selling tickets right away!"
 msgstr ""
-"Du mkannst nun herunterscrollen und die Einstellungen detailliert anpassen, "
+"Du kannst nun herunterscrollen und die Einstellungen detailliert anpassen, "
 "wenn du möchtest, oder dein erstes Produkt erstellen und mit dem Ticket-"
 "Verkauf loslegen!"
 
@@ -7363,7 +7363,7 @@ msgid ""
 "smartphone or a hardware token generator and that changes on a regular basis."
 msgstr ""
 "Zwei-Faktor-Authentifizierung ist ein Weg, deinen Account zusätzlich "
-"abzusichern. Wenn du es aktivierest, benötigst du neben einem Passwort bei "
+"abzusichern. Wenn du es aktivierst, benötigst du neben einem Passwort bei "
 "jeder Anmeldung auch einen zusätzlichen Token, der z.B. von einer App auf "
 "deinem Smartphone oder einem Hardware-Tokengenerator erzeugt wird und sich "
 "regelmäßig ändert."
@@ -11303,7 +11303,7 @@ msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "tickets get available again."
 msgstr ""
-"Wir haben dich zur Warteliste hinzugefügt. Du erhälst eine E-Mail, sobald "
+"Wir haben dich zur Warteliste hinzugefügt. Du erhältst eine E-Mail, sobald "
 "wieder Tickets verfügbar sind."
 
 #: pretix/settings.py:324
