@@ -6192,7 +6192,7 @@ msgstr "Möchten Sie das Produkt <strong>%(item)s</strong> wirklich löschen?"
 #, python-format
 msgid ""
 "You cannot delete the product <strong>%(item)s</strong> because it already "
-"has been ordered, but you can deactive it."
+"has been ordered, but you can deactivate it."
 msgstr ""
 "Das Produkt <strong>%(item)s</strong> kann nicht gelöscht werden, da es "
 "bereits bestellt wurde, aber Sie können es deaktivieren."
@@ -9847,7 +9847,7 @@ msgstr "Stripe meldete ein Ereignis: {}"
 msgid ""
 "The Stripe transaction <a %(stripe_href)s>%(charge)s</a> has succeeded, but "
 "the order %(order)s is expired and the product was sold out in the meantime. "
-"Therefore, the payment could not be acceped. Please contact the user and "
+"Therefore, the payment could not be accepted. Please contact the user and "
 "refund the money via Stripe's interface."
 msgstr ""
 "Die Stripe-Zahlung <a %(stripe_href)s>%(charge)s</a> war erfolgreich, aber "
@@ -10327,7 +10327,7 @@ msgid "Invoice address: name"
 msgstr "Rechnungsadresse: Name"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:133
-msgid "Invocie address: company"
+msgid "Invoice address: company"
 msgstr "Rechnungsadresse: Firma"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:134
