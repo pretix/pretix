@@ -53,7 +53,7 @@ error_messages = {
                  'the quantity you selected. Please see below for details.'),
     'price_changed': _('The price of some of the items in your cart has changed in the '
                        'meantime. Please see below for details.'),
-    'internal': _("An internal error occured, please try again."),
+    'internal': _("An internal error occurred, please try again."),
     'empty': _("Your cart is empty."),
     'max_items_per_product': _("You cannot select more than %(max)s items of the product %(product)s. We removed the "
                                "surplus items from your cart."),
@@ -592,7 +592,11 @@ def send_expiry_warnings(sender, **kwargs):
                 'invoice_name': invoice_name,
                 'invoice_company': invoice_company,
             }
-            email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
+            if eventsettings.payment_term_expire_automatically:
+                email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
+            else:
+                email_subject = _('Your order is pending payment: %(code)s') % {'code': o.code}
+
             try:
                 o.send_mail(
                     email_subject, email_template, email_context,
@@ -1010,7 +1014,8 @@ class OrderChangeManager:
 
     def _check_complete_cancel(self):
         cancels = len([o for o in self._operations if isinstance(o, (self.CancelOperation, self.SplitOperation))])
-        if cancels == self.order.positions.count():
+        adds = len([o for o in self._operations if isinstance(o, self.AddOperation)])
+        if self.order.positions.count() - cancels + adds < 1:
             raise OrderError(self.error_messages['complete_cancel'])
 
     @property

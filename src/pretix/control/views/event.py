@@ -457,7 +457,7 @@ class MailSettings(EventSettingsViewMixin, EventSettingsFormView):
                 try:
                     backend.test(self.request.event.settings.mail_from)
                 except Exception as e:
-                    messages.warning(self.request, _('An error occured while contacting the SMTP server: %s') % str(e))
+                    messages.warning(self.request, _('An error occurred while contacting the SMTP server: %s') % str(e))
                 else:
                     if form.cleaned_data.get('smtp_use_custom'):
                         messages.success(self.request, _('Your changes have been saved and the connection attempt to '

@@ -68,7 +68,7 @@ class EventWizardBasicsForm(I18nModelForm):
         label=_("Sales tax rate"),
         help_text=_("Do you need to pay sales tax on your tickets? In this case, please enter the applicable tax rate "
                     "here in percent. If you have a more complicated tax situation, you can add more tax rates and "
-                    "detailled configuration later."),
+                    "detailed configuration later."),
         required=False
     )
 
@@ -265,7 +265,7 @@ class EventSettingsForm(SettingsForm):
     last_order_modification_date = RelativeDateTimeField(
         label=_('Last date of modifications'),
         help_text=_("The last date users can modify details of their orders, such as attendee names or "
-                    "answers to questions. If you use the event series feature and an order contains tickest for "
+                    "answers to questions. If you use the event series feature and an order contains tickets for "
                     "multiple event dates, the earliest date will be used."),
         required=False,
     )

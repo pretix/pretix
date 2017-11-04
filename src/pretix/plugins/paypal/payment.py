@@ -230,7 +230,6 @@ class Paypal(BasePaymentProvider):
             logger.error('Invalid state: %s' % str(payment))
             raise PaymentException(_('We were unable to process your payment. See below for details on how to '
                                      'proceed.'))
-            return
 
         if order.status == Order.STATUS_PAID:
             logger.warning('PayPal success event even though order is already marked as paid')

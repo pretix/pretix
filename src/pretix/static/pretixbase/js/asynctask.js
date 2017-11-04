@@ -59,10 +59,10 @@ function async_task_check_error(jqXHR, textStatus, errorThrown) {
         if (jqXHR.status >= 400 && jqXHR.status < 500) {
             $("body").data('ajaxing', false);
             waitingDialog.hide();
-            alert(gettext('An error of type {code} occured.').replace(/\{code\}/, jqXHR.status));
+            alert(gettext('An error of type {code} occurred.').replace(/\{code\}/, jqXHR.status));
         } else {
             // 500 can be an application error or overload in some cases :(
-            $("#loadingmodal p").text(gettext('We currenctly cannot reach the server, but we keep trying.' +
+            $("#loadingmodal p").text(gettext('We currently cannot reach the server, but we keep trying.' +
                                               ' Last error code: {code}').replace(/\{code\}/, jqXHR.status));
             async_task_timeout = window.setTimeout(async_task_check, 5000);
         }
@@ -113,10 +113,10 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
     } else {
         if (jqXHR.status >= 400 && jqXHR.status < 500) {
             waitingDialog.hide();
-            alert(gettext('An error of type {code} occured.').replace(/\{code\}/, jqXHR.status));
+            alert(gettext('An error of type {code} occurred.').replace(/\{code\}/, jqXHR.status));
         } else {
             waitingDialog.hide();
-            alert(gettext('We currenctly cannot reach the server. Please try again. ' +
+            alert(gettext('We currently cannot reach the server. Please try again. ' +
                           'Error code: {code}').replace(/\{code\}/, jqXHR.status));
         }
     }
