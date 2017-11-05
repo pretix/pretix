@@ -24,7 +24,7 @@ email                                 string                     The customer em
 locale                                string                     The locale used for communication with this customer
 datetime                              datetime                   Time of order creation
 expires                               datetime                   The order will expire, if it is still pending by this time
-payment_date                          date                       Date of payment receival
+payment_date                          date                       Date of payment receipt
 payment_provider                      string                     Payment provider used for this order
 payment_fee                           money (string)             Payment fee included in this order's total
 payment_fee_tax_rate                  decimal (string)           Tax rate applied to the payment fee
@@ -94,7 +94,7 @@ Order position resource
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
-id                                    integer                    Internal ID of the order positon
+id                                    integer                    Internal ID of the order position
 code                                  string                     Order code of the order the position belongs to
 positionid                            integer                    Number of the position within the order
 item                                  integer                    ID of the purchased item
@@ -373,10 +373,10 @@ Order endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource
-                    **or** downlodas are not available for this order at this time. The response content will
+                    **or** downloads are not available for this order at this time. The response content will
                     contain more details.
    :statuscode 404: The requested order or output provider does not exist.
-   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting vor a few
+   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                           seconds.
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_paid/
@@ -731,7 +731,7 @@ Order position endpoints
 
    Download tickets for one order position, identified by its internal ID.
    Depending on the chosen output, the response might be a ZIP file, PDF file or something else. The order details
-   response contains a list of output options for this partictular order position.
+   response contains a list of output options for this particular order position.
 
    Tickets can be only downloaded if the order is paid and if ticket downloads are active. Also, depending on event
    configuration downloads might be only unavailable for add-on products or non-admission products.
@@ -763,8 +763,8 @@ Order position endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource
-                    **or** downlodas are not available for this order position at this time. The response content will
+                    **or** downloads are not available for this order position at this time. The response content will
                     contain more details.
    :statuscode 404: The requested order position or download provider does not exist.
-   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting vor a few
+   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                     seconds.

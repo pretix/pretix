@@ -177,7 +177,7 @@ For background tasks we need a second service ``/etc/systemd/system/pretix-worke
     [Install]
     WantedBy=multi-user.target
 
-You can now run the following comamnds to enable and start the services::
+You can now run the following commands to enable and start the services::
 
     # systemctl daemon-reload
     # systemctl enable pretix-web pretix-worker

@@ -125,7 +125,7 @@ Endpoints
    :query boolean is_cancellation: If set to ``true`` or ``false``, only invoices with this value for the field
                                    ``is_cancellation`` will be returned.
    :query string order: If set, only invoices belonging to the order with the given order code will be returned.
-   :query string refers: If set, only invoices refering to the given invoice will be returned.
+   :query string refers: If set, only invoices referring to the given invoice will be returned.
    :query string locale: If set, only invoices with the given locale will be returned.
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``date`` and
                            ``nr`` (equals to ``number``). Default: ``nr``
