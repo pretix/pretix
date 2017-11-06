@@ -99,6 +99,13 @@ class QuotaViewSet(viewsets.ModelViewSet):
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
             data=self.request.data
         )
+        if serializer.instance.subevent:
+            serializer.instance.subevent.log_action(
+                'pretix.subevent.quota.added',
+                user=self.request.user,
+                api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                data=self.request.data
+            )
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
@@ -113,6 +120,13 @@ class QuotaViewSet(viewsets.ModelViewSet):
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
             data=self.request.data
         )
+        if serializer.instance.subevent:
+            serializer.instance.subevent.log_action(
+                'pretix.subevent.quota.changed',
+                user=self.request.user,
+                api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                data=self.request.data
+            )
         serializer.instance.rebuild_cache()
 
     def perform_destroy(self, instance):
@@ -121,6 +135,12 @@ class QuotaViewSet(viewsets.ModelViewSet):
             user=self.request.user,
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
         )
+        if instance.subevent:
+            instance.subevent.log_action(
+                'pretix.subevent.quota.deleted',
+                user=self.request.user,
+                api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            )
         super().perform_destroy(instance)
 
     @detail_route(methods=['get'])
