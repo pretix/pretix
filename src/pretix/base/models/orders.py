@@ -388,9 +388,9 @@ class Order(LoggedModel):
         from pretix.base.services.mail import SendMailException, mail, render_mail
 
         recipient = self.email
-        email_content = render_mail(template, context)[0]
         try:
             with language(self.locale):
+                email_content = render_mail(template, context)[0]
                 mail(
                     recipient, subject, template, context,
                     self.event, self.locale, self, headers, sender
