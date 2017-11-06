@@ -406,7 +406,7 @@ def test_quota_create_with_subevent(token_client, organizer, event, event3, item
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["Subevent cannot be null for event series"]}'
+    assert resp.content.decode() == '{"non_field_errors":["The subevent does not belong to this event"]}'
 
 
 @pytest.mark.django_db
