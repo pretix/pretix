@@ -150,7 +150,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             sender=sender,
             event=event.id if event else None,
             headers=headers,
-            invoices=[i.pk for i in invoices]
+            invoices=[i.pk for i in invoices] if invoices else []
         )
 
         if invoices:
