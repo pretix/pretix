@@ -129,6 +129,10 @@ DEFAULTS = {
         'default': '__user__',
         'type': str
     },
+    'invoice_email_attachment': {
+        'default': 'False',
+        'type': bool
+    },
     'show_items_outside_presale_period': {
         'default': 'True',
         'type': bool
