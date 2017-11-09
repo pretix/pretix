@@ -6,7 +6,7 @@ from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.utils import translation
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views.generic.base import TemplateResponseMixin
 
 from pretix.base.models import Order
@@ -33,6 +33,7 @@ from pretix.presale.views.questions import QuestionsViewMixin
 
 class BaseCheckoutFlowStep:
     requires_valid_cart = True
+    icon = 'pencil'
 
     def __init__(self, event):
         self.event = event
@@ -41,6 +42,10 @@ class BaseCheckoutFlowStep:
     @property
     def identifier(self):
         raise NotImplementedError()
+
+    @property
+    def label(self):
+        return pgettext_lazy('checkoutflow', 'Step')
 
     @property
     def priority(self):
@@ -137,6 +142,11 @@ class TemplateFlowStep(TemplateResponseMixin, BaseCheckoutFlowStep):
         kwargs.setdefault('step', self)
         kwargs.setdefault('event', self.event)
         kwargs.setdefault('prev_url', self.get_prev_url(self.request))
+        kwargs.setdefault('checkout_flow', [
+            step
+            for step in self.request._checkout_flow
+            if step.is_applicable(self.request)
+        ])
         return kwargs
 
     def render(self, **kwargs):
@@ -166,6 +176,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     task = set_cart_addons
     known_errortypes = ['CartError']
     requires_valid_cart = False
+    label = pgettext_lazy('checkoutflow', 'Add-on products')
+    icon = 'puzzle-piece'
 
     def is_applicable(self, request):
         if not hasattr(request, '_checkoutflow_addons_applicable'):
@@ -173,6 +185,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         return request._checkoutflow_addons_applicable
 
     def is_completed(self, request, warn=False):
+        if getattr(self, '_completed', None) is not None:
+            return self._completed
         for cartpos in get_cart(request).filter(addon_to__isnull=True).prefetch_related(
             'item__addons', 'item__addons__addon_category', 'addons', 'addons__item'
         ):
@@ -180,7 +194,9 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
             for iao in cartpos.item.addons.all():
                 found = len([1 for p in a if p.item.category_id == iao.addon_category_id])
                 if found < iao.min_count or found > iao.max_count:
+                    self._completed = False
                     return False
+        self._completed = True
         return True
 
     @cached_property
@@ -283,6 +299,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     priority = 50
     identifier = "questions"
     template_name = "pretixpresale/event/checkout_questions.html"
+    label = pgettext_lazy('checkoutflow', 'Your information')
 
     def is_applicable(self, request):
         return True
@@ -397,6 +414,8 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     priority = 200
     identifier = "payment"
     template_name = "pretixpresale/event/checkout_payment.html"
+    label = pgettext_lazy('checkoutflow', 'Payment')
+    icon = 'credit-card'
 
     @cached_property
     def _total_order_value(self):
@@ -479,6 +498,8 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
     template_name = "pretixpresale/event/checkout_confirm.html"
     task = perform_order
     known_errortypes = ['OrderError']
+    label = pgettext_lazy('checkoutflow', 'Confirm order')
+    icon = 'eye'
 
     def is_applicable(self, request):
         return True
