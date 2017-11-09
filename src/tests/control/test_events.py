@@ -594,6 +594,7 @@ class SubEventsTest(SoupTest):
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
         self.subevent1 = self.event1.subevents.create(name='SE1', date_from=now())
+        self.subevent2 = self.event1.subevents.create(name='SE2', date_from=now())
 
     def test_list(self):
         doc = self.get_doc('/control/event/ccc/30c3/subevents/')
@@ -698,8 +699,13 @@ class SubEventsTest(SoupTest):
         doc = self.get_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk)
         assert doc.select("button")
         doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk, {})
-        assert doc.select(".alert-danger")
+        if self.event1.subevents.count() > 1:  # we created 2 subevents. Number of subevents left after one is deleted
+            assert doc.select(".alert-success")
+        if self.event1.subevents.count() == 1:  # last one, can't be deleted
+            doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent2.pk, {})
+            assert doc.select(".alert-danger")
         assert not SubEventItem.objects.filter(pk=self.subevent1.pk).exists()
+        assert not SubEventItem.objects.filter(pk=self.subevent2.pk).exists()
 
     def test_delete_with_orders(self):
         o = Order.objects.create(
