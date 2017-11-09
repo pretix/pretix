@@ -183,6 +183,58 @@ def test_item_detail_addons(token_client, organizer, event, team, item, category
     assert res == resp.data
 
 
+@pytest.mark.django_db
+def test_item_create(token_client, organizer, event, item, category, taxrule):
+   resp = token_client.post(
+       '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+       {
+           "category": category.pk,
+           "name": {
+               "en": "Ticket"
+           },
+           "active": True,
+           "description": None,
+           "default_price": "23.00",
+           "free_price": False,
+           "tax_rate": "19.00",
+           "tax_rule": taxrule.pk,
+           "admission": True,
+           "position": 0,
+           "picture": None,
+           "available_from": None,
+           "available_until": None,
+           "require_voucher": False,
+           "hide_without_voucher": False,
+           "allow_cancel": True,
+           "min_per_order": None,
+           "max_per_order": None,
+           "checkin_attention": False,
+           "has_variations": True,
+           "variations": [
+               {
+                   "value": {"en": "Student"},
+                   "default_price": "10.00",
+                   "price": "10.00",
+                   "active": True,
+                   "description": None,
+                   "position": 0
+               },
+               {
+                   "value": {"en": "Regular"},
+                   "default_price": None,
+                   "price": "23.00",
+                   "active": True,
+                   "description": None,
+                   "position": 1
+               }
+           ],
+           "addons": []
+       },
+       format='json'
+    )
+   assert resp.status_code == 201
+
+
 @pytest.fixture
 def quota(event, item):
     q = event.quotas.create(name="Budget Quota", size=200)

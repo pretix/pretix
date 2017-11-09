@@ -11,6 +11,7 @@ from pretix.api.serializers.item import (
     QuotaSerializer,
 )
 from pretix.base.models import Item, ItemCategory, Question, Quota
+from pretix.base.models.organizer import TeamAPIToken
 
 
 class ItemFilter(FilterSet):
@@ -27,7 +28,7 @@ class ItemFilter(FilterSet):
         fields = ['active', 'category', 'admission', 'tax_rate', 'free_price']
 
 
-class ItemViewSet(viewsets.ReadOnlyModelViewSet):
+class ItemViewSet(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     queryset = Item.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -35,9 +36,41 @@ class ItemViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ('position', 'id')
     filter_class = ItemFilter
     permission = 'can_change_items'
+    write_permission = 'can_change_items'
 
     def get_queryset(self):
         return self.request.event.items.select_related('tax_rule').prefetch_related('variations', 'addons').all()
+
+    def perform_create(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.item.added',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data=self.request.data
+        )
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        return ctx
+
+    def perform_update(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.item.changed',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data=self.request.data
+        )
+
+    def perform_destroy(self, instance):
+         instance.log_action(
+             'pretix.event.item.deleted',
+             user=self.request.user,
+             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+         )
+         super().perform_destroy(instance)
 
 
 class ItemCategoryFilter(FilterSet):

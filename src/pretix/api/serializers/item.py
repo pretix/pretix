@@ -45,6 +45,23 @@ class ItemSerializer(I18nAwareModelSerializer):
                   'min_per_order', 'max_per_order', 'checkin_attention', 'has_variations',
                   'variations', 'addons')
 
+    def create(self, validated_data):
+        variations_data = validated_data.pop('variations')
+        addons_data = validated_data.pop('addons')
+        item = Item.objects.create(**validated_data)
+        for variation_data in variations_data:
+            ItemVariation.objects.create(item=item, **variation_data)
+        for addon_data in addons_data:
+            ItemAddOn.objects.create(item=item, **addon_data)
+
+        return item
+
+    def validate(self, data):
+        data = super().validate(data)
+        event = self.context['event']
+
+        return data
+
 
 class ItemCategorySerializer(I18nAwareModelSerializer):
 
