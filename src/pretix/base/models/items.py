@@ -902,26 +902,26 @@ class Quota(LoggedModel):
     def clean_variations(items, variations):
         for variation in variations:
             if variation.item not in items:
-                raise ValidationError(_('All variations must belong to an item contained in the items list'))
+                raise ValidationError(_('All variations must belong to an item contained in the items list.'))
                 break
 
     @staticmethod
     def clean_items(event, items, variations):
         for item in items:
             if event != item.event:
-                raise ValidationError(_('One or more items does not belong to this event'))
+                raise ValidationError(_('One or more items do not belong to this event.'))
             if item.has_variations:
                 selected_vars = set(item.variations.all()).intersection(variations)
                 if bool(selected_vars) is False:
-                    raise ValidationError(_('One or more items has variations but none of these are in the variations list'))
+                    raise ValidationError(_('One or more items has variations but none of these are in the variations list.'))
 
     @staticmethod
     def clean_subevent(event, subevent):
         if event.has_subevents:
             if not subevent:
-                raise ValidationError(_('Subevent cannot be null for event series'))
+                raise ValidationError(_('Subevent cannot be null for event series.'))
             if event != subevent.event:
-                raise ValidationError(_('The subevent does not belong to this event'))
+                raise ValidationError(_('The subevent does not belong to this event.'))
         else:
             if subevent:
-                raise ValidationError(_('The subevent does not belong to this event'))
+                raise ValidationError(_('The subevent does not belong to this event.'))
