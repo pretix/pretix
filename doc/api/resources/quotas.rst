@@ -114,13 +114,12 @@ Endpoints
 
    .. sourcecode:: http
 
-      POST /api/v1/organizers/bigevents/events/sampleconf/quotas/1/ HTTP/1.1
+      POST /api/v1/organizers/bigevents/events/sampleconf/quotas/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content: application/json
 
       {
-        "id": 1,
         "name": "Ticket Quota",
         "size": 200,
         "items": [1, 2],
