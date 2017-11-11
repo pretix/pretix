@@ -581,37 +581,38 @@ def send_expiry_warnings(sender, **kwargs):
         days = eventsettings.get('mail_days_order_expire_warning', as_type=int)
         tz = pytz.timezone(eventsettings.get('timezone', settings.TIME_ZONE))
         if days and (o.expires - today).days <= days:
-            o.expiry_reminder_sent = True
-            o.save()
-            try:
-                invoice_name = o.invoice_address.name
-                invoice_company = o.invoice_address.company
-            except InvoiceAddress.DoesNotExist:
-                invoice_name = ""
-                invoice_company = ""
-            email_template = eventsettings.mail_text_order_expire_warning
-            email_context = {
-                'event': o.event.name,
-                'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                    'order': o.code,
-                    'secret': o.secret
-                }),
-                'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
-                'invoice_name': invoice_name,
-                'invoice_company': invoice_company,
-            }
-            if eventsettings.payment_term_expire_automatically:
-                email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
-            else:
-                email_subject = _('Your order is pending payment: %(code)s') % {'code': o.code}
+            with language(o.locale):
+                o.expiry_reminder_sent = True
+                o.save()
+                try:
+                    invoice_name = o.invoice_address.name
+                    invoice_company = o.invoice_address.company
+                except InvoiceAddress.DoesNotExist:
+                    invoice_name = ""
+                    invoice_company = ""
+                email_template = eventsettings.mail_text_order_expire_warning
+                email_context = {
+                    'event': o.event.name,
+                    'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                        'order': o.code,
+                        'secret': o.secret
+                    }),
+                    'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
+                    'invoice_name': invoice_name,
+                    'invoice_company': invoice_company,
+                }
+                if eventsettings.payment_term_expire_automatically:
+                    email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
+                else:
+                    email_subject = _('Your order is pending payment: %(code)s') % {'code': o.code}
 
-            try:
-                o.send_mail(
-                    email_subject, email_template, email_context,
-                    'pretix.event.order.email.expire_warning_sent'
-                )
-            except SendMailException:
-                logger.exception('Reminder email could not be sent')
+                try:
+                    o.send_mail(
+                        email_subject, email_template, email_context,
+                        'pretix.event.order.email.expire_warning_sent'
+                    )
+                except SendMailException:
+                    logger.exception('Reminder email could not be sent')
 
 
 @receiver(signal=periodic_task)

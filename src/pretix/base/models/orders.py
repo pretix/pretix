@@ -387,28 +387,28 @@ class Order(LoggedModel):
         """
         from pretix.base.services.mail import SendMailException, mail, render_mail
 
-        recipient = self.email
-        try:
-            with language(self.locale):
+        with language(self.locale):
+            recipient = self.email
+            try:
                 email_content = render_mail(template, context)[0]
                 mail(
                     recipient, subject, template, context,
                     self.event, self.locale, self, headers, sender,
                     invoices=invoices
                 )
-        except SendMailException:
-            raise
-        else:
-            self.log_action(
-                log_entry_type,
-                user=user,
-                data={
-                    'subject': subject,
-                    'message': email_content,
-                    'recipient': recipient,
-                    'invoices': [i.pk for i in invoices] if invoices else []
-                }
-            )
+            except SendMailException:
+                raise
+            else:
+                self.log_action(
+                    log_entry_type,
+                    user=user,
+                    data={
+                        'subject': subject,
+                        'message': email_content,
+                        'recipient': recipient,
+                        'invoices': [i.pk for i in invoices] if invoices else []
+                    }
+                )
 
 
 def answerfile_name(instance, filename: str) -> str:
