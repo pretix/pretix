@@ -199,8 +199,8 @@ class Event(EventMixin, LoggedModel):
     slug = models.SlugField(
         max_length=50, db_index=True,
         help_text=_(
-            "Should be short, only contain lowercase letters and numbers, and must be unique among your events. "
-            "We recommend some kind of abbreviation or a date with less than 10 characters that can be easily "
+            "Should be short, only contain lowercase letters, numbers, dots, and dashes, and must be unique among your "
+            "events. We recommend some kind of abbreviation or a date with less than 10 characters that can be easily "
             "remembered, but you can also choose to use a random value. "
             "This will be used in URLs, order codes, invoice numbers, and bank transfer references."),
         validators=[
