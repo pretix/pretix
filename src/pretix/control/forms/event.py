@@ -549,7 +549,7 @@ class InvoiceSettingsForm(SettingsForm):
     )
     invoice_email_attachment = forms.BooleanField(
         label=_("Attach invoices to emails"),
-        help_text=_("If invocies are automatically generated for all orders, they will be attached to the order "
+        help_text=_("If invoices are automatically generated for all orders, they will be attached to the order "
                     "confirmation mail. If they are automatically generated on payment, they will be attached to the "
                     "payment confirmation mail. If they are not automatically generated, they will not be attached "
                     "to emails."),
