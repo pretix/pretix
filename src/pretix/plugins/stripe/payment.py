@@ -76,7 +76,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                 ('secret_key',
                  forms.CharField(
                      label=_('Secret key'),
-                     help_text=_('<a target="_blank" href="{docs_url}">{text}</a>').format(
+                     help_text=_('<a target="_blank" rel="noopener" href="{docs_url}">{text}</a>').format(
                          text=_('Click here for a tutorial on how to obtain the required keys'),
                          docs_url='https://docs.pretix.eu/en/latest/user/payments/stripe.html'
                      ),

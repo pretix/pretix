@@ -61,12 +61,14 @@ def safelink_callback(attrs, new=False):
         signer = signing.Signer(salt='safe-redirect')
         attrs[None, 'href'] = reverse('redirect') + '?url=' + urllib.parse.quote(signer.sign(url))
         attrs[None, 'target'] = '_blank'
+        attrs[None, 'rel'] = 'noopener'
     return attrs
 
 
 def abslink_callback(attrs, new=False):
     attrs[None, 'href'] = urllib.parse.urljoin(settings.SITE_URL, attrs.get((None, 'href'), '/'))
     attrs[None, 'target'] = '_blank'
+    attrs[None, 'rel'] = 'noopener'
     return attrs
 
 

@@ -51,7 +51,7 @@
         &middot;
     {% endif %}
     {% for f in footer %}
-        <a href="{% safelink f.url %}" target="_blank">{{ f.label }}</a>
+        <a href="{% safelink f.url %}" target="_blank" rel="noopener">{{ f.label }}</a>
         &middot;
     {% endfor %}
     {% include "pretixpresale/base_footer.html" %}
