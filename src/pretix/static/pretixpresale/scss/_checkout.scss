@@ -68,6 +68,10 @@
     &.step-current .checkout-step-bar-left {
       background: $brand-success;
     }
+    &:last-child .checkout-step-bar-right,
+    &:first-child .checkout-step-bar-left {
+      background: transparent;
+    }
 
     &:hover, &:active {
       text-decoration: none;
