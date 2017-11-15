@@ -4572,7 +4572,7 @@ msgid "The payment method has been changed."
 msgstr "Die Zahlungsmethode wurde geändert."
 
 #: pretix/control/logdisplay.py:125
-msgid "An unindentified type email has been sent."
+msgid "An unidentified type email has been sent."
 msgstr "Eine E-Mail unbekannten Typs wurde verschickt."
 
 #: pretix/control/logdisplay.py:126
