@@ -42,7 +42,7 @@ class UpdateSettingsForm(SettingsForm):
         help_text=_("During the update check, pretix will report an anonymous, unique installation ID, "
                     "the current version of pretix and your installed plugins and the number of active and "
                     "inactive events in your installation to servers operated by the pretix developers. We "
-                    "will only store anonymous data, never any IP adresses and we will not know who you are "
+                    "will only store anonymous data, never any IP addresses and we will not know who you are "
                     "or where to find your instance. You can disable this behaviour here at any time.")
     )
     update_check_email = forms.EmailField(
