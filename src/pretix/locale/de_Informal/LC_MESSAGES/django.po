@@ -7843,7 +7843,7 @@ msgid ""
 "address into your address bar. Please note that the link is only valid for "
 "three days and that the link can only be used once."
 msgstr ""
-"Du hsat auf einen ungültigen Link geklickt. Bitte prüfe, ob du die volle "
+"Du hast auf einen ungültigen Link geklickt. Bitte prüfe, ob du die volle "
 "Adresse in deine Adresszeile kopiert hast. Bitte beachte, dass der Link nur "
 "drei Tage gültig ist und nur einmal benutzt werden kann."
 
