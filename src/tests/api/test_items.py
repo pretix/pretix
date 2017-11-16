@@ -290,7 +290,7 @@ def test_quota_create(token_client, organizer, event, event2, item):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["One or more items does not belong to this event"]}'
+    assert resp.content.decode() == '{"non_field_errors":["One or more items do not belong to this event."]}'
 
 
 @pytest.mark.django_db
@@ -334,7 +334,7 @@ def test_quota_create_with_variations(token_client, organizer, event, item, vari
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["All variations must belong to an item contained in the items list"]}'
+    assert resp.content.decode() == '{"non_field_errors":["All variations must belong to an item contained in the items list."]}'
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
@@ -348,7 +348,7 @@ def test_quota_create_with_variations(token_client, organizer, event, item, vari
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["One or more items has variations but none of these are in the variations list"]}'
+    assert resp.content.decode() == '{"non_field_errors":["One or more items has variations but none of these are in the variations list."]}'
 
 
 @pytest.mark.django_db
@@ -378,7 +378,7 @@ def test_quota_create_with_subevent(token_client, organizer, event, event3, item
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["Subevent cannot be null for event series"]}'
+    assert resp.content.decode() == '{"non_field_errors":["Subevent cannot be null for event series."]}'
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
@@ -392,7 +392,7 @@ def test_quota_create_with_subevent(token_client, organizer, event, event3, item
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["The subevent does not belong to this event"]}'
+    assert resp.content.decode() == '{"non_field_errors":["The subevent does not belong to this event."]}'
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event3.slug),
@@ -406,7 +406,7 @@ def test_quota_create_with_subevent(token_client, organizer, event, event3, item
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["The subevent does not belong to this event"]}'
+    assert resp.content.decode() == '{"non_field_errors":["The subevent does not belong to this event."]}'
 
 
 @pytest.mark.django_db
