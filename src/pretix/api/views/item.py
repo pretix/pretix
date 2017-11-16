@@ -113,20 +113,37 @@ class QuotaViewSet(viewsets.ModelViewSet):
         return ctx
 
     def perform_update(self, serializer):
+        current_subevent = serializer.instance.subevent
         serializer.save(event=self.request.event)
+        request_subevent = serializer.instance.subevent
         serializer.instance.log_action(
             'pretix.event.quota.changed',
             user=self.request.user,
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
             data=self.request.data
         )
-        if serializer.instance.subevent:
-            serializer.instance.subevent.log_action(
-                'pretix.subevent.quota.changed',
-                user=self.request.user,
-                api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
-                data=self.request.data
-            )
+        if current_subevent == request_subevent:
+            if current_subevent is not None:
+                current_subevent.log_action(
+                    'pretix.subevent.quota.changed',
+                    user=self.request.user,
+                    api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                    data=self.request.data
+                )
+        else:
+            if request_subevent is not None:
+                request_subevent.log_action(
+                    'pretix.subevent.quota.added',
+                    user=self.request.user,
+                    api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                    data=self.request.data
+                )
+            if current_subevent is not None:
+                current_subevent.log_action(
+                    'pretix.subevent.quota.deleted',
+                    user=self.request.user,
+                    api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                )
         serializer.instance.rebuild_cache()
 
     def perform_destroy(self, instance):
