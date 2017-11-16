@@ -41,7 +41,7 @@ class CheckoutView(View):
         except CartError as e:
             cart_error = e
 
-        flow = get_checkout_flow(self.request.event)
+        flow = request._checkout_flow = get_checkout_flow(self.request.event)
         previous_step = None
         for step in flow:
             if not step.is_applicable(request):
@@ -64,4 +64,6 @@ class CheckoutView(View):
                 return handler(request)
             else:
                 previous_step = step
+                step.c_is_before = True
+                step.c_resolved_url = step.get_step_url(request)
         raise Http404()
