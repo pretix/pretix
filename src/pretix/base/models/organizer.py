@@ -32,9 +32,8 @@ class Organizer(LoggedModel):
     slug = models.SlugField(
         max_length=50, db_index=True,
         help_text=_(
-            "Should be short, only contain lowercase letters, numbers, dots, and dashes, and must be unique among your "
-            "events. "
-            "This is being used in URLs to refer to your events."),
+            "Should be short, only contain lowercase letters, numbers, dots, and dashes. Every slug can only be used "
+            "once. This is being used in URLs to refer to your organizer accounts and your events."),
         validators=[
             RegexValidator(
                 regex="^[a-zA-Z0-9.-]+$",
