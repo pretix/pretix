@@ -498,7 +498,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
     template_name = "pretixpresale/event/checkout_confirm.html"
     task = perform_order
     known_errortypes = ['OrderError']
-    label = pgettext_lazy('checkoutflow', 'Confirm order')
+    label = pgettext_lazy('checkoutflow', 'Review order')
     icon = 'eye'
 
     def is_applicable(self, request):
