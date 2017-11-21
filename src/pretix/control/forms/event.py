@@ -544,7 +544,16 @@ class InvoiceSettingsForm(SettingsForm):
             ('user', _('Automatically on user request')),
             ('True', _('Automatically for all created orders')),
             ('paid', _('Automatically on payment')),
-        )
+        ),
+        help_text=_("Invoices will never be automatically generated for free orders.")
+    )
+    invoice_email_attachment = forms.BooleanField(
+        label=_("Attach invoices to emails"),
+        help_text=_("If invoices are automatically generated for all orders, they will be attached to the order "
+                    "confirmation mail. If they are automatically generated on payment, they will be attached to the "
+                    "payment confirmation mail. If they are not automatically generated, they will not be attached "
+                    "to emails."),
+        required=False
     )
     invoice_renderer = forms.ChoiceField(
         label=_("Invoice style"),

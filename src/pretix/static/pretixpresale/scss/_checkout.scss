@@ -1,0 +1,86 @@
+.checkout-flow {
+  display: flex;
+  flex-direction: row;
+  margin: 15px 0 13px 0;
+
+  .checkout-step {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+
+    .checkout-step-icon {
+      border: 1px solid $text-muted;
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      line-height: 28px;
+      border-radius: 15px;
+      color: $text-muted;
+      z-index: 200;
+      background: white;
+      position: relative;
+    }
+
+    .checkout-step-label {
+      padding-top: 10px;
+      color: $text-muted;
+    }
+
+    .checkout-step-bar-left {
+      position: absolute;
+      top: 22px;
+      left: 0;
+      width: 50%;
+      height: 6px;
+      background: $gray-lighter;
+      z-index: 100;
+    }
+    .checkout-step-bar-right {
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      width: 50%;
+      height: 6px;
+      background: $gray-lighter;
+      z-index: 100;
+    }
+
+    &.step-done .checkout-step-icon {
+      border: 1px solid $brand-success;
+      background: $brand-success;
+      color: white;
+    }
+    &.step-done .checkout-step-label {
+      color: $brand-success;
+    }
+    &.step-done .checkout-step-bar-left, &.step-done .checkout-step-bar-right {
+      background: $brand-success;
+    }
+
+    &.step-current .checkout-step-icon {
+      border: 1px solid darken($brand-info, 20%);
+      background: darken($brand-info, 20%);
+      color: white;
+    }
+    &.step-current .checkout-step-label {
+      color: darken($brand-info, 20%);
+    }
+    &.step-current .checkout-step-bar-left {
+      background: $brand-success;
+    }
+    &:last-child .checkout-step-bar-right,
+    &:first-child .checkout-step-bar-left {
+      background: transparent;
+    }
+
+    &:hover, &:active {
+      text-decoration: none;
+    }
+  }
+}
+@media(max-width: $screen-sm-max) {
+  .checkout-step-label {
+    display: none;
+  }
+}

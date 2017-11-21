@@ -151,9 +151,8 @@ $(function () {
 
     $('.stripe-container').closest("form").submit(
         function () {
-            if (($("input[name=payment][value=stripe]").prop('checked') || $("input[name=payment]").length === 0)
+            if (($("input[name=payment][value=stripe]").prop('checked') || $("input[name=payment][type=checkbox]").length === 0)
                 && $("#stripe_token").val() == "") {
-                console.log("foo");
                 if ($("#stripe-checkout").length) {
                     pretixstripe.show_checkout();
                 } else {

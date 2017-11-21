@@ -25,6 +25,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
+from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition
 from pretix.base.ticketoutput import BaseTicketOutput
 from pretix.plugins.ticketoutputpdf.signals import (
@@ -252,12 +253,13 @@ class PdfTicketOutput(BaseTicketOutput):
     def generate_order(self, order: Order):
         buffer = BytesIO()
         p = self._create_canvas(buffer)
-        for op in order.positions.all():
-            if op.addon_to_id and not self.event.settings.ticket_download_addons:
-                continue
-            if not op.item.admission and not self.event.settings.ticket_download_nonadm:
-                continue
-            self._draw_page(p, op, order)
+        with language(order.locale):
+            for op in order.positions.all():
+                if op.addon_to_id and not self.event.settings.ticket_download_addons:
+                    continue
+                if not op.item.admission and not self.event.settings.ticket_download_nonadm:
+                    continue
+                self._draw_page(p, op, order)
         p.save()
         outbuffer = self._render_with_background(buffer)
         return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()
@@ -266,7 +268,8 @@ class PdfTicketOutput(BaseTicketOutput):
         buffer = BytesIO()
         p = self._create_canvas(buffer)
         order = op.order
-        self._draw_page(p, op, order)
+        with language(order.locale):
+            self._draw_page(p, op, order)
         p.save()
         outbuffer = self._render_with_background(buffer)
         return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()

@@ -368,7 +368,7 @@ class Order(LoggedModel):
 
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
-                  user: User=None, headers: dict=None, sender: str=None):
+                  user: User=None, headers: dict=None, sender: str=None, invoices: list=None):
         """
         Sends an email to the user that placed this order. Basically, this method does two things:
 
@@ -387,26 +387,28 @@ class Order(LoggedModel):
         """
         from pretix.base.services.mail import SendMailException, mail, render_mail
 
-        recipient = self.email
-        email_content = render_mail(template, context)[0]
-        try:
-            with language(self.locale):
+        with language(self.locale):
+            recipient = self.email
+            try:
+                email_content = render_mail(template, context)[0]
                 mail(
                     recipient, subject, template, context,
-                    self.event, self.locale, self, headers, sender
+                    self.event, self.locale, self, headers, sender,
+                    invoices=invoices
                 )
-        except SendMailException:
-            raise
-        else:
-            self.log_action(
-                log_entry_type,
-                user=user,
-                data={
-                    'subject': subject,
-                    'message': email_content,
-                    'recipient': recipient
-                }
-            )
+            except SendMailException:
+                raise
+            else:
+                self.log_action(
+                    log_entry_type,
+                    user=user,
+                    data={
+                        'subject': subject,
+                        'message': email_content,
+                        'recipient': recipient,
+                        'invoices': [i.pk for i in invoices] if invoices else []
+                    }
+                )
 
 
 def answerfile_name(instance, filename: str) -> str:

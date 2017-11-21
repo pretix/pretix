@@ -4,7 +4,7 @@ Quotas
 Resource description
 --------------------
 
-Questions define how many times an item can be sold.
+Quotas define how many times an item can be sold.
 The quota resource contains the following public fields:
 
 .. rst-class:: rest-resource-table
@@ -105,6 +105,131 @@ Endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/quotas/
+
+   Creates a new quota
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/quotas/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content: application/json
+
+      {
+        "name": "Ticket Quota",
+        "size": 200,
+        "items": [1, 2],
+        "variations": [1, 4, 5, 7],
+        "subevent": null
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "name": "Ticket Quota",
+        "size": 200,
+        "items": [1, 2],
+        "variations": [1, 4, 5, 7],
+        "subevent": null
+      }
+
+   :param organizer: The ``slug`` field of the organizer of the event/item to create a quota for
+   :param event: The ``slug`` field of the event to create a quota for
+   :statuscode 201: no error
+   :statuscode 400: The quota could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
+
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/quotas/(id)/
+
+   Update a quota. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
+   the resource, other fields will be resetted to default. With ``PATCH``, you only need to provide the fields that you
+   want to change.
+
+   You can change all fields of the resource except the ``id`` field.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/quotas/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 94
+
+      {
+        "name": "New Ticket Quota",
+        "size": 100,
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 2,
+        "name": "New Ticket Quota",
+        "size": 100,
+        "items": [
+          1,
+          2
+        ],
+        "variations": [
+          1,
+          2
+        ],
+        "subevent": null
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param id: The ``id`` field of the quota rule to modify
+   :statuscode 200: no error
+   :statuscode 400: The quota could not be modified due to invalid submitted data
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
+
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/quota/(id)/
+
+   Delete a quota. Note that if you delete a quota the items the quota acts on might no longer be available for sale.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/quotas/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param id: The ``id`` field of the quotas to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/quotas/(id)/availability/
 

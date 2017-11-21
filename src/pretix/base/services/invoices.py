@@ -158,7 +158,7 @@ def build_cancellation(invoice: Invoice):
     return invoice
 
 
-def generate_cancellation(invoice: Invoice):
+def generate_cancellation(invoice: Invoice, trigger_pdf=True):
     cancellation = copy.copy(invoice)
     cancellation.pk = None
     cancellation.invoice_no = None
@@ -170,7 +170,8 @@ def generate_cancellation(invoice: Invoice):
     cancellation.save()
 
     cancellation = build_cancellation(cancellation)
-    invoice_pdf(cancellation.pk)
+    if trigger_pdf:
+        invoice_pdf(cancellation.pk)
     return cancellation
 
 
@@ -183,7 +184,7 @@ def regenerate_invoice(invoice: Invoice):
     return invoice
 
 
-def generate_invoice(order: Order):
+def generate_invoice(order: Order, trigger_pdf=True):
     locale = order.event.settings.get('invoice_language')
     if locale:
         if locale == '__user__':
@@ -197,10 +198,11 @@ def generate_invoice(order: Order):
         locale=locale
     )
     invoice = build_invoice(invoice)
-    invoice_pdf(invoice.pk)
+    if trigger_pdf:
+        invoice_pdf(invoice.pk)
 
     if order.status in (Order.STATUS_CANCELED, Order.STATUS_REFUNDED):
-        generate_cancellation(invoice)
+        generate_cancellation(invoice, trigger_pdf)
 
     return invoice
 

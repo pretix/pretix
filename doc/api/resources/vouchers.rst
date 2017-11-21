@@ -282,7 +282,7 @@ Endpoints
 
    :param organizer: The ``slug`` field of the organizer to modify
    :param event: The ``slug`` field of the event to modify
-   :param id: The ``id`` field of the tax rule to modify
+   :param id: The ``id`` field of the voucher to modify
    :statuscode 200: no error
    :statuscode 400: The voucher could not be modified due to invalid submitted data
    :statuscode 401: Authentication failure
@@ -310,7 +310,7 @@ Endpoints
 
    :param organizer: The ``slug`` field of the organizer to modify
    :param event: The ``slug`` field of the event to modify
-   :param id: The ``id`` field of the tax rule to delete
+   :param id: The ``id`` field of the voucher to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.

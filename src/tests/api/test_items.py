@@ -2,6 +2,8 @@ from decimal import Decimal
 
 import pytest
 
+from pretix.base.models import Quota
+
 
 @pytest.fixture
 def category(event):
@@ -52,6 +54,16 @@ def test_category_detail(token_client, organizer, event, team, category):
 
 @pytest.fixture
 def item(event):
+    return event.items.create(name="Budget Ticket", default_price=23)
+
+
+@pytest.fixture
+def item2(event2):
+    return event2.items.create(name="Budget Ticket", default_price=23)
+
+
+@pytest.fixture
+def item3(event):
     return event.items.create(name="Budget Ticket", default_price=23)
 
 
@@ -251,6 +263,22 @@ TEST_QUOTA_RES = {
 }
 
 
+@pytest.fixture
+def variations(item):
+    v = list()
+    v.append(item.variations.create(value="ChildA1"))
+    v.append(item.variations.create(value="ChildA2"))
+    return v
+
+
+@pytest.fixture
+def variations2(item2):
+    v = list()
+    v.append(item2.variations.create(value="ChildB1"))
+    v.append(item2.variations.create(value="ChildB2"))
+    return v
+
+
 @pytest.mark.django_db
 def test_quota_list(token_client, organizer, event, quota, item, subevent):
     res = dict(TEST_QUOTA_RES)
@@ -282,6 +310,171 @@ def test_quota_detail(token_client, organizer, event, quota, item):
                                                                                 quota.pk))
     assert resp.status_code == 200
     assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_quota_create(token_client, organizer, event, event2, item):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [item.pk],
+            "variations": [],
+            "subevent": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    quota = Quota.objects.get(pk=resp.data['id'])
+    assert quota.name == "Ticket Quota"
+    assert quota.size == 200
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event2.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [item.pk],
+            "variations": [],
+            "subevent": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["One or more items do not belong to this event."]}'
+
+
+@pytest.mark.django_db
+def test_quota_create_with_variations(token_client, organizer, event, item, variations, variations2):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [item.pk],
+            "variations": [variations[0].pk],
+            "subevent": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [item.pk],
+            "variations": [100],
+            "subevent": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"variations":["Invalid pk \\"100\\" - object does not exist."]}'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [item.pk],
+            "variations": [variations[0].pk, variations2[0].pk],
+            "subevent": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["All variations must belong to an item contained in the items list."]}'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [item.pk],
+            "variations": [],
+            "subevent": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["One or more items has variations but none of these are in the variations list."]}'
+
+
+@pytest.mark.django_db
+def test_quota_create_with_subevent(token_client, organizer, event, event3, item, variations, subevent, subevent2):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [item.pk],
+            "variations": [variations[0].pk],
+            "subevent": subevent.pk
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [item.pk],
+            "variations": [variations[0].pk],
+            "subevent": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["Subevent cannot be null for event series."]}'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [item.pk],
+            "variations": [variations[0].pk],
+            "subevent": subevent2.pk
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The subevent does not belong to this event."]}'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event3.slug),
+        {
+            "name": "Ticket Quota",
+            "size": 200,
+            "items": [],
+            "variations": [],
+            "subevent": subevent2.pk
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The subevent does not belong to this event."]}'
+
+
+@pytest.mark.django_db
+def test_quota_update(token_client, organizer, event, quota, item):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/quotas/{}/'.format(organizer.slug, event.slug, quota.pk),
+        {
+            "name": "Ticket Quota Update",
+            "size": 111,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    quota = Quota.objects.get(pk=resp.data['id'])
+    assert quota.name == "Ticket Quota Update"
+    assert quota.size == 111
 
 
 @pytest.mark.django_db
