@@ -8,9 +8,9 @@ from rest_framework.response import Response
 
 from pretix.api.serializers.item import (
     ItemCategorySerializer, ItemSerializer, QuestionSerializer,
-    QuotaSerializer,
+    QuotaSerializer, ItemVariationSerializer, InlineItemVariationSerializer
 )
-from pretix.base.models import Item, ItemCategory, Question, Quota
+from pretix.base.models import Item, ItemVariation, ItemCategory, Question, Quota
 from pretix.base.models.organizer import TeamAPIToken
 
 
@@ -71,6 +71,26 @@ class ItemViewSet(viewsets.ModelViewSet):
              api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
          )
          super().perform_destroy(instance)
+
+
+class ItemVariationFilter(FilterSet):
+    class Meta:
+        model = ItemVariation
+        fields = ['subevent']
+
+
+class ItemVariationViewSet(viewsets.ModelViewSet):
+    serializer_class = ItemVariationSerializer
+    queryset = ItemVariation.objects.none()
+    filter_backends = (DjangoFilterBackend, OrderingFilter,)
+    filter_class = ItemVariationFilter
+    ordering_fields = ('id', 'position')
+    ordering = ('id',)
+    permission = 'can_change_items'
+    write_permission = 'can_change_items'
+
+    def get_queryset(self):
+        return self.request.event.items.variations.all()
 
 
 class ItemCategoryFilter(FilterSet):

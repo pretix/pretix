@@ -16,6 +16,13 @@ class InlineItemVariationSerializer(I18nAwareModelSerializer):
                   'position', 'default_price', 'price')
 
 
+class ItemVariationSerializer(I18nAwareModelSerializer):
+    class Meta:
+        model = ItemVariation
+        fields = ('id', 'value', 'active', 'description',
+                  'position', 'default_price', 'price')
+
+
 class InlineItemAddOnSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemAddOn
