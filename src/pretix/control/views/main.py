@@ -118,6 +118,14 @@ class EventWizard(SessionWizardView):
             ctx['organizer'] = self.get_cleaned_data_for_step('foundation').get('organizer')
         return ctx
 
+    def render(self, form=None, **kwargs):
+        if self.steps.current != 'foundation':
+            fdata = self.get_cleaned_data_for_step('foundation')
+            if fdata is None:
+                return self.render_goto_step('foundation')
+
+        return super().render(form, **kwargs)
+
     def get_form_kwargs(self, step=None):
         kwargs = {
             'user': self.request.user
