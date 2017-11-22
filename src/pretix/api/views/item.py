@@ -1,5 +1,6 @@
 import django_filters
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
@@ -90,7 +91,41 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
     write_permission = 'can_change_items'
 
     def get_queryset(self):
-        return self.request.event.items.variations.all()
+        item = get_object_or_404(Item, pk=self.kwargs['item'])
+        return item.variations.all()
+
+    def perform_create(self, serializer):
+        item = get_object_or_404(Item, pk=self.kwargs['item'])
+        serializer.save(item=item)
+        item.log_action(
+            'pretix.event.item.variation.added',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data={**self.request.data, **{'ORDER': serializer.instance.position}, **{'id': serializer.instance.pk}}
+        )
+
+    def perform_update(self, serializer):
+        variation = get_object_or_404(ItemVariation, pk=self.kwargs['pk'])
+        serializer.save(variation=variation)
+        variation.item.log_action(
+            'pretix.event.item.variation.changed',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data={**self.request.data['value'], **{'id': self.kwargs['pk']}}
+        )
+
+    def perform_destroy(self, serializer):
+        variation = get_object_or_404(ItemVariation, pk=self.kwargs['pk'])
+        super().perform_destroy(variation)
+        variation.item.log_action(
+            'pretix.event.item.variation.deleted',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data={
+                'value': variation.value,
+                'id': self.kwargs['pk']
+            }
+        )
 
 
 class ItemCategoryFilter(FilterSet):

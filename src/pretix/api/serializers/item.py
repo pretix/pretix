@@ -22,6 +22,17 @@ class ItemVariationSerializer(I18nAwareModelSerializer):
         fields = ('id', 'value', 'active', 'description',
                   'position', 'default_price', 'price')
 
+    def validate(self, data):
+        data = super().validate(data)
+
+        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+        full_data.update(data)
+
+        #pk = None if not self.instance else self.instance.pk
+        #ItemVariation.clean_positions(pk, full_data)
+
+        return data
+
 
 class InlineItemAddOnSerializer(serializers.ModelSerializer):
     class Meta:
