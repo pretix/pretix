@@ -431,7 +431,10 @@ class Event(EventMixin, LoggedModel):
             else:
                 s.save()
 
-        event_copy_data.send(sender=self, other=other)
+        event_copy_data.send(
+            sender=self, other=other,
+            tax_map=tax_map, category_map=category_map, item_map=item_map, variation_map=variation_map,
+        )
 
     def get_payment_providers(self) -> dict:
         """

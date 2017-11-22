@@ -223,7 +223,10 @@ You don't need to copy data inside the general settings storage which is cloned 
 but you might need to modify that data.
 
 The ``sender`` keyword argument will contain the event of the **new** event. The ``other``
-keyword argument will contain the event to **copy from**.
+keyword argument will contain the event to **copy from**. The keyword arguments
+``tax_map``, ``category_map``, ``item_map``, and ``variation_map`` contain mappings
+from object IDs in the original event to objects in the new event of the respective
+types.
 """
 
 periodic_task = django.dispatch.Signal()
