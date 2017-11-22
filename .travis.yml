@@ -36,5 +36,7 @@ matrix:
       env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_postgres.cfg
     - python: 3.6
       env: JOB=plugins
+    - python: 3.6
+      env: JOB=spelling
 addons:
   postgresql: "9.4"

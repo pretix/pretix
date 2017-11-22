@@ -30,13 +30,13 @@ available products, quotas, prices and some meta information, but most settings 
 We recommend to use this feature only if you really know that you need it and if you really run a lot of events, not if
 you run e.g. a yearly conference. You can read more on this feature :ref:`here <subevents>`.
 
-Once you set these values, you can procede to the next step:
+Once you set these values, you can proceed to the next step:
 
 .. thumbnail:: ../../screens/event/create_step2.png
    :align: center
    :class: screenshot
 
-In this step, you will be asked more detailled questions about your event. In particular, you can fill in the
+In this step, you will be asked more detailed questions about your event. In particular, you can fill in the
 following fields:
 
 Name

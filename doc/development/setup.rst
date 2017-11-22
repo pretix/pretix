@@ -106,7 +106,7 @@ Execute the following commands to check for code style errors::
     isort -c -rc .
     python manage.py check
 
-Execute the following command to run pretix' test suite (might take a coumple of minutes)::
+Execute the following command to run pretix' test suite (might take a couple of minutes)::
 
     py.test
 
@@ -122,7 +122,7 @@ for example::
     flake8 . || exit 1
     isort -q -rc -c . || exit 1
 
-This keeps you from accidentally creating commits violating the sdtyle guide.
+This keeps you from accidentally creating commits violating the style guide.
 
 Working with mails
 ^^^^^^^^^^^^^^^^^^

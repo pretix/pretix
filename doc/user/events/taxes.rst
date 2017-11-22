@@ -18,7 +18,7 @@ your event, go to the respective section in your event's settings:
    :class: screenshot
 
 On this page, you can create, edit and delete your tax rules. Clicking on the name of a tax rule will take you to its
-detailled settings:
+detailed settings:
 
 .. thumbnail:: ../../screens/event/tax_detail.png
    :align: center

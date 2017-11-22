@@ -176,7 +176,7 @@ as active.
 
 If your linked view should stay in the tab-like context of this page, we recommend
 that you use ``pretix.control.views.organizer.OrganizerDetailViewMixin`` for your view
-and your tempalte inherits from ``pretixcontrol/organizers/base.html``.
+and your template inherits from ``pretixcontrol/organizers/base.html``.
 
 This is a regular django signal (no pretix event signal). Receivers will be passed
 the keyword arguments ``organizer`` and ``request``.
@@ -205,7 +205,7 @@ as active.
 
 If your linked view should stay in the tab-like context of this page, we recommend
 that you use ``pretix.control.views.event.EventSettingsViewMixin`` for your view
-and your tempalte inherits from ``pretixcontrol/event/settings_base.html``.
+and your template inherits from ``pretixcontrol/event/settings_base.html``.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 A second keyword argument ``request`` will contain the request object.

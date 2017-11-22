@@ -55,9 +55,9 @@ class Invoice(models.Model):
     :type footer_text: str
     :param foreign_currency_display: A different currency that taxes should also be displayed in.
     :type foreign_currency_display: str
-    :param foreign_currency_rate: The rate of a forein currency that the taxes should be displayed in.
+    :param foreign_currency_rate: The rate of a foreign currency that the taxes should be displayed in.
     :type foreign_currency_rate: Decimal
-    :param foreign_currency_rate_date: The date of the forein currency exchange rates.
+    :param foreign_currency_rate_date: The date of the foreign currency exchange rates.
     :type foreign_currency_rate_date: date
     :param file: The filename of the rendered invoice
     :type file: File

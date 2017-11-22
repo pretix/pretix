@@ -67,7 +67,7 @@ SSL
 ---
 
 Since buying a ticket normally involves entering sensitive data, we strongly suggest that you use SSL/HTTPS for the page
-that includes the widget. Initiatives like `Let's Encrypt`_ allow you to obtain a SSL certificat free of charge.
+that includes the widget. Initiatives like `Let's Encrypt`_ allow you to obtain a SSL certificate free of charge.
 
 All data transferred to pretix will be made over SSL, even if using the widget on a non-SSL site. However, without
 using SSL for your site, a man-in-the-middle attacker could potentially alter the widget in dangerous ways. Moreover,
@@ -75,7 +75,7 @@ using SSL is becoming standard practice and your customers might want expect see
 granted to SSL-enabled web pages.
 
 By default, the checkout process will open in a new tab in your customer's browsers if you don't use SSL for your
-website. If you confident to have a good reason for not using SSL, you can override this behaviour with the
+website. If you confident to have a good reason for not using SSL, you can override this behavior with the
 ``skip-ssl-check`` attribute::
 
    <pretix-widget event="https://pretix.eu/demo/democon/" skip-ssl-check></pretix-widget>

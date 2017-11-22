@@ -550,7 +550,7 @@ class Question(LoggedModel):
     :param question: The question text. This will be displayed next to the input field.
     :type question: str
     :param type: One of the above types
-    :param required: Whether answering this question is required for submiting an order including
+    :param required: Whether answering this question is required for submitting an order including
                      items associated with this question.
     :type required: bool
     :param items: A set of ``Items`` objects that this question should be applied to
@@ -667,7 +667,7 @@ class Quota(LoggedModel):
         again if those people do not proceed to the checkout.
 
     AVAILABILITY_ORDERED
-        This item is currently not availalbe for sale because all available
+        This item is currently not available for sale because all available
         items are ordered. It might become available again if those people
         do not pay.
 

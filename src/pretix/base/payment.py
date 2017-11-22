@@ -324,7 +324,7 @@ class BasePaymentProvider:
         at least store the user's input into his session.
 
         This method should return ``False`` if the user's input was invalid, ``True``
-        if the input was valid and the frontend should continue with default behaviour
+        if the input was valid and the frontend should continue with default behavior
         or a string containing a URL if the user should be redirected somewhere else.
 
         On errors, you should use Django's message framework to display an error message
@@ -375,7 +375,7 @@ class BasePaymentProvider:
         """
         After the user has confirmed their purchase, this method will be called to complete
         the payment process. This is the place to actually move the money if applicable.
-        If you need any special  behaviour,  you can return a string
+        If you need any special  behavior,  you can return a string
         containing the URL the user will be redirected to. If you are done with your process
         you should return the user to the order's detail page.
 
@@ -523,8 +523,8 @@ class BasePaymentProvider:
         Will be called if the event administrator confirms the refund.
 
         This should transfer the money back (if possible). You can return the URL the
-        user should be redirected to if you need special behaviour or None to continue
-        with default behaviour.
+        user should be redirected to if you need special behavior or None to continue
+        with default behavior.
 
         On failure, you should use Django's message framework to display an error message
         to the user.
@@ -588,8 +588,8 @@ class FreeOrderProvider(BasePaymentProvider):
         Will be called if the event administrator confirms the refund.
 
         This should transfer the money back (if possible). You can return the URL the
-        user should be redirected to if you need special behaviour or None to continue
-        with default behaviour.
+        user should be redirected to if you need special behavior or None to continue
+        with default behavior.
 
         On failure, you should use Django's message framework to display an error message
         to the user.
