@@ -6,14 +6,13 @@ from django.contrib.auth import REDIRECT_FIELD_NAME, logout
 from django.core.urlresolvers import get_script_prefix, resolve, reverse
 from django.http import Http404
 from django.shortcuts import redirect, resolve_url
-from django.utils.deprecation import MiddlewareMixin
 from django.utils.encoding import force_str
 from django.utils.translation import ugettext as _
 
 from pretix.base.models import Event, Organizer
 
 
-class PermissionMiddleware(MiddlewareMixin):
+class PermissionMiddleware:
     """
     This middleware enforces all requests to the control app to require login.
     Additionally, it enforces all requests to "control:event." URLs
@@ -28,6 +27,9 @@ class PermissionMiddleware(MiddlewareMixin):
         "auth.forgot.recover",
         "auth.invite",
     )
+
+    def __init__(self, get_response):
+        self.get_response = get_response
 
     def _login_redirect(self, request):
         # Taken from django/contrib/auth/decorators.py
@@ -92,3 +94,8 @@ class PermissionMiddleware(MiddlewareMixin):
                 raise Http404(_("The selected organizer was not found or you "
                                 "have no permission to administrate it."))
             request.orgapermset = request.user.get_organizer_permission_set(request.organizer)
+
+    def __call__(self, request):
+        self.process_request(request)
+        response = self.get_response(request)
+        return self.process_response(request, response)

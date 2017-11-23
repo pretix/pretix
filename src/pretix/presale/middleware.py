@@ -1,12 +1,16 @@
 from django.core.urlresolvers import resolve
-from django.utils.deprecation import MiddlewareMixin
 
 from pretix.presale.signals import process_response
 
 from .utils import _detect_event
 
 
-class EventMiddleware(MiddlewareMixin):
+class EventMiddleware:
+
+    def __init__(self, get_response, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.get_response = get_response
+
     def process_request(self, request):
         url = resolve(request.path_info)
         request._namespace = url.namespace
@@ -23,3 +27,8 @@ class EventMiddleware(MiddlewareMixin):
             for receiver, r in process_response.send(request.event, request=request, response=response):
                 response = r
         return response
+
+    def __call__(self, request):
+        self.process_request(request)
+        response = self.get_response(request)
+        return self.process_response(request, response)
