@@ -202,8 +202,8 @@ class ItemCreateForm(I18nModelForm):
             self.instance.min_per_order = self.cleaned_data['copy_from'].min_per_order
             self.instance.max_per_order = self.cleaned_data['copy_from'].max_per_order
             self.instance.checkin_attention = self.cleaned_data['copy_from'].checkin_attention
-            self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
 
+        self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
         instance = super().save(*args, **kwargs)
 
         if not self.event.has_subevents and not self.cleaned_data.get('has_variations'):
