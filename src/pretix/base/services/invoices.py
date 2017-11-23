@@ -109,6 +109,8 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 desc += " - " + str(p.variation.value)
             if p.addon_to_id:
                 desc = "  + " + desc
+            if invoice.event.settings.invoice_attendee_name and p.attendee_name:
+                desc += "<br />" + pgettext("invoice", "Attendee: {name}").format(name=p.attendee_name)
             InvoiceLine.objects.create(
                 position=i, invoice=invoice, description=desc,
                 gross_value=p.price, tax_value=p.tax_value,
