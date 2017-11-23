@@ -609,6 +609,7 @@ var editor = {
                 alert(gettext('Saving failed.'));
             }
         }, 'json');
+        return false;
     },
 
     _preview: function () {
