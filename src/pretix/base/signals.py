@@ -25,6 +25,24 @@ class EventPluginSignal(django.dispatch.Signal):
     Event.
     """
 
+    def _is_active(self, sender, receiver):
+        # Find the Django application this belongs to
+        searchpath = receiver.__module__
+        core_module = any([searchpath.startswith(cm) for cm in settings.CORE_MODULES])
+        app = None
+        if not core_module:
+            while True:
+                app = app_cache.get(searchpath)
+                if "." not in searchpath or app:
+                    break
+                searchpath, _ = searchpath.rsplit(".", 1)
+
+        # Only fire receivers from active plugins and core modules
+        if core_module or (sender and app and app.name in sender.get_plugins()):
+            if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
+                return True
+        return False
+
     def send(self, sender: Event, **named) -> List[Tuple[Callable, Any]]:
         """
         Send signal from sender to all connected receivers that belong to
@@ -43,23 +61,34 @@ class EventPluginSignal(django.dispatch.Signal):
             _populate_app_cache()
 
         for receiver in self._live_receivers(sender):
-            # Find the Django application this belongs to
-            searchpath = receiver.__module__
-            core_module = any([searchpath.startswith(cm) for cm in settings.CORE_MODULES])
-            app = None
-            if not core_module:
-                while True:
-                    app = app_cache.get(searchpath)
-                    if "." not in searchpath or app:
-                        break
-                    searchpath, _ = searchpath.rsplit(".", 1)
-
-            # Only fire receivers from active plugins and core modules
-            if core_module or (sender and app and app.name in sender.get_plugins()):
-                if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
-                    response = receiver(signal=self, sender=sender, **named)
-                    responses.append((receiver, response))
+            if self._is_active(sender, receiver):
+                response = receiver(signal=self, sender=sender, **named)
+                responses.append((receiver, response))
         return sorted(responses, key=lambda r: (receiver.__module__, receiver.__name__))
+
+    def send_chained(self, sender: Event, chain_kwarg_name, **named) -> List[Tuple[Callable, Any]]:
+        """
+        Send signal from sender to all connected receivers. The return value of the first receiver
+        will be used as the keyword argument specified by ``chain_kwarg_name`` in the input to the
+        second receiver and so on. The return value of the last receiver is returned by this method.
+
+        sender is required to be an instance of ``pretix.base.models.Event``.
+        """
+        if sender and not isinstance(sender, Event):
+            raise ValueError("Sender needs to be an event.")
+
+        response = named.get(chain_kwarg_name)
+        if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
+            return response
+
+        if not app_cache:
+            _populate_app_cache()
+
+        for receiver in self._live_receivers(sender):
+            if self._is_active(sender, receiver):
+                named[chain_kwarg_name] = response
+                response = receiver(signal=self, sender=sender, **named)
+        return response
 
 
 class DeprecatedSignal(django.dispatch.Signal):
@@ -276,4 +305,17 @@ This signal is sent out to check if tickets for an order can be downloaded. If a
 a download will not be offered.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+email_filter = EventPluginSignal(
+    providing_args=['message', 'order']
+)
+"""
+This signal allows you to implement a middleware-style filter on all outgoing emails. You are expected to
+return a (possibly modified) copy of the message object passed to you.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+The ``message`` argument will contian an ``EmailMultiAlternatives`` object.
+If the email is associated with a specific order, the ``order`` argument will be passed as well, otherwise
+it will be ``None``.
 """

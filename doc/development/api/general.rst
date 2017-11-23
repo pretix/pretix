@@ -11,7 +11,7 @@ Core
 ----
 
 .. automodule:: pretix.base.signals
-   :members: periodic_task, event_live_issues, event_copy_data
+   :members: periodic_task, event_live_issues, event_copy_data, email_filter
 
 Order events
 """"""""""""

@@ -15,6 +15,7 @@ from inlinestyler.utils import inline_css
 from pretix.base.i18n import language
 from pretix.base.models import Event, Invoice, InvoiceAddress, Order
 from pretix.base.services.invoices import invoice_pdf_task
+from pretix.base.signals import email_filter
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -150,7 +151,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             sender=sender,
             event=event.id if event else None,
             headers=headers,
-            invoices=[i.pk for i in invoices] if invoices else []
+            invoices=[i.pk for i in invoices] if invoices else [],
+            order=order.pk if order else None
         )
 
         if invoices:
@@ -164,7 +166,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
 
 @app.task
 def mail_send_task(*args, to: List[str], subject: str, body: str, html: str, sender: str,
-                   event: int=None, headers: dict=None, bcc: List[str]=None, invoices: List[int]=None) -> bool:
+                   event: int=None, headers: dict=None, bcc: List[str]=None, invoices: List[int]=None,
+                   order: int=None) -> bool:
     email = EmailMultiAlternatives(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
         email.attach_alternative(inline_css(html), "text/html")
@@ -182,6 +185,14 @@ def mail_send_task(*args, to: List[str], subject: str, body: str, html: str, sen
         backend = event.get_mail_backend()
     else:
         backend = get_connection(fail_silently=False)
+
+    if event:
+        if order:
+            try:
+                order = event.orders.get(pk=order)
+            except Order.DoesNotExist:
+                order = None
+        email = email_filter.send_chained(event, 'message', message=email, order=order)
 
     try:
         backend.send_messages([email])
