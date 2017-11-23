@@ -8,7 +8,6 @@ from django.http import HttpRequest, HttpResponse
 from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
 from django.utils.crypto import get_random_string
-from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.utils.translation.trans_real import (
     check_for_language, get_supported_language_variant, language_code_re,
@@ -20,12 +19,14 @@ from pretix.multidomain.urlreverse import get_domain
 _supported = None
 
 
-class LocaleMiddleware(MiddlewareMixin):
-
+class LocaleMiddleware:
     """
     This middleware sets the correct locale and timezone
     for a request.
     """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
 
     def process_request(self, request: HttpRequest):
         language = get_language_from_request(request)
@@ -66,6 +67,11 @@ class LocaleMiddleware(MiddlewareMixin):
         if 'Content-Language' not in response:
             response['Content-Language'] = language
         return response
+
+    def __call__(self, request):
+        self.process_request(request)
+        response = self.get_response(request)
+        return self.process_response(request, response)
 
 
 def get_language_from_user_settings(request: HttpRequest) -> str:
@@ -161,10 +167,14 @@ def _merge_csp(a, b):
             a[k] = b[k]
 
 
-class SecurityMiddleware(MiddlewareMixin):
+class SecurityMiddleware:
     CSP_EXEMPT = (
         '/api/v1/docs/',
     )
+
+    def __init__(self, get_response, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.get_response = get_response
 
     def process_request(self, request):
         request.csp_nonce = get_random_string(length=32)
@@ -231,3 +241,8 @@ class SecurityMiddleware(MiddlewareMixin):
             del resp['Content-Security-Policy']
 
         return resp
+
+    def __call__(self, request):
+        self.process_request(request)
+        response = self.get_response(request)
+        return self.process_response(request, response)
