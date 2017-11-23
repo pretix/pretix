@@ -394,12 +394,15 @@ class Event(EventMixin, LoggedModel):
             for v in vars:
                 q.variations.add(variation_map[v.pk])
 
+        question_map = {}
         for q in Question.objects.filter(event=other).prefetch_related('items', 'options'):
             items = list(q.items.all())
             opts = list(q.options.all())
+            question_map[q.pk] = q
             q.pk = None
             q.event = self
             q.save()
+
             for i in items:
                 q.items.add(item_map[i.pk])
             for o in opts:
@@ -434,6 +437,7 @@ class Event(EventMixin, LoggedModel):
         event_copy_data.send(
             sender=self, other=other,
             tax_map=tax_map, category_map=category_map, item_map=item_map, variation_map=variation_map,
+            question_map=question_map
         )
 
     def get_payment_providers(self) -> dict:
