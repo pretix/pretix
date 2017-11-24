@@ -64,7 +64,7 @@ $(function () {
 
     $(".checkout-button-row .btn-primary").click(
         function (e) {
-            if (($("input[name=payment][value=stripe]").prop('checked') || $("input[type=checkbox][name=payment]").length === 0)
+            if (($("input[name=payment][value=stripe]").prop('checked') || $("input[type=checkbox][name=radio]").length === 0)
                 && $("#stripe_token").val() == "") {
                 pretixstripe.start();
                 e.preventDefault();
