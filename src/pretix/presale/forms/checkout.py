@@ -30,7 +30,7 @@ class ContactForm(forms.Form):
                              help_text=_('Make sure to enter a valid email address. We will send you an order '
                                          'confirmation including a link that you need in case you want to make '
                                          'modifications to your order or download your ticket later.'),
-                             widget=forms.EmailInput(attrs={'data-typocheck-target': '1'}))
+                             widget=forms.EmailInput(attrs={'data-typocheck-target': '1', 'autofocus': 'autofocus'}))
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
