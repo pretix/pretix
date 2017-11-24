@@ -313,7 +313,7 @@ TEST_INVOICE_RES = {
     "foreign_currency_rate_date": None,
     "lines": [
         {
-            "description": "Budget Ticket",
+            "description": "Budget Ticket<br />Attendee: Peter",
             "gross_value": "23.00",
             "tax_value": "0.00",
             "tax_name": "",
