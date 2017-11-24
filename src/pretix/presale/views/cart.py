@@ -421,7 +421,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
                 self.subevent = get_object_or_404(SubEvent, event=request.event, pk=request.GET.get('subevent'),
                                                   active=True)
 
-            if self.voucher.subevent:
+            if hasattr(self, 'voucher') and self.voucher.subevent:
                 self.subevent = self.voucher.subevent
         else:
             pass
