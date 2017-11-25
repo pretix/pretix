@@ -40,3 +40,6 @@ matrix:
       env: JOB=spelling
 addons:
   postgresql: "9.4"
+  apt:
+      packages:
+          - enchant
