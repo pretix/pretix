@@ -278,6 +278,39 @@ class SubEventFilterForm(FilterForm):
         return qs
 
 
+class OrganizerFilterForm(FilterForm):
+    orders = {
+        'slug': 'slug',
+        'name': 'name',
+    }
+    query = forms.CharField(
+        label=_('Organizer name'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Organizer name'),
+            'autofocus': 'autofocus'
+        }),
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('request')
+        super().__init__(*args, **kwargs)
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('query'):
+            query = fdata.get('query')
+            qs = qs.filter(
+                Q(name__icontains=query) | Q(slug__icontains=query)
+            )
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
+
+        return qs
+
+
 class EventFilterForm(FilterForm):
     orders = {
         'slug': 'slug',
