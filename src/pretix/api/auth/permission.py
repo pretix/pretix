@@ -1,3 +1,7 @@
+import time
+
+from django.conf import settings
+from django.contrib.auth import logout
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
@@ -20,6 +24,18 @@ class EventPermission(BasePermission):
             required_permission = getattr(view, 'permission')
         else:
             required_permission = None
+
+        if request.user.is_authenticated:
+            # If this logic is updated, make sure to also update the logic in pretix/control/middleware.py
+            if not settings.PRETIX_LONG_SESSIONS or not request.session.get('pretix_auth_long_session', False):
+                last_used = request.session.get('pretix_auth_last_used', time.time())
+                if time.time() - request.session.get('pretix_auth_login_time', time.time()) > settings.PRETIX_SESSION_TIMEOUT_ABSOLUTE:
+                    logout(request)
+                    request.session['pretix_auth_login_time'] = 0
+                    return False
+                if time.time() - last_used > settings.PRETIX_SESSION_TIMEOUT_RELATIVE:
+                    return False
+                request.session['pretix_auth_last_used'] = int(time.time())
 
         perm_holder = (request.auth if isinstance(request.auth, TeamAPIToken)
                        else request.user)
