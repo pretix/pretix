@@ -1,4 +1,7 @@
+import time
+
 import pytest
+from django.test import override_settings
 
 from pretix.base.models import Organizer
 
@@ -107,3 +110,99 @@ def test_token_event_permission_not_allowed(token_client, team, organizer, event
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/events/{}/{}'.format(
         organizer.slug, event.slug, urlset[2]))
     assert resp.status_code in (404, 403)
+
+
+@pytest.mark.django_db
+def test_log_out_after_absolute_timeout(user_client, team, organizer, event):
+    session = user_client.session
+    session['pretix_auth_long_session'] = False
+    session['pretix_auth_login_time'] = int(time.time()) - 3600 * 12 - 60
+    session.save()
+
+    response = user_client.get('/api/v1/organizers/{}/events/'.format(organizer.slug))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_dont_logout_before_absolute_timeout(user_client, team, organizer, event):
+    session = user_client.session
+    session['pretix_auth_long_session'] = True
+    session['pretix_auth_login_time'] = int(time.time()) - 3600 * 12 + 60
+    session.save()
+
+    response = user_client.get('/api/v1/organizers/{}/events/'.format(organizer.slug))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+@override_settings(PRETIX_LONG_SESSIONS=False)
+def test_ignore_long_session_if_disabled_in_config(user_client, team, organizer, event):
+    session = user_client.session
+    session['pretix_auth_long_session'] = True
+    session['pretix_auth_login_time'] = int(time.time()) - 3600 * 12 - 60
+    session.save()
+
+    response = user_client.get('/api/v1/organizers/{}/events/'.format(organizer.slug))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_dont_logout_in_long_session(user_client, team, organizer, event):
+    session = user_client.session
+    session['pretix_auth_long_session'] = True
+    session['pretix_auth_login_time'] = int(time.time()) - 3600 * 12 - 60
+    session.save()
+
+    response = user_client.get('/api/v1/organizers/{}/events/'.format(organizer.slug))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_log_out_after_relative_timeout(user_client, team, organizer, event):
+    session = user_client.session
+    session['pretix_auth_long_session'] = False
+    session['pretix_auth_login_time'] = int(time.time()) - 3600 * 6
+    session['pretix_auth_last_used'] = int(time.time()) - 3600 * 3 - 60
+    session.save()
+
+    response = user_client.get('/api/v1/organizers/{}/events/'.format(organizer.slug))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_dont_logout_before_relative_timeout(user_client, team, organizer, event):
+    session = user_client.session
+    session['pretix_auth_long_session'] = True
+    session['pretix_auth_login_time'] = int(time.time()) - 3600 * 6
+    session['pretix_auth_last_used'] = int(time.time()) - 3600 * 3 + 60
+    session.save()
+
+    response = user_client.get('/api/v1/organizers/{}/events/'.format(organizer.slug))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_dont_logout_by_relative_in_long_session(user_client, team, organizer, event):
+    session = user_client.session
+    session['pretix_auth_long_session'] = True
+    session['pretix_auth_login_time'] = int(time.time()) - 3600 * 5
+    session['pretix_auth_last_used'] = int(time.time()) - 3600 * 3 - 60
+    session.save()
+
+    response = user_client.get('/api/v1/organizers/{}/events/'.format(organizer.slug))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_update_session_activity(user_client, team, organizer, event):
+    t1 = int(time.time()) - 5
+    session = user_client.session
+    session['pretix_auth_long_session'] = False
+    session['pretix_auth_login_time'] = int(time.time()) - 3600 * 5
+    session['pretix_auth_last_used'] = t1
+    session.save()
+
+    response = user_client.get('/api/v1/organizers/{}/events/'.format(organizer.slug))
+    assert response.status_code == 200
+
+    assert user_client.session['pretix_auth_last_used'] > t1
