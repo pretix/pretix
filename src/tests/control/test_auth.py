@@ -566,6 +566,26 @@ class SessionTimeOutTest(TestCase):
         response = self.client.get('/control/')
         self.assertEqual(response.status_code, 200)
 
+    def test_log_out_after_relative_timeout_really_enforced(self):
+        # Regression test added after a security problem in 1.9.1
+        # The problem was that, once the relative timeout happened, the user was redirected
+        # to /control/reauth/, but loading /control/reauth/ was already considered to be
+        # "session activitiy". Therefore, after loding /control/reauth/, the session was no longer
+        # in the timeout state and the user was able to access pages again without re-entering the
+        # password.
+        session = self.client.session
+        session['pretix_auth_long_session'] = False
+        session['pretix_auth_login_time'] = int(time.time()) - 3600 * 6
+        session['pretix_auth_last_used'] = int(time.time()) - 3600 * 3 - 60
+        session.save()
+
+        response = self.client.get('/control/')
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/control/reauth/?next=/control/')
+        self.client.get('/control/reauth/?next=/control/')
+        response = self.client.get('/control/')
+        self.assertEqual(response.status_code, 302)
+
     def test_update_session_activity(self):
         t1 = int(time.time()) - 5
         session = self.client.session
