@@ -8,6 +8,8 @@ tests:
         - XDG_CACHE_HOME=/cache bash .travis.sh tests
     tags:
         - python3
+    except:
+        - pypi
 pypi:
     stage: release
     script:
@@ -22,7 +24,7 @@ pypi:
     tags:
         - python3
     only:
-        - release
+        - pypi
     artifacts:
         paths:
             - src/dist/
