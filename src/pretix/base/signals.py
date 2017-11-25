@@ -180,7 +180,7 @@ order_paid = EventPluginSignal(
 """
 This signal is sent out every time an order is paid. The order object is given
 as the first argument. This signal is *not* sent out if an order is marked as paid
-because it an already-paid order has been splitted.
+because an already-paid order has been split.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
