@@ -7,18 +7,14 @@ from django.db import migrations, models
 
 
 def assign_checkin_lists(apps, schema_editor):
-    Event = apps.get_model('pretixbase', 'Event')
     AppConfiguration = apps.get_model('pretixdroid', 'AppConfiguration')
-    for e in Event.objects.all():
-        if e.has_subevents:
-            for se in e.subevents.all():
-                cl = e.checkin_lists.get_or_create(subevent=se, all_products=True, defaults={
-                    'name': se.name
-                })[0]
-                AppConfiguration.objects.filter(event=e, subevent=se).update(list=cl)
-        else:
-            cl = e.checkin_lists.get_or_create(all_products=True, defaults={'name': 'Default'})[0]
-            AppConfiguration.objects.filter(event=e).update(list=cl)
+
+    for ac in AppConfiguration.objects.all():
+        cl = ac.event.checkin_lists.get_or_create(subevent=ac.subevent, all_products=True, defaults={
+            'name': ac.subevent.name if ac.subevent else 'Default'
+        })[0]
+        ac.list = cl
+        ac.save()
 
 
 class Migration(migrations.Migration):
@@ -65,5 +61,11 @@ class Migration(migrations.Migration):
         migrations.RemoveField(
             model_name='appconfiguration',
             name='subevent',
+        ),
+        migrations.AlterField(
+            model_name='appconfiguration',
+            name='list',
+            field=models.ForeignKey(blank=False, null=False, on_delete=django.db.models.deletion.CASCADE,
+                                    to='pretixbase.CheckinList'),
         ),
     ]

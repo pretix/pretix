@@ -45,12 +45,14 @@ def env():
         order=o1, item=ticket,
         price=23, attendee_name="Peter", secret='5678910', subevent=se2
     )
-    return event, user, o1, op1, op2, se1, se2
+    cl1 = event.checkin_lists.create(name="Foo", all_products=True, subevent=se1)
+    cl2 = event.checkin_lists.create(name="Foo", all_products=True, subevent=se2)
+    return event, user, o1, op1, op2, se1, se2, cl1, cl2
 
 
 @pytest.mark.django_db
 def test_custom_datetime(client, env):
-    AppConfiguration.objects.create(event=env[0], key='abcdefg', subevent=env[5])
+    AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[7])
     dt = now() - timedelta(days=1)
     dt = dt.replace(microsecond=0)
     resp = client.post('/pretixdroid/api/%s/%s/%d/redeem/?key=%s' % (
@@ -64,7 +66,7 @@ def test_custom_datetime(client, env):
 
 @pytest.mark.django_db
 def test_wrong_subevent(client, env):
-    AppConfiguration.objects.create(event=env[0], key='abcdefg')
+    AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[7])
 
     resp = client.post('/pretixdroid/api/%s/%s/%d/redeem/?key=%s' % (
         env[0].organizer.slug, env[0].slug, env[5].pk, 'abcdefg'
@@ -82,7 +84,7 @@ def test_wrong_subevent(client, env):
 
 @pytest.mark.django_db
 def test_other_subevent_not_allowed(client, env):
-    ac = AppConfiguration.objects.create(event=env[0], key='abcdefg', subevent=env[5])
+    ac = AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[7])
 
     resp = client.post('/pretixdroid/api/%s/%s/%d/redeem/?key=%s' % (
         env[0].organizer.slug, env[0].slug, env[6].pk, 'abcdefg'
@@ -103,7 +105,7 @@ def test_other_subevent_not_allowed(client, env):
 
 @pytest.mark.django_db
 def test_unknown_subevent(client, env):
-    AppConfiguration.objects.create(event=env[0], key='abcdefg')
+    AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[7])
     resp = client.post('/pretixdroid/api/%s/%s/%d/redeem/?key=%s' % (
         env[0].organizer.slug, env[0].slug, env[6].pk + 1000, 'abcdefg'
     ), data={'secret': '5678910'})
@@ -120,7 +122,7 @@ def test_no_subevent(client, env):
 
 @pytest.mark.django_db
 def test_search(client, env):
-    AppConfiguration.objects.create(event=env[0], key='abcdefg')
+    AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[7])
     resp = client.get('/pretixdroid/api/%s/%s/%d/search/?key=%s&query=%s' % (
         env[0].organizer.slug, env[0].slug, env[5].pk, 'abcdefg', '567891'))
     jdata = json.loads(resp.content.decode("utf-8"))
@@ -134,7 +136,7 @@ def test_search(client, env):
 
 @pytest.mark.django_db
 def test_download_all_data(client, env):
-    AppConfiguration.objects.create(event=env[0], key='abcdefg', subevent=env[5])
+    AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[7])
     resp = client.get('/pretixdroid/api/%s/%s/%d/download/?key=%s' % (
         env[0].organizer.slug, env[0].slug, env[5].pk, 'abcdefg'))
     jdata = json.loads(resp.content.decode("utf-8"))
@@ -144,8 +146,8 @@ def test_download_all_data(client, env):
 
 @pytest.mark.django_db
 def test_status(client, env):
-    AppConfiguration.objects.create(event=env[0], key='abcdefg', subevent=env[5])
-    Checkin.objects.create(position=env[3])
+    AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[7])
+    Checkin.objects.create(position=env[3], list=env[7])
     resp = client.get('/pretixdroid/api/%s/%s/%d/status/?key=%s' % (
         env[0].organizer.slug, env[0].slug, env[5].pk, 'abcdefg'))
     jdata = json.loads(resp.content.decode("utf-8"))

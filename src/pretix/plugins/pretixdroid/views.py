@@ -133,8 +133,8 @@ class ApiView(View):
 
         self.subevent = None
         if self.event.has_subevents:
-            if self.config.subevent:
-                self.subevent = self.config.subevent
+            if self.config.list.subevent:
+                self.subevent = self.config.list.subevent
             elif 'subevent' in kwargs:
                 self.subevent = get_object_or_404(SubEvent, event=self.event, pk=kwargs['subevent'])
             else:
@@ -170,7 +170,7 @@ class ApiRedeemView(ApiView):
                     response['status'] = 'error'
                     response['reason'] = 'product'
                 elif op.order.status == Order.STATUS_PAID or force:
-                    ci, created = Checkin.objects.get_or_create(position=op, defaults={
+                    ci, created = Checkin.objects.get_or_create(position=op, list=self.config.list, defaults={
                         'datetime': dt,
                         'nonce': nonce,
                     })
@@ -188,6 +188,7 @@ class ApiRedeemView(ApiView):
                             'first': True,
                             'forced': op.order.status != Order.STATUS_PAID,
                             'datetime': dt,
+                            'list': self.config.list.pk
                         })
                 else:
                     if force:
@@ -201,6 +202,7 @@ class ApiRedeemView(ApiView):
                         'first': False,
                         'forced': force,
                         'datetime': dt,
+                        'list': self.config.list.pk
                     })
 
             response['data'] = serialize_op(op, redeemed=op.order.status == Order.STATUS_PAID or force)
@@ -285,11 +287,24 @@ class ApiDownloadView(ApiView):
 
 class ApiStatusView(ApiView):
     def get(self, request, **kwargs):
+
+        cqs = Checkin.objects.filter(
+            position__order__event=self.event, position__subevent=self.subevent,
+            position__order__status=Order.STATUS_PAID,
+            list=self.config.list
+        )
+        pqs = OrderPosition.objects.filter(
+            order__event=self.event, order__status=Order.STATUS_PAID, subevent=self.subevent,
+        )
+        if not self.config.list.all_products:
+            pqs = pqs.filter(item__in=self.config.list.limit_products.values_list('id', flat=True))
+
         ev = self.subevent or self.event
         response = {
             'version': API_VERSION,
             'event': {
                 'name': str(ev.name),
+                'list': self.config.list.name,
                 'slug': self.event.slug,
                 'organizer': {
                     'name': str(self.event.organizer),
@@ -301,45 +316,25 @@ class ApiStatusView(ApiView):
                 'timezone': self.event.settings.timezone,
                 'url': event_absolute_uri(self.event, 'presale:event.index')
             },
-            'checkins': Checkin.objects.filter(
-                position__order__event=self.event, position__subevent=self.subevent
-            ).count(),
-            'total': OrderPosition.objects.filter(
-                order__event=self.event, order__status=Order.STATUS_PAID, subevent=self.subevent
-            ).count()
+            'checkins': cqs.count(),
+            'total': pqs.count()
         }
 
         op_by_item = {
             p['item']: p['cnt']
-            for p in OrderPosition.objects.filter(
-                order__event=self.event,
-                order__status=Order.STATUS_PAID,
-                subevent=self.subevent
-            ).order_by().values('item').annotate(cnt=Count('id'))
+            for p in pqs.order_by().values('item').annotate(cnt=Count('id'))
         }
         op_by_variation = {
             p['variation']: p['cnt']
-            for p in OrderPosition.objects.filter(
-                order__event=self.event,
-                order__status=Order.STATUS_PAID,
-                subevent=self.subevent
-            ).order_by().values('variation').annotate(cnt=Count('id'))
+            for p in pqs.order_by().values('variation').annotate(cnt=Count('id'))
         }
         c_by_item = {
             p['position__item']: p['cnt']
-            for p in Checkin.objects.filter(
-                position__order__event=self.event,
-                position__order__status=Order.STATUS_PAID,
-                position__subevent=self.subevent
-            ).order_by().values('position__item').annotate(cnt=Count('id'))
+            for p in cqs.order_by().values('position__item').annotate(cnt=Count('id'))
         }
         c_by_variation = {
             p['position__variation']: p['cnt']
-            for p in Checkin.objects.filter(
-                position__order__event=self.event,
-                position__order__status=Order.STATUS_PAID,
-                position__subevent=self.subevent
-            ).order_by().values('position__variation').annotate(cnt=Count('id'))
+            for p in cqs.order_by().values('position__variation').annotate(cnt=Count('id'))
         }
 
         response['items'] = []

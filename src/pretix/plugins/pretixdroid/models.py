@@ -17,7 +17,7 @@ class AppConfiguration(models.Model):
                                        help_text=_('If disabled, the device can not search for attendees by name. '
                                                    'pretixdroid 1.6 or newer only.'))
     list = models.ForeignKey(
-        'pretixbase.CheckinList', on_delete=models.CASCADE, null=True, blank=True
+        'pretixbase.CheckinList', on_delete=models.CASCADE
     )
 
     @property
