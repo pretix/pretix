@@ -73,6 +73,17 @@ def user():
 
 
 @pytest.fixture
+def user_client(client, team, user):
+    team.can_view_orders = True
+    team.can_view_vouchers = True
+    team.all_events = True
+    team.save()
+    team.members.add(user)
+    client.force_authenticate(user=user)
+    return client
+
+
+@pytest.fixture
 def token_client(client, team):
     team.can_view_orders = True
     team.can_view_vouchers = True
