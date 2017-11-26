@@ -1,8 +1,8 @@
 import dateutil.parser
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.db import models, transaction
-from django.db.models import Count, F, Max, OuterRef, Q, Subquery
+from django.db import transaction
+from django.db.models import Max, OuterRef, Subquery
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.functional import cached_property
@@ -112,40 +112,8 @@ class CheckinListList(ListView):
     template_name = 'pretixcontrol/checkin/lists.html'
 
     def get_queryset(self):
-        cqs = Checkin.objects.filter(
-            position__order__event=self.request.event,
-            position__order__status=Order.STATUS_PAID,
-            list=OuterRef('pk')
-        ).filter(
-            # This assumes that in an event with subevents, *all* positions have subevents
-            # and *all* checkin lists have a subevent assigned
-            Q(position__subevent=OuterRef('subevent'))
-            | (Q(position__subevent__isnull=True))
-        ).order_by().values('list').annotate(
-            c=Count('*')
-        ).values('c')
-        pqs = OrderPosition.objects.filter(
-            order__event=self.request.event,
-            order__status=Order.STATUS_PAID,
-        ).filter(
-            # This assumes that in an event with subevents, *all* positions have subevents
-            # and *all* checkin lists have a subevent assigned
-            Q(subevent=OuterRef('subevent'))
-            | (Q(subevent__isnull=True))
-        ).order_by().values('order__event').annotate(
-            c=Count('*')
-        ).values('c')
-        # TODO: Limit products
-
-        # if not self.config.list.all_products:
-        #    pqs = pqs.filter(item__in=self.config.list.limit_products.values_list('id', flat=True))
-
-        qs = self.request.event.checkin_lists.prefetch_related("limit_products").annotate(
-            checkin_count=Subquery(cqs, output_field=models.IntegerField()),
-            position_count=Subquery(pqs, output_field=models.IntegerField())
-        ).annotate(
-            percent=F('checkin_count') * 100 / F('position_count')
-        )
+        qs = self.request.event.checkin_lists.prefetch_related("limit_products")
+        qs = CheckinList.annotate_with_numbers(qs, self.request.event)
 
         if self.request.GET.get("subevent", "") != "":
             s = self.request.GET.get("subevent", "")
