@@ -2,8 +2,10 @@ from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
+from pretix.base.models import LoggedModel
 
-class CheckinList(models.Model):
+
+class CheckinList(LoggedModel):
     event = models.ForeignKey('Event', related_name='checkin_lists')
     name = models.CharField(max_length=190)
     all_products = models.BooleanField(default=True, verbose_name=_("All products (including newly created ones)"))
