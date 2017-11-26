@@ -168,11 +168,10 @@ urlpatterns = [
             name='event.orders.waitinglist.delete'),
         url(r'^checkinlists/$', checkin.CheckinListList.as_view(), name='event.orders.checkinlists'),
         url(r'^checkinlists/add$', checkin.CheckinListCreate.as_view(), name='event.orders.checkinlists.add'),
-        url(r'^checkinlists/(?P<list>\d+)/$', checkin.CheckinListList.as_view(), name='event.orders.checkinlists.show'),
+        url(r'^checkinlists/(?P<list>\d+)/$', checkin.CheckInListShow.as_view(), name='event.orders.checkinlists.show'),
         url(r'^checkinlists/(?P<list>\d+)/change$', checkin.CheckinListUpdate.as_view(),
             name='event.orders.checkinlists.edit'),
         url(r'^checkinlists/(?P<list>\d+)/delete$', checkin.CheckinListDelete.as_view(),
             name='event.orders.checkinlists.delete'),
-        url(r'^checkins/$', checkin.CheckInView.as_view(), name='event.orders.checkins'),
     ])),
 ]
