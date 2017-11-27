@@ -4,35 +4,25 @@ from collections import OrderedDict
 from defusedcsv import csv
 from django import forms
 from django.db.models.functions import Coalesce
-from django.utils.translation import (
-    pgettext, pgettext_lazy, ugettext as _, ugettext_lazy,
-)
+from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Order, OrderPosition, Question
 
 
 class BaseCheckinList(BaseExporter):
-    pass
-
-
-class CSVCheckinList(BaseCheckinList):
-    name = "overview"
-    identifier = 'checkinlistcsv'
-    verbose_name = ugettext_lazy('Check-in list (CSV)')
-
     @property
     def export_form_fields(self):
         d = OrderedDict(
             [
-                ('items',
-                 forms.ModelMultipleChoiceField(
-                     queryset=self.event.items.all(),
-                     label=_('Limit to products'),
-                     widget=forms.CheckboxSelectMultiple(
-                         attrs={'class': 'scrolling-multiple-choice'}
+                ('list',
+                 forms.ModelChoiceField(
+                     queryset=self.event.checkin_lists.all(),
+                     label=_('Check-in list'),
+                     widget=forms.RadioSelect(
+                         attrs={'class': 'scrolling-choice'}
                      ),
-                     initial=self.event.items.filter(admission=True)
+                     initial=self.event.checkin_lists.first()
                  )),
                 ('secrets',
                  forms.BooleanField(
@@ -67,25 +57,31 @@ class CSVCheckinList(BaseCheckinList):
                  )),
             ]
         )
-        if self.event.has_subevents:
-            d['subevent'] = forms.ModelChoiceField(
-                self.event.subevents.all(),
-                label=pgettext_lazy('subevent', 'Date'),
-                required=False,
-                empty_label=pgettext_lazy('subevent', 'All dates')
-            )
         return d
+
+
+class CSVCheckinList(BaseCheckinList):
+    name = "overview"
+    identifier = 'checkinlistcsv'
+    verbose_name = ugettext_lazy('Check-in list (CSV)')
 
     def render(self, form_data: dict):
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
+        cl = self.event.checkin_lists.get(pk=form_data['list'])
 
         questions = list(Question.objects.filter(event=self.event, id__in=form_data['questions']))
         qs = OrderPosition.objects.filter(
-            order__event=self.event, item_id__in=form_data['items']
+            order__event=self.event,
         ).prefetch_related(
             'answers', 'answers__question'
         ).select_related('order', 'item', 'variation', 'addon_to')
+
+        if not cl.all_products:
+            qs = qs.filter(item__in=cl.limit_products.values_list('id', flat=True))
+
+        if cl.subevent:
+            qs = qs.filter(subevent=cl.subevent)
 
         if form_data['sort'] == 'name':
             qs = qs.order_by(Coalesce('attendee_name', 'addon_to__attendee_name'))
@@ -95,8 +91,6 @@ class CSVCheckinList(BaseCheckinList):
         headers = [
             _('Order code'), _('Attendee name'), _('Product'), _('Price')
         ]
-        if form_data.get('subevent'):
-            qs = qs.filter(subevent=form_data.get('subevent'))
         if form_data['paid_only']:
             qs = qs.filter(order__status=Order.STATUS_PAID)
         else:

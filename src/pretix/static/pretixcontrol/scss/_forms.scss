@@ -251,7 +251,7 @@ label .optional {
   }
 }
 
-div.scrolling-multiple-choice {
+div.scrolling-multiple-choice, div.scrolling-choice {
   height: 150px;
   border: 1px solid $input-border;
   border-radius: $input-border-radius;

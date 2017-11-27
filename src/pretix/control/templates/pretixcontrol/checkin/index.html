@@ -16,6 +16,11 @@
                 {% trans "Edit list" %}
             </a>
         {% endif %}
+        <a href="{% url "control:event.orders.export" event=request.event.slug organizer=request.event.organizer.slug %}?identifier=checkinlistcsv&checkinlistcsv-list={{ checkinlist.pk }}"
+                class="btn btn-default" target="_blank">
+            <span class="fa fa-download"></span>
+            {% trans "CSV" %}
+        </a>
     </h1>
     <form class="row filter-form" action="" method="get">
         <div class="col-md-4 col-sm-6 col-xs-12">
@@ -45,7 +50,6 @@
             </p>
         </div>
     {% else %}
-        {% include "pretixcontrol/pagination.html" %}
         <form method="post" action="">
            {% csrf_token %}
             <div class="table-responsive">

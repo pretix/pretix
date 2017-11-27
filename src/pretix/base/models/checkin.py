@@ -64,6 +64,9 @@ class CheckinList(LoggedModel):
             percent=F('checkin_count') * 100 / F('position_count')
         )
 
+    def __str__(self):
+        return self.name
+
 
 class Checkin(models.Model):
     """
@@ -75,3 +78,8 @@ class Checkin(models.Model):
     list = models.ForeignKey(
         'pretixbase.CheckinList', related_name='checkins', on_delete=models.PROTECT,
     )
+
+    def __repr__(self):
+        return "<Checkin: pos {} on list '{}' at {}>".format(
+            self.position, self.list, self.datetime
+        )
