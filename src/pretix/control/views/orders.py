@@ -906,9 +906,21 @@ class ExportMixin:
         responses = register_data_exporters.send(self.request.event)
         for receiver, response in responses:
             ex = response(self.request.event)
+            if self.request.GET.get("identifier") and ex.identifier != self.request.GET.get("identifier"):
+                continue
+
+            # Use form parse cycle to generate useful defaults
+            test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
+            test_form.fields = ex.export_form_fields
+            test_form.is_valid()
+            initial = {
+                k: v for k, v in test_form.cleaned_data.items() if ex.identifier + "-" + k in self.request.GET
+            }
+
             ex.form = ExporterForm(
                 data=(self.request.POST if self.request.method == 'POST' else None),
-                prefix=ex.identifier
+                prefix=ex.identifier,
+                initial=initial
             )
             ex.form.fields = ex.export_form_fields
             exporters.append(ex)

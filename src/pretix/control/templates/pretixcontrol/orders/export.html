@@ -4,7 +4,12 @@
 {% load order_overview %}
 {% block title %}{% trans "Data export" %}{% endblock %}
 {% block content %}
-	<h1>{% trans "Data export" %}</h1>
+	<h1>
+        {% trans "Data export" %}
+        {% if "identifier" in request.GET %}
+            <a href="?" class="btn btn-default">{% trans "Show all" %}</a>
+        {% endif %}
+    </h1>
     {% for e in exporters %}
         <div class="panel panel-default">
             <div class="panel-heading">
