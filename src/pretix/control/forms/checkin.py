@@ -6,6 +6,7 @@ from pretix.base.models.checkin import CheckinList
 class CheckinListForm(forms.ModelForm):
     def __init__(self, **kwargs):
         self.event = kwargs.pop('event')
+        kwargs.pop('locales', None)
         super().__init__(**kwargs)
         self.fields['limit_products'].queryset = self.event.items.all()
         if self.event.has_subevents:
@@ -25,6 +26,6 @@ class CheckinListForm(forms.ModelForm):
         ]
         widgets = {
             'limit_products': forms.CheckboxSelectMultiple(attrs={
-                'data-inverse-dependency': '#id_all_products'
+                'data-inverse-dependency': '<[name$=all_products]'
             }),
         }
