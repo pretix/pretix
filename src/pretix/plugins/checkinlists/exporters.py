@@ -113,7 +113,7 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
         headlinestyle = self.get_style()
         headlinestyle.fontSize = 15
         headlinestyle.fontName = 'OpenSansBd'
-        colwidths = [8 * mm, 8 * mm] + [
+        colwidths = [3 * mm, 8 * mm, 8 * mm] + [
             a * (doc.width - 8 * mm)
             for a in [.1, .25, (.25 if questions else .60)] + (
                 [.35 / len(questions)] * len(questions) if questions else []
@@ -121,18 +121,25 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
         ]
         tstyledata = [
             ('VALIGN', (0, 0), (-1, 0), 'BOTTOM'),
-            ('ALIGN', (1, 0), (1, 0), 'CENTER'),
+            ('ALIGN', (2, 0), (2, 0), 'CENTER'),
             ('VALIGN', (0, 1), (-1, -1), 'TOP'),
             ('FONTNAME', (0, 0), (-1, 0), 'OpenSansBd'),
+            ('ALIGN', (0, 0), (0, -1), 'CENTER'),
+            ('TEXTCOLOR', (0, 0), (0, -1), '#990000'),
+            ('FONTNAME', (0, 0), (0, -1), 'OpenSansBd'),
         ]
 
         story = [
-            Paragraph(cl.name, headlinestyle),
+            Paragraph(
+                '{} – {}'.format(cl.name, (cl.subevent or self.event).get_date_from_display()),
+                headlinestyle
+            ),
             Spacer(1, 5 * mm)
         ]
 
         tdata = [
             [
+                '',
                 '',
                 # Translators: maximum 5 characters
                 TableTextRotate(pgettext('tablehead', 'paid')),
@@ -190,6 +197,7 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
                 name += "\n" + iac
 
             row = [
+                '!!' if op.item.checkin_attention else '',
                 CBFlowable(bool(op.last_checked_in)),
                 '✘' if op.order.status != Order.STATUS_PAID else '✔',
                 op.order.code,
@@ -204,9 +212,9 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
                 row.append(acache.get(q.pk, ''))
             if op.order.status != Order.STATUS_PAID:
                 tstyledata += [
-                    ('BACKGROUND', (1, len(tdata)), (1, len(tdata)), '#990000'),
-                    ('TEXTCOLOR', (1, len(tdata)), (1, len(tdata)), '#ffffff'),
-                    ('ALIGN', (1, len(tdata)), (1, len(tdata)), 'CENTER'),
+                    ('BACKGROUND', (2, len(tdata)), (2, len(tdata)), '#990000'),
+                    ('TEXTCOLOR', (2, len(tdata)), (2, len(tdata)), '#ffffff'),
+                    ('ALIGN', (2, len(tdata)), (2, len(tdata)), 'CENTER'),
                 ]
             tdata.append(row)
 
