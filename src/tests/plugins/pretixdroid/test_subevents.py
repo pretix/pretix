@@ -66,14 +66,12 @@ def test_custom_datetime(client, env):
 
 @pytest.mark.django_db
 def test_wrong_subevent(client, env):
-    AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[7])
+    AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[8])
 
     resp = client.post('/pretixdroid/api/%s/%s/%d/redeem/?key=%s' % (
         env[0].organizer.slug, env[0].slug, env[5].pk, 'abcdefg'
     ), data={'secret': '5678910'})
-    jdata = json.loads(resp.content.decode("utf-8"))
-    assert jdata['status'] == 'error'
-    assert jdata['reason'] == 'unknown_ticket'
+    assert resp.status_code == 403
 
     resp = client.post('/pretixdroid/api/%s/%s/%d/redeem/?key=%s' % (
         env[0].organizer.slug, env[0].slug, env[6].pk, 'abcdefg'
@@ -84,17 +82,14 @@ def test_wrong_subevent(client, env):
 
 @pytest.mark.django_db
 def test_other_subevent_not_allowed(client, env):
-    ac = AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[7])
-
+    AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[7])
     resp = client.post('/pretixdroid/api/%s/%s/%d/redeem/?key=%s' % (
         env[0].organizer.slug, env[0].slug, env[6].pk, 'abcdefg'
     ), data={'secret': '5678910'})
-    jdata = json.loads(resp.content.decode("utf-8"))
-    assert jdata['status'] == 'error'
-    assert jdata['reason'] == 'unknown_ticket'
+    assert resp.status_code == 403
 
-    ac.subevent = env[6]
-    ac.save()
+    env[7].subevent = env[6]
+    env[7].save()
 
     resp = client.post('/pretixdroid/api/%s/%s/%d/redeem/?key=%s' % (
         env[0].organizer.slug, env[0].slug, env[6].pk, 'abcdefg'
@@ -109,7 +104,7 @@ def test_unknown_subevent(client, env):
     resp = client.post('/pretixdroid/api/%s/%s/%d/redeem/?key=%s' % (
         env[0].organizer.slug, env[0].slug, env[6].pk + 1000, 'abcdefg'
     ), data={'secret': '5678910'})
-    assert resp.status_code == 404
+    assert resp.status_code == 403
 
 
 @pytest.mark.django_db
@@ -122,9 +117,10 @@ def test_no_subevent(client, env):
 
 @pytest.mark.django_db
 def test_search(client, env):
-    AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[7])
+    AppConfiguration.objects.create(event=env[0], key='hijklmn', list=env[7])
+    AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[8])
     resp = client.get('/pretixdroid/api/%s/%s/%d/search/?key=%s&query=%s' % (
-        env[0].organizer.slug, env[0].slug, env[5].pk, 'abcdefg', '567891'))
+        env[0].organizer.slug, env[0].slug, env[5].pk, 'hijklmn', '567891'))
     jdata = json.loads(resp.content.decode("utf-8"))
     assert len(jdata['results']) == 0
     resp = client.get('/pretixdroid/api/%s/%s/%d/search/?key=%s&query=%s' % (

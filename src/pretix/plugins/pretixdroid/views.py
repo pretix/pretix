@@ -135,6 +135,8 @@ class ApiView(View):
         if self.event.has_subevents:
             if self.config.list.subevent:
                 self.subevent = self.config.list.subevent
+                if 'subevent' in kwargs and kwargs['subevent'] != str(self.subevent.pk):
+                    return HttpResponseForbidden('Invalid subevent selected.')
             elif 'subevent' in kwargs:
                 self.subevent = get_object_or_404(SubEvent, event=self.event, pk=kwargs['subevent'])
             else:
