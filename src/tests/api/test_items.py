@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-from pretix.base.models import Quota
+from pretix.base.models import Quota, ItemVariation
 
 
 @pytest.fixture
@@ -248,22 +248,6 @@ def test_item_create(token_client, organizer, event, item, category, taxrule):
 
 
 @pytest.fixture
-def quota(event, item):
-    q = event.quotas.create(name="Budget Quota", size=200)
-    q.items.add(item)
-    return q
-
-
-TEST_QUOTA_RES = {
-    "name": "Budget Quota",
-    "size": 200,
-    "items": [],
-    "variations": [],
-    "subevent": None
-}
-
-
-@pytest.fixture
 def variations(item):
     v = list()
     v.append(item.variations.create(value="ChildA1"))
@@ -277,6 +261,104 @@ def variations2(item2):
     v.append(item2.variations.create(value="ChildB1"))
     v.append(item2.variations.create(value="ChildB2"))
     return v
+
+
+@pytest.fixture
+def variation(item):
+    return item.variations.create(value="ChildC1")
+
+
+TEST_VARIATIONS_RES = {
+    "value": {
+        "en": "ChildC1"
+    },
+    "active": True,
+    "description": None,
+    "position": 0,
+    "default_price": None,
+    "price": 23.0
+}
+
+TEST_VARIATIONS_UPDATE = {
+    "value": {
+        "en": "ChildC2"
+    },
+    "active": True,
+    "description": None,
+    "position": 1,
+    "default_price": None,
+    "price": 23.0
+}
+
+@pytest.mark.django_db
+def test_variations_list(token_client, organizer, event, item, variation):
+    res = dict(TEST_VARIATIONS_RES)
+    res["id"] = variation.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/variations/'.format(organizer.slug, event.slug, item.pk))
+    assert resp.status_code == 200
+    assert res['value'] == resp.data['results'][0]['value']
+    assert res['position'] == resp.data['results'][0]['position']
+    assert res['price'] == resp.data['results'][0]['price']
+
+
+@pytest.mark.django_db
+def test_variations_detail(token_client, organizer, event, item, variation):
+    res = dict(TEST_VARIATIONS_RES)
+    res["id"] = variation.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_variations_update(token_client, organizer, event, item, item3, variation):
+    res = dict(TEST_VARIATIONS_UPDATE)
+    res["id"] = variation.pk
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk),
+        {
+            "value": {
+                "en": "ChildC2"
+            },
+            "position": 1
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert res == resp.data
+
+    # Variation exists but do not belong to item
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item3.pk, variation.pk),
+        {
+            "position": 1
+        },
+        format='json'
+    )
+    assert resp.status_code == 404
+
+
+@pytest.mark.django_db
+def test_variations_delete(token_client, organizer, event, item, variation):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
+    assert resp.status_code == 204
+    assert not item.variations.filter(pk=variation.id).exists()
+
+
+@pytest.fixture
+def quota(event, item):
+    q = event.quotas.create(name="Budget Quota", size=200)
+    q.items.add(item)
+    return q
+
+
+TEST_QUOTA_RES = {
+    "name": "Budget Quota",
+    "size": 200,
+    "items": [],
+    "variations": [],
+    "subevent": None
+}
 
 
 @pytest.mark.django_db
@@ -475,6 +557,14 @@ def test_quota_update(token_client, organizer, event, quota, item):
     quota = Quota.objects.get(pk=resp.data['id'])
     assert quota.name == "Ticket Quota Update"
     assert quota.size == 111
+
+
+@pytest.mark.django_db
+def test_quota_delete(token_client, organizer, event, quota):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/quotas/{}/'.format(organizer.slug, event.slug,
+                                                                                quota.pk))
+    assert resp.status_code == 204
+    assert not event.quotas.filter(pk=quota.id).exists()
 
 
 @pytest.mark.django_db

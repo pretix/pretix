@@ -476,14 +476,6 @@ class ItemVariation(models.Model):
             return self.id < other.id
         return self.position < other.position
 
-    @staticmethod
-    def clean_positions(pk, variation):
-        item = variation['item']
-        all_variations = item.variations.all()
-        if any(var.id != pk and var.position == variation['position'] for var in all_variations):
-            raise ValidationError(
-                _('The variations position must be unique.'))
-
 
 class ItemAddOn(models.Model):
     """
