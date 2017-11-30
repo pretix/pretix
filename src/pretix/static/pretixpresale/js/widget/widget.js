@@ -212,7 +212,7 @@ Vue.component('pricebox', {
             if (this.price.gross === "0.00") {
                 return strings.free;
             } else {
-                return this.$root.currency + " " + floatformat(this.display_price, 2);
+                return this.$root.currency + " " + this.display_price;
             }
         },
         taxline: function () {
