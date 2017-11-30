@@ -368,8 +368,8 @@ class CheckInFilterForm(FilterForm):
         '-code': '-order__code',
         'email': 'order__email',
         '-email': '-order__email',
-        'status': FixedOrderBy(F('last_checked_in'), nulls_first=True),
-        '-status': FixedOrderBy(F('last_checked_in'), nulls_last=True, descending=True),
+        'status': FixedOrderBy(F('last_checked_in'), nulls_first=True, descending=True),
+        '-status': FixedOrderBy(F('last_checked_in'), nulls_last=True),
         'timestamp': FixedOrderBy(F('last_checked_in'), nulls_first=True),
         '-timestamp': FixedOrderBy(F('last_checked_in'), nulls_last=True, descending=True),
         'item': ('item__name', 'variation__value'),
@@ -416,8 +416,8 @@ class CheckInFilterForm(FilterForm):
     def filter_qs(self, qs):
         fdata = self.cleaned_data
 
-        if fdata.get('query'):
-            u = fdata.get('query')
+        if fdata.get('user'):
+            u = fdata.get('user')
             qs = qs.filter(
                 Q(order__email__icontains=u)
                 | Q(attendee_name__icontains=u)
@@ -436,15 +436,13 @@ class CheckInFilterForm(FilterForm):
         if fdata.get('ordering'):
             ob = self.orders[fdata.get('ordering')]
             if isinstance(ob, dict):
+                ob = dict(ob)
                 o = ob.pop('_order')
                 qs = qs.annotate(**ob).order_by(o)
             elif isinstance(ob, (list, tuple)):
                 qs = qs.order_by(*ob)
             else:
-                print(ob)
-                print(qs.query)
                 qs = qs.order_by(ob)
-                print(qs.query.sql_with_params())
 
         if fdata.get('item'):
             qs = qs.filter(item=fdata.get('item'))

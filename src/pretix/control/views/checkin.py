@@ -104,7 +104,7 @@ class CheckInListShow(EventPermissionRequiredMixin, ListView):
         }) + '?' + request.GET.urlencode())
 
 
-class CheckinListList(ListView):
+class CheckinListList(EventPermissionRequiredMixin, ListView):
     model = CheckinList
     context_object_name = 'checkinlists'
     paginate_by = 30

@@ -61,7 +61,7 @@ def test_list_detail(token_client, organizer, event, clist, item):
     res = dict(TEST_LIST_RES)
 
     res["id"] = clist.pk
-    res["items"] = [item.pk]
+    res["limit_products"] = [item.pk]
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/'.format(organizer.slug, event.slug,
                                                                                       clist.pk))
     assert resp.status_code == 200
@@ -69,13 +69,13 @@ def test_list_detail(token_client, organizer, event, clist, item):
 
 
 @pytest.mark.django_db
-def test_list_create(token_client, organizer, event, event2, item, item_on_wrong_event):
+def test_list_create(token_client, organizer, event, item, item_on_wrong_event):
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
         {
             "name": "VIP",
             "limit_products": [item.pk],
-            "all_products": True,
+            "all_products": False,
             "subevent": None
         },
         format='json'
@@ -87,7 +87,7 @@ def test_list_create(token_client, organizer, event, event2, item, item_on_wrong
     assert not cl.all_products
 
     resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event2.slug),
+        '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
         {
             "name": "VIP",
             "limit_products": [item_on_wrong_event.pk],
@@ -101,7 +101,7 @@ def test_list_create(token_client, organizer, event, event2, item, item_on_wrong
 
 
 @pytest.mark.django_db
-def test_list_create_with_subevent(token_client, organizer, event, event3, item, variations, subevent, subevent2):
+def test_list_create_with_subevent(token_client, organizer, event, event3, item, subevent, subevent2):
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
         {
@@ -141,7 +141,7 @@ def test_list_create_with_subevent(token_client, organizer, event, event3, item,
     assert resp.content.decode() == '{"non_field_errors":["The subevent does not belong to this event."]}'
 
     resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event3.slug),
+        '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event3.slug),
         {
             "name": "VIP",
             "limit_products": [],
