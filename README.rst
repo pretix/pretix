@@ -47,7 +47,7 @@ including issues, pull requests, etc.
 
 License
 -------
-The code in this repository is published under the terms of the Apache License.
+The code in this repository is published under the terms of the Apache License. 
 See the LICENSE file for the complete license text.
 
 This project is maintained by Raphael Michel <mail@raphaelmichel.de>. See the
