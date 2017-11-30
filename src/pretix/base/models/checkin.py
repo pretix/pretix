@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Case, Count, F, OuterRef, Q, Subquery, When
+from django.db.models.functions import Coalesce
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
@@ -54,12 +55,12 @@ class CheckinList(LoggedModel):
         ).values('c')
 
         return qs.annotate(
-            checkin_count=Subquery(cqs, output_field=models.IntegerField()),
-            position_count=Case(
+            checkin_count=Coalesce(Subquery(cqs, output_field=models.IntegerField()), 0),
+            position_count=Coalesce(Case(
                 When(all_products=True, then=Subquery(pqs_all, output_field=models.IntegerField())),
                 default=Subquery(pqs_limited, output_field=models.IntegerField()),
                 output_field=models.IntegerField()
-            )
+            ), 0)
         ).annotate(
             percent=F('checkin_count') * 100 / F('position_count')
         )

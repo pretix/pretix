@@ -15,4 +15,5 @@ Resources and endpoints
    orders
    invoices
    vouchers
+   checkinlists
    waitinglist
