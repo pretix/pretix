@@ -12,3 +12,5 @@ wanting to use pretix to sell tickets.
    events/taxes
    payments/index
    events/widget
+   organizers/domain
+   faq

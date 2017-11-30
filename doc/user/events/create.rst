@@ -1,3 +1,5 @@
+.. _event_create:
+
 Creating an event
 =================
 

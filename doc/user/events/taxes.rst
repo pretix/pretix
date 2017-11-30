@@ -1,5 +1,5 @@
-Tax rules
-=========
+Configuring taxes
+=================
 
 In most countries, you will be required to pay some form of sales tax for your event tickets. If you don't know about
 the exact rules, you should consult a professional tax consultant right now.
