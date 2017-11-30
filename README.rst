@@ -40,9 +40,14 @@ Contributing
 If you want to contribute to pretix, please read the `developer documentation`_
 in our documentation. If you have any further questions, please do not hesitate to ask!
 
+Code of Conduct
+---------------
+We have a `Code of Conduct`_ in place that applies to all project contributions,
+including issues, pull requests, etc.
+
 License
 -------
-The code in this repository is published under the terms of the Apache License. 
+The code in this repository is published under the terms of the Apache License.
 See the LICENSE file for the complete license text.
 
 This project is maintained by Raphael Michel <mail@raphaelmichel.de>. See the
@@ -50,5 +55,6 @@ AUTHORS file for a list of all the awesome folks who contributed to this project
 
 .. _installation guide: https://docs.pretix.eu/en/latest/admin/installation/index.html
 .. _developer documentation: https://docs.pretix.eu/en/latest/development/index.html
+.. _Code of Conduct: https://docs.pretix.eu/en/latest/development/contribution/codeofconduct.html
 .. _pretix.eu: https://pretix.eu
 .. _blog: https://pretix.eu/about/en/blog/
