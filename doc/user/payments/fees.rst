@@ -1,3 +1,5 @@
+.. _payment-fees:
+
 Payment method fees
 ===================
 

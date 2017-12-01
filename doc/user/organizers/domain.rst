@@ -1,3 +1,5 @@
+.. _custom_domain:
+
 Using a custom domain
 =====================
 

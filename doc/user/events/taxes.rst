@@ -1,3 +1,5 @@
+.. _taxes:
+
 Configuring taxes
 =================
 
