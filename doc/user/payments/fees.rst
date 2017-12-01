@@ -18,6 +18,9 @@ might also decide to go for option one to make it easier for customers who don't
              legislation might already be in place or become relevant from January 2018 the latest. This is not
              legal advice. If in doubt, consult a lawyer or refrain from charging payment fees.
 
+If you go for the first option (as you should in the EU), you can just leave the payment fee fields in pretix' settings
+empty.
+
 If you go for the second option, you can configure pretix to charge the payment method fees to your user. You can
 define both an absolute fee as well as a percental fee based on the order total. If you do so, there are two
 different ways in which pretix can calculate the fee. Normally, it is fine to just go with the default setting, but
