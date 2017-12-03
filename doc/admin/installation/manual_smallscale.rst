@@ -276,6 +276,8 @@ To upgrade to a new pretix release, pull the latest code changes and run the fol
     # systemctl restart pretix-web pretix-worker
 
 
+.. _`manual_plugininstall`:
+
 Install a plugin
 ----------------
 

@@ -6,4 +6,6 @@ Configuring an event
 
    subevents
    ../payments/index
+   plugins
+   display
    taxes

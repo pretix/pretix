@@ -35,12 +35,14 @@ ALLOWED_TAGS = [
     'th',
     'div',
     'span',
+    'hr',
     'h1',
     'h2',
     'h3',
     'h4',
     'h5',
     'h6',
+    # Update doc/user/markdown.rst if you change this!
 ]
 
 ALLOWED_ATTRIBUTES = {
@@ -52,6 +54,7 @@ ALLOWED_ATTRIBUTES = {
     'div': ['class'],
     'p': ['class'],
     'span': ['class'],
+    # Update doc/user/markdown.rst if you change this!
 }
 
 
@@ -72,15 +75,28 @@ def abslink_callback(attrs, new=False):
     return attrs
 
 
+def markdown_compile(source):
+    return bleach.clean(
+        markdown.markdown(
+            source,
+            extensions=[
+                'markdown.extensions.sane_lists',
+                # 'markdown.extensions.nl2br',  # TODO: Enable, but check backwards-compatibility issues e.g. with mails
+            ]
+        ),
+        tags=ALLOWED_TAGS,
+        attributes=ALLOWED_ATTRIBUTES
+    )
+
+
 @register.filter
 def rich_text(text: str, **kwargs):
     """
     Processes markdown and cleans HTML in a text input.
     """
     text = str(text)
-    body_md = bleach.linkify(bleach.clean(
-        markdown.markdown(text),
-        tags=ALLOWED_TAGS,
-        attributes=ALLOWED_ATTRIBUTES,
-    ), callbacks=DEFAULT_CALLBACKS + ([safelink_callback] if kwargs.get('safelinks', True) else [abslink_callback]))
+    body_md = bleach.linkify(
+        markdown_compile(text),
+        callbacks=DEFAULT_CALLBACKS + ([safelink_callback] if kwargs.get('safelinks', True) else [abslink_callback])
+    )
     return mark_safe(body_md)

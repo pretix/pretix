@@ -12,3 +12,4 @@ wanting to use pretix to sell tickets.
    events/settings
    events/widget
    faq
+   markdown

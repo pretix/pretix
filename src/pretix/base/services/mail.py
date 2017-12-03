@@ -16,6 +16,7 @@ from pretix.base.i18n import language
 from pretix.base.models import Event, Invoice, InvoiceAddress, Order
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.signals import email_filter
+from pretix.base.templatetags.rich_text import markdown_compile
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -210,11 +211,8 @@ def render_mail(template, context):
         body = str(template)
         if context:
             body = body.format_map(TolerantDict(context))
-        body_md = bleach.linkify(bleach.clean(markdown.markdown(body), tags=bleach.ALLOWED_TAGS + [
-            'p', 'pre'
-        ]))
     else:
         tpl = get_template(template)
         body = tpl.render(context)
-        body_md = bleach.linkify(markdown.markdown(body))
+    body_md = bleach.linkify(markdown_compile(body))
     return body, body_md

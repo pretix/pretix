@@ -239,6 +239,8 @@ Restarting the service can take a few seconds, especially if the update requires
 Replace ``stable`` above with a specific version number like ``1.0`` or with ``latest`` for the development
 version, if you want to.
 
+.. _`docker_plugininstall`:
+
 Install a plugin
 ----------------
 
