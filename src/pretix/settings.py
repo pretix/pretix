@@ -263,7 +263,6 @@ CORE_MODULES = {
     "pretix.presale",
     "pretix.control",
     "pretix.plugins.checkinlists",
-    "pretix.plugins.pretixdroid",
 }
 
 MIDDLEWARE = [
