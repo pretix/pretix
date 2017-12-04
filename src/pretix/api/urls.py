@@ -27,6 +27,7 @@ event_router.register(r'waitinglistentries', waitinglist.WaitingListViewSet)
 
 item_router = routers.DefaultRouter()
 item_router.register(r'variations', item.ItemVariationViewSet)
+item_router.register(r'addons', item.ItemAddOnViewSet)
 
 # Force import of all plugins to give them a chance to register URLs with the router
 for app in apps.get_app_configs():

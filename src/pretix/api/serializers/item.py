@@ -23,11 +23,18 @@ class ItemVariationSerializer(I18nAwareModelSerializer):
                   'position', 'default_price', 'price')
 
 
+class ItemAddOnSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemAddOn
+        fields = ('id', 'addon_category', 'min_count', 'max_count',
+                  'position', 'price_included')
+
+
 class InlineItemAddOnSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemAddOn
         fields = ('addon_category', 'min_count', 'max_count',
-                  'position')
+                  'position', 'price_included')
 
 
 class ItemTaxRateField(serializers.Field):

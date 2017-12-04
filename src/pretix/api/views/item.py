@@ -9,9 +9,9 @@ from rest_framework.response import Response
 
 from pretix.api.serializers.item import (
     ItemCategorySerializer, ItemSerializer, QuestionSerializer,
-    QuotaSerializer, ItemVariationSerializer, InlineItemVariationSerializer
+    QuotaSerializer, ItemVariationSerializer, ItemAddOnSerializer
 )
-from pretix.base.models import Item, ItemVariation, ItemCategory, Question, Quota
+from pretix.base.models import Item, ItemVariation, ItemAddOn, ItemCategory, Question, Quota
 from pretix.base.models.organizer import TeamAPIToken
 
 
@@ -74,17 +74,10 @@ class ItemViewSet(viewsets.ModelViewSet):
          super().perform_destroy(instance)
 
 
-class ItemVariationFilter(FilterSet):
-    class Meta:
-        model = ItemVariation
-        fields = ['subevent']
-
-
 class ItemVariationViewSet(viewsets.ModelViewSet):
     serializer_class = ItemVariationSerializer
     queryset = ItemVariation.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter,)
-    filter_class = ItemVariationFilter
     ordering_fields = ('id', 'position')
     ordering = ('id',)
     permission = 'can_change_items'
@@ -123,6 +116,54 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
             data={
                 'value': variation.value,
+                'id': self.kwargs['pk']
+            }
+        )
+
+
+class ItemAddOnViewSet(viewsets.ModelViewSet):
+    serializer_class = ItemAddOnSerializer
+    queryset = ItemAddOn.objects.none()
+    filter_backends = (DjangoFilterBackend, OrderingFilter,)
+    ordering_fields = ('id', 'position')
+    ordering = ('id',)
+    permission = 'can_change_items'
+    write_permission = 'can_change_items'
+
+    def get_queryset(self):
+        item = get_object_or_404(Item, pk=self.kwargs['item'])
+        return item.addons.all()
+
+    def perform_create(self, serializer):
+        item = get_object_or_404(Item, pk=self.kwargs['item'])
+        category = get_object_or_404(ItemCategory, pk=self.request.data['addon_category'])
+        serializer.save(item=item, addon_category=category)
+        item.log_action(
+            'pretix.event.item.addons.added',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data={**self.request.data, **{'ORDER': serializer.instance.position}, **{'id': serializer.instance.pk}}
+        )
+
+    def perform_update(self, serializer):
+        addon = get_object_or_404(ItemAddOn, pk=self.kwargs['pk'])
+        serializer.save(addon=addon)
+        addon.item.log_action(
+            'pretix.event.item.addons.changed',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data={**self.request.data['value'], **{'id': self.kwargs['pk']}}
+        )
+
+    def perform_destroy(self, serializer):
+        addon = get_object_or_404(ItemAddOn, pk=self.kwargs['pk'])
+        super().perform_destroy(addon)
+        addon.item.log_action(
+            'pretix.event.item.addons.deleted',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data={
+                'value': addon.value,
                 'id': self.kwargs['pk']
             }
         )
