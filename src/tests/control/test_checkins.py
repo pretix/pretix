@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
 import pytest
@@ -9,6 +9,8 @@ from pretix.base.models import (
     OrderPosition, Organizer, Team, User,
 )
 from pretix.control.views.dashboards import checkin_widget
+
+from ..base import SoupTest, extract_form_fields
 
 
 @pytest.fixture
@@ -357,3 +359,55 @@ def test_checkins_attendee_name_from_addon_available(client, checkin_list_with_a
     item_keys = [q.order.code + str(q.item.name) +
                  (str(q.addon_to.attendee_name) if q.addon_to is not None else str(q.attendee_name)) for q in qs]
     assert item_keys == ['A1TicketA1', 'A1WorkshopA1', 'A2TicketA2']  # A1Workshop<name> comes from addon_to position
+
+
+class CheckinListFormTest(SoupTest):
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
+        self.orga1 = Organizer.objects.create(name='CCC', slug='ccc')
+        self.orga2 = Organizer.objects.create(name='MRM', slug='mrm')
+        self.event1 = Event.objects.create(
+            organizer=self.orga1, name='30C3', slug='30c3',
+            date_from=datetime(2013, 12, 26, tzinfo=timezone.utc),
+        )
+        t = Team.objects.create(organizer=self.orga1, can_change_event_settings=True, can_view_orders=True)
+        t.members.add(self.user)
+        t.limit_events.add(self.event1)
+        self.client.login(email='dummy@dummy.dummy', password='dummy')
+        self.item_ticket = Item.objects.create(event=self.event1, name="Ticket", default_price=23, admission=True)
+
+    def test_create(self):
+        doc = self.get_doc('/control/event/%s/%s/checkinlists/add' % (self.orga1.slug, self.event1.slug))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['name'] = 'All'
+        form_data['all_products'] = 'on'
+        doc = self.post_doc('/control/event/%s/%s/checkinlists/add' % (self.orga1.slug, self.event1.slug), form_data)
+        assert doc.select(".alert-success")
+        self.assertIn("All", doc.select("#page-wrapper table")[0].text)
+        assert self.event1.checkin_lists.get(
+            name='All', all_products=True
+        )
+
+    def test_update(self):
+        cl = self.event1.checkin_lists.create(name='All', all_products=True)
+        doc = self.get_doc('/control/event/%s/%s/checkinlists/%s/change' % (self.orga1.slug, self.event1.slug, cl.id))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['all_products'] = ''
+        form_data['limit_products'] = str(self.item_ticket.pk)
+        doc = self.post_doc('/control/event/%s/%s/checkinlists/%s/change' % (self.orga1.slug, self.event1.slug, cl.id),
+                            form_data)
+        assert doc.select(".alert-success")
+        cl.refresh_from_db()
+        assert not cl.all_products
+        assert list(cl.limit_products.all()) == [self.item_ticket]
+
+    def test_delete(self):
+        cl = self.event1.checkin_lists.create(name='All', all_products=True)
+        doc = self.get_doc('/control/event/%s/%s/checkinlists/%s/delete' % (self.orga1.slug, self.event1.slug, cl.id))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        doc = self.post_doc('/control/event/%s/%s/checkinlists/%s/delete' % (self.orga1.slug, self.event1.slug, cl.id),
+                            form_data)
+        assert doc.select(".alert-success")
+        self.assertNotIn("VAT", doc.select("#page-wrapper")[0].text)
+        assert not self.event1.checkin_lists.exists()
