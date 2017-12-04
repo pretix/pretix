@@ -20,6 +20,10 @@ variations                            list of integers           List of item va
 subevent                              integer                    ID of the date inside an event series this quota belongs to (or ``null``).
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 1.10
+
+   The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
+
 
 Endpoints
 ---------
