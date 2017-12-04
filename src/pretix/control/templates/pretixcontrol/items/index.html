@@ -34,6 +34,7 @@
                     <th class="iconcol"></th>
                     <th class="iconcol"></th>
                     <th class="iconcol"></th>
+                    <th class="iconcol"></th>
                     <th>{% trans "Category" %}</th>
                     <th class="action-col-2"></th>
                     <th class="action-col-2"></th>
@@ -50,6 +51,12 @@
                         {% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}">{{ i.name }}</a>
                                 {% if not i.active %}</strike>{% endif %}
                             </strong>
+                            </td>
+                            <td>
+                                {% if i.available_from or i.available_until %}
+                                    <span class="fa fa-clock-o fa-fw text-muted" data-toggle="tooltip" title="{% trans "Only available in a limited timeframe" %}">
+                                    </span>
+                                {% endif %}
                             </td>
                             <td>
                                 {% if i.admission %}

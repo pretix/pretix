@@ -13,6 +13,7 @@ from django.template.loader import get_template
 from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.html import escape
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _, ungettext
 
 from pretix.base.models import (
@@ -34,6 +35,9 @@ NUM_WIDGET = '<div class="numwidget"><span class="num">{num}</span><span class="
 def base_widgets(sender, subevent=None, **kwargs):
     prodc = Item.objects.filter(
         event=sender, active=True,
+    ).filter(
+        (Q(available_until__isnull=True) | Q(available_until__gte=now())) &
+        (Q(available_from__isnull=True) | Q(available_from__lte=now()))
     ).count()
 
     if subevent:
