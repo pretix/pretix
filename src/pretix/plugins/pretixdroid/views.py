@@ -110,7 +110,7 @@ class ConfigView(EventPermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['add_form'] = self.add_form
-        ctx['configs'] = self.request.event.appconfiguration_set.prefetch_related('items')
+        ctx['configs'] = self.request.event.appconfiguration_set.select_related('list').prefetch_related('items')
         return ctx
 
 
