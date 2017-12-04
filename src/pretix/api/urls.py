@@ -4,7 +4,7 @@ from django.apps import apps
 from django.conf.urls import include, url
 from rest_framework import routers
 
-from .views import event, item, order, organizer, voucher, waitinglist
+from .views import checkin, event, item, order, organizer, voucher, waitinglist
 
 router = routers.DefaultRouter()
 router.register(r'organizers', organizer.OrganizerViewSet)
@@ -24,6 +24,7 @@ event_router.register(r'orderpositions', order.OrderPositionViewSet)
 event_router.register(r'invoices', order.InvoiceViewSet)
 event_router.register(r'taxrules', event.TaxRuleViewSet)
 event_router.register(r'waitinglistentries', waitinglist.WaitingListViewSet)
+event_router.register(r'checkinlists', checkin.CheckinListViewSet)
 
 # Force import of all plugins to give them a chance to register URLs with the router
 for app in apps.get_app_configs():

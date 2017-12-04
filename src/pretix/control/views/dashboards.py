@@ -20,6 +20,7 @@ from pretix.base.models import (
     Event, Item, Order, OrderPosition, RequiredAction, SubEvent, Voucher,
     WaitingListEntry,
 )
+from pretix.base.models.checkin import CheckinList
 from pretix.control.forms.event import CommentForm
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,
@@ -190,7 +191,7 @@ def shop_state_widget(sender, **kwargs):
 
 
 @receiver(signal=event_dashboard_widgets)
-def checkin_widget(sender, **kwargs):
+def checkin_widget(sender, subevent=None, **kwargs):
     size_qs = OrderPosition.objects.filter(order__event=sender, order__status='p')
     checked_qs = OrderPosition.objects.filter(order__event=sender, order__status='p', checkins__isnull=False)
 
@@ -199,15 +200,22 @@ def checkin_widget(sender, **kwargs):
         size_qs = size_qs.filter(item__admission=True)
         checked_qs = checked_qs.filter(item__admission=True)
 
-    return [{
-        'content': NUM_WIDGET.format(num='{}/{}'.format(checked_qs.count(), size_qs.count()), text=_('Checked in')),
-        'display_size': 'small',
-        'priority': 50,
-        'url': reverse('control:event.orders.checkins', kwargs={
-            'event': sender.slug,
-            'organizer': sender.organizer.slug
+    widgets = []
+    qs = sender.checkin_lists.filter(subevent=subevent)
+    qs = CheckinList.annotate_with_numbers(qs, sender)
+    for cl in qs:
+        widgets.append({
+            'content': NUM_WIDGET.format(num='{}/{}'.format(cl.checkin_count, cl.position_count),
+                                         text=_('Checked in – {list}').format(list=escape(cl.name))),
+            'display_size': 'small',
+            'priority': 50,
+            'url': reverse('control:event.orders.checkinlists.show', kwargs={
+                'event': sender.slug,
+                'organizer': sender.organizer.slug,
+                'list': cl.pk
+            })
         })
-    }]
+    return widgets
 
 
 @receiver(signal=event_dashboard_widgets)

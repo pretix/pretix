@@ -410,6 +410,14 @@ class Event(EventMixin, LoggedModel):
                 o.question = q
                 o.save()
 
+        for cl in other.checkin_lists.filter(subevent__isnull=True).prefetch_related('limit_products'):
+            items = list(cl.limit_products.all())
+            cl.pk = None
+            cl.event = self
+            cl.save()
+            for i in items:
+                cl.limit_products.add(item_map[i.pk])
+
         for s in other.settings._objects.all():
             s.object = self
             s.pk = None

@@ -983,6 +983,8 @@ class EventTest(TestCase):
         que1.items.add(i1)
         event1.settings.foo_setting = 23
         event1.settings.tax_rate_default = tr7
+        cl1 = event1.checkin_lists.create(name="All", all_products=False)
+        cl1.limit_products.add(i1)
 
         event2 = Event.objects.create(
             organizer=self.organizer, name='Download', slug='ab1234',
@@ -990,7 +992,7 @@ class EventTest(TestCase):
         )
         event2.copy_data_from(event1)
 
-        for a in (tr7, c1, c2, i1, q1, que1):
+        for a in (tr7, c1, c2, i1, q1, que1, cl1):
             a.refresh_from_db()
             assert a.event == event1
 
@@ -1012,6 +1014,8 @@ class EventTest(TestCase):
         assert que1new.items.get(pk=i1new.pk)
         assert event2.settings.foo_setting == '23'
         assert event2.settings.tax_rate_default == trnew
+        assert event2.checkin_lists.count() == 1
+        assert [i.pk for i in event2.checkin_lists.first().limit_products.all()] == [i1new.pk]
 
 
 class SubEventTest(TestCase):

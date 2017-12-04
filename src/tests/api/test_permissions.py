@@ -17,6 +17,7 @@ event_urls = [
     'subevents/',
     'taxrules/',
     'waitinglistentries/',
+    'checkinlists/',
 ]
 
 event_permission_urls = [
@@ -46,6 +47,11 @@ event_permission_urls = [
     ('post', 'can_change_orders', 'orders/ABC12/mark_expired/', 404),
     ('post', 'can_change_orders', 'orders/ABC12/mark_canceled/', 404),
     ('post', 'can_change_orders', 'orders/ABC12/extend/', 400),
+    ('get', 'can_view_orders', 'checkinlists/', 200),
+    ('post', 'can_change_event_settings', 'checkinlists/', 400),
+    ('put', 'can_change_event_settings', 'checkinlists/1/', 404),
+    ('patch', 'can_change_event_settings', 'checkinlists/1/', 404),
+    ('delete', 'can_change_event_settings', 'checkinlists/1/', 404),
 ]
 
 
