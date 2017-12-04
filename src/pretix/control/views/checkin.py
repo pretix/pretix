@@ -36,7 +36,8 @@ class CheckInListShow(EventPermissionRequiredMixin, ListView):
 
         qs = OrderPosition.objects.filter(
             order__event=self.request.event,
-            order__status=Order.STATUS_PAID
+            order__status=Order.STATUS_PAID,
+            subevent=self.list.subevent
         ).annotate(
             last_checked_in=Subquery(cqs)
         ).select_related('item', 'variation', 'order', 'addon_to')

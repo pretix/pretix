@@ -62,7 +62,11 @@ class CheckinList(LoggedModel):
                 output_field=models.IntegerField()
             ), 0)
         ).annotate(
-            percent=F('checkin_count') * 100 / F('position_count')
+            percent=Case(
+                When(position_count__gt=0, then=F('checkin_count') * 100 / F('position_count')),
+                default=0,
+                output_field=models.IntegerField()
+            )
         )
 
     def __str__(self):

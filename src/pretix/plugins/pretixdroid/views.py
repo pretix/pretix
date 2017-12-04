@@ -4,7 +4,7 @@ import logging
 import dateutil.parser
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import Count, Q
+from django.db.models import Count, Max, OuterRef, Q, Subquery
 from django.http import (
     HttpResponseForbidden, HttpResponseNotFound, JsonResponse,
 )
@@ -168,6 +168,9 @@ class ApiRedeemView(ApiView):
                 op = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').get(
                     order__event=self.event, secret=secret, subevent=self.subevent
                 )
+                if not self.config.list.all_products and op.item_id not in [i.pk for i in self.config.list.limit_products.all()]:
+                    response['status'] = 'error'
+                    response['reason'] = 'product'
                 if not self.config.all_items and op.item_id not in [i.pk for i in self.config.items.all()]:
                     response['status'] = 'error'
                     response['reason'] = 'product'
@@ -247,22 +250,38 @@ class ApiSearchView(ApiView):
         }
 
         if len(query) >= 4:
-            qs = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address')
+            cqs = Checkin.objects.filter(
+                position_id=OuterRef('pk'),
+                list_id=self.config.list.pk
+            ).order_by().values('position_id').annotate(
+                m=Max('datetime')
+            ).values('m')
+
+            qs = OrderPosition.objects.filter(
+                order__event=self.event,
+                order__status=Order.STATUS_PAID,
+                subevent=self.config.list.subevent
+            ).annotate(
+                last_checked_in=Subquery(cqs)
+            ).select_related('item', 'variation', 'order', 'order__invoice_address', 'addon_to')
+
+            if not self.config.list.all_products:
+                qs = qs.filter(item__in=self.config.list.limit_products.values_list('id', flat=True))
+
+            if not self.config.all_items:
+                qs = qs.filter(item__in=self.config.items.all())
+
             if not self.config.allow_search:
                 ops = qs.filter(
-                    Q(order__event=self.event) & Q(secret__istartswith=query) & Q(subevent=self.subevent)
-                ).annotate(checkin_cnt=Count('checkins'))[:25]
+                    Q(secret__istartswith=query)
+                )[:25]
             else:
                 ops = qs.filter(
-                    Q(order__event=self.event)
-                    & Q(
-                        Q(secret__istartswith=query) | Q(attendee_name__icontains=query) | Q(order__code__istartswith=query)
-                        | Q(order__invoice_address__name__icontains=query)
-                    )
-                    & Q(subevent=self.subevent)
-                ).annotate(checkin_cnt=Count('checkins'))[:25]
+                    Q(secret__istartswith=query) | Q(attendee_name__icontains=query) | Q(order__code__istartswith=query)
+                    | Q(order__invoice_address__name__icontains=query)
+                )[:25]
 
-            response['results'] = [serialize_op(op, bool(op.checkin_cnt)) for op in ops]
+            response['results'] = [serialize_op(op, bool(op.last_checked_in)) for op in ops]
         else:
             response['results'] = []
 
@@ -275,15 +294,28 @@ class ApiDownloadView(ApiView):
             'version': API_VERSION
         }
 
-        ops = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').filter(
-            Q(order__event=self.event) & Q(subevent=self.subevent)
-        )
+        cqs = Checkin.objects.filter(
+            position_id=OuterRef('pk'),
+            list_id=self.config.list.pk
+        ).order_by().values('position_id').annotate(
+            m=Max('datetime')
+        ).values('m')
+
+        qs = OrderPosition.objects.filter(
+            order__event=self.event,
+            order__status=Order.STATUS_PAID,
+            subevent=self.config.list.subevent
+        ).annotate(
+            last_checked_in=Subquery(cqs)
+        ).select_related('item', 'variation', 'order', 'addon_to')
+
+        if not self.config.list.all_products:
+            qs = qs.filter(item__in=self.config.list.limit_products.values_list('id', flat=True))
+
         if not self.config.all_items:
-            ops = ops.filter(item__in=self.config.items.all())
+            qs = qs.filter(item__in=self.config.items.all())
 
-        ops = ops.annotate(checkin_cnt=Count('checkins'))
-        response['results'] = [serialize_op(op, bool(op.checkin_cnt)) for op in ops]
-
+        response['results'] = [serialize_op(op, bool(op.last_checked_in)) for op in qs]
         return JsonResponse(response)
 
 
