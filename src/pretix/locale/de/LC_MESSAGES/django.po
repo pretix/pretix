@@ -9608,7 +9608,7 @@ msgstr "Ticket #{posid} wurde am {datetime} für die Liste \"{list}\" gescannt."
 #: pretix/plugins/pretixdroid/signals.py:63
 #, python-brace-format
 msgid "Position #{posid} has been scanned for list \"{list}\"."
-msgstr "Ticket #{posid} wurde am {datetime} für die Liste \"{list}\" gescannt."
+msgstr "Ticket #{posid} wurde für die Liste \"{list}\" gescannt."
 
 #: pretix/plugins/pretixdroid/signals.py:70
 #, python-brace-format
