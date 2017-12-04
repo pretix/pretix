@@ -1006,7 +1006,7 @@ msgid ""
 "tickets to indicate to the person at check-in that the student ID card still "
 "needs to be checked."
 msgstr ""
-"Wenn diese Option gesetzt ist, wird die Check-In-Anwendung melden, dass "
+"Wenn diese Option gesetzt ist, wird die Check-in-Anwendung melden, dass "
 "dieses Ticket besondere Behandlung braucht. Das ist z.B. für Studierende "
 "nützlich, deren Studierendenausweis noch geprüft werden soll."
 
@@ -4150,7 +4150,7 @@ msgstr "Teilnehmer suchen …"
 
 #: pretix/control/forms/filter.py:425
 msgid "Check-in status"
-msgstr "Check-In-Status"
+msgstr "Check-in-Status"
 
 #: pretix/control/forms/filter.py:427
 msgid "All attendees"
@@ -4865,15 +4865,15 @@ msgstr "Die Steuer-Regel wurde geändert."
 
 #: pretix/control/logdisplay.py:172
 msgid "The check-in list has been added."
-msgstr "Die Check-In-Liste wurde erstellt."
+msgstr "Die Check-in-Liste wurde erstellt."
 
 #: pretix/control/logdisplay.py:173
 msgid "The check-in list has been deleted."
-msgstr "Der Check-In-Liste wurde gelöscht."
+msgstr "Der Check-in-Liste wurde gelöscht."
 
 #: pretix/control/logdisplay.py:174
 msgid "The check-in list has been changed."
-msgstr "Der Check-In-Liste wurde verändert."
+msgstr "Der Check-in-Liste wurde verändert."
 
 #: pretix/control/logdisplay.py:175 pretix/control/logdisplay.py:181
 msgid "The event settings have been changed."
@@ -5300,7 +5300,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:13
 #, python-format
 msgid "Check-in list: %(name)s"
-msgstr "Check-In-Liste: %(name)s"
+msgstr "Check-in-Liste: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:16
 msgid "Edit list"
@@ -5340,27 +5340,27 @@ msgid "Timestamp"
 msgstr "Zeitpunkt"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:118
-msgid "Check-In selected attendees"
+msgid "Check-in selected attendees"
 msgstr "Ausgewählte Teilnehmer einchecken"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
 msgid "Delete check-in list"
-msgstr "Check-In-Liste löschen"
+msgstr "Check-in-Liste löschen"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the check-in list <strong>%(name)s</strong>?"
 msgstr ""
-"Möchten Sie die Check-In-Liste <strong>%(name)s</strong> wirklich löschen?"
+"Möchten Sie die Check-in-Liste <strong>%(name)s</strong> wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:11
 #, python-format
 msgid ""
 "This will delete the information of <strong>%(num)s</strong> check-ins as "
 "well."
-msgstr "Dies löscht auch die <strong>%(num)s</strong> gespeicherten Check-Ins."
+msgstr "Dies löscht auch die <strong>%(num)s</strong> gespeicherten Check-ins."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:17
@@ -5431,7 +5431,7 @@ msgstr "Allgemeine Informationen"
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:28
 msgid "Please select the products that should be part of this check-in list."
 msgstr ""
-"Bitte wählen Sie die Produkte aus, die Teil dieser Check-In-Liste sein "
+"Bitte wählen Sie die Produkte aus, die Teil dieser Check-in-Liste sein "
 "sollen."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:3
@@ -5450,7 +5450,7 @@ msgid ""
 "do this process by printing out the list on paper, using this web interface "
 "or by using one of our mobile or desktop apps to automatically scan tickets."
 msgstr ""
-"Sie können Check-In-Listen erzeugen, um z.B. am Einlass Ihrer Veranstaltung "
+"Sie können Check-in-Listen erzeugen, um z.B. am Einlass Ihrer Veranstaltung "
 "zu kontrollieren, ob jeder Besucher ein gültiges Ticket hat. Hierzu können "
 "Sie die Listen auf Papier ausdrucken, dieses Online-Interface benutzen oder "
 "eine unserer mobilen oder Desktop-Apps nutzen, um die Tickets automatisch zu "
@@ -5474,16 +5474,16 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:44
 msgid "Your search did not match any check-in lists."
-msgstr "Ihre Filter treffen auf keine Check-In-Listen zu."
+msgstr "Ihre Filter treffen auf keine Check-in-Listen zu."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:46
 msgid "You haven't created any check-in lists yet."
-msgstr "Sie haben noch keine Check-In-Liste erstellt."
+msgstr "Sie haben noch keine Check-in-Liste erstellt."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:55
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:61
 msgid "Create a new check-in list"
-msgstr "Neue Check-In-Liste erstellen"
+msgstr "Neue Check-in-Liste erstellen"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:9
 msgid "Go to event"
@@ -7451,7 +7451,7 @@ msgstr "Produktpreise"
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:188
 msgid "Add a new check-in list"
-msgstr "Neue Check-In-Liste erstellen"
+msgstr "Neue Check-in-Liste erstellen"
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:198
 msgctxt "subevent"
@@ -8113,7 +8113,7 @@ msgstr "Die ausgewählten Tickets wurden als eingecheckt markiert."
 
 #: pretix/control/views/checkin.py:145
 msgid "The new check-in list has been created."
-msgstr "Die neue Check-In-Liste wurde erstellt."
+msgstr "Die neue Check-in-Liste wurde erstellt."
 
 #: pretix/control/views/checkin.py:152 pretix/control/views/checkin.py:190
 #: pretix/control/views/event.py:160 pretix/control/views/event.py:310
