@@ -11,9 +11,10 @@ function typocheck() {
     }
 
     $sources.each(function () {
-        $.each($(this).val().toLowerCase().replace('-', '').split(' '), function (i, w) {
+        $.each($(this).val().toLowerCase().split(' '), function (i, w) {
             if (w && w.length > 5) {
                 words.push(w);
+                words.push(w.replace('-', ''));
             }
         });
     });
