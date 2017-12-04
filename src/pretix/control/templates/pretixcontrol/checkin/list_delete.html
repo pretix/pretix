@@ -8,7 +8,7 @@
 		{% csrf_token %}
 		<p>{% blocktrans with name=checkinlist.name %}Are you sure you want to delete the check-in list <strong>{{ name }}</strong>?{% endblocktrans %}</p>
 		{% if checkinlist.checkins.exists > 0 %}
-			<p>{% blocktrans with num=checkinlist.checkins.count %}
+			<p>{% blocktrans trimmed with num=checkinlist.checkins.count %}
                 This will delete the information of <strong>{{ num }}</strong> check-ins as well.
             {% endblocktrans %}</p>
 		{% endif %}
