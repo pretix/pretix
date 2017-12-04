@@ -75,7 +75,7 @@ def base_widgets(sender, subevent=None, **kwargs):
             'url': reverse('control:event.orders', kwargs={
                 'event': sender.slug,
                 'organizer': sender.organizer.slug
-            })
+            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
             'content': NUM_WIDGET.format(num=paidc, text=_('Attendees (paid)')),
@@ -84,7 +84,7 @@ def base_widgets(sender, subevent=None, **kwargs):
             'url': reverse('control:event.orders.overview', kwargs={
                 'event': sender.slug,
                 'organizer': sender.organizer.slug
-            })
+            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
             'content': NUM_WIDGET.format(
@@ -94,7 +94,7 @@ def base_widgets(sender, subevent=None, **kwargs):
             'url': reverse('control:event.orders.overview', kwargs={
                 'event': sender.slug,
                 'organizer': sender.organizer.slug
-            })
+            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
             'content': NUM_WIDGET.format(num=prodc, text=_('Active products')),
