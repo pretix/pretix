@@ -259,7 +259,6 @@ class ApiSearchView(ApiView):
 
             qs = OrderPosition.objects.filter(
                 order__event=self.event,
-                order__status=Order.STATUS_PAID,
                 subevent=self.config.list.subevent
             ).annotate(
                 last_checked_in=Subquery(cqs)
