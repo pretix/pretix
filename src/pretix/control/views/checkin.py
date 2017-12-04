@@ -67,7 +67,11 @@ class CheckInListShow(EventPermissionRequiredMixin, ListView):
         ctx['filter_form'] = self.filter_form
         for e in ctx['entries']:
             if e.last_checked_in:
-                e.last_checked_in = make_aware(dateutil.parser.parse(e.last_checked_in), UTC)
+                if isinstance(e.last_checked_in, str):
+                    # Apparently only happens on SQLite
+                    e.last_checked_in_aware = make_aware(dateutil.parser.parse(e.last_checked_in), UTC)
+                else:
+                    e.last_checked_in_aware = e.last_checked_in
         return ctx
 
     def post(self, request, *args, **kwargs):

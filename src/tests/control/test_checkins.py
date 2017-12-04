@@ -112,8 +112,8 @@ def checkin_list_env():
     cl = event.checkin_lists.create(name="Default", all_products=True)
 
     # item
-    item_ticket = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True)
-    item_mascot = Item.objects.create(event=event, name="Mascot", default_price=10, admission=False)
+    item_ticket = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, position=0)
+    item_mascot = Item.objects.create(event=event, name="Mascot", default_price=10, admission=False, position=1)
 
     # order
     order_pending = Order.objects.create(
@@ -190,16 +190,16 @@ def checkin_list_env():
 @pytest.mark.parametrize("order_key, expected", [
     ('', ['A1Ticket', 'A1Mascot', 'A2Ticket', 'A3Ticket']),
     ('-code', ['A3Ticket', 'A2Ticket', 'A1Ticket', 'A1Mascot']),
-    ('code', ['A1Ticket', 'A1Mascot', 'A2Ticket', 'A3Ticket']),
+    ('code', ['A1Mascot', 'A1Ticket', 'A2Ticket', 'A3Ticket']),
     ('-email', ['A3Ticket', 'A2Ticket', 'A1Ticket', 'A1Mascot']),
-    ('email', ['A1Ticket', 'A1Mascot', 'A2Ticket', 'A3Ticket']),
-    ('-status', ['A3Ticket', 'A1Ticket', 'A1Mascot', 'A2Ticket']),
+    ('email', ['A1Mascot', 'A1Ticket', 'A2Ticket', 'A3Ticket']),
+    ('-status', ['A3Ticket', 'A1Ticket', 'A2Ticket', 'A1Mascot']),
     ('status', ['A1Mascot', 'A2Ticket', 'A1Ticket', 'A3Ticket']),
-    ('-timestamp', ['A1Ticket', 'A3Ticket', 'A1Mascot', 'A2Ticket']),  # A1 checkin date > A3 checkin date
+    ('-timestamp', ['A1Ticket', 'A3Ticket', 'A2Ticket', 'A1Mascot']),  # A1 checkin date > A3 checkin date
     ('timestamp', ['A1Mascot', 'A2Ticket', 'A3Ticket', 'A1Ticket']),
     ('-name', ['A3Ticket', 'A2Ticket', 'A1Ticket', 'A1Mascot']),
     ('name', ['A1Mascot', 'A1Ticket', 'A2Ticket', 'A3Ticket']),  # mascot doesn't include attendee name
-    ('-item', ['A1Ticket', 'A2Ticket', 'A3Ticket', 'A1Mascot']),
+    ('-item', ['A3Ticket', 'A2Ticket', 'A1Ticket', 'A1Mascot']),
     ('item', ['A1Mascot', 'A1Ticket', 'A2Ticket', 'A3Ticket']),
 ])
 def test_checkins_list_ordering(client, checkin_list_env, order_key, expected):

@@ -105,7 +105,7 @@
                             </td>
                             <td>
                                 {% if e.last_checked_in %}
-                                    {{ e.last_checked_in|date:"SHORT_DATETIME_FORMAT" }}
+                                    {{ e.last_checked_in_aware|date:"SHORT_DATETIME_FORMAT" }}
                                 {% endif %}
                             </td>
                         </tr>
