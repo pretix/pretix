@@ -39,6 +39,7 @@ memcached
 middleware
 mixin
 mixins
+multi
 multidomain
 namespace
 namespaced
