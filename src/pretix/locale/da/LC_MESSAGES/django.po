@@ -1,27 +1,64 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Raphael Michel <michel@rami.io>, 2014.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-20 12:56+0000\n"
-"PO-Revision-Date: 2017-10-31 15:19+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2017-12-05 15:37+0100\n"
+"Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
 "Language-Team: \n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.2\n"
+"X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:898
+#: pretix/control/templates/pretixcontrol/events/index.html:122
+#: pretix/control/views/dashboards.py:358
+msgid "Shop disabled"
+msgstr "Butik deaktiveret"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:900
+#: pretix/control/forms/filter.py:239 pretix/control/forms/filter.py:334
+#: pretix/control/templates/pretixcontrol/events/index.html:124
+#: pretix/control/templates/pretixcontrol/subevents/index.html:91
+msgid "Presale over"
+msgstr "Forsalg slut"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:902
+#: pretix/control/forms/filter.py:238 pretix/control/forms/filter.py:333
+#: pretix/control/templates/pretixcontrol/events/index.html:126
+#: pretix/control/templates/pretixcontrol/subevents/index.html:93
+msgid "Presale not started"
+msgstr "Forsalg ikke startet"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:904
+#: pretix/control/templates/pretixcontrol/events/index.html:128
+#: pretix/control/templates/pretixcontrol/subevents/index.html:95
+#: pretix/control/views/dashboards.py:364
+msgid "On sale"
+msgstr "Til salg"
+
+#: pretix/api/serializers/checkin.py:26 pretix/base/models/items.py:912
+msgid "One or more items do not belong to this event."
+msgstr "En eller flere varer hører ikke til dette arrangement."
+
+#: pretix/api/serializers/checkin.py:30 pretix/base/models/items.py:921
+msgid "Subevent cannot be null for event series."
+msgstr ""
+
+#: pretix/api/serializers/checkin.py:32 pretix/api/serializers/checkin.py:35
+#: pretix/base/models/items.py:923 pretix/base/models/items.py:926
+msgid "The subevent does not belong to this event."
+msgstr ""
 
 #: pretix/base/exporters/answers.py:18
-#, fuzzy
 msgid "Answers to file upload questions"
-msgstr "Svar på filuploadspørgsmål"
+msgstr "Svar på spørgsmål med filupload"
 
 #: pretix/base/exporters/answers.py:27 pretix/base/models/items.py:609
 #: pretix/control/templates/pretixcontrol/event/base.html:63
@@ -150,7 +187,7 @@ msgstr "Land"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:90
 #: pretix/presale/templates/pretixpresale/event/order.html:188
 msgid "VAT ID"
-msgstr "Moms-id"
+msgstr "CVR-nr."
 
 #: pretix/base/exporters/orderlist.py:66 pretix/base/models/orders.py:138
 #: pretix/control/templates/pretixcontrol/order/index.html:90
@@ -456,7 +493,6 @@ msgid "Gross"
 msgstr "I alt"
 
 #: pretix/base/invoice.py:368
-#, fuzzy
 msgctxt "invoice"
 msgid "Invoice total"
 msgstr "Fakturatotal"
@@ -636,9 +672,8 @@ msgid "Internal comment"
 msgstr "Intern kommentar"
 
 #: pretix/base/models/event.py:253 pretix/control/views/dashboards.py:357
-#, fuzzy
 msgid "Event series"
-msgstr ""
+msgstr "Arrangementsrække"
 
 #: pretix/base/models/event.py:258 pretix/base/models/items.py:190
 #: pretix/base/models/items.py:698 pretix/base/models/orders.py:119
@@ -674,14 +709,12 @@ msgid "Frontpage text"
 msgstr "Forsidetekst"
 
 #: pretix/base/models/event.py:559
-#, fuzzy
 msgid "Date in event series"
-msgstr ""
+msgstr "Dato i arrangementsrække"
 
 #: pretix/base/models/event.py:560
-#, fuzzy
 msgid "Dates in event series"
-msgstr ""
+msgstr "Datoer i arrangementsrække"
 
 #: pretix/base/models/event.py:670
 msgid "Can not contain spaces or special characters execpt underscores"
@@ -1276,12 +1309,12 @@ msgstr "Momsværdi"
 #: pretix/base/models/orders.py:734
 #, fuzzy
 msgid "Order position"
-msgstr "Placering"
+msgstr ""
 
 #: pretix/base/models/orders.py:735
 #, fuzzy
 msgid "Order positions"
-msgstr "Rækkefølge"
+msgstr ""
 
 #: pretix/base/models/orders.py:832
 msgid "Cart ID (e.g. session key)"
@@ -1290,7 +1323,7 @@ msgstr ""
 #: pretix/base/models/orders.py:847
 #, fuzzy
 msgid "Cart position"
-msgstr "Placering i kurv"
+msgstr ""
 
 #: pretix/base/models/orders.py:848
 msgid "Cart positions"
@@ -1455,9 +1488,8 @@ msgid "plus {rate}% {name}"
 msgstr "plus {rate}% {name}"
 
 #: pretix/base/models/tax.py:114
-#, fuzzy
 msgid "reverse charge enabled"
-msgstr ""
+msgstr "Omvendt betalingspligt aktiveret"
 
 #: pretix/base/models/vouchers.py:75
 msgid "No effect"
@@ -1817,7 +1849,7 @@ msgstr "Du har ikke valgt nogen produkter."
 #: pretix/base/services/cart.py:38
 #, fuzzy
 msgid "Unknown cart position."
-msgstr "Ukendt"
+msgstr ""
 
 #: pretix/base/services/cart.py:39
 msgctxt "subevent"
@@ -1973,10 +2005,10 @@ msgstr ""
 "{country}"
 
 #: pretix/base/services/invoices.py:61
-#, fuzzy, python-format
+#, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr "Dag(e)"
+msgstr "CVR-nr.: %s"
 
 #: pretix/base/services/invoices.py:125
 msgctxt "invoice"
@@ -2665,9 +2697,8 @@ msgid "Choose all languages that your event should be available in."
 msgstr "Vælg alle sprog som dit arrangement skal kunne vises på."
 
 #: pretix/control/forms/event.py:30
-#, fuzzy
 msgid "This is an event series"
-msgstr "Arrangement"
+msgstr "Dette er en arrangementsrække"
 
 #: pretix/control/forms/event.py:31
 msgid ""
@@ -3033,12 +3064,12 @@ msgstr "Kundenavn påkrævet"
 
 #: pretix/control/forms/event.py:514
 msgid "Ask for VAT ID"
-msgstr "Spørg efter momsnummer"
+msgstr "Spørg efter CVR-nr."
 
 #: pretix/control/forms/event.py:515
 msgid ""
 "Does only work if an invoice address is asked for. VAT ID is not required."
-msgstr "Virker kun når der spørges efter faktureringsadresse. Momsnummer er ikke påkrævet."
+msgstr "Virker kun når der spørges efter faktureringsadresse. CVR-nr. er ikke påkrævet."
 
 #: pretix/control/forms/event.py:520
 msgid "Show free products on invoices"
@@ -3142,7 +3173,7 @@ msgstr ""
 msgid ""
 "e.g. your bank details, legal details like your VAT ID, registration "
 "numbers, etc."
-msgstr ""
+msgstr "fx dine bankopysninger, juridiske oplysninger som dit CVR-nr., registreringsnr., osv."
 
 #: pretix/control/forms/event.py:601
 msgid "Footer"
@@ -3502,18 +3533,6 @@ msgstr ""
 #: pretix/control/forms/filter.py:234
 msgid "Inactive"
 msgstr "Inaktive"
-
-#: pretix/control/forms/filter.py:235 pretix/control/forms/filter.py:297
-#: pretix/control/templates/pretixcontrol/events/index.html:126
-#: pretix/control/templates/pretixcontrol/subevents/index.html:93
-msgid "Presale not started"
-msgstr ""
-
-#: pretix/control/forms/filter.py:236 pretix/control/forms/filter.py:298
-#: pretix/control/templates/pretixcontrol/events/index.html:124
-#: pretix/control/templates/pretixcontrol/subevents/index.html:91
-msgid "Presale over"
-msgstr ""
 
 #: pretix/control/forms/filter.py:293
 msgid "All events"
@@ -5201,25 +5220,13 @@ msgid "Paid tickets per quota"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/events/index.html:97
-#, fuzzy
 msgid "Series"
-msgstr ""
+msgstr "Række"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:114
 #: pretix/control/templates/pretixcontrol/subevents/index.html:81
 msgid "More quotas"
 msgstr "Flere kvoter"
-
-#: pretix/control/templates/pretixcontrol/events/index.html:122
-#: pretix/control/views/dashboards.py:346
-msgid "Shop disabled"
-msgstr "Butik deaktiveret"
-
-#: pretix/control/templates/pretixcontrol/events/index.html:128
-#: pretix/control/templates/pretixcontrol/subevents/index.html:95
-#: pretix/control/views/dashboards.py:352
-msgid "On sale"
-msgstr "Til salg"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html:3
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html:3
@@ -5725,9 +5732,9 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/change.html:60
-#, fuzzy, python-format
+#, python-format
 msgid "Add-On to position #%(posid)s"
-msgstr ""
+msgstr "Tilføjelse til position #%(posid)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:79
 msgid "Keep unchanged"
@@ -5987,7 +5994,7 @@ msgstr "Postnummer og by"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:384
 msgid "Valid EU VAT ID"
-msgstr ""
+msgstr "Gyldigt CVR-nr."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:390
 msgid "Check"
@@ -6076,9 +6083,6 @@ msgstr ""
 #, fuzzy
 msgid "Positions"
 msgstr ""
-"Lister af etiketter accepteres også (én etiket pr. linje), men kun hvis "
-"feltet endnu ikke indeholder værdier. Numeriske nøgler genereres automatisk "
-"udfra placeringerne i listen."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:4
 msgid "Sales overview"
@@ -6423,7 +6427,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:6
 msgid "Disable two-factor authentication"
-msgstr "Deaktiver to-faktor-autorisation"
+msgstr "Deaktiver tofaktorgodkendelse"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:10
 msgid "Do you really want to disable two-factor authentication?"
@@ -6561,7 +6565,7 @@ msgstr "Aktiveret"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:28
 msgid "Change two-factor settings"
-msgstr "Ændr to-faktor-indstillinger"
+msgstr "Ændr tofaktor-indstillinger"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:43
 msgid "Show account history"
@@ -7065,7 +7069,7 @@ msgstr "Kunne ikke opdatere kommentaren."
 
 #: pretix/control/views/event.py:903 pretix/control/views/main.py:172
 msgid "VAT"
-msgstr ""
+msgstr "Moms"
 
 #: pretix/control/views/event.py:909
 msgid "The new tax rule has been created."
@@ -7195,7 +7199,7 @@ msgstr "En faktura for denne bestilling findes allerede."
 
 #: pretix/control/views/orders.py:287 pretix/control/views/orders.py:291
 msgid "No VAT ID specified."
-msgstr "Intet momsnummer angivet."
+msgstr "Intet CVR-nr. angivet."
 
 #: pretix/control/views/orders.py:295
 msgid "No country specified."
@@ -7203,15 +7207,15 @@ msgstr "Intet land angivet."
 
 #: pretix/control/views/orders.py:299
 msgid "VAT ID could not be checked since a non-EU country has been specified."
-msgstr ""
+msgstr "CVR-nummeret kun ikke valideres idet et ikke-EU-land er angivet."
 
 #: pretix/control/views/orders.py:304 pretix/presale/forms/checkout.py:133
 msgid "Your VAT ID does not match the selected country."
-msgstr ""
+msgstr "Dit CVR-nr. matcher ikke det valgte land."
 
 #: pretix/control/views/orders.py:315
 msgid "This VAT ID is not valid."
-msgstr "Dette momsnummer er ikke gyldigt"
+msgstr "Dette CVR-nr. er ikke gyldigt"
 
 #: pretix/control/views/orders.py:318
 msgid ""
@@ -7221,7 +7225,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:321
 msgid "This VAT ID is valid."
-msgstr "Dette momsnummer er gyldigt."
+msgstr "Dette CVR-nr. er gyldigt."
 
 #: pretix/control/views/orders.py:335 pretix/control/views/orders.py:358
 msgid "Unknown invoice."
@@ -7413,9 +7417,8 @@ msgid "The new date has been created."
 msgstr "Den nye dato er blevet oprettet."
 
 #: pretix/control/views/typeahead.py:31
-#, fuzzy
 msgid "Series:"
-msgstr ""
+msgstr "Række:"
 
 #: pretix/control/views/user.py:52
 msgid "The password you entered was invalid, please try again."
@@ -8990,9 +8993,8 @@ msgid "Text content"
 msgstr "Tekstindhold"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:287
-#, fuzzy
 msgid "Event attribute:"
-msgstr "Arrangement"
+msgstr "Arrangementsegenskab"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:290
 msgid "Other…"
@@ -9084,9 +9086,8 @@ msgid "2017-05-31 19:00"
 msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:115
-#, fuzzy
 msgid "Event admission time"
-msgstr "Arrangements indgangstidspunkt"
+msgstr "Indgangstidspunkt"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:116
 msgid "19:00"
@@ -9241,7 +9242,7 @@ msgstr ""
 
 #: pretix/presale/forms/checkout.py:141
 msgid "This VAT ID is not valid. Please re-check your input."
-msgstr ""
+msgstr "Dette CVR-nr. er ikke gyldigt. Kontroller din indtastning."
 
 #: pretix/presale/forms/checkout.py:146
 msgid ""
