@@ -165,7 +165,7 @@ Endpoints
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(id)/
 
    Update a check-in list. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the resource, other fields will be resetted to default. With ``PATCH``, you only need to provide the fields that you
+   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
    You can change all fields of the resource except the ``id`` field and the ``checkin_count`` and ``position_count``

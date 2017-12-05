@@ -47,11 +47,11 @@ Permissions separate into two areas:
    * Can change product settings – This permission allows to create and modify products and objects that are closely
      related to products, such as product categories, quotas, and questions.
 
-   * Can view orders – This permission allows viewing the list of orders and allindividual order details, but not
+   * Can view orders – This permission allows viewing the list of orders and all individual order details, but not
      changing anything about it. This also includes the various exports offered.
 
    * Can change orders – This permission allows all actions that involve changing an order, such as changing the products
-     in an order, marking an order as paid or refunden, importing banking data, etc. This only works properly if the
+     in an order, marking an order as paid or refunded, importing banking data, etc. This only works properly if the
      same users also have the "Can view orders" permission.
 
    * Can view vouchers – This permission allows viewing the list of vouchers including the voucher codes themselves and
