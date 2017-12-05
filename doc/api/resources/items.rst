@@ -70,7 +70,7 @@ addons                                list of objects            Definition of a
 ├ addon_category                      integer                    Internal ID of the item category the add-on can be
                                                                  chosen from.
 ├ min_count                           integer                    The minimal number of add-ons that need to be chosen.
-├ max_count                           integer                    The maxima number of add-ons that can be chosen.
+├ max_count                           integer                    The maximal number of add-ons that can be chosen.
 └ position                            integer                    An integer, used for sorting
 ===================================== ========================== =======================================================
 

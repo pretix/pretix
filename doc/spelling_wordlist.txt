@@ -10,8 +10,10 @@ boolean
 booleans
 cancelled
 casted
+checkbox
 checkin
 checkins
+checksum
 config
 contenttypes
 contextmanager
@@ -48,6 +50,7 @@ namespacing
 natively
 nginx
 ons
+optimizations
 param
 percental
 positionid
@@ -66,16 +69,20 @@ proxying
 queryset
 redemptions
 redis
+regex
 renderer
 renderers
 reportlab
+screenshot
 serializers
 serializers
 sexualized
+startup
 stdout
 stylesheet
 subdirectories
 subdirectory
+subdomain
 subevent
 subevents
 submodule
@@ -87,6 +94,7 @@ unconfigured
 unix
 unprefixed
 untrusted
+username
 url
 viewset
 viewsets
