@@ -700,10 +700,10 @@ class SubEventsTest(SoupTest):
         assert doc.select("button")
         doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk, {})
         assert doc.select(".alert-success")
-        if self.event1.subevents.count() == 1:  # last one, can't be deleted
-            doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent2.pk, {})
-            assert doc.select(".alert-danger")
-            assert not SubEventItem.objects.filter(pk=self.subevent2.pk).exists()
+        # deleting the second event
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent2.pk, {})
+        assert doc.select(".alert-danger")
+        assert SubEventItem.objects.filter(pk=self.subevent2.pk).exists()
         assert not SubEventItem.objects.filter(pk=self.subevent1.pk).exists()
 
     def test_delete_with_orders(self):
