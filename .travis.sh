@@ -29,6 +29,7 @@ if [ "$1" == "spelling" ]; then
 	XDG_CACHE_HOME=/cache pip3 install -Ur doc/requirements.txt
 	cd doc
 	make spelling
+	[ -s _build/spelling/output.txt ]
 fi
 if [ "$1" == "tests" ]; then
 	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt -r src/requirements/py34.txt
