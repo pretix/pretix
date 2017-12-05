@@ -26,6 +26,7 @@ django
 dockerfile
 durations
 eu
+filename
 filesystem
 fontawesome
 frontend
@@ -38,6 +39,7 @@ iterable
 libsass
 linters
 memcached
+metadata
 middleware
 mixin
 mixins
@@ -69,6 +71,7 @@ proxying
 queryset
 redemptions
 redis
+refactored
 regex
 renderer
 renderers
@@ -83,6 +86,7 @@ stylesheet
 subdirectories
 subdirectory
 subdomain
+subdomains
 subevent
 subevents
 submodule
