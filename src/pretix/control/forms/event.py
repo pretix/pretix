@@ -68,7 +68,7 @@ class EventWizardBasicsForm(I18nModelForm):
         label=_("Sales tax rate"),
         help_text=_("Do you need to pay sales tax on your tickets? In this case, please enter the applicable tax rate "
                     "here in percent. If you have a more complicated tax situation, you can add more tax rates and "
-                    "detailled configuration later."),
+                    "detailed configuration later."),
         required=False
     )
 
@@ -265,7 +265,7 @@ class EventSettingsForm(SettingsForm):
     last_order_modification_date = RelativeDateTimeField(
         label=_('Last date of modifications'),
         help_text=_("The last date users can modify details of their orders, such as attendee names or "
-                    "answers to questions. If you use the event series feature and an order contains tickest for "
+                    "answers to questions. If you use the event series feature and an order contains tickets for "
                     "multiple event dates, the earliest date will be used."),
         required=False,
     )
@@ -544,7 +544,20 @@ class InvoiceSettingsForm(SettingsForm):
             ('user', _('Automatically on user request')),
             ('True', _('Automatically for all created orders')),
             ('paid', _('Automatically on payment')),
-        )
+        ),
+        help_text=_("Invoices will never be automatically generated for free orders.")
+    )
+    invoice_attendee_name = forms.BooleanField(
+        label=_("Show attendee names on invoices"),
+        required=False
+    )
+    invoice_email_attachment = forms.BooleanField(
+        label=_("Attach invoices to emails"),
+        help_text=_("If invoices are automatically generated for all orders, they will be attached to the order "
+                    "confirmation mail. If they are automatically generated on payment, they will be attached to the "
+                    "payment confirmation mail. If they are not automatically generated, they will not be attached "
+                    "to emails."),
+        required=False
     )
     invoice_renderer = forms.ChoiceField(
         label=_("Invoice style"),

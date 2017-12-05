@@ -109,6 +109,8 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 desc += " - " + str(p.variation.value)
             if p.addon_to_id:
                 desc = "  + " + desc
+            if invoice.event.settings.invoice_attendee_name and p.attendee_name:
+                desc += "<br />" + pgettext("invoice", "Attendee: {name}").format(name=p.attendee_name)
             InvoiceLine.objects.create(
                 position=i, invoice=invoice, description=desc,
                 gross_value=p.price, tax_value=p.tax_value,
@@ -158,7 +160,7 @@ def build_cancellation(invoice: Invoice):
     return invoice
 
 
-def generate_cancellation(invoice: Invoice):
+def generate_cancellation(invoice: Invoice, trigger_pdf=True):
     cancellation = copy.copy(invoice)
     cancellation.pk = None
     cancellation.invoice_no = None
@@ -170,7 +172,8 @@ def generate_cancellation(invoice: Invoice):
     cancellation.save()
 
     cancellation = build_cancellation(cancellation)
-    invoice_pdf(cancellation.pk)
+    if trigger_pdf:
+        invoice_pdf(cancellation.pk)
     return cancellation
 
 
@@ -183,7 +186,7 @@ def regenerate_invoice(invoice: Invoice):
     return invoice
 
 
-def generate_invoice(order: Order):
+def generate_invoice(order: Order, trigger_pdf=True):
     locale = order.event.settings.get('invoice_language')
     if locale:
         if locale == '__user__':
@@ -197,10 +200,11 @@ def generate_invoice(order: Order):
         locale=locale
     )
     invoice = build_invoice(invoice)
-    invoice_pdf(invoice.pk)
+    if trigger_pdf:
+        invoice_pdf(invoice.pk)
 
     if order.status in (Order.STATUS_CANCELED, Order.STATUS_REFUNDED):
-        generate_cancellation(invoice)
+        generate_cancellation(invoice, trigger_pdf)
 
     return invoice
 

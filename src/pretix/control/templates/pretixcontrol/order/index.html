@@ -187,7 +187,9 @@
                                     – {{ line.variation }}
                                 {% endif %}
                                 {% if line.checkins.all %}
-                                    <span class="fa fa-check" data-toggle="tooltip" title="{% blocktrans trimmed with date=line.checkins.all.0.datetime|date:'d.m.Y H:i' %}First scanned: {{ date }}{% endblocktrans %}"></span>
+                                    {% for c in line.checkins.all %}
+                                        <span class="fa fa-fw fa-check" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'d.m.Y H:i' %}First scanned: {{ date }}{% endblocktrans %}"></span>
+                                    {% endfor %}
                                 {% endif %}
                                 {% if line.voucher %}
                                     <br/><span class="fa fa-tags"></span> {% trans "Voucher code used:" %}

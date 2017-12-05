@@ -147,7 +147,7 @@ class OrderDetail(OrderView):
         ).select_related(
             'item', 'variation', 'addon_to', 'tax_rule'
         ).prefetch_related(
-            'item__questions', 'answers', 'answers__question', 'checkins'
+            'item__questions', 'answers', 'answers__question', 'checkins', 'checkins__list'
         ).order_by('positionid')
 
         positions = []
@@ -611,7 +611,7 @@ class OrderChange(OrderView):
         form_valid = self._process_add(ocm) and self._process_change(ocm) and self._process_other(ocm)
 
         if not form_valid:
-            messages.error(self.request, _('An error occured. Please see the details below.'))
+            messages.error(self.request, _('An error occurred. Please see the details below.'))
         else:
             try:
                 ocm.commit()
@@ -906,9 +906,21 @@ class ExportMixin:
         responses = register_data_exporters.send(self.request.event)
         for receiver, response in responses:
             ex = response(self.request.event)
+            if self.request.GET.get("identifier") and ex.identifier != self.request.GET.get("identifier"):
+                continue
+
+            # Use form parse cycle to generate useful defaults
+            test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
+            test_form.fields = ex.export_form_fields
+            test_form.is_valid()
+            initial = {
+                k: v for k, v in test_form.cleaned_data.items() if ex.identifier + "-" + k in self.request.GET
+            }
+
             ex.form = ExporterForm(
                 data=(self.request.POST if self.request.method == 'POST' else None),
-                prefix=ex.identifier
+                prefix=ex.identifier,
+                initial=initial
             )
             ex.form.fields = ex.export_form_fields
             exporters.append(ex)

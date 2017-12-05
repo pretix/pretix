@@ -11,7 +11,7 @@ Core
 ----
 
 .. automodule:: pretix.base.signals
-   :members: periodic_task, event_live_issues, event_copy_data
+   :members: periodic_task, event_live_issues, event_copy_data, email_filter
 
 Order events
 """"""""""""
@@ -47,7 +47,7 @@ Backend
 -------
 
 .. automodule:: pretix.control.signals
-   :members: nav_event, html_head, quota_detail_html, nav_topbar, nav_global, nav_organizer, nav_event_settings, order_info
+   :members: nav_event, html_head, quota_detail_html, nav_topbar, nav_global, nav_organizer, nav_event_settings, order_info, event_settings_widget
 
 
 .. automodule:: pretix.base.signals

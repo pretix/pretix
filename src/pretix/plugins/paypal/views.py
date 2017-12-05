@@ -14,6 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from pretix.base.models import Order, Quota, RequiredAction
+from pretix.base.payment import PaymentException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
@@ -57,7 +58,12 @@ def success(request, *args, **kwargs):
     if pid == request.session.get('payment_paypal_id', None):
         if order:
             prov = Paypal(request.event)
-            resp = prov.payment_perform(request, order)
+            try:
+                resp = prov.payment_perform(request, order)
+            except PaymentException as e:
+                messages.error(request, str(e))
+                urlkwargs['step'] = 'payment'
+                return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs=urlkwargs))
             if resp:
                 return resp
     else:

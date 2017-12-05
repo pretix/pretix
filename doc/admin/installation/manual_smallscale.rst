@@ -177,7 +177,7 @@ For background tasks we need a second service ``/etc/systemd/system/pretix-worke
     [Install]
     WantedBy=multi-user.target
 
-You can now run the following comamnds to enable and start the services::
+You can now run the following commands to enable and start the services::
 
     # systemctl daemon-reload
     # systemctl enable pretix-web pretix-worker
@@ -213,7 +213,7 @@ The following snippet is an example on how to configure a nginx proxy for pretix
         ssl_certificate /path/to/cert.chain.pem;
         ssl_certificate_key /path/to/key.pem;
 
-        add_header Referrer-Options same-origin;
+        add_header Referrer-Policy same-origin;
         add_header X-Content-Type-Options nosniff;
 
         location / {
@@ -275,6 +275,8 @@ To upgrade to a new pretix release, pull the latest code changes and run the fol
     (venv)$ python -m pretix updatestyles
     # systemctl restart pretix-web pretix-worker
 
+
+.. _`manual_plugininstall`:
 
 Install a plugin
 ----------------

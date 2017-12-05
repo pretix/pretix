@@ -4,8 +4,9 @@ from decimal import Decimal
 import pytest
 from django.utils import timezone
 from django.utils.timezone import now
+from pytz import UTC
 
-from pretix.base.models import Voucher
+from pretix.base.models import Event, Voucher
 
 
 @pytest.fixture
@@ -539,6 +540,28 @@ def change_voucher(token_client, organizer, event, voucher, data, expected_failu
     else:
         assert resp.status_code == 200
     voucher.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_change_to_item_of_other_event(token_client, organizer, event, item):
+    e2 = Event.objects.create(
+        organizer=organizer,
+        name='Dummy2',
+        slug='dummy2',
+        date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC),
+        plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf'
+    )
+    ticket2 = e2.items.create(name='Late-bird ticket', default_price=23)
+    v = event.vouchers.create(item=item)
+    change_voucher(
+        token_client, organizer, event, v,
+        data={
+            'item': ticket2.pk
+        },
+        expected_failure=True
+    )
+    v.refresh_from_db()
+    assert v.item == item
 
 
 @pytest.mark.django_db

@@ -61,6 +61,8 @@ error_messages = {
                         'cart if you want to use it for a different product.'),
     'voucher_expired': _('This voucher is expired.'),
     'voucher_invalid_item': _('This voucher is not valid for this product.'),
+    'voucher_item_not_available': _(
+        'Your voucher is valid for a product that is currently not for sale.'),
     'voucher_invalid_subevent': pgettext_lazy('subevent', 'This voucher is not valid for this event date.'),
     'voucher_required': _('You need a valid voucher code to order this product.'),
     'inactive_subevent': pgettext_lazy('subevent', 'The selected event date is not active.'),

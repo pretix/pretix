@@ -395,6 +395,8 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
                     err = error_messages['voucher_redeemed']
                 if self.voucher.valid_until is not None and self.voucher.valid_until < now():
                     err = error_messages['voucher_expired']
+                if self.voucher.item is not None and self.voucher.item.is_available() is False:
+                    err = error_messages['voucher_item_not_available']
 
                 redeemed_in_carts = CartPosition.objects.filter(
                     Q(voucher=self.voucher) & Q(event=request.event) &
@@ -419,7 +421,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
                 self.subevent = get_object_or_404(SubEvent, event=request.event, pk=request.GET.get('subevent'),
                                                   active=True)
 
-            if self.voucher.subevent:
+            if hasattr(self, 'voucher') and self.voucher.subevent:
                 self.subevent = self.voucher.subevent
         else:
             pass

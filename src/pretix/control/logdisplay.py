@@ -9,7 +9,9 @@ from django.utils.formats import date_format
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.models import Event, ItemVariation, LogEntry, OrderPosition
+from pretix.base.models import (
+    CheckinList, Event, ItemVariation, LogEntry, OrderPosition,
+)
 from pretix.base.signals import logentry_display
 
 OVERVIEW_BLACKLIST = [
@@ -122,7 +124,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
         'pretix.event.order.comment': _('The order\'s internal comment has been updated.'),
         'pretix.event.order.payment.changed': _('The payment method has been changed.'),
-        'pretix.event.order.email.sent': _('An unindentified type email has been sent.'),
+        'pretix.event.order.email.sent': _('An unidentified type email has been sent.'),
         'pretix.event.order.email.custom_sent': _('A custom email has been sent.'),
         'pretix.event.order.email.expire_warning_sent': _('An email has been sent with a warning that the order is about '
                                                           'to expire.'),
@@ -167,6 +169,9 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.taxrule.added': _('The tax rule has been added.'),
         'pretix.event.taxrule.deleted': _('The tax rule has been deleted.'),
         'pretix.event.taxrule.changed': _('The tax rule has been changed.'),
+        'pretix.event.checkinlist.added': _('The check-in list has been added.'),
+        'pretix.event.checkinlist.deleted': _('The check-in list has been deleted.'),
+        'pretix.event.checkinlist.changed': _('The check-in list has been changed.'),
         'pretix.event.settings': _('The event settings have been changed.'),
         'pretix.event.tickets.settings': _('The ticket download settings have been changed.'),
         'pretix.event.plugins.enabled': _('A plugin has been enabled.'),
@@ -222,15 +227,24 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         dt = dateutil.parser.parse(data.get('datetime'))
         tz = pytz.timezone(sender.settings.timezone)
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
+        if 'list' in data:
+            try:
+                checkin_list = sender.checkin_lists.get(pk=data.get('list')).name
+            except CheckinList.DoesNotExist:
+                checkin_list = _("(unknown)")
+        else:
+            checkin_list = _("(unknown)")
 
         if data.get('first'):
-            return _('Position #{posid} has been checked in manually at {datetime}.').format(
+            return _('Position #{posid} has been checked in manually at {datetime} on list "{list}".').format(
                 posid=data.get('positionid'),
-                datetime=dt_formatted
+                datetime=dt_formatted,
+                list=checkin_list,
             )
-        return _('Position #{posid} has been checked in again at {datetime}.').format(
+        return _('Position #{posid} has been checked in again at {datetime} on list "{list}".').format(
             posid=data.get('positionid'),
-            datetime=dt_formatted
+            datetime=dt_formatted,
+            list=checkin_list
         )
 
     if logentry.action_type == 'pretix.team.member.added':

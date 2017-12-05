@@ -199,8 +199,8 @@ class Event(EventMixin, LoggedModel):
     slug = models.SlugField(
         max_length=50, db_index=True,
         help_text=_(
-            "Should be short, only contain lowercase letters and numbers, and must be unique among your events. "
-            "We recommend some kind of abbreviation or a date with less than 10 characters that can be easily "
+            "Should be short, only contain lowercase letters, numbers, dots, and dashes, and must be unique among your "
+            "events. We recommend some kind of abbreviation or a date with less than 10 characters that can be easily "
             "remembered, but you can also choose to use a random value. "
             "This will be used in URLs, order codes, invoice numbers, and bank transfer references."),
         validators=[
@@ -394,18 +394,29 @@ class Event(EventMixin, LoggedModel):
             for v in vars:
                 q.variations.add(variation_map[v.pk])
 
+        question_map = {}
         for q in Question.objects.filter(event=other).prefetch_related('items', 'options'):
             items = list(q.items.all())
             opts = list(q.options.all())
+            question_map[q.pk] = q
             q.pk = None
             q.event = self
             q.save()
+
             for i in items:
                 q.items.add(item_map[i.pk])
             for o in opts:
                 o.pk = None
                 o.question = q
                 o.save()
+
+        for cl in other.checkin_lists.filter(subevent__isnull=True).prefetch_related('limit_products'):
+            items = list(cl.limit_products.all())
+            cl.pk = None
+            cl.event = self
+            cl.save()
+            for i in items:
+                cl.limit_products.add(item_map[i.pk])
 
         for s in other.settings._objects.all():
             s.object = self
@@ -431,7 +442,11 @@ class Event(EventMixin, LoggedModel):
             else:
                 s.save()
 
-        event_copy_data.send(sender=self, other=other)
+        event_copy_data.send(
+            sender=self, other=other,
+            tax_map=tax_map, category_map=category_map, item_map=item_map, variation_map=variation_map,
+            question_map=question_map
+        )
 
     def get_payment_providers(self) -> dict:
         """

@@ -46,6 +46,8 @@ class ItemList(ListView):
     def get_queryset(self):
         return Item.objects.filter(
             event=self.request.event
+        ).annotate(
+            var_count=Count('variations')
         ).prefetch_related("category")
 
 

@@ -49,6 +49,10 @@ DEFAULTS = {
         'default': 'False',
         'type': bool,
     },
+    'invoice_attendee_name': {
+        'default': 'True',
+        'type': bool,
+    },
     'invoice_address_required': {
         'default': 'False',
         'type': bool,
@@ -128,6 +132,10 @@ DEFAULTS = {
     'invoice_language': {
         'default': '__user__',
         'type': str
+    },
+    'invoice_email_attachment': {
+        'default': 'False',
+        'type': bool
     },
     'show_items_outside_presale_period': {
         'default': 'True',

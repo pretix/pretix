@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.models import CheckinList
 from pretix.base.signals import logentry_display
 from pretix.control.signals import nav_event
 
@@ -43,25 +44,40 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
         tz = pytz.timezone(sender.settings.timezone)
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
 
+    if 'list' in data:
+        try:
+            checkin_list = sender.checkin_lists.get(pk=data.get('list')).name
+        except CheckinList.DoesNotExist:
+            checkin_list = _("(unknown)")
+    else:
+        checkin_list = _("(unknown)")
+
     if data.get('first'):
         if show_dt:
-            return _('Position #{posid} has been scanned at {datetime}.').format(
+            return _('Position #{posid} has been scanned at {datetime} for list "{list}".').format(
                 posid=data.get('positionid'),
-                datetime=dt_formatted
+                datetime=dt_formatted,
+                list=checkin_list
             )
         else:
-            return _('Position #{posid} has been scanned.').format(
-                posid=data.get('positionid')
+            return _('Position #{posid} has been scanned for list "{list}".').format(
+                posid=data.get('positionid'),
+                list=checkin_list
             )
     else:
         if data.get('forced'):
             return _(
-                'A scan for position #{posid} at {datetime} has been uploaded even though it has '
+                'A scan for position #{posid} at {datetime} for list "{list}" has been uploaded even though it has '
                 'been scanned already.'.format(
                     posid=data.get('positionid'),
-                    datetime=dt_formatted
+                    datetime=dt_formatted,
+                    list=checkin_list
                 )
             )
-        return _('Position #{posid} has been scanned and rejected because it has already been scanned before.'.format(
-            posid=data.get('positionid')
-        ))
+        return _(
+            'Position #{posid} has been scanned and rejected because it has already been scanned before '
+            'on list "{list}".'.format(
+                posid=data.get('positionid'),
+                list=checkin_list
+            )
+        )

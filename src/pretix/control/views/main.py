@@ -15,6 +15,7 @@ from django.views.generic import ListView
 from formtools.wizard.views import SessionWizardView
 from i18nfield.strings import LazyI18nString
 
+from pretix.base.i18n import language
 from pretix.base.models import Event, Organizer, Quota, Team
 from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
@@ -118,6 +119,14 @@ class EventWizard(SessionWizardView):
             ctx['organizer'] = self.get_cleaned_data_for_step('foundation').get('organizer')
         return ctx
 
+    def render(self, form=None, **kwargs):
+        if self.steps.current != 'foundation':
+            fdata = self.get_cleaned_data_for_step('foundation')
+            if fdata is None:
+                return self.render_goto_step('foundation')
+
+        return super().render(form, **kwargs)
+
     def get_form_kwargs(self, step=None):
         kwargs = {
             'user': self.request.user
@@ -135,7 +144,7 @@ class EventWizard(SessionWizardView):
         basics_data = self.get_cleaned_data_for_step('basics')
         copy_data = self.get_cleaned_data_for_step('copy')
 
-        with transaction.atomic():
+        with transaction.atomic(), language(basics_data['locale']):
             event = form_dict['basics'].instance
             event.organizer = foundation_data['organizer']
             event.plugins = settings.PRETIX_PLUGINS_DEFAULT
@@ -157,7 +166,7 @@ class EventWizard(SessionWizardView):
                 t.limit_events.add(event)
 
             if event.has_subevents:
-                event.subevents.create(
+                se = event.subevents.create(
                     name=event.name,
                     date_from=event.date_from,
                     date_to=event.date_to,
@@ -183,6 +192,17 @@ class EventWizard(SessionWizardView):
             if copy_data and copy_data['copy_from_event']:
                 from_event = copy_data['copy_from_event']
                 event.copy_data_from(from_event)
+            elif event.has_subevents:
+                event.checkin_lists.create(
+                    name=str(se),
+                    all_products=True,
+                    subevent=se
+                )
+            else:
+                event.checkin_lists.create(
+                    name=_('Default'),
+                    all_products=True
+                )
 
             event.settings.set('timezone', basics_data['timezone'])
             event.settings.set('locale', basics_data['locale'])

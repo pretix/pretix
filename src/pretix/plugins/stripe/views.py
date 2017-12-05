@@ -18,6 +18,7 @@ from django.views.decorators.http import require_POST
 
 from pretix.base.models import Order, Quota, RequiredAction
 from pretix.base.payment import PaymentException
+from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
@@ -97,6 +98,8 @@ def charge_webhook(event, event_json, charge_id):
     elif order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and charge['status'] == 'succeeded' and not is_refund:
         try:
             mark_order_paid(order, user=None)
+        except LockTimeoutException:
+            return HttpResponse("Lock timeout, please try again.", status=503)
         except Quota.QuotaExceededException:
             if not RequiredAction.objects.filter(event=event, action_type='pretix.plugins.stripe.overpaid',
                                                  data__icontains=order.code).exists():

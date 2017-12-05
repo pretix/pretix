@@ -1,3 +1,5 @@
+.. _event_create:
+
 Creating an event
 =================
 
@@ -26,7 +28,7 @@ is useful if you have a large number of events that are very similar to each oth
 (i.e. users should be able to buy tickets for multiple events at the same time). Those single events can differ in
 available products, quotas, prices and some meta information, but most settings need to be the same for all of them.
 We recommend to use this feature only if you really know that you need it and if you really run a lot of events, not if
-you run e.g. a yearly conference.
+you run e.g. a yearly conference. You can read more on this feature :ref:`here <subevents>`.
 
 Once you set these values, you can procede to the next step:
 

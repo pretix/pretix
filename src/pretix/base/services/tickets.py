@@ -7,7 +7,8 @@ from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedCombinedTicket, CachedTicket, Event, Order, OrderPosition,
+    CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, Order,
+    OrderPosition,
 )
 from pretix.base.services.async import ProfiledTask
 from pretix.base.signals import register_ticket_outputs
@@ -73,13 +74,21 @@ def preview(event: int, provider: str):
     event = Event.objects.get(id=event)
 
     with rolledback_transaction(), language(event.settings.locale):
-        item = event.items.create(name=_("Sample product"), default_price=42.23)
+        item = event.items.create(name=_("Sample product"), default_price=42.23,
+                                  description=_("Sample product description"))
+        item2 = event.items.create(name=_("Sample workshop"), default_price=23.40)
 
+        from pretix.base.models import Order
         order = event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
                                     email='sample@pretix.eu',
+                                    locale=event.settings.locale,
                                     expires=now(), code="PREVIEW1234", total=119)
 
         p = order.positions.create(item=item, attendee_name=_("John Doe"), price=item.default_price)
+        order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
+        order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
+
+        InvoiceAddress.objects.create(order=order, name=_("John Doe"), company=_("Sample company"))
 
         responses = register_ticket_outputs.send(event)
         for receiver, response in responses:

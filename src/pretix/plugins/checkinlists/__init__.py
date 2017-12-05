@@ -13,6 +13,7 @@ class CheckinlistsApp(AppConfig):
         name = _("Check-in list exporter")
         author = _("the pretix team")
         version = version
+        visible = False
         description = _("This plugin allows you to generate check-in lists for your conference.")
 
     def ready(self):

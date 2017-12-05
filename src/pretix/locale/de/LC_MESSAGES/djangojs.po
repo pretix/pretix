@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-30 22:56+0000\n"
+"POT-Creation-Date: 2017-12-04 17:14+0000\n"
 "PO-Revision-Date: 2017-10-28 22:59+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
@@ -78,12 +78,12 @@ msgstr "Ticket-Design"
 msgid "Saving failed."
 msgstr "Speichern fehlgeschlagen."
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:655
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:656
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Möchten Sie den Editor wirklich schließen ohne Ihre Änderungen zu speichern?"
 
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:669
+#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:670
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Es gab ein Problem beim Hochladen der PDF-Datei, bitte erneut versuchen."
@@ -103,7 +103,8 @@ msgstr ""
 #: pretix/static/pretixbase/js/asyncdownload.js:41
 #: pretix/static/pretixbase/js/asynctask.js:62
 #: pretix/static/pretixbase/js/asynctask.js:116
-msgid "An error of type {code} occured."
+#: pretix/static/pretixcontrol/js/ui/mail.js:23
+msgid "An error of type {code} occurred."
 msgstr "Ein Fehler ist aufgetreten. Fehlercode: {code}"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:54
@@ -133,7 +134,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:65
 msgid ""
-"We currenctly cannot reach the server, but we keep trying. Last error code: "
+"We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
 "Wir können den Server aktuell nicht erreichen, versuchen es aber weiter. "
@@ -145,8 +146,9 @@ msgid "The request took to long. Please try again."
 msgstr "Diese Anfrage hat zu lange gedauert. Bitte erneut versuchen."
 
 #: pretix/static/pretixbase/js/asynctask.js:119
+#: pretix/static/pretixcontrol/js/ui/mail.js:25
 msgid ""
-"We currenctly cannot reach the server. Please try again. Error code: {code}"
+"We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "Wir können den Server aktuell nicht erreichen. Bitte versuchen Sie es noch "
 "einmal. Fehlercode: {code}"
@@ -168,17 +170,6 @@ msgstr "Drücken Sie Strg+C zum Kopieren!"
 msgid "An error has occurred."
 msgstr "Ein Fehler ist aufgetreten."
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:23
-msgid "An error of type {code} occurred."
-msgstr "Ein Fehler vom Typ {code} ist aufgetreten."
-
-#: pretix/static/pretixcontrol/js/ui/mail.js:25
-msgid ""
-"We currently cannot reach the server. Please try again. Error code: {code}"
-msgstr ""
-"Wir können den Server aktuell nicht erreichen. Bitte versuche es noch "
-"einmal. Fehlercode: {code}"
-
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
 msgid "Generating messages …"
 msgstr "Generiere Nachrichten…"
@@ -187,11 +178,11 @@ msgstr "Generiere Nachrichten…"
 msgid "Unknown error."
 msgstr "Unbekannter Fehler."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:329
+#: pretix/static/pretixcontrol/js/ui/main.js:223
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:330
+#: pretix/static/pretixcontrol/js/ui/main.js:224
 msgid "None"
 msgstr "Keine"
 
@@ -203,15 +194,15 @@ msgstr "Sonstige"
 msgid "Count"
 msgstr "Anzahl"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:22
+#: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
 msgstr "Die Produkte in Ihrem Warenkorb sind nicht mehr für Sie reserviert."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:24
+#: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
 msgstr "Warenkorb abgelaufen"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:29
+#: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
@@ -304,10 +295,15 @@ msgstr ""
 "den Warenkorb zu verändern."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
+#, fuzzy
+#| msgctxt "widget"
+#| msgid ""
+#| "ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank"
+#| "\">pretix</a>"
 msgctxt "widget"
 msgid ""
-"ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\">pretix</"
-"a>"
+"ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\" rel="
+"\"noopener\">pretix</a>"
 msgstr ""
 "ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\">pretix</"
 "a>"

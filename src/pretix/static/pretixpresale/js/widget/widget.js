@@ -23,7 +23,7 @@ var strings = {
     'cart_exists': django.pgettext('widget', 'You currently have an active cart for this event. If you select more' +
         ' products, they will be added to your existing cart. Click on this message to continue checkout with your' +
         ' cart.'),
-    'poweredby': django.pgettext('widget', 'ticketing powered by <a href="https://pretix.eu" target="_blank">pretix</a>'),
+    'poweredby': django.pgettext('widget', 'ticketing powered by <a href="https://pretix.eu" target="_blank" rel="noopener">pretix</a>'),
     'redeem_voucher': django.pgettext('widget', 'Redeem a voucher'),
     'redeem': django.pgettext('widget', 'Redeem'),
     'voucher_code': django.pgettext('widget', 'Voucher code'),
@@ -142,7 +142,7 @@ Vue.component('availbox', {
         + '</div>'
         + '<div class="pretix-widget-waiting-list-link"'
         + '     v-if="waiting_list_show">'
-        + '<a :href="waiting_list_url" @click.prevent="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
+        + '<a :href="waiting_list_url" target="_blank" @click="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!item.require_voucher && avail[0] === 100">'
         + '<label class="pretix-widget-item-count-single-label" v-if="order_max === 1">'
@@ -212,7 +212,7 @@ Vue.component('pricebox', {
             if (this.price.gross === "0.00") {
                 return strings.free;
             } else {
-                return this.$root.currency + " " + floatformat(this.display_price, 2);
+                return this.$root.currency + " " + this.display_price;
             }
         },
         taxline: function () {
@@ -651,9 +651,14 @@ var create_widget = function (element) {
         },
         methods: {
             open_link_in_frame: function (event) {
-                var url = event.target.attributes.href.value;
-                this.$children[0].$refs['frame-container'].children[0].src = url;
-                this.frame_loading = true;
+                if (this.$root.useIframe) {
+                    event.preventDefault();
+                    var url = event.target.attributes.href.value;
+                    this.$children[0].$refs['frame-container'].children[0].src = url;
+                    this.frame_loading = true;
+                } else {
+                    return;
+                }
             }
         }
     });

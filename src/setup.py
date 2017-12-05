@@ -73,7 +73,7 @@ setup(
         'django-compressor==2.1',
         'django-hierarkey==1.0.*,>=1.0.2',
         'django-filter==1.0.*',
-        'reportlab==3.2.*',
+        'reportlab==3.4.*',
         'easy-thumbnails==2.4.*',
         'PyPDF2==1.26.*',
         'django-libsass',

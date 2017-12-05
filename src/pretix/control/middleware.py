@@ -64,15 +64,17 @@ class PermissionMiddleware(MiddlewareMixin):
             return self._login_redirect(request)
 
         if not settings.PRETIX_LONG_SESSIONS or not request.session.get('pretix_auth_long_session', False):
+            # If this logic is updated, make sure to also update the logic in pretix/api/auth/permission.py
             last_used = request.session.get('pretix_auth_last_used', time.time())
             if time.time() - request.session.get('pretix_auth_login_time', time.time()) > settings.PRETIX_SESSION_TIMEOUT_ABSOLUTE:
                 logout(request)
                 request.session['pretix_auth_login_time'] = 0
                 return self._login_redirect(request)
-            if time.time() - last_used > settings.PRETIX_SESSION_TIMEOUT_RELATIVE and url_name != 'user.reauth':
-                return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
+            if url_name != 'user.reauth':
+                if time.time() - last_used > settings.PRETIX_SESSION_TIMEOUT_RELATIVE:
+                    return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
 
-            request.session['pretix_auth_last_used'] = int(time.time())
+                request.session['pretix_auth_last_used'] = int(time.time())
 
         if 'event' in url.kwargs and 'organizer' in url.kwargs:
             request.event = Event.objects.filter(

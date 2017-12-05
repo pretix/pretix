@@ -210,3 +210,14 @@ and your tempalte inherits from ``pretixcontrol/event/settings_base.html``.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 A second keyword argument ``request`` will contain the request object.
 """
+
+event_settings_widget = EventPluginSignal(
+    providing_args=['request']
+)
+"""
+This signal is sent out to include template snippets on the settings page of an event
+that allows generating a pretix Widget code.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+A second keyword argument ``request`` will contain the request object.
+"""

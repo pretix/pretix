@@ -1,14 +1,14 @@
 from django import forms
 from django.apps import apps
-from django.db.models import Exists, OuterRef, Q
-from django.db.models.functions import Concat
+from django.db.models import Exists, F, OuterRef, Q
+from django.db.models.functions import Coalesce, Concat
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.models import Event, Invoice, Item, Order, Organizer, SubEvent
 from pretix.base.signals import register_payment_providers
 from pretix.control.utils.i18n import i18ncomp
-from pretix.helpers.database import rolledback_transaction
+from pretix.helpers.database import FixedOrderBy, rolledback_transaction
 
 PAYMENT_PROVIDERS = []
 
@@ -57,7 +57,10 @@ class FilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['ordering'] = forms.ChoiceField(
-            choices=sum([[(a, b), ('-' + a, '-' + b)] for a, b in self.orders.items()], []),
+            choices=sum([
+                [(a, a), ('-' + a, '-' + a)]
+                for a in self.orders.keys()
+            ], []),
             required=False
         )
 
@@ -136,7 +139,7 @@ class OrderFilterForm(FilterForm):
                 qs = qs.filter(status=s)
 
         if fdata.get('ordering'):
-            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
+            qs = qs.order_by(self.orders[fdata.get('ordering')])
 
         if fdata.get('provider'):
             qs = qs.filter(payment_provider=fdata.get('provider'))
@@ -273,6 +276,39 @@ class SubEventFilterForm(FilterForm):
             )
 
         if fdata.get('ordering'):
+            qs = qs.order_by(self.orders[fdata.get('ordering')])
+
+        return qs
+
+
+class OrganizerFilterForm(FilterForm):
+    orders = {
+        'slug': 'slug',
+        'name': 'name',
+    }
+    query = forms.CharField(
+        label=_('Organizer name'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Organizer name'),
+            'autofocus': 'autofocus'
+        }),
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('request')
+        super().__init__(*args, **kwargs)
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('query'):
+            query = fdata.get('query')
+            qs = qs.filter(
+                Q(name__icontains=query) | Q(slug__icontains=query)
+            )
+
+        if fdata.get('ordering'):
             qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
 
         return qs
@@ -354,6 +390,94 @@ class EventFilterForm(FilterForm):
             )
 
         if fdata.get('ordering'):
-            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
+            qs = qs.order_by(self.orders[fdata.get('ordering')])
+
+        return qs
+
+
+class CheckInFilterForm(FilterForm):
+    orders = {
+        'code': ('order__code', 'item__name'),
+        '-code': ('-order__code', '-item__name'),
+        'email': ('order__email', 'item__name'),
+        '-email': ('-order__email', '-item__name'),
+        'status': (FixedOrderBy(F('last_checked_in'), nulls_first=True, descending=True), 'order__code'),
+        '-status': (FixedOrderBy(F('last_checked_in'), nulls_last=True), '-order__code'),
+        'timestamp': (FixedOrderBy(F('last_checked_in'), nulls_first=True), 'order__code'),
+        '-timestamp': (FixedOrderBy(F('last_checked_in'), nulls_last=True, descending=True), '-order__code'),
+        'item': ('item__name', 'variation__value', 'order__code'),
+        '-item': ('-item__name', '-variation__value', '-order__code'),
+        'name': {'_order': F('display_name').asc(nulls_first=True),
+                 'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')},
+        '-name': {'_order': F('display_name').desc(nulls_last=True),
+                  'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')},
+    }
+
+    user = forms.CharField(
+        label=_('Search attendee…'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Search attendee…'),
+            'autofocus': 'autofocus'
+        }),
+        required=False
+    )
+    status = forms.ChoiceField(
+        label=_('Check-in status'),
+        choices=(
+            ('', _('All attendees')),
+            ('1', _('Checked in')),
+            ('0', _('Not checked in')),
+        ),
+        required=False,
+    )
+    item = forms.ModelChoiceField(
+        label=_('Products'),
+        queryset=Item.objects.none(),
+        required=False,
+        empty_label=_('All products')
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        self.list = kwargs.pop('list')
+        super().__init__(*args, **kwargs)
+        if self.list.all_products:
+            self.fields['item'].queryset = self.event.items.all()
+        else:
+            self.fields['item'].queryset = self.list.limit_products.all()
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('user'):
+            u = fdata.get('user')
+            qs = qs.filter(
+                Q(order__email__icontains=u)
+                | Q(attendee_name__icontains=u)
+                | Q(attendee_email__icontains=u)
+                | Q(order__invoice_address__name__icontains=u)
+                | Q(order__invoice_address__company__icontains=u)
+            )
+
+        if fdata.get('status'):
+            s = fdata.get('status')
+            if s == '1':
+                qs = qs.filter(last_checked_in__isnull=False)
+            elif s == '0':
+                qs = qs.filter(last_checked_in__isnull=True)
+
+        if fdata.get('ordering'):
+            ob = self.orders[fdata.get('ordering')]
+            if isinstance(ob, dict):
+                ob = dict(ob)
+                o = ob.pop('_order')
+                qs = qs.annotate(**ob).order_by(o)
+            elif isinstance(ob, (list, tuple)):
+                qs = qs.order_by(*ob)
+            else:
+                qs = qs.order_by(ob)
+
+        if fdata.get('item'):
+            qs = qs.filter(item=fdata.get('item'))
 
         return qs

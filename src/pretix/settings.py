@@ -261,7 +261,8 @@ REST_FRAMEWORK = {
 CORE_MODULES = {
     "pretix.base",
     "pretix.presale",
-    "pretix.control"
+    "pretix.control",
+    "pretix.plugins.checkinlists",
 }
 
 MIDDLEWARE = [

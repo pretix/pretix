@@ -55,7 +55,7 @@ class Paypal(BasePaymentProvider):
                 ('client_id',
                  forms.CharField(
                      label=_('Client ID'),
-                     help_text=_('<a target="_blank" href="{docs_url}">{text}</a>').format(
+                     help_text=_('<a target="_blank" rel="noopener" href="{docs_url}">{text}</a>').format(
                          text=_('Click here for a tutorial on how to obtain the required keys'),
                          docs_url='https://docs.pretix.eu/en/latest/user/payments/paypal.html'
                      )
@@ -230,7 +230,6 @@ class Paypal(BasePaymentProvider):
             logger.error('Invalid state: %s' % str(payment))
             raise PaymentException(_('We were unable to process your payment. See below for details on how to '
                                      'proceed.'))
-            return
 
         if order.status == Order.STATUS_PAID:
             logger.warning('PayPal success event even though order is already marked as paid')

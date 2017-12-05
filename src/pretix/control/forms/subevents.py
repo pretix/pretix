@@ -123,3 +123,30 @@ class SubEventMetaValueForm(forms.ModelForm):
         widgets = {
             'value': forms.TextInput
         }
+
+
+class CheckinListFormSet(I18nInlineFormSet):
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event', None)
+        self.locales = self.event.settings.get('locales')
+        super().__init__(*args, **kwargs)
+
+    @cached_property
+    def items(self):
+        return self.event.items.prefetch_related('variations').all()
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['event'] = self.event
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            event=self.event,
+        )
+        self.add_fields(form, None)
+        return form

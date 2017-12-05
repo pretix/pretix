@@ -4,7 +4,7 @@ import logging
 import dateutil.parser
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import Count, Q
+from django.db.models import Count, Max, OuterRef, Q, Subquery
 from django.http import (
     HttpResponseForbidden, HttpResponseNotFound, JsonResponse,
 )
@@ -110,7 +110,7 @@ class ConfigView(EventPermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['add_form'] = self.add_form
-        ctx['configs'] = self.request.event.appconfiguration_set.prefetch_related('items')
+        ctx['configs'] = self.request.event.appconfiguration_set.select_related('list').prefetch_related('items')
         return ctx
 
 
@@ -133,8 +133,10 @@ class ApiView(View):
 
         self.subevent = None
         if self.event.has_subevents:
-            if self.config.subevent:
-                self.subevent = self.config.subevent
+            if self.config.list.subevent:
+                self.subevent = self.config.list.subevent
+                if 'subevent' in kwargs and kwargs['subevent'] != str(self.subevent.pk):
+                    return HttpResponseForbidden('Invalid subevent selected.')
             elif 'subevent' in kwargs:
                 self.subevent = get_object_or_404(SubEvent, event=self.event, pk=kwargs['subevent'])
             else:
@@ -166,11 +168,14 @@ class ApiRedeemView(ApiView):
                 op = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').get(
                     order__event=self.event, secret=secret, subevent=self.subevent
                 )
+                if not self.config.list.all_products and op.item_id not in [i.pk for i in self.config.list.limit_products.all()]:
+                    response['status'] = 'error'
+                    response['reason'] = 'product'
                 if not self.config.all_items and op.item_id not in [i.pk for i in self.config.items.all()]:
                     response['status'] = 'error'
                     response['reason'] = 'product'
                 elif op.order.status == Order.STATUS_PAID or force:
-                    ci, created = Checkin.objects.get_or_create(position=op, defaults={
+                    ci, created = Checkin.objects.get_or_create(position=op, list=self.config.list, defaults={
                         'datetime': dt,
                         'nonce': nonce,
                     })
@@ -188,6 +193,7 @@ class ApiRedeemView(ApiView):
                             'first': True,
                             'forced': op.order.status != Order.STATUS_PAID,
                             'datetime': dt,
+                            'list': self.config.list.pk
                         })
                 else:
                     if force:
@@ -201,6 +207,7 @@ class ApiRedeemView(ApiView):
                         'first': False,
                         'forced': force,
                         'datetime': dt,
+                        'list': self.config.list.pk
                     })
 
             response['data'] = serialize_op(op, redeemed=op.order.status == Order.STATUS_PAID or force)
@@ -243,22 +250,37 @@ class ApiSearchView(ApiView):
         }
 
         if len(query) >= 4:
-            qs = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address')
+            cqs = Checkin.objects.filter(
+                position_id=OuterRef('pk'),
+                list_id=self.config.list.pk
+            ).order_by().values('position_id').annotate(
+                m=Max('datetime')
+            ).values('m')
+
+            qs = OrderPosition.objects.filter(
+                order__event=self.event,
+                subevent=self.config.list.subevent
+            ).annotate(
+                last_checked_in=Subquery(cqs)
+            ).select_related('item', 'variation', 'order', 'order__invoice_address', 'addon_to')
+
+            if not self.config.list.all_products:
+                qs = qs.filter(item__in=self.config.list.limit_products.values_list('id', flat=True))
+
+            if not self.config.all_items:
+                qs = qs.filter(item__in=self.config.items.all())
+
             if not self.config.allow_search:
                 ops = qs.filter(
-                    Q(order__event=self.event) & Q(secret__istartswith=query) & Q(subevent=self.subevent)
-                ).annotate(checkin_cnt=Count('checkins'))[:25]
+                    Q(secret__istartswith=query)
+                )[:25]
             else:
                 ops = qs.filter(
-                    Q(order__event=self.event)
-                    & Q(
-                        Q(secret__istartswith=query) | Q(attendee_name__icontains=query) | Q(order__code__istartswith=query)
-                        | Q(order__invoice_address__name__icontains=query)
-                    )
-                    & Q(subevent=self.subevent)
-                ).annotate(checkin_cnt=Count('checkins'))[:25]
+                    Q(secret__istartswith=query) | Q(attendee_name__icontains=query) | Q(order__code__istartswith=query)
+                    | Q(order__invoice_address__name__icontains=query)
+                )[:25]
 
-            response['results'] = [serialize_op(op, bool(op.checkin_cnt)) for op in ops]
+            response['results'] = [serialize_op(op, bool(op.last_checked_in)) for op in ops]
         else:
             response['results'] = []
 
@@ -271,25 +293,51 @@ class ApiDownloadView(ApiView):
             'version': API_VERSION
         }
 
-        ops = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').filter(
-            Q(order__event=self.event) & Q(subevent=self.subevent)
-        )
+        cqs = Checkin.objects.filter(
+            position_id=OuterRef('pk'),
+            list_id=self.config.list.pk
+        ).order_by().values('position_id').annotate(
+            m=Max('datetime')
+        ).values('m')
+
+        qs = OrderPosition.objects.filter(
+            order__event=self.event,
+            order__status=Order.STATUS_PAID,
+            subevent=self.config.list.subevent
+        ).annotate(
+            last_checked_in=Subquery(cqs)
+        ).select_related('item', 'variation', 'order', 'addon_to')
+
+        if not self.config.list.all_products:
+            qs = qs.filter(item__in=self.config.list.limit_products.values_list('id', flat=True))
+
         if not self.config.all_items:
-            ops = ops.filter(item__in=self.config.items.all())
+            qs = qs.filter(item__in=self.config.items.all())
 
-        ops = ops.annotate(checkin_cnt=Count('checkins'))
-        response['results'] = [serialize_op(op, bool(op.checkin_cnt)) for op in ops]
-
+        response['results'] = [serialize_op(op, bool(op.last_checked_in)) for op in qs]
         return JsonResponse(response)
 
 
 class ApiStatusView(ApiView):
     def get(self, request, **kwargs):
+
+        cqs = Checkin.objects.filter(
+            position__order__event=self.event, position__subevent=self.subevent,
+            position__order__status=Order.STATUS_PAID,
+            list=self.config.list
+        )
+        pqs = OrderPosition.objects.filter(
+            order__event=self.event, order__status=Order.STATUS_PAID, subevent=self.subevent,
+        )
+        if not self.config.list.all_products:
+            pqs = pqs.filter(item__in=self.config.list.limit_products.values_list('id', flat=True))
+
         ev = self.subevent or self.event
         response = {
             'version': API_VERSION,
             'event': {
                 'name': str(ev.name),
+                'list': self.config.list.name,
                 'slug': self.event.slug,
                 'organizer': {
                     'name': str(self.event.organizer),
@@ -301,45 +349,25 @@ class ApiStatusView(ApiView):
                 'timezone': self.event.settings.timezone,
                 'url': event_absolute_uri(self.event, 'presale:event.index')
             },
-            'checkins': Checkin.objects.filter(
-                position__order__event=self.event, position__subevent=self.subevent
-            ).count(),
-            'total': OrderPosition.objects.filter(
-                order__event=self.event, order__status=Order.STATUS_PAID, subevent=self.subevent
-            ).count()
+            'checkins': cqs.count(),
+            'total': pqs.count()
         }
 
         op_by_item = {
             p['item']: p['cnt']
-            for p in OrderPosition.objects.filter(
-                order__event=self.event,
-                order__status=Order.STATUS_PAID,
-                subevent=self.subevent
-            ).order_by().values('item').annotate(cnt=Count('id'))
+            for p in pqs.order_by().values('item').annotate(cnt=Count('id'))
         }
         op_by_variation = {
             p['variation']: p['cnt']
-            for p in OrderPosition.objects.filter(
-                order__event=self.event,
-                order__status=Order.STATUS_PAID,
-                subevent=self.subevent
-            ).order_by().values('variation').annotate(cnt=Count('id'))
+            for p in pqs.order_by().values('variation').annotate(cnt=Count('id'))
         }
         c_by_item = {
             p['position__item']: p['cnt']
-            for p in Checkin.objects.filter(
-                position__order__event=self.event,
-                position__order__status=Order.STATUS_PAID,
-                position__subevent=self.subevent
-            ).order_by().values('position__item').annotate(cnt=Count('id'))
+            for p in cqs.order_by().values('position__item').annotate(cnt=Count('id'))
         }
         c_by_variation = {
             p['position__variation']: p['cnt']
-            for p in Checkin.objects.filter(
-                position__order__event=self.event,
-                position__order__status=Order.STATUS_PAID,
-                position__subevent=self.subevent
-            ).order_by().values('position__variation').annotate(cnt=Count('id'))
+            for p in cqs.order_by().values('position__variation').annotate(cnt=Count('id'))
         }
 
         response['items'] = []

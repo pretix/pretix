@@ -195,6 +195,8 @@ class WidgetAPIProductList(View):
                 self.subevent = request.event.subevents.filter(pk=kwargs['subevent'], active=True).first()
                 if not self.subevent:
                     raise Http404()
+            else:
+                raise Http404()
         else:
             if 'subevent' in kwargs:
                 raise Http404()

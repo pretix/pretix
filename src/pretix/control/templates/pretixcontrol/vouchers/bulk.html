@@ -64,6 +64,9 @@
                     </div>
                 </div>
             </div>
+            {% if form.subevent %}
+                {% bootstrap_field form.subevent layout="control" %}
+            {% endif %}
             {% bootstrap_field form.tag layout="control" %}
             {% bootstrap_field form.comment layout="control" %}
         </fieldset>

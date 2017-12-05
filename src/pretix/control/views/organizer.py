@@ -17,6 +17,7 @@ from pretix.base.models import Organizer, Team, TeamInvite, User
 from pretix.base.models.event import EventMetaProperty
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.mail import SendMailException, mail
+from pretix.control.forms.filter import OrganizerFilterForm
 from pretix.control.forms.organizer import (
     EventMetaPropertyForm, OrganizerDisplaySettingsForm, OrganizerForm,
     OrganizerSettingsForm, OrganizerUpdateForm, TeamForm,
@@ -34,10 +35,22 @@ class OrganizerList(ListView):
     paginate_by = 30
 
     def get_queryset(self):
+        qs = Organizer.objects.all()
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
         if self.request.user.is_superuser:
-            return Organizer.objects.all()
+            return qs
         else:
-            return Organizer.objects.filter(pk__in=self.request.user.teams.values_list('organizer', flat=True))
+            return qs.filter(pk__in=self.request.user.teams.values_list('organizer', flat=True))
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['filter_form'] = self.filter_form
+        return ctx
+
+    @cached_property
+    def filter_form(self):
+        return OrganizerFilterForm(data=self.request.GET, request=self.request)
 
 
 class InviteForm(forms.Form):
