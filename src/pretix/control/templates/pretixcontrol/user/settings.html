@@ -12,6 +12,15 @@
         {% bootstrap_field form.fullname layout='horizontal' %}
         {% bootstrap_field form.locale layout='horizontal' %}
         {% bootstrap_field form.timezone layout='horizontal' %}
+        <div class="form-group">
+            <label class="col-md-3 control-label" for="id_new_pw_repeat">{% trans "Notifications" %}</label>
+            <div class="col-md-9 static-form-row">
+                <a href="{% url "control:user.settings.notifications" %}">
+                    <span class="fa fa-bell-o"></span>
+                    {% trans "Change notification settings" %}
+                </a>
+            </div>
+        </div>
     </fieldset>
     <fieldset>
         <legend>{% trans "Login settings" %}</legend>

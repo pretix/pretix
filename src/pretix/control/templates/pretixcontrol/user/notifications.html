@@ -1,0 +1,63 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Notification settings" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Notification settings" %}</h1>
+    <form class="form-inline" method="get">
+        <fieldset>
+            <legend>{% trans "Choose event" %}</legend>
+            <p>
+                <select name="event" class="form-control">
+                    <option value="">{% trans "All my events" %}</option>
+                    {% for e in events %}
+                        <option value="{{ e.pk }}"
+                                {% if e.pk|floatformat:0 == request.GET.event %}selected="selected"{% endif %}>
+                            {{ e.name }} – {{ e.get_date_range_display }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-primary" type="submit">{% trans "Choose" %}</button>
+            </p>
+        </fieldset>
+    </form>
+    <form method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>{% trans "Choose notifications to get" %}</legend>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>{% trans "Notification type" %}</th>
+                    <th class="text-center">{% trans "E-Mail notification" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for type in types.values %}
+                    <tr>
+                        <td>
+                            {{ type.verbose_name }}
+                        </td>
+                        <td class="text-center">
+                            {% if not event or type.required_permission in permset %}
+                                <label class="checkbox">
+                                    <input type="checkbox" value="on"
+                                           {% if type.action_type in enabled.mail %}checked="checked"{% endif %}
+                                           name="mail:{{ type.action_type }}">
+                                </label>
+                            {% else %}
+                                <span class="fa fa-lock" data-toggle="tooltip" title="{% trans "You have no permission to receive this notification" %}"></span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

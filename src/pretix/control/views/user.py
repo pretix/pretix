@@ -1,6 +1,7 @@
 import base64
 import logging
 import time
+from collections import defaultdict
 from urllib.parse import quote
 
 from django.conf import settings
@@ -19,7 +20,8 @@ from u2flib_server import u2f
 from u2flib_server.jsapi import DeviceRegistration
 
 from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
-from pretix.base.models import U2FDevice, User
+from pretix.base.models import Event, NotificationSetting, U2FDevice, User
+from pretix.base.notifications import get_all_notification_types
 from pretix.control.views.auth import get_u2f_appid
 
 REAL_DEVICE_TYPES = (TOTPDevice, U2FDevice)
@@ -352,3 +354,55 @@ class User2FARegenerateEmergencyView(RecentAuthenticationRequiredMixin, Template
         messages.success(request, _('Your emergency codes have been newly generated. Remember to store them in a safe '
                                     'place in case you lose access to your devices.'))
         return redirect(reverse('control:user.settings.2fa'))
+
+
+class UserNotificationsEditView(TemplateView):
+    template_name = 'pretixcontrol/user/notifications.html'
+
+    @cached_property
+    def event(self):
+        if self.request.GET.get('event'):
+            try:
+                return self.request.user.get_events_with_any_permission().select_related(
+                    'organizer'
+                ).get(pk=self.request.GET.get('event'))
+            except Event.DoesNotExist:
+                return None
+        return None
+
+    @cached_property
+    def types(self):
+        return get_all_notification_types(self.event)
+
+    @cached_property
+    def currently_enabled(self):
+        enabled_per_method = defaultdict(set)
+        for n in self.request.user.notification_settings.filter(event=self.event):
+            enabled_per_method[n.method].add(n.action_type)
+        return enabled_per_method
+
+    def post(self, request, *args, **kwargs):
+        for method, __ in NotificationSetting.CHANNELS:
+            old_enabled = self.currently_enabled[method]
+            new_enabled = set()
+            for at in self.types.keys():
+                if request.POST.get('{}:{}'.format(method, at)) == 'on':
+                    new_enabled.add(at)
+
+            for at in old_enabled - new_enabled:
+                self.request.user.notification_settings.filter(event=self.event, action_type=at, method=method).delete()
+
+            for at in new_enabled - old_enabled:
+                self.request.user.notification_settings.create(event=self.event, action_type=at, method=method)
+
+        messages.success(request, _('Your notification settings have been saved.'))
+        return redirect(reverse('control:user.settings.notifications') + ('?event={}'.format(self.event.pk) if self.event else ''))
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['events'] = self.request.user.get_events_with_any_permission().order_by('-date_from')
+        ctx['types'] = self.types
+        ctx['enabled'] = self.currently_enabled
+        if self.event:
+            ctx['permset'] = self.request.user.get_event_permission_set(self.event.organizer, self.event)
+        return ctx
