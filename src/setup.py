@@ -94,6 +94,7 @@ setup(
         'django-markup',
         'markdown',
         'bleach==2.*',
+        'html5lib==1.0b10',  # Until https://github.com/mozilla/bleach/issues/337 is fixed, can be removed afterwards
         'raven',
         'paypalrestsdk==1.12.*',
         'pycparser==2.13',
