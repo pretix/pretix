@@ -42,6 +42,7 @@ ALLOWED_TAGS = [
     'h4',
     'h5',
     'h6',
+    'pre',
     # Update doc/user/markdown.rst if you change this!
 ]
 
