@@ -373,6 +373,28 @@ class Item(LoggedModel):
     def has_variations(self):
         return self.variations.exists()
 
+    @staticmethod
+    def clean_per_order(min_per_order, max_per_order):
+        if min_per_order is not None and max_per_order is not None:
+            if min_per_order > max_per_order:
+                raise ValidationError(_('max_per_order must be greater than min_per_order (or null for no limitation).'))
+
+    @staticmethod
+    def clean_category(category, event):
+        if category is not None and category.event is not None and category.event != event:
+            raise ValidationError(_('The items category must belong to the same event as the item.'))
+
+    @staticmethod
+    def clean_tax_rule(tax_rule, event):
+        if tax_rule is not None and tax_rule.event is not None and tax_rule.event != event:
+            raise ValidationError(_('The items tax_rule must belong to the same event as the item.'))
+
+    @staticmethod
+    def clean_available(from_date, until_date):
+        if from_date is not None and until_date is not None:
+            if from_date > until_date:
+                raise ValidationError(_('The available_from date must be before the available_until date (or null).'))
+
 
 class ItemVariation(models.Model):
     """

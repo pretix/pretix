@@ -106,3 +106,8 @@ def subevent2(event2, meta_prop):
 @pytest.fixture
 def taxrule(event):
     return event.tax_rules.create(name="VAT", rate=19)
+
+
+@pytest.fixture
+def taxrule2(event2):
+    return event2.tax_rules.create(name="VAT", rate=25)

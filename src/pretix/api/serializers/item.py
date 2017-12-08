@@ -46,8 +46,8 @@ class ItemTaxRateField(serializers.Field):
 
 
 class ItemSerializer(I18nAwareModelSerializer):
-    addons = InlineItemAddOnSerializer(many=True)
-    variations = InlineItemVariationSerializer(many=True)
+    addons = InlineItemAddOnSerializer(many=True, required=False)
+    variations = InlineItemVariationSerializer(many=True, required=False)
     tax_rate = ItemTaxRateField(source='*', read_only=True)
 
     class Meta:
@@ -58,21 +58,16 @@ class ItemSerializer(I18nAwareModelSerializer):
                   'require_voucher', 'hide_without_voucher', 'allow_cancel',
                   'min_per_order', 'max_per_order', 'checkin_attention', 'has_variations',
                   'variations', 'addons')
-
-    def create(self, validated_data):
-        variations_data = validated_data.pop('variations')
-        addons_data = validated_data.pop('addons')
-        item = Item.objects.create(**validated_data)
-        for variation_data in variations_data:
-            ItemVariation.objects.create(item=item, **variation_data)
-        for addon_data in addons_data:
-            ItemAddOn.objects.create(item=item, **addon_data)
-
-        return item
+        read_only_fields = ('variations', 'addons')
 
     def validate(self, data):
         data = super().validate(data)
         event = self.context['event']
+
+        Item.clean_per_order(data.get('min_per_order'), data.get('max_per_order'))
+        Item.clean_available(data.get('available_from'), data.get('available_until'))
+        Item.clean_category(data.get('category'), event)
+        Item.clean_tax_rule(data.get('tax_rule'), event)
 
         return data
 

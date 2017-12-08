@@ -1,13 +1,25 @@
+import datetime
 from decimal import Decimal
+from unittest import mock
 
 import pytest
+from django.utils.timezone import now
+from django_countries.fields import Country
+from pytz import UTC
 
+from pretix.base.models import InvoiceAddress, Order, OrderPosition
+from pretix.base.models.orders import OrderFee
 from pretix.base.models import Quota, ItemVariation
 
 
 @pytest.fixture
 def category(event):
     return event.categories.create(name="Tickets")
+
+
+@pytest.fixture
+def category2(event2):
+    return event2.categories.create(name="Tickets2")
 
 
 TEST_CATEGORY_RES = {
@@ -187,7 +199,8 @@ def test_item_detail_addons(token_client, organizer, event, team, item, category
         "addon_category": category.pk,
         "min_count": 0,
         "max_count": 1,
-        "position": 0
+        "position": 0,
+        "price_included": False
     }]
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
                                                                                item.pk))
@@ -221,30 +234,56 @@ def test_item_create(token_client, organizer, event, item, category, taxrule):
            "min_per_order": None,
            "max_per_order": None,
            "checkin_attention": False,
-           "has_variations": True,
-           "variations": [
-               {
-                   "value": {"en": "Student"},
-                   "default_price": "10.00",
-                   "price": "10.00",
-                   "active": True,
-                   "description": None,
-                   "position": 0
-               },
-               {
-                   "value": {"en": "Regular"},
-                   "default_price": None,
-                   "price": "23.00",
-                   "active": True,
-                   "description": None,
-                   "position": 1
-               }
-           ],
-           "addons": []
+           "has_variations": True
        },
        format='json'
     )
    assert resp.status_code == 201
+
+
+@pytest.mark.django_db
+def test_item_update(token_client, organizer, event, item, category2, taxrule2):
+   resp = token_client.patch(
+       '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+       {
+           "min_per_order": 10,
+           "max_per_order": 2
+       },
+       format='json'
+    )
+   assert resp.status_code == 400
+   assert resp.content.decode() == '{"non_field_errors":["max_per_order must be greater than min_per_order (or null for no limitation)."]}'
+
+   resp = token_client.patch(
+       '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+       {
+           "available_from": "2017-12-30T12:00",
+           "available_until": "2017-12-29T12:00"
+       },
+       format='json'
+    )
+   assert resp.status_code == 400
+   assert resp.content.decode() == '{"non_field_errors":["The available_from date must be before the available_until date (or null)."]}'
+
+   resp = token_client.patch(
+       '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+       {
+           "category": category2.pk
+       },
+       format='json'
+    )
+   assert resp.status_code == 400
+   assert resp.content.decode() == '{"non_field_errors":["The items category must belong to the same event as the item."]}'
+
+   resp = token_client.patch(
+       '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+       {
+           "tax_rule": taxrule2.pk
+       },
+       format='json'
+    )
+   assert resp.status_code == 400
+   assert resp.content.decode() == '{"non_field_errors":["The items tax_rule must belong to the same event as the item."]}'
 
 
 @pytest.fixture
@@ -338,11 +377,50 @@ def test_variations_update(token_client, organizer, event, item, item3, variatio
     assert resp.status_code == 404
 
 
+@pytest.fixture
+def order(event, item, taxrule):
+    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        o = Order.objects.create(
+            code='FOO', event=event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
+            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
+            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+            total=23, payment_provider='banktransfer', locale='en'
+        )
+        o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
+                      tax_value=Decimal('0.05'), tax_rule=taxrule)
+        InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
+        OrderPosition.objects.create(
+            order=o,
+            item=item,
+            variation=None,
+            price=Decimal("23"),
+            attendee_name="Peter",
+            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+        )
+        return o
+
+
 @pytest.mark.django_db
-def test_variations_delete(token_client, organizer, event, item, variation):
+def test_variations_delete(token_client, organizer, event, item, variation, order):
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
     assert resp.status_code == 204
     assert not item.variations.filter(pk=variation.id).exists()
+
+
+@pytest.mark.django_db
+def test_ordered_variations_not_delete(token_client, organizer, event, item, order):
+    var = item.variations.create(value="Children")
+    op = order.positions.first()
+    op.variation = var
+    op.save()
+
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, var.pk))
+    assert resp.status_code == 400
+    assert item.variations.filter(pk=var.id).exists()
 
 
 @pytest.fixture
