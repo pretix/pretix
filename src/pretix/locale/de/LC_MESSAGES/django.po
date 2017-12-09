@@ -4526,7 +4526,7 @@ msgid "Number of times times EACH of these vouchers can be redeemed."
 msgstr "Wie oft JEDER der Gutscheine eingelöst werden kann."
 
 #: pretix/control/forms/vouchers.py:168
-msgid "A voucher with one of this codes already exists."
+msgid "A voucher with one of these codes already exists."
 msgstr "Ein Gutschein mit einem der eingegebenen Codes existiert bereits."
 
 #: pretix/control/logdisplay.py:25
