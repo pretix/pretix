@@ -165,7 +165,7 @@ class VoucherBulkForm(VoucherForm):
         data = super().clean()
 
         if Voucher.objects.filter(code__in=data['codes'], event=self.instance.event).exists():
-            raise ValidationError(_('A voucher with one of this codes already exists.'))
+            raise ValidationError(_('A voucher with one of these codes already exists.'))
 
         return data
 
