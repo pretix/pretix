@@ -64,6 +64,13 @@ class FilterForm(forms.Form):
             required=False
         )
 
+    def get_order_by(self):
+        o = self.cleaned_data.get('ordering')
+        if o.startswith('-'):
+            return '-' + self.orders[o[1:]]
+        else:
+            return self.orders[o]
+
 
 class OrderFilterForm(FilterForm):
     query = forms.CharField(
@@ -139,7 +146,7 @@ class OrderFilterForm(FilterForm):
                 qs = qs.filter(status=s)
 
         if fdata.get('ordering'):
-            qs = qs.order_by(self.orders[fdata.get('ordering')])
+            qs = qs.order_by(self.get_order_by())
 
         if fdata.get('provider'):
             qs = qs.filter(payment_provider=fdata.get('provider'))
@@ -276,7 +283,7 @@ class SubEventFilterForm(FilterForm):
             )
 
         if fdata.get('ordering'):
-            qs = qs.order_by(self.orders[fdata.get('ordering')])
+            qs = qs.order_by(self.get_order_by())
 
         return qs
 
@@ -309,7 +316,7 @@ class OrganizerFilterForm(FilterForm):
             )
 
         if fdata.get('ordering'):
-            qs = qs.order_by(dict(self.fields['ordering'].choices)[fdata.get('ordering')])
+            qs = qs.order_by(self.get_order_by())
 
         return qs
 
@@ -390,7 +397,7 @@ class EventFilterForm(FilterForm):
             )
 
         if fdata.get('ordering'):
-            qs = qs.order_by(self.orders[fdata.get('ordering')])
+            qs = qs.order_by(self.get_order_by())
 
         return qs
 
