@@ -22,13 +22,13 @@ from pretix.control.forms.subevents import (
     SubEventItemVariationForm, SubEventMetaValueForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
 
 
-class SubEventList(EventPermissionRequiredMixin, ListView):
+class SubEventList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = SubEvent
     context_object_name = 'subevents'
-    paginate_by = 30
     template_name = 'pretixcontrol/subevents/index.html'
     permission = 'can_change_settings'
 

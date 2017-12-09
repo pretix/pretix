@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load urlreplace %}
-<nav class="text-center">
+<nav class="text-center pagination-container">
     <ul class="pagination">
         {% if is_paginated %}
             {% if page_obj.has_previous %}
@@ -32,4 +32,17 @@
             {% endif %}
         {% endif %}
     </ul>
+    {% if page_size %}
+        <div class="clearfix">
+            <small>
+                {% trans "Show per page:" %}
+            </small>
+            <a href="?{% url_replace request "page_size" "25" "page" "1" %}">
+                {% if page_size == 25 %}<strong>{% endif %}25{% if page_size == 25 %}</strong>{% endif %}</a> |
+            <a href="?{% url_replace request "page_size" "50" "page" "1" %}">
+                {% if page_size == 50 %}<strong>{% endif %}50{% if page_size == 50 %}</strong>{% endif %}</a> |
+            <a href="?{% url_replace request "page_size" "100" "page" "1" %}">
+                {% if page_size == 100 %}<strong>{% endif %}100{% if page_size == 100 %}</strong>{% endif %}</a>
+        </div>
+    {% endif %}
 </nav>

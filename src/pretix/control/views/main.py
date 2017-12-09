@@ -22,12 +22,12 @@ from pretix.control.forms.event import (
 )
 from pretix.control.forms.filter import EventFilterForm
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
+from pretix.control.views import PaginationMixin
 
 
-class EventList(ListView):
+class EventList(PaginationMixin, ListView):
     model = Event
     context_object_name = 'events'
-    paginate_by = 30
     template_name = 'pretixcontrol/events/index.html'
 
     def get_queryset(self):

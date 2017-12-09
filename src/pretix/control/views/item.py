@@ -32,7 +32,7 @@ from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
 )
 
-from . import ChartContainingView, CreateView, UpdateView
+from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
 
 class ItemList(ListView):
@@ -192,10 +192,9 @@ class CategoryCreate(EventPermissionRequiredMixin, CreateView):
         return super().form_invalid(form)
 
 
-class CategoryList(ListView):
+class CategoryList(PaginationMixin, ListView):
     model = ItemCategory
     context_object_name = 'categories'
-    paginate_by = 30
     template_name = 'pretixcontrol/items/categories.html'
 
     def get_queryset(self):
@@ -245,10 +244,9 @@ def category_move_down(request, organizer, event, category):
                     event=request.event.slug)
 
 
-class QuestionList(ListView):
+class QuestionList(PaginationMixin, ListView):
     model = Question
     context_object_name = 'questions'
-    paginate_by = 30
     template_name = 'pretixcontrol/items/questions.html'
 
     def get_queryset(self):
@@ -545,10 +543,9 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
         return ret
 
 
-class QuotaList(ListView):
+class QuotaList(PaginationMixin, ListView):
     model = Quota
     context_object_name = 'quotas'
-    paginate_by = 30
     template_name = 'pretixcontrol/items/quotas.html'
 
     def get_queryset(self):

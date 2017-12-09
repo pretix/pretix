@@ -16,13 +16,12 @@ from pretix.base.models.checkin import CheckinList
 from pretix.control.forms.checkin import CheckinListForm
 from pretix.control.forms.filter import CheckInFilterForm
 from pretix.control.permissions import EventPermissionRequiredMixin
-from pretix.control.views import CreateView, UpdateView
+from pretix.control.views import CreateView, PaginationMixin, UpdateView
 
 
-class CheckInListShow(EventPermissionRequiredMixin, ListView):
+class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = Checkin
     context_object_name = 'entries'
-    paginate_by = 30
     template_name = 'pretixcontrol/checkin/index.html'
     permission = 'can_view_orders'
 
@@ -109,10 +108,9 @@ class CheckInListShow(EventPermissionRequiredMixin, ListView):
         }) + '?' + request.GET.urlencode())
 
 
-class CheckinListList(EventPermissionRequiredMixin, ListView):
+class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = CheckinList
     context_object_name = 'checkinlists'
-    paginate_by = 30
     permission = 'can_view_orders'
     template_name = 'pretixcontrol/checkin/lists.html'
 

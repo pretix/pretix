@@ -45,7 +45,7 @@ from pretix.helpers.urls import build_absolute_uri
 from pretix.multidomain.urlreverse import get_domain
 from pretix.presale.style import regenerate_css
 
-from . import CreateView, UpdateView
+from . import CreateView, PaginationMixin, UpdateView
 from ..logdisplay import OVERVIEW_BLACKLIST
 
 
@@ -877,10 +877,9 @@ class EventComment(EventPermissionRequiredMixin, View):
         })
 
 
-class TaxList(EventSettingsViewMixin, EventPermissionRequiredMixin, ListView):
+class TaxList(EventSettingsViewMixin, EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = TaxRule
     context_object_name = 'taxrules'
-    paginate_by = 30
     template_name = 'pretixcontrol/event/tax_index.html'
     permission = 'can_change_event_settings'
 

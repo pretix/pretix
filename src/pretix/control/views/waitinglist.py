@@ -15,6 +15,7 @@ from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.async import AsyncAction
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views import PaginationMixin
 
 
 class AutoAssign(EventPermissionRequiredMixin, AsyncAction, View):
@@ -39,10 +40,9 @@ class AutoAssign(EventPermissionRequiredMixin, AsyncAction, View):
                        self.request.POST.get('subevent'))
 
 
-class WaitingListView(EventPermissionRequiredMixin, ListView):
+class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = WaitingListEntry
     context_object_name = 'entries'
-    paginate_by = 30
     template_name = 'pretixcontrol/waitinglist/index.html'
     permission = 'can_view_orders'
 

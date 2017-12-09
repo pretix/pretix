@@ -21,12 +21,12 @@ from pretix.base.models.vouchers import _generate_random_code
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
+from pretix.control.views import PaginationMixin
 
 
-class VoucherList(EventPermissionRequiredMixin, ListView):
+class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
     model = Voucher
     context_object_name = 'vouchers'
-    paginate_by = 30
     template_name = 'pretixcontrol/vouchers/index.html'
     permission = 'can_view_vouchers'
 

@@ -50,6 +50,7 @@ from pretix.control.forms.orders import (
     OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views import PaginationMixin
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.signals import question_form_fields
@@ -57,10 +58,9 @@ from pretix.presale.signals import question_form_fields
 logger = logging.getLogger(__name__)
 
 
-class OrderList(EventPermissionRequiredMixin, ListView):
+class OrderList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = Order
     context_object_name = 'orders'
-    paginate_by = 30
     template_name = 'pretixcontrol/orders/index.html'
     permission = 'can_view_orders'
 
@@ -815,7 +815,7 @@ class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
     permission = 'can_view_orders'
     model = LogEntry
     context_object_name = 'logs'
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         order = Order.objects.filter(
