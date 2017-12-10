@@ -7,6 +7,8 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
 
+from pretix.base.notifications import get_all_notification_types
+from pretix.base.services.notifications import notify
 from pretix.helpers.json import CustomJSONEncoder
 
 
@@ -59,6 +61,9 @@ class LoggingMixin:
         if data:
             logentry.data = json.dumps(data, cls=CustomJSONEncoder)
         logentry.save()
+
+        if action in get_all_notification_types():
+            notify.apply_async(args=(logentry.pk,))
 
 
 class LoggedModel(models.Model, LoggingMixin):
