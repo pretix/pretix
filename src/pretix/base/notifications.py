@@ -1,22 +1,63 @@
 import logging
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 
 from django.dispatch import receiver
+from django.utils.formats import date_format, localize
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Event, LogEntry
 from pretix.base.signals import register_notification_types
+from pretix.helpers.urls import build_absolute_uri
 
 logger = logging.getLogger(__name__)
 _ALL_TYPES = None
+
+
+NotificationAttribute = namedtuple('NotificationAttribute', ('title', 'value'))
+NotificationAction = namedtuple('NotificationAction', ('label', 'url'))
+
+
+class Notification:
+    """
+    Represents a notification that is sent/shown to a user. A notification consists of:
+
+    * one ``event`` reference
+    * one ``title`` text that is shown e.g. in the email subject or in a headline
+    * optionally one ``detail`` text that may or may not be shown depending on the notification method
+    * optionally one ``url`` that should be absolute and point to the context of an notification (e.g. an order)
+    * optionally a number of attributes consisting of a title and a value that can be used to add additional details
+      to the notification (e.g. "Customer: ABC")
+    * optionally a number of actions that may or may not be shown as buttons depending on the notification method,
+      each consisting of a button label and an absolute URL to point to.
+    """
+
+    def __init__(self, event: Event, title: str, detail: str=None, url: str=None):
+        self.title = title
+        self.event = event
+        self.detail = detail
+        self.url = url
+        self.attributes = []
+        self.actions = []
+
+    def add_action(self, label, url):
+        """
+        Add an action to the notification
+        """
+        self.actions.append(NotificationAction(label, url))
+
+    def add_attribute(self, title, value):
+        """
+        Add an attribute to the notification-
+        """
+        self.attributes.append(NotificationAttribute(title, value))
 
 
 class NotificationType:
     def __init__(self, event: Event = None):
         self.event = event
 
-    def __str__(self):
-        return self.action_types
+    def __repr__(self):
+        return '<NotificationType: {}>'.format(self.action_type)
 
     @property
     def action_type(self) -> str:
@@ -42,8 +83,11 @@ class NotificationType:
         """
         raise NotImplementedError()  # NOQA
 
-    def render_notification(self, logentry: LogEntry):
-        return logentry.display()
+    def build_notification(self, logentry: LogEntry) -> Notification:
+        return Notification(
+            logentry.event,
+            logentry.display()
+        )
 
 
 def get_all_notification_types(event=None):
@@ -64,12 +108,13 @@ def get_all_notification_types(event=None):
     return types
 
 
-class ParametrizedOrderNotification(NotificationType):
+class ParametrizedOrderNotificationType(NotificationType):
     required_permission = "can_view_orders"
 
-    def __init__(self, event, action_type, verbose_name):
+    def __init__(self, event, action_type, verbose_name, title):
         self._action_type = action_type
         self._verbose_name = verbose_name
+        self._title = title
         super().__init__(event)
 
     @property
@@ -80,10 +125,45 @@ class ParametrizedOrderNotification(NotificationType):
     def verbose_name(self):
         return self._verbose_name
 
+    def build_notification(self, logentry: LogEntry):
+        order = logentry.content_object
+
+        order_url = build_absolute_uri(
+            'control:event.order',
+            kwargs={
+                'organizer': logentry.event.organizer.slug,
+                'event': logentry.event.slug,
+                'code': order.code
+            }
+        )
+
+        n = Notification(
+            event=logentry.event,
+            title=self._title.format(order=order, event=logentry.event),
+            url=order_url
+        )
+        n.add_attribute(_('Order code'), order.code)
+        n.add_attribute(_('Order total'), '{} {}'.format(localize(order.total), logentry.event.currency))
+        n.add_attribute(_('Order date'), date_format(order.datetime, 'SHORT_DATETIME_FORMAT'))
+        n.add_attribute(_('Order status'), order.get_status_display())
+        n.add_attribute(_('Order positions'), str(order.positions.count()))
+        n.add_action(_('View order details'), order_url)
+        return n
+
 
 @receiver(register_notification_types, dispatch_uid="base_register_default_notification_types")
 def register_default_notification_types(sender, **kwargs):
     return (
-        ParametrizedOrderNotification(sender, 'pretix.event.order.placed', _('New order placed')),
-        ParametrizedOrderNotification(sender, 'pretix.event.order.paid', _('Order marked as paid')),
+        ParametrizedOrderNotificationType(
+            sender,
+            'pretix.event.order.placed',
+            _('New order placed'),
+            _('New order {order.code} has been placed'),
+        ),
+        ParametrizedOrderNotificationType(
+            sender,
+            'pretix.event.order.paid',
+            _('Order marked as paid'),
+            _('Order {order.code} has been marked as paid')
+        ),
     )

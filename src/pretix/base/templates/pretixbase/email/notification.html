@@ -1,0 +1,50 @@
+{% extends "pretixbase/email/base.html" %}
+{% load eventurl %}
+{% load i18n %}
+{% block content %}
+    <tr>
+        <td class="containertd">
+            <div class="content">
+                <h3>
+                    {% if notification.url %}<a href="{{ notification.url }}">{% endif %}
+                    {{ notification.title }}
+                    {% if notification.url %}</a>{% endif %}
+                </h3>
+                {% if notification.detail %}
+                    <p>{{ notification.detail }}</p>
+                {% endif %}
+                {% if notification.attributes %}
+                    <table>
+                        {% for attr in notification.attributes %}
+                            <tr>
+                                <td>
+                                    <strong>{{ attr.title }}</strong>
+                                </td>
+                                <td>
+                                    {{ attr.value }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+                {% if notification.actions %}
+                    <p class="actions" style="text-align: center">
+                        {% for action in notification.actions %}
+                            <a href="{{ action.url }}" class="button">{{ action.label }}</a>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="containertd">
+            <div class="content">
+                {% trans "You receive these emails based on your notification settings." %}<br>
+                <a href="{{ settings_url }}">
+                    {% trans "Click here to view and change your notification settings" %}
+                </a>
+            </div>
+        </td>
+    </tr>
+{% endblock %}
