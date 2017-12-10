@@ -7,8 +7,6 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
 
-from pretix.base.notifications import get_all_notification_types
-from pretix.base.services.notifications import notify
 from pretix.helpers.json import CustomJSONEncoder
 
 
@@ -49,6 +47,8 @@ class LoggingMixin:
         """
         from .log import LogEntry
         from .event import Event
+        from ..notifications import get_all_notification_types
+        from ..services.notifications import notify
 
         event = None
         if isinstance(self, Event):

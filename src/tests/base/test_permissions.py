@@ -223,7 +223,7 @@ def test_list_of_events(event, user):
 
     team1 = Team.objects.create(organizer=event.organizer, can_change_orders=True, all_events=True)
     team2 = Team.objects.create(organizer=event.organizer, can_change_vouchers=True)
-    team3 = Team.objects.create(organizer=event.organizer, can_change_event_settings=True)
+    team3 = Team.objects.create(organizer=orga2, can_change_event_settings=True)
     team1.members.add(user)
     team2.members.add(user)
     team3.members.add(user)
@@ -235,3 +235,21 @@ def test_list_of_events(event, user):
     assert event2 in events
     assert event3 in events
     assert event4 not in events
+
+    events = list(user.get_events_with_permission('can_change_event_settings'))
+    assert event not in events
+    assert event2 not in events
+    assert event3 in events
+    assert event4 not in events
+
+    admin = User.objects.get(is_superuser=True)
+    assert set(event.get_users_with_any_permission()) == {user, admin}
+    assert set(event2.get_users_with_any_permission()) == {user, admin}
+    assert set(event3.get_users_with_any_permission()) == {user, admin}
+    assert set(event4.get_users_with_any_permission()) == {admin}
+
+    assert set(event.get_users_with_permission('can_change_event_settings')) == {admin}
+    assert set(event2.get_users_with_permission('can_change_event_settings')) == {admin}
+    assert set(event3.get_users_with_permission('can_change_event_settings')) == {user, admin}
+    assert set(event4.get_users_with_permission('can_change_event_settings')) == {admin}
+    assert set(event.get_users_with_permission('can_change_orders')) == {admin, user}
