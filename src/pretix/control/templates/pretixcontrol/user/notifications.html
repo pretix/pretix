@@ -33,18 +33,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for type in types.values %}
+                {% for type, enabled, global in types %}
                     <tr>
                         <td>
                             {{ type.verbose_name }}
                         </td>
                         <td class="text-center">
                             {% if not event or type.required_permission in permset %}
-                                <label class="checkbox">
-                                    <input type="checkbox" value="on"
-                                           {% if type.action_type in enabled.mail %}checked="checked"{% endif %}
-                                           name="mail:{{ type.action_type }}">
-                                </label>
+                                <select name="mail:{{ type.action_type }}" class="form-control">
+                                    {% if event %}<option value="global">{% trans "Global" %} ({% if global.mail %}{% trans "On" %}{% else %}{% trans "Off" %}{% endif %})</option>{% endif %}
+                                    <option value="off" {% if "mail" in enabled and enabled.mail == False %}selected{% endif %}>{% trans "Off" %}</option>
+                                    <option value="on" {% if enabled.mail %}selected{% endif %}>{% trans "On" %}</option>
+                                </select>
                             {% else %}
                                 <span class="fa fa-lock" data-toggle="tooltip" title="{% trans "You have no permission to receive this notification" %}"></span>
                             {% endif %}

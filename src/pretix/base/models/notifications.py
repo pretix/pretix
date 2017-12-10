@@ -16,6 +16,10 @@ class NotificationSetting(models.Model):
     :type event: Event
     :param method: The method to notify with.
     :type method: str
+    :param enabled: Indicates whether the specified notification is enabled. If no
+                    event is set, this must always be true. If no event is set, setting
+                    this to false is equivalent to deleting the object.
+    :type enabled: bool
     """
     CHANNELS = (
         ('mail', _('E-mail')),
@@ -26,6 +30,7 @@ class NotificationSetting(models.Model):
     event = models.ForeignKey('Event', null=True, blank=True, on_delete=models.CASCADE,
                               related_name='notification_settings')
     method = models.CharField(max_length=255, choices=CHANNELS)
+    enabled = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ('user', 'action_type', 'event', 'method')

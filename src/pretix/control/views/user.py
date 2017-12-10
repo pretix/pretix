@@ -375,25 +375,49 @@ class UserNotificationsEditView(TemplateView):
         return get_all_notification_types(self.event)
 
     @cached_property
-    def currently_enabled(self):
-        enabled_per_method = defaultdict(set)
+    def currently_set(self):
+        set_per_method = defaultdict(dict)
         for n in self.request.user.notification_settings.filter(event=self.event):
-            enabled_per_method[n.method].add(n.action_type)
-        return enabled_per_method
+            set_per_method[n.method][n.action_type] = n.enabled
+        return set_per_method
+
+    @cached_property
+    def global_set(self):
+        set_per_method = defaultdict(dict)
+        for n in self.request.user.notification_settings.filter(event__isnull=True):
+            set_per_method[n.method][n.action_type] = n.enabled
+        return set_per_method
 
     def post(self, request, *args, **kwargs):
         for method, __ in NotificationSetting.CHANNELS:
-            old_enabled = self.currently_enabled[method]
-            new_enabled = set()
+            old_enabled = self.currently_set[method]
+
             for at in self.types.keys():
-                if request.POST.get('{}:{}'.format(method, at)) == 'on':
-                    new_enabled.add(at)
+                val = request.POST.get('{}:{}'.format(method, at))
 
-            for at in old_enabled - new_enabled:
-                self.request.user.notification_settings.filter(event=self.event, action_type=at, method=method).delete()
+                # True → False
+                if old_enabled.get(at) is True and val == 'off':
+                    self.request.user.notification_settings.filter(
+                        event=self.event, action_type=at, method=method
+                    ).update(enabled=False)
 
-            for at in new_enabled - old_enabled:
-                self.request.user.notification_settings.create(event=self.event, action_type=at, method=method)
+                # True/False → None
+                if old_enabled.get(at) is not None and val == 'global':
+                    self.request.user.notification_settings.filter(
+                        event=self.event, action_type=at, method=method
+                    ).delete()
+
+                # None → True/False
+                if old_enabled.get(at) is None and val in ('on', 'off'):
+                    self.request.user.notification_settings.create(
+                        event=self.event, action_type=at, method=method, enabled=(val == 'on'),
+                    )
+
+                # False → True
+                if old_enabled.get(at) is False and val == 'on':
+                    self.request.user.notification_settings.filter(
+                        event=self.event, action_type=at, method=method
+                    ).update(enabled=True)
 
         messages.success(request, _('Your notification settings have been saved.'))
         return redirect(reverse('control:user.settings.notifications') + ('?event={}'.format(self.event.pk) if self.event else ''))
@@ -401,8 +425,15 @@ class UserNotificationsEditView(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['events'] = self.request.user.get_events_with_any_permission().order_by('-date_from')
-        ctx['types'] = self.types
-        ctx['enabled'] = self.currently_enabled
+        ctx['types'] = [
+            (
+                tv,
+                {k: a.get(t) for k, a in self.currently_set.items()},
+                {k: a.get(t) for k, a in self.global_set.items()},
+            )
+            for t, tv in self.types.items()
+        ]
+        ctx['event'] = self.event
         if self.event:
             ctx['permset'] = self.request.user.get_event_permission_set(self.event.organizer, self.event)
         return ctx

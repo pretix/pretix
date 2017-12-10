@@ -22,6 +22,7 @@ class Migration(migrations.Migration):
                 ('method', models.CharField(choices=[('mail', 'E-mail')], max_length=255)),
                 ('event', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='pretixbase.Event')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('enabled', models.BooleanField(default=True)),
             ],
         ),
         migrations.AlterUniqueTogether(
