@@ -25,7 +25,7 @@ class BaseExporter:
         """
         A short and unique identifier for this exporter.
         This should only contain lowercase letters and in most
-        cases will be the same as your packagename.
+        cases will be the same as your package name.
         """
         raise NotImplementedError()  # NOQA
 

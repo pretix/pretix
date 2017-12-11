@@ -315,7 +315,7 @@ This signal allows you to implement a middleware-style filter on all outgoing em
 return a (possibly modified) copy of the message object passed to you.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
-The ``message`` argument will contian an ``EmailMultiAlternatives`` object.
+The ``message`` argument will contain an ``EmailMultiAlternatives`` object.
 If the email is associated with a specific order, the ``order`` argument will be passed as well, otherwise
 it will be ``None``.
 """

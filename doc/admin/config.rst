@@ -2,6 +2,8 @@
 
 .. _`config`:
 
+.. spelling:: Galera
+
 Configuration file
 ==================
 
@@ -45,7 +47,7 @@ Example::
 
 ``datadir``
     The local path to a data directory that will be used for storing user uploads and similar
-    data. Defaults to thea value of the environment variable ``DATA_DIR`` or ``data``.
+    data. Defaults to the value of the environment variable ``DATA_DIR`` or ``data``.
 
 ``plugins_default``
     A comma-separated list of plugins that are enabled by default for all new events.

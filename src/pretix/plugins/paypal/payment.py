@@ -166,8 +166,8 @@ class Paypal(BasePaymentProvider):
         Will be called if the user submitted his order successfully to initiate the
         payment process.
 
-        It should return a custom redirct URL, if you need special behaviour, or None to
-        continue with default behaviour.
+        It should return a custom redirct URL, if you need special behavior, or None to
+        continue with default behavior.
 
         On errors, it should use Django's message framework to display an error message
         to the user (or the normal form validation error messages).

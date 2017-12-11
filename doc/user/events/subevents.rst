@@ -103,7 +103,7 @@ End of presale
 
 Quotas
   As for all events, no tickets will be available unless there is a quota created for them that specifies the number
-  of tickets available. You can create multiple quotas that are assinged to this date directly from this interface.
+  of tickets available. You can create multiple quotas that are assigned to this date directly from this interface.
 
 Item prices
   This is a table of all products configured for your shop. If you want, you can enter a new price for each one of them

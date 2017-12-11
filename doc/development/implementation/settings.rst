@@ -35,7 +35,7 @@ Forms
 -----
 
 Hierarkey also provides a base class for forms that allow the modification of settings. pretix contains a
-subclass that also adds suport for internationalized fields:
+subclass that also adds support for internationalized fields:
 
 .. autoclass:: pretix.base.forms.SettingsForm
 

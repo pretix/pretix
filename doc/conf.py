@@ -45,6 +45,7 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinxcontrib.httpdomain',
     'sphinxcontrib.images',
+    'sphinxcontrib.spelling',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -290,3 +291,18 @@ texinfo_documents = [
 images_config = {
     'default_image_width': '250px'
 }
+
+# -- Options for Spelling output ------------------------------------------
+
+# String specifying the language, as understood by PyEnchant and enchant.
+# Defaults to en_US for US English.
+spelling_lang = 'en_US'
+
+# String specifying a file containing a list of words known to be spelled
+# correctly but that do not appear in the language dictionary selected by
+# spelling_lang. The file should contain one word per line.
+spelling_word_list_filename='spelling_wordlist.txt'
+
+# Boolean controlling whether suggestions for misspelled words are printed.
+# Defaults to False.
+spelling_show_suggestions=True

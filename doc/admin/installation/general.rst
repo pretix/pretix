@@ -1,5 +1,7 @@
 .. highlight:: ini
 
+.. spelling:: SQL
+
 General remarks
 ===============
 

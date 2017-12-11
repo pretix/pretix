@@ -1,3 +1,6 @@
+.. spelling::
+   Analytics
+
 List of plugins
 ===============
 

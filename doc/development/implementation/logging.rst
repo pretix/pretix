@@ -19,7 +19,7 @@ To actually log an action, you can just call the ``log_action`` method on your o
    order.log_action('pretix.event.order.canceled', user=user, data={})
 
 The positional ``action`` argument should represent the type of action and should be globally unique, we
-recomment do prefix it with your packagename, e.g. ``paypal.payment.rejected``. The ``user`` argument is
+recommend to prefix it with your package name, e.g. ``paypal.payment.rejected``. The ``user`` argument is
 optional and may contain the user who performed the action. The optional ``data`` argument can contain
 additional information about this action.
 

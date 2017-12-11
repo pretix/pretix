@@ -79,7 +79,7 @@ downloads                             list of objects            List of ticket 
 
    The attributes ``invoice_address.vat_id_validated`` and ``invoice_address.is_business`` have been added.
    The attributes ``order.payment_fee``, ``order.payment_fee_tax_rate`` and ``order.payment_fee_tax_value`` have been
-   deprecated in favour of the new ``fees`` attribute but will still be served and removed in 1.9.
+   deprecated in favor of the new ``fees`` attribute but will still be served and removed in 1.9.
 
 .. versionchanged:: 1.9
 
@@ -342,7 +342,7 @@ Order endpoints
 
    Download tickets for an order, identified by its order code. Depending on the chosen output, the response might
    be a ZIP file, PDF file or something else. The order details response contains a list of output options for this
-   partictular order.
+   particular order.
 
    Tickets can be only downloaded if the order is paid and if ticket downloads are active. Note that in some cases the
    ticket file might not yet have been created. In that case, you will receive a status code :http:statuscode:`409` and

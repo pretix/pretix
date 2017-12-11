@@ -9,7 +9,7 @@ There are multiple ways to do this.
 First, you could just create some orders in your real shop and cancel/refund them later. If you don't want to process
 real payments for the tests, you can either use a "manual" payment method like bank transfer and just mark the orders
 as paid with the button in the backend, or if you want to use e.g. Stripe, you can configure pretix to use your keys
-for the Stripe test sytem and use their test credit cars. Read our :ref:`Stripe documentation <stripe>` for more
+for the Stripe test system and use their test credit cars. Read our :ref:`Stripe documentation <stripe>` for more
 information.
 
 Second, you could create a separate event, just for testing. In the last step of the :ref:`event creation process <event_create>`,
