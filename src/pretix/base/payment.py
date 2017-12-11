@@ -203,9 +203,12 @@ class BasePaymentProvider:
         """
         This is called when an invoice for an order with this payment provider is generated.
         The default implementation returns the content of the _invoice_text configuration
-        variable (an I18nString), or an empty string if unconfigured.
+        variable (an I18nString), or an empty string if unconfigured for a pending order.
+        All other orders will not show a payment provider specific text on invoices by default.
         """
-        return self.settings.get('_invoice_text', as_type=LazyI18nString, default='')
+        if order.status == order.STATUS_PENDING:
+            return self.settings.get('_invoice_text', as_type=LazyI18nString, default='')
+        return ''
 
     @property
     def payment_form_fields(self) -> dict:
