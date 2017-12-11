@@ -39,7 +39,7 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="invoice" class="panel-collapse collapse{% if event.settings.invoice_address_required or event.settings.invoice_name_required %} in {% endif %}">
+                    <div id="invoice" class="panel-collapse collapse {% if event.settings.invoice_address_required or event.settings.invoice_name_required or "invoice" in request.GET %} in{% endif %}">
                         <div class="panel-body">
                             {% bootstrap_form invoice_form layout="horizontal" %}
                         </div>
