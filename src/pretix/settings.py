@@ -520,11 +520,17 @@ CELERY_TASK_QUEUES = (
     Queue('default', routing_key='default.#'),
     Queue('checkout', routing_key='checkout.#'),
     Queue('mail', routing_key='mail.#'),
+    Queue('background', routing_key='background.#'),
 )
 CELERY_TASK_ROUTES = ([
     ('pretix.base.services.cart.*', {'queue': 'checkout'}),
     ('pretix.base.services.orders.*', {'queue': 'checkout'}),
     ('pretix.base.services.mail.*', {'queue': 'mail'}),
+    ('pretix.base.services.style.*', {'queue': 'background'}),
+    ('pretix.base.services.update_check.*', {'queue': 'background'}),
+    ('pretix.base.services.quotas.*', {'queue': 'background'}),
+    ('pretix.base.services.waitinglist.*', {'queue': 'background'}),
+    ('pretix.plugins.banktransfer.*', {'queue': 'background'}),
 ],)
 
 BOOTSTRAP3 = {
