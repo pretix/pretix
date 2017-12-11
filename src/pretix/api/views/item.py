@@ -107,8 +107,12 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
             data={**self.request.data['value'], **{'id': self.kwargs['pk']}}
         )
 
-    def perform_destroy(self, serializer):
+    def destroy(self, request, *args, **kwargs):
         variation = get_object_or_404(ItemVariation, pk=self.kwargs['pk'])
+
+        ItemVariation.clean_order_positions(variation)
+        ItemVariation.clean_cart_positions(variation)
+
         super().perform_destroy(variation)
         variation.item.log_action(
             'pretix.event.item.variation.deleted',

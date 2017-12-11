@@ -498,6 +498,19 @@ class ItemVariation(models.Model):
             return self.id < other.id
         return self.position < other.position
 
+    @staticmethod
+    def clean_order_positions(variation):
+        if not len(variation.orderposition_set.all()):
+            raise ValidationError('The variation cannot be deleted because it has already been ordered by a user. '
+                                  'Please set the variation as "inactive" instead.')
+
+    @staticmethod
+    def clean_cart_positions(variation):
+        if len(variation.cartposition_set.all()):
+            raise ValidationError('The variation cannot be deleted because it currently is in a users\'s cart. '
+                                  'Please set the variation as "inactive" instead.')
+
+
 
 class ItemAddOn(models.Model):
     """
