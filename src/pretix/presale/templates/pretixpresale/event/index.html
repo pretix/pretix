@@ -49,7 +49,7 @@
                         {% endif %}
                     </em>
                     <div class="row checkout-button-row">
-                        <div class="col-md-4 col-xs-12">
+                        <div class="col-md-4 col-xs-12 hidden-xs">
                             <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
                                 {% csrf_token %}
                                 <button class="btn btn-block btn-default btn-lg" type="submit">
@@ -66,6 +66,13 @@
                                     <i class="fa fa-shopping-cart"></i> {% trans "Proceed with checkout" %}
                                 {% endif %}
                             </a>
+                        </div>
+                        <div class="visible-xs-block col-xs-12">
+                            <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
+                                {% csrf_token %}
+                                <button class="btn btn-block btn-default btn-lg" type="submit">
+                                    <i class="fa fa-close"></i> {% trans "Empty cart" %}</button>
+                            </form>
                         </div>
                         <div class="clearfix"></div>
                     </div>
