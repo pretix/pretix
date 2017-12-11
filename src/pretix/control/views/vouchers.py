@@ -3,7 +3,6 @@ import io
 from defusedcsv import csv
 from django.conf import settings
 from django.contrib import messages
-from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
 from django.db.models import Sum
 from django.http import (
@@ -11,6 +10,7 @@ from django.http import (
     JsonResponse,
 )
 from django.shortcuts import redirect
+from django.urls import resolve, reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (

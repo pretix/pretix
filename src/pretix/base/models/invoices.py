@@ -64,14 +64,14 @@ class Invoice(models.Model):
     :param file: The filename of the rendered invoice
     :type file: File
     """
-    order = models.ForeignKey('Order', related_name='invoices', db_index=True)
+    order = models.ForeignKey('Order', related_name='invoices', db_index=True, on_delete=models.CASCADE)
     organizer = models.ForeignKey('Organizer', related_name='invoices', db_index=True, on_delete=models.PROTECT)
-    event = models.ForeignKey('Event', related_name='invoices', db_index=True)
+    event = models.ForeignKey('Event', related_name='invoices', db_index=True, on_delete=models.CASCADE)
     prefix = models.CharField(max_length=160, db_index=True)
     invoice_no = models.CharField(max_length=19, db_index=True)
     full_invoice_no = models.CharField(max_length=190, db_index=True)
     is_cancellation = models.BooleanField(default=False)
-    refers = models.ForeignKey('Invoice', related_name='refered', null=True, blank=True)
+    refers = models.ForeignKey('Invoice', related_name='refered', null=True, blank=True, on_delete=models.CASCADE)
     invoice_from = models.TextField()
     invoice_to = models.TextField()
     date = models.DateField(default=today)
@@ -175,7 +175,7 @@ class InvoiceLine(models.Model):
     :param tax_name: The name of the applied tax rate
     :type tax_name: str
     """
-    invoice = models.ForeignKey('Invoice', related_name='lines')
+    invoice = models.ForeignKey('Invoice', related_name='lines', on_delete=models.CASCADE)
     position = models.PositiveIntegerField(default=0)
     description = models.TextField()
     gross_value = models.DecimalField(max_digits=10, decimal_places=2)

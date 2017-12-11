@@ -1,7 +1,7 @@
 from urllib.parse import urljoin
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 def build_absolute_uri(urlname, args=None, kwargs=None):

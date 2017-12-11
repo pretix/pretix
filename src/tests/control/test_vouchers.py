@@ -42,7 +42,7 @@ class VoucherFormTest(SoupTest):
         form_data.update(data)
         doc = self.post_doc('/control/event/%s/%s/vouchers/add' % (self.orga.slug, self.event.slug), form_data)
         if expected_failure:
-            assert doc.select(".alert-danger")
+            assert doc.select(".alert-danger, .has-error")
             assert count_before == self.event.vouchers.count()
         else:
             assert doc.select(".alert-success")

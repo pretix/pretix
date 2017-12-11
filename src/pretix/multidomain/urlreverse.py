@@ -1,7 +1,7 @@
 from urllib.parse import urljoin, urlsplit
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from pretix.base.models import Event, Organizer
 

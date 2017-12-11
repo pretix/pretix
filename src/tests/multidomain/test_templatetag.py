@@ -1,7 +1,7 @@
 import pytest
 from django.conf import settings
-from django.core.urlresolvers import NoReverseMatch
 from django.template import Context, Template, TemplateSyntaxError
+from django.urls import NoReverseMatch
 from django.utils.timezone import now
 
 from pretix.base.models import Event, Organizer

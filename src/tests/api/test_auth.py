@@ -13,6 +13,7 @@ def test_no_auth(client):
 def test_session_auth_no_teams(client, user):
     client.login(email=user.email, password='dummy')
     resp = client.get('/api/v1/organizers/')
+    print(resp.data)
     assert resp.status_code == 200
     assert len(resp.data['results']) == 0
 

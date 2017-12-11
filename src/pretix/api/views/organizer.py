@@ -12,7 +12,7 @@ class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_url_kwarg = 'organizer'
 
     def get_queryset(self):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             if self.request.user.has_active_staff_session(self.request.session.session_key):
                 return Organizer.objects.all()
             elif isinstance(self.request.auth, OAuthAccessToken):

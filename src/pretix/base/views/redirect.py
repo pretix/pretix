@@ -1,8 +1,8 @@
 import urllib.parse
 
 from django.core import signing
-from django.core.urlresolvers import reverse
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
+from django.urls import reverse
 
 
 def redir_view(request):

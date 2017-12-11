@@ -60,7 +60,7 @@ EU_CURRENCIES = {
 
 
 class TaxRule(LoggedModel):
-    event = models.ForeignKey('Event', related_name='tax_rules')
+    event = models.ForeignKey('Event', related_name='tax_rules', on_delete=models.CASCADE)
     name = I18nCharField(
         verbose_name=_('Name'),
         help_text=_('Should be short, e.g. "VAT"'),

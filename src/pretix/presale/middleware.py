@@ -1,4 +1,4 @@
-from django.core.urlresolvers import resolve
+from django.urls import resolve
 from django.utils.deprecation import MiddlewareMixin
 
 from pretix.presale.signals import process_response

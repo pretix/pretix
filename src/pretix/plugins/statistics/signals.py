@@ -1,5 +1,5 @@
-from django.core.urlresolvers import resolve, reverse
 from django.dispatch import receiver
+from django.urls import resolve, reverse
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.signals import order_paid, order_placed

@@ -7,7 +7,7 @@ from pretix.base.models import Organizer
 
 class KnownDomain(models.Model):
     domainname = models.CharField(max_length=255, primary_key=True)
-    organizer = models.ForeignKey(Organizer, blank=True, null=True, related_name='domains')
+    organizer = models.ForeignKey(Organizer, blank=True, null=True, related_name='domains', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _("Known domain")

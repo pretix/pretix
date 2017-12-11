@@ -1,5 +1,5 @@
+from django import urls
 from django.conf import settings
-from django.core import urlresolvers
 
 from pretix.helpers.urls import build_absolute_uri
 
@@ -11,7 +11,7 @@ def test_site_url_domain():
 
 def test_site_url_subpath():
     settings.SITE_URL = 'https://example.com/presale'
-    old_prefix = urlresolvers.get_script_prefix()
-    urlresolvers.set_script_prefix('/presale/')
+    old_prefix = urls.get_script_prefix()
+    urls.set_script_prefix('/presale/')
     assert build_absolute_uri('control:auth.login') == 'https://example.com/presale/control/login'
-    urlresolvers.set_script_prefix(old_prefix)
+    urls.set_script_prefix(old_prefix)

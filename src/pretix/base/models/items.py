@@ -447,7 +447,8 @@ class ItemVariation(models.Model):
     """
     item = models.ForeignKey(
         Item,
-        related_name='variations'
+        related_name='variations',
+        on_delete=models.CASCADE
     )
     value = I18nCharField(
         max_length=255,
@@ -562,12 +563,14 @@ class ItemAddOn(models.Model):
     """
     base_item = models.ForeignKey(
         Item,
-        related_name='addons'
+        related_name='addons',
+        on_delete=models.CASCADE
     )
     addon_category = models.ForeignKey(
         ItemCategory,
         related_name='addon_to',
-        verbose_name=_('Category')
+        verbose_name=_('Category'),
+        on_delete=models.CASCADE
     )
     min_count = models.PositiveIntegerField(
         default=0,
@@ -679,7 +682,8 @@ class Question(LoggedModel):
 
     event = models.ForeignKey(
         Event,
-        related_name="questions"
+        related_name="questions",
+        on_delete=models.CASCADE
     )
     question = I18nTextField(
         verbose_name=_("Question")
@@ -831,7 +835,7 @@ class Question(LoggedModel):
 
 
 class QuestionOption(models.Model):
-    question = models.ForeignKey('Question', related_name='options')
+    question = models.ForeignKey('Question', related_name='options', on_delete=models.CASCADE)
     identifier = models.CharField(max_length=190)
     answer = I18nCharField(verbose_name=_('Answer'))
     position = models.IntegerField(default=0)

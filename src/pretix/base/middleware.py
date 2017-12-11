@@ -3,8 +3,8 @@ from urllib.parse import urlsplit
 
 import pytz
 from django.conf import settings
-from django.core.urlresolvers import get_script_prefix
 from django.http import HttpRequest, HttpResponse
+from django.urls import get_script_prefix
 from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin

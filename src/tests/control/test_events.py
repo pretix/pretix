@@ -417,7 +417,7 @@ class EventsTest(SoupTest):
             'foundation-organizer': self.orga2.pk,
             'foundation-locales': ('en', 'de')
         })
-        assert doc.select(".alert-danger")
+        assert doc.select(".has-error")
 
     def test_create_invalid_default_language(self):
         doc = self.post_doc('/control/events/add', {
@@ -442,7 +442,7 @@ class EventsTest(SoupTest):
             'basics-presale_start': '2016-11-01 10:00:00',
             'basics-presale_end': '2016-11-30 18:00:00',
         })
-        assert doc.select(".alert-danger")
+        assert doc.select(".has-error")
 
     def test_create_duplicate_slug(self):
         doc = self.post_doc('/control/events/add', {
@@ -471,7 +471,7 @@ class EventsTest(SoupTest):
             'basics-presale_end_0': '2016-11-30',
             'basics-presale_end_1': '18:00:00',
         })
-        assert doc.select(".alert-danger")
+        assert doc.select(".has-error")
 
     def test_create_event_success(self):
         doc = self.get_doc('/control/events/add')
@@ -642,7 +642,7 @@ class EventsTest(SoupTest):
             'basics-presale_end_0': '2016-11-30',
             'basics-presale_end_1': '18:00:00',
         })
-        assert doc.select(".alert-danger")
+        assert doc.select(".has-error")
 
     def test_create_event_currency_symbol(self):
         doc = self.post_doc('/control/events/add', {
@@ -669,7 +669,7 @@ class EventsTest(SoupTest):
             'basics-presale_end_0': '2016-11-30',
             'basics-presale_end_1': '18:00:00',
         })
-        assert doc.select(".alert-danger")
+        assert doc.select(".has-error")
 
     def test_create_event_non_iso_currency(self):
         doc = self.post_doc('/control/events/add', {
@@ -696,7 +696,7 @@ class EventsTest(SoupTest):
             'basics-presale_end_0': '2016-11-30',
             'basics-presale_end_1': '18:00:00',
         })
-        assert doc.select(".alert-danger")
+        assert doc.select(".has-error")
 
 
 class SubEventsTest(SoupTest):

@@ -17,7 +17,7 @@ base_patterns = [
     url(r'^metrics$', metrics.serve_metrics,
         name='metrics'),
     url(r'^csp_report/$', csp.csp_report, name='csp.report'),
-    url(r'^api/v1/', include('pretix.api.urls', namespace='api-v1')),
+    url(r'^api/v1/', include(('pretix.api.urls', 'pretixapi'), namespace='api-v1')),
     url(r'^api/$', RedirectView.as_view(url='/api/v1/'), name='redirect-api-version')
 ]
 
