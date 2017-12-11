@@ -280,7 +280,8 @@ class QuestionsForm(forms.Form):
                     queryset=q.options.all(),
                     label=q.question, required=q.required,
                     help_text=q.help_text,
-                    widget=forms.RadioSelect,
+                    widget=forms.Select,
+                    empty_label='',
                     initial=initial.options.first() if initial else None,
                 )
             elif q.type == Question.TYPE_CHOICE_MULTIPLE:
