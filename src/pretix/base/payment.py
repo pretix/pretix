@@ -11,7 +11,7 @@ from django.forms import Form
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 from i18nfield.strings import LazyI18nString
 
@@ -184,7 +184,9 @@ class BasePaymentProvider:
             ('_invoice_text',
              I18nFormField(
                  label=_('Text on invoices'),
-                 help_text=_('Will be printed just below the payment figures and above the closing text on invoices.'),
+                 help_text=_('Will be printed just below the payment figures and above the closing text on invoices. '
+                             'This will only be used if the invoice is generated before the order is paid. If the '
+                             'invoice is generated later, it will show a text stating that it has already been paid.'),
                  required=False,
                  widget=I18nTextarea,
                  widget_kwargs={'attrs': {'rows': '2'}}
@@ -205,6 +207,8 @@ class BasePaymentProvider:
         The default implementation returns the content of the _invoice_text configuration
         variable (an I18nString), or an empty string if unconfigured.
         """
+        if order.status == Order.STATUS_PAID:
+            return pgettext_lazy('invoice', 'The payment for this invoice has already been received.')
         return self.settings.get('_invoice_text', as_type=LazyI18nString, default='')
 
     @property
