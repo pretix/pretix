@@ -459,7 +459,8 @@ class CheckInFilterForm(FilterForm):
         if fdata.get('user'):
             u = fdata.get('user')
             qs = qs.filter(
-                Q(order__email__icontains=u)
+                Q(order__code__istartswith=u)
+                | Q(order__email__icontains=u)
                 | Q(attendee_name__icontains=u)
                 | Q(attendee_email__icontains=u)
                 | Q(order__invoice_address__name__icontains=u)
