@@ -73,6 +73,33 @@ class CheckoutTestCase(TestCase):
         self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
+    def test_addon_questions(self):
+        q1 = Question.objects.create(
+            event=self.event, question='Age', type=Question.TYPE_NUMBER,
+            required=True
+        )
+        q1.items.add(self.ticket)
+        q1.items.add(self.workshop1)
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1,
+                                 price_included=True)
+        cp1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        cp1.answers.create(question=q1, answer='12')
+        cp2 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.workshop1, addon_to=cp1,
+            price=0, expires=now() + timedelta(minutes=10)
+        )
+        cp2.answers.create(question=q1, answer='12')
+
+        self._set_session('payment', 'banktransfer')
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertEqual(OrderPosition.objects.filter(item=self.ticket).first().answers.first().answer, '12')
+        self.assertEqual(OrderPosition.objects.filter(item=self.workshop1).first().answers.first().answer, '12')
+
     def test_questions(self):
         q1 = Question.objects.create(
             event=self.event, question='Age', type=Question.TYPE_NUMBER,
