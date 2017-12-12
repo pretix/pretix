@@ -306,3 +306,7 @@ spelling_word_list_filename='spelling_wordlist.txt'
 # Boolean controlling whether suggestions for misspelled words are printed.
 # Defaults to False.
 spelling_show_suggestions=True
+
+# List of filter classes to be added to the tokenizer that produces words to be checked. 
+from checkin_filter import CheckinFilter
+spelling_filters=[CheckinFilter]

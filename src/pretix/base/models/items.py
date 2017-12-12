@@ -179,7 +179,7 @@ class Item(LoggedModel):
     :type max_per_order: int
     :param min_per_order: Minimum number of times this item needs to be in an order if bought at all. None for unlimited.
     :type min_per_order: int
-    :param checkin_attention: Requires special attention at checkin
+    :param checkin_attention: Requires special attention at check-in
     :type checkin_attention: bool
     """
 

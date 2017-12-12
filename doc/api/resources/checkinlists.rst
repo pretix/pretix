@@ -213,7 +213,7 @@ Endpoints
 
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/checkinlist/(id)/
 
-   Delete a check-in list. Note that this also deletes the information on all checkins performed via this list.
+   Delete a check-in list. Note that this also deletes the information on all check-ins performed via this list.
 
    **Example request**:
 

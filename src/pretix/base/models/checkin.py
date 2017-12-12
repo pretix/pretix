@@ -75,7 +75,7 @@ class CheckinList(LoggedModel):
 
 class Checkin(models.Model):
     """
-    A checkin object is created when a person enters the event.
+    A check-in object is created when a person enters the event.
     """
     position = models.ForeignKey('pretixbase.OrderPosition', related_name='checkins')
     datetime = models.DateTimeField(default=now)
