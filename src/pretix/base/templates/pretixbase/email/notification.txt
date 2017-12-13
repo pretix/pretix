@@ -1,5 +1,6 @@
 {% load i18n %}
 {{ notification.title }}{% if notification.detail %}
+
 {{ notification.detail }}
 {% endif %}{% if notification.url %}
 

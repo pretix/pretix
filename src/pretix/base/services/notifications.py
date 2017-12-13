@@ -12,7 +12,7 @@ from pretix.helpers.urls import build_absolute_uri
 
 @app.task(base=TransactionAwareTask)
 def notify(logentry_id: int):
-    logentry = LogEntry.objects.get(id=logentry_id)
+    logentry = LogEntry.all.get(id=logentry_id)
     if not logentry.event:
         return  # Ignore, we only have event-related notifications right now
     types = get_all_notification_types(logentry.event)
@@ -55,7 +55,7 @@ def notify(logentry_id: int):
 
 @app.task(base=ProfiledTask)
 def send_notification(logentry_id: int, user_id: int, method: str):
-    logentry = LogEntry.objects.get(id=logentry_id)
+    logentry = LogEntry.all.get(id=logentry_id)
     user = User.objects.get(id=user_id)
     types = get_all_notification_types(logentry.event)
     notification_type = types.get(logentry.action_type)

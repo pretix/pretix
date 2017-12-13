@@ -108,6 +108,31 @@ def get_all_notification_types(event=None):
     return types
 
 
+class ActionRequiredNotificationType(NotificationType):
+    required_permission = "can_change_orders"
+    action_type = "pretix.event.action_required"
+    verbose_name = _("Administrative action required")
+
+    def build_notification(self, logentry: LogEntry):
+        control_url = build_absolute_uri(
+            'control:event.requiredactions',
+            kwargs={
+                'organizer': logentry.event.organizer.slug,
+                'event': logentry.event.slug,
+            }
+        )
+
+        n = Notification(
+            event=logentry.event,
+            title=_('Administrative action required'),
+            detail=_('Something happened in your event that our system cannot handle automatically, e.g. an external '
+                     'refund. You need to resolve it manually or choose to ignore it, depending on the issue at hand.'),
+            url=control_url
+        )
+        n.add_action(_('View all unresolved problems'), control_url)
+        return n
+
+
 class ParametrizedOrderNotificationType(NotificationType):
     required_permission = "can_view_orders"
 
@@ -158,12 +183,45 @@ def register_default_notification_types(sender, **kwargs):
             sender,
             'pretix.event.order.placed',
             _('New order placed'),
-            _('New order {order.code} has been placed'),
+            _('A new order has been placed: {order.code}'),
         ),
         ParametrizedOrderNotificationType(
             sender,
             'pretix.event.order.paid',
             _('Order marked as paid'),
-            _('Order {order.code} has been marked as paid')
+            _('Order {order.code} has been marked as paid.')
         ),
+        ParametrizedOrderNotificationType(
+            sender,
+            'pretix.event.order.canceled',
+            _('Order canceled'),
+            _('Order {order.code} has been canceled.')
+        ),
+        ParametrizedOrderNotificationType(
+            sender,
+            'pretix.event.order.modified',
+            _('Order information changed'),
+            _('The ticket information of order {order.code} has been changed.')
+        ),
+        ParametrizedOrderNotificationType(
+            sender,
+            'pretix.event.order.contact.changed',
+            _('Order contact address changed'),
+            _('The contact address of order {order.code} has been changed.')
+        ),
+        ParametrizedOrderNotificationType(
+            sender,
+            'pretix.event.order.changed',
+            _('Order changed'),
+            _('Order {order.code} has been changed.')
+        ),
+        ParametrizedOrderNotificationType(
+            sender,
+            'pretix.event.order.refunded',
+            _('Order refunded'),
+            _('Order {order.code} has been refunded.')
+        ),
+        ActionRequiredNotificationType(
+            sender,
+        )
     )

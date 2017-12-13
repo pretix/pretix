@@ -698,6 +698,21 @@ class RequiredAction(models.Model):
                 return response
         return self.action_type
 
+    def save(self, *args, **kwargs):
+        created = not self.pk
+        super().save(*args, **kwargs)
+        if created:
+            from .log import LogEntry
+            from ..services.notifications import notify
+
+            logentry = LogEntry.objects.create(
+                content_object=self,
+                action_type='pretix.event.action_required',
+                event=self.event,
+                visible=False
+            )
+            notify.apply_async(args=(logentry.pk,))
+
 
 class EventMetaProperty(LoggedModel):
     """
