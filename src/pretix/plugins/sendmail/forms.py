@@ -3,14 +3,19 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
 from pretix.base.forms import PlaceholderValidator
-from pretix.base.models import Order
-from pretix.base.models.event import SubEvent
+from pretix.base.models import Item, Order, SubEvent
 
 
 class MailForm(forms.Form):
     sendto = forms.MultipleChoiceField()  # overridden later
     subject = forms.CharField(label=_("Subject"))
     message = forms.CharField(label=_("Message"))
+    item = forms.ModelChoiceField(
+        Item.objects.none(),
+        label=_('Only send to people who bought'),
+        required=False,
+        empty_label=_('Any product')
+    )
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
         label=_('Only send to customers of'),
@@ -47,6 +52,7 @@ class MailForm(forms.Form):
             widget=forms.CheckboxSelectMultiple,
             choices=choices
         )
+        self.fields['item'].queryset = event.items.all()
         if event.has_subevents:
             self.fields['subevent'].queryset = event.subevents.all()
         else:
