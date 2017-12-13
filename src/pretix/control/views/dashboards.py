@@ -192,14 +192,6 @@ def shop_state_widget(sender, **kwargs):
 
 @receiver(signal=event_dashboard_widgets)
 def checkin_widget(sender, subevent=None, **kwargs):
-    size_qs = OrderPosition.objects.filter(order__event=sender, order__status='p')
-    checked_qs = OrderPosition.objects.filter(order__event=sender, order__status='p', checkins__isnull=False)
-
-    # if this setting is False, we check only items for admission
-    if not sender.settings.ticket_download_nonadm:
-        size_qs = size_qs.filter(item__admission=True)
-        checked_qs = checked_qs.filter(item__admission=True)
-
     widgets = []
     qs = sender.checkin_lists.filter(subevent=subevent)
     qs = CheckinList.annotate_with_numbers(qs, sender)
