@@ -20,6 +20,8 @@ urlpatterns = [
     url(r'^settings/?$', user.UserSettings.as_view(), name='user.settings'),
     url(r'^settings/history/$', user.UserHistoryView.as_view(), name='user.settings.history'),
     url(r'^settings/notifications/$', user.UserNotificationsEditView.as_view(), name='user.settings.notifications'),
+    url(r'^settings/notifications/off/(?P<id>\d+)/(?P<token>[^/]+)/$', user.UserNotificationsDisableView.as_view(),
+        name='user.settings.notifications.off'),
     url(r'^settings/2fa/$', user.User2FAMainView.as_view(), name='user.settings.2fa'),
     url(r'^settings/2fa/add$', user.User2FADeviceAddView.as_view(), name='user.settings.2fa.add'),
     url(r'^settings/2fa/enable', user.User2FAEnableView.as_view(), name='user.settings.2fa.enable'),

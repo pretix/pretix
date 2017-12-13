@@ -79,6 +79,13 @@ def send_notification_mail(notification: Notification, user: User):
         'notification': notification,
         'settings_url': build_absolute_uri(
             'control:user.settings.notifications',
+        ),
+        'disable_url': build_absolute_uri(
+            'control:user.settings.notifications.off',
+            kwargs={
+                'token': user.notifications_token,
+                'id': user.pk
+            }
         )
     }
 

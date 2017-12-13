@@ -356,6 +356,23 @@ class User2FARegenerateEmergencyView(RecentAuthenticationRequiredMixin, Template
         return redirect(reverse('control:user.settings.2fa'))
 
 
+class UserNotificationsDisableView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        user = get_object_or_404(User, notifications_token=kwargs.get('token'), pk=kwargs.get('id'))
+        user.notifications_send = False
+        user.save()
+        messages.success(request, _('Your notifications have been disabled.'))
+
+        if request.user.is_authenticated:
+            return redirect(
+                reverse('control:user.settings.notifications')
+            )
+        else:
+            return redirect(
+                reverse('control:auth.login')
+            )
+
+
 class UserNotificationsEditView(TemplateView):
     template_name = 'pretixcontrol/user/notifications.html'
 
@@ -394,6 +411,10 @@ class UserNotificationsEditView(TemplateView):
             request.user.save()
 
             messages.success(request, _('Your notification settings have been saved.'))
+            if request.user.notifications_send:
+                self.request.user.log_action('pretix.user.settings.notifications.disabled', user=self.request.user)
+            else:
+                self.request.user.log_action('pretix.user.settings.notifications.enabled', user=self.request.user)
             return redirect(
                 reverse('control:user.settings.notifications') +
                 ('?event={}'.format(self.event.pk) if self.event else '')
@@ -430,6 +451,7 @@ class UserNotificationsEditView(TemplateView):
                         ).update(enabled=True)
 
             messages.success(request, _('Your notification settings have been saved.'))
+            self.request.user.log_action('pretix.user.settings.notifications.changed', user=self.request.user)
             return redirect(
                 reverse('control:user.settings.notifications') +
                 ('?event={}'.format(self.event.pk) if self.event else '')
