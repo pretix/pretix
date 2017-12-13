@@ -4,6 +4,30 @@
 {% block title %}{% trans "Notification settings" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Notification settings" %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <fieldset>
+            {% if request.user.notifications_send %}
+                <div class="alert alert-info">
+                    <button name="notifications_send" value="off" type="submit" class="pull-right btn btn-default">
+                        <span class="fa fa-bell-slash"></span>
+                        {% trans "Disable" %}
+                    </button>
+                    {% trans "Notifications are turned on according to the settings below." %}
+                    <div class="clearfix"></div>
+                </div>
+            {% else %}
+                <div class="alert alert-warning">
+                    <button name="notifications_send" value="on" type="submit" class="pull-right btn btn-default">
+                        <span class="fa fa-bell"></span>
+                        {% trans "Enable" %}
+                    </button>
+                    {% trans "All notifications are turned off globally." %}
+                    <div class="clearfix"></div>
+                </div>
+            {% endif %}
+        </fieldset>
+    </form>
     <form class="form-inline" method="get">
         <fieldset>
             <legend>{% trans "Choose event" %}</legend>
@@ -18,6 +42,7 @@
                     {% endfor %}
                 </select>
                 <button class="btn btn-primary" type="submit">{% trans "Choose" %}</button>
+                <span class="help-block">{% trans "Save your modifications before switching events." %}</span>
             </p>
         </fieldset>
     </form>
@@ -41,7 +66,8 @@
                         <td class="text-center">
                             {% if not event or type.required_permission in permset %}
                                 <select name="mail:{{ type.action_type }}" class="form-control">
-                                    {% if event %}<option value="global">{% trans "Global" %} ({% if global.mail %}{% trans "On" %}{% else %}{% trans "Off" %}{% endif %})</option>{% endif %}
+                                    {% if event %}
+                                        <option value="global">{% trans "Global" %} ({% if global.mail %}{% trans "On" %}{% else %}{% trans "Off" %}{% endif %})</option>{% endif %}
                                     <option value="off" {% if "mail" in enabled and enabled.mail == False %}selected{% endif %}>{% trans "Off" %}</option>
                                     <option value="on" {% if enabled.mail %}selected{% endif %}>{% trans "On" %}</option>
                                 </select>

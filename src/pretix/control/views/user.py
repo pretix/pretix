@@ -389,38 +389,51 @@ class UserNotificationsEditView(TemplateView):
         return set_per_method
 
     def post(self, request, *args, **kwargs):
-        for method, __ in NotificationSetting.CHANNELS:
-            old_enabled = self.currently_set[method]
+        if "notifications_send" in request.POST:
+            request.user.notifications_send = request.POST.get("notifications_send", "") == "on"
+            request.user.save()
 
-            for at in self.types.keys():
-                val = request.POST.get('{}:{}'.format(method, at))
+            messages.success(request, _('Your notification settings have been saved.'))
+            return redirect(
+                reverse('control:user.settings.notifications') +
+                ('?event={}'.format(self.event.pk) if self.event else '')
+            )
+        else:
+            for method, __ in NotificationSetting.CHANNELS:
+                old_enabled = self.currently_set[method]
 
-                # True → False
-                if old_enabled.get(at) is True and val == 'off':
-                    self.request.user.notification_settings.filter(
-                        event=self.event, action_type=at, method=method
-                    ).update(enabled=False)
+                for at in self.types.keys():
+                    val = request.POST.get('{}:{}'.format(method, at))
 
-                # True/False → None
-                if old_enabled.get(at) is not None and val == 'global':
-                    self.request.user.notification_settings.filter(
-                        event=self.event, action_type=at, method=method
-                    ).delete()
+                    # True → False
+                    if old_enabled.get(at) is True and val == 'off':
+                        self.request.user.notification_settings.filter(
+                            event=self.event, action_type=at, method=method
+                        ).update(enabled=False)
 
-                # None → True/False
-                if old_enabled.get(at) is None and val in ('on', 'off'):
-                    self.request.user.notification_settings.create(
-                        event=self.event, action_type=at, method=method, enabled=(val == 'on'),
-                    )
+                    # True/False → None
+                    if old_enabled.get(at) is not None and val == 'global':
+                        self.request.user.notification_settings.filter(
+                            event=self.event, action_type=at, method=method
+                        ).delete()
 
-                # False → True
-                if old_enabled.get(at) is False and val == 'on':
-                    self.request.user.notification_settings.filter(
-                        event=self.event, action_type=at, method=method
-                    ).update(enabled=True)
+                    # None → True/False
+                    if old_enabled.get(at) is None and val in ('on', 'off'):
+                        self.request.user.notification_settings.create(
+                            event=self.event, action_type=at, method=method, enabled=(val == 'on'),
+                        )
 
-        messages.success(request, _('Your notification settings have been saved.'))
-        return redirect(reverse('control:user.settings.notifications') + ('?event={}'.format(self.event.pk) if self.event else ''))
+                    # False → True
+                    if old_enabled.get(at) is False and val == 'on':
+                        self.request.user.notification_settings.filter(
+                            event=self.event, action_type=at, method=method
+                        ).update(enabled=True)
+
+            messages.success(request, _('Your notification settings have been saved.'))
+            return redirect(
+                reverse('control:user.settings.notifications') +
+                ('?event={}'.format(self.event.pk) if self.event else '')
+            )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

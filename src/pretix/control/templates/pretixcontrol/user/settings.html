@@ -15,8 +15,17 @@
         <div class="form-group">
             <label class="col-md-3 control-label" for="id_new_pw_repeat">{% trans "Notifications" %}</label>
             <div class="col-md-9 static-form-row">
+                {% if request.user.notifications_send and request.user.notification_settings.exists %}
+                    <span class="label label-success">
+                        <span class="fa fa-bell-o"></span> {% trans "On" %}
+                    </span>
+                {% else %}
+                    <span class="label label-warning">
+                        <span class="fa fa-bell-slash-o"></span> {% trans "Off" %}
+                    </span>
+                {% endif %}
+                &nbsp;
                 <a href="{% url "control:user.settings.notifications" %}">
-                    <span class="fa fa-bell-o"></span>
                     {% trans "Change notification settings" %}
                 </a>
             </div>
@@ -32,12 +41,12 @@
             <label class="col-md-3 control-label" for="id_new_pw_repeat">{% trans "Two-factor authentication" %}</label>
             <div class="col-md-9 static-form-row">
                 {% if user.require_2fa %}
-                    <span class="label label-success">{% trans "Enabled" %}</span>
+                    <span class="label label-success">{% trans "Enabled" %}</span> &nbsp;
                     <a href="{% url "control:user.settings.2fa" %}">
                         {% trans "Change two-factor settings" %}
                     </a>
                 {% else %}
-                    <span class="label label-default">{% trans "Disabled" %}</span>
+                    <span class="label label-default">{% trans "Disabled" %}</span> &nbsp;
                     <a href="{% url "control:user.settings.2fa" %}">
                         {% trans "Enable" %}
                     </a>

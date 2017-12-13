@@ -6,6 +6,8 @@ import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
+import pretix.base.models.auth
+
 
 class Migration(migrations.Migration):
 
@@ -28,5 +30,30 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name='notificationsetting',
             unique_together=set([('user', 'action_type', 'event', 'method')]),
+        ),
+        migrations.AddField(
+            model_name='logentry',
+            name='visible',
+            field=models.BooleanField(default=True),
+        ),
+        migrations.AlterField(
+            model_name='notificationsetting',
+            name='event',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='notification_settings', to='pretixbase.Event'),
+        ),
+        migrations.AlterField(
+            model_name='notificationsetting',
+            name='user',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='notification_settings', to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='user',
+            name='notifications_send',
+            field=models.BooleanField(default=True, help_text='If turned off, you will not get any notifications.', verbose_name='Receive notifications according to my settings below'),
+        ),
+        migrations.AddField(
+            model_name='user',
+            name='notifications_token',
+            field=models.CharField(default=pretix.base.models.auth.generate_notifications_token, max_length=255),
         ),
     ]

@@ -23,7 +23,9 @@ def notify(logentry_id: int):
     # All users that have the permission to get the notification
     users = logentry.event.get_users_with_permission(
         notification_type.required_permission
-    )
+    ).filter(notifications_send=True)
+    if logentry.user:
+        users = users.exclude(pk=logentry.user.pk)
 
     # Get all notification settings, both specific to this event as well as global
     notify_specific = {
