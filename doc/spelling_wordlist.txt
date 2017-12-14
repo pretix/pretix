@@ -51,6 +51,7 @@ namespaces
 namespacing
 natively
 nginx
+NotificationType
 ons
 optimizations
 param

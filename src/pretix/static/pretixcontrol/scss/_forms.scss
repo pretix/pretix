@@ -263,3 +263,11 @@ div.scrolling-multiple-choice, div.scrolling-choice {
     margin-top: 0;
   }
 }
+table td > .checkbox {
+  margin: 0;
+  position: static;
+}
+table td > .checkbox input[type="checkbox"] {
+  margin: 0;
+  position: static;
+}
