@@ -23,6 +23,11 @@ def user():
     return User.objects.create_user('dummy@dummy.dummy', 'dummy')
 
 
+@pytest.fixture
+def admin():
+    return User.objects.create_user('admin@dummy.dummy', 'dummy', is_superuser=True)
+
+
 @pytest.mark.django_db
 def test_invalid_permission(event, user):
     team = Team.objects.create(organizer=event.organizer)
@@ -204,7 +209,7 @@ def test_superuser(event, user):
 
 
 @pytest.mark.django_db
-def test_list_of_events(event, user):
+def test_list_of_events(event, user, admin):
     orga2 = Organizer.objects.create(slug='d2', name='d2')
     event2 = Event.objects.create(
         organizer=event.organizer, name='Dummy', slug='dummy2',
@@ -242,7 +247,6 @@ def test_list_of_events(event, user):
     assert event3 in events
     assert event4 not in events
 
-    admin = User.objects.get(is_superuser=True)
     assert set(event.get_users_with_any_permission()) == {user, admin}
     assert set(event2.get_users_with_any_permission()) == {user, admin}
     assert set(event3.get_users_with_any_permission()) == {user, admin}
