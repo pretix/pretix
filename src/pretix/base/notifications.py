@@ -41,13 +41,15 @@ class Notification:
 
     def add_action(self, label, url):
         """
-        Add an action to the notification
+        Add an action to the notification, defined by a label and an url. An example could be a label of "View order"
+        and an url linking to the order detail page.
         """
         self.actions.append(NotificationAction(label, url))
 
     def add_attribute(self, title, value):
         """
-        Add an attribute to the notification-
+        Add an attribute to the notification, defined by a title and a value. An example could be a title of
+        "Date" and a value of "2017-12-14".
         """
         self.attributes.append(NotificationAttribute(title, value))
 
@@ -63,7 +65,7 @@ class NotificationType:
     def action_type(self) -> str:
         """
         The action_type string that this notification handles, for example
-        pretix.event.order.paid. Only one notification type should be registered
+        ``"pretix.event.order.paid"``. Only one notification type should be registered
         per action type.
         """
         raise NotImplementedError()  # NOQA
@@ -79,11 +81,15 @@ class NotificationType:
     def required_permission(self) -> str:
         """
         The permission a user needs to hold for the related event to receive this
-        notification
+        notification.
         """
         raise NotImplementedError()  # NOQA
 
     def build_notification(self, logentry: LogEntry) -> Notification:
+        """
+        This is the main function that you should override. It is supposed to turn a log entry
+        object into a notification object that can then be rendered e.g. into an email.
+        """
         return Notification(
             logentry.event,
             logentry.display()
