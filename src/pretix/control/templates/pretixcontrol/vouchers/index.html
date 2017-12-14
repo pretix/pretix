@@ -19,7 +19,7 @@
                 <option value="v" {% if request.GET.status == "v" %}selected="selected"{% endif %}>{% trans "Valid" %}</option>
                 <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Redeemed" %}</option>
                 <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
-                <option value="e" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Redeemed and checked in with ticket" %}</option>
+                <option value="c" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Redeemed and checked in with ticket" %}</option>
             </select>
             {% if request.event.has_subevents %}
                 <select name="subevent" class="form-control">

@@ -8060,7 +8060,7 @@ msgstr "Gültig"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:22
 msgid "Redeemed and checked in with ticket"
-msgstr "Eingelösung und Ticket eingecheckt"
+msgstr "Eingelöst und Ticket eingecheckt"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:36
 msgid "Download list"
