@@ -23,7 +23,7 @@ class MailExporter(BaseExporter):
         ).values('attendee_email')
         data = "\r\n".join(set(a['email'] for a in addrs)
                            | set(a['attendee_email'] for a in pos if a['attendee_email']))
-        return 'pretixemails.txt', 'text/plain', data.encode("utf-8")
+        return '{}_pretixemails.txt'.format(self.event.slug), 'text/plain', data.encode("utf-8")
 
     @property
     def export_form_fields(self):
