@@ -171,7 +171,7 @@ class QuotaListExporter(BaseExporter):
             ]
             writer.writerow(row)
 
-        return 'quotas.csv', 'text/csv', output.getvalue().encode("utf-8")
+        return '{}_quotas.csv'.format(self.event.slug), 'text/csv', output.getvalue().encode("utf-8")
 
 
 @receiver(register_data_exporters, dispatch_uid="exporter_orderlist")
