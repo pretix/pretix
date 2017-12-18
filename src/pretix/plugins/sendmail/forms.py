@@ -27,6 +27,7 @@ class MailForm(forms.Form):
         event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
         self.fields['subject'] = I18nFormField(
+            label=_('Subject'),
             widget=I18nTextInput, required=True,
             locales=event.settings.get('locales'),
             help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
@@ -35,6 +36,7 @@ class MailForm(forms.Form):
                                               '{invoice_name}', '{invoice_company}'])]
         )
         self.fields['message'] = I18nFormField(
+            label=_('Message'),
             widget=I18nTextarea, required=True,
             locales=event.settings.get('locales'),
             help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
