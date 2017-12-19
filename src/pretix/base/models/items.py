@@ -498,18 +498,13 @@ class ItemVariation(models.Model):
             return self.id < other.id
         return self.position < other.position
 
-    @staticmethod
-    def clean_order_positions(variation):
-        if not len(variation.orderposition_set.all()):
-            raise ValidationError('The variation cannot be deleted because it has already been ordered by a user. '
-                                  'Please set the variation as "inactive" instead.')
+    def allow_delete(self):
+        from pretix.base.models.orders import CartPosition, OrderPosition
 
-    @staticmethod
-    def clean_cart_positions(variation):
-        if len(variation.cartposition_set.all()):
-            raise ValidationError('The variation cannot be deleted because it currently is in a users\'s cart. '
-                                  'Please set the variation as "inactive" instead.')
-
+        return (
+            not OrderPosition.objects.filter(variation=self).exists()
+            and not CartPosition.objects.filter(variation=self).exists()
+        )
 
 
 class ItemAddOn(models.Model):

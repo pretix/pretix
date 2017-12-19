@@ -419,7 +419,7 @@ def test_ordered_variations_not_delete(token_client, organizer, event, item, ord
     op.save()
 
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, var.pk))
-    assert resp.status_code == 400
+    assert resp.status_code == 403
     assert item.variations.filter(pk=var.id).exists()
 
 

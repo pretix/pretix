@@ -6,6 +6,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
 
 from pretix.api.serializers.item import (
     ItemCategorySerializer, ItemSerializer, QuestionSerializer,
@@ -107,22 +108,22 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
             data={**self.request.data['value'], **{'id': self.kwargs['pk']}}
         )
 
-    def destroy(self, request, *args, **kwargs):
-        variation = get_object_or_404(ItemVariation, pk=self.kwargs['pk'])
+    def perform_destroy(self, instance):
+        if not instance.allow_delete():
+            raise PermissionDenied('This variation cannot be deleted because it has already been ordered '
+                                   'by a user or currently is in a users\'s cart. Please set the variation as '
+                                   '"inactive" instead.')
 
-        ItemVariation.clean_order_positions(variation)
-        ItemVariation.clean_cart_positions(variation)
-
-        super().perform_destroy(variation)
-        variation.item.log_action(
+        instance.item.log_action(
             'pretix.event.item.variation.deleted',
             user=self.request.user,
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
             data={
-                'value': variation.value,
+                'value': instance.value,
                 'id': self.kwargs['pk']
             }
         )
+        super().perform_destroy(instance)
 
 
 class ItemAddOnViewSet(viewsets.ModelViewSet):
