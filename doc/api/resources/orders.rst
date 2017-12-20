@@ -86,6 +86,8 @@ downloads                             list of objects            List of ticket 
    First write operations (``…/mark_paid/``, ``…/mark_pending/``, ``…/mark_canceled/``, ``…/mark_expired/``) have been added.
    The attribute ``invoice_address.internal_reference`` has been added.
 
+.. _order-position-resource:
+
 Order position resource
 -----------------------
 
@@ -110,6 +112,7 @@ secret                                string                     Secret code pri
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
 subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``).
 checkins                              list of objects            List of check-ins with this ticket
+├ list                                integer                    Internal ID of the check-in list
 └ datetime                            datetime                   Time of check-in
 downloads                             list of objects            List of ticket download options
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)
@@ -123,6 +126,10 @@ answers                               list of objects            Answers to user
 .. versionchanged:: 1.7
 
    The attribute ``tax_rule`` has been added.
+
+.. versionchanged:: 1.11
+
+   The attribute ``checkins.list`` has been added.
 
 
 Order endpoints
@@ -198,6 +205,7 @@ Order endpoints
                 "subevent": null,
                 "checkins": [
                   {
+                    "list": 44,
                     "datetime": "2017-12-25T12:45:23Z"
                   }
                 ],
@@ -304,6 +312,7 @@ Order endpoints
             "subevent": null,
             "checkins": [
               {
+                "list": 44,
                 "datetime": "2017-12-25T12:45:23Z"
               }
             ],
@@ -622,6 +631,7 @@ Order position endpoints
             "subevent": null,
             "checkins": [
               {
+                "list": 44,
                 "datetime": "2017-12-25T12:45:23Z"
               }
             ],
@@ -701,6 +711,7 @@ Order position endpoints
         "subevent": null,
         "checkins": [
           {
+            "list": 44,
             "datetime": "2017-12-25T12:45:23Z"
           }
         ],
