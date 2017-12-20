@@ -11597,7 +11597,7 @@ msgid ""
 msgstr ""
 "Wenn Sie den Link zu Ihrer Bestellung verloren haben, geben Sie hier die "
 "verwendete E-Mail-Adresse ein. Wir senden Ihnen dann eine E-Mail mit Links "
-"zu allen Bestellungen, die mit dieser Adresse getätigt worden."
+"zu allen Bestellungen, die mit dieser Adresse getätigt wurden."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:26
 msgid "Send links"
