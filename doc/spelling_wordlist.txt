@@ -11,8 +11,6 @@ booleans
 cancelled
 casted
 checkbox
-checkin
-checkins
 checksum
 config
 contenttypes

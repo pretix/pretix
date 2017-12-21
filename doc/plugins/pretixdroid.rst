@@ -157,7 +157,7 @@ uses to communicate with the pretix server.
 .. http:get:: /pretixdroid/api/(organizer)/(event)/status/
 
    Returns status information, such as the total number of tickets and the
-   number of performed checkins.
+   number of performed check-ins.
 
    **Example request**:
 
