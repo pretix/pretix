@@ -1,3 +1,5 @@
+.. spelling:: checkins
+
 Orders
 ======
 
