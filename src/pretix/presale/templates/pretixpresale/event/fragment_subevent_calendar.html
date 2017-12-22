@@ -1,9 +1,16 @@
 {% load i18n %}
 {% load eventurl %}
-<form class="form-inline" method="get" id="monthselform" action="{% eventurl event "presale:event.index" %}">
+{% load urlreplace %}
+<form class="form-inline" method="get" id="monthselform" action="{% eventurl event "presale:event.index" cart_namespace=cart_namespace %}">
+    {% for f, v in request.GET.items %}
+        {% if f != "month" and f != "year" %}
+            <input type="hidden" name="{{ f }}" value="{{ v }}">
+        {% endif %}
+    {% endfor %}
     <div class="row">
         <div class="col-sm-4 hidden-xs">
-            <a href="{% eventurl event "presale:event.index" %}?year={{ before.year }}&month={{ before.month }}" class="btn btn-default">
+            <a href="?{% url_replace request "year" before.year "month" before.month %}"
+                    class="btn btn-default">
                 <span class="fa fa-arrow-left"></span>
                 {{ before|date:"F Y" }}
             </a>
@@ -24,7 +31,7 @@
             </button>
         </div>
         <div class="col-sm-4 hidden-xs text-right">
-            <a href="{% eventurl event "presale:event.index" %}?year={{ after.year }}&month={{ after.month }}" class="btn btn-default">
+            <a href="?{% url_replace request "year" after.year "month" after.month %}" class="btn btn-default">
                 <span class="fa fa-arrow-right"></span>
                 {{ after|date:"F Y" }}
             </a>

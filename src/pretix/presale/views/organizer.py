@@ -151,7 +151,7 @@ def add_events_for_days(request, organizer, before, after, ebd, timezones):
             })
 
 
-def add_subevents_for_days(qs, before, after, ebd, timezones, event=None):
+def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_namespace=None):
     qs = qs.filter(active=True).filter(
         Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
         Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
@@ -160,6 +160,10 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None):
         'date_from'
     )
     for se in qs:
+        kwargs = {'subevent': se.pk}
+        if cart_namespace:
+            kwargs['cart_namespace'] = cart_namespace
+
         settings = event.settings if event else se.event.settings
         timezones.add(settings.timezones)
         tz = pytz.timezone(settings.timezone)
@@ -175,9 +179,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None):
                     'timezone': settings.timezone,
                     'time': datetime_from.time().replace(tzinfo=None) if first and settings.show_times else None,
                     'event': se,
-                    'url': eventreverse(se.event, 'presale:event.index', kwargs={
-                        'subevent': se.pk
-                    }),
+                    'url': eventreverse(se.event, 'presale:event.index', kwargs=kwargs)
                 })
                 d += timedelta(days=1)
 
@@ -186,9 +188,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None):
                 'event': se,
                 'continued': False,
                 'time': datetime_from.time().replace(tzinfo=None) if se.event.settings.show_times else None,
-                'url': eventreverse(se.event, 'presale:event.index', kwargs={
-                    'subevent': se.pk
-                }),
+                'url': eventreverse(se.event, 'presale:event.index', kwargs=kwargs),
                 'timezone': se.event.settings.timezone,
             })
 
