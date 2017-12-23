@@ -3,6 +3,7 @@ import enchant as ec
 import os
 from enchant.checker import SpellChecker
 from enchant.tokenize import Filter, HTMLChunker
+from shutil import rmtree
 
 class PythonFormatFilter(Filter):
     def _skip(self, word):
@@ -18,12 +19,21 @@ languages = {
         "en": "en_US",
 }
 
-# locales is the directory containing the translations
-# ignores is the directory containing the ignore-files
-# These wordlists only need to contain uncapitalized words, the corresponding capitalized words are automatically recognized.
-# TODO: make this more python-y
-locales = '../../pretix/locale'
-ignores = os.listdir(".")
+# These wordlists in the IGNORES_DIR only need to contain uncapitalized words,
+# the corresponding capitalized words are automatically recognized.
+LOCALES_DIR = os.path.abspath('../../pretix/locale')
+IGNORES_DIR = os.getcwd()
+BUILD_DIR = os.path.abspath('./_build')
+
+try:
+    print('Creating build directory at' + BUILD_DIR + '…')
+    os.mkdir(BUILD_DIR)
+except FileExistsError:
+    print("File or directory" + BUILD_DIR + "already exists, deleting…")
+    rmtree(BUILD_DIR)
+    print('Recreating build directory')
+    os.mkdir(BUILD_DIR)
+    print('Build directory done')
 
 class Check:
     def __init__(self, path):
@@ -34,48 +44,52 @@ class Check:
         self.get_ignorefile(lang)
         check_dict = ec.DictWithPWL(checklang, pwl=self.ignore)
         self.checker = SpellChecker(check_dict, chunkers=[HTMLChunker], filters=[PythonFormatFilter])
-        self.output = open('_build/' + lang + '_output.txt', 'w')
+        self.set_output(lang)
+        
+    def set_output(self, lang):
+        name = (lang + '_output.txt')
+        files = os.listdir(BUILD_DIR)
+        if name in files:
+            self.output_file = open(os.path.join(BUILD_DIR, name), 'a')
+        else:
+            self.output_file = open(os.path.join(BUILD_DIR, name), 'w')
 
     def get_ignorefile(self, lang):
-        for f in ignores:
-            if "ignore" in f and lang in f:
+        for f in os.listdir(IGNORES_DIR):
+            if lang in f:
                 self.ignore = f
+                return
+
 
 # checks contains tuples of po-files and corresponding checkers
 checks = []
 
-for root, dirs, files in os.walk(locales):
+for root, dirs, files in os.walk(LOCALES_DIR):
     for f in files:
         if f.endswith(".po"):
             checks.append(Check(os.path.join(root, f)))
 
 en_dict = ec.DictWithPWL("en_US", pwl='./ignore_en.txt')
 en_ckr = SpellChecker(en_dict, chunkers=[HTMLChunker], filters=[PythonFormatFilter])
-output = open('_build/en_output.txt', 'w')
-
-try:
-    print('Creating build directory…')
-    os.mkdir('_build')
-except FileExistsError:
-    print('Build directory already exists.')
+output_file = open('_build/en_output.txt', 'w')
 
 for c in checks:
     for entry in c.po:
-        if entry.obsolete:
-            continue
+        if entry.obsolete: continue
 
         en_ckr.set_text(entry.msgid)
         for err in en_ckr:
-            print("ERROR:", c.popath, ":", entry.linenum, ":", err.word)
-            output.write("ERROR:" + c.popath + ":" + str(entry.linenum) + ":" + err.word + "\n")
-
+            path = os.path.relpath(c.popath, start=LOCALES_DIR)
+            print("ERROR: {}:{}: {}".format(path, entry.linenum, err.word))
+            output_file.write("ERROR: {}:{}: {}\n".format(path, entry.linenum, err.word))
 
         c.checker.set_text(entry.msgstr)
         for err in c.checker:
-            print("ERROR:", c.popath, ":", entry.linenum, ":", err.word)
-            c.output.write("ERROR:" + c.popath + ":" + str(entry.linenum) + ":" + err.word + "\n")
+            path = os.path.relpath(c.popath, start=LOCALES_DIR)
+            print("ERROR: {}:{}: {}".format(path, entry.linenum, err.word))
+            c.output_file.write("ERROR: {}:{}: {}\n".format(path, entry.linenum, err.word))
 
-print("Spell-checking done. You can find the outputs in \"_build/<lang>_output\".")
+print("Spell-checking done. You can find the outputs in '_build/<lang>_output'.")
 # TODO: extend english wordlist
 # TODO: extend german wordlist
 # TODO: use python test library to make good tests
