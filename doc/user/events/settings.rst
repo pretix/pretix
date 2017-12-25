@@ -10,3 +10,4 @@ Configuring an event
    display
    email
    taxes
+   invoicing
