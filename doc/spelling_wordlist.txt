@@ -32,6 +32,7 @@ frontpage
 gettext
 gunicorn
 hardcoded
+hostname
 invalidations
 iterable
 libsass

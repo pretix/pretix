@@ -8,4 +8,5 @@ Configuring an event
    ../payments/index
    plugins
    display
+   email
    taxes
