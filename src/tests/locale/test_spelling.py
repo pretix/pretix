@@ -1,16 +1,16 @@
-import polib
-import enchant as ec
 import os
-from enchant.checker import SpellChecker
-from enchant.tokenize import Filter, HTMLChunker, URLFilter
 from shutil import rmtree
 
+import polib
+from enchant import DictWithPWL
+from enchant.checker import SpellChecker
+from enchant.tokenize import Filter, HTMLChunker, URLFilter
 
 # The languages dict maps the language of the po-file to the the dictionary
 # language used by pyenchant
 LANGUAGES = {
-        "de": "de_DE",
-        "en": "en_US",
+    "de": "de_DE",
+    "en": "en_US",
 }
 
 # LOCALES_DIR is the directory that contains the po-files per language.
@@ -26,6 +26,7 @@ IGNORES_DIR = os.getcwd()
 
 # BUILD_DIR is the directory that the output-files should be written to.
 BUILD_DIR = os.path.abspath('./_build')
+
 
 class PythonFormatFilter(Filter):
     """
@@ -64,7 +65,7 @@ class Check:
         lang = self.po.metadata["Language"]
         checklang = LANGUAGES[lang]
         ignore = self.get_ignorefile(lang)
-        check_dict = ec.DictWithPWL(checklang, pwl=ignore)
+        check_dict = DictWithPWL(checklang, pwl=ignore)
         self.checker = SpellChecker(check_dict, chunkers=[HTMLChunker], filters=[PythonFormatFilter, URLFilter])
         self.set_output(lang, ("djangojs" in path))
 
@@ -84,14 +85,14 @@ class Check:
     def get_ignorefile(self, lang):
         for f in os.listdir(IGNORES_DIR):
             if lang in f:
-                return f# as there should be only one language file
+                return f  # as there should be only one language file
 
 
 try:
     print('Creating build directory at', BUILD_DIR)
     os.mkdir(BUILD_DIR)
 except FileExistsError:
-    print("File or directory", BUILD_DIR ,"already exists, deleting")
+    print("File or directory", BUILD_DIR, "already exists, deleting")
     rmtree(BUILD_DIR)
     print('Recreating build directory')
     os.mkdir(BUILD_DIR)
@@ -105,13 +106,14 @@ for root, dirs, files in os.walk(LOCALES_DIR):
         if f.endswith(".po"):
             checks.append(Check(os.path.join(root, f)))
 
-en_dict = ec.DictWithPWL("en_US", pwl='./ignore_en.txt')
+en_dict = DictWithPWL("en_US", pwl='./ignore_en.txt')
 en_ckr = SpellChecker(en_dict, chunkers=[HTMLChunker], filters=[PythonFormatFilter, URLFilter])
 output_file = open(BUILD_DIR + '/en_output.txt', 'w')
 
 for c in checks:
     for entry in c.po:
-        if entry.obsolete: continue
+        if entry.obsolete:
+            continue
 
         en_ckr.set_text(entry.msgid)
         for err in en_ckr:
@@ -132,4 +134,6 @@ print("Spell-checking done. You can find the outputs in", BUILD_DIR + "/<lang>/{
 # TODO: use python test library to make good tests
 
 # For reference: How sphinxcontrib-spelling reports errors:
-# INFO 2017-12-13 10:26:55,977 sphinx.application logging api/resources/orders.rst:112:checkins:["chickens", "checking", "check ins", "check-ins", "kitchens", "checkin"]
+# INFO 2017-12-13 10:26:55,977 sphinx.application logging
+# api/resources/orders.rst:112:checkins:["chickens", "checking", "check ins",
+# "check-ins", "kitchens", "checkin"]
